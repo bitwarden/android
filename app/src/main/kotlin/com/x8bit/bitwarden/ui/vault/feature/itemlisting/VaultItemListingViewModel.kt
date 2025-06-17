@@ -44,7 +44,6 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
-import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
@@ -1430,10 +1429,6 @@ class VaultItemListingViewModel @Inject constructor(
                 handleProviderGetPasswordCredentialRequestReceive(action)
             }
 
-            is VaultItemListingsAction.Internal.ProviderGetPasswordCredentialResultReceive -> {
-                handlePasswordGetResultReceive(action)
-            }
-
             VaultItemListingsAction.Internal.InternetConnectionErrorReceived -> {
                 handleInternetConnectionErrorReceived()
             }
@@ -2176,11 +2171,20 @@ class VaultItemListingViewModel @Inject constructor(
         selectedCipher: CipherView,
     ) {
         viewModelScope.launch {
-            sendAction(
-                VaultItemListingsAction.Internal.ProviderGetPasswordCredentialResultReceive(
-                    data = selectedCipher.login?.let {
-                        ProviderGetPasswordCredentialResult.Success(it)
-                    } ?: ProviderGetPasswordCredentialResult.Error,
+            bitwardenCredentialManager.isUserVerified = false
+            clearDialogState()
+
+            sendEvent(
+                selectedCipher.login?.let { credential ->
+                    VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
+                        GetPasswordCredentialResult.Success(
+                            credential = credential,
+                        ),
+                    )
+                } ?: VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
+                    GetPasswordCredentialResult.Error(
+                        message = "".asText(), //TODO text
+                    ),
                 ),
             )
         }
@@ -2207,34 +2211,6 @@ class VaultItemListingViewModel @Inject constructor(
                     VaultItemListingEvent.CompleteFido2Assertion(
                         AssertFido2CredentialResult.Success(
                             responseJson = action.result.responseJson,
-                        ),
-                    ),
-                )
-            }
-        }
-    }
-
-    private fun handlePasswordGetResultReceive(
-        action: VaultItemListingsAction.Internal.ProviderGetPasswordCredentialResultReceive,
-    ) {
-        bitwardenCredentialManager.isUserVerified = false
-        clearDialogState()
-        when (action.data) {
-            ProviderGetPasswordCredentialResult.Error -> {
-                sendEvent(
-                    VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
-                        GetPasswordCredentialResult.Error(
-                            message = "".asText(), //TODO text
-                        ),
-                    ),
-                )
-            }
-
-            is ProviderGetPasswordCredentialResult.Success -> {
-                sendEvent(
-                    VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
-                        GetPasswordCredentialResult.Success(
-                            credential = action.data.credential,
                         ),
                     ),
                 )
@@ -3381,13 +3357,6 @@ sealed class VaultItemListingsAction {
          */
         data class ProviderGetPasswordCredentialRequestReceive(
             val data: ProviderGetPasswordCredentialRequest,
-        ) : Internal()
-
-        /**
-         * Indicates that a result of a Password credential result has been received.
-         */
-        data class ProviderGetPasswordCredentialResultReceive(
-            val data: ProviderGetPasswordCredentialResult,
         ) : Internal()
 
         /**
