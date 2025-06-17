@@ -2058,16 +2058,14 @@ class VaultItemListingViewModel @Inject constructor(
 
         if (selectedCipherId.isEmpty()) {
             showCredentialManagerErrorDialog(
-                // TODO text
-                R.string.passkey_operation_failed_because_no_item_was_selected.asText(),
+                R.string.password_operation_failed_because_no_item_was_selected.asText(),
             )
         } else {
             val selectedCipher = data.filter { it.isActiveWithPasswordCredentials }
                 .find { it.id == selectedCipherId }
                 ?: run {
                     showCredentialManagerErrorDialog(
-                        // TODO text
-                        R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
+                        R.string.password_operation_failed_because_the_selected_item_does_not_exist
                             .asText(),
                     )
                     return
@@ -2086,20 +2084,21 @@ class VaultItemListingViewModel @Inject constructor(
             ) {
                 repromptMasterPasswordForProviderGetCredential(action.data.cipherId)
             } else {
+                val result = cipher.login?.let {
+                    GetPasswordCredentialResult.Success(it)
+                } ?: GetPasswordCredentialResult.Error(
+                    R.string.password_operation_failed_because_the_selected_item_does_not_exist
+                        .asText(),
+                )
+
                 sendEvent(
-                    VaultItemListingEvent
-                        .CompleteProviderGetPasswordCredentialRequest(
-                            result = cipher.login?.let {
-                                GetPasswordCredentialResult.Success(it)
-                            } ?: GetPasswordCredentialResult.Error("".asText()), // TODO text
-                        ),
+                    VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(result),
                 )
             }
         }
             ?: run {
                 showCredentialManagerErrorDialog(
-                    // TODO text
-                    R.string.passkey_operation_failed_because_no_item_was_selected.asText(),
+                    R.string.password_operation_failed_because_no_item_was_selected.asText(),
                 )
             }
     }
@@ -2168,19 +2167,21 @@ class VaultItemListingViewModel @Inject constructor(
             bitwardenCredentialManager.isUserVerified = false
             clearDialogState()
 
-            sendEvent(
-                selectedCipher.login?.let { credential ->
-                    VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
-                        GetPasswordCredentialResult.Success(
-                            credential = credential,
-                        ),
-                    )
-                } ?: VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
-                    GetPasswordCredentialResult.Error(
-                        message = "".asText(), // TODO text
+            val event = selectedCipher.login?.let { credential ->
+                VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
+                    GetPasswordCredentialResult.Success(
+                        credential = credential,
                     ),
+                )
+            } ?: VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
+                GetPasswordCredentialResult.Error(
+                    message =
+                        R.string.password_operation_failed_because_the_selected_item_does_not_exist
+                            .asText(),
                 ),
             )
+
+            sendEvent(event)
         }
     }
 

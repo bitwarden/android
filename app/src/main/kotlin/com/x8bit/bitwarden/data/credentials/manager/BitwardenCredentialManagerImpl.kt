@@ -207,10 +207,7 @@ class BitwardenCredentialManagerImpl(
                 cipherViewsWithPublicKeyCredentials = cipherViews
                     .filter { it.isActiveWithFido2Credentials },
             )
-            .onFailure {
-                Timber.e(it, "Failed to get FIDO 2 credential entries.")
-
-            }
+            .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
 
         if (passkeyCredentialResult.isFailure && passwordCredentialResult.isNotEmpty()) {
             Result.success(passwordCredentialResult)
