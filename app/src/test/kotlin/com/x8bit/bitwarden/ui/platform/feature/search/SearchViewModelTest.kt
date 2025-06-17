@@ -1159,7 +1159,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             ciphers.toViewState(
                 searchTerm = "",
-                baseIconUrl = "https://vault.bitwarden.com/icons",
+                baseIconUrl = "https://icons.bitwarden.net",
                 isIconLoadingDisabled = false,
                 isAutofill = false,
                 hasMasterPassword = true,
@@ -1261,7 +1261,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             ciphers.toViewState(
                 searchTerm = "",
-                baseIconUrl = "https://vault.bitwarden.com/icons",
+                baseIconUrl = "https://icons.bitwarden.net",
                 isIconLoadingDisabled = false,
                 isAutofill = false,
                 hasMasterPassword = true,
@@ -1373,7 +1373,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             ciphers.toViewState(
                 searchTerm = "",
-                baseIconUrl = "https://vault.bitwarden.com/icons",
+                baseIconUrl = "https://icons.bitwarden.net",
                 isIconLoadingDisabled = false,
                 isAutofill = false,
                 hasMasterPassword = true,
@@ -1488,7 +1488,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             ciphers.toViewState(
                 searchTerm = "",
-                baseIconUrl = "https://vault.bitwarden.com/icons",
+                baseIconUrl = "https://icons.bitwarden.net",
                 isIconLoadingDisabled = false,
                 isAutofill = false,
                 hasMasterPassword = true,
@@ -1663,7 +1663,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             ciphers.toViewState(
                 searchTerm = "",
-                baseIconUrl = "https://vault.bitwarden.com/icons",
+                baseIconUrl = "https://icons.bitwarden.net",
                 isIconLoadingDisabled = false,
                 isAutofill = true,
                 hasMasterPassword = true,
@@ -1697,7 +1697,7 @@ private val DEFAULT_STATE: SearchState = SearchState(
     dialogState = null,
     vaultFilterData = null,
     baseWebSendUrl = "https://send.bitwarden.com/#",
-    baseIconUrl = "https://vault.bitwarden.com/icons",
+    baseIconUrl = "https://icons.bitwarden.net",
     isIconLoadingDisabled = false,
     hasMasterPassword = true,
     totpData = null,
