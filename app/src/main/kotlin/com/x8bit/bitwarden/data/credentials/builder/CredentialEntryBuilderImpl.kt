@@ -120,6 +120,7 @@ class CredentialEntryBuilderImpl(
                     beginGetPasswordOption = option,
                 )
                 .setDisplayName(cipherView.name)
+                .setAutoSelectAllowed(this.size == 1)
                 .setIcon(
                     getCredentialEntryIcon(
                         isPassword = true,
