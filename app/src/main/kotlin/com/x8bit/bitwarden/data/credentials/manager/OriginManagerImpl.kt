@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.credentials.manager
 
 import androidx.credentials.provider.CallingAppInfo
 import com.bitwarden.network.service.DigitalAssetLinkService
+import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessary
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
@@ -26,25 +27,28 @@ class OriginManagerImpl(
 ) : OriginManager {
 
     override suspend fun validateOrigin(
+        relyingPartyId: String,
         callingAppInfo: CallingAppInfo,
     ): ValidateOriginResult {
         return if (callingAppInfo.isOriginPopulated()) {
             validatePrivilegedAppOrigin(callingAppInfo)
         } else {
-            validateCallingApplicationAssetLinks(callingAppInfo)
+            validateCallingApplicationAssetLinks(relyingPartyId, callingAppInfo)
         }
     }
 
     private suspend fun validateCallingApplicationAssetLinks(
+        relyingPartyId: String,
         callingAppInfo: CallingAppInfo,
     ): ValidateOriginResult {
         return digitalAssetLinkService
             .checkDigitalAssetLinksRelations(
-                packageName = callingAppInfo.packageName,
-                certificateFingerprint = callingAppInfo
+                sourceWebSite = relyingPartyId.prefixHttpsIfNecessary(),
+                targetPackageName = callingAppInfo.packageName,
+                targetCertificateFingerprint = callingAppInfo
                     .getSignatureFingerprintAsHexString()
                     .orEmpty(),
-                relation = DELEGATE_PERMISSION_HANDLE_ALL_URLS,
+                relations = listOf(DELEGATE_PERMISSION_HANDLE_ALL_URLS),
             )
             .fold(
                 onSuccess = {

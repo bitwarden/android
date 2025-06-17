@@ -453,7 +453,7 @@ private fun VaultItemListingDialogs(
 
         is VaultItemListingState.DialogState.TrustPrivilegedAddPrompt -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(R.string.an_error_has_occurred),
+                title = stringResource(R.string.unrecognized_browser),
                 message = dialogState.message.invoke(),
                 confirmButtonText = stringResource(R.string.trust),
                 dismissButtonText = stringResource(R.string.cancel),

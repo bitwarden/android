@@ -12,16 +12,16 @@ internal class DigitalAssetLinkServiceImpl(
 ) : DigitalAssetLinkService {
 
     override suspend fun checkDigitalAssetLinksRelations(
-        packageName: String,
-        certificateFingerprint: String,
-        relation: String,
+        sourceWebSite: String,
+        targetPackageName: String,
+        targetCertificateFingerprint: String,
+        relations: List<String>,
     ): Result<DigitalAssetLinkCheckResponseJson> = digitalAssetLinkApi
         .checkDigitalAssetLinksRelations(
-            sourcePackageName = packageName,
-            sourceCertificateFingerprint = certificateFingerprint,
-            targetPackageName = packageName,
-            targetCertificateFingerprint = certificateFingerprint,
-            relation = relation,
+            sourceWebSite = sourceWebSite,
+            targetPackageName = targetPackageName,
+            targetCertificateFingerprint = targetCertificateFingerprint,
+            relations = relations,
         )
         .toResult()
 }

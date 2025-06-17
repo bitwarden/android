@@ -476,6 +476,70 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `AuthCodeFlow Loaded with valid items should update ViewState to content but leave the error dialog state alone`() =
+        runTest {
+            setupMockUri()
+            val state = createVerificationCodeState(
+                dialogState = VerificationCodeState.DialogState.Error(
+                    title = null,
+                    message = "Test".asText(),
+                ),
+            )
+            val viewModel = createViewModel(state = state)
+
+            mutableAuthCodeFlow.tryEmit(
+                value = DataState.Loaded(
+                    data = listOf(
+                        createVerificationCodeItem(number = 1),
+                        createVerificationCodeItem(number = 2).copy(hasPasswordReprompt = true),
+                    ),
+                ),
+            )
+
+            assertEquals(
+                state.copy(
+                    viewState = VerificationCodeState.ViewState.Content(
+                        createDisplayItemList(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `AuthCodeFlow Loaded with valid items should update ViewState to content and clear the loading dialog state`() =
+        runTest {
+            setupMockUri()
+            val state = createVerificationCodeState(
+                dialogState = VerificationCodeState.DialogState.Loading(
+                    message = "Test".asText(),
+                ),
+            )
+            val viewModel = createViewModel(state = state)
+
+            mutableAuthCodeFlow.tryEmit(
+                value = DataState.Loaded(
+                    data = listOf(
+                        createVerificationCodeItem(number = 1),
+                        createVerificationCodeItem(number = 2).copy(hasPasswordReprompt = true),
+                    ),
+                ),
+            )
+
+            assertEquals(
+                state.copy(
+                    viewState = VerificationCodeState.ViewState.Content(
+                        createDisplayItemList(),
+                    ),
+                    dialogState = null,
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `AuthCodeState Loaded with non premium user and no org TOTP enabled should cause navigate back`() =
         runTest {
             setupMockUri()
@@ -605,12 +669,13 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
     private fun createVerificationCodeState(
         viewState: VerificationCodeState.ViewState = VerificationCodeState.ViewState.Loading,
-    ) = VerificationCodeState(
+        dialogState: VerificationCodeState.DialogState? = null,
+    ): VerificationCodeState = VerificationCodeState(
         viewState = viewState,
         vaultFilterType = vaultRepository.vaultFilterType,
         isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
         baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
-        dialogState = null,
+        dialogState = dialogState,
         isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
         isRefreshing = false,
         hasMasterPassword = true,

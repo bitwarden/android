@@ -1557,7 +1557,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = notes),
+                    ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                        notes = notes,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
             verify(exactly = 1) {
@@ -1630,7 +1633,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode),
+                    ListingItemOverflowAction.VaultAction.CopyTotpClick(
+                        totpCode = totpCode,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
 
@@ -1655,7 +1661,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode),
+                    ListingItemOverflowAction.VaultAction.CopyTotpClick(
+                        totpCode = totpCode,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
 

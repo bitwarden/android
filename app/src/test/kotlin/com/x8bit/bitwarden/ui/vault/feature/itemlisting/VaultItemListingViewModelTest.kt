@@ -57,6 +57,7 @@ import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.model.createMockCreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockGetCredentialsRequest
+import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -154,7 +155,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         Instant.parse("2023-10-27T12:00:00Z"),
         ZoneOffset.UTC,
     )
-
     private val clipboardManager: BitwardenClipboardManager = mockk {
         every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
     }
@@ -220,7 +220,12 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         coEvery { getCredentialEntries(any()) } returns emptyList<CredentialEntry>().asSuccess()
     }
     private val originManager: OriginManager = mockk {
-        coEvery { validateOrigin(any()) } returns ValidateOriginResult.Success(null)
+        coEvery {
+            validateOrigin(
+                relyingPartyId = any(),
+                callingAppInfo = any(),
+            )
+        } returns ValidateOriginResult.Success(null)
     }
 
     private val organizationEventManager = mockk<OrganizationEventManager> {
@@ -250,17 +255,26 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { packageName } returns "mockPackageName"
         every { isOriginPopulated() } returns false
     }
+    private val mockGetPublicKeyCredentialOption = mockk<GetPublicKeyCredentialOption> {
+        every { requestJson } returns "mockRequestJson"
+    }
     private val mockProviderGetCredentialRequest = mockk<ProviderGetCredentialRequest> {
-        every { credentialOptions } returns listOf(mockk<GetPublicKeyCredentialOption>())
+        every { credentialOptions } returns listOf(mockGetPublicKeyCredentialOption)
         every { callingAppInfo } returns mockCallingAppInfo
     }
-    private val mockBeginGetPublicKeyCredentialOption = mockk<BeginGetPublicKeyCredentialOption>()
+    private val mockBeginGetPublicKeyCredentialOption = mockk<BeginGetPublicKeyCredentialOption> {
+        every { requestJson } returns "mockRequestJson"
+    }
     private val mockBeginGetCredentialRequest = mockk<BeginGetCredentialRequest> {
         every { beginGetCredentialOptions } returns listOf(mockBeginGetPublicKeyCredentialOption)
         every { callingAppInfo } returns mockCallingAppInfo
     }
-    val mockProviderCreateCredentialRequest = mockk<ProviderCreateCredentialRequest> {
-        every { callingRequest } returns mockk<CreatePublicKeyCredentialRequest>(relaxed = true)
+    private val mockCreatePublicKeyCredentialRequest = mockk<CreatePublicKeyCredentialRequest> {
+        every { requestJson } returns "mockRequestJson"
+        every { origin } returns "mockOrigin"
+    }
+    private val mockProviderCreateCredentialRequest = mockk<ProviderCreateCredentialRequest> {
+        every { callingRequest } returns mockCreatePublicKeyCredentialRequest
         every { callingAppInfo } returns mockCallingAppInfo
     }
     private val mutableSnackbarDataFlow: MutableSharedFlow<BitwardenSnackbarData> =
@@ -269,6 +283,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every {
             getSnackbarDataFlow(relay = any(), relays = anyVararg())
         } returns mutableSnackbarDataFlow
+    }
+    private val relyingPartyParser = mockk<RelyingPartyParser> {
+        every { parse(any<BeginGetPublicKeyCredentialOption>()) } returns DEFAULT_RELYING_PARTY_ID
+        every { parse(any<GetPublicKeyCredentialOption>()) } returns DEFAULT_RELYING_PARTY_ID
+        every { parse(any<CreatePublicKeyCredentialRequest>()) } returns DEFAULT_RELYING_PARTY_ID
     }
 
     @BeforeEach
@@ -324,7 +343,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     createCredentialRequest = createCredentialRequest,
                 )
             coEvery {
-                originManager.validateOrigin(any())
+                originManager.validateOrigin(any(), any())
             } returns ValidateOriginResult.Success(null)
             val viewModel = createVaultItemListingViewModel()
 
@@ -1685,7 +1704,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = notes),
+                    ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                        notes = notes,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
             verify(exactly = 1) {
@@ -1785,7 +1807,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode),
+                    ListingItemOverflowAction.VaultAction.CopyTotpClick(
+                        totpCode = totpCode,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
 
@@ -1810,7 +1835,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode),
+                    ListingItemOverflowAction.VaultAction.CopyTotpClick(
+                        totpCode = totpCode,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
 
@@ -2087,7 +2115,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 )
             } returns DecryptFido2CredentialAutofillViewResult.Success(emptyList())
             coEvery {
-                originManager.validateOrigin(any())
+                originManager.validateOrigin(any(), any())
             } returns ValidateOriginResult.Success("")
 
             mockFilteredCiphers = listOf(cipherView1)
@@ -2141,7 +2169,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 vaultRepository.getDecryptedFido2CredentialAutofillViews(
                     cipherViewList = listOf(cipherView1, cipherView2),
                 )
-                originManager.validateOrigin(any())
+                originManager.validateOrigin(any(), any())
             }
         }
 
@@ -2797,13 +2825,16 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 createMockCreateCredentialRequest(number = 1),
             )
         coEvery {
-            originManager.validateOrigin(mockCallingAppInfo)
+            originManager.validateOrigin(
+                relyingPartyId = DEFAULT_RELYING_PARTY_ID,
+                callingAppInfo = mockCallingAppInfo,
+            )
         } returns ValidateOriginResult.Success("mockOrigin")
 
         createVaultItemListingViewModel()
 
         coVerify(ordering = Ordering.ORDERED) {
-            originManager.validateOrigin(any())
+            originManager.validateOrigin(any(), any())
             vaultRepository.vaultDataStateFlow
         }
     }
@@ -2815,7 +2846,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 createMockCreateCredentialRequest(number = 1),
             )
         coEvery {
-            originManager.validateOrigin(mockCallingAppInfo)
+            originManager.validateOrigin(
+                relyingPartyId = DEFAULT_RELYING_PARTY_ID,
+                callingAppInfo = mockCallingAppInfo,
+            )
         } returns ValidateOriginResult.Error.Unknown
 
         val viewModel = createVaultItemListingViewModel()
@@ -2838,7 +2872,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     createCredentialRequest = createMockCreateCredentialRequest(number = 1),
                 )
             coEvery {
-                originManager.validateOrigin(mockCallingAppInfo)
+                originManager.validateOrigin(
+                    relyingPartyId = DEFAULT_RELYING_PARTY_ID,
+                    callingAppInfo = mockCallingAppInfo,
+                )
             } returns ValidateOriginResult.Error.PrivilegedAppNotAllowed
 
             val viewModel = createVaultItemListingViewModel()
@@ -2862,7 +2899,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     createCredentialRequest = createMockCreateCredentialRequest(number = 1),
                 )
             coEvery {
-                originManager.validateOrigin(mockCallingAppInfo)
+                originManager.validateOrigin(
+                    relyingPartyId = DEFAULT_RELYING_PARTY_ID,
+                    callingAppInfo = mockCallingAppInfo,
+                )
             } returns ValidateOriginResult.Error.PrivilegedAppSignatureNotFound
 
             val viewModel = createVaultItemListingViewModel()
@@ -2885,7 +2925,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     createCredentialRequest = createMockCreateCredentialRequest(number = 1),
                 )
             coEvery {
-                originManager.validateOrigin(mockCallingAppInfo)
+                originManager.validateOrigin(
+                    relyingPartyId = DEFAULT_RELYING_PARTY_ID,
+                    callingAppInfo = mockCallingAppInfo,
+                )
             } returns ValidateOriginResult.Error.PasskeyNotSupportedForApp
 
             val viewModel = createVaultItemListingViewModel()
@@ -2908,7 +2951,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     createCredentialRequest = createMockCreateCredentialRequest(number = 1),
                 )
             coEvery {
-                originManager.validateOrigin(mockCallingAppInfo)
+                originManager.validateOrigin(
+                    relyingPartyId = DEFAULT_RELYING_PARTY_ID,
+                    callingAppInfo = mockCallingAppInfo,
+                )
             } returns ValidateOriginResult.Error.AssetLinkNotFound
 
             val viewModel = createVaultItemListingViewModel()
@@ -3082,7 +3128,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 bitwardenCredentialManager.getCredentialEntries(any())
             } returns emptyList<PublicKeyCredentialEntry>().asSuccess()
             coEvery {
-                originManager.validateOrigin(callingAppInfo = any())
+                originManager.validateOrigin(relyingPartyId = any(), callingAppInfo = any())
             } returns ValidateOriginResult.Success("mockOrigin")
             every {
                 vaultRepository
@@ -3160,7 +3206,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
                     title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    message =
+                        R.string.passkey_operation_failed_because_relying_party_cannot_be_identified
+                            .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -3230,7 +3278,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     mockGetCredentialsRequest,
                 )
             coEvery {
-                originManager.validateOrigin(callingAppInfo = any())
+                originManager.validateOrigin(relyingPartyId = any(), callingAppInfo = any())
             } returns ValidateOriginResult.Error.Unknown
 
             val dataState = DataState.Loaded(
@@ -3437,6 +3485,59 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Fido2Assertion should show error dialog when relying party cannot be identified`() =
+        runTest {
+            setupMockUri()
+            val mockAssertionRequest = createMockFido2CredentialAssertionRequest(number = 1)
+                .copy(cipherId = "mockId-1")
+            val mockFido2CredentialList = createMockSdkFido2CredentialList(number = 1)
+            val mockCipherView = createMockCipherView(
+                number = 1,
+                fido2Credentials = mockFido2CredentialList,
+            )
+            specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Assertion(
+                mockAssertionRequest,
+            )
+            every { bitwardenCredentialManager.isUserVerified } returns true
+            every {
+                vaultRepository
+                    .ciphersStateFlow
+                    .value
+                    .data
+            } returns listOf(mockCipherView)
+            every {
+                relyingPartyParser.parse(mockGetPublicKeyCredentialOption)
+            } returns null
+
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(mockCipherView),
+                    folderViewList = listOf(createMockFolderView(number = 1)),
+                    collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
+                ),
+            )
+            val viewModel = createVaultItemListingViewModel()
+            mutableVaultDataStateFlow.value = dataState
+
+            coVerify(exactly = 0) {
+                originManager.validateOrigin(any(), any())
+            }
+            viewModel.stateFlow.test {
+                assertEquals(
+                    VaultItemListingState.DialogState.CredentialManagerOperationFail(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message =
+                            R.string.passkey_operation_failed_because_relying_party_cannot_be_identified
+                                .asText(),
+                    ),
+                    awaitItem().dialogState,
+                )
+            }
+        }
+
     @Test
     fun `Fido2AssertionRequest should show error dialog when validateOrigin is not Success`() =
         runTest {
@@ -3459,7 +3560,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     .data
             } returns listOf(mockCipherView)
             coEvery {
-                originManager.validateOrigin(any())
+                originManager.validateOrigin(any(), any())
             } returns ValidateOriginResult.Error.Unknown
 
             val dataState = DataState.Loaded(
@@ -4015,7 +4116,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Assertion(
                 fido2AssertionRequest = mockAssertionRequest,
             )
-
             every {
                 ProviderGetCredentialRequest.fromBundle(any())
             } returns mockk(relaxed = true) {
@@ -4743,7 +4843,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 mockCallingAppInfo.getSignatureFingerprintAsHexString()
             } returns "mockSignature"
             coEvery {
-                originManager.validateOrigin(any())
+                originManager.validateOrigin(any(), any())
             } returns ValidateOriginResult.Error.PrivilegedAppNotAllowed
 
             val viewModel = createVaultItemListingViewModel()
@@ -4814,7 +4914,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 mockCallingAppInfo.getSignatureFingerprintAsHexString()
             } returns "mockSignature"
             coEvery {
-                originManager.validateOrigin(mockCallingAppInfo)
+                originManager.validateOrigin(
+                    relyingPartyId = DEFAULT_RELYING_PARTY_ID,
+                    callingAppInfo = mockCallingAppInfo,
+                )
             } returns ValidateOriginResult.Error.PrivilegedAppNotAllowed
             coEvery {
                 bitwardenCredentialManager.getCredentialEntries(any())
@@ -4934,7 +5037,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         cipherId = cipherView.id!!,
                     ),
                 )
-
             every {
                 mockCallingAppInfo.getSignatureFingerprintAsHexString()
             } returns "mockSignature"
@@ -4956,7 +5058,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             every { bitwardenCredentialManager.isUserVerified } returns true
             coEvery {
-                originManager.validateOrigin(mockCallingAppInfo)
+                originManager.validateOrigin(
+                    relyingPartyId = DEFAULT_RELYING_PARTY_ID,
+                    callingAppInfo = mockCallingAppInfo,
+                )
             } returns ValidateOriginResult.Success("mockOrigin")
 
             mutableVaultDataStateFlow.value = DataState.Loaded(
@@ -5181,6 +5286,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             privilegedAppRepository = privilegedAppRepository,
             featureFlagManager = featureFlagManager,
             snackbarRelayManager = snackbarRelayManager,
+            relyingPartyParser = relyingPartyParser,
         )
 
     @Suppress("MaxLineLength")
@@ -5235,3 +5341,5 @@ private val DEFAULT_USER_STATE = UserState(
     activeUserId = "activeUserId",
     accounts = listOf(DEFAULT_ACCOUNT),
 )
+
+private const val DEFAULT_RELYING_PARTY_ID = "www.bitwarden.com"
