@@ -105,6 +105,7 @@ import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -171,7 +172,7 @@ class VaultItemListingViewModel @Inject constructor(
             policyDisablesSend = policyManager
                 .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
                 .any(),
-            restrictItemTypesPolicyOrgIds = emptyList(),
+            restrictItemTypesPolicyOrgIds = persistentListOf(),
             autofillSelectionData = specialCircumstance?.toAutofillSelectionDataOrNull(),
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
             totpData = specialCircumstance?.toTotpDataOrNull(),
@@ -1473,7 +1474,11 @@ class VaultItemListingViewModel @Inject constructor(
         action: VaultItemListingsAction.Internal.RestrictItemTypesPolicyUpdateReceive,
     ) {
         mutableStateFlow.update {
-            it.copy(restrictItemTypesPolicyOrgIds = action.restrictItemTypesPolicyOrdIds)
+            it.copy(
+                restrictItemTypesPolicyOrgIds = action
+                    .restrictItemTypesPolicyOrdIds
+                    .toImmutableList(),
+            )
         }
 
         vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
@@ -2314,7 +2319,7 @@ data class VaultItemListingState(
     val isIconLoadingDisabled: Boolean,
     val dialogState: DialogState?,
     val policyDisablesSend: Boolean,
-    val restrictItemTypesPolicyOrgIds: List<String>,
+    val restrictItemTypesPolicyOrgIds: ImmutableList<String>,
     // Internal
     private val isPullToRefreshSettingEnabled: Boolean,
     val totpData: TotpData? = null,
@@ -2330,13 +2335,13 @@ data class VaultItemListingState(
      * Whether or not the add FAB should be shown.
      */
     val hasAddItemFabButton: Boolean
-        get() = if ((viewState is ViewState.NoItems &&
+        get() = if (viewState is ViewState.NoItems &&
                 restrictItemTypesPolicyOrgIds.isNotEmpty() &&
-                itemListingType == VaultItemListingState.ItemListingType.Vault.Card)) {
+                itemListingType == VaultItemListingState.ItemListingType.Vault.Card) {
                     false
                 } else {
                     itemListingType.hasFab ||
-                (viewState is ViewState.NoItems && viewState.shouldShowAddButton)
+                        (viewState is ViewState.NoItems && viewState.shouldShowAddButton)
                 }
 
     /**

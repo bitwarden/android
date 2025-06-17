@@ -427,8 +427,7 @@ private fun VaultDialogs(
             },
             onDismissRequest = vaultHandlers.dialogDismiss,
             excludedOptions = dialogState.excludedOptions,
-
-            )
+        )
 
         null -> Unit
     }

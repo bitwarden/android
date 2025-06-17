@@ -368,7 +368,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             val viewModel = createVaultItemListingViewModel()
             assertEquals(
-                initialState.copy(restrictItemTypesPolicyOrgIds = emptyList()),
+                initialState.copy(restrictItemTypesPolicyOrgIds = persistentListOf()),
                 viewModel.stateFlow.value,
             )
             mutableActivePoliciesFlow.emit(
@@ -384,7 +384,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
 
             assertEquals(
-                initialState.copy(restrictItemTypesPolicyOrgIds = listOf("Test Organization")),
+                initialState.copy(
+                    restrictItemTypesPolicyOrgIds = persistentListOf("Test Organization"),
+                ),
                 viewModel.stateFlow.value,
             )
         }
@@ -411,7 +413,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
 
             assertEquals(
-                initialState.copy(restrictItemTypesPolicyOrgIds = emptyList()),
+                initialState.copy(restrictItemTypesPolicyOrgIds = persistentListOf()),
                 viewModel.stateFlow.value,
             )
         }
@@ -1355,7 +1357,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                             CreateVaultItemType.SSH_KEY,
                         ),
                     ),
-                ).copy(restrictItemTypesPolicyOrgIds = listOf("Test Organization")),
+                ).copy(restrictItemTypesPolicyOrgIds = persistentListOf("Test Organization")),
                 viewModel.stateFlow.value,
             )
         }
@@ -1394,7 +1396,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                             CreateVaultItemType.SSH_KEY,
                         ),
                     ),
-                ).copy(restrictItemTypesPolicyOrgIds = listOf("Test Organization")),
+                ).copy(restrictItemTypesPolicyOrgIds = persistentListOf("Test Organization")),
                 viewModel.stateFlow.value,
             )
         }
@@ -5313,7 +5315,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             createCredentialRequest = null,
             isPremium = true,
             isRefreshing = false,
-            restrictItemTypesPolicyOrgIds = emptyList(),
+            restrictItemTypesPolicyOrgIds = persistentListOf(),
         )
 }
 

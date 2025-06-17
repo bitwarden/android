@@ -1887,9 +1887,11 @@ class VaultScreenTest : BitwardenComposeTest() {
     @Test
     fun `SelectVaultAddItemType dialog state show vault item type selection dialog`() {
         mutableStateFlow.update {
-            it.copy(dialog = VaultState.DialogState.SelectVaultAddItemType(
-                persistentListOf(CreateVaultItemType.SSH_KEY),
-            ))
+            it.copy(
+                dialog = VaultState.DialogState.SelectVaultAddItemType(
+                    persistentListOf(CreateVaultItemType.SSH_KEY),
+                ),
+            )
         }
 
         composeTestRule
@@ -1905,12 +1907,14 @@ class VaultScreenTest : BitwardenComposeTest() {
     @Test
     fun `SelectVaultAddItemType dialog state hide vault item type selection if excluded`() {
         mutableStateFlow.update {
-            it.copy(dialog = VaultState.DialogState.SelectVaultAddItemType(
-                persistentListOf(
-                    CreateVaultItemType.SSH_KEY,
-                    CreateVaultItemType.CARD,
+            it.copy(
+                dialog = VaultState.DialogState.SelectVaultAddItemType(
+                    persistentListOf(
+                        CreateVaultItemType.SSH_KEY,
+                        CreateVaultItemType.CARD,
+                    ),
                 ),
-            ))
+            )
         }
 
         composeTestRule
@@ -1941,9 +1945,11 @@ class VaultScreenTest : BitwardenComposeTest() {
     @Test
     fun `when option is selected in SelectVaultAddItemType dialog add item action is sent`() {
         mutableStateFlow.update {
-            it.copy(dialog = VaultState.DialogState.SelectVaultAddItemType(
-                persistentListOf(CreateVaultItemType.SSH_KEY),
-            ))
+            it.copy(
+                dialog = VaultState.DialogState.SelectVaultAddItemType(
+                    persistentListOf(CreateVaultItemType.SSH_KEY),
+                ),
+            )
         }
 
         composeTestRule
