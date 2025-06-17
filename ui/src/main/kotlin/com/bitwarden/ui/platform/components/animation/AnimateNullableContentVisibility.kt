@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.animation
+package com.bitwarden.ui.platform.components.animation
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope

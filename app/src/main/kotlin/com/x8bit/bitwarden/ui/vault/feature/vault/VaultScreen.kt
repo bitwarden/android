@@ -31,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.animation.AnimateNullableContentVisibility
 import com.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
@@ -41,7 +42,6 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
-import com.x8bit.bitwarden.ui.platform.components.animation.AnimateNullableContentVisibility
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
