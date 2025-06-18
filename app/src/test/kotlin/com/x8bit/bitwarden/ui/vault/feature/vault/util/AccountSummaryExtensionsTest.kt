@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import io.mockk.every
@@ -49,7 +50,7 @@ class AccountSummaryExtensionsTest {
     @Test
     fun `iconRes returns a checkmark for active accounts`() {
         assertEquals(
-            R.drawable.ic_check_mark,
+            BitwardenDrawable.ic_check_mark,
             mockk<AccountSummary> {
                 every { status } returns AccountSummary.Status.ACTIVE
             }
@@ -60,7 +61,7 @@ class AccountSummaryExtensionsTest {
     @Test
     fun `iconRes returns a locked lock for locked accounts`() {
         assertEquals(
-            R.drawable.ic_locked,
+            BitwardenDrawable.ic_locked,
             mockk<AccountSummary> {
                 every { status } returns AccountSummary.Status.LOCKED
             }
@@ -71,7 +72,7 @@ class AccountSummaryExtensionsTest {
     @Test
     fun `iconRes returns a locked lock for logged out accounts`() {
         assertEquals(
-            R.drawable.ic_locked,
+            BitwardenDrawable.ic_locked,
             mockk<AccountSummary> {
                 every { status } returns AccountSummary.Status.LOGGED_OUT
             }
@@ -82,7 +83,7 @@ class AccountSummaryExtensionsTest {
     @Test
     fun `iconRes returns an unlocked lock for unlocked accounts`() {
         assertEquals(
-            R.drawable.ic_unlocked,
+            BitwardenDrawable.ic_unlocked,
             mockk<AccountSummary> {
                 every { status } returns AccountSummary.Status.UNLOCKED
             }

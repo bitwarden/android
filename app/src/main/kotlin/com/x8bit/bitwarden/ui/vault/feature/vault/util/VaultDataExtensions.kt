@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import android.net.Uri
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -157,9 +158,9 @@ fun List<LoginUriView>?.toLoginIconData(
     usePasskeyDefaultIcon: Boolean,
 ): IconData {
     val defaultIconRes = if (usePasskeyDefaultIcon) {
-        R.drawable.ic_bw_passkey
+        BitwardenDrawable.ic_bw_passkey
     } else {
-        R.drawable.ic_globe
+        BitwardenDrawable.ic_globe
     }
 
     var uri = this
@@ -168,11 +169,11 @@ fun List<LoginUriView>?.toLoginIconData(
         ?: return IconData.Local(defaultIconRes)
 
     if (uri.startsWith(ANDROID_URI)) {
-        return IconData.Local(R.drawable.ic_android)
+        return IconData.Local(BitwardenDrawable.ic_android)
     }
 
     if (uri.startsWith(IOS_URI)) {
-        return IconData.Local(R.drawable.ic_ios)
+        return IconData.Local(BitwardenDrawable.ic_ios)
     }
 
     if (isIconLoadingDisabled) {

@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.ui.platform.components.button.color.bitwardenStandardIconButtonColors
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 
@@ -30,12 +31,12 @@ fun BitwardenPlaceholderAccountActionItem(
             .semantics(mergeDescendants = true) { testTag = "CurrentActiveAccount" },
     ) {
         Icon(
-            painter = rememberVectorPainter(id = R.drawable.ic_account_initials_container),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ic_account_initials_container),
             contentDescription = null,
             tint = BitwardenTheme.colorScheme.background.tertiary,
         )
         Icon(
-            painter = rememberVectorPainter(id = R.drawable.ic_dots),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ic_dots),
             contentDescription = stringResource(id = R.string.account),
             tint = BitwardenTheme.colorScheme.text.interaction,
         )

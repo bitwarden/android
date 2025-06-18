@@ -240,7 +240,7 @@ fun VaultItemScreen(
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(VaultItemAction.Common.EditClick) }
                     },
-                    painter = rememberVectorPainter(id = R.drawable.ic_pencil),
+                    painter = rememberVectorPainter(id = BitwardenDrawable.ic_pencil),
                     contentDescription = stringResource(id = R.string.edit_item),
                     modifier = Modifier
                         .testTag(tag = "EditItemButton")

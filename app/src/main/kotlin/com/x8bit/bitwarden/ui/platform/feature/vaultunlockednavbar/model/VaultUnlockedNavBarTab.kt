@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model
 
 import android.os.Parcelable
 import com.bitwarden.ui.platform.components.navigation.model.NavigationItem
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.util.toObjectNavigationRoute
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.feature.settings.SettingsGraphRoute
@@ -30,8 +31,8 @@ sealed class VaultUnlockedNavBarTab : NavigationItem, Parcelable {
      */
     @Parcelize
     data object Generator : VaultUnlockedNavBarTab() {
-        override val iconResSelected get() = R.drawable.ic_generator_filled
-        override val iconRes get() = R.drawable.ic_generator
+        override val iconResSelected get() = BitwardenDrawable.ic_generator_filled
+        override val iconRes get() = BitwardenDrawable.ic_generator
         override val labelRes get() = R.string.generator
         override val contentDescriptionRes get() = R.string.generator
         override val graphRoute get() = GeneratorGraphRoute.toObjectNavigationRoute()
@@ -45,8 +46,8 @@ sealed class VaultUnlockedNavBarTab : NavigationItem, Parcelable {
      */
     @Parcelize
     data object Send : VaultUnlockedNavBarTab() {
-        override val iconResSelected get() = R.drawable.ic_send_filled
-        override val iconRes get() = R.drawable.ic_send
+        override val iconResSelected get() = BitwardenDrawable.ic_send_filled
+        override val iconRes get() = BitwardenDrawable.ic_send
         override val labelRes get() = R.string.send
         override val contentDescriptionRes get() = R.string.send
         override val graphRoute get() = SendGraphRoute.toObjectNavigationRoute()
@@ -63,8 +64,8 @@ sealed class VaultUnlockedNavBarTab : NavigationItem, Parcelable {
         override val labelRes: Int,
         override val contentDescriptionRes: Int,
     ) : VaultUnlockedNavBarTab() {
-        override val iconResSelected get() = R.drawable.ic_vault_filled
-        override val iconRes get() = R.drawable.ic_vault
+        override val iconResSelected get() = BitwardenDrawable.ic_vault_filled
+        override val iconRes get() = BitwardenDrawable.ic_vault
         override val graphRoute get() = VaultGraphRoute.toObjectNavigationRoute()
         override val startDestinationRoute get() = VaultRoute.toObjectNavigationRoute()
         override val testTag get() = "VaultTab"
@@ -78,8 +79,8 @@ sealed class VaultUnlockedNavBarTab : NavigationItem, Parcelable {
     data class Settings(
         override val notificationCount: Int = 0,
     ) : VaultUnlockedNavBarTab() {
-        override val iconResSelected get() = R.drawable.ic_settings_filled
-        override val iconRes get() = R.drawable.ic_settings
+        override val iconResSelected get() = BitwardenDrawable.ic_settings_filled
+        override val iconRes get() = BitwardenDrawable.ic_settings
         override val labelRes get() = R.string.settings
         override val contentDescriptionRes get() = R.string.settings
         override val graphRoute get() = SettingsGraphRoute.toObjectNavigationRoute()

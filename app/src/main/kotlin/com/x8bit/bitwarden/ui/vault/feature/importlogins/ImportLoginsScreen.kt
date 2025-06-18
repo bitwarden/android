@@ -235,7 +235,7 @@ private fun InitialImportLoginsContent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
-            painter = rememberVectorPainter(R.drawable.img_import_logins),
+            painter = rememberVectorPainter(BitwardenDrawable.img_import_logins),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -301,7 +301,7 @@ private fun ImportLoginsStepOneContent(
         stepTitle = stringResource(R.string.export_your_saved_logins),
         instructions = persistentListOf(
             ContentBlockData(
-                iconVectorResource = R.drawable.ic_number1,
+                iconVectorResource = BitwardenDrawable.ic_number1,
                 headerText = instruction1,
                 subtitleText = null,
             ),
@@ -311,7 +311,7 @@ private fun ImportLoginsStepOneContent(
                 subtitleText = null,
             ),
             ContentBlockData(
-                iconVectorResource = R.drawable.ic_number3,
+                iconVectorResource = BitwardenDrawable.ic_number3,
                 headerText = instruction3,
                 subtitleText = stringResource(R.string.delete_this_file_after_import_is_complete)
                     .toAnnotatedString(),
@@ -347,7 +347,7 @@ private fun ImportLoginsStepTwoContent(
         stepTitle = stringResource(R.string.log_in_to_bitwarden),
         instructions = persistentListOf(
             ContentBlockData(
-                iconVectorResource = R.drawable.ic_number1,
+                iconVectorResource = BitwardenDrawable.ic_number1,
                 headerText = instruction1,
                 subtitleText = null,
             ),
@@ -389,7 +389,7 @@ private fun ImportLoginsStepThreeContent(
         stepTitle = stringResource(R.string.import_logins_to_bitwarden),
         instructions = persistentListOf(
             ContentBlockData(
-                iconVectorResource = R.drawable.ic_number1,
+                iconVectorResource = BitwardenDrawable.ic_number1,
                 headerText = instruction1,
                 subtitleText = null,
             ),
@@ -399,12 +399,12 @@ private fun ImportLoginsStepThreeContent(
                 subtitleText = null,
             ),
             ContentBlockData(
-                iconVectorResource = R.drawable.ic_number3,
+                iconVectorResource = BitwardenDrawable.ic_number3,
                 headerText = instruction3,
                 subtitleText = null,
             ),
             ContentBlockData(
-                iconVectorResource = R.drawable.ic_number4,
+                iconVectorResource = BitwardenDrawable.ic_number4,
                 headerText = instruction4,
                 subtitleText = null,
             ),
@@ -432,7 +432,7 @@ private fun ImportLoginsSuccessBottomSheetContent(
     ) {
         Spacer(Modifier.height(24.dp))
         Image(
-            painter = rememberVectorPainter(R.drawable.img_secure_devices),
+            painter = rememberVectorPainter(BitwardenDrawable.img_secure_devices),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -462,19 +462,19 @@ private fun ImportLoginsSuccessBottomSheetContent(
                     subtitleText = stringResource(
                         R.string.go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser,
                     ),
-                    iconVectorResource = R.drawable.ic_puzzle,
+                    iconVectorResource = BitwardenDrawable.ic_puzzle,
                 ),
                 ContentBlockData(
                     headerText = stringResource(R.string.use_the_web_app),
                     subtitleText = stringResource(
                         R.string.log_in_at_bitwarden_com_to_easily_manage_your_account,
                     ),
-                    iconVectorResource = R.drawable.ic_desktop,
+                    iconVectorResource = BitwardenDrawable.ic_desktop,
                 ),
                 ContentBlockData(
                     headerText = stringResource(R.string.autofill_passwords),
                     subtitleText = stringResource(R.string.set_up_autofill_on_all_your_devices),
-                    iconVectorResource = R.drawable.ic_shield,
+                    iconVectorResource = BitwardenDrawable.ic_shield,
                 ),
             ),
             modifier = Modifier.standardHorizontalMargin(),

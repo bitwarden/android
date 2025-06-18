@@ -41,6 +41,7 @@ import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -169,7 +170,7 @@ fun AccountSecurityScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.account_security),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.BackClick) }

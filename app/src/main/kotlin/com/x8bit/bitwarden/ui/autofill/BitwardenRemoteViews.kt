@@ -5,6 +5,7 @@ import android.widget.RemoteViews
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.color.BitwardenColorScheme
 import com.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
 import com.bitwarden.ui.platform.theme.color.lightBitwardenColorScheme
@@ -50,7 +51,7 @@ fun buildVaultItemAutofillRemoteViews(
                 getString(R.string.go_to_my_vault)
             }
         },
-        iconRes = R.drawable.icon,
+        iconRes = BitwardenDrawable.icon,
         shouldTintIcon = false,
         autofillContentDescription = null,
     )

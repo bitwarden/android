@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
@@ -87,7 +88,7 @@ fun EnvironmentSelector(
                 modifier = Modifier.padding(end = 8.dp),
             )
             Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_chevron_down_small),
+                painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_down_small),
                 contentDescription = stringResource(id = R.string.region),
                 tint = BitwardenTheme.colorScheme.icon.secondary,
             )
@@ -95,7 +96,7 @@ fun EnvironmentSelector(
         Spacer(modifier = Modifier.weight(weight = 1f))
         if (isHelpEnabled) {
             BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_question_circle_small,
+                vectorIconRes = BitwardenDrawable.ic_question_circle_small,
                 contentDescription = stringResource(R.string.help_with_server_geolocations),
                 onClick = onHelpClick,
                 contentColor = BitwardenTheme.colorScheme.icon.secondary,

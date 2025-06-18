@@ -578,7 +578,7 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.GeneratedStringItem(
                 },
             ) {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_generate,
+                    vectorIconRes = BitwardenDrawable.ic_generate,
                     contentDescription = stringResource(id = R.string.generate_password),
                     onClick = onRegenerateClick,
                     modifier = Modifier.testTag("RegenerateValueButton"),

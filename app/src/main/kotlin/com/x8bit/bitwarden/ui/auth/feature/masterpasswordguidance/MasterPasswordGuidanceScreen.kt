@@ -142,7 +142,7 @@ private fun MasterPasswordGuidanceContentBlocks(modifier: Modifier = Modifier) {
                     subtitleText = annotatedStringResource(
                         id = R.string.pick_three_or_four_random_unrelated_words,
                     ),
-                    iconVectorResource = R.drawable.ic_number1,
+                    iconVectorResource = BitwardenDrawable.ic_number1,
                 ),
                 ContentBlockData(
                     headerText = stringResource(R.string.combine_those_words_together)
@@ -157,7 +157,7 @@ private fun MasterPasswordGuidanceContentBlocks(modifier: Modifier = Modifier) {
                     subtitleText = annotatedStringResource(
                         id = R.string.add_a_number_or_symbol_to_make_it_even_stronger,
                     ),
-                    iconVectorResource = R.drawable.ic_number3,
+                    iconVectorResource = BitwardenDrawable.ic_number3,
                 ),
             ),
         )

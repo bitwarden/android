@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.autofill.model
 
 import androidx.annotation.DrawableRes
 import com.bitwarden.core.Uuid
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 
 /**
  * A paired down model of the CipherView for use within the autofill feature.
@@ -48,7 +48,7 @@ sealed class AutofillCipher {
         val number: String,
     ) : AutofillCipher() {
         override val iconRes: Int
-            @DrawableRes get() = R.drawable.ic_payment_card
+            @DrawableRes get() = BitwardenDrawable.ic_payment_card
 
         override val isTotpEnabled: Boolean
             get() = false
@@ -67,6 +67,6 @@ sealed class AutofillCipher {
         val username: String,
     ) : AutofillCipher() {
         override val iconRes: Int
-            @DrawableRes get() = R.drawable.ic_globe
+            @DrawableRes get() = BitwardenDrawable.ic_globe
     }
 }

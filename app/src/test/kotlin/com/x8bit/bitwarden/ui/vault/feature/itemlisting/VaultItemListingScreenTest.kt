@@ -21,6 +21,7 @@ import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertMasterPasswordDialogDisplayed
 import com.bitwarden.ui.util.assertNoDialogExists
@@ -2398,26 +2399,26 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         secondSubtitleTestTag = null,
         subtitle = "mockSubtitle-$number",
         subtitleTestTag = "SendDateLabel",
-        iconData = IconData.Local(R.drawable.ic_payment_card),
+        iconData = IconData.Local(BitwardenDrawable.ic_payment_card),
         extraIconList = persistentListOf(
             IconData.Local(
-                iconRes = R.drawable.ic_send_disabled,
+                iconRes = BitwardenDrawable.ic_send_disabled,
                 contentDescription = R.string.disabled.asText(),
             ),
             IconData.Local(
-                iconRes = R.drawable.ic_key,
+                iconRes = BitwardenDrawable.ic_key,
                 contentDescription = R.string.password.asText(),
             ),
             IconData.Local(
-                iconRes = R.drawable.ic_send_max_access_count_reached,
+                iconRes = BitwardenDrawable.ic_send_max_access_count_reached,
                 contentDescription = R.string.maximum_access_count_reached.asText(),
             ),
             IconData.Local(
-                iconRes = R.drawable.ic_send_expired,
+                iconRes = BitwardenDrawable.ic_send_expired,
                 contentDescription = R.string.expired.asText(),
             ),
             IconData.Local(
-                iconRes = R.drawable.ic_send_pending_delete,
+                iconRes = BitwardenDrawable.ic_send_pending_delete,
                 contentDescription = R.string.pending_delete.asText(),
             ),
         ),
@@ -2452,7 +2453,7 @@ private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayI
         secondSubtitleTestTag = null,
         subtitle = "mockSubtitle-$number",
         subtitleTestTag = "CipherSubTitleLabel",
-        iconData = IconData.Local(R.drawable.ic_vault),
+        iconData = IconData.Local(BitwardenDrawable.ic_vault),
         extraIconList = persistentListOf(),
         overflowOptions = listOf(
             ListingItemOverflowAction.VaultAction.EditClick(

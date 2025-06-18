@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.autofill
 import android.content.Context
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
@@ -203,7 +204,7 @@ class BitwardenRemoteViewsTest {
         prepareRemoteViews(
             name = APP_NAME,
             subtitle = VAULT_IS_LOCKED,
-            iconRes = R.drawable.icon,
+            iconRes = BitwardenDrawable.icon,
         )
 
         // Test
@@ -231,7 +232,7 @@ class BitwardenRemoteViewsTest {
             anyConstructed<RemoteViews>()
                 .setImageViewResource(
                     R.id.icon,
-                    R.drawable.icon,
+                    BitwardenDrawable.icon,
                 )
             anyConstructed<RemoteViews>()
                 .setInt(
@@ -261,7 +262,7 @@ class BitwardenRemoteViewsTest {
         prepareRemoteViews(
             name = APP_NAME,
             subtitle = GO_TO_MY_VAULT,
-            iconRes = R.drawable.icon,
+            iconRes = BitwardenDrawable.icon,
         )
 
         // Test
@@ -289,7 +290,7 @@ class BitwardenRemoteViewsTest {
             anyConstructed<RemoteViews>()
                 .setImageViewResource(
                     R.id.icon,
-                    R.drawable.icon,
+                    BitwardenDrawable.icon,
                 )
             anyConstructed<RemoteViews>()
                 .setInt(

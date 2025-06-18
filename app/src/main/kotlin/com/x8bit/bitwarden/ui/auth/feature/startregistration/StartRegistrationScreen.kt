@@ -194,7 +194,7 @@ private fun StartRegistrationContent(
 
         Spacer(modifier = Modifier.weight(1f))
         Image(
-            painter = rememberVectorPainter(id = R.drawable.bitwarden_logo),
+            painter = rememberVectorPainter(id = BitwardenDrawable.bitwarden_logo),
             colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
             contentDescription = null,
             modifier = Modifier

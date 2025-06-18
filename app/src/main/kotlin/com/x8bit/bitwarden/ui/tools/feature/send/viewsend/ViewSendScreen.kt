@@ -147,7 +147,7 @@ fun ViewSendScreen(
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(ViewSendAction.EditClick) }
                     },
-                    painter = rememberVectorPainter(id = R.drawable.ic_pencil),
+                    painter = rememberVectorPainter(id = BitwardenDrawable.ic_pencil),
                     contentDescription = stringResource(id = R.string.edit_send),
                     modifier = Modifier.testTag(tag = "EditItemButton"),
                 )
@@ -254,7 +254,7 @@ private fun ViewStateContent(
         BitwardenFilledButton(
             label = stringResource(id = R.string.copy),
             onClick = onCopyClick,
-            icon = rememberVectorPainter(id = R.drawable.ic_copy_small),
+            icon = rememberVectorPainter(id = BitwardenDrawable.ic_copy_small),
             cardStyle = CardStyle.Middle(hasDivider = false),
             cardInsets = PaddingValues(top = 16.dp, bottom = 6.dp, start = 16.dp, end = 16.dp),
             modifier = Modifier
@@ -265,7 +265,7 @@ private fun ViewStateContent(
         BitwardenOutlinedButton(
             label = stringResource(id = R.string.share),
             onClick = onShareClick,
-            icon = rememberVectorPainter(id = R.drawable.ic_share_small),
+            icon = rememberVectorPainter(id = BitwardenDrawable.ic_share_small),
             cardStyle = CardStyle.Bottom,
             cardInsets = PaddingValues(top = 6.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
             modifier = Modifier
@@ -368,7 +368,7 @@ private fun DeleteButton(
     BitwardenOutlinedErrorButton(
         label = stringResource(id = R.string.delete_send),
         onClick = { shouldShowDeleteConfirmationDialog = true },
-        icon = rememberVectorPainter(id = R.drawable.ic_trash_small),
+        icon = rememberVectorPainter(id = BitwardenDrawable.ic_trash_small),
         modifier = modifier,
     )
 }
@@ -517,7 +517,7 @@ private fun ColumnScope.AdditionalOptions(
                     value = it,
                     actions = {
                         BitwardenStandardIconButton(
-                            vectorIconRes = R.drawable.ic_copy,
+                            vectorIconRes = BitwardenDrawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy_notes),
                             onClick = onCopyNotesClick,
                             modifier = Modifier.testTag(tag = "ViewSendNotesCopyButton"),

@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -58,7 +59,7 @@ fun BitwardenExternalLinkRow(
     ) {
         Icon(
             modifier = Modifier.mirrorIfRtl(),
-            painter = rememberVectorPainter(id = R.drawable.ic_external_link),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ic_external_link),
             contentDescription = null,
             tint = BitwardenTheme.colorScheme.icon.primary,
         )

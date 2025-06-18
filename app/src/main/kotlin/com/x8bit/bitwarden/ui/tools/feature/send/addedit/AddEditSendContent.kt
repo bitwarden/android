@@ -38,6 +38,7 @@ import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -202,7 +203,7 @@ private fun DeleteButton(
     BitwardenOutlinedErrorButton(
         label = stringResource(id = R.string.delete_send),
         onClick = { shouldShowDeleteConfirmationDialog = true },
-        icon = rememberVectorPainter(id = R.drawable.ic_trash_small),
+        icon = rememberVectorPainter(id = BitwardenDrawable.ic_trash_small),
         modifier = modifier,
     )
 }

@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
@@ -66,7 +66,7 @@ fun VaultEntryListItem(
 private fun VaultEntryListItem_preview() {
     BitwardenTheme {
         VaultEntryListItem(
-            startIcon = IconData.Local(R.drawable.ic_globe),
+            startIcon = IconData.Local(BitwardenDrawable.ic_globe),
             startIconTestTag = "Test Tag",
             label = "Example Login",
             supportingLabel = "Username",

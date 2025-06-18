@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import android.net.Uri
 import com.bitwarden.send.SendView
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -477,7 +478,7 @@ class SearchTypeDataExtensionsTest {
                 displayItems = listOf(
                     createMockDisplayItemForCipher(
                         number = 1,
-                        fallbackIconRes = R.drawable.ic_bw_passkey,
+                        fallbackIconRes = BitwardenDrawable.ic_bw_passkey,
                     ),
                     createMockDisplayItemForCipher(number = 2),
                 ),

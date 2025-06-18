@@ -28,6 +28,7 @@ import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionI
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -499,7 +500,7 @@ private fun VaultItemListingScaffold(
                 title = state.appBarTitle(),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = NavigationIcon(
-                    navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
+                    navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                     navigationIconContentDescription = stringResource(id = R.string.back),
                     onNavigationIconClick = vaultItemListingHandlers.backClick,
                 )
@@ -538,7 +539,7 @@ private fun VaultItemListingScaffold(
             if (state.hasAddItemFabButton) {
                 BitwardenFloatingActionButton(
                     onClick = vaultItemListingHandlers.addVaultItemClick,
-                    painter = rememberVectorPainter(id = R.drawable.ic_plus_large),
+                    painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
                     contentDescription = stringResource(id = R.string.add_item),
                     modifier = Modifier.testTag(tag = "AddItemButton"),
                 )

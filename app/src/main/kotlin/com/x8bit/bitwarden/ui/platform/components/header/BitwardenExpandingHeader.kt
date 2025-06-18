@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 
@@ -92,7 +93,7 @@ fun BitwardenExpandingHeader(
                 label = "expanderIconRotationAnimation",
             )
             Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_chevron_up_small),
+                painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_up_small),
                 contentDescription = null,
                 tint = BitwardenTheme.colorScheme.icon.secondary,
                 modifier = Modifier.rotate(degrees = iconRotationDegrees.value),

@@ -218,7 +218,7 @@ private fun WarningMessageCard(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            painter = rememberVectorPainter(id = R.drawable.ic_warning),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ic_warning),
             contentDescription = null,
             tint = BitwardenTheme.colorScheme.status.weak1,
         )

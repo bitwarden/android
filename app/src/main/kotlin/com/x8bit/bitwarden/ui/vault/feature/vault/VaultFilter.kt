@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.scrolledContainerBackground
 import com.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
@@ -103,7 +104,7 @@ fun VaultFilter(
         Spacer(modifier = Modifier.width(16.dp))
 
         BitwardenStandardIconButton(
-            vectorIconRes = R.drawable.ic_ellipsis_horizontal,
+            vectorIconRes = BitwardenDrawable.ic_ellipsis_horizontal,
             contentDescription = stringResource(id = R.string.filter_by_vault),
             onClick = { shouldShowSelectionDialog = true },
             modifier = Modifier.testTag(tag = "OpenOrgFilter"),

@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
 import android.net.Uri
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.vault.CipherType
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
@@ -197,7 +197,7 @@ class CipherViewExtensionsTest {
                 common = createCommonContent(
                     isEmpty = false,
                     isPremiumUser = true,
-                    iconResId = R.drawable.ic_id_card,
+                    iconResId = BitwardenDrawable.ic_id_card,
                 )
                     .copy(currentCipher = cipherView),
                 type = createIdentityContent(isEmpty = false),
@@ -228,7 +228,7 @@ class CipherViewExtensionsTest {
                 common = createCommonContent(
                     isEmpty = true,
                     isPremiumUser = true,
-                    iconResId = R.drawable.ic_id_card,
+                    iconResId = BitwardenDrawable.ic_id_card,
                 )
                     .copy(currentCipher = cipherView),
                 type = createIdentityContent(isEmpty = true),
@@ -269,7 +269,7 @@ class CipherViewExtensionsTest {
                 common = createCommonContent(
                     isEmpty = false,
                     isPremiumUser = true,
-                    iconResId = R.drawable.ic_id_card,
+                    iconResId = BitwardenDrawable.ic_id_card,
                 )
                     .copy(currentCipher = cipherView),
                 type = createIdentityContent(
@@ -315,7 +315,7 @@ class CipherViewExtensionsTest {
                 common = createCommonContent(
                     isEmpty = false,
                     isPremiumUser = true,
-                    iconResId = R.drawable.ic_id_card,
+                    iconResId = BitwardenDrawable.ic_id_card,
                 ).copy(
                     currentCipher = cipherView.copy(
                         identity = cipherView.identity?.copy(
@@ -363,7 +363,7 @@ class CipherViewExtensionsTest {
                 common = createCommonContent(
                     isEmpty = false,
                     isPremiumUser = true,
-                    iconResId = R.drawable.ic_note,
+                    iconResId = BitwardenDrawable.ic_note,
                 )
                     .copy(currentCipher = cipherView),
                 type = VaultItemState.ViewState.Content.ItemType.SecureNote,
@@ -394,7 +394,7 @@ class CipherViewExtensionsTest {
             common = createCommonContent(
                 isEmpty = true,
                 isPremiumUser = true,
-                iconResId = R.drawable.ic_note,
+                iconResId = BitwardenDrawable.ic_note,
             )
                 .copy(currentCipher = cipherView),
             type = VaultItemState.ViewState.Content.ItemType.SecureNote,
@@ -424,7 +424,7 @@ class CipherViewExtensionsTest {
                 common = createCommonContent(
                     isEmpty = false,
                     isPremiumUser = true,
-                    iconResId = R.drawable.ic_ssh_key,
+                    iconResId = BitwardenDrawable.ic_ssh_key,
                 ).copy(
                     currentCipher = cipherView.copy(
                         name = "mockName",
@@ -445,11 +445,11 @@ class CipherViewExtensionsTest {
     @Test
     fun `toViewState should transform full CipherView into ViewState with iconData based on cipher type`() {
         mapOf<CipherType, Int>(
-            CipherType.LOGIN to R.drawable.ic_globe,
-            CipherType.IDENTITY to R.drawable.ic_id_card,
-            CipherType.CARD to R.drawable.ic_payment_card,
-            CipherType.SECURE_NOTE to R.drawable.ic_note,
-            CipherType.SSH_KEY to R.drawable.ic_ssh_key,
+            CipherType.LOGIN to BitwardenDrawable.ic_globe,
+            CipherType.IDENTITY to BitwardenDrawable.ic_id_card,
+            CipherType.CARD to BitwardenDrawable.ic_payment_card,
+            CipherType.SECURE_NOTE to BitwardenDrawable.ic_note,
+            CipherType.SSH_KEY to BitwardenDrawable.ic_ssh_key,
         )
             .forEach {
                 val cipherView = createCipherView(type = it.key, isEmpty = false)

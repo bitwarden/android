@@ -16,8 +16,8 @@ import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 
 /**
  * A reusable composable function that displays a group item.
@@ -86,7 +86,7 @@ private fun BitwardenGroupItem_preview() {
         BitwardenGroupItem(
             label = "Sample Label",
             supportingLabel = "5",
-            startIcon = rememberVectorPainter(id = R.drawable.ic_file_text),
+            startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_file_text),
             startIconTestTag = "Test Tag",
             onClick = {},
             cardStyle = CardStyle.Full,

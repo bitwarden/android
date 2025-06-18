@@ -8,6 +8,7 @@ import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -579,7 +580,7 @@ class VaultItemListingDataExtensionsTest {
                             subtitleTestTag = "PasskeyName",
                             iconData = IconData.Network(
                                 uri = "https://icons.bitwarden.net/www.mockuri.com/icon.png",
-                                fallbackIconRes = R.drawable.ic_bw_passkey,
+                                fallbackIconRes = BitwardenDrawable.ic_bw_passkey,
                             ),
                             isAutofill = true,
                             shouldShowMasterPasswordReprompt = true,
@@ -666,7 +667,7 @@ class VaultItemListingDataExtensionsTest {
                             subtitleTestTag = "PasskeyName",
                             iconData = IconData.Network(
                                 uri = "https://icons.bitwarden.net/www.mockuri.com/icon.png",
-                                fallbackIconRes = R.drawable.ic_bw_passkey,
+                                fallbackIconRes = BitwardenDrawable.ic_bw_passkey,
                             ),
                             isAutofill = true,
                             shouldShowMasterPasswordReprompt = false,
@@ -903,7 +904,7 @@ class VaultItemListingDataExtensionsTest {
                 message = R.string.search_for_a_login_or_add_a_new_login.asText(),
                 shouldShowAddButton = false,
                 buttonText = R.string.new_item.asText(),
-                vectorRes = R.drawable.img_folder_question,
+                vectorRes = BitwardenDrawable.img_folder_question,
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Trash,

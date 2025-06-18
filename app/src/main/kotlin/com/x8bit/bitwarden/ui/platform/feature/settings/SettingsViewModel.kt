@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -236,32 +237,32 @@ enum class Settings(
 ) {
     ACCOUNT_SECURITY(
         text = R.string.account_security.asText(),
-        vectorIconRes = R.drawable.ic_locked,
+        vectorIconRes = BitwardenDrawable.ic_locked,
         testTag = "AccountSecuritySettingsButton",
     ),
     AUTO_FILL(
         text = R.string.autofill.asText(),
-        vectorIconRes = R.drawable.ic_check_mark,
+        vectorIconRes = BitwardenDrawable.ic_check_mark,
         testTag = "AutofillSettingsButton",
     ),
     VAULT(
         text = R.string.vault.asText(),
-        vectorIconRes = R.drawable.ic_vault_thin,
+        vectorIconRes = BitwardenDrawable.ic_vault_thin,
         testTag = "VaultSettingsButton",
     ),
     APPEARANCE(
         text = R.string.appearance.asText(),
-        vectorIconRes = R.drawable.ic_paintbrush,
+        vectorIconRes = BitwardenDrawable.ic_paintbrush,
         testTag = "AppearanceSettingsButton",
     ),
     OTHER(
         text = R.string.other.asText(),
-        vectorIconRes = R.drawable.ic_filter,
+        vectorIconRes = BitwardenDrawable.ic_filter,
         testTag = "OtherSettingsButton",
     ),
     ABOUT(
         text = R.string.about.asText(),
-        vectorIconRes = R.drawable.ic_info_circle,
+        vectorIconRes = BitwardenDrawable.ic_info_circle,
         testTag = "AboutSettingsButton",
     ),
 }

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util
 
 import androidx.annotation.DrawableRes
 import com.bitwarden.network.model.TwoFactorAuthMethod
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -117,8 +118,8 @@ val TwoFactorAuthMethod.shouldUseNfc: Boolean
 @get:DrawableRes
 val TwoFactorAuthMethod.imageRes: Int?
     get() = when (this) {
-        TwoFactorAuthMethod.YUBI_KEY -> R.drawable.yubi_key
-        TwoFactorAuthMethod.EMAIL -> R.drawable.img_new_device_verification
-        TwoFactorAuthMethod.AUTHENTICATOR_APP -> R.drawable.img_authenticator
+        TwoFactorAuthMethod.YUBI_KEY -> BitwardenDrawable.yubi_key
+        TwoFactorAuthMethod.EMAIL -> BitwardenDrawable.img_new_device_verification
+        TwoFactorAuthMethod.AUTHENTICATOR_APP -> BitwardenDrawable.img_authenticator
         else -> null
     }

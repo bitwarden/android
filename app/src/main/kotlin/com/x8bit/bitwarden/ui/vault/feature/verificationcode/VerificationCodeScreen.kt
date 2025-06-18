@@ -30,6 +30,7 @@ import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActio
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
@@ -109,7 +110,7 @@ fun VerificationCodeScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.verification_codes),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = verificationCodeHandler.backClick,
                 actions = {

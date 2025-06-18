@@ -106,7 +106,7 @@ private fun ImportLoginsInstructionStep_preview() {
                 stepTitle = "Step title",
                 instructions = persistentListOf(
                     ContentBlockData(
-                        iconVectorResource = R.drawable.ic_number1,
+                        iconVectorResource = BitwardenDrawable.ic_number1,
                         headerText = buildAnnotatedString {
                             append("Step text 1")
                             withStyle(
@@ -128,7 +128,7 @@ private fun ImportLoginsInstructionStep_preview() {
                         subtitleText = "Added deets".toAnnotatedString(),
                     ),
                     ContentBlockData(
-                        iconVectorResource = R.drawable.ic_number3,
+                        iconVectorResource = BitwardenDrawable.ic_number3,
                         headerText = buildAnnotatedString {
                             append("Step text 3")
                         },

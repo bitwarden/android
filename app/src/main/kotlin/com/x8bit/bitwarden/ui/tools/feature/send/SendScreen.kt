@@ -26,6 +26,7 @@ import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionI
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
@@ -195,7 +196,7 @@ fun SendScreen(
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(SendAction.AddSendClick) }
                     },
-                    painter = rememberVectorPainter(id = R.drawable.ic_plus_large),
+                    painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
                     contentDescription = stringResource(id = R.string.add_item),
                     modifier = Modifier.testTag(tag = "AddItemButton"),
                 )

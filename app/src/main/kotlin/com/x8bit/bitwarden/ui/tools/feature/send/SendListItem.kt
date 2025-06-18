@@ -11,6 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -123,7 +124,7 @@ private fun SendListItem_preview() {
         SendListItem(
             label = "Sample Label",
             supportingLabel = "Jan 3, 2024, 10:35 AM",
-            startIcon = IconData.Local(R.drawable.ic_file_text),
+            startIcon = IconData.Local(BitwardenDrawable.ic_file_text),
             trailingLabelIcons = persistentListOf(),
             showMoreOptions = true,
             onClick = {},
