@@ -27,13 +27,13 @@ import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.content.model.ContentBlockData
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
-import com.x8bit.bitwarden.ui.platform.components.model.ContentBlockData
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import kotlinx.collections.immutable.persistentListOf
 
@@ -150,7 +150,7 @@ private fun MasterPasswordGuidanceContentBlocks(modifier: Modifier = Modifier) {
                     subtitleText = annotatedStringResource(
                         id = R.string.put_the_words_together_in_any_order_to_form_your_passphrase,
                     ),
-                    iconVectorResource = R.drawable.ic_number2,
+                    iconVectorResource = BitwardenDrawable.ic_number2,
                 ),
                 ContentBlockData(
                     headerText = stringResource(R.string.make_it_yours).toAnnotatedString(),

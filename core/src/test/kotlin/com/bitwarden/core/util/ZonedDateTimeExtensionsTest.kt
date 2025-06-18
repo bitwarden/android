@@ -1,6 +1,5 @@
-package com.x8bit.bitwarden.data.platform.base.util
+package com.bitwarden.core.util
 
-import com.x8bit.bitwarden.ui.platform.base.util.isOverFiveMinutesOld
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -10,6 +9,7 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 class ZonedDateTimeExtensionsTest {
+
     private val fixedClock: Clock = Clock.fixed(
         Instant.parse("2023-10-27T12:00:00Z"),
         ZoneOffset.UTC,

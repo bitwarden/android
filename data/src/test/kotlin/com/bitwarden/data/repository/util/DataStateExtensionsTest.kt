@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.repository.util
+package com.bitwarden.data.repository.util
 
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState

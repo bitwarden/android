@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.content
+package com.bitwarden.ui.platform.components.content
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -20,10 +20,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.bottomDivider
+import com.bitwarden.ui.platform.components.content.model.ContentBlockData
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.model.ContentBlockData
 
 /**
  * An overloaded version [BitwardenContentBlock] which takes a [ContentBlockData] for the
@@ -129,7 +129,7 @@ private fun BitwardenContentBlock_preview() {
                 data = ContentBlockData(
                     headerText = "Header",
                     subtitleText = "Subtitle",
-                    iconVectorResource = R.drawable.ic_number2,
+                    iconVectorResource = BitwardenDrawable.ic_number2,
                 ),
             )
             BitwardenContentBlock(
