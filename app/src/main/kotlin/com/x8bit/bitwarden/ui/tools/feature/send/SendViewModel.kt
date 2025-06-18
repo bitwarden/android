@@ -216,7 +216,7 @@ class SendViewModel @Inject constructor(
 
             is RemovePasswordSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(SendEvent.ShowToast(message = R.string.send_password_removed.asText()))
+                sendEvent(SendEvent.ShowToast(message = R.string.password_removed.asText()))
             }
         }
     }

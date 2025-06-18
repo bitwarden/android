@@ -1498,9 +1498,7 @@ class VaultItemListingViewModel @Inject constructor(
             is RemovePasswordSendResult.Success -> {
                 clearDialogState()
                 sendEvent(
-                    VaultItemListingEvent.ShowToast(
-                        text = R.string.send_password_removed.asText(),
-                    ),
+                    VaultItemListingEvent.ShowToast(text = R.string.password_removed.asText()),
                 )
             }
         }

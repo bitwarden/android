@@ -601,9 +601,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(AddEditSendAction.RemovePasswordClick)
                 assertEquals(
                     AddEditSendEvent.ShowSnackbar(
-                        data = BitwardenSnackbarData(
-                            message = R.string.send_password_removed.asText(),
-                        ),
+                        data = BitwardenSnackbarData(message = R.string.password_removed.asText()),
                     ),
                     awaitItem(),
                 )

@@ -454,7 +454,7 @@ Scanning will happen automatically.</string>
     <string name="password_info">Require this password to view the Send.</string>
     <string name="remove_password">Remove password</string>
     <string name="removing_send_password">Removing password</string>
-    <string name="send_password_removed">Password has been removed.</string>
+    <string name="password_removed">Password removed</string>
     <string name="add_a_send">New send</string>
     <string name="copy_link">Copy link</string>
     <string name="share_link">Share link</string>
