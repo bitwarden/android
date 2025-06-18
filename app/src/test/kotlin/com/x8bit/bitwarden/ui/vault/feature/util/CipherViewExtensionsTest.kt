@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.util
 
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -7,7 +8,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockIdentityVie
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSecureNoteView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockUriView
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.model.VaultTrailingIcon
 import org.junit.jupiter.api.Assertions.assertEquals

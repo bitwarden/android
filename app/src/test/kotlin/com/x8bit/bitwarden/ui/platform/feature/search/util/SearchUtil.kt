@@ -2,11 +2,11 @@ package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import androidx.annotation.DrawableRes
 import com.bitwarden.send.SendType
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.persistentListOf
