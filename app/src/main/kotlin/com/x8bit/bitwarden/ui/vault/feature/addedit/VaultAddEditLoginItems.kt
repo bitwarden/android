@@ -173,7 +173,7 @@ fun LazyListScope.vaultAddEditLoginItems(
             BitwardenClickableText(
                 label = stringResource(id = R.string.add_website),
                 onClick = loginItemTypeHandlers.onAddNewUriClick,
-                leadingIcon = painterResource(id = R.drawable.ic_plus_small),
+                leadingIcon = painterResource(id = BitwardenDrawable.ic_plus_small),
                 style = BitwardenTheme.typography.labelMedium,
                 innerPadding = PaddingValues(all = 16.dp),
                 cornerSize = 0.dp,
@@ -212,7 +212,7 @@ private fun UsernameRow(
         onValueChange = loginItemTypeHandlers.onUsernameTextChange,
         actions = {
             BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_generate,
+                vectorIconRes = BitwardenDrawable.ic_generate,
                 contentDescription = stringResource(id = R.string.generate_username),
                 onClick = {
                     if (username.isEmpty()) {
@@ -309,7 +309,7 @@ private fun CoachMarkScope<AddEditItemCoachMark>.PasswordRow(
                 },
             ) {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_generate,
+                    vectorIconRes = BitwardenDrawable.ic_generate,
                     contentDescription = stringResource(id = R.string.generate_password),
                     onClick = {
                         if (password.isEmpty()) {
@@ -375,7 +375,7 @@ private fun TotpRow(
                     onClick = loginItemTypeHandlers.onClearTotpKeyClick,
                 )
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_copy,
+                    vectorIconRes = BitwardenDrawable.ic_copy,
                     contentDescription = stringResource(id = R.string.copy_totp),
                     onClick = { loginItemTypeHandlers.onCopyTotpKeyClick(totpKey) },
                 )
@@ -390,7 +390,7 @@ private fun TotpRow(
             BitwardenClickableText(
                 label = stringResource(id = R.string.set_up_authenticator_key),
                 onClick = onTotpSetupClick,
-                leadingIcon = painterResource(id = R.drawable.ic_camera_small),
+                leadingIcon = painterResource(id = BitwardenDrawable.ic_camera_small),
                 style = BitwardenTheme.typography.labelMedium,
                 innerPadding = PaddingValues(all = 16.dp),
                 isEnabled = canViewTotp,
@@ -424,7 +424,7 @@ private fun PasskeyField(
         actions = {
             if (canRemovePasskey) {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_minus,
+                    vectorIconRes = BitwardenDrawable.ic_minus,
                     contentDescription = stringResource(id = R.string.remove_passkey),
                     onClick = loginItemTypeHandlers.onClearFido2CredentialClick,
                     modifier = Modifier.testTag(tag = "RemovePasskeyButton"),

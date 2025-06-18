@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import androidx.annotation.DrawableRes
 import com.bitwarden.send.SendType
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
@@ -16,7 +17,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun createMockDisplayItemForCipher(
     number: Int,
     cipherType: CipherType = CipherType.LOGIN,
-    @DrawableRes fallbackIconRes: Int = R.drawable.ic_globe,
+    @DrawableRes fallbackIconRes: Int = BitwardenDrawable.ic_globe,
 ): SearchState.DisplayItem =
     when (cipherType) {
         CipherType.LOGIN -> {
@@ -32,12 +33,12 @@ fun createMockDisplayItemForCipher(
                 ),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = R.drawable.ic_collections,
+                        iconRes = BitwardenDrawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
-                        iconRes = R.drawable.ic_paperclip,
+                        iconRes = BitwardenDrawable.ic_paperclip,
                         contentDescription = R.string.attachments.asText(),
                         testTag = "CipherWithAttachmentsIcon",
                     ),
@@ -84,15 +85,15 @@ fun createMockDisplayItemForCipher(
                 titleTestTag = "CipherNameLabel",
                 subtitle = null,
                 subtitleTestTag = "CipherSubTitleLabel",
-                iconData = IconData.Local(R.drawable.ic_note),
+                iconData = IconData.Local(BitwardenDrawable.ic_note),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = R.drawable.ic_collections,
+                        iconRes = BitwardenDrawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
-                        iconRes = R.drawable.ic_paperclip,
+                        iconRes = BitwardenDrawable.ic_paperclip,
                         contentDescription = R.string.attachments.asText(),
                         testTag = "CipherWithAttachmentsIcon",
                     ),
@@ -128,15 +129,15 @@ fun createMockDisplayItemForCipher(
                 titleTestTag = "CipherNameLabel",
                 subtitle = "mockBrand-$number, *er-$number",
                 subtitleTestTag = "CipherSubTitleLabel",
-                iconData = IconData.Local(R.drawable.ic_payment_card),
+                iconData = IconData.Local(BitwardenDrawable.ic_payment_card),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = R.drawable.ic_collections,
+                        iconRes = BitwardenDrawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
-                        iconRes = R.drawable.ic_paperclip,
+                        iconRes = BitwardenDrawable.ic_paperclip,
                         contentDescription = R.string.attachments.asText(),
                         testTag = "CipherWithAttachmentsIcon",
                     ),
@@ -177,15 +178,15 @@ fun createMockDisplayItemForCipher(
                 titleTestTag = "CipherNameLabel",
                 subtitle = "mockFirstName-${number}mockLastName-$number",
                 subtitleTestTag = "CipherSubTitleLabel",
-                iconData = IconData.Local(R.drawable.ic_id_card),
+                iconData = IconData.Local(BitwardenDrawable.ic_id_card),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = R.drawable.ic_collections,
+                        iconRes = BitwardenDrawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
-                        iconRes = R.drawable.ic_paperclip,
+                        iconRes = BitwardenDrawable.ic_paperclip,
                         contentDescription = R.string.attachments.asText(),
                         testTag = "CipherWithAttachmentsIcon",
                     ),
@@ -217,10 +218,10 @@ fun createMockDisplayItemForCipher(
                 titleTestTag = "CipherNameLabel",
                 subtitle = "mockPublicKey-$number",
                 subtitleTestTag = "CipherSubTitleLabel",
-                iconData = IconData.Local(R.drawable.ic_ssh_key),
+                iconData = IconData.Local(BitwardenDrawable.ic_ssh_key),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = R.drawable.ic_collections,
+                        iconRes = BitwardenDrawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
@@ -262,15 +263,15 @@ fun createMockDisplayItemForSend(
                 titleTestTag = "SendNameLabel",
                 subtitle = "Oct 27, 2023, 12:00 PM",
                 subtitleTestTag = "SendDateLabel",
-                iconData = IconData.Local(R.drawable.ic_file),
+                iconData = IconData.Local(BitwardenDrawable.ic_file),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = R.drawable.ic_key,
+                        iconRes = BitwardenDrawable.ic_key,
                         contentDescription = R.string.password.asText(),
                         testTag = "PasswordProtectedSendIcon",
                     ),
                     IconData.Local(
-                        iconRes = R.drawable.ic_send_max_access_count_reached,
+                        iconRes = BitwardenDrawable.ic_send_max_access_count_reached,
                         contentDescription = R.string.maximum_access_count_reached.asText(),
                         testTag = "MaxAccessSendIcon",
                     ),
@@ -308,15 +309,15 @@ fun createMockDisplayItemForSend(
                 titleTestTag = "SendNameLabel",
                 subtitle = "Oct 27, 2023, 12:00 PM",
                 subtitleTestTag = "SendDateLabel",
-                iconData = IconData.Local(R.drawable.ic_file_text),
+                iconData = IconData.Local(BitwardenDrawable.ic_file_text),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = R.drawable.ic_key,
+                        iconRes = BitwardenDrawable.ic_key,
                         contentDescription = R.string.password.asText(),
                         testTag = "PasswordProtectedSendIcon",
                     ),
                     IconData.Local(
-                        iconRes = R.drawable.ic_send_max_access_count_reached,
+                        iconRes = BitwardenDrawable.ic_send_max_access_count_reached,
                         contentDescription = R.string.maximum_access_count_reached.asText(),
                         testTag = "MaxAccessSendIcon",
                     ),

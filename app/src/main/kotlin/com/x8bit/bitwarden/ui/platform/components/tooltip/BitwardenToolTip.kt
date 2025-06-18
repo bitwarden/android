@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 
@@ -67,7 +68,7 @@ fun TooltipScope.BitwardenToolTip(
                 Spacer(modifier = Modifier.weight(1f))
                 onDismiss?.let {
                     BitwardenStandardIconButton(
-                        painter = rememberVectorPainter(R.drawable.ic_close_small),
+                        painter = rememberVectorPainter(BitwardenDrawable.ic_close_small),
                         contentDescription = stringResource(R.string.close),
                         onClick = it,
                         modifier = Modifier.offset(x = 16.dp),

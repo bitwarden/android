@@ -24,6 +24,7 @@ import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
@@ -369,7 +370,7 @@ private fun NotesField(
         singleLine = false,
         actions = {
             BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_copy,
+                vectorIconRes = BitwardenDrawable.ic_copy,
                 contentDescription = stringResource(id = R.string.copy_notes),
                 onClick = onCopyAction,
                 modifier = Modifier.testTag(tag = "CipherNotesCopyButton"),
@@ -401,7 +402,7 @@ private fun PasswordField(
             singleLine = false,
             actions = {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_copy,
+                    vectorIconRes = BitwardenDrawable.ic_copy,
                     contentDescription = stringResource(id = R.string.copy_password),
                     onClick = onCopyPasswordClick,
                     modifier = Modifier.testTag(tag = "LoginCopyPasswordButton"),
@@ -464,7 +465,7 @@ private fun TotpField(
                     periodSeconds = totpCodeItemData.periodSeconds,
                 )
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_copy,
+                    vectorIconRes = BitwardenDrawable.ic_copy,
                     contentDescription = stringResource(id = R.string.copy_totp),
                     onClick = onCopyTotpClick,
                     modifier = Modifier.testTag(tag = "LoginCopyTotpButton"),
@@ -510,7 +511,7 @@ private fun UriField(
         actions = {
             if (uriData.isLaunchable) {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_external_link,
+                    vectorIconRes = BitwardenDrawable.ic_external_link,
                     contentDescription = stringResource(id = R.string.launch),
                     onClick = { onLaunchUriClick(uriData.uri) },
                     modifier = Modifier.testTag(tag = "LoginLaunchUriButton"),
@@ -518,7 +519,7 @@ private fun UriField(
             }
             if (uriData.isCopyable) {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_copy,
+                    vectorIconRes = BitwardenDrawable.ic_copy,
                     contentDescription = stringResource(id = R.string.copy),
                     onClick = { onCopyUriClick(uriData.uri) },
                     modifier = Modifier.testTag(tag = "LoginCopyUriButton"),
@@ -546,7 +547,7 @@ private fun UsernameField(
         singleLine = false,
         actions = {
             BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_copy,
+                vectorIconRes = BitwardenDrawable.ic_copy,
                 contentDescription = stringResource(id = R.string.copy_username),
                 onClick = onCopyUsernameClick,
                 modifier = Modifier.testTag(tag = "LoginCopyUsernameButton"),

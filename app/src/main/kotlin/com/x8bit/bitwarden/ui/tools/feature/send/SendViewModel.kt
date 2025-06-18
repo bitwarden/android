@@ -9,6 +9,7 @@ import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -518,8 +519,8 @@ data class SendState(
                  * Indicates the type of send this, a text or file.
                  */
                 enum class Type(@DrawableRes val iconRes: Int) {
-                    FILE(iconRes = R.drawable.ic_file),
-                    TEXT(iconRes = R.drawable.ic_file_text),
+                    FILE(iconRes = BitwardenDrawable.ic_file),
+                    TEXT(iconRes = BitwardenDrawable.ic_file_text),
                 }
             }
         }

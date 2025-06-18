@@ -22,6 +22,7 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
@@ -72,7 +73,7 @@ fun VaultItemSecureNoteContent(
                     singleLine = false,
                     actions = {
                         BitwardenStandardIconButton(
-                            vectorIconRes = R.drawable.ic_copy,
+                            vectorIconRes = BitwardenDrawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy_notes),
                             onClick = vaultCommonItemTypeHandlers.onCopyNotesClick,
                             modifier = Modifier.testTag(tag = "CipherNotesCopyButton"),

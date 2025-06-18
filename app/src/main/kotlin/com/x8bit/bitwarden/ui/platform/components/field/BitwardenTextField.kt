@@ -62,8 +62,8 @@ import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenCutCopyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIcon
@@ -316,7 +316,7 @@ fun BitwardenTextField(
                                     )
                                     Spacer(modifier = Modifier.width(width = 8.dp))
                                     BitwardenStandardIconButton(
-                                        vectorIconRes = R.drawable.ic_question_circle_small,
+                                        vectorIconRes = BitwardenDrawable.ic_question_circle_small,
                                         contentDescription = it.contentDescription,
                                         onClick = it.onClick,
                                         contentColor = BitwardenTheme.colorScheme.icon.secondary,

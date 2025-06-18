@@ -55,6 +55,7 @@ import com.bitwarden.ui.platform.base.util.toSafeOverlayColor
 import com.bitwarden.ui.platform.base.util.toUnscaledTextUnit
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLogoutConfirmationDialog
@@ -303,7 +304,9 @@ private fun AccountSummaryItem(
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_account_initials_container),
+                painter = rememberVectorPainter(
+                    id = BitwardenDrawable.ic_account_initials_container,
+                ),
                 contentDescription = null,
                 tint = accountSummary.avatarColor,
                 modifier = Modifier.size(24.dp),
@@ -426,7 +429,7 @@ private fun AddAccountItem(
             .then(modifier),
     ) {
         Icon(
-            painter = rememberVectorPainter(id = R.drawable.ic_plus_small),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_small),
             contentDescription = null,
             tint = BitwardenTheme.colorScheme.icon.secondary,
             modifier = Modifier

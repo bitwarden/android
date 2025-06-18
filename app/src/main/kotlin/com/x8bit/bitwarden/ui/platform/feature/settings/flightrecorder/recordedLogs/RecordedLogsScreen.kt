@@ -134,7 +134,9 @@ fun RecordedLogsScreen(
             RecordedLogsState.ViewState.Empty -> {
                 BitwardenEmptyContent(
                     text = stringResource(id = R.string.no_logs_recorded),
-                    illustrationData = IconData.Local(iconRes = R.drawable.il_secure_devices),
+                    illustrationData = IconData.Local(
+                        iconRes = BitwardenDrawable.il_secure_devices,
+                    ),
                     modifier = Modifier.fillMaxSize(),
                 )
             }
@@ -324,7 +326,7 @@ private fun LogRow(
                     isEnabled = displayableItem.isDeletedEnabled,
                 ),
             ),
-            vectorIconRes = R.drawable.ic_ellipsis_horizontal,
+            vectorIconRes = BitwardenDrawable.ic_ellipsis_horizontal,
             testTag = "Options",
         )
     }
