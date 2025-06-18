@@ -24,10 +24,11 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.content.model.ContentBlockData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
-import com.x8bit.bitwarden.ui.platform.components.model.ContentBlockData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -120,7 +121,7 @@ private fun ImportLoginsInstructionStep_preview() {
                         subtitleText = null,
                     ),
                     ContentBlockData(
-                        iconVectorResource = R.drawable.ic_number2,
+                        iconVectorResource = BitwardenDrawable.ic_number2,
                         headerText = buildAnnotatedString {
                             append("Step text 2")
                         },

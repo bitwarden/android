@@ -1,14 +1,13 @@
-package com.x8bit.bitwarden.ui.platform.components.model
+package com.bitwarden.ui.platform.components.content.model
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.AnnotatedString
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenContentBlock
+import com.bitwarden.ui.platform.components.content.BitwardenContentBlock
 
 /**
- * Wrapper class for data to display in a
- * [BitwardenContentBlock]
+ * Wrapper class for data to display in a [BitwardenContentBlock]
  */
 @Immutable
 data class ContentBlockData(

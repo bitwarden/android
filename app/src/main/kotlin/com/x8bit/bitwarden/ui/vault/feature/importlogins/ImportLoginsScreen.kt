@@ -47,6 +47,7 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.content.model.ContentBlockData
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -55,7 +56,6 @@ import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBott
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.model.ContentBlockData
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -306,7 +306,7 @@ private fun ImportLoginsStepOneContent(
                 subtitleText = null,
             ),
             ContentBlockData(
-                iconVectorResource = R.drawable.ic_number2,
+                iconVectorResource = BitwardenDrawable.ic_number2,
                 headerText = instruction2,
                 subtitleText = null,
             ),
@@ -352,7 +352,7 @@ private fun ImportLoginsStepTwoContent(
                 subtitleText = null,
             ),
             ContentBlockData(
-                iconVectorResource = R.drawable.ic_number2,
+                iconVectorResource = BitwardenDrawable.ic_number2,
                 headerText = instruction2,
                 subtitleText = null,
             ),
@@ -394,7 +394,7 @@ private fun ImportLoginsStepThreeContent(
                 subtitleText = null,
             ),
             ContentBlockData(
-                iconVectorResource = R.drawable.ic_number2,
+                iconVectorResource = BitwardenDrawable.ic_number2,
                 headerText = instruction2,
                 subtitleText = null,
             ),
