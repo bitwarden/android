@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.base.util
+package com.bitwarden.core.util
 
 import java.time.Clock
 import java.time.Duration
