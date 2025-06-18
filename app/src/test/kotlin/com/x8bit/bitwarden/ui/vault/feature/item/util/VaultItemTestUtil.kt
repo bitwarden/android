@@ -280,8 +280,8 @@ fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemT
             totpCode = "testCode",
         )
             .takeUnless { isEmpty },
-        fido2CredentialCreationDateText = R.string.created_xy
-            .asText("10/27/23", "12:00 PM")
+        fido2CredentialCreationDateText = R.string.created_x
+            .asText("Oct 27, 2023, 12:00 PM")
             .takeUnless { isEmpty },
         canViewTotpCode = true,
     )

@@ -2179,9 +2179,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     originalCipher = cipherView,
                 ),
                 typeContentViewState = createLoginTypeContentViewState(
-                    fido2CredentialCreationDateTime = R.string.created_xy.asText(
-                        "05/08/24",
-                        "14:30 PM",
+                    fido2CredentialCreationDateTime = R.string.created_x.asText(
+                        "May 08, 2024, 4:30 PM",
                     ),
                 ),
                 createCredentialRequest = mockFido2CredentialRequest,
@@ -2859,9 +2858,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 savedStateHandle = createSavedStateHandleWithState(
                     state = createVaultAddItemState(
                         typeContentViewState = createLoginTypeContentViewState(
-                            fido2CredentialCreationDateTime = R.string.created_xy.asText(
-                                "05/08/24",
-                                "14:30 PM",
+                            fido2CredentialCreationDateTime = R.string.created_x.asText(
+                                "May 08, 2024, 4:30 PM",
                             ),
                         ),
                     ),

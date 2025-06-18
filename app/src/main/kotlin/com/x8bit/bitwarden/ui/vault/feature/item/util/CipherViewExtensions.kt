@@ -1,9 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
 import androidx.annotation.DrawableRes
-import com.bitwarden.core.data.util.toFormattedDateStyle
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
-import com.bitwarden.core.data.util.toFormattedTimeStyle
 import com.bitwarden.ui.platform.base.util.nullIfAllEqual
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.ui.platform.base.util.orZeroWidthSpace
@@ -256,19 +254,14 @@ private fun LoginUriView.toUriData() =
         isLaunchable = !uri.isNullOrBlank(),
     )
 
-private fun Fido2Credential?.getCreationDateText(clock: Clock): Text? =
-    this?.let {
-        R.string.created_xy.asText(
-            creationDate.toFormattedDateStyle(
-                dateStyle = FormatStyle.SHORT,
-                clock = clock,
-            ),
-            creationDate.toFormattedTimeStyle(
-                timeStyle = FormatStyle.SHORT,
-                clock = clock,
-            ),
-        )
-    }
+private fun Fido2Credential.getCreationDateText(clock: Clock): Text? =
+    R.string.created_x.asText(
+        this.creationDate.toFormattedDateTimeStyle(
+            dateStyle = FormatStyle.MEDIUM,
+            timeStyle = FormatStyle.SHORT,
+            clock = clock,
+        ),
+    )
 
 private fun CipherView.toIconData(
     baseIconUrl: String,
