@@ -313,9 +313,7 @@ class AddEditSendViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(
                     AddEditSendEvent.ShowSnackbar(
-                        data = BitwardenSnackbarData(
-                            message = R.string.send_password_removed.asText(),
-                        ),
+                        data = BitwardenSnackbarData(message = R.string.password_removed.asText()),
                     ),
                 )
             }

@@ -1518,7 +1518,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 assertEquals(
-                    VaultItemListingEvent.ShowToast(R.string.send_password_removed.asText()),
+                    VaultItemListingEvent.ShowToast(R.string.password_removed.asText()),
                     awaitItem(),
                 )
             }

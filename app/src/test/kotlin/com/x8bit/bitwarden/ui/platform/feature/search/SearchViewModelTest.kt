@@ -898,7 +898,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 assertEquals(
-                    SearchEvent.ShowToast(R.string.send_password_removed.asText()),
+                    SearchEvent.ShowToast(R.string.password_removed.asText()),
                     awaitItem(),
                 )
             }
