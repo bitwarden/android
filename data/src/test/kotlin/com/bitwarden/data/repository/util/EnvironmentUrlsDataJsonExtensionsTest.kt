@@ -8,18 +8,18 @@ import org.junit.jupiter.api.Test
 
 class EnvironmentUrlsDataJsonExtensionsTest {
     @Test
-    fun `baseApiUrl should return base if it is present`() {
+    fun `baseApiUrl should return api if it is present`() {
         assertEquals(
-            "base/api",
+            "api",
             DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.baseApiUrl,
         )
     }
 
     @Test
-    fun `baseApiUrl should return api value if base is empty`() {
+    fun `baseApiUrl should return base value if api is empty`() {
         assertEquals(
-            "api",
-            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.copy(base = "").baseApiUrl,
+            "base/api",
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.copy(api = "").baseApiUrl,
         )
     }
 
@@ -32,18 +32,18 @@ class EnvironmentUrlsDataJsonExtensionsTest {
     }
 
     @Test
-    fun `baseEventsUrl should return base if it is present`() {
+    fun `baseEventsUrl should return events if it is present`() {
         assertEquals(
-            "base/events",
+            "events",
             DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.baseEventsUrl,
         )
     }
 
     @Test
-    fun `baseEventsUrl should return events value if base is empty`() {
+    fun `baseEventsUrl should return base value if events is empty`() {
         assertEquals(
-            "events",
-            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.copy(base = "").baseEventsUrl,
+            "base/events",
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.copy(events = "").baseEventsUrl,
         )
     }
 
@@ -165,14 +165,14 @@ class EnvironmentUrlsDataJsonExtensionsTest {
     }
 
     @Test
-    fun `baseWebSendUrl should return the default when webvault matches default webvault`() {
+    fun `baseWebSendUrl should return the modified webvault when not in the US`() {
         val result = DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA
             .copy(
                 webVault = "https://vault.bitwarden.com",
                 base = "",
             )
             .baseWebSendUrl
-        assertEquals("https://send.bitwarden.com/#", result)
+        assertEquals("https://vault.bitwarden.com/#/send/", result)
     }
 
     @Test
