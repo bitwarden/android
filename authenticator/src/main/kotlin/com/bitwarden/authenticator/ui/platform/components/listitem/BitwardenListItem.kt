@@ -34,10 +34,10 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.row.BitwardenBasicDialogRow
-import com.bitwarden.authenticator.ui.platform.components.icon.BitwardenIcon
-import com.bitwarden.authenticator.ui.platform.components.model.IconData
 import com.bitwarden.authenticator.ui.platform.components.model.IconResource
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
+import com.bitwarden.ui.platform.components.icon.BitwardenIcon
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -87,7 +87,6 @@ fun BitwardenListItem(
     ) {
         BitwardenIcon(
             iconData = startIcon,
-            contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.size(24.dp),
         )

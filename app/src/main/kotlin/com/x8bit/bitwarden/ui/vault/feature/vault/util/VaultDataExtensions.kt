@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import android.net.Uri
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -11,7 +12,6 @@ import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.util.getFilteredCollections
 import com.x8bit.bitwarden.ui.vault.feature.util.getFilteredFolders
 import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
