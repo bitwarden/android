@@ -24,6 +24,7 @@ import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.CipherView
+import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilder
 import com.x8bit.bitwarden.data.credentials.model.Fido2AttestationResponse
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
@@ -119,6 +120,7 @@ class BitwardenCredentialManagerTest {
     }
     private val mockVaultSdkSource = mockk<VaultSdkSource>()
     private val mockFido2CredentialStore = mockk<Fido2CredentialStore>()
+    private val mockAutofillCipherProvider = mockk<AutofillCipherProvider>()
     private val mockVaultRepository = mockk<VaultRepository> {
         every { ciphersStateFlow } returns mutableCipherStateFlow
     }
@@ -136,6 +138,7 @@ class BitwardenCredentialManagerTest {
         bitwardenCredentialManager = BitwardenCredentialManagerImpl(
             vaultSdkSource = mockVaultSdkSource,
             fido2CredentialStore = mockFido2CredentialStore,
+            autofillCipherProvider = mockAutofillCipherProvider,
             json = json,
             dispatcherManager = FakeDispatcherManager(),
             vaultRepository = mockVaultRepository,
