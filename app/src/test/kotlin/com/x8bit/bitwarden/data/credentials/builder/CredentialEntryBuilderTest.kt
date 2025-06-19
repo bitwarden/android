@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.data.util.mockBuilder
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPasswordCredentialAutofillCipherLogin
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.mockk
@@ -358,12 +359,4 @@ class CredentialEntryBuilderTest {
         }
     }
 
-    private fun createMockPasswordCredentialAutofillCipherLogin() = AutofillCipher.Login(
-        cipherId = "mockCipherId",
-        name = "Cipher One",
-        isTotpEnabled = false,
-        password = "mock-password",
-        username = "mock-username",
-        subtitle = "Subtitle",
-    )
 }
