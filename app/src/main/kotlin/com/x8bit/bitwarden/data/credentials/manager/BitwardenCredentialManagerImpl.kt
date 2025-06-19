@@ -351,7 +351,9 @@ class BitwardenCredentialManagerImpl(
     ): List<CredentialEntry> {
         val ciphers = autofillCipherProvider.getLoginAutofillCiphers(
             packageName.toAndroidAppUriString(),
-        )
+        ).filter {
+            it.password.isNotEmpty()
+        }
 
         return credentialEntryBuilder
             .buildPasswordCredentialEntries(
