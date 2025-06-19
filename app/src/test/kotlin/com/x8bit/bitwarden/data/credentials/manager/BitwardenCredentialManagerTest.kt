@@ -1264,8 +1264,8 @@ class BitwardenCredentialManagerTest {
             assertTrue(result.getOrNull()?.first() is PasswordCredentialEntry)
         }
 
-    //TODO test password entries are returend even if passkey fails
-    //TODO test both password and passkeys are returned together
+    // TODO test password entries are returend even if passkey fails
+    // TODO test both password and passkeys are returned together
 }
 
 private const val DEFAULT_PACKAGE_NAME = "com.x8bit.bitwarden"

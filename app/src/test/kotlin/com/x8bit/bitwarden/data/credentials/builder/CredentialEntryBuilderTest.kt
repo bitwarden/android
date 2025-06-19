@@ -358,5 +358,4 @@ class CredentialEntryBuilderTest {
             anyConstructed<PasswordCredentialEntry.Builder>().setBiometricPromptData(any())
         }
     }
-
 }

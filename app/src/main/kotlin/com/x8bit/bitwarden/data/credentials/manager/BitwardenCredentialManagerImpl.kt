@@ -349,7 +349,7 @@ class BitwardenCredentialManagerImpl(
         userId: String,
         packageName: String,
     ): List<CredentialEntry> {
-        if(this.isEmpty()) return emptyList()
+        if (this.isEmpty()) return emptyList()
 
         val ciphers = autofillCipherProvider.getLoginAutofillCiphers(
             packageName.toAndroidAppUriString(),
