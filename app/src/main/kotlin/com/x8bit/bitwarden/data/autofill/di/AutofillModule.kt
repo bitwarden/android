@@ -16,8 +16,8 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManagerImpl
-import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillEnabledManager
-import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillEnabledManagerImpl
+import com.x8bit.bitwarden.data.autofill.manager.chrome.BrowserThirdPartyAutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.manager.chrome.BrowserThirdPartyAutofillEnabledManagerImpl
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParserImpl
 import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessor
@@ -59,10 +59,10 @@ object AutofillModule {
 
     @Singleton
     @Provides
-    fun providesChromeAutofillEnabledManager(
+    fun providesBrowserAutofillEnabledManager(
         featureFlagManager: FeatureFlagManager,
-    ): ChromeThirdPartyAutofillEnabledManager =
-        ChromeThirdPartyAutofillEnabledManagerImpl(
+    ): BrowserThirdPartyAutofillEnabledManager =
+        BrowserThirdPartyAutofillEnabledManagerImpl(
             featureFlagManager = featureFlagManager,
         )
 

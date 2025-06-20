@@ -49,7 +49,7 @@ import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome.ChromeAutofillSettingsCard
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.BrowserAutofillSettingsCard
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.handlers.AutoFillHandlers
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -100,7 +100,7 @@ fun AutoFillScreen(
             }
 
             AutoFillEvent.NavigateToSetupAutofill -> onNavigateToSetupAutofill()
-            is AutoFillEvent.NavigateToChromeAutofillSettings -> {
+            is AutoFillEvent.NavigateToBrowserAutofillSettings -> {
                 intentManager.startChromeAutofillSettingsActivity(
                     releaseChannel = event.releaseChannel,
                 )
@@ -212,7 +212,7 @@ private fun AutoFillScreenContent(
         }
 
         if (state.chromeAutofillSettingsOptions.isNotEmpty()) {
-            ChromeAutofillSettingsCard(
+            BrowserAutofillSettingsCard(
                 options = state.chromeAutofillSettingsOptions,
                 onOptionClicked = autoFillHandlers.onChromeAutofillSelected,
                 enabled = state.isAutoFillServicesEnabled,

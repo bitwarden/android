@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.manager.chrome
 
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutoFillData
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutofillStatus
+import com.x8bit.bitwarden.data.autofill.model.chrome.BrowserThirdPartyAutoFillData
+import com.x8bit.bitwarden.data.autofill.model.chrome.BrowserThirdPartyAutofillStatus
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import kotlinx.coroutines.flow.Flow
@@ -10,12 +10,12 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 
 /**
- * Default implementation of [ChromeThirdPartyAutofillEnabledManager].
+ * Default implementation of [BrowserThirdPartyAutofillEnabledManager].
  */
-class ChromeThirdPartyAutofillEnabledManagerImpl(
+class BrowserThirdPartyAutofillEnabledManagerImpl(
     private val featureFlagManager: FeatureFlagManager,
-) : ChromeThirdPartyAutofillEnabledManager {
-    override var chromeThirdPartyAutofillStatus: ChromeThirdPartyAutofillStatus = DEFAULT_STATUS
+) : BrowserThirdPartyAutofillEnabledManager {
+    override var browserThirdPartyAutofillStatus: BrowserThirdPartyAutofillStatus = DEFAULT_STATUS
         set(value) {
             field = value
             mutableChromeThirdPartyAutofillStatusStateFlow.update {
@@ -24,10 +24,10 @@ class ChromeThirdPartyAutofillEnabledManagerImpl(
         }
 
     private val mutableChromeThirdPartyAutofillStatusStateFlow = MutableStateFlow(
-        chromeThirdPartyAutofillStatus,
+        value = browserThirdPartyAutofillStatus,
     )
 
-    override val chromeThirdPartyAutofillStatusFlow: Flow<ChromeThirdPartyAutofillStatus>
+    override val chromeThirdPartyAutofillStatusFlow: Flow<BrowserThirdPartyAutofillStatus>
         get() = mutableChromeThirdPartyAutofillStatusStateFlow
             .combine(
                 featureFlagManager.getFeatureFlagFlow(FlagKey.ChromeAutofill),
@@ -40,12 +40,12 @@ class ChromeThirdPartyAutofillEnabledManagerImpl(
             }
 }
 
-private val DEFAULT_STATUS = ChromeThirdPartyAutofillStatus(
-    ChromeThirdPartyAutoFillData(
+private val DEFAULT_STATUS = BrowserThirdPartyAutofillStatus(
+    chromeStableStatusData = BrowserThirdPartyAutoFillData(
         isAvailable = false,
         isThirdPartyEnabled = false,
     ),
-    ChromeThirdPartyAutoFillData(
+    chromeBetaChannelStatusData = BrowserThirdPartyAutoFillData(
         isAvailable = false,
         isThirdPartyEnabled = false,
     ),

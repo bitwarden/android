@@ -8,9 +8,9 @@ import androidx.lifecycle.lifecycleScope
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
-import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillEnabledManager
-import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillManager
-import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillManagerImpl
+import com.x8bit.bitwarden.data.autofill.manager.chrome.BrowserThirdPartyAutofillManager
+import com.x8bit.bitwarden.data.autofill.manager.chrome.BrowserThirdPartyAutofillManagerImpl
+import com.x8bit.bitwarden.data.autofill.manager.chrome.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import dagger.Module
 import dagger.Provides
@@ -29,9 +29,9 @@ object ActivityAutofillModule {
     @ActivityScoped
     @ActivityScopedManager
     @Provides
-    fun provideActivityScopedChromeThirdPartyAutofillManager(
+    fun provideActivityScopedBrowserThirdPartyAutofillManager(
         activity: Activity,
-    ): ChromeThirdPartyAutofillManager = ChromeThirdPartyAutofillManagerImpl(
+    ): BrowserThirdPartyAutofillManager = BrowserThirdPartyAutofillManagerImpl(
         context = activity.baseContext,
     )
 
@@ -39,19 +39,19 @@ object ActivityAutofillModule {
     @Provides
     fun provideAutofillActivityManager(
         @ActivityScopedManager autofillManager: AutofillManager,
-        @ActivityScopedManager chromeThirdPartyAutofillManager: ChromeThirdPartyAutofillManager,
+        @ActivityScopedManager browserThirdPartyAutofillManager: BrowserThirdPartyAutofillManager,
         appStateManager: AppStateManager,
         autofillEnabledManager: AutofillEnabledManager,
         lifecycleScope: LifecycleCoroutineScope,
-        chromeThirdPartyAutofillEnabledManager: ChromeThirdPartyAutofillEnabledManager,
+        browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
     ): AutofillActivityManager =
         AutofillActivityManagerImpl(
             autofillManager = autofillManager,
-            chromeThirdPartyAutofillManager = chromeThirdPartyAutofillManager,
+            browserThirdPartyAutofillManager = browserThirdPartyAutofillManager,
             appStateManager = appStateManager,
             autofillEnabledManager = autofillEnabledManager,
             lifecycleScope = lifecycleScope,
-            chromeThirdPartyAutofillEnabledManager = chromeThirdPartyAutofillEnabledManager,
+            browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
         )
 
     /**

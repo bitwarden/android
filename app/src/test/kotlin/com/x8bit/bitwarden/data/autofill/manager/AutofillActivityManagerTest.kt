@@ -3,11 +3,11 @@ package com.x8bit.bitwarden.data.autofill.manager
 import android.view.autofill.AutofillManager
 import androidx.lifecycle.LifecycleCoroutineScope
 import app.cash.turbine.test
-import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillEnabledManager
-import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillEnabledManagerImpl
-import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillManager
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutoFillData
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutofillStatus
+import com.x8bit.bitwarden.data.autofill.manager.chrome.BrowserThirdPartyAutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.manager.chrome.BrowserThirdPartyAutofillEnabledManagerImpl
+import com.x8bit.bitwarden.data.autofill.manager.chrome.BrowserThirdPartyAutofillManager
+import com.x8bit.bitwarden.data.autofill.model.chrome.BrowserThirdPartyAutoFillData
+import com.x8bit.bitwarden.data.autofill.model.chrome.BrowserThirdPartyAutofillStatus
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
@@ -42,16 +42,16 @@ class AutofillActivityManagerTest {
     private val lifecycleScope = mockk<LifecycleCoroutineScope> {
         every { coroutineContext } returns UnconfinedTestDispatcher()
     }
-    private val chromeThirdPartyAutofillManager = mockk<ChromeThirdPartyAutofillManager> {
-        every { stableChromeAutofillStatus } returns DEFAULT_CHROME_AUTOFILL_DATA
-        every { betaChromeAutofillStatus } returns DEFAULT_CHROME_AUTOFILL_DATA
+    private val chromeThirdPartyAutofillManager = mockk<BrowserThirdPartyAutofillManager> {
+        every { stableChromeAutofillStatus } returns DEFAULT_BROWSER_AUTOFILL_DATA
+        every { betaChromeAutofillStatus } returns DEFAULT_BROWSER_AUTOFILL_DATA
     }
 
     private val featureFlagManager = mockk<FeatureFlagManager> {
         every { getFeatureFlagFlow(FlagKey.ChromeAutofill) } returns MutableStateFlow(true)
     }
-    private val chromeThirdPartyAutofillEnabledManager: ChromeThirdPartyAutofillEnabledManager =
-        ChromeThirdPartyAutofillEnabledManagerImpl(featureFlagManager = featureFlagManager)
+    private val browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager =
+        BrowserThirdPartyAutofillEnabledManagerImpl(featureFlagManager = featureFlagManager)
 
     // We will construct an instance here just to hook the various dependencies together internally
     @Suppress("unused")
@@ -60,8 +60,8 @@ class AutofillActivityManagerTest {
         appStateManager = appStateManager,
         autofillEnabledManager = autofillEnabledManager,
         lifecycleScope = lifecycleScope,
-        chromeThirdPartyAutofillManager = chromeThirdPartyAutofillManager,
-        chromeThirdPartyAutofillEnabledManager = chromeThirdPartyAutofillEnabledManager,
+        browserThirdPartyAutofillManager = chromeThirdPartyAutofillManager,
+        browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
     )
 
     private var isAutofillEnabledAndSupported = false
@@ -93,11 +93,10 @@ class AutofillActivityManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `changes in app foreground status should update the ChromeThirdPartyAutofillEnabledManager as necessary`() =
+    fun `changes in app foreground status should update the BrowserThirdPartyAutofillEnabledManager as necessary`() =
         runTest {
-            val updatedBetaState =
-                DEFAULT_CHROME_AUTOFILL_DATA.copy(isAvailable = true)
-            chromeThirdPartyAutofillEnabledManager.chromeThirdPartyAutofillStatusFlow.test {
+            val updatedBetaState = DEFAULT_BROWSER_AUTOFILL_DATA.copy(isAvailable = true)
+            browserThirdPartyAutofillEnabledManager.chromeThirdPartyAutofillStatusFlow.test {
                 assertEquals(
                     DEFAULT_EXPECTED_AUTOFILL_STATUS,
                     awaitItem(),
@@ -107,7 +106,7 @@ class AutofillActivityManagerTest {
                 mutableAppForegroundStateFlow.value = AppForegroundState.FOREGROUNDED
                 assertEquals(
                     DEFAULT_EXPECTED_AUTOFILL_STATUS.copy(
-                        betaChannelStatusData = updatedBetaState,
+                        chromeBetaChannelStatusData = updatedBetaState,
                     ),
                     awaitItem(),
                 )
@@ -115,12 +114,12 @@ class AutofillActivityManagerTest {
         }
 }
 
-private val DEFAULT_CHROME_AUTOFILL_DATA = ChromeThirdPartyAutoFillData(
+private val DEFAULT_BROWSER_AUTOFILL_DATA = BrowserThirdPartyAutoFillData(
     isAvailable = false,
     isThirdPartyEnabled = false,
 )
 
-private val DEFAULT_EXPECTED_AUTOFILL_STATUS = ChromeThirdPartyAutofillStatus(
-    stableStatusData = DEFAULT_CHROME_AUTOFILL_DATA,
-    betaChannelStatusData = DEFAULT_CHROME_AUTOFILL_DATA,
+private val DEFAULT_EXPECTED_AUTOFILL_STATUS = BrowserThirdPartyAutofillStatus(
+    chromeStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
+    chromeBetaChannelStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
 )

@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.autofill.manager.chrome
 
 import app.cash.turbine.test
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutoFillData
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutofillStatus
+import com.x8bit.bitwarden.data.autofill.model.chrome.BrowserThirdPartyAutoFillData
+import com.x8bit.bitwarden.data.autofill.model.chrome.BrowserThirdPartyAutofillStatus
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import io.mockk.every
@@ -21,7 +21,7 @@ class ChromeThirdPartyAutofillEnabledManagerTest {
         } returns mutableChromeAutofillFeatureFlow
     }
     private val chromeThirdPartyAutofillEnabledManager =
-        ChromeThirdPartyAutofillEnabledManagerImpl(featureFlagManager = featureFlagManager)
+        BrowserThirdPartyAutofillEnabledManagerImpl(featureFlagManager = featureFlagManager)
 
     @Suppress("MaxLineLength")
     @Test
@@ -33,26 +33,26 @@ class ChromeThirdPartyAutofillEnabledManagerTest {
                     awaitItem(),
                 )
                 val firstExpectedStatusChange = DEFAULT_EXPECTED_AUTOFILL_STATUS.copy(
-                    stableStatusData = DEFAULT_CHROME_AUTOFILL_DATA.copy(isAvailable = true),
+                    chromeStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA.copy(isAvailable = true),
                 )
-                chromeThirdPartyAutofillEnabledManager.chromeThirdPartyAutofillStatus =
+                chromeThirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus =
                     firstExpectedStatusChange
 
                 assertEquals(
                     firstExpectedStatusChange,
                     awaitItem(),
                 )
-                chromeThirdPartyAutofillEnabledManager.chromeThirdPartyAutofillStatus =
+                chromeThirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus =
                     firstExpectedStatusChange.copy()
                 expectNoEvents()
 
                 val secondExpectedStatusChange = firstExpectedStatusChange
                     .copy(
-                        betaChannelStatusData = DEFAULT_CHROME_AUTOFILL_DATA.copy(
+                        chromeBetaChannelStatusData = DEFAULT_BROWSER_AUTOFILL_DATA.copy(
                             isThirdPartyEnabled = true,
                         ),
                     )
-                chromeThirdPartyAutofillEnabledManager.chromeThirdPartyAutofillStatus =
+                chromeThirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus =
                     secondExpectedStatusChange
 
                 assertEquals(
@@ -73,26 +73,26 @@ class ChromeThirdPartyAutofillEnabledManagerTest {
                     awaitItem(),
                 )
                 val firstExpectedStatusChange = DEFAULT_EXPECTED_AUTOFILL_STATUS.copy(
-                    stableStatusData = DEFAULT_CHROME_AUTOFILL_DATA.copy(isAvailable = true),
+                    chromeStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA.copy(isAvailable = true),
                 )
-                chromeThirdPartyAutofillEnabledManager.chromeThirdPartyAutofillStatus =
+                chromeThirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus =
                     firstExpectedStatusChange
 
                 assertEquals(
                     DEFAULT_EXPECTED_AUTOFILL_STATUS,
                     awaitItem(),
                 )
-                chromeThirdPartyAutofillEnabledManager.chromeThirdPartyAutofillStatus =
+                chromeThirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus =
                     firstExpectedStatusChange.copy()
                 expectNoEvents()
 
                 val secondExpectedStatusChange = firstExpectedStatusChange
                     .copy(
-                        betaChannelStatusData = DEFAULT_CHROME_AUTOFILL_DATA.copy(
+                        chromeBetaChannelStatusData = DEFAULT_BROWSER_AUTOFILL_DATA.copy(
                             isThirdPartyEnabled = true,
                         ),
                     )
-                chromeThirdPartyAutofillEnabledManager.chromeThirdPartyAutofillStatus =
+                chromeThirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus =
                     secondExpectedStatusChange
 
                 assertEquals(
@@ -103,12 +103,12 @@ class ChromeThirdPartyAutofillEnabledManagerTest {
         }
 }
 
-private val DEFAULT_CHROME_AUTOFILL_DATA = ChromeThirdPartyAutoFillData(
+private val DEFAULT_BROWSER_AUTOFILL_DATA = BrowserThirdPartyAutoFillData(
     isAvailable = false,
     isThirdPartyEnabled = false,
 )
 
-private val DEFAULT_EXPECTED_AUTOFILL_STATUS = ChromeThirdPartyAutofillStatus(
-    stableStatusData = DEFAULT_CHROME_AUTOFILL_DATA,
-    betaChannelStatusData = DEFAULT_CHROME_AUTOFILL_DATA,
+private val DEFAULT_EXPECTED_AUTOFILL_STATUS = BrowserThirdPartyAutofillStatus(
+    chromeStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
+    chromeBetaChannelStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
 )

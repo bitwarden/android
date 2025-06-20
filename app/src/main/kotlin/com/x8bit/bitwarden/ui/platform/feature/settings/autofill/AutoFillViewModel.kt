@@ -8,16 +8,16 @@ import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillEnabledManager
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutofillStatus
+import com.x8bit.bitwarden.data.autofill.manager.chrome.BrowserThirdPartyAutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.model.chrome.BrowserReleaseChannel
+import com.x8bit.bitwarden.data.autofill.model.chrome.BrowserThirdPartyAutofillStatus
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
-import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome.model.ChromeAutofillSettingsOption
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.launchIn
@@ -36,7 +36,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class AutoFillViewModel @Inject constructor(
     authRepository: AuthRepository,
-    chromeThirdPartyAutofillEnabledManager: ChromeThirdPartyAutofillEnabledManager,
+    chromeThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
     private val savedStateHandle: SavedStateHandle,
     private val settingsRepository: SettingsRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
@@ -61,8 +61,8 @@ class AutoFillViewModel @Inject constructor(
                 showAutofillActionCard = false,
                 activeUserId = userId,
                 chromeAutofillSettingsOptions = chromeThirdPartyAutofillEnabledManager
-                    .chromeThirdPartyAutofillStatus
-                    .toChromeAutoFillSettingsOptions(),
+                    .browserThirdPartyAutofillStatus
+                    .toBrowserAutoFillSettingsOptions(),
                 isUserManagedPrivilegedAppsEnabled =
                     featureFlagManager.getFeatureFlag(FlagKey.UserManagedPrivilegedApps),
             )
@@ -171,13 +171,13 @@ class AutoFillViewModel @Inject constructor(
             it.copy(
                 chromeAutofillSettingsOptions = action
                     .status
-                    .toChromeAutoFillSettingsOptions(),
+                    .toBrowserAutoFillSettingsOptions(),
             )
         }
     }
 
     private fun handleChromeAutofillSelected(action: AutoFillAction.ChromeAutofillSelected) {
-        sendEvent(AutoFillEvent.NavigateToChromeAutofillSettings(action.releaseChannel))
+        sendEvent(AutoFillEvent.NavigateToBrowserAutofillSettings(action.releaseChannel))
     }
 
     private fun handleDismissShowAutofillActionCard() {
@@ -282,7 +282,7 @@ data class AutoFillState(
     val defaultUriMatchType: UriMatchType,
     val showAutofillActionCard: Boolean,
     val activeUserId: String,
-    val chromeAutofillSettingsOptions: ImmutableList<ChromeAutofillSettingsOption>,
+    val chromeAutofillSettingsOptions: ImmutableList<BrowserAutofillSettingsOption>,
     val isUserManagedPrivilegedAppsEnabled: Boolean,
 ) : Parcelable {
 
@@ -295,16 +295,16 @@ data class AutoFillState(
 }
 
 @Suppress("MaxLineLength")
-private fun ChromeThirdPartyAutofillStatus.toChromeAutoFillSettingsOptions(): ImmutableList<ChromeAutofillSettingsOption> =
+private fun BrowserThirdPartyAutofillStatus.toBrowserAutoFillSettingsOptions(): ImmutableList<BrowserAutofillSettingsOption> =
     persistentListOfNotNull(
-        ChromeAutofillSettingsOption.Stable(
-            enabled = this.stableStatusData.isThirdPartyEnabled,
+        BrowserAutofillSettingsOption.ChromeStable(
+            enabled = this.chromeStableStatusData.isThirdPartyEnabled,
         )
-            .takeIf { this.stableStatusData.isAvailable },
-        ChromeAutofillSettingsOption.Beta(
-            enabled = this.betaChannelStatusData.isThirdPartyEnabled,
+            .takeIf { this.chromeStableStatusData.isAvailable },
+        BrowserAutofillSettingsOption.ChromeBeta(
+            enabled = this.chromeBetaChannelStatusData.isThirdPartyEnabled,
         )
-            .takeIf { this.betaChannelStatusData.isAvailable },
+            .takeIf { this.chromeBetaChannelStatusData.isAvailable },
     )
 
 /**
@@ -346,8 +346,8 @@ sealed class AutoFillEvent {
     /**
      * Navigate to the Autofill settings of the specified [releaseChannel].
      */
-    data class NavigateToChromeAutofillSettings(
-        val releaseChannel: ChromeReleaseChannel,
+    data class NavigateToBrowserAutofillSettings(
+        val releaseChannel: BrowserReleaseChannel,
     ) : AutoFillEvent()
 
     /**
@@ -433,7 +433,7 @@ sealed class AutoFillAction {
     /**
      * User has clicked one of the chrome autofill options.
      */
-    data class ChromeAutofillSelected(val releaseChannel: ChromeReleaseChannel) : AutoFillAction()
+    data class ChromeAutofillSelected(val releaseChannel: BrowserReleaseChannel) : AutoFillAction()
 
     /**
      * User has clicked the about privileged apps help link.
@@ -464,10 +464,10 @@ sealed class AutoFillAction {
         data class UpdateShowAutofillActionCard(val showAutofillActionCard: Boolean) : Internal()
 
         /**
-         * Received updated [ChromeThirdPartyAutofillStatus] data.
+         * Received updated [BrowserThirdPartyAutofillStatus] data.
          */
         data class ChromeAutofillStatusReceive(
-            val status: ChromeThirdPartyAutofillStatus,
+            val status: BrowserThirdPartyAutofillStatus,
         ) : Internal()
 
         /**

@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome
+package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
@@ -14,25 +14,25 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
+import com.x8bit.bitwarden.data.autofill.model.chrome.BrowserReleaseChannel
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
-import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome.model.ChromeAutofillSettingsOption
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 /**
- * Card for displaying a list of [ChromeAutofillSettingsOption]s and whether they are
- * currently enabled.
+ * Card for displaying a list of [BrowserAutofillSettingsOption]s and whether they are currently
+ * enabled.
  *
  * @param options List of data to display in the card, if the list is empty nothing will be drawn.
  * @param onOptionClicked Lambda that is invoked when an option row is clicked and passes back the
- * [ChromeReleaseChannel] for that option.
+ * [BrowserReleaseChannel] for that option.
  * @param enabled Whether to show the switches for each option as enabled.
  */
 @Composable
-fun ChromeAutofillSettingsCard(
-    options: ImmutableList<ChromeAutofillSettingsOption>,
-    onOptionClicked: (ChromeReleaseChannel) -> Unit,
+fun BrowserAutofillSettingsCard(
+    options: ImmutableList<BrowserAutofillSettingsOption>,
+    onOptionClicked: (BrowserReleaseChannel) -> Unit,
     enabled: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -43,7 +43,7 @@ fun ChromeAutofillSettingsCard(
                 label = option.optionText(),
                 isChecked = option.isEnabled,
                 onCheckedChange = {
-                    onOptionClicked(option.chromeReleaseChannel)
+                    onOptionClicked(option.browserReleaseChannel)
                 },
                 cardStyle = if (index == 0) {
                     CardStyle.Top(
@@ -82,10 +82,10 @@ fun ChromeAutofillSettingsCard(
 @Composable
 private fun ChromeAutofillSettingsCard_preview() {
     BitwardenTheme {
-        ChromeAutofillSettingsCard(
+        BrowserAutofillSettingsCard(
             options = persistentListOf(
-                ChromeAutofillSettingsOption.Stable(enabled = false),
-                ChromeAutofillSettingsOption.Beta(enabled = true),
+                BrowserAutofillSettingsOption.ChromeStable(enabled = false),
+                BrowserAutofillSettingsOption.ChromeBeta(enabled = true),
             ),
             enabled = true,
             onOptionClicked = {},
