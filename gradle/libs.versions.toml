@@ -52,7 +52,7 @@ robolectric = "4.14.1"
 sonarqube = "6.2.0.5505"
 testng = "7.11.0"
 timber = "5.0.1"
-turbine = "1.2.0"
+turbine = "1.2.1"
 zxing = "3.5.3"
 
 [libraries]
