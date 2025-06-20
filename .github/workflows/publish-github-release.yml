@@ -3,6 +3,8 @@ name: Publish GitHub Release as newest
 on:
   workflow_dispatch:
 
+permissions: {}
+
 jobs:
   stub:
     runs-on: ubuntu-24.04
