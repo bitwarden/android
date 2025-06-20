@@ -9,6 +9,11 @@ import com.x8bit.bitwarden.data.autofill.model.chrome.BrowserThirdPartyAutoFillD
 interface BrowserThirdPartyAutofillManager {
 
     /**
+     * The data representing the status of the stable Brave version
+     */
+    val stableBraveAutofillStatus: BrowserThirdPartyAutoFillData
+
+    /**
      * The data representing the status of the stable Chrome version
      */
     val stableChromeAutofillStatus: BrowserThirdPartyAutoFillData

@@ -297,6 +297,10 @@ data class AutoFillState(
 @Suppress("MaxLineLength")
 private fun BrowserThirdPartyAutofillStatus.toBrowserAutoFillSettingsOptions(): ImmutableList<BrowserAutofillSettingsOption> =
     persistentListOfNotNull(
+        BrowserAutofillSettingsOption.BraveStable(
+            enabled = this.braveStableStatusData.isThirdPartyEnabled,
+        )
+            .takeIf { this.braveStableStatusData.isAvailable },
         BrowserAutofillSettingsOption.ChromeStable(
             enabled = this.chromeStableStatusData.isThirdPartyEnabled,
         )

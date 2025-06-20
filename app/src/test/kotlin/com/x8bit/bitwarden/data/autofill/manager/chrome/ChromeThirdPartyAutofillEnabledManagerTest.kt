@@ -109,6 +109,7 @@ private val DEFAULT_BROWSER_AUTOFILL_DATA = BrowserThirdPartyAutoFillData(
 )
 
 private val DEFAULT_EXPECTED_AUTOFILL_STATUS = BrowserThirdPartyAutofillStatus(
+    braveStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
     chromeStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
     chromeBetaChannelStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
 )

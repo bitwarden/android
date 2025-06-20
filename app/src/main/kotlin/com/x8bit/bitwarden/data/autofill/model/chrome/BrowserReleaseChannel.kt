@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.model.chrome
 
+private const val BRAVE_CHANNEL_PACKAGE = "com.brave.browser"
 private const val CHROME_BETA_CHANNEL_PACKAGE = "com.chrome.beta"
 private const val CHROME_RELEASE_CHANNEL_PACKAGE = "com.android.chrome"
 
@@ -9,6 +10,7 @@ private const val CHROME_RELEASE_CHANNEL_PACKAGE = "com.android.chrome"
  * @property packageName the package name of the release channel for the browser version.
  */
 enum class BrowserReleaseChannel(val packageName: String) {
+    BRAVE_RELEASE(BRAVE_CHANNEL_PACKAGE),
     CHROME_STABLE(CHROME_RELEASE_CHANNEL_PACKAGE),
     CHROME_BETA(CHROME_BETA_CHANNEL_PACKAGE),
 }

@@ -518,8 +518,8 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `BrowserAutofillSettingsCard is only displayed when there are options in the list`() {
         val browserAutofillSupportingText =
-            "Improves login filling for supported websites on Chrome. " +
-                "Once enabled, you’ll be directed to Chrome settings to enable " +
+            "Improves login filling for supported websites on selected browsers. " +
+                "Once enabled, you’ll be directed to browser settings to enable " +
                 "third-party autofill."
 
         composeTestRule
