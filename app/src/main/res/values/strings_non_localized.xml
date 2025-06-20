@@ -9,7 +9,6 @@
 
     <!-- Debug Menu -->
     <string name="email_verification">Email Verification</string>
-    <string name="onboarding_flow">Onboarding Flow</string>
     <string name="import_logins_flow">Import Logins Flow</string>
     <string name="feature_flags">Feature Flags:</string>
     <string name="debug_menu">Debug Menu</string>
@@ -26,6 +25,11 @@
     <string name="enable_chrome_autofill">Enable chrome autofill</string>
     <string name="enable_error_reporting_dialog">Enable error reporting dialog</string>
     <string name="enable_flight_recorder">Enable flight recorder</string>
+    <string name="restrict_item_deletion">Restrict item deletion</string>
     <string name="enable_pre_auth_settings">Enabled pre-auth settings</string>
+    <string name="generate_crash">Generate crash</string>
+    <string name="generate_error_report">Generate error report</string>
+    <string name="error_reports">Error reports</string>
+    <string name="user_trusted_privileged_app_management">User-trusted privileged app management</string>
     <!-- /Debug Menu -->
 </resources>

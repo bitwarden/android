@@ -14,13 +14,13 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.CreateIte
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.EditItemState.Companion.MAX_ALLOWED_CODE_DIGITS
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.EditItemState.Companion.MIN_ALLOWED_CODE_DIGITS
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.model.EditItemData
-import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.takeUntilLoaded
+import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.util.isBase32
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
-import com.bitwarden.authenticator.ui.platform.base.util.isBase32
-import com.bitwarden.core.data.repository.model.DataState
-import com.bitwarden.core.data.repository.util.takeUntilLoaded
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -42,7 +42,7 @@ class EditItemViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EditItemState, EditItemEvent, EditItemAction>(
     initialState = savedStateHandle[KEY_STATE] ?: EditItemState(
-        itemId = EditItemArgs(savedStateHandle).itemId,
+        itemId = savedStateHandle.toEditItemArgs().itemId,
         viewState = EditItemState.ViewState.Loading,
         dialog = null,
     ),
@@ -64,7 +64,7 @@ class EditItemViewModel @Inject constructor(
             is EditItemAction.CancelClick -> handleCancelClick()
             is EditItemAction.TypeOptionClick -> handleTypeOptionClick(action)
             is EditItemAction.IssuerNameTextChange -> handleIssuerNameTextChange(action)
-            is EditItemAction.UsernameTextChange -> handleIssuerTextChange(action)
+            is EditItemAction.UsernameTextChange -> handleUsernameTextChange(action)
             is EditItemAction.FavoriteToggleClick -> handleFavoriteToggleClick(action)
             is EditItemAction.RefreshPeriodOptionClick -> handlePeriodTextChange(action)
             is EditItemAction.TotpCodeTextChange -> handleTotpCodeTextChange(action)
@@ -156,7 +156,7 @@ class EditItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleIssuerTextChange(action: EditItemAction.UsernameTextChange) {
+    private fun handleUsernameTextChange(action: EditItemAction.UsernameTextChange) {
         updateItemData { currentItemData ->
             currentItemData.copy(
                 username = action.username,

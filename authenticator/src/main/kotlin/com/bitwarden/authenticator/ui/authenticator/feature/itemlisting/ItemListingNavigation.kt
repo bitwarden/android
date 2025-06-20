@@ -1,9 +1,14 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
 import androidx.navigation.NavGraphBuilder
-import com.bitwarden.authenticator.ui.platform.base.util.composableWithPushTransitions
+import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import kotlinx.serialization.Serializable
 
-const val ITEM_LIST_ROUTE = "item_list"
+/**
+ * The type-safe route for the item listing screen.
+ */
+@Serializable
+data object ItemListingRoute
 
 /**
  * Add the item listing screen to the nav graph.
@@ -15,9 +20,7 @@ fun NavGraphBuilder.itemListingDestination(
     onNavigateToManualKeyEntry: () -> Unit = { },
     onNavigateToEditItemScreen: (id: String) -> Unit = { },
 ) {
-    composableWithPushTransitions(
-        route = ITEM_LIST_ROUTE,
-    ) {
+    composableWithPushTransitions<ItemListingRoute> {
         ItemListingScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToSearch = onNavigateToSearch,

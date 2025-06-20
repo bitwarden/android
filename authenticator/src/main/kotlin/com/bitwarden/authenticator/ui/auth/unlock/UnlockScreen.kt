@@ -28,16 +28,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
-import com.bitwarden.ui.util.asText
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledTonalButton
 import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
-import com.bitwarden.authenticator.ui.platform.theme.LocalBiometricsManager
+import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.util.asText
 
 /**
  * Top level composable for the unlock screen.
@@ -135,7 +135,7 @@ fun UnlockScreen(
                     contentDescription = stringResource(R.string.bitwarden_authenticator),
                 )
                 Spacer(modifier = Modifier.height(32.dp))
-                BitwardenFilledTonalButton(
+                AuthenticatorFilledTonalButton(
                     label = stringResource(id = R.string.use_biometrics_to_unlock),
                     onClick = {
                         biometricsManager.promptBiometrics(

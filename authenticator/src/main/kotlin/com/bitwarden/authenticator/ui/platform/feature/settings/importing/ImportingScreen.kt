@@ -28,17 +28,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
-import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
-import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
+import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledTonalButton
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
 import com.bitwarden.authenticator.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.authenticator.ui.platform.composition.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
-import com.bitwarden.authenticator.ui.platform.theme.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
+import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -118,10 +119,10 @@ fun ImportingScreen(
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            BitwardenTopAppBar(
+            AuthenticatorTopAppBar(
                 title = stringResource(id = R.string.import_vault),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = painterResource(id = R.drawable.ic_close),
+                navigationIcon = painterResource(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
                     {
@@ -180,7 +181,7 @@ private fun ImportScreenContent(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        BitwardenFilledTonalButton(
+        AuthenticatorFilledTonalButton(
             label = stringResource(id = R.string.import_vault),
             onClick = onImportClick,
             modifier = Modifier

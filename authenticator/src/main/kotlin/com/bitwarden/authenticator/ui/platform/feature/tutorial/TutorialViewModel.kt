@@ -2,7 +2,7 @@ package com.bitwarden.authenticator.ui.platform.feature.tutorial
 
 import android.os.Parcelable
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize

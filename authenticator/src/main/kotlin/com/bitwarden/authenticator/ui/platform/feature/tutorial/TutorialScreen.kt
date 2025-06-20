@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -37,23 +38,18 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
-import com.bitwarden.authenticator.ui.platform.base.util.standardHorizontalMargin
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledTonalButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.authenticator.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.authenticator.ui.platform.util.isPortrait
-
-/**
- * The custom horizontal margin that is specific to this screen.
- */
-private val LANDSCAPE_HORIZONTAL_MARGIN: Dp = 48.dp
+import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import kotlinx.coroutines.launch
 
 /**
  * Top level composable for the tutorial screen.
@@ -65,6 +61,7 @@ fun TutorialScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val pagerState = rememberPagerState(pageCount = { state.pages.size })
+    val coroutineScope = rememberCoroutineScope()
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -73,7 +70,9 @@ fun TutorialScreen(
             }
 
             is TutorialEvent.UpdatePager -> {
-                pagerState.animateScrollToPage(event.index)
+                coroutineScope.launch {
+                    pagerState.animateScrollToPage(event.index)
+                }
             }
         }
     }
@@ -139,7 +138,7 @@ private fun TutorialScreenContent(
                 TutorialScreenLandscape(
                     state = state.pages[index],
                     modifier = Modifier
-                        .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN)
+                        .standardHorizontalMargin()
                         .statusBarsPadding(),
                 )
             }
@@ -156,20 +155,20 @@ private fun TutorialScreenContent(
                 .height(44.dp),
         )
 
-        BitwardenFilledTonalButton(
+        AuthenticatorFilledTonalButton(
             label = state.actionButtonText,
             onClick = { continueClick(state.index) },
             modifier = Modifier
-                .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
-        BitwardenTextButton(
+        AuthenticatorTextButton(
             isEnabled = !state.isLastPage,
             label = stringResource(id = R.string.skip),
             onClick = skipClick,
             modifier = Modifier
-                .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN)
+                .standardHorizontalMargin()
                 .fillMaxWidth()
                 .alpha(if (state.isLastPage) 0f else 1f)
                 .padding(bottom = 12.dp),

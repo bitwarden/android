@@ -48,11 +48,7 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
-import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
-import com.bitwarden.authenticator.ui.platform.base.util.mirrorIfRtl
-import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenMediumTopAppBar
+import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorMediumTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionRow
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
@@ -60,15 +56,21 @@ import com.bitwarden.authenticator.ui.platform.components.row.BitwardenExternalL
 import com.bitwarden.authenticator.ui.platform.components.row.BitwardenTextRow
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenWideSwitch
-import com.bitwarden.authenticator.ui.platform.components.util.rememberVectorPainter
-import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
+import com.bitwarden.authenticator.ui.platform.composition.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
-import com.bitwarden.authenticator.ui.platform.theme.LocalBiometricsManager
-import com.bitwarden.authenticator.ui.platform.theme.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
+import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
+import com.bitwarden.ui.platform.base.util.mirrorIfRtl
+import com.bitwarden.ui.platform.base.util.spanStyleOf
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 
 /**
  * Display the settings screen.
@@ -107,6 +109,10 @@ fun SettingsScreen(
                 intentManager.launchUri("https://bitwarden.com/privacy".toUri())
             }
 
+            SettingsEvent.NavigateToSyncInformation -> {
+                intentManager.launchUri("https://bitwarden.com/help/totp-sync".toUri())
+            }
+
             SettingsEvent.NavigateToBitwardenApp -> {
 
                 intentManager.startActivity(
@@ -132,7 +138,7 @@ fun SettingsScreen(
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            BitwardenMediumTopAppBar(
+            AuthenticatorMediumTopAppBar(
                 title = stringResource(id = R.string.settings),
                 scrollBehavior = scrollBehavior,
             )
@@ -176,6 +182,9 @@ fun SettingsScreen(
                     {
                         viewModel.trySendAction(SettingsAction.DataClick.SyncWithBitwardenClick)
                     }
+                },
+                onSyncLearnMoreClick = remember(viewModel) {
+                    { viewModel.trySendAction(SettingsAction.DataClick.SyncLearnMoreClick) }
                 },
                 onDefaultSaveOptionUpdated = remember(viewModel) {
                     {
@@ -280,6 +289,7 @@ private fun VaultSettings(
     onImportClick: () -> Unit,
     onBackupClick: () -> Unit,
     onSyncWithBitwardenClick: () -> Unit,
+    onSyncLearnMoreClick: () -> Unit,
     onDefaultSaveOptionUpdated: (DefaultSaveOption) -> Unit,
     shouldShowSyncWithBitwardenApp: Boolean,
     shouldShowDefaultSaveOptions: Boolean,
@@ -333,12 +343,28 @@ private fun VaultSettings(
         dialogTitle = stringResource(R.string.data_backup_title),
         dialogMessage = stringResource(R.string.data_backup_message),
         dialogConfirmButtonText = stringResource(R.string.learn_more),
-        dialogDismissButtonText = stringResource(R.string.ok),
+        dialogDismissButtonText = stringResource(R.string.okay),
     )
     if (shouldShowSyncWithBitwardenApp) {
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextRow(
             text = stringResource(id = R.string.sync_with_bitwarden_app),
+            description = annotatedStringResource(
+                id = R.string.this_feature_is_not_not_yet_available_for_self_hosted_users,
+                style = spanStyleOf(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                ),
+                linkHighlightStyle = spanStyleOf(
+                    color = MaterialTheme.colorScheme.primary,
+                    textStyle = MaterialTheme.typography.labelLarge,
+                ),
+                onAnnotationClick = {
+                    when (it) {
+                        "learnMore" -> onSyncLearnMoreClick()
+                    }
+                },
+            ),
             onClick = onSyncWithBitwardenClick,
             modifier = modifier,
             withDivider = true,

@@ -15,15 +15,15 @@ import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClip
 import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
-import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
-import com.bitwarden.ui.util.concat
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
-import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
+import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -184,6 +184,7 @@ class SettingsViewModel @Inject constructor(
             SettingsAction.DataClick.ImportClick -> handleImportClick()
             SettingsAction.DataClick.BackupClick -> handleBackupClick()
             SettingsAction.DataClick.SyncWithBitwardenClick -> handleSyncWithBitwardenClick()
+            SettingsAction.DataClick.SyncLearnMoreClick -> handleSyncLearnMoreClick()
             is SettingsAction.DataClick.DefaultSaveOptionUpdated ->
                 handleDefaultSaveOptionChosen(action)
         }
@@ -213,6 +214,10 @@ class SettingsViewModel @Inject constructor(
 
             else -> sendEvent(SettingsEvent.NavigateToBitwardenApp)
         }
+    }
+
+    private fun handleSyncLearnMoreClick() {
+        sendEvent(SettingsEvent.NavigateToSyncInformation)
     }
 
     private fun handleExportClick() {
@@ -425,6 +430,11 @@ sealed class SettingsEvent {
     data object NavigateToPrivacyPolicy : SettingsEvent()
 
     /**
+     * Navigate to the sync learn more web page.
+     */
+    data object NavigateToSyncInformation : SettingsEvent()
+
+    /**
      * Navigate to the Bitwarden account settings.
      */
     data object NavigateToBitwardenApp : SettingsEvent()
@@ -491,7 +501,12 @@ sealed class SettingsAction(
         data object SyncWithBitwardenClick : DataClick()
 
         /**
-         * User confirmed a new [DeafultSaveOption].
+         * Indicates the user clicked sync learn more button.
+         */
+        data object SyncLearnMoreClick : DataClick()
+
+        /**
+         * User confirmed a new [DefaultSaveOption].
          */
         data class DefaultSaveOptionUpdated(val option: DefaultSaveOption) : DataClick()
     }

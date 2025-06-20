@@ -16,6 +16,7 @@ dependencies {
     detektPlugins(libs.detekt.detekt.formatting)
     detektPlugins(libs.detekt.detekt.rules)
 
+    kover(project(":annotation"))
     kover(project(":app"))
     kover(project(":authenticator"))
     kover(project(":authenticatorbridge"))
@@ -29,6 +30,7 @@ detekt {
     autoCorrect = true
     config.from(files("detekt-config.yml"))
     source.from(
+        "annotation/src",
         "app/src",
         "authenticator/src",
         "authenticatorbridge/src",
@@ -64,13 +66,15 @@ kover {
                     "androidx.compose.ui.tooling.preview.Preview",
                     "androidx.compose.ui.tooling.preview.PreviewScreenSizes",
                     // Manually excluded classes/files/etc.
-                    "com.bitwarden.core.annotation.OmitFromCoverage",
+                    "com.bitwarden.annotation.OmitFromCoverage",
                     // Dagger modules
                     "dagger.Module",
                 )
-                classes(
+                files(
                     // Navigation helpers
-                    "*.*NavigationKt*",
+                    "*.*Navigation.kt",
+                )
+                classes(
                     // Composable singletons
                     "*.*ComposableSingletons*",
                     // Generated classes related to interfaces with default values

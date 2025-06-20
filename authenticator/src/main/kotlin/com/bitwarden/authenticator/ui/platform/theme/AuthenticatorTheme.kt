@@ -1,8 +1,6 @@
 package com.bitwarden.authenticator.ui.platform.theme
 
-import android.app.Activity
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.annotation.ColorRes
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -13,22 +11,11 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
-import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
-import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManagerImpl
-import com.bitwarden.authenticator.ui.platform.manager.exit.ExitManager
-import com.bitwarden.authenticator.ui.platform.manager.exit.ExitManagerImpl
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManagerImpl
-import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
-import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManagerImpl
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 
 /**
  * The overall application theme. This can be configured to support a [theme] and [dynamicColor].
@@ -47,7 +34,6 @@ fun AuthenticatorTheme(
 
     // Get the current scheme
     val context = LocalContext.current
-    val activity = context as Activity
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
@@ -55,19 +41,6 @@ fun AuthenticatorTheme(
 
         darkTheme -> darkColorScheme(context)
         else -> lightColorScheme(context)
-    }
-
-    // Update status bar according to scheme
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            WindowCompat.setDecorFitsSystemWindows(window, false)
-            val insetsController = WindowCompat.getInsetsController(window, view)
-            insetsController.isAppearanceLightStatusBars = !darkTheme
-            insetsController.isAppearanceLightNavigationBars = !darkTheme
-            window.setBackgroundDrawable(ColorDrawable(colorScheme.surface.value.toInt()))
-        }
     }
 
     val nonMaterialColors = if (darkTheme) {
@@ -79,10 +52,6 @@ fun AuthenticatorTheme(
     CompositionLocalProvider(
         LocalNonMaterialColors provides nonMaterialColors,
         LocalNonMaterialTypography provides nonMaterialTypography,
-        LocalPermissionsManager provides PermissionsManagerImpl(activity),
-        LocalIntentManager provides IntentManagerImpl(context),
-        LocalExitManager provides ExitManagerImpl(activity),
-        LocalBiometricsManager provides BiometricsManagerImpl(activity),
     ) {
         // Set overall theme based on color scheme and typography settings
         MaterialTheme(
@@ -170,34 +139,6 @@ private fun lightColorScheme(context: Context): ColorScheme =
 @ColorRes
 private fun Int.toColor(context: Context): Color =
     Color(context.getColor(this))
-
-/**
- * Provides access to the biometrics manager throughout the app.
- */
-val LocalBiometricsManager: ProvidableCompositionLocal<BiometricsManager> = compositionLocalOf {
-    error("CompositionLocal BiometricsManager not present")
-}
-
-/**
- * Provides access to the exit manager throughout the app.
- */
-val LocalExitManager: ProvidableCompositionLocal<ExitManager> = compositionLocalOf {
-    error("CompositionLocal ExitManager not present")
-}
-
-/**
- * Provides access to the intent manager throughout the app.
- */
-val LocalIntentManager: ProvidableCompositionLocal<IntentManager> = compositionLocalOf {
-    error("CompositionLocal LocalIntentManager not present")
-}
-
-/**
- * Provides access to the permission manager throughout the app.
- */
-val LocalPermissionsManager: ProvidableCompositionLocal<PermissionsManager> = compositionLocalOf {
-    error("CompositionLocal LocalPermissionsManager not present")
-}
 
 /**
  * Provides access to non material theme typography throughout the app.

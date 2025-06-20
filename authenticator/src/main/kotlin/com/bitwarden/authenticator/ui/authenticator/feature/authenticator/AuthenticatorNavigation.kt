@@ -7,21 +7,26 @@ import androidx.navigation.navigation
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.navigateToEditItem
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.itemListingGraph
 import com.bitwarden.authenticator.ui.authenticator.feature.manualcodeentry.navigateToManualCodeEntryScreen
-import com.bitwarden.authenticator.ui.authenticator.feature.navbar.AUTHENTICATOR_NAV_BAR_ROUTE
+import com.bitwarden.authenticator.ui.authenticator.feature.navbar.AuthenticatorNavbarRoute
 import com.bitwarden.authenticator.ui.authenticator.feature.navbar.authenticatorNavBarDestination
 import com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.navigateToQrCodeScanScreen
 import com.bitwarden.authenticator.ui.authenticator.feature.search.navigateToSearch
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.navigateToExport
 import com.bitwarden.authenticator.ui.platform.feature.settings.importing.navigateToImporting
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.navigateToSettingsTutorial
+import kotlinx.serialization.Serializable
 
-const val AUTHENTICATOR_GRAPH_ROUTE = "authenticator_graph"
+/**
+ * The type-safe route for the authenticator graph.
+ */
+@Serializable
+data object AuthenticatorGraphRoute
 
 /**
  * Navigate to the authenticator graph
  */
 fun NavController.navigateToAuthenticatorGraph(navOptions: NavOptions? = null) {
-    navigate(AUTHENTICATOR_NAV_BAR_ROUTE, navOptions)
+    navigate(route = AuthenticatorNavbarRoute, navOptions = navOptions)
 }
 
 /**
@@ -31,9 +36,8 @@ fun NavGraphBuilder.authenticatorGraph(
     navController: NavController,
     onNavigateBack: () -> Unit,
 ) {
-    navigation(
-        startDestination = AUTHENTICATOR_NAV_BAR_ROUTE,
-        route = AUTHENTICATOR_GRAPH_ROUTE,
+    navigation<AuthenticatorGraphRoute>(
+        startDestination = AuthenticatorNavbarRoute,
     ) {
         authenticatorNavBarDestination(
             onNavigateBack = onNavigateBack,

@@ -8,7 +8,7 @@
     <string name="generic_error_message">Não foi possível processar o seu pedido. Por favor, tente novamente ou entre em contato conosco.</string>
     <string name="internet_connection_required_title">É necessária uma conexão com a Internet</string>
     <string name="internet_connection_required_message">Por favor, conecte-se à internet antes de continuar.</string>
-    <string name="ok">Aceitar</string>
+    <string name="okay">Okay</string>
     <string name="syncing">Sincronizando</string>
     <string name="copy">Copiar</string>
     <string name="edit_item">Editar</string>
@@ -17,15 +17,11 @@
     <string name="name">Nome</string>
     <string name="add_item_rotation">Adicionar Rotação do Item</string>
     <string name="scan_a_qr_code">Escanear QR code</string>
-    <string name="enter_a_setup_key">Inserir uma chave de configuração</string>
     <string name="scan_qr_code">Escanear QR code</string>
     <string name="point_your_camera_at_the_qr_code">Aponte sua câmera para o QR code.</string>
-    <string name="cannot_scan_qr_code">Não foi possível escanear o QR code.</string>
+    <string name="cannot_scan_qr_code_enter_key_manually">Cannot scan QR code? <annotation link="enterKeyManually">Enter key manually</annotation></string>
     <string name="enter_key_manually">Insira a chave manualmente.</string>
     <string name="cannot_add_authenticator_key">Não foi possível adicionar chave de autenticação?</string>
-    <string name="once_the_key_is_successfully_entered">Assim que a chave for inserida corretamente,\nselecione Adicionar TOTP para armazenar a chave de forma segura</string>
-    <string name="add_totp">Adicionar TOTP</string>
-    <string name="authenticator_key_scanner">Chave de Autenticação</string>
     <string name="no_thanks">Não obrigado</string>
     <string name="settings">Configurações</string>
     <string name="enable_camera_permission_to_use_the_scanner">Conceda permissão de uso da câmera para usar o scanner</string>
@@ -62,7 +58,6 @@
     <string name="theme">Tema</string>
     <string name="dark">Escuro</string>
     <string name="light">Claro</string>
-    <string name="language">Idioma</string>
     <string name="language_change_x_description">O idioma foi alterado para %1$s. Por favor, reinicie o aplicativo para ver a alteração</string>
     <string name="secure_your_accounts_with_bitwarden_authenticator">Proteja suas contas com o Bitwarden Authenticator</string>
     <string name="get_verification_codes_for_all_your_accounts">Obtenha códigos de verificação para todas as suas contas que suportam verificação em duas etapas.</string>
@@ -70,10 +65,7 @@
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Digitalize o QR code nas configurações de verificação de duas etapas para qualquer conta.</string>
     <string name="sign_in_using_unique_codes">Fazer login usando códigos únicos</string>
     <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">Ao usar a verificação em duas etapas, você digitará seu nome de usuário e senha e um código gerado neste aplicativo.</string>
-    <string name="continue_button">Continuar</string>
     <string name="skip">Pular</string>
-    <string name="get_started">Introdução</string>
-    <string name="unique_codes">Códigos únicos</string>
     <string name="help">Ajuda</string>
     <string name="launch_tutorial">Iniciar tutorial</string>
     <string name="value_has_been_copied">%1$s copiado</string>
@@ -113,7 +105,6 @@
     <string name="import_vault">Importar</string>
     <string name="import_success">Cofre importado com sucesso</string>
     <string name="key_is_invalid">Chave é inválida.</string>
-    <string name="favorite_tooltip">Salvar como favorito</string>
     <string name="favorite">Favorito</string>
     <string name="favorites">Favoritos</string>
     <string name="backup">Backup</string>
@@ -126,11 +117,12 @@
     <string name="download_bitwarden_card_message">Armazene todos os seus logins e sincronize códigos de verificação diretamente com o app Autenticador.</string>
     <string name="download_now">Baixe agora</string>
     <string name="sync_with_bitwarden_app">Sincronizar com o aplicativo Bitwarden</string>
+    <string name="this_feature_is_not_not_yet_available_for_self_hosted_users">This feature is not yet available for self-hosted users. <annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Não é possível sincronizar os códigos do aplicativo Bitwarden. Certifique-se de que ambos os aplicativos estão atualizados. Você ainda pode acessar os códigos existentes no aplicativo Bitwarden.</string>
     <string name="shared_accounts_header">%1$s ├%2$s</string>
     <string name="sync_with_the_bitwarden_app">Sincronizar com o aplicativo Bitwarden</string>
-    <string name="go_to_settings">Ir para as configurações</string>
     <string name="sync_with_bitwarden_action_card_message">Permitir a sincronização do app Autenticador em configurações para ver todos os seus códigos de verificação aqui.</string>
+    <string name="take_me_to_app_settings">Me leve para as configurações do aplicativo</string>
     <string name="something_went_wrong">Algo deu errado</string>
     <string name="please_try_again">Por favor, tente novamente</string>
     <string name="move_to_bitwarden">Mover para o Bitwarden</string>
@@ -144,8 +136,6 @@
     <string name="choose_save_location_message">Salve esta chave de autenticador aqui, ou adicione-a a um login no seu aplicativo Bitwarden.</string>
     <string name="save_option_as_default">Salvar opção como padrão</string>
     <string name="account_synced_from_bitwarden_app">Conta sincronizada do aplicativo Bitwarden</string>
-    <string name="add_code_to_bitwarden">Adicionar o código ao Bitwarden</string>
-    <string name="add_code_locally">Adicionar código localmente</string>
     <string name="local_codes">Códigos locais</string>
     <string name="required_information_missing">Informações necessárias faltando</string>
     <string name="required_information_missing_message">"As informações necessárias estão faltando (ex.: 'serviços' ou 'segredo'). Verifique o seu arquivo e tente novamente. Visite bitwarden.com/help para obter suporte"</string>

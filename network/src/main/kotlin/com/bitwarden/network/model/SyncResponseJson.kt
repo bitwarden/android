@@ -250,6 +250,7 @@ data class SyncResponseJson(
          * @property familySponsorshipValidUntil The family sponsorship valid until
          * of the organization (nullable).
          * @property status The status of the organization.
+         * @property limitItemDeletion If the organization limits item deletion.
          */
         @Serializable
         data class Organization(
@@ -346,7 +347,10 @@ data class SyncResponseJson(
             val status: OrganizationStatusType,
 
             @SerialName("userIsClaimedByOrganization")
-            val userIsClaimedByOrganization: Boolean,
+            val userIsClaimedByOrganization: Boolean = false,
+
+            @SerialName("limitItemDeletion")
+            val limitItemDeletion: Boolean = false,
         )
 
         /**
@@ -434,6 +438,8 @@ data class SyncResponseJson(
      * @property shouldViewPassword If the password can be viewed for the cipher.
      * @property isFavorite If the cipher is a favorite.
      * @property card The card of the cipher.
+     * @property key The key of the cipher (nullable).
+     * @property encryptedFor ID of the user who the cipher is encrypted by.
      */
     @Serializable
     data class Cipher(
@@ -454,6 +460,9 @@ data class SyncResponseJson(
 
         @SerialName("passwordHistory")
         val passwordHistory: List<PasswordHistory>?,
+
+        @SerialName("permissions")
+        val permissions: CipherPermissions?,
 
         @SerialName("revisionDate")
         @Contextual
@@ -511,6 +520,9 @@ data class SyncResponseJson(
 
         @SerialName("key")
         val key: String?,
+
+        @SerialName("encryptedFor")
+        val encryptedFor: String?,
     ) {
         /**
          * Represents an attachment in the vault response.
@@ -767,6 +779,21 @@ data class SyncResponseJson(
             @SerialName("lastUsedDate")
             @Contextual
             val lastUsedDate: ZonedDateTime,
+        )
+
+        /**
+         * Represents a cipher permissions in the vault response.
+         *
+         * @property delete whether the delete permissions is active.
+         * @property restore whether the restore permissions is active.
+         */
+        @Serializable
+        data class CipherPermissions(
+            @SerialName("delete")
+            val delete: Boolean,
+
+            @SerialName("restore")
+            val restore: Boolean,
         )
 
         /**

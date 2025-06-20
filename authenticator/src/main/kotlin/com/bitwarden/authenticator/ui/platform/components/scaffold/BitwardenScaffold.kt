@@ -11,7 +11,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.semantics
@@ -21,7 +20,6 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
  * Direct passthrough to [Scaffold] but contains a few specific override values. Everything is
  * still overridable if necessary.
  */
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BitwardenScaffold(
     modifier: Modifier = Modifier,

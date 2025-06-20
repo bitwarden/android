@@ -15,12 +15,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bitwarden.authenticator.data.platform.util.isSuspicious
+import com.bitwarden.authenticator.ui.platform.composition.LocalManagerProvider
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
 import com.bitwarden.authenticator.ui.platform.feature.rootnav.RootNavScreen
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
+import com.bitwarden.ui.platform.util.setupEdgeToEdge
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
@@ -49,18 +52,21 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
+        setupEdgeToEdge(appThemeFlow = mainViewModel.stateFlow.map { it.theme })
         setContent {
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
             val navController = rememberNavController()
             observeViewModelEvents(navController)
-            AuthenticatorTheme(
-                theme = state.theme,
-            ) {
-                RootNavScreen(
-                    navController = navController,
-                    onSplashScreenRemoved = { shouldShowSplashScreen = false },
-                    onExitApplication = { finishAffinity() },
-                )
+            LocalManagerProvider {
+                AuthenticatorTheme(
+                    theme = state.theme,
+                ) {
+                    RootNavScreen(
+                        navController = navController,
+                        onSplashScreenRemoved = { shouldShowSplashScreen = false },
+                        onExitApplication = { finishAffinity() },
+                    )
+                }
             }
         }
     }

@@ -38,8 +38,11 @@ android {
 }
 
 dependencies {
+    implementation(project(":annotation"))
+
     implementation(libs.google.hilt.android)
     ksp(libs.google.hilt.compiler)
+    implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization)
 
@@ -48,6 +51,7 @@ dependencies {
     testImplementation(libs.junit.junit5)
     testImplementation(libs.junit.vintage)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk.mockk)
 }
 
 tasks {

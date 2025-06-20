@@ -4,23 +4,31 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
-import com.bitwarden.authenticator.ui.platform.base.util.composableWithPushTransitions
+import androidx.navigation.toRoute
+import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import kotlinx.serialization.Serializable
 
-private const val EDIT_ITEM_PREFIX = "edit_item"
-private const val EDIT_ITEM_ITEM_ID = "item_id"
-private const val EDIT_ITEM_ROUTE = "$EDIT_ITEM_PREFIX/{$EDIT_ITEM_ITEM_ID}"
+/**
+ * The type-safe route for the edit item screen.
+ */
+@Serializable
+data class EditItemRoute(
+    val itemId: String,
+)
 
 /**
  * Class to retrieve authenticator item arguments from the [SavedStateHandle].
  *
  * @property itemId ID of the item to be edited.
  */
-data class EditItemArgs(val itemId: String) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        checkNotNull(savedStateHandle[EDIT_ITEM_ITEM_ID]) as String,
-    )
+data class EditItemArgs(val itemId: String)
+
+/**
+ * Constructs a [EditItemArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toEditItemArgs(): EditItemArgs {
+    val route = this.toRoute<EditItemRoute>()
+    return EditItemArgs(itemId = route.itemId)
 }
 
 /**
@@ -29,12 +37,7 @@ data class EditItemArgs(val itemId: String) {
 fun NavGraphBuilder.editItemDestination(
     onNavigateBack: () -> Unit = { },
 ) {
-    composableWithPushTransitions(
-        route = EDIT_ITEM_ROUTE,
-        arguments = listOf(
-            navArgument(EDIT_ITEM_ITEM_ID) { type = NavType.StringType },
-        ),
-    ) {
+    composableWithPushTransitions<EditItemRoute> {
         EditItemScreen(
             onNavigateBack = onNavigateBack,
         )
@@ -49,7 +52,7 @@ fun NavController.navigateToEditItem(
     navOptions: NavOptions? = null,
 ) {
     navigate(
-        route = "$EDIT_ITEM_PREFIX/$itemId",
+        route = EditItemRoute(itemId = itemId),
         navOptions = navOptions,
     )
 }

@@ -400,27 +400,24 @@ Note in particular how consumers of the above **do not need to know the details 
 <summary>Show example</summary>
 
 ```kotlin
-private const val IS_TOGGLE_ENABLED: String = "is_toggle_enabled"
-private const val EXAMPLE_ROUTE_PREFIX = "example"
-private const val EXAMPLE_ROUTE = "$EXAMPLE_ROUTE_PREFIX/{$IS_TOGGLE_ENABLED}"
+@Serializable
+data class ExampleRoute(
+    val isToggleEnabled: Boolean,
+)
 
 data class ExampleArgs(
     val isToggleEnabledInitialValue: Boolean,
-) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        isToggleEnabledInitialValue = checkNotNull(savedStateHandle[IS_TOGGLE_ENABLED]) as Boolean,
-    )
+)
+
+fun SavedStateHandle.toExampleArgs(): ExampleArgs {
+    val route = this.toRoute<ExampleRoute>()
+    return ExampleArgs(isToggleEnabledInitialValue = route.isToggleEnabled)
 }
 
 fun NavGraphBuilder.exampleDestination(
     onNavigateToNextScreen: (CompletionData) -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = EXAMPLE_ROUTE,
-        arguments = listOf(
-            navArgument(IS_TOGGLE_ENABLED) { type = NavType.BoolType }
-        ),
-    ) {
+    composableWithSlideTransitions<ExampleRoute> {
         ExampleScreen(onNavigateToNextScreen = onNavigateToNextScreen)
     }
 }
@@ -430,8 +427,8 @@ fun NavController.navigateToExample(
     navOptions: NavOptions? = null,
 ) {
     this.navigate(
-        "$EXAMPLE_ROUTE_PREFIX/$isToggleEnabled",
-        navOptions,
+        route = ExampleRoute(isToggleEnabled = isToggleEnabled),
+        navOptions = navOptions,
     )
 }
 ```

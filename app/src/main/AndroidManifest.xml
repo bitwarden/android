@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.READ_USER_DICTIONARY"/>
+    <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
     <!-- Protect access to AuthenticatorBridgeService using this custom permission.
 
     Note that each build type uses a different value for knownCerts.
@@ -37,15 +37,18 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
+        android:intentMatchingFlags="enforceIntentFilter"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/LaunchTheme"
+        tools:ignore="CredentialDependency"
         tools:replace="appComponentFactory"
-        tools:targetApi="33">
+        tools:targetApi="36">
         <activity
             android:name=".MainActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:launchMode="@integer/launchModeAPIlevel"
             android:theme="@style/LaunchTheme"
@@ -76,16 +79,15 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-
-                <data android:host="vault.bitwarden.com" />
-                <data android:host="vault.bitwarden.eu" />
+                <data android:host="*.bitwarden.com" />
+                <data android:host="*.bitwarden.eu" />
                 <data android:host="*.bitwarden.pw" />
                 <data android:pathPattern="/redirect-connector.*" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.x8bit.bitwarden.fido2.ACTION_CREATE_PASSKEY" />
-                <action android:name="com.x8bit.bitwarden.fido2.ACTION_GET_PASSKEY" />
-                <action android:name="com.x8bit.bitwarden.fido2.ACTION_UNLOCK_ACCOUNT" />
+                <action android:name="com.x8bit.bitwarden.credentials.ACTION_CREATE_PASSKEY" />
+                <action android:name="com.x8bit.bitwarden.credentials.ACTION_GET_PASSKEY" />
+                <action android:name="com.x8bit.bitwarden.credentials.ACTION_UNLOCK_ACCOUNT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -309,6 +311,14 @@
             android:name="com.x8bit.bitwarden.data.platform.service.AuthenticatorBridgeService"
             android:exported="true"
             android:permission="${applicationId}.permission.AUTHENTICATOR_BRIDGE_SERVICE" />
+
+        <!-- Firebase SDK initOrder is 100. We use a higher order to initialize first -->
+        <provider
+            android:name=".data.platform.contentprovider.UncaughtErrorLoggingContentProvider"
+            android:authorities="${applicationId}"
+            android:exported="false"
+            android:grantUriPermissions="false"
+            android:initOrder="101" />
 
     </application>
 

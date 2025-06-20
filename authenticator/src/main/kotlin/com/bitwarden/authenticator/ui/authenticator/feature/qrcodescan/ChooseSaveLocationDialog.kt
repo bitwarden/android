@@ -3,7 +3,6 @@ package com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenWideSwitch
 import com.bitwarden.authenticator.ui.platform.components.util.maxDialogHeight
 import com.bitwarden.authenticator.ui.platform.components.util.maxDialogWidth
@@ -41,7 +40,6 @@ import com.bitwarden.authenticator.ui.platform.components.util.maxDialogWidth
  * parameter is true if the user checked "Save option as default".
  */
 @Composable
-@OptIn(ExperimentalLayoutApi::class)
 @Suppress("LongMethod")
 fun ChooseSaveLocationDialog(
     onSaveHereClick: (Boolean) -> Unit,
@@ -98,14 +96,14 @@ fun ChooseSaveLocationDialog(
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier.padding(horizontal = 8.dp),
             ) {
-                BitwardenTextButton(
+                AuthenticatorTextButton(
                     modifier = Modifier
                         .padding(horizontal = 4.dp),
                     label = stringResource(R.string.save_here),
                     labelTextColor = MaterialTheme.colorScheme.primary,
                     onClick = { onSaveHereClick.invoke(isSaveAsDefaultChecked) },
                 )
-                BitwardenTextButton(
+                AuthenticatorTextButton(
                     modifier = Modifier
                         .padding(horizontal = 4.dp),
                     label = stringResource(R.string.save_to_bitwarden),

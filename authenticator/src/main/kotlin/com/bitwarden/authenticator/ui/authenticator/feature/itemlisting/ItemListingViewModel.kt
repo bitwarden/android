@@ -19,17 +19,17 @@ import com.bitwarden.authenticator.data.platform.manager.BitwardenEncodingManage
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.GoogleAuthenticatorProtos
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
-import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toSharedCodesDisplayState
-import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
+import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
-import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
@@ -152,6 +152,10 @@ class ItemListingViewModel @Inject constructor(
 
             ItemListingAction.SyncWithBitwardenDismiss -> {
                 handleSyncWithBitwardenDismiss()
+            }
+
+            ItemListingAction.SyncLearnMoreClick -> {
+                handleSyncLearnMoreClick()
             }
         }
     }
@@ -564,6 +568,10 @@ class ItemListingViewModel @Inject constructor(
         }
     }
 
+    private fun handleSyncLearnMoreClick() {
+        sendEvent(ItemListingEvent.NavigateToSyncInformation)
+    }
+
     /**
      * Converts a [SharedVerificationCodesState] into an action card for display.
      */
@@ -795,6 +803,11 @@ sealed class ItemListingEvent {
     data object NavigateToAppSettings : ItemListingEvent()
 
     /**
+     * Navigate to the sync information web page.
+     */
+    data object NavigateToSyncInformation : ItemListingEvent()
+
+    /**
      * Navigate to Bitwarden play store listing.
      */
     data object NavigateToBitwardenListing : ItemListingEvent()
@@ -873,6 +886,11 @@ sealed class ItemListingAction {
     data object SyncWithBitwardenClick : ItemListingAction()
 
     /**
+     * The user tapped the learn more button on the sync action card.
+     */
+    data object SyncLearnMoreClick : ItemListingAction()
+
+    /**
      * The user dismissed sync Bitwarden action card.
      */
     data object SyncWithBitwardenDismiss : ItemListingAction()
@@ -886,7 +904,7 @@ sealed class ItemListingAction {
      * Represents an action triggered when the user clicks an item in the dropdown menu.
      *
      * @param menuAction The action selected from the dropdown menu.
-     * @param id The identifier of the item on which the action is being performed.
+     * @param item The item on which the action is being performed.
      */
     data class DropdownMenuClick(
         val menuAction: VaultDropdownMenuAction,

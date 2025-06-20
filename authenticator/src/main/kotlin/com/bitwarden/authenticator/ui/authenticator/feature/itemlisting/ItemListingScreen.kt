@@ -8,16 +8,21 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.HorizontalDivider
@@ -32,6 +37,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -52,12 +58,12 @@ import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.It
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
-import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
-import com.bitwarden.ui.util.asText
-import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenMediumTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.appbar.action.BitwardenSearchActionItem
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
+import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorMediumTopAppBar
+import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
+import com.bitwarden.authenticator.ui.platform.components.appbar.action.AuthenticatorSearchActionItem
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledTonalButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
 import com.bitwarden.authenticator.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
@@ -70,13 +76,17 @@ import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHe
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderTextWithSupportLabel
 import com.bitwarden.authenticator.ui.platform.components.model.IconResource
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.authenticator.ui.platform.components.util.rememberVectorPainter
-import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.authenticator.ui.platform.composition.LocalIntentManager
+import com.bitwarden.authenticator.ui.platform.composition.LocalPermissionsManager
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
-import com.bitwarden.authenticator.ui.platform.theme.LocalIntentManager
-import com.bitwarden.authenticator.ui.platform.theme.LocalPermissionsManager
 import com.bitwarden.authenticator.ui.platform.theme.Typography
+import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.util.asText
+import kotlinx.coroutines.launch
 
 /**
  * Displays the item listing screen.
@@ -105,6 +115,7 @@ fun ItemListingScreen(
         }
     }
     val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -136,13 +147,19 @@ fun ItemListingScreen(
                 )
             }
 
+            ItemListingEvent.NavigateToSyncInformation -> {
+                intentManager.launchUri("https://bitwarden.com/help/totp-sync".toUri())
+            }
+
             ItemListingEvent.NavigateToBitwardenSettings -> {
                 intentManager.startMainBitwardenAppAccountSettings()
             }
 
             is ItemListingEvent.ShowFirstTimeSyncSnackbar -> {
                 // Message property is overridden by FirstTimeSyncSnackbarHost:
-                snackbarHostState.showSnackbar("")
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar("")
+                }
             }
         }
     }
@@ -225,6 +242,9 @@ fun ItemListingScreen(
                         viewModel.trySendAction(ItemListingAction.SyncWithBitwardenDismiss)
                     }
                 },
+                onSyncLearnMoreClick = remember(viewModel) {
+                    { viewModel.trySendAction(ItemListingAction.SyncLearnMoreClick) }
+                },
             )
         }
 
@@ -265,6 +285,9 @@ fun ItemListingScreen(
                         viewModel.trySendAction(ItemListingAction.SyncWithBitwardenClick)
                     }
                 },
+                onSyncLearnMoreClick = remember(viewModel) {
+                    { viewModel.trySendAction(ItemListingAction.SyncLearnMoreClick) }
+                },
                 onDismissSyncWithBitwardenClick = remember(viewModel) {
                     {
                         viewModel.trySendAction(ItemListingAction.SyncWithBitwardenDismiss)
@@ -304,7 +327,7 @@ private fun ItemListingDialogs(
             BitwardenTwoButtonDialog(
                 title = stringResource(id = R.string.delete),
                 message = dialog.message(),
-                confirmButtonText = stringResource(id = R.string.ok),
+                confirmButtonText = stringResource(id = R.string.okay),
                 dismissButtonText = stringResource(id = R.string.cancel),
                 onConfirmClick = {
                     onConfirmDeleteClick(dialog.itemId)
@@ -334,17 +357,18 @@ private fun ItemListingContent(
     onDismissDownloadBitwardenClick: () -> Unit,
     onSyncWithBitwardenClick: () -> Unit,
     onDismissSyncWithBitwardenClick: () -> Unit,
+    onSyncLearnMoreClick: () -> Unit,
 ) {
     BitwardenScaffold(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            BitwardenMediumTopAppBar(
+            AuthenticatorMediumTopAppBar(
                 title = stringResource(id = R.string.verification_codes),
                 scrollBehavior = scrollBehavior,
                 actions = {
-                    BitwardenSearchActionItem(
+                    AuthenticatorSearchActionItem(
                         contentDescription = stringResource(id = R.string.search_codes),
                         onClick = onNavigateToSearch,
                     )
@@ -397,23 +421,15 @@ private fun ItemListingContent(
         ) {
             LazyColumn {
                 item {
-                    when (state.actionCard) {
-                        ItemListingState.ActionCardState.DownloadBitwardenApp ->
-                            DownloadBitwardenActionCard(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                onDownloadBitwardenClick = onDownloadBitwardenClick,
-                                onDismissClick = onDismissDownloadBitwardenClick,
-                            )
-
-                        ItemListingState.ActionCardState.SyncWithBitwarden ->
-                            SyncWithBitwardenActionCard(
-                                modifier = Modifier.padding(16.dp),
-                                onSyncWithBitwardenClick = onSyncWithBitwardenClick,
-                                onDismissClick = onDismissSyncWithBitwardenClick,
-                            )
-
-                        ItemListingState.ActionCardState.None -> Unit
-                    }
+                    ActionCard(
+                        actionCardState = state.actionCard,
+                        onDownloadBitwardenClick = onDownloadBitwardenClick,
+                        onDownloadBitwardenDismissClick = onDismissDownloadBitwardenClick,
+                        onSyncWithBitwardenClick = onSyncWithBitwardenClick,
+                        onSyncWithBitwardenDismissClick = onDismissSyncWithBitwardenClick,
+                        onSyncLearnMoreClick = onSyncLearnMoreClick,
+                        modifier = Modifier.padding(all = 16.dp),
+                    )
                 }
                 if (state.favoriteItems.isNotEmpty()) {
                     item {
@@ -567,6 +583,7 @@ fun EmptyItemListingContent(
     onDownloadBitwardenClick: () -> Unit,
     onDismissDownloadBitwardenClick: () -> Unit,
     onSyncWithBitwardenClick: () -> Unit,
+    onSyncLearnMoreClick: () -> Unit,
     onDismissSyncWithBitwardenClick: () -> Unit,
 ) {
     BitwardenScaffold(
@@ -574,7 +591,7 @@ fun EmptyItemListingContent(
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            BitwardenTopAppBar(
+            AuthenticatorTopAppBar(
                 title = stringResource(id = R.string.verification_codes),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = null,
@@ -630,23 +647,14 @@ fun EmptyItemListingContent(
                 ItemListingState.ActionCardState.SyncWithBitwarden -> Arrangement.Top
             },
         ) {
-            when (actionCardState) {
-                ItemListingState.ActionCardState.DownloadBitwardenApp ->
-                    DownloadBitwardenActionCard(
-                        modifier = Modifier.padding(16.dp),
-                        onDismissClick = onDismissDownloadBitwardenClick,
-                        onDownloadBitwardenClick = onDownloadBitwardenClick,
-                    )
-
-                ItemListingState.ActionCardState.SyncWithBitwarden ->
-                    SyncWithBitwardenActionCard(
-                        modifier = Modifier.padding(16.dp),
-                        onDismissClick = onDismissSyncWithBitwardenClick,
-                        onSyncWithBitwardenClick = onSyncWithBitwardenClick,
-                    )
-
-                ItemListingState.ActionCardState.None -> Unit
-            }
+            ActionCard(
+                actionCardState = actionCardState,
+                onDownloadBitwardenClick = onDownloadBitwardenClick,
+                onDownloadBitwardenDismissClick = onDismissDownloadBitwardenClick,
+                onSyncWithBitwardenClick = onSyncWithBitwardenClick,
+                onSyncWithBitwardenDismissClick = onDismissSyncWithBitwardenClick,
+                onSyncLearnMoreClick = onSyncLearnMoreClick,
+            )
 
             // Add a spacer if an action card is showing:
             when (actionCardState) {
@@ -691,7 +699,7 @@ fun EmptyItemListingContent(
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-                BitwardenFilledTonalButton(
+                AuthenticatorFilledTonalButton(
                     modifier = Modifier
                         .semantics { testTag = "AddCodeButton" }
                         .fillMaxWidth(),
@@ -720,7 +728,7 @@ private fun DownloadBitwardenActionCard(
             onClick = onDismissClick,
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_close),
+                painter = painterResource(id = BitwardenDrawable.ic_close),
                 contentDescription = stringResource(id = R.string.close),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
@@ -730,32 +738,114 @@ private fun DownloadBitwardenActionCard(
     },
 )
 
+@Suppress("LongMethod")
 @Composable
 private fun SyncWithBitwardenActionCard(
     modifier: Modifier = Modifier,
     onDismissClick: () -> Unit,
+    onAppSettingsClick: () -> Unit,
+    onLearnMoreClick: () -> Unit,
+) {
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(size = 16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+        ),
+        elevation = CardDefaults.elevatedCardElevation(),
+    ) {
+        Spacer(Modifier.height(height = 4.dp))
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Spacer(Modifier.width(width = 16.dp))
+            Row(
+                modifier = Modifier.padding(top = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    painter = rememberVectorPainter(id = R.drawable.ic_bitwarden),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(size = 20.dp),
+                )
+                Spacer(Modifier.width(width = 16.dp))
+                Text(
+                    text = stringResource(id = R.string.sync_with_the_bitwarden_app),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+            }
+            Spacer(Modifier.weight(weight = 1f))
+            Spacer(Modifier.width(width = 16.dp))
+            IconButton(onClick = onDismissClick) {
+                Icon(
+                    painter = painterResource(id = BitwardenDrawable.ic_close),
+                    contentDescription = stringResource(id = R.string.close),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(size = 24.dp),
+                )
+            }
+            Spacer(Modifier.width(width = 4.dp))
+        }
+        Text(
+            text = stringResource(id = R.string.sync_with_bitwarden_action_card_message),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(start = 36.dp, end = 48.dp)
+                .fillMaxWidth(),
+        )
+        Spacer(Modifier.height(height = 16.dp))
+        AuthenticatorFilledButton(
+            label = stringResource(id = R.string.take_me_to_app_settings),
+            onClick = onAppSettingsClick,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
+        )
+        AuthenticatorTextButton(
+            label = stringResource(id = R.string.learn_more),
+            onClick = onLearnMoreClick,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
+        )
+        Spacer(Modifier.height(height = 4.dp))
+    }
+}
+
+@Composable
+private fun ActionCard(
+    actionCardState: ItemListingState.ActionCardState,
+    onDownloadBitwardenClick: () -> Unit,
+    onDownloadBitwardenDismissClick: () -> Unit,
     onSyncWithBitwardenClick: () -> Unit,
-) = BitwardenActionCard(
-    modifier = modifier,
-    actionIcon = rememberVectorPainter(R.drawable.ic_refresh),
-    actionText = stringResource(R.string.sync_with_bitwarden_action_card_message),
-    callToActionText = stringResource(R.string.go_to_settings),
-    titleText = stringResource(R.string.sync_with_bitwarden_app),
-    onCardClicked = onSyncWithBitwardenClick,
-    trailingContent = {
-        IconButton(
-            onClick = onDismissClick,
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_close),
-                contentDescription = stringResource(id = R.string.close),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier
-                    .size(24.dp),
+    onSyncWithBitwardenDismissClick: () -> Unit,
+    onSyncLearnMoreClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    when (actionCardState) {
+        ItemListingState.ActionCardState.DownloadBitwardenApp -> {
+            DownloadBitwardenActionCard(
+                modifier = modifier,
+                onDownloadBitwardenClick = onDownloadBitwardenClick,
+                onDismissClick = onDownloadBitwardenDismissClick,
             )
         }
-    },
-)
+
+        ItemListingState.ActionCardState.SyncWithBitwarden -> {
+            SyncWithBitwardenActionCard(
+                modifier = modifier,
+                onAppSettingsClick = onSyncWithBitwardenClick,
+                onDismissClick = onSyncWithBitwardenDismissClick,
+                onLearnMoreClick = onSyncLearnMoreClick,
+            )
+        }
+
+        ItemListingState.ActionCardState.None -> Unit
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -771,6 +861,7 @@ private fun EmptyListingContentPreview() {
         onDownloadBitwardenClick = { },
         onDismissDownloadBitwardenClick = { },
         onSyncWithBitwardenClick = { },
+        onSyncLearnMoreClick = { },
         onDismissSyncWithBitwardenClick = { },
     )
 }

@@ -6,6 +6,7 @@ import com.bitwarden.network.api.CiphersApi
 import com.bitwarden.network.base.BaseServiceTest
 import com.bitwarden.network.model.AttachmentJsonResponse
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
+import com.bitwarden.network.model.CreateCipherResponseJson
 import com.bitwarden.network.model.FileUploadType
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
@@ -15,7 +16,6 @@ import com.bitwarden.network.model.UpdateCipherResponseJson
 import com.bitwarden.network.model.createMockAttachment
 import com.bitwarden.network.model.createMockAttachmentInfo
 import com.bitwarden.network.model.createMockAttachmentJsonRequest
-import com.bitwarden.network.model.createMockAttachmentJsonResponse
 import com.bitwarden.network.model.createMockAttachmentResponse
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCipherJsonRequest
@@ -68,7 +68,22 @@ class CiphersServiceTest : BaseServiceTest() {
             body = createMockCipherJsonRequest(number = 1),
         )
         assertEquals(
-            createMockCipher(number = 1),
+            CreateCipherResponseJson.Success(createMockCipher(number = 1)),
+            result.getOrThrow(),
+        )
+    }
+
+    @Test
+    fun `createCipher should return Invalid with correct data`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(400).setBody(CREATE_CIPHER_INVALID_JSON))
+        val result = ciphersService.createCipher(
+            body = createMockCipherJsonRequest(number = 1),
+        )
+        assertEquals(
+            CreateCipherResponseJson.Invalid(
+                message = "Cipher was not encrypted for the current user. Please try again.",
+                validationErrors = null,
+            ),
             result.getOrThrow(),
         )
     }
@@ -83,10 +98,29 @@ class CiphersServiceTest : BaseServiceTest() {
             ),
         )
         assertEquals(
-            createMockCipher(number = 1),
+            CreateCipherResponseJson.Success(createMockCipher(number = 1)),
             result.getOrThrow(),
         )
     }
+
+    @Test
+    fun `createCipherInOrganization should return Invalid with correct data`() =
+        runTest {
+            server.enqueue(MockResponse().setResponseCode(400).setBody(CREATE_CIPHER_INVALID_JSON))
+            val result = ciphersService.createCipherInOrganization(
+                body = CreateCipherInOrganizationJsonRequest(
+                    cipher = createMockCipherJsonRequest(number = 1),
+                    collectionIds = listOf("12345"),
+                ),
+            )
+            assertEquals(
+                CreateCipherResponseJson.Invalid(
+                    message = "Cipher was not encrypted for the current user. Please try again.",
+                    validationErrors = null,
+                ),
+                result.getOrThrow(),
+            )
+        }
 
     @Test
     fun `createAttachment should return the correct response`() = runTest {
@@ -96,7 +130,7 @@ class CiphersServiceTest : BaseServiceTest() {
             body = createMockAttachmentJsonRequest(number = 1),
         )
         assertEquals(
-            createMockAttachmentJsonResponse(number = 1),
+            createMockAttachmentResponse(number = 1),
             result.getOrThrow(),
         )
     }
@@ -375,6 +409,10 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
         "lastUsedDate": "2023-10-27T12:00:00.00Z"
       }
     ],
+    "permissions": {
+      "delete": true,
+      "restore": true
+    },
     "revisionDate": "2023-10-27T12:00:00.00Z",
     "type": 1,
     "login": {
@@ -464,7 +502,8 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
       "publicKey": "mockPublicKey-1",
       "privateKey": "mockPrivateKey-1",
       "keyFingerprint": "mockKeyFingerprint-1"
-    }
+    },
+    "encryptedFor": "mockEncryptedFor-1"
   }
 }
 """
@@ -498,6 +537,10 @@ private const val CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON = """
       "lastUsedDate": "2023-10-27T12:00:00.00Z"
     }
   ],
+  "permissions": {
+    "delete": true,
+    "restore": true
+  },
   "revisionDate": "2023-10-27T12:00:00.00Z",
   "type": 1,
   "login": {
@@ -587,13 +630,20 @@ private const val CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON = """
     "publicKey": "mockPublicKey-1",
     "privateKey": "mockPrivateKey-1",
     "keyFingerprint": "mockKeyFingerprint-1"
-  }
+  },
+  "encryptedFor": "mockEncryptedFor-1"
 }
 """
 
 private const val UPDATE_CIPHER_INVALID_JSON = """
 {
   "message": "You do not have permission to edit this.",
+  "validationErrors": null
+}
+"""
+private const val CREATE_CIPHER_INVALID_JSON = """
+{
+  "message": "Cipher was not encrypted for the current user. Please try again.",
   "validationErrors": null
 }
 """
