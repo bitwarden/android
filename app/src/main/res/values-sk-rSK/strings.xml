@@ -296,9 +296,9 @@ Skenovanie prebehne automaticky.</string>
     <string name="autofill_and_save">Auto-vyplniť a uložiť</string>
     <string name="organization">Organizácia</string>
     <string name="try_again">Skúsiť Znovu</string>
-    <string name="created">Created: %1$s</string>
-    <string name="password_last_updated">Password last updated: %1$s</string>
-    <string name="last_edited">Last edited: %1$s</string>
+    <string name="created">Vytvorené: %1$s</string>
+    <string name="password_last_updated">Naposledy upravené heslo: %1$s</string>
+    <string name="last_edited">Naposledy upravené: %1$s</string>
     <string name="invalid_email">Neplatná e-mailová adresa.</string>
     <string name="cards">Karty</string>
     <string name="identities">Identity</string>
@@ -454,7 +454,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="password_info">Voliteľne môžete vyžadovať heslo pre používateľov na prístup k tomuto Sendu.</string>
     <string name="remove_password">Odstrániť heslo</string>
     <string name="removing_send_password">Odstraňuje sa heslo</string>
-    <string name="send_password_removed">Heslo bolo odstránené.</string>
+    <string name="password_removed">Password removed</string>
     <string name="add_a_send">Pridať Send</string>
     <string name="copy_link">Kopírovať odkaz</string>
     <string name="share_link">Zdieľať odkaz</string>
@@ -675,7 +675,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="privacy_policy_description_long">Pozrite si naše zásady ochrany osobných údajov na bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Preskúmajte ďalšie funkcie svojho účtu na Bitwarden vo webovej aplikácii.</string>
     <string name="learn_about_organizations_description_long">Bitwarden vám umožňuje zdieľať vaše položky trezora s ostatnými pomocou organizácie. Viac informácií nájdete na webovej stránke bitwarden.com.</string>
-    <string name="created_xy">Vytvorené %1$s, %2$s</string>
+    <string name="created_x">Vytvorené: %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Vaša organizácia vyžaduje, aby ste nastavili hlavné heslo.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Nastavte možnosť odomknutia, aby ste zmenili akciu pri vypršaní času trezoru.</string>
     <string name="save_passkey_as_new_login">Uložiť prístupový kľúč ako nové prihlásenie</string>
@@ -980,4 +980,5 @@ Chcete prepnúť na tento účet?</string>
     <string name="about_privileged_applications">O privilegovaných aplikáciách</string>
     <string name="learn_more_about_privileged_apps">Viac informácií o privilegovaných aplikáciách</string>
     <string name="privileged_apps">Privilegované aplikácie</string>
+    <string name="unrecognized_browser">Neznámy prehliadač</string>
 </resources>
