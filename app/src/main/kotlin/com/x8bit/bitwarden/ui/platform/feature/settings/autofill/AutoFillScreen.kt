@@ -49,7 +49,7 @@ import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome.ChromeAutofillSettingsCard
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.BrowserAutofillSettingsCard
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.handlers.AutoFillHandlers
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -100,9 +100,9 @@ fun AutoFillScreen(
             }
 
             AutoFillEvent.NavigateToSetupAutofill -> onNavigateToSetupAutofill()
-            is AutoFillEvent.NavigateToChromeAutofillSettings -> {
-                intentManager.startChromeAutofillSettingsActivity(
-                    releaseChannel = event.releaseChannel,
+            is AutoFillEvent.NavigateToBrowserAutofillSettings -> {
+                intentManager.startBrowserAutofillSettingsActivity(
+                    browserPackage = event.browserPackage,
                 )
             }
 
@@ -211,10 +211,10 @@ private fun AutoFillScreenContent(
             Spacer(modifier = Modifier.height(height = 8.dp))
         }
 
-        if (state.chromeAutofillSettingsOptions.isNotEmpty()) {
-            ChromeAutofillSettingsCard(
-                options = state.chromeAutofillSettingsOptions,
-                onOptionClicked = autoFillHandlers.onChromeAutofillSelected,
+        if (state.browserAutofillSettingsOptions.isNotEmpty()) {
+            BrowserAutofillSettingsCard(
+                options = state.browserAutofillSettingsOptions,
+                onOptionClicked = autoFillHandlers.onBrowserAutofillSelected,
                 enabled = state.isAutoFillServicesEnabled,
             )
             Spacer(modifier = Modifier.height(8.dp))
