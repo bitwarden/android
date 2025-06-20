@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.handlers
 
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
+import com.x8bit.bitwarden.data.autofill.model.chrome.BrowserReleaseChannel
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.AutoFillAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.AutoFillViewModel
@@ -15,7 +15,7 @@ class AutoFillHandlers(
     val onAutofillActionCardDismissClick: () -> Unit,
     val onAutofillServicesClick: (isEnabled: Boolean) -> Unit,
     val onUseInlineAutofillClick: (isEnabled: Boolean) -> Unit,
-    val onChromeAutofillSelected: (releaseChannel: ChromeReleaseChannel) -> Unit,
+    val onChromeAutofillSelected: (releaseChannel: BrowserReleaseChannel) -> Unit,
     val onPasskeyManagementClick: () -> Unit,
     val onPrivilegedAppsClick: () -> Unit,
     val onPrivilegedAppsHelpLinkClick: () -> Unit,

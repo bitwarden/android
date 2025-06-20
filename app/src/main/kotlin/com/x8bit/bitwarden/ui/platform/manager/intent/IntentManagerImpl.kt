@@ -28,7 +28,7 @@ import com.bitwarden.core.data.util.toFormattedPattern
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
+import com.x8bit.bitwarden.data.autofill.model.chrome.BrowserReleaseChannel
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import java.io.File
@@ -140,7 +140,7 @@ class IntentManagerImpl(
     }
 
     override fun startChromeAutofillSettingsActivity(
-        releaseChannel: ChromeReleaseChannel,
+        releaseChannel: BrowserReleaseChannel,
     ): Boolean = try {
         val intent = Intent(Intent.ACTION_APPLICATION_PREFERENCES)
             .apply {
