@@ -2341,7 +2341,7 @@ data class VaultItemListingState(
                     false
                 } else {
                     itemListingType.hasFab ||
-                        (viewState is ViewState.NoItems && viewState.shouldShowAddButton)
+                        (viewState as? ViewState.NoItems)?.shouldShowAddButton == true
                 }
 
     /**
