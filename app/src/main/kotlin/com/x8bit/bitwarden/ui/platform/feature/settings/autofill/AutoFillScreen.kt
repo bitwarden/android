@@ -68,6 +68,7 @@ fun AutoFillScreen(
     onNavigateToBlockAutoFillScreen: () -> Unit,
     onNavigateToSetupAutofill: () -> Unit,
     onNavigateToAboutPrivilegedAppsScreen: () -> Unit,
+    onNavigateToPrivilegedAppsList: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -108,6 +109,10 @@ fun AutoFillScreen(
 
             AutoFillEvent.NavigateToAboutPrivilegedAppsScreen -> {
                 onNavigateToAboutPrivilegedAppsScreen()
+            }
+
+            AutoFillEvent.NavigateToPrivilegedAppsListScreen -> {
+                onNavigateToPrivilegedAppsList()
             }
         }
     }
