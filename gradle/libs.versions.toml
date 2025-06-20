@@ -130,6 +130,7 @@ testng = { group = "org.testng", name = "testng", version.ref = "testng" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+androidx-room = { id = "androidx.room", version.ref = "androidxRoom" }
 crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 google-protobuf = { id = "com.google.protobuf", version.ref = "googleProtoBufPlugin" }
