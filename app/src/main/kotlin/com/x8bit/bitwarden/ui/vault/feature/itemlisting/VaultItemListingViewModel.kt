@@ -788,7 +788,7 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun createVaultItemTypeSelectionExcludedOptions(): ImmutableList<CreateVaultItemType> {
         // If policy is enable for any organization, exclude the card option
-        return if (!state.restrictItemTypesPolicyOrgIds.isEmpty()) {
+        return if (state.restrictItemTypesPolicyOrgIds.isNotEmpty()) {
             persistentListOf(
                 CreateVaultItemType.CARD,
                 CreateVaultItemType.FOLDER,
@@ -2335,8 +2335,7 @@ data class VaultItemListingState(
      * Whether or not the add FAB should be shown.
      */
     val hasAddItemFabButton: Boolean
-        get() = if (viewState is ViewState.NoItems &&
-                restrictItemTypesPolicyOrgIds.isNotEmpty() &&
+        get() = if (restrictItemTypesPolicyOrgIds.isNotEmpty() &&
                 itemListingType == VaultItemListingState.ItemListingType.Vault.Card) {
                     false
                 } else {
