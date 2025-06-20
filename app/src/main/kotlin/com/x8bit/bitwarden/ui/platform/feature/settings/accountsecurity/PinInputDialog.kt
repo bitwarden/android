@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -58,6 +60,7 @@ fun PinInputDialog(
     isPinCreation: Boolean = false,
 ) {
     var pin by remember { mutableStateOf(value = "") }
+    val isDoneEnabled: () -> Boolean = { !isPinCreation || pin.length >= MINIMUM_PIN_LENGTH }
     Dialog(
         onDismissRequest = onDismissRequest,
     ) {
@@ -115,6 +118,14 @@ fun PinInputDialog(
                     onValueChange = { newValue ->
                         pin = newValue.filter { it.isDigit() || !isPinCreation }
                     },
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            pin
+                                .takeIf { isDoneEnabled() }
+                                ?.let(onSubmitClick)
+                                ?: defaultKeyboardAction(ImeAction.Done)
+                        },
+                    ),
                     keyboardType = KeyboardType.Number,
                     textFieldTestTag = "AlertInputField",
                     cardStyle = CardStyle.Full,
@@ -138,7 +149,7 @@ fun PinInputDialog(
 
                 BitwardenFilledButton(
                     label = stringResource(id = R.string.submit),
-                    isEnabled = !isPinCreation || pin.length >= MINIMUM_PIN_LENGTH,
+                    isEnabled = isDoneEnabled(),
                     onClick = { onSubmitClick(pin) },
                     modifier = Modifier.testTag(tag = "AcceptAlertButton"),
                 )
