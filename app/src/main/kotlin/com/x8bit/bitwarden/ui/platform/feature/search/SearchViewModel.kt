@@ -561,7 +561,7 @@ class SearchViewModel @Inject constructor(
 
             is RemovePasswordSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(SearchEvent.ShowToast(R.string.send_password_removed.asText()))
+                sendEvent(SearchEvent.ShowToast(R.string.password_removed.asText()))
             }
         }
     }

@@ -2,38 +2,62 @@ package com.bitwarden.data.repository.util
 
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.data.repository.model.EnvironmentRegion
 import java.net.URI
 
-private const val DEFAULT_API_URL: String = "https://api.bitwarden.com"
-private const val DEFAULT_EVENTS_URL: String = "https://events.bitwarden.com"
-private const val DEFAULT_IDENTITY_URL: String = "https://identity.bitwarden.com"
-private const val DEFAULT_WEB_VAULT_URL: String = "https://vault.bitwarden.com"
-private const val DEFAULT_WEB_SEND_URL: String = "https://send.bitwarden.com/#"
-private const val DEFAULT_ICON_URL: String = "https://icons.bitwarden.net"
+private const val DEFAULT_US_API_URL: String = "https://api.bitwarden.com"
+private const val DEFAULT_EU_API_URL: String = "https://api.bitwarden.eu"
+private const val DEFAULT_US_EVENTS_URL: String = "https://events.bitwarden.com"
+private const val DEFAULT_EU_EVENTS_URL: String = "https://events.bitwarden.eu"
+private const val DEFAULT_US_IDENTITY_URL: String = "https://identity.bitwarden.com"
+private const val DEFAULT_EU_IDENTITY_URL: String = "https://identity.bitwarden.eu"
+private const val DEFAULT_US_WEB_VAULT_URL: String = "https://vault.bitwarden.com"
+private const val DEFAULT_EU_WEB_VAULT_URL: String = "https://vault.bitwarden.eu"
+private const val DEFAULT_US_WEB_SEND_URL: String = "https://send.bitwarden.com/#"
+private const val DEFAULT_US_ICON_URL: String = "https://icons.bitwarden.net"
+private const val DEFAULT_EU_ICON_URL: String = "https://icons.bitwarden.eu"
 
 /**
  * Returns the base api URL or the default value if one is not present.
  */
 val EnvironmentUrlDataJson.baseApiUrl: String
-    get() = this.base.sanitizeUrl?.let { "$it/api" }
-        ?: this.api.sanitizeUrl
-        ?: DEFAULT_API_URL
+    get() = when (this.environmentRegion) {
+        EnvironmentRegion.UNITED_STATES -> DEFAULT_US_API_URL
+        EnvironmentRegion.EUROPEAN_UNION -> DEFAULT_EU_API_URL
+        EnvironmentRegion.SELF_HOSTED -> {
+            this.api.sanitizeUrl
+                ?: this.base.sanitizeUrl?.let { "$it/api" }
+                ?: DEFAULT_US_API_URL
+        }
+    }
 
 /**
  * Returns the base events URL or the default value if one is not present.
  */
 val EnvironmentUrlDataJson.baseEventsUrl: String
-    get() = this.base.sanitizeUrl?.let { "$it/events" }
-        ?: this.events.sanitizeUrl
-        ?: DEFAULT_EVENTS_URL
+    get() = when (this.environmentRegion) {
+        EnvironmentRegion.UNITED_STATES -> DEFAULT_US_EVENTS_URL
+        EnvironmentRegion.EUROPEAN_UNION -> DEFAULT_EU_EVENTS_URL
+        EnvironmentRegion.SELF_HOSTED -> {
+            this.events.sanitizeUrl
+                ?: this.base.sanitizeUrl?.let { "$it/events" }
+                ?: DEFAULT_US_EVENTS_URL
+        }
+    }
 
 /**
  * Returns the base identity URL or the default value if one is not present.
  */
 val EnvironmentUrlDataJson.baseIdentityUrl: String
-    get() = this.identity.sanitizeUrl
-        ?: this.base.sanitizeUrl?.let { "$it/identity" }
-        ?: DEFAULT_IDENTITY_URL
+    get() = when (this.environmentRegion) {
+        EnvironmentRegion.UNITED_STATES -> DEFAULT_US_IDENTITY_URL
+        EnvironmentRegion.EUROPEAN_UNION -> DEFAULT_EU_IDENTITY_URL
+        EnvironmentRegion.SELF_HOSTED -> {
+            this.identity.sanitizeUrl
+                ?: this.base.sanitizeUrl?.let { "$it/identity" }
+                ?: DEFAULT_US_IDENTITY_URL
+        }
+    }
 
 /**
  * Returns the base web vault URL. This will check for a custom [EnvironmentUrlDataJson.webVault]
@@ -41,8 +65,11 @@ val EnvironmentUrlDataJson.baseIdentityUrl: String
  * null or blank.
  */
 val EnvironmentUrlDataJson.baseWebVaultUrlOrNull: String?
-    get() = this.webVault.sanitizeUrl
-        ?: this.base.sanitizeUrl
+    get() = when (this.environmentRegion) {
+        EnvironmentRegion.UNITED_STATES -> DEFAULT_US_WEB_VAULT_URL
+        EnvironmentRegion.EUROPEAN_UNION -> DEFAULT_EU_WEB_VAULT_URL
+        EnvironmentRegion.SELF_HOSTED -> this.webVault.sanitizeUrl ?: this.base.sanitizeUrl
+    }
 
 /**
  * Returns the base web vault URL or the default value if one is not present.
@@ -50,25 +77,18 @@ val EnvironmentUrlDataJson.baseWebVaultUrlOrNull: String?
  * See [baseWebVaultUrlOrNull] for more details.
  */
 val EnvironmentUrlDataJson.baseWebVaultUrlOrDefault: String
-    get() = this.baseWebVaultUrlOrNull ?: DEFAULT_WEB_VAULT_URL
+    get() = this.baseWebVaultUrlOrNull ?: DEFAULT_US_WEB_VAULT_URL
 
 /**
  * Returns the base web send URL or the default value if one is not present.
  */
 val EnvironmentUrlDataJson.baseWebSendUrl: String
-    get() =
-        this
-            .baseWebVaultUrlOrNull
-            ?.let {
-                // Only on US Cloud we should use the default web send URL
-                // On all other server instances we should use the base web send URL
-                if (it == DEFAULT_WEB_VAULT_URL) {
-                    DEFAULT_WEB_SEND_URL
-                } else {
-                    "$it/#/send/"
-                }
-            }
-            ?: DEFAULT_WEB_SEND_URL
+    get() = when (this.environmentRegion) {
+        EnvironmentRegion.UNITED_STATES -> DEFAULT_US_WEB_SEND_URL
+        EnvironmentRegion.EUROPEAN_UNION,
+        EnvironmentRegion.SELF_HOSTED,
+            -> this.baseWebVaultUrlOrNull?.let { "$it/#/send/" } ?: DEFAULT_US_WEB_SEND_URL
+    }
 
 /**
  * Returns the base web vault import URL or the default value if one is not present.
@@ -83,9 +103,15 @@ val EnvironmentUrlDataJson.toBaseWebVaultImportUrl: String
  * Returns a base icon url based on the environment or the default value if values are missing.
  */
 val EnvironmentUrlDataJson.baseIconUrl: String
-    get() = this.icon.sanitizeUrl
-        ?: this.base.sanitizeUrl?.let { "$it/icons" }
-        ?: DEFAULT_ICON_URL
+    get() = when (this.environmentRegion) {
+        EnvironmentRegion.UNITED_STATES -> DEFAULT_US_ICON_URL
+        EnvironmentRegion.EUROPEAN_UNION -> DEFAULT_EU_ICON_URL
+        EnvironmentRegion.SELF_HOSTED -> {
+            this.icon.sanitizeUrl
+                ?: this.base.sanitizeUrl?.let { "$it/icons" }
+                ?: DEFAULT_US_ICON_URL
+        }
+    }
 
 /**
  * Returns the appropriate pre-defined labels for environments matching the known US/EU values.

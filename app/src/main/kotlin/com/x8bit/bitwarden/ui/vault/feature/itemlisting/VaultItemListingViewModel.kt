@@ -11,6 +11,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.map
+import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.fido.Fido2CredentialAutofillView
@@ -1551,9 +1552,7 @@ class VaultItemListingViewModel @Inject constructor(
             is RemovePasswordSendResult.Success -> {
                 clearDialogState()
                 sendEvent(
-                    VaultItemListingEvent.ShowToast(
-                        text = R.string.send_password_removed.asText(),
-                    ),
+                    VaultItemListingEvent.ShowToast(text = R.string.password_removed.asText()),
                 )
             }
         }

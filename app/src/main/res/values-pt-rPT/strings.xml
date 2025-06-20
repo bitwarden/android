@@ -454,7 +454,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="password_info">Esta palavra-passe é necessária para visualizar o Send.</string>
     <string name="remove_password">Remover palavra-passe</string>
     <string name="removing_send_password">A remover palavra-passe</string>
-    <string name="send_password_removed">A palavra-passe foi removida.</string>
+    <string name="password_removed">Palavra-passe removida</string>
     <string name="add_a_send">Novo Send</string>
     <string name="copy_link">Copiar link</string>
     <string name="share_link">Partilhar link</string>
@@ -674,7 +674,7 @@ Pretende mudar para esta conta?</string>
     <string name="privacy_policy_description_long">Consulte a nossa política de privacidade em bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Explore mais funcionalidades da sua conta Bitwarden na aplicação Web.</string>
     <string name="learn_about_organizations_description_long">O Bitwarden permite-lhe partilhar os seus itens do cofre com outras pessoas através da utilização de uma organização. Saiba mais no site bitwarden.com.</string>
-    <string name="created_xy">Criada a %1$s, %2$s</string>
+    <string name="created_x">Criado a %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">A sua organização exige a definição de uma palavra-passe mestra.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Configure uma opção de desbloqueio para alterar a ação de tempo limite do seu cofre.</string>
     <string name="save_passkey_as_new_login">Guarde a chave de acesso como uma nova credencial</string>
@@ -967,7 +967,7 @@ Pretende mudar para esta conta?</string>
     <string name="dynamic_colors">Cores dinâmicas</string>
     <string name="dynamic_colors_description">Aplique cores dinâmicas com base no seu papel de parede</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">As cores dinâmicas utilizam as cores do sistema e podem não cumprir todas as diretrizes de acessibilidade.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">A operação da chave de acesso falhou porque o navegador (%1$s) não é de confiança. Selecione \"Confiar\" para adicionar o %1$s à lista de aplicações de confiança ou \"Cancelar\"\ para abortar a operação.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">A operação de chave de acesso falhou porque o navegador (%1$s) não foi reconhecido. Selecione \"Confiar\" para adicionar %1$s à lista de aplicações localmente fiáveis.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">A operação da chave de acesso falhou porque o navegador não é de confiança.</string>
     <string name="trust">Confiar</string>
     <string name="trusted_by_you_learn_more">Estas são aplicações ou navegadores em que o Bitwarden não confia por defeito, mas que são confiadas por SI para realizar operações de chave de acesso.</string>
@@ -980,4 +980,5 @@ Pretende mudar para esta conta?</string>
     <string name="about_privileged_applications">Sobre aplicações privilegiadas</string>
     <string name="learn_more_about_privileged_apps">Saiba mais sobre as aplicações privilegiadas</string>
     <string name="privileged_apps">Apps privilegiadas</string>
+    <string name="unrecognized_browser">Navegador não reconhecido</string>
 </resources>

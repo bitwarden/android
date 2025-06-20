@@ -454,7 +454,7 @@ L\'escaneig es farà automàticament.</string>
     <string name="password_info">Necessiteu aquesta contrasenya per veure el Send.</string>
     <string name="remove_password">Suprimeix la contrasenya</string>
     <string name="removing_send_password">S\'està suprimint la contrasenya</string>
-    <string name="send_password_removed">S\'ha suprimit la contrasenya</string>
+    <string name="password_removed">Password removed</string>
     <string name="add_a_send">Nou Send</string>
     <string name="copy_link">Copia l\'enllaç</string>
     <string name="share_link">Comparteix l\'enllaç</string>
@@ -675,7 +675,7 @@ Voleu canviar a aquest compte?</string>
     <string name="privacy_policy_description_long">Consulteu la nostra política de privadesa a bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Exploreu més característiques del vostre compte Bitwarden a l\'aplicació web.</string>
     <string name="learn_about_organizations_description_long">Bitwarden us permet compartir els elements de la vostra caixa forta amb altres usuaris mitjançant una organització. Més informació al lloc web bitwarden.com.</string>
-    <string name="created_xy">Creat %1$s, %2$s</string>
+    <string name="created_x">Creat %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">La vostra organització requereix que establiu una contrasenya mestra.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Configura una opció de desbloqueig per canviar l\'acció de temps d\'espera de la caixa forta.</string>
     <string name="save_passkey_as_new_login">Guarda la clau de pas com a nou inici de sessió</string>
@@ -967,7 +967,7 @@ Voleu canviar a aquest compte?</string>
     <string name="dynamic_colors">Dynamic colors</string>
     <string name="dynamic_colors_description">Apply dynamic colors based on your wallpaper</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamic colors uses the system colors and may not meet all accessibility guidelines.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not trusted. Select \"Trust\" to add %1$s to the list of trusted applications or \"Cancel\"\ to abort the operation.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
     <string name="trust">Trust</string>
     <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
@@ -980,4 +980,5 @@ Voleu canviar a aquest compte?</string>
     <string name="about_privileged_applications">About privileged applications</string>
     <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
     <string name="privileged_apps">Privileged apps</string>
+    <string name="unrecognized_browser">Navegador no reconegut</string>
 </resources>
