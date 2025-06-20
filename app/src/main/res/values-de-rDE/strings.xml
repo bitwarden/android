@@ -296,9 +296,9 @@ Das Scannen erfolgt automatisch.</string>
     <string name="autofill_and_save">Automatisch ausfüllen und speichern</string>
     <string name="organization">Organisation</string>
     <string name="try_again">Versuche es erneut</string>
-    <string name="created">Created: %1$s</string>
-    <string name="password_last_updated">Password last updated: %1$s</string>
-    <string name="last_edited">Last edited: %1$s</string>
+    <string name="created">Erstellt: %1$s</string>
+    <string name="password_last_updated">Passwort zuletzt aktualisiert: %1$s</string>
+    <string name="last_edited">Zuletzt bearbeitet: %1$s</string>
     <string name="invalid_email">Ungültige E-Mail-Adresse.</string>
     <string name="cards">Karten</string>
     <string name="identities">Identitäten</string>
@@ -454,7 +454,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="password_info">Optional ein Passwort verlangen, damit Benutzer auf dieses Send zugreifen können.</string>
     <string name="remove_password">Passwort entfernen</string>
     <string name="removing_send_password">Passwort wird entfernt</string>
-    <string name="send_password_removed">Passwort wurde entfernt.</string>
+    <string name="password_removed">Password removed</string>
     <string name="add_a_send">Neues Send</string>
     <string name="copy_link">Link kopieren</string>
     <string name="share_link">Link teilen</string>
@@ -467,7 +467,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="add_text_send">Neues Text-Send</string>
     <string name="are_you_sure_delete_send">Bist du sicher, dass du dieses Send löschen möchtest?</string>
     <string name="send_deleted">Send gelöscht</string>
-    <string name="send_updated">Send updated</string>
+    <string name="send_updated">Send aktualisiert</string>
     <string name="one_day">1 Tag</string>
     <string name="two_days">2 Tage</string>
     <string name="three_days">3 Tage</string>
@@ -548,8 +548,8 @@ Das Scannen erfolgt automatisch.</string>
     <string name="device_type">Gerätetyp</string>
     <string name="ip_address">IP-Adresse</string>
     <string name="time">Zeit</string>
-    <string name="select_time">Select time</string>
-    <string name="switch_input_mode">Switch input mode</string>
+    <string name="select_time">Zeit auswählen</string>
+    <string name="switch_input_mode">Eingabemodus wechseln</string>
     <string name="confirm_log_in">Anmeldung genehmigen</string>
     <string name="deny_log_in">Anmeldung ablehnen</string>
     <string name="log_in_denied">Anmeldung abgelehnt</string>
@@ -674,7 +674,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="privacy_policy_description_long">Lies unsere Datenschutzerklärung auf bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Entdecke mehr Funktionen deines Bitwarden-Kontos in der Web-App.</string>
     <string name="learn_about_organizations_description_long">Bitwarden erlaubt es dir, deine Tresor-Einträge mit anderen zu teilen, indem du eine Organisation verwendest. Erfahre mehr auf der bitwarden.com Website.</string>
-    <string name="created_xy">Erstellt am %1$s, %2$s</string>
+    <string name="created_x">Created %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Deine Organisation verlangt, dass du ein Master-Passwort festlegen musst.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Richte eine Entsperroption ein, um deine Aktion bei Tresor-Timeout zu ändern.</string>
     <string name="save_passkey_as_new_login">Passkey als neue Zugangsdaten speichern</string>
@@ -969,14 +969,15 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Der Passkey-Vorgang ist fehlgeschlagen, da der Browser (%1$s) nicht vertrauenswürdig ist. Wähle \"Vertrauen\" aus, um %1$s der Liste vertrauenswürdiger Anwendungen hinzuzufügen oder \"Abbrechen\"\ um den Vorgang abzubrechen.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Der Passkey-Vorgang ist fehlgeschlagen, da der Browser nicht vertrauenswürdig ist.</string>
     <string name="trust">Vertrauen</string>
-    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
-    <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
-    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
-    <string name="trusted_by_you">Trusted by You</string>
-    <string name="trusted_by_the_community">Trusted by the Community</string>
-    <string name="trusted_by_google">Trusted by Google</string>
-    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through web browsers trusted by Google or the Bitwarden community.</string>
-    <string name="about_privileged_applications">About privileged applications</string>
-    <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
-    <string name="privileged_apps">Privileged apps</string>
+    <string name="trusted_by_you_learn_more">Dies sind Anwendungen oder Browser, die Bitwarden standardmäßig als nicht vertrauenswürdig einstuft, denen DU jedoch vertraust, um Passkey-Vorgänge durchzuführen.</string>
+    <string name="trusted_by_community_learn_more">Dies sind Anwendungen, die nicht im Google Play Store verfügbar sind, aber Bitwarden als vertrauenswürdig einstuft, Passkey-Vorgänge durchzuführen, nachdem Community-Mitglieder sie verwendet und als sicher eingestuft haben.</string>
+    <string name="trusted_by_google_learn_more">Dies sind Apps, die Google als sicher betrachtet und im Google Play Store verfügbar sind.</string>
+    <string name="trusted_by_you">Vertraut von dir</string>
+    <string name="trusted_by_the_community">Vertraut von der Community</string>
+    <string name="trusted_by_google">Vertraut von Google</string>
+    <string name="privileged_apps_description">Um Benutzer vor Phishing-Versuchen zu schützen, führt Bitwarden standardmäßig Passkey-Vorgänge nur über Webbrowser durch, die von Google oder der Bitwarden-Community als vertrauenswürdig eingestuft wurden.</string>
+    <string name="about_privileged_applications">Über autorisierte Apps</string>
+    <string name="learn_more_about_privileged_apps">Erfahre mehr über autorisierte Apps</string>
+    <string name="privileged_apps">Autorisierte Apps</string>
+    <string name="unrecognized_browser">Unrecognized browser</string>
 </resources>

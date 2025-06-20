@@ -454,7 +454,7 @@ Skaneerimine toimub automaatselt.</string>
     <string name="password_info">Soovi korral nõua parooli, millega Sendile ligi pääseb.</string>
     <string name="remove_password">Eemalda parool</string>
     <string name="removing_send_password">Parooli eemaldamine</string>
-    <string name="send_password_removed">Parool on eemaldatud</string>
+    <string name="password_removed">Password removed</string>
     <string name="add_a_send">Lisa Send</string>
     <string name="copy_link">Kopeeri link</string>
     <string name="share_link">Jaga linki</string>
@@ -675,7 +675,7 @@ Soovid selle konto peale lülituda?</string>
     <string name="privacy_policy_description_long">Vaadake meie privaatsuspoliitikat veebilehel bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Uuri ka teisi Bitwardeni konto funktsioone veebibrauseris.</string>
     <string name="learn_about_organizations_description_long">Bitwarden võimaldab sul hoidla sisu teiste kasutajatega jagada, kasutades selleks organisatsiooni kontot. Uuri lähemalt www.bitwarden.com.</string>
-    <string name="created_xy">Loodud %1$s, %2$s</string>
+    <string name="created_x">Created %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Sinu organisatsioon nõuab sult ülemparooli seadistamist.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Hoidla ajalõpu muutmiseks vali esmalt lahtilukustamise meetod.</string>
     <string name="save_passkey_as_new_login">Salvesta pääsuvõti uude kirjesse</string>
@@ -967,7 +967,7 @@ Soovid selle konto peale lülituda?</string>
     <string name="dynamic_colors">Dynamic colors</string>
     <string name="dynamic_colors_description">Apply dynamic colors based on your wallpaper</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamic colors uses the system colors and may not meet all accessibility guidelines.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not trusted. Select \"Trust\" to add %1$s to the list of trusted applications or \"Cancel\"\ to abort the operation.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
     <string name="trust">Trust</string>
     <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
@@ -980,4 +980,5 @@ Soovid selle konto peale lülituda?</string>
     <string name="about_privileged_applications">About privileged applications</string>
     <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
     <string name="privileged_apps">Privileged apps</string>
+    <string name="unrecognized_browser">Unrecognized browser</string>
 </resources>

@@ -295,9 +295,9 @@
     <string name="autofill_and_save">Automatikus kitöltés és mentés</string>
     <string name="organization">Szervezet</string>
     <string name="try_again">Próbáluk újra</string>
-    <string name="created">Created: %1$s</string>
-    <string name="password_last_updated">Password last updated: %1$s</string>
-    <string name="last_edited">Last edited: %1$s</string>
+    <string name="created">Létrehozva: %1$s</string>
+    <string name="password_last_updated">Jelszó utolsó frissítés: %1$s</string>
+    <string name="last_edited">Utolsó szerkesztés: %1$s</string>
     <string name="invalid_email">Az email cím érvénytelen.</string>
     <string name="cards">Kártyák</string>
     <string name="identities">Azonosságok</string>
@@ -453,7 +453,7 @@
     <string name="password_info">Opcionálissan egy jelszó kérhető a felhasználóktól a Send eléréséhez.</string>
     <string name="remove_password">Jelszó eltávolítása</string>
     <string name="removing_send_password">Jelszó eltávolítása..</string>
-    <string name="send_password_removed">A jelszó eltávolításra került.</string>
+    <string name="password_removed">A jelszó eltávolításra került.</string>
     <string name="add_a_send">Send hozzáadása</string>
     <string name="copy_link">Hivatkozás másolása</string>
     <string name="share_link">Hivatkozás megosztása</string>
@@ -674,7 +674,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="privacy_policy_description_long">Az adatvédelmi szabályzat megtekintése a bitwarden.com webhelyen.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Fedezzük fel a Bitwarden-fiók további funkcióit a webalkalmazásban.</string>
     <string name="learn_about_organizations_description_long">A Bitwarden lehetővé teszi a széf elemeinek megosztását másokkal egy szervezet használatával. További információ a bitwarden.com webhelyen.</string>
-    <string name="created_xy">Létrehozta: %1$s, %2$s</string>
+    <string name="created_x">Létrehozva: %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">A szervezet megköveteli egy mesterjelszó beállítását.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Állítsunk be egy feloldási módot a széf időkifutási műveletének módosításához.</string>
     <string name="save_passkey_as_new_login">Belépőkulcs mentése új bejelentkezésként</string>
@@ -979,4 +979,5 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="about_privileged_applications">A kiváltságos alkalmazásokról</string>
     <string name="learn_more_about_privileged_apps">További információ a kiváltságos alkalmazásokról</string>
     <string name="privileged_apps">Kiváltságos alkalmazások</string>
+    <string name="unrecognized_browser">Felismerhetetlen böngésző</string>
 </resources>

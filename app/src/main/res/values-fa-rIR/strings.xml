@@ -454,7 +454,7 @@
     <string name="password_info">به صورت اختیاری برای دسترسی کاربران به این ارسال به یک کلمه عبور نیاز دارید.</string>
     <string name="remove_password">حذف کلمه عبور</string>
     <string name="removing_send_password">حذف کلمه عبور</string>
-    <string name="send_password_removed">کلمه عبور حذف شد.</string>
+    <string name="password_removed">Password removed</string>
     <string name="add_a_send">افزودن یک ارسال</string>
     <string name="copy_link">کپی پیوند</string>
     <string name="share_link">اشتراک گذاری پیوند</string>
@@ -675,7 +675,7 @@
     <string name="privacy_policy_description_long">سیاست حفظ حریم خصوصی ما را در bitwarden.com بررسی کنید.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">ویژگی‌های بیشتر حساب کاربری Bitwarden خود را در برنامه وب کاوش کنید.</string>
     <string name="learn_about_organizations_description_long">Bitwarden به شما اجازه می‌دهد تا با استفاده از یک سازمان، موارد گاوصندوق خود را با دیگران به اشتراک بگذارید. در وب سایت bitwarden.com بیشتر بیاموزید.</string>
-    <string name="created_xy">ایجاد شده در %1$s، %2$s</string>
+    <string name="created_x">Created %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">سازمان‌تان از شما می‌خواهد که یک کلمه عبور اصلی تنظیم کنید.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">یک گزینه باز کردن قفل برای پایان زمان مجاز راه‌اندازی کنید.</string>
     <string name="save_passkey_as_new_login">کلید عبور را به عنوان ورود جدید ذخیره کن</string>
@@ -980,4 +980,5 @@
     <string name="about_privileged_applications">About privileged applications</string>
     <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
     <string name="privileged_apps">Privileged apps</string>
+    <string name="unrecognized_browser">Unrecognized browser</string>
 </resources>
