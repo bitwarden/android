@@ -1,38 +1,59 @@
 package com.x8bit.bitwarden.ui.auth.feature.vaultunlock
 
+import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
+import com.bitwarden.ui.platform.util.ParcelableRouteSerializer
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
-import com.x8bit.bitwarden.ui.platform.util.toObjectRoute
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 /**
  * The type-safe route for the vault unlock screen.
  */
-@Serializable
-sealed class VaultUnlockRoute {
+@Parcelize
+@Serializable(with = VaultUnlockRoute.Serializer::class)
+sealed class VaultUnlockRoute : Parcelable {
     /**
      * The underlying [UnlockType] used in the vault unlock screen.
      */
     abstract val unlockType: UnlockType
 
     /**
+     * Custom serializer to support polymorphic routes.
+     */
+    class Serializer : ParcelableRouteSerializer<VaultUnlockRoute>(VaultUnlockRoute::class)
+
+    /**
      * The type-safe route for the standard vault unlock screen.
      */
-    @Serializable
+    @Parcelize
+    @Serializable(with = Standard.Serializer::class)
     data object Standard : VaultUnlockRoute() {
         override val unlockType: UnlockType get() = UnlockType.STANDARD
+
+        /**
+         * Custom serializer to support polymorphic routes.
+         */
+        class Serializer : ParcelableRouteSerializer<Standard>(Standard::class)
     }
 
     /**
      * The type-safe route for the TDE vault unlock screen.
      */
-    @Serializable
+    @Parcelize
+    @Serializable(with = Tde.Serializer::class)
     data object Tde : VaultUnlockRoute() {
         override val unlockType: UnlockType get() = UnlockType.TDE
+
+        /**
+         * Custom serializer to support polymorphic routes.
+         */
+        class Serializer : ParcelableRouteSerializer<Tde>(Tde::class)
     }
 }
 
@@ -47,11 +68,8 @@ data class VaultUnlockArgs(
  * Constructs a [VaultUnlockArgs] from the [SavedStateHandle] and internal route data.
  */
 fun SavedStateHandle.toVaultUnlockArgs(): VaultUnlockArgs {
-    val route = this.toObjectRoute<VaultUnlockRoute.Tde>()
-        ?: this.toObjectRoute<VaultUnlockRoute.Standard>()
-    return route
-        ?.let { VaultUnlockArgs(unlockType = it.unlockType) }
-        ?: throw IllegalStateException("Missing correct route for VaultUnlockScreen")
+    val route = this.toRoute<VaultUnlockRoute>()
+    return VaultUnlockArgs(unlockType = route.unlockType)
 }
 
 /**

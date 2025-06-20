@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings
 
+import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -7,8 +8,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
+import androidx.navigation.toRoute
 import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import com.bitwarden.ui.platform.util.ParcelableRouteSerializer
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.aboutDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.navigateToAbout
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.accountSecurityDestination
@@ -27,7 +30,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.other.navigateToOther
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.otherDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.navigateToVaultSettings
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.vaultSettingsDestination
-import com.x8bit.bitwarden.ui.platform.util.toObjectRoute
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 /**
@@ -39,27 +42,45 @@ data object SettingsGraphRoute
 /**
  * The type-safe route for the settings screen.
  */
-@Serializable
-sealed class SettingsRoute {
+@Parcelize
+@Serializable(with = SettingsRoute.Serializer::class)
+sealed class SettingsRoute : Parcelable {
     /**
      * Indicates that the settings screen should be shown as a pre-authentication.
      */
     abstract val isPreAuth: Boolean
 
     /**
+     * Custom serializer to support polymorphic routes.
+     */
+    class Serializer : ParcelableRouteSerializer<SettingsRoute>(SettingsRoute::class)
+
+    /**
      * The type-safe route for the settings screen in the settings graph.
      */
-    @Serializable
+    @Parcelize
+    @Serializable(with = Standard.Serializer::class)
     data object Standard : SettingsRoute() {
         override val isPreAuth: Boolean get() = false
+
+        /**
+         * Custom serializer to support polymorphic routes.
+         */
+        class Serializer : ParcelableRouteSerializer<Standard>(Standard::class)
     }
 
     /**
      * The type-safe route for the pre-auth settings screen.
      */
-    @Serializable
+    @Parcelize
+    @Serializable(with = PreAuth.Serializer::class)
     data object PreAuth : SettingsRoute() {
         override val isPreAuth: Boolean get() = true
+
+        /**
+         * Custom serializer to support polymorphic routes.
+         */
+        class Serializer : ParcelableRouteSerializer<PreAuth>(PreAuth::class)
     }
 }
 
@@ -72,12 +93,8 @@ data class SettingsArgs(val isPreAuth: Boolean)
  * Constructs a [SettingsArgs] from the [SavedStateHandle] and internal route data.
  */
 fun SavedStateHandle.toSettingsArgs(): SettingsArgs {
-    val route = this.toObjectRoute<SettingsRoute.PreAuth>()
-        ?: this.toObjectRoute<SettingsRoute.Standard>()
-    return route
-        ?.let { SettingsArgs(isPreAuth = it.isPreAuth) }
-        ?: this.toObjectRoute<SettingsGraphRoute>()?.let { SettingsArgs(isPreAuth = false) }
-        ?: throw IllegalStateException("Missing correct route for SettingsScreen")
+    val route = this.toRoute<SettingsRoute>()
+    return SettingsArgs(isPreAuth = route.isPreAuth)
 }
 
 /**
