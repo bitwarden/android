@@ -55,14 +55,15 @@ import com.bitwarden.authenticator.ui.platform.components.dropdown.BitwardenMult
 import com.bitwarden.authenticator.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.authenticator.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
-import com.bitwarden.authenticator.ui.platform.components.icon.BitwardenIcon
-import com.bitwarden.authenticator.ui.platform.components.model.IconData
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.components.stepper.BitwardenStepper
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.icon.BitwardenIcon
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.util.asText
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -337,9 +338,7 @@ fun EditItemContent(
                         } else {
                             R.drawable.ic_chevron_down
                         },
-                    ),
-                    contentDescription = stringResource(
-                        id = R.string.collapse_advanced_options,
+                        contentDescription = R.string.collapse_advanced_options.asText(),
                     ),
                     tint = MaterialTheme.colorScheme.primary,
                 )

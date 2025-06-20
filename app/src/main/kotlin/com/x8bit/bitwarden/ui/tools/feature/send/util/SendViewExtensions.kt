@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.util
 
 import com.bitwarden.send.SendView
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.ImmutableList

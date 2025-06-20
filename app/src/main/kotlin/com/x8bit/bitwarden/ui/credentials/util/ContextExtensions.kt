@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.credentials.util
 import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.core.graphics.drawable.IconCompat
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bumptech.glide.Glide
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import timber.log.Timber
 import java.util.concurrent.CancellationException
 import java.util.concurrent.ExecutionException

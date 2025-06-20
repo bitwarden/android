@@ -2,7 +2,7 @@ package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model
 
 import android.os.Parcelable
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.components.model.IconData
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import kotlinx.parcelize.Parcelize
 
 /**

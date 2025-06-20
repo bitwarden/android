@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.vault.feature.util
 
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.model.VaultTrailingIcon
 import kotlinx.collections.immutable.ImmutableList
