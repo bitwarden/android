@@ -480,19 +480,23 @@ class VaultAddEditViewModel @Inject constructor(
         request: ProviderCreateCredentialRequest,
         cipherView: CipherView,
     ) {
-        request
-            .getCreatePasskeyCredentialRequestOrNull()
-            ?.let { handleCreatePublicKeyCredentialRequest(request.callingAppInfo, it, cipherView) }
-            ?.let {
-                request.getCreatePasswordCredentialRequestOrNull()
-                    ?.let {
-                        handleCreatePasswordCredentialRequest(
-                            request.callingAppInfo,
-                            it,
-                            cipherView,
-                        )
-                    }
-            } ?: run { handleUnsupportedProviderCreateCredentialRequest() }
+        when (val callingRequest = request.callingRequest) {
+            is CreatePublicKeyCredentialRequest ->
+                handleCreatePublicKeyCredentialRequest(
+                    request.callingAppInfo,
+                    callingRequest,
+                    cipherView,
+                )
+
+            is CreatePasswordRequest ->
+                handleCreatePasswordCredentialRequest(
+                    request.callingAppInfo,
+                    callingRequest,
+                    cipherView,
+                )
+
+            else -> handleUnsupportedProviderCreateCredentialRequest()
+        }
     }
 
     private fun handleCreatePublicKeyCredentialRequest(
@@ -585,7 +589,8 @@ class VaultAddEditViewModel @Inject constructor(
         viewModelScope.launch {
             val userId = authRepository.activeUserId
                 ?: run {
-                    showFido2ErrorDialog( // TODO password error dialog
+                    showFido2ErrorDialog(
+                        // TODO password error dialog
                         R.string.passkey_operation_failed_because_user_could_not_be_verified
                             .asText(),
                     )
@@ -605,6 +610,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleUnsupportedProviderCreateCredentialRequest() {
+        // TODO normal error (credential error?)
         showFido2ErrorDialog(
             BitwardenString.passkey_operation_failed_because_the_request_is_unsupported.asText(),
         )
