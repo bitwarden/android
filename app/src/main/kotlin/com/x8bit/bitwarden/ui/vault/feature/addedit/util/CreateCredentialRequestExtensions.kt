@@ -40,7 +40,7 @@ fun CreateCredentialRequest.toDefaultAddTypeContent(
 
     return VaultAddEditState.ViewState.Content(
         common = VaultAddEditState.ViewState.Content.Common(
-            name = name ,
+            name = name,
         ),
         isIndividualVaultDisabled = isIndividualVaultDisabled,
         type = VaultAddEditState.ViewState.Content.ItemType.Login(

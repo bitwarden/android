@@ -141,7 +141,7 @@ class CredentialProviderProcessorImpl(
     private fun handleCreatePasskeyQuery(
         request: BeginCreateCredentialRequest,
     ): BeginCreateCredentialResponse? {
-        if(request !is BeginCreatePublicKeyCredentialRequest) return null
+        if (request !is BeginCreatePublicKeyCredentialRequest) return null
 
         val requestJson = request
             .candidateQueryData
@@ -153,7 +153,7 @@ class CredentialProviderProcessorImpl(
 
         return BeginCreateCredentialResponse.Builder()
             .setCreateEntries(
-                userState.accounts.toCreatePasskeyEntry(userState.activeUserId)
+                userState.accounts.toCreatePasskeyEntry(userState.activeUserId),
             )
             .build()
     }
@@ -192,14 +192,16 @@ class CredentialProviderProcessorImpl(
         return entryBuilder.build()
     }
 
-    private fun handleCreatePasswordQuery(request: BeginCreateCredentialRequest): BeginCreateCredentialResponse? {
-        if(request !is BeginCreatePasswordCredentialRequest) return null
+    private fun handleCreatePasswordQuery(
+        request: BeginCreateCredentialRequest,
+    ): BeginCreateCredentialResponse? {
+        if (request !is BeginCreatePasswordCredentialRequest) return null
 
         val userState = authRepository.userStateFlow.value ?: return null
 
         return BeginCreateCredentialResponse.Builder()
             .setCreateEntries(
-                userState.accounts.toCreatePasswordEntry(userState.activeUserId)
+                userState.accounts.toCreatePasswordEntry(userState.activeUserId),
             )
             .build()
     }
@@ -223,7 +225,7 @@ class CredentialProviderProcessorImpl(
             )
             .setDescription(
                 context.getString(
-                    R.string.your_passkey_will_be_saved_to_your_bitwarden_vault_for_x, //TODO text
+                    R.string.your_passkey_will_be_saved_to_your_bitwarden_vault_for_x, // TODO text
                     accountName,
                 ),
             )

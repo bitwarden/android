@@ -415,8 +415,9 @@ class VaultItemListingViewModel @Inject constructor(
         getCipherViewOrNull(action.cipherViewId)
             ?.let { registerPasswordCredential(it) }
             ?: run {
+                // TODO
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_selected_item_does_not_exist //TODO
+                    R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
                         .asText(),
                 )
                 return
@@ -1105,9 +1106,9 @@ class VaultItemListingViewModel @Inject constructor(
         val providerRequest = state
             .createCredentialRequest
             ?.providerRequest
-            ?: run {
+            ?: run { // TODO
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(), //TODO
+                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
                 )
                 return
             }
@@ -1173,7 +1174,7 @@ class VaultItemListingViewModel @Inject constructor(
                 providerRequest,
             )
 
-            else -> Unit //TODO error dialog
+            else -> Unit // TODO error dialog
         }
     }
 
@@ -1219,18 +1220,18 @@ class VaultItemListingViewModel @Inject constructor(
         providerRequest: ProviderCreateCredentialRequest,
     ) {
         val activeUserId = authRepository.activeUserId
-            ?: run {
+            ?: run { // TODO
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(), //TODO
+                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 )
                 return
             }
 
         val createRequest = providerRequest
             .getCreatePasswordCredentialRequestOrNull()
-            ?: run {
+            ?: run { // TODO
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(), //TODO
+                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
                 )
                 return
             }
@@ -2159,7 +2160,7 @@ class VaultItemListingViewModel @Inject constructor(
                         VaultItemListingState.DialogState.CredentialManagerOperationFail(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
-                        )
+                        ),
                 )
             }
         }

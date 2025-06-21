@@ -42,7 +42,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialRegist
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialSearchUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.awaitClose

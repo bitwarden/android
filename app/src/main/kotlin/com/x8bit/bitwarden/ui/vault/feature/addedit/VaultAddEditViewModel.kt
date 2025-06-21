@@ -489,7 +489,7 @@ class VaultAddEditViewModel @Inject constructor(
                         handleCreatePasswordCredentialRequest(
                             request.callingAppInfo,
                             it,
-                            cipherView
+                            cipherView,
                         )
                     }
             } ?: run { handleUnsupportedProviderCreateCredentialRequest() }
@@ -585,7 +585,7 @@ class VaultAddEditViewModel @Inject constructor(
         viewModelScope.launch {
             val userId = authRepository.activeUserId
                 ?: run {
-                    showFido2ErrorDialog( //TODO password error dialog
+                    showFido2ErrorDialog( // TODO password error dialog
                         R.string.passkey_operation_failed_because_user_could_not_be_verified
                             .asText(),
                     )
@@ -706,7 +706,7 @@ class VaultAddEditViewModel @Inject constructor(
             }
             ?: showFido2ErrorDialog(
                 R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
-            ) //TODO show password error dialog
+            ) // TODO show password error dialog
     }
 
     private fun handleUserVerificationLockOut() {
