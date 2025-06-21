@@ -51,7 +51,9 @@ class PushManagerTest {
 
     private val pushDiskSource: PushDiskSource = PushDiskSourceImpl(FakeSharedPreferences())
 
-    private val pushService: PushService = mockk()
+    private val pushService: PushService = mockk {
+        coEvery { putDeviceToken(any()) } returns Unit.asSuccess()
+    }
 
     private lateinit var pushManager: PushManager
 
@@ -650,56 +652,102 @@ class PushManagerTest {
                 authDiskSource.userState = UserStateJson(userId, mapOf(userId to account))
             }
 
-            @Suppress("MaxLineLength")
-            @Test
-            fun `registerStoredPushTokenIfNecessary should do nothing if registered less than a day before`() {
-                val lastRegistration = ZonedDateTime.ofInstant(
-                    clock.instant().minus(23, ChronoUnit.HOURS),
-                    ZoneOffset.UTC,
-                )
-                pushDiskSource.registeredPushToken = existingToken
-                pushDiskSource.storeLastPushTokenRegistrationDate(
-                    userId,
-                    lastRegistration,
-                )
-                pushManager.registerStoredPushTokenIfNecessary()
-
-                // Assert the last registration value has not changed
-                assertEquals(
-                    lastRegistration.toEpochSecond(),
-                    pushDiskSource.getLastPushTokenRegistrationDate(userId)!!.toEpochSecond(),
-                )
-            }
-
             @Nested
             inner class MatchingToken {
-                private val newToken = "existingToken"
+                private val newToken = existingToken
 
                 @Suppress("MaxLineLength")
                 @Test
-                fun `registerPushTokenIfNecessary should update registeredPushToken and lastPushTokenRegistrationDate`() {
+                fun `registerPushTokenIfNecessary should do nothing if registered less than 7 days before`() {
+                    val lastRegistration = ZonedDateTime.ofInstant(
+                        clock.instant().minus(6, ChronoUnit.DAYS).minus(23, ChronoUnit.HOURS),
+                        ZoneOffset.UTC,
+                    )
+                    pushDiskSource.storeLastPushTokenRegistrationDate(
+                        userId,
+                        lastRegistration,
+                    )
                     pushManager.registerPushTokenIfNecessary(newToken)
 
                     coVerify(exactly = 0) { pushService.putDeviceToken(any()) }
                     assertEquals(newToken, pushDiskSource.registeredPushToken)
+                    // Assert the last registration value has not changed
                     assertEquals(
-                        clock.instant().epochSecond,
-                        pushDiskSource.getLastPushTokenRegistrationDate(userId)?.toEpochSecond(),
+                        lastRegistration.toEpochSecond(),
+                        pushDiskSource.getLastPushTokenRegistrationDate(userId)!!.toEpochSecond(),
                     )
                 }
 
                 @Suppress("MaxLineLength")
                 @Test
-                fun `registerStoredPushTokenIfNecessary should update registeredPushToken and lastPushTokenRegistrationDate`() {
+                fun `registerStoredPushTokenIfNecessary should do nothing if registered less than 7 days before`() {
+                    val lastRegistration = ZonedDateTime.ofInstant(
+                        clock.instant().minus(6, ChronoUnit.DAYS).minus(23, ChronoUnit.HOURS),
+                        ZoneOffset.UTC,
+                    )
                     pushDiskSource.registeredPushToken = newToken
+                    pushDiskSource.storeLastPushTokenRegistrationDate(
+                        userId,
+                        lastRegistration,
+                    )
                     pushManager.registerStoredPushTokenIfNecessary()
 
                     coVerify(exactly = 0) { pushService.putDeviceToken(any()) }
                     assertEquals(newToken, pushDiskSource.registeredPushToken)
+                    // Assert the last registration value has not changed
+                    assertEquals(
+                        lastRegistration.toEpochSecond(),
+                        pushDiskSource.getLastPushTokenRegistrationDate(userId)!!.toEpochSecond(),
+                    )
+                }
+
+                @Suppress("MaxLineLength")
+                @Test
+                fun `registerPushTokenIfNecessary should update registeredPushToken, lastPushTokenRegistrationDate and currentPushToken`() {
+                    val lastRegistration = ZonedDateTime.ofInstant(
+                        clock.instant().minus(8, ChronoUnit.DAYS),
+                        ZoneOffset.UTC,
+                    )
+                    pushDiskSource.storeLastPushTokenRegistrationDate(
+                        userId,
+                        lastRegistration,
+                    )
+                    pushManager.registerPushTokenIfNecessary(newToken)
+
+                    coVerify(exactly = 1) {
+                        pushService.putDeviceToken(PushTokenRequest(newToken))
+                    }
                     assertEquals(
                         clock.instant().epochSecond,
                         pushDiskSource.getLastPushTokenRegistrationDate(userId)?.toEpochSecond(),
                     )
+                    assertEquals(newToken, pushDiskSource.registeredPushToken)
+                    assertEquals(newToken, pushDiskSource.getCurrentPushToken(userId))
+                }
+
+                @Suppress("MaxLineLength")
+                @Test
+                fun `registerStoredPushTokenIfNecessary should update registeredPushToken, lastPushTokenRegistrationDate and currentPushToken`() {
+                    val lastRegistration = ZonedDateTime.ofInstant(
+                        clock.instant().minus(8, ChronoUnit.DAYS),
+                        ZoneOffset.UTC,
+                    )
+                    pushDiskSource.storeLastPushTokenRegistrationDate(
+                        userId,
+                        lastRegistration,
+                    )
+                    pushDiskSource.registeredPushToken = newToken
+                    pushManager.registerStoredPushTokenIfNecessary()
+
+                    coVerify(exactly = 1) {
+                        pushService.putDeviceToken(PushTokenRequest(newToken))
+                    }
+                    assertEquals(
+                        clock.instant().epochSecond,
+                        pushDiskSource.getLastPushTokenRegistrationDate(userId)?.toEpochSecond(),
+                    )
+                    assertEquals(newToken, pushDiskSource.registeredPushToken)
+                    assertEquals(newToken, pushDiskSource.getCurrentPushToken(userId))
                 }
             }
 

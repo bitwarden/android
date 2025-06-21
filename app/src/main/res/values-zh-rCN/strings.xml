@@ -454,7 +454,7 @@
     <string name="password_info">需要这个密码才能查看此 Send。</string>
     <string name="remove_password">移除密码</string>
     <string name="removing_send_password">正在移除密码</string>
-    <string name="send_password_removed">密码已移除。</string>
+    <string name="password_removed">密码已移除</string>
     <string name="add_a_send">新增 Send</string>
     <string name="copy_link">复制链接</string>
     <string name="share_link">分享链接</string>
@@ -675,7 +675,7 @@
     <string name="privacy_policy_description_long">在 bitwarden.com 上查看我们的隐私政策。</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">在网页 App 上探索您的 Bitwarden 账户的更多功能。</string>
     <string name="learn_about_organizations_description_long">Bitwarden 允许您使用组织与他人共享您的密码库项目。访问 bitwarden.com 网站进一步了解。</string>
-    <string name="created_xy">创建于 %1$s, %2$s</string>
+    <string name="created_x">创建于 %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">您的组织要求您设置主密码。</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">设置解锁选项以更改您的密码库超时动作。</string>
     <string name="save_passkey_as_new_login">将通行密钥保存为新的登录</string>
@@ -743,7 +743,7 @@
     <string name="write_this_password_down_and_keep_it_somewhere_safe">写下此密码并将其保存在安全的地方。</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">了解其他防止账户被锁住的方法</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">了解防止账户被锁住的方法</annotation></string>
-    <string name="help_with_server_geolocations">帮助选择服务器位置。</string>
+    <string name="help_with_server_geolocations">帮助确定服务器位置。</string>
     <string name="email_address_required">电子邮箱地址（必填）</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"选择电子邮件中的链接来验证您的电子邮箱地址并继续创建您的账户。 "</string>
     <string name="change_email_address">更改电子邮箱地址</string>
@@ -968,7 +968,7 @@
     <string name="dynamic_colors">动态颜色</string>
     <string name="dynamic_colors_description">基于您的壁纸应用动态颜色</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">动态颜色使用系统颜色，可能无法满足所有无障碍指南要求。</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">由于浏览器 (%1$s) 未被信任，通行密钥操作失败。选择「信任」将 %1$s 添加到受信任的应用程序列表，或选择「取消」中止操作。</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">由于浏览器 (%1$s) 无法识别，通行密钥操作失败。选择「信任」将 %1$s 添加到本地受信任的应用程序列表。</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">由于浏览器未被信任，通行密钥操作失败。</string>
     <string name="trust">信任</string>
     <string name="trusted_by_you_learn_more">这些是 Bitwarden 默认不信任的应用程序或浏览器，但是您信任其执行通行密钥操作。</string>
@@ -981,4 +981,5 @@
     <string name="about_privileged_applications">关于特权 App</string>
     <string name="learn_more_about_privileged_apps">进一步了解特权 App</string>
     <string name="privileged_apps">特权 App</string>
+    <string name="unrecognized_browser">无法识别的浏览器</string>
 </resources>

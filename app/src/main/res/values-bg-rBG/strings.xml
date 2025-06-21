@@ -296,9 +296,9 @@
     <string name="autofill_and_save">Дописване и обновяване</string>
     <string name="organization">Организация</string>
     <string name="try_again">Нов опит</string>
-    <string name="created">Created: %1$s</string>
-    <string name="password_last_updated">Password last updated: %1$s</string>
-    <string name="last_edited">Last edited: %1$s</string>
+    <string name="created">Създадено: %1$s</string>
+    <string name="password_last_updated">Последна промяна на паролата: %1$s</string>
+    <string name="last_edited">Последна редакция: %1$s</string>
     <string name="invalid_email">Грешен адрес на е-поща.</string>
     <string name="cards">Карти</string>
     <string name="identities">Самоличности</string>
@@ -454,7 +454,7 @@
     <string name="password_info">Изискване на парола за достъп до това изпращане.</string>
     <string name="remove_password">Премахване на парола</string>
     <string name="removing_send_password">Премахване на парола</string>
-    <string name="send_password_removed">Паролата е премахната.</string>
+    <string name="password_removed">Паролата е премахната</string>
     <string name="add_a_send">Добавяне на изпращане</string>
     <string name="copy_link">Копиране на връзката</string>
     <string name="share_link">Споделяне на връзката</string>
@@ -675,7 +675,7 @@
     <string name="privacy_policy_description_long">Прегледайте нашата Политика за поверителност на bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Разгледайте още от възможностите на регистрацията си в Битуорден в уеб приложението.</string>
     <string name="learn_about_organizations_description_long">Битуорден позволява да споделяте части от трезора си чрез използването на организация. Научете повече на сайта bitwarden.com.</string>
-    <string name="created_xy">Създадено на %1$s, %2$s</string>
+    <string name="created_x">Създадено: %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Организацията Ви изисква да зададете главна парола.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Задайте начин за отключване, за да може да промените действието при изтичане на времето за достъп до трезора.</string>
     <string name="save_passkey_as_new_login">Запазване на секретния ключ като нов елемент за вписване</string>
@@ -972,14 +972,15 @@
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Операцията със секретен ключ не беше успешна, тъй като браузърът (%1$s) не е доверен. Изберете „Даване на доверие“, за да добавите %1$s към списъка с доверени приложения или „Отказ“, за да прекратите операцията.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Операцията със секретен ключ не беше успешна, тъй като браузърът не е доверен.</string>
     <string name="trust">Даване на доверие</string>
-    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
-    <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
-    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
-    <string name="trusted_by_you">Trusted by You</string>
-    <string name="trusted_by_the_community">Trusted by the Community</string>
-    <string name="trusted_by_google">Trusted by Google</string>
-    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through web browsers trusted by Google or the Bitwarden community.</string>
-    <string name="about_privileged_applications">About privileged applications</string>
-    <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
-    <string name="privileged_apps">Privileged apps</string>
+    <string name="trusted_by_you_learn_more">Това са приложения или браузъри, на които по подразбиране Битуорден няма доверие, но ВИЕ им вярвате достатъчно, за да извършват операции със секретни ключове.</string>
+    <string name="trusted_by_community_learn_more">Това са приложения, които не са налични в магазина „Google Play“, но на които Битуорден се доверява за извършването на операции със секретни ключове, тъй като членове на общността ги ползват и ги смятат за безопасни.</string>
+    <string name="trusted_by_google_learn_more">Това са приложения, Гугъл смята за безопасни и са налични в магазина „Google Play“.</string>
+    <string name="trusted_by_you">Вие имате доверие</string>
+    <string name="trusted_by_the_community">Общността има доверие</string>
+    <string name="trusted_by_google">Гугъл има доверие</string>
+    <string name="privileged_apps_description">С цел защита на потребителите от опити за измами, по подразбиране Битуорден извършва операции със секретни ключове само чрез браузъри, на които Гугъл или общността на Битуорден имат доверие.</string>
+    <string name="about_privileged_applications">Относно доверените приложения</string>
+    <string name="learn_more_about_privileged_apps">Научете повече за доверените приложения</string>
+    <string name="privileged_apps">Доверени приложения</string>
+    <string name="unrecognized_browser">Неразпознат браузър</string>
 </resources>

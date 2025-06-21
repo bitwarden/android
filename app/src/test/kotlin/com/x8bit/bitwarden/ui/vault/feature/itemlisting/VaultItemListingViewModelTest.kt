@@ -1521,7 +1521,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 assertEquals(
-                    VaultItemListingEvent.ShowToast(R.string.send_password_removed.asText()),
+                    VaultItemListingEvent.ShowToast(R.string.password_removed.asText()),
                     awaitItem(),
                 )
             }
@@ -1851,7 +1851,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                                 secondSubtitleTestTag = "PasskeySite",
                                 subtitleTestTag = "PasskeyName",
                                 iconData = IconData.Network(
-                                    uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
+                                    uri = "https://icons.bitwarden.net/www.mockuri.com/icon.png",
                                     fallbackIconRes = R.drawable.ic_bw_passkey,
                                 ),
                                 isAutofill = true,
@@ -1983,7 +1983,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                                     secondSubtitleTestTag = "PasskeySite",
                                     subtitleTestTag = "PasskeyName",
                                     iconData = IconData.Network(
-                                        uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
+                                        uri = "https://icons.bitwarden.net/www.mockuri.com/icon.png",
                                         fallbackIconRes = R.drawable.ic_bw_passkey,
                                     ),
                                     isCredentialCreation = true,

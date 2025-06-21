@@ -2061,7 +2061,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Created 3/13/24, 3:56 PM")
+            .onNodeWithText(text = "Created Mar 13, 2024, 3:56 PM")
             .assertIsDisplayed()
     }
 
@@ -3192,10 +3192,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
         relatedLocations = persistentListOf(),
     )
 
-private val DEFAULT_PASSKEY = R.string.created_xy.asText(
-    "3/13/24",
-    "3:56 PM",
-)
+private val DEFAULT_PASSKEY = R.string.created_x.asText("Mar 13, 2024, 3:56 PM")
 
 private val DEFAULT_LOGIN: VaultItemState.ViewState.Content.ItemType.Login =
     VaultItemState.ViewState.Content.ItemType.Login(
