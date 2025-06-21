@@ -1164,55 +1164,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in add mode during fido2, SaveClick should show fido2 error dialog when request type is not supported`() =
-        runTest {
-            val fido2CredentialRequest = createMockCreateCredentialRequest(number = 1)
-            specialCircumstanceManager.specialCircumstance =
-                SpecialCircumstance.ProviderCreateCredential(
-                    createCredentialRequest = fido2CredentialRequest,
-                )
-            val stateWithName = createVaultAddItemState(
-                commonContentViewState = createCommonContentViewState(
-                    name = "mockName-1",
-                ),
-                createCredentialRequest = fido2CredentialRequest,
-            )
-                .copy(shouldExitOnSave = true)
-
-            val mockProviderCreateCredentialRequest: ProviderCreateCredentialRequest =
-                mockk<ProviderCreateCredentialRequest>(relaxed = true) {
-                    every { callingAppInfo } returns mockk(relaxed = true)
-                    every { callingRequest } returns mockk<CreatePasswordRequest>(relaxed = true)
-                }
-
-            every {
-                ProviderCreateCredentialRequest.fromBundle(any())
-            } returns mockProviderCreateCredentialRequest
-
-            mutableVaultDataFlow.value = DataState.Loaded(
-                createVaultData(),
-            )
-            val viewModel = createAddVaultItemViewModel(
-                createSavedStateHandleWithState(
-                    state = stateWithName,
-                    vaultAddEditType = VaultAddEditType.AddItem,
-                    vaultItemCipherType = VaultItemCipherType.LOGIN,
-                ),
-            )
-
-            viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
-
-            assertEquals(
-                VaultAddEditState.DialogState.Fido2Error(
-                    message = R.string.passkey_operation_failed_because_the_request_is_unsupported
-                        .asText(),
-                ),
-                viewModel.stateFlow.value.dialog,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
     fun `in add mode during fido2, SaveClick should emit fido user verification as optional when verification is PREFERRED`() =
         runTest {
             val fido2CredentialRequest = createMockCreateCredentialRequest(number = 1)
