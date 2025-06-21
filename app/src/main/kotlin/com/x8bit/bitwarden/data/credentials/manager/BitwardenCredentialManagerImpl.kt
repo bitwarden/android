@@ -44,7 +44,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKe
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.withContext
@@ -95,7 +94,6 @@ class BitwardenCredentialManagerImpl(
         }
     }
 
-
     /**
      * Register a new Password credential to a users vault.
      */
@@ -105,7 +103,7 @@ class BitwardenCredentialManagerImpl(
         createPasswordCredentialRequest: CreatePasswordRequest,
         selectedCipherView: CipherView,
     ): PasswordRegisterCredentialResult {
-        return when(val result = vaultRepository.createCipher(cipherView = selectedCipherView)) {
+        return when (vaultRepository.createCipher(cipherView = selectedCipherView)) {
             is CreateCipherResult.Error -> PasswordRegisterCredentialResult.Error.InternalError
             CreateCipherResult.Success -> PasswordRegisterCredentialResult
                 .Success(selectedCipherView)

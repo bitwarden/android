@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.credentials.manager.model
 
 import com.bitwarden.ui.util.Text
-import com.bitwarden.vault.CipherView
 
 /**
  * Represents the result of a Password credential registration attempt.
