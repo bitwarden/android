@@ -35,12 +35,14 @@ import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
+import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockCreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockGetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.util.getCreateCredentialRequestOrNull
 import com.x8bit.bitwarden.data.credentials.util.getFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.credentials.util.getGetCredentialsRequestOrNull
+import com.x8bit.bitwarden.data.credentials.util.getProviderGetPasswordRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -175,6 +177,7 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getAutofillSelectionDataOrNull,
             Intent::getCompleteRegistrationDataIntentOrNull,
             Intent::getFido2AssertionRequestOrNull,
+            Intent::getProviderGetPasswordRequestOrNull,
             Intent::getCreateCredentialRequestOrNull,
             Intent::getGetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
@@ -205,6 +208,7 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getAutofillSelectionDataOrNull,
             Intent::getCompleteRegistrationDataIntentOrNull,
             Intent::getFido2AssertionRequestOrNull,
+            Intent::getProviderGetPasswordRequestOrNull,
             Intent::getCreateCredentialRequestOrNull,
             Intent::getGetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
@@ -1191,6 +1195,7 @@ private fun createMockIntent(
     mockAutofillSelectionData: AutofillSelectionData? = null,
     mockCompleteRegistrationData: CompleteRegistrationData? = null,
     mockFido2CredentialAssertionRequest: Fido2CredentialAssertionRequest? = null,
+    mockProviderGetPasswordRequest: ProviderGetPasswordCredentialRequest? = null,
     mockCreateCredentialRequest: CreateCredentialRequest? = null,
     mockGetCredentialsRequest: GetCredentialsRequest? = null,
     mockIsMyVaultShortcut: Boolean = false,
@@ -1204,6 +1209,7 @@ private fun createMockIntent(
     every { getAutofillSelectionDataOrNull() } returns mockAutofillSelectionData
     every { getCompleteRegistrationDataIntentOrNull() } returns mockCompleteRegistrationData
     every { getFido2AssertionRequestOrNull() } returns mockFido2CredentialAssertionRequest
+    every { getProviderGetPasswordRequestOrNull() } returns mockProviderGetPasswordRequest
     every { getCreateCredentialRequestOrNull() } returns mockCreateCredentialRequest
     every { getGetCredentialsRequestOrNull() } returns mockGetCredentialsRequest
     every { isMyVaultShortcut } returns mockIsMyVaultShortcut
