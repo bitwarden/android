@@ -39,6 +39,7 @@ import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialR
 import com.x8bit.bitwarden.data.credentials.model.createMockCreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockGetCredentialsRequest
+import com.x8bit.bitwarden.data.credentials.model.createMockPasswordGetCredentialRequest
 import com.x8bit.bitwarden.data.credentials.util.getCreateCredentialRequestOrNull
 import com.x8bit.bitwarden.data.credentials.util.getFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.credentials.util.getGetCredentialsRequestOrNull
@@ -809,7 +810,28 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveFirstIntent with fido2 get credentials request data should set the special circumstance to Fido2GetCredentials`() {
+    fun `on ReceiveFirstIntent with password get request data should set the special circumstance to ProviderGetPasswordRequest`() {
+        val viewModel = createViewModel()
+        val mockProviderGetCredentialRequest = createMockPasswordGetCredentialRequest()
+        val passwordGetCredentialIntent = createMockIntent(
+            mockProviderGetPasswordRequest = mockProviderGetCredentialRequest,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(
+                intent = passwordGetCredentialIntent,
+            ),
+        )
+
+        assertEquals(
+            SpecialCircumstance.ProviderGetPasswordRequest(mockProviderGetCredentialRequest),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveFirstIntent with get credentials request data should set the special circumstance to ProviderGetCredentials`() {
         val viewModel = createViewModel()
         val mockGetCredentialsRequest = createMockGetCredentialsRequest(number = 1)
         val mockIntent = createMockIntent(
