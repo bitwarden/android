@@ -109,6 +109,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     private val credentialProviderCompletionManager: CredentialProviderCompletionManager = mockk {
         every { completeFido2Registration(any()) } just runs
         every { completeFido2Assertion(any()) } just runs
+        every { completePasswordGet(any()) } just runs
         every { completeProviderGetCredentialsRequest(any()) } just runs
     }
     private val biometricsManager: BiometricsManager = mockk()

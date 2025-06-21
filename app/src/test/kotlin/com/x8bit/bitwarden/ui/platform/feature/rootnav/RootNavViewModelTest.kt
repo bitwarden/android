@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockGetCredentialsRequest
+import com.x8bit.bitwarden.data.credentials.model.createMockProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
@@ -713,7 +714,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `when the active user has an unlocked vault but there is a Fido2Assertion special circumstance the nav state should be VaultUnlockedForFido2Save`() {
+    fun `when the active user has an unlocked vault but there is a Fido2Assertion special circumstance the nav state should be VaultUnlockedForFido2Assertion`() {
         val fido2CredentialAssertionRequest =
             createMockFido2CredentialAssertionRequest(number = 1)
         specialCircumstanceManager.specialCircumstance =
@@ -755,6 +756,52 @@ class RootNavViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when the active user has an unlocked vault but there is a ProviderGetPasswordRequest special circumstance the nav state should be VaultUnlockedForPasswordGet`() {
+        val providerGetPasswordCredentialRequest =
+            createMockProviderGetPasswordCredentialRequest()
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.ProviderGetPasswordRequest(providerGetPasswordCredentialRequest)
+        mutableUserStateFlow.tryEmit(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "name",
+                        email = "email",
+                        avatarColorHex = "avatarHexColor",
+                        environment = Environment.Us,
+                        isPremium = true,
+                        isLoggedIn = true,
+                        isVaultUnlocked = true,
+                        needsPasswordReset = false,
+                        isBiometricsEnabled = false,
+                        organizations = emptyList(),
+                        needsMasterPassword = false,
+                        trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.COMPLETE,
+                        firstTimeState = FirstTimeState(
+                            showImportLoginsCard = true,
+                        ),
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.VaultUnlockedForPasswordGet(
+                activeUserId = "activeUserId",
+                providerGetPasswordCredentialRequest = providerGetPasswordCredentialRequest,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
 
     @Suppress("MaxLineLength")
     @Test
