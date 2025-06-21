@@ -6,7 +6,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockGetCredentialsRequest
-import com.x8bit.bitwarden.data.credentials.model.createMockPasswordGetCredentialRequest
+import com.x8bit.bitwarden.data.credentials.model.createMockProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.vault.model.TotpData
 import io.mockk.mockk
@@ -275,7 +275,7 @@ class SpecialCircumstanceExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `toPasswordGetRequestOrNull should return a non-null value for PasswordGetCredentials`() {
-        val passwordGetCredentialsRequest = createMockPasswordGetCredentialRequest()
+        val passwordGetCredentialsRequest = createMockProviderGetPasswordCredentialRequest()
         assertEquals(
             passwordGetCredentialsRequest,
             SpecialCircumstance

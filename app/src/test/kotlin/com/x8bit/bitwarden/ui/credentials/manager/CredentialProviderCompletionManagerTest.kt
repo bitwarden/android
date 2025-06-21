@@ -12,8 +12,10 @@ import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.credentials.processor.GET_PASSKEY_INTENT
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.Called
@@ -72,6 +74,16 @@ class CredentialProviderCompletionManagerTest {
             credentialProviderCompletionManager.completeFido2Assertion(mockAssertionResult)
             verify {
                 mockAssertionResult wasNot Called
+                mockActivity wasNot Called
+            }
+        }
+
+        @Test
+        fun `completePasswordGet should perform no operations`() {
+            val mockPasswordGetResult = mockk<GetPasswordCredentialResult>()
+            credentialProviderCompletionManager.completePasswordGet(mockPasswordGetResult)
+            verify {
+                mockPasswordGetResult wasNot Called
                 mockActivity wasNot Called
             }
         }
@@ -186,6 +198,45 @@ class CredentialProviderCompletionManagerTest {
         fun `completeFido2Assertion should set GetCredentialException, set activity result, then finish activity when result is Cancelled`() {
             credentialProviderCompletionManager
                 .completeFido2Assertion(AssertFido2CredentialResult.Cancelled)
+            verifyActivityResultIsSetAndFinishedAfter {
+                PendingIntentHandler.setGetCredentialException(
+                    any(),
+                    any<GetCredentialCancellationException>(),
+                )
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completePasswordGet should set GetCredentialResponse, set activity result, then finish activity when result is Success`() {
+            credentialProviderCompletionManager
+                .completePasswordGet(GetPasswordCredentialResult.Success(createMockLoginView(1)))
+
+            verifyActivityResultIsSetAndFinishedAfter {
+                PendingIntentHandler.setGetCredentialResponse(any(), any())
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completePasswordGet should set GetCredentialException, set activity result, then finish activity when result is Error`() {
+            credentialProviderCompletionManager
+                .completePasswordGet(GetPasswordCredentialResult.Error("".asText()))
+
+            verifyActivityResultIsSetAndFinishedAfter {
+                mockActivity.resources
+                PendingIntentHandler.setGetCredentialException(
+                    any(),
+                    any<GetCredentialUnknownException>(),
+                )
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completePasswordGet should set GetCredentialException, set activity result, then finish activity when result is Cancelled`() {
+            credentialProviderCompletionManager
+                .completePasswordGet(GetPasswordCredentialResult.Cancelled)
             verifyActivityResultIsSetAndFinishedAfter {
                 PendingIntentHandler.setGetCredentialException(
                     any(),

@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.credentials.model
 
 import androidx.core.os.bundleOf
 
-fun createMockPasswordGetCredentialRequest(
+fun createMockProviderGetPasswordCredentialRequest(
     userId: String = "mockUserId",
     cipherId: String = "mockCipherId",
 ): ProviderGetPasswordCredentialRequest =

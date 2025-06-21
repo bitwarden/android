@@ -39,7 +39,7 @@ import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialR
 import com.x8bit.bitwarden.data.credentials.model.createMockCreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockGetCredentialsRequest
-import com.x8bit.bitwarden.data.credentials.model.createMockPasswordGetCredentialRequest
+import com.x8bit.bitwarden.data.credentials.model.createMockProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.credentials.util.getCreateCredentialRequestOrNull
 import com.x8bit.bitwarden.data.credentials.util.getFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.credentials.util.getGetCredentialsRequestOrNull
@@ -812,7 +812,7 @@ class MainViewModelTest : BaseViewModelTest() {
     @Test
     fun `on ReceiveFirstIntent with password get request data should set the special circumstance to ProviderGetPasswordRequest`() {
         val viewModel = createViewModel()
-        val mockProviderGetCredentialRequest = createMockPasswordGetCredentialRequest()
+        val mockProviderGetCredentialRequest = createMockProviderGetPasswordCredentialRequest()
         val passwordGetCredentialIntent = createMockIntent(
             mockProviderGetPasswordRequest = mockProviderGetCredentialRequest,
         )

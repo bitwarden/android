@@ -1233,6 +1233,16 @@ class VaultItemListingViewModel @Inject constructor(
                 )
             }
 
+            state.providerGetPasswordCredentialRequest != null -> {
+                sendEvent(
+                    VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
+                        result = GetPasswordCredentialResult.Error(
+                            message = action.message,
+                        ),
+                    ),
+                )
+            }
+
             state.getCredentialsRequest != null -> {
                 sendEvent(
                     VaultItemListingEvent.CompleteProviderGetCredentialsRequest(
@@ -2072,6 +2082,7 @@ class VaultItemListingViewModel @Inject constructor(
             .value
             .data
             .orEmpty()
+            .filter { it.isActiveWithPasswordCredentials }
 
         val selectedCipherId = action.data.cipherId
 
@@ -2080,7 +2091,7 @@ class VaultItemListingViewModel @Inject constructor(
                 R.string.password_operation_failed_because_no_item_was_selected.asText(),
             )
         } else {
-            val selectedCipher = data.filter { it.isActiveWithPasswordCredentials }
+            val selectedCipher = data
                 .find { it.id == selectedCipherId }
                 ?: run {
                     showCredentialManagerErrorDialog(
