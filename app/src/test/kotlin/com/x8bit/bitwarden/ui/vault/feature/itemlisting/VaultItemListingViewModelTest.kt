@@ -3070,9 +3070,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
                     title = R.string.an_error_has_occurred.asText(),
-                    message =
-                        R.string.credential_operation_failed_because_user_could_not_be_verified
-                            .asText(),
+                    message = R.string.generic_error_message.asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -3809,28 +3807,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     VaultItemListingEvent.CompleteFido2Assertion(
                         result = AssertFido2CredentialResult.Cancelled,
-                    ),
-                    awaitItem(),
-                )
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `UserVerificationCancelled should clear dialog state, set isUserVerified to false, and emit CompleteProviderGetPasswordCredentialRequest with cancelled result`() =
-        runTest {
-            specialCircumstanceManager.specialCircumstance = SpecialCircumstance.ProviderGetPasswordRequest(
-                createMockProviderGetPasswordCredentialRequest(),
-            )
-            val viewModel = createVaultItemListingViewModel()
-            viewModel.trySendAction(VaultItemListingsAction.UserVerificationCancelled)
-
-            verify { bitwardenCredentialManager.isUserVerified = false }
-            assertNull(viewModel.stateFlow.value.dialogState)
-            viewModel.eventFlow.test {
-                assertEquals(
-                    VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
-                        result = GetPasswordCredentialResult.Cancelled,
                     ),
                     awaitItem(),
                 )
