@@ -39,6 +39,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasswordConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.model.BitwardenPullToRefreshState
@@ -183,6 +184,10 @@ fun VaultItemListingScreen(
                 credentialProviderCompletionManager.completeFido2Registration(event.result)
             }
 
+            is VaultItemListingEvent.CompletePasswordRegistration -> {
+                credentialProviderCompletionManager.completePasswordRegistration(event.result)
+            }
+
             is VaultItemListingEvent.CredentialManagerUserVerification -> {
                 biometricsManager.promptUserVerification(
                     onSuccess = {
@@ -242,6 +247,15 @@ fun VaultItemListingScreen(
             { cipherId ->
                 viewModel.trySendAction(
                     VaultItemListingsAction.ConfirmOverwriteExistingPasskeyClick(
+                        cipherViewId = cipherId,
+                    ),
+                )
+            }
+        },
+        onConfirmOverwriteExistingPassword = remember(viewModel) {
+            { cipherId ->
+                viewModel.trySendAction(
+                    VaultItemListingsAction.ConfirmOverwriteExistingPasswordClick(
                         cipherViewId = cipherId,
                     ),
                 )
@@ -341,6 +355,7 @@ private fun VaultItemListingDialogs(
     onDismissRequest: () -> Unit,
     onDismissCredentialManagerErrorDialog: (Text) -> Unit,
     onConfirmOverwriteExistingPasskey: (cipherViewId: String) -> Unit,
+    onConfirmOverwriteExistingPassword: (cipherViewId: String) -> Unit,
     onSubmitMasterPasswordCredentialVerification: (password: String, cipherId: String) -> Unit,
     onRetryGetCredentialPasswordVerification: (cipherId: String) -> Unit,
     onSubmitPinCredentialVerification: (pin: String, cipherId: String) -> Unit,
@@ -372,6 +387,13 @@ private fun VaultItemListingDialogs(
         is VaultItemListingState.DialogState.OverwritePasskeyConfirmationPrompt -> {
             BitwardenOverwritePasskeyConfirmationDialog(
                 onConfirmClick = { onConfirmOverwriteExistingPasskey(dialogState.cipherViewId) },
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VaultItemListingState.DialogState.OverwritePasswordConfirmationPrompt -> {
+            BitwardenOverwritePasswordConfirmationDialog(
+                onConfirmClick = { onConfirmOverwriteExistingPassword(dialogState.cipherViewId) },
                 onDismissRequest = onDismissRequest,
             )
         }

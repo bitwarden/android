@@ -119,9 +119,9 @@ interface IntentManager {
 
     /**
      * Creates a pending intent to use when providing [CreateEntry]
-     * instances for FIDO 2 credential creation.
+     * instances for FIDO 2 or password credential creation.
      */
-    fun createFido2CreationPendingIntent(
+    fun createCredentialCreationPendingIntent(
         action: String,
         userId: String,
         requestCode: Int,

@@ -307,7 +307,7 @@ class IntentManagerImpl(
         )
     }
 
-    override fun createFido2CreationPendingIntent(
+    override fun createCredentialCreationPendingIntent(
         action: String,
         userId: String,
         requestCode: Int,
