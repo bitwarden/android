@@ -296,9 +296,9 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="autofill_and_save">Autouzupełnij i zapisz</string>
     <string name="organization">Organizacja</string>
     <string name="try_again">Spróbuj ponownie</string>
-    <string name="created">Created: %1$s</string>
-    <string name="password_last_updated">Password last updated: %1$s</string>
-    <string name="last_edited">Last edited: %1$s</string>
+    <string name="created">Utworzono: %1$s</string>
+    <string name="password_last_updated">Hasło ostatnio zaktualizowane: %1$s</string>
+    <string name="last_edited">Ostatnio edytowane: %1$s</string>
     <string name="invalid_email">Adres e-mail jest nieprawidłowy.</string>
     <string name="cards">Karty</string>
     <string name="identities">Tożsamości</string>
@@ -454,7 +454,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="password_info">Opcjonalne hasło dla użytkownika, aby uzyskać dostęp do wysyłki.</string>
     <string name="remove_password">Usuń hasło</string>
     <string name="removing_send_password">Usuwanie hasła</string>
-    <string name="send_password_removed">Hasło zostało usunięte.</string>
+    <string name="password_removed">Password removed</string>
     <string name="add_a_send">Dodaj wysyłkę</string>
     <string name="copy_link">Kopiuj link</string>
     <string name="share_link">Udostępnij link</string>
@@ -675,7 +675,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="privacy_policy_description_long">Sprawdź naszą politykę prywatności na bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Odkryj więcej funkcji swojego konta Bitwarden w aplikacji internetowej.</string>
     <string name="learn_about_organizations_description_long">Bitwarden pozwala na udostępnianie zawartości sejfu innym osobom za pośrednictwem organizacji. Dowiedz się wiecej na bitwarden.com.</string>
-    <string name="created_xy">Utworzono %1$s, %2$s</string>
+    <string name="created_x">Created %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Twoja organizacja wymaga ustawienia hasła głównego.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Ustaw opcje odblokowania, aby zmienić czas blokowania sejfu.</string>
     <string name="save_passkey_as_new_login">Zapisz klucz dostępu jako nowe dane logowania</string>
@@ -970,14 +970,15 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Operacja Passkey nie powiodła się, ponieważ przeglądarka (%1$s) nie jest zaufana. Wybierz \"Zaufaj\" aby dodać %1$s do listy zaufanych aplikacji lub \"Anuluj\"\ aby przerwać operację.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Operacja Passkey nie powiodła się, ponieważ przeglądarka nie jest zaufana.</string>
     <string name="trust">Zaufaj</string>
-    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
-    <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
-    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
-    <string name="trusted_by_you">Trusted by You</string>
-    <string name="trusted_by_the_community">Trusted by the Community</string>
-    <string name="trusted_by_google">Trusted by Google</string>
-    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through web browsers trusted by Google or the Bitwarden community.</string>
-    <string name="about_privileged_applications">About privileged applications</string>
-    <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
-    <string name="privileged_apps">Privileged apps</string>
+    <string name="trusted_by_you_learn_more">Są to aplikacje lub przeglądarki, których Bitwarden domyślnie nie ufa, ale ufasz im by wykonywać operacje passkey.</string>
+    <string name="trusted_by_community_learn_more">Są to aplikacje, które nie są dostępne w sklepie Google Play, ale Bitwarden ufa, że ​​operacje z użyciem passkey zostaną przeprowadzone po tym, jak członkowie społeczności je wykorzystają i zgłoszą jako bezpieczne.</string>
+    <string name="trusted_by_google_learn_more">To są aplikacje, które Google uważa za bezpieczne i są dostępne w sklepie Google Play.</string>
+    <string name="trusted_by_you">Zaufane przez Ciebie</string>
+    <string name="trusted_by_the_community">Zaufane przez Społeczność</string>
+    <string name="trusted_by_google">Zaufane przez Google</string>
+    <string name="privileged_apps_description">Aby chronić użytkowników przed próbami wyłudzania, Bitwarden zakończył domyślnie tylko operacje passkey przez przeglądarki zaufane przez Google lub społeczność Bitwarden.</string>
+    <string name="about_privileged_applications">O uprawnionych aplikacjach</string>
+    <string name="learn_more_about_privileged_apps">Dowiedz się więcej o uprawnionych aplikacjach</string>
+    <string name="privileged_apps">Uprawnione aplikacje</string>
+    <string name="unrecognized_browser">Nierozpoznana przeglądarka</string>
 </resources>

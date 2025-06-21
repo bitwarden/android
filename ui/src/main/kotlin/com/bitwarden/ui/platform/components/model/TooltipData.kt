@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.ui.platform.components.model
+package com.bitwarden.ui.platform.components.model
 
 /**
  * Data class representing the data needed to create a tooltip icon in a composable.

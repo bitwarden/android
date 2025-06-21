@@ -269,8 +269,8 @@ Načtení proběhne automaticky.</string>
     <string name="icons_url">URL serveru ikon</string>
     <string name="vault_is_locked">Trezor je uzamčený</string>
     <string name="go_to_my_vault">Přejít do trezoru</string>
-    <string name="collections">Kolekce</string>
-    <string name="no_items_collection">V této kolekci nejsou žádné položky.</string>
+    <string name="collections">Sbírky</string>
+    <string name="no_items_collection">V této sbírce nejsou žádné položky.</string>
     <string name="no_items_folder">V této složce nejsou žádné položky.</string>
     <string name="no_items_trash">V koši nejsou žádné položky.</string>
     <string name="autofill_accessibility_summary">Pomůže při vyplňování uživatelského jména a hesla v jiných aplikacích a na webu.</string>
@@ -322,9 +322,9 @@ Načtení proběhne automaticky.</string>
     <string name="move_down">Přesunout dolů</string>
     <string name="move_up">Přesunout nahoru</string>
     <string name="owner">Vlastník</string>
-    <string name="no_collections_to_list">Žádné kolekce k zobrazení.</string>
+    <string name="no_collections_to_list">Žádné sbírky k zobrazení.</string>
     <string name="moved_item_to_org">Položka %1$s byla přesunuta do %2$s.</string>
-    <string name="select_one_collection">Musíte vybrat alespoň jednu kolekci.</string>
+    <string name="select_one_collection">Musíte vybrat alespoň jednu sbírku.</string>
     <string name="share">Sdílet</string>
     <string name="move_to_organization">Přesunout do organizace</string>
     <string name="no_orgs_to_list">Žádné organizace k zobrazení.</string>
@@ -454,7 +454,7 @@ Načtení proběhne automaticky.</string>
     <string name="password_info">Vyžadovat totot heslo pro přístup k tomuto Send.</string>
     <string name="remove_password">Odebrat heslo</string>
     <string name="removing_send_password">Odebírání hesla</string>
-    <string name="send_password_removed">Heslo bylo odebráno.</string>
+    <string name="password_removed">Heslo bylo odebráno</string>
     <string name="add_a_send">Nový Send</string>
     <string name="copy_link">Kopírovat odkaz</string>
     <string name="share_link">Sdílet odkaz</string>
@@ -674,7 +674,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="privacy_policy_description_long">Podívejte se na naše Zásady ochrany osobních údajů na bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Prozkoumejte další funkce Vašeho účtu Bitwarden ve webové aplikaci.</string>
     <string name="learn_about_organizations_description_long">Bitwarden Vám umožňuje sdílet položky v trezoru s ostatními prostřednictvím organizace. Více informací naleznete na bitwarden.com.</string>
-    <string name="created_xy">Vytvořeno %1$s, %2$s</string>
+    <string name="created_x">Vytvořeno: %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Vaše organizace vyžaduje nastavení hlavního hesla.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Nastavte volbu odemknutí, abyste změnili časový limit Vašeho trezoru.</string>
     <string name="save_passkey_as_new_login">Uložit přístupový klíč jako nové přihlášení</string>
@@ -981,4 +981,5 @@ při opakování problémů.</string>
     <string name="about_privileged_applications">O privilegovaných aplikacích</string>
     <string name="learn_more_about_privileged_apps">Další informace o privilegovaných aplikacích</string>
     <string name="privileged_apps">Privilegované aplikace</string>
+    <string name="unrecognized_browser">Nerozpoznaný prohlížeč</string>
 </resources>

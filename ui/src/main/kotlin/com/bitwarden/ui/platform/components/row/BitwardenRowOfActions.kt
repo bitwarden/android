@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.row
+package com.bitwarden.ui.platform.components.row
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope

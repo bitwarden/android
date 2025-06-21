@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,7 +25,6 @@ import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledButton
-import com.bitwarden.authenticator.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.components.ListItemContent
@@ -32,6 +32,7 @@ import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
@@ -111,14 +112,20 @@ private fun FeatureFlagContent(
             modifier = Modifier.standardHorizontalMargin(),
         )
         Spacer(modifier = Modifier.height(8.dp))
-        BitwardenHorizontalDivider()
+        BitwardenHorizontalDivider(
+            color = MaterialTheme.colorScheme.outline,
+            thickness = 1.dp,
+        )
         featureFlagMap.forEach { featureFlag ->
             featureFlag.key.ListItemContent(
                 currentValue = featureFlag.value,
                 onValueChange = onValueChange,
                 modifier = Modifier.standardHorizontalMargin(),
             )
-            BitwardenHorizontalDivider()
+            BitwardenHorizontalDivider(
+                color = MaterialTheme.colorScheme.outline,
+                thickness = 1.dp,
+            )
         }
         Spacer(modifier = Modifier.height(12.dp))
         AuthenticatorFilledButton(

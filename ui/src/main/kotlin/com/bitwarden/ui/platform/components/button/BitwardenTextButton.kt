@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.button
+package com.bitwarden.ui.platform.components.button
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues

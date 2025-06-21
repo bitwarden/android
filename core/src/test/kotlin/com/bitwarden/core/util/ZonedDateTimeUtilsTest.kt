@@ -1,7 +1,5 @@
-package com.x8bit.bitwarden.ui.platform.util
+package com.bitwarden.core.util
 
-import com.x8bit.bitwarden.data.platform.util.getBinaryLongFromZoneDateTime
-import com.x8bit.bitwarden.data.platform.util.getZoneDateTimeFromBinaryLong
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.ZonedDateTime
