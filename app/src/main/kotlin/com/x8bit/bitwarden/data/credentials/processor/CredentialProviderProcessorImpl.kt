@@ -44,6 +44,7 @@ import javax.crypto.Cipher
 
 private const val CREATE_PASSKEY_INTENT = "com.x8bit.bitwarden.credentials.ACTION_CREATE_PASSKEY"
 const val GET_PASSKEY_INTENT = "com.x8bit.bitwarden.credentials.ACTION_GET_PASSKEY"
+const val GET_PASSWORD_INTENT = "com.x8bit.bitwarden.credentials.ACTION_GET_PASSWORD"
 const val UNLOCK_ACCOUNT_INTENT = "com.x8bit.bitwarden.credentials.ACTION_UNLOCK_ACCOUNT"
 
 /**

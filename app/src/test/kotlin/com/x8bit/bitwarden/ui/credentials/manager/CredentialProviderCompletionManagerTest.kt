@@ -7,13 +7,18 @@ import android.graphics.drawable.Icon
 import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.BeginGetCredentialResponse
+import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.credentials.processor.GET_PASSKEY_INTENT
+import com.x8bit.bitwarden.data.credentials.processor.GET_PASSWORD_INTENT
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPasswordCredentialAutofillCipherLogin
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.Called
@@ -72,6 +77,16 @@ class CredentialProviderCompletionManagerTest {
             credentialProviderCompletionManager.completeFido2Assertion(mockAssertionResult)
             verify {
                 mockAssertionResult wasNot Called
+                mockActivity wasNot Called
+            }
+        }
+
+        @Test
+        fun `completePasswordGet should perform no operations`() {
+            val mockPasswordGetResult = mockk<GetPasswordCredentialResult>()
+            credentialProviderCompletionManager.completePasswordGet(mockPasswordGetResult)
+            verify {
+                mockPasswordGetResult wasNot Called
                 mockActivity wasNot Called
             }
         }
@@ -196,6 +211,45 @@ class CredentialProviderCompletionManagerTest {
 
         @Suppress("MaxLineLength")
         @Test
+        fun `completePasswordGet should set GetCredentialResponse, set activity result, then finish activity when result is Success`() {
+            credentialProviderCompletionManager
+                .completePasswordGet(GetPasswordCredentialResult.Success(createMockLoginView(1)))
+
+            verifyActivityResultIsSetAndFinishedAfter {
+                PendingIntentHandler.setGetCredentialResponse(any(), any())
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completePasswordGet should set GetCredentialException, set activity result, then finish activity when result is Error`() {
+            credentialProviderCompletionManager
+                .completePasswordGet(GetPasswordCredentialResult.Error("".asText()))
+
+            verifyActivityResultIsSetAndFinishedAfter {
+                mockActivity.resources
+                PendingIntentHandler.setGetCredentialException(
+                    any(),
+                    any<GetCredentialUnknownException>(),
+                )
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completePasswordGet should set GetCredentialException, set activity result, then finish activity when result is Cancelled`() {
+            credentialProviderCompletionManager
+                .completePasswordGet(GetPasswordCredentialResult.Cancelled)
+            verifyActivityResultIsSetAndFinishedAfter {
+                PendingIntentHandler.setGetCredentialException(
+                    any(),
+                    any<GetCredentialCancellationException>(),
+                )
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
         fun `completeProviderGetCredentials should set BeginGetCredentialResponse, set activity result, then finish activity when result is Success`() {
             credentialProviderCompletionManager
                 .completeProviderGetCredentialsRequest(
@@ -210,8 +264,9 @@ class CredentialProviderCompletionManagerTest {
             }
         }
 
+        @Suppress("MaxLineLength")
         @Test
-        fun `completeProviderGetCredentials clear authentication actions when result is Success`() {
+        fun `completeProviderGetCredentials for FIDO 2 clear authentication actions when result is Success`() {
             mockkConstructor(PublicKeyCredentialEntry.Builder::class)
             mockkStatic(PendingIntent::class)
 
@@ -224,6 +279,51 @@ class CredentialProviderCompletionManagerTest {
                     userId = "mockUserId",
                     credentialId = mockFido2AutofillView.credentialId.toString(),
                     cipherId = mockFido2AutofillView.cipherId,
+                    isUserVerified = false,
+                    requestCode = any(),
+                )
+            } returns mockk()
+            every { mockActivity.getString(any()) } returns "No username"
+            every { Icon.createWithResource(mockActivity, any()) } returns mockk<Icon>()
+
+            credentialProviderCompletionManager
+                .completeProviderGetCredentialsRequest(
+                    GetCredentialsResult.Success(
+                        credentialEntries = listOf(mockCredentialEntry),
+                        userId = "mockUserId",
+                    ),
+                )
+
+            val responseSlot = slot<BeginGetCredentialResponse>()
+            verify {
+                PendingIntentHandler.setBeginGetCredentialResponse(
+                    intent = any(),
+                    response = capture(responseSlot),
+                )
+            }
+
+            assertEquals(
+                listOf(mockCredentialEntry),
+                responseSlot.captured.credentialEntries,
+            )
+
+            assertTrue(responseSlot.captured.authenticationActions.isEmpty())
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completeProviderGetCredentials for Password clear authentication actions when result is Success`() {
+            mockkConstructor(PasswordCredentialEntry.Builder::class)
+            mockkStatic(PendingIntent::class)
+
+            val mockCredentialEntry = mockk<PasswordCredentialEntry>()
+            val mockPasswordAutofillView = createMockPasswordCredentialAutofillCipherLogin()
+
+            every {
+                mockIntentManager.createPasswordGetCredentialPendingIntent(
+                    action = GET_PASSWORD_INTENT,
+                    userId = "mockUserId",
+                    cipherId = mockPasswordAutofillView.cipherId,
                     isUserVerified = false,
                     requestCode = any(),
                 )
