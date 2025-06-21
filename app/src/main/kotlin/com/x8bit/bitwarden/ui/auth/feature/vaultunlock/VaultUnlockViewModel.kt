@@ -192,8 +192,8 @@ class VaultUnlockViewModel @Inject constructor(
         when {
             state.getCredentialsRequest != null -> {
                 sendEvent(
-                    VaultUnlockEvent.Fido2GetCredentialsError(
-                        R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    VaultUnlockEvent.GetCredentialsError(
+                        R.string.credential_operation_failed_because_user_could_not_be_verified
                             .asText(),
                     ),
                 )
@@ -564,15 +564,14 @@ sealed class VaultUnlockEvent {
     data class PromptForBiometrics(val cipher: Cipher) : BackgroundEvent, VaultUnlockEvent()
 
     /**
-     * Completes the FIDO2 get credentials request with an error response.
+     * Completes the get credentials request with an error response.
      */
-    data class Fido2GetCredentialsError(val message: Text) : VaultUnlockEvent()
+    data class GetCredentialsError(val message: Text) : VaultUnlockEvent()
 
     /**
      * Completes the FIDO2 credential assertion request with an error response.
      */
     data class Fido2CredentialAssertionError(val message: Text) : VaultUnlockEvent()
-
 }
 
 /**

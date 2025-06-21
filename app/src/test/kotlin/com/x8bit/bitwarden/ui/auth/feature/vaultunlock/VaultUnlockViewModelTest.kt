@@ -612,8 +612,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(VaultUnlockAction.DismissDialog)
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultUnlockEvent.Fido2GetCredentialsError(
-                        R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    VaultUnlockEvent.GetCredentialsError(
+                        R.string.credential_operation_failed_because_user_could_not_be_verified.asText(),
                     ),
                     awaitItem(),
                 )
