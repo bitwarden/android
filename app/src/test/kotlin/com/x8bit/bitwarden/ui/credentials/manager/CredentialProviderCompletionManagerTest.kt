@@ -264,6 +264,7 @@ class CredentialProviderCompletionManagerTest {
             }
         }
 
+        @Suppress("MaxLineLength")
         @Test
         fun `completeProviderGetCredentials for FIDO 2 clear authentication actions when result is Success`() {
             mockkConstructor(PublicKeyCredentialEntry.Builder::class)
@@ -309,6 +310,7 @@ class CredentialProviderCompletionManagerTest {
             assertTrue(responseSlot.captured.authenticationActions.isEmpty())
         }
 
+        @Suppress("MaxLineLength")
         @Test
         fun `completeProviderGetCredentials for Password clear authentication actions when result is Success`() {
             mockkConstructor(PasswordCredentialEntry.Builder::class)

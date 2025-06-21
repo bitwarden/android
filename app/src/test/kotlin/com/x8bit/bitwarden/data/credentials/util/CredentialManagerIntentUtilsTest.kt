@@ -273,7 +273,7 @@ class CredentialManagerIntentUtilsTest {
         )
     }
 
-
+    @Suppress("MaxLineLength")
     @Test
     fun `getProviderGetPasswordRequestOrNull should return ProviderGetPasswordCredentialRequest when present`() {
         val intent = mockk<Intent> {
@@ -360,6 +360,7 @@ class CredentialManagerIntentUtilsTest {
         assertNull(assertionRequest)
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `getProviderGetPasswordRequestOrNull should return null when extras are not correctly set`() {
         every {

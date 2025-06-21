@@ -802,7 +802,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
         )
     }
 
-
     @Suppress("MaxLineLength")
     @Test
     fun `when the active user has an unlocked vault but there is a ProviderGetCredentials special circumstance the nav state should be VaultUnlockedForProviderGetCredentials`() {

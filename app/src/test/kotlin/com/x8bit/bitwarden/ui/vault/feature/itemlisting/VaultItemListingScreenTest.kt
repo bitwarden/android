@@ -1994,7 +1994,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     fun `GetPasswordCredentialResult event should call CredentialProviderCompletionManager with result`() {
         val result = GetPasswordCredentialResult.Success(createMockLoginView(1))
         mutableEventFlow.tryEmit(
-            VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(result)
+            VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(result),
         )
         verify {
             credentialProviderCompletionManager.completePasswordGet(result)
