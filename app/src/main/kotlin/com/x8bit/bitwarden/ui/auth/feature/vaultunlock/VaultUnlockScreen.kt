@@ -131,7 +131,6 @@ fun VaultUnlockScreen(
                     result = GetCredentialsResult.Error(message = event.message),
                 )
             }
-
         }
     }
 
