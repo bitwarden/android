@@ -306,6 +306,7 @@ tasks {
         maxHeapSize = "2g"
         maxParallelForks = Runtime.getRuntime().availableProcessors()
         jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" + "-Duser.country=US"
+        android.sourceSets["main"].res.srcDirs("src/test/res")
     }
 }
 

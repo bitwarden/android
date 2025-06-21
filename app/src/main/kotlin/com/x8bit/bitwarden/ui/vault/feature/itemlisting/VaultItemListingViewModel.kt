@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
+import androidx.credentials.CreatePasswordRequest
+import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.CredentialEntry
@@ -46,12 +48,14 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionReques
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
+import com.x8bit.bitwarden.data.credentials.model.PasswordRegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.credentials.util.getCreatePasskeyCredentialRequestOrNull
+import com.x8bit.bitwarden.data.credentials.util.getCreatePasswordCredentialRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
@@ -78,6 +82,7 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialRes
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordCredentialResult
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
@@ -312,6 +317,10 @@ class VaultItemListingViewModel @Inject constructor(
                 handleConfirmOverwriteExistingPasskeyClick(action)
             }
 
+            is VaultItemListingsAction.ConfirmOverwriteExistingPasswordClick -> {
+                handleConfirmOverwriteExistingPasswordClick(action)
+            }
+
             VaultItemListingsAction.UserVerificationLockOut -> {
                 handleUserVerificationLockOut()
             }
@@ -397,6 +406,21 @@ class VaultItemListingViewModel @Inject constructor(
             getCipherViewForCredentialOrNull(action.cipherViewId)
                 ?.let { registerFido2Credential(it) }
         }
+    }
+
+    private fun handleConfirmOverwriteExistingPasswordClick(
+        action: VaultItemListingsAction.ConfirmOverwriteExistingPasswordClick,
+    ) {
+        clearDialogState()
+        getCipherViewOrNull(action.cipherViewId)
+            ?.let { registerPasswordCredential(it) }
+            ?: run {
+                showCredentialManagerErrorDialog(
+                    R.string.passkey_operation_failed_because_the_selected_item_does_not_exist //TODO
+                        .asText(),
+                )
+                return
+            }
     }
 
     private fun handleUserVerificationLockOut() {
@@ -974,16 +998,24 @@ class VaultItemListingViewModel @Inject constructor(
                     .providerRequest
                     .getCreatePasskeyCredentialRequestOrNull()
                     ?.let { createPasskeyCredentialRequest ->
-                        handleItemClickForCreatePublicKeyCredentialRequest(
-                            cipherId = action.id,
-                            cipherView = cipherView,
-                        )
-                    }
-                    ?: run {
-                        sendAction(
+                handleItemClickForCreatePublicKeyCredentialRequest(
+                    cipherId = action.id,
+                    cipherView = cipherView,
+                )
+            } ?: createCredentialRequest
+            .providerRequest
+            .getCreatePasswordCredentialRequestOrNull()
+            ?.let {
+                handleItemClickForCreatePasswordCredentialRequest(
+                    cipherId = action.id,
+                    cipherView = cipherView,
+                )
+            }
+        ?: run {
+            sendAction(
                             VaultItemListingsAction.Internal.CredentialOperationFailureReceive(
                                 title = BitwardenString.an_error_has_occurred.asText(),
-                                message = BitwardenString
+                message = BitwardenString
                                     .passkey_operation_failed_because_the_request_is_unsupported
                                     .asText(),
                                 error = null,
@@ -1010,6 +1042,25 @@ class VaultItemListingViewModel @Inject constructor(
             }
         } else {
             registerFido2Credential(cipherView)
+        }
+    }
+
+    private fun handleItemClickForCreatePasswordCredentialRequest(
+        cipherId: String,
+        cipherView: CipherView,
+    ) {
+        if (cipherView.isActiveWithPasswordCredentials) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = VaultItemListingState
+                        .DialogState
+                        .OverwritePasswordConfirmationPrompt(
+                            cipherViewId = cipherId,
+                        ),
+                )
+            }
+        } else {
+            registerPasswordCredential(cipherView)
         }
     }
 
@@ -1040,6 +1091,28 @@ class VaultItemListingViewModel @Inject constructor(
         } else {
             performUserVerificationIfRequired(cipherView, providerRequest)
         }
+    }
+
+    private fun registerPasswordCredential(cipherView: CipherView) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Loading(
+                    message = R.string.saving.asText(),
+                ),
+            )
+        }
+
+        val providerRequest = state
+            .createCredentialRequest
+            ?.providerRequest
+            ?: run {
+                showCredentialManagerErrorDialog(
+                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(), //TODO
+                )
+                return
+            }
+
+        registerPasswordCredentialToCipher(cipherView, providerRequest)
     }
 
     private fun performUserVerificationIfRequired(
@@ -1085,6 +1158,25 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
+    private fun registerCredentialToCipher(
+        cipherView: CipherView,
+        providerRequest: ProviderCreateCredentialRequest,
+    ) {
+        when (providerRequest.callingRequest) {
+            is CreatePublicKeyCredentialRequest -> registerFido2CredentialToCipher(
+                cipherView,
+                providerRequest,
+            )
+
+            is CreatePasswordRequest -> registerPasswordCredentialToCipher(
+                cipherView,
+                providerRequest,
+            )
+
+            else -> Unit //TODO error dialog
+        }
+    }
+
     private fun registerFido2CredentialToCipher(
         cipherView: CipherView,
         providerRequest: ProviderCreateCredentialRequest,
@@ -1118,6 +1210,42 @@ class VaultItemListingViewModel @Inject constructor(
                 )
             sendAction(
                 VaultItemListingsAction.Internal.Fido2RegisterCredentialResultReceive(result),
+            )
+        }
+    }
+
+    private fun registerPasswordCredentialToCipher(
+        cipherView: CipherView,
+        providerRequest: ProviderCreateCredentialRequest,
+    ) {
+        val activeUserId = authRepository.activeUserId
+            ?: run {
+                showCredentialManagerErrorDialog(
+                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(), //TODO
+                )
+                return
+            }
+
+        val createRequest = providerRequest
+            .getCreatePasswordCredentialRequestOrNull()
+            ?: run {
+                showCredentialManagerErrorDialog(
+                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(), //TODO
+                )
+                return
+            }
+
+        viewModelScope.launch {
+            val result: PasswordRegisterCredentialResult =
+                bitwardenCredentialManager.registerPasswordCredential(
+                    userId = activeUserId,
+                    callingAppInfo = providerRequest.callingAppInfo,
+                    createPasswordCredentialRequest = createRequest,
+                    selectedCipherView = cipherView,
+                )
+            sendAction(
+                VaultItemListingsAction.Internal
+                    .PasswordRegisterCredentialResultReceive(result),
             )
         }
     }
@@ -1530,11 +1658,15 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             is VaultItemListingsAction.Internal.CreateCredentialRequestReceive -> {
-                handleRegisterFido2CredentialRequestReceive(action)
+                handleRegisterCredentialRequestReceive(action)
             }
 
             is VaultItemListingsAction.Internal.Fido2RegisterCredentialResultReceive -> {
                 handleFido2RegisterCredentialResultReceive(action)
+            }
+
+            is VaultItemListingsAction.Internal.PasswordRegisterCredentialResultReceive -> {
+                handlePasswordRegisterCredentialResultReceive(action)
             }
 
             is VaultItemListingsAction.Internal.Fido2AssertionDataReceive -> {
@@ -1900,7 +2032,7 @@ class VaultItemListingViewModel @Inject constructor(
         state.createCredentialRequest
             ?.providerRequest
             ?.let { request ->
-                registerFido2CredentialToCipher(
+                registerCredentialToCipher(
                     cipherView = cipherView,
                     providerRequest = request,
                 )
@@ -2012,6 +2144,27 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
+    private fun handleRegisterCredentialRequestReceive(
+        action: VaultItemListingsAction.Internal.CreateCredentialRequestReceive,
+    ) {
+        when (action.request.providerRequest.callingRequest) {
+            is CreatePublicKeyCredentialRequest ->
+                handleRegisterFido2CredentialRequestReceive(action)
+
+            is CreatePasswordRequest -> observeVaultData()
+
+            else -> mutableStateFlow.update {
+                it.copy(
+                    dialogState =
+                        VaultItemListingState.DialogState.CredentialManagerOperationFail(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        )
+                )
+            }
+        }
+    }
+
     private fun handleRegisterFido2CredentialRequestReceive(
         action: VaultItemListingsAction.Internal.CreateCredentialRequestReceive,
     ) {
@@ -2070,6 +2223,26 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
+    private fun handlePasswordRegisterCredentialResultReceive(
+        action: VaultItemListingsAction.Internal.PasswordRegisterCredentialResultReceive,
+    ) {
+        clearDialogState()
+        when (action.result) {
+            is PasswordRegisterCredentialResult.Error -> {
+                handleRegisterPasswordCredentialResultErrorReceive(action.result)
+            }
+
+            is PasswordRegisterCredentialResult.Success -> {
+                sendEvent(VaultItemListingEvent.ShowToast(R.string.item_updated.asText()))
+                sendEvent(
+                    VaultItemListingEvent.CompletePasswordRegistration(
+                        RegisterPasswordCredentialResult.Success,
+                    ),
+                )
+            }
+        }
+    }
+
     private fun handleRegisterFido2CredentialResultErrorReceive(
         error: Fido2RegisterCredentialResult.Error,
     ) {
@@ -2079,6 +2252,19 @@ class VaultItemListingViewModel @Inject constructor(
         sendEvent(
             VaultItemListingEvent.CompleteFido2Registration(
                 RegisterFido2CredentialResult.Error(
+                    message = error.messageResourceId.asText(),
+                ),
+            ),
+        )
+    }
+
+    private fun handleRegisterPasswordCredentialResultErrorReceive(
+        error: PasswordRegisterCredentialResult.Error,
+    ) {
+        sendEvent(VaultItemListingEvent.ShowToast(R.string.an_error_has_occurred.asText()))
+        sendEvent(
+            VaultItemListingEvent.CompletePasswordRegistration(
+                RegisterPasswordCredentialResult.Error(
                     message = error.messageResourceId.asText(),
                 ),
             ),
@@ -2770,6 +2956,12 @@ data class VaultItemListingState(
         data class OverwritePasskeyConfirmationPrompt(val cipherViewId: String) : DialogState()
 
         /**
+         * Displays the overwrite password confirmation prompt to the user.
+         */
+        @Parcelize
+        data class OverwritePasswordConfirmationPrompt(val cipherViewId: String) : DialogState()
+
+        /**
          * Represents a dialog to prompt the user for their master password as part of the
          * CredentialManager user verification flow.
          */
@@ -3249,6 +3441,15 @@ sealed class VaultItemListingEvent {
     ) : BackgroundEvent, VaultItemListingEvent()
 
     /**
+     * Complete the current Password credential registration process.
+     *
+     * @property result The result of Password credential registration.
+     */
+    data class CompletePasswordRegistration(
+        val result: RegisterPasswordCredentialResult,
+    ) : BackgroundEvent, VaultItemListingEvent()
+
+    /**
      * Perform user verification for a CredentialManager operation.
      */
     data class CredentialManagerUserVerification(
@@ -3495,6 +3696,13 @@ sealed class VaultItemListingsAction {
     ) : VaultItemListingsAction()
 
     /**
+     * The user has confirmed overwriting the existing cipher's passkey.
+     */
+    data class ConfirmOverwriteExistingPasswordClick(
+        val cipherViewId: String,
+    ) : VaultItemListingsAction()
+
+    /**
      * Indicated a selection was made to add a new item to the vault.
      */
     data class ItemTypeToAddSelected(
@@ -3604,6 +3812,13 @@ sealed class VaultItemListingsAction {
          */
         data class Fido2RegisterCredentialResultReceive(
             val result: Fido2RegisterCredentialResult,
+        ) : Internal()
+
+        /**
+         * Indicates that a result for password credential registration has been received.
+         */
+        data class PasswordRegisterCredentialResultReceive(
+            val result: PasswordRegisterCredentialResult,
         ) : Internal()
 
         /**

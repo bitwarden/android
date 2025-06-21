@@ -42,6 +42,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialRegist
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialSearchUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.awaitClose
@@ -50,6 +51,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.time.Instant
+import kotlin.collections.filter
 
 /**
  * Primary implementation of [VaultSdkSource] that serves as a convenience wrapper around a

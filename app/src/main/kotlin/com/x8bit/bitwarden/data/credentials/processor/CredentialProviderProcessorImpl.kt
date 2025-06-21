@@ -19,6 +19,7 @@ import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.AuthenticationAction
 import androidx.credentials.provider.BeginCreateCredentialRequest
 import androidx.credentials.provider.BeginCreateCredentialResponse
+import androidx.credentials.provider.BeginCreatePasswordCredentialRequest
 import androidx.credentials.provider.BeginCreatePublicKeyCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialResponse
@@ -69,7 +70,7 @@ class CredentialProviderProcessorImpl(
         }
 
         val createCredentialJob = ioScope.launch {
-            processCreateCredentialRequest(request = request)
+            (handleCreatePasskeyQuery(request) ?: handleCreatePasswordQuery(request))
                 ?.let { callback.onResult(it) }
                 ?: callback.onError(CreateCredentialUnknownException())
         }
@@ -137,21 +138,11 @@ class CredentialProviderProcessorImpl(
         callback.onError(ClearCredentialUnsupportedException())
     }
 
-    private fun processCreateCredentialRequest(
+    private fun handleCreatePasskeyQuery(
         request: BeginCreateCredentialRequest,
     ): BeginCreateCredentialResponse? {
-        return when (request) {
-            is BeginCreatePublicKeyCredentialRequest -> {
-                handleCreatePasskeyQuery(request)
-            }
+        if(request !is BeginCreatePublicKeyCredentialRequest) return null
 
-            else -> null
-        }
-    }
-
-    private fun handleCreatePasskeyQuery(
-        request: BeginCreatePublicKeyCredentialRequest,
-    ): BeginCreateCredentialResponse? {
         val requestJson = request
             .candidateQueryData
             .getString("androidx.credentials.BUNDLE_KEY_REQUEST_JSON")
@@ -161,25 +152,78 @@ class CredentialProviderProcessorImpl(
         val userState = authRepository.userStateFlow.value ?: return null
 
         return BeginCreateCredentialResponse.Builder()
-            .setCreateEntries(userState.accounts.toCreateEntries(userState.activeUserId))
+            .setCreateEntries(
+                userState.accounts.toCreatePasskeyEntry(userState.activeUserId)
+            )
             .build()
     }
 
-    private fun List<UserState.Account>.toCreateEntries(activeUserId: String) =
-        map { it.toCreateEntry(isActive = activeUserId == it.userId) }
+    private fun List<UserState.Account>.toCreatePasskeyEntry(
+        activeUserId: String,
+    ) = map { it.toCreatePasskeyEntry(isActive = activeUserId == it.userId) }
 
-    private fun UserState.Account.toCreateEntry(isActive: Boolean): CreateEntry {
+    private fun UserState.Account.toCreatePasskeyEntry(
+        isActive: Boolean,
+    ): CreateEntry {
         val accountName = name ?: email
         val entryBuilder = CreateEntry
             .Builder(
                 accountName = accountName,
-                pendingIntent = pendingIntentManager.createFido2CreationPendingIntent(
+                pendingIntent = pendingIntentManager.createCredentialCreationPendingIntent(
                     userId = userId,
                 ),
             )
             .setDescription(
                 context.getString(
                     BitwardenString.your_passkey_will_be_saved_to_your_bitwarden_vault_for_x,
+                    accountName,
+                ),
+            )
+            // Set the last used time to "now" so the active account is the default option in the
+            // system prompt.
+            .setLastUsedTime(if (isActive) clock.instant() else null)
+            .setAutoSelectAllowed(true)
+
+        if (isVaultUnlocked) {
+            biometricsEncryptionManager
+                .getOrCreateCipher(userId)
+                ?.let { entryBuilder.setBiometricPromptDataIfSupported(cipher = it) }
+        }
+        return entryBuilder.build()
+    }
+
+    private fun handleCreatePasswordQuery(request: BeginCreateCredentialRequest): BeginCreateCredentialResponse? {
+        if(request !is BeginCreatePasswordCredentialRequest) return null
+
+        val userState = authRepository.userStateFlow.value ?: return null
+
+        return BeginCreateCredentialResponse.Builder()
+            .setCreateEntries(
+                userState.accounts.toCreatePasswordEntry(userState.activeUserId)
+            )
+            .build()
+    }
+
+    private fun List<UserState.Account>.toCreatePasswordEntry(
+        activeUserId: String,
+    ) = map { it.toCreatePasswordEntry(isActive = activeUserId == it.userId) }
+
+    private fun UserState.Account.toCreatePasswordEntry(
+        isActive: Boolean,
+    ): CreateEntry {
+        val accountName = name ?: email
+        val entryBuilder = CreateEntry
+            .Builder(
+                accountName = accountName,
+                pendingIntent = intentManager.createCredentialCreationPendingIntent(
+                    CREATE_PASSWORD_INTENT,
+                    userId,
+                    requestCode.getAndIncrement(),
+                ),
+            )
+            .setDescription(
+                context.getString(
+                    R.string.your_passkey_will_be_saved_to_your_bitwarden_vault_for_x, //TODO text
                     accountName,
                 ),
             )

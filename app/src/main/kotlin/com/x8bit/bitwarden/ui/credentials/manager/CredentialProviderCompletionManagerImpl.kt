@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.credentials.CreatePasswordResponse
 import androidx.credentials.CreatePublicKeyCredentialResponse
 import androidx.credentials.GetCredentialResponse
 import androidx.credentials.PasswordCredential
@@ -18,6 +19,9 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialRes
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordCredentialResult
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditEvent
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditEvent.CompletePasswordRegistration
 
 /**
  * Primary implementation of [CredentialProviderCompletionManager] when the build version is
@@ -53,6 +57,41 @@ class CredentialProviderCompletionManagerImpl(
                 }
 
                 is RegisterFido2CredentialResult.Cancelled -> {
+                    PendingIntentHandler
+                        .setCreateCredentialException(
+                            intent = intent,
+                            exception = CreateCredentialCancellationException(),
+                        )
+                }
+            }
+            it.setResult(Activity.RESULT_OK, intent)
+            it.finish()
+        }
+    }
+
+    override fun completePasswordRegistration(result: RegisterPasswordCredentialResult) {
+        activity.also {
+            val intent = Intent()
+            when (result) {
+                is RegisterPasswordCredentialResult.Error -> {
+                    PendingIntentHandler
+                        .setCreateCredentialException(
+                            intent = intent,
+                            exception = CreateCredentialUnknownException(
+                                errorMessage = result.message.invoke(it.resources),
+                            ),
+                        )
+                }
+
+                is RegisterPasswordCredentialResult.Success -> {
+                    PendingIntentHandler
+                        .setCreateCredentialResponse(
+                            intent = intent,
+                            response = CreatePasswordResponse(),
+                        )
+                }
+
+                is RegisterPasswordCredentialResult.Cancelled -> {
                     PendingIntentHandler
                         .setCreateCredentialException(
                             intent = intent,

@@ -10,7 +10,7 @@ import java.util.UUID
 
 /**
  * Returns pre-filled content that may be used for an "add" type
- * [VaultAddEditState.ViewState.Content] during FIDO 2 credential creation.
+ * [VaultAddEditState.ViewState.Content] during credential creation.
  */
 fun CreateCredentialRequest.toDefaultAddTypeContent(
     attestationOptions: PasskeyAttestationOptions?,
@@ -23,23 +23,29 @@ fun CreateCredentialRequest.toDefaultAddTypeContent(
         ?: callingAppInfo.packageName
             .toAndroidAppUriString()
 
-    val rpName = attestationOptions
+    val name = attestationOptions
         ?.relyingParty
-        ?.name
-        .orEmpty()
+        ?.name ?: callingAppInfo.packageName
 
     val username = attestationOptions
         ?.user
         ?.name
+        ?: createPasswordCredentialRequest
+            ?.id
+            .orEmpty()
+
+    val password = createPasswordCredentialRequest
+        ?.password
         .orEmpty()
 
     return VaultAddEditState.ViewState.Content(
         common = VaultAddEditState.ViewState.Content.Common(
-            name = rpName,
+            name = name ,
         ),
         isIndividualVaultDisabled = isIndividualVaultDisabled,
         type = VaultAddEditState.ViewState.Content.ItemType.Login(
             username = username,
+            password = password,
             uriList = listOf(
                 UriItem(
                     id = UUID.randomUUID().toString(),

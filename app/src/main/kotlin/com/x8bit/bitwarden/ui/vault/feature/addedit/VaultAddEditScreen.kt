@@ -167,6 +167,12 @@ fun VaultAddEditScreen(
                 )
             }
 
+            is VaultAddEditEvent.CompletePasswordRegistration -> {
+                credentialProviderCompletionManager.completePasswordRegistration(
+                    result = event.result,
+                )
+            }
+
             is VaultAddEditEvent.Fido2UserVerification -> {
                 biometricsManager.promptUserVerification(
                     onSuccess = userVerificationHandlers.onUserVerificationSuccess,
@@ -238,6 +244,13 @@ fun VaultAddEditScreen(
             {
                 viewModel.trySendAction(
                     action = VaultAddEditAction.Common.ConfirmOverwriteExistingPasskeyClick,
+                )
+            }
+        },
+        onConfirmOverwriteExistingPassword = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    action = VaultAddEditAction.Common.ConfirmOverwriteExistingPasswordClick,
                 )
             }
         },
@@ -465,6 +478,7 @@ private fun VaultAddEditItemDialogs(
     onAutofillDismissRequest: () -> Unit,
     onFido2ErrorDismiss: (Text) -> Unit,
     onConfirmOverwriteExistingPasskey: () -> Unit,
+    onConfirmOverwriteExistingPassword: () -> Unit,
     onSubmitMasterPasswordFido2Verification: (password: String) -> Unit,
     onRetryFido2PasswordVerification: () -> Unit,
     onSubmitPinFido2Verification: (pin: String) -> Unit,
@@ -506,6 +520,13 @@ private fun VaultAddEditItemDialogs(
         is VaultAddEditState.DialogState.OverwritePasskeyConfirmationPrompt -> {
             BitwardenOverwritePasskeyConfirmationDialog(
                 onConfirmClick = onConfirmOverwriteExistingPasskey,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VaultAddEditState.DialogState.OverwritePasswordConfirmationPrompt -> {
+            BitwardenOverwritePasswordConfirmationDialog(
+                onConfirmClick = onConfirmOverwriteExistingPassword,
                 onDismissRequest = onDismissRequest,
             )
         }
