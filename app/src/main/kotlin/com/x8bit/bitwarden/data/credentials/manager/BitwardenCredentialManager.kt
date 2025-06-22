@@ -51,8 +51,6 @@ interface BitwardenCredentialManager {
      * Register a new Password credential to a users vault.
      */
     suspend fun registerPasswordCredential(
-        userId: String,
-        callingAppInfo: CallingAppInfo,
         createPasswordCredentialRequest: CreatePasswordRequest,
         selectedCipherView: CipherView,
     ): PasswordRegisterCredentialResult

@@ -1199,7 +1199,7 @@ class VaultItemListingViewModel @Inject constructor(
         cipherView: CipherView,
         providerRequest: ProviderCreateCredentialRequest,
     ) {
-        val activeUserId = authRepository.activeUserId
+        authRepository.activeUserId
             ?: run {
                 showCredentialManagerErrorDialog(
                     R.string.password_operation_failed_because_user_could_not_be_verified.asText(),
@@ -1219,8 +1219,6 @@ class VaultItemListingViewModel @Inject constructor(
         viewModelScope.launch {
             val result: PasswordRegisterCredentialResult =
                 bitwardenCredentialManager.registerPasswordCredential(
-                    userId = activeUserId,
-                    callingAppInfo = providerRequest.callingAppInfo,
                     createPasswordCredentialRequest = createRequest,
                     selectedCipherView = cipherView,
                 )
