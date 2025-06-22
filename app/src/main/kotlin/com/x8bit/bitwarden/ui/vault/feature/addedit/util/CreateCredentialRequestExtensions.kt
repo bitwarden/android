@@ -10,7 +10,7 @@ import java.util.UUID
 
 /**
  * Returns pre-filled content that may be used for an "add" type
- * [VaultAddEditState.ViewState.Content] during credential creation.
+ * [VaultAddEditState.ViewState.Content] during FIDO 2 or Password credential creation.
  */
 fun CreateCredentialRequest.toDefaultAddTypeContent(
     attestationOptions: PasskeyAttestationOptions?,
