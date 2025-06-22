@@ -32,6 +32,7 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
+import com.x8bit.bitwarden.data.credentials.model.PasswordRegisterResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.getAppOrigin
@@ -100,10 +101,10 @@ class BitwardenCredentialManagerImpl(
     override suspend fun registerPasswordCredential(
         createPasswordRequest: CreatePasswordRequest,
         selectedCipherView: CipherView,
-    ): PasswordRegisterCredentialResult {
+    ): PasswordRegisterResult {
         return when (vaultRepository.createCipher(cipherView = selectedCipherView)) {
-            is CreateCipherResult.Error -> PasswordRegisterCredentialResult.Error.InternalError
-            CreateCipherResult.Success -> PasswordRegisterCredentialResult.Success
+            is CreateCipherResult.Error -> PasswordRegisterResult.Error.InternalError
+            CreateCipherResult.Success -> PasswordRegisterResult.Success
         }
     }
 

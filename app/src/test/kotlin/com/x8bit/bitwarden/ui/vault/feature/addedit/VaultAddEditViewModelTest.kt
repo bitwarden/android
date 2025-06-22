@@ -42,7 +42,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
-import com.x8bit.bitwarden.data.credentials.model.PasswordRegisterCredentialResult
+import com.x8bit.bitwarden.data.credentials.model.PasswordRegisterResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.credentials.model.createMockCreateCredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -79,6 +79,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordCredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordResult
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -1371,7 +1372,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     selectedCipherView = any(),
                     createPasswordRequest = mockCreatePasswordRequest,
                 )
-            } returns PasswordRegisterCredentialResult.Success
+            } returns PasswordRegisterResult.Success
             every { authRepository.activeUserId } returns mockUserId
             coEvery {
                 vaultRepository.createCipherInOrganization(any(), any())
@@ -1400,7 +1401,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithName, stateFlow.awaitItem())
                 assertEquals(
                     VaultAddEditEvent.CompletePasswordRegistration(
-                        RegisterPasswordCredentialResult.Success,
+                        RegisterPasswordResult.Success,
                     ),
                     eventFlow.awaitItem(),
                 )
@@ -2296,6 +2297,130 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 bitwardenCredentialManager.isUserVerified
             }
         }
+
+
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in edit mode during Password registration, SaveClick should display ConfirmOverwriteExistingPasswordDialog when original cipher has a password`() =
+        runTest {
+            val cipherView = createMockCipherView(number = 1)
+            val mockPasswordCredentialRequest = createMockCreateCredentialRequest(number = 1)
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val stateWithName = createVaultAddItemState(
+                commonContentViewState = createCommonContentViewState(
+                    name = cipherView.name,
+                    originalCipher = cipherView,
+                ),
+                typeContentViewState = createLoginTypeContentViewState(),
+                createCredentialRequest = mockPasswordCredentialRequest,
+            )
+
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.ProviderCreateCredential(
+                    createCredentialRequest = mockPasswordCredentialRequest,
+                )
+
+            setupPasswordCreateRequest()
+
+            every {
+                cipherView.toViewState(
+                    isClone = false,
+                    isIndividualVaultDisabled = false,
+                    totpData = null,
+                    resourceManager = resourceManager,
+                    clock = fixedClock,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+            } returns stateWithName.viewState
+            mutableVaultDataFlow.value = DataState.Loaded(
+                createVaultData(cipherView = cipherView),
+            )
+
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = vaultAddEditType,
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            )
+
+            viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+
+            assertEquals(
+                VaultAddEditState.DialogState.OverwritePasswordConfirmationPrompt,
+                viewModel.stateFlow.value.dialog,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmOverwriteExistingPasswordClick should register credential when user is verified`() {
+        val cipherView = createMockCipherView(number = 1)
+        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+        val mockPasswordRequest = createMockCreateCredentialRequest(number = 1)
+        val stateWithName = createVaultAddItemState(
+            vaultAddEditType = vaultAddEditType,
+            commonContentViewState = createCommonContentViewState(
+                name = "mockName-1",
+                originalCipher = cipherView,
+                notes = "mockNotes-1",
+            ),
+            createCredentialRequest = mockPasswordRequest,
+        )
+        val mockCallingAppInfo = mockk<CallingAppInfo>(relaxed = true)
+        val mockCreatePasswordRequest =
+            mockk<CreatePasswordRequest>(relaxed = true)
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.ProviderCreateCredential(
+                createCredentialRequest = mockPasswordRequest,
+            )
+        setupPasswordCreateRequest(
+            mockCallingAppInfo = mockCallingAppInfo,
+            mockCreatePasswordRequest = mockCreatePasswordRequest,
+        )
+        coEvery {
+            bitwardenCredentialManager.registerPasswordCredential(
+                createPasswordRequest = mockCreatePasswordRequest,
+                selectedCipherView = any(),
+            )
+        } returns PasswordRegisterResult.Success
+
+        every {
+            cipherView.toViewState(
+                isClone = false,
+                isIndividualVaultDisabled = false,
+                totpData = null,
+                resourceManager = resourceManager,
+                clock = fixedClock,
+                canDelete = true,
+                canAssignToCollections = true,
+            )
+        } returns stateWithName.viewState
+        every { bitwardenCredentialManager.isUserVerified } returns true
+
+        mutableVaultDataFlow.value = DataState.Loaded(
+            createVaultData(cipherView = cipherView),
+        )
+
+        val viewModel = createAddVaultItemViewModel(
+            createSavedStateHandleWithState(
+                state = stateWithName,
+                vaultAddEditType = vaultAddEditType,
+                vaultItemCipherType = VaultItemCipherType.LOGIN,
+            ),
+        )
+        viewModel.trySendAction(VaultAddEditAction.Common.ConfirmOverwriteExistingPasswordClick)
+
+        coVerify {
+            bitwardenCredentialManager.isUserVerified
+            bitwardenCredentialManager.registerPasswordCredential(
+                createPasswordRequest = mockCreatePasswordRequest,
+                selectedCipherView = any(),
+            )
+        }
+    }
 
     @Test
     fun `Saving item with an empty name field will cause a dialog to show up`() = runTest {
@@ -4685,7 +4810,92 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
             }
+
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `PasswordRegisterResult Error should show toast and emit CompletePasswordRegistration result`() =
+        runTest {
+            val mockRequest = createMockCreateCredentialRequest(number = 1)
+            val mockResult = PasswordRegisterResult.Error.InternalError
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.ProviderCreateCredential(
+                    createCredentialRequest = mockRequest,
+                )
+            every { authRepository.activeUserId } returns "activeUserId"
+            coEvery {
+                bitwardenCredentialManager.registerPasswordCredential(
+                    any(),
+                    any(),
+                )
+            } returns mockResult
+
+            setupPasswordCreateRequest()
+
+            viewModel.trySendAction(
+                VaultAddEditAction.Internal.PasswordRegisterResultReceive(
+                    mockResult,
+                ),
+            )
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultAddEditEvent.ShowToast(R.string.an_error_has_occurred.asText()),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    VaultAddEditEvent.CompletePasswordRegistration(
+                        RegisterPasswordResult.Error(
+                            R.string.password_registration_failed_due_to_an_internal_error
+                                .asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `PasswordRegisterResult Success should show toast and emit CompletePasswordRegistration result`() =
+        runTest {
+            val mockRequest = createMockCreateCredentialRequest(number = 1)
+            val mockResult = PasswordRegisterResult.Success
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.ProviderCreateCredential(
+                    createCredentialRequest = mockRequest,
+                )
+            setupPasswordCreateRequest()
+
+            coEvery {
+                bitwardenCredentialManager.registerPasswordCredential(
+                    any(),
+                    any(),
+                )
+            } returns mockResult
+
+            viewModel.trySendAction(
+                VaultAddEditAction.Internal.PasswordRegisterResultReceive(
+                    mockResult,
+                ),
+            )
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultAddEditEvent.ShowToast(R.string.item_updated.asText()),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    VaultAddEditEvent.CompletePasswordRegistration(
+                        RegisterPasswordResult.Success,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+    }
 
     //region Helper functions
 

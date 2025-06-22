@@ -48,7 +48,7 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionReques
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
-import com.x8bit.bitwarden.data.credentials.model.PasswordRegisterCredentialResult
+import com.x8bit.bitwarden.data.credentials.model.PasswordRegisterResult
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
@@ -82,7 +82,7 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialRes
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordCredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordResult
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
@@ -1016,7 +1016,7 @@ class VaultItemListingViewModel @Inject constructor(
                             VaultItemListingsAction.Internal.CredentialOperationFailureReceive(
                                 title = BitwardenString.an_error_has_occurred.asText(),
                 message = BitwardenString
-                                    .passkey_operation_failed_because_the_request_is_unsupported
+                                    .credential_operation_failed_because_the_request_is_unsupported
                                     .asText(),
                                 error = null,
                             ),
@@ -1240,7 +1240,7 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
         viewModelScope.launch {
-            val result: PasswordRegisterCredentialResult =
+            val result: PasswordRegisterResult =
                 bitwardenCredentialManager.registerPasswordCredential(
                     createPasswordRequest = createRequest,
                     selectedCipherView = cipherView,
@@ -2230,15 +2230,15 @@ class VaultItemListingViewModel @Inject constructor(
     ) {
         clearDialogState()
         when (action.result) {
-            is PasswordRegisterCredentialResult.Error -> {
+            is PasswordRegisterResult.Error -> {
                 handleRegisterPasswordCredentialResultErrorReceive(action.result)
             }
 
-            is PasswordRegisterCredentialResult.Success -> {
+            is PasswordRegisterResult.Success -> {
                 sendEvent(VaultItemListingEvent.ShowToast(R.string.item_updated.asText()))
                 sendEvent(
                     VaultItemListingEvent.CompletePasswordRegistration(
-                        RegisterPasswordCredentialResult.Success,
+                        RegisterPasswordResult.Success,
                     ),
                 )
             }
@@ -2261,12 +2261,12 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleRegisterPasswordCredentialResultErrorReceive(
-        error: PasswordRegisterCredentialResult.Error,
+        error: PasswordRegisterResult.Error,
     ) {
         sendEvent(VaultItemListingEvent.ShowToast(R.string.an_error_has_occurred.asText()))
         sendEvent(
             VaultItemListingEvent.CompletePasswordRegistration(
-                RegisterPasswordCredentialResult.Error(
+                RegisterPasswordResult.Error(
                     message = error.messageResourceId.asText(),
                 ),
             ),
@@ -3448,7 +3448,7 @@ sealed class VaultItemListingEvent {
      * @property result The result of Password credential registration.
      */
     data class CompletePasswordRegistration(
-        val result: RegisterPasswordCredentialResult,
+        val result: RegisterPasswordResult,
     ) : BackgroundEvent, VaultItemListingEvent()
 
     /**
@@ -3820,7 +3820,7 @@ sealed class VaultItemListingsAction {
          * Indicates that a result for password credential registration has been received.
          */
         data class PasswordRegisterCredentialResultReceive(
-            val result: PasswordRegisterCredentialResult,
+            val result: PasswordRegisterResult,
         ) : Internal()
 
         /**

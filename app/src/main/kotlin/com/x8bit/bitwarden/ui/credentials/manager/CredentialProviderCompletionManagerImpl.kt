@@ -19,7 +19,7 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialRes
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordCredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordResult
 
 /**
  * Primary implementation of [CredentialProviderCompletionManager] when the build version is
@@ -67,11 +67,11 @@ class CredentialProviderCompletionManagerImpl(
         }
     }
 
-    override fun completePasswordRegistration(result: RegisterPasswordCredentialResult) {
+    override fun completePasswordRegistration(result: RegisterPasswordResult) {
         activity.also {
             val intent = Intent()
             when (result) {
-                is RegisterPasswordCredentialResult.Error -> {
+                is RegisterPasswordResult.Error -> {
                     PendingIntentHandler
                         .setCreateCredentialException(
                             intent = intent,
@@ -81,7 +81,7 @@ class CredentialProviderCompletionManagerImpl(
                         )
                 }
 
-                is RegisterPasswordCredentialResult.Success -> {
+                is RegisterPasswordResult.Success -> {
                     PendingIntentHandler
                         .setCreateCredentialResponse(
                             intent = intent,
@@ -89,7 +89,7 @@ class CredentialProviderCompletionManagerImpl(
                         )
                 }
 
-                is RegisterPasswordCredentialResult.Cancelled -> {
+                is RegisterPasswordResult.Cancelled -> {
                     PendingIntentHandler
                         .setCreateCredentialException(
                             intent = intent,
