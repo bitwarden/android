@@ -70,6 +70,7 @@ import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasswordConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialProviderCompletionManager
@@ -237,6 +238,13 @@ fun VaultAddEditScreen(
             { errorMessage ->
                 viewModel.trySendAction(
                     VaultAddEditAction.Common.Fido2ErrorDialogDismissed(message = errorMessage),
+                )
+            }
+        },
+        onPasswordErrorDismiss = remember(viewModel) {
+            { errorMessage ->
+                viewModel.trySendAction(
+                    VaultAddEditAction.Common.PasswordErrorDialogDismissed(message = errorMessage),
                 )
             }
         },
@@ -477,6 +485,7 @@ private fun VaultAddEditItemDialogs(
     onDismissRequest: () -> Unit,
     onAutofillDismissRequest: () -> Unit,
     onFido2ErrorDismiss: (Text) -> Unit,
+    onPasswordErrorDismiss: (Text) -> Unit,
     onConfirmOverwriteExistingPasskey: () -> Unit,
     onConfirmOverwriteExistingPassword: () -> Unit,
     onSubmitMasterPasswordFido2Verification: (password: String) -> Unit,
@@ -514,6 +523,14 @@ private fun VaultAddEditItemDialogs(
                 title = stringResource(id = BitwardenString.an_error_has_occurred),
                 message = dialogState.message(),
                 onDismissRequest = { onFido2ErrorDismiss(dialogState.message) },
+            )
+        }
+
+        is VaultAddEditState.DialogState.PasswordError -> {
+            BitwardenBasicDialog(
+                title = stringResource(id = R.string.an_error_has_occurred),
+                message = dialogState.message(),
+                onDismissRequest = { onPasswordErrorDismiss(dialogState.message) },
             )
         }
 

@@ -155,7 +155,7 @@ class VaultAddEditViewModel @Inject constructor(
             val autofillSelectionData = specialCircumstance?.toAutofillSelectionDataOrNull()
             // Check for totp data to pre-populate
             val totpData = specialCircumstance?.toTotpDataOrNull()
-            // Check for credential data to pre-populate
+            // Check for Fido2 or Password credential data to pre-populate
             val providerCreateCredentialRequest =
                 specialCircumstance?.toCreateCredentialRequestOrNull()
             val fido2AttestationOptions = providerCreateCredentialRequest?.requestJson
@@ -361,6 +361,10 @@ class VaultAddEditViewModel @Inject constructor(
                 handleFido2ErrorDialogDismissed(action)
             }
 
+            is VaultAddEditAction.Common.PasswordErrorDialogDismissed -> {
+                handlePasswordErrorDialogDismissed(action)
+            }
+
             VaultAddEditAction.Common.UserVerificationNotSupported -> {
                 handleUserVerificationNotSupported()
             }
@@ -495,7 +499,9 @@ class VaultAddEditViewModel @Inject constructor(
                     cipherView,
                 )
 
-            else -> handleUnsupportedProviderCreateCredentialRequest()
+            else -> showGenericErrorDialog(
+                message = R.string.credential_operation_failed_because_the_request_is_invalid.asText(),
+            )
         }
     }
 
@@ -589,9 +595,8 @@ class VaultAddEditViewModel @Inject constructor(
         viewModelScope.launch {
             val userId = authRepository.activeUserId
                 ?: run {
-                    showFido2ErrorDialog(
-                        // TODO password error dialog
-                        R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    showPasswordErrorDialog(
+                        R.string.password_operation_failed_because_user_could_not_be_verified
                             .asText(),
                     )
                     return@launch
@@ -607,13 +612,6 @@ class VaultAddEditViewModel @Inject constructor(
                 VaultAddEditAction.Internal.PasswordRegisterCredentialResultReceive(result),
             )
         }
-    }
-
-    private fun handleUnsupportedProviderCreateCredentialRequest() {
-        // TODO normal error (credential error?)
-        showFido2ErrorDialog(
-            BitwardenString.passkey_operation_failed_because_the_request_is_unsupported.asText(),
-        )
     }
 
     private fun handleAttachmentsClick() {
@@ -710,9 +708,9 @@ class VaultAddEditViewModel @Inject constructor(
                     )
                 }
             }
-            ?: showFido2ErrorDialog(
-                R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
-            ) // TODO show password error dialog
+            ?: showPasswordErrorDialog(
+                R.string.password_operation_failed_because_the_request_is_invalid.asText(),
+            )
     }
 
     private fun handleUserVerificationLockOut() {
@@ -758,6 +756,18 @@ class VaultAddEditViewModel @Inject constructor(
         sendEvent(
             VaultAddEditEvent.CompleteFido2Registration(
                 result = RegisterFido2CredentialResult.Error(action.message),
+            ),
+        )
+    }
+
+    private fun handlePasswordErrorDialogDismissed(
+        action: VaultAddEditAction.Common.PasswordErrorDialogDismissed,
+    ) {
+        bitwardenCredentialManager.isUserVerified = false
+        clearDialogState()
+        sendEvent(
+            VaultAddEditEvent.CompletePasswordRegistration(
+                result = RegisterPasswordCredentialResult.Error(action.message),
             ),
         )
     }
@@ -2199,6 +2209,14 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
+    private fun showPasswordErrorDialog(message: Text) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultAddEditState.DialogState.PasswordError(message),
+            )
+        }
+    }
+
     private fun showGenericErrorDialog(
         message: Text = BitwardenString.generic_error_message.asText(),
     ) {
@@ -2879,6 +2897,12 @@ data class VaultAddEditState(
         data class Fido2Error(val message: Text) : DialogState()
 
         /**
+         * Displays a Password operation error dialog to the user.
+         */
+        @Parcelize
+        data class PasswordError(val message: Text) : DialogState()
+
+        /**
          * Displays the overwrite passkey confirmation prompt to the user.
          */
         @Parcelize
@@ -3225,6 +3249,11 @@ sealed class VaultAddEditAction {
          * The user has dismissed the FIDO 2 credential error dialog.
          */
         data class Fido2ErrorDialogDismissed(val message: Text) : Common()
+
+        /**
+         * The user has dismissed the Password credential error dialog.
+         */
+        data class PasswordErrorDialogDismissed(val message: Text) : Common()
 
         /**
          * User verification cannot be performed with device biometrics or credentials.

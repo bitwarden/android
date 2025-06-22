@@ -415,9 +415,8 @@ class VaultItemListingViewModel @Inject constructor(
         getCipherViewOrNull(action.cipherViewId)
             ?.let { registerPasswordCredential(it) }
             ?: run {
-                // TODO
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
+                    R.string.password_operation_failed_because_the_selected_item_does_not_exist
                         .asText(),
                 )
                 return
@@ -1106,9 +1105,9 @@ class VaultItemListingViewModel @Inject constructor(
         val providerRequest = state
             .createCredentialRequest
             ?.providerRequest
-            ?: run { // TODO
+            ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
+                    R.string.password_operation_failed_because_the_request_is_invalid.asText(),
                 )
                 return
             }
@@ -1174,7 +1173,11 @@ class VaultItemListingViewModel @Inject constructor(
                 providerRequest,
             )
 
-            else -> Unit // TODO error dialog
+            else ->
+                showCredentialManagerErrorDialog(
+                    R.string.credential_operation_failed_because_the_request_is_invalid
+                        .asText(),
+                )
         }
     }
 
@@ -1220,18 +1223,18 @@ class VaultItemListingViewModel @Inject constructor(
         providerRequest: ProviderCreateCredentialRequest,
     ) {
         val activeUserId = authRepository.activeUserId
-            ?: run { // TODO
+            ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    R.string.password_operation_failed_because_user_could_not_be_verified.asText(),
                 )
                 return
             }
 
         val createRequest = providerRequest
             .getCreatePasswordCredentialRequestOrNull()
-            ?: run { // TODO
+            ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
+                    R.string.password_operation_failed_because_the_request_is_invalid.asText(),
                 )
                 return
             }

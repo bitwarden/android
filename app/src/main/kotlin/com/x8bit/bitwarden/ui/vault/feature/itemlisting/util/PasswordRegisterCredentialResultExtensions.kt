@@ -12,5 +12,5 @@ val PasswordRegisterCredentialResult.Error.messageResourceId: Int
     @StringRes
     get() = when (this) {
         PasswordRegisterCredentialResult.Error.InternalError ->
-            R.string.passkey_registration_failed_due_to_an_internal_error // TODO
+            R.string.password_registration_failed_due_to_an_internal_error
     }
