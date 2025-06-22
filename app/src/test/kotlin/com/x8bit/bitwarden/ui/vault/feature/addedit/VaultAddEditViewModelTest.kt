@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.core.os.bundleOf
-import androidx.credentials.CreatePasswordRequest
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.ProviderCreateCredentialRequest
