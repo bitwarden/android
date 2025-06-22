@@ -495,7 +495,6 @@ class VaultAddEditViewModel @Inject constructor(
 
             is CreatePasswordRequest ->
                 handleCreatePasswordCredentialRequest(
-                    request.callingAppInfo,
                     callingRequest,
                     cipherView,
                 )
@@ -543,7 +542,6 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleCreatePasswordCredentialRequest(
-        callingAppInfo: CallingAppInfo,
         request: CreatePasswordRequest,
         cipherView: CipherView,
     ) {

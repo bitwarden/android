@@ -2302,7 +2302,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `in edit mode during Password registration, SaveClick should display ConfirmOverwriteExistingPasswordDialog when original cipher has a password`() =
         runTest {
-            val cipherView = createMockCipherView(number = 1)
+            val cipherView = createMockCipherView(number = 5)
             val mockPasswordCredentialRequest = createMockCreateCredentialRequest(number = 1)
             val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
             val stateWithName = createVaultAddItemState(
@@ -2310,7 +2310,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     name = cipherView.name,
                     originalCipher = cipherView,
                 ),
-                typeContentViewState = createLoginTypeContentViewState(),
+                typeContentViewState = createLoginTypeContentViewState(
+                    password = "mock-password",
+                ),
                 createCredentialRequest = mockPasswordCredentialRequest,
             )
 
@@ -2374,6 +2376,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             SpecialCircumstance.ProviderCreateCredential(
                 createCredentialRequest = mockPasswordRequest,
             )
+        every { authRepository.activeUserId } returns "activeUserId"
+
         setupPasswordCreateRequest(
             mockCallingAppInfo = mockCallingAppInfo,
             mockCreatePasswordRequest = mockCreatePasswordRequest,
