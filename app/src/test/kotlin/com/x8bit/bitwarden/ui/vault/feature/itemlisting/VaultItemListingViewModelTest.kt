@@ -1015,7 +1015,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `ItemClick for vault item during Password registration should perform registration`() =
         runTest {
             setupMockUri()
-            val cipherView = createMockCipherView(number = 1)
+            val cipherView = createMockCipherView(
+                number = 1,
+                password = "",
+            )
             val mockPasswordRequest = createMockCreateCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
@@ -1051,7 +1054,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             coVerify {
                 bitwardenCredentialManager.registerPasswordCredential(
                     createPasswordRequest = any(),
-                    selectedCipherView = cipherView,
+                    selectedCipherView = any(),
                 )
             }
         }
@@ -2993,9 +2996,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `ValidateOriginResult should update dialog state on Unknown error`() = runTest {
+        val mockCredentialsRequest = createMockCreateCredentialRequest(number = 1)
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.ProviderCreateCredential(
-                createMockCreateCredentialRequest(number = 1),
+                mockCredentialsRequest,
             )
         coEvery {
             originManager.validateOrigin(
@@ -5742,13 +5746,15 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(VaultItemListingEvent.ShowSnackbar(data = snackbarData), awaitItem())
         }
     }
-
     private fun setupFido2CreateRequest(
-        mockCallingAppInfo: CallingAppInfo = mockk(relaxed = true),
+        mockCallingAppInfo: CallingAppInfo = this.mockCallingAppInfo,
         mockCreatePublicKeyCredentialRequest: CreatePublicKeyCredentialRequest =
-            mockk<CreatePublicKeyCredentialRequest>(relaxed = true),
+            mockk<CreatePublicKeyCredentialRequest> {
+                every { requestJson } returns "mockRequestJson"
+                every { origin } returns "mockOrigin"
+            },
         mockProviderCreateCredentialRequest: ProviderCreateCredentialRequest =
-            mockk<ProviderCreateCredentialRequest>(relaxed = true) {
+            mockk<ProviderCreateCredentialRequest> {
                 every { callingAppInfo } returns mockCallingAppInfo
                 every { callingRequest } returns mockCreatePublicKeyCredentialRequest
             },
@@ -5759,7 +5765,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     private fun setupPasswordCreateRequest(
-        mockCallingAppInfo: CallingAppInfo = mockk(relaxed = true),
+        mockCallingAppInfo: CallingAppInfo = this.mockCallingAppInfo,
         mockCreatePasswordRequest: CreatePasswordRequest =
             mockk<CreatePasswordRequest>(relaxed = true),
         mockProviderCreateCredentialRequest: ProviderCreateCredentialRequest =
