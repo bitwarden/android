@@ -28,7 +28,7 @@ import com.x8bit.bitwarden.data.autofill.util.isActiveWithPasswordCredentials
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
-import com.x8bit.bitwarden.data.credentials.model.PasswordRegisterCredentialResult
+import com.x8bit.bitwarden.data.credentials.model.PasswordRegisterResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -57,6 +57,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordCredentialResult
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordResult
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -592,13 +593,13 @@ class VaultAddEditViewModel @Inject constructor(
                     )
                     return@launch
                 }
-            val result: PasswordRegisterCredentialResult =
+            val result: PasswordRegisterResult =
                 bitwardenCredentialManager.registerPasswordCredential(
                     createPasswordRequest = request,
                     selectedCipherView = cipherView,
                 )
             sendAction(
-                VaultAddEditAction.Internal.PasswordRegisterCredentialResultReceive(result),
+                VaultAddEditAction.Internal.PasswordRegisterResultReceive(result),
             )
         }
     }
@@ -755,7 +756,7 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
         sendEvent(
             VaultAddEditEvent.CompletePasswordRegistration(
-                result = RegisterPasswordCredentialResult.Error(action.message),
+                result = RegisterPasswordResult.Error(action.message),
             ),
         )
     }
@@ -1636,7 +1637,7 @@ class VaultAddEditViewModel @Inject constructor(
                 handleFido2RegisterCredentialResultReceive(action)
             }
 
-            is VaultAddEditAction.Internal.PasswordRegisterCredentialResultReceive -> {
+            is VaultAddEditAction.Internal.PasswordRegisterResultReceive -> {
                 handlePasswordRegisterCredentialResultReceive(action)
             }
 
@@ -2025,26 +2026,26 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handlePasswordRegisterCredentialResultReceive(
-        action: VaultAddEditAction.Internal.PasswordRegisterCredentialResultReceive,
+        action: VaultAddEditAction.Internal.PasswordRegisterResultReceive,
     ) {
         clearDialogState()
         when (action.result) {
-            is PasswordRegisterCredentialResult.Error -> {
+            is PasswordRegisterResult.Error -> {
                 sendEvent(VaultAddEditEvent.ShowToast(R.string.an_error_has_occurred.asText()))
                 sendEvent(
                     VaultAddEditEvent.CompletePasswordRegistration(
-                        RegisterPasswordCredentialResult.Error(
+                        RegisterPasswordResult.Error(
                             action.result.messageResourceId.asText(),
                         ),
                     ),
                 )
             }
 
-            is PasswordRegisterCredentialResult.Success -> {
+            is PasswordRegisterResult.Success -> {
                 sendEvent(VaultAddEditEvent.ShowToast(R.string.item_updated.asText()))
                 sendEvent(
                     VaultAddEditEvent.CompletePasswordRegistration(
-                        RegisterPasswordCredentialResult.Success,
+                        RegisterPasswordResult.Success,
                     ),
                 )
             }
@@ -2960,7 +2961,7 @@ sealed class VaultAddEditEvent {
      * @property result the result of Password credential registration.
      */
     data class CompletePasswordRegistration(
-        val result: RegisterPasswordCredentialResult,
+        val result: RegisterPasswordResult,
     ) : BackgroundEvent, VaultAddEditEvent()
 
     /**
@@ -3609,8 +3610,8 @@ sealed class VaultAddEditAction {
         /**
          * Indicates that the Password registration result has been received.
          */
-        data class PasswordRegisterCredentialResultReceive(
-            val result: PasswordRegisterCredentialResult,
+        data class PasswordRegisterResultReceive(
+            val result: PasswordRegisterResult,
         ) : Internal()
 
         /**

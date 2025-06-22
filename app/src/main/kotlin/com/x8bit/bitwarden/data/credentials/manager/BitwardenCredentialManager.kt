@@ -11,7 +11,7 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
-import com.x8bit.bitwarden.data.credentials.model.PasswordRegisterCredentialResult
+import com.x8bit.bitwarden.data.credentials.model.PasswordRegisterResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 
 /**
@@ -53,7 +53,7 @@ interface BitwardenCredentialManager {
     suspend fun registerPasswordCredential(
         createPasswordRequest: CreatePasswordRequest,
         selectedCipherView: CipherView,
-    ): PasswordRegisterCredentialResult
+    ): PasswordRegisterResult
 
     /**
      * Authenticate a FIDO credential against a cipher in the users vault.
