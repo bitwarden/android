@@ -499,9 +499,10 @@ class VaultAddEditViewModel @Inject constructor(
                     cipherView,
                 )
 
-            else -> showGenericErrorDialog(
-                message = R.string.credential_operation_failed_because_the_request_is_invalid.asText(),
-            )
+            else ->
+                showGenericErrorDialog(
+                    R.string.credential_operation_failed_because_the_request_is_invalid.asText(),
+                )
         }
     }
 
