@@ -1242,7 +1242,7 @@ class VaultItemListingViewModel @Inject constructor(
         viewModelScope.launch {
             val result: PasswordRegisterCredentialResult =
                 bitwardenCredentialManager.registerPasswordCredential(
-                    createPasswordCredentialRequest = createRequest,
+                    createPasswordRequest = createRequest,
                     selectedCipherView = cipherView,
                 )
             sendAction(

@@ -481,7 +481,7 @@ class BitwardenCredentialManagerTest {
             } returns CreateCipherResult.Success
 
             bitwardenCredentialManager.registerPasswordCredential(
-                createPasswordCredentialRequest = mockCreatePasswordCredentialRequest,
+                createPasswordRequest = mockCreatePasswordCredentialRequest,
                 selectedCipherView = mockCipherView,
             )
 

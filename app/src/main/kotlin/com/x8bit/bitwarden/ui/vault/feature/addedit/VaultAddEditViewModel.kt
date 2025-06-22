@@ -603,7 +603,7 @@ class VaultAddEditViewModel @Inject constructor(
                 }
             val result: PasswordRegisterCredentialResult =
                 bitwardenCredentialManager.registerPasswordCredential(
-                    createPasswordCredentialRequest = request,
+                    createPasswordRequest = request,
                     selectedCipherView = cipherView,
                 )
             sendAction(
