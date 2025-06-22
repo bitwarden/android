@@ -5,6 +5,7 @@ import android.content.pm.SigningInfo
 import android.net.Uri
 import android.util.Base64
 import androidx.core.graphics.drawable.IconCompat
+import androidx.credentials.CreatePasswordRequest
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.exceptions.GetCredentialUnknownException
@@ -110,6 +111,10 @@ class BitwardenCredentialManagerTest {
     val mockCreatePublicKeyCredentialRequest = mockk<CreatePublicKeyCredentialRequest> {
         every { requestJson } returns DEFAULT_FIDO2_CREATE_REQUEST_JSON
         every { clientDataHash } returns byteArrayOf()
+    }
+    val mockCreatePasswordCredentialRequest = mockk<CreatePasswordRequest> {
+        every { id } returns "mock-id"
+        every { password } returns "mock-password"
     }
     val mockGetPublicKeyCredentialOption = mockk<GetPublicKeyCredentialOption> {
         every { requestJson } returns DEFAULT_FIDO2_AUTH_REQUEST_JSON
@@ -462,6 +467,29 @@ class BitwardenCredentialManagerTest {
                 Fido2RegisterCredentialResult.Error.MissingHostUrl,
                 result,
             )
+        }
+
+    @Test
+    fun `registerPasswordCredential should register Password credential to repository`() =
+        runTest {
+            val mockCipherView = createMockCipherView(number = 1)
+
+            coEvery {
+                mockVaultRepository.createCipher(
+                    cipherView = mockCipherView,
+                )
+            } returns CreateCipherResult.Success
+
+            bitwardenCredentialManager.registerPasswordCredential(
+                createPasswordCredentialRequest = mockCreatePasswordCredentialRequest,
+                selectedCipherView = mockCipherView,
+            )
+
+            coVerify(exactly = 1) {
+                mockVaultRepository.createCipher(
+                    cipherView = mockCipherView,
+                )
+            }
         }
 
     @Suppress("MaxLineLength")

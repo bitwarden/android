@@ -98,15 +98,12 @@ class BitwardenCredentialManagerImpl(
      * Register a new Password credential to a users vault.
      */
     override suspend fun registerPasswordCredential(
-        userId: String,
-        callingAppInfo: CallingAppInfo,
         createPasswordCredentialRequest: CreatePasswordRequest,
         selectedCipherView: CipherView,
     ): PasswordRegisterCredentialResult {
         return when (vaultRepository.createCipher(cipherView = selectedCipherView)) {
             is CreateCipherResult.Error -> PasswordRegisterCredentialResult.Error.InternalError
-            CreateCipherResult.Success -> PasswordRegisterCredentialResult
-                .Success(selectedCipherView)
+            CreateCipherResult.Success -> PasswordRegisterCredentialResult.Success
         }
     }
 

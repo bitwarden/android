@@ -554,11 +554,11 @@ class VaultAddEditViewModel @Inject constructor(
         }
 
         if (bitwardenCredentialManager.isUserVerified) {
-            registerPasswordCredentialToCipher(callingAppInfo, request, cipherView)
+            registerPasswordCredentialToCipher(request, cipherView)
             return
         }
 
-        registerPasswordCredentialToCipher(callingAppInfo, request, cipherView)
+        registerPasswordCredentialToCipher(request, cipherView)
     }
 
     private fun registerFido2CredentialToCipher(
@@ -589,12 +589,11 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun registerPasswordCredentialToCipher(
-        callingAppInfo: CallingAppInfo,
         request: CreatePasswordRequest,
         cipherView: CipherView,
     ) {
         viewModelScope.launch {
-            val userId = authRepository.activeUserId
+            authRepository.activeUserId
                 ?: run {
                     showPasswordErrorDialog(
                         R.string.password_operation_failed_because_user_could_not_be_verified
@@ -604,8 +603,6 @@ class VaultAddEditViewModel @Inject constructor(
                 }
             val result: PasswordRegisterCredentialResult =
                 bitwardenCredentialManager.registerPasswordCredential(
-                    userId = userId,
-                    callingAppInfo = callingAppInfo,
                     createPasswordCredentialRequest = request,
                     selectedCipherView = cipherView,
                 )
