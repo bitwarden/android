@@ -8,16 +8,16 @@ import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillEnabledManager
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutofillStatus
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
-import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome.model.ChromeAutofillSettingsOption
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.launchIn
@@ -36,7 +36,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class AutoFillViewModel @Inject constructor(
     authRepository: AuthRepository,
-    chromeThirdPartyAutofillEnabledManager: ChromeThirdPartyAutofillEnabledManager,
+    chromeThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
     private val savedStateHandle: SavedStateHandle,
     private val settingsRepository: SettingsRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
@@ -60,9 +60,9 @@ class AutoFillViewModel @Inject constructor(
                 defaultUriMatchType = settingsRepository.defaultUriMatchType,
                 showAutofillActionCard = false,
                 activeUserId = userId,
-                chromeAutofillSettingsOptions = chromeThirdPartyAutofillEnabledManager
-                    .chromeThirdPartyAutofillStatus
-                    .toChromeAutoFillSettingsOptions(),
+                browserAutofillSettingsOptions = chromeThirdPartyAutofillEnabledManager
+                    .browserThirdPartyAutofillStatus
+                    .toBrowserAutoFillSettingsOptions(),
                 isUserManagedPrivilegedAppsEnabled =
                     featureFlagManager.getFeatureFlag(FlagKey.UserManagedPrivilegedApps),
             )
@@ -98,8 +98,8 @@ class AutoFillViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         chromeThirdPartyAutofillEnabledManager
-            .chromeThirdPartyAutofillStatusFlow
-            .map { AutoFillAction.Internal.ChromeAutofillStatusReceive(status = it) }
+            .browserThirdPartyAutofillStatusFlow
+            .map { AutoFillAction.Internal.BrowserAutofillStatusReceive(status = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -122,7 +122,7 @@ class AutoFillViewModel @Inject constructor(
         is AutoFillAction.Internal -> handleInternalAction(action)
         AutoFillAction.AutofillActionCardCtaClick -> handleAutofillActionCardCtaClick()
         AutoFillAction.DismissShowAutofillActionCard -> handleDismissShowAutofillActionCard()
-        is AutoFillAction.ChromeAutofillSelected -> handleChromeAutofillSelected(action)
+        is AutoFillAction.BrowserAutofillSelected -> handleBrowserAutofillSelected(action)
         AutoFillAction.AboutPrivilegedAppsClick -> handleAboutPrivilegedAppsClick()
     }
 
@@ -140,8 +140,8 @@ class AutoFillViewModel @Inject constructor(
                 handleUpdateShowAutofillActionCard(action)
             }
 
-            is AutoFillAction.Internal.ChromeAutofillStatusReceive -> {
-                handleChromeAutofillStatusReceive(action)
+            is AutoFillAction.Internal.BrowserAutofillStatusReceive -> {
+                handleBrowserAutofillStatusReceive(action)
             }
 
             is AutoFillAction.Internal.UserManagedPrivilegedAppsEnableUpdateReceive -> {
@@ -164,20 +164,20 @@ class AutoFillViewModel @Inject constructor(
         }
     }
 
-    private fun handleChromeAutofillStatusReceive(
-        action: AutoFillAction.Internal.ChromeAutofillStatusReceive,
+    private fun handleBrowserAutofillStatusReceive(
+        action: AutoFillAction.Internal.BrowserAutofillStatusReceive,
     ) {
         mutableStateFlow.update {
             it.copy(
-                chromeAutofillSettingsOptions = action
+                browserAutofillSettingsOptions = action
                     .status
-                    .toChromeAutoFillSettingsOptions(),
+                    .toBrowserAutoFillSettingsOptions(),
             )
         }
     }
 
-    private fun handleChromeAutofillSelected(action: AutoFillAction.ChromeAutofillSelected) {
-        sendEvent(AutoFillEvent.NavigateToChromeAutofillSettings(action.releaseChannel))
+    private fun handleBrowserAutofillSelected(action: AutoFillAction.BrowserAutofillSelected) {
+        sendEvent(AutoFillEvent.NavigateToBrowserAutofillSettings(action.browserPackage))
     }
 
     private fun handleDismissShowAutofillActionCard() {
@@ -282,7 +282,7 @@ data class AutoFillState(
     val defaultUriMatchType: UriMatchType,
     val showAutofillActionCard: Boolean,
     val activeUserId: String,
-    val chromeAutofillSettingsOptions: ImmutableList<ChromeAutofillSettingsOption>,
+    val browserAutofillSettingsOptions: ImmutableList<BrowserAutofillSettingsOption>,
     val isUserManagedPrivilegedAppsEnabled: Boolean,
 ) : Parcelable {
 
@@ -295,16 +295,16 @@ data class AutoFillState(
 }
 
 @Suppress("MaxLineLength")
-private fun ChromeThirdPartyAutofillStatus.toChromeAutoFillSettingsOptions(): ImmutableList<ChromeAutofillSettingsOption> =
+private fun BrowserThirdPartyAutofillStatus.toBrowserAutoFillSettingsOptions(): ImmutableList<BrowserAutofillSettingsOption> =
     persistentListOfNotNull(
-        ChromeAutofillSettingsOption.Stable(
-            enabled = this.stableStatusData.isThirdPartyEnabled,
+        BrowserAutofillSettingsOption.ChromeStable(
+            enabled = this.chromeStableStatusData.isThirdPartyEnabled,
         )
-            .takeIf { this.stableStatusData.isAvailable },
-        ChromeAutofillSettingsOption.Beta(
-            enabled = this.betaChannelStatusData.isThirdPartyEnabled,
+            .takeIf { this.chromeStableStatusData.isAvailable },
+        BrowserAutofillSettingsOption.ChromeBeta(
+            enabled = this.chromeBetaChannelStatusData.isThirdPartyEnabled,
         )
-            .takeIf { this.betaChannelStatusData.isAvailable },
+            .takeIf { this.chromeBetaChannelStatusData.isAvailable },
     )
 
 /**
@@ -344,10 +344,10 @@ sealed class AutoFillEvent {
     ) : AutoFillEvent()
 
     /**
-     * Navigate to the Autofill settings of the specified [releaseChannel].
+     * Navigate to the Autofill settings of the specified [browserPackage].
      */
-    data class NavigateToChromeAutofillSettings(
-        val releaseChannel: ChromeReleaseChannel,
+    data class NavigateToBrowserAutofillSettings(
+        val browserPackage: BrowserPackage,
     ) : AutoFillEvent()
 
     /**
@@ -431,9 +431,9 @@ sealed class AutoFillAction {
     data object AutofillActionCardCtaClick : AutoFillAction()
 
     /**
-     * User has clicked one of the chrome autofill options.
+     * User has clicked one of the browser autofill options.
      */
-    data class ChromeAutofillSelected(val releaseChannel: ChromeReleaseChannel) : AutoFillAction()
+    data class BrowserAutofillSelected(val browserPackage: BrowserPackage) : AutoFillAction()
 
     /**
      * User has clicked the about privileged apps help link.
@@ -464,10 +464,10 @@ sealed class AutoFillAction {
         data class UpdateShowAutofillActionCard(val showAutofillActionCard: Boolean) : Internal()
 
         /**
-         * Received updated [ChromeThirdPartyAutofillStatus] data.
+         * Received updated [BrowserThirdPartyAutofillStatus] data.
          */
-        data class ChromeAutofillStatusReceive(
-            val status: ChromeThirdPartyAutofillStatus,
+        data class BrowserAutofillStatusReceive(
+            val status: BrowserThirdPartyAutofillStatus,
         ) : Internal()
 
         /**

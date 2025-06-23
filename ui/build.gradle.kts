@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -34,9 +36,6 @@ android {
         // Required for Robolectric
         unitTests.isIncludeAndroidResources = true
         unitTests.isReturnDefaultValues = true
-    }
-    kotlinOptions {
-        jvmTarget = libs.versions.jvmTarget.get()
     }
     @Suppress("UnstableApiUsage")
     testFixtures {
@@ -86,6 +85,12 @@ dependencies {
     testFixturesImplementation(libs.mockk.mockk)
     testFixturesImplementation(libs.robolectric.robolectric)
     testFixturesImplementation(libs.square.turbine)
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
+    }
 }
 
 tasks {
