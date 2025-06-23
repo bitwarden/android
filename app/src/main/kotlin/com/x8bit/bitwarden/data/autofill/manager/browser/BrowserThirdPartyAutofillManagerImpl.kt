@@ -1,35 +1,34 @@
-package com.x8bit.bitwarden.data.autofill.manager.chrome
+package com.x8bit.bitwarden.data.autofill.manager.browser
 
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import com.bitwarden.annotation.OmitFromCoverage
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutoFillData
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFillData
 
 private const val CONTENT_PROVIDER_NAME = ".AutofillThirdPartyModeContentProvider"
 private const val THIRD_PARTY_MODE_COLUMN = "autofill_third_party_state"
 private const val THIRD_PARTY_MODE_ACTIONS_URI_PATH = "autofill_third_party_mode"
 
 /**
- * Default implementation of the [ChromeThirdPartyAutofillManager] which uses a
- * [ContentResolver] to determine if the installed Chrome packages support and enable
- * third party autofill services.
+ * Default implementation of the [BrowserThirdPartyAutofillManager] which uses a [ContentResolver]
+ * to determine if the installed browser packages support and enable third party autofill services.
  *
  * Based off of [this blog post](https://android-developers.googleblog.com/2025/02/chrome-3p-autofill-services-update.html)
  */
 @OmitFromCoverage
-class ChromeThirdPartyAutofillManagerImpl(
+class BrowserThirdPartyAutofillManagerImpl(
     private val context: Context,
-) : ChromeThirdPartyAutofillManager {
-    override val stableChromeAutofillStatus: ChromeThirdPartyAutoFillData
-        get() = getThirdPartyAutoFillStatusForChannel(ChromeReleaseChannel.STABLE)
-    override val betaChromeAutofillStatus: ChromeThirdPartyAutoFillData
-        get() = getThirdPartyAutoFillStatusForChannel(ChromeReleaseChannel.BETA)
+) : BrowserThirdPartyAutofillManager {
+    override val stableChromeAutofillStatus: BrowserThirdPartyAutoFillData
+        get() = getThirdPartyAutoFillStatusForChannel(BrowserPackage.CHROME_STABLE)
+    override val betaChromeAutofillStatus: BrowserThirdPartyAutoFillData
+        get() = getThirdPartyAutoFillStatusForChannel(BrowserPackage.CHROME_BETA)
 
     private fun getThirdPartyAutoFillStatusForChannel(
-        releaseChannel: ChromeReleaseChannel,
-    ): ChromeThirdPartyAutoFillData {
+        releaseChannel: BrowserPackage,
+    ): BrowserThirdPartyAutoFillData {
         val uri = Uri.Builder()
             .scheme(ContentResolver.SCHEME_CONTENT)
             .authority(releaseChannel.packageName + CONTENT_PROVIDER_NAME)
@@ -54,7 +53,7 @@ class ChromeThirdPartyAutofillManagerImpl(
                 true
             }
             ?: false
-        return ChromeThirdPartyAutoFillData(
+        return BrowserThirdPartyAutoFillData(
             isAvailable = isThirdPartyAvailable,
             isThirdPartyEnabled = thirdPartyEnabled,
         )
