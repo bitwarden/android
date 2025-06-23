@@ -1,13 +1,12 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.util
 
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.SendState
 import java.time.Clock
-
-private const val DELETION_DATE_PATTERN: String = "MMM d, uuuu, hh:mm a"
+import java.time.format.FormatStyle
 
 /**
  * Transforms [SendData] into [SendState.ViewState].
@@ -34,8 +33,9 @@ private fun List<SendView>.toSendContent(
                 SendState.ViewState.Content.SendItem(
                     id = requireNotNull(sendView.id),
                     name = sendView.name,
-                    deletionDate = sendView.deletionDate.toFormattedPattern(
-                        pattern = DELETION_DATE_PATTERN,
+                    deletionDate = sendView.deletionDate.toFormattedDateTimeStyle(
+                        dateStyle = FormatStyle.MEDIUM,
+                        timeStyle = FormatStyle.SHORT,
                         clock = clock,
                     ),
                     type = when (sendView.type) {

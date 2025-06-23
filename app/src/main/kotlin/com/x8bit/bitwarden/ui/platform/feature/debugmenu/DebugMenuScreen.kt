@@ -27,14 +27,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
-import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.components.ListItemContent
@@ -99,10 +99,7 @@ fun DebugMenuScreen(
             Spacer(Modifier.height(height = 16.dp))
             BitwardenHorizontalDivider()
             Spacer(Modifier.height(height = 16.dp))
-            // Pulled these into variable to avoid over-nested formatting in the composable call.
-            val isRestartOnboardingEnabled = state.featureFlags[FlagKey.OnboardingFlow] as? Boolean
             OnboardingOverrideContent(
-                isRestartOnboardingEnabled = isRestartOnboardingEnabled == true,
                 onStartOnboarding = remember(viewModel) {
                     {
                         viewModel.trySendAction(DebugMenuAction.RestartOnboarding)
@@ -209,7 +206,6 @@ private fun FeatureFlagContent(
  */
 @Composable
 private fun OnboardingOverrideContent(
-    isRestartOnboardingEnabled: Boolean,
     onStartOnboarding: () -> Unit,
     onStartOnboardingCarousel: () -> Unit,
     modifier: Modifier = Modifier,
@@ -225,7 +221,6 @@ private fun OnboardingOverrideContent(
         BitwardenFilledButton(
             label = stringResource(R.string.restart_onboarding_cta),
             onClick = onStartOnboarding,
-            isEnabled = isRestartOnboardingEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -268,7 +263,6 @@ private fun FeatureFlagContent_preview() {
         FeatureFlagContent(
             featureFlagMap = persistentMapOf(
                 FlagKey.EmailVerification to true,
-                FlagKey.OnboardingFlow to false,
             ),
             onValueChange = { _, _ -> },
             onResetValues = { },
@@ -282,7 +276,6 @@ private fun OnboardingOverrideContent_preview() {
     BitwardenTheme {
         OnboardingOverrideContent(
             onStartOnboarding = {},
-            isRestartOnboardingEnabled = true,
             onStartOnboardingCarousel = {},
         )
     }

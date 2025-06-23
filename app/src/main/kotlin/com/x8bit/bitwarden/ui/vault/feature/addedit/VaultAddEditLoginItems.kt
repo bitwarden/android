@@ -23,6 +23,8 @@ import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.model.TooltipData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -35,7 +37,6 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordF
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
 
@@ -360,7 +361,7 @@ private fun TotpRow(
     onTotpSetupClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BitwardenTextField(
+    BitwardenPasswordField(
         label = stringResource(id = R.string.authenticator_key),
         value = totpKey.orEmpty(),
         onValueChange = {},
@@ -369,7 +370,7 @@ private fun TotpRow(
         actions = {
             totpKey?.let {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_clear,
+                    vectorIconRes = BitwardenDrawable.ic_clear,
                     contentDescription = stringResource(id = R.string.delete),
                     onClick = loginItemTypeHandlers.onClearTotpKeyClick,
                 )
@@ -399,7 +400,7 @@ private fun TotpRow(
                     .testTag("SetupTotpButton"),
             )
         },
-        textFieldTestTag = "LoginTotpEntry",
+        passwordFieldTestTag = "LoginTotpEntry",
         cardStyle = CardStyle.Full,
         modifier = modifier
             .fillMaxWidth()

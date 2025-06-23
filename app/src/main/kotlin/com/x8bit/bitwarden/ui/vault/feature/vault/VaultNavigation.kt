@@ -5,7 +5,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -29,7 +28,7 @@ fun NavGraphBuilder.vaultDestination(
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
-    onNavigateToImportLogins: (SnackbarRelay) -> Unit,
+    onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutScreen: () -> Unit,
 ) {

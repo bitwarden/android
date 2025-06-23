@@ -19,10 +19,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 
 /**
@@ -94,7 +94,7 @@ fun AttachmentItemContent(
             onDismissRequest = { shouldShowPremiumWarningDialog = false },
             confirmButton = {
                 BitwardenTextButton(
-                    label = stringResource(R.string.ok),
+                    label = stringResource(R.string.okay),
                     onClick = { shouldShowPremiumWarningDialog = false },
                 )
             },

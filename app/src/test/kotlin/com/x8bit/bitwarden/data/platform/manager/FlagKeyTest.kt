@@ -18,16 +18,8 @@ class FlagKeyTest {
             "email-verification",
         )
         assertEquals(
-            FlagKey.OnboardingFlow.keyName,
-            "native-create-account-flow",
-        )
-        assertEquals(
             FlagKey.ImportLoginsFlow.keyName,
             "import-logins-flow",
-        )
-        assertEquals(
-            FlagKey.VerifiedSsoDomainEndpoint.keyName,
-            "pm-12337-refactor-sso-details-endpoint",
         )
         assertEquals(
             FlagKey.CredentialExchangeProtocolImport.keyName,
@@ -77,6 +69,10 @@ class FlagKeyTest {
             FlagKey.PreAuthSettings.keyName,
             "enable-pm-prelogin-settings",
         )
+        assertEquals(
+            FlagKey.UserManagedPrivilegedApps.keyName,
+            "pm-18970-user-managed-privileged-apps",
+        )
     }
 
     @Test
@@ -85,9 +81,7 @@ class FlagKeyTest {
             listOf(
                 FlagKey.AuthenticatorSync,
                 FlagKey.EmailVerification,
-                FlagKey.OnboardingFlow,
                 FlagKey.ImportLoginsFlow,
-                FlagKey.VerifiedSsoDomainEndpoint,
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
                 FlagKey.SingleTapPasskeyCreation,
@@ -100,6 +94,7 @@ class FlagKeyTest {
                 FlagKey.FlightRecorder,
                 FlagKey.RestrictCipherItemDeletion,
                 FlagKey.PreAuthSettings,
+                FlagKey.UserManagedPrivilegedApps,
             ).all {
                 !it.defaultValue
             },

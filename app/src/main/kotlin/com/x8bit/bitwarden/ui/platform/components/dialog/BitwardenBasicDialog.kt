@@ -10,12 +10,12 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
+import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.util.ciBuildInfo
 import com.x8bit.bitwarden.data.platform.util.deviceData
 import com.x8bit.bitwarden.data.platform.util.versionData
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.composition.LocalFeatureFlagsState
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -44,7 +44,7 @@ fun BitwardenBasicDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.ok),
+                label = stringResource(id = R.string.okay),
                 onClick = onDismissRequest,
                 modifier = Modifier.testTag(tag = "AcceptAlertButton"),
             )
@@ -107,7 +107,7 @@ fun BitwardenBasicDialog(
 private fun BitwardenBasicDialog_preview() {
     BitwardenTheme {
         BitwardenBasicDialog(
-            title = "An error has occurred.",
+            title = "An error has occurred",
             message = "Username or password is incorrect. Try again.",
             onDismissRequest = {},
         )

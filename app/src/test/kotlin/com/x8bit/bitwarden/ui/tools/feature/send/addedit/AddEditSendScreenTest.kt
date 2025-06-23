@@ -27,6 +27,7 @@ import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.isEditableText
 import com.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
@@ -49,7 +50,7 @@ import java.time.ZonedDateTime
 class AddEditSendScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
-    private var onNavigateUpToRootCalled = false
+    private var onNavigateUpToSearchOrRootCalled = false
 
     private val exitManager: ExitManager = mockk(relaxed = true) {
         every { exitApplication() } just runs
@@ -75,7 +76,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             AddEditSendScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateUpToRoot = { onNavigateUpToRootCalled = true },
+                onNavigateUpToSearchOrRoot = { onNavigateUpToSearchOrRootCalled = true },
             )
         }
     }
@@ -87,9 +88,9 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on NavigateToRoot should call onNavigateUpToRoot`() {
-        mutableEventFlow.tryEmit(AddEditSendEvent.NavigateToRoot)
-        assertTrue(onNavigateUpToRootCalled)
+    fun `on NavigateUpToSearchOrRoot should call onNavigateUpToSearchOrRootCalled`() {
+        mutableEventFlow.tryEmit(AddEditSendEvent.NavigateUpToSearchOrRoot)
+        assertTrue(onNavigateUpToSearchOrRootCalled)
     }
 
     @Test
@@ -98,6 +99,16 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         verify {
             exitManager.exitApplication()
         }
+    }
+
+    @Test
+    fun `on ShowSnackbar event should display the snackbar`() {
+        val message = "message"
+        val data = BitwardenSnackbarData(message = message.asText())
+        mutableEventFlow.tryEmit(AddEditSendEvent.ShowSnackbar(data = data))
+        composeTestRule
+            .onNodeWithText(text = message)
+            .assertIsDisplayed()
     }
 
     @Test
@@ -284,7 +295,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithText(text = "Delete send")
+            .onNodeWithText(text = "Delete Send")
             .performScrollTo()
             .performClick()
 
@@ -301,7 +312,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithText(text = "Delete send")
+            .onNodeWithText(text = "Delete Send")
             .performScrollTo()
             .performClick()
 
@@ -783,7 +794,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithText("Ok")
+            .onNodeWithText(text = "Okay")
             .performClick()
         verify { viewModel.trySendAction(AddEditSendAction.DismissDialogClick) }
     }

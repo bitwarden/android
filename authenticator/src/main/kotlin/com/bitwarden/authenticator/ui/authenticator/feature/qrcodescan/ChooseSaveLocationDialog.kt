@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenWideSwitch
 import com.bitwarden.authenticator.ui.platform.components.util.maxDialogHeight
 import com.bitwarden.authenticator.ui.platform.components.util.maxDialogWidth
@@ -96,14 +96,14 @@ fun ChooseSaveLocationDialog(
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier.padding(horizontal = 8.dp),
             ) {
-                BitwardenTextButton(
+                AuthenticatorTextButton(
                     modifier = Modifier
                         .padding(horizontal = 4.dp),
                     label = stringResource(R.string.save_here),
                     labelTextColor = MaterialTheme.colorScheme.primary,
                     onClick = { onSaveHereClick.invoke(isSaveAsDefaultChecked) },
                 )
-                BitwardenTextButton(
+                AuthenticatorTextButton(
                     modifier = Modifier
                         .padding(horizontal = 4.dp),
                     label = stringResource(R.string.save_to_bitwarden),

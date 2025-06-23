@@ -8,7 +8,7 @@
     <string name="generic_error_message">Tələbinizi emal edə bilmədik. Lütfən yenidən sınayın və ya bizimlə əlaqə saxlayın.</string>
     <string name="internet_connection_required_title">İnternet bağlantısı tələb olunur</string>
     <string name="internet_connection_required_message">Davam etməzdən əvvəl lütfən internetə bağlanın.</string>
-    <string name="ok">Oldu</string>
+    <string name="okay">Okay</string>
     <string name="syncing">Sinxronlaşdırılır</string>
     <string name="copy">Kopyala</string>
     <string name="edit_item">Düzəliş et</string>
@@ -17,15 +17,11 @@
     <string name="name">Ad</string>
     <string name="add_item_rotation">Element döndərmə əlavə et</string>
     <string name="scan_a_qr_code">QR kodu skan et</string>
-    <string name="enter_a_setup_key">Quraşdırma açarı daxil et</string>
     <string name="scan_qr_code">QR kodu skane et</string>
     <string name="point_your_camera_at_the_qr_code">Kameranı QR koduna yönləndirin.</string>
-    <string name="cannot_scan_qr_code">QR kodu skan edilə bilmir.</string>
+    <string name="cannot_scan_qr_code_enter_key_manually">Cannot scan QR code? <annotation link="enterKeyManually">Enter key manually</annotation></string>
     <string name="enter_key_manually">Açarı əllə daxil et.</string>
     <string name="cannot_add_authenticator_key">Kimlik doğrulayıcı açarı əlavə edilə bilmir?</string>
-    <string name="once_the_key_is_successfully_entered">Açar uğurla daxil edildikdən sonra\naçarı güvənli şəkildə saxlamaq üçün \"TOTP əlavə et\"i seçin</string>
-    <string name="add_totp">TOTP əlavə et</string>
-    <string name="authenticator_key_scanner">Kimlik doğrulayıcı açarı</string>
     <string name="no_thanks">Xeyr təşəkkürlər</string>
     <string name="settings">Ayarlar</string>
     <string name="enable_camera_permission_to_use_the_scanner">Skaneri istifadə etmək üçün kamera icazəsini fəallaşdırın</string>
@@ -62,7 +58,6 @@
     <string name="theme">Tema</string>
     <string name="dark">Qaranlıq</string>
     <string name="light">İşıqlı</string>
-    <string name="language">Dil</string>
     <string name="language_change_x_description">Dil, %1$s olaraq dəyişdirildi. Dəyişiklikləri görmək üçün lütfən tətbiqi yenidən başladın</string>
     <string name="secure_your_accounts_with_bitwarden_authenticator">Hesablarınızı Bitwarden Authenticator ilə qoruyun</string>
     <string name="get_verification_codes_for_all_your_accounts">2 addımlı doğrulamanı dəstəkləyən bütün hesablarınız üçün doğrulama kodu alın.</string>
@@ -70,10 +65,7 @@
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">İstənilən hesab üçün 2 addımlı doğrulama ayarlarınızdakı QR kodu skan edin.</string>
     <string name="sign_in_using_unique_codes">Unikal kodları istifadə edərək hesabınıza daxil olun</string>
     <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">2 addımlı doğrulamanı istifadə edərkən istifadəçi adınızı, parolunuzu və bu tətbiqdə yaradılan kodu daxil edəcəksiniz.</string>
-    <string name="continue_button">Davam et</string>
     <string name="skip">Ötür</string>
-    <string name="get_started">Başlayaq</string>
-    <string name="unique_codes">Unikal kodlar</string>
     <string name="help">Kömək</string>
     <string name="launch_tutorial">Təlimi başlat</string>
     <string name="value_has_been_copied">%1$s kopyalandı.</string>
@@ -113,7 +105,6 @@
     <string name="import_vault">Daxilə köçür</string>
     <string name="import_success">Seyfi daxilə köçürmə uğurlu oldu</string>
     <string name="key_is_invalid">Açar yararsızdır.</string>
-    <string name="favorite_tooltip">Sevimli olaraq saxla</string>
     <string name="favorite">Sevimli</string>
     <string name="favorites">Sevimlilər</string>
     <string name="backup">Nüsxələmə</string>
@@ -126,11 +117,12 @@
     <string name="download_bitwarden_card_message">Bütün girişlərinizi saxlayın və doğrulama kodlarını birbaşa Authenticator tətbiqi ilə sinxronlaşdırın.</string>
     <string name="download_now">İndi endir</string>
     <string name="sync_with_bitwarden_app">Bitwarden tətbiqi ilə sinxronlaşdır</string>
+    <string name="this_feature_is_not_not_yet_available_for_self_hosted_users">This feature is not yet available for self-hosted users. <annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Kodlar, Bitwarden tətbiqindən sinxronlaşdırıla bilmir. Hər iki tətbiqin güncəl olduğuna əmin olun. Mövcud kodlarınıza Bitwarden tətbiqində müraciət etməyə davam edə bilərsiniz.</string>
     <string name="shared_accounts_header">%1$s | %2$s</string>
     <string name="sync_with_the_bitwarden_app">Bitwarden tətbiqi ilə sinxronlaşdır</string>
-    <string name="go_to_settings">Ayarlara get</string>
     <string name="sync_with_bitwarden_action_card_message">Bütün doğrulama kodlarınıza burada baxmaq üçün ayarlarda Authenticator tətbiqinin sinxronlaşdırmasına icazə verin.</string>
+    <string name="take_me_to_app_settings">Məni tətbiq ayarlarına apar</string>
     <string name="something_went_wrong">Nəsə səhv getdi</string>
     <string name="please_try_again">Lütfən yenidən sınayın</string>
     <string name="move_to_bitwarden">\"Bitwarden\"ə daşı</string>
@@ -144,8 +136,6 @@
     <string name="choose_save_location_message">Bu kimlik doğrulayıcı açarı burada saxlayın, ya da onu Bitwarden tətbiqində bir girişə əlavə edin.</string>
     <string name="save_option_as_default">Seçimi ilkin olaraq saxla</string>
     <string name="account_synced_from_bitwarden_app">Hesab, Bitwarden tətbiqindən sinxronlaşdırıldı</string>
-    <string name="add_code_to_bitwarden">Kodu Bitwarden-ə əlavə et</string>
-    <string name="add_code_locally">Kodu daxili anbara əlavə et</string>
     <string name="local_codes">Daxili anbardakı kodlar</string>
     <string name="required_information_missing">Tələb olunan məlumat əskikdir</string>
     <string name="required_information_missing_message">"Tələb olunan məlumatlar əskikdir (məs. 'xidmətlər' və ya 'sirr'). Faylınızı yoxlayıb yenidən sınayın. Dəstək üçün bitwarden.com/help ünvanını ziyarət edin"</string>

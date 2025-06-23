@@ -15,7 +15,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
-import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
@@ -352,13 +351,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * Set the value of [webAuthResultFlow].
      */
     fun setWebAuthResult(webAuthResult: WebAuthResult)
-
-    /**
-     * Checks for a claimed domain organization for the [email] that can be used for an SSO request.
-     */
-    suspend fun getOrganizationDomainSsoDetails(
-        email: String,
-    ): OrganizationDomainSsoDetailsResult
 
     /**
      * Get the verified organization domain SSO details for the given [email].

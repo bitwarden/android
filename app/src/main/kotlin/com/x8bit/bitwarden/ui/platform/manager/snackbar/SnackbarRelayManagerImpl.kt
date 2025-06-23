@@ -1,41 +1,83 @@
 package com.x8bit.bitwarden.ui.platform.manager.snackbar
 
-import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.emitWhenSubscribedTo
+import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalForInheritanceCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onSubscription
+import kotlinx.coroutines.launch
+import java.util.UUID
 
 /**
  * The default implementation of the [SnackbarRelayManager] interface.
  */
-class SnackbarRelayManagerImpl : SnackbarRelayManager {
-    private val mutableSnackbarRelayMap =
-        mutableMapOf<SnackbarRelay, MutableSharedFlow<BitwardenSnackbarData?>>()
+class SnackbarRelayManagerImpl(
+    dispatcherManager: DispatcherManager,
+) : SnackbarRelayManager {
+    private val unconfinedScope = CoroutineScope(context = dispatcherManager.unconfined)
+    private val snackbarSharedFlow = SnackbarLastSubscriberMutableSharedFlow()
 
     override fun sendSnackbarData(data: BitwardenSnackbarData, relay: SnackbarRelay) {
-        getSnackbarDataFlowInternal(relay).tryEmit(data)
-    }
-
-    override fun getSnackbarDataFlow(relay: SnackbarRelay): Flow<BitwardenSnackbarData> =
-        getSnackbarDataFlowInternal(relay)
-            .onCompletion {
-                // when the subscription is ended, remove the relay from the map.
-                mutableSnackbarRelayMap.remove(relay)
-            }
-            .filterNotNull()
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun clearRelayBuffer(relay: SnackbarRelay) {
-        getSnackbarDataFlowInternal(relay).resetReplayCache()
-    }
-
-    private fun getSnackbarDataFlowInternal(
-        relay: SnackbarRelay,
-    ): MutableSharedFlow<BitwardenSnackbarData?> =
-        mutableSnackbarRelayMap.getOrPut(relay) {
-            bufferedMutableSharedFlow(replay = 1)
+        unconfinedScope.launch {
+            snackbarSharedFlow.emitWhenSubscribedTo(
+                value = SnackbarDataAndRelay(
+                    relay = relay,
+                    data = data,
+                ),
+            )
         }
+    }
+
+    override fun getSnackbarDataFlow(
+        relay: SnackbarRelay,
+        vararg relays: SnackbarRelay,
+    ): Flow<BitwardenSnackbarData> =
+        merge(
+            snackbarSharedFlow.generateFlowFor(relay = relay),
+            *relays.map { snackbarSharedFlow.generateFlowFor(relay = it) }.toTypedArray(),
+        )
+            .map { it.data }
+}
+
+/**
+ * A wrapper for the [BitwardenSnackbarData] payload and [SnackbarRelay] associated with it.
+ */
+private data class SnackbarDataAndRelay(
+    val relay: SnackbarRelay,
+    val data: BitwardenSnackbarData,
+)
+
+/**
+ * Helper class that ensures that only the last subscriber to a specific relay gets the Snackbar
+ * data.
+ */
+@OptIn(ExperimentalForInheritanceCoroutinesApi::class)
+private class SnackbarLastSubscriberMutableSharedFlow(
+    private val source: MutableSharedFlow<SnackbarDataAndRelay> = MutableSharedFlow(),
+) : MutableSharedFlow<SnackbarDataAndRelay> by source {
+    private val mutableRelayUuidMap: MutableMap<SnackbarRelay, MutableList<UUID>> = mutableMapOf()
+
+    fun generateFlowFor(
+        relay: SnackbarRelay,
+    ): Flow<SnackbarDataAndRelay> {
+        lateinit var uuid: UUID
+        return source
+            .onSubscription {
+                uuid = UUID.randomUUID().also { getUuidStack(relay = relay).add(element = it) }
+            }
+            .onCompletion { getUuidStack(relay = relay).remove(element = uuid) }
+            .filter { it.relay == relay }
+            .filter { getUuidStack(relay = relay).last() == uuid }
+    }
+
+    private fun getUuidStack(
+        relay: SnackbarRelay,
+    ): MutableList<UUID> = mutableRelayUuidMap.getOrPut(key = relay) { mutableListOf() }
 }

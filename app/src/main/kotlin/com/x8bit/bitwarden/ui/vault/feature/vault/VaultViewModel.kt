@@ -86,11 +86,11 @@ class VaultViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
-    private val snackbarRelayManager: SnackbarRelayManager,
     private val reviewPromptManager: ReviewPromptManager,
-    private val featureFlagManager: FeatureFlagManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val networkConnectionManager: NetworkConnectionManager,
+    snackbarRelayManager: SnackbarRelayManager,
+    featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -166,7 +166,7 @@ class VaultViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         snackbarRelayManager
-            .getSnackbarDataFlow(SnackbarRelay.MY_VAULT_RELAY)
+            .getSnackbarDataFlow(SnackbarRelay.LOGINS_IMPORTED)
             .map { VaultAction.Internal.SnackbarDataReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -204,6 +204,9 @@ class VaultViewModel @Inject constructor(
             is VaultAction.DialogDismiss -> handleDialogDismiss()
             is VaultAction.RefreshPull -> handleRefreshPull()
             is VaultAction.OverflowOptionClick -> handleOverflowOptionClick(action)
+            is VaultAction.OverflowMasterPasswordRepromptSubmit -> {
+                handleOverflowMasterPasswordRepromptSubmit(action)
+            }
 
             is VaultAction.MasterPasswordRepromptSubmit -> {
                 handleMasterPasswordRepromptSubmit(action)
@@ -225,7 +228,6 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleFlightRecorderGoToSettingsClick() {
-        settingsRepository.dismissFlightRecorderBanner()
         sendEvent(VaultEvent.NavigateToAbout)
     }
 
@@ -366,9 +368,6 @@ class VaultViewModel @Inject constructor(
                 SwitchAccountResult.AccountSwitched -> true
                 SwitchAccountResult.NoChange -> false
             }
-        if (isSwitchingAccounts) {
-            snackbarRelayManager.clearRelayBuffer(SnackbarRelay.MY_VAULT_RELAY)
-        }
         mutableStateFlow.update {
             it.copy(isSwitchingAccounts = isSwitchingAccounts)
         }
@@ -506,14 +505,28 @@ class VaultViewModel @Inject constructor(
         }
     }
 
-    private fun handleMasterPasswordRepromptSubmit(
-        action: VaultAction.MasterPasswordRepromptSubmit,
+    private fun handleOverflowMasterPasswordRepromptSubmit(
+        action: VaultAction.OverflowMasterPasswordRepromptSubmit,
     ) {
         viewModelScope.launch {
             val result = authRepository.validatePassword(action.password)
             sendAction(
-                VaultAction.Internal.ValidatePasswordResultReceive(
+                VaultAction.Internal.OverflowValidatePasswordResultReceive(
                     overflowAction = action.overflowAction,
+                    result = result,
+                ),
+            )
+        }
+    }
+
+    private fun handleMasterPasswordRepromptSubmit(
+        action: VaultAction.MasterPasswordRepromptSubmit,
+    ) {
+        viewModelScope.launch {
+            val result = authRepository.validatePassword(password = action.password)
+            sendAction(
+                VaultAction.Internal.ValidatePasswordResultReceive(
+                    item = action.item,
                     result = result,
                 ),
             )
@@ -615,6 +628,10 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal.IconLoadingSettingReceive -> handleIconLoadingSettingReceive(
                 action,
             )
+
+            is VaultAction.Internal.OverflowValidatePasswordResultReceive -> {
+                handleOverflowValidatePasswordResultReceive(action)
+            }
 
             is VaultAction.Internal.ValidatePasswordResultReceive -> {
                 handleValidatePasswordResultReceive(action)
@@ -813,8 +830,8 @@ class VaultViewModel @Inject constructor(
         }
     }
 
-    private fun handleValidatePasswordResultReceive(
-        action: VaultAction.Internal.ValidatePasswordResultReceive,
+    private fun handleOverflowValidatePasswordResultReceive(
+        action: VaultAction.Internal.OverflowValidatePasswordResultReceive,
     ) {
         when (val result = action.result) {
             is ValidatePasswordResult.Error -> {
@@ -843,6 +860,39 @@ class VaultViewModel @Inject constructor(
                 }
                 // Complete the overflow action.
                 trySendAction(VaultAction.OverflowOptionClick(action.overflowAction))
+            }
+        }
+    }
+
+    private fun handleValidatePasswordResultReceive(
+        action: VaultAction.Internal.ValidatePasswordResultReceive,
+    ) {
+        when (val result = action.result) {
+            is ValidatePasswordResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                            error = result.error,
+                        ),
+                    )
+                }
+            }
+
+            is ValidatePasswordResult.Success -> {
+                if (result.isValid) {
+                    trySendAction(VaultAction.VaultItemClick(vaultItem = action.item))
+                } else {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialog = VaultState.DialogState.Error(
+                                title = R.string.an_error_has_occurred.asText(),
+                                message = R.string.invalid_master_password.asText(),
+                            ),
+                        )
+                    }
+                }
             }
         }
     }
@@ -1462,8 +1512,17 @@ sealed class VaultAction {
      * User submitted their master password to authenticate before continuing with
      * the selected overflow action.
      */
-    data class MasterPasswordRepromptSubmit(
+    data class OverflowMasterPasswordRepromptSubmit(
         val overflowAction: ListingItemOverflowAction.VaultAction,
+        val password: String,
+    ) : VaultAction()
+
+    /**
+     * User submitted their master password to authenticate before continuing with the primary
+     * action.
+     */
+    data class MasterPasswordRepromptSubmit(
+        val item: VaultState.ViewState.VaultItem,
         val password: String,
     ) : VaultAction()
 
@@ -1524,8 +1583,16 @@ sealed class VaultAction {
         /**
          * Indicates that a result for verifying the user's master password has been received.
          */
-        data class ValidatePasswordResultReceive(
+        data class OverflowValidatePasswordResultReceive(
             val overflowAction: ListingItemOverflowAction.VaultAction,
+            val result: ValidatePasswordResult,
+        ) : Internal()
+
+        /**
+         * Indicates that a result for verifying the user's master password has been received.
+         */
+        data class ValidatePasswordResultReceive(
+            val item: VaultState.ViewState.VaultItem,
             val result: ValidatePasswordResult,
         ) : Internal()
 

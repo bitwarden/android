@@ -38,105 +38,12 @@ class CipherViewExtensionsTest {
         unmockkStatic(Uri::class)
     }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `toViewState should transform full CipherView into ViewState Login Content maintaining re-prompt and visibility state`() {
-        val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = false)
-        val viewState = cipherView.toViewState(
-            previousState = VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false, isPremiumUser = true).copy(
-                    currentCipher = cipherView,
-                    // This re-prompt state should be preserved
-                    requiresReprompt = false,
-                ),
-                type = createLoginContent(isEmpty = false).copy(
-                    passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
-                        password = "password",
-                        // This visibility state should be preserved
-                        isVisible = true,
-                        canViewPassword = false,
-                    ),
-                ),
-            ),
-            isPremiumUser = true,
-            hasMasterPassword = true,
-            totpCodeItemData = TotpCodeItemData(
-                periodSeconds = 30,
-                timeLeftSeconds = 15,
-                verificationCode = "123456",
-                totpCode = "testCode",
-            ),
-            clock = fixedClock,
-            canDelete = true,
-            canRestore = true,
-            canAssignToCollections = true,
-            canEdit = true,
-            baseIconUrl = "https://example.com/",
-            isIconLoadingDisabled = true,
-            relatedLocations = persistentListOf(),
-        )
-
-        assertEquals(
-            VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false, isPremiumUser = true).copy(
-                    currentCipher = cipherView,
-                    requiresReprompt = false,
-                ),
-                type = createLoginContent(isEmpty = false).copy(
-                    passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
-                        password = "password",
-                        isVisible = true,
-                        canViewPassword = false,
-                    ),
-                ),
-            ),
-            viewState,
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `toViewState should transform full CipherView into ViewState Login Content without master password reprompt`() {
-        val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = false)
-        val viewState = cipherView.toViewState(
-            previousState = null,
-            isPremiumUser = true,
-            hasMasterPassword = false,
-            totpCodeItemData = TotpCodeItemData(
-                periodSeconds = 30,
-                timeLeftSeconds = 15,
-                verificationCode = "123456",
-                totpCode = "testCode",
-            ),
-            clock = fixedClock,
-            canDelete = true,
-            canRestore = true,
-            canAssignToCollections = true,
-            canEdit = true,
-            baseIconUrl = "https://example.com/",
-            isIconLoadingDisabled = true,
-            relatedLocations = persistentListOf(),
-        )
-
-        assertEquals(
-            VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false, isPremiumUser = true).copy(
-                    currentCipher = cipherView,
-                    requiresReprompt = false,
-                ),
-                type = createLoginContent(isEmpty = false),
-            ),
-            viewState,
-        )
-    }
-
     @Test
     fun `toViewState should transform full CipherView into ViewState Login Content with premium`() {
         val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = false)
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = TotpCodeItemData(
                 periodSeconds = 30,
                 timeLeftSeconds = 15,
@@ -171,7 +78,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = isPremiumUser,
-            hasMasterPassword = true,
             totpCodeItemData = TotpCodeItemData(
                 periodSeconds = 30,
                 timeLeftSeconds = 15,
@@ -212,7 +118,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = isPremiumUser,
-            hasMasterPassword = true,
             totpCodeItemData = TotpCodeItemData(
                 periodSeconds = 30,
                 timeLeftSeconds = 15,
@@ -248,7 +153,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
             canDelete = true,
@@ -277,7 +181,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
             canDelete = true,
@@ -309,7 +212,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
             canDelete = true,
@@ -351,7 +253,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
             canDelete = true,
@@ -398,7 +299,6 @@ class CipherViewExtensionsTest {
         val result = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
             canDelete = true,
@@ -447,7 +347,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
             canDelete = true,
@@ -480,7 +379,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
             canDelete = true,
@@ -511,7 +409,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
             canDelete = true,
@@ -559,7 +456,6 @@ class CipherViewExtensionsTest {
                 val viewState = cipherView.toViewState(
                     previousState = null,
                     isPremiumUser = true,
-                    hasMasterPassword = true,
                     totpCodeItemData = null,
                     clock = fixedClock,
                     canDelete = true,
@@ -587,7 +483,6 @@ class CipherViewExtensionsTest {
                 val viewState = cipherView.toViewState(
                     previousState = null,
                     isPremiumUser = true,
-                    hasMasterPassword = true,
                     totpCodeItemData = null,
                     clock = fixedClock,
                     canDelete = true,

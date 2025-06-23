@@ -19,18 +19,20 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.components.appbar.BitwardenSearchTopAppBar
+import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenSearchTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.handlers.SearchHandlers
@@ -72,6 +74,7 @@ fun SearchScreen(
         )
     }
 
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             SearchEvent.NavigateBack -> onNavigateBack()
@@ -111,6 +114,7 @@ fun SearchScreen(
 
             is SearchEvent.NavigateToUrl -> intentManager.launchUri(event.url.toUri())
             is SearchEvent.ShowShareSheet -> intentManager.shareText(event.content)
+            is SearchEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
             is SearchEvent.ShowToast -> {
                 Toast
                     .makeText(context, event.message(context.resources), Toast.LENGTH_SHORT)
@@ -137,6 +141,7 @@ fun SearchScreen(
                     navigationIconContentDescription = stringResource(id = R.string.back),
                     onNavigationIconClick = searchHandlers.onBackClick,
                 ),
+                clearIconContentDescription = stringResource(id = R.string.clear),
             )
         },
         utilityBar = {
@@ -158,6 +163,7 @@ fun SearchScreen(
                 )
             }
         },
+        snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarHostState) },
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
     ) {

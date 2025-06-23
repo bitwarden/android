@@ -4,6 +4,7 @@ package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import androidx.annotation.DrawableRes
 import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.util.removeDiacritics
@@ -20,15 +21,13 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
 import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import java.time.Clock
-
-private const val DELETION_DATE_PATTERN: String = "MMM d, uuuu, hh:mm a"
+import java.time.format.FormatStyle
 
 /**
  * Updates a [SearchTypeData] with the given data if necessary.
@@ -151,7 +150,6 @@ fun List<CipherView>.toViewState(
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
-    isTotp: Boolean,
     isPremiumUser: Boolean,
 ): SearchState.ViewState =
     when {
@@ -163,7 +161,6 @@ fun List<CipherView>.toViewState(
                     hasMasterPassword = hasMasterPassword,
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     isAutofill = isAutofill,
-                    isTotp = isTotp,
                     isPremiumUser = isPremiumUser,
                 )
                     .sortAlphabetically(),
@@ -177,13 +174,11 @@ fun List<CipherView>.toViewState(
         }
     }
 
-@Suppress("LongParameterList")
 private fun List<CipherView>.toDisplayItemList(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
-    isTotp: Boolean,
     isPremiumUser: Boolean,
 ): List<SearchState.DisplayItem> =
     this.map {
@@ -192,18 +187,15 @@ private fun List<CipherView>.toDisplayItemList(
             hasMasterPassword = hasMasterPassword,
             isIconLoadingDisabled = isIconLoadingDisabled,
             isAutofill = isAutofill,
-            isTotp = isTotp,
             isPremiumUser = isPremiumUser,
         )
     }
 
-@Suppress("LongParameterList")
 private fun CipherView.toDisplayItem(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
-    isTotp: Boolean,
     isPremiumUser: Boolean,
 ): SearchState.DisplayItem =
     SearchState.DisplayItem(
@@ -231,8 +223,8 @@ private fun CipherView.toDisplayItem(
             .filter {
                 this.login != null || (it != AutofillSelectionOption.AUTOFILL_AND_SAVE)
             },
-        isTotp = isTotp,
-        shouldDisplayMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
+        shouldDisplayMasterPasswordReprompt = hasMasterPassword &&
+            reprompt == CipherRepromptType.PASSWORD,
         itemType = SearchState.DisplayItem.ItemType.Vault(type = this.type),
     )
 
@@ -360,7 +352,11 @@ private fun SendView.toDisplayItem(
         id = id.orEmpty(),
         title = name,
         titleTestTag = "SendNameLabel",
-        subtitle = deletionDate.toFormattedPattern(DELETION_DATE_PATTERN, clock),
+        subtitle = deletionDate.toFormattedDateTimeStyle(
+            dateStyle = FormatStyle.MEDIUM,
+            timeStyle = FormatStyle.SHORT,
+            clock = clock,
+        ),
         subtitleTestTag = "SendDateLabel",
         iconData = IconData.Local(
             iconRes = when (type) {
@@ -373,7 +369,6 @@ private fun SendView.toDisplayItem(
         overflowTestTag = "SendOptionsButton",
         totpCode = null,
         autofillSelectionOptions = emptyList(),
-        isTotp = false,
         shouldDisplayMasterPasswordReprompt = false,
         itemType = SearchState.DisplayItem.ItemType.Sends(type = this.type),
     )

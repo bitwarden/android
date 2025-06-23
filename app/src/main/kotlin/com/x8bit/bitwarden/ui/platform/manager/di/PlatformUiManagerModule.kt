@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.manager.di
 
 import android.content.Context
+import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
@@ -12,6 +13,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -25,9 +27,11 @@ class PlatformUiManagerModule {
     @Singleton
     fun provideIntentManager(
         @ApplicationContext context: Context,
+        clock: Clock,
     ): IntentManager =
         IntentManagerImpl(
             context = context,
+            clock = clock,
         )
 
     @Provides
@@ -37,5 +41,9 @@ class PlatformUiManagerModule {
 
     @Provides
     @Singleton
-    fun provideSnackbarRelayManager(): SnackbarRelayManager = SnackbarRelayManagerImpl()
+    fun provideSnackbarRelayManager(
+        dispatcherManager: DispatcherManager,
+    ): SnackbarRelayManager = SnackbarRelayManagerImpl(
+        dispatcherManager = dispatcherManager,
+    )
 }

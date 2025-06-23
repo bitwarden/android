@@ -183,7 +183,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
                 email = EMAIL,
                 fingerprint = AUTH_REQUEST.fingerprint,
                 ipAddress = AUTH_REQUEST.ipAddress,
-                time = "9/13/24 12:00 AM",
+                time = "9/13/24, 12:00 AM",
             ),
         )
         val viewModel = createViewModel()
@@ -455,7 +455,7 @@ private val DEFAULT_STATE: LoginApprovalState = LoginApprovalState(
         email = EMAIL,
         fingerprint = FINGERPRINT,
         ipAddress = "1.0.0.1",
-        time = "9/13/24 12:00 AM",
+        time = "9/13/24, 12:00 AM",
     ),
 )
 private const val USER_ID = "userID"

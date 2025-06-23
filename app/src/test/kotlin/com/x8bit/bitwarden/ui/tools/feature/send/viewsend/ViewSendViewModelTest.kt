@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.send.viewsend
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
@@ -14,6 +15,9 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.util.toViewSendViewStateContent
 import io.mockk.coEvery
@@ -24,6 +28,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -45,6 +50,14 @@ class ViewSendViewModelTest : BaseViewModelTest() {
     }
     private val environmentRepository = mockk<EnvironmentRepository> {
         every { environment } returns Environment.Us
+    }
+    private val mutableSnackbarDataFlow: MutableSharedFlow<BitwardenSnackbarData> =
+        bufferedMutableSharedFlow()
+    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+        every { sendSnackbarData(data = any(), relay = any()) } just runs
+        every {
+            getSnackbarDataFlow(relay = any(), relays = anyVararg())
+        } returns mutableSnackbarDataFlow
     }
 
     @BeforeEach
@@ -96,6 +109,20 @@ class ViewSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on CopyNotesClick should call setText on ClipboardManger`() {
+        val viewModel = createViewModel()
+        val sendView = createMockSendView(number = 1)
+        every {
+            sendView.toViewSendViewStateContent(baseWebSendUrl = any(), clock = FIXED_CLOCK)
+        } returns DEFAULT_CONTENT_VIEW_STATE
+        mutableSendStateFlow.value = DataState.Loaded(data = sendView)
+        viewModel.trySendAction(ViewSendAction.CopyNotesClick)
+        verify(exactly = 1) {
+            clipboardManager.setText(text = "notes")
+        }
+    }
+
+    @Test
     fun `on DeleteClick with failure should display error dialog`() = runTest {
         val initialState = DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
         val sendView = createMockSendView(number = 1)
@@ -135,7 +162,7 @@ class ViewSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on DeleteClick with success should display toast`() = runTest {
+    fun `on DeleteClick with success should navigate back`() = runTest {
         val initialState = DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
         val sendView = createMockSendView(number = 1)
         every {
@@ -162,12 +189,14 @@ class ViewSendViewModelTest : BaseViewModelTest() {
                 stateFlow.awaitItem(),
             )
             assertEquals(
-                ViewSendEvent.ShowToast(message = R.string.send_deleted.asText()),
-                eventFLow.awaitItem(),
-            )
-            assertEquals(
                 ViewSendEvent.NavigateBack,
                 eventFLow.awaitItem(),
+            )
+        }
+        verify(exactly = 1) {
+            snackbarRelayManager.sendSnackbarData(
+                data = BitwardenSnackbarData(message = R.string.send_deleted.asText()),
+                relay = SnackbarRelay.SEND_DELETED,
             )
         }
     }
@@ -376,6 +405,16 @@ class ViewSendViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `SnackbarDataReceive should update emit ShowSnackbar`() = runTest {
+        val viewModel = createViewModel()
+        val snackbarData = BitwardenSnackbarData(message = "Test".asText())
+        viewModel.eventFlow.test {
+            mutableSnackbarDataFlow.tryEmit(snackbarData)
+            assertEquals(ViewSendEvent.ShowSnackbar(data = snackbarData), awaitItem())
+        }
+    }
+
     private fun createViewModel(
         state: ViewSendState? = null,
     ): ViewSendViewModel = ViewSendViewModel(
@@ -383,8 +422,8 @@ class ViewSendViewModelTest : BaseViewModelTest() {
         clock = FIXED_CLOCK,
         vaultRepository = vaultRepository,
         environmentRepository = environmentRepository,
-        savedStateHandle = SavedStateHandle().apply
-        {
+        snackbarRelayManager = snackbarRelayManager,
+        savedStateHandle = SavedStateHandle().apply {
             set(key = "state", value = state)
             every { toViewSendArgs() } returns ViewSendArgs(
                 sendId = (state ?: DEFAULT_STATE).sendId,

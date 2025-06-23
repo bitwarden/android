@@ -300,7 +300,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
 
         composeTestRule
-            .onAllNodesWithText(text = "Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify {
@@ -369,7 +369,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
 
         composeTestRule
-            .onAllNodesWithText(text = "Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify {
@@ -438,7 +438,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
 
         composeTestRule
-            .onAllNodesWithText(text = "Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify {
@@ -456,7 +456,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -512,7 +512,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -548,7 +548,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN_DIALOG
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -571,7 +571,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN_DIALOG
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
     }
@@ -985,7 +985,20 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll("Authenticator key")
+            .assertTextEquals("Authenticator key", "••••••••")
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Authenticator key")
+            .assertExists()
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "Show"))
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Authenticator key")
             .assertTextEquals("Authenticator key", "TestCode")
+            .assertIsEnabled()
 
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) { copy(totp = "NewTestCode") }
@@ -998,6 +1011,42 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) { copy(totp = null) }
         }
+    }
+
+    @Test
+    fun `in ItemType_Login state totp control should display the text provided by the state`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(totp = "TestCode") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Authenticator key")
+            .assertTextEquals("Authenticator key", "••••••••")
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Authenticator key")
+            .assertExists()
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "Show"))
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Authenticator key")
+            .assertTextEquals("Authenticator key", "TestCode")
+            .assertIsEnabled()
+
+        composeTestRule
+            .onNodeWithText("Authenticator key")
+            .assertExists()
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "Hide"))
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Authenticator key")
+            .assertTextEquals("Authenticator key", "••••••••")
     }
 
     @Suppress("MaxLineLength")
@@ -2313,7 +2362,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performTextInput("TestLinked")
 
         composeTestRule
-            .onNodeWithText("Ok")
+            .onNodeWithText(text = "Okay")
             .performClick()
 
         verify {
@@ -2895,7 +2944,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performTextInput("TestText")
 
         composeTestRule
-            .onNodeWithText("Ok")
+            .onNodeWithText(text = "Okay")
             .performClick()
 
         verify {
@@ -2959,7 +3008,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performTextInput("TestBoolean")
 
         composeTestRule
-            .onNodeWithText("Ok")
+            .onNodeWithText(text = "Okay")
             .performClick()
 
         verify {
@@ -3000,7 +3049,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performTextInput("TestHidden")
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -3151,7 +3200,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performTextInput("Boolean")
 
         composeTestRule
-            .onNodeWithText("Ok")
+            .onNodeWithText(text = "Okay")
             .performClick()
 
         verify {
@@ -3472,7 +3521,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -3520,7 +3569,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -3642,7 +3691,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 

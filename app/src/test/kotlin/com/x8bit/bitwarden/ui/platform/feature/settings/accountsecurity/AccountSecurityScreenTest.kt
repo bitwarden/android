@@ -810,7 +810,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
@@ -868,7 +868,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -927,7 +927,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Time")
+            .onAllNodesWithText(text = "Select time")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
@@ -935,7 +935,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
     }
@@ -974,7 +974,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -1005,7 +1005,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -1015,7 +1015,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             .isDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -1388,7 +1388,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 

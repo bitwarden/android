@@ -64,7 +64,7 @@ class EditItemViewModel @Inject constructor(
             is EditItemAction.CancelClick -> handleCancelClick()
             is EditItemAction.TypeOptionClick -> handleTypeOptionClick(action)
             is EditItemAction.IssuerNameTextChange -> handleIssuerNameTextChange(action)
-            is EditItemAction.UsernameTextChange -> handleIssuerTextChange(action)
+            is EditItemAction.UsernameTextChange -> handleUsernameTextChange(action)
             is EditItemAction.FavoriteToggleClick -> handleFavoriteToggleClick(action)
             is EditItemAction.RefreshPeriodOptionClick -> handlePeriodTextChange(action)
             is EditItemAction.TotpCodeTextChange -> handleTotpCodeTextChange(action)
@@ -156,7 +156,7 @@ class EditItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleIssuerTextChange(action: EditItemAction.UsernameTextChange) {
+    private fun handleUsernameTextChange(action: EditItemAction.UsernameTextChange) {
         updateItemData { currentItemData ->
             currentItemData.copy(
                 username = action.username,

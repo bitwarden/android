@@ -32,7 +32,6 @@ import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,10 +42,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
-import com.bitwarden.ui.platform.base.util.toAnnotatedString
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ErrorDialogDismiss
@@ -54,8 +56,6 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEv
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToTerms
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.handlers.StartRegistrationHandler
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.handlers.rememberStartRegistrationHandler
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
@@ -156,7 +156,7 @@ fun StartRegistrationScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.create_account),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = handler.onCloseClick,
             )
@@ -168,7 +168,6 @@ fun StartRegistrationScreen(
             nameInput = state.nameInput,
             isReceiveMarketingEmailsToggled = state.isReceiveMarketingEmailsToggled,
             isContinueButtonEnabled = state.isContinueButtonEnabled,
-            isNewOnboardingUiEnabled = state.showNewOnboardingUi,
             handler = handler,
         )
     }
@@ -183,7 +182,6 @@ private fun StartRegistrationContent(
     isReceiveMarketingEmailsToggled: Boolean,
     isContinueButtonEnabled: Boolean,
     handler: StartRegistrationHandler,
-    isNewOnboardingUiEnabled: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -194,18 +192,17 @@ private fun StartRegistrationContent(
     ) {
         Spacer(modifier = Modifier.height(height = 12.dp))
 
-        if (isNewOnboardingUiEnabled) {
-            Spacer(modifier = Modifier.weight(1f))
-            Image(
-                painter = rememberVectorPainter(id = R.drawable.bitwarden_logo),
-                colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
-                contentDescription = null,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
-            Spacer(modifier = Modifier.weight(1f))
-        }
+        Spacer(modifier = Modifier.weight(1f))
+        Image(
+            painter = rememberVectorPainter(id = R.drawable.bitwarden_logo),
+            colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
+            contentDescription = null,
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .fillMaxWidth(),
+        )
+        Spacer(modifier = Modifier.weight(1f))
+
         Spacer(modifier = Modifier.height(12.dp))
 
         BitwardenTextField(
@@ -222,7 +219,6 @@ private fun StartRegistrationContent(
                     selectedOption = selectedEnvironmentType,
                     onOptionSelected = handler.onEnvironmentTypeSelect,
                     onHelpClick = handler.onServerGeologyHelpClick,
-                    isHelpEnabled = isNewOnboardingUiEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(tag = "RegionSelectorDropdown"),
@@ -293,13 +289,6 @@ private fun TermsAndPrivacyText(
 ) {
     val strTerms = stringResource(id = R.string.terms_of_service)
     val strPrivacy = stringResource(id = R.string.privacy_policy)
-    val annotatedLinkString: AnnotatedString =
-        R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy.toAnnotatedString {
-            when (it) {
-                "termsOfService" -> onTermsClick()
-                "privacyPolicy" -> onPrivacyPolicyClick()
-            }
-        }
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
@@ -327,7 +316,15 @@ private fun TermsAndPrivacyText(
             .fillMaxWidth(),
     ) {
         Text(
-            text = annotatedLinkString,
+            text = annotatedStringResource(
+                id = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy,
+                onAnnotationClick = {
+                    when (it) {
+                        "termsOfService" -> onTermsClick()
+                        "privacyPolicy" -> onPrivacyPolicyClick()
+                    }
+                },
+            ),
             style = BitwardenTheme.typography.bodyMedium.copy(
                 textAlign = TextAlign.Center,
             ),
@@ -356,14 +353,14 @@ private fun ReceiveMarketingEmailsSwitch(
                         },
                     ),
                 )
-            },
-        label = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time
-            .toAnnotatedString {
-                onUnsubscribeClick()
-            },
+            }
+            .testTag(tag = "ReceiveMarketingEmailsToggle"),
+        label = annotatedStringResource(
+            id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time,
+            onAnnotationClick = { onUnsubscribeClick() },
+        ),
         isChecked = isChecked,
         onCheckedChange = onCheckedChange,
-        contentDescription = "ReceiveMarketingEmailsToggle",
         cardStyle = CardStyle.Full,
     )
 }
@@ -378,7 +375,6 @@ private fun StartRegistrationContentFilledOut_preview() {
             nameInput = "Test User",
             isReceiveMarketingEmailsToggled = true,
             isContinueButtonEnabled = true,
-            isNewOnboardingUiEnabled = false,
             handler = StartRegistrationHandler(
                 onEmailInputChange = {},
                 onNameInputChange = {},
@@ -405,34 +401,6 @@ private fun StartRegistrationContentEmpty_preview() {
             nameInput = "",
             isReceiveMarketingEmailsToggled = false,
             isContinueButtonEnabled = false,
-            isNewOnboardingUiEnabled = false,
-            handler = StartRegistrationHandler(
-                onEmailInputChange = {},
-                onNameInputChange = {},
-                onEnvironmentTypeSelect = {},
-                onContinueClick = {},
-                onTermsClick = {},
-                onPrivacyPolicyClick = {},
-                onReceiveMarketingEmailsToggle = {},
-                onUnsubscribeMarketingEmailsClick = {},
-                onServerGeologyHelpClick = {},
-                onCloseClick = {},
-            ),
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun StartRegistrationContentNewOnboardingUi_preview() {
-    BitwardenTheme {
-        StartRegistrationContent(
-            emailInput = "",
-            selectedEnvironmentType = Environment.Type.US,
-            nameInput = "",
-            isReceiveMarketingEmailsToggled = false,
-            isContinueButtonEnabled = false,
-            isNewOnboardingUiEnabled = true,
             handler = StartRegistrationHandler(
                 onEmailInputChange = {},
                 onNameInputChange = {},

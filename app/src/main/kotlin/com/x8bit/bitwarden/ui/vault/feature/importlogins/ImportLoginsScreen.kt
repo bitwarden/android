@@ -39,25 +39,26 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.bitwardenBoldSpanStyle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.content.model.ContentBlockData
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.model.ContentBlockData
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.components.ImportLoginsInstructionStep
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.handlers.ImportLoginHandler
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.handlers.rememberImportLoginHandler
@@ -118,7 +119,7 @@ fun ImportLoginsScreen(
             BitwardenTopAppBar(
                 title = stringResource(R.string.import_logins),
                 navigationIcon = NavigationIcon(
-                    navigationIcon = rememberVectorPainter(R.drawable.ic_close),
+                    navigationIcon = rememberVectorPainter(BitwardenDrawable.ic_close),
                     onNavigationIconClick = handler.onCloseClick,
                     navigationIconContentDescription = stringResource(R.string.close),
                 ),
@@ -286,13 +287,15 @@ private fun ImportLoginsStepOneContent(
     onHelpClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val instruction1 =
-        R.string.on_your_computer_log_in_to_your_current_browser_or_password_manager.toAnnotatedString()
-    val instruction2 =
-        R.string.export_your_passwords_this_option_is_usually_found_in_your_settings.toAnnotatedString()
-    val instruction3 =
-        R.string.save_the_exported_file_somewhere_on_your_computer_you_can_find_easily
-            .toAnnotatedString()
+    val instruction1 = annotatedStringResource(
+        id = R.string.on_your_computer_log_in_to_your_current_browser_or_password_manager,
+    )
+    val instruction2 = annotatedStringResource(
+        id = R.string.export_your_passwords_this_option_is_usually_found_in_your_settings,
+    )
+    val instruction3 = annotatedStringResource(
+        id = R.string.save_the_exported_file_somewhere_on_your_computer_you_can_find_easily,
+    )
     ImportLoginsInstructionStep(
         stepText = stringResource(R.string.step_1_of_3),
         stepTitle = stringResource(R.string.export_your_saved_logins),
@@ -303,7 +306,7 @@ private fun ImportLoginsStepOneContent(
                 subtitleText = null,
             ),
             ContentBlockData(
-                iconVectorResource = R.drawable.ic_number2,
+                iconVectorResource = BitwardenDrawable.ic_number2,
                 headerText = instruction2,
                 subtitleText = null,
             ),
@@ -329,11 +332,10 @@ private fun ImportLoginsStepTwoContent(
     onHelpClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val instruction1 =
-        R.string.on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com
-            .toAnnotatedString(
-                vaultUrl,
-            )
+    val instruction1 = annotatedStringResource(
+        id = R.string.on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com,
+        args = arrayOf(vaultUrl),
+    )
     val instruction2Text = stringResource(R.string.log_in_to_the_bitwarden_web_app)
     val instruction2 = buildAnnotatedString {
         withStyle(bitwardenBoldSpanStyle) {
@@ -350,7 +352,7 @@ private fun ImportLoginsStepTwoContent(
                 subtitleText = null,
             ),
             ContentBlockData(
-                iconVectorResource = R.drawable.ic_number2,
+                iconVectorResource = BitwardenDrawable.ic_number2,
                 headerText = instruction2,
                 subtitleText = null,
             ),
@@ -370,15 +372,18 @@ private fun ImportLoginsStepThreeContent(
     onHelpClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val instruction1 =
-        R.string.in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data
-            .toAnnotatedString()
-    val instruction2 = R.string.fill_out_the_form_and_import_your_saved_password_file
-        .toAnnotatedString()
-    val instruction3 = R.string.select_import_data_in_the_web_app_then_done_to_finish_syncing
-        .toAnnotatedString()
-    val instruction4 = R.string.for_your_security_be_sure_to_delete_your_saved_password_file
-        .toAnnotatedString()
+    val instruction1 = annotatedStringResource(
+        id = R.string.in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data,
+    )
+    val instruction2 = annotatedStringResource(
+        id = R.string.fill_out_the_form_and_import_your_saved_password_file,
+    )
+    val instruction3 = annotatedStringResource(
+        id = R.string.select_import_data_in_the_web_app_then_done_to_finish_syncing,
+    )
+    val instruction4 = annotatedStringResource(
+        id = R.string.for_your_security_be_sure_to_delete_your_saved_password_file,
+    )
     ImportLoginsInstructionStep(
         stepText = stringResource(R.string.step_3_of_3),
         stepTitle = stringResource(R.string.import_logins_to_bitwarden),
@@ -389,7 +394,7 @@ private fun ImportLoginsStepThreeContent(
                 subtitleText = null,
             ),
             ContentBlockData(
-                iconVectorResource = R.drawable.ic_number2,
+                iconVectorResource = BitwardenDrawable.ic_number2,
                 headerText = instruction2,
                 subtitleText = null,
             ),
@@ -555,14 +560,12 @@ private class ImportLoginsDialogContentPreviewProvider :
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 showBottomSheet = false,
                 currentWebVaultUrl = "vault.bitwarden.com",
-                snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
             ),
             ImportLoginsState(
                 dialogState = ImportLoginsState.DialogState.ImportLater,
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 showBottomSheet = false,
                 currentWebVaultUrl = "vault.bitwarden.com",
-                snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
             ),
         )
 }

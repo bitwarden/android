@@ -1,13 +1,17 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlocked
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
+import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupAutoFillScreen
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScreen
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupAutoFillDestination
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupUnlockDestination
+import com.x8bit.bitwarden.ui.platform.feature.search.SearchRoute
 import com.x8bit.bitwarden.ui.platform.feature.search.navigateToSearch
 import com.x8bit.bitwarden.ui.platform.feature.search.searchDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.deleteAccountDestination
@@ -18,6 +22,8 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapp
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval.navigateToLoginApproval
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingrequests.navigateToPendingRequests
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingrequests.pendingRequestsDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.about.aboutPrivilegedAppsDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.about.navigateToAboutPrivilegedAppsScreen
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.exportVaultDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.navigateToExportVault
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.flightRecorderDestination
@@ -112,9 +118,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             },
             onNavigateToSetupUnlockScreen = { navController.navigateToSetupUnlockScreen() },
             onNavigateToSetupAutoFillScreen = { navController.navigateToSetupAutoFillScreen() },
-            onNavigateToImportLogins = {
-                navController.navigateToImportLoginsScreen(snackbarRelay = it)
-            },
+            onNavigateToImportLogins = { navController.navigateToImportLoginsScreen() },
             onNavigateToAddFolderScreen = {
                 navController.navigateToFolderAddEdit(
                     folderAddEditType = FolderAddEditType.AddItem,
@@ -125,6 +129,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                 navController.navigateToFlightRecorder(isPreAuth = false)
             },
             onNavigateToRecordedLogs = { navController.navigateToRecordedLogs(isPreAuth = false) },
+            onNavigateToAboutPrivilegedApps = {
+                navController.navigateToAboutPrivilegedAppsScreen()
+            },
         )
         flightRecorderDestination(
             isPreAuth = false,
@@ -132,6 +139,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         recordedLogsDestination(
             isPreAuth = false,
+            onNavigateBack = { navController.popBackStack() },
+        )
+        aboutPrivilegedAppsDestination(
             onNavigateBack = { navController.popBackStack() },
         )
         deleteAccountDestination(
@@ -201,7 +211,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
 
         addEditSendDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateUpToRoot = { navController.navigateToVaultUnlockedRoot() },
+            onNavigateUpToSearchOrRoot = { navController.navigateUpToSearchOrVaultUnlockedRoot() },
         )
         viewSendDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -249,6 +259,12 @@ fun NavGraphBuilder.vaultUnlockedGraph(
     }
 }
 
-private fun NavController.navigateToVaultUnlockedRoot() {
-    this.popBackStack(route = VaultUnlockedNavbarRoute, inclusive = false)
+private fun NavController.navigateUpToSearchOrVaultUnlockedRoot() {
+    if (!this.popBackStack<SearchRoute>(inclusive = false)) {
+        this.navigateUpToVaultUnlockedRoot()
+    }
+}
+
+private fun NavController.navigateUpToVaultUnlockedRoot() {
+    this.popBackStack<VaultUnlockedNavbarRoute>(inclusive = false)
 }

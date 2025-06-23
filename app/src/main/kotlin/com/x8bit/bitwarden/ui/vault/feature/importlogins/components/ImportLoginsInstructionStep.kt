@@ -19,14 +19,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
+import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.content.model.ContentBlockData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
-import com.x8bit.bitwarden.ui.platform.components.model.ContentBlockData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -66,10 +68,10 @@ fun ImportLoginsInstructionStep(
         )
         Spacer(Modifier.height(24.dp))
         Text(
-            text = R.string.need_help_check_out_import_help
-                .toAnnotatedString {
-                    onHelpClick()
-                },
+            text = annotatedStringResource(
+                id = R.string.need_help_check_out_import_help,
+                onAnnotationClick = { onHelpClick() },
+            ),
             style = BitwardenTheme.typography.bodySmall,
             color = BitwardenTheme.colorScheme.text.secondary,
             modifier = Modifier.standardHorizontalMargin(),
@@ -119,7 +121,7 @@ private fun ImportLoginsInstructionStep_preview() {
                         subtitleText = null,
                     ),
                     ContentBlockData(
-                        iconVectorResource = R.drawable.ic_number2,
+                        iconVectorResource = BitwardenDrawable.ic_number2,
                         headerText = buildAnnotatedString {
                             append("Step text 2")
                         },

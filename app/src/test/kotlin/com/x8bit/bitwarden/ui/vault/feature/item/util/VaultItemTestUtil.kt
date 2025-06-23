@@ -169,10 +169,10 @@ fun createCommonContent(
     if (isEmpty) {
         VaultItemState.ViewState.Content.Common(
             name = "mockName",
-            lastUpdated = "1/1/70 12:16 AM",
+            created = R.string.created.asText("Jan 1, 1970, 12:16 AM"),
+            lastUpdated = R.string.last_edited.asText("Jan 1, 1970, 12:16 AM"),
             notes = null,
             customFields = emptyList(),
-            requiresReprompt = true,
             requiresCloneConfirmation = false,
             attachments = emptyList(),
             canDelete = true,
@@ -187,7 +187,8 @@ fun createCommonContent(
     } else {
         VaultItemState.ViewState.Content.Common(
             name = "mockName",
-            lastUpdated = "1/1/70 12:16 AM",
+            created = R.string.created.asText("Jan 1, 1970, 12:16 AM"),
+            lastUpdated = R.string.last_edited.asText("Jan 1, 1970, 12:16 AM"),
             notes = "Lots of notes",
             customFields = listOf(
                 FieldView(
@@ -226,7 +227,6 @@ fun createCommonContent(
                 )
                     .toCustomField(null),
             ),
-            requiresReprompt = true,
             requiresCloneConfirmation = true,
             attachments = listOf(
                 VaultItemState.ViewState.Content.Common.AttachmentItem(
@@ -269,7 +269,9 @@ fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemT
                 ),
             )
         },
-        passwordRevisionDate = "1/1/70 12:16 AM".takeUnless { isEmpty },
+        passwordRevisionDate = R.string.password_last_updated
+            .asText("Jan 1, 1970, 12:16 AM")
+            .takeUnless { isEmpty },
         isPremiumUser = true,
         totpCodeItemData = TotpCodeItemData(
             periodSeconds = 30,
@@ -278,8 +280,8 @@ fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemT
             totpCode = "testCode",
         )
             .takeUnless { isEmpty },
-        fido2CredentialCreationDateText = R.string.created_xy
-            .asText("10/27/23", "12:00 PM")
+        fido2CredentialCreationDateText = R.string.created_x
+            .asText("Oct 27, 2023, 12:00 PM")
             .takeUnless { isEmpty },
         canViewTotpCode = true,
     )

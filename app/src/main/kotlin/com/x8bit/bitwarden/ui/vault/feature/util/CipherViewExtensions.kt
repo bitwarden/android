@@ -11,6 +11,7 @@ import kotlinx.collections.immutable.toImmutableList
 /**
  * Creates the list of overflow actions to be displayed for a [CipherView].
  */
+@Suppress("LongMethod")
 fun CipherView.toOverflowActions(
     hasMasterPassword: Boolean,
     isPremiumUser: Boolean,
@@ -22,6 +23,7 @@ fun CipherView.toOverflowActions(
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = cipherId,
                     cipherType = this.type,
+                    requiresPasswordReprompt = hasMasterPassword,
                 ),
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = cipherId,
@@ -42,7 +44,12 @@ fun CipherView.toOverflowActions(
                     }
                     .takeIf { this.viewPassword },
                 this.login?.totp
-                    ?.let { ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode = it) }
+                    ?.let {
+                        ListingItemOverflowAction.VaultAction.CopyTotpClick(
+                            totpCode = it,
+                            requiresPasswordReprompt = hasMasterPassword,
+                        )
+                    }
                     .takeIf {
                         this.type == CipherType.LOGIN &&
                             (this.organizationUseTotp || isPremiumUser)
@@ -61,7 +68,12 @@ fun CipherView.toOverflowActions(
                     )
                 },
                 this.notes
-                    ?.let { ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = it) }
+                    ?.let {
+                        ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                            notes = it,
+                            requiresPasswordReprompt = hasMasterPassword,
+                        )
+                    }
                     .takeIf { this.type == CipherType.SECURE_NOTE },
                 this.login?.uris?.firstOrNull { it.uri != null }?.uri?.let {
                     ListingItemOverflowAction.VaultAction.LaunchClick(url = it)

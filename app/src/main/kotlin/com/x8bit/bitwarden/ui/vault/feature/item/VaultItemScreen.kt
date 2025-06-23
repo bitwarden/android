@@ -21,24 +21,24 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
+import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
+import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
@@ -126,16 +126,6 @@ fun VaultItemScreen(
         onDismissRequest = remember(viewModel) {
             { viewModel.trySendAction(VaultItemAction.Common.DismissDialogClick) }
         },
-        onSubmitMasterPassword = remember(viewModel) {
-            { masterPassword, action ->
-                viewModel.trySendAction(
-                    VaultItemAction.Common.MasterPasswordSubmit(
-                        masterPassword = masterPassword,
-                        action = action,
-                    ),
-                )
-            }
-        },
         onConfirmDeleteClick = remember(viewModel) {
             { viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick) }
         },
@@ -160,7 +150,7 @@ fun VaultItemScreen(
             BitwardenTopAppBar(
                 title = state.title(),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(VaultItemAction.Common.CloseClick) }
@@ -180,6 +170,7 @@ fun VaultItemScreen(
                         )
                     }
                     BitwardenOverflowActionItem(
+                        contentDescription = stringResource(R.string.more),
                         menuItemDataList = persistentListOfNotNull(
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.attachments),
@@ -286,7 +277,6 @@ private fun VaultItemDialogs(
     dialog: VaultItemState.DialogState?,
     onDismissRequest: () -> Unit,
     onConfirmDeleteClick: () -> Unit,
-    onSubmitMasterPassword: (masterPassword: String, action: PasswordRepromptAction) -> Unit,
     onConfirmCloneWithoutFido2Credential: () -> Unit,
     onConfirmRestoreAction: () -> Unit,
 ) {
@@ -302,18 +292,11 @@ private fun VaultItemDialogs(
             text = dialog.message(),
         )
 
-        is VaultItemState.DialogState.MasterPasswordDialog -> {
-            BitwardenMasterPasswordDialog(
-                onConfirmClick = { onSubmitMasterPassword(it, dialog.action) },
-                onDismissRequest = onDismissRequest,
-            )
-        }
-
         is VaultItemState.DialogState.DeleteConfirmationPrompt -> {
             BitwardenTwoButtonDialog(
                 title = stringResource(id = R.string.delete),
                 message = dialog.message.invoke(),
-                confirmButtonText = stringResource(id = R.string.ok),
+                confirmButtonText = stringResource(id = R.string.okay),
                 dismissButtonText = stringResource(id = R.string.cancel),
                 onConfirmClick = onConfirmDeleteClick,
                 onDismissClick = onDismissRequest,
@@ -336,7 +319,7 @@ private fun VaultItemDialogs(
         VaultItemState.DialogState.RestoreItemDialog -> BitwardenTwoButtonDialog(
             title = stringResource(id = R.string.restore),
             message = stringResource(id = R.string.do_you_really_want_to_restore_cipher),
-            confirmButtonText = stringResource(id = R.string.ok),
+            confirmButtonText = stringResource(id = R.string.okay),
             dismissButtonText = stringResource(id = R.string.cancel),
             onConfirmClick = onConfirmRestoreAction,
             onDismissClick = onDismissRequest,

@@ -1,24 +1,23 @@
 package com.bitwarden.ui.platform.base.util
 
+import android.content.res.Resources
 import android.text.Annotation
 import android.text.SpannableStringBuilder
 import android.text.SpannedString
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.core.text.getSpans
-import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Creates an [AnnotatedString] from a string resource allowing for optional arguments
  * to be applied.
+ *
  * @param args Optional arguments to be applied to the string resource, must already be a
  * [String]
  * @param style Style to apply to the entire string
@@ -26,6 +25,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * with the "emphasis" annotation.
  * @param linkHighlightStyle Style to apply to part of the resource that has been annotated with
  * the "link" annotation.
+ * @param resources The resources used to access the strings.
  * @param onAnnotationClick Callback to invoke when a link annotation is clicked. Will pass back
  * the value of the annotation as a string to allow for delineation if there are multiple callbacks
  * to be applied.
@@ -45,22 +45,28 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * following custom XML tag: <annotation arg="0"> where the value is the index of the argument,
  * starting at 0.
  */
-@Suppress("LongMethod")
 @Composable
 fun @receiver:StringRes Int.toAnnotatedString(
-    vararg args: String,
+    vararg args: CharSequence,
     style: SpanStyle = bitwardenDefaultSpanStyle,
     emphasisHighlightStyle: SpanStyle = bitwardenBoldSpanStyle,
     linkHighlightStyle: SpanStyle = bitwardenClickableTextSpanStyle,
+    resources: Resources = LocalContext.current.resources,
     onAnnotationClick: ((annotationKey: String) -> Unit)? = null,
-): AnnotatedString {
-    val resources = LocalContext.current.resources
+): AnnotatedString = remember(
+    this,
+    args,
+    style,
+    emphasisHighlightStyle,
+    linkHighlightStyle,
+    onAnnotationClick,
+) {
     // The spannableBuilder is used to help parse through the annotations in the string resource.
     val spannableBuilder = try {
         SpannableStringBuilder(resources.getText(this) as SpannedString)
-    } catch (e: ClassCastException) {
+    } catch (_: ClassCastException) {
         // the resource did not contain and valid spans so we just return the raw string.
-        return stringResource(id = this, *args).toAnnotatedString()
+        return@remember resources.getString(this, *args).toAnnotatedString()
     }
     // Replace any format arguments with the provided arguments.
     spannableBuilder.applyArgAnnotations(args = args)
@@ -101,7 +107,7 @@ fun @receiver:StringRes Int.toAnnotatedString(
                     onAnnotationClick?.invoke(annotation.value.orEmpty())
                 }
                 annotatedStringBuilder.addLink(
-                    link,
+                    clickable = link,
                     start = start,
                     end = end,
                 )
@@ -110,7 +116,7 @@ fun @receiver:StringRes Int.toAnnotatedString(
             ValidAnnotationType.ARG -> Unit
         }
     }
-    return remember { annotatedStringBuilder.toAnnotatedString() }
+    return@remember annotatedStringBuilder.toAnnotatedString()
 }
 
 /**
@@ -118,7 +124,7 @@ fun @receiver:StringRes Int.toAnnotatedString(
  * replaced with the index value in the provided [args].
  */
 private fun SpannableStringBuilder.applyArgAnnotations(
-    vararg args: String,
+    vararg args: CharSequence,
 ) {
     val argAnnotations = getSpans<Annotation>()
         .filter { it.isArgAnnotation() }
@@ -127,7 +133,7 @@ private fun SpannableStringBuilder.applyArgAnnotations(
         val spanStart = getSpanStart(annotation).takeIf { it >= 0 } ?: continue
         val argIndex = Integer.parseInt(annotation.value)
         // if no string is available just replace it with an empty string.
-        val replacementString = args.getOrNull(argIndex).orEmpty()
+        val replacementString = args.getOrNull(index = argIndex) ?: ""
         this.replace(
             spanStart,
             this.getSpanEnd(annotation),
@@ -148,27 +154,3 @@ private enum class ValidAnnotationType {
 
 private fun Annotation.isArgAnnotation(): Boolean =
     this.key.uppercase() == ValidAnnotationType.ARG.name
-
-val bitwardenDefaultSpanStyle: SpanStyle
-    @Composable
-    @ReadOnlyComposable
-    get() = spanStyleOf(
-        color = BitwardenTheme.colorScheme.text.primary,
-        textStyle = BitwardenTheme.typography.labelMedium,
-    )
-
-val bitwardenBoldSpanStyle: SpanStyle
-    @Composable
-    @ReadOnlyComposable
-    get() = spanStyleOf(
-        color = BitwardenTheme.colorScheme.text.primary,
-        textStyle = BitwardenTheme.typography.bodyMediumEmphasis,
-    )
-
-val bitwardenClickableTextSpanStyle: SpanStyle
-    @Composable
-    @ReadOnlyComposable
-    get() = spanStyleOf(
-        color = BitwardenTheme.colorScheme.text.interaction,
-        textStyle = BitwardenTheme.typography.labelMedium,
-    )

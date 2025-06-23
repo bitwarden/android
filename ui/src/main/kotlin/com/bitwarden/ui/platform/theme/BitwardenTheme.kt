@@ -1,6 +1,5 @@
 package com.bitwarden.ui.platform.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -12,12 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
-import androidx.core.graphics.drawable.toDrawable
-import androidx.core.view.WindowCompat
 import com.bitwarden.ui.platform.components.field.interceptor.IncognitoInput
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.theme.color.BitwardenColorScheme
@@ -76,9 +71,9 @@ fun BitwardenTheme(
     }
 
     // Get the current scheme
-    val context = LocalContext.current
     val materialColorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            val context = LocalContext.current
             if (darkTheme) {
                 dynamicDarkColorScheme(context = context)
             } else {
@@ -99,21 +94,6 @@ fun BitwardenTheme(
 
         darkTheme -> darkBitwardenColorScheme
         else -> lightBitwardenColorScheme
-    }
-
-    // Update status bar according to scheme
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            WindowCompat.setDecorFitsSystemWindows(window, false)
-            val insetsController = WindowCompat.getInsetsController(window, view)
-            insetsController.isAppearanceLightStatusBars = !darkTheme
-            insetsController.isAppearanceLightNavigationBars = !darkTheme
-            window.setBackgroundDrawable(
-                bitwardenColorScheme.background.primary.value.toInt().toDrawable(),
-            )
-        }
     }
 
     CompositionLocalProvider(

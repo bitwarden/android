@@ -1,8 +1,6 @@
 package com.bitwarden.authenticator.ui.platform.theme
 
-import android.app.Activity
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.annotation.ColorRes
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -13,12 +11,9 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
 import com.bitwarden.authenticator.R
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 
@@ -46,19 +41,6 @@ fun AuthenticatorTheme(
 
         darkTheme -> darkColorScheme(context)
         else -> lightColorScheme(context)
-    }
-
-    // Update status bar according to scheme
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            WindowCompat.setDecorFitsSystemWindows(window, false)
-            val insetsController = WindowCompat.getInsetsController(window, view)
-            insetsController.isAppearanceLightStatusBars = !darkTheme
-            insetsController.isAppearanceLightNavigationBars = !darkTheme
-            window.setBackgroundDrawable(ColorDrawable(colorScheme.surface.value.toInt()))
-        }
     }
 
     val nonMaterialColors = if (darkTheme) {
