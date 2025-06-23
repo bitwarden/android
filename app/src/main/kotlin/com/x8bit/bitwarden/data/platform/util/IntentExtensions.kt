@@ -24,3 +24,19 @@ inline fun <reified T> Intent.getSafeParcelableExtra(
 inline fun <reified T> Bundle.getSafeParcelableExtra(
     name: String,
 ): T? = BundleCompat.getParcelable(this, name, T::class.java)
+
+/**
+ * Returns true if this intent contains unexpected or suspicious data.
+ */
+val Intent.isSuspicious: Boolean
+    get() {
+        return try {
+            val containsSuspiciousExtras = extras?.isEmpty() == false
+            val containsSuspiciousData = data != null
+            containsSuspiciousData || containsSuspiciousExtras
+        } catch (e: Exception) {
+            // `unparcel()` throws an exception on Android 12 and below if the bundle contains
+            // suspicious data, so we catch the exception and return true.
+            true
+        }
+    }
