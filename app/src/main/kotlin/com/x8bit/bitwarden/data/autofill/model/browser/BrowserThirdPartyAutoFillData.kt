@@ -12,6 +12,7 @@ data class BrowserThirdPartyAutoFillData(
  * The overall status for all relevant browsers.
  */
 data class BrowserThirdPartyAutofillStatus(
+    val braveStableStatusData: BrowserThirdPartyAutoFillData,
     val chromeStableStatusData: BrowserThirdPartyAutoFillData,
     val chromeBetaChannelStatusData: BrowserThirdPartyAutoFillData,
 )

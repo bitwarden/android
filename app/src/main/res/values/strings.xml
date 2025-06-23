@@ -908,9 +908,10 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
     <string name="self_host_server_url">Self-host server URL</string>
+    <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
     <string name="use_chrome_beta_autofill_integration">Use Chrome autofill integration (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Improves login filling for supported websites on Chrome. Once enabled, you’ll be directed to Chrome settings to enable third-party autofill.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
     <string name="show_more">Show more</string>
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>

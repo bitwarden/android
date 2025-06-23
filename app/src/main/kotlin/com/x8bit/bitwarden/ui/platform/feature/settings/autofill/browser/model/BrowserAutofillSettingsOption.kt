@@ -18,6 +18,19 @@ sealed class BrowserAutofillSettingsOption(val isEnabled: Boolean) : Parcelable 
     abstract val optionText: Text
 
     /**
+     * Represents the Brave release channel.
+     */
+    @Parcelize
+    data class BraveStable(
+        val enabled: Boolean,
+    ) : BrowserAutofillSettingsOption(isEnabled = enabled) {
+        override val browserPackage: BrowserPackage
+            get() = BrowserPackage.BRAVE_RELEASE
+        override val optionText: Text
+            get() = R.string.use_brave_autofill_integration.asText()
+    }
+
+    /**
      * Represents the stable Chrome release channel.
      */
     @Parcelize
