@@ -182,6 +182,7 @@ class VaultLockManagerImpl(
                             privateKey = privateKey,
                             method = initUserCryptoMethod,
                             userId = userId,
+                            signingKey = null,
                         ),
                     )
                     .flatMap { result ->
