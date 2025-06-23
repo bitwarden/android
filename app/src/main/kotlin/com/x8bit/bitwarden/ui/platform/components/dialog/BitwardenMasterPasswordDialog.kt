@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -75,6 +76,9 @@ fun BitwardenMasterPasswordDialog(
                     label = stringResource(id = R.string.master_password),
                     value = masterPassword,
                     onValueChange = { masterPassword = it },
+                    keyboardActions = KeyboardActions(
+                        onDone = { onConfirmClick(masterPassword) },
+                    ),
                     autoFocus = true,
                     passwordFieldTestTag = "AlertInputField",
                     cardStyle = CardStyle.Full,
