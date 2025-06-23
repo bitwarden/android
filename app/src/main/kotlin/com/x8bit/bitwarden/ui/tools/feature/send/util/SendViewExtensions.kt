@@ -40,14 +40,14 @@ fun SendView.toOverflowActions(
         .id
         ?.let { sendId ->
             listOfNotNull(
-                ListingItemOverflowAction.SendAction.ViewClick(sendId = sendId, sendType = type),
-                ListingItemOverflowAction.SendAction.EditClick(sendId = sendId, sendType = type),
                 ListingItemOverflowAction.SendAction.CopyUrlClick(
                     sendUrl = toSendUrl(baseWebSendUrl = baseWebSendUrl),
                 ),
                 ListingItemOverflowAction.SendAction.ShareUrlClick(
                     sendUrl = toSendUrl(baseWebSendUrl = baseWebSendUrl),
                 ),
+                ListingItemOverflowAction.SendAction.ViewClick(sendId = sendId, sendType = type),
+                ListingItemOverflowAction.SendAction.EditClick(sendId = sendId, sendType = type),
                 ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = sendId).takeIf {
                     hasPassword
                 },
