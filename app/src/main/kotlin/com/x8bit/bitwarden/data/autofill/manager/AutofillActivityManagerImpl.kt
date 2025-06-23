@@ -27,6 +27,7 @@ class AutofillActivityManagerImpl(
 
     private val browserAutofillStatus: BrowserThirdPartyAutofillStatus
         get() = BrowserThirdPartyAutofillStatus(
+            braveStableStatusData = browserThirdPartyAutofillManager.stableBraveAutofillStatus,
             chromeStableStatusData = browserThirdPartyAutofillManager.stableChromeAutofillStatus,
             chromeBetaChannelStatusData = browserThirdPartyAutofillManager.betaChromeAutofillStatus,
         )

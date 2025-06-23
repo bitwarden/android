@@ -62,7 +62,7 @@ fun BrowserAutofillSettingsCard(
         }
         Text(
             text = stringResource(
-                R.string.improves_login_filling_for_supported_websites_on_chrome,
+                id = R.string.improves_login_filling_for_supported_websites_on_selected_browsers,
             ),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.secondary,
@@ -84,6 +84,7 @@ private fun ChromeAutofillSettingsCard_preview() {
     BitwardenTheme {
         BrowserAutofillSettingsCard(
             options = persistentListOf(
+                BrowserAutofillSettingsOption.BraveStable(enabled = true),
                 BrowserAutofillSettingsOption.ChromeStable(enabled = false),
                 BrowserAutofillSettingsOption.ChromeBeta(enabled = true),
             ),

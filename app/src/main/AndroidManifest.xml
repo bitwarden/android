@@ -335,6 +335,9 @@
 
         <!-- To Query Chrome Stable: -->
         <package android:name="com.android.chrome" />
+
+        <!-- To Query Brave Stable: -->
+        <package android:name="com.brave.browser" />
     </queries>
 
 </manifest>

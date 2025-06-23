@@ -41,6 +41,10 @@ class BrowserThirdPartyAutofillEnabledManagerImpl(
 }
 
 private val DEFAULT_STATUS = BrowserThirdPartyAutofillStatus(
+    braveStableStatusData = BrowserThirdPartyAutoFillData(
+        isAvailable = false,
+        isThirdPartyEnabled = false,
+    ),
     chromeStableStatusData = BrowserThirdPartyAutoFillData(
         isAvailable = false,
         isThirdPartyEnabled = false,
