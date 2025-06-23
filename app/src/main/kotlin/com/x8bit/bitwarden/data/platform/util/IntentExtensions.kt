@@ -3,6 +3,7 @@
 package com.x8bit.bitwarden.data.platform.util
 
 import android.content.Intent
+import android.os.BadParcelableException
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.content.IntentCompat
@@ -26,17 +27,21 @@ inline fun <reified T> Bundle.getSafeParcelableExtra(
 ): T? = BundleCompat.getParcelable(this, name, T::class.java)
 
 /**
- * Returns true if this intent contains unexpected or suspicious data.
+ * Validate if there's anything suspicious
  */
-val Intent.isSuspicious: Boolean
-    get() {
-        return try {
-            val containsSuspiciousExtras = extras?.isEmpty() == false
-            val containsSuspiciousData = data != null
-            containsSuspiciousData || containsSuspiciousExtras
-        } catch (_: Exception) {
-            // `unparcel()` throws an exception on Android 12 and below if the bundle contains
-            // suspicious data, so we catch the exception and return true.
-            true
+fun Intent.validate() {
+    @Suppress("TooGenericExceptionCaught")
+    try {
+        // This will force Android to attempt unparcelling the extras
+        this.extras?.getBundle("trashstringwhichhasnousebuttocheckunparcel")
+    } catch (ex: Exception) {
+        if (ex is BadParcelableException ||
+            ex is ClassNotFoundException ||
+            ex is RuntimeException
+        ) {
+            this.replaceExtras(null as Bundle?)
+        } else {
+            throw ex // rethrow if it’s an unexpected exception
         }
     }
+}
