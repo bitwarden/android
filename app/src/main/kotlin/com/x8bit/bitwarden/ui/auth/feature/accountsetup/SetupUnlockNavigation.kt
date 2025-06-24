@@ -1,37 +1,59 @@
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
+import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.toRoute
 import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import com.x8bit.bitwarden.ui.platform.util.toObjectRoute
+import com.bitwarden.ui.platform.util.ParcelableRouteSerializer
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 /**
  * The type-safe route for the setup unlock screen.
  */
-sealed class SetupUnlockRoute {
+@Parcelize
+@Serializable(with = SetupUnlockRoute.Serializer::class)
+sealed class SetupUnlockRoute : Parcelable {
     /**
      * The [isInitialSetup] value used in the setup unlock screen.
      */
     abstract val isInitialSetup: Boolean
 
     /**
+     * Custom serializer to support polymorphic routes.
+     */
+    class Serializer : ParcelableRouteSerializer<SetupUnlockRoute>(SetupUnlockRoute::class)
+
+    /**
      * The type-safe route for the standard setup unlock screen.
      */
-    @Serializable
+    @Parcelize
+    @Serializable(with = Standard.Serializer::class)
     data object Standard : SetupUnlockRoute() {
         override val isInitialSetup: Boolean get() = false
+
+        /**
+         * Custom serializer to support polymorphic routes.
+         */
+        class Serializer : ParcelableRouteSerializer<Standard>(Standard::class)
     }
 
     /**
      * The type-safe route for the root setup unlock screen.
      */
-    @Serializable
+    @Parcelize
+    @Serializable(with = AsRoot.Serializer::class)
     data object AsRoot : SetupUnlockRoute() {
         override val isInitialSetup: Boolean get() = true
+
+        /**
+         * Custom serializer to support polymorphic routes.
+         */
+        class Serializer : ParcelableRouteSerializer<AsRoot>(AsRoot::class)
     }
 }
 
@@ -46,11 +68,8 @@ data class SetupUnlockArgs(
  * Constructs a [SetupUnlockArgs] from the [SavedStateHandle] and internal route data.
  */
 fun SavedStateHandle.toSetupUnlockArgs(): SetupUnlockArgs {
-    val route = this.toObjectRoute<SetupUnlockRoute.AsRoot>()
-        ?: this.toObjectRoute<SetupUnlockRoute.Standard>()
-    return route
-        ?.let { SetupUnlockArgs(isInitialSetup = it.isInitialSetup) }
-        ?: throw IllegalStateException("Missing correct route for SetupUnlockScreen")
+    val route = this.toRoute<SetupUnlockRoute>()
+    return SetupUnlockArgs(isInitialSetup = route.isInitialSetup)
 }
 
 /**
