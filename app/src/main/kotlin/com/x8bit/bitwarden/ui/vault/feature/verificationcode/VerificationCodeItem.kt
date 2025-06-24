@@ -17,12 +17,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.icon.BitwardenIcon
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 
 /**
  * The verification code item displayed to the user.
@@ -113,7 +114,7 @@ fun VaultVerificationCodeItem(
             Spacer(modifier = Modifier.width(width = 16.dp))
 
             BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_copy,
+                vectorIconRes = BitwardenDrawable.ic_copy,
                 contentDescription = stringResource(id = R.string.copy),
                 onClick = onCopyClick,
                 contentColor = BitwardenTheme.colorScheme.icon.primary,
@@ -128,7 +129,7 @@ fun VaultVerificationCodeItem(
 private fun VerificationCodeItem_preview() {
     BitwardenTheme {
         VaultVerificationCodeItem(
-            startIcon = IconData.Local(R.drawable.ic_globe),
+            startIcon = IconData.Local(BitwardenDrawable.ic_globe),
             label = "Sample Label",
             supportingLabel = "Supporting Label",
             authCode = "1234567890".chunked(3).joinToString(" "),

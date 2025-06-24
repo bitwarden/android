@@ -5,10 +5,10 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillEnabledManager
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutoFillData
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutofillStatus
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFillData
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -16,7 +16,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
-import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome.model.ChromeAutofillSettingsOption
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -49,10 +49,10 @@ class AutoFillViewModelTest : BaseViewModelTest() {
     }
 
     private val mutableChromeAutofillStatusFlow = MutableStateFlow(DEFAULT_AUTOFILL_STATUS)
-    private val chromeThirdPartyAutofillEnabledManager =
-        mockk<ChromeThirdPartyAutofillEnabledManager> {
-            every { chromeThirdPartyAutofillStatusFlow } returns mutableChromeAutofillStatusFlow
-            every { chromeThirdPartyAutofillStatus } returns DEFAULT_AUTOFILL_STATUS
+    private val browserThirdPartyAutofillEnabledManager =
+        mockk<BrowserThirdPartyAutofillEnabledManager> {
+            every { browserThirdPartyAutofillStatusFlow } returns mutableChromeAutofillStatusFlow
+            every { browserThirdPartyAutofillStatus } returns DEFAULT_AUTOFILL_STATUS
         }
 
     private val settingsRepository: SettingsRepository = mockk {
@@ -388,13 +388,15 @@ class AutoFillViewModelTest : BaseViewModelTest() {
                 )
                 mutableChromeAutofillStatusFlow.update {
                     it.copy(
-                        stableStatusData = DEFAULT_CHROME_AUTOFILL_DATA.copy(isAvailable = true),
+                        chromeStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA.copy(
+                            isAvailable = true,
+                        ),
                     )
                 }
                 assertEquals(
                     DEFAULT_STATE.copy(
-                        chromeAutofillSettingsOptions = persistentListOf(
-                            ChromeAutofillSettingsOption.Stable(enabled = false),
+                        browserAutofillSettingsOptions = persistentListOf(
+                            BrowserAutofillSettingsOption.ChromeStable(enabled = false),
                         ),
                     ),
                     awaitItem(),
@@ -404,22 +406,22 @@ class AutoFillViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `when ChromeAutofillSelected action is handled the correct NavigateToChromeAutofillSettings event is sent`() =
+    fun `when ChromeAutofillSelected action is handled the correct NavigateToBrowserAutofillSettings event is sent`() =
         runTest {
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
                 viewModel.trySendAction(
-                    AutoFillAction.ChromeAutofillSelected(ChromeReleaseChannel.STABLE),
+                    AutoFillAction.BrowserAutofillSelected(BrowserPackage.CHROME_STABLE),
                 )
                 assertEquals(
-                    AutoFillEvent.NavigateToChromeAutofillSettings(ChromeReleaseChannel.STABLE),
+                    AutoFillEvent.NavigateToBrowserAutofillSettings(BrowserPackage.CHROME_STABLE),
                     awaitItem(),
                 )
                 viewModel.trySendAction(
-                    AutoFillAction.ChromeAutofillSelected(ChromeReleaseChannel.BETA),
+                    AutoFillAction.BrowserAutofillSelected(BrowserPackage.CHROME_BETA),
                 )
                 assertEquals(
-                    AutoFillEvent.NavigateToChromeAutofillSettings(ChromeReleaseChannel.BETA),
+                    AutoFillEvent.NavigateToBrowserAutofillSettings(BrowserPackage.CHROME_BETA),
                     awaitItem(),
                 )
             }
@@ -446,7 +448,7 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         settingsRepository = settingsRepository,
         authRepository = authRepository,
         firstTimeActionManager = firstTimeActionManager,
-        chromeThirdPartyAutofillEnabledManager = chromeThirdPartyAutofillEnabledManager,
+        chromeThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
         featureFlagManager = mockFeatureFlagManager,
     )
 }
@@ -462,16 +464,17 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     defaultUriMatchType = UriMatchType.DOMAIN,
     showAutofillActionCard = false,
     activeUserId = "activeUserId",
-    chromeAutofillSettingsOptions = persistentListOf(),
+    browserAutofillSettingsOptions = persistentListOf(),
     isUserManagedPrivilegedAppsEnabled = false,
 )
 
-private val DEFAULT_CHROME_AUTOFILL_DATA = ChromeThirdPartyAutoFillData(
+private val DEFAULT_BROWSER_AUTOFILL_DATA = BrowserThirdPartyAutoFillData(
     isAvailable = false,
     isThirdPartyEnabled = false,
 )
 
-private val DEFAULT_AUTOFILL_STATUS = ChromeThirdPartyAutofillStatus(
-    stableStatusData = DEFAULT_CHROME_AUTOFILL_DATA,
-    betaChannelStatusData = DEFAULT_CHROME_AUTOFILL_DATA,
+private val DEFAULT_AUTOFILL_STATUS = BrowserThirdPartyAutofillStatus(
+    braveStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
+    chromeStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
+    chromeBetaChannelStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
 )

@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -138,9 +139,9 @@ private fun MinimumCharacterCount(
     ) {
         AnimatedContent(
             targetState = if (minimumRequirementMet) {
-                R.drawable.ic_plain_checkmark
+                BitwardenDrawable.ic_plain_checkmark
             } else {
-                R.drawable.ic_circle
+                BitwardenDrawable.ic_circle
             },
             label = "iconForMinimumCharacterCount",
         ) {

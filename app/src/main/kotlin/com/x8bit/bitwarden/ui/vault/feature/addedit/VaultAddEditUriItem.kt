@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
@@ -41,7 +42,7 @@ fun VaultAddEditUriItem(
         onValueChange = { onUriValueChange(uriItem.copy(uri = it)) },
         actions = {
             BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_cog,
+                vectorIconRes = BitwardenDrawable.ic_cog,
                 contentDescription = stringResource(id = R.string.options),
                 onClick = { shouldShowOptionsDialog = true },
                 modifier = Modifier.testTag(tag = "LoginUriOptionsButton"),
