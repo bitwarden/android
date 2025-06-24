@@ -68,20 +68,20 @@ fun SendListItem(
         onClick = onClick,
         selectionDataList = persistentListOfNotNull(
             SelectionItemData(
-                text = stringResource(id = R.string.view),
-                onClick = onViewClick,
-            ),
-            SelectionItemData(
-                text = stringResource(id = R.string.edit),
-                onClick = onEditClick,
-            ),
-            SelectionItemData(
                 text = stringResource(id = R.string.copy_link),
                 onClick = onCopyClick,
             ),
             SelectionItemData(
                 text = stringResource(id = R.string.share_link),
                 onClick = onShareClick,
+            ),
+            SelectionItemData(
+                text = stringResource(id = R.string.view),
+                onClick = onViewClick,
+            ),
+            SelectionItemData(
+                text = stringResource(id = R.string.edit),
+                onClick = onEditClick,
             ),
             onRemovePasswordClick?.let {
                 SelectionItemData(

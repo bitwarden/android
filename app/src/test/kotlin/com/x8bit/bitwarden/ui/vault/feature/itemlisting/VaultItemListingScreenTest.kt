@@ -2423,6 +2423,8 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
             ),
         ),
         overflowOptions = listOf(
+            ListingItemOverflowAction.SendAction.CopyUrlClick(sendUrl = "www.test.com"),
+            ListingItemOverflowAction.SendAction.ShareUrlClick(sendUrl = "www.test.com"),
             ListingItemOverflowAction.SendAction.ViewClick(
                 sendId = "mockId-$number",
                 sendType = SendType.FILE,
@@ -2431,8 +2433,6 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
                 sendId = "mockId-$number",
                 sendType = SendType.TEXT,
             ),
-            ListingItemOverflowAction.SendAction.CopyUrlClick(sendUrl = "www.test.com"),
-            ListingItemOverflowAction.SendAction.ShareUrlClick(sendUrl = "www.test.com"),
             ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
             ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
         ),

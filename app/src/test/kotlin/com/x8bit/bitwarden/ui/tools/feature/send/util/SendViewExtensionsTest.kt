@@ -151,6 +151,12 @@ private val ALL_SEND_STATUS_ICONS: ImmutableList<IconData> = persistentListOf(
 
 private val ALL_SEND_OVERFLOW_OPTIONS: List<ListingItemOverflowAction> =
     listOf(
+        ListingItemOverflowAction.SendAction.CopyUrlClick(
+            sendUrl = "www.test.commockAccessId-1/mockKey-1",
+        ),
+        ListingItemOverflowAction.SendAction.ShareUrlClick(
+            sendUrl = "www.test.commockAccessId-1/mockKey-1",
+        ),
         ListingItemOverflowAction.SendAction.ViewClick(
             sendId = "mockId-1",
             sendType = SendType.FILE,
@@ -158,12 +164,6 @@ private val ALL_SEND_OVERFLOW_OPTIONS: List<ListingItemOverflowAction> =
         ListingItemOverflowAction.SendAction.EditClick(
             sendId = "mockId-1",
             sendType = SendType.FILE,
-        ),
-        ListingItemOverflowAction.SendAction.CopyUrlClick(
-            sendUrl = "www.test.commockAccessId-1/mockKey-1",
-        ),
-        ListingItemOverflowAction.SendAction.ShareUrlClick(
-            sendUrl = "www.test.commockAccessId-1/mockKey-1",
         ),
         ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-1"),
         ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-1"),
