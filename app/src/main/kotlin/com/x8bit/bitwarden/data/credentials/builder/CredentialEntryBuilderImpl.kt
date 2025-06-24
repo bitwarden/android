@@ -6,6 +6,7 @@ import androidx.core.graphics.drawable.IconCompat
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.credentials.processor.GET_PASSKEY_INTENT
 import com.x8bit.bitwarden.data.credentials.util.setBiometricPromptDataIfSupported
@@ -87,9 +88,9 @@ class CredentialEntryBuilderImpl(
         .createWithResource(
             context,
             if (isPasskey) {
-                R.drawable.ic_bw_passkey
+                BitwardenDrawable.ic_bw_passkey
             } else {
-                R.drawable.ic_globe
+                BitwardenDrawable.ic_globe
             },
         )
         .toIcon(context)

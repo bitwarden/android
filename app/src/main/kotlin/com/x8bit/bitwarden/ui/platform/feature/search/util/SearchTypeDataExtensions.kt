@@ -8,6 +8,7 @@ import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.util.removeDiacritics
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -247,11 +248,11 @@ private fun CipherView.toIconData(
 @get:DrawableRes
 private val CipherType.iconRes: Int
     get() = when (this) {
-        CipherType.LOGIN -> R.drawable.ic_globe
-        CipherType.SECURE_NOTE -> R.drawable.ic_note
-        CipherType.CARD -> R.drawable.ic_payment_card
-        CipherType.IDENTITY -> R.drawable.ic_id_card
-        CipherType.SSH_KEY -> R.drawable.ic_ssh_key
+        CipherType.LOGIN -> BitwardenDrawable.ic_globe
+        CipherType.SECURE_NOTE -> BitwardenDrawable.ic_note
+        CipherType.CARD -> BitwardenDrawable.ic_payment_card
+        CipherType.IDENTITY -> BitwardenDrawable.ic_id_card
+        CipherType.SSH_KEY -> BitwardenDrawable.ic_ssh_key
     }
 
 /**
@@ -360,8 +361,8 @@ private fun SendView.toDisplayItem(
         subtitleTestTag = "SendDateLabel",
         iconData = IconData.Local(
             iconRes = when (type) {
-                SendType.TEXT -> R.drawable.ic_file_text
-                SendType.FILE -> R.drawable.ic_file
+                SendType.TEXT -> BitwardenDrawable.ic_file_text
+                SendType.FILE -> BitwardenDrawable.ic_file
             },
         ),
         extraIconList = toLabelIcons(clock = clock),

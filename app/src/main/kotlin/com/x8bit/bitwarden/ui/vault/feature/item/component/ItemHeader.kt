@@ -36,6 +36,7 @@ import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
@@ -109,9 +110,9 @@ fun LazyListScope.itemHeader(
                     Icon(
                         painter = painterResource(
                             id = if (isFavorite) {
-                                R.drawable.ic_favorite_full
+                                BitwardenDrawable.ic_favorite_full
                             } else {
-                                R.drawable.ic_favorite_empty
+                                BitwardenDrawable.ic_favorite_empty
                             },
                         ),
                         contentDescription = stringResource(
@@ -132,7 +133,7 @@ fun LazyListScope.itemHeader(
     if (relatedLocations.isEmpty()) {
         item(key = "noFolder") {
             ItemLocationListItem(
-                vectorPainter = rememberVectorPainter(R.drawable.ic_folder),
+                vectorPainter = rememberVectorPainter(BitwardenDrawable.ic_folder),
                 text = stringResource(R.string.no_folder),
                 iconTestTag = "NoFolderIcon",
                 modifier = Modifier
@@ -378,7 +379,7 @@ private fun ItemHeaderWithLocalIcon_Preview() {
                 value = "Login without favicon",
                 isFavorite = true,
                 iconData = IconData.Local(
-                    iconRes = R.drawable.ic_globe,
+                    iconRes = BitwardenDrawable.ic_globe,
                 ),
                 relatedLocations = persistentListOf(),
                 isExpanded = isExpanded,
@@ -400,7 +401,7 @@ private fun ItemHeaderWithNetworkIcon_Preview() {
                 isFavorite = true,
                 iconData = IconData.Network(
                     uri = "mockuri",
-                    fallbackIconRes = R.drawable.ic_globe,
+                    fallbackIconRes = BitwardenDrawable.ic_globe,
                 ),
                 relatedLocations = persistentListOf(),
                 isExpanded = isExpanded,
@@ -421,7 +422,7 @@ private fun ItemHeaderWithOrganization_Preview() {
                 value = "Login without favicon",
                 isFavorite = true,
                 iconData = IconData.Local(
-                    iconRes = R.drawable.ic_globe,
+                    iconRes = BitwardenDrawable.ic_globe,
                 ),
                 relatedLocations = persistentListOf(
                     VaultItemLocation.Organization("Stark Industries"),
@@ -444,7 +445,7 @@ private fun ItemHeaderWithOrgAndSingleCollection_Preview() {
                 value = "Login without favicon",
                 isFavorite = true,
                 iconData = IconData.Local(
-                    iconRes = R.drawable.ic_globe,
+                    iconRes = BitwardenDrawable.ic_globe,
                 ),
                 relatedLocations = persistentListOf(
                     VaultItemLocation.Organization("Stark Industries"),
@@ -468,7 +469,7 @@ private fun ItemHeaderWithOrgAndMultiCollection_Preview() {
                 value = "Login without favicon",
                 isFavorite = true,
                 iconData = IconData.Local(
-                    iconRes = R.drawable.ic_payment_card_brand_visa,
+                    iconRes = BitwardenDrawable.ic_payment_card_brand_visa,
                 ),
                 relatedLocations = persistentListOf(
                     VaultItemLocation.Organization("Stark Industries"),
@@ -493,7 +494,7 @@ private fun ItemHeaderWithOrgSingleCollectionAndFolder_Preview() {
                 value = "Note without favicon",
                 isFavorite = true,
                 iconData = IconData.Local(
-                    iconRes = R.drawable.ic_note,
+                    iconRes = BitwardenDrawable.ic_note,
                 ),
                 relatedLocations = persistentListOf(
                     VaultItemLocation.Organization("Stark Industries"),
@@ -518,7 +519,7 @@ private fun ItemHeaderFolderOnly_Preview() {
                 value = "SSH key in a folder",
                 isFavorite = true,
                 iconData = IconData.Local(
-                    iconRes = R.drawable.ic_ssh_key,
+                    iconRes = BitwardenDrawable.ic_ssh_key,
                 ),
                 relatedLocations = persistentListOf(
                     VaultItemLocation.Folder("Competition"),

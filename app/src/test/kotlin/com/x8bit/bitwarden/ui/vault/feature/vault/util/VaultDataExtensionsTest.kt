@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault.util
 import android.net.Uri
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -434,7 +435,7 @@ class VaultDataExtensionsTest {
                     usePasskeyDefaultIcon = false,
                 )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_globe)
+        val expected = IconData.Local(iconRes = BitwardenDrawable.ic_globe)
 
         assertEquals(expected, actual)
     }
@@ -455,7 +456,7 @@ class VaultDataExtensionsTest {
                     usePasskeyDefaultIcon = true,
                 )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_bw_passkey)
+        val expected = IconData.Local(iconRes = BitwardenDrawable.ic_bw_passkey)
 
         assertEquals(expected, actual)
     }
@@ -475,7 +476,7 @@ class VaultDataExtensionsTest {
                 usePasskeyDefaultIcon = false,
             )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_globe)
+        val expected = IconData.Local(iconRes = BitwardenDrawable.ic_globe)
 
         assertEquals(expected, actual)
     }
@@ -496,7 +497,7 @@ class VaultDataExtensionsTest {
                 usePasskeyDefaultIcon = true,
             )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_bw_passkey)
+        val expected = IconData.Local(iconRes = BitwardenDrawable.ic_bw_passkey)
 
         assertEquals(expected, actual)
     }
@@ -516,7 +517,7 @@ class VaultDataExtensionsTest {
                 usePasskeyDefaultIcon = false,
             )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_android)
+        val expected = IconData.Local(iconRes = BitwardenDrawable.ic_android)
 
         assertEquals(expected, actual)
     }
@@ -536,7 +537,7 @@ class VaultDataExtensionsTest {
                 usePasskeyDefaultIcon = false,
             )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_ios)
+        val expected = IconData.Local(iconRes = BitwardenDrawable.ic_ios)
 
         assertEquals(expected, actual)
     }
@@ -563,7 +564,7 @@ class VaultDataExtensionsTest {
 
         val expected = IconData.Network(
             uri = "https://icons.bitwarden.net/www.mockuri1.com/icon.png",
-            fallbackIconRes = R.drawable.ic_globe,
+            fallbackIconRes = BitwardenDrawable.ic_globe,
         )
 
         assertEquals(expected, actual)
@@ -594,7 +595,7 @@ class VaultDataExtensionsTest {
 
         val expected = IconData.Network(
             uri = "https://icons.bitwarden.net/www.mockuri1.com/icon.png",
-            fallbackIconRes = R.drawable.ic_bw_passkey,
+            fallbackIconRes = BitwardenDrawable.ic_bw_passkey,
         )
 
         assertEquals(expected, actual)
@@ -768,7 +769,7 @@ class VaultDataExtensionsTest {
                         name = mockCipher.name.asText(),
                         startIcon = IconData.Network(
                             uri = "https://icons.bitwarden.net/www.mockuri1.com/icon.png",
-                            fallbackIconRes = R.drawable.ic_globe,
+                            fallbackIconRes = BitwardenDrawable.ic_globe,
                         ),
                         startIconTestTag = "LoginCipherIcon",
                         extraIconList = mockCipher.toLabelIcons(),
@@ -1002,16 +1003,16 @@ private fun createMockSshKeyVaultItem(number: Int): VaultState.ViewState.VaultIt
                 requiresPasswordReprompt = true,
             ),
         ),
-        startIcon = IconData.Local(iconRes = R.drawable.ic_ssh_key),
+        startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_ssh_key),
         startIconTestTag = "SshKeyCipherIcon",
         extraIconList = persistentListOf(
             IconData.Local(
-                iconRes = R.drawable.ic_collections,
+                iconRes = BitwardenDrawable.ic_collections,
                 contentDescription = R.string.collections.asText(),
                 testTag = "CipherInCollectionIcon",
             ),
             IconData.Local(
-                iconRes = R.drawable.ic_paperclip,
+                iconRes = BitwardenDrawable.ic_paperclip,
                 contentDescription = R.string.attachments.asText(),
                 testTag = "CipherWithAttachmentsIcon",
             ),

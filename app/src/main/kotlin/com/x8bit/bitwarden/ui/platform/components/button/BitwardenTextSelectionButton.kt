@@ -37,8 +37,8 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 
 /**
  * A button which uses a read-only text field for layout and style purposes.
@@ -103,7 +103,7 @@ fun BitwardenTextSelectionButton(
                     tooltip?.let {
                         Spacer(modifier = Modifier.width(8.dp))
                         BitwardenStandardIconButton(
-                            vectorIconRes = R.drawable.ic_question_circle_small,
+                            vectorIconRes = BitwardenDrawable.ic_question_circle_small,
                             contentDescription = it.contentDescription,
                             onClick = it.onClick,
                             contentColor = BitwardenTheme.colorScheme.icon.secondary,
@@ -117,7 +117,7 @@ fun BitwardenTextSelectionButton(
                     modifier = Modifier.padding(paddingValues = actionsPadding),
                     actions = {
                         Icon(
-                            painter = rememberVectorPainter(id = R.drawable.ic_chevron_down),
+                            painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_down),
                             contentDescription = null,
                             tint = BitwardenTheme.colorScheme.icon.primary,
                             modifier = Modifier.minimumInteractiveComponentSize(),

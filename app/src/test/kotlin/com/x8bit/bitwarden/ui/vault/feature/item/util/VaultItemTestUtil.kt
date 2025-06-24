@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.CipherRepromptType
@@ -164,7 +165,7 @@ fun createCipherView(type: CipherType, isEmpty: Boolean): CipherView =
 fun createCommonContent(
     isEmpty: Boolean,
     isPremiumUser: Boolean,
-    @DrawableRes iconResId: Int = R.drawable.ic_globe,
+    @DrawableRes iconResId: Int = BitwardenDrawable.ic_globe,
 ): VaultItemState.ViewState.Content.Common =
     if (isEmpty) {
         VaultItemState.ViewState.Content.Common(

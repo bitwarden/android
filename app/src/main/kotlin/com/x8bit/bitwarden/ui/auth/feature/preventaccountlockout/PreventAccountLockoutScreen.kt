@@ -109,12 +109,12 @@ private fun PreventAccountLockoutContent(modifier: Modifier = Modifier) {
                     subtitleText = stringResource(
                         R.string.your_hint_will_be_send_to_you_via_email_when_you_request_it,
                     ),
-                    iconVectorResource = R.drawable.ic_light_bulb,
+                    iconVectorResource = BitwardenDrawable.ic_light_bulb,
                 ),
                 ContentBlockData(
                     headerText = stringResource(R.string.write_your_password_down),
                     subtitleText = stringResource(R.string.keep_it_secret_keep_it_safe),
-                    iconVectorResource = R.drawable.ic_pencil,
+                    iconVectorResource = BitwardenDrawable.ic_pencil,
                 ),
             ),
         )

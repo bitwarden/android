@@ -9,6 +9,7 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.hexToColor
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -1120,7 +1121,7 @@ data class VaultState(
             data class Login(
                 override val id: String,
                 override val name: Text,
-                override val startIcon: IconData = IconData.Local(R.drawable.ic_globe),
+                override val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_globe),
                 override val startIconTestTag: String = "LoginCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
@@ -1141,7 +1142,9 @@ data class VaultState(
             data class Card(
                 override val id: String,
                 override val name: Text,
-                override val startIcon: IconData = IconData.Local(R.drawable.ic_payment_card),
+                override val startIcon: IconData = IconData.Local(
+                    BitwardenDrawable.ic_payment_card,
+                ),
                 override val startIconTestTag: String = "CardCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
@@ -1173,7 +1176,7 @@ data class VaultState(
             data class Identity(
                 override val id: String,
                 override val name: Text,
-                override val startIcon: IconData = IconData.Local(R.drawable.ic_id_card),
+                override val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_id_card),
                 override val startIconTestTag: String = "IdentityCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
@@ -1192,7 +1195,7 @@ data class VaultState(
             data class SecureNote(
                 override val id: String,
                 override val name: Text,
-                override val startIcon: IconData = IconData.Local(R.drawable.ic_note),
+                override val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_note),
                 override val startIconTestTag: String = "SecureNoteCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
@@ -1213,7 +1216,7 @@ data class VaultState(
             data class SshKey(
                 override val id: String,
                 override val name: Text,
-                override val startIcon: IconData = IconData.Local(R.drawable.ic_ssh_key),
+                override val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_ssh_key),
                 override val startIconTestTag: String = "SshKeyCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -488,7 +489,7 @@ data class VerificationCodeDisplayItem(
     val periodSeconds: Int,
     val authCode: String,
     val hideAuthCode: Boolean,
-    val startIcon: IconData = IconData.Local(R.drawable.ic_globe),
+    val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_globe),
 ) : Parcelable
 
 /**

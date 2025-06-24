@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.item.model
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -32,7 +32,7 @@ sealed class VaultItemLocation : Parcelable {
         override val name: String,
     ) : VaultItemLocation() {
         override val icon: Int
-            get() = R.drawable.ic_organization
+            get() = BitwardenDrawable.ic_organization
     }
 
     /**
@@ -43,7 +43,7 @@ sealed class VaultItemLocation : Parcelable {
         override val name: String,
     ) : VaultItemLocation() {
         override val icon: Int
-            get() = R.drawable.ic_collections
+            get() = BitwardenDrawable.ic_collections
     }
 
     /**
@@ -54,6 +54,6 @@ sealed class VaultItemLocation : Parcelable {
         override val name: String,
     ) : VaultItemLocation() {
         override val icon: Int
-            get() = R.drawable.ic_folder
+            get() = BitwardenDrawable.ic_folder
     }
 }

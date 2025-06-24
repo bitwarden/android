@@ -36,8 +36,8 @@ import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.toggle.color.bitwardenSwitchColors
 
 /**
@@ -363,7 +363,7 @@ private fun RowScope.ToolTip(
     if (!isVisible) return
     Spacer(modifier = Modifier.width(width = 8.dp))
     BitwardenStandardIconButton(
-        vectorIconRes = R.drawable.ic_question_circle_small,
+        vectorIconRes = BitwardenDrawable.ic_question_circle_small,
         contentDescription = tooltip.contentDescription,
         onClick = tooltip.onClick,
         contentColor = BitwardenTheme.colorScheme.icon.secondary,
@@ -403,7 +403,7 @@ private fun BitwardenSwitch_preview() {
                 ),
                 actions = {
                     BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_generate,
+                        vectorIconRes = BitwardenDrawable.ic_generate,
                         contentDescription = "content description",
                         onClick = {},
                     )
@@ -427,7 +427,7 @@ private fun BitwardenSwitch_preview() {
                 onCheckedChange = {},
                 actions = {
                     BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_generate,
+                        vectorIconRes = BitwardenDrawable.ic_generate,
                         contentDescription = "content description",
                         onClick = {},
                     )

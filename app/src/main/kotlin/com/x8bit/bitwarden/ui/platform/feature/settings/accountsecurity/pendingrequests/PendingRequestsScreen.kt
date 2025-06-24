@@ -248,7 +248,7 @@ private fun PendingRequestsContent(
 
         BitwardenOutlinedButton(
             label = stringResource(id = R.string.decline_all_requests),
-            icon = rememberVectorPainter(id = R.drawable.ic_trash),
+            icon = rememberVectorPainter(id = BitwardenDrawable.ic_trash),
             onClick = { shouldShowDeclineAllRequestsConfirm = true },
             modifier = Modifier
                 .testTag("DeclineAllRequestsButton")
@@ -341,7 +341,7 @@ private fun PendingRequestsEmpty(
         Spacer(modifier = Modifier.height(16.dp))
         Spacer(modifier = Modifier.weight(1f))
         Image(
-            painter = rememberVectorPainter(id = R.drawable.pending_requests),
+            painter = rememberVectorPainter(id = BitwardenDrawable.pending_requests),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -379,7 +379,7 @@ private fun PendingRequestsBottomSheetContent(
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Spacer(modifier = Modifier.height(height = 24.dp))
         Image(
-            painter = rememberVectorPainter(id = R.drawable.img_2fa),
+            painter = rememberVectorPainter(id = BitwardenDrawable.img_2fa),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
