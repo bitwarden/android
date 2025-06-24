@@ -61,6 +61,7 @@ kotlin {
 dependencies {
     // SDK dependencies:
     implementation(project(":annotation"))
+    implementation(project(":core"))
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.kotlinx.serialization)

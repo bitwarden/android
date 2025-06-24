@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
@@ -15,7 +16,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
 import io.mockk.every
 import io.mockk.just
@@ -81,28 +81,26 @@ class AutoFillViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(::isBuildVersionBelow)
-        every { isBuildVersionBelow(Build.VERSION_CODES.R) } returns true
+        mockkStatic(::isBuildVersionAtLeast)
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.R) } returns false
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(::isBuildVersionBelow)
+        unmockkStatic(::isBuildVersionAtLeast)
     }
 
     @Test
     fun `initial state should be correct when not set`() {
-        every { isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns false
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns true
 
         val viewModel = createViewModel(state = null)
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-
-        unmockkStatic(::isBuildVersionBelow)
     }
 
     @Test
     fun `initial state should be correct when set`() {
-        every { isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns false
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns true
 
         mutableIsAutofillEnabledStateFlow.value = true
         val state = DEFAULT_STATE.copy(
@@ -111,13 +109,11 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = state)
         assertEquals(state, viewModel.stateFlow.value)
-
-        unmockkStatic(::isBuildVersionBelow)
     }
 
     @Test
     fun `initial state should be correct when sdk is below min`() {
-        every { isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns true
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns false
 
         val expected = DEFAULT_STATE.copy(
             showPasskeyManagementRow = false,
@@ -125,18 +121,15 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(state = null)
 
         assertEquals(expected, viewModel.stateFlow.value)
-
-        unmockkStatic(::isBuildVersionBelow)
     }
 
     @Test
     fun `showInlineAutofillOption should be true when the build version is not below R`() {
-        every { isBuildVersionBelow(Build.VERSION_CODES.R) } returns false
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.R) } returns true
         val viewModel = createViewModel(state = null)
         assertEquals(
             DEFAULT_STATE.copy(
                 showInlineAutofillOption = true,
-                showPasskeyManagementRow = false,
             ),
             viewModel.stateFlow.value,
         )

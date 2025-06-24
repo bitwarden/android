@@ -1,8 +1,9 @@
 @file:OmitFromCoverage
 
-package com.x8bit.bitwarden.data.platform.util
+package com.bitwarden.core.util
 
 import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
 import com.bitwarden.annotation.OmitFromCoverage
 
 /**
@@ -10,4 +11,7 @@ import com.bitwarden.annotation.OmitFromCoverage
  *
  * @see Build.VERSION_CODES
  */
-internal fun isBuildVersionBelow(version: Int): Boolean = version > Build.VERSION.SDK_INT
+@ChecksSdkIntAtLeast(parameter = 0)
+fun isBuildVersionAtLeast(
+    version: Int,
+): Boolean = version >= Build.VERSION.SDK_INT
