@@ -21,6 +21,8 @@ private const val THIRD_PARTY_MODE_ACTIONS_URI_PATH = "autofill_third_party_mode
 class BrowserThirdPartyAutofillManagerImpl(
     private val context: Context,
 ) : BrowserThirdPartyAutofillManager {
+    override val stableBraveAutofillStatus: BrowserThirdPartyAutoFillData
+        get() = getThirdPartyAutoFillStatusForChannel(BrowserPackage.BRAVE_RELEASE)
     override val stableChromeAutofillStatus: BrowserThirdPartyAutoFillData
         get() = getThirdPartyAutoFillStatusForChannel(BrowserPackage.CHROME_STABLE)
     override val betaChromeAutofillStatus: BrowserThirdPartyAutoFillData
