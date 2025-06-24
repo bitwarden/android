@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
 import android.net.Uri
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
