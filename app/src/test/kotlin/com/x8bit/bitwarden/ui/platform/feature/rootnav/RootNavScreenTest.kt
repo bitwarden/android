@@ -328,6 +328,27 @@ class RootNavScreenTest : BitwardenComposeTest() {
             }
         }
 
+        // Make sure navigating to vault unlocked for PasswordGet works as expected:
+        rootNavStateFlow.value = RootNavState.VaultUnlockedForPasswordGet(
+            activeUserId = "activeUserId",
+            providerGetPasswordCredentialRequest = mockk(),
+        )
+        composeTestRule.runOnIdle {
+            verify {
+                mockNavHostController.navigate(
+                    route = VaultUnlockedGraphRoute,
+                    navOptions = expectedNavOptions,
+                )
+                mockNavHostController.navigate(
+                    route = VaultItemListingRoute.AsRoot(
+                        type = ItemListingType.LOGIN,
+                        itemId = null,
+                    ),
+                    navOptions = expectedNavOptions,
+                )
+            }
+        }
+
         // Make sure navigating to vault unlocked for GetCredentialsRequest works as expected:
         rootNavStateFlow.value = RootNavState.VaultUnlockedForProviderGetCredentials(
             activeUserId = "activeUserId",
