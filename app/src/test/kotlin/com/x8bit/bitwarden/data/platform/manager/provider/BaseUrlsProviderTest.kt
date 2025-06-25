@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.platform.manager.provider
 import com.bitwarden.data.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.datasource.disk.FakeEnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.provider.BaseUrlsProviderImpl
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class BaseUrlsProviderTest {
@@ -16,8 +16,8 @@ class BaseUrlsProviderTest {
     @Test
     fun `getBaseApiUrl should return correct api URL when preAuthEnvironmentUrlData is set`() {
         fakeEnvironmentDiskSource.preAuthEnvironmentUrlData = Environment.Eu.environmentUrlData
-        Assertions.assertEquals(
-            "https://vault.bitwarden.eu/api",
+        assertEquals(
+            "https://api.bitwarden.eu",
             baseUrlsManager.getBaseApiUrl(),
         )
     }
@@ -25,8 +25,8 @@ class BaseUrlsProviderTest {
     @Test
     fun `getBaseApiUrl should return default value when preAuthEnvironmentUrlData is null`() {
         fakeEnvironmentDiskSource.preAuthEnvironmentUrlData = null
-        Assertions.assertEquals(
-            "https://vault.bitwarden.com/api",
+        assertEquals(
+            "https://api.bitwarden.com",
             baseUrlsManager.getBaseApiUrl(),
         )
     }
@@ -34,8 +34,8 @@ class BaseUrlsProviderTest {
     @Test
     fun `getBaseIdentityUrl should return correct api URL when preAuthEnvironmentUrlData is set`() {
         fakeEnvironmentDiskSource.preAuthEnvironmentUrlData = Environment.Eu.environmentUrlData
-        Assertions.assertEquals(
-            "https://vault.bitwarden.eu/identity",
+        assertEquals(
+            "https://identity.bitwarden.eu",
             baseUrlsManager.getBaseIdentityUrl(),
         )
     }
@@ -43,8 +43,8 @@ class BaseUrlsProviderTest {
     @Test
     fun `getBaseIdentityUrl should return default value when preAuthEnvironmentUrlData is null`() {
         fakeEnvironmentDiskSource.preAuthEnvironmentUrlData = null
-        Assertions.assertEquals(
-            "https://vault.bitwarden.com/identity",
+        assertEquals(
+            "https://identity.bitwarden.com",
             baseUrlsManager.getBaseIdentityUrl(),
         )
     }
@@ -52,8 +52,8 @@ class BaseUrlsProviderTest {
     @Test
     fun `getBaseEventsUrl should return correct api URL when preAuthEnvironmentUrlData is set`() {
         fakeEnvironmentDiskSource.preAuthEnvironmentUrlData = Environment.Eu.environmentUrlData
-        Assertions.assertEquals(
-            "https://vault.bitwarden.eu/events",
+        assertEquals(
+            "https://events.bitwarden.eu",
             baseUrlsManager.getBaseEventsUrl(),
         )
     }
@@ -61,8 +61,8 @@ class BaseUrlsProviderTest {
     @Test
     fun `getBaseEventsUrl should return default value when preAuthEnvironmentUrlData is null`() {
         fakeEnvironmentDiskSource.preAuthEnvironmentUrlData = null
-        Assertions.assertEquals(
-            "https://vault.bitwarden.com/events",
+        assertEquals(
+            "https://events.bitwarden.com",
             baseUrlsManager.getBaseEventsUrl(),
         )
     }

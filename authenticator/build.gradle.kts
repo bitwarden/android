@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.androidx.room)
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.android)
@@ -21,6 +22,10 @@ android {
     namespace = "com.bitwarden.authenticator"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
+
     defaultConfig {
         applicationId = "com.bitwarden.authenticator"
         minSdk = libs.versions.minSdkBwa.get().toInt()
@@ -31,11 +36,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         setProperty("archivesBaseName", "com.bitwarden.authenticator")
-
-        ksp {
-            // The location in which the generated Room Database Schemas will be stored in the repo.
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
     }
 
     androidResources {
@@ -143,7 +143,7 @@ android {
 
 kotlin {
     compilerOptions {
-        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
+        jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
     }
 }
 

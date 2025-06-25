@@ -9,6 +9,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.util.createPasswordlessRequestDataIntent
@@ -66,7 +67,7 @@ class AuthRequestNotificationManagerImpl(
                     ?.let { context.getString(R.string.confim_log_in_attemp_for_x, it) }
                     ?: context.getString(R.string.confirm_log_in),
             )
-            .setSmallIcon(R.drawable.ic_notification)
+            .setSmallIcon(BitwardenDrawable.ic_notification)
             .setColor(Color.White.value.toInt())
             .setAutoCancel(true)
             .setTimeoutAfter(NOTIFICATION_DEFAULT_TIMEOUT_MILLIS)

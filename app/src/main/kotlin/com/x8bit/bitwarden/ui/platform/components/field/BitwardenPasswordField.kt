@@ -48,16 +48,17 @@ import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.base.util.tabNavigation
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.model.TooltipData
+import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenCutCopyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
-import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 
 /**
@@ -171,7 +172,7 @@ fun BitwardenPasswordField(
                                 )
                                 Spacer(modifier = Modifier.width(width = 8.dp))
                                 BitwardenStandardIconButton(
-                                    vectorIconRes = R.drawable.ic_question_circle_small,
+                                    vectorIconRes = BitwardenDrawable.ic_question_circle_small,
                                     contentDescription = it.contentDescription,
                                     onClick = it.onClick,
                                     contentColor = BitwardenTheme.colorScheme.icon.secondary,
@@ -209,9 +210,9 @@ fun BitwardenPasswordField(
                             BitwardenStandardIconButton(
                                 modifier = Modifier.nullableTestTag(tag = showPasswordTestTag),
                                 vectorIconRes = if (showPassword) {
-                                    R.drawable.ic_eye_slash
+                                    BitwardenDrawable.ic_eye_slash
                                 } else {
-                                    R.drawable.ic_eye
+                                    BitwardenDrawable.ic_eye
                                 },
                                 contentDescription = stringResource(
                                     id = if (showPassword) R.string.hide else R.string.show,

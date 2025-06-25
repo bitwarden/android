@@ -18,12 +18,12 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
+import com.bitwarden.ui.platform.components.icon.BitwardenIcon
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIcon
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 
 /**
  * Reusable row with push icon built in.
@@ -102,7 +102,7 @@ private fun TrailingContent(
             Spacer(modifier = Modifier.width(12.dp))
         }
         Icon(
-            painter = rememberVectorPainter(id = R.drawable.ic_chevron_right),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_right),
             contentDescription = null,
             tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier
@@ -126,7 +126,7 @@ private fun BitwardenPushRow_preview() {
                 text = "Icon Row",
                 onClick = { },
                 cardStyle = CardStyle.Middle(),
-                leadingIcon = IconData.Local(iconRes = R.drawable.ic_vault),
+                leadingIcon = IconData.Local(iconRes = BitwardenDrawable.ic_vault),
             )
             BitwardenPushRow(
                 text = "Notification Row",

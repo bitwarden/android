@@ -16,10 +16,10 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.assertNoDialogExists
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome.model.ChromeAutofillSettingsOption
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
@@ -40,6 +40,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     private var onNavigateToBlockAutoFillScreenCalled = false
     private var onNavigateToSetupAutoFillScreenCalled = false
     private var onNavigateToAboutPrivilegedAppsScreenCalled = false
+    private var onNavigateToPrivilegedAppsListCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<AutoFillEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -51,7 +52,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         every { startSystemAutofillSettingsActivity() } answers { isSystemSettingsRequestSuccess }
         every { startCredentialManagerSettings(any()) } just runs
         every { startSystemAccessibilitySettingsActivity() } just runs
-        every { startChromeAutofillSettingsActivity(any()) } returns true
+        every { startBrowserAutofillSettingsActivity(any()) } returns true
     }
 
     @Before
@@ -65,6 +66,9 @@ class AutoFillScreenTest : BitwardenComposeTest() {
                 onNavigateToSetupAutofill = { onNavigateToSetupAutoFillScreenCalled = true },
                 onNavigateToAboutPrivilegedAppsScreen = {
                     onNavigateToAboutPrivilegedAppsScreenCalled = true
+                },
+                onNavigateToPrivilegedAppsList = {
+                    onNavigateToPrivilegedAppsListCalled = true
                 },
                 viewModel = viewModel,
             )
@@ -516,38 +520,38 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `ChromeAutofillSettingsCard is only displayed when there are options in the list`() {
-        val chromeAutofillSupportingText =
-            "Improves login filling for supported websites on Chrome. " +
-                "Once enabled, you’ll be directed to Chrome settings to enable " +
+    fun `BrowserAutofillSettingsCard is only displayed when there are options in the list`() {
+        val browserAutofillSupportingText =
+            "Improves login filling for supported websites on selected browsers. " +
+                "Once enabled, you’ll be directed to browser settings to enable " +
                 "third-party autofill."
 
         composeTestRule
-            .onNodeWithText(chromeAutofillSupportingText)
+            .onNodeWithText(browserAutofillSupportingText)
             .assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(
-                chromeAutofillSettingsOptions = persistentListOf(
-                    ChromeAutofillSettingsOption.Stable(enabled = true),
+                browserAutofillSettingsOptions = persistentListOf(
+                    BrowserAutofillSettingsOption.ChromeStable(enabled = true),
                 ),
             )
         }
 
         composeTestRule
-            .onNodeWithText(chromeAutofillSupportingText)
+            .onNodeWithText(browserAutofillSupportingText)
             .performScrollTo()
             .assertIsDisplayed()
     }
 
     @Test
-    fun `when Chrome autofill options are clicked the correct action is sent`() {
+    fun `when browser autofill options are clicked the correct action is sent`() {
         mutableStateFlow.update {
             it.copy(
                 isAutoFillServicesEnabled = true,
-                chromeAutofillSettingsOptions = persistentListOf(
-                    ChromeAutofillSettingsOption.Stable(enabled = true),
-                    ChromeAutofillSettingsOption.Beta(enabled = false),
+                browserAutofillSettingsOptions = persistentListOf(
+                    BrowserAutofillSettingsOption.ChromeStable(enabled = true),
+                    BrowserAutofillSettingsOption.ChromeBeta(enabled = false),
                 ),
             )
         }
@@ -564,31 +568,31 @@ class AutoFillScreenTest : BitwardenComposeTest() {
 
         verify(exactly = 1) {
             viewModel.trySendAction(
-                AutoFillAction.ChromeAutofillSelected(ChromeReleaseChannel.BETA),
+                AutoFillAction.BrowserAutofillSelected(BrowserPackage.CHROME_BETA),
             )
             viewModel.trySendAction(
-                AutoFillAction.ChromeAutofillSelected(ChromeReleaseChannel.STABLE),
+                AutoFillAction.BrowserAutofillSelected(BrowserPackage.CHROME_STABLE),
             )
         }
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `when NavigateToChromeAutofillSettings events are sent they invoke the intent manager with the correct release channel`() {
+    fun `when NavigateToBrowserAutofillSettings events are sent they invoke the intent manager with the correct release channel`() {
         mutableEventFlow.tryEmit(
-            AutoFillEvent.NavigateToChromeAutofillSettings(
-                ChromeReleaseChannel.STABLE,
+            AutoFillEvent.NavigateToBrowserAutofillSettings(
+                BrowserPackage.CHROME_STABLE,
             ),
         )
         mutableEventFlow.tryEmit(
-            AutoFillEvent.NavigateToChromeAutofillSettings(
-                ChromeReleaseChannel.BETA,
+            AutoFillEvent.NavigateToBrowserAutofillSettings(
+                BrowserPackage.CHROME_BETA,
             ),
         )
 
         verify(exactly = 1) {
-            intentManager.startChromeAutofillSettingsActivity(ChromeReleaseChannel.BETA)
-            intentManager.startChromeAutofillSettingsActivity(ChromeReleaseChannel.STABLE)
+            intentManager.startBrowserAutofillSettingsActivity(BrowserPackage.CHROME_BETA)
+            intentManager.startBrowserAutofillSettingsActivity(BrowserPackage.CHROME_STABLE)
         }
     }
 
@@ -627,6 +631,24 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(AutoFillAction.AboutPrivilegedAppsClick)
         }
     }
+
+    @Test
+    fun `on NavigateToPrivilegedAppsList should call onNavigateToPrivilegedAppsList`() {
+        mutableEventFlow.tryEmit(AutoFillEvent.NavigateToPrivilegedAppsListScreen)
+        assertTrue(onNavigateToPrivilegedAppsListCalled)
+    }
+
+    @Test
+    fun `privileged apps row click should send PrivilegedAppsClick`() {
+        mutableStateFlow.update { it.copy(isUserManagedPrivilegedAppsEnabled = true) }
+        composeTestRule
+            .onNodeWithText("Privileged apps")
+            .performScrollTo()
+            .performClick()
+        verify {
+            viewModel.trySendAction(AutoFillAction.PrivilegedAppsClick)
+        }
+    }
 }
 
 private val DEFAULT_STATE: AutoFillState = AutoFillState(
@@ -640,6 +662,6 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     defaultUriMatchType = UriMatchType.DOMAIN,
     showAutofillActionCard = false,
     activeUserId = "activeUserId",
-    chromeAutofillSettingsOptions = persistentListOf(),
+    browserAutofillSettingsOptions = persistentListOf(),
     isUserManagedPrivilegedAppsEnabled = false,
 )

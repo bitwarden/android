@@ -454,7 +454,7 @@
     <string name="password_info">Опционо захтевај лозинку од корисника за приступ овом слању.</string>
     <string name="remove_password">Уклони лозинку</string>
     <string name="removing_send_password">Уклањање лозинке</string>
-    <string name="send_password_removed">Лозинка је уклоњена.</string>
+    <string name="password_removed">Password removed</string>
     <string name="add_a_send">Ново слање</string>
     <string name="copy_link">Копирај везу</string>
     <string name="share_link">Подели везу</string>
@@ -675,7 +675,7 @@
     <string name="privacy_policy_description_long">Погледајте нашу политику приватности на bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Истражите више својстава на Bitwarden налогу на веб апликаији.</string>
     <string name="learn_about_organizations_description_long">Bitwarden вам омогућава да делите ставке сефа са другима користећи организацију. Сазнајте више на веб локацију bitwarden.com.</string>
-    <string name="created_xy">Креирано %1$s, %2$s</string>
+    <string name="created_x">Created %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Ваша организација захтева да поставите главну лозинку.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Подесите опцију откључавања да бисте променили радњу временског ограничења сефа.</string>
     <string name="save_passkey_as_new_login">Сачувати приступни кључ као нову пријаву</string>
@@ -980,4 +980,5 @@
     <string name="about_privileged_applications">About privileged applications</string>
     <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
     <string name="privileged_apps">Privileged apps</string>
+    <string name="unrecognized_browser">Unrecognized browser</string>
 </resources>

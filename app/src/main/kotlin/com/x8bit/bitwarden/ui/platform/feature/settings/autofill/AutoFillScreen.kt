@@ -34,7 +34,9 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
@@ -43,13 +45,12 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome.ChromeAutofillSettingsCard
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.BrowserAutofillSettingsCard
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.handlers.AutoFillHandlers
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -68,6 +69,7 @@ fun AutoFillScreen(
     onNavigateToBlockAutoFillScreen: () -> Unit,
     onNavigateToSetupAutofill: () -> Unit,
     onNavigateToAboutPrivilegedAppsScreen: () -> Unit,
+    onNavigateToPrivilegedAppsList: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -100,14 +102,18 @@ fun AutoFillScreen(
             }
 
             AutoFillEvent.NavigateToSetupAutofill -> onNavigateToSetupAutofill()
-            is AutoFillEvent.NavigateToChromeAutofillSettings -> {
-                intentManager.startChromeAutofillSettingsActivity(
-                    releaseChannel = event.releaseChannel,
+            is AutoFillEvent.NavigateToBrowserAutofillSettings -> {
+                intentManager.startBrowserAutofillSettingsActivity(
+                    browserPackage = event.browserPackage,
                 )
             }
 
             AutoFillEvent.NavigateToAboutPrivilegedAppsScreen -> {
                 onNavigateToAboutPrivilegedAppsScreen()
+            }
+
+            AutoFillEvent.NavigateToPrivilegedAppsListScreen -> {
+                onNavigateToPrivilegedAppsList()
             }
         }
     }
@@ -130,7 +136,7 @@ fun AutoFillScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.autofill),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(AutoFillAction.BackClick) }
@@ -211,10 +217,10 @@ private fun AutoFillScreenContent(
             Spacer(modifier = Modifier.height(height = 8.dp))
         }
 
-        if (state.chromeAutofillSettingsOptions.isNotEmpty()) {
-            ChromeAutofillSettingsCard(
-                options = state.chromeAutofillSettingsOptions,
-                onOptionClicked = autoFillHandlers.onChromeAutofillSelected,
+        if (state.browserAutofillSettingsOptions.isNotEmpty()) {
+            BrowserAutofillSettingsCard(
+                options = state.browserAutofillSettingsOptions,
+                onOptionClicked = autoFillHandlers.onBrowserAutofillSelected,
                 enabled = state.isAutoFillServicesEnabled,
             )
             Spacer(modifier = Modifier.height(8.dp))

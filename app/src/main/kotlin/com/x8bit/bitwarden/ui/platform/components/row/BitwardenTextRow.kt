@@ -21,11 +21,11 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.model.TooltipData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
-import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 
 /**
  * Represents a clickable row of text and can contains an optional [content] that appears to the
@@ -119,7 +119,7 @@ private fun RowScope.ToolTip(
 ) {
     Spacer(modifier = Modifier.width(width = 8.dp))
     BitwardenStandardIconButton(
-        vectorIconRes = R.drawable.ic_question_circle_small,
+        vectorIconRes = BitwardenDrawable.ic_question_circle_small,
         contentDescription = tooltip.contentDescription,
         onClick = tooltip.onClick,
         contentColor = BitwardenTheme.colorScheme.icon.secondary,

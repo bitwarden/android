@@ -9,6 +9,8 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.hexToColor
+import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -35,7 +37,6 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -71,6 +72,8 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import javax.inject.Inject
+import kotlin.collections.emptyList
+import kotlin.collections.map
 
 /**
  * Manages [VaultState], handles [VaultAction], and launches [VaultEvent] for the [VaultScreen].
@@ -119,6 +122,7 @@ class VaultViewModel @Inject constructor(
             flightRecorderSnackBar = settingsRepository
                 .flightRecorderData
                 .toSnackbarData(clock = clock),
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
     },
 ) {
@@ -174,6 +178,21 @@ class VaultViewModel @Inject constructor(
         settingsRepository
             .flightRecorderDataFlow
             .map { VaultAction.Internal.FlightRecorderDataReceive(data = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        policyManager
+            .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            .combine(
+                featureFlagManager.getFeatureFlagFlow(FlagKey.RemoveCardPolicy),
+            ) { policies, enabledFlag ->
+                if (enabledFlag && policies.isNotEmpty()) {
+                    policies.map { it.organizationId }
+                } else {
+                    null
+                }
+            }
+            .map { VaultAction.Internal.PolicyUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -232,9 +251,20 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleSelectAddItemType() {
+        // If policy is enable for any organization, exclude the card option
+        var excludedOptions =
+            if (!state.restrictItemTypesPolicyOrgIds.isNullOrEmpty()) {
+                persistentListOf(
+                    CreateVaultItemType.SSH_KEY,
+                    CreateVaultItemType.CARD,
+                )
+            } else {
+                persistentListOf(CreateVaultItemType.SSH_KEY)
+            }
+
         mutableStateFlow.update {
             it.copy(
-                dialog = VaultState.DialogState.SelectVaultAddItemType,
+                dialog = VaultState.DialogState.SelectVaultAddItemType(excludedOptions),
             )
         }
     }
@@ -646,6 +676,20 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal.FlightRecorderDataReceive -> {
                 handleFlightRecorderDataReceive(action)
             }
+
+            is VaultAction.Internal.PolicyUpdateReceive -> {
+                handlePolicyUpdateReceive(action)
+            }
+        }
+    }
+
+    private fun handlePolicyUpdateReceive(action: VaultAction.Internal.PolicyUpdateReceive) {
+        mutableStateFlow.update {
+            it.copy(restrictItemTypesPolicyOrgIds = action.restrictItemTypesPolicyOrdIds)
+        }
+
+        vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
+            updateVaultState(vaultData, clearDialog = false)
         }
     }
 
@@ -766,6 +810,7 @@ class VaultViewModel @Inject constructor(
             errorTitle = R.string.an_error_has_occurred.asText(),
             errorMessage = R.string.generic_error_message.asText(),
             isRefreshing = false,
+            restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
         )
     }
 
@@ -782,6 +827,7 @@ class VaultViewModel @Inject constructor(
 
     private fun updateVaultState(
         vaultData: VaultData,
+        clearDialog: Boolean = true,
     ) {
         mutableStateFlow.update {
             it.copy(
@@ -791,8 +837,9 @@ class VaultViewModel @Inject constructor(
                     isPremium = state.isPremium,
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
+                    restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                 ),
-                dialog = null,
+                dialog = if (clearDialog) null else state.dialog,
                 isRefreshing = false,
             )
         }
@@ -825,6 +872,7 @@ class VaultViewModel @Inject constructor(
                     isPremium = state.isPremium,
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
+                    restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                 ),
             )
         }
@@ -930,6 +978,7 @@ data class VaultState(
     private val isPullToRefreshSettingEnabled: Boolean,
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
+    val restrictItemTypesPolicyOrgIds: List<String>?,
 ) : Parcelable {
 
     /**
@@ -1024,6 +1073,7 @@ data class VaultState(
             val noFolderItems: List<VaultItem>,
             val collectionItems: List<CollectionItem>,
             val trashItemsCount: Int,
+            val showCardGroup: Boolean,
         ) : ViewState() {
             override val hasFab: Boolean get() = true
             override val isPullToRefreshEnabled: Boolean get() = true
@@ -1120,7 +1170,7 @@ data class VaultState(
             data class Login(
                 override val id: String,
                 override val name: Text,
-                override val startIcon: IconData = IconData.Local(R.drawable.ic_globe),
+                override val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_globe),
                 override val startIconTestTag: String = "LoginCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
@@ -1141,7 +1191,9 @@ data class VaultState(
             data class Card(
                 override val id: String,
                 override val name: Text,
-                override val startIcon: IconData = IconData.Local(R.drawable.ic_payment_card),
+                override val startIcon: IconData = IconData.Local(
+                    BitwardenDrawable.ic_payment_card,
+                ),
                 override val startIconTestTag: String = "CardCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
@@ -1173,7 +1225,7 @@ data class VaultState(
             data class Identity(
                 override val id: String,
                 override val name: Text,
-                override val startIcon: IconData = IconData.Local(R.drawable.ic_id_card),
+                override val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_id_card),
                 override val startIconTestTag: String = "IdentityCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
@@ -1192,7 +1244,7 @@ data class VaultState(
             data class SecureNote(
                 override val id: String,
                 override val name: Text,
-                override val startIcon: IconData = IconData.Local(R.drawable.ic_note),
+                override val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_note),
                 override val startIconTestTag: String = "SecureNoteCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
@@ -1213,7 +1265,7 @@ data class VaultState(
             data class SshKey(
                 override val id: String,
                 override val name: Text,
-                override val startIcon: IconData = IconData.Local(R.drawable.ic_ssh_key),
+                override val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_ssh_key),
                 override val startIconTestTag: String = "SshKeyCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
@@ -1243,7 +1295,9 @@ data class VaultState(
          * Represents a dialog for selecting a vault item type to add.
          */
         @Parcelize
-        data object SelectVaultAddItemType : DialogState()
+        data class SelectVaultAddItemType(
+            val excludedOptions: ImmutableList<CreateVaultItemType>,
+        ) : DialogState()
 
         /**
          * Represents an error dialog with the given [title] and [message].
@@ -1609,6 +1663,13 @@ sealed class VaultAction {
         data class FlightRecorderDataReceive(
             val data: FlightRecorderDataSet,
         ) : Internal()
+
+        /**
+         * Indicates that a policy update has been received.
+         */
+        data class PolicyUpdateReceive(
+            val restrictItemTypesPolicyOrdIds: List<String>?,
+        ) : Internal()
     }
 }
 
@@ -1623,6 +1684,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
     errorTitle: Text,
     errorMessage: Text,
     isRefreshing: Boolean,
+    restrictItemTypesPolicyOrgIds: List<String>?,
 ) {
     this.update {
         if (vaultData != null) {
@@ -1633,6 +1695,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                     hasMasterPassword = hasMasterPassword,
                     vaultFilterType = vaultFilterType,
                     isIconLoadingDisabled = isIconLoadingDisabled,
+                    restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
                 ),
                 dialog = VaultState.DialogState.Error(
                     title = errorTitle,

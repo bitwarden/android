@@ -2,7 +2,7 @@ package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model
 
 import android.os.Parcelable
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.components.model.IconData
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -17,7 +17,10 @@ data class VerificationCodeDisplayItem(
     val periodSeconds: Int,
     val alertThresholdSeconds: Int,
     val authCode: String,
-    val startIcon: IconData = IconData.Local(R.drawable.ic_login_item),
+    val startIcon: IconData = IconData.Local(
+        iconRes = R.drawable.ic_login_item,
+        testTag = "BitwardenIcon",
+    ),
     val favorite: Boolean,
     val allowLongPressActions: Boolean,
     val showMoveToBitwarden: Boolean,

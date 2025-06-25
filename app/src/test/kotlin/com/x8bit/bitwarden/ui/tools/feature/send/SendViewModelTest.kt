@@ -301,7 +301,7 @@ class SendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SendAction.RemovePasswordClick(sendItem))
-            assertEquals(SendEvent.ShowToast(R.string.send_password_removed.asText()), awaitItem())
+            assertEquals(SendEvent.ShowToast(R.string.password_removed.asText()), awaitItem())
         }
     }
 

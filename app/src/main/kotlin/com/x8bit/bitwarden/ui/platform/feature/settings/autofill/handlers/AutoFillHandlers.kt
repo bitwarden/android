@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.handlers
 
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.AutoFillAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.AutoFillViewModel
@@ -15,7 +15,7 @@ class AutoFillHandlers(
     val onAutofillActionCardDismissClick: () -> Unit,
     val onAutofillServicesClick: (isEnabled: Boolean) -> Unit,
     val onUseInlineAutofillClick: (isEnabled: Boolean) -> Unit,
-    val onChromeAutofillSelected: (releaseChannel: ChromeReleaseChannel) -> Unit,
+    val onBrowserAutofillSelected: (browserPackage: BrowserPackage) -> Unit,
     val onPasskeyManagementClick: () -> Unit,
     val onPrivilegedAppsClick: () -> Unit,
     val onPrivilegedAppsHelpLinkClick: () -> Unit,
@@ -54,18 +54,14 @@ class AutoFillHandlers(
                     ),
                 )
             },
-            onChromeAutofillSelected = {
-                viewModel.trySendAction(
-                    AutoFillAction.ChromeAutofillSelected(
-                        it,
-                    ),
-                )
+            onBrowserAutofillSelected = {
+                viewModel.trySendAction(AutoFillAction.BrowserAutofillSelected(it))
             },
             onPasskeyManagementClick = {
                 viewModel.trySendAction(AutoFillAction.PasskeyManagementClick)
             },
             onPrivilegedAppsClick = {
-                // TODO (PM-19108): Open privileged apps screen when available
+                viewModel.trySendAction(AutoFillAction.PrivilegedAppsClick)
             },
             onPrivilegedAppsHelpLinkClick = {
                 viewModel.trySendAction(AutoFillAction.AboutPrivilegedAppsClick)

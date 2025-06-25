@@ -15,8 +15,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.components.row.BitwardenRowOfActions
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
+import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 
 /**
  * Represents a Bitwarden-styled text field accompanied by a series of actions.

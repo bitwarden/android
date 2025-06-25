@@ -5,8 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Icon
 import android.net.Uri
 import androidx.core.graphics.drawable.IconCompat
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bumptech.glide.Glide
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic

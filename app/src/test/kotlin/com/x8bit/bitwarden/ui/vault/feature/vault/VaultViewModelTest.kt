@@ -93,10 +93,16 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val clipboardManager: BitwardenClipboardManager = mockk {
         every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
     }
+
+    private val mutableActivePoliciesFlow: MutableStateFlow<List<SyncResponseJson.Policy>> =
+        MutableStateFlow(emptyList())
     private val policyManager: PolicyManager = mockk {
         every {
             getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
         } returns emptyList()
+        every {
+            getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+        } returns mutableActivePoliciesFlow
     }
 
     private val mutablePullToRefreshEnabledFlow = MutableStateFlow(false)
@@ -152,11 +158,15 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     private val mutableImportLoginsFeatureFlow = MutableStateFlow(true)
+    private val mutableRemoveCardPolicyFeatureFlow = MutableStateFlow(false)
     private val mutableSshKeyVaultItemsEnabledFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every {
             getFeatureFlagFlow(FlagKey.ImportLoginsFlow)
         } returns mutableImportLoginsFeatureFlow
+        every {
+            getFeatureFlagFlow(FlagKey.RemoveCardPolicy)
+        } returns mutableRemoveCardPolicyFeatureFlow
     }
     private val reviewPromptManager: ReviewPromptManager = mockk()
 
@@ -391,6 +401,62 @@ class VaultViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is enable`() =
+        runTest {
+            mutableRemoveCardPolicyFeatureFlow.value = true
+
+            val viewModel = createViewModel()
+            assertEquals(
+                DEFAULT_STATE,
+                viewModel.stateFlow.value,
+            )
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(restrictItemTypesPolicyOrgIds = listOf("Test Organization")),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is disabled`() =
+        runTest {
+            val viewModel = createViewModel()
+            assertEquals(
+                DEFAULT_STATE,
+                viewModel.stateFlow.value,
+            )
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(restrictItemTypesPolicyOrgIds = null),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `Flight Recorder changes should update flightRecorderSnackbar accordingly`() = runTest {
@@ -648,6 +714,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
                 baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                 hasMasterPassword = true,
+                restrictItemTypesPolicyOrgIds = null,
             ),
         )
             .copy(
@@ -672,6 +739,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
                     baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                     hasMasterPassword = true,
+                    restrictItemTypesPolicyOrgIds = null,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -785,6 +853,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     totpItemsCount = 1,
                     itemTypesCount = CipherType.entries.size,
                     sshKeyItemsCount = 1,
+                    showCardGroup = true,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -809,6 +878,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     totpItemsCount = 1,
                     itemTypesCount = 5,
                     sshKeyItemsCount = 0,
+                    showCardGroup = true,
                 ),
             )
             val viewModel = createViewModel()
@@ -928,6 +998,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     totpItemsCount = 1,
                     itemTypesCount = 5,
                     sshKeyItemsCount = 0,
+                    showCardGroup = true,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1033,6 +1104,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 1,
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
+                        showCardGroup = true,
                     ),
                     dialog = VaultState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
@@ -1136,6 +1208,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 1,
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
+                        showCardGroup = true,
                     ),
                     dialog = null,
                 ),
@@ -1213,6 +1286,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 1,
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 1,
+                        showCardGroup = true,
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -2143,13 +2217,49 @@ class VaultViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.trySendAction(VaultAction.SelectAddItemType)
         val expectedState = DEFAULT_STATE.copy(
-            dialog = VaultState.DialogState.SelectVaultAddItemType,
+            dialog = VaultState.DialogState.SelectVaultAddItemType(
+                excludedOptions = persistentListOf(CreateVaultItemType.SSH_KEY),
+            ),
         )
         assertEquals(
             expectedState,
             viewModel.stateFlow.value,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SelectAddItemType action should set dialog state to SelectVaultAddItemType accordingly when RESTRICT_ITEM_TYPES is enabled`() =
+        runTest {
+            mutableRemoveCardPolicyFeatureFlow.value = true
+            val viewModel = createViewModel()
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(VaultAction.SelectAddItemType)
+            val expectedState = DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.SelectVaultAddItemType(
+                    excludedOptions = persistentListOf(
+                        CreateVaultItemType.SSH_KEY,
+                        CreateVaultItemType.CARD,
+                    ),
+                ),
+                restrictItemTypesPolicyOrgIds = listOf("Test Organization"),
+            )
+            assertEquals(
+                expectedState,
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `InternetConnectionErrorReceived should show network error if no internet connection`() =
@@ -2292,4 +2402,5 @@ private fun createMockVaultState(
         showImportActionCard = true,
         isRefreshing = false,
         flightRecorderSnackBar = null,
+        restrictItemTypesPolicyOrgIds = null,
     )

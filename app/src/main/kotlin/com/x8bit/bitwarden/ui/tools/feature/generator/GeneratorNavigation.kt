@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
+import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -7,28 +8,49 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import com.bitwarden.ui.platform.util.ParcelableRouteSerializer
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 /**
  * The type-safe route for the generator screen.
  */
-@Serializable
-sealed class GeneratorRoute {
+@Parcelize
+@Serializable(with = GeneratorRoute.Serializer::class)
+sealed class GeneratorRoute : Parcelable {
+
+    /**
+     * Custom serializer to support polymorphic routes.
+     */
+    class Serializer : ParcelableRouteSerializer<GeneratorRoute>(GeneratorRoute::class)
+
     /**
      * The type-safe route for the standard generator screen.
      */
-    @Serializable
-    data object Standard : GeneratorRoute()
+    @Parcelize
+    @Serializable(with = Standard.Serializer::class)
+    data object Standard : GeneratorRoute() {
+        /**
+         * Custom serializer to support polymorphic routes.
+         */
+        class Serializer : ParcelableRouteSerializer<Standard>(Standard::class)
+    }
 
     /**
      * The type-safe route for the modal generator screen.
      */
-    @Serializable
+    @Parcelize
+    @Serializable(with = Modal.Serializer::class)
     data class Modal(
         val type: ModalType,
         val website: String?,
-    ) : GeneratorRoute()
+    ) : GeneratorRoute() {
+        /**
+         * Custom serializer to support polymorphic routes.
+         */
+        class Serializer : ParcelableRouteSerializer<Modal>(Modal::class)
+    }
 }
 
 /**
@@ -52,20 +74,15 @@ data class GeneratorArgs(
  */
 fun SavedStateHandle.toGeneratorArgs(): GeneratorArgs {
     return GeneratorArgs(
-        type = try {
-            this.toModalGeneratorMode()
-        } catch (_: Exception) {
-            GeneratorMode.Default
+        type = when (val route = this.toRoute<GeneratorRoute>()) {
+            is GeneratorRoute.Modal -> when (route.type) {
+                ModalType.PASSWORD -> GeneratorMode.Modal.Password
+                ModalType.USERNAME -> GeneratorMode.Modal.Username(website = route.website)
+            }
+
+            GeneratorRoute.Standard -> GeneratorMode.Default
         },
     )
-}
-
-private fun SavedStateHandle.toModalGeneratorMode(): GeneratorMode.Modal {
-    val route = this.toRoute<GeneratorRoute.Modal>()
-    return when (route.type) {
-        ModalType.PASSWORD -> GeneratorMode.Modal.Password
-        ModalType.USERNAME -> GeneratorMode.Modal.Username(website = route.website)
-    }
 }
 
 /**

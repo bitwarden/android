@@ -142,7 +142,7 @@ internal class BitwardenServiceClientImpl(
     }
 
     override val eventService: EventService by lazy {
-        EventServiceImpl(eventApi = retrofits.authenticatedApiRetrofit.create())
+        EventServiceImpl(eventApi = retrofits.authenticatedEventsRetrofit.create())
     }
 
     override val folderService: FolderService by lazy {

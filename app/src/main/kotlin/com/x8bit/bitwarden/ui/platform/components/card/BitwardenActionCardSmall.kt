@@ -24,8 +24,8 @@ import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.color.bitwardenCardColors
 
 /**
@@ -93,7 +93,7 @@ fun BitwardenActionCardSmall(
 private fun ActionCardSmall_preview() {
     BitwardenTheme {
         BitwardenActionCardSmall(
-            actionIcon = rememberVectorPainter(id = R.drawable.ic_generate),
+            actionIcon = rememberVectorPainter(id = BitwardenDrawable.ic_generate),
             actionText = "This is an action.",
             callToActionText = "Take action",
             onCardClicked = { },
@@ -106,13 +106,13 @@ private fun ActionCardSmall_preview() {
 private fun ActionCardSmallWithTrailingIcon_preview() {
     BitwardenTheme {
         BitwardenActionCardSmall(
-            actionIcon = rememberVectorPainter(id = R.drawable.ic_generate),
+            actionIcon = rememberVectorPainter(id = BitwardenDrawable.ic_generate),
             actionText = "An action with trailing content",
             callToActionText = "Take action",
             onCardClicked = {},
             trailingContent = {
                 Icon(
-                    painter = rememberVectorPainter(id = R.drawable.ic_chevron_right),
+                    painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_right),
                     contentDescription = null,
                     tint = BitwardenTheme.colorScheme.icon.primary,
                 )
