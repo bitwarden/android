@@ -422,11 +422,12 @@ private fun VaultDialogs(
             onDismissRequest = vaultHandlers.dialogDismiss,
         )
 
-        VaultState.DialogState.SelectVaultAddItemType -> VaultItemSelectionDialog(
+        is VaultState.DialogState.SelectVaultAddItemType -> VaultItemSelectionDialog(
             onOptionSelected = {
                 vaultHandlers.addItemClickAction(it)
             },
             onDismissRequest = vaultHandlers.dialogDismiss,
+            excludedOptions = dialogState.excludedOptions,
         )
 
         null -> Unit

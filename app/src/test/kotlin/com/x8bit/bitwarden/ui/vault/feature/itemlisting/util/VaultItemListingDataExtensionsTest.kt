@@ -470,6 +470,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -563,6 +564,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = fido2CredentialAutofillViews,
             totpData = null,
             isPremiumUser = true,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -649,6 +651,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = fido2CredentialAutofillViews,
             totpData = null,
             isPremiumUser = true,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -715,6 +718,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -738,6 +742,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -759,6 +764,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -781,6 +787,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -802,6 +809,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -823,6 +831,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -844,6 +853,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -869,6 +879,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -894,6 +905,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -920,6 +932,7 @@ class VaultItemListingDataExtensionsTest {
                     every { issuer } returns "issuer"
                 },
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
     }
@@ -1162,6 +1175,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -1206,6 +1220,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -1224,6 +1239,119 @@ class VaultItemListingDataExtensionsTest {
                 ),
                 displayItemList = emptyList(),
                 displayFolderList = emptyList(),
+            ),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should properly filter cards when cipher have organizationId in restrictItemTypesPolicyOrgIds`() {
+        mockkStatic(CipherView::subtitle)
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { any<CipherView>().subtitle } returns null
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.host } returns "www.mockuri.com"
+
+        val vaultData = VaultData(
+            cipherViewList = listOf(
+                createMockCipherView(
+                    number = 1,
+                    organizationId = "restrict_item_type_policy_id",
+                    cipherType = CipherType.LOGIN,
+                ),
+                createMockCipherView(
+                    number = 2,
+                    organizationId = "restrict_item_type_policy_id",
+                    cipherType = CipherType.CARD,
+                ),
+                createMockCipherView(
+                    number = 3,
+                    organizationId = null,
+                    cipherType = CipherType.CARD,
+                ),
+                createMockCipherView(
+                    number = 4,
+                    organizationId = "another_id",
+                    cipherType = CipherType.CARD,
+                ),
+            ),
+
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+            fido2CredentialAutofillViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Card,
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            isIconLoadingDisabled = false,
+            autofillSelectionData = null,
+            createCredentialRequestData = null,
+            fido2CredentialAutofillViews = null,
+            totpData = null,
+            isPremiumUser = true,
+            restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+        )
+
+        assertEquals(
+            VaultItemListingState.ViewState.Content(
+                displayCollectionList = emptyList(),
+                displayItemList = listOf(
+                    createMockDisplayItemForCipher(
+                        number = 4,
+                        cipherType = CipherType.CARD,
+                        subtitle = null,
+                    ).copy(secondSubtitleTestTag = "PasskeySite"),
+                ),
+                displayFolderList = emptyList(),
+            ),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should set properly shouldShowAddButton false when restrictItemTypesPolicyOrgIds has values, vault type is card and there is an empty vault state`() {
+        mockkStatic(CipherView::subtitle)
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { any<CipherView>().subtitle } returns null
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.host } returns "www.mockuri.com"
+
+        val vaultData = VaultData(
+            cipherViewList = listOf(),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+            fido2CredentialAutofillViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Card,
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            isIconLoadingDisabled = false,
+            autofillSelectionData = null,
+            createCredentialRequestData = null,
+            fido2CredentialAutofillViews = null,
+            totpData = null,
+            isPremiumUser = true,
+            restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+        )
+
+        // Card type
+        assertEquals(
+            VaultItemListingState.ViewState.NoItems(
+                message = R.string.no_cards.asText(),
+                shouldShowAddButton = false,
+                buttonText = R.string.new_card.asText(),
             ),
             actual,
         )

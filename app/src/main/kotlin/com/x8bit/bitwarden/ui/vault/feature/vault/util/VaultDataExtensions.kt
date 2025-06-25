@@ -40,10 +40,13 @@ fun VaultData.toViewState(
     isIconLoadingDisabled: Boolean,
     baseIconUrl: String,
     vaultFilterType: VaultFilterType,
+    restrictItemTypesPolicyOrgIds: List<String>?,
 ): VaultState.ViewState {
 
     val filteredCipherViewListWithDeletedItems =
-        cipherViewList.toFilteredList(vaultFilterType)
+        cipherViewList
+            .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds ?: emptyList())
+            .toFilteredList(vaultFilterType)
 
     val filteredCipherViewList = filteredCipherViewListWithDeletedItems
         .filter { it.deletedDate == null }
@@ -70,6 +73,7 @@ fun VaultData.toViewState(
         val totpItems = filteredCipherViewList.filter { it.login?.totp != null }
         val shouldShowUnGroupedItems = filteredCollectionViewList.isEmpty() &&
             noFolderItems.size < NO_FOLDER_ITEM_THRESHOLD
+        val cardCount = filteredCipherViewList.count { it.type == CipherType.CARD }
         VaultState.ViewState.Content(
             itemTypesCount = itemTypesCount,
             totpItemsCount = if (isPremium) {
@@ -78,7 +82,7 @@ fun VaultData.toViewState(
                 totpItems.count { it.organizationUseTotp }
             },
             loginItemsCount = filteredCipherViewList.count { it.type == CipherType.LOGIN },
-            cardItemsCount = filteredCipherViewList.count { it.type == CipherType.CARD },
+            cardItemsCount = cardCount,
             identityItemsCount = filteredCipherViewList.count { it.type == CipherType.IDENTITY },
             secureNoteItemsCount = filteredCipherViewList
                 .count { it.type == CipherType.SECURE_NOTE },
@@ -145,6 +149,7 @@ fun VaultData.toViewState(
             trashItemsCount = filteredCipherViewListWithDeletedItems.count {
                 it.deletedDate != null
             },
+            showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds == null,
         )
     }
 }
@@ -354,5 +359,28 @@ fun List<CollectionView>.toFilteredList(
                 is VaultFilterType.OrganizationVault -> {
                     it.organizationId == vaultFilterType.organizationId
                 }
+            }
+        }
+
+/**
+ * Filters out [CipherType.CARD] [CipherView]s that are in [restrictItemTypesPolicyOrgIds] list.
+ * When [restrictItemTypesPolicyOrgIds] is not empty, individual vault items are also removed.
+ */
+fun List<CipherView>.applyRestrictItemTypesPolicy(
+    restrictItemTypesPolicyOrgIds: List<String>,
+): List<CipherView> =
+    this
+        .filterNot { cipherView ->
+            if (restrictItemTypesPolicyOrgIds.isEmpty()) {
+                // No policy, so don't apply removal
+                false
+            } else if (cipherView.type != CipherType.CARD) {
+                // Policy only for cards
+                false
+            } else {
+                // If a policy is enable for a given organization then
+                // also hide cards from individual vault
+                cipherView.organizationId.isNullOrEmpty() ||
+                    restrictItemTypesPolicyOrgIds.contains(cipherView.organizationId)
             }
         }

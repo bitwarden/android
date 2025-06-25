@@ -23,6 +23,7 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.icon.model.IconData
@@ -60,6 +61,7 @@ import com.x8bit.bitwarden.data.credentials.model.createMockFido2CredentialAsser
 import com.x8bit.bitwarden.data.credentials.model.createMockGetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -67,6 +69,7 @@ import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingMa
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
@@ -197,9 +200,14 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             authRepository = mockAuthRepository,
             dispatcherManager = FakeDispatcherManager(),
         )
+    private val mutableActivePoliciesFlow: MutableStateFlow<List<SyncResponseJson.Policy>> =
+        MutableStateFlow(emptyList())
     private val policyManager: PolicyManager = mockk {
         every { getActivePolicies(type = PolicyTypeJson.DISABLE_SEND) } returns emptyList()
         every { getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND) } returns emptyFlow()
+        every {
+            getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+        } returns mutableActivePoliciesFlow
     }
     private val bitwardenCredentialManager: BitwardenCredentialManager = mockk {
         every { isUserVerified } returns false
@@ -230,6 +238,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
     private val privilegedAppRepository = mockk<PrivilegedAppRepository> {
         coEvery { addTrustedPrivilegedApp(any(), any()) } just runs
+    }
+
+    private val mutableRemoveCardPolicyFeatureFlow = MutableStateFlow(false)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every {
+            getFeatureFlagFlow(FlagKey.RemoveCardPolicy)
+        } returns mutableRemoveCardPolicyFeatureFlow
     }
 
     private val initialState = createVaultItemListingState()
@@ -344,6 +359,64 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
             }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is enable`() =
+        runTest {
+            mutableRemoveCardPolicyFeatureFlow.value = true
+
+            val viewModel = createVaultItemListingViewModel()
+            assertEquals(
+                initialState.copy(restrictItemTypesPolicyOrgIds = persistentListOf()),
+                viewModel.stateFlow.value,
+            )
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+
+            assertEquals(
+                initialState.copy(
+                    restrictItemTypesPolicyOrgIds = persistentListOf("Test Organization"),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is disabled`() =
+        runTest {
+            val viewModel = createVaultItemListingViewModel()
+            assertEquals(
+                initialState,
+                viewModel.stateFlow.value,
+            )
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+
+            assertEquals(
+                initialState.copy(restrictItemTypesPolicyOrgIds = persistentListOf()),
+                viewModel.stateFlow.value,
+            )
         }
 
     @Test
@@ -1226,6 +1299,108 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
+
+    @Test
+    fun `AddVaultItemClick inside a collection should show item selection dialog state`() {
+        val viewModel = createVaultItemListingViewModel(
+            savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                vaultItemListingType = VaultItemListingType.Collection(collectionId = "id"),
+            ),
+        )
+        viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
+        assertEquals(
+            createVaultItemListingState(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Collection(
+                    collectionId = "id",
+                ),
+                dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
+                    excludedOptions = persistentListOf(
+                        CreateVaultItemType.SSH_KEY,
+                        CreateVaultItemType.FOLDER,
+                    ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `AddVaultItemClick inside a folder should hide card item selection dialog state when RESTRICT_ITEM_TYPES policy is enabled`() =
+        runTest {
+            mutableRemoveCardPolicyFeatureFlow.value = true
+            val viewModel = createVaultItemListingViewModel(
+                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                    vaultItemListingType = VaultItemListingType.Folder(folderId = "id"),
+                ),
+            )
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+            viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
+            assertEquals(
+                createVaultItemListingState(
+                    itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
+                        folderId = "id",
+                    ),
+                    dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
+                        excludedOptions = persistentListOf(
+                            CreateVaultItemType.CARD,
+                            CreateVaultItemType.FOLDER,
+                            CreateVaultItemType.SSH_KEY,
+                        ),
+                    ),
+                ).copy(restrictItemTypesPolicyOrgIds = persistentListOf("Test Organization")),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `AddVaultItemClick inside a collection should hide card item selection dialog state when RESTRICT_ITEM_TYPES policy is enabled`() =
+        runTest {
+            mutableRemoveCardPolicyFeatureFlow.value = true
+            val viewModel = createVaultItemListingViewModel(
+                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                    vaultItemListingType = VaultItemListingType.Collection(collectionId = "id"),
+                ),
+            )
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+            viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
+            assertEquals(
+                createVaultItemListingState(
+                    itemListingType = VaultItemListingState.ItemListingType.Vault.Collection(
+                        collectionId = "id",
+                    ),
+                    dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
+                        excludedOptions = persistentListOf(
+                            CreateVaultItemType.CARD,
+                            CreateVaultItemType.FOLDER,
+                            CreateVaultItemType.SSH_KEY,
+                        ),
+                    ),
+                ).copy(restrictItemTypesPolicyOrgIds = persistentListOf("Test Organization")),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `AddVaultItemClick for vault item should emit NavigateToAddVaultItem`() = runTest {
@@ -5112,6 +5287,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             originManager = originManager,
             networkConnectionManager = networkConnectionManager,
             privilegedAppRepository = privilegedAppRepository,
+            featureFlagManager = featureFlagManager,
             snackbarRelayManager = snackbarRelayManager,
             relyingPartyParser = relyingPartyParser,
         )
@@ -5140,6 +5316,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             createCredentialRequest = null,
             isPremium = true,
             isRefreshing = false,
+            restrictItemTypesPolicyOrgIds = persistentListOf(),
         )
 }
 
