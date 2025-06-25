@@ -15,13 +15,13 @@ import com.bitwarden.authenticatorbridge.util.decrypt
 import com.bitwarden.authenticatorbridge.util.encrypt
 import com.bitwarden.authenticatorbridge.util.toFingerprint
 import com.bitwarden.authenticatorbridge.util.toSymmetricEncryptionKeyData
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
 import com.x8bit.bitwarden.data.platform.util.createAddTotpItemFromAuthenticatorIntent
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.vault.util.getTotpDataOrNull
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -46,7 +46,7 @@ class AuthenticatorBridgeProcessorImpl(
         get() {
             return if (
                 !featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) ||
-                isBuildVersionBelow(Build.VERSION_CODES.S)
+                !isBuildVersionAtLeast(Build.VERSION_CODES.S)
             ) {
                 // If the feature flag is not enabled, OR if version is below Android 12,
                 // return a null binder which will no-op all service calls

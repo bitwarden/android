@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager
 
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -21,18 +21,18 @@ class SdkClientManagerTest {
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(::isBuildVersionBelow)
-        every { isBuildVersionBelow(any()) } returns false
+        mockkStatic(::isBuildVersionAtLeast)
+        every { isBuildVersionAtLeast(any()) } returns true
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(::isBuildVersionBelow)
+        unmockkStatic(::isBuildVersionAtLeast)
     }
 
     @Test
     fun `init should load the bitwarden_uniffi library when build version is below 31`() = runTest {
-        every { isBuildVersionBelow(31) } returns true
+        every { isBuildVersionAtLeast(31) } returns false
         createSdkClientManager()
         verify { mockNativeLibraryManager.loadLibrary("bitwarden_uniffi") }
     }
@@ -40,7 +40,7 @@ class SdkClientManagerTest {
     @Test
     fun `init should not load the bitwarden_uniffi library when build version is 31 or above`() =
         runTest {
-            every { isBuildVersionBelow(31) } returns false
+            every { isBuildVersionAtLeast(31) } returns true
             createSdkClientManager()
             verify(exactly = 0) { mockNativeLibraryManager.loadLibrary("bitwarden_uniffi") }
         }

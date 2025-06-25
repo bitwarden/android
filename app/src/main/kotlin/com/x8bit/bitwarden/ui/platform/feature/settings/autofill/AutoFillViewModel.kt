@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
@@ -16,7 +17,6 @@ import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -53,8 +53,8 @@ class AutoFillViewModel @Inject constructor(
                 isAutoFillServicesEnabled = settingsRepository.isAutofillEnabledStateFlow.value,
                 isCopyTotpAutomaticallyEnabled = !settingsRepository.isAutoCopyTotpDisabled,
                 isUseInlineAutoFillEnabled = settingsRepository.isInlineAutofillEnabled,
-                showInlineAutofillOption = !isBuildVersionBelow(Build.VERSION_CODES.R),
-                showPasskeyManagementRow = !isBuildVersionBelow(
+                showInlineAutofillOption = isBuildVersionAtLeast(Build.VERSION_CODES.R),
+                showPasskeyManagementRow = isBuildVersionAtLeast(
                     Build.VERSION_CODES.UPSIDE_DOWN_CAKE,
                 ),
                 defaultUriMatchType = settingsRepository.defaultUriMatchType,

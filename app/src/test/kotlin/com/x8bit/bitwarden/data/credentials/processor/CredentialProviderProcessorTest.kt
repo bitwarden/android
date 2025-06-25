@@ -22,6 +22,7 @@ import androidx.credentials.provider.BeginGetPasswordOption
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.CredentialEntry
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.repository.model.Environment
@@ -34,7 +35,6 @@ import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.coEvery
 import io.mockk.every
@@ -95,12 +95,12 @@ class CredentialProviderProcessorTest {
             dispatcherManager,
         )
 
-        mockkStatic(::isBuildVersionBelow)
+        mockkStatic(::isBuildVersionAtLeast)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(::isBuildVersionBelow)
+        unmockkStatic(::isBuildVersionAtLeast)
     }
 
     @Test
@@ -284,7 +284,7 @@ class CredentialProviderProcessorTest {
             biometricsEncryptionManager.getOrCreateCipher(any())
         } returns mockk<Cipher>()
         every { featureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyCreation) } returns true
-        every { isBuildVersionBelow(Build.VERSION_CODES.VANILLA_ICE_CREAM) } returns false
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.VANILLA_ICE_CREAM) } returns true
 
         credentialProviderProcessor.processCreateCredentialRequest(
             request,
