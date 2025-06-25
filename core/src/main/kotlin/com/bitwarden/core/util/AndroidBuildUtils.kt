@@ -14,4 +14,4 @@ import com.bitwarden.annotation.OmitFromCoverage
 @ChecksSdkIntAtLeast(parameter = 0)
 fun isBuildVersionAtLeast(
     version: Int,
-): Boolean = version >= Build.VERSION.SDK_INT
+): Boolean = Build.VERSION.SDK_INT >= version

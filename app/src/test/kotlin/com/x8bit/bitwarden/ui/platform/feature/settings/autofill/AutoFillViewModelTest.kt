@@ -130,6 +130,7 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 showInlineAutofillOption = true,
+                showPasskeyManagementRow = false,
             ),
             viewModel.stateFlow.value,
         )
