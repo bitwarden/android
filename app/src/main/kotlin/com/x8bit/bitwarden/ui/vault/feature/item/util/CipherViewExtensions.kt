@@ -5,6 +5,8 @@ import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.base.util.nullIfAllEqual
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.ui.platform.base.util.orZeroWidthSpace
+import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CardView
@@ -17,7 +19,6 @@ import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
@@ -291,25 +292,25 @@ private fun CipherView.toIconData(
 @get:DrawableRes
 private val CipherType.iconRes: Int
     get() = when (this) {
-        CipherType.SECURE_NOTE -> R.drawable.ic_note
-        CipherType.CARD -> R.drawable.ic_payment_card
-        CipherType.IDENTITY -> R.drawable.ic_id_card
-        CipherType.SSH_KEY -> R.drawable.ic_ssh_key
-        CipherType.LOGIN -> R.drawable.ic_globe
+        CipherType.SECURE_NOTE -> BitwardenDrawable.ic_note
+        CipherType.CARD -> BitwardenDrawable.ic_payment_card
+        CipherType.IDENTITY -> BitwardenDrawable.ic_id_card
+        CipherType.SSH_KEY -> BitwardenDrawable.ic_ssh_key
+        CipherType.LOGIN -> BitwardenDrawable.ic_globe
     }
 
 @get:DrawableRes
 private val CardView.paymentCardBrandIconRes: Int?
     get() = when (this.cardBrand) {
-        VaultCardBrand.VISA -> R.drawable.ic_payment_card_brand_visa
-        VaultCardBrand.MASTERCARD -> R.drawable.ic_payment_card_brand_mastercard
-        VaultCardBrand.AMEX -> R.drawable.ic_payment_card_brand_amex
-        VaultCardBrand.DISCOVER -> R.drawable.ic_payment_card_brand_discover
-        VaultCardBrand.DINERS_CLUB -> R.drawable.ic_payment_card_brand_diners_club
-        VaultCardBrand.JCB -> R.drawable.ic_payment_card_brand_jcb
-        VaultCardBrand.MAESTRO -> R.drawable.ic_payment_card_brand_maestro
-        VaultCardBrand.UNIONPAY -> R.drawable.ic_payment_card_brand_union_pay
-        VaultCardBrand.RUPAY -> R.drawable.ic_payment_card_brand_ru_pay
+        VaultCardBrand.VISA -> BitwardenDrawable.ic_payment_card_brand_visa
+        VaultCardBrand.MASTERCARD -> BitwardenDrawable.ic_payment_card_brand_mastercard
+        VaultCardBrand.AMEX -> BitwardenDrawable.ic_payment_card_brand_amex
+        VaultCardBrand.DISCOVER -> BitwardenDrawable.ic_payment_card_brand_discover
+        VaultCardBrand.DINERS_CLUB -> BitwardenDrawable.ic_payment_card_brand_diners_club
+        VaultCardBrand.JCB -> BitwardenDrawable.ic_payment_card_brand_jcb
+        VaultCardBrand.MAESTRO -> BitwardenDrawable.ic_payment_card_brand_maestro
+        VaultCardBrand.UNIONPAY -> BitwardenDrawable.ic_payment_card_brand_union_pay
+        VaultCardBrand.RUPAY -> BitwardenDrawable.ic_payment_card_brand_ru_pay
         VaultCardBrand.SELECT,
         VaultCardBrand.OTHER,
         null,

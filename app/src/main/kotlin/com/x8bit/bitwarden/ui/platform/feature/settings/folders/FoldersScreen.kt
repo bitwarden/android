@@ -91,7 +91,7 @@ fun FoldersScreen(
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(FoldersAction.AddFolderButtonClick) }
                 },
-                painter = rememberVectorPainter(id = R.drawable.ic_plus_large),
+                painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
                 contentDescription = stringResource(id = R.string.add_item),
                 modifier = Modifier
                     .testTag(tag = "AddItemButton")

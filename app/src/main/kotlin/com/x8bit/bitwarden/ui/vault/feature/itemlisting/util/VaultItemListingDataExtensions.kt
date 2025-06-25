@@ -8,6 +8,8 @@ import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
+import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -20,7 +22,6 @@ import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
@@ -254,7 +255,7 @@ fun VaultData.toViewState(
                         .asText()
                 },
             vectorRes = totpData
-                ?.let { R.drawable.img_folder_question },
+                ?.let { BitwardenDrawable.img_folder_question },
         )
     }
 }
@@ -468,8 +469,8 @@ private fun SendView.toDisplayItem(
         subtitleTestTag = "SendDateLabel",
         iconData = IconData.Local(
             iconRes = when (type) {
-                SendType.TEXT -> R.drawable.ic_file_text
-                SendType.FILE -> R.drawable.ic_file
+                SendType.TEXT -> BitwardenDrawable.ic_file_text
+                SendType.FILE -> BitwardenDrawable.ic_file
             },
         ),
         iconTestTag = null,
@@ -485,9 +486,9 @@ private fun SendView.toDisplayItem(
 @get:DrawableRes
 private val CipherType.iconRes: Int
     get() = when (this) {
-        CipherType.LOGIN -> R.drawable.ic_globe
-        CipherType.SECURE_NOTE -> R.drawable.ic_note
-        CipherType.CARD -> R.drawable.ic_payment_card
-        CipherType.IDENTITY -> R.drawable.ic_id_card
-        CipherType.SSH_KEY -> R.drawable.ic_ssh_key
+        CipherType.LOGIN -> BitwardenDrawable.ic_globe
+        CipherType.SECURE_NOTE -> BitwardenDrawable.ic_note
+        CipherType.CARD -> BitwardenDrawable.ic_payment_card
+        CipherType.IDENTITY -> BitwardenDrawable.ic_id_card
+        CipherType.SSH_KEY -> BitwardenDrawable.ic_ssh_key
     }

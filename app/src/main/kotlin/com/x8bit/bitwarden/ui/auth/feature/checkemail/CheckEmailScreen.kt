@@ -37,6 +37,7 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.checkemail.handlers.rememberCheckEmailHandler
@@ -78,7 +79,7 @@ fun CheckEmailScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.create_account),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = handler.onBackClick,
             )
@@ -115,7 +116,7 @@ private fun CheckEmailContent(
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         Image(
-            painter = rememberVectorPainter(id = R.drawable.open_email),
+            painter = rememberVectorPainter(id = BitwardenDrawable.open_email),
             contentDescription = null,
             contentScale = ContentScale.FillHeight,
             modifier = Modifier

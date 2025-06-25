@@ -1,37 +1,59 @@
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
+import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.toRoute
 import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
-import com.x8bit.bitwarden.ui.platform.util.toObjectRoute
+import com.bitwarden.ui.platform.util.ParcelableRouteSerializer
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 /**
  * The type-safe route for the setup autofill screen.
  */
-sealed class SetupAutofillRoute {
+@Parcelize
+@Serializable(with = SetupAutofillRoute.Serializer::class)
+sealed class SetupAutofillRoute : Parcelable {
     /**
      * The [isInitialSetup] value used in the setup autofill screen.
      */
     abstract val isInitialSetup: Boolean
 
     /**
+     * Custom serializer to support polymorphic routes.
+     */
+    class Serializer : ParcelableRouteSerializer<SetupAutofillRoute>(SetupAutofillRoute::class)
+
+    /**
      * The type-safe route for the standard setup autofill screen.
      */
-    @Serializable
+    @Parcelize
+    @Serializable(with = Standard.Serializer::class)
     data object Standard : SetupAutofillRoute() {
         override val isInitialSetup: Boolean get() = false
+
+        /**
+         * Custom serializer to support polymorphic routes.
+         */
+        class Serializer : ParcelableRouteSerializer<Standard>(Standard::class)
     }
 
     /**
      * The type-safe route for the root setup autofill screen.
      */
-    @Serializable
+    @Parcelize
+    @Serializable(with = AsRoot.Serializer::class)
     data object AsRoot : SetupAutofillRoute() {
         override val isInitialSetup: Boolean get() = true
+
+        /**
+         * Custom serializer to support polymorphic routes.
+         */
+        class Serializer : ParcelableRouteSerializer<AsRoot>(AsRoot::class)
     }
 }
 
@@ -44,11 +66,8 @@ data class SetupAutoFillScreenArgs(val isInitialSetup: Boolean)
  * Constructs a [SetupAutoFillScreenArgs] from the [SavedStateHandle] and internal route data.
  */
 fun SavedStateHandle.toSetupAutoFillArgs(): SetupAutoFillScreenArgs {
-    val route = (this.toObjectRoute<SetupAutofillRoute.AsRoot>()
-        ?: this.toObjectRoute<SetupAutofillRoute.Standard>())
-    return route
-        ?.let { SetupAutoFillScreenArgs(isInitialSetup = it.isInitialSetup) }
-        ?: throw IllegalStateException("Missing correct route for SetupAutofillScreen")
+    val route = this.toRoute<SetupAutofillRoute>()
+    return SetupAutoFillScreenArgs(isInitialSetup = route.isInitialSetup)
 }
 
 /**

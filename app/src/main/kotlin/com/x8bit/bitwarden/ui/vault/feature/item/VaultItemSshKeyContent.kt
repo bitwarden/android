@@ -21,13 +21,14 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
 import com.x8bit.bitwarden.ui.vault.feature.item.component.itemHeader
@@ -72,7 +73,7 @@ fun VaultItemSshKeyContent(
                 readOnly = true,
                 actions = {
                     BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_copy,
+                        vectorIconRes = BitwardenDrawable.ic_copy,
                         contentDescription = stringResource(id = R.string.copy_public_key),
                         onClick = vaultSshKeyItemTypeHandlers.onCopyPublicKeyClick,
                         modifier = Modifier.testTag(tag = "SshKeyCopyPublicKeyButton"),
@@ -96,7 +97,7 @@ fun VaultItemSshKeyContent(
                 readOnly = true,
                 actions = {
                     BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_copy,
+                        vectorIconRes = BitwardenDrawable.ic_copy,
                         contentDescription = stringResource(id = R.string.copy_private_key),
                         onClick = vaultSshKeyItemTypeHandlers.onCopyPrivateKeyClick,
                         modifier = Modifier.testTag(tag = "SshKeyCopyPrivateKeyButton"),
@@ -123,7 +124,7 @@ fun VaultItemSshKeyContent(
                 readOnly = true,
                 actions = {
                     BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_copy,
+                        vectorIconRes = BitwardenDrawable.ic_copy,
                         contentDescription = stringResource(id = R.string.copy_fingerprint),
                         onClick = vaultSshKeyItemTypeHandlers.onCopyFingerprintClick,
                         modifier = Modifier.testTag(tag = "SshKeyCopyFingerprintButton"),
@@ -158,7 +159,7 @@ fun VaultItemSshKeyContent(
                     singleLine = false,
                     actions = {
                         BitwardenStandardIconButton(
-                            vectorIconRes = R.drawable.ic_copy,
+                            vectorIconRes = BitwardenDrawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy_notes),
                             onClick = vaultCommonItemTypeHandlers.onCopyNotesClick,
                             modifier = Modifier.testTag(tag = "CipherNotesCopyButton"),

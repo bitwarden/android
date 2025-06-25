@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.model
+package com.bitwarden.ui.platform.components.icon.model
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes

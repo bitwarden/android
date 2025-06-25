@@ -43,6 +43,7 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -90,7 +91,7 @@ fun BlockAutoFillScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.block_auto_fill),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(BlockAutoFillAction.BackClick) }
@@ -107,7 +108,7 @@ fun BlockAutoFillScreen(
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(BlockAutoFillAction.AddUriClick) }
                     },
-                    painter = rememberVectorPainter(id = R.drawable.ic_plus_large),
+                    painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
                     contentDescription = stringResource(id = R.string.add_item),
                     modifier = Modifier.testTag(tag = "AddItemButton"),
                 )
@@ -220,7 +221,7 @@ private fun BlockAutoFillNoItems(
         Spacer(modifier = Modifier.height(height = 24.dp))
         Image(
             painter = rememberVectorPainter(
-                id = R.drawable.blocked_uri,
+                id = BitwardenDrawable.blocked_uri,
             ),
             contentDescription = null,
             modifier = Modifier
@@ -281,7 +282,7 @@ private fun BlockAutoFillListItem(
             color = BitwardenTheme.colorScheme.text.primary,
         )
         Icon(
-            painter = rememberVectorPainter(id = R.drawable.ic_pencil_square),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ic_pencil_square),
             contentDescription = null,
             tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier.size(24.dp),
