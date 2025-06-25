@@ -330,6 +330,11 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.HOME" />
         </intent>
+        <!-- To Query Privileged Apps -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http" />
+        </intent>
         <!-- To Query Chrome Beta: -->
         <package android:name="com.chrome.beta" />
 

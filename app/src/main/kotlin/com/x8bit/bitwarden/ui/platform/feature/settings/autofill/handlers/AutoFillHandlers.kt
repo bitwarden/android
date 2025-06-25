@@ -61,7 +61,7 @@ class AutoFillHandlers(
                 viewModel.trySendAction(AutoFillAction.PasskeyManagementClick)
             },
             onPrivilegedAppsClick = {
-                // TODO (PM-19108): Open privileged apps screen when available
+                viewModel.trySendAction(AutoFillAction.PrivilegedAppsClick)
             },
             onPrivilegedAppsHelpLinkClick = {
                 viewModel.trySendAction(AutoFillAction.AboutPrivilegedAppsClick)
