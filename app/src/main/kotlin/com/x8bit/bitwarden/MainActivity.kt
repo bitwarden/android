@@ -186,6 +186,10 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 is MainEvent.UpdateAppTheme -> AppCompatDelegate.setDefaultNightMode(event.osTheme)
+
+                is MainEvent.ScreenCaptureSettingChange -> {
+                    updateScreenCapture(event.isAllowed)
+                }
             }
         }
     }
