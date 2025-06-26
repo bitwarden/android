@@ -245,6 +245,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every {
             getFeatureFlagFlow(FlagKey.RemoveCardPolicy)
         } returns mutableRemoveCardPolicyFeatureFlow
+        every {
+            getFeatureFlag(FlagKey.UserManagedPrivilegedApps)
+        } returns true
     }
 
     private val initialState = createVaultItemListingState()
@@ -2868,7 +2871,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ValidateOriginResult should update dialog state on PrivilegedAppNotAllowed error`() =
+    fun `ValidateOriginResult should show TrustPrivilegedAddPrompt dialog when feature flag is on`() =
         runTest {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
@@ -2888,6 +2891,36 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     message = R.string.passkey_operation_failed_because_browser_x_is_not_trusted
                         .asText("mockPackageName"),
                     selectedCipherId = null,
+                ),
+                viewModel.stateFlow.value.dialogState,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ValidateOriginResult should show not show TrustPrivilegedAppPrompt dialog when feature flag is off`() =
+        runTest {
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.ProviderCreateCredential(
+                    createCredentialRequest = createMockCreateCredentialRequest(number = 1),
+                )
+            coEvery {
+                originManager.validateOrigin(
+                    relyingPartyId = DEFAULT_RELYING_PARTY_ID,
+                    callingAppInfo = mockCallingAppInfo,
+                )
+            } returns ValidateOriginResult.Error.PrivilegedAppNotAllowed
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.UserManagedPrivilegedApps)
+            } returns false
+
+            val viewModel = createVaultItemListingViewModel()
+
+            assertEquals(
+                VaultItemListingState.DialogState.CredentialManagerOperationFail(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.passkey_operation_failed_because_browser_is_not_privileged
+                        .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
