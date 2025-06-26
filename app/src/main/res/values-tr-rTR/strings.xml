@@ -296,8 +296,9 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="autofill_and_save">Otomatik doldur ve kaydet</string>
     <string name="organization">Kuruluş</string>
     <string name="try_again">Yeniden dene</string>
-    <string name="date_password_updated">Parola güncellendi</string>
-    <string name="date_updated">Güncelleme</string>
+    <string name="created">Oluşturulma: %1$s</string>
+    <string name="password_last_updated">Son parola güncellemesi: %1$s</string>
+    <string name="last_edited">Son düzenleme: %1$s</string>
     <string name="invalid_email">Geçersiz e-posta adresi.</string>
     <string name="cards">Kartlar</string>
     <string name="identities">Kimlikler</string>
@@ -453,7 +454,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="password_info">Kullanıcıların bu Send\'e erişmek için parola girmelerini isteyebilirsiniz.</string>
     <string name="remove_password">Parolayı kaldır</string>
     <string name="removing_send_password">Parola kaldırılıyor</string>
-    <string name="send_password_removed">Parola kaldırıldı.</string>
+    <string name="password_removed">Parola kaldırıldı</string>
     <string name="add_a_send">Send ekle</string>
     <string name="copy_link">Bağlantıyı kopyala</string>
     <string name="share_link">Bağlantıyı paylaş</string>
@@ -466,6 +467,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="add_text_send">Yeni Send metni</string>
     <string name="are_you_sure_delete_send">Bu Send\'i silmek istediğinizden emin misiniz?</string>
     <string name="send_deleted">Send silindi</string>
+    <string name="send_updated">Send güncellendi</string>
     <string name="one_day">1 gün</string>
     <string name="two_days">2 gün</string>
     <string name="three_days">3 gün</string>
@@ -546,6 +548,8 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="device_type">Cihaz türü</string>
     <string name="ip_address">IP adresi</string>
     <string name="time">Tarih</string>
+    <string name="select_time">Zamanı seçin</string>
+    <string name="switch_input_mode">Giriş modunu değiştir</string>
     <string name="confirm_log_in">Girişi onayla</string>
     <string name="deny_log_in">Girişi reddet</string>
     <string name="log_in_denied">Giriş reddedildi</string>
@@ -670,7 +674,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="privacy_policy_description_long">Gizlilik ilkelerimizi bitwarden.com\'da bulabilirsiniz.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Web uygulamasında Bitwarden hesabınızın diğer özelliklerini keşfedin.</string>
     <string name="learn_about_organizations_description_long">Bitwarden\'ın kuruluş özelliğini kullanarak kasanızdaki kayıtları başkalarıyla paylaşabilirsiniz. Daha fazla bilgi için bitwarden.com sitesini ziyaret edin.</string>
-    <string name="created_xy">Oluşturulma: %1$s %2$s</string>
+    <string name="created_x">Oluşturulma: %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Kuruluşunuz bir ana parola belirlemenizi gerektiriyor.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Kasa zaman aşımı eyleminizi değiştirmek için bir kilit açma yöntemi ayarlayın.</string>
     <string name="save_passkey_as_new_login">Geçiş anahtarını yeni hesap olarak kaydet</string>
@@ -962,4 +966,18 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="dynamic_colors">Dinamik renkler</string>
     <string name="dynamic_colors_description">Duvar kâğıdınıza dayalı dinamik renkler uygulayın</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dinamik renkler sistem renklerini kullandığı için erişilebilirlik yönergelerine uygun olmayabilir.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
+    <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
+    <string name="trust">Trust</string>
+    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
+    <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
+    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
+    <string name="trusted_by_you">Trusted by You</string>
+    <string name="trusted_by_the_community">Trusted by the Community</string>
+    <string name="trusted_by_google">Trusted by Google</string>
+    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through web browsers trusted by Google or the Bitwarden community.</string>
+    <string name="about_privileged_applications">About privileged applications</string>
+    <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
+    <string name="privileged_apps">Privileged apps</string>
+    <string name="unrecognized_browser">Tanınmayan tarayıcı</string>
 </resources>

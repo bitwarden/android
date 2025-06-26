@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.send
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.network.model.PolicyTypeJson
@@ -23,6 +24,8 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toViewState
 import io.mockk.coEvery
@@ -34,6 +37,7 @@ import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.advanceTimeBy
@@ -71,6 +75,13 @@ class SendViewModelTest : BaseViewModelTest() {
 
     private val networkConnectionManager: NetworkConnectionManager = mockk {
         every { isNetworkConnected } returns true
+    }
+    private val mutableSnackbarDataFlow: MutableSharedFlow<BitwardenSnackbarData> =
+        bufferedMutableSharedFlow()
+    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+        every {
+            getSnackbarDataFlow(relay = any(), relays = anyVararg())
+        } returns mutableSnackbarDataFlow
     }
 
     @BeforeEach
@@ -290,7 +301,7 @@ class SendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SendAction.RemovePasswordClick(sendItem))
-            assertEquals(SendEvent.ShowToast(R.string.send_password_removed.asText()), awaitItem())
+            assertEquals(SendEvent.ShowToast(R.string.password_removed.asText()), awaitItem())
         }
     }
 
@@ -629,6 +640,16 @@ class SendViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `SnackbarDataReceive should update emit ShowSnackbar`() = runTest {
+        val viewModel = createViewModel()
+        val snackbarData = BitwardenSnackbarData(message = "Test".asText())
+        viewModel.eventFlow.test {
+            mutableSnackbarDataFlow.tryEmit(snackbarData)
+            assertEquals(SendEvent.ShowSnackbar(data = snackbarData), awaitItem())
+        }
+    }
+
     @Suppress("LongParameterList")
     private fun createViewModel(
         state: SendState? = null,
@@ -649,6 +670,7 @@ class SendViewModelTest : BaseViewModelTest() {
         vaultRepo = vaultRepository,
         policyManager = policyManager,
         networkConnectionManager = networkConnectionManager,
+        snackbarRelayManager = snackbarRelayManager,
     )
 }
 

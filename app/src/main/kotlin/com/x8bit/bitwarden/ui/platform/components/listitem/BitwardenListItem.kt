@@ -25,13 +25,14 @@ import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.icon.BitwardenIcon
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
-import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIcon
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -141,7 +142,7 @@ fun BitwardenListItem(
 
         if (selectionDataList.isNotEmpty()) {
             BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_ellipsis_horizontal,
+                vectorIconRes = BitwardenDrawable.ic_ellipsis_horizontal,
                 contentDescription = stringResource(id = R.string.options),
                 onClick = { shouldShowDialog = true },
                 modifier = Modifier.nullableTestTag(tag = optionsTestTag),
@@ -185,7 +186,7 @@ private fun BitwardenListItem_preview() {
         BitwardenListItem(
             label = "Sample Label",
             supportingLabel = "Jan 3, 2024, 10:35 AM",
-            startIcon = IconData.Local(R.drawable.ic_file_text),
+            startIcon = IconData.Local(BitwardenDrawable.ic_file_text),
             onClick = {},
             selectionDataList = persistentListOf(),
             cardStyle = CardStyle.Full,

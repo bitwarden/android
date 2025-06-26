@@ -27,18 +27,18 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldButtonColors
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.model.TooltipData
+import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
-import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
-import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 
 /**
  * A button which uses a read-only text field for layout and style purposes.
@@ -103,7 +103,7 @@ fun BitwardenTextSelectionButton(
                     tooltip?.let {
                         Spacer(modifier = Modifier.width(8.dp))
                         BitwardenStandardIconButton(
-                            vectorIconRes = R.drawable.ic_question_circle_small,
+                            vectorIconRes = BitwardenDrawable.ic_question_circle_small,
                             contentDescription = it.contentDescription,
                             onClick = it.onClick,
                             contentColor = BitwardenTheme.colorScheme.icon.secondary,
@@ -117,7 +117,7 @@ fun BitwardenTextSelectionButton(
                     modifier = Modifier.padding(paddingValues = actionsPadding),
                     actions = {
                         Icon(
-                            painter = rememberVectorPainter(id = R.drawable.ic_chevron_down),
+                            painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_down),
                             contentDescription = null,
                             tint = BitwardenTheme.colorScheme.icon.primary,
                             modifier = Modifier.minimumInteractiveComponentSize(),

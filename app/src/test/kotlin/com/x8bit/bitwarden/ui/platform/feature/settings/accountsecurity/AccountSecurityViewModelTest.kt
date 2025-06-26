@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
@@ -32,7 +33,6 @@ import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.AccountSecurityAction.AuthenticatorSyncToggle
@@ -111,12 +111,12 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(::isBuildVersionBelow)
+        mockkStatic(::isBuildVersionAtLeast)
     }
 
     @AfterEach
     fun teardown() {
-        unmockkStatic(::isBuildVersionBelow)
+        unmockkStatic(::isBuildVersionAtLeast)
     }
 
     @Test
@@ -821,7 +821,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `when featureFlagManger returns true for AuthenticatorSync, and version is at least 31 should show authenticator sync UI`() {
-        every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns false
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns true
         val vm = createViewModel(
             initialState = null,
             featureFlagManager = mockk {
@@ -838,7 +838,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `when featureFlagManger returns true for AuthenticatorSync, and version is under 31 should not show authenticator sync UI`() {
-        every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns true
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns false
         every { featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) } returns true
         every { featureFlagManager.getFeatureFlagFlow(FlagKey.AuthenticatorSync) } returns emptyFlow()
         val vm = createViewModel(initialState = null)
@@ -850,7 +850,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `when featureFlagManger updates value AuthenticatorSync, should update UI`() = runTest {
-        every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns false
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns true
         val featureFlagFlow = MutableStateFlow(false)
         val vm = createViewModel(
             initialState = null,
@@ -872,7 +872,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     fun `when featureFlagManger updates value AuthenticatorSync, authenticator sync row should never show if below API 31`() =
         runTest {
-            every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns true
+            every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns false
             val featureFlagFlow = MutableStateFlow(false)
             every { featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) } returns false
             every {

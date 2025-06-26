@@ -10,18 +10,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.composition.LocalClock
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import java.time.ZonedDateTime
+import java.time.format.FormatStyle
 import java.time.temporal.ChronoUnit
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
@@ -94,7 +95,13 @@ private sealed class CustomDeletionOption : Parcelable {
 
         override fun getText(
             clock: Clock,
-        ): Text = time.toFormattedPattern(pattern = "d MMM, yyyy, h:mma", clock = clock).asText()
+        ): Text = time
+            .toFormattedDateTimeStyle(
+                dateStyle = FormatStyle.MEDIUM,
+                timeStyle = FormatStyle.SHORT,
+                clock = clock,
+            )
+            .asText()
     }
 
     @Parcelize

@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.PolicyTypeJson
@@ -50,10 +51,12 @@ import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toViewState
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -69,6 +72,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -128,6 +132,13 @@ class SearchViewModelTest : BaseViewModelTest() {
         )
     private val organizationEventManager = mockk<OrganizationEventManager> {
         every { trackEvent(event = any()) } just runs
+    }
+    private val mutableSnackbarDataFlow: MutableSharedFlow<BitwardenSnackbarData> =
+        bufferedMutableSharedFlow()
+    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+        every {
+            getSnackbarDataFlow(relay = any(), relays = anyVararg())
+        } returns mutableSnackbarDataFlow
     }
 
     @BeforeEach
@@ -887,7 +898,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 assertEquals(
-                    SearchEvent.ShowToast(R.string.send_password_removed.asText()),
+                    SearchEvent.ShowToast(R.string.password_removed.asText()),
                     awaitItem(),
                 )
             }
@@ -900,7 +911,10 @@ class SearchViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = notes),
+                    ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                        notes = notes,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
             verify(exactly = 1) {
@@ -946,7 +960,10 @@ class SearchViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode),
+                    ListingItemOverflowAction.VaultAction.CopyTotpClick(
+                        totpCode = totpCode,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
 
@@ -971,7 +988,10 @@ class SearchViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode),
+                    ListingItemOverflowAction.VaultAction.CopyTotpClick(
+                        totpCode = totpCode,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
 
@@ -1139,7 +1159,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             ciphers.toViewState(
                 searchTerm = "",
-                baseIconUrl = "https://vault.bitwarden.com/icons",
+                baseIconUrl = "https://icons.bitwarden.net",
                 isIconLoadingDisabled = false,
                 isAutofill = false,
                 hasMasterPassword = true,
@@ -1241,7 +1261,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             ciphers.toViewState(
                 searchTerm = "",
-                baseIconUrl = "https://vault.bitwarden.com/icons",
+                baseIconUrl = "https://icons.bitwarden.net",
                 isIconLoadingDisabled = false,
                 isAutofill = false,
                 hasMasterPassword = true,
@@ -1353,7 +1373,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             ciphers.toViewState(
                 searchTerm = "",
-                baseIconUrl = "https://vault.bitwarden.com/icons",
+                baseIconUrl = "https://icons.bitwarden.net",
                 isIconLoadingDisabled = false,
                 isAutofill = false,
                 hasMasterPassword = true,
@@ -1468,7 +1488,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             ciphers.toViewState(
                 searchTerm = "",
-                baseIconUrl = "https://vault.bitwarden.com/icons",
+                baseIconUrl = "https://icons.bitwarden.net",
                 isIconLoadingDisabled = false,
                 isAutofill = false,
                 hasMasterPassword = true,
@@ -1554,6 +1574,16 @@ class SearchViewModelTest : BaseViewModelTest() {
         assertTrue(viewModel.stateFlow.value.isIconLoadingDisabled)
     }
 
+    @Test
+    fun `SnackbarDataReceive should update emit ShowSnackbar`() = runTest {
+        val viewModel = createViewModel()
+        val snackbarData = BitwardenSnackbarData(message = "Test".asText())
+        viewModel.eventFlow.test {
+            mutableSnackbarDataFlow.tryEmit(snackbarData)
+            assertEquals(SearchEvent.ShowSnackbar(data = snackbarData), awaitItem())
+        }
+    }
+
     @Suppress("CyclomaticComplexMethod")
     private fun createViewModel(
         initialState: SearchState? = null,
@@ -1599,6 +1629,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         accessibilitySelectionManager = accessibilitySelectionManager,
         autofillSelectionManager = autofillSelectionManager,
         organizationEventManager = organizationEventManager,
+        snackbarRelayManager = snackbarRelayManager,
     )
 
     /**
@@ -1632,7 +1663,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             ciphers.toViewState(
                 searchTerm = "",
-                baseIconUrl = "https://vault.bitwarden.com/icons",
+                baseIconUrl = "https://icons.bitwarden.net",
                 isIconLoadingDisabled = false,
                 isAutofill = true,
                 hasMasterPassword = true,
@@ -1666,7 +1697,7 @@ private val DEFAULT_STATE: SearchState = SearchState(
     dialogState = null,
     vaultFilterData = null,
     baseWebSendUrl = "https://send.bitwarden.com/#",
-    baseIconUrl = "https://vault.bitwarden.com/icons",
+    baseIconUrl = "https://icons.bitwarden.net",
     isIconLoadingDisabled = false,
     hasMasterPassword = true,
     totpData = null,

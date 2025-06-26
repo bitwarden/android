@@ -8,6 +8,8 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -39,7 +41,6 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.feature.item.util.createCommonContent
@@ -2515,7 +2516,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isLaunchable = true,
                     ),
                 ),
-                passwordRevisionDate = "12/31/69 06:16 PM",
+                passwordRevisionDate = R.string.password_last_updated.asText("12/31/69 06:16 PM"),
                 isPremiumUser = true,
                 totpCodeItemData = TotpCodeItemData(
                     totpCode = "otpauth://totp/Example:alice@google.com" +
@@ -2541,7 +2542,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     code = "987",
                     isVisible = false,
                 ),
-                paymentCardBrandIconData = IconData.Local(R.drawable.ic_payment_card_brand_visa),
+                paymentCardBrandIconData = IconData.Local(
+                    BitwardenDrawable.ic_payment_card_brand_visa,
+                ),
             )
 
         private val DEFAULT_SSH_KEY_TYPE: VaultItemState.ViewState.Content.ItemType.SshKey =
@@ -2569,7 +2572,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
             VaultItemState.ViewState.Content.Common(
                 name = "login cipher",
-                lastUpdated = "12/31/69 06:16 PM",
+                created = R.string.created.asText("Dec 1, 1969, 05:20 PM"),
+                lastUpdated = R.string.last_edited.asText("Dec 31, 1969, 06:16 PM"),
                 notes = "Lots of notes",
                 customFields = listOf(
                     VaultItemState.ViewState.Content.Common.Custom.TextField(
@@ -2619,7 +2623,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 canEdit = true,
                 favorite = false,
                 passwordHistoryCount = 1,
-                iconData = IconData.Local(R.drawable.ic_globe),
+                iconData = IconData.Local(BitwardenDrawable.ic_globe),
                 relatedLocations = persistentListOf(),
             )
 

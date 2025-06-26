@@ -45,6 +45,8 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.Aut
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.model.EditItemData
 import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
+import com.bitwarden.authenticator.ui.platform.components.content.BitwardenErrorContent
+import com.bitwarden.authenticator.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
@@ -53,14 +55,15 @@ import com.bitwarden.authenticator.ui.platform.components.dropdown.BitwardenMult
 import com.bitwarden.authenticator.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.authenticator.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
-import com.bitwarden.authenticator.ui.platform.components.icon.BitwardenIcon
-import com.bitwarden.authenticator.ui.platform.components.model.IconData
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.components.stepper.BitwardenStepper
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.icon.BitwardenIcon
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.util.asText
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -204,10 +207,17 @@ fun EditItemScreen(
             }
 
             is EditItemState.ViewState.Error -> {
-                /*ItemErrorContent(state)*/
+                BitwardenErrorContent(
+                    message = viewState.message(),
+                    modifier = Modifier.padding(innerPadding),
+                )
             }
 
-            EditItemState.ViewState.Loading -> EditItemState.ViewState.Loading
+            EditItemState.ViewState.Loading -> {
+                BitwardenLoadingContent(
+                    modifier = Modifier.padding(innerPadding),
+                )
+            }
         }
     }
 }
@@ -328,9 +338,7 @@ fun EditItemContent(
                         } else {
                             R.drawable.ic_chevron_down
                         },
-                    ),
-                    contentDescription = stringResource(
-                        id = R.string.collapse_advanced_options,
+                        contentDescription = R.string.collapse_advanced_options.asText(),
                     ),
                     tint = MaterialTheme.colorScheme.primary,
                 )

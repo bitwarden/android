@@ -6,6 +6,7 @@ import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
+import com.bitwarden.network.model.CreateCipherResponseJson
 import com.bitwarden.network.model.ShareCipherJsonRequest
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
@@ -46,6 +47,7 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toNetworkAttachmentRequest
+import io.mockk.Ordering
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -56,7 +58,6 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkConstructor
 import io.mockk.unmockkStatic
-import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -123,7 +124,13 @@ class CipherManagerTest {
 
         val result = cipherManager.createCipher(cipherView = mockk())
 
-        assertEquals(CreateCipherResult.Error(error = NoActiveUserException()), result)
+        assertEquals(
+            CreateCipherResult.Error(
+                errorMessage = null,
+                error = NoActiveUserException(),
+            ),
+            result,
+        )
     }
 
     @Test
@@ -142,7 +149,7 @@ class CipherManagerTest {
 
             val result = cipherManager.createCipher(cipherView = mockCipherView)
 
-            assertEquals(CreateCipherResult.Error(error = error), result)
+            assertEquals(CreateCipherResult.Error(errorMessage = null, error = error), result)
         }
 
     @Test
@@ -173,7 +180,46 @@ class CipherManagerTest {
 
             val result = cipherManager.createCipher(cipherView = mockCipherView)
 
-            assertEquals(CreateCipherResult.Error(error = error), result)
+            assertEquals(CreateCipherResult.Error(errorMessage = null, error = error), result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createCipher with ciphersService createCipher Invalid response should return CreateCipherResult failure`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val mockCipherView = createMockCipherView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = mockCipherView,
+                )
+            } returns createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            ).asSuccess()
+            coEvery {
+                ciphersService.createCipher(
+                    body = createMockCipherJsonRequest(
+                        number = 1,
+                        login = createMockLogin(number = 1, uri = null),
+                    ),
+                )
+            } returns CreateCipherResponseJson.Invalid(
+                message = "You do not have permission to edit this.",
+                validationErrors = null,
+            ).asSuccess()
+
+            val result = cipherManager.createCipher(cipherView = mockCipherView)
+
+            assertEquals(
+                CreateCipherResult.Error(
+                    errorMessage = "You do not have permission to edit this.",
+                    error = null,
+                ),
+                result,
+            )
         }
 
     @Test
@@ -200,13 +246,16 @@ class CipherManagerTest {
                         login = createMockLogin(number = 1, uri = null),
                     ),
                 )
-            } returns mockCipher.asSuccess()
+            } returns CreateCipherResponseJson.Success(mockCipher).asSuccess()
             coEvery { vaultDiskSource.saveCipher(userId, mockCipher) } just runs
 
             val result = cipherManager.createCipher(cipherView = mockCipherView)
 
             assertEquals(CreateCipherResult.Success, result)
-            verify(exactly = 1) { reviewPromptManager.registerAddCipherAction() }
+            coVerify(ordering = Ordering.ORDERED) {
+                vaultDiskSource.saveCipher(userId, mockCipher)
+                reviewPromptManager.registerAddCipherAction()
+            }
         }
 
     @Test
@@ -219,7 +268,13 @@ class CipherManagerTest {
                 collectionIds = mockk(),
             )
 
-            assertEquals(CreateCipherResult.Error(error = NoActiveUserException()), result)
+            assertEquals(
+                CreateCipherResult.Error(
+                    errorMessage = null,
+                    error = NoActiveUserException(),
+                ),
+                result,
+            )
         }
 
     @Test
@@ -242,7 +297,7 @@ class CipherManagerTest {
                 collectionIds = mockk(),
             )
 
-            assertEquals(CreateCipherResult.Error(error = error), result)
+            assertEquals(CreateCipherResult.Error(errorMessage = null, error = error), result)
         }
 
     @Test
@@ -279,7 +334,52 @@ class CipherManagerTest {
                 collectionIds = listOf("mockId-1"),
             )
 
-            assertEquals(CreateCipherResult.Error(error = error), result)
+            assertEquals(CreateCipherResult.Error(errorMessage = null, error = error), result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createCipherInOrganization with ciphersService createCipher Invalid response should return CreateCipherResult failure`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val mockCipherView = createMockCipherView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = mockCipherView,
+                )
+            } returns createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            ).asSuccess()
+            coEvery {
+                ciphersService.createCipherInOrganization(
+                    body = CreateCipherInOrganizationJsonRequest(
+                        cipher = createMockCipherJsonRequest(
+                            number = 1,
+                            login = createMockLogin(number = 1, uri = null),
+                        ),
+                        collectionIds = listOf("mockId-1"),
+                    ),
+                )
+            } returns CreateCipherResponseJson.Invalid(
+                message = "You do not have permission to edit this.",
+                validationErrors = null,
+            ).asSuccess()
+
+            val result = cipherManager.createCipherInOrganization(
+                cipherView = mockCipherView,
+                collectionIds = listOf("mockId-1"),
+            )
+
+            assertEquals(
+                CreateCipherResult.Error(
+                    errorMessage = "You do not have permission to edit this.",
+                    error = null,
+                ),
+                result,
+            )
         }
 
     @Test
@@ -309,7 +409,7 @@ class CipherManagerTest {
                         collectionIds = listOf("mockId-1"),
                     ),
                 )
-            } returns mockCipher.asSuccess()
+            } returns CreateCipherResponseJson.Success(mockCipher).asSuccess()
             coEvery {
                 vaultDiskSource.saveCipher(
                     userId,
@@ -323,7 +423,13 @@ class CipherManagerTest {
             )
 
             assertEquals(CreateCipherResult.Success, result)
-            verify(exactly = 1) { reviewPromptManager.registerAddCipherAction() }
+            coVerify(ordering = Ordering.ORDERED) {
+                vaultDiskSource.saveCipher(
+                    userId,
+                    mockCipher.copy(collectionIds = listOf("mockId-1")),
+                )
+                reviewPromptManager.registerAddCipherAction()
+            }
         }
 
     @Test

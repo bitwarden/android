@@ -24,13 +24,13 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.credentials.CredentialManager
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.util.toFormattedPattern
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import java.io.File
 import java.time.Clock
 
@@ -139,15 +139,15 @@ class IntentManagerImpl(
         }
     }
 
-    override fun startChromeAutofillSettingsActivity(
-        releaseChannel: ChromeReleaseChannel,
+    override fun startBrowserAutofillSettingsActivity(
+        browserPackage: BrowserPackage,
     ): Boolean = try {
         val intent = Intent(Intent.ACTION_APPLICATION_PREFERENCES)
             .apply {
                 addCategory(Intent.CATEGORY_DEFAULT)
                 addCategory(Intent.CATEGORY_APP_BROWSER)
                 addCategory(Intent.CATEGORY_PREFERENCE)
-                setPackage(releaseChannel.packageName)
+                setPackage(browserPackage.packageName)
             }
         context.startActivity(intent)
         true
@@ -158,7 +158,7 @@ class IntentManagerImpl(
     override fun launchUri(uri: Uri) {
         if (uri.scheme.equals(other = "androidapp", ignoreCase = true)) {
             val packageName = uri.toString().removePrefix(prefix = "androidapp://")
-            if (isBuildVersionBelow(Build.VERSION_CODES.TIRAMISU)) {
+            if (!isBuildVersionAtLeast(Build.VERSION_CODES.TIRAMISU)) {
                 startActivity(createPlayStoreIntent(packageName))
             } else {
                 try {

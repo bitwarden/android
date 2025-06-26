@@ -1598,7 +1598,11 @@ class VaultAddEditViewModel @Inject constructor(
             is CreateCipherResult.Error -> {
                 showDialog(
                     dialogState = VaultAddEditState.DialogState.Generic(
-                        message = R.string.generic_error_message.asText(),
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = result
+                            .errorMessage
+                            ?.asText()
+                            ?: R.string.generic_error_message.asText(),
                         error = result.error,
                     ),
                 )

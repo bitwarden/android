@@ -26,6 +26,7 @@ import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionI
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
@@ -38,6 +39,8 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialo
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
@@ -82,6 +85,7 @@ fun SendScreen(
         AppResumeScreenData.SendScreen
     }
 
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is SendEvent.NavigateToSearch -> onNavigateToSearchSend(SearchType.Sends.All)
@@ -115,6 +119,8 @@ fun SendScreen(
             is SendEvent.ShowShareSheet -> {
                 intentManager.shareText(event.url)
             }
+
+            is SendEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
 
             is SendEvent.ShowToast -> {
                 Toast
@@ -190,13 +196,14 @@ fun SendScreen(
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(SendAction.AddSendClick) }
                     },
-                    painter = rememberVectorPainter(id = R.drawable.ic_plus_large),
+                    painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
                     contentDescription = stringResource(id = R.string.add_item),
                     modifier = Modifier.testTag(tag = "AddItemButton"),
                 )
             }
         },
         pullToRefreshState = pullToRefreshState,
+        snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarHostState) },
     ) {
         val modifier = Modifier
             .fillMaxSize()

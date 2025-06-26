@@ -9,7 +9,9 @@ import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.send.SendType
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -38,13 +40,15 @@ import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toSearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toViewState
 import com.x8bit.bitwarden.ui.platform.feature.search.util.updateWithAdditionalDataIfNecessary
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -81,6 +85,7 @@ class SearchViewModel @Inject constructor(
     private val accessibilitySelectionManager: AccessibilitySelectionManager,
     private val autofillSelectionManager: AutofillSelectionManager,
     private val organizationEventManager: OrganizationEventManager,
+    private val snackbarRelayManager: SnackbarRelayManager,
     private val vaultRepo: VaultRepository,
     private val authRepo: AuthRepository,
     environmentRepo: EnvironmentRepository,
@@ -133,6 +138,11 @@ class SearchViewModel @Inject constructor(
         vaultRepo
             .vaultDataStateFlow
             .map { SearchAction.Internal.VaultDataReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.SEND_DELETED, SnackbarRelay.SEND_UPDATED)
+            .map { SearchAction.Internal.SnackbarDataReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -473,6 +483,8 @@ class SearchViewModel @Inject constructor(
                 handleRemovePasswordSendResultReceive(action)
             }
 
+            is SearchAction.Internal.SnackbarDataReceived -> handleSnackbarDataReceived(action)
+
             is SearchAction.Internal.UpdateCipherResultReceive -> {
                 handleUpdateCipherResultReceive(action)
             }
@@ -549,9 +561,13 @@ class SearchViewModel @Inject constructor(
 
             is RemovePasswordSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(SearchEvent.ShowToast(R.string.send_password_removed.asText()))
+                sendEvent(SearchEvent.ShowToast(R.string.password_removed.asText()))
             }
         }
+    }
+
+    private fun handleSnackbarDataReceived(action: SearchAction.Internal.SnackbarDataReceived) {
+        sendEvent(SearchEvent.ShowSnackbar(action.data))
     }
 
     private fun handleUpdateCipherResultReceive(
@@ -1185,6 +1201,13 @@ sealed class SearchAction {
         ) : Internal()
 
         /**
+         * Indicates that snackbar data has been received.
+         */
+        data class SnackbarDataReceived(
+            val data: BitwardenSnackbarData,
+        ) : Internal()
+
+        /**
          * Indicates a result for updating a cipher during the autofill-and-save process.
          */
         data class UpdateCipherResultReceive(
@@ -1264,6 +1287,13 @@ sealed class SearchEvent {
     data class ShowShareSheet(
         val content: String,
     ) : SearchEvent()
+
+    /**
+     * Show a snackbar to the user.
+     */
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : SearchEvent(), BackgroundEvent
 
     /**
      * Show a toast with the given [message].

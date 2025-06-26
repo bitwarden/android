@@ -33,19 +33,21 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
+import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
@@ -69,7 +71,6 @@ import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.util.minutes
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import kotlinx.collections.immutable.toImmutableList
 import java.time.LocalTime
 import javax.crypto.Cipher
@@ -169,7 +170,7 @@ fun AccountSecurityScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.account_security),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.BackClick) }
@@ -572,13 +573,11 @@ private fun SessionCustomTimeoutRow(
         cardStyle = CardStyle.Middle(),
         modifier = modifier,
     ) {
-        val formattedTime = LocalTime
-            .ofSecondOfDay(
-                vaultTimeoutInMinutes * MINUTES_PER_HOUR.toLong(),
-            )
-            .toFormattedPattern("HH:mm")
+
         Text(
-            text = formattedTime,
+            text = LocalTime
+                .ofSecondOfDay(vaultTimeoutInMinutes * MINUTES_PER_HOUR.toLong())
+                .toFormattedPattern(pattern = "HH:mm"),
             style = BitwardenTheme.typography.labelSmall,
             color = BitwardenTheme.colorScheme.text.primary,
         )

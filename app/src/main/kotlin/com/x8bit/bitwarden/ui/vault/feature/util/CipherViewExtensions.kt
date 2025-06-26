@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.vault.feature.util
 
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.model.VaultTrailingIcon
 import kotlinx.collections.immutable.ImmutableList
@@ -11,6 +11,7 @@ import kotlinx.collections.immutable.toImmutableList
 /**
  * Creates the list of overflow actions to be displayed for a [CipherView].
  */
+@Suppress("LongMethod")
 fun CipherView.toOverflowActions(
     hasMasterPassword: Boolean,
     isPremiumUser: Boolean,
@@ -19,17 +20,6 @@ fun CipherView.toOverflowActions(
         .id
         ?.let { cipherId ->
             listOfNotNull(
-                ListingItemOverflowAction.VaultAction.ViewClick(
-                    cipherId = cipherId,
-                    cipherType = this.type,
-                    requiresPasswordReprompt = hasMasterPassword,
-                ),
-                ListingItemOverflowAction.VaultAction.EditClick(
-                    cipherId = cipherId,
-                    cipherType = this.type,
-                    requiresPasswordReprompt = hasMasterPassword,
-                )
-                    .takeUnless { this.deletedDate != null || !this.edit },
                 this.login?.username?.let {
                     ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = it)
                 },
@@ -43,7 +33,12 @@ fun CipherView.toOverflowActions(
                     }
                     .takeIf { this.viewPassword },
                 this.login?.totp
-                    ?.let { ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode = it) }
+                    ?.let {
+                        ListingItemOverflowAction.VaultAction.CopyTotpClick(
+                            totpCode = it,
+                            requiresPasswordReprompt = hasMasterPassword,
+                        )
+                    }
                     .takeIf {
                         this.type == CipherType.LOGIN &&
                             (this.organizationUseTotp || isPremiumUser)
@@ -62,8 +57,24 @@ fun CipherView.toOverflowActions(
                     )
                 },
                 this.notes
-                    ?.let { ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = it) }
+                    ?.let {
+                        ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                            notes = it,
+                            requiresPasswordReprompt = hasMasterPassword,
+                        )
+                    }
                     .takeIf { this.type == CipherType.SECURE_NOTE },
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = cipherId,
+                    cipherType = this.type,
+                    requiresPasswordReprompt = hasMasterPassword,
+                ),
+                ListingItemOverflowAction.VaultAction.EditClick(
+                    cipherId = cipherId,
+                    cipherType = this.type,
+                    requiresPasswordReprompt = hasMasterPassword,
+                )
+                    .takeUnless { this.deletedDate != null || !this.edit },
                 this.login?.uris?.firstOrNull { it.uri != null }?.uri?.let {
                     ListingItemOverflowAction.VaultAction.LaunchClick(url = it)
                 },

@@ -64,7 +64,7 @@
     <string name="website_uri">Veb sayt (URI)</string>
     <string name="username">İstifadəçi adı</string>
     <string name="validation_field_required">%1$s xanası lazımlıdır.</string>
-    <string name="you_must_attach_a_file_to_save_this_send">You must attach a file to save this send.</string>
+    <string name="you_must_attach_a_file_to_save_this_send">Bu send-i saxlamaq üçün bir fayl əlavə etməlisiniz.</string>
     <string name="value_has_been_copied">%1$s kopyalandı</string>
     <string name="verify_master_password">Ana parolu doğrula</string>
     <string name="verify_pin">PIN-i doğrula</string>
@@ -296,8 +296,9 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="autofill_and_save">Avto-doldur və saxla</string>
     <string name="organization">Təşkilat</string>
     <string name="try_again">Yenidən sınayın</string>
-    <string name="date_password_updated">Parol güncəlləndi</string>
-    <string name="date_updated">Güncəlləndi</string>
+    <string name="created">Yaradıldı: %1$s</string>
+    <string name="password_last_updated">Son parol güncəlləməsi: %1$s</string>
+    <string name="last_edited">Son düzəliş: %1$s</string>
     <string name="invalid_email">Yararsız e-poçt ünvanı.</string>
     <string name="cards">Kartlar</string>
     <string name="identities">Kimliklər</string>
@@ -453,7 +454,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="password_info">İstəyinizə görə istifadəçilərdən bu \"Send\"ə müraciət edərkən parol tələb edə bilərsiniz.</string>
     <string name="remove_password">Parolu çıxart</string>
     <string name="removing_send_password">Parol çıxarılır</string>
-    <string name="send_password_removed">Parol çıxarıldı.</string>
+    <string name="password_removed">Password removed</string>
     <string name="add_a_send">Bir \"Send\" əlavə et</string>
     <string name="copy_link">Bağlantını kopyala</string>
     <string name="share_link">Bağlantını paylaş</string>
@@ -466,6 +467,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="add_text_send">Yeni Send mətni</string>
     <string name="are_you_sure_delete_send">Bu \"Send\"i silmək istədiyinizə əminsiniz?</string>
     <string name="send_deleted">\"Send\" silindi.</string>
+    <string name="send_updated">Send güncəlləndi</string>
     <string name="one_day">1 gün</string>
     <string name="two_days">2 gün</string>
     <string name="three_days">3 gün</string>
@@ -546,6 +548,8 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="device_type">Cihaz növü</string>
     <string name="ip_address">IP ünvan</string>
     <string name="time">Vaxt</string>
+    <string name="select_time">Vaxt seçin</string>
+    <string name="switch_input_mode">Giriş rejimini dəyişdir</string>
     <string name="confirm_log_in">Girişi təsdiqlə</string>
     <string name="deny_log_in">Girişi rədd et</string>
     <string name="log_in_denied">Giriş rədd edildi</string>
@@ -670,7 +674,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="privacy_policy_description_long">bitwarden.com saytında gizlilik siyasətimizi nəzərdən keçirin.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Veb tətbiqində Bitwarden hesabınızın daha çox özəlliyini kəşf edin.</string>
     <string name="learn_about_organizations_description_long">Bitwarden, bir təşkilatı istifadə edərək seyf elementlərinizi başqaları ilə paylaşmağınıza imkan verir. Daha ətraflı məlumat üçün bitwarden.com saytını ziyarət edin.</string>
-    <string name="created_xy">Yaradıldı: %1$s, %2$s</string>
+    <string name="created_x">Created %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Təşkilatınız bir ana parol ayarlamağı tələb edir.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Seyf vaxt bitmə əməliyyatınızı dəyişdirmək üçün bir kilid açma seçimi qurun.</string>
     <string name="save_passkey_as_new_login">Keçid açarını yeni bir giriş olaraq saxla</string>
@@ -964,4 +968,18 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="dynamic_colors">Dinamik rənglər</string>
     <string name="dynamic_colors_description">Divar kağızınıza görə dinamik rənglər tətbiq edin</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dinamik rənglər, sistem rənglərini istifadə edir və bütün əlçatımlılıq göstərişlərinə cavab verməyə bilər.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Keçid açarı əməliyyatı uğursuz oldu, çünki brauzer (%1$s) güvənli deyil. %1$s tətbiqini güvənli tətbiqlər siyahısına əlavə etmək üçün \"Güvən\"i, əməliyyatı ləğv etmək üçün \"İmtina\"nı seçin.</string>
+    <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Keçid açarı əməliyyatı uğursuz oldu, çünki brauzer güvənli deyil.</string>
+    <string name="trust">Güvən</string>
+    <string name="trusted_by_you_learn_more">Bunlar, Bitwarden-in ilkin olaraq güvənmədiyi tətbiqlər və ya brauzerlərdir, ancaq keçid açarı əməliyyatlarını icra etməsi üçün SİZ güvənirsiniz.</string>
+    <string name="trusted_by_community_learn_more">Bunlar, Google Play Store-a daxil edilməyən tətbiqlərdir, ancaq icma üzvləri istifadə etdikdən və bunları etibarlı olaraq bildirdikdən sonra Bitwarden, keçid açarı əməliyyatlarını icra etməsi üçün güvənir.</string>
+    <string name="trusted_by_google_learn_more">Bunlar Google-un etibarlı hesab etdiyi və Google Play Store-da mövcud olan tətbiqlərdir.</string>
+    <string name="trusted_by_you">Siz güvənirsiniz</string>
+    <string name="trusted_by_the_community">İcma güvənir</string>
+    <string name="trusted_by_google">Google güvənir</string>
+    <string name="privileged_apps_description">İstifadəçiləri fişinq cəhdlərindən qorumaq üçün Bitwarden, ilkin olaraq keçid açarı əməliyyatlarını yalnız Google və ya Bitwarden icması tərəfindən güvənilən veb brauzerlər vasitəsilə tamamlayır.</string>
+    <string name="about_privileged_applications">İmtiyazlı tətbiqlər barədə</string>
+    <string name="learn_more_about_privileged_apps">İmtiyazlı tətbiqlər barədə daha ətraflı</string>
+    <string name="privileged_apps">İmtiyazlı tətbiqlər</string>
+    <string name="unrecognized_browser">Tanınmayan brauzer</string>
 </resources>

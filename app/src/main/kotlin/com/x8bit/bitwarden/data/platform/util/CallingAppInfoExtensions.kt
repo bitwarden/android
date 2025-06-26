@@ -23,7 +23,7 @@ fun CallingAppInfo.getSignatureFingerprintAsHexString(): String? {
  */
 fun CallingAppInfo.validatePrivilegedApp(allowList: String): ValidateOriginResult {
 
-    if (!allowList.contains("\"package_name\": \"$packageName\"")) {
+    if (!allowList.contains("\"$packageName\"")) {
         return ValidateOriginResult.Error.PrivilegedAppNotAllowed
     }
 

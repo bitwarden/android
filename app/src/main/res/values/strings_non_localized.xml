@@ -30,5 +30,7 @@
     <string name="generate_crash">Generate crash</string>
     <string name="generate_error_report">Generate error report</string>
     <string name="error_reports">Error reports</string>
+    <string name="user_trusted_privileged_app_management">User-trusted privileged app management</string>
+    <string name="remove_card_policy">Remove Card Policy</string>
     <!-- /Debug Menu -->
 </resources>

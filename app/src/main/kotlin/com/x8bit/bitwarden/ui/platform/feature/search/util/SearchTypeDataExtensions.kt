@@ -4,9 +4,12 @@ package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import androidx.annotation.DrawableRes
 import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.util.removeDiacritics
+import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -16,19 +19,16 @@ import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.util.subtitle
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
 import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import java.time.Clock
-
-private const val DELETION_DATE_PATTERN: String = "MMM d, uuuu, hh:mm a"
+import java.time.format.FormatStyle
 
 /**
  * Updates a [SearchTypeData] with the given data if necessary.
@@ -248,11 +248,11 @@ private fun CipherView.toIconData(
 @get:DrawableRes
 private val CipherType.iconRes: Int
     get() = when (this) {
-        CipherType.LOGIN -> R.drawable.ic_globe
-        CipherType.SECURE_NOTE -> R.drawable.ic_note
-        CipherType.CARD -> R.drawable.ic_payment_card
-        CipherType.IDENTITY -> R.drawable.ic_id_card
-        CipherType.SSH_KEY -> R.drawable.ic_ssh_key
+        CipherType.LOGIN -> BitwardenDrawable.ic_globe
+        CipherType.SECURE_NOTE -> BitwardenDrawable.ic_note
+        CipherType.CARD -> BitwardenDrawable.ic_payment_card
+        CipherType.IDENTITY -> BitwardenDrawable.ic_id_card
+        CipherType.SSH_KEY -> BitwardenDrawable.ic_ssh_key
     }
 
 /**
@@ -353,12 +353,16 @@ private fun SendView.toDisplayItem(
         id = id.orEmpty(),
         title = name,
         titleTestTag = "SendNameLabel",
-        subtitle = deletionDate.toFormattedPattern(DELETION_DATE_PATTERN, clock),
+        subtitle = deletionDate.toFormattedDateTimeStyle(
+            dateStyle = FormatStyle.MEDIUM,
+            timeStyle = FormatStyle.SHORT,
+            clock = clock,
+        ),
         subtitleTestTag = "SendDateLabel",
         iconData = IconData.Local(
             iconRes = when (type) {
-                SendType.TEXT -> R.drawable.ic_file_text
-                SendType.FILE -> R.drawable.ic_file
+                SendType.TEXT -> BitwardenDrawable.ic_file_text
+                SendType.FILE -> BitwardenDrawable.ic_file
             },
         ),
         extraIconList = toLabelIcons(clock = clock),

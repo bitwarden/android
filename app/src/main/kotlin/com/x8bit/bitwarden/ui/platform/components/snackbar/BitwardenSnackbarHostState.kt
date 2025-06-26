@@ -84,6 +84,6 @@ data class BitwardenSnackbarData(
 fun rememberBitwardenSnackbarHostState(
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     scope: CoroutineScope = rememberCoroutineScope(),
-) = remember {
+): BitwardenSnackbarHostState = remember {
     BitwardenSnackbarHostState(snackbarHostState = snackbarHostState, scope = scope)
 }

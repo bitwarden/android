@@ -60,10 +60,8 @@ class VaultSettingsViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         snackbarRelayManager
-            .getSnackbarDataFlow(SnackbarRelay.VAULT_SETTINGS_RELAY)
-            .map {
-                VaultSettingsAction.Internal.SnackbarDataReceived(it)
-            }
+            .getSnackbarDataFlow(SnackbarRelay.LOGINS_IMPORTED)
+            .map { VaultSettingsAction.Internal.SnackbarDataReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }

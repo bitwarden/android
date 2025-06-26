@@ -32,6 +32,7 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
@@ -42,7 +43,6 @@ import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 
 /**
  * Displays the vault settings screen.
@@ -54,7 +54,7 @@ fun VaultSettingsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
-    onNavigateToImportLogins: (SnackbarRelay) -> Unit,
+    onNavigateToImportLogins: () -> Unit,
     viewModel: VaultSettingsViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
@@ -73,7 +73,7 @@ fun VaultSettingsScreen(
 
             is VaultSettingsEvent.NavigateToImportVault -> {
                 if (state.isNewImportLoginsFlowEnabled) {
-                    onNavigateToImportLogins(SnackbarRelay.VAULT_SETTINGS_RELAY)
+                    onNavigateToImportLogins()
                 } else {
                     intentManager.launchUri(event.url.toUri())
                 }
@@ -92,7 +92,7 @@ fun VaultSettingsScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.vault),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(VaultSettingsAction.BackClick) }

@@ -518,4 +518,5 @@ private val DEFAULT_STATE = VerificationCodeState(
     isPullToRefreshSettingEnabled = false,
     dialogState = null,
     isRefreshing = false,
+    hasMasterPassword = false,
 )

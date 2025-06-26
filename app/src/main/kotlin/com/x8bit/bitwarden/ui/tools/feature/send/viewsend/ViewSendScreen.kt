@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.viewsend
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -68,6 +67,8 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -89,6 +90,7 @@ fun ViewSendScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resources = context.resources
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is ViewSendEvent.NavigateBack -> onNavigateBack()
@@ -106,9 +108,7 @@ fun ViewSendScreen(
                 intentManager.shareText(text = event.text(resources).toString())
             }
 
-            is ViewSendEvent.ShowToast -> {
-                Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
-            }
+            is ViewSendEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
 
@@ -147,12 +147,13 @@ fun ViewSendScreen(
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(ViewSendAction.EditClick) }
                     },
-                    painter = rememberVectorPainter(id = R.drawable.ic_pencil),
+                    painter = rememberVectorPainter(id = BitwardenDrawable.ic_pencil),
                     contentDescription = stringResource(id = R.string.edit_send),
                     modifier = Modifier.testTag(tag = "EditItemButton"),
                 )
             }
         },
+        snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarHostState) },
     ) {
         ViewSendScreenContent(
             state = state,
@@ -253,7 +254,7 @@ private fun ViewStateContent(
         BitwardenFilledButton(
             label = stringResource(id = R.string.copy),
             onClick = onCopyClick,
-            icon = rememberVectorPainter(id = R.drawable.ic_copy_small),
+            icon = rememberVectorPainter(id = BitwardenDrawable.ic_copy_small),
             cardStyle = CardStyle.Middle(hasDivider = false),
             cardInsets = PaddingValues(top = 16.dp, bottom = 6.dp, start = 16.dp, end = 16.dp),
             modifier = Modifier
@@ -264,7 +265,7 @@ private fun ViewStateContent(
         BitwardenOutlinedButton(
             label = stringResource(id = R.string.share),
             onClick = onShareClick,
-            icon = rememberVectorPainter(id = R.drawable.ic_share_small),
+            icon = rememberVectorPainter(id = BitwardenDrawable.ic_share_small),
             cardStyle = CardStyle.Bottom,
             cardInsets = PaddingValues(top = 6.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
             modifier = Modifier
@@ -367,7 +368,7 @@ private fun DeleteButton(
     BitwardenOutlinedErrorButton(
         label = stringResource(id = R.string.delete_send),
         onClick = { shouldShowDeleteConfirmationDialog = true },
-        icon = rememberVectorPainter(id = R.drawable.ic_trash_small),
+        icon = rememberVectorPainter(id = BitwardenDrawable.ic_trash_small),
         modifier = modifier,
     )
 }
@@ -516,7 +517,7 @@ private fun ColumnScope.AdditionalOptions(
                     value = it,
                     actions = {
                         BitwardenStandardIconButton(
-                            vectorIconRes = R.drawable.ic_copy,
+                            vectorIconRes = BitwardenDrawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy_notes),
                             onClick = onCopyNotesClick,
                             modifier = Modifier.testTag(tag = "ViewSendNotesCopyButton"),

@@ -11,15 +11,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
-import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 

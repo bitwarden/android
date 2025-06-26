@@ -64,7 +64,7 @@
     <string name="website_uri">Webhely (URI)</string>
     <string name="username">Felhasználónév</string>
     <string name="validation_field_required">%1$s mező megadása kötelező.</string>
-    <string name="you_must_attach_a_file_to_save_this_send">You must attach a file to save this send.</string>
+    <string name="you_must_attach_a_file_to_save_this_send">A Send elem mentéséhez csatolni kell egy fájlt.</string>
     <string name="value_has_been_copied">%1$s másolásra került.</string>
     <string name="verify_master_password">Mesterjelszó megerősítése</string>
     <string name="verify_pin">PIN megerősítése</string>
@@ -295,8 +295,9 @@
     <string name="autofill_and_save">Automatikus kitöltés és mentés</string>
     <string name="organization">Szervezet</string>
     <string name="try_again">Próbáluk újra</string>
-    <string name="date_password_updated">A jelszó frissítésre került.</string>
-    <string name="date_updated">Frissítve</string>
+    <string name="created">Létrehozva: %1$s</string>
+    <string name="password_last_updated">Jelszó utolsó frissítés: %1$s</string>
+    <string name="last_edited">Utolsó szerkesztés: %1$s</string>
     <string name="invalid_email">Az email cím érvénytelen.</string>
     <string name="cards">Kártyák</string>
     <string name="identities">Azonosságok</string>
@@ -452,7 +453,7 @@
     <string name="password_info">Opcionálissan egy jelszó kérhető a felhasználóktól a Send eléréséhez.</string>
     <string name="remove_password">Jelszó eltávolítása</string>
     <string name="removing_send_password">Jelszó eltávolítása..</string>
-    <string name="send_password_removed">A jelszó eltávolításra került.</string>
+    <string name="password_removed">A jelszó eltávolításra került.</string>
     <string name="add_a_send">Send hozzáadása</string>
     <string name="copy_link">Hivatkozás másolása</string>
     <string name="share_link">Hivatkozás megosztása</string>
@@ -465,6 +466,7 @@
     <string name="add_text_send">Új szöveges Send elem</string>
     <string name="are_you_sure_delete_send">Biztosan törlésre kerüljön ez a Send elem?</string>
     <string name="send_deleted">A Send elem törlésre került.</string>
+    <string name="send_updated">A Send elem frissítésre került.</string>
     <string name="one_day">1 nap</string>
     <string name="two_days">2 nap</string>
     <string name="three_days">3 nap</string>
@@ -546,6 +548,8 @@ TOTP hozzáadása a kulcs biztonságos tárolásához lehetőséget.</string>
     <string name="device_type">Eszköz típus</string>
     <string name="ip_address">IP cím</string>
     <string name="time">Időpont</string>
+    <string name="select_time">Időpont kiválasztása</string>
+    <string name="switch_input_mode">Beviteli mód váltás</string>
     <string name="confirm_log_in">Bejelentkezés megerősítése</string>
     <string name="deny_log_in">Bejelentkezés megtagadása</string>
     <string name="log_in_denied">A bejelentkezés megtagadásra került.</string>
@@ -670,7 +674,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="privacy_policy_description_long">Az adatvédelmi szabályzat megtekintése a bitwarden.com webhelyen.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Fedezzük fel a Bitwarden-fiók további funkcióit a webalkalmazásban.</string>
     <string name="learn_about_organizations_description_long">A Bitwarden lehetővé teszi a széf elemeinek megosztását másokkal egy szervezet használatával. További információ a bitwarden.com webhelyen.</string>
-    <string name="created_xy">Létrehozta: %1$s, %2$s</string>
+    <string name="created_x">Létrehozva: %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">A szervezet megköveteli egy mesterjelszó beállítását.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Állítsunk be egy feloldási módot a széf időkifutási műveletének módosításához.</string>
     <string name="save_passkey_as_new_login">Belépőkulcs mentése új bejelentkezésként</string>
@@ -962,4 +966,18 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="dynamic_colors">Dinamikus színek</string>
     <string name="dynamic_colors_description">Dinamikus színek alkalmazása a háttérkép alapján</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">A dinamikus színek a rendszer színeit használják és előfordulhat, hogy nem felelnek meg minden akadálymentesítési irányelvnek.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">A Belépőkulcs művelet nem sikerült, mert a böngésző (%1$s) nem megbízható. Válasszuk a \"Megbítható\" lehetőséget %1$s a hozzáadáshoz a megbízható alkalmazások listájánál vagy a \"Mégsem\" lehetőséget a művelet megszakításához.</string>
+    <string name="passkey_operation_failed_because_the_browser_is_not_trusted">A Belépőkulcs művelet nem sikerült, mert a böngésző nem megbítható.</string>
+    <string name="trust">Megbízható</string>
+    <string name="trusted_by_you_learn_more">Ezek olyan alkalmazások vagy böngészők, amelyekben a Bitwarden alapértelmezés szerint nem bízik, de a felhasználó bízik a hozzáférési kulcs műveletek végrehajtásában.</string>
+    <string name="trusted_by_community_learn_more">Ezek olyan alkalmazások, amelyek nem szerepelnek a Google Play Áruházban, de a Bitwarden bízik abban, hogy a közösség tagjai használata után hozzáférési kulcs műveleteket hajt végre és biztonságosnak jelenti azokat.</string>
+    <string name="trusted_by_google_learn_more">Ezek olyan alkalmazások, amelyeket a Google biztonságosnak tart és elérhetők a Google Play Áruházában.</string>
+    <string name="trusted_by_you">Megbízhatónak tartom</string>
+    <string name="trusted_by_the_community">A közösség megbízhatónak tartja</string>
+    <string name="trusted_by_google">A Google megbízhatónak tartja</string>
+    <string name="privileged_apps_description">A felhasználók adathalász kísérletekkel szembeni védelme érdekében a Bitwarden alapértelmezés szerint csak a Google vagy a Bitwarden közösség által megbízható webböngészőkön keresztül fejez be hozzáférési kulcs műveleteket.</string>
+    <string name="about_privileged_applications">A kiváltságos alkalmazásokról</string>
+    <string name="learn_more_about_privileged_apps">További információ a kiváltságos alkalmazásokról</string>
+    <string name="privileged_apps">Kiváltságos alkalmazások</string>
+    <string name="unrecognized_browser">Felismerhetetlen böngésző</string>
 </resources>

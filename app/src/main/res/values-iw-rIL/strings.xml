@@ -296,8 +296,9 @@
     <string name="autofill_and_save">מלא אוטומטית ושמור</string>
     <string name="organization">ארגון</string>
     <string name="try_again">נסה שוב</string>
-    <string name="date_password_updated">הסיסמה עודכנה</string>
-    <string name="date_updated">עודכן</string>
+    <string name="created">Created: %1$s</string>
+    <string name="password_last_updated">Password last updated: %1$s</string>
+    <string name="last_edited">Last edited: %1$s</string>
     <string name="invalid_email">כתובת דוא\"ל אינה חוקית.</string>
     <string name="cards">כרטיסים</string>
     <string name="identities">זהויות</string>
@@ -453,7 +454,7 @@
     <string name="password_info">דרוש את הסיסמה הזאת כדי להציג הסֵנְד.</string>
     <string name="remove_password">הסר סיסמה</string>
     <string name="removing_send_password">מסיר סיסמה</string>
-    <string name="send_password_removed">הסיסמה הוסרה.</string>
+    <string name="password_removed">Password removed</string>
     <string name="add_a_send">סֵנְד חדש</string>
     <string name="copy_link">העתק קישור</string>
     <string name="share_link">שתף קישור</string>
@@ -466,6 +467,7 @@
     <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">האם אתה בטוח שברצונך למחוק סֵנְד זה?</string>
     <string name="send_deleted">הסֵנְד נמחק</string>
+    <string name="send_updated">Send updated</string>
     <string name="one_day">יום 1</string>
     <string name="two_days">2 ימים</string>
     <string name="three_days">3 ימים</string>
@@ -547,6 +549,8 @@
     <string name="device_type">סוג מכשיר</string>
     <string name="ip_address">כתובת IP</string>
     <string name="time">זמן</string>
+    <string name="select_time">Select time</string>
+    <string name="switch_input_mode">Switch input mode</string>
     <string name="confirm_log_in">אשר כניסה</string>
     <string name="deny_log_in">דחה כניסה</string>
     <string name="log_in_denied">הכניסה נדחתה</string>
@@ -671,7 +675,7 @@
     <string name="privacy_policy_description_long">בדוק את מדיניות הפרטיות שלנו ב־bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">גלה עוד תכונות של חשבון ה־Bitwarden שלך ביישום הרשת.</string>
     <string name="learn_about_organizations_description_long">Bitwarden מאפשר לך לשתף את פריטי הכספת שלך עם אחרים על ידי שימוש בארגון. למד עוד באתר האינטרנט bitwarden.com.</string>
-    <string name="created_xy">נוצר ב־%1$s, %2$s</string>
+    <string name="created_x">Created %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">הארגון שלך דורש ממך להגדיר סיסמה ראשית.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">הגדר אפשרות ביטול נעילה כדי לשנות את פעולת פסק הזמן לכספת שלך.</string>
     <string name="save_passkey_as_new_login">שמור מפתח גישה ככניסה חדשה</string>
@@ -963,4 +967,18 @@
     <string name="dynamic_colors">Dynamic colors</string>
     <string name="dynamic_colors_description">Apply dynamic colors based on your wallpaper</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamic colors uses the system colors and may not meet all accessibility guidelines.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
+    <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
+    <string name="trust">Trust</string>
+    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
+    <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
+    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
+    <string name="trusted_by_you">Trusted by You</string>
+    <string name="trusted_by_the_community">Trusted by the Community</string>
+    <string name="trusted_by_google">Trusted by Google</string>
+    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through web browsers trusted by Google or the Bitwarden community.</string>
+    <string name="about_privileged_applications">About privileged applications</string>
+    <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
+    <string name="privileged_apps">Privileged apps</string>
+    <string name="unrecognized_browser">Unrecognized browser</string>
 </resources>

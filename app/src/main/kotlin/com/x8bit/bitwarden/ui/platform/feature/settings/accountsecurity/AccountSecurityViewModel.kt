@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -25,7 +26,6 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -76,7 +76,7 @@ class AccountSecurityViewModel @Inject constructor(
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
             shouldShowEnableAuthenticatorSync =
                 featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) &&
-                    !isBuildVersionBelow(Build.VERSION_CODES.S),
+                    isBuildVersionAtLeast(Build.VERSION_CODES.S),
             userId = userId,
             vaultTimeout = settingsRepository.vaultTimeout,
             vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
@@ -455,7 +455,7 @@ class AccountSecurityViewModel @Inject constructor(
         action: AccountSecurityAction.Internal.AuthenticatorSyncFeatureFlagUpdate,
     ) {
         val shouldShowAuthenticatorSync =
-            action.isEnabled && !isBuildVersionBelow(Build.VERSION_CODES.S)
+            action.isEnabled && isBuildVersionAtLeast(Build.VERSION_CODES.S)
         mutableStateFlow.update {
             it.copy(
                 shouldShowEnableAuthenticatorSync = shouldShowAuthenticatorSync,
