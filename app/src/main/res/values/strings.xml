@@ -425,7 +425,9 @@ Scanning will happen automatically.</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="passkey_management">Passkey management</string>
     <string name="autofill_services">Autofill services</string>
-    <string name="inline_autofill">Use inline autofill</string>
+    <string name="display_autofill_suggestions">Display autofill suggestions</string>
+    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
+    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
     <string name="accessibility">Use accessibility</string>
     <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
     <string name="personal_ownership_policy_in_effect">An organization policy is affecting your ownership options.</string>
@@ -660,8 +662,8 @@ Do you want to switch to this account?</string>
     <string name="session_timeout_action">Session timeout action</string>
     <string name="account_fingerprint_phrase">Account fingerprint phrase</string>
     <string name="passkey_management_explanation_long">Use Bitwarden to save new passkeys and log in with passkeys stored in your vault.</string>
-    <string name="autofill_services_explanation_long">The Android Autofill Framework is used to assist in filling login information into other apps on your device.</string>
-    <string name="use_inline_autofill_explanation_long">Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</string>
+    <string name="autofill_services_explanation_long">Allow Bitwarden to use your saved login information to sign in to other apps on your device.</string>
+    <string name="use_inline_autofill_explanation_long">Choose how your autofill suggestions will appear when you sign in to other apps on your device.</string>
     <string name="additional_options">Additional options</string>
     <string name="continue_to_web_app">Continue to web app?</string>
     <string name="continue_to_x">Continue to %1$s?</string>
