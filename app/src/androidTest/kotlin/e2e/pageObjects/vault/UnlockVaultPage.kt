@@ -1,5 +1,6 @@
 package e2e.pageObjects.vault
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -19,6 +20,7 @@ class UnlockVaultPage(composeTestRule: ComposeTestRule) : Page(composeTestRule) 
     }
 
     fun performUnlockVault(password: String): VaultPage {
+        unlockVaultButtonTag.assertIsDisplayed()
         passwordEntryTag.performClick().performTextInput(password)
         unlockVaultButtonTag.performClick()
         return VaultPage(composeTestRule)

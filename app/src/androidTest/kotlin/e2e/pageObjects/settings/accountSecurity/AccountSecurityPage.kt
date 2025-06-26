@@ -20,6 +20,7 @@ class AccountSecurityPage(composeTestRule: ComposeTestRule) : Page(composeTestRu
      */
     fun lockVault(): UnlockVaultPage {
         lockNowLabel.performScrollTo().performClick()
+        lockNowLabel.assertIsNotDisplayed()
         return UnlockVaultPage(composeTestRule)
     }
 }

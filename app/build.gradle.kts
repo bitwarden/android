@@ -301,6 +301,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4.android)
     androidTestImplementation("androidx.test:runner:1.6.0")
     androidTestImplementation("androidx.test:rules:1.6.0")
+    androidTestImplementation("com.google.code.gson:gson:2.8.9")
 }
 
 tasks {
