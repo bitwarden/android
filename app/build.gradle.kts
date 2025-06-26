@@ -293,6 +293,12 @@ dependencies {
     testImplementation(libs.robolectric.robolectric)
     testImplementation(libs.square.okhttp.mockwebserver)
     testImplementation(libs.square.turbine)
+    androidTestImplementation(libs.androidx.uiautomator)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.junit.ktx)
+    androidTestImplementation(libs.androidx.ui.test.junit4.android)
+    androidTestImplementation("androidx.test:runner:1.6.0")
+    androidTestImplementation("androidx.test:rules:1.6.0")
 }
 
 tasks {
