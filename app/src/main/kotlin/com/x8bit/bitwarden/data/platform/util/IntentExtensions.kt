@@ -3,6 +3,7 @@
 package com.x8bit.bitwarden.data.platform.util
 
 import android.content.Intent
+import android.os.BadParcelableException
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.content.IntentCompat
@@ -24,3 +25,23 @@ inline fun <reified T> Intent.getSafeParcelableExtra(
 inline fun <reified T> Bundle.getSafeParcelableExtra(
     name: String,
 ): T? = BundleCompat.getParcelable(this, name, T::class.java)
+
+/**
+ * Validate if there's anything suspicious
+ */
+fun Intent.validate() {
+    @Suppress("TooGenericExceptionCaught")
+    try {
+        // This will force Android to attempt unparcelling the extras
+        this.extras?.getBundle("trashstringwhichhasnousebuttocheckunparcel")
+    } catch (ex: Exception) {
+        if (ex is BadParcelableException ||
+            ex is ClassNotFoundException ||
+            ex is RuntimeException
+        ) {
+            this.replaceExtras(null as Bundle?)
+        } else {
+            throw ex // rethrow if it’s an unexpected exception
+        }
+    }
+}
