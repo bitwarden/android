@@ -161,7 +161,7 @@ fun VaultVerificationCodeItem(
                 },
                 onClick = {
                     shouldShowDropdownMenu = false
-                    onDropdownMenuClick(VaultDropdownMenuAction.COPY)
+                    onDropdownMenuClick(VaultDropdownMenuAction.COPY_CODE)
                 },
                 leadingIcon = {
                     Icon(
@@ -190,16 +190,18 @@ fun VaultVerificationCodeItem(
                 HorizontalDivider()
                 DropdownMenuItem(
                     text = {
-                        Text(text = stringResource(id = R.string.move_to_bitwarden))
+                        Text(text = stringResource(id = R.string.copy_to_bitwarden_vault))
                     },
                     onClick = {
                         shouldShowDropdownMenu = false
-                        onDropdownMenuClick(VaultDropdownMenuAction.MOVE)
+                        onDropdownMenuClick(VaultDropdownMenuAction.COPY_TO_BITWARDEN)
                     },
                     leadingIcon = {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_arrow_right),
-                            contentDescription = stringResource(id = R.string.move_to_bitwarden),
+                            contentDescription = stringResource(
+                                id = R.string.copy_to_bitwarden_vault,
+                            ),
                         )
                     },
                 )

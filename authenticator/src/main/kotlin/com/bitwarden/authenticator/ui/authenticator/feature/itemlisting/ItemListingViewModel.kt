@@ -119,7 +119,7 @@ class ItemListingViewModel @Inject constructor(
             }
 
             is ItemListingAction.ItemClick -> {
-                handleCopyItemClick(action.authCode)
+                handleCopyCodeClick(action.authCode)
             }
 
             is ItemListingAction.DialogDismiss -> {
@@ -164,7 +164,7 @@ class ItemListingViewModel @Inject constructor(
         sendEvent(ItemListingEvent.NavigateToAppSettings)
     }
 
-    private fun handleCopyItemClick(authCode: String) {
+    private fun handleCopyCodeClick(authCode: String) {
         clipboardManager.setText(authCode)
     }
 
@@ -172,7 +172,7 @@ class ItemListingViewModel @Inject constructor(
         sendEvent(ItemListingEvent.NavigateToEditItem(itemId))
     }
 
-    private fun handleMoveToBitwardenClick(itemId: String) {
+    private fun handleCopyToBitwardenClick(itemId: String) {
         viewModelScope.launch {
             val item = authenticatorRepository
                 .getItemStateFlow(itemId)
@@ -521,9 +521,9 @@ class ItemListingViewModel @Inject constructor(
 
     private fun handleDropdownMenuClick(action: ItemListingAction.DropdownMenuClick) {
         when (action.menuAction) {
-            VaultDropdownMenuAction.COPY -> handleCopyItemClick(action.item.authCode)
+            VaultDropdownMenuAction.COPY_CODE -> handleCopyCodeClick(action.item.authCode)
             VaultDropdownMenuAction.EDIT -> handleEditItemClick(action.item.id)
-            VaultDropdownMenuAction.MOVE -> handleMoveToBitwardenClick(action.item.id)
+            VaultDropdownMenuAction.COPY_TO_BITWARDEN -> handleCopyToBitwardenClick(action.item.id)
             VaultDropdownMenuAction.DELETE -> handleDeleteItemClick(action.item.id)
         }
     }
