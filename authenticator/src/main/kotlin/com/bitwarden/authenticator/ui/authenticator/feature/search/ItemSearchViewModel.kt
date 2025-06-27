@@ -14,6 +14,7 @@ import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparat
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.removeDiacritics
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -186,7 +187,7 @@ class ItemSearchViewModel @Inject constructor(
             periodSeconds = periodSeconds,
             timeLeftSeconds = timeLeftSeconds,
             alertThresholdSeconds = 7,
-            startIcon = IconData.Local(iconRes = R.drawable.ic_login_item),
+            startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_login_item),
         )
 
     /**

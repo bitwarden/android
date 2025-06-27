@@ -110,7 +110,7 @@ private fun ActionCardPreview() {
 @Composable
 private fun ActionCardWithTrailingPreview() {
     BitwardenActionCard(
-        actionIcon = rememberVectorPainter(id = R.drawable.ic_bitwarden),
+        actionIcon = rememberVectorPainter(id = BitwardenDrawable.ic_shield),
         actionText = "An action with trailing content",
         titleText = "This is a title",
         callToActionText = "Take action",

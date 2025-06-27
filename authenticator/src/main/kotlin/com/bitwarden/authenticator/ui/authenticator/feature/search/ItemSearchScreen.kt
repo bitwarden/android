@@ -26,6 +26,7 @@ import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaf
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.bottomDivider
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 
 /**
  * The search screen for authenticator items.
@@ -67,7 +68,7 @@ fun ItemSearchScreen(
                 onSearchTermChange = searchHandlers.onSearchTermChange,
                 scrollBehavior = scrollBehavior,
                 navigationIcon = NavigationIcon(
-                    navigationIcon = painterResource(id = R.drawable.ic_back),
+                    navigationIcon = painterResource(id = BitwardenDrawable.ic_back),
                     navigationIconContentDescription = stringResource(id = R.string.back),
                     onNavigationIconClick = searchHandlers.onBackClick,
                 ),
