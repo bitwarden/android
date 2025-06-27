@@ -19,7 +19,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.bitwarden.authenticator.R
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 
 /**
  * The empty state for the item search screen.
@@ -35,7 +35,7 @@ fun ItemSearchEmptyContent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_search_24px),
+            painter = painterResource(id = BitwardenDrawable.ic_search_wide),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier

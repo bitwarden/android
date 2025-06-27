@@ -38,6 +38,7 @@ import com.bitwarden.authenticator.ui.platform.components.model.IconResource
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -135,7 +136,7 @@ fun BitwardenListItem(
                 modifier = Modifier.semantics { optionsTestTag?.let { testTag = it } },
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_more_horizontal),
+                    painter = painterResource(id = BitwardenDrawable.ic_more_horizontal),
                     contentDescription = stringResource(id = R.string.options),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(24.dp),
@@ -180,7 +181,7 @@ private fun BitwardenListItem_preview() {
         BitwardenListItem(
             label = "Sample Label",
             supportingLabel = "Jan 3, 2024, 10:35 AM",
-            startIcon = IconData.Local(R.drawable.ic_login_item),
+            startIcon = IconData.Local(BitwardenDrawable.ic_login_item),
             onClick = {},
             selectionDataList = persistentListOf(),
         )
