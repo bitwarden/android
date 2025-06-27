@@ -425,7 +425,9 @@ Skenovanie prebehne automaticky.</string>
     <string name="privacy_policy">Zásady ochrany osobných údajov</string>
     <string name="passkey_management">Správa prístupových kľúčov</string>
     <string name="autofill_services">Služba automatického vypĺňania</string>
-    <string name="inline_autofill">Použiť vnorené automatické vypĺňanie</string>
+    <string name="display_autofill_suggestions">Zobraziť návrhy na automatické vypĺňanie</string>
+    <string name="autofill_suggestions_inline">Inline (zobrazí sa na klávesnici)</string>
+    <string name="autofill_suggestions_popup">Vyskakovacie okno (zobrazí sa cez vstupné pole)</string>
     <string name="accessibility">Použiť dostupnosť</string>
     <string name="accessibility_description5">Vyžaduje sa pre použitie dlaždice rýchleho automatického vypĺňania.</string>
     <string name="personal_ownership_policy_in_effect">Politika organizácie ovplyvňuje vaše možnosti vlastníctva.</string>
@@ -454,7 +456,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="password_info">Voliteľne môžete vyžadovať heslo pre používateľov na prístup k tomuto Sendu.</string>
     <string name="remove_password">Odstrániť heslo</string>
     <string name="removing_send_password">Odstraňuje sa heslo</string>
-    <string name="password_removed">Password removed</string>
+    <string name="password_removed">Heslo bolo odstránené</string>
     <string name="add_a_send">Pridať Send</string>
     <string name="copy_link">Kopírovať odkaz</string>
     <string name="share_link">Zdieľať odkaz</string>
@@ -908,9 +910,10 @@ Chcete prepnúť na tento účet?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operácia prístupového kľúča zlyhala, pretože nebola vybraná žiadna položka.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operácia prístupového kľúča zlyhala, pretože požiadavka nie podporovaná.</string>
     <string name="self_host_server_url">Adresa URL vlastného hostingu</string>
+    <string name="use_brave_autofill_integration">Použiť integráciu automatického vypĺňania Brave</string>
     <string name="use_chrome_autofill_integration">Použiť integráciu automatického vyplňovania Chromu</string>
     <string name="use_chrome_beta_autofill_integration">Použiť integráciu automatického vyplňovania Chromu (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Vylepšuje vypĺňanie prihlasovacích údajov pre podporované webové stránky v Chrome. Po zapnutí budete presmerovaní do nastavení Chromu, kde môžete povoliť automatické vypĺňanie od tretích strán.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Vylepšuje vypĺňanie prihlasovacích údajov pre podporované webové stránky v Brave. Po zapnutí budete presmerovaní do nastavení Brave, kde môžete povoliť automatické vypĺňanie od tretích strán.</string>
     <string name="show_more">Zobraziť viac</string>
     <string name="no_folder">Žiadny priečinok</string>
     <string name="show_less">Zobraziť menej</string>
@@ -981,4 +984,13 @@ Chcete prepnúť na tento účet?</string>
     <string name="learn_more_about_privileged_apps">Viac informácií o privilegovaných aplikáciách</string>
     <string name="privileged_apps">Privilegované aplikácie</string>
     <string name="unrecognized_browser">Neznámy prehliadač</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Ďalšie informácie o používaní prístupových kľúčov s Bitwardenom.</string>
+    <string name="google">Google</string>
+    <string name="the_community">komunity</string>
+    <string name="you">VÁS</string>
+    <string name="all_trusted_apps">Všetky dôveryhodné aplikácie</string>
+    <string name="trusted_by_x">Dôveryhodné podľa %s</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Naozaj už nechcete dôverovať %s?</string>
+    <string name="installed_apps">Nainštalované aplikácie</string>
+    <string name="delete_x">Odstrániť %s</string>
 </resources>

@@ -425,7 +425,9 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="privacy_policy">Chính sách Bảo mật</string>
     <string name="passkey_management">Quản lý mã khoá</string>
     <string name="autofill_services">Tự động điền mật khẩu</string>
-    <string name="inline_autofill">Tự động điền biểu mẫu</string>
+    <string name="display_autofill_suggestions">Display autofill suggestions</string>
+    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
+    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
     <string name="accessibility">Dùng trợ năng</string>
     <string name="accessibility_description5">Yêu cầu sử dụng Ô Quick-Action Tự động điền.</string>
     <string name="personal_ownership_policy_in_effect">Chính sách của tổ chức đang ảnh hưởng đến các tùy chọn quyền sở hữu của bạn.</string>
@@ -908,9 +910,10 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Hoạt động mã khóa không thành công vì không có mục nào được chọn.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Hoạt động mã khóa không thành công vì yêu cầu không hỗ trợ.</string>
     <string name="self_host_server_url">URL máy chủ tự lưu trữ</string>
+    <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Dùng tích hợp điền tự động Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Dùng tích hợp điền tự động Chrome (Thử nghiệm)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Cải thiện việc điền thông tin đăng nhập cho các trang web được hỗ trợ trên Chrome. Sau khi bật, bạn sẽ được chuyển hướng đến cài đặt Chrome để bật tính năng tự động điền của bên thứ ba.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
     <string name="show_more">Xem thêm</string>
     <string name="no_folder">Chưa phân loại</string>
     <string name="show_less">Thu gọn</string>
@@ -983,4 +986,13 @@ bất kỳ sự cố nào.</string>
     <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
     <string name="privileged_apps">Privileged apps</string>
     <string name="unrecognized_browser">Unrecognized browser</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
+    <string name="google">Google</string>
+    <string name="the_community">the Community</string>
+    <string name="you">YOU</string>
+    <string name="all_trusted_apps">All trusted apps</string>
+    <string name="trusted_by_x">Trusted by %s</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
+    <string name="installed_apps">Installed apps</string>
+    <string name="delete_x">Delete %s</string>
 </resources>

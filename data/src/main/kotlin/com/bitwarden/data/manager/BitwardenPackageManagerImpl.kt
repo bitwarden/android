@@ -2,6 +2,7 @@ package com.bitwarden.data.manager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import com.bitwarden.core.util.isBuildVersionAtLeast
 
 /**
  * Primary implementation of [BitwardenPackageManager].
@@ -12,9 +13,24 @@ class BitwardenPackageManagerImpl(
 
     private val nativePackageManager = context.packageManager
 
+    override fun getPackageInstallationSourceOrNull(packageName: String): String? =
+        try {
+            if (isBuildVersionAtLeast(Build.VERSION_CODES.R)) {
+                nativePackageManager
+                    .getInstallSourceInfo(packageName)
+                    .installingPackageName
+            } else {
+                @Suppress("DEPRECATION")
+                nativePackageManager
+                    .getInstallerPackageName(packageName)
+            }
+        } catch (_: PackageManager.NameNotFoundException) {
+            null
+        }
+
     override fun isPackageInstalled(packageName: String): Boolean {
         return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (isBuildVersionAtLeast(Build.VERSION_CODES.TIRAMISU)) {
                 nativePackageManager.getApplicationInfo(
                     packageName,
                     PackageManager.ApplicationInfoFlags.of(0L),

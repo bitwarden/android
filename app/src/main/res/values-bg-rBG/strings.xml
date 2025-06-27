@@ -425,7 +425,9 @@
     <string name="privacy_policy">Политика за поверителност</string>
     <string name="passkey_management">Управление на секретни ключове</string>
     <string name="autofill_services">Услуга за автоматично дописване</string>
-    <string name="inline_autofill">Дописване вътре</string>
+    <string name="display_autofill_suggestions">Показване на предложения за авт. попълване</string>
+    <string name="autofill_suggestions_inline">Вмъкнато (показва се в клавиатурата)</string>
+    <string name="autofill_suggestions_popup">Изскачащ прозорец (показва се над полето за въвеждане)</string>
     <string name="accessibility">Услуги за достъпност</string>
     <string name="accessibility_description5">Това е необходимо, ако искате да използвате плочката за бързо действие за автоматично попълване.</string>
     <string name="personal_ownership_policy_in_effect">Политика от някоя организация влияе на вариантите за собственост.</string>
@@ -908,9 +910,10 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">Операцията със секретния ключ беше неуспешна, тъй като няма избран елемент.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Операцията със секретния ключ беше неуспешна, тъй като заявката не се поддържа.</string>
     <string name="self_host_server_url">Адрес на собствения сървър</string>
+    <string name="use_brave_autofill_integration">Използване на интеграцията с автоматичното попълване на Brave</string>
     <string name="use_chrome_autofill_integration">Използване на интеграцията с автоматичното попълване на Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Използване на интеграцията с автоматичното попълване на Chrome (бета)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Подобрява попълването на данни за вписване в Chrome за поддържаните уеб сайтове. Ако го включите, ще бъдете пренасочени към настройките на Chrome, за да включите автоматичното попълване чрез добавка.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Подобрява попълването на данни за вписване в избрани браузъри за поддържаните уеб сайтове. Ако го включите, ще бъдете пренасочени към настройките на браузъра, за да включите автоматичното попълване чрез добавка.</string>
     <string name="show_more">Показване на повече</string>
     <string name="no_folder">Няма папка</string>
     <string name="show_less">Показване на по-малко</string>
@@ -983,4 +986,13 @@
     <string name="learn_more_about_privileged_apps">Научете повече за доверените приложения</string>
     <string name="privileged_apps">Доверени приложения</string>
     <string name="unrecognized_browser">Неразпознат браузър</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Научете повече относно използването на секретни ключове в Битуорден.</string>
+    <string name="google">Google</string>
+    <string name="the_community">общността</string>
+    <string name="you">Вие</string>
+    <string name="all_trusted_apps">Всички доверени приложения</string>
+    <string name="trusted_by_x">Има доверие от %s</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Наистина ли искате да премахнете доверието от %s?</string>
+    <string name="installed_apps">Инсталирани приложения</string>
+    <string name="delete_x">Изтриване на %s</string>
 </resources>

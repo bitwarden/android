@@ -30,10 +30,10 @@ fun VerificationCodeItem.toDisplayItem(
     },
     favorite = (source as? AuthenticatorItem.Source.Local)?.isFavorite ?: false,
     showMoveToBitwarden = when (source) {
-        // Shared items should never show Move to Bitwarden action:
+        // Shared items should never show "Copy to Bitwarden vault" action:
         is AuthenticatorItem.Source.Shared -> false
 
-        // Local items should only show Move to Bitwarden if we are successfully syncing: =
+        // Local items should only show "Copy to Bitwarden vault" if we are successfully syncing: =
         is AuthenticatorItem.Source.Local -> when (sharedVerificationCodesState) {
             SharedVerificationCodesState.AppNotInstalled,
             SharedVerificationCodesState.Error,
