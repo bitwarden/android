@@ -68,6 +68,24 @@ jobs:
       - name: Configure .json test data file
         run: printf %s '${{ env.TEST_ACCOUNT_CREDS }}' > app/src/androidTest/assets/TestData.json
 
+      - name: Log in to Azure
+        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
+        with:
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+
+      - name: Retrieve secrets
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
+        run: |
+          mkdir -p ${{ github.workspace }}/secrets
+          mkdir -p ${{ github.workspace }}/app/src/standardRelease
+
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name app_play-keystore.jks --file ${{ github.workspace }}/keystores/app_play-keystore.jks --output none
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name google-services.json --file ${{ github.workspace }}/app/src/standardRelease/google-services.json --output none
+
       - name: Build release APK
         env:
           PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
@@ -89,14 +107,14 @@ jobs:
 
       - name: Upload app APK to SauceLabs storage
         run: |
-          saucectl storage upload --app com.x8bit.bitwarden.apk
+          saucectl storage upload --app app/build/outputs/apk/standard/release/com.x8bit.bitwarden.apk
         env:
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
 
       - name: Upload test APK to SauceLabs storage
         run: |
-          saucectl storage upload --app com.x8bit.bitwarden-androidTest.apk
+          saucectl storage upload --app app/build/outputs/apk/standard/release/com.x8bit.bitwarden-androidTest.apk
         env:
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
