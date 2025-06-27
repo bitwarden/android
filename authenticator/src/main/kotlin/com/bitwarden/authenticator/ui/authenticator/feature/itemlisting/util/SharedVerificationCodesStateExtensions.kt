@@ -23,7 +23,7 @@ fun SharedVerificationCodesState.Success.toSharedCodesDisplayState(
             it.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 // Always map based on Error state, because shared codes will never
-                // show "Move to Bitwarden" action.
+                // show "Copy to Bitwarden vault" action.
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
             ),
         )

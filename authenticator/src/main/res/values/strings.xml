@@ -124,7 +124,7 @@
     <string name="take_me_to_app_settings">Take me to the app settings</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="please_try_again">Please try again</string>
-    <string name="move_to_bitwarden">Move to Bitwarden</string>
+    <string name="copy_to_bitwarden_vault">Copy to Bitwarden vault</string>
     <string name="default_save_option">Default save option</string>
     <string name="save_to_bitwarden">Save to Bitwarden</string>
     <string name="save_here">Save here</string>
