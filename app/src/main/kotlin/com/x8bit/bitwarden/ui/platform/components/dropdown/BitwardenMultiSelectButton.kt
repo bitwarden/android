@@ -12,11 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.components.button.BitwardenTextSelectionButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextSelectionButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import kotlinx.collections.immutable.ImmutableList
