@@ -424,7 +424,9 @@
     <string name="privacy_policy">Pravila privatnosti</string>
     <string name="passkey_management">Upravljanje pristupnim ključevima</string>
     <string name="autofill_services">Usluge auto-ispune</string>
-    <string name="inline_autofill">Koristi izravnu auto-ispunu</string>
+    <string name="display_autofill_suggestions">Display autofill suggestions</string>
+    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
+    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
     <string name="accessibility">Koristi pristupačnost</string>
     <string name="accessibility_description5">Potrebno za korištenje pločice za brzo djelovanje auto-ispune.</string>
     <string name="personal_ownership_policy_in_effect">Pravila organizacije utječu na tvoje mogućnosti vlasništva.</string>
@@ -907,9 +909,10 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">Operacija pristupnog ključa nije uspjela jer nije odabrana niti jedna stavka.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
     <string name="self_host_server_url">URL vlastitog poslužitelja</string>
+    <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Koristi Chrome integraciju auto-ispune</string>
     <string name="use_chrome_beta_autofill_integration">Koristi Chrome integraciju auto-ispune (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Poboljšava popunjavanje prijave za podržane web stranice u Chromu. Nakon uključivanja, potrebno je u postavkama Chroma omogućiti auto-ispunu treće strane (third-party autofill).</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
     <string name="show_more">Prikaži više</string>
     <string name="no_folder">Nema mape</string>
     <string name="show_less">Pokaži manje</string>
@@ -980,4 +983,13 @@
     <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
     <string name="privileged_apps">Privileged apps</string>
     <string name="unrecognized_browser">Unrecognized browser</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
+    <string name="google">Google</string>
+    <string name="the_community">the Community</string>
+    <string name="you">YOU</string>
+    <string name="all_trusted_apps">All trusted apps</string>
+    <string name="trusted_by_x">Trusted by %s</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
+    <string name="installed_apps">Installed apps</string>
+    <string name="delete_x">Delete %s</string>
 </resources>
