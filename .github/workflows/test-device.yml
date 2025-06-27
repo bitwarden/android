@@ -7,10 +7,112 @@ permissions:
   contents: read
 
 jobs:
-  test:
-    name: Test Device
+  test-device:
+    name: Check main build against real devices
     runs-on: ubuntu-24.04
+    env:
+      JAVA_VERSION: 17
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+      SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
 
     steps:
-    - name: Placeholder step
-      run: echo "Placeholder workflow step"
+      - name: Check out repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@v4
+
+      - name: Cache Gradle files
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-v2-
+
+      - name: Cache build output
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: ${{ github.workspace }}/build-cache
+          key: ${{ runner.os }}-build-cache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: Configure JDK
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+        with:
+          distribution: "temurin"
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Configure Ruby
+        uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
+        with:
+          bundler-cache: true
+
+      - name: Install Fastlane
+        run: |
+          gem install bundler:2.2.27
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Retrieve test data
+        uses: bitwarden/sm-action@14f92f1d294ae3c2b6a3845d389cd2c318b0dfd8 # v2.2.0
+        with:
+          access_token: ${{ secrets.BWS_ACCESS_TOKEN }}
+          secrets: |
+            e4b23903-31d8-4989-9193-b30900d543f0 > TEST_ACCOUNT_CREDS
+
+      - name: Configure .json test data file
+        run: printf %s '${{ env.TEST_ACCOUNT_CREDS }}' > app/src/androidTest/assets/TestData.json
+
+      - name: Build release APK
+        env:
+          PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
+        run: |
+          bundle exec fastlane assemblePlayStoreReleaseApk \
+            storeFile:app_play-keystore.jks \
+            storePassword:'${{ env.PLAY_KEYSTORE_PASSWORD }}' \
+            keyAlias:bitwarden \
+            keyPassword:'${{ env.PLAY_KEYSTORE_PASSWORD }}'
+
+      - name: Build test APK (espresso)
+        run: |
+          ./gradlew :app:assembleStandardReleaseAndroidTest
+
+      - name: Install saucectl
+        run: |
+          curl -L https://github.com/saucelabs/saucectl/releases/latest/download/saucectl_linux_amd64.tar.gz | tar -xz
+          sudo mv saucectl /usr/local/bin/
+
+      - name: Upload app APK to SauceLabs storage
+        run: |
+          saucectl storage upload --app com.x8bit.bitwarden.apk
+        env:
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+
+      - name: Upload test APK to SauceLabs storage
+        run: |
+          saucectl storage upload --app com.x8bit.bitwarden-androidTest.apk
+        env:
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+
+      - name: Run tests on SauceLabs
+        run: saucectl run --config .sauce/config.yml
+        env:
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+
+      - name: Upload SauceLabs test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: saucectl-report
+          path: saucectl-report.xml
+
+
+
