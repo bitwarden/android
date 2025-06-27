@@ -1,9 +1,9 @@
-package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util
+package com.bitwarden.authenticator.ui.authenticator.feature.util
 
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
 
 /**
  * Converts [VerificationCodeItem] to a [VerificationCodeDisplayItem].
