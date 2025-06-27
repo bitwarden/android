@@ -425,7 +425,9 @@ Načtení proběhne automaticky.</string>
     <string name="privacy_policy">Zásady ochrany osobních údajů</string>
     <string name="passkey_management">Správa přístupových klíčů</string>
     <string name="autofill_services">Služby automatického vyplňování</string>
-    <string name="inline_autofill">Použít automatické vyplňování</string>
+    <string name="display_autofill_suggestions">Zobrazit návrhy automatického vyplňování</string>
+    <string name="autofill_suggestions_inline">Inline (zobrazí se v klávesnici)</string>
+    <string name="autofill_suggestions_popup">Vyskakovací okno (zobrazí se přes vstupní pole)</string>
     <string name="accessibility">Použít přístupnost</string>
     <string name="accessibility_description5">Vyžadováno pro použití v dlaždici rychlé akce automatického vyplňování.</string>
     <string name="personal_ownership_policy_in_effect">Zásady organizace ovlivňují možnosti vlastnictví.</string>
@@ -659,8 +661,8 @@ Chcete se přepnout na tento účet?</string>
     <string name="session_timeout_action">Akce časového limitu relace</string>
     <string name="account_fingerprint_phrase">Fráze otisku prstu účtu</string>
     <string name="passkey_management_explanation_long">Použijte Bitwarden pro ukládání nových přístupových klíčů a přihlašování se pomocí přístupových klíčů uložených ve Vašem trezoru.</string>
-    <string name="autofill_services_explanation_long">Android Autofill Framework se používá k vyplnění přihlašovacích údajů do jiných aplikací na Vašem zařízení.</string>
-    <string name="use_inline_autofill_explanation_long">Pokud to Vaše vybraná klávesnice podporuje, použije se inline automatické vyplňování. V opačném případě se použije výchozí překrytí.</string>
+    <string name="autofill_services_explanation_long">Povolí Bitwardenu používat uložené přihlašovací údaje k přihlášení do jiných aplikací na Vašem zařízení.</string>
+    <string name="use_inline_autofill_explanation_long">Zvolte, jak se budou Vaše návrhy automatického vyplňování zobrazovat při přihlášení do jiných aplikací na Vašem zařízení.</string>
     <string name="additional_options">Další volby</string>
     <string name="continue_to_web_app">Pokračovat do webové aplikace?</string>
     <string name="continue_to_x">Pokračovat do %1$s?</string>
@@ -907,9 +909,10 @@ Chcete se přepnout na tento účet?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operace přístupového klíče se nezdařila, protože nebyla vybrána žádná položka.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operace přístupového klíče se nezdařila, protože je požadavek nepodporovaný.</string>
     <string name="self_host_server_url">Adresa URL serveru vlastního hostování</string>
+    <string name="use_brave_autofill_integration">Použít integraci automatického vyplňování Brave</string>
     <string name="use_chrome_autofill_integration">Použít integraci automatického vyplňování Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Použít integraci automatického vyplňování Chrome (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Zlepšuje vyplňování přihlašovacích údajů pro podporované webové stránky na Chrome. Pokud je povoleno, budete přesměrováni na nastavení Chrome, abyste povolili automatické vyplňování třetích stran.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Zlepšuje vyplňování přihlašovacích údajů pro podporované webové stránky. Pokud je povoleno, budete přesměrováni na nastavení prohlížeče, abyste povolili automatické vyplňování třetích stran.</string>
     <string name="show_more">Zobrazit další</string>
     <string name="no_folder">Žádná složka</string>
     <string name="show_less">Zobrazit méně</string>
@@ -982,4 +985,13 @@ při opakování problémů.</string>
     <string name="learn_more_about_privileged_apps">Další informace o privilegovaných aplikacích</string>
     <string name="privileged_apps">Privilegované aplikace</string>
     <string name="unrecognized_browser">Nerozpoznaný prohlížeč</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Přečtěte si více o používání hesel s Bitwardenem.</string>
+    <string name="google">Google</string>
+    <string name="the_community">Komunita</string>
+    <string name="you">VY</string>
+    <string name="all_trusted_apps">Všechny důvěryhodné aplikace</string>
+    <string name="trusted_by_x">Důvěryhodné od %s</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Jste si jisti, že chcete přestat důvěřovat %s?</string>
+    <string name="installed_apps">Nainstalované aplikace</string>
+    <string name="delete_x">Smazat %s</string>
 </resources>
