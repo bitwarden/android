@@ -288,11 +288,12 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `on UseInlineAutofillClick should update the state and save the new value to settings`() {
+    fun `on AutofillStyleSelected should update the state and save the new value to settings`() {
         val viewModel = createViewModel()
-        viewModel.trySendAction(AutoFillAction.UseInlineAutofillClick(false))
+        val autofillStyle = AutofillStyle.POPUP
+        viewModel.trySendAction(AutoFillAction.AutofillStyleSelected(style = autofillStyle))
         assertEquals(
-            DEFAULT_STATE.copy(isUseInlineAutoFillEnabled = false),
+            DEFAULT_STATE.copy(autofillStyle = autofillStyle),
             viewModel.stateFlow.value,
         )
         verify { settingsRepository.isInlineAutofillEnabled = false }
@@ -466,7 +467,7 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     isAccessibilityAutofillEnabled = false,
     isAutoFillServicesEnabled = false,
     isCopyTotpAutomaticallyEnabled = false,
-    isUseInlineAutoFillEnabled = true,
+    autofillStyle = AutofillStyle.INLINE,
     showInlineAutofillOption = false,
     showPasskeyManagementRow = true,
     defaultUriMatchType = UriMatchType.DOMAIN,
