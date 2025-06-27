@@ -45,6 +45,7 @@ android {
 
 dependencies {
     implementation(project(":annotation"))
+    implementation(project(":core"))
 
     implementation(libs.androidx.appcompat)
     implementation(platform(libs.androidx.compose.bom))
