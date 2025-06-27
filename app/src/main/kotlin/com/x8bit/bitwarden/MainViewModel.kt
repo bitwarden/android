@@ -265,6 +265,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun handleScreenCaptureUpdate(action: MainAction.Internal.ScreenCaptureUpdate) {
+        sendEvent(MainEvent.ScreenCaptureSettingChange(isAllowed = action.isScreenCaptureEnabled))
         mutableStateFlow.update { it.copy(isScreenCaptureAllowed = action.isScreenCaptureEnabled) }
     }
 
@@ -639,4 +640,9 @@ sealed class MainEvent {
     data class UpdateAppTheme(
         val osTheme: Int,
     ) : MainEvent()
+
+    /**
+     * Event indicating a change in the screen capture setting.
+     */
+    data class ScreenCaptureSettingChange(val isAllowed: Boolean) : MainEvent()
 }

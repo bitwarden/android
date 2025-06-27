@@ -243,7 +243,9 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
-            // We skip the first 2 events because they are the default appTheme and appLanguage
+            // We skip the first 3 events because they are the
+            // default appTheme, appLanguage and ScreenCaptureUpdate
+            awaitItem()
             awaitItem()
             awaitItem()
 
@@ -294,7 +296,9 @@ class MainViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
 
             viewModel.eventFlow.test {
-                // We skip the first 2 events because they are the default appTheme and appLanguage
+                // We skip the first 3 events because they are the
+                // default appTheme, appLanguage and ScreenCaptureUpdate
+                awaitItem()
                 awaitItem()
                 awaitItem()
 
@@ -315,7 +319,9 @@ class MainViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             val cipherView = mockk<CipherView>()
             viewModel.eventFlow.test {
-                // We skip the first 2 events because they are the default appTheme and appLanguage
+                // We skip the first 3 events because they are the
+                // default appTheme, appLanguage and ScreenCaptureUpdate
+                awaitItem()
                 awaitItem()
                 awaitItem()
 
@@ -332,7 +338,9 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val cipherView = mockk<CipherView>()
         viewModel.eventFlow.test {
-            // We skip the first 2 events because they are the default appTheme and appLanguage
+            // We skip the first 3 events because they are the
+            // default appTheme, appLanguage and ScreenCaptureUpdate
+            awaitItem()
             awaitItem()
             awaitItem()
 
@@ -365,7 +373,9 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-            // We skip the first 2 events because they are the default appTheme and appLanguage
+            // We skip the first 3 events because they are the
+            // default appTheme, appLanguage and ScreenCaptureUpdate
+            eventFlow.awaitItem()
             eventFlow.awaitItem()
             eventFlow.awaitItem()
 
@@ -388,7 +398,9 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
-            // We skip the first 2 events because they are the default appTheme and appLanguage
+            // We skip the first 3 events because they are the
+            // default appTheme, appLanguage and ScreenCaptureUpdate
+            awaitItem()
             awaitItem()
             awaitItem()
 
@@ -596,7 +608,9 @@ class MainViewModelTest : BaseViewModelTest() {
             } returns EmailTokenResult.Error(message = null, error = Throwable("Fail!"))
 
             viewModel.eventFlow.test {
-                // We skip the first 2 events because they are the default appTheme and appLanguage
+                // We skip the first 3 events because they are the
+                // default appTheme, appLanguage and ScreenCaptureUpdate
+                awaitItem()
                 awaitItem()
                 awaitItem()
 
@@ -630,7 +644,9 @@ class MainViewModelTest : BaseViewModelTest() {
             } returns EmailTokenResult.Error(message = expectedMessage, error = null)
 
             viewModel.eventFlow.test {
-                // We skip the first 2 events because they are the default appTheme and appLanguage
+                // We skip the first 3 events because they are the
+                // default appTheme, appLanguage and ScreenCaptureUpdate
+                awaitItem()
                 awaitItem()
                 awaitItem()
 
@@ -1023,7 +1039,9 @@ class MainViewModelTest : BaseViewModelTest() {
     fun `send NavigateToDebugMenu action when OpenDebugMenu action is sent`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            // We skip the first 2 events because they are the default appTheme and appLanguage
+            // We skip the first 3 events because they are the
+            // default appTheme, appLanguage and ScreenCaptureUpdate
+            awaitItem()
             awaitItem()
             awaitItem()
 
@@ -1115,6 +1133,23 @@ class MainViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(MainAction.AppSpecificLanguageUpdate(AppLanguage.SPANISH))
 
         verify { settingsRepository.appLanguage = AppLanguage.SPANISH }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ScreenCaptureUpdate should trigger the ScreenCaptureSettingChange event`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            // We skip the first 3 events because they are the
+            // default appTheme, appLanguage and ScreenCaptureUpdate
+            awaitItem()
+            awaitItem()
+            awaitItem()
+
+            viewModel.trySendAction(MainAction.Internal.ScreenCaptureUpdate(true))
+            assertEquals(MainEvent.ScreenCaptureSettingChange(true), awaitItem())
+        }
     }
 
     private fun createViewModel(
