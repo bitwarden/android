@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model
+package com.bitwarden.authenticator.ui.authenticator.feature.model
 
 import android.os.Parcelable
 import com.bitwarden.authenticator.R
