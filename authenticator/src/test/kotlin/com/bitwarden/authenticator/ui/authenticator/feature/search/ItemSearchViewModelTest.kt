@@ -1,7 +1,6 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.search
 
 import androidx.lifecycle.SavedStateHandle
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.manager.util.createMockVerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
@@ -13,6 +12,7 @@ import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCo
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -142,7 +142,7 @@ private val SHARED_AND_LOCAL_DISPLAY_ITEMS = listOf(
         timeLeftSeconds = SHARED_ITEMS[0].timeLeftSeconds,
         alertThresholdSeconds = 7,
         startIcon = IconData.Local(
-            iconRes = R.drawable.ic_login_item,
+            iconRes = BitwardenDrawable.ic_login_item,
             testTag = "BitwardenIcon",
         ),
         subtitle = SHARED_ITEMS[0].label,
@@ -158,7 +158,7 @@ private val SHARED_AND_LOCAL_DISPLAY_ITEMS = listOf(
         timeLeftSeconds = LOCAL_ITEMS[0].timeLeftSeconds,
         alertThresholdSeconds = 7,
         startIcon = IconData.Local(
-            iconRes = R.drawable.ic_login_item,
+            iconRes = BitwardenDrawable.ic_login_item,
             testTag = "BitwardenIcon",
         ),
         subtitle = LOCAL_ITEMS[0].label,

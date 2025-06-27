@@ -38,6 +38,7 @@ import com.bitwarden.authenticator.ui.platform.components.indicator.BitwardenCir
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 
 /**
  * The verification code item displayed to the user.
@@ -165,7 +166,7 @@ fun VaultVerificationCodeItem(
                 },
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_copy),
+                        painter = painterResource(id = BitwardenDrawable.ic_copy),
                         contentDescription = stringResource(id = R.string.copy),
                     )
                 },
@@ -181,7 +182,7 @@ fun VaultVerificationCodeItem(
                 },
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_edit_item),
+                        painter = painterResource(id = BitwardenDrawable.ic_edit_item),
                         contentDescription = stringResource(R.string.edit_item),
                     )
                 },
@@ -198,7 +199,7 @@ fun VaultVerificationCodeItem(
                     },
                     leadingIcon = {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_arrow_right),
+                            painter = painterResource(id = BitwardenDrawable.ic_arrow_right),
                             contentDescription = stringResource(
                                 id = R.string.copy_to_bitwarden_vault,
                             ),
@@ -217,7 +218,7 @@ fun VaultVerificationCodeItem(
                 },
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_delete_item),
+                        painter = painterResource(id = BitwardenDrawable.ic_delete_item),
                         contentDescription = stringResource(id = R.string.delete_item),
                     )
                 },
@@ -238,7 +239,7 @@ private fun VerificationCodeItem_preview() {
             periodSeconds = 30,
             timeLeftSeconds = 15,
             alertThresholdSeconds = 7,
-            startIcon = IconData.Local(R.drawable.ic_login_item),
+            startIcon = IconData.Local(BitwardenDrawable.ic_login_item),
             onItemClick = {},
             onDropdownMenuClick = {},
             allowLongPress = true,
