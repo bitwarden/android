@@ -10,11 +10,11 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVer
 import com.bitwarden.authenticator.data.platform.manager.BitwardenEncodingManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toDisplayItem
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toSharedCodesDisplayState
+import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.authenticator.feature.util.toDisplayItem
+import com.bitwarden.authenticator.ui.authenticator.feature.util.toSharedCodesDisplayState
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
