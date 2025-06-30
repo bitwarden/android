@@ -416,7 +416,7 @@ platform :android do
 
   desc "Promote to production."
   lane :promoteToProduction do |options|
-    supply_options = {
+    release_options = {
       package_name: options[:packageName],
       version_code: options[:versionCode],
       version_name: options[:versionName],
@@ -428,18 +428,18 @@ platform :android do
     }
 
     if options[:releaseNotes].nil? or options[:releaseNotes].to_s.empty?
-      supply_options[:skip_upload_metadata] = true
+      release_options[:skip_upload_metadata] = true
     else
-      supply_options[:skip_upload_metadata] = false
+      release_options[:skip_upload_metadata] = false
     end
 
     if options[:rolloutPercentage].to_f < 1
-      supply_options[:track_promote_release_status] = "inProgress"
-      supply_options[:rollout] = options[:rolloutPercentage]
+      release_options[:track_promote_release_status] = "inProgress"
+      release_options[:rollout] = options[:rolloutPercentage]
     else
-      supply_options[:release_status] = "completed"
+      release_options[:release_status] = "completed"
     end
 
-    supply(supply_options)
+    supply(release_options)
   end
 end
