@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
-import com.bitwarden.authenticator.R
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 
 /**
  * Represents the Authenticator search action item.
@@ -29,7 +29,7 @@ fun AuthenticatorSearchActionItem(
         modifier = Modifier.testTag("SearchButton"),
     ) {
         Icon(
-            painter = rememberVectorPainter(id = R.drawable.ic_search_24px),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ic_search_wide),
             contentDescription = contentDescription,
         )
     }

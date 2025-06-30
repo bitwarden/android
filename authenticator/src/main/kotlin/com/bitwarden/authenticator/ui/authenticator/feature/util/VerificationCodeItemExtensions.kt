@@ -1,9 +1,9 @@
-package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util
+package com.bitwarden.authenticator.ui.authenticator.feature.util
 
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
 
 /**
  * Converts [VerificationCodeItem] to a [VerificationCodeDisplayItem].
@@ -30,10 +30,10 @@ fun VerificationCodeItem.toDisplayItem(
     },
     favorite = (source as? AuthenticatorItem.Source.Local)?.isFavorite ?: false,
     showMoveToBitwarden = when (source) {
-        // Shared items should never show Move to Bitwarden action:
+        // Shared items should never show "Copy to Bitwarden vault" action:
         is AuthenticatorItem.Source.Shared -> false
 
-        // Local items should only show Move to Bitwarden if we are successfully syncing: =
+        // Local items should only show "Copy to Bitwarden vault" if we are successfully syncing: =
         is AuthenticatorItem.Source.Local -> when (sharedVerificationCodesState) {
             SharedVerificationCodesState.AppNotInstalled,
             SharedVerificationCodesState.Error,

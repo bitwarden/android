@@ -425,7 +425,9 @@ Das Scannen erfolgt automatisch.</string>
     <string name="privacy_policy">Datenschutzbestimmungen</string>
     <string name="passkey_management">Passkey-Verwaltung</string>
     <string name="autofill_services">Auto-Ausfüllen-Dienste</string>
-    <string name="inline_autofill">Inline Auto-Ausfüllen verwenden</string>
+    <string name="display_autofill_suggestions">Display autofill suggestions</string>
+    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
+    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
     <string name="accessibility">Bedienungshilfen verwenden</string>
     <string name="accessibility_description5">Benötigt für die Verwendung der Auto-Ausfüllen-Schnellaktionskachel.</string>
     <string name="personal_ownership_policy_in_effect">Eine Organisationsrichtlinie beeinflusst deine Eigentümer-Optionen.</string>
@@ -454,7 +456,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="password_info">Optional ein Passwort verlangen, damit Benutzer auf dieses Send zugreifen können.</string>
     <string name="remove_password">Passwort entfernen</string>
     <string name="removing_send_password">Passwort wird entfernt</string>
-    <string name="password_removed">Password removed</string>
+    <string name="password_removed">Passwort entfernt</string>
     <string name="add_a_send">Neues Send</string>
     <string name="copy_link">Link kopieren</string>
     <string name="share_link">Link teilen</string>
@@ -674,7 +676,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="privacy_policy_description_long">Lies unsere Datenschutzerklärung auf bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Entdecke mehr Funktionen deines Bitwarden-Kontos in der Web-App.</string>
     <string name="learn_about_organizations_description_long">Bitwarden erlaubt es dir, deine Tresor-Einträge mit anderen zu teilen, indem du eine Organisation verwendest. Erfahre mehr auf der bitwarden.com Website.</string>
-    <string name="created_x">Created %1$s</string>
+    <string name="created_x">%1$s erstellt</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Deine Organisation verlangt, dass du ein Master-Passwort festlegen musst.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Richte eine Entsperroption ein, um deine Aktion bei Tresor-Timeout zu ändern.</string>
     <string name="save_passkey_as_new_login">Passkey als neue Zugangsdaten speichern</string>
@@ -907,9 +909,10 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Der Passkey-Vorgang ist fehlgeschlagen, da kein Eintrag ausgewählt wurde.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Der Passkey-Vorgang ist fehlgeschlagen, weil die Anfrage nicht unterstützt wird.</string>
     <string name="self_host_server_url">Selbst gehostete Server-URL</string>
+    <string name="use_brave_autofill_integration">Brave Auto-Ausfüllen-Integration verwenden</string>
     <string name="use_chrome_autofill_integration">Chrome Auto-Ausfüllen-Integration verwenden</string>
     <string name="use_chrome_beta_autofill_integration">Chrome Auto-Ausfüllen-Integration verwenden (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Verbessert das Ausfüllen von Zugangsdaten für unterstützte Websites in Chrome. Einmal aktiviert, wirst du zu den Chrome-Einstellungen weitergeleitet, um das Auto-Ausfüllen von Drittanbietern zu aktivieren.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Verbessert das Ausfüllen von Zugangsdaten für unterstützte Websites in ausgewählten Browsern. Einmal aktiviert, wirst du zu den Browsereinstellungen weitergeleitet, um Auto-Ausfüllen durch Drittanbieter zu aktivieren.</string>
     <string name="show_more">Mehr anzeigen</string>
     <string name="no_folder">Kein Ordner</string>
     <string name="show_less">Weniger anzeigen</string>
@@ -979,5 +982,14 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="about_privileged_applications">Über autorisierte Apps</string>
     <string name="learn_more_about_privileged_apps">Erfahre mehr über autorisierte Apps</string>
     <string name="privileged_apps">Autorisierte Apps</string>
-    <string name="unrecognized_browser">Unrecognized browser</string>
+    <string name="unrecognized_browser">Unbekannter Browser</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Erfahre mehr über die Verwendung von Passkeys mit Bitwarden.</string>
+    <string name="google">Google</string>
+    <string name="the_community">der Community</string>
+    <string name="you">DU</string>
+    <string name="all_trusted_apps">Alle vertrauenswürdigen Apps</string>
+    <string name="trusted_by_x">Vertraut von %s</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Bist du sicher, dass du aufhören willst, %s zu vertrauen?</string>
+    <string name="installed_apps">Installierte Apps</string>
+    <string name="delete_x">%s löschen</string>
 </resources>

@@ -31,11 +31,11 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionRow
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.components.model.TooltipData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -118,7 +118,7 @@ fun BitwardenMultiSelectButton(
                         modifier = Modifier.size(16.dp),
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_tooltip_small),
+                            painter = painterResource(id = BitwardenDrawable.ic_tooltip_small),
                             contentDescription = it.contentDescription,
                         )
                     }
@@ -130,7 +130,7 @@ fun BitwardenMultiSelectButton(
         enabled = shouldShowDialog,
         trailingIcon = {
             Icon(
-                painter = painterResource(id = R.drawable.ic_region_select_dropdown),
+                painter = painterResource(id = BitwardenDrawable.ic_region_select_dropdown),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
             )

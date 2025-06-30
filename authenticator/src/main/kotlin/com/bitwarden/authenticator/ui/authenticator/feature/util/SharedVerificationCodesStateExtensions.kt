@@ -1,10 +1,10 @@
-package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util
+package com.bitwarden.authenticator.ui.authenticator.feature.util
 
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
 import com.bitwarden.ui.util.asText
 
 /**
@@ -23,7 +23,7 @@ fun SharedVerificationCodesState.Success.toSharedCodesDisplayState(
             it.toDisplayItem(
                 alertThresholdSeconds = alertThresholdSeconds,
                 // Always map based on Error state, because shared codes will never
-                // show "Move to Bitwarden" action.
+                // show "Copy to Bitwarden vault" action.
                 sharedVerificationCodesState = SharedVerificationCodesState.Error,
             ),
         )

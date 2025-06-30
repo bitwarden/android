@@ -1,7 +1,6 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.search
 
 import androidx.lifecycle.SavedStateHandle
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.manager.util.createMockVerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
@@ -9,9 +8,11 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.Authentic
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.util.itemsOrEmpty
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -66,7 +67,7 @@ class ItemSearchViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             ItemSearchState.ViewState.Content(
-                displayItems = SHARED_AND_LOCAL_DISPLAY_ITEMS,
+                itemList = SHARED_AND_LOCAL_DISPLAY_ITEMS,
             ),
             viewModel.stateFlow.value.viewState,
         )
@@ -84,7 +85,7 @@ class ItemSearchViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             ItemSearchState.ViewState.Content(
-                displayItems = listOf(SHARED_AND_LOCAL_DISPLAY_ITEMS[1]),
+                itemList = listOf(SHARED_AND_LOCAL_DISPLAY_ITEMS[1]),
             ),
             viewModel.stateFlow.value.viewState,
         )
@@ -116,7 +117,7 @@ private val LOCAL_ITEMS = listOf(
 
 private val SHARED_ITEMS = listOf(
     VerificationCodeItem(
-        "123456",
+        code = "123456",
         periodSeconds = 60,
         timeLeftSeconds = 30,
         issueTime = 1,
@@ -133,24 +134,36 @@ private val SHARED_ITEMS = listOf(
 )
 
 private val SHARED_AND_LOCAL_DISPLAY_ITEMS = listOf(
-    ItemSearchState.DisplayItem(
+    VerificationCodeDisplayItem(
         id = SHARED_ITEMS[0].id,
         authCode = SHARED_ITEMS[0].code,
         title = SHARED_ITEMS[0].issuer!!,
         periodSeconds = SHARED_ITEMS[0].periodSeconds,
         timeLeftSeconds = SHARED_ITEMS[0].timeLeftSeconds,
         alertThresholdSeconds = 7,
-        startIcon = IconData.Local(iconRes = R.drawable.ic_login_item),
+        startIcon = IconData.Local(
+            iconRes = BitwardenDrawable.ic_login_item,
+            testTag = "BitwardenIcon",
+        ),
         subtitle = SHARED_ITEMS[0].label,
+        favorite = false,
+        allowLongPressActions = false,
+        showMoveToBitwarden = false,
     ),
-    ItemSearchState.DisplayItem(
+    VerificationCodeDisplayItem(
         id = LOCAL_ITEMS[0].id,
         authCode = LOCAL_ITEMS[0].code,
         title = LOCAL_ITEMS[0].issuer!!,
         periodSeconds = LOCAL_ITEMS[0].periodSeconds,
         timeLeftSeconds = LOCAL_ITEMS[0].timeLeftSeconds,
         alertThresholdSeconds = 7,
-        startIcon = IconData.Local(iconRes = R.drawable.ic_login_item),
+        startIcon = IconData.Local(
+            iconRes = BitwardenDrawable.ic_login_item,
+            testTag = "BitwardenIcon",
+        ),
         subtitle = LOCAL_ITEMS[0].label,
+        favorite = false,
+        allowLongPressActions = true,
+        showMoveToBitwarden = true,
     ),
 )

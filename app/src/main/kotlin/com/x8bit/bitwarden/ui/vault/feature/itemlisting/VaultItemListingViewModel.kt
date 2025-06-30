@@ -94,7 +94,6 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toSendItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toVaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.updateWithAdditionalDataIfNecessary
-import com.x8bit.bitwarden.ui.vault.feature.vault.VaultAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
@@ -116,7 +115,6 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import javax.inject.Inject
-import kotlin.collections.map
 
 /**
  * Manages [VaultItemListingState], handles [VaultItemListingsAction],
@@ -1985,11 +1983,11 @@ class VaultItemListingViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(
-                dialogState = when (error) {
-                    is ValidateOriginResult.Error.PrivilegedAppNotAllowed -> {
-                        @Suppress("MaxLineLength")
+                dialogState = when {
+                    shouldShowTrustPrompt(error) -> {
                         VaultItemListingState.DialogState.TrustPrivilegedAddPrompt(
-                            message = R.string.passkey_operation_failed_because_browser_x_is_not_trusted
+                            message = R.string
+                                .passkey_operation_failed_because_browser_x_is_not_trusted
                                 .asText(callingAppInfo.packageName),
                             selectedCipherId = selectedCipherId,
                         )
@@ -2005,6 +2003,10 @@ class VaultItemListingViewModel @Inject constructor(
             )
         }
     }
+
+    private fun shouldShowTrustPrompt(error: ValidateOriginResult.Error): Boolean =
+        error is ValidateOriginResult.Error.PrivilegedAppNotAllowed &&
+            featureFlagManager.getFeatureFlag(FlagKey.UserManagedPrivilegedApps)
 
     private fun handleFido2AssertionDataReceive(
         action: VaultItemListingsAction.Internal.Fido2AssertionDataReceive,

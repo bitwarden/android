@@ -14,9 +14,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 
 /**
  * Represents a Bitwarden-styled text field accompanied by a series of actions.
@@ -91,7 +91,7 @@ private fun BitwardenTextFieldWithActions_preview() {
             onValueChange = {},
             actions = {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_tooltip),
+                    painter = painterResource(id = BitwardenDrawable.ic_tooltip),
                     contentDescription = "Action 1",
                 )
             },
