@@ -215,9 +215,8 @@ class CipherViewExtensionsTest {
                     ),
                     totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
                     canViewPassword = false,
-                    fido2CredentialCreationDateTime = R.string.created_xy.asText(
-                        "10/27/23",
-                        "12:00 PM",
+                    fido2CredentialCreationDateTime = R.string.created_x.asText(
+                        "Oct 27, 2023, 12:00 PM",
                     ),
                 ),
             ),
@@ -277,9 +276,8 @@ class CipherViewExtensionsTest {
                     ),
                     totp = totp,
                     canViewPassword = false,
-                    fido2CredentialCreationDateTime = R.string.created_xy.asText(
-                        "10/27/23",
-                        "12:00 PM",
+                    fido2CredentialCreationDateTime = R.string.created_x.asText(
+                        "Oct 27, 2023, 12:00 PM",
                     ),
                 ),
             ),

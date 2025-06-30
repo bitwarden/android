@@ -23,9 +23,11 @@ class FillRequestExtensionsTest {
     @Test
     fun `getInlinePresentationSpecs should return empty list when request is null`() {
         // Setup
-        val autofillAppInfo: AutofillAppInfo = mockk {
-            every { sdkInt } returns 30
-        }
+        val autofillAppInfo = AutofillAppInfo(
+            context = mockk(),
+            packageName = PACKAGE_NAME,
+            sdkInt = 30,
+        )
         val expected: List<InlinePresentationSpec> = emptyList()
 
         // Test
@@ -41,9 +43,11 @@ class FillRequestExtensionsTest {
     @Test
     fun `getInlinePresentationSpecs should return empty list when disabled`() {
         // Setup
-        val autofillAppInfo: AutofillAppInfo = mockk {
-            every { sdkInt } returns 30
-        }
+        val autofillAppInfo = AutofillAppInfo(
+            context = mockk(),
+            packageName = PACKAGE_NAME,
+            sdkInt = 30,
+        )
         val expected: List<InlinePresentationSpec> = emptyList()
 
         // Test
@@ -169,3 +173,4 @@ class FillRequestExtensionsTest {
 }
 
 private const val MAX_INLINE_SUGGESTIONS_COUNT: Int = 42
+private const val PACKAGE_NAME: String = "com.x8bit.bitwarden"

@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import android.content.SharedPreferences
+import com.bitwarden.core.util.getBinaryLongFromZoneDateTime
+import com.bitwarden.core.util.getZoneDateTimeFromBinaryLong
 import com.bitwarden.data.datasource.disk.BaseDiskSource
-import com.x8bit.bitwarden.data.platform.util.getBinaryLongFromZoneDateTime
-import com.x8bit.bitwarden.data.platform.util.getZoneDateTimeFromBinaryLong
 import java.time.ZonedDateTime
 
 private const val CURRENT_PUSH_TOKEN_KEY = "pushCurrentToken"

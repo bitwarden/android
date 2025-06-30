@@ -15,6 +15,7 @@ import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenTwoBut
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 
 /**
  * Represents a row of text that can be clicked on and contains an external link.
@@ -52,7 +53,7 @@ fun BitwardenExternalLinkRow(
     ) {
         Icon(
             modifier = Modifier.mirrorIfRtl(),
-            painter = rememberVectorPainter(id = R.drawable.ic_external_link),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ic_external_link),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface,
         )

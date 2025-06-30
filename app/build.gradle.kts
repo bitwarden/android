@@ -10,6 +10,7 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.androidx.room)
     // Crashlytics is enabled for all builds initially but removed for FDroid builds in gradle and
     // standardDebug builds in the merged manifest.
     alias(libs.plugins.crashlytics)
@@ -46,6 +47,10 @@ android {
     namespace = "com.x8bit.bitwarden"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
+
     defaultConfig {
         applicationId = "com.x8bit.bitwarden"
         minSdk = libs.versions.minSdk.get().toInt()
@@ -54,11 +59,6 @@ android {
         versionName = "2025.4.0"
 
         setProperty("archivesBaseName", "com.x8bit.bitwarden")
-
-        ksp {
-            // The location in which the generated Room Database Schemas will be stored in the repo.
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -99,6 +99,7 @@ android {
             applicationIdSuffix = ".beta"
             isDebuggable = false
             isMinifyEnabled = true
+            isShrinkResources = true
             matchingFallbacks += listOf("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -111,6 +112,7 @@ android {
         release {
             isDebuggable = false
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -193,7 +195,7 @@ android {
 
 kotlin {
     compilerOptions {
-        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
+        jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
     }
 }
 
@@ -296,8 +298,7 @@ tasks {
         useJUnitPlatform()
         maxHeapSize = "2g"
         maxParallelForks = Runtime.getRuntime().availableProcessors()
-        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC"
-        android.sourceSets["main"].res.srcDirs("src/test/res")
+        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" + "-Duser.country=US"
     }
 }
 

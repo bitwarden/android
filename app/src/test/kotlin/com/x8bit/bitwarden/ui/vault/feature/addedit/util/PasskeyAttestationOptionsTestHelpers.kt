@@ -28,7 +28,7 @@ fun createMockPasskeyAttestationOptions(
     pubKeyCredParams = listOf(
         PasskeyAttestationOptions.PublicKeyCredentialParameters(
             type = "PublicKeyCredentialParametersType-$number",
-            alg = number.toLong(),
+            alg = number.toDouble(),
         ),
     ),
     relyingParty = PasskeyAttestationOptions.PublicKeyCredentialRpEntity(

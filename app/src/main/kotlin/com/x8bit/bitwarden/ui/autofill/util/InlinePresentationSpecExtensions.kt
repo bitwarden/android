@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.autofill.inline.UiVersions
 import androidx.autofill.inline.v1.InlineSuggestionUi
 import androidx.compose.ui.graphics.toArgb
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
@@ -64,7 +65,7 @@ fun InlinePresentationSpec.createVaultItemInlinePresentationOrNull(
         } else {
             autofillAppInfo.context.getString(R.string.my_vault)
         },
-        iconRes = R.drawable.icon,
+        iconRes = BitwardenDrawable.icon,
         shouldTintIcon = false,
     )
 

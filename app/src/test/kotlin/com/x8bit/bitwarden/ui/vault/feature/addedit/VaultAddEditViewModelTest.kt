@@ -1876,7 +1876,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             coEvery {
                 vaultRepository.createCipherInOrganization(any(), any())
-            } returns CreateCipherResult.Error(error = Throwable("Oh dang"))
+            } returns CreateCipherResult.Error(errorMessage = null, error = Throwable("Oh dang"))
             viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
             assertEquals(
@@ -1884,6 +1884,61 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     dialog = VaultAddEditState.DialogState.Generic(
                         title = R.string.internet_connection_required_title.asText(),
                         message = R.string.internet_connection_required_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `in edit mode, SaveClick should show network error message in dialog when not null`() =
+        runTest {
+            val stateWithName = createVaultAddItemState(
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                ),
+            )
+            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
+
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            )
+
+            coEvery {
+                vaultRepository.createCipherInOrganization(any(), any())
+            } returns CreateCipherResult.Error(
+                errorMessage = "Network error message",
+                error = null,
+            )
+            viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+
+            assertEquals(
+                stateWithName.copy(
+                    dialog = VaultAddEditState.DialogState.Generic(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = "Network error message".asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+
+            // Verify default error message is shown when errorMessage is null
+            coEvery {
+                vaultRepository.createCipherInOrganization(any(), any())
+            } returns CreateCipherResult.Error(
+                errorMessage = null,
+                error = null,
+            )
+            viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+            assertEquals(
+                stateWithName.copy(
+                    dialog = VaultAddEditState.DialogState.Generic(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.generic_error_message.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -2124,9 +2179,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     originalCipher = cipherView,
                 ),
                 typeContentViewState = createLoginTypeContentViewState(
-                    fido2CredentialCreationDateTime = R.string.created_xy.asText(
-                        "05/08/24",
-                        "14:30 PM",
+                    fido2CredentialCreationDateTime = R.string.created_x.asText(
+                        "May 08, 2024, 4:30 PM",
                     ),
                 ),
                 createCredentialRequest = mockFido2CredentialRequest,
@@ -2804,9 +2858,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 savedStateHandle = createSavedStateHandleWithState(
                     state = createVaultAddItemState(
                         typeContentViewState = createLoginTypeContentViewState(
-                            fido2CredentialCreationDateTime = R.string.created_xy.asText(
-                                "05/08/24",
-                                "14:30 PM",
+                            fido2CredentialCreationDateTime = R.string.created_x.asText(
+                                "May 08, 2024, 4:30 PM",
                             ),
                         ),
                     ),

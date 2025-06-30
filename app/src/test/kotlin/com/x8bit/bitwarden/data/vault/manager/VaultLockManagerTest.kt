@@ -748,6 +748,7 @@ class VaultLockManagerTest {
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = userAutoUnlockKey,
                     ),
+                    signingKey = null,
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
@@ -772,6 +773,7 @@ class VaultLockManagerTest {
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = userAutoUnlockKey,
                     ),
+                    signingKey = null,
                 ),
             )
             trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
@@ -904,6 +906,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -969,6 +972,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
                 vaultSdkSource.initializeOrganizationCrypto(
@@ -1002,6 +1006,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1078,6 +1083,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
                 vaultSdkSource.initializeOrganizationCrypto(
@@ -1112,6 +1118,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             } returns InitializeCryptoResult.AuthenticationError(error = error).asSuccess()
@@ -1158,6 +1165,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             }
@@ -1185,6 +1193,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1238,6 +1247,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             }
@@ -1272,6 +1282,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             } returns error.asFailure()
@@ -1317,6 +1328,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             }
@@ -1344,6 +1356,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1396,6 +1409,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             }
@@ -1429,6 +1443,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1488,6 +1503,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             }
@@ -1613,6 +1629,7 @@ class VaultLockManagerTest {
                         password = masterPassword,
                         userKey = userKey,
                     ),
+                    signingKey = null,
                 ),
             )
         } coAnswers {
@@ -1659,6 +1676,7 @@ class VaultLockManagerTest {
                         password = masterPassword,
                         userKey = userKey,
                     ),
+                    signingKey = null,
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
@@ -1694,6 +1712,7 @@ class VaultLockManagerTest {
                         password = masterPassword,
                         userKey = userKey,
                     ),
+                    signingKey = null,
                 ),
             )
         }

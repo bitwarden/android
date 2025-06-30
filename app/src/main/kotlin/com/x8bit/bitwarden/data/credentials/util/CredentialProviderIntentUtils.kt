@@ -7,10 +7,10 @@ import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CREDENTIAL_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_USER_ID
@@ -21,7 +21,7 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_UV_PERFORMED_DUR
  * [CredentialManager] creation process.
  */
 fun Intent.getCreateCredentialRequestOrNull(): CreateCredentialRequest? {
-    if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) return null
+    if (!isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) return null
 
     val systemRequest = PendingIntentHandler.retrieveProviderCreateCredentialRequest(this)
         ?: return null
@@ -48,7 +48,7 @@ fun Intent.getCreateCredentialRequestOrNull(): CreateCredentialRequest? {
  * credential authentication process.
  */
 fun Intent.getFido2AssertionRequestOrNull(): Fido2CredentialAssertionRequest? {
-    if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) return null
+    if (!isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) return null
 
     val systemRequest = PendingIntentHandler
         .retrieveProviderGetCredentialRequest(this)
@@ -84,7 +84,7 @@ fun Intent.getFido2AssertionRequestOrNull(): Fido2CredentialAssertionRequest? {
  * [CredentialManager] credential lookup process.
  */
 fun Intent.getGetCredentialsRequestOrNull(): GetCredentialsRequest? {
-    if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) return null
+    if (!isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) return null
 
     val systemRequest = PendingIntentHandler
         .retrieveBeginGetCredentialRequest(this)

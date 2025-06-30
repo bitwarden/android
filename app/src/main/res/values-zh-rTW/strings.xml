@@ -296,8 +296,9 @@
     <string name="autofill_and_save">自動填入並儲存</string>
     <string name="organization">組織</string>
     <string name="try_again">再試一次</string>
-    <string name="date_password_updated">密碼更新於</string>
-    <string name="date_updated">更新於</string>
+    <string name="created">Created: %1$s</string>
+    <string name="password_last_updated">Password last updated: %1$s</string>
+    <string name="last_edited">Last edited: %1$s</string>
     <string name="invalid_email">無效的電子郵件地址。</string>
     <string name="cards">支付卡</string>
     <string name="identities">身分</string>
@@ -424,7 +425,9 @@
     <string name="privacy_policy">隱私權政策</string>
     <string name="passkey_management">密碼金鑰管理</string>
     <string name="autofill_services">自動填入服務</string>
-    <string name="inline_autofill">使用內嵌式自動填入</string>
+    <string name="display_autofill_suggestions">Display autofill suggestions</string>
+    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
+    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
     <string name="accessibility">使用無障礙</string>
     <string name="accessibility_description5">使用自動填入快速動作方塊所必須</string>
     <string name="personal_ownership_policy_in_effect">組織原則正在影響您的擁有權選項。</string>
@@ -453,7 +456,7 @@
     <string name="password_info">選用。使用者需提供密碼才能存取此 Send。</string>
     <string name="remove_password">移除密碼</string>
     <string name="removing_send_password">正在移除密碼</string>
-    <string name="send_password_removed">已移除密碼。</string>
+    <string name="password_removed">Password removed</string>
     <string name="add_a_send">新增 Send</string>
     <string name="copy_link">複製連結</string>
     <string name="share_link">共用連結</string>
@@ -466,6 +469,7 @@
     <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">您確定要刪除此 Send 嗎？</string>
     <string name="send_deleted">已刪除 Send</string>
+    <string name="send_updated">Send updated</string>
     <string name="one_day">1 天</string>
     <string name="two_days">2 天</string>
     <string name="three_days">3 天</string>
@@ -547,6 +551,8 @@
     <string name="device_type">裝置類型</string>
     <string name="ip_address">IP 位址</string>
     <string name="time">時間</string>
+    <string name="select_time">Select time</string>
+    <string name="switch_input_mode">Switch input mode</string>
     <string name="confirm_log_in">確認登入</string>
     <string name="deny_log_in">拒絕登入</string>
     <string name="log_in_denied">登入被拒絕</string>
@@ -671,7 +677,7 @@
     <string name="privacy_policy_description_long">在 bitwarden.com 上查看我們的隱私權政策。</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">在 Web 應用程式上探索 Bitwarden 帳戶的更多功能。</string>
     <string name="learn_about_organizations_description_long">Bitwarden 可讓您透過組織與其他人共用您的密碼庫項目。請造訪 bitwarden.com 網站以了解更多資訊。</string>
-    <string name="created_xy">建立於 %1$s, %2$s</string>
+    <string name="created_x">Created %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">您的組織要求您設定主密碼。</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">設定一個解鎖方式來變更您的密碼庫逾時動作。</string>
     <string name="save_passkey_as_new_login">將密碼金鑰儲存為新的登入資訊</string>
@@ -904,9 +910,10 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
     <string name="self_host_server_url">Self-host server URL</string>
+    <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
     <string name="use_chrome_beta_autofill_integration">Use Chrome autofill integration (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Improves login filling for supported websites on Chrome. Once enabled, you’ll be directed to Chrome settings to enable third-party autofill.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
     <string name="show_more">Show more</string>
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
@@ -963,4 +970,27 @@
     <string name="dynamic_colors">Dynamic colors</string>
     <string name="dynamic_colors_description">Apply dynamic colors based on your wallpaper</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamic colors uses the system colors and may not meet all accessibility guidelines.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
+    <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
+    <string name="trust">Trust</string>
+    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
+    <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
+    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
+    <string name="trusted_by_you">Trusted by You</string>
+    <string name="trusted_by_the_community">Trusted by the Community</string>
+    <string name="trusted_by_google">Trusted by Google</string>
+    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through web browsers trusted by Google or the Bitwarden community.</string>
+    <string name="about_privileged_applications">About privileged applications</string>
+    <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
+    <string name="privileged_apps">Privileged apps</string>
+    <string name="unrecognized_browser">Unrecognized browser</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
+    <string name="google">Google</string>
+    <string name="the_community">the Community</string>
+    <string name="you">YOU</string>
+    <string name="all_trusted_apps">All trusted apps</string>
+    <string name="trusted_by_x">Trusted by %s</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
+    <string name="installed_apps">Installed apps</string>
+    <string name="delete_x">Delete %s</string>
 </resources>

@@ -7,8 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.core.data.repository.util.mapNullable
+import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -29,8 +31,6 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemStateData
@@ -1359,8 +1359,8 @@ data class VaultItemState(
              * Content data that is common for all item types.
              *
              * @property name The name of the item.
-             * @property lastUpdated A formatted date string indicating when the item was last
-             * updated.
+             * @param created A formatted string indicating when the item was created.
+             * @property lastUpdated A formatted string indicating when the item was last updated.
              * @property notes Contains general notes taken by the user.
              * @property customFields A list of custom fields that user has added.
              * @property requiresCloneConfirmation Indicates user confirmation is required when
@@ -1377,7 +1377,8 @@ data class VaultItemState(
             @Parcelize
             data class Common(
                 val name: String,
-                val lastUpdated: String,
+                val created: Text,
+                val lastUpdated: Text,
                 val notes: String?,
                 val customFields: List<Custom>,
                 val requiresCloneConfirmation: Boolean,
@@ -1495,7 +1496,7 @@ data class VaultItemState(
                     val username: String?,
                     val passwordData: PasswordData?,
                     val uris: List<UriData>,
-                    val passwordRevisionDate: String?,
+                    val passwordRevisionDate: Text?,
                     val totpCodeItemData: TotpCodeItemData?,
                     val isPremiumUser: Boolean,
                     val canViewTotpCode: Boolean,

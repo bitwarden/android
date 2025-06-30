@@ -296,8 +296,9 @@ Skaneerimine toimub automaatselt.</string>
     <string name="autofill_and_save">Täida ja salvesta</string>
     <string name="organization">Organisatsioon</string>
     <string name="try_again">Proovi uuesti</string>
-    <string name="date_password_updated">Parool on uuendatud</string>
-    <string name="date_updated">Uuendatud</string>
+    <string name="created">Created: %1$s</string>
+    <string name="password_last_updated">Password last updated: %1$s</string>
+    <string name="last_edited">Last edited: %1$s</string>
     <string name="invalid_email">Vigane e-posti aadress.</string>
     <string name="cards">Kaardid</string>
     <string name="identities">Identiteedid</string>
@@ -424,7 +425,9 @@ Skaneerimine toimub automaatselt.</string>
     <string name="privacy_policy">Privaatsuspoliitika</string>
     <string name="passkey_management">Pääsuvõtme haldamine</string>
     <string name="autofill_services">Automaattäite teenused</string>
-    <string name="inline_autofill">Kasuta klaviatuuriülest sisestust</string>
+    <string name="display_autofill_suggestions">Display autofill suggestions</string>
+    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
+    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
     <string name="accessibility">Kasuta juurdepääsetavust</string>
     <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
     <string name="personal_ownership_policy_in_effect">Organisatsiooni poliitika piirab kirje omaniku valikuvõimalusi.</string>
@@ -453,7 +456,7 @@ Skaneerimine toimub automaatselt.</string>
     <string name="password_info">Soovi korral nõua parooli, millega Sendile ligi pääseb.</string>
     <string name="remove_password">Eemalda parool</string>
     <string name="removing_send_password">Parooli eemaldamine</string>
-    <string name="send_password_removed">Parool on eemaldatud</string>
+    <string name="password_removed">Password removed</string>
     <string name="add_a_send">Lisa Send</string>
     <string name="copy_link">Kopeeri link</string>
     <string name="share_link">Jaga linki</string>
@@ -466,6 +469,7 @@ Skaneerimine toimub automaatselt.</string>
     <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Soovid tõesti selle Sendi kustutada?</string>
     <string name="send_deleted">Send on kustutatud.</string>
+    <string name="send_updated">Send updated</string>
     <string name="one_day">1 päev</string>
     <string name="two_days">2 päeva</string>
     <string name="three_days">3 päeva</string>
@@ -547,6 +551,8 @@ Skaneerimine toimub automaatselt.</string>
     <string name="device_type">Seadme tüüp</string>
     <string name="ip_address">IP aadress</string>
     <string name="time">Aeg</string>
+    <string name="select_time">Select time</string>
+    <string name="switch_input_mode">Switch input mode</string>
     <string name="confirm_log_in">Kinnita sisselogimine</string>
     <string name="deny_log_in">Tühista sisselogimine</string>
     <string name="log_in_denied">Sisselogimine on tühistatud</string>
@@ -657,7 +663,7 @@ Soovid selle konto peale lülituda?</string>
     <string name="account_fingerprint_phrase">Account fingerprint phrase</string>
     <string name="passkey_management_explanation_long">Kasuta Bitwardenit uute pääsuvõtmete salvestamiseks hoidlas ja nendega sisse logimiseks.</string>
     <string name="autofill_services_explanation_long">Android Autofill Raamistiku kasutatakse teistesse rakendustesse sisselogimisel andmete automaatse täitmise lihtsustamiseks.</string>
-    <string name="use_inline_autofill_explanation_long">Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</string>
+    <string name="use_inline_autofill_explanation_long">Choose how your autofill suggestions will appear when you sign in to other apps on your device.</string>
     <string name="additional_options">Muud valikud</string>
     <string name="continue_to_web_app">Jätka veebibrauseris?</string>
     <string name="continue_to_x">Ava %1$s?</string>
@@ -671,7 +677,7 @@ Soovid selle konto peale lülituda?</string>
     <string name="privacy_policy_description_long">Vaadake meie privaatsuspoliitikat veebilehel bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Uuri ka teisi Bitwardeni konto funktsioone veebibrauseris.</string>
     <string name="learn_about_organizations_description_long">Bitwarden võimaldab sul hoidla sisu teiste kasutajatega jagada, kasutades selleks organisatsiooni kontot. Uuri lähemalt www.bitwarden.com.</string>
-    <string name="created_xy">Loodud %1$s, %2$s</string>
+    <string name="created_x">Created %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Sinu organisatsioon nõuab sult ülemparooli seadistamist.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Hoidla ajalõpu muutmiseks vali esmalt lahtilukustamise meetod.</string>
     <string name="save_passkey_as_new_login">Salvesta pääsuvõti uude kirjesse</string>
@@ -904,9 +910,10 @@ Soovid selle konto peale lülituda?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
     <string name="self_host_server_url">Self-host server URL</string>
+    <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
     <string name="use_chrome_beta_autofill_integration">Use Chrome autofill integration (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Improves login filling for supported websites on Chrome. Once enabled, you’ll be directed to Chrome settings to enable third-party autofill.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
     <string name="show_more">Show more</string>
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
@@ -963,4 +970,27 @@ Soovid selle konto peale lülituda?</string>
     <string name="dynamic_colors">Dynamic colors</string>
     <string name="dynamic_colors_description">Apply dynamic colors based on your wallpaper</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamic colors uses the system colors and may not meet all accessibility guidelines.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
+    <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
+    <string name="trust">Trust</string>
+    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
+    <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
+    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
+    <string name="trusted_by_you">Trusted by You</string>
+    <string name="trusted_by_the_community">Trusted by the Community</string>
+    <string name="trusted_by_google">Trusted by Google</string>
+    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through web browsers trusted by Google or the Bitwarden community.</string>
+    <string name="about_privileged_applications">About privileged applications</string>
+    <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
+    <string name="privileged_apps">Privileged apps</string>
+    <string name="unrecognized_browser">Unrecognized browser</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
+    <string name="google">Google</string>
+    <string name="the_community">the Community</string>
+    <string name="you">YOU</string>
+    <string name="all_trusted_apps">All trusted apps</string>
+    <string name="trusted_by_x">Trusted by %s</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
+    <string name="installed_apps">Installed apps</string>
+    <string name="delete_x">Delete %s</string>
 </resources>

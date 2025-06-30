@@ -18,7 +18,7 @@
     <string name="email">ایمیل</string>
     <string name="email_address">نشانی ایمیل</string>
     <string name="enter_pin">کد پین را وارد کنید</string>
-    <string name="favorites">علاقه‌مندی‌ها</string>
+    <string name="favorites">مورد علاقه‌ها</string>
     <string name="folder">پوشه</string>
     <string name="folder_created">پوشه جدید ساخته شد.</string>
     <string name="folder_deleted">پوشه حذف شد.</string>
@@ -64,7 +64,7 @@
     <string name="website_uri">وب‌سایت (نشانی اینترنتی)</string>
     <string name="username">نام کاربری</string>
     <string name="validation_field_required">فیلد %1$s ضروریست.</string>
-    <string name="you_must_attach_a_file_to_save_this_send">You must attach a file to save this send.</string>
+    <string name="you_must_attach_a_file_to_save_this_send">برای ارسال این پیام باید یک پرونده پیوست کنید.</string>
     <string name="value_has_been_copied">%1$s کپی شد.</string>
     <string name="verify_master_password">تأیید کلمه عبور اصلی</string>
     <string name="verify_pin">تأیید کد پین</string>
@@ -126,7 +126,7 @@
     <string name="new_ssh_key">کلید SSH جدید</string>
     <string name="no_text_sends">هیچ ارسال متنی در گاوصندوق‌تان موجود نیست.</string>
     <string name="no_file_sends">هیچ ارسال پرونده‌ای در گاوصندوق‌تان موجود نیست.</string>
-    <string name="no_ssh_keys">هیچ ارسال کلید SSH در گاوصندوق‌تان موجود نیست.</string>
+    <string name="no_ssh_keys">هیچ کلید SSH در گاوصندوق‌تان موجود نیست.</string>
     <string name="new_text_send">ارسال متن جدید</string>
     <string name="new_file_send">ارسال پرونده جدید</string>
     <string name="no_username">بدون نام کاربری</string>
@@ -191,7 +191,7 @@
     <string name="point_your_camera_at_the_qr_code">دوربین دستگاه‌تان را به سمت کد QR بگیرید.
 اسکن به صورت خودکار انجام می‌شود.</string>
     <string name="copy_totp">کپی TOTP</string>
-    <string name="copy_totp_automatically_description">اگر یک ورود دارای یک کلید احراز هویت باشد، هنگام پر کردن خودکار ورود، کد تأیید TOTP را در حافظهٔ موقت خود کپی کن.</string>
+    <string name="copy_totp_automatically_description">اگر یک ورود دارای یک کلید احراز هویت باشد، هنگام پر کردن خودکار ورود، کد تأیید TOTP را در حافظه موقت خود کپی کن.</string>
     <string name="copy_totp_automatically">TOTP را به صورت خودکار کپی کن</string>
     <string name="premium_required">برای استفاده از این ویژگی عضویت پرمیوم لازم است.</string>
     <string name="attachment_deleted">پیوست حذف شد</string>
@@ -201,7 +201,7 @@
     <string name="no_attachments">هیچ پیوستی وجود ندارد.</string>
     <string name="file_source">منبع پرونده</string>
     <string name="max_file_size">بیشترین حجم پرونده ۱۰۰ مگابایت است.</string>
-    <string name="required_max_file_size">Required. Maximum file size is 100 MB.</string>
+    <string name="required_max_file_size">الزامی است. حداکثر اندازه پرونده ۱۰۰ مگابایت است.</string>
     <string name="learn_more">بیشتر بدانید</string>
     <string name="api_url">نشانی اینترنتی سرور API</string>
     <string name="client_certificate_mtls">گواهی‌نامه مشتری (mTLS)</string>
@@ -266,7 +266,7 @@
     <string name="expiration">انقضاء</string>
     <string name="show_website_icons">نمایش نمادهای وب‌سایت</string>
     <string name="show_website_icons_description">نمایش تصویری قابل تشخیص در کنار هر ورود</string>
-    <string name="icons_url">نشانی اینترنتی سرور آیکون‌ها</string>
+    <string name="icons_url">نشانی اینترنتی سرور نمادها</string>
     <string name="vault_is_locked">گاوصندوق قفل شد</string>
     <string name="go_to_my_vault">برو به گاوصندوق من</string>
     <string name="collections">مجموعه‌ها</string>
@@ -296,8 +296,9 @@
     <string name="autofill_and_save">پر کردن خودکار و ذخیره</string>
     <string name="organization">سازمان</string>
     <string name="try_again">دوباره تلاش کن</string>
-    <string name="date_password_updated">کلمه عبور به‌روزرسانی شد</string>
-    <string name="date_updated">به‌روزرسانی شد</string>
+    <string name="created">Created: %1$s</string>
+    <string name="password_last_updated">Password last updated: %1$s</string>
+    <string name="last_edited">Last edited: %1$s</string>
     <string name="invalid_email">نشانی ایمیل نامعتبر است.</string>
     <string name="cards">کارت‌ها</string>
     <string name="identities">هویت‌ها</string>
@@ -424,7 +425,9 @@
     <string name="privacy_policy">سیاست حفظ حریم خصوصی</string>
     <string name="passkey_management">مدیریت کلید عبور</string>
     <string name="autofill_services">سرویس‌های پر کردن خودکار</string>
-    <string name="inline_autofill">از پر کردن خودکار درون خطی استفاده کنید</string>
+    <string name="display_autofill_suggestions">Display autofill suggestions</string>
+    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
+    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
     <string name="accessibility">از قابلیت دسترسی استفاده کنید</string>
     <string name="accessibility_description5">برای استفاده از کاشی اقدام سریع پر کردن خودکار لازم است.</string>
     <string name="personal_ownership_policy_in_effect">سیاست سازمانی بر تنظیمات مالکیت شما تأثیر می‌گذارد.</string>
@@ -453,7 +456,7 @@
     <string name="password_info">به صورت اختیاری برای دسترسی کاربران به این ارسال به یک کلمه عبور نیاز دارید.</string>
     <string name="remove_password">حذف کلمه عبور</string>
     <string name="removing_send_password">حذف کلمه عبور</string>
-    <string name="send_password_removed">کلمه عبور حذف شد.</string>
+    <string name="password_removed">Password removed</string>
     <string name="add_a_send">افزودن یک ارسال</string>
     <string name="copy_link">کپی پیوند</string>
     <string name="share_link">اشتراک گذاری پیوند</string>
@@ -466,6 +469,7 @@
     <string name="add_text_send">متن جدید ارسال</string>
     <string name="are_you_sure_delete_send">آیا مطمئن هستید که می‌خواهید این ارسال را حذف کنید؟</string>
     <string name="send_deleted">ارسال حذف شد</string>
+    <string name="send_updated">Send updated</string>
     <string name="one_day">۱ روز</string>
     <string name="two_days">۲ روز</string>
     <string name="three_days">۳ روز</string>
@@ -547,6 +551,8 @@
     <string name="device_type">نوع دستگاه</string>
     <string name="ip_address">نشانی IP</string>
     <string name="time">زمان</string>
+    <string name="select_time">Select time</string>
+    <string name="switch_input_mode">Switch input mode</string>
     <string name="confirm_log_in">تأیید ورود</string>
     <string name="deny_log_in">رد ورود</string>
     <string name="log_in_denied">ورود رد شد</string>
@@ -671,7 +677,7 @@
     <string name="privacy_policy_description_long">سیاست حفظ حریم خصوصی ما را در bitwarden.com بررسی کنید.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">ویژگی‌های بیشتر حساب کاربری Bitwarden خود را در برنامه وب کاوش کنید.</string>
     <string name="learn_about_organizations_description_long">Bitwarden به شما اجازه می‌دهد تا با استفاده از یک سازمان، موارد گاوصندوق خود را با دیگران به اشتراک بگذارید. در وب سایت bitwarden.com بیشتر بیاموزید.</string>
-    <string name="created_xy">ایجاد شده در %1$s، %2$s</string>
+    <string name="created_x">Created %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">سازمان‌تان از شما می‌خواهد که یک کلمه عبور اصلی تنظیم کنید.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">یک گزینه باز کردن قفل برای پایان زمان مجاز راه‌اندازی کنید.</string>
     <string name="save_passkey_as_new_login">کلید عبور را به عنوان ورود جدید ذخیره کن</string>
@@ -764,12 +770,12 @@
     <string name="youre_all_set">همه چیز آماده است!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">خطا در اتصال به سرویس Duo. از روش ورود دو مرحله‌ای دیگری استفاده کنید یا برای دریافت کمک با Duo تماس بگیرید.</string>
     <string name="master_password_hint_not_specified">یادآور کلمه عبور اصلی</string>
-    <string name="new_master_password_hint">راهنمای کلمه عبور اصلی جدید</string>
+    <string name="new_master_password_hint">یادآور کلمه عبور اصلی جدید</string>
     <string name="get_started">شروع کنید</string>
     <string name="save_and_protect_your_data">داده‌های خود را ذخیره و از آن‌ها محافظت کنید</string>
     <string name="the_vault_protects_more_than_just_passwords">گاوصندوق تنها کلمات عبور را محافظت نمی‌کند. ورودهای امن، شناسه‌ها، کارت‌ها و یادداشت‌ها را نیز به صورت امن در اینجا ذخیره کنید.</string>
     <string name="new_login">ورود جدید</string>
-    <string name="share_files_and_data_securely_with_anyone_on_any_platform">پرونده‌ها و داده‌های خود را به‌صورت امن با هر کسی، در هر پلتفرمی به اشتراک بگذارید. اطلاعات شما در حین اشتراک‌گذاری به‌طور کامل رمزگذاری انتها به انتها باقی خواهد ماند و میزان افشا محدود می‌شود.</string>
+    <string name="share_files_and_data_securely_with_anyone_on_any_platform">پرونده‌ها و داده‌های خود را به‌صورت امن با هر کسی، در هر پلتفرمی به اشتراک بگذارید. اطلاعات شما در حین اشتراک‌گذاری به‌طور کامل با رمزگذاری انتها به انتها باقی خواهد ماند و میزان افشا محدود می‌شود.</string>
     <string name="send_sensitive_information_safely">اطلاعات حساس را به‌صورت ایمن ارسال کنید</string>
     <string name="import_saved_logins">ورودهای ذخیره‌شده را درون ریزی کنید</string>
     <string name="use_a_computer_to_import_logins">از یک رایانه برای درون ریزی ورودهای ذخیره‌شده از یک مدیر کلمه عبور موجود استفاده کنید</string>
@@ -904,9 +910,10 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">عملیات کلید عبور ناموفق بود زیرا هیچ موردی انتخاب نشده است.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">عملیات کلید عبور ناموفق بود زیرا درخواست پشتیبانی نمی‌شود.</string>
     <string name="self_host_server_url">نشانی اینترنتی سرور خود میزبان</string>
+    <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">استفاده از قابلیت پر کردن خودکار کروم</string>
     <string name="use_chrome_beta_autofill_integration">استفاده از قابلیت پرکردن خودکار کروم (نسخه بتا)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">پر کردن خودکار ورود به حساب برای وب‌سایت‌های پشتیبانی شده در کروم را بهبود می‌بخشد. پس از فعال‌سازی، به تنظیمات کروم هدایت می‌شوید تا پر کردن خودکار از سوی شخص ثالث را فعال کنید.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
     <string name="show_more">نمایش بیشتر</string>
     <string name="no_folder">بدون پوشه</string>
     <string name="show_less">نمایش کمتر</string>
@@ -963,4 +970,27 @@
     <string name="dynamic_colors">رنگ‌های پویا</string>
     <string name="dynamic_colors_description">رنگ‌های پویا را بر اساس کاغذ دیواری خود اعمال کنید</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">رنگ‌های پویا از رنگ‌های سیستم استفاده می‌کنند و ممکن است تمام دستورالعمل‌های دسترسی را رعایت نکنند.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">عملیات کلید عبور ناموفق بود زیرا مرورگر (%1$s) مورد اعتماد نیست. گزینه \"اعتماد\" را انتخاب کنید تا %1$s به فهرست برنامه‌های مورد اعتماد افزوده شود یا \"لغو\" را برای توقف عملیات انتخاب کنید.</string>
+    <string name="passkey_operation_failed_because_the_browser_is_not_trusted">عملیات کلید عبور ناموفق بود زیرا مرورگر مورد اعتماد نیست.</string>
+    <string name="trust">اعتماد</string>
+    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
+    <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
+    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
+    <string name="trusted_by_you">Trusted by You</string>
+    <string name="trusted_by_the_community">Trusted by the Community</string>
+    <string name="trusted_by_google">Trusted by Google</string>
+    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through web browsers trusted by Google or the Bitwarden community.</string>
+    <string name="about_privileged_applications">About privileged applications</string>
+    <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
+    <string name="privileged_apps">Privileged apps</string>
+    <string name="unrecognized_browser">Unrecognized browser</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
+    <string name="google">Google</string>
+    <string name="the_community">the Community</string>
+    <string name="you">YOU</string>
+    <string name="all_trusted_apps">All trusted apps</string>
+    <string name="trusted_by_x">Trusted by %s</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
+    <string name="installed_apps">Installed apps</string>
+    <string name="delete_x">Delete %s</string>
 </resources>

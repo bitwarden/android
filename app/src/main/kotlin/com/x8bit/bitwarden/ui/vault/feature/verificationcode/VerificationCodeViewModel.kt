@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -18,7 +20,6 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -282,10 +283,7 @@ class VerificationCodeViewModel @Inject constructor(
     ) {
         val data = verificationCodeData.data
         if (data != null) {
-            updateStateWithVerificationCodeData(
-                verificationCodeData = data,
-                clearDialogState = true,
-            )
+            updateStateWithVerificationCodeData(verificationCodeData = data)
         } else {
             mutableStateFlow.update { currentState ->
                 currentState.copy(
@@ -307,20 +305,14 @@ class VerificationCodeViewModel @Inject constructor(
     private fun vaultPendingReceive(
         verificationCodeData: DataState.Pending<List<VerificationCodeItem>>,
     ) {
-        updateStateWithVerificationCodeData(
-            verificationCodeData = verificationCodeData.data,
-            clearDialogState = false,
-        )
+        updateStateWithVerificationCodeData(verificationCodeData = verificationCodeData.data)
     }
 
     private fun vaultLoadedReceive(
         verificationCodeData:
         DataState.Loaded<List<VerificationCodeItem>>,
     ) {
-        updateStateWithVerificationCodeData(
-            verificationCodeData = verificationCodeData.data,
-            clearDialogState = true,
-        )
+        updateStateWithVerificationCodeData(verificationCodeData = verificationCodeData.data)
         mutableStateFlow.update { it.copy(isRefreshing = false) }
     }
 
@@ -331,10 +323,7 @@ class VerificationCodeViewModel @Inject constructor(
     private fun vaultErrorReceive(vaultData: DataState.Error<List<VerificationCodeItem>>) {
         val data = vaultData.data
         if (data != null) {
-            updateStateWithVerificationCodeData(
-                verificationCodeData = data,
-                clearDialogState = true,
-            )
+            updateStateWithVerificationCodeData(verificationCodeData = data)
         } else {
             mutableStateFlow.update {
                 it.copy(
@@ -350,7 +339,6 @@ class VerificationCodeViewModel @Inject constructor(
 
     private fun updateStateWithVerificationCodeData(
         verificationCodeData: List<VerificationCodeItem>,
-        clearDialogState: Boolean,
     ) {
         if (verificationCodeData.isEmpty()) {
             sendEvent(VerificationCodeEvent.NavigateBack)
@@ -378,7 +366,9 @@ class VerificationCodeViewModel @Inject constructor(
                             )
                         },
                 ),
-                dialogState = state.dialogState.takeUnless { clearDialogState },
+                dialogState = state.dialogState.takeUnless {
+                    it is VerificationCodeState.DialogState.Loading
+                },
             )
         }
     }
@@ -499,7 +489,7 @@ data class VerificationCodeDisplayItem(
     val periodSeconds: Int,
     val authCode: String,
     val hideAuthCode: Boolean,
-    val startIcon: IconData = IconData.Local(R.drawable.ic_globe),
+    val startIcon: IconData = IconData.Local(BitwardenDrawable.ic_globe),
 ) : Parcelable
 
 /**

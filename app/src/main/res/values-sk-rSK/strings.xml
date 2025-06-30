@@ -296,8 +296,9 @@ Skenovanie prebehne automaticky.</string>
     <string name="autofill_and_save">Auto-vyplniť a uložiť</string>
     <string name="organization">Organizácia</string>
     <string name="try_again">Skúsiť Znovu</string>
-    <string name="date_password_updated">Heslo bolo aktualizované</string>
-    <string name="date_updated">Aktualizované</string>
+    <string name="created">Vytvorené: %1$s</string>
+    <string name="password_last_updated">Naposledy upravené heslo: %1$s</string>
+    <string name="last_edited">Naposledy upravené: %1$s</string>
     <string name="invalid_email">Neplatná e-mailová adresa.</string>
     <string name="cards">Karty</string>
     <string name="identities">Identity</string>
@@ -361,7 +362,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="copy_notes">Kopírovať poznámku</string>
     <string name="exit">Ukončiť</string>
     <string name="exit_confirmation">Naozaj chcete ukončiť Bitwarden?</string>
-    <string name="require_master_password_on_app_restart">Vyžadovať hlavné heslo pri reštarte prehliadača?</string>
+    <string name="require_master_password_on_app_restart">Vyžadovať hlavné heslo pri reštarte aplikácie?</string>
     <string name="pin_require_master_password_restart">Chcete po reštarte aplikácie požadovať odomykanie vaším hlavným heslom?</string>
     <string name="ask_to_add_login">Požiadať o pridanie prihlásenia</string>
     <string name="ask_to_add_login_description">Opýtať sa na pridanie prihlasovacích údajov ak ich ešte nemáte v trezore.</string>
@@ -424,7 +425,9 @@ Skenovanie prebehne automaticky.</string>
     <string name="privacy_policy">Zásady ochrany osobných údajov</string>
     <string name="passkey_management">Správa prístupových kľúčov</string>
     <string name="autofill_services">Služba automatického vypĺňania</string>
-    <string name="inline_autofill">Použiť vnorené automatické vypĺňanie</string>
+    <string name="display_autofill_suggestions">Zobraziť návrhy na automatické vypĺňanie</string>
+    <string name="autofill_suggestions_inline">Inline (zobrazí sa na klávesnici)</string>
+    <string name="autofill_suggestions_popup">Vyskakovacie okno (zobrazí sa cez vstupné pole)</string>
     <string name="accessibility">Použiť dostupnosť</string>
     <string name="accessibility_description5">Vyžaduje sa pre použitie dlaždice rýchleho automatického vypĺňania.</string>
     <string name="personal_ownership_policy_in_effect">Politika organizácie ovplyvňuje vaše možnosti vlastníctva.</string>
@@ -453,7 +456,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="password_info">Voliteľne môžete vyžadovať heslo pre používateľov na prístup k tomuto Sendu.</string>
     <string name="remove_password">Odstrániť heslo</string>
     <string name="removing_send_password">Odstraňuje sa heslo</string>
-    <string name="send_password_removed">Heslo bolo odstránené.</string>
+    <string name="password_removed">Heslo bolo odstránené</string>
     <string name="add_a_send">Pridať Send</string>
     <string name="copy_link">Kopírovať odkaz</string>
     <string name="share_link">Zdieľať odkaz</string>
@@ -466,6 +469,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="add_text_send">Nový textový Send</string>
     <string name="are_you_sure_delete_send">Naozaj chcete odstrániť tento Send?</string>
     <string name="send_deleted">Send bol odstránený.</string>
+    <string name="send_updated">Send bol aktualizovaný</string>
     <string name="one_day">1 deň</string>
     <string name="two_days">2 dni</string>
     <string name="three_days">3 dni</string>
@@ -547,6 +551,8 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
     <string name="device_type">Typ zariadenia</string>
     <string name="ip_address">IP adresa</string>
     <string name="time">Čas</string>
+    <string name="select_time">Vyberte čas</string>
+    <string name="switch_input_mode">Prepnúť režim vstupu</string>
     <string name="confirm_log_in">Potvrdiť prihlásenie</string>
     <string name="deny_log_in">Odmietnuť prihlásenie</string>
     <string name="log_in_denied">Prihlásenie zamietnuté</string>
@@ -671,7 +677,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="privacy_policy_description_long">Pozrite si naše zásady ochrany osobných údajov na bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Preskúmajte ďalšie funkcie svojho účtu na Bitwarden vo webovej aplikácii.</string>
     <string name="learn_about_organizations_description_long">Bitwarden vám umožňuje zdieľať vaše položky trezora s ostatnými pomocou organizácie. Viac informácií nájdete na webovej stránke bitwarden.com.</string>
-    <string name="created_xy">Vytvorené %1$s, %2$s</string>
+    <string name="created_x">Vytvorené: %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Vaša organizácia vyžaduje, aby ste nastavili hlavné heslo.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Nastavte možnosť odomknutia, aby ste zmenili akciu pri vypršaní času trezoru.</string>
     <string name="save_passkey_as_new_login">Uložiť prístupový kľúč ako nové prihlásenie</string>
@@ -904,9 +910,10 @@ Chcete prepnúť na tento účet?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operácia prístupového kľúča zlyhala, pretože nebola vybraná žiadna položka.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operácia prístupového kľúča zlyhala, pretože požiadavka nie podporovaná.</string>
     <string name="self_host_server_url">Adresa URL vlastného hostingu</string>
+    <string name="use_brave_autofill_integration">Použiť integráciu automatického vypĺňania Brave</string>
     <string name="use_chrome_autofill_integration">Použiť integráciu automatického vyplňovania Chromu</string>
     <string name="use_chrome_beta_autofill_integration">Použiť integráciu automatického vyplňovania Chromu (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Vylepšuje vypĺňanie prihlasovacích údajov pre podporované webové stránky v Chrome. Po zapnutí budete presmerovaní do nastavení Chromu, kde môžete povoliť automatické vypĺňanie od tretích strán.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Vylepšuje vypĺňanie prihlasovacích údajov pre podporované webové stránky v Brave. Po zapnutí budete presmerovaní do nastavení Brave, kde môžete povoliť automatické vypĺňanie od tretích strán.</string>
     <string name="show_more">Zobraziť viac</string>
     <string name="no_folder">Žiadny priečinok</string>
     <string name="show_less">Zobraziť menej</string>
@@ -963,4 +970,27 @@ Chcete prepnúť na tento účet?</string>
     <string name="dynamic_colors">Dynamické farby</string>
     <string name="dynamic_colors_description">Použiť dynamické farby na základe tapety</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamické farby používajú systémové farby a nemusia spĺňať všetky usmernenia o prístupnosti.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Operácia prístupového kľúča zlyhala, pretože prehliadač (%1$s) nie je dôveryhodný. Vyberte \"Dôverovať\", aby ste pridali %1$s na zoznam dôveryhodných aplikácií alebo \"Zrušiť\", aby ste operáciu zrušili.</string>
+    <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Operácia prístupového kľúča zlyhala, pretože prehliadač nie je dôveryhodný.</string>
+    <string name="trust">Dôverovať</string>
+    <string name="trusted_by_you_learn_more">Toto sú aplikácie alebo prehliadače, ktorým Bitwarden predvolene nedôveruje, ale VY im dôverujete pri vykonávaní operácií s prístupovými kľúčmi.</string>
+    <string name="trusted_by_community_learn_more">Tieto aplikácie sa nenachádzajú v obchode Google Play, ale Bitwarden dôveruje vykonávaným operáciám s prístupovými kľúčmi po tom, čo ich členovia komunity použijú a nahlásia ako bezpečné.</string>
+    <string name="trusted_by_google_learn_more">Tieto aplikácie považuje Google za bezpečné a sú k dispozícii v obchode Google Play.</string>
+    <string name="trusted_by_you">Dôveryhodné podľa vás</string>
+    <string name="trusted_by_the_community">Dôveryhodné podľa komunity</string>
+    <string name="trusted_by_google">Dôveryhodné podľa Googlu</string>
+    <string name="privileged_apps_description">Na ochranu používateľov pred pokusmi o phishing vykonáva Bitwarden v predvolenom nastavení operácie s prístupovými kľúčmi len prostredníctvom webových prehliadačov, ktorým dôveruje Google alebo komunita Bitwardenu.</string>
+    <string name="about_privileged_applications">O privilegovaných aplikáciách</string>
+    <string name="learn_more_about_privileged_apps">Viac informácií o privilegovaných aplikáciách</string>
+    <string name="privileged_apps">Privilegované aplikácie</string>
+    <string name="unrecognized_browser">Neznámy prehliadač</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Ďalšie informácie o používaní prístupových kľúčov s Bitwardenom.</string>
+    <string name="google">Google</string>
+    <string name="the_community">komunity</string>
+    <string name="you">VÁS</string>
+    <string name="all_trusted_apps">Všetky dôveryhodné aplikácie</string>
+    <string name="trusted_by_x">Dôveryhodné podľa %s</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Naozaj už nechcete dôverovať %s?</string>
+    <string name="installed_apps">Nainštalované aplikácie</string>
+    <string name="delete_x">Odstrániť %s</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +22,10 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.model.TooltipData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
@@ -29,12 +33,9 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
-import com.x8bit.bitwarden.ui.vault.feature.item.component.VaultItemUpdateText
 import com.x8bit.bitwarden.ui.vault.feature.item.component.itemHeader
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
@@ -268,25 +269,43 @@ fun VaultItemLoginContent(
             }
         }
 
-        item(key = "lastUpdated") {
-            Spacer(modifier = Modifier.height(16.dp))
-            VaultItemUpdateText(
-                header = "${stringResource(id = R.string.date_updated)}: ",
-                text = commonState.lastUpdated,
+        item(key = "created") {
+            Spacer(modifier = Modifier.height(height = 16.dp))
+            Text(
+                text = commonState.created(),
+                style = BitwardenTheme.typography.bodySmall,
+                color = BitwardenTheme.colorScheme.text.secondary,
                 modifier = Modifier
+                    .fillMaxWidth()
                     .standardHorizontalMargin()
                     .padding(horizontal = 12.dp)
+                    .animateItem()
+                    .testTag("LoginItemCreated"),
+            )
+        }
+
+        item(key = "lastUpdated") {
+            Spacer(modifier = Modifier.height(height = 4.dp))
+            Text(
+                text = commonState.lastUpdated(),
+                style = BitwardenTheme.typography.bodySmall,
+                color = BitwardenTheme.colorScheme.text.secondary,
+                modifier = Modifier
                     .fillMaxWidth()
-                    .animateItem(),
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 12.dp)
+                    .animateItem()
+                    .testTag("LoginItemLastUpdated"),
             )
         }
 
         loginItemState.passwordRevisionDate?.let { revisionDate ->
             item(key = "revisionDate") {
                 Spacer(modifier = Modifier.height(height = 4.dp))
-                VaultItemUpdateText(
-                    header = "${stringResource(id = R.string.date_password_updated)}: ",
-                    text = revisionDate,
+                Text(
+                    text = revisionDate(),
+                    style = BitwardenTheme.typography.bodySmall,
+                    color = BitwardenTheme.colorScheme.text.secondary,
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -351,7 +370,7 @@ private fun NotesField(
         singleLine = false,
         actions = {
             BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_copy,
+                vectorIconRes = BitwardenDrawable.ic_copy,
                 contentDescription = stringResource(id = R.string.copy_notes),
                 onClick = onCopyAction,
                 modifier = Modifier.testTag(tag = "CipherNotesCopyButton"),
@@ -383,7 +402,7 @@ private fun PasswordField(
             singleLine = false,
             actions = {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_copy,
+                    vectorIconRes = BitwardenDrawable.ic_copy,
                     contentDescription = stringResource(id = R.string.copy_password),
                     onClick = onCopyPasswordClick,
                     modifier = Modifier.testTag(tag = "LoginCopyPasswordButton"),
@@ -446,7 +465,7 @@ private fun TotpField(
                     periodSeconds = totpCodeItemData.periodSeconds,
                 )
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_copy,
+                    vectorIconRes = BitwardenDrawable.ic_copy,
                     contentDescription = stringResource(id = R.string.copy_totp),
                     onClick = onCopyTotpClick,
                     modifier = Modifier.testTag(tag = "LoginCopyTotpButton"),
@@ -492,7 +511,7 @@ private fun UriField(
         actions = {
             if (uriData.isLaunchable) {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_external_link,
+                    vectorIconRes = BitwardenDrawable.ic_external_link,
                     contentDescription = stringResource(id = R.string.launch),
                     onClick = { onLaunchUriClick(uriData.uri) },
                     modifier = Modifier.testTag(tag = "LoginLaunchUriButton"),
@@ -500,7 +519,7 @@ private fun UriField(
             }
             if (uriData.isCopyable) {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_copy,
+                    vectorIconRes = BitwardenDrawable.ic_copy,
                     contentDescription = stringResource(id = R.string.copy),
                     onClick = { onCopyUriClick(uriData.uri) },
                     modifier = Modifier.testTag(tag = "LoginCopyUriButton"),
@@ -528,7 +547,7 @@ private fun UsernameField(
         singleLine = false,
         actions = {
             BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_copy,
+                vectorIconRes = BitwardenDrawable.ic_copy,
                 contentDescription = stringResource(id = R.string.copy_username),
                 onClick = onCopyUsernameClick,
                 modifier = Modifier.testTag(tag = "LoginCopyUsernameButton"),

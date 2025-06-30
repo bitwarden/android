@@ -898,7 +898,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 assertEquals(
-                    SearchEvent.ShowToast(R.string.send_password_removed.asText()),
+                    SearchEvent.ShowToast(R.string.password_removed.asText()),
                     awaitItem(),
                 )
             }
@@ -911,7 +911,10 @@ class SearchViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = notes),
+                    ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                        notes = notes,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
             verify(exactly = 1) {
@@ -957,7 +960,10 @@ class SearchViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode),
+                    ListingItemOverflowAction.VaultAction.CopyTotpClick(
+                        totpCode = totpCode,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
 
@@ -982,7 +988,10 @@ class SearchViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode),
+                    ListingItemOverflowAction.VaultAction.CopyTotpClick(
+                        totpCode = totpCode,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
 
@@ -1150,7 +1159,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             ciphers.toViewState(
                 searchTerm = "",
-                baseIconUrl = "https://vault.bitwarden.com/icons",
+                baseIconUrl = "https://icons.bitwarden.net",
                 isIconLoadingDisabled = false,
                 isAutofill = false,
                 hasMasterPassword = true,
@@ -1252,7 +1261,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             ciphers.toViewState(
                 searchTerm = "",
-                baseIconUrl = "https://vault.bitwarden.com/icons",
+                baseIconUrl = "https://icons.bitwarden.net",
                 isIconLoadingDisabled = false,
                 isAutofill = false,
                 hasMasterPassword = true,
@@ -1364,7 +1373,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             ciphers.toViewState(
                 searchTerm = "",
-                baseIconUrl = "https://vault.bitwarden.com/icons",
+                baseIconUrl = "https://icons.bitwarden.net",
                 isIconLoadingDisabled = false,
                 isAutofill = false,
                 hasMasterPassword = true,
@@ -1479,7 +1488,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             ciphers.toViewState(
                 searchTerm = "",
-                baseIconUrl = "https://vault.bitwarden.com/icons",
+                baseIconUrl = "https://icons.bitwarden.net",
                 isIconLoadingDisabled = false,
                 isAutofill = false,
                 hasMasterPassword = true,
@@ -1654,7 +1663,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             ciphers.toViewState(
                 searchTerm = "",
-                baseIconUrl = "https://vault.bitwarden.com/icons",
+                baseIconUrl = "https://icons.bitwarden.net",
                 isIconLoadingDisabled = false,
                 isAutofill = true,
                 hasMasterPassword = true,
@@ -1688,7 +1697,7 @@ private val DEFAULT_STATE: SearchState = SearchState(
     dialogState = null,
     vaultFilterData = null,
     baseWebSendUrl = "https://send.bitwarden.com/#",
-    baseIconUrl = "https://vault.bitwarden.com/icons",
+    baseIconUrl = "https://icons.bitwarden.net",
     isIconLoadingDisabled = false,
     hasMasterPassword = true,
     totpData = null,

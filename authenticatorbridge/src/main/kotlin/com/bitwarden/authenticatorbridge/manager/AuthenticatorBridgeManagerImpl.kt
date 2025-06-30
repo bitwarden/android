@@ -21,8 +21,8 @@ import com.bitwarden.authenticatorbridge.provider.StubAuthenticatorBridgeCallbac
 import com.bitwarden.authenticatorbridge.provider.SymmetricKeyStorageProvider
 import com.bitwarden.authenticatorbridge.util.decrypt
 import com.bitwarden.authenticatorbridge.util.encrypt
-import com.bitwarden.authenticatorbridge.util.isBuildVersionBelow
 import com.bitwarden.authenticatorbridge.util.toFingerprint
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -64,7 +64,9 @@ internal class AuthenticatorBridgeManagerImpl(
     private val mutableSharedAccountsStateFlow: MutableStateFlow<AccountSyncState> =
         MutableStateFlow(
             when {
-                isBuildVersionBelow(Build.VERSION_CODES.S) -> AccountSyncState.OsVersionNotSupported
+                !isBuildVersionAtLeast(Build.VERSION_CODES.S) -> {
+                    AccountSyncState.OsVersionNotSupported
+                }
                 !isBitwardenAppInstalled() -> AccountSyncState.AppNotInstalled
                 else -> AccountSyncState.Loading
             },
@@ -122,7 +124,7 @@ internal class AuthenticatorBridgeManagerImpl(
             ?: false
 
     private fun bindService() {
-        if (isBuildVersionBelow(Build.VERSION_CODES.S)) {
+        if (!isBuildVersionAtLeast(Build.VERSION_CODES.S)) {
             mutableSharedAccountsStateFlow.value = AccountSyncState.OsVersionNotSupported
             return
         }
@@ -137,7 +139,7 @@ internal class AuthenticatorBridgeManagerImpl(
             )
         }
 
-        val flags = if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
+        val flags = if (!isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
             Context.BIND_AUTO_CREATE
         } else {
             Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS

@@ -9,7 +9,7 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -50,9 +50,9 @@ interface IntentManager {
     fun startCredentialManagerSettings(context: Context)
 
     /**
-     * Starts the Chrome autofill settings activity for the provided [ChromeReleaseChannel].
+     * Starts the browser autofill settings activity for the provided [BrowserPackage].
      */
-    fun startChromeAutofillSettingsActivity(releaseChannel: ChromeReleaseChannel): Boolean
+    fun startBrowserAutofillSettingsActivity(browserPackage: BrowserPackage): Boolean
 
     /**
      * Start an activity to view the given [uri] in an external browser.

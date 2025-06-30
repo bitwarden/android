@@ -8,6 +8,8 @@ import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
+import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -24,7 +26,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.TotpData
@@ -469,6 +470,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -562,6 +564,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = fido2CredentialAutofillViews,
             totpData = null,
             isPremiumUser = true,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -578,8 +581,8 @@ class VaultItemListingDataExtensionsTest {
                             secondSubtitleTestTag = "PasskeySite",
                             subtitleTestTag = "PasskeyName",
                             iconData = IconData.Network(
-                                uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
-                                fallbackIconRes = R.drawable.ic_bw_passkey,
+                                uri = "https://icons.bitwarden.net/www.mockuri.com/icon.png",
+                                fallbackIconRes = BitwardenDrawable.ic_bw_passkey,
                             ),
                             isAutofill = true,
                             shouldShowMasterPasswordReprompt = true,
@@ -648,6 +651,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = fido2CredentialAutofillViews,
             totpData = null,
             isPremiumUser = true,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -665,8 +669,8 @@ class VaultItemListingDataExtensionsTest {
                             secondSubtitleTestTag = "PasskeySite",
                             subtitleTestTag = "PasskeyName",
                             iconData = IconData.Network(
-                                uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
-                                fallbackIconRes = R.drawable.ic_bw_passkey,
+                                uri = "https://icons.bitwarden.net/www.mockuri.com/icon.png",
+                                fallbackIconRes = BitwardenDrawable.ic_bw_passkey,
                             ),
                             isAutofill = true,
                             shouldShowMasterPasswordReprompt = false,
@@ -714,6 +718,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -737,6 +742,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -758,6 +764,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -780,6 +787,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -801,6 +809,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -822,6 +831,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -843,6 +853,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -868,6 +879,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -893,6 +905,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
 
@@ -903,7 +916,7 @@ class VaultItemListingDataExtensionsTest {
                 message = R.string.search_for_a_login_or_add_a_new_login.asText(),
                 shouldShowAddButton = false,
                 buttonText = R.string.new_item.asText(),
-                vectorRes = R.drawable.img_folder_question,
+                vectorRes = BitwardenDrawable.img_folder_question,
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Trash,
@@ -919,6 +932,7 @@ class VaultItemListingDataExtensionsTest {
                     every { issuer } returns "issuer"
                 },
                 isPremiumUser = true,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
     }
@@ -1161,6 +1175,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -1205,6 +1220,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -1223,6 +1239,119 @@ class VaultItemListingDataExtensionsTest {
                 ),
                 displayItemList = emptyList(),
                 displayFolderList = emptyList(),
+            ),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should properly filter cards when cipher have organizationId in restrictItemTypesPolicyOrgIds`() {
+        mockkStatic(CipherView::subtitle)
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { any<CipherView>().subtitle } returns null
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.host } returns "www.mockuri.com"
+
+        val vaultData = VaultData(
+            cipherViewList = listOf(
+                createMockCipherView(
+                    number = 1,
+                    organizationId = "restrict_item_type_policy_id",
+                    cipherType = CipherType.LOGIN,
+                ),
+                createMockCipherView(
+                    number = 2,
+                    organizationId = "restrict_item_type_policy_id",
+                    cipherType = CipherType.CARD,
+                ),
+                createMockCipherView(
+                    number = 3,
+                    organizationId = null,
+                    cipherType = CipherType.CARD,
+                ),
+                createMockCipherView(
+                    number = 4,
+                    organizationId = "another_id",
+                    cipherType = CipherType.CARD,
+                ),
+            ),
+
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+            fido2CredentialAutofillViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Card,
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            isIconLoadingDisabled = false,
+            autofillSelectionData = null,
+            createCredentialRequestData = null,
+            fido2CredentialAutofillViews = null,
+            totpData = null,
+            isPremiumUser = true,
+            restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+        )
+
+        assertEquals(
+            VaultItemListingState.ViewState.Content(
+                displayCollectionList = emptyList(),
+                displayItemList = listOf(
+                    createMockDisplayItemForCipher(
+                        number = 4,
+                        cipherType = CipherType.CARD,
+                        subtitle = null,
+                    ).copy(secondSubtitleTestTag = "PasskeySite"),
+                ),
+                displayFolderList = emptyList(),
+            ),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should set properly shouldShowAddButton false when restrictItemTypesPolicyOrgIds has values, vault type is card and there is an empty vault state`() {
+        mockkStatic(CipherView::subtitle)
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { any<CipherView>().subtitle } returns null
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.host } returns "www.mockuri.com"
+
+        val vaultData = VaultData(
+            cipherViewList = listOf(),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+            fido2CredentialAutofillViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Card,
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            isIconLoadingDisabled = false,
+            autofillSelectionData = null,
+            createCredentialRequestData = null,
+            fido2CredentialAutofillViews = null,
+            totpData = null,
+            isPremiumUser = true,
+            restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+        )
+
+        // Card type
+        assertEquals(
+            VaultItemListingState.ViewState.NoItems(
+                message = R.string.no_cards.asText(),
+                shouldShowAddButton = false,
+                buttonText = R.string.new_card.asText(),
             ),
             actual,
         )
