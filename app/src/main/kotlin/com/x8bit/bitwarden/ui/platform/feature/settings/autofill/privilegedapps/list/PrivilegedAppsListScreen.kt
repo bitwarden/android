@@ -185,6 +185,7 @@ private fun PrivilegedAppsListContent(
                         R.string.trusted_by_x,
                         stringResource(item.trustAuthority.displayName),
                     ),
+                    clickable = false,
                     onClick = {},
                     cardStyle = state.installedApps
                         .toListItemCardStyle(index),
@@ -251,6 +252,7 @@ private fun PrivilegedAppsListContent(
                     BitwardenTextRow(
                         text = item.label,
                         onClick = {},
+                        clickable = false,
                         cardStyle = state.notInstalledUserTrustedApps
                             .toListItemCardStyle(index),
                         modifier = Modifier
@@ -303,6 +305,7 @@ private fun PrivilegedAppsListContent(
                     BitwardenTextRow(
                         text = item.label,
                         onClick = {},
+                        clickable = false,
                         cardStyle = state.notInstalledCommunityTrustedApps
                             .toListItemCardStyle(index),
                         modifier = Modifier
@@ -336,6 +339,7 @@ private fun PrivilegedAppsListContent(
                     BitwardenTextRow(
                         text = item.label,
                         onClick = {},
+                        clickable = false,
                         cardStyle = state.notInstalledGoogleTrustedApps
                             .toListItemCardStyle(index),
                         modifier = Modifier
