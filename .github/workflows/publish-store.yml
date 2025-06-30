@@ -15,7 +15,7 @@ on:
       version-code:
         description: "Build number to promote to production."
         required: true
-        type: number
+        type: string
       rollout-percentage:
           description: "Percentage of users who will receive this version update."
           required: true
