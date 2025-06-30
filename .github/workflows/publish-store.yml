@@ -142,10 +142,10 @@ jobs:
               versionCode:"$VERSION_CODE"
 
             bundle exec fastlane promoteToProduction \
-              versionCode:"$VERSION_CODE" \ 
+              versionCode:"$VERSION_CODE" \
               versionName:"$VERSION_NAME" \
               rolloutPercentage:"$decimal" \
-              packageName:"$PACKAGE_NAME"\
-              releaseNotes:"$RELEASE_NOTES"\
-              track:"$TRACK_FROM"\
+              packageName:"$PACKAGE_NAME" \
+              releaseNotes:"$RELEASE_NOTES" \
+              track:"$TRACK_FROM" \
               trackPromoteTo:"$TRACK_TARGET"
