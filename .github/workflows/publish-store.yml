@@ -111,7 +111,7 @@ jobs:
           env:
             PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_BETA_KEYSTORE_PASSWORD }}
             PLAY_KEY_PASSWORD: ${{ secrets.PLAY_BETA_KEY_PASSWORD }}
-            VERSION_CODE: ${{ inputs.version-code }}
+            VERSION_CODE_INPUT: ${{ inputs.version-code }}
             VERSION_NAME: ${{inputs.version-name}}
             ROLLOUT_PERCENTAGE: ${{ inputs.rollout-percentage }}
             PRODUCT: ${{ inputs.product }}
@@ -127,6 +127,8 @@ jobs:
               exit 1
             fi
 
+            VERSION_CODE=$(echo "${VERSION_CODE_INPUT}" | tr -d ',')
+
             decimal=$(echo "scale=2; ${ROLLOUT_PERCENTAGE/\%/} / 100" | bc)
 
             bundle exec fastlane updateReleaseNotes \
@@ -134,7 +136,7 @@ jobs:
               versionCode:"$VERSION_CODE"
 
             bundle exec fastlane promoteToProduction \
-              versionCode:"$VERSION_CODE" \
+              versionCode:"$VERSION_CODE" \ 
               versionName:"$VERSION_NAME" \
               rolloutPercentage:"$decimal" \
               packageName:"$PACKAGE_NAME"\
