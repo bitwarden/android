@@ -127,8 +127,6 @@ jobs:
               exit 1
             fi
 
-            VERSION_CODE=$(echo "${VERSION_CODE_INPUT}" | tr -d ',')
-
             decimal=$(echo "scale=2; ${ROLLOUT_PERCENTAGE/\%/} / 100" | bc)
 
             bundle exec fastlane updateReleaseNotes \
