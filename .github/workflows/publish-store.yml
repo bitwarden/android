@@ -33,12 +33,20 @@ on:
         required: true
       track-from:
         description: "Track to promote from."
-        type: string
+        type: choice
+        options:
+          - internal
+          - Staged for Production
+          - Fastlane Automation Source
         required: true
         default: "internal"
       track-target:
         description: "Track to promote to."
-        type: string
+        type: choice
+        options:
+          - production
+          - Staged for Production
+          - Fastlane Automation Target
         required: true
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
