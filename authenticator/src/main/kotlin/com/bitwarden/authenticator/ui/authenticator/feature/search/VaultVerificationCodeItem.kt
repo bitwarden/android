@@ -27,6 +27,7 @@ import com.bitwarden.authenticator.ui.platform.components.indicator.BitwardenCir
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 
 /**
  * The verification code item displayed to the user.
@@ -115,7 +116,7 @@ fun VaultVerificationCodeItem(
             onClick = onCopyClick,
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_copy),
+                painter = painterResource(id = BitwardenDrawable.ic_copy),
                 contentDescription = stringResource(id = R.string.copy),
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(24.dp),
@@ -130,7 +131,7 @@ fun VaultVerificationCodeItem(
 private fun VerificationCodeItem_preview() {
     AuthenticatorTheme {
         VaultVerificationCodeItem(
-            startIcon = IconData.Local(R.drawable.ic_login_item),
+            startIcon = IconData.Local(BitwardenDrawable.ic_login_item),
             issuer = "Sample Label",
             supportingLabel = "Supporting Label",
             authCode = "1234567890".chunked(3).joinToString(" "),

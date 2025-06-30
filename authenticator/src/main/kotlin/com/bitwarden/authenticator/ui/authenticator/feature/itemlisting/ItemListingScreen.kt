@@ -385,7 +385,7 @@ private fun ItemListingContent(
                     ItemListingExpandableFabAction.ScanQrCode(
                         label = R.string.scan_a_qr_code.asText(),
                         icon = IconResource(
-                            iconPainter = painterResource(id = R.drawable.ic_camera),
+                            iconPainter = painterResource(id = BitwardenDrawable.ic_camera),
                             contentDescription = stringResource(id = R.string.scan_a_qr_code),
                             testTag = "ScanQRCodeButton",
                         ),
@@ -394,7 +394,7 @@ private fun ItemListingContent(
                     ItemListingExpandableFabAction.EnterSetupKey(
                         label = R.string.enter_key_manually.asText(),
                         icon = IconResource(
-                            iconPainter = painterResource(id = R.drawable.ic_keyboard_24px),
+                            iconPainter = painterResource(id = BitwardenDrawable.ic_keyboard),
                             contentDescription = stringResource(id = R.string.enter_key_manually),
                             testTag = "EnterSetupKeyButton",
                         ),
@@ -403,7 +403,7 @@ private fun ItemListingContent(
                 ),
                 expandableFabIcon = ExpandableFabIcon(
                     iconData = IconResource(
-                        iconPainter = painterResource(id = R.drawable.ic_plus),
+                        iconPainter = painterResource(id = BitwardenDrawable.ic_plus),
                         contentDescription = stringResource(id = R.string.add_item),
                         testTag = "AddItemButton",
                     ),
@@ -608,7 +608,7 @@ fun EmptyItemListingContent(
                     ItemListingExpandableFabAction.ScanQrCode(
                         label = R.string.scan_a_qr_code.asText(),
                         icon = IconResource(
-                            iconPainter = painterResource(id = R.drawable.ic_camera),
+                            iconPainter = painterResource(id = BitwardenDrawable.ic_camera),
                             contentDescription = stringResource(id = R.string.scan_a_qr_code),
                             testTag = "ScanQRCodeButton",
                         ),
@@ -617,7 +617,7 @@ fun EmptyItemListingContent(
                     ItemListingExpandableFabAction.EnterSetupKey(
                         label = R.string.enter_key_manually.asText(),
                         icon = IconResource(
-                            iconPainter = painterResource(id = R.drawable.ic_keyboard_24px),
+                            iconPainter = painterResource(id = BitwardenDrawable.ic_keyboard),
                             contentDescription = stringResource(id = R.string.enter_key_manually),
                             testTag = "EnterSetupKeyButton",
                         ),
@@ -626,7 +626,7 @@ fun EmptyItemListingContent(
                 ),
                 expandableFabIcon = ExpandableFabIcon(
                     iconData = IconResource(
-                        iconPainter = painterResource(id = R.drawable.ic_plus),
+                        iconPainter = painterResource(id = BitwardenDrawable.ic_plus),
                         contentDescription = stringResource(id = R.string.add_item),
                         testTag = "AddItemButton",
                     ),
@@ -675,9 +675,9 @@ fun EmptyItemListingContent(
                     modifier = Modifier.fillMaxWidth(),
                     painter = painterResource(
                         id = when (appTheme) {
-                            AppTheme.DARK -> R.drawable.ic_empty_vault_dark
-                            AppTheme.LIGHT -> R.drawable.ic_empty_vault_light
-                            AppTheme.DEFAULT -> R.drawable.ic_empty_vault
+                            AppTheme.DARK -> BitwardenDrawable.ic_empty_vault_dark
+                            AppTheme.LIGHT -> BitwardenDrawable.ic_empty_vault_light
+                            AppTheme.DEFAULT -> BitwardenDrawable.ic_empty_vault
                         },
                     ),
                     contentDescription = stringResource(
@@ -718,7 +718,7 @@ private fun DownloadBitwardenActionCard(
     onDownloadBitwardenClick: () -> Unit,
 ) = BitwardenActionCard(
     modifier = modifier,
-    actionIcon = rememberVectorPainter(R.drawable.ic_bitwarden),
+    actionIcon = rememberVectorPainter(BitwardenDrawable.ic_shield),
     actionText = stringResource(R.string.download_bitwarden_card_message),
     callToActionText = stringResource(R.string.download_now),
     titleText = stringResource(R.string.download_bitwarden_card_title),
@@ -763,7 +763,7 @@ private fun SyncWithBitwardenActionCard(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
-                    painter = rememberVectorPainter(id = R.drawable.ic_bitwarden),
+                    painter = rememberVectorPainter(id = BitwardenDrawable.ic_shield),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(size = 20.dp),
