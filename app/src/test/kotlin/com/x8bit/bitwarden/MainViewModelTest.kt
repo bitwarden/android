@@ -1022,20 +1022,6 @@ class MainViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `changes in the allowed screen capture value should update the state`() {
-        val viewModel = createViewModel()
-
-        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-
-        mutableScreenCaptureAllowedFlow.value = false
-
-        assertEquals(
-            DEFAULT_STATE.copy(isScreenCaptureAllowed = false),
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Test
     fun `send NavigateToDebugMenu action when OpenDebugMenu action is sent`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
@@ -1135,7 +1121,6 @@ class MainViewModelTest : BaseViewModelTest() {
         verify { settingsRepository.appLanguage = AppLanguage.SPANISH }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `on ScreenCaptureUpdate should trigger the ScreenCaptureSettingChange event`() = runTest {
         val viewModel = createViewModel()
@@ -1177,7 +1162,6 @@ class MainViewModelTest : BaseViewModelTest() {
 
 private val DEFAULT_STATE: MainState = MainState(
     theme = AppTheme.DEFAULT,
-    isScreenCaptureAllowed = true,
     isErrorReportingDialogEnabled = false,
     isDynamicColorsEnabled = false,
 )
