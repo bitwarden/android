@@ -418,7 +418,7 @@ platform :android do
   lane :promoteToProduction do |options|
     release_options = {
       package_name: options[:packageName],
-      version_code: options[:versionCode],
+      version_code: options[:versionCode].to_i,
       version_name: options[:versionName],
       track: options[:track],
       track_promote_to: options[:trackPromoteTo],
