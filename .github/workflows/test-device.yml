@@ -114,7 +114,7 @@ jobs:
 
       - name: Upload test APK to SauceLabs storage
         run: |
-          saucectl storage upload --app app/build/outputs/apk/standard/release/com.x8bit.bitwarden-androidTest.apk
+          saucectl storage upload --app app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-standard-release-androidTest.apk
         env:
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}

@@ -47,6 +47,8 @@ android {
     namespace = "com.x8bit.bitwarden"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
+    testBuildType = "release"
+
     room {
         schemaDirectory("$projectDir/schemas")
     }
