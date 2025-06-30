@@ -124,9 +124,11 @@ private val SHARED_ITEMS = listOf(
 private val SHARED_DISPLAY_ITEMS = SharedCodesDisplayState.Codes(
     sections = listOf(
         SharedCodesDisplayState.SharedCodesAccountSection(
+            id = "mockUserId-2",
             label = R.string.shared_accounts_header.asText(
                 "mockEmail-2",
                 "mockkEnvironmentLabel-2",
+                1,
             ),
             codes = listOf(
                 VerificationCodeDisplayItem(
@@ -142,6 +144,7 @@ private val SHARED_DISPLAY_ITEMS = SharedCodesDisplayState.Codes(
                     showMoveToBitwarden = false,
                 ),
             ),
+            isExpanded = true,
         ),
     ),
 )
