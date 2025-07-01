@@ -2,13 +2,11 @@
 <resources>
 
     <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:textCursorDrawable">@null</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionModeOverlay">true</item>
-        <item name="android:windowLayoutInDisplayCutoutMode">default</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">@integer/displayCutoutMode</item>
         <item name="android:backgroundDimAmount">@dimen/dialogDimBackgroundAmount</item>
     </style>
 

@@ -16,9 +16,9 @@ import com.bitwarden.authenticatorbridge.util.FakeSymmetricKeyStorageProvider
 import com.bitwarden.authenticatorbridge.util.TestAuthenticatorBridgeCallbackProvider
 import com.bitwarden.authenticatorbridge.util.decrypt
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
-import com.bitwarden.authenticatorbridge.util.isBuildVersionBelow
 import com.bitwarden.authenticatorbridge.util.toFingerprint
 import com.bitwarden.authenticatorbridge.util.toSymmetricEncryptionKeyData
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -32,6 +32,7 @@ import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class AuthenticatorBridgeManagerTest {
@@ -51,11 +52,15 @@ class AuthenticatorBridgeManagerTest {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(::isBuildVersionBelow)
-        every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns false
+        mockkStatic(::isBuildVersionAtLeast)
         mockkConstructor(Intent::class)
         mockkStatic(IAuthenticatorBridgeService.Stub::class)
         mockkStatic(EncryptedSharedAccountData::decrypt)
+
+        // Set default test API level to at least 34
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns true
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns true
+
         manager = AuthenticatorBridgeManagerImpl(
             context = context,
             connectionType = AuthenticatorBridgeConnectionType.DEV,
@@ -67,10 +72,10 @@ class AuthenticatorBridgeManagerTest {
 
     @AfterEach
     fun teardown() {
-        mockkStatic(::isBuildVersionBelow)
         unmockkConstructor(Intent::class)
         unmockkStatic(IAuthenticatorBridgeService.Stub::class)
         unmockkStatic(EncryptedSharedAccountData::decrypt)
+        unmockkStatic(::isBuildVersionAtLeast)
     }
 
     @Test
@@ -94,38 +99,30 @@ class AuthenticatorBridgeManagerTest {
     }
 
     @Test
-    fun `initial AccountSyncState should be OsVersionNotSupported when OS level is below S`() {
-        every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns true
-        val manager = AuthenticatorBridgeManagerImpl(
-            context = context,
-            connectionType = AuthenticatorBridgeConnectionType.DEV,
-            symmetricKeyStorageProvider = fakeSymmetricKeyStorageProvider,
-            callbackProvider = testAuthenticatorBridgeCallbackProvider,
-            processLifecycleOwner = fakeLifecycleOwner,
-        )
-        assertEquals(AccountSyncState.OsVersionNotSupported, manager.accountSyncStateFlow.value)
-    }
-
-    @Test
-    fun `onStart when OS level is below S should set state to OsVersionNotSupported`() {
-        every { isBuildVersionBelow(Build.VERSION_CODES.S) } returns true
-        fakeLifecycleOwner.lifecycle.dispatchOnStart()
-        assertEquals(AccountSyncState.OsVersionNotSupported, manager.accountSyncStateFlow.value)
-    }
-
-    @Test
     fun `onStart when bindService fails should set state to error`() {
         val mockIntent: Intent = mockk()
         every {
             anyConstructed<Intent>().setComponent(any())
         } returns mockIntent
 
-        every { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) } returns false
+        every {
+            context.bindService(
+                any(),
+                any(),
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
+            )
+        } returns false
 
         fakeLifecycleOwner.lifecycle.dispatchOnStart()
 
         assertEquals(AccountSyncState.Error, manager.accountSyncStateFlow.value)
-        verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
+        verify {
+            context.bindService(
+                any(),
+                any(),
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
+            )
+        }
     }
 
     @Test
@@ -139,7 +136,11 @@ class AuthenticatorBridgeManagerTest {
         } returns mockIntent
 
         every {
-            context.bindService(any(), any(), Context.BIND_AUTO_CREATE)
+            context.bindService(
+                any(),
+                any(),
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
+            )
         } throws SecurityException()
 
         fakeLifecycleOwner.lifecycle.dispatchOnStart()
@@ -155,13 +156,23 @@ class AuthenticatorBridgeManagerTest {
         } returns mockIntent
 
         every {
-            context.bindService(any(), any(), Context.BIND_AUTO_CREATE)
+            context.bindService(
+                any(),
+                any(),
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
+            )
         } throws SecurityException()
 
         fakeLifecycleOwner.lifecycle.dispatchOnStart()
 
         assertEquals(AccountSyncState.Error, manager.accountSyncStateFlow.value)
-        verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
+        verify {
+            context.bindService(
+                any(),
+                any(),
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
+            )
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -172,12 +183,24 @@ class AuthenticatorBridgeManagerTest {
             anyConstructed<Intent>().setComponent(any())
         } returns mockIntent
 
-        every { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) } returns true
+        every {
+            context.bindService(
+                any(),
+                any(),
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
+            )
+        } returns true
 
         fakeLifecycleOwner.lifecycle.dispatchOnStart()
 
         assertEquals(AccountSyncState.Loading, manager.accountSyncStateFlow.value)
-        verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
+        verify {
+            context.bindService(
+                any(),
+                any(),
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
+            )
+        }
     }
 
     @Test
@@ -196,7 +219,7 @@ class AuthenticatorBridgeManagerTest {
             context.bindService(
                 any(),
                 capture(serviceConnection),
-                Context.BIND_AUTO_CREATE,
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
             )
         } returns true
 
@@ -205,7 +228,13 @@ class AuthenticatorBridgeManagerTest {
 
         assertEquals(AccountSyncState.SyncNotEnabled, manager.accountSyncStateFlow.value)
         verify { mockBridgeService.symmetricEncryptionKeyData }
-        verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
+        verify {
+            context.bindService(
+                any(),
+                any(),
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
+            )
+        }
         verify { context.unbindService(any()) }
     }
 
@@ -225,7 +254,7 @@ class AuthenticatorBridgeManagerTest {
             context.bindService(
                 any(),
                 capture(serviceConnection),
-                Context.BIND_AUTO_CREATE,
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
             )
         } returns true
 
@@ -235,7 +264,13 @@ class AuthenticatorBridgeManagerTest {
         assertEquals(AccountSyncState.Loading, manager.accountSyncStateFlow.value)
         assertEquals(SYMMETRIC_KEY, fakeSymmetricKeyStorageProvider.symmetricKey)
         verify { mockBridgeService.symmetricEncryptionKeyData }
-        verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
+        verify {
+            context.bindService(
+                any(),
+                any(),
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
+            )
+        }
     }
 
     @Test
@@ -258,7 +293,7 @@ class AuthenticatorBridgeManagerTest {
             context.bindService(
                 any(),
                 capture(serviceConnection),
-                Context.BIND_AUTO_CREATE,
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
             )
         } returns true
 
@@ -268,7 +303,13 @@ class AuthenticatorBridgeManagerTest {
         assertEquals(AccountSyncState.Loading, manager.accountSyncStateFlow.value)
         assertEquals(SYMMETRIC_KEY, fakeSymmetricKeyStorageProvider.symmetricKey)
         verify(exactly = 0) { mockBridgeService.symmetricEncryptionKeyData }
-        verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
+        verify {
+            context.bindService(
+                any(),
+                any(),
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
+            )
+        }
         verify { mockBridgeService.registerBridgeServiceCallback(any()) }
         verify { mockBridgeService.syncAccounts() }
     }
@@ -296,7 +337,7 @@ class AuthenticatorBridgeManagerTest {
             context.bindService(
                 any(),
                 capture(serviceConnection),
-                Context.BIND_AUTO_CREATE,
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
             )
         } returns true
 
@@ -305,7 +346,13 @@ class AuthenticatorBridgeManagerTest {
 
         assertEquals(AccountSyncState.Error, manager.accountSyncStateFlow.value)
         assertEquals(SYMMETRIC_KEY, fakeSymmetricKeyStorageProvider.symmetricKey)
-        verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
+        verify {
+            context.bindService(
+                any(),
+                any(),
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
+            )
+        }
         verify { context.unbindService(any()) }
         verify { mockBridgeService.symmetricEncryptionKeyData }
     }
@@ -316,11 +363,10 @@ class AuthenticatorBridgeManagerTest {
         val expectedAccounts = listOf<SharedAccountData.Account>(
             mockk(),
         )
-        val encryptedAccounts: EncryptedSharedAccountData = mockk()
+        val encryptedAccounts: EncryptedSharedAccountData = mockk(relaxed = true)
         val decryptedAccounts: SharedAccountData = mockk {
             every { accounts } returns expectedAccounts
         }
-        mockkStatic(EncryptedSharedAccountData::decrypt)
         every { encryptedAccounts.decrypt(SYMMETRIC_KEY) } returns Result.success(decryptedAccounts)
         every {
             mockBridgeService.checkSymmetricEncryptionKeyFingerprint(
@@ -341,7 +387,7 @@ class AuthenticatorBridgeManagerTest {
             context.bindService(
                 any(),
                 capture(serviceConnection),
-                Context.BIND_AUTO_CREATE,
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
             )
         } returns true
 
@@ -354,7 +400,13 @@ class AuthenticatorBridgeManagerTest {
 
         assertEquals(SYMMETRIC_KEY, fakeSymmetricKeyStorageProvider.symmetricKey)
         verify(exactly = 0) { mockBridgeService.symmetricEncryptionKeyData }
-        verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
+        verify {
+            context.bindService(
+                any(),
+                any(),
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
+            )
+        }
         verify { mockBridgeService.registerBridgeServiceCallback(any()) }
         verify { mockBridgeService.syncAccounts() }
     }
@@ -381,7 +433,7 @@ class AuthenticatorBridgeManagerTest {
             context.bindService(
                 any(),
                 capture(serviceConnection),
-                Context.BIND_AUTO_CREATE,
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
             )
         } returns true
 
@@ -394,7 +446,13 @@ class AuthenticatorBridgeManagerTest {
         assertEquals(AccountSyncState.Error, manager.accountSyncStateFlow.value)
 
         verify(exactly = 0) { mockBridgeService.symmetricEncryptionKeyData }
-        verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
+        verify {
+            context.bindService(
+                any(),
+                any(),
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
+            )
+        }
         verify { mockBridgeService.registerBridgeServiceCallback(any()) }
         verify { mockBridgeService.syncAccounts() }
     }
@@ -403,7 +461,6 @@ class AuthenticatorBridgeManagerTest {
     @Suppress("MaxLineLength")
     fun `onAccountsSync when decryption fails state should be error`() {
         val encryptedAccounts: EncryptedSharedAccountData = mockk()
-        mockkStatic(EncryptedSharedAccountData::decrypt)
         every { encryptedAccounts.decrypt(SYMMETRIC_KEY) } returns Result.failure(RuntimeException())
         every {
             mockBridgeService.checkSymmetricEncryptionKeyFingerprint(
@@ -424,7 +481,7 @@ class AuthenticatorBridgeManagerTest {
             context.bindService(
                 any(),
                 capture(serviceConnection),
-                Context.BIND_AUTO_CREATE,
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
             )
         } returns true
 
@@ -437,7 +494,13 @@ class AuthenticatorBridgeManagerTest {
 
         assertEquals(SYMMETRIC_KEY, fakeSymmetricKeyStorageProvider.symmetricKey)
         verify(exactly = 0) { mockBridgeService.symmetricEncryptionKeyData }
-        verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
+        verify {
+            context.bindService(
+                any(),
+                any(),
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
+            )
+        }
         verify { mockBridgeService.registerBridgeServiceCallback(any()) }
         verify { mockBridgeService.syncAccounts() }
     }
@@ -449,15 +512,84 @@ class AuthenticatorBridgeManagerTest {
             anyConstructed<Intent>().setComponent(any())
         } returns mockIntent
 
-        every { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) } returns true
+        every {
+            context.bindService(
+                any(),
+                any(),
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
+            )
+        } returns true
         every { context.unbindService(any()) } just runs
 
         fakeLifecycleOwner.lifecycle.dispatchOnStart()
         fakeLifecycleOwner.lifecycle.dispatchOnStop()
 
         assertEquals(AccountSyncState.Loading, manager.accountSyncStateFlow.value)
-        verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
+        verify {
+            context.bindService(
+                any(),
+                any(),
+                Context.BIND_AUTO_CREATE or Context.BIND_ALLOW_ACTIVITY_STARTS,
+            )
+        }
         verify { context.unbindService(any()) }
+    }
+
+    /**
+     * Tests to verify behavior between API levels 31 and 33.
+     */
+    @Nested
+    inner class PostApi31AuthenticatorBridgeManagerTest {
+        @BeforeEach
+        fun setup() {
+            every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns true
+            every { isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns false
+        }
+
+        @Test
+        fun `correct flags should be passed to bindService when API level is between 31 and 33`() {
+            val mockIntent: Intent = mockk()
+            every {
+                anyConstructed<Intent>().setComponent(any())
+            } returns mockIntent
+
+            every { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) } returns true
+
+            fakeLifecycleOwner.lifecycle.dispatchOnStart()
+
+            verify { context.bindService(any(), any(), Context.BIND_AUTO_CREATE) }
+        }
+    }
+
+    /**
+     * Tests to verify behavior between API levels below 31.
+     */
+    @Nested
+    inner class PreApi31AuthenticatorBridgeManagerTest {
+        @BeforeEach
+        fun setup() {
+            every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns false
+            every { isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns false
+        }
+
+        @Test
+        fun `initial AccountSyncState should be OsVersionNotSupported when OS level is below S`() {
+            val manager = AuthenticatorBridgeManagerImpl(
+                context = context,
+                connectionType = AuthenticatorBridgeConnectionType.DEV,
+                symmetricKeyStorageProvider = fakeSymmetricKeyStorageProvider,
+                callbackProvider = testAuthenticatorBridgeCallbackProvider,
+                processLifecycleOwner = fakeLifecycleOwner,
+            )
+            assertEquals(AccountSyncState.OsVersionNotSupported, manager.accountSyncStateFlow.value)
+        }
+
+        @Test
+        fun `onStart when OS level is below S should set state to OsVersionNotSupported`() {
+            every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns false
+            fakeLifecycleOwner.lifecycle.dispatchOnStart()
+            assertEquals(AccountSyncState.OsVersionNotSupported, manager.accountSyncStateFlow.value)
+        }
     }
 }
 

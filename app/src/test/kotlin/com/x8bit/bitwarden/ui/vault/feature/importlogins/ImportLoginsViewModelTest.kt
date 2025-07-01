@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.importlogins
 
 import android.net.Uri
-import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
@@ -48,10 +47,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(
-            SavedStateHandle::toImportLoginsArgs,
-            Uri::parse,
-        )
+        mockkStatic(Uri::parse)
         every { Uri.parse(Environment.Us.environmentUrlData.base) } returns mockk {
             every { host } returns DEFAULT_VAULT_URL
         }
@@ -59,10 +55,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(
-            SavedStateHandle::toImportLoginsArgs,
-            Uri::parse,
-        )
+        unmockkStatic(Uri::parse)
     }
 
     private val snackbarRelayManager: SnackbarRelayManagerImpl = mockk {
@@ -88,7 +81,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 showBottomSheet = false,
                 currentWebVaultUrl = DEFAULT_VAULT_URL,
-                snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
             ),
             viewModel.stateFlow.value,
         )
@@ -104,7 +96,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 showBottomSheet = false,
                 currentWebVaultUrl = DEFAULT_VAULT_URL,
-                snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
             ),
             viewModel.stateFlow.value,
         )
@@ -125,7 +116,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     showBottomSheet = false,
                     currentWebVaultUrl = DEFAULT_VAULT_URL,
-                    snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
                 ),
                 awaitItem(),
             )
@@ -136,7 +126,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     showBottomSheet = false,
                     currentWebVaultUrl = DEFAULT_VAULT_URL,
-                    snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
                 ),
                 awaitItem(),
             )
@@ -160,7 +149,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         showBottomSheet = false,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
-                        snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
                     ),
                     stateFlow.awaitItem(),
                 )
@@ -171,7 +159,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         showBottomSheet = false,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
-                        snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
                     ),
                     stateFlow.awaitItem(),
                 )
@@ -201,7 +188,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     showBottomSheet = false,
                     currentWebVaultUrl = DEFAULT_VAULT_URL,
-                    snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
                 ),
                 awaitItem(),
             )
@@ -212,7 +198,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     viewState = ImportLoginsState.ViewState.ImportStepOne,
                     showBottomSheet = false,
                     currentWebVaultUrl = DEFAULT_VAULT_URL,
-                    snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
                 ),
                 awaitItem(),
             )
@@ -253,7 +238,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewState = ImportLoginsState.ViewState.ImportStepOne,
                 showBottomSheet = false,
                 currentWebVaultUrl = DEFAULT_VAULT_URL,
-                snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
             ),
             viewModel.stateFlow.value,
         )
@@ -269,7 +253,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewState = ImportLoginsState.ViewState.ImportStepTwo,
                 showBottomSheet = false,
                 currentWebVaultUrl = DEFAULT_VAULT_URL,
-                snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
             ),
             viewModel.stateFlow.value,
         )
@@ -285,7 +268,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewState = ImportLoginsState.ViewState.ImportStepThree,
                 showBottomSheet = false,
                 currentWebVaultUrl = DEFAULT_VAULT_URL,
-                snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
             ),
             viewModel.stateFlow.value,
         )
@@ -305,7 +287,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 showBottomSheet = false,
                 currentWebVaultUrl = DEFAULT_VAULT_URL,
-                snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
             ),
             viewModel.stateFlow.value,
         )
@@ -326,7 +307,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                     viewState = ImportLoginsState.ViewState.InitialContent,
                     showBottomSheet = false,
                     currentWebVaultUrl = DEFAULT_VAULT_URL,
-                    snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
                 ),
                 awaitItem(),
             )
@@ -354,7 +334,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         showBottomSheet = false,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
-                        snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
                     ),
                     awaitItem(),
                 )
@@ -374,7 +353,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 showBottomSheet = true,
                 currentWebVaultUrl = DEFAULT_VAULT_URL,
-                snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
             ),
             viewModel.stateFlow.value,
         )
@@ -404,7 +382,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         showBottomSheet = false,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
-                        snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
                     ),
                     awaitItem(),
                 )
@@ -417,7 +394,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         showBottomSheet = false,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
-                        snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
                     ),
                     awaitItem(),
                 )
@@ -435,7 +411,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 viewState = ImportLoginsState.ViewState.InitialContent,
                 showBottomSheet = false,
                 currentWebVaultUrl = DEFAULT_VAULT_URL,
-                snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
             ),
             viewModel.stateFlow.value,
         )
@@ -458,7 +433,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         showBottomSheet = false,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
-                        snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
                     ),
                     viewModel.stateFlow.value,
                 )
@@ -484,7 +458,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         showBottomSheet = false,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
-                        snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
                     ),
                     stateFlow.awaitItem(),
                 )
@@ -494,7 +467,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         showBottomSheet = true,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
-                        snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
                     ),
                     stateFlow.awaitItem(),
                 )
@@ -505,7 +477,6 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         showBottomSheet = false,
                         currentWebVaultUrl = DEFAULT_VAULT_URL,
-                        snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
                     ),
                     stateFlow.awaitItem(),
                 )
@@ -519,17 +490,12 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             verify {
                 snackbarRelayManager.sendSnackbarData(
                     data = expectedSnackbarData,
-                    relay = SnackbarRelay.MY_VAULT_RELAY,
+                    relay = SnackbarRelay.LOGINS_IMPORTED,
                 )
             }
         }
 
-    private fun createViewModel(
-        snackbarRelay: SnackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
-    ): ImportLoginsViewModel = ImportLoginsViewModel(
-        savedStateHandle = SavedStateHandle().apply {
-            every { toImportLoginsArgs() } returns ImportLoginsArgs(snackBarRelay = snackbarRelay)
-        },
+    private fun createViewModel(): ImportLoginsViewModel = ImportLoginsViewModel(
         vaultRepository = vaultRepository,
         firstTimeActionManager = firstTimeActionManager,
         environmentRepository = environmentRepository,
@@ -544,5 +510,4 @@ private val DEFAULT_STATE = ImportLoginsState(
     viewState = ImportLoginsState.ViewState.InitialContent,
     showBottomSheet = false,
     currentWebVaultUrl = DEFAULT_VAULT_URL,
-    snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
 )

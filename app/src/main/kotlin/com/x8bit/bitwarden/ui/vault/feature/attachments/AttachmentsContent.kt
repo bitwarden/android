@@ -26,11 +26,12 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
+import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.vault.feature.attachments.handlers.AttachmentsHandlers
@@ -189,7 +190,7 @@ private fun AttachmentListEntry(
         Spacer(modifier = Modifier.width(8.dp))
 
         BitwardenStandardIconButton(
-            vectorIconRes = R.drawable.ic_trash,
+            vectorIconRes = BitwardenDrawable.ic_trash,
             contentDescription = stringResource(id = R.string.delete),
             onClick = { shouldShowDeleteDialog = true },
             modifier = Modifier

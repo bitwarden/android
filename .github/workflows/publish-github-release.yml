@@ -9,6 +9,8 @@ permissions:
   contents: write
   actions: read
 
+permissions: {}
+
 jobs:
   publish-release-password-manager:
     name: Publish Password Manager Release

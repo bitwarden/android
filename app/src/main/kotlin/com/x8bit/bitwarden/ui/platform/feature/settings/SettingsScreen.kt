@@ -24,11 +24,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
+import com.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
+import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenPushRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 
@@ -70,7 +71,7 @@ fun SettingsScreen(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = if (state.shouldShowCloseButton) {
                     NavigationIcon(
-                        navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
+                        navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                         navigationIconContentDescription = stringResource(id = R.string.close),
                         onNavigationIconClick = remember(viewModel) {
                             { viewModel.trySendAction(SettingsAction.CloseClick) }

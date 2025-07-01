@@ -11,9 +11,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.compositionLocalOf
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManagerImpl
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManagerImpl
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManagerUnsupportedApiImpl
@@ -32,6 +32,7 @@ import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManagerImp
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManagerImpl
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
+import java.time.Clock
 
 /**
  * Helper [Composable] that wraps a [content] and provides manager classes via [CompositionLocal].
@@ -43,8 +44,9 @@ fun LocalManagerProvider(
     appResumeStateManager: AppResumeStateManager = AppResumeStateManagerImpl(),
     appReviewManager: AppReviewManager = AppReviewManagerImpl(activity = activity),
     biometricsManager: BiometricsManager = BiometricsManagerImpl(activity = activity),
+    clock: Clock = Clock.systemDefaultZone(),
     exitManager: ExitManager = ExitManagerImpl(activity = activity),
-    intentManager: IntentManager = IntentManagerImpl(context = activity),
+    intentManager: IntentManager = IntentManagerImpl(context = activity, clock = clock),
     credentialProviderCompletionManager: CredentialProviderCompletionManager =
         createCredentialProviderCompletionManager(activity = activity),
     keyChainManager: KeyChainManager = KeyChainManagerImpl(activity = activity),
@@ -57,6 +59,7 @@ fun LocalManagerProvider(
         LocalAppResumeStateManager provides appResumeStateManager,
         LocalAppReviewManager provides appReviewManager,
         LocalBiometricsManager provides biometricsManager,
+        LocalClock provides clock,
         LocalExitManager provides exitManager,
         LocalCredentialProviderCompletionManager provides credentialProviderCompletionManager,
         LocalIntentManager provides intentManager,
@@ -70,7 +73,7 @@ fun LocalManagerProvider(
 private fun createCredentialProviderCompletionManager(
     activity: Activity,
 ): CredentialProviderCompletionManager =
-    if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
+    if (!isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
         CredentialProviderCompletionManagerUnsupportedApiImpl
     } else {
         CredentialProviderCompletionManagerImpl(activity)
@@ -82,6 +85,11 @@ private fun createCredentialProviderCompletionManager(
 val LocalBiometricsManager: ProvidableCompositionLocal<BiometricsManager> = compositionLocalOf {
     error("CompositionLocal BiometricsManager not present")
 }
+
+/**
+ * Provides access to the clock throughout the app.
+ */
+val LocalClock: ProvidableCompositionLocal<Clock> = compositionLocalOf { Clock.systemDefaultZone() }
 
 /**
  * Provides access to the exit manager throughout the app.

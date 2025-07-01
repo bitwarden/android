@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import android.net.Uri
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -11,7 +13,6 @@ import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.util.getFilteredCollections
 import com.x8bit.bitwarden.ui.vault.feature.util.getFilteredFolders
 import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
@@ -39,10 +40,13 @@ fun VaultData.toViewState(
     isIconLoadingDisabled: Boolean,
     baseIconUrl: String,
     vaultFilterType: VaultFilterType,
+    restrictItemTypesPolicyOrgIds: List<String>?,
 ): VaultState.ViewState {
 
     val filteredCipherViewListWithDeletedItems =
-        cipherViewList.toFilteredList(vaultFilterType)
+        cipherViewList
+            .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds ?: emptyList())
+            .toFilteredList(vaultFilterType)
 
     val filteredCipherViewList = filteredCipherViewListWithDeletedItems
         .filter { it.deletedDate == null }
@@ -69,6 +73,7 @@ fun VaultData.toViewState(
         val totpItems = filteredCipherViewList.filter { it.login?.totp != null }
         val shouldShowUnGroupedItems = filteredCollectionViewList.isEmpty() &&
             noFolderItems.size < NO_FOLDER_ITEM_THRESHOLD
+        val cardCount = filteredCipherViewList.count { it.type == CipherType.CARD }
         VaultState.ViewState.Content(
             itemTypesCount = itemTypesCount,
             totpItemsCount = if (isPremium) {
@@ -77,7 +82,7 @@ fun VaultData.toViewState(
                 totpItems.count { it.organizationUseTotp }
             },
             loginItemsCount = filteredCipherViewList.count { it.type == CipherType.LOGIN },
-            cardItemsCount = filteredCipherViewList.count { it.type == CipherType.CARD },
+            cardItemsCount = cardCount,
             identityItemsCount = filteredCipherViewList.count { it.type == CipherType.IDENTITY },
             secureNoteItemsCount = filteredCipherViewList
                 .count { it.type == CipherType.SECURE_NOTE },
@@ -144,6 +149,7 @@ fun VaultData.toViewState(
             trashItemsCount = filteredCipherViewListWithDeletedItems.count {
                 it.deletedDate != null
             },
+            showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds == null,
         )
     }
 }
@@ -157,9 +163,9 @@ fun List<LoginUriView>?.toLoginIconData(
     usePasskeyDefaultIcon: Boolean,
 ): IconData {
     val defaultIconRes = if (usePasskeyDefaultIcon) {
-        R.drawable.ic_bw_passkey
+        BitwardenDrawable.ic_bw_passkey
     } else {
-        R.drawable.ic_globe
+        BitwardenDrawable.ic_globe
     }
 
     var uri = this
@@ -168,11 +174,11 @@ fun List<LoginUriView>?.toLoginIconData(
         ?: return IconData.Local(defaultIconRes)
 
     if (uri.startsWith(ANDROID_URI)) {
-        return IconData.Local(R.drawable.ic_android)
+        return IconData.Local(BitwardenDrawable.ic_android)
     }
 
     if (uri.startsWith(IOS_URI)) {
-        return IconData.Local(R.drawable.ic_ios)
+        return IconData.Local(BitwardenDrawable.ic_ios)
     }
 
     if (isIconLoadingDisabled) {
@@ -197,7 +203,7 @@ fun List<LoginUriView>?.toLoginIconData(
 /**
  * Transforms a [CipherView] into a [VaultState.ViewState.VaultItem].
  */
-@Suppress("MagicNumber", "LongMethod")
+@Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod")
 private fun CipherView.toVaultItemOrNull(
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
@@ -220,7 +226,8 @@ private fun CipherView.toVaultItemOrNull(
                 isPremiumUser = isPremiumUser,
             ),
             extraIconList = toLabelIcons(),
-            shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
+            shouldShowMasterPasswordReprompt = hasMasterPassword &&
+                reprompt == CipherRepromptType.PASSWORD,
         )
 
         CipherType.SECURE_NOTE -> VaultState.ViewState.VaultItem.SecureNote(
@@ -231,7 +238,8 @@ private fun CipherView.toVaultItemOrNull(
                 isPremiumUser = isPremiumUser,
             ),
             extraIconList = toLabelIcons(),
-            shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
+            shouldShowMasterPasswordReprompt = hasMasterPassword &&
+                reprompt == CipherRepromptType.PASSWORD,
         )
 
         CipherType.CARD -> VaultState.ViewState.VaultItem.Card(
@@ -246,7 +254,8 @@ private fun CipherView.toVaultItemOrNull(
                 isPremiumUser = isPremiumUser,
             ),
             extraIconList = toLabelIcons(),
-            shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
+            shouldShowMasterPasswordReprompt = hasMasterPassword &&
+                reprompt == CipherRepromptType.PASSWORD,
         )
 
         CipherType.IDENTITY -> VaultState.ViewState.VaultItem.Identity(
@@ -263,7 +272,8 @@ private fun CipherView.toVaultItemOrNull(
                 isPremiumUser = isPremiumUser,
             ),
             extraIconList = toLabelIcons(),
-            shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
+            shouldShowMasterPasswordReprompt = hasMasterPassword &&
+                reprompt == CipherRepromptType.PASSWORD,
         )
 
         CipherType.SSH_KEY -> VaultState.ViewState.VaultItem.SshKey(
@@ -286,7 +296,8 @@ private fun CipherView.toVaultItemOrNull(
                 isPremiumUser = isPremiumUser,
             ),
             extraIconList = toLabelIcons(),
-            shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
+            shouldShowMasterPasswordReprompt = hasMasterPassword &&
+                reprompt == CipherRepromptType.PASSWORD,
         )
     }
 }
@@ -348,5 +359,28 @@ fun List<CollectionView>.toFilteredList(
                 is VaultFilterType.OrganizationVault -> {
                     it.organizationId == vaultFilterType.organizationId
                 }
+            }
+        }
+
+/**
+ * Filters out [CipherType.CARD] [CipherView]s that are in [restrictItemTypesPolicyOrgIds] list.
+ * When [restrictItemTypesPolicyOrgIds] is not empty, individual vault items are also removed.
+ */
+fun List<CipherView>.applyRestrictItemTypesPolicy(
+    restrictItemTypesPolicyOrgIds: List<String>,
+): List<CipherView> =
+    this
+        .filterNot { cipherView ->
+            if (restrictItemTypesPolicyOrgIds.isEmpty()) {
+                // No policy, so don't apply removal
+                false
+            } else if (cipherView.type != CipherType.CARD) {
+                // Policy only for cards
+                false
+            } else {
+                // If a policy is enable for a given organization then
+                // also hide cards from individual vault
+                cipherView.organizationId.isNullOrEmpty() ||
+                    restrictItemTypesPolicyOrgIds.contains(cipherView.organizationId)
             }
         }

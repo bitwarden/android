@@ -21,11 +21,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.authenticator.feature.search.handlers.SearchHandlers
-import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenSearchTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorSearchTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.bottomDivider
+import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 
 /**
  * The search screen for authenticator items.
@@ -58,7 +59,7 @@ fun ItemSearchScreen(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            BitwardenSearchTopAppBar(
+            AuthenticatorSearchTopAppBar(
                 modifier = Modifier
                     .semantics { testTag = "SearchFieldEntry" }
                     .bottomDivider(),
@@ -67,7 +68,7 @@ fun ItemSearchScreen(
                 onSearchTermChange = searchHandlers.onSearchTermChange,
                 scrollBehavior = scrollBehavior,
                 navigationIcon = NavigationIcon(
-                    navigationIcon = painterResource(id = R.drawable.ic_back),
+                    navigationIcon = painterResource(id = BitwardenDrawable.ic_back),
                     navigationIconContentDescription = stringResource(id = R.string.back),
                     onNavigationIconClick = searchHandlers.onBackClick,
                 ),

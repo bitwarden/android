@@ -7,17 +7,20 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
@@ -26,6 +29,7 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.assertScrollableNodeDoesNotExist
 import com.bitwarden.ui.util.onNodeWithTextAfterScroll
+import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
@@ -34,7 +38,6 @@ import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertRemovalConfirmationDialogIsDisplayed
@@ -51,6 +54,7 @@ import com.x8bit.bitwarden.ui.util.performYesDialogButtonClick
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -113,10 +117,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
                 onNavigateToVerificationCodeScreen = { onNavigateToVerificationCodeScreen = true },
                 onNavigateToSearchVault = { onNavigateToSearchScreen = true },
-                onNavigateToImportLogins = {
-                    onNavigateToImportLoginsCalled = true
-                    assertEquals(SnackbarRelay.MY_VAULT_RELAY, it)
-                },
+                onNavigateToImportLogins = { onNavigateToImportLoginsCalled = true },
                 onNavigateToAddFolderScreen = { folderName ->
                     onNavigateToAddFolderCalled = true
                     onNavigateToAddFolderParentFolderName = folderName
@@ -571,7 +572,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -885,6 +886,263 @@ class VaultScreenTest : BitwardenComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking a favorite item with password prompt should prompt for password before dismissing upon Cancel`() {
+        val itemText = "Test Item"
+        val userName = "Bitwarden"
+        val vaultItem = VaultState.ViewState.VaultItem.Login(
+            id = "12345",
+            name = itemText.asText(),
+            username = userName.asText(),
+            overflowOptions = emptyList(),
+            shouldShowMasterPasswordReprompt = true,
+        )
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    favoriteItems = listOf(vaultItem),
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
+        composeTestRule
+            .onNodeWithText(text = itemText)
+            .assertTextEquals(itemText, userName)
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password confirmation")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                text = "This action is protected, to continue please re-enter your master " +
+                    "password to verify your identity.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(
+                action = VaultAction.MasterPasswordRepromptSubmit(
+                    item = vaultItem,
+                    password = "",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking a favorite item with password prompt should prompt for password before sending VaultItemClick upon Submit`() {
+        val itemText = "Test Item"
+        val userName = "Bitwarden"
+        val password = "password1234"
+        val vaultItem = VaultState.ViewState.VaultItem.Login(
+            id = "12345",
+            name = itemText.asText(),
+            username = userName.asText(),
+            overflowOptions = emptyList(),
+            shouldShowMasterPasswordReprompt = true,
+        )
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    favoriteItems = listOf(vaultItem),
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
+        composeTestRule
+            .onNodeWithText(text = itemText)
+            .assertTextEquals(itemText, userName)
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password confirmation")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                text = "This action is protected, to continue please re-enter your master " +
+                    "password to verify your identity.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performTextInput(text = password)
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                action = VaultAction.MasterPasswordRepromptSubmit(
+                    item = vaultItem,
+                    password = password,
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking a favorite item overflow with password prompt should prompt for password before dismissing upon Cancel`() {
+        val itemText = "Test Item"
+        val userName = "Bitwarden"
+        val cipherId = "12345"
+        val vaultItem = VaultState.ViewState.VaultItem.Login(
+            id = cipherId,
+            name = itemText.asText(),
+            username = userName.asText(),
+            overflowOptions = persistentListOf(
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = cipherId,
+                    cipherType = CipherType.LOGIN,
+                    requiresPasswordReprompt = true,
+                ),
+            ),
+            shouldShowMasterPasswordReprompt = true,
+        )
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    favoriteItems = listOf(vaultItem),
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
+        composeTestRule
+            .onNodeWithText(text = itemText)
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "Options"))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "View")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password confirmation")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                text = "This action is protected, to continue please re-enter your master " +
+                    "password to verify your identity.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(
+                action = VaultAction.MasterPasswordRepromptSubmit(
+                    item = vaultItem,
+                    password = "",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking a favorite item overflow with password prompt should prompt for password before sending VaultItemClick upon Submit`() {
+        val itemText = "Test Item"
+        val userName = "Bitwarden"
+        val password = "password1234"
+        val cipherId = "12345"
+        val overflowAction = ListingItemOverflowAction.VaultAction.ViewClick(
+            cipherId = cipherId,
+            cipherType = CipherType.LOGIN,
+            requiresPasswordReprompt = true,
+        )
+        val vaultItem = VaultState.ViewState.VaultItem.Login(
+            id = cipherId,
+            name = itemText.asText(),
+            username = userName.asText(),
+            overflowOptions = persistentListOf(overflowAction),
+            shouldShowMasterPasswordReprompt = true,
+        )
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    favoriteItems = persistentListOf(vaultItem),
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
+        composeTestRule
+            .onNodeWithText(text = itemText)
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "Options"))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "View")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password confirmation")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                text = "This action is protected, to continue please re-enter your master " +
+                    "password to verify your identity.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performTextInput(text = password)
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                action = VaultAction.OverflowMasterPasswordRepromptSubmit(
+                    overflowAction = overflowAction,
+                    password = password,
+                ),
+            )
+        }
+    }
+
     @Test
     fun `clicking a folder item should send FolderClick with the correct item`() {
         val folderText = "Test Folder"
@@ -973,7 +1231,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `clicking a no folder item should send VaultItemClick with the correct item`() {
+    fun `clicking a no folder item without password prompt should send VaultItemClick`() {
         val itemText = "Test Item"
         val userName = "BitWarden"
         val vaultItem = VaultState.ViewState.VaultItem.Login(
@@ -998,6 +1256,262 @@ class VaultScreenTest : BitwardenComposeTest() {
             .performClick()
         verify {
             viewModel.trySendAction(VaultAction.VaultItemClick(vaultItem))
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking a no folder overflow item with password prompt should prompt for password before dismissing upon Cancel`() {
+        val itemText = "Test Item"
+        val userName = "Bitwarden"
+        val cipherId = "12345"
+        val overflowAction = ListingItemOverflowAction.VaultAction.ViewClick(
+            cipherId = cipherId,
+            cipherType = CipherType.LOGIN,
+            requiresPasswordReprompt = true,
+        )
+        val vaultItem = VaultState.ViewState.VaultItem.Login(
+            id = cipherId,
+            name = itemText.asText(),
+            username = userName.asText(),
+            overflowOptions = persistentListOf(overflowAction),
+            shouldShowMasterPasswordReprompt = true,
+        )
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    noFolderItems = listOf(vaultItem),
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
+        composeTestRule
+            .onNodeWithText(text = itemText)
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "Options"))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "View")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password confirmation")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                text = "This action is protected, to continue please re-enter your master " +
+                    "password to verify your identity.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(
+                action = VaultAction.OverflowMasterPasswordRepromptSubmit(
+                    overflowAction = overflowAction,
+                    password = "",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking a no folder overflow item with password prompt should prompt for password before sending VaultItemClick upon Submit`() {
+        val itemText = "Test Item"
+        val userName = "Bitwarden"
+        val password = "password1234"
+        val cipherId = "12345"
+        val overflowAction = ListingItemOverflowAction.VaultAction.ViewClick(
+            cipherId = cipherId,
+            cipherType = CipherType.LOGIN,
+            requiresPasswordReprompt = true,
+        )
+        val vaultItem = VaultState.ViewState.VaultItem.Login(
+            id = cipherId,
+            name = itemText.asText(),
+            username = userName.asText(),
+            overflowOptions = persistentListOf(overflowAction),
+            shouldShowMasterPasswordReprompt = true,
+        )
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    noFolderItems = listOf(vaultItem),
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
+        composeTestRule
+            .onNodeWithText(text = itemText)
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "Options"))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "View")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password confirmation")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                text = "This action is protected, to continue please re-enter your master " +
+                    "password to verify your identity.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performTextInput(text = password)
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                action = VaultAction.OverflowMasterPasswordRepromptSubmit(
+                    overflowAction = overflowAction,
+                    password = password,
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking a no folder item with password prompt should prompt for password before dismissing upon Cancel`() {
+        val itemText = "Test Item"
+        val userName = "Bitwarden"
+        val vaultItem = VaultState.ViewState.VaultItem.Login(
+            id = "12345",
+            name = itemText.asText(),
+            username = userName.asText(),
+            overflowOptions = emptyList(),
+            shouldShowMasterPasswordReprompt = true,
+        )
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    noFolderItems = listOf(vaultItem),
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
+        composeTestRule
+            .onNodeWithText(text = itemText)
+            .assertTextEquals(itemText, userName)
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password confirmation")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                text = "This action is protected, to continue please re-enter your master " +
+                    "password to verify your identity.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(
+                action = VaultAction.MasterPasswordRepromptSubmit(
+                    item = vaultItem,
+                    password = "",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking a no folder item with password prompt should prompt for password before sending VaultItemClick upon Submit`() {
+        val itemText = "Test Item"
+        val userName = "Bitwarden"
+        val password = "password1234"
+        val vaultItem = VaultState.ViewState.VaultItem.Login(
+            id = "12345",
+            name = itemText.asText(),
+            username = userName.asText(),
+            overflowOptions = emptyList(),
+            shouldShowMasterPasswordReprompt = true,
+        )
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    noFolderItems = listOf(vaultItem),
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(itemText))
+        composeTestRule
+            .onNodeWithText(text = itemText)
+            .assertTextEquals(itemText, userName)
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password confirmation")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                text = "This action is protected, to continue please re-enter your master " +
+                    "password to verify your identity.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performTextInput(text = password)
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                action = VaultAction.MasterPasswordRepromptSubmit(
+                    item = vaultItem,
+                    password = password,
+                ),
+            )
         }
     }
 
@@ -1035,6 +1549,36 @@ class VaultScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(VaultAction.LoginGroupClick)
         }
+    }
+
+    @Test
+    fun `card section should be visible based on state`() {
+        mutableStateFlow.update { state ->
+            state.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    cardItemsCount = 1,
+                    showCardGroup = true,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Card")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { state ->
+            state.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    cardItemsCount = 0,
+                    showCardGroup = false,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Card")
+            .assertIsNotDisplayed()
     }
 
     @Test
@@ -1343,7 +1887,11 @@ class VaultScreenTest : BitwardenComposeTest() {
     @Test
     fun `SelectVaultAddItemType dialog state show vault item type selection dialog`() {
         mutableStateFlow.update {
-            it.copy(dialog = VaultState.DialogState.SelectVaultAddItemType)
+            it.copy(
+                dialog = VaultState.DialogState.SelectVaultAddItemType(
+                    persistentListOf(CreateVaultItemType.SSH_KEY),
+                ),
+            )
         }
 
         composeTestRule
@@ -1357,9 +1905,51 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `SelectVaultAddItemType dialog state hide vault item type selection if excluded`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.SelectVaultAddItemType(
+                    persistentListOf(
+                        CreateVaultItemType.SSH_KEY,
+                        CreateVaultItemType.CARD,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Type")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Card")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onAllNodesWithText("SSH key")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onAllNodesWithText("Card")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertDoesNotExist()
+    }
+
+    @Test
     fun `when option is selected in SelectVaultAddItemType dialog add item action is sent`() {
         mutableStateFlow.update {
-            it.copy(dialog = VaultState.DialogState.SelectVaultAddItemType)
+            it.copy(
+                dialog = VaultState.DialogState.SelectVaultAddItemType(
+                    persistentListOf(CreateVaultItemType.SSH_KEY),
+                ),
+            )
         }
 
         composeTestRule
@@ -1484,6 +2074,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
     isRefreshing = false,
     showImportActionCard = false,
     flightRecorderSnackBar = null,
+    restrictItemTypesPolicyOrgIds = null,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(
@@ -1499,4 +2090,5 @@ private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultStat
     totpItemsCount = 0,
     itemTypesCount = 4,
     sshKeyItemsCount = 0,
+    showCardGroup = true,
 )

@@ -2,10 +2,11 @@ package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import androidx.annotation.DrawableRes
 import com.bitwarden.send.SendType
+import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.persistentListOf
@@ -16,8 +17,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun createMockDisplayItemForCipher(
     number: Int,
     cipherType: CipherType = CipherType.LOGIN,
-    isTotp: Boolean = false,
-    @DrawableRes fallbackIconRes: Int = R.drawable.ic_globe,
+    @DrawableRes fallbackIconRes: Int = BitwardenDrawable.ic_globe,
 ): SearchState.DisplayItem =
     when (cipherType) {
         CipherType.LOGIN -> {
@@ -33,26 +33,17 @@ fun createMockDisplayItemForCipher(
                 ),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = R.drawable.ic_collections,
+                        iconRes = BitwardenDrawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
-                        iconRes = R.drawable.ic_paperclip,
+                        iconRes = BitwardenDrawable.ic_paperclip,
                         contentDescription = R.string.attachments.asText(),
                         testTag = "CipherWithAttachmentsIcon",
                     ),
                 ),
                 overflowOptions = listOf(
-                    ListingItemOverflowAction.VaultAction.ViewClick(
-                        cipherId = "mockId-$number",
-                        cipherType = CipherType.LOGIN,
-                    ),
-                    ListingItemOverflowAction.VaultAction.EditClick(
-                        cipherId = "mockId-$number",
-                        cipherType = CipherType.LOGIN,
-                        requiresPasswordReprompt = true,
-                    ),
                     ListingItemOverflowAction.VaultAction.CopyUsernameClick(
                         username = "mockUsername-$number",
                     ),
@@ -63,6 +54,17 @@ fun createMockDisplayItemForCipher(
                     ),
                     ListingItemOverflowAction.VaultAction.CopyTotpClick(
                         totpCode = "mockTotp-$number",
+                        requiresPasswordReprompt = true,
+                    ),
+                    ListingItemOverflowAction.VaultAction.ViewClick(
+                        cipherId = "mockId-$number",
+                        cipherType = CipherType.LOGIN,
+                        requiresPasswordReprompt = true,
+                    ),
+                    ListingItemOverflowAction.VaultAction.EditClick(
+                        cipherId = "mockId-$number",
+                        cipherType = CipherType.LOGIN,
+                        requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.LaunchClick(
                         url = "www.mockuri$number.com",
@@ -72,7 +74,6 @@ fun createMockDisplayItemForCipher(
                 totpCode = "mockTotp-$number",
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
-                isTotp = isTotp,
                 itemType = SearchState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
@@ -84,38 +85,39 @@ fun createMockDisplayItemForCipher(
                 titleTestTag = "CipherNameLabel",
                 subtitle = null,
                 subtitleTestTag = "CipherSubTitleLabel",
-                iconData = IconData.Local(R.drawable.ic_note),
+                iconData = IconData.Local(BitwardenDrawable.ic_note),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = R.drawable.ic_collections,
+                        iconRes = BitwardenDrawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
-                        iconRes = R.drawable.ic_paperclip,
+                        iconRes = BitwardenDrawable.ic_paperclip,
                         contentDescription = R.string.attachments.asText(),
                         testTag = "CipherWithAttachmentsIcon",
                     ),
                 ),
                 overflowOptions = listOf(
+                    ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                        notes = "mockNotes-$number",
+                        requiresPasswordReprompt = true,
+                    ),
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = "mockId-$number",
                         cipherType = CipherType.SECURE_NOTE,
+                        requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-$number",
                         cipherType = CipherType.SECURE_NOTE,
                         requiresPasswordReprompt = true,
                     ),
-                    ListingItemOverflowAction.VaultAction.CopyNoteClick(
-                        notes = "mockNotes-$number",
-                    ),
                 ),
                 overflowTestTag = "CipherOptionsButton",
                 totpCode = null,
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
-                isTotp = false,
                 itemType = SearchState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
@@ -127,29 +129,20 @@ fun createMockDisplayItemForCipher(
                 titleTestTag = "CipherNameLabel",
                 subtitle = "mockBrand-$number, *er-$number",
                 subtitleTestTag = "CipherSubTitleLabel",
-                iconData = IconData.Local(R.drawable.ic_payment_card),
+                iconData = IconData.Local(BitwardenDrawable.ic_payment_card),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = R.drawable.ic_collections,
+                        iconRes = BitwardenDrawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
-                        iconRes = R.drawable.ic_paperclip,
+                        iconRes = BitwardenDrawable.ic_paperclip,
                         contentDescription = R.string.attachments.asText(),
                         testTag = "CipherWithAttachmentsIcon",
                     ),
                 ),
                 overflowOptions = listOf(
-                    ListingItemOverflowAction.VaultAction.ViewClick(
-                        cipherId = "mockId-$number",
-                        cipherType = CipherType.CARD,
-                    ),
-                    ListingItemOverflowAction.VaultAction.EditClick(
-                        cipherId = "mockId-$number",
-                        cipherType = CipherType.CARD,
-                        requiresPasswordReprompt = true,
-                    ),
                     ListingItemOverflowAction.VaultAction.CopyNumberClick(
                         number = "mockNumber-$number",
                         requiresPasswordReprompt = true,
@@ -159,12 +152,21 @@ fun createMockDisplayItemForCipher(
                         cipherId = "mockId-$number",
                         requiresPasswordReprompt = true,
                     ),
+                    ListingItemOverflowAction.VaultAction.ViewClick(
+                        cipherId = "mockId-$number",
+                        cipherType = CipherType.CARD,
+                        requiresPasswordReprompt = true,
+                    ),
+                    ListingItemOverflowAction.VaultAction.EditClick(
+                        cipherId = "mockId-$number",
+                        cipherType = CipherType.CARD,
+                        requiresPasswordReprompt = true,
+                    ),
                 ),
                 overflowTestTag = "CipherOptionsButton",
                 totpCode = null,
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
-                isTotp = false,
                 itemType = SearchState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
@@ -176,15 +178,15 @@ fun createMockDisplayItemForCipher(
                 titleTestTag = "CipherNameLabel",
                 subtitle = "mockFirstName-${number}mockLastName-$number",
                 subtitleTestTag = "CipherSubTitleLabel",
-                iconData = IconData.Local(R.drawable.ic_id_card),
+                iconData = IconData.Local(BitwardenDrawable.ic_id_card),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = R.drawable.ic_collections,
+                        iconRes = BitwardenDrawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
                     IconData.Local(
-                        iconRes = R.drawable.ic_paperclip,
+                        iconRes = BitwardenDrawable.ic_paperclip,
                         contentDescription = R.string.attachments.asText(),
                         testTag = "CipherWithAttachmentsIcon",
                     ),
@@ -193,6 +195,7 @@ fun createMockDisplayItemForCipher(
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = "mockId-$number",
                         cipherType = CipherType.IDENTITY,
+                        requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-$number",
@@ -204,7 +207,6 @@ fun createMockDisplayItemForCipher(
                 totpCode = null,
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
-                isTotp = false,
                 itemType = SearchState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
@@ -216,10 +218,10 @@ fun createMockDisplayItemForCipher(
                 titleTestTag = "CipherNameLabel",
                 subtitle = "mockPublicKey-$number",
                 subtitleTestTag = "CipherSubTitleLabel",
-                iconData = IconData.Local(R.drawable.ic_ssh_key),
+                iconData = IconData.Local(BitwardenDrawable.ic_ssh_key),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = R.drawable.ic_collections,
+                        iconRes = BitwardenDrawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
@@ -228,6 +230,7 @@ fun createMockDisplayItemForCipher(
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = "mockId-$number",
                         cipherType = CipherType.SSH_KEY,
+                        requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-$number",
@@ -239,7 +242,6 @@ fun createMockDisplayItemForCipher(
                 totpCode = null,
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
-                isTotp = false,
                 itemType = SearchState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
@@ -261,20 +263,26 @@ fun createMockDisplayItemForSend(
                 titleTestTag = "SendNameLabel",
                 subtitle = "Oct 27, 2023, 12:00 PM",
                 subtitleTestTag = "SendDateLabel",
-                iconData = IconData.Local(R.drawable.ic_file),
+                iconData = IconData.Local(BitwardenDrawable.ic_file),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = R.drawable.ic_key,
+                        iconRes = BitwardenDrawable.ic_key,
                         contentDescription = R.string.password.asText(),
                         testTag = "PasswordProtectedSendIcon",
                     ),
                     IconData.Local(
-                        iconRes = R.drawable.ic_send_max_access_count_reached,
+                        iconRes = BitwardenDrawable.ic_send_max_access_count_reached,
                         contentDescription = R.string.maximum_access_count_reached.asText(),
                         testTag = "MaxAccessSendIcon",
                     ),
                 ),
                 overflowOptions = listOf(
+                    ListingItemOverflowAction.SendAction.CopyUrlClick(
+                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
+                    ),
+                    ListingItemOverflowAction.SendAction.ShareUrlClick(
+                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
+                    ),
                     ListingItemOverflowAction.SendAction.ViewClick(
                         sendId = "mockId-$number",
                         sendType = sendType,
@@ -283,12 +291,6 @@ fun createMockDisplayItemForSend(
                         sendId = "mockId-$number",
                         sendType = sendType,
                     ),
-                    ListingItemOverflowAction.SendAction.CopyUrlClick(
-                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
-                    ),
-                    ListingItemOverflowAction.SendAction.ShareUrlClick(
-                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
-                    ),
                     ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
                     ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
                 ),
@@ -296,7 +298,6 @@ fun createMockDisplayItemForSend(
                 totpCode = null,
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
-                isTotp = false,
                 itemType = SearchState.DisplayItem.ItemType.Sends(type = sendType),
             )
         }
@@ -308,20 +309,26 @@ fun createMockDisplayItemForSend(
                 titleTestTag = "SendNameLabel",
                 subtitle = "Oct 27, 2023, 12:00 PM",
                 subtitleTestTag = "SendDateLabel",
-                iconData = IconData.Local(R.drawable.ic_file_text),
+                iconData = IconData.Local(BitwardenDrawable.ic_file_text),
                 extraIconList = persistentListOf(
                     IconData.Local(
-                        iconRes = R.drawable.ic_key,
+                        iconRes = BitwardenDrawable.ic_key,
                         contentDescription = R.string.password.asText(),
                         testTag = "PasswordProtectedSendIcon",
                     ),
                     IconData.Local(
-                        iconRes = R.drawable.ic_send_max_access_count_reached,
+                        iconRes = BitwardenDrawable.ic_send_max_access_count_reached,
                         contentDescription = R.string.maximum_access_count_reached.asText(),
                         testTag = "MaxAccessSendIcon",
                     ),
                 ),
                 overflowOptions = listOf(
+                    ListingItemOverflowAction.SendAction.CopyUrlClick(
+                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
+                    ),
+                    ListingItemOverflowAction.SendAction.ShareUrlClick(
+                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
+                    ),
                     ListingItemOverflowAction.SendAction.ViewClick(
                         sendId = "mockId-$number",
                         sendType = sendType,
@@ -330,12 +337,6 @@ fun createMockDisplayItemForSend(
                         sendId = "mockId-$number",
                         sendType = sendType,
                     ),
-                    ListingItemOverflowAction.SendAction.CopyUrlClick(
-                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
-                    ),
-                    ListingItemOverflowAction.SendAction.ShareUrlClick(
-                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
-                    ),
                     ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
                     ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
                 ),
@@ -343,7 +344,6 @@ fun createMockDisplayItemForSend(
                 totpCode = null,
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
-                isTotp = false,
                 itemType = SearchState.DisplayItem.ItemType.Sends(type = sendType),
             )
         }

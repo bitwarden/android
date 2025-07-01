@@ -29,13 +29,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
-import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderDisplayItem
@@ -78,7 +79,7 @@ fun FoldersScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.folders),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(FoldersAction.CloseButtonClick) }
@@ -90,7 +91,7 @@ fun FoldersScreen(
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(FoldersAction.AddFolderButtonClick) }
                 },
-                painter = rememberVectorPainter(id = R.drawable.ic_plus_large),
+                painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
                 contentDescription = stringResource(id = R.string.add_item),
                 modifier = Modifier
                     .testTag(tag = "AddItemButton")

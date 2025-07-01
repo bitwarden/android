@@ -31,26 +31,26 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.animation.AnimateNullableContentVisibility
+import com.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
+import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
+import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
+import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
+import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
+import com.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
-import com.x8bit.bitwarden.ui.platform.components.animation.AnimateNullableContentVisibility
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.x8bit.bitwarden.ui.platform.components.model.BitwardenPullToRefreshState
-import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbar
@@ -64,12 +64,10 @@ import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.components.VaultItemSelectionDialog
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
-import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -94,7 +92,7 @@ fun VaultScreen(
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
-    onNavigateToImportLogins: (SnackbarRelay) -> Unit,
+    onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutScreen: () -> Unit,
     exitManager: ExitManager = LocalExitManager.current,
@@ -172,10 +170,7 @@ fun VaultScreen(
                     .show()
             }
 
-            VaultEvent.NavigateToImportLogins -> {
-                onNavigateToImportLogins(SnackbarRelay.MY_VAULT_RELAY)
-            }
-
+            VaultEvent.NavigateToImportLogins -> onNavigateToImportLogins()
             is VaultEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
             VaultEvent.PromptForAppReview -> {
                 launchPrompt.invoke()
@@ -243,21 +238,6 @@ private fun VaultScreenScaffold(
         )
     }
 
-    var masterPasswordRepromptAction by remember {
-        mutableStateOf<ListingItemOverflowAction.VaultAction?>(null)
-    }
-    masterPasswordRepromptAction?.let { action ->
-        BitwardenMasterPasswordDialog(
-            onConfirmClick = { password ->
-                masterPasswordRepromptAction = null
-                vaultHandlers.masterPasswordRepromptSubmit(action, password)
-            },
-            onDismissRequest = {
-                masterPasswordRepromptAction = null
-            },
-        )
-    }
-
     BitwardenScaffold(
         topBar = {
             BitwardenMediumTopAppBar(
@@ -280,6 +260,7 @@ private fun VaultScreenScaffold(
                         onClick = vaultHandlers.searchIconClickAction,
                     )
                     BitwardenOverflowActionItem(
+                        contentDescription = stringResource(R.string.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.sync),
@@ -343,7 +324,7 @@ private fun VaultScreenScaffold(
             ) {
                 BitwardenFloatingActionButton(
                     onClick = vaultHandlers.selectAddItemTypeClickAction,
-                    painter = rememberVectorPainter(id = R.drawable.ic_plus_large),
+                    painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
                     contentDescription = stringResource(id = R.string.add_item),
                     modifier = Modifier.testTag(tag = "AddItemButton"),
                 )
@@ -372,7 +353,6 @@ private fun VaultScreenScaffold(
                 is VaultState.ViewState.Content -> VaultContent(
                     state = viewState,
                     vaultHandlers = vaultHandlers,
-                    onOverflowOptionClick = { masterPasswordRepromptAction = it },
                     modifier = Modifier.fillMaxSize(),
                 )
 
@@ -401,7 +381,7 @@ private fun VaultScreenScaffold(
                         )
                     }
                     VaultNoItems(
-                        vectorRes = R.drawable.img_vault_items,
+                        vectorRes = BitwardenDrawable.img_vault_items,
                         headerText = stringResource(id = R.string.save_and_protect_your_data),
                         message = stringResource(
                             R.string.the_vault_protects_more_than_just_passwords,
@@ -442,11 +422,12 @@ private fun VaultDialogs(
             onDismissRequest = vaultHandlers.dialogDismiss,
         )
 
-        VaultState.DialogState.SelectVaultAddItemType -> VaultItemSelectionDialog(
+        is VaultState.DialogState.SelectVaultAddItemType -> VaultItemSelectionDialog(
             onOptionSelected = {
                 vaultHandlers.addItemClickAction(it)
             },
             onDismissRequest = vaultHandlers.dialogDismiss,
+            excludedOptions = dialogState.excludedOptions,
         )
 
         null -> Unit

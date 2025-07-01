@@ -9,12 +9,17 @@ import com.bitwarden.sdk.Fido2CredentialStore
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilder
 import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilderImpl
+import com.x8bit.bitwarden.data.credentials.datasource.disk.PrivilegedAppDiskSource
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManagerImpl
 import com.x8bit.bitwarden.data.credentials.manager.OriginManager
 import com.x8bit.bitwarden.data.credentials.manager.OriginManagerImpl
+import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
+import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParserImpl
 import com.x8bit.bitwarden.data.credentials.processor.CredentialProviderProcessor
 import com.x8bit.bitwarden.data.credentials.processor.CredentialProviderProcessorImpl
+import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
+import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepositoryImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -85,10 +90,14 @@ object CredentialProviderModule {
     fun provideOriginManager(
         assetManager: AssetManager,
         digitalAssetLinkService: DigitalAssetLinkService,
+        privilegedAppRepository: PrivilegedAppRepository,
+        featureFlagManager: FeatureFlagManager,
     ): OriginManager =
         OriginManagerImpl(
             assetManager = assetManager,
             digitalAssetLinkService = digitalAssetLinkService,
+            privilegedAppRepository = privilegedAppRepository,
+            featureFlagManager = featureFlagManager,
         )
 
     @Provides
@@ -104,4 +113,24 @@ object CredentialProviderModule {
         featureFlagManager = featureFlagManager,
         biometricsEncryptionManager = biometricsEncryptionManager,
     )
+
+    @Provides
+    @Singleton
+    fun providePrivilegedAppRepository(
+        privilegedAppDiskSource: PrivilegedAppDiskSource,
+        assetManager: AssetManager,
+        dispatcherManager: DispatcherManager,
+        json: Json,
+    ): PrivilegedAppRepository = PrivilegedAppRepositoryImpl(
+        privilegedAppDiskSource = privilegedAppDiskSource,
+        assetManager = assetManager,
+        dispatcherManager = dispatcherManager,
+        json = json,
+    )
+
+    @Provides
+    @Singleton
+    fun provideRelyingPartyParser(
+        json: Json,
+    ): RelyingPartyParser = RelyingPartyParserImpl(json)
 }

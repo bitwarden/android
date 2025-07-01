@@ -29,6 +29,7 @@ fun createMockCipherJsonRequest(
     reprompt: CipherRepromptTypeJson = CipherRepromptTypeJson.NONE,
     lastKnownRevisionDate: ZonedDateTime? = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
     key: String? = "mockKey-$number",
+    encryptedFor: String? = "mockEncryptedFor-$number",
 ): CipherJsonRequest =
     CipherJsonRequest(
         attachments = attachments,
@@ -48,4 +49,5 @@ fun createMockCipherJsonRequest(
         reprompt = reprompt,
         lastKnownRevisionDate = lastKnownRevisionDate,
         key = key,
+        encryptedFor = encryptedFor,
     )

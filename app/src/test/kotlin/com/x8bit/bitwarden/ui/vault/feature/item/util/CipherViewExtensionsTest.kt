@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
 import android.net.Uri
+import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.vault.CipherType
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
@@ -38,105 +38,12 @@ class CipherViewExtensionsTest {
         unmockkStatic(Uri::class)
     }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `toViewState should transform full CipherView into ViewState Login Content maintaining re-prompt and visibility state`() {
-        val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = false)
-        val viewState = cipherView.toViewState(
-            previousState = VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false, isPremiumUser = true).copy(
-                    currentCipher = cipherView,
-                    // This re-prompt state should be preserved
-                    requiresReprompt = false,
-                ),
-                type = createLoginContent(isEmpty = false).copy(
-                    passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
-                        password = "password",
-                        // This visibility state should be preserved
-                        isVisible = true,
-                        canViewPassword = false,
-                    ),
-                ),
-            ),
-            isPremiumUser = true,
-            hasMasterPassword = true,
-            totpCodeItemData = TotpCodeItemData(
-                periodSeconds = 30,
-                timeLeftSeconds = 15,
-                verificationCode = "123456",
-                totpCode = "testCode",
-            ),
-            clock = fixedClock,
-            canDelete = true,
-            canRestore = true,
-            canAssignToCollections = true,
-            canEdit = true,
-            baseIconUrl = "https://example.com/",
-            isIconLoadingDisabled = true,
-            relatedLocations = persistentListOf(),
-        )
-
-        assertEquals(
-            VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false, isPremiumUser = true).copy(
-                    currentCipher = cipherView,
-                    requiresReprompt = false,
-                ),
-                type = createLoginContent(isEmpty = false).copy(
-                    passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
-                        password = "password",
-                        isVisible = true,
-                        canViewPassword = false,
-                    ),
-                ),
-            ),
-            viewState,
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `toViewState should transform full CipherView into ViewState Login Content without master password reprompt`() {
-        val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = false)
-        val viewState = cipherView.toViewState(
-            previousState = null,
-            isPremiumUser = true,
-            hasMasterPassword = false,
-            totpCodeItemData = TotpCodeItemData(
-                periodSeconds = 30,
-                timeLeftSeconds = 15,
-                verificationCode = "123456",
-                totpCode = "testCode",
-            ),
-            clock = fixedClock,
-            canDelete = true,
-            canRestore = true,
-            canAssignToCollections = true,
-            canEdit = true,
-            baseIconUrl = "https://example.com/",
-            isIconLoadingDisabled = true,
-            relatedLocations = persistentListOf(),
-        )
-
-        assertEquals(
-            VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false, isPremiumUser = true).copy(
-                    currentCipher = cipherView,
-                    requiresReprompt = false,
-                ),
-                type = createLoginContent(isEmpty = false),
-            ),
-            viewState,
-        )
-    }
-
     @Test
     fun `toViewState should transform full CipherView into ViewState Login Content with premium`() {
         val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = false)
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = TotpCodeItemData(
                 periodSeconds = 30,
                 timeLeftSeconds = 15,
@@ -171,7 +78,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = isPremiumUser,
-            hasMasterPassword = true,
             totpCodeItemData = TotpCodeItemData(
                 periodSeconds = 30,
                 timeLeftSeconds = 15,
@@ -212,7 +118,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = isPremiumUser,
-            hasMasterPassword = true,
             totpCodeItemData = TotpCodeItemData(
                 periodSeconds = 30,
                 timeLeftSeconds = 15,
@@ -248,7 +153,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
             canDelete = true,
@@ -277,7 +181,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
             canDelete = true,
@@ -294,7 +197,7 @@ class CipherViewExtensionsTest {
                 common = createCommonContent(
                     isEmpty = false,
                     isPremiumUser = true,
-                    iconResId = R.drawable.ic_id_card,
+                    iconResId = BitwardenDrawable.ic_id_card,
                 )
                     .copy(currentCipher = cipherView),
                 type = createIdentityContent(isEmpty = false),
@@ -309,7 +212,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
             canDelete = true,
@@ -326,7 +228,7 @@ class CipherViewExtensionsTest {
                 common = createCommonContent(
                     isEmpty = true,
                     isPremiumUser = true,
-                    iconResId = R.drawable.ic_id_card,
+                    iconResId = BitwardenDrawable.ic_id_card,
                 )
                     .copy(currentCipher = cipherView),
                 type = createIdentityContent(isEmpty = true),
@@ -351,7 +253,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
             canDelete = true,
@@ -368,7 +269,7 @@ class CipherViewExtensionsTest {
                 common = createCommonContent(
                     isEmpty = false,
                     isPremiumUser = true,
-                    iconResId = R.drawable.ic_id_card,
+                    iconResId = BitwardenDrawable.ic_id_card,
                 )
                     .copy(currentCipher = cipherView),
                 type = createIdentityContent(
@@ -398,7 +299,6 @@ class CipherViewExtensionsTest {
         val result = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
             canDelete = true,
@@ -415,7 +315,7 @@ class CipherViewExtensionsTest {
                 common = createCommonContent(
                     isEmpty = false,
                     isPremiumUser = true,
-                    iconResId = R.drawable.ic_id_card,
+                    iconResId = BitwardenDrawable.ic_id_card,
                 ).copy(
                     currentCipher = cipherView.copy(
                         identity = cipherView.identity?.copy(
@@ -447,7 +347,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
             canDelete = true,
@@ -464,7 +363,7 @@ class CipherViewExtensionsTest {
                 common = createCommonContent(
                     isEmpty = false,
                     isPremiumUser = true,
-                    iconResId = R.drawable.ic_note,
+                    iconResId = BitwardenDrawable.ic_note,
                 )
                     .copy(currentCipher = cipherView),
                 type = VaultItemState.ViewState.Content.ItemType.SecureNote,
@@ -480,7 +379,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
             canDelete = true,
@@ -496,7 +394,7 @@ class CipherViewExtensionsTest {
             common = createCommonContent(
                 isEmpty = true,
                 isPremiumUser = true,
-                iconResId = R.drawable.ic_note,
+                iconResId = BitwardenDrawable.ic_note,
             )
                 .copy(currentCipher = cipherView),
             type = VaultItemState.ViewState.Content.ItemType.SecureNote,
@@ -511,7 +409,6 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             previousState = null,
             isPremiumUser = true,
-            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
             canDelete = true,
@@ -527,7 +424,7 @@ class CipherViewExtensionsTest {
                 common = createCommonContent(
                     isEmpty = false,
                     isPremiumUser = true,
-                    iconResId = R.drawable.ic_ssh_key,
+                    iconResId = BitwardenDrawable.ic_ssh_key,
                 ).copy(
                     currentCipher = cipherView.copy(
                         name = "mockName",
@@ -548,18 +445,17 @@ class CipherViewExtensionsTest {
     @Test
     fun `toViewState should transform full CipherView into ViewState with iconData based on cipher type`() {
         mapOf<CipherType, Int>(
-            CipherType.LOGIN to R.drawable.ic_globe,
-            CipherType.IDENTITY to R.drawable.ic_id_card,
-            CipherType.CARD to R.drawable.ic_payment_card,
-            CipherType.SECURE_NOTE to R.drawable.ic_note,
-            CipherType.SSH_KEY to R.drawable.ic_ssh_key,
+            CipherType.LOGIN to BitwardenDrawable.ic_globe,
+            CipherType.IDENTITY to BitwardenDrawable.ic_id_card,
+            CipherType.CARD to BitwardenDrawable.ic_payment_card,
+            CipherType.SECURE_NOTE to BitwardenDrawable.ic_note,
+            CipherType.SSH_KEY to BitwardenDrawable.ic_ssh_key,
         )
             .forEach {
                 val cipherView = createCipherView(type = it.key, isEmpty = false)
                 val viewState = cipherView.toViewState(
                     previousState = null,
                     isPremiumUser = true,
-                    hasMasterPassword = true,
                     totpCodeItemData = null,
                     clock = fixedClock,
                     canDelete = true,
@@ -587,7 +483,6 @@ class CipherViewExtensionsTest {
                 val viewState = cipherView.toViewState(
                     previousState = null,
                     isPremiumUser = true,
-                    hasMasterPassword = true,
                     totpCodeItemData = null,
                     clock = fixedClock,
                     canDelete = true,

@@ -41,21 +41,24 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
 import com.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
+import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
+import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.model.TooltipData
+import com.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkActionText
@@ -67,8 +70,6 @@ import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectB
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
-import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
-import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
 import com.x8bit.bitwarden.ui.platform.components.segment.SegmentedButtonOptionContent
@@ -310,6 +311,7 @@ private fun DefaultAppBar(
         dividerStyle = TopAppBarDividerStyle.NONE,
         actions = {
             BitwardenOverflowActionItem(
+                contentDescription = stringResource(R.string.more),
                 menuItemDataList = persistentListOf(
                     OverflowMenuItemData(
                         text = stringResource(id = R.string.password_history),
@@ -333,7 +335,7 @@ private fun ModalAppBar(
 ) {
     BitwardenTopAppBar(
         title = stringResource(id = R.string.generator),
-        navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
+        navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
         navigationIconContentDescription = stringResource(id = R.string.close),
         onNavigationIconClick = onCloseClick,
         scrollBehavior = scrollBehavior,
@@ -576,7 +578,7 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.GeneratedStringItem(
                 },
             ) {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_generate,
+                    vectorIconRes = BitwardenDrawable.ic_generate,
                     contentDescription = stringResource(id = R.string.generate_password),
                     onClick = onRegenerateClick,
                     modifier = Modifier.testTag("RegenerateValueButton"),

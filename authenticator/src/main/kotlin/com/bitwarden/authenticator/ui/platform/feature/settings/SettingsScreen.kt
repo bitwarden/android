@@ -48,7 +48,7 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenMediumTopAppBar
+import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorMediumTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionRow
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
@@ -64,11 +64,12 @@ import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.base.util.spanStyleOf
-import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 
@@ -138,7 +139,7 @@ fun SettingsScreen(
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            BitwardenMediumTopAppBar(
+            AuthenticatorMediumTopAppBar(
                 title = stringResource(id = R.string.settings),
                 scrollBehavior = scrollBehavior,
             )
@@ -310,7 +311,7 @@ private fun VaultSettings(
                 modifier = Modifier
                     .mirrorIfRtl()
                     .size(24.dp),
-                painter = painterResource(id = R.drawable.ic_navigate_next),
+                painter = painterResource(id = BitwardenDrawable.ic_navigate_next),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface,
             )
@@ -328,7 +329,7 @@ private fun VaultSettings(
                 modifier = Modifier
                     .mirrorIfRtl()
                     .size(24.dp),
-                painter = painterResource(id = R.drawable.ic_navigate_next),
+                painter = painterResource(id = BitwardenDrawable.ic_navigate_next),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface,
             )
@@ -343,37 +344,35 @@ private fun VaultSettings(
         dialogTitle = stringResource(R.string.data_backup_title),
         dialogMessage = stringResource(R.string.data_backup_message),
         dialogConfirmButtonText = stringResource(R.string.learn_more),
-        dialogDismissButtonText = stringResource(R.string.ok),
+        dialogDismissButtonText = stringResource(R.string.okay),
     )
     if (shouldShowSyncWithBitwardenApp) {
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextRow(
             text = stringResource(id = R.string.sync_with_bitwarden_app),
-            description = R.string
-                .this_feature_is_not_not_yet_available_for_self_hosted_users
-                .toAnnotatedString(
-                    style = spanStyleOf(
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        textStyle = MaterialTheme.typography.bodyMedium,
-                    ),
-                    linkHighlightStyle = spanStyleOf(
-                        color = MaterialTheme.colorScheme.primary,
-                        textStyle = MaterialTheme.typography.labelLarge,
-                    ),
-                ) {
+            description = annotatedStringResource(
+                id = R.string.this_feature_is_not_not_yet_available_for_self_hosted_users,
+                style = spanStyleOf(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                ),
+                linkHighlightStyle = spanStyleOf(
+                    color = MaterialTheme.colorScheme.primary,
+                    textStyle = MaterialTheme.typography.labelLarge,
+                ),
+                onAnnotationClick = {
                     when (it) {
                         "learnMore" -> onSyncLearnMoreClick()
                     }
                 },
+            ),
             onClick = onSyncWithBitwardenClick,
             modifier = modifier,
             withDivider = true,
             content = {
                 Icon(
-                    modifier = Modifier
-                        .mirrorIfRtl()
-                        .size(24.dp),
-                    painter = painterResource(id = R.drawable.ic_external_link),
+                    modifier = Modifier.mirrorIfRtl(),
+                    painter = painterResource(id = BitwardenDrawable.ic_external_link),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurface,
                 )
@@ -510,7 +509,7 @@ private fun ThemeSelectionRow(
                 .mirrorIfRtl()
                 .size(24.dp),
             painter = painterResource(
-                id = R.drawable.ic_navigate_next,
+                id = BitwardenDrawable.ic_navigate_next,
             ),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface,
@@ -647,7 +646,7 @@ private fun CopyRow(
                 color = MaterialTheme.colorScheme.onSurface,
             )
             Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_copy),
+                painter = rememberVectorPainter(id = BitwardenDrawable.ic_copy),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface,
             )

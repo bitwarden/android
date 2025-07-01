@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.ui.vault.feature.vault.util
 import android.net.Uri
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
+import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -16,7 +18,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSshKeyView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
 import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
@@ -63,6 +64,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -106,6 +108,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -130,6 +133,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.MyVault,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -152,6 +156,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -185,6 +190,7 @@ class VaultDataExtensionsTest {
                 organizationName = "Mock Organization 1",
             ),
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -218,6 +224,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -238,6 +245,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -261,6 +269,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -285,6 +294,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -301,6 +311,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -322,6 +333,7 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -338,6 +350,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 0,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -359,6 +372,7 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -375,6 +389,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -398,6 +413,7 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -414,6 +430,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -434,7 +451,7 @@ class VaultDataExtensionsTest {
                     usePasskeyDefaultIcon = false,
                 )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_globe)
+        val expected = IconData.Local(iconRes = BitwardenDrawable.ic_globe)
 
         assertEquals(expected, actual)
     }
@@ -455,7 +472,7 @@ class VaultDataExtensionsTest {
                     usePasskeyDefaultIcon = true,
                 )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_bw_passkey)
+        val expected = IconData.Local(iconRes = BitwardenDrawable.ic_bw_passkey)
 
         assertEquals(expected, actual)
     }
@@ -475,7 +492,7 @@ class VaultDataExtensionsTest {
                 usePasskeyDefaultIcon = false,
             )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_globe)
+        val expected = IconData.Local(iconRes = BitwardenDrawable.ic_globe)
 
         assertEquals(expected, actual)
     }
@@ -496,7 +513,7 @@ class VaultDataExtensionsTest {
                 usePasskeyDefaultIcon = true,
             )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_bw_passkey)
+        val expected = IconData.Local(iconRes = BitwardenDrawable.ic_bw_passkey)
 
         assertEquals(expected, actual)
     }
@@ -516,7 +533,7 @@ class VaultDataExtensionsTest {
                 usePasskeyDefaultIcon = false,
             )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_android)
+        val expected = IconData.Local(iconRes = BitwardenDrawable.ic_android)
 
         assertEquals(expected, actual)
     }
@@ -536,7 +553,7 @@ class VaultDataExtensionsTest {
                 usePasskeyDefaultIcon = false,
             )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_ios)
+        val expected = IconData.Local(iconRes = BitwardenDrawable.ic_ios)
 
         assertEquals(expected, actual)
     }
@@ -562,8 +579,8 @@ class VaultDataExtensionsTest {
                 )
 
         val expected = IconData.Network(
-            uri = "https://vault.bitwarden.com/icons/www.mockuri1.com/icon.png",
-            fallbackIconRes = R.drawable.ic_globe,
+            uri = "https://icons.bitwarden.net/www.mockuri1.com/icon.png",
+            fallbackIconRes = BitwardenDrawable.ic_globe,
         )
 
         assertEquals(expected, actual)
@@ -593,8 +610,8 @@ class VaultDataExtensionsTest {
                 )
 
         val expected = IconData.Network(
-            uri = "https://vault.bitwarden.com/icons/www.mockuri1.com/icon.png",
-            fallbackIconRes = R.drawable.ic_bw_passkey,
+            uri = "https://icons.bitwarden.net/www.mockuri1.com/icon.png",
+            fallbackIconRes = BitwardenDrawable.ic_bw_passkey,
         )
 
         assertEquals(expected, actual)
@@ -621,6 +638,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -637,6 +655,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -660,6 +679,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -676,6 +696,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 0,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -702,6 +723,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -724,6 +746,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 100,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -751,6 +774,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -767,8 +791,8 @@ class VaultDataExtensionsTest {
                         id = "mockId-1",
                         name = mockCipher.name.asText(),
                         startIcon = IconData.Network(
-                            uri = "https://vault.bitwarden.com/icons/www.mockuri1.com/icon.png",
-                            fallbackIconRes = R.drawable.ic_globe,
+                            uri = "https://icons.bitwarden.net/www.mockuri1.com/icon.png",
+                            fallbackIconRes = BitwardenDrawable.ic_globe,
                         ),
                         startIconTestTag = "LoginCipherIcon",
                         extraIconList = mockCipher.toLabelIcons(),
@@ -784,6 +808,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -817,6 +842,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -865,6 +891,123 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
+            ),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should excluded card vault items and adjust type count for ciphers with orgId in restrictItemTypesPolicyOrgIds and set showCardGroup to true if there are remaining cards`() {
+        val vaultData = VaultData(
+            cipherViewList = listOf(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.CARD,
+                ),
+                createMockCipherView(
+                    number = 2,
+                    organizationId = "restrict_item_type_policy_id",
+                    cipherType = CipherType.CARD,
+                ),
+                createMockCipherView(
+                    number = 3,
+                    organizationId = "another_id",
+                    cipherType = CipherType.CARD,
+                ),
+                createMockCipherView(
+                    number = 4,
+                    organizationId = null,
+                    cipherType = CipherType.CARD,
+                ),
+            ),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+            fido2CredentialAutofillViewList = null,
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 0,
+                cardItemsCount = 2,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                sshKeyItemsCount = 0,
+                favoriteItems = listOf(),
+                collectionItems = listOf(),
+                folderItems = listOf(),
+                noFolderItems = listOf(),
+                trashItemsCount = 0,
+                totpItemsCount = 0,
+                itemTypesCount = CipherType.entries.size,
+                showCardGroup = true,
+            ),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should excluded card vault items for ciphers with orgId in restrictItemTypesPolicyOrgIds and set showCardGroup to false if there are no remaining cards`() {
+        val vaultData = VaultData(
+            cipherViewList = listOf(
+                createMockCipherView(
+                    number = 1,
+                    organizationId = "restrict_item_type_policy_id",
+                    cipherType = CipherType.LOGIN,
+                ),
+                createMockCipherView(
+                    number = 2,
+                    organizationId = "restrict_item_type_policy_id",
+                    cipherType = CipherType.CARD,
+                ),
+                createMockCipherView(
+                    number = 3,
+                    organizationId = "restrict_item_type_policy_id",
+                    cipherType = CipherType.CARD,
+                ),
+            ),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+            fido2CredentialAutofillViewList = null,
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 1,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                sshKeyItemsCount = 0,
+                favoriteItems = listOf(),
+                collectionItems = listOf(),
+                folderItems = listOf(),
+                noFolderItems = listOf(),
+                trashItemsCount = 0,
+                totpItemsCount = 1,
+                itemTypesCount = CipherType.entries.size,
+                showCardGroup = false,
             ),
             actual,
         )
@@ -889,6 +1032,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -907,6 +1051,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 // Verify item types count includes all CipherTypes when showSshKeys is true.
                 itemTypesCount = CipherType.entries.size,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -946,6 +1091,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -977,6 +1123,7 @@ class VaultDataExtensionsTest {
                 trashItemsCount = 0,
                 totpItemsCount = 0,
                 itemTypesCount = CipherType.entries.size,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -994,6 +1141,7 @@ private fun createMockSshKeyVaultItem(number: Int): VaultState.ViewState.VaultIt
             ListingItemOverflowAction.VaultAction.ViewClick(
                 cipherId = "mockId-$number",
                 cipherType = CipherType.SSH_KEY,
+                requiresPasswordReprompt = true,
             ),
             ListingItemOverflowAction.VaultAction.EditClick(
                 cipherId = "mockId-$number",
@@ -1001,16 +1149,16 @@ private fun createMockSshKeyVaultItem(number: Int): VaultState.ViewState.VaultIt
                 requiresPasswordReprompt = true,
             ),
         ),
-        startIcon = IconData.Local(iconRes = R.drawable.ic_ssh_key),
+        startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_ssh_key),
         startIconTestTag = "SshKeyCipherIcon",
         extraIconList = persistentListOf(
             IconData.Local(
-                iconRes = R.drawable.ic_collections,
+                iconRes = BitwardenDrawable.ic_collections,
                 contentDescription = R.string.collections.asText(),
                 testTag = "CipherInCollectionIcon",
             ),
             IconData.Local(
-                iconRes = R.drawable.ic_paperclip,
+                iconRes = BitwardenDrawable.ic_paperclip,
                 contentDescription = R.string.attachments.asText(),
                 testTag = "CipherWithAttachmentsIcon",
             ),

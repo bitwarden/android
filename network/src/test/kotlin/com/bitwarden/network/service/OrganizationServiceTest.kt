@@ -5,7 +5,6 @@ import com.bitwarden.network.api.AuthenticatedOrganizationApi
 import com.bitwarden.network.api.UnauthenticatedOrganizationApi
 import com.bitwarden.network.base.BaseServiceTest
 import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
-import com.bitwarden.network.model.OrganizationDomainSsoDetailsResponseJson
 import com.bitwarden.network.model.OrganizationKeysResponseJson
 import com.bitwarden.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 import kotlinx.coroutines.test.runTest
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import retrofit2.create
-import java.time.ZonedDateTime
 
 class OrganizationServiceTest : BaseServiceTest() {
     private val authenticatedOrganizationApi: AuthenticatedOrganizationApi = retrofit.create()
@@ -48,29 +46,6 @@ class OrganizationServiceTest : BaseServiceTest() {
                 passwordHash = "passwordHash",
                 resetPasswordKey = "resetPasswordKey",
             )
-            assertTrue(result.isFailure)
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getOrganizationDomainSsoDetails when response is success should return PrevalidateSsoResponseJson`() =
-        runTest {
-            val email = "test@gmail.com"
-            server.enqueue(
-                MockResponse()
-                    .setResponseCode(200)
-                    .setBody(ORGANIZATION_DOMAIN_SSO_DETAILS_JSON),
-            )
-            val result = organizationService.getOrganizationDomainSsoDetails(email)
-            assertEquals(ORGANIZATION_DOMAIN_SSO_BODY.asSuccess(), result)
-        }
-
-    @Test
-    fun `getOrganizationDomainSsoDetails when response is an error should return an error`() =
-        runTest {
-            val email = "test@gmail.com"
-            server.enqueue(MockResponse().setResponseCode(400))
-            val result = organizationService.getOrganizationDomainSsoDetails(email)
             assertTrue(result.isFailure)
         }
 
@@ -163,22 +138,6 @@ private const val ORGANIZATION_AUTO_ENROLL_STATUS_JSON = """
 private val ORGANIZATION_AUTO_ENROLL_STATUS_RESPONSE = OrganizationAutoEnrollStatusResponseJson(
     organizationId = "orgId",
     isResetPasswordEnabled = true,
-)
-
-private const val ORGANIZATION_DOMAIN_SSO_DETAILS_JSON = """
-{
-  "ssoAvailable": true,
-  "domainName": "bitwarden.com",
-  "organizationIdentifier": "Test Org",
-  "ssoRequired": false,
-  "verifiedDate": "2024-09-13T00:00:00.000Z"
-}
-"""
-
-private val ORGANIZATION_DOMAIN_SSO_BODY = OrganizationDomainSsoDetailsResponseJson(
-    isSsoAvailable = true,
-    organizationIdentifier = "Test Org",
-    verifiedDate = ZonedDateTime.parse("2024-09-13T00:00:00.000Z"),
 )
 
 private const val ORGANIZATION_KEYS_JSON = """

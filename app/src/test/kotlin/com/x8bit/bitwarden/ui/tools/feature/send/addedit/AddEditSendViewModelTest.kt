@@ -24,7 +24,10 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toViewState
@@ -80,6 +83,9 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
     private val networkConnectionManager = mockk<NetworkConnectionManager> {
         every { isNetworkConnected } returns true
+    }
+    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+        every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
 
     @BeforeEach
@@ -401,7 +407,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             initialState.copy(
                 dialogState = AddEditSendState.DialogState.Error(
                     title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required.asText(R.string.file.asText()),
+                    message = R.string.you_must_attach_a_file_to_save_this_send.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -594,7 +600,9 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.trySendAction(AddEditSendAction.RemovePasswordClick)
                 assertEquals(
-                    AddEditSendEvent.ShowToast(R.string.send_password_removed.asText()),
+                    AddEditSendEvent.ShowSnackbar(
+                        data = BitwardenSnackbarData(message = R.string.password_removed.asText()),
+                    ),
                     awaitItem(),
                 )
             }
@@ -649,22 +657,28 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `DeleteClick vaultRepository deleteSend Success should show toast`() = runTest {
-        val sendId = "mockId-1"
-        coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Success
-        val viewModel = createViewModel(
-            state = DEFAULT_STATE.copy(
+    fun `DeleteClick vaultRepository deleteSend Success should emit NavigateUpToSearchOrRoot`() =
+        runTest {
+            val sendId = "mockId-1"
+            coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Success
+            val viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
+                ),
                 addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
-            ),
-            addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
-        )
+            )
 
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AddEditSendAction.DeleteClick)
-            assertEquals(AddEditSendEvent.NavigateToRoot, awaitItem())
-            assertEquals(AddEditSendEvent.ShowToast(R.string.send_deleted.asText()), awaitItem())
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AddEditSendAction.DeleteClick)
+                assertEquals(AddEditSendEvent.NavigateUpToSearchOrRoot, awaitItem())
+            }
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = R.string.send_deleted.asText()),
+                    relay = SnackbarRelay.SEND_DELETED,
+                )
+            }
         }
-    }
 
     @Test
     fun `ShareLinkClick with nonnull sendUrl should launch share sheet`() = runTest {
@@ -959,6 +973,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         vaultRepo = vaultRepository,
         policyManager = policyManager,
         networkConnectionManager = networkConnectionManager,
+        snackbarRelayManager = snackbarRelayManager,
     )
 }
 

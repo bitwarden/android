@@ -94,9 +94,9 @@ sealed class ListingItemOverflowAction : Parcelable {
         data class ViewClick(
             val cipherId: String,
             val cipherType: CipherType,
+            override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
             override val title: Text get() = R.string.view.asText()
-            override val requiresPasswordReprompt: Boolean get() = false
         }
 
         /**
@@ -136,9 +136,11 @@ sealed class ListingItemOverflowAction : Parcelable {
          * Click on the copy TOTP code overflow option.
          */
         @Parcelize
-        data class CopyTotpClick(val totpCode: String) : VaultAction() {
+        data class CopyTotpClick(
+            val totpCode: String,
+            override val requiresPasswordReprompt: Boolean,
+        ) : VaultAction() {
             override val title: Text get() = R.string.copy_totp.asText()
-            override val requiresPasswordReprompt: Boolean get() = false
         }
 
         /**
@@ -168,9 +170,11 @@ sealed class ListingItemOverflowAction : Parcelable {
          * Click on the copy secure note overflow option.
          */
         @Parcelize
-        data class CopyNoteClick(val notes: String) : VaultAction() {
+        data class CopyNoteClick constructor(
+            val notes: String,
+            override val requiresPasswordReprompt: Boolean,
+        ) : VaultAction() {
             override val title: Text get() = R.string.copy_notes.asText()
-            override val requiresPasswordReprompt: Boolean get() = false
         }
 
         /**

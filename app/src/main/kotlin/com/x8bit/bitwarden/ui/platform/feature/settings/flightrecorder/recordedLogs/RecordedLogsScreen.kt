@@ -35,18 +35,19 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
+import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenEmptyContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
@@ -95,7 +96,7 @@ fun RecordedLogsScreen(
         topBar = {
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.recorded_logs_title),
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(RecordedLogsAction.BackClick) }
@@ -133,7 +134,9 @@ fun RecordedLogsScreen(
             RecordedLogsState.ViewState.Empty -> {
                 BitwardenEmptyContent(
                     text = stringResource(id = R.string.no_logs_recorded),
-                    illustrationData = IconData.Local(iconRes = R.drawable.il_secure_devices),
+                    illustrationData = IconData.Local(
+                        iconRes = BitwardenDrawable.il_secure_devices,
+                    ),
                     modifier = Modifier.fillMaxSize(),
                 )
             }
@@ -168,6 +171,7 @@ private fun RecordedLogsOverflowMenu(
         )
     }
     BitwardenOverflowActionItem(
+        contentDescription = stringResource(R.string.more),
         modifier = modifier,
         menuItemDataList = persistentListOf(
             OverflowMenuItemData(
@@ -309,6 +313,7 @@ private fun LogRow(
         }
         Spacer(modifier = Modifier.width(width = 12.dp))
         BitwardenOverflowActionItem(
+            contentDescription = stringResource(R.string.more),
             menuItemDataList = persistentListOf(
                 OverflowMenuItemData(
                     text = stringResource(id = R.string.share),
@@ -321,7 +326,7 @@ private fun LogRow(
                     isEnabled = displayableItem.isDeletedEnabled,
                 ),
             ),
-            vectorIconRes = R.drawable.ic_ellipsis_horizontal,
+            vectorIconRes = BitwardenDrawable.ic_ellipsis_horizontal,
             testTag = "Options",
         )
     }

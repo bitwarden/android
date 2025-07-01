@@ -35,17 +35,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.model.WindowSize
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.rememberWindowSize
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.handlers.SetupUnlockHandler
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -116,7 +117,7 @@ fun SetupUnlockScreen(
                     null
                 } else {
                     NavigationIcon(
-                        navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
+                        navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                         navigationIconContentDescription = stringResource(id = R.string.close),
                         onNavigationIconClick = remember(viewModel) {
                             {
@@ -243,7 +244,7 @@ private fun SetUpLaterButton(
 private fun ColumnScope.SetupUnlockHeaderCompact() {
     Spacer(modifier = Modifier.height(height = 32.dp))
     Image(
-        painter = rememberVectorPainter(id = R.drawable.account_setup),
+        painter = rememberVectorPainter(id = BitwardenDrawable.account_setup),
         contentDescription = null,
         modifier = Modifier
             .standardHorizontalMargin()
@@ -287,7 +288,7 @@ private fun SetupUnlockHeaderMedium(
             .standardHorizontalMargin(),
     ) {
         Image(
-            painter = rememberVectorPainter(id = R.drawable.account_setup),
+            painter = rememberVectorPainter(id = BitwardenDrawable.account_setup),
             contentDescription = null,
             modifier = Modifier
                 .size(size = 100.dp)

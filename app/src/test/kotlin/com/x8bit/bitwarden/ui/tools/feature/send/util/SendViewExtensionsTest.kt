@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.util
 
 import com.bitwarden.send.SendType
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.ImmutableList
@@ -151,6 +151,12 @@ private val ALL_SEND_STATUS_ICONS: ImmutableList<IconData> = persistentListOf(
 
 private val ALL_SEND_OVERFLOW_OPTIONS: List<ListingItemOverflowAction> =
     listOf(
+        ListingItemOverflowAction.SendAction.CopyUrlClick(
+            sendUrl = "www.test.commockAccessId-1/mockKey-1",
+        ),
+        ListingItemOverflowAction.SendAction.ShareUrlClick(
+            sendUrl = "www.test.commockAccessId-1/mockKey-1",
+        ),
         ListingItemOverflowAction.SendAction.ViewClick(
             sendId = "mockId-1",
             sendType = SendType.FILE,
@@ -158,12 +164,6 @@ private val ALL_SEND_OVERFLOW_OPTIONS: List<ListingItemOverflowAction> =
         ListingItemOverflowAction.SendAction.EditClick(
             sendId = "mockId-1",
             sendType = SendType.FILE,
-        ),
-        ListingItemOverflowAction.SendAction.CopyUrlClick(
-            sendUrl = "www.test.commockAccessId-1/mockKey-1",
-        ),
-        ListingItemOverflowAction.SendAction.ShareUrlClick(
-            sendUrl = "www.test.commockAccessId-1/mockKey-1",
         ),
         ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-1"),
         ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-1"),

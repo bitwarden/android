@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="dialogDimBackgroundAmount" format="float">0.55</dimen>
+    <!-- default -->
+    <integer name="displayCutoutMode">0</integer>
 </resources>

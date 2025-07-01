@@ -25,10 +25,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
+import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 
 /**
@@ -57,7 +58,7 @@ fun SendEmpty(
 
         Spacer(modifier = Modifier.weight(1F))
         Image(
-            painter = rememberVectorPainter(R.drawable.img_send),
+            painter = rememberVectorPainter(BitwardenDrawable.img_send),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -94,7 +95,7 @@ fun SendEmpty(
         BitwardenFilledButton(
             onClick = onAddItemClick,
             label = stringResource(id = R.string.add_a_send),
-            icon = rememberVectorPainter(R.drawable.ic_plus_small),
+            icon = rememberVectorPainter(BitwardenDrawable.ic_plus_small),
             modifier = Modifier
                 .clearAndSetSemantics {
                     text = newSendLabel.toAnnotatedString()

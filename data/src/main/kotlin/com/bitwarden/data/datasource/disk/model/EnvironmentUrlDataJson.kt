@@ -1,5 +1,6 @@
 package com.bitwarden.data.datasource.disk.model
 
+import com.bitwarden.data.repository.model.EnvironmentRegion
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -41,6 +42,16 @@ data class EnvironmentUrlDataJson(
     @SerialName("events")
     val events: String? = null,
 ) {
+    /**
+     * Returns the [EnvironmentRegion] based on the base domain for the US or EU environments.
+     */
+    val environmentRegion: EnvironmentRegion
+        get() = when (base) {
+            DEFAULT_US.base -> EnvironmentRegion.UNITED_STATES
+            DEFAULT_EU.base -> EnvironmentRegion.EUROPEAN_UNION
+            else -> EnvironmentRegion.SELF_HOSTED
+        }
+
     @Suppress("UndocumentedPublicClass")
     companion object {
         /**

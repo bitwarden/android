@@ -102,10 +102,6 @@ class DebugMenuRepositoryTest {
                     FlagKey.EmailVerification,
                     FlagKey.EmailVerification.defaultValue,
                 )
-                mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
-                    FlagKey.OnboardingFlow,
-                    FlagKey.OnboardingFlow.defaultValue,
-                )
             }
             debugMenuRepository.featureFlagOverridesUpdatedFlow.test {
                 awaitItem() // initial value on subscription

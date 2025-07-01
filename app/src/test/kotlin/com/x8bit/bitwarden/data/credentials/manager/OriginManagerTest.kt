@@ -8,7 +8,10 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.model.DigitalAssetLinkCheckResponseJson
 import com.bitwarden.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
+import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -40,13 +43,19 @@ class OriginManagerTest {
             every { hasMultipleSigners() } returns false
         }
     }
+    private val mockPrivilegedAppRepository = mockk<PrivilegedAppRepository>()
+    private val mockFeatureFlagManager = mockk<FeatureFlagManager> {
+        every { getFeatureFlag(FlagKey.UserManagedPrivilegedApps) } returns true
+    }
     private val mockMessageDigest = mockk<MessageDigest> {
         every { digest(any()) } returns DEFAULT_APP_SIGNATURE.toByteArray()
     }
 
-    private val fido2OriginManager = OriginManagerImpl(
+    private val originManager = OriginManagerImpl(
         assetManager = mockAssetManager,
         digitalAssetLinkService = mockDigitalAssetLinkService,
+        privilegedAppRepository = mockPrivilegedAppRepository,
+        featureFlagManager = mockFeatureFlagManager,
     )
 
     @BeforeEach
@@ -74,7 +83,8 @@ class OriginManagerTest {
                 mockAssetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
             } returns DEFAULT_ALLOW_LIST.asSuccess()
 
-            val result = fido2OriginManager.validateOrigin(
+            val result = originManager.validateOrigin(
+                relyingPartyId = DEFAULT_ORIGIN,
                 callingAppInfo = mockPrivilegedAppInfo,
             )
             coVerify(exactly = 1) {
@@ -97,7 +107,8 @@ class OriginManagerTest {
                 mockAssetManager.readAsset(COMMUNITY_ALLOW_LIST_FILENAME)
             } returns DEFAULT_ALLOW_LIST.asSuccess()
 
-            val result = fido2OriginManager.validateOrigin(
+            val result = originManager.validateOrigin(
+                relyingPartyId = DEFAULT_ORIGIN,
                 callingAppInfo = mockPrivilegedAppInfo,
             )
             coVerify(exactly = 1) {
@@ -112,7 +123,7 @@ class OriginManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `validateOrigin should return ApplicationNotFound when calling app is Privileged but not in either allow list`() =
+    fun `validateOrigin should return Success when calling app is Privileged and is in the User Trust list`() =
         runTest {
             coEvery {
                 mockAssetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
@@ -120,8 +131,41 @@ class OriginManagerTest {
             coEvery {
                 mockAssetManager.readAsset(COMMUNITY_ALLOW_LIST_FILENAME)
             } returns FAIL_ALLOW_LIST.asSuccess()
+            coEvery {
+                mockPrivilegedAppRepository.getUserTrustedAllowListJson()
+            } returns DEFAULT_ALLOW_LIST
 
-            val result = fido2OriginManager.validateOrigin(
+            val result = originManager.validateOrigin(
+                relyingPartyId = DEFAULT_ORIGIN,
+                callingAppInfo = mockPrivilegedAppInfo,
+            )
+            coVerify(exactly = 1) {
+                mockAssetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
+                mockAssetManager.readAsset(COMMUNITY_ALLOW_LIST_FILENAME)
+                mockPrivilegedAppRepository.getUserTrustedAllowListJson()
+            }
+            assertEquals(
+                ValidateOriginResult.Success(DEFAULT_ORIGIN),
+                result,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `validateOrigin should return ApplicationNotFound when calling app is Privileged but not present in an allow list`() =
+        runTest {
+            coEvery {
+                mockAssetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
+            } returns FAIL_ALLOW_LIST.asSuccess()
+            coEvery {
+                mockAssetManager.readAsset(COMMUNITY_ALLOW_LIST_FILENAME)
+            } returns FAIL_ALLOW_LIST.asSuccess()
+            coEvery {
+                mockPrivilegedAppRepository.getUserTrustedAllowListJson()
+            } returns FAIL_ALLOW_LIST
+
+            val result = originManager.validateOrigin(
+                relyingPartyId = DEFAULT_ORIGIN,
                 callingAppInfo = mockPrivilegedAppInfo,
             )
 
@@ -141,13 +185,15 @@ class OriginManagerTest {
         runTest {
             coEvery {
                 mockDigitalAssetLinkService.checkDigitalAssetLinksRelations(
-                    packageName = DEFAULT_PACKAGE_NAME,
-                    certificateFingerprint = DEFAULT_CERT_FINGERPRINT,
-                    relation = "delegate_permission/common.handle_all_urls",
+                    sourceWebSite = "https://$DEFAULT_RELYING_PARTY_ID",
+                    targetPackageName = DEFAULT_PACKAGE_NAME,
+                    targetCertificateFingerprint = DEFAULT_CERT_FINGERPRINT,
+                    relations = listOf("delegate_permission/common.handle_all_urls"),
                 )
             } returns DEFAULT_ASSET_LINKS_CHECK_RESPONSE.asSuccess()
 
-            val result = fido2OriginManager.validateOrigin(
+            val result = originManager.validateOrigin(
+                relyingPartyId = DEFAULT_RELYING_PARTY_ID,
                 callingAppInfo = mockNonPrivilegedAppInfo,
             )
 
@@ -163,9 +209,10 @@ class OriginManagerTest {
         runTest {
             coEvery {
                 mockDigitalAssetLinkService.checkDigitalAssetLinksRelations(
-                    packageName = DEFAULT_PACKAGE_NAME,
-                    certificateFingerprint = DEFAULT_CERT_FINGERPRINT,
-                    relation = "delegate_permission/common.handle_all_urls",
+                    sourceWebSite = "https://$DEFAULT_RELYING_PARTY_ID",
+                    targetPackageName = DEFAULT_PACKAGE_NAME,
+                    targetCertificateFingerprint = DEFAULT_CERT_FINGERPRINT,
+                    relations = listOf("delegate_permission/common.handle_all_urls"),
                 )
             } returns DEFAULT_ASSET_LINKS_CHECK_RESPONSE
                 .copy(linked = false)
@@ -173,7 +220,10 @@ class OriginManagerTest {
 
             assertEquals(
                 ValidateOriginResult.Error.PasskeyNotSupportedForApp,
-                fido2OriginManager.validateOrigin(callingAppInfo = mockNonPrivilegedAppInfo),
+                originManager.validateOrigin(
+                    relyingPartyId = DEFAULT_RELYING_PARTY_ID,
+                    callingAppInfo = mockNonPrivilegedAppInfo,
+                ),
             )
         }
 
@@ -183,42 +233,55 @@ class OriginManagerTest {
         runTest {
             coEvery {
                 mockDigitalAssetLinkService.checkDigitalAssetLinksRelations(
-                    packageName = DEFAULT_PACKAGE_NAME,
-                    certificateFingerprint = DEFAULT_CERT_FINGERPRINT,
-                    relation = "delegate_permission/common.handle_all_urls",
+                    sourceWebSite = "https://$DEFAULT_RELYING_PARTY_ID",
+                    targetPackageName = DEFAULT_PACKAGE_NAME,
+                    targetCertificateFingerprint = DEFAULT_CERT_FINGERPRINT,
+                    relations = listOf("delegate_permission/common.handle_all_urls"),
                 )
             } returns RuntimeException().asFailure()
 
             assertEquals(
                 ValidateOriginResult.Error.AssetLinkNotFound,
-                fido2OriginManager.validateOrigin(callingAppInfo = mockNonPrivilegedAppInfo),
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `validateOrigin should return Unknown error when calling app is Privileged and allow list file read fails`() =
-        runTest {
-            coEvery {
-                mockAssetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
-            } returns IllegalStateException().asFailure()
-            coEvery {
-                mockAssetManager.readAsset(COMMUNITY_ALLOW_LIST_FILENAME)
-            } returns IllegalStateException().asFailure()
-
-            assertEquals(
-                ValidateOriginResult.Error.Unknown,
-                fido2OriginManager.validateOrigin(
-                    callingAppInfo = mockPrivilegedAppInfo,
+                originManager.validateOrigin(
+                    relyingPartyId = DEFAULT_RELYING_PARTY_ID,
+                    callingAppInfo = mockNonPrivilegedAppInfo,
                 ),
             )
         }
+
+    @Test
+    fun `validateOrigin should ignore user trust list when feature flag is disabled`() = runTest {
+        every {
+            mockFeatureFlagManager.getFeatureFlag(FlagKey.UserManagedPrivilegedApps)
+        } returns false
+        coEvery {
+            mockAssetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
+        } returns FAIL_ALLOW_LIST.asSuccess()
+        coEvery {
+            mockAssetManager.readAsset(COMMUNITY_ALLOW_LIST_FILENAME)
+        } returns FAIL_ALLOW_LIST.asSuccess()
+
+        val result = originManager.validateOrigin(
+            relyingPartyId = DEFAULT_ORIGIN,
+            callingAppInfo = mockPrivilegedAppInfo,
+        )
+        assertEquals(
+            ValidateOriginResult.Error.PrivilegedAppNotAllowed,
+            result,
+        )
+        coVerify(exactly = 1) {
+            mockAssetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
+            mockAssetManager.readAsset(COMMUNITY_ALLOW_LIST_FILENAME)
+        }
+        coVerify(exactly = 0) { mockPrivilegedAppRepository.getUserTrustedAllowListJson() }
+    }
 }
 
 private const val DEFAULT_PACKAGE_NAME = "com.x8bit.bitwarden"
 private const val DEFAULT_APP_SIGNATURE = "0987654321ABCDEF"
 private const val DEFAULT_CERT_FINGERPRINT = "30:39:38:37:36:35:34:33:32:31:41:42:43:44:45:46"
 private const val DEFAULT_ORIGIN = "bitwarden.com"
+private const val DEFAULT_RELYING_PARTY_ID = "www.bitwarden.com"
 private const val GOOGLE_ALLOW_LIST_FILENAME = "fido2_privileged_google.json"
 private const val COMMUNITY_ALLOW_LIST_FILENAME = "fido2_privileged_community.json"
 private const val DEFAULT_ALLOW_LIST = """

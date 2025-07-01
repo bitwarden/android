@@ -21,6 +21,8 @@ import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
+import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertMasterPasswordDialogDisplayed
 import com.bitwarden.ui.util.assertNoDialogExists
@@ -36,7 +38,7 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
@@ -366,6 +368,16 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) {
             exitManager.exitApplication()
         }
+    }
+
+    @Test
+    fun `on ShowSnackbar event should display the snackbar`() {
+        val message = "message"
+        val data = BitwardenSnackbarData(message = message.asText())
+        mutableEventFlow.tryEmit(VaultItemListingEvent.ShowSnackbar(data = data))
+        composeTestRule
+            .onNodeWithText(text = message)
+            .assertIsDisplayed()
     }
 
     @Test
@@ -1121,7 +1133,6 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
                     displayCollectionList = emptyList(),
                     displayItemList = listOf(
                         createDisplayItem(number = 1).copy(
-                            isTotp = true,
                             shouldShowMasterPasswordReprompt = true,
                         ),
                     ),
@@ -1745,7 +1756,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
 
         composeTestRule
-            .onAllNodesWithText(text = "Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify {
@@ -1840,7 +1851,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
 
         composeTestRule
-            .onAllNodesWithText(text = "Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify {
@@ -1915,7 +1926,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText(text = "Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify {
@@ -1943,7 +1954,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText(text = "Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -2188,7 +2199,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -2265,6 +2276,63 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             )
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when Trust is selected in TrustPrivilegedAppPrompt dialog TrustPrivilegedApp action is sent`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.TrustPrivilegedAddPrompt(
+                    message = "message".asText(),
+                    selectedCipherId = null,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Trust")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemListingsAction.TrustPrivilegedAppClick(null))
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when Cancel is selected in TrustPrivilegedAppPrompt dialog DismissCredentialManagerErrorDialogClick action is sent`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.TrustPrivilegedAddPrompt(
+                    message = "message".asText(),
+                    selectedCipherId = null,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissCredentialManagerErrorDialogClick(
+                    message = R.string.passkey_operation_failed_because_the_browser_is_not_trusted
+                        .asText(),
+                ),
+            )
+        }
+    }
 }
 
 private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
@@ -2316,6 +2384,7 @@ private val DEFAULT_STATE = VaultItemListingState(
     hasMasterPassword = true,
     isPremium = false,
     isRefreshing = false,
+    restrictItemTypesPolicyOrgIds = persistentListOf(),
 )
 
 private val STATE_FOR_AUTOFILL = DEFAULT_STATE.copy(
@@ -2331,30 +2400,32 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         secondSubtitleTestTag = null,
         subtitle = "mockSubtitle-$number",
         subtitleTestTag = "SendDateLabel",
-        iconData = IconData.Local(R.drawable.ic_payment_card),
+        iconData = IconData.Local(BitwardenDrawable.ic_payment_card),
         extraIconList = persistentListOf(
             IconData.Local(
-                iconRes = R.drawable.ic_send_disabled,
+                iconRes = BitwardenDrawable.ic_send_disabled,
                 contentDescription = R.string.disabled.asText(),
             ),
             IconData.Local(
-                iconRes = R.drawable.ic_key,
+                iconRes = BitwardenDrawable.ic_key,
                 contentDescription = R.string.password.asText(),
             ),
             IconData.Local(
-                iconRes = R.drawable.ic_send_max_access_count_reached,
+                iconRes = BitwardenDrawable.ic_send_max_access_count_reached,
                 contentDescription = R.string.maximum_access_count_reached.asText(),
             ),
             IconData.Local(
-                iconRes = R.drawable.ic_send_expired,
+                iconRes = BitwardenDrawable.ic_send_expired,
                 contentDescription = R.string.expired.asText(),
             ),
             IconData.Local(
-                iconRes = R.drawable.ic_send_pending_delete,
+                iconRes = BitwardenDrawable.ic_send_pending_delete,
                 contentDescription = R.string.pending_delete.asText(),
             ),
         ),
         overflowOptions = listOf(
+            ListingItemOverflowAction.SendAction.CopyUrlClick(sendUrl = "www.test.com"),
+            ListingItemOverflowAction.SendAction.ShareUrlClick(sendUrl = "www.test.com"),
             ListingItemOverflowAction.SendAction.ViewClick(
                 sendId = "mockId-$number",
                 sendType = SendType.FILE,
@@ -2363,8 +2434,6 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
                 sendId = "mockId-$number",
                 sendType = SendType.TEXT,
             ),
-            ListingItemOverflowAction.SendAction.CopyUrlClick(sendUrl = "www.test.com"),
-            ListingItemOverflowAction.SendAction.ShareUrlClick(sendUrl = "www.test.com"),
             ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
             ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
         ),
@@ -2373,7 +2442,6 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         isCredentialCreation = false,
         shouldShowMasterPasswordReprompt = false,
         iconTestTag = null,
-        isTotp = false,
         itemType = VaultItemListingState.DisplayItem.ItemType.Sends(type = SendType.TEXT),
     )
 
@@ -2386,7 +2454,7 @@ private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayI
         secondSubtitleTestTag = null,
         subtitle = "mockSubtitle-$number",
         subtitleTestTag = "CipherSubTitleLabel",
-        iconData = IconData.Local(R.drawable.ic_vault),
+        iconData = IconData.Local(BitwardenDrawable.ic_vault),
         extraIconList = persistentListOf(),
         overflowOptions = listOf(
             ListingItemOverflowAction.VaultAction.EditClick(
@@ -2400,6 +2468,5 @@ private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayI
         isCredentialCreation = false,
         shouldShowMasterPasswordReprompt = false,
         iconTestTag = null,
-        isTotp = true,
         itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
     )

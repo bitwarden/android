@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,15 +22,15 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
-import com.x8bit.bitwarden.ui.vault.feature.item.component.VaultItemUpdateText
 import com.x8bit.bitwarden.ui.vault.feature.item.component.itemHeader
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
@@ -355,16 +356,33 @@ fun VaultItemIdentityContent(
             }
         }
 
-        item(key = "lastUpdated") {
+        item(key = "created") {
             Spacer(modifier = Modifier.height(height = 16.dp))
-            VaultItemUpdateText(
-                header = "${stringResource(id = R.string.date_updated)}: ",
-                text = commonState.lastUpdated,
+            Text(
+                text = commonState.created(),
+                style = BitwardenTheme.typography.bodySmall,
+                color = BitwardenTheme.colorScheme.text.secondary,
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
                     .padding(horizontal = 12.dp)
-                    .animateItem(),
+                    .animateItem()
+                    .testTag("IdentityItemCreated"),
+            )
+        }
+
+        item(key = "lastUpdated") {
+            Spacer(modifier = Modifier.height(height = 4.dp))
+            Text(
+                text = commonState.lastUpdated(),
+                style = BitwardenTheme.typography.bodySmall,
+                color = BitwardenTheme.colorScheme.text.secondary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 12.dp)
+                    .animateItem()
+                    .testTag("IdentityItemLastUpdated"),
             )
         }
 
@@ -413,7 +431,7 @@ private fun IdentityCopyField(
         singleLine = false,
         actions = {
             BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_copy,
+                vectorIconRes = BitwardenDrawable.ic_copy,
                 contentDescription = copyContentDescription,
                 onClick = onCopyClick,
                 modifier = Modifier.testTag(tag = copyActionTestTag),

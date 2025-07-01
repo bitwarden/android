@@ -152,7 +152,7 @@ class SetupAutofillScreenTest : BitwardenComposeTest() {
             .onNode(isDialog())
             .assertIsDisplayed()
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify { viewModel.trySendAction(SetupAutoFillAction.DismissDialog) }

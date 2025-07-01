@@ -25,11 +25,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -74,7 +75,7 @@ fun AppearanceScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.appearance),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(AppearanceAction.BackClick) }
@@ -156,7 +157,7 @@ private fun AppearanceDialogs(
                 message = stringResource(
                     id = R.string.dynamic_colors_may_not_adhere_to_accessibility_guidelines,
                 ),
-                confirmButtonText = stringResource(R.string.ok),
+                confirmButtonText = stringResource(R.string.okay),
                 dismissButtonText = stringResource(R.string.cancel),
                 onConfirmClick = onConfirmEnableDynamicColorsClick,
                 onDismissClick = onDismissDialog,

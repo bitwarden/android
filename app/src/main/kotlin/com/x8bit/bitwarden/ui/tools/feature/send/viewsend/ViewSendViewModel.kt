@@ -16,6 +16,9 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.util.toViewSendViewStateContent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,6 +40,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class ViewSendViewModel @Inject constructor(
     private val clipboardManager: BitwardenClipboardManager,
+    private val snackbarRelayManager: SnackbarRelayManager,
     private val clock: Clock,
     private val vaultRepository: VaultRepository,
     environmentRepository: EnvironmentRepository,
@@ -60,12 +64,18 @@ class ViewSendViewModel @Inject constructor(
             .map { ViewSendAction.Internal.SendDataReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.SEND_UPDATED)
+            .map { ViewSendAction.Internal.SnackbarDataReceived(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: ViewSendAction) {
         when (action) {
             ViewSendAction.CloseClick -> handleCloseClick()
             ViewSendAction.CopyClick -> handleCopyClick()
+            ViewSendAction.CopyNotesClick -> handleCopyNotesClick()
             ViewSendAction.DeleteClick -> handleDeleteClick()
             ViewSendAction.DialogDismiss -> handleDialogDismiss()
             ViewSendAction.EditClick -> handleEditClick()
@@ -78,6 +88,7 @@ class ViewSendViewModel @Inject constructor(
         when (action) {
             is ViewSendAction.Internal.SendDataReceive -> handleSendDataReceive(action)
             is ViewSendAction.Internal.DeleteResultReceive -> handleDeleteResultReceive(action)
+            is ViewSendAction.Internal.SnackbarDataReceived -> handleSnackbarDataReceived(action)
         }
     }
 
@@ -87,6 +98,10 @@ class ViewSendViewModel @Inject constructor(
 
     private fun handleCopyClick() {
         onContent { clipboardManager.setText(text = it.shareLink) }
+    }
+
+    private fun handleCopyNotesClick() {
+        onContent { clipboardManager.setText(text = it.notes.orEmpty()) }
     }
 
     private fun handleDeleteClick() {
@@ -129,10 +144,17 @@ class ViewSendViewModel @Inject constructor(
 
             is DeleteSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(ViewSendEvent.ShowToast(message = R.string.send_deleted.asText()))
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = R.string.send_deleted.asText()),
+                    relay = SnackbarRelay.SEND_DELETED,
+                )
                 sendEvent(ViewSendEvent.NavigateBack)
             }
         }
+    }
+
+    private fun handleSnackbarDataReceived(action: ViewSendAction.Internal.SnackbarDataReceived) {
+        sendEvent(ViewSendEvent.ShowSnackbar(action.data))
     }
 
     private fun handleSendDataReceive(action: ViewSendAction.Internal.SendDataReceive) {
@@ -335,10 +357,10 @@ sealed class ViewSendEvent {
     ) : ViewSendEvent()
 
     /**
-     * Shows the [message] via a toast.
+     * Show a snackbar to the user.
      */
-    data class ShowToast(
-        val message: Text,
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
     ) : ViewSendEvent(), BackgroundEvent
 }
 
@@ -355,6 +377,11 @@ sealed class ViewSendAction {
      * The user has clicked the copy button.
      */
     data object CopyClick : ViewSendAction()
+
+    /**
+     * The user has clicked the copy notes button.
+     */
+    data object CopyNotesClick : ViewSendAction()
 
     /**
      * The user has clicked the delete button.
@@ -389,5 +416,12 @@ sealed class ViewSendAction {
          * Indicates that the send item data has been received.
          */
         data class SendDataReceive(val sendDataState: DataState<SendView?>) : Internal()
+
+        /**
+         * Indicates that snackbar data has been received.
+         */
+        data class SnackbarDataReceived(
+            val data: BitwardenSnackbarData,
+        ) : Internal()
     }
 }

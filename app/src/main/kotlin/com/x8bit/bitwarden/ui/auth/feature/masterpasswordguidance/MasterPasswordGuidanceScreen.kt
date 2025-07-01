@@ -23,15 +23,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.content.model.ContentBlockData
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
-import com.x8bit.bitwarden.ui.platform.components.model.ContentBlockData
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import kotlinx.collections.immutable.persistentListOf
 
@@ -63,7 +65,7 @@ fun MasterPasswordGuidanceScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.master_password),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
                     {
@@ -137,21 +139,25 @@ private fun MasterPasswordGuidanceContentBlocks(modifier: Modifier = Modifier) {
                 ContentBlockData(
                     headerText = stringResource(R.string.choose_three_or_four_random_words)
                         .toAnnotatedString(),
-                    subtitleText = R.string.pick_three_or_four_random_unrelated_words.toAnnotatedString(),
-                    iconVectorResource = R.drawable.ic_number1,
+                    subtitleText = annotatedStringResource(
+                        id = R.string.pick_three_or_four_random_unrelated_words,
+                    ),
+                    iconVectorResource = BitwardenDrawable.ic_number1,
                 ),
                 ContentBlockData(
                     headerText = stringResource(R.string.combine_those_words_together)
                         .toAnnotatedString(),
-                    subtitleText = R.string.put_the_words_together_in_any_order_to_form_your_passphrase
-                        .toAnnotatedString(),
-                    iconVectorResource = R.drawable.ic_number2,
+                    subtitleText = annotatedStringResource(
+                        id = R.string.put_the_words_together_in_any_order_to_form_your_passphrase,
+                    ),
+                    iconVectorResource = BitwardenDrawable.ic_number2,
                 ),
                 ContentBlockData(
                     headerText = stringResource(R.string.make_it_yours).toAnnotatedString(),
-                    subtitleText = R.string.add_a_number_or_symbol_to_make_it_even_stronger
-                        .toAnnotatedString(),
-                    iconVectorResource = R.drawable.ic_number3,
+                    subtitleText = annotatedStringResource(
+                        id = R.string.add_a_number_or_symbol_to_make_it_even_stronger,
+                    ),
+                    iconVectorResource = BitwardenDrawable.ic_number3,
                 ),
             ),
         )

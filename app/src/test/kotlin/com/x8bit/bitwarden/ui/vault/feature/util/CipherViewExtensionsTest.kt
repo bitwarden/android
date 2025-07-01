@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.util
 
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -7,7 +8,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockIdentityVie
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSecureNoteView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockUriView
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.model.VaultTrailingIcon
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -30,22 +30,26 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             listOf(
-                ListingItemOverflowAction.VaultAction.ViewClick(
-                    cipherId = id,
-                    cipherType = CipherType.LOGIN,
-                ),
-                ListingItemOverflowAction.VaultAction.EditClick(
-                    cipherId = id,
-                    cipherType = CipherType.LOGIN,
-                    requiresPasswordReprompt = false,
-                ),
                 ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = username),
                 ListingItemOverflowAction.VaultAction.CopyPasswordClick(
                     password = password,
                     requiresPasswordReprompt = false,
                     cipherId = id,
                 ),
-                ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode = totpCode),
+                ListingItemOverflowAction.VaultAction.CopyTotpClick(
+                    totpCode = totpCode,
+                    requiresPasswordReprompt = false,
+                ),
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.LOGIN,
+                    requiresPasswordReprompt = false,
+                ),
+                ListingItemOverflowAction.VaultAction.EditClick(
+                    cipherId = id,
+                    cipherType = CipherType.LOGIN,
+                    requiresPasswordReprompt = false,
+                ),
                 ListingItemOverflowAction.VaultAction.LaunchClick(url = uri),
             ),
             result,
@@ -67,20 +71,21 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             listOf(
-                ListingItemOverflowAction.VaultAction.ViewClick(
-                    cipherId = id,
-                    cipherType = CipherType.LOGIN,
-                ),
-                ListingItemOverflowAction.VaultAction.EditClick(
-                    cipherId = id,
-                    cipherType = CipherType.LOGIN,
-                    requiresPasswordReprompt = false,
-                ),
                 ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = username),
                 ListingItemOverflowAction.VaultAction.CopyPasswordClick(
                     password = password,
                     requiresPasswordReprompt = false,
                     cipherId = id,
+                ),
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.LOGIN,
+                    requiresPasswordReprompt = false,
+                ),
+                ListingItemOverflowAction.VaultAction.EditClick(
+                    cipherId = id,
+                    cipherType = CipherType.LOGIN,
+                    requiresPasswordReprompt = false,
                 ),
                 ListingItemOverflowAction.VaultAction.LaunchClick(url = uri),
             ),
@@ -104,16 +109,17 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             listOf(
+                ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = username),
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = id,
                     cipherType = CipherType.LOGIN,
+                    requiresPasswordReprompt = true,
                 ),
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = id,
                     cipherType = CipherType.LOGIN,
                     requiresPasswordReprompt = true,
                 ),
-                ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = username),
                 ListingItemOverflowAction.VaultAction.LaunchClick(url = uri),
             ),
             result,
@@ -144,6 +150,7 @@ class CipherViewExtensionsTest {
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = id,
                     cipherType = CipherType.LOGIN,
+                    requiresPasswordReprompt = true,
                 ),
             ),
             result,
@@ -166,15 +173,6 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             listOf(
-                ListingItemOverflowAction.VaultAction.ViewClick(
-                    cipherId = id,
-                    cipherType = CipherType.CARD,
-                ),
-                ListingItemOverflowAction.VaultAction.EditClick(
-                    cipherId = id,
-                    cipherType = CipherType.CARD,
-                    requiresPasswordReprompt = true,
-                ),
                 ListingItemOverflowAction.VaultAction.CopyNumberClick(
                     number = number,
                     requiresPasswordReprompt = true,
@@ -182,6 +180,16 @@ class CipherViewExtensionsTest {
                 ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
                     securityCode = securityCode,
                     cipherId = id,
+                    requiresPasswordReprompt = true,
+                ),
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.CARD,
+                    requiresPasswordReprompt = true,
+                ),
+                ListingItemOverflowAction.VaultAction.EditClick(
+                    cipherId = id,
+                    cipherType = CipherType.CARD,
                     requiresPasswordReprompt = true,
                 ),
             ),
@@ -211,6 +219,7 @@ class CipherViewExtensionsTest {
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = id,
                     cipherType = CipherType.CARD,
+                    requiresPasswordReprompt = false,
                 ),
             ),
             result,
@@ -231,6 +240,7 @@ class CipherViewExtensionsTest {
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = id,
                     cipherType = CipherType.IDENTITY,
+                    requiresPasswordReprompt = false,
                 ),
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = id,
@@ -254,13 +264,14 @@ class CipherViewExtensionsTest {
                 identity = createMockIdentityView(number = 1),
             )
 
-        val result = cipher.toOverflowActions(hasMasterPassword = true, false)
+        val result = cipher.toOverflowActions(hasMasterPassword = true, isPremiumUser = false)
 
         assertEquals(
             listOf(
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = id,
                     cipherType = CipherType.IDENTITY,
+                    requiresPasswordReprompt = true,
                 ),
             ),
             result,
@@ -280,16 +291,20 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             listOf(
+                ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                    notes = notes,
+                    requiresPasswordReprompt = true,
+                ),
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = id,
                     cipherType = CipherType.SECURE_NOTE,
+                    requiresPasswordReprompt = true,
                 ),
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = id,
                     cipherType = CipherType.SECURE_NOTE,
                     requiresPasswordReprompt = true,
                 ),
-                ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = notes),
             ),
             result,
         )
@@ -315,6 +330,7 @@ class CipherViewExtensionsTest {
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = id,
                     cipherType = CipherType.SECURE_NOTE,
+                    requiresPasswordReprompt = false,
                 ),
             ),
             result,
@@ -346,6 +362,7 @@ class CipherViewExtensionsTest {
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = id,
                     cipherType = CipherType.LOGIN,
+                    requiresPasswordReprompt = true,
                 ),
             ),
             result,
@@ -377,6 +394,7 @@ class CipherViewExtensionsTest {
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = id,
                     cipherType = CipherType.LOGIN,
+                    requiresPasswordReprompt = true,
                 ),
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = id,

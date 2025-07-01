@@ -11,10 +11,12 @@ data class VerificationCodeHandlers(
     val backClick: () -> Unit,
     val searchIconClick: () -> Unit,
     val itemClick: (id: String) -> Unit,
+    val masterPasswordRepromptSubmit: (id: String, password: String) -> Unit,
     val refreshClick: () -> Unit,
     val syncClick: () -> Unit,
     val lockClick: () -> Unit,
     val copyClick: (text: String) -> Unit,
+    val dismissDialog: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -31,10 +33,16 @@ data class VerificationCodeHandlers(
                     viewModel.trySendAction(VerificationCodeAction.SearchIconClick)
                 },
                 itemClick = { viewModel.trySendAction(VerificationCodeAction.ItemClick(it)) },
+                masterPasswordRepromptSubmit = { cipherId, password ->
+                    viewModel.trySendAction(
+                        action = VerificationCodeAction.MasterPasswordSubmit(cipherId, password),
+                    )
+                },
                 refreshClick = { viewModel.trySendAction(VerificationCodeAction.RefreshClick) },
                 syncClick = { viewModel.trySendAction(VerificationCodeAction.SyncClick) },
                 lockClick = { viewModel.trySendAction(VerificationCodeAction.LockClick) },
                 copyClick = { viewModel.trySendAction(VerificationCodeAction.CopyClick(it)) },
+                dismissDialog = { viewModel.trySendAction(VerificationCodeAction.DismissDialog) },
             )
     }
 }

@@ -1,26 +1,23 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.edititem
 
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -32,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -48,8 +46,10 @@ import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.model.EditItemData
-import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
+import com.bitwarden.authenticator.ui.platform.components.content.BitwardenErrorContent
+import com.bitwarden.authenticator.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
@@ -58,14 +58,13 @@ import com.bitwarden.authenticator.ui.platform.components.dropdown.BitwardenMult
 import com.bitwarden.authenticator.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.authenticator.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
-import com.bitwarden.authenticator.ui.platform.components.icon.BitwardenIcon
-import com.bitwarden.authenticator.ui.platform.components.model.IconData
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.components.stepper.BitwardenStepper
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.base.util.EventsEffect
-import com.bitwarden.ui.platform.theme.DEFAULT_FADE_TRANSITION_TIME_MS
-import com.bitwarden.ui.platform.theme.DEFAULT_STAY_TRANSITION_TIME_MS
+import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -111,12 +110,12 @@ fun EditItemScreen(
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            BitwardenTopAppBar(
+            AuthenticatorTopAppBar(
                 title = stringResource(
                     id = R.string.edit_item,
                 ),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = painterResource(id = R.drawable.ic_close),
+                navigationIcon = painterResource(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
                     {
@@ -124,7 +123,7 @@ fun EditItemScreen(
                     }
                 },
                 actions = {
-                    BitwardenTextButton(
+                    AuthenticatorTextButton(
                         label = stringResource(id = R.string.save),
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(EditItemAction.SaveClick) }
@@ -209,10 +208,17 @@ fun EditItemScreen(
             }
 
             is EditItemState.ViewState.Error -> {
-                /*ItemErrorContent(state)*/
+                BitwardenErrorContent(
+                    message = viewState.message(),
+                    modifier = Modifier.padding(innerPadding),
+                )
             }
 
-            EditItemState.ViewState.Loading -> EditItemState.ViewState.Loading
+            EditItemState.ViewState.Loading -> {
+                BitwardenLoadingContent(
+                    modifier = Modifier.padding(innerPadding),
+                )
+            }
         }
     }
 }
@@ -235,236 +241,229 @@ fun EditItemContent(
     onNumberOfDigitsChanged: (Int) -> Unit = {},
     onExpandAdvancedOptionsClicked: () -> Unit = {},
 ) {
-    Column(modifier = modifier) {
-        LazyColumn {
-            item {
-                BitwardenListHeaderText(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp),
-                    label = stringResource(id = R.string.information),
-                )
-            }
+    LazyColumn(modifier = modifier) {
+        item {
+            BitwardenListHeaderText(
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
+                label = stringResource(id = R.string.information),
+            )
+        }
 
-            item {
-                Spacer(Modifier.height(8.dp))
-                BitwardenTextField(
-                    modifier = Modifier
-                        .semantics { testTag = "NameTextField" }
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp),
-                    label = stringResource(id = R.string.name),
-                    value = viewState.itemData.issuer,
-                    onValueChange = onIssuerNameTextChange,
-                    singleLine = true,
-                )
-            }
+        item {
+            Spacer(Modifier.height(8.dp))
+            BitwardenTextField(
+                modifier = Modifier
+                    .testTag(tag = "NameTextField")
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
+                label = stringResource(id = R.string.name),
+                value = viewState.itemData.issuer,
+                onValueChange = onIssuerNameTextChange,
+                singleLine = true,
+            )
+        }
 
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-                BitwardenPasswordField(
-                    modifier = Modifier
-                        .semantics { testTag = "KeyTextField" }
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp),
-                    label = stringResource(id = R.string.key),
-                    value = viewState.itemData.totpCode,
-                    onValueChange = onTotpCodeTextChange,
-                    singleLine = true,
-                    capitalization = KeyboardCapitalization.Characters,
-                )
-            }
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenPasswordField(
+                modifier = Modifier
+                    .testTag(tag = "KeyTextField")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+                label = stringResource(id = R.string.key),
+                value = viewState.itemData.totpCode,
+                onValueChange = onTotpCodeTextChange,
+                singleLine = true,
+                capitalization = KeyboardCapitalization.Characters,
+            )
+        }
 
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-                BitwardenTextField(
-                    modifier = Modifier
-                        .semantics { testTag = "UsernameTextField" }
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    label = stringResource(id = R.string.username),
-                    value = viewState.itemData.username.orEmpty(),
-                    onValueChange = onUsernameTextChange,
-                    singleLine = true,
-                )
-            }
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenTextField(
+                modifier = Modifier
+                    .testTag(tag = "UsernameTextField")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+                label = stringResource(id = R.string.username),
+                value = viewState.itemData.username.orEmpty(),
+                onValueChange = onUsernameTextChange,
+                singleLine = true,
+            )
+        }
 
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-                BitwardenSwitch(
-                    label = stringResource(id = R.string.favorite),
-                    isChecked = viewState.itemData.favorite,
-                    onCheckedChange = onToggleFavorite,
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+            BitwardenSwitch(
+                label = stringResource(id = R.string.favorite),
+                isChecked = viewState.itemData.favorite,
+                onCheckedChange = onToggleFavorite,
+                modifier = Modifier
+                    .testTag(tag = "ItemFavoriteToggle")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+        }
+
+        item(key = "AdvancedOptions") {
+            val iconRotationDegrees = animateFloatAsState(
+                targetValue = if (viewState.isAdvancedOptionsExpanded) 180f else 0f,
+                label = "expanderIconRotationAnimation",
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier = Modifier
+                    .testTag(tag = "CollapseAdvancedOptions")
+                    .standardHorizontalMargin()
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(28.dp))
+                    .clickable(
+                        indication = ripple(
+                            bounded = true,
+                            color = MaterialTheme.colorScheme.primary,
+                        ),
+                        interactionSource = remember { MutableInteractionSource() },
+                        onClick = onExpandAdvancedOptionsClicked,
+                    )
+                    .padding(vertical = 12.dp)
+                    .animateItem(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(R.string.advanced),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                Spacer(Modifier.width(8.dp))
+                Icon(
+                    painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_down),
+                    contentDescription = if (viewState.isAdvancedOptionsExpanded) {
+                        stringResource(R.string.collapse_advanced_options)
+                    } else {
+                        stringResource(R.string.expand_advanced_options)
+                    },
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
-                        .testTag("ItemFavoriteToggle")
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .rotate(degrees = iconRotationDegrees.value),
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        if (viewState.isAdvancedOptionsExpanded) {
+            advancedOptions(
+                viewState = viewState,
+                onAlgorithmOptionClicked = onAlgorithmOptionClicked,
+                onTypeOptionClicked = onTypeOptionClicked,
+                onRefreshPeriodOptionClicked = onRefreshPeriodOptionClicked,
+                onNumberOfDigitsChanged = onNumberOfDigitsChanged,
+            )
+        }
 
-        AdvancedOptions(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            viewState = viewState,
-            onExpandStateChange = onExpandAdvancedOptionsClicked,
-            onAlgorithmOptionClicked = onAlgorithmOptionClicked,
-            onTypeOptionClicked = onTypeOptionClicked,
-            onRefreshPeriodOptionClicked = onRefreshPeriodOptionClicked,
-            onNumberOfDigitsChanged = onNumberOfDigitsChanged,
-        )
+        item {
+            Spacer(modifier = Modifier.height(height = 16.dp))
+            Spacer(modifier = Modifier.navigationBarsPadding())
+        }
     }
 }
 
 @Suppress("LongMethod")
-@Composable
-private fun AdvancedOptions(
-    modifier: Modifier = Modifier,
+private fun LazyListScope.advancedOptions(
     viewState: EditItemState.ViewState.Content,
-    onExpandStateChange: () -> Unit,
     onAlgorithmOptionClicked: (AuthenticatorItemAlgorithm) -> Unit,
     onTypeOptionClicked: (AuthenticatorItemType) -> Unit,
     onRefreshPeriodOptionClicked: (AuthenticatorRefreshPeriodOption) -> Unit,
     onNumberOfDigitsChanged: (Int) -> Unit,
 ) {
-    Column(modifier = modifier) {
-        Row(
+    item(key = "OtpItemTypeSelector") {
+        val possibleTypeOptions = AuthenticatorItemType.entries
+        val typeOptionsWithStrings =
+            possibleTypeOptions.associateWith { it.name }
+        BitwardenMultiSelectButton(
             modifier = Modifier
-                .semantics { testTag = "CollapseAdvancedOptions" }
-                .padding(vertical = 4.dp)
-                .clip(RoundedCornerShape(28.dp))
-                .clickable(
-                    indication = ripple(
-                        bounded = true,
-                        color = MaterialTheme.colorScheme.primary,
-                    ),
-                    interactionSource = remember { MutableInteractionSource() },
-                ) {
-                    onExpandStateChange()
-                },
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = stringResource(R.string.advanced),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-            )
-            Spacer(Modifier.width(8.dp))
-            BitwardenIcon(
-                iconData = IconData.Local(
-                    iconRes = if (viewState.isAdvancedOptionsExpanded) {
-                        R.drawable.ic_chevron_up
-                    } else {
-                        R.drawable.ic_chevron_down
-                    },
-                ),
-                contentDescription = stringResource(
-                    id = R.string.collapse_advanced_options,
-                ),
-                tint = MaterialTheme.colorScheme.primary,
-            )
+                .testTag(tag = "OTPItemTypePicker")
+                .standardHorizontalMargin()
+                .fillMaxWidth()
+                .animateItem(),
+            label = stringResource(id = R.string.otp_type),
+            options = typeOptionsWithStrings.values.toImmutableList(),
+            selectedOption = viewState.itemData.type.name,
+            onOptionSelected = { selectedOption ->
+                val selectedOptionName = typeOptionsWithStrings
+                    .entries
+                    .first { it.value == selectedOption }
+                    .key
+                onTypeOptionClicked(selectedOptionName)
+            },
+        )
+    }
+
+    item(key = "AlgorithmItemTypeSelector") {
+        val possibleAlgorithmOptions = AuthenticatorItemAlgorithm.entries
+        val algorithmOptionsWithStrings = possibleAlgorithmOptions.associateWith { it.name }
+        Spacer(Modifier.height(8.dp))
+        BitwardenMultiSelectButton(
+            modifier = Modifier
+                .testTag(tag = "AlgorithmItemTypePicker")
+                .standardHorizontalMargin()
+                .fillMaxWidth()
+                .animateItem(),
+            label = stringResource(id = R.string.algorithm),
+            options = algorithmOptionsWithStrings.values.toImmutableList(),
+            selectedOption = viewState.itemData.algorithm.name,
+            onOptionSelected = { selectedOption ->
+                val selectedOptionName = algorithmOptionsWithStrings
+                    .entries
+                    .first { it.value == selectedOption }
+                    .key
+                onAlgorithmOptionClicked(selectedOptionName)
+            },
+        )
+    }
+
+    item(key = "RefreshPeriodItemTypePicker") {
+        val possibleRefreshPeriodOptions = AuthenticatorRefreshPeriodOption.entries
+        val refreshPeriodOptionsWithStrings = possibleRefreshPeriodOptions.associateWith {
+            stringResource(id = R.string.refresh_period_seconds, it.seconds)
         }
-
-        AnimatedVisibility(
-            visible = viewState.isAdvancedOptionsExpanded,
-            enter = fadeIn(tween(DEFAULT_FADE_TRANSITION_TIME_MS)) +
-                expandVertically(tween(DEFAULT_STAY_TRANSITION_TIME_MS)),
-            exit = fadeOut(tween(DEFAULT_FADE_TRANSITION_TIME_MS)) +
-                shrinkVertically(tween(DEFAULT_STAY_TRANSITION_TIME_MS)),
-        ) {
-            LazyColumn {
-                item {
-                    val possibleTypeOptions = AuthenticatorItemType.entries
-                    val typeOptionsWithStrings =
-                        possibleTypeOptions.associateWith { it.name }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    BitwardenMultiSelectButton(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .semantics { testTag = "OTPItemTypePicker" },
-                        label = stringResource(id = R.string.otp_type),
-                        options = typeOptionsWithStrings.values.toImmutableList(),
-                        selectedOption = viewState.itemData.type.name,
-                        onOptionSelected = { selectedOption ->
-                            val selectedOptionName = typeOptionsWithStrings
-                                .entries
-                                .first { it.value == selectedOption }
-                                .key
-
-                            onTypeOptionClicked(selectedOptionName)
-                        },
-                    )
+        Spacer(modifier = Modifier.height(8.dp))
+        BitwardenMultiSelectButton(
+            modifier = Modifier
+                .testTag(tag = "RefreshPeriodItemTypePicker")
+                .standardHorizontalMargin()
+                .fillMaxWidth()
+                .animateItem(),
+            label = stringResource(id = R.string.refresh_period),
+            options = refreshPeriodOptionsWithStrings.values.toImmutableList(),
+            selectedOption = stringResource(
+                id = R.string.refresh_period_seconds,
+                viewState.itemData.refreshPeriod.seconds,
+            ),
+            onOptionSelected = remember(viewState) {
+                { selectedOption ->
+                    val selectedOptionName = refreshPeriodOptionsWithStrings
+                        .entries
+                        .first { it.value == selectedOption }
+                        .key
+                    onRefreshPeriodOptionClicked(selectedOptionName)
                 }
+            },
+        )
+    }
 
-                item {
-                    val possibleAlgorithmOptions = AuthenticatorItemAlgorithm.entries
-                    val algorithmOptionsWithStrings =
-                        possibleAlgorithmOptions.associateWith { it.name }
-                    Spacer(Modifier.height(8.dp))
-                    BitwardenMultiSelectButton(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .semantics { testTag = "AlgorithmItemTypePicker" },
-                        label = stringResource(id = R.string.algorithm),
-                        options = algorithmOptionsWithStrings.values.toImmutableList(),
-                        selectedOption = viewState.itemData.algorithm.name,
-                        onOptionSelected = { selectedOption ->
-                            val selectedOptionName = algorithmOptionsWithStrings
-                                .entries
-                                .first { it.value == selectedOption }
-                                .key
-
-                            onAlgorithmOptionClicked(selectedOptionName)
-                        },
-                    )
-                }
-
-                item {
-                    val possibleRefreshPeriodOptions = AuthenticatorRefreshPeriodOption.entries
-                    val refreshPeriodOptionsWithStrings = possibleRefreshPeriodOptions
-                        .associateWith {
-                            stringResource(
-                                id = R.string.refresh_period_seconds,
-                                it.seconds,
-                            )
-                        }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    BitwardenMultiSelectButton(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .semantics { testTag = "RefreshPeriodItemTypePicker" },
-                        label = stringResource(id = R.string.refresh_period),
-                        options = refreshPeriodOptionsWithStrings.values.toImmutableList(),
-                        selectedOption = stringResource(
-                            id = R.string.refresh_period_seconds,
-                            viewState.itemData.refreshPeriod.seconds,
-                        ),
-                        onOptionSelected = remember(viewState) {
-                            { selectedOption ->
-                                val selectedOptionName = refreshPeriodOptionsWithStrings
-                                    .entries
-                                    .first { it.value == selectedOption }
-                                    .key
-
-                                onRefreshPeriodOptionClicked(selectedOptionName)
-                            }
-                        },
-                    )
-                }
-
-                item {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    DigitsCounterItem(
-                        digits = viewState.itemData.digits,
-                        onDigitsCounterChange = onNumberOfDigitsChanged,
-                        minValue = viewState.minDigitsAllowed,
-                        maxValue = viewState.maxDigitsAllowed,
-                    )
-                }
-            }
-        }
+    item(key = "DigitsCounterItem") {
+        Spacer(modifier = Modifier.height(8.dp))
+        DigitsCounterItem(
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin()
+                .animateItem(),
+            digits = viewState.itemData.digits,
+            onDigitsCounterChange = onNumberOfDigitsChanged,
+            minValue = viewState.minDigitsAllowed,
+            maxValue = viewState.maxDigitsAllowed,
+        )
     }
 }
 
@@ -500,6 +499,7 @@ private fun DigitsCounterItem(
     onDigitsCounterChange: (Int) -> Unit,
     minValue: Int,
     maxValue: Int,
+    modifier: Modifier = Modifier,
 ) {
     BitwardenStepper(
         label = stringResource(id = R.string.number_of_digits),
@@ -508,7 +508,7 @@ private fun DigitsCounterItem(
         onValueChange = onDigitsCounterChange,
         increaseButtonTestTag = "DigitsIncreaseButton",
         decreaseButtonTestTag = "DigitsDecreaseButton",
-        modifier = Modifier.testTag("DigitsValueLabel"),
+        modifier = modifier.testTag(tag = "DigitsValueLabel"),
     )
 }
 

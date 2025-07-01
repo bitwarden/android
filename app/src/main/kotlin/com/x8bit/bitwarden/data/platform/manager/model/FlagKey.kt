@@ -23,9 +23,7 @@ sealed class FlagKey<out T : Any> {
             listOf(
                 AuthenticatorSync,
                 EmailVerification,
-                OnboardingFlow,
                 ImportLoginsFlow,
-                VerifiedSsoDomainEndpoint,
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
                 MutualTls,
@@ -38,6 +36,8 @@ sealed class FlagKey<out T : Any> {
                 FlightRecorder,
                 RestrictCipherItemDeletion,
                 PreAuthSettings,
+                UserManagedPrivilegedApps,
+                RemoveCardPolicy,
             )
         }
     }
@@ -75,26 +75,10 @@ sealed class FlagKey<out T : Any> {
     }
 
     /**
-     * Data object holding the feature flag key for the new onboarding feature.
-     */
-    data object OnboardingFlow : FlagKey<Boolean>() {
-        override val keyName: String = "native-create-account-flow"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
      * Data object holding the feature flag key for the import logins feature.
      */
     data object ImportLoginsFlow : FlagKey<Boolean>() {
         override val keyName: String = "import-logins-flow"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the new verified SSO domain endpoint feature.
-     */
-    data object VerifiedSsoDomainEndpoint : FlagKey<Boolean>() {
-        override val keyName: String = "pm-12337-refactor-sso-details-endpoint"
         override val defaultValue: Boolean = false
     }
 
@@ -187,6 +171,23 @@ sealed class FlagKey<out T : Any> {
      */
     data object PreAuthSettings : FlagKey<Boolean>() {
         override val keyName: String = "enable-pm-prelogin-settings"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key to enabled user-managed privileged apps.
+     */
+    data object UserManagedPrivilegedApps : FlagKey<Boolean>() {
+        override val keyName: String = "pm-18970-user-managed-privileged-apps"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key to enable the removal of card item types.
+     * This flag will hide card types from organizations with policy enable and individual vaults
+     */
+    data object RemoveCardPolicy : FlagKey<Boolean>() {
+        override val keyName: String = "pm-16442-remove-card-item-type-policy"
         override val defaultValue: Boolean = false
     }
 

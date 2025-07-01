@@ -21,10 +21,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 
 /**
@@ -91,7 +92,7 @@ fun VaultNoItems(
         Spacer(modifier = Modifier.height(24.dp))
 
         BitwardenFilledButton(
-            icon = rememberVectorPainter(R.drawable.ic_plus_small),
+            icon = rememberVectorPainter(BitwardenDrawable.ic_plus_small),
             modifier = Modifier.standardHorizontalMargin(),
             onClick = addItemClickAction,
             label = buttonText,
@@ -111,7 +112,7 @@ private fun VaultNoItems_preview() {
             modifier = Modifier.background(BitwardenTheme.colorScheme.background.primary),
         ) {
             VaultNoItems(
-                vectorRes = R.drawable.img_vault_items,
+                vectorRes = BitwardenDrawable.img_vault_items,
                 headerText = stringResource(id = R.string.save_and_protect_your_data),
                 message = stringResource(
                     R.string.the_vault_protects_more_than_just_passwords,

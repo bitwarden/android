@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.network.model.OrganizationType
@@ -60,9 +61,9 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
@@ -82,20 +83,26 @@ class VaultViewModelTest : BaseViewModelTest() {
         ZoneOffset.UTC,
     )
 
-    private val mutableSnackbarDataFlow = MutableStateFlow<BitwardenSnackbarData?>(null)
+    private val mutableSnackbarDataFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
     private val snackbarRelayManager: SnackbarRelayManager = mockk {
-        every { getSnackbarDataFlow(SnackbarRelay.MY_VAULT_RELAY) } returns mutableSnackbarDataFlow
-            .filterNotNull()
-        every { clearRelayBuffer(SnackbarRelay.MY_VAULT_RELAY) } just runs
+        every {
+            getSnackbarDataFlow(SnackbarRelay.LOGINS_IMPORTED)
+        } returns mutableSnackbarDataFlow
     }
 
     private val clipboardManager: BitwardenClipboardManager = mockk {
         every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
     }
+
+    private val mutableActivePoliciesFlow: MutableStateFlow<List<SyncResponseJson.Policy>> =
+        MutableStateFlow(emptyList())
     private val policyManager: PolicyManager = mockk {
         every {
             getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
         } returns emptyList()
+        every {
+            getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+        } returns mutableActivePoliciesFlow
     }
 
     private val mutablePullToRefreshEnabledFlow = MutableStateFlow(false)
@@ -151,11 +158,15 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     private val mutableImportLoginsFeatureFlow = MutableStateFlow(true)
+    private val mutableRemoveCardPolicyFeatureFlow = MutableStateFlow(false)
     private val mutableSshKeyVaultItemsEnabledFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
         every {
             getFeatureFlagFlow(FlagKey.ImportLoginsFlow)
         } returns mutableImportLoginsFeatureFlow
+        every {
+            getFeatureFlagFlow(FlagKey.RemoveCardPolicy)
+        } returns mutableRemoveCardPolicyFeatureFlow
     }
     private val reviewPromptManager: ReviewPromptManager = mockk()
 
@@ -391,6 +402,62 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is enable`() =
+        runTest {
+            mutableRemoveCardPolicyFeatureFlow.value = true
+
+            val viewModel = createViewModel()
+            assertEquals(
+                DEFAULT_STATE,
+                viewModel.stateFlow.value,
+            )
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(restrictItemTypesPolicyOrgIds = listOf("Test Organization")),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is disabled`() =
+        runTest {
+            val viewModel = createViewModel()
+            assertEquals(
+                DEFAULT_STATE,
+                viewModel.stateFlow.value,
+            )
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(restrictItemTypesPolicyOrgIds = null),
+                viewModel.stateFlow.value,
+            )
+        }
+
     @Test
     fun `Flight Recorder changes should update flightRecorderSnackbar accordingly`() = runTest {
         mockkStatic(FlightRecorderDataSet::toSnackbarData)
@@ -430,10 +497,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAction.FlightRecorderGoToSettingsClick)
             assertEquals(VaultEvent.NavigateToAbout, awaitItem())
-        }
-
-        verify(exactly = 1) {
-            settingsRepository.dismissFlightRecorderBanner()
         }
     }
 
@@ -651,6 +714,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
                 baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                 hasMasterPassword = true,
+                restrictItemTypesPolicyOrgIds = null,
             ),
         )
             .copy(
@@ -675,6 +739,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
                     baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                     hasMasterPassword = true,
+                    restrictItemTypesPolicyOrgIds = null,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -788,6 +853,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     totpItemsCount = 1,
                     itemTypesCount = CipherType.entries.size,
                     sshKeyItemsCount = 1,
+                    showCardGroup = true,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -812,6 +878,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     totpItemsCount = 1,
                     itemTypesCount = 5,
                     sshKeyItemsCount = 0,
+                    showCardGroup = true,
                 ),
             )
             val viewModel = createViewModel()
@@ -931,6 +998,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     totpItemsCount = 1,
                     itemTypesCount = 5,
                     sshKeyItemsCount = 0,
+                    showCardGroup = true,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1036,6 +1104,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 1,
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
+                        showCardGroup = true,
                     ),
                     dialog = VaultState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
@@ -1139,6 +1208,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 1,
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
+                        showCardGroup = true,
                     ),
                     dialog = null,
                 ),
@@ -1216,6 +1286,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 1,
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 1,
+                        showCardGroup = true,
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -1486,7 +1557,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = notes),
+                    ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                        notes = notes,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
             verify(exactly = 1) {
@@ -1559,7 +1633,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode),
+                    ListingItemOverflowAction.VaultAction.CopyTotpClick(
+                        totpCode = totpCode,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
 
@@ -1584,7 +1661,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode),
+                    ListingItemOverflowAction.VaultAction.CopyTotpClick(
+                        totpCode = totpCode,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
 
@@ -1683,24 +1763,143 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `OverflowOptionClick Vault ViewClick should emit NavigateToUrl`() = runTest {
-        val cipherId = "cipherId-9876"
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(
-                VaultAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.ViewClick(
-                        cipherId = cipherId,
-                        cipherType = CipherType.LOGIN,
+    fun `OverflowOptionClick Vault ViewClick without reprompt should emit NavigateToUrl`() =
+        runTest {
+            val cipherId = "cipherId-9876"
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAction.OverflowOptionClick(
+                        ListingItemOverflowAction.VaultAction.ViewClick(
+                            cipherId = cipherId,
+                            cipherType = CipherType.LOGIN,
+                            requiresPasswordReprompt = false,
+                        ),
                     ),
+                )
+                assertEquals(
+                    VaultEvent.NavigateToVaultItem(
+                        itemId = cipherId,
+                        type = VaultItemCipherType.LOGIN,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowMasterPasswordRepromptSubmit for a request Error should show a generic error dialog`() =
+        runTest {
+            val password = "password"
+            val error = Throwable("Fail!")
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Error(error = error)
+
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(
+                    VaultAction.OverflowMasterPasswordRepromptSubmit(
+                        overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                            password = password,
+                            requiresPasswordReprompt = true,
+                            cipherId = "cipherId",
+                        ),
+                        password = password,
+                    ),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialog = VaultState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                            error = error,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowMasterPasswordRepromptSubmit for a request Success with an invalid password should show an invalid password dialog`() =
+        runTest {
+            val password = "password"
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = false)
+
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(
+                    VaultAction.OverflowMasterPasswordRepromptSubmit(
+                        overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                            password = password,
+                            requiresPasswordReprompt = true,
+                            cipherId = "cipherId",
+                        ),
+                        password = password,
+                    ),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialog = VaultState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.invalid_master_password.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowMasterPasswordRepromptSubmit for a request Success with a valid password should continue the action`() =
+        runTest {
+            val password = "password"
+            val cipherId = "cipherId"
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = true)
+
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.OverflowMasterPasswordRepromptSubmit(
+                    overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                        password = password,
+                        requiresPasswordReprompt = true,
+                        cipherId = cipherId,
+                    ),
+                    password = password,
                 ),
             )
-            assertEquals(
-                VaultEvent.NavigateToVaultItem(itemId = cipherId, type = VaultItemCipherType.LOGIN),
-                awaitItem(),
-            )
+
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = password,
+                    toastDescriptorOverride = R.string.password.asText(),
+                )
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
+                )
+            }
         }
-    }
 
     @Test
     fun `MasterPasswordRepromptSubmit for a request Error should show a generic error dialog`() =
@@ -1720,10 +1919,12 @@ class VaultViewModelTest : BaseViewModelTest() {
 
                 viewModel.trySendAction(
                     VaultAction.MasterPasswordRepromptSubmit(
-                        overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                            password = password,
-                            requiresPasswordReprompt = true,
-                            cipherId = "cipherId",
+                        item = VaultState.ViewState.VaultItem.Login(
+                            id = "cipherId",
+                            name = "name".asText(),
+                            shouldShowMasterPasswordReprompt = true,
+                            username = null,
+                            overflowOptions = persistentListOf(),
                         ),
                         password = password,
                     ),
@@ -1760,10 +1961,11 @@ class VaultViewModelTest : BaseViewModelTest() {
 
                 viewModel.trySendAction(
                     VaultAction.MasterPasswordRepromptSubmit(
-                        overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                            password = password,
-                            requiresPasswordReprompt = true,
-                            cipherId = "cipherId",
+                        item = VaultState.ViewState.VaultItem.Card(
+                            id = "cipherId",
+                            name = "name".asText(),
+                            shouldShowMasterPasswordReprompt = true,
+                            overflowOptions = persistentListOf(),
                         ),
                         password = password,
                     ),
@@ -1786,31 +1988,29 @@ class VaultViewModelTest : BaseViewModelTest() {
     fun `MasterPasswordRepromptSubmit for a request Success with a valid password should continue the action`() =
         runTest {
             val password = "password"
-            val cipherId = "cipherId"
+            val item = VaultState.ViewState.VaultItem.Identity(
+                id = "cipherId",
+                name = "name".asText(),
+                shouldShowMasterPasswordReprompt = true,
+                fullName = null,
+                overflowOptions = persistentListOf(),
+            )
             coEvery {
                 authRepository.validatePassword(password = password)
             } returns ValidatePasswordResult.Success(isValid = true)
 
             val viewModel = createViewModel()
 
-            viewModel.trySendAction(
-                VaultAction.MasterPasswordRepromptSubmit(
-                    overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAction.MasterPasswordRepromptSubmit(
+                        item = item,
                         password = password,
-                        requiresPasswordReprompt = true,
-                        cipherId = cipherId,
                     ),
-                    password = password,
-                ),
-            )
-
-            verify(exactly = 1) {
-                clipboardManager.setText(
-                    text = password,
-                    toastDescriptorOverride = R.string.password.asText(),
                 )
-                organizationEventManager.trackEvent(
-                    event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
+                assertEquals(
+                    VaultEvent.NavigateToVaultItem(itemId = item.id, type = item.type),
+                    awaitItem(),
                 )
             }
         }
@@ -1933,8 +2133,8 @@ class VaultViewModelTest : BaseViewModelTest() {
     fun `when SnackbarRelay flow updates, snackbar is shown`() = runTest {
         val viewModel = createViewModel()
         val expectedSnackbarData = BitwardenSnackbarData(message = "test message".asText())
-        mutableSnackbarDataFlow.update { expectedSnackbarData }
         viewModel.eventFlow.test {
+            mutableSnackbarDataFlow.tryEmit(expectedSnackbarData)
             assertEquals(VaultEvent.ShowSnackbar(expectedSnackbarData), awaitItem())
         }
     }
@@ -1951,9 +2151,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                     },
                 ),
             )
-            verify(exactly = 1) {
-                snackbarRelayManager.clearRelayBuffer(SnackbarRelay.MY_VAULT_RELAY)
-            }
         }
 
     @Suppress("MaxLineLength")
@@ -2020,13 +2217,49 @@ class VaultViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.trySendAction(VaultAction.SelectAddItemType)
         val expectedState = DEFAULT_STATE.copy(
-            dialog = VaultState.DialogState.SelectVaultAddItemType,
+            dialog = VaultState.DialogState.SelectVaultAddItemType(
+                excludedOptions = persistentListOf(CreateVaultItemType.SSH_KEY),
+            ),
         )
         assertEquals(
             expectedState,
             viewModel.stateFlow.value,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SelectAddItemType action should set dialog state to SelectVaultAddItemType accordingly when RESTRICT_ITEM_TYPES is enabled`() =
+        runTest {
+            mutableRemoveCardPolicyFeatureFlow.value = true
+            val viewModel = createViewModel()
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(VaultAction.SelectAddItemType)
+            val expectedState = DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.SelectVaultAddItemType(
+                    excludedOptions = persistentListOf(
+                        CreateVaultItemType.SSH_KEY,
+                        CreateVaultItemType.CARD,
+                    ),
+                ),
+                restrictItemTypesPolicyOrgIds = listOf("Test Organization"),
+            )
+            assertEquals(
+                expectedState,
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `InternetConnectionErrorReceived should show network error if no internet connection`() =
@@ -2169,4 +2402,5 @@ private fun createMockVaultState(
         showImportActionCard = true,
         isRefreshing = false,
         flightRecorderSnackBar = null,
+        restrictItemTypesPolicyOrgIds = null,
     )

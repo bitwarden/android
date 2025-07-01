@@ -741,12 +741,14 @@ class VaultLockManagerTest {
             vaultSdkSource.initializeCrypto(
                 userId = USER_ID,
                 request = InitUserCryptoRequest(
+                    userId = USER_ID,
                     kdfParams = MOCK_PROFILE.toSdkParams(),
                     email = MOCK_PROFILE.email,
                     privateKey = privateKey,
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = userAutoUnlockKey,
                     ),
+                    signingKey = null,
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
@@ -764,12 +766,14 @@ class VaultLockManagerTest {
             vaultSdkSource.initializeCrypto(
                 userId = USER_ID,
                 request = InitUserCryptoRequest(
+                    userId = USER_ID,
                     kdfParams = MOCK_PROFILE.toSdkParams(),
                     email = MOCK_PROFILE.email,
                     privateKey = privateKey,
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = userAutoUnlockKey,
                     ),
+                    signingKey = null,
                 ),
             )
             trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
@@ -894,6 +898,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -901,6 +906,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -958,6 +964,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -965,6 +972,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
                 vaultSdkSource.initializeOrganizationCrypto(
@@ -990,6 +998,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -997,6 +1006,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1065,6 +1075,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1072,6 +1083,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
                 vaultSdkSource.initializeOrganizationCrypto(
@@ -1098,6 +1110,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1105,6 +1118,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             } returns InitializeCryptoResult.AuthenticationError(error = error).asSuccess()
@@ -1143,6 +1157,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1150,6 +1165,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             }
@@ -1169,6 +1185,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1176,6 +1193,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1221,6 +1239,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1228,6 +1247,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             }
@@ -1254,6 +1274,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1261,6 +1282,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             } returns error.asFailure()
@@ -1298,6 +1320,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1305,6 +1328,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             }
@@ -1324,6 +1348,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1331,6 +1356,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1375,6 +1401,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1382,6 +1409,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             }
@@ -1407,6 +1435,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1414,6 +1443,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
@@ -1465,6 +1495,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1472,6 +1503,7 @@ class VaultLockManagerTest {
                             password = masterPassword,
                             userKey = userKey,
                         ),
+                        signingKey = null,
                     ),
                 )
             }
@@ -1589,6 +1621,7 @@ class VaultLockManagerTest {
             vaultSdkSource.initializeCrypto(
                 userId = userId,
                 request = InitUserCryptoRequest(
+                    userId = userId,
                     kdfParams = kdf,
                     email = email,
                     privateKey = privateKey,
@@ -1596,6 +1629,7 @@ class VaultLockManagerTest {
                         password = masterPassword,
                         userKey = userKey,
                     ),
+                    signingKey = null,
                 ),
             )
         } coAnswers {
@@ -1634,6 +1668,7 @@ class VaultLockManagerTest {
             vaultSdkSource.initializeCrypto(
                 userId = userId,
                 request = InitUserCryptoRequest(
+                    userId = userId,
                     kdfParams = kdf,
                     email = email,
                     privateKey = privateKey,
@@ -1641,6 +1676,7 @@ class VaultLockManagerTest {
                         password = masterPassword,
                         userKey = userKey,
                     ),
+                    signingKey = null,
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
@@ -1668,6 +1704,7 @@ class VaultLockManagerTest {
             vaultSdkSource.initializeCrypto(
                 userId = userId,
                 request = InitUserCryptoRequest(
+                    userId = userId,
                     kdfParams = kdf,
                     email = email,
                     privateKey = privateKey,
@@ -1675,6 +1712,7 @@ class VaultLockManagerTest {
                         password = masterPassword,
                         userKey = userKey,
                     ),
+                    signingKey = null,
                 ),
             )
         }

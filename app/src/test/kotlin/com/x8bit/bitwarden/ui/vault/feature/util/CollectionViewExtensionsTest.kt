@@ -79,10 +79,10 @@ class CollectionViewExtensionsTest {
     @Test
     fun `hasDeletePermissionInAtLeastOneCollection should return true if the user has manage permission in at least one collection`() {
         val collectionList: List<CollectionView> = listOf(
+            createViewCollectionView(number = 4),
             createManageCollectionView(number = 1),
             createEditCollectionView(number = 2),
             createEditExceptPasswordsCollectionView(number = 3),
-            createViewCollectionView(number = 4),
             createViewExceptPasswordsCollectionView(number = 5),
         )
 
@@ -179,6 +179,24 @@ class CollectionViewExtensionsTest {
         assertTrue(
             emptyList<CollectionView>().hasDeletePermissionInAtLeastOneCollection(
                 collectionIds,
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hasDeletePermissionInAtLeastOneCollection should return false if the user doesn't have any collection with edit or manage permissions`() {
+        val collectionList: List<CollectionView> = listOf(
+            createViewCollectionView(number = 1),
+            createViewCollectionView(number = 2),
+            createViewExceptPasswordsCollectionView(number = 3),
+            createViewExceptPasswordsCollectionView(number = 4),
+        )
+        val collectionIds = collectionList.mapNotNull { it.id }
+        assertFalse(
+            collectionList.hasDeletePermissionInAtLeastOneCollection(
+                collectionIds = collectionIds,
+                needsManagePermission = false,
             ),
         )
     }

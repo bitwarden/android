@@ -20,6 +20,7 @@ import com.bitwarden.vault.CipherPermissions
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.EncryptionContext
 import com.bitwarden.vault.Fido2Credential
 import com.bitwarden.vault.Field
 import com.bitwarden.vault.FieldType
@@ -37,8 +38,12 @@ import java.time.ZonedDateTime
 /**
  * Converts a Bitwarden SDK [Cipher] object to a corresponding
  * [SyncResponseJson.Cipher] object.
+ *
+ * @param encryptedFor The ID of the user who this cipher is encrypted by.
  */
-fun Cipher.toEncryptedNetworkCipher(): CipherJsonRequest =
+fun Cipher.toEncryptedNetworkCipher(
+    encryptedFor: String,
+): CipherJsonRequest =
     CipherJsonRequest(
         notes = notes,
         attachments = attachments
@@ -59,13 +64,18 @@ fun Cipher.toEncryptedNetworkCipher(): CipherJsonRequest =
         card = card?.toEncryptedNetworkCard(),
         key = key,
         sshKey = sshKey?.toEncryptedNetworkSshKey(),
+        encryptedFor = encryptedFor,
     )
 
 /**
  * Converts a Bitwarden SDK [Cipher] object to a corresponding
  * [SyncResponseJson.Cipher] object.
+ *
+ * @param encryptedFor The ID of the user who this cipher is encrypted by.
  */
-fun Cipher.toEncryptedNetworkCipherResponse(): SyncResponseJson.Cipher =
+fun Cipher.toEncryptedNetworkCipherResponse(
+    encryptedFor: String,
+): SyncResponseJson.Cipher =
     SyncResponseJson.Cipher(
         notes = notes,
         reprompt = reprompt.toNetworkRepromptType(),
@@ -92,6 +102,7 @@ fun Cipher.toEncryptedNetworkCipherResponse(): SyncResponseJson.Cipher =
         id = id.orEmpty(),
         shouldViewPassword = viewPassword,
         key = key,
+        encryptedFor = encryptedFor,
     )
 
 /**
@@ -626,3 +637,17 @@ fun List<CipherListView>.sortAlphabetically(): List<CipherListView> {
         },
     )
 }
+
+/**
+ * Converts a Bitwarden SDK [EncryptionContext] object to a corresponding [CipherJsonRequest]
+ * object.
+ */
+fun EncryptionContext.toEncryptedNetworkCipher(): CipherJsonRequest =
+    cipher.toEncryptedNetworkCipher(encryptedFor = encryptedFor)
+
+/**
+ * Converts a Bitwarden SDK [EncryptionContext] object to a corresponding [SyncResponseJson.Cipher]
+ * object.
+ */
+fun EncryptionContext.toEncryptedNetworkCipherResponse(): SyncResponseJson.Cipher =
+    cipher.toEncryptedNetworkCipherResponse(encryptedFor = encryptedFor)

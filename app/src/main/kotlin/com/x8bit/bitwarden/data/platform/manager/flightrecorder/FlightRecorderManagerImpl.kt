@@ -5,11 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import com.bitwarden.core.data.util.concurrentMapOf
+import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.repository.model.FlightRecorderDuration
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

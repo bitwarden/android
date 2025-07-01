@@ -11,11 +11,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
+import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 
 /**
  * Displays a stepper that allows the user to increment and decrement an int value.
@@ -115,7 +115,7 @@ fun BitwardenStepper(
         textFieldTestTag = "StepperValueLabel",
         actions = {
             BitwardenFilledIconButton(
-                vectorIconRes = R.drawable.ic_minus,
+                vectorIconRes = BitwardenDrawable.ic_minus,
                 contentDescription = "\u2212",
                 onClick = {
                     val decrementedValue = ((clampedValue ?: 0) - 1).coerceIn(range)
@@ -127,7 +127,7 @@ fun BitwardenStepper(
                 modifier = Modifier.testTag("DecrementValue"),
             )
             BitwardenFilledIconButton(
-                vectorIconRes = R.drawable.ic_plus,
+                vectorIconRes = BitwardenDrawable.ic_plus,
                 contentDescription = "+",
                 onClick = {
                     val incrementedValue = ((clampedValue ?: 0) + 1).coerceIn(range)
