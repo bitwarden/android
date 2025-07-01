@@ -82,5 +82,6 @@ class SdkClientManagerTest {
         clientProvider = { mockk(relaxed = true) },
         nativeLibraryManager = mockNativeLibraryManager,
         featureFlagManager = mockk(),
+        vaultDiskSource = mockk(),
     )
 }

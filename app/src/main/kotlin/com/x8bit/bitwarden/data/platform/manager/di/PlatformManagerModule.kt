@@ -233,9 +233,11 @@ object PlatformManagerModule {
     fun provideSdkClientManager(
         featureFlagManager: FeatureFlagManager,
         nativeLibraryManager: NativeLibraryManager,
+        vaultDiskSource: VaultDiskSource,
     ): SdkClientManager = SdkClientManagerImpl(
         featureFlagManager = featureFlagManager,
         nativeLibraryManager = nativeLibraryManager,
+        vaultDiskSource =  vaultDiskSource,
     )
 
     @Provides
