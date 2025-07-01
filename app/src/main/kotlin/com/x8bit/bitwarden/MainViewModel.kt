@@ -85,7 +85,6 @@ class MainViewModel @Inject constructor(
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
     initialState = MainState(
         theme = settingsRepository.appTheme,
-        isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
         isErrorReportingDialogEnabled = featureFlagManager.getFeatureFlag(
             key = FlagKey.MobileErrorReporting,
         ),
@@ -266,7 +265,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun handleScreenCaptureUpdate(action: MainAction.Internal.ScreenCaptureUpdate) {
-        mutableStateFlow.update { it.copy(isScreenCaptureAllowed = action.isScreenCaptureEnabled) }
+        sendEvent(MainEvent.ScreenCaptureSettingChange(isAllowed = action.isScreenCaptureEnabled))
     }
 
     private fun handleAppThemeUpdated(action: MainAction.Internal.ThemeUpdate) {
@@ -508,7 +507,6 @@ class MainViewModel @Inject constructor(
 @Parcelize
 data class MainState(
     val theme: AppTheme,
-    val isScreenCaptureAllowed: Boolean,
     val isDynamicColorsEnabled: Boolean,
     private val isErrorReportingDialogEnabled: Boolean,
 ) : Parcelable {
@@ -654,4 +652,9 @@ sealed class MainEvent {
     data class UpdateAppTheme(
         val osTheme: Int,
     ) : MainEvent()
+
+    /**
+     * Event indicating a change in the screen capture setting.
+     */
+    data class ScreenCaptureSettingChange(val isAllowed: Boolean) : MainEvent()
 }

@@ -32,6 +32,7 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
@@ -91,7 +92,7 @@ fun VaultSettingsScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.vault),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(VaultSettingsAction.BackClick) }

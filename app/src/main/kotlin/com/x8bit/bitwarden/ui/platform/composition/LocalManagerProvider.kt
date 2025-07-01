@@ -11,9 +11,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.compositionLocalOf
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManagerImpl
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManagerImpl
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManagerUnsupportedApiImpl
@@ -73,7 +73,7 @@ fun LocalManagerProvider(
 private fun createCredentialProviderCompletionManager(
     activity: Activity,
 ): CredentialProviderCompletionManager =
-    if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
+    if (!isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
         CredentialProviderCompletionManagerUnsupportedApiImpl
     } else {
         CredentialProviderCompletionManagerImpl(activity)

@@ -39,6 +39,7 @@ import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
@@ -323,7 +324,7 @@ private fun VaultScreenScaffold(
             ) {
                 BitwardenFloatingActionButton(
                     onClick = vaultHandlers.selectAddItemTypeClickAction,
-                    painter = rememberVectorPainter(id = R.drawable.ic_plus_large),
+                    painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
                     contentDescription = stringResource(id = R.string.add_item),
                     modifier = Modifier.testTag(tag = "AddItemButton"),
                 )
@@ -380,7 +381,7 @@ private fun VaultScreenScaffold(
                         )
                     }
                     VaultNoItems(
-                        vectorRes = R.drawable.img_vault_items,
+                        vectorRes = BitwardenDrawable.img_vault_items,
                         headerText = stringResource(id = R.string.save_and_protect_your_data),
                         message = stringResource(
                             R.string.the_vault_protects_more_than_just_passwords,
@@ -421,11 +422,12 @@ private fun VaultDialogs(
             onDismissRequest = vaultHandlers.dialogDismiss,
         )
 
-        VaultState.DialogState.SelectVaultAddItemType -> VaultItemSelectionDialog(
+        is VaultState.DialogState.SelectVaultAddItemType -> VaultItemSelectionDialog(
             onOptionSelected = {
                 vaultHandlers.addItemClickAction(it)
             },
             onDismissRequest = vaultHandlers.dialogDismiss,
+            excludedOptions = dialogState.excludedOptions,
         )
 
         null -> Unit

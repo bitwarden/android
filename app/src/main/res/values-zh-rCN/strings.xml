@@ -157,7 +157,7 @@
     <string name="view_passkey">查看通行密钥</string>
     <string name="web_vault">Bitwarden 网页版密码库</string>
     <string name="items">项目</string>
-    <string name="items_for_uri">%1$s 的项目</string>
+    <string name="items_for_uri">适用于 %1$s 的项目</string>
     <string name="no_items_for_uri">您的密码库中没有可用于 %1$s 的项目。</string>
     <string name="no_items_for_vault">您的密码库中没有匹配「%1$s」的项目</string>
     <string name="search_for_a_login_or_add_a_new_login">搜索登录或添加新的登录</string>
@@ -425,7 +425,9 @@
     <string name="privacy_policy">隐私政策</string>
     <string name="passkey_management">通行密钥管理</string>
     <string name="autofill_services">自动填充服务</string>
-    <string name="inline_autofill">使用内嵌自动填充</string>
+    <string name="display_autofill_suggestions">显示自动填充建议</string>
+    <string name="autofill_suggestions_inline">内嵌（显示在键盘内）</string>
+    <string name="autofill_suggestions_popup">弹出（显示在输入字段上方）</string>
     <string name="accessibility">使用无障碍功能</string>
     <string name="accessibility_description5">要求使用自动填充快速操作磁贴。</string>
     <string name="personal_ownership_policy_in_effect">某个组织策略正影响您的所有权选项。</string>
@@ -660,8 +662,8 @@
     <string name="session_timeout_action">会话超时动作</string>
     <string name="account_fingerprint_phrase">账户指纹短语</string>
     <string name="passkey_management_explanation_long">使用 Bitwarden 保存新的通行密钥并使用存储在密码库中的通行密钥登录。</string>
-    <string name="autofill_services_explanation_long">Android 自动填充框架用于协助将登录信息填充到您设备上的其他 App 中。</string>
-    <string name="use_inline_autofill_explanation_long">如果您所选的键盘支持，将使用内嵌自动填充。否则，将使用默认的叠加层自动填充。</string>
+    <string name="autofill_services_explanation_long">允许 Bitwarden 使用您保存的登录信息来登录设备上的其他 App。</string>
+    <string name="use_inline_autofill_explanation_long">选择在登录设备上的其他 App 时，自动填充建议的显示方式。</string>
     <string name="additional_options">附加选项</string>
     <string name="continue_to_web_app">前往网页 App 吗？</string>
     <string name="continue_to_x">前往 %1$s 吗？</string>
@@ -908,9 +910,10 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">由于没有选择任何项目，通行密钥操作失败。</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">由于请求不受支持，通行密钥操作失败。</string>
     <string name="self_host_server_url">自托管服务器 URL</string>
+    <string name="use_brave_autofill_integration">使用 Brave 自动填充集成</string>
     <string name="use_chrome_autofill_integration">使用 Chrome 自动填充集成</string>
     <string name="use_chrome_beta_autofill_integration">使用 Chrome 自动填充集成 (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">改进 Chrome 上受支持的网站的登录填充。启用后，您将被引导至 Chrome 设置以启用第三方自动填充。</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">改进了对选定的浏览器上受支持网站的登录填充功能。启用后，您将被引导至浏览器设置以启用第三方自动填充。</string>
     <string name="show_more">显示更多</string>
     <string name="no_folder">无文件夹</string>
     <string name="show_less">显示更少</string>
@@ -982,4 +985,13 @@
     <string name="learn_more_about_privileged_apps">进一步了解特权 App</string>
     <string name="privileged_apps">特权 App</string>
     <string name="unrecognized_browser">无法识别的浏览器</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">进一步了解 Bitwarden 通行密钥的使用。</string>
+    <string name="google">Google</string>
+    <string name="the_community">社区</string>
+    <string name="you">您</string>
+    <string name="all_trusted_apps">所有信任的 App</string>
+    <string name="trusted_by_x">被 %s 信任</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">确定要停止信任 %s 吗？</string>
+    <string name="installed_apps">已安装的 App</string>
+    <string name="delete_x">删除于 %s</string>
 </resources>

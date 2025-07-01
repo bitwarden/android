@@ -425,7 +425,9 @@ A leitura será efetuada automaticamente.</string>
     <string name="privacy_policy">Política de privacidade</string>
     <string name="passkey_management">Gestão de chaves de acesso</string>
     <string name="autofill_services">Serviços de preenchimento automático</string>
-    <string name="inline_autofill">Utilizar o preenchimento automático em linha</string>
+    <string name="display_autofill_suggestions">Apresentar sugestões de preenchimento automático</string>
+    <string name="autofill_suggestions_inline">Em linha (aparece no teclado)</string>
+    <string name="autofill_suggestions_popup">Pop-up (aparece sobre o campo de entrada)</string>
     <string name="accessibility">Utilizar a acessibilidade</string>
     <string name="accessibility_description5">Necessário para utilizar o ícone de ação rápida de preenchimento automático.</string>
     <string name="personal_ownership_policy_in_effect">Uma política da organização está a afetar as suas opções de propriedade.</string>
@@ -659,8 +661,8 @@ Pretende mudar para esta conta?</string>
     <string name="session_timeout_action">Ação de tempo limite da sessão</string>
     <string name="account_fingerprint_phrase">Frase de impressão digital da conta</string>
     <string name="passkey_management_explanation_long">Utilize o Bitwarden para guardar novas chaves de acesso e iniciar sessão com chaves de acesso armazenadas no seu cofre.</string>
-    <string name="autofill_services_explanation_long">A estrutura de preenchimento automático do Android é utilizada para ajudar a preencher as informações de início de sessão noutras aplicações do seu dispositivo.</string>
-    <string name="use_inline_autofill_explanation_long">Utilize o preenchimento automático em linha se o teclado selecionado o suportar. Caso contrário, utilize a sobreposição predefinida.</string>
+    <string name="autofill_services_explanation_long">Permita que o Bitwarden utilize as suas credenciais guardadas para iniciar sessão noutras apps do seu dispositivo.</string>
+    <string name="use_inline_autofill_explanation_long">Escolha a forma como as suas sugestões de preenchimento automático serão apresentadas quando iniciar sessão noutras apps do seu dispositivo.</string>
     <string name="additional_options">Opções adicionais</string>
     <string name="continue_to_web_app">Continuar para a aplicação Web?</string>
     <string name="continue_to_x">Continuar para %1$s?</string>
@@ -908,9 +910,10 @@ Pretende mudar para esta conta?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">A operação da chave de acesso falhou porque não foi selecionado nenhum item.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A operação da chave de acesso falhou porque o pedido não é suportado.</string>
     <string name="self_host_server_url">URL do servidor auto-hospedado</string>
+    <string name="use_brave_autofill_integration">Utilizar a integração do preenchimento automático do Brave</string>
     <string name="use_chrome_autofill_integration">Utilizar a integração do preenchimento automático do Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Utilizar a integração do preenchimento automático do Chrome (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Melhora o preenchimento de credenciais para sites suportados no Chrome. Uma vez ativado, será direcionado para as definições do Chrome para ativar o preenchimento automático de terceiros.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Melhora o preenchimento de credenciais para sites suportados em navegadores selecionados. Uma vez ativado, será direcionado para as definições do Brave para ativar o preenchimento automático de terceiros.</string>
     <string name="show_more">Mostrar mais</string>
     <string name="no_folder">Sem pasta</string>
     <string name="show_less">Mostrar menos</string>
@@ -981,4 +984,13 @@ Pretende mudar para esta conta?</string>
     <string name="learn_more_about_privileged_apps">Saiba mais sobre as aplicações privilegiadas</string>
     <string name="privileged_apps">Apps privilegiadas</string>
     <string name="unrecognized_browser">Navegador não reconhecido</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Saiba mais sobre a utilização de chaves de acesso com o Bitwarden.</string>
+    <string name="google">Google</string>
+    <string name="the_community">a Comunidade</string>
+    <string name="you">SI</string>
+    <string name="all_trusted_apps">Todas as apps de confiança</string>
+    <string name="trusted_by_x">Confiadas por %s</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Tem a certeza de que quer deixar de confiar em %s?</string>
+    <string name="installed_apps">Apps instaladas</string>
+    <string name="delete_x">Eliminar %s</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.edititem
 
 import android.widget.Toast
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -27,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -55,13 +58,12 @@ import com.bitwarden.authenticator.ui.platform.components.dropdown.BitwardenMult
 import com.bitwarden.authenticator.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.authenticator.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
-import com.bitwarden.authenticator.ui.platform.components.icon.BitwardenIcon
-import com.bitwarden.authenticator.ui.platform.components.model.IconData
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.components.stepper.BitwardenStepper
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import kotlinx.collections.immutable.toImmutableList
 
@@ -305,7 +307,11 @@ fun EditItemContent(
             )
         }
 
-        item {
+        item(key = "AdvancedOptions") {
+            val iconRotationDegrees = animateFloatAsState(
+                targetValue = if (viewState.isAdvancedOptionsExpanded) 180f else 0f,
+                label = "expanderIconRotationAnimation",
+            )
             Spacer(modifier = Modifier.height(16.dp))
             Row(
                 modifier = Modifier
@@ -321,7 +327,8 @@ fun EditItemContent(
                         interactionSource = remember { MutableInteractionSource() },
                         onClick = onExpandAdvancedOptionsClicked,
                     )
-                    .padding(vertical = 12.dp),
+                    .padding(vertical = 12.dp)
+                    .animateItem(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
@@ -330,18 +337,16 @@ fun EditItemContent(
                     color = MaterialTheme.colorScheme.primary,
                 )
                 Spacer(Modifier.width(8.dp))
-                BitwardenIcon(
-                    iconData = IconData.Local(
-                        iconRes = if (viewState.isAdvancedOptionsExpanded) {
-                            R.drawable.ic_chevron_up
-                        } else {
-                            R.drawable.ic_chevron_down
-                        },
-                    ),
-                    contentDescription = stringResource(
-                        id = R.string.collapse_advanced_options,
-                    ),
+                Icon(
+                    painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_down),
+                    contentDescription = if (viewState.isAdvancedOptionsExpanded) {
+                        stringResource(R.string.collapse_advanced_options)
+                    } else {
+                        stringResource(R.string.expand_advanced_options)
+                    },
                     tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .rotate(degrees = iconRotationDegrees.value),
                 )
             }
         }

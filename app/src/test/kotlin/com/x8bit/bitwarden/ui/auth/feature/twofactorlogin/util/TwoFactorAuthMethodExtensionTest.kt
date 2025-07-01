@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util
 
 import com.bitwarden.network.model.TwoFactorAuthMethod
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.R
@@ -135,10 +136,10 @@ class TwoFactorAuthMethodExtensionTest {
     @Test
     fun `imageRes returns the expected value`() {
         mapOf(
-            TwoFactorAuthMethod.AUTHENTICATOR_APP to R.drawable.img_authenticator,
-            TwoFactorAuthMethod.EMAIL to R.drawable.img_new_device_verification,
+            TwoFactorAuthMethod.AUTHENTICATOR_APP to BitwardenDrawable.img_authenticator,
+            TwoFactorAuthMethod.EMAIL to BitwardenDrawable.img_new_device_verification,
             TwoFactorAuthMethod.DUO to null,
-            TwoFactorAuthMethod.YUBI_KEY to R.drawable.yubi_key,
+            TwoFactorAuthMethod.YUBI_KEY to BitwardenDrawable.yubi_key,
             TwoFactorAuthMethod.U2F to null,
             TwoFactorAuthMethod.REMEMBER to null,
             TwoFactorAuthMethod.DUO_ORGANIZATION to null,

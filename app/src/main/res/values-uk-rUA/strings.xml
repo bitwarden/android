@@ -425,7 +425,9 @@
     <string name="privacy_policy">Політика приватності</string>
     <string name="passkey_management">Керування ключами доступу</string>
     <string name="autofill_services">Служби автозаповнення</string>
-    <string name="inline_autofill">Використовувати вбудоване автозаповнення</string>
+    <string name="display_autofill_suggestions">Display autofill suggestions</string>
+    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
+    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
     <string name="accessibility">Використовувати спеціальні можливості</string>
     <string name="accessibility_description5">Необхідно використовувати плитку швидких дій для автозаповнення.</string>
     <string name="personal_ownership_policy_in_effect">Політика організації впливає на ваші параметри власності.</string>
@@ -908,9 +910,10 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">Не вдалося виконати операцію з ключем доступу, тому що не вибрано жодного елемента.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Не вдалося виконати операцію з ключем доступу, оскільки запит не підтримується.</string>
     <string name="self_host_server_url">URL-адреса власного сервера</string>
+    <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Використовувати інтеграцію автозаповнення з Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Використовувати інтеграцію автозаповнення з Chrome (бета-версія)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Покращення заповнення даних входу на підтримуваних вебсайтах у Chrome. Після увімкнення вас буде спрямовано в налаштування Chrome для активації автозаповнення третіх сторін.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
     <string name="show_more">Розгорнути</string>
     <string name="no_folder">Без теки</string>
     <string name="show_less">Згорнути</string>
@@ -983,4 +986,13 @@
     <string name="learn_more_about_privileged_apps">Докладніше про привілейовані програми</string>
     <string name="privileged_apps">Привілейовані програми</string>
     <string name="unrecognized_browser">Нерозпізнаний браузер</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
+    <string name="google">Google</string>
+    <string name="the_community">the Community</string>
+    <string name="you">YOU</string>
+    <string name="all_trusted_apps">All trusted apps</string>
+    <string name="trusted_by_x">Trusted by %s</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
+    <string name="installed_apps">Installed apps</string>
+    <string name="delete_x">Delete %s</string>
 </resources>

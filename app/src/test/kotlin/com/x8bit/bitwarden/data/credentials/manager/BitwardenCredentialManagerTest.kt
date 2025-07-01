@@ -38,7 +38,6 @@ import com.x8bit.bitwarden.data.credentials.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.platform.util.getAppSigningSignatureFingerprint
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
@@ -161,7 +160,6 @@ class BitwardenCredentialManagerTest {
         unmockkStatic(
             PublicKeyCredentialAuthenticatorAssertionResponse::toAndroidFido2PublicKeyCredential,
             CallingAppInfo::getAppSigningSignatureFingerprint,
-            ::isBuildVersionBelow,
         )
         unmockkConstructor(PublicKeyCredentialEntry.Builder::class)
     }

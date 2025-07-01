@@ -21,7 +21,7 @@ fun ItemSearchContent(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
-        items(viewState.displayItems) {
+        items(viewState.itemList) {
             VaultVerificationCodeItem(
                 modifier = Modifier
                     .fillMaxWidth()

@@ -42,6 +42,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.RestrictCipherItemDeletion,
     FlagKey.PreAuthSettings,
     FlagKey.UserManagedPrivilegedApps,
+    FlagKey.RemoveCardPolicy,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -105,4 +106,5 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.UserManagedPrivilegedApps -> {
         stringResource(R.string.user_trusted_privileged_app_management)
     }
+    FlagKey.RemoveCardPolicy -> stringResource(R.string.remove_card_policy)
 }

@@ -9,9 +9,9 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import androidx.core.net.toUri
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.platform.base.AuthenticatorComposeTest
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.FakePermissionManager
@@ -346,7 +346,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
     }
 
     @Test
-    fun `clicking Move to Bitwarden should send MoveToBitwardenClick`() {
+    fun `clicking Copy to Bitwarden vault should send DropdownMenuClick with COPY_TO_BITWARDEN`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
                 actionCard = ItemListingState.ActionCardState.None,
@@ -360,21 +360,22 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
             .performTouchInput { longClick() }
 
         composeTestRule
-            .onNodeWithText("Move to Bitwarden")
+            .onNodeWithText(text = "Copy to Bitwarden vault")
             .performClick()
 
         verify {
             viewModel.trySendAction(
                 ItemListingAction.DropdownMenuClick(
-                    menuAction = VaultDropdownMenuAction.MOVE,
+                    menuAction = VaultDropdownMenuAction.COPY_TO_BITWARDEN,
                     item = LOCAL_CODE,
                 ),
             )
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `Move to Bitwarden long press action should not show when showMoveToBitwarden is false`() {
+    fun `Copy to Bitwarden vault long press action should not show when showMoveToBitwarden is false`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
                 actionCard = ItemListingState.ActionCardState.None,
@@ -388,7 +389,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
             .performTouchInput { longClick() }
 
         composeTestRule
-            .onNodeWithText("Move to Bitwarden")
+            .onNodeWithText(text = "Copy to Bitwarden vault")
             .assertDoesNotExist()
     }
 

@@ -8,6 +8,7 @@ import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.credentials.processor.GET_PASSKEY_INTENT
@@ -147,9 +148,9 @@ class CredentialEntryBuilderImpl(
         .createWithResource(
             context,
             when {
-                isPasskey -> R.drawable.ic_bw_passkey
-                isPassword -> R.drawable.ic_key
-                else -> R.drawable.ic_globe
+                isPasskey -> BitwardenDrawable.ic_bw_passkey
+                isPassword -> BitwardenDrawable.ic_key
+                else -> BitwardenDrawable.ic_globe
             },
         )
         .toIcon(context)

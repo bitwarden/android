@@ -73,6 +73,10 @@ class FlagKeyTest {
             FlagKey.UserManagedPrivilegedApps.keyName,
             "pm-18970-user-managed-privileged-apps",
         )
+        assertEquals(
+            FlagKey.RemoveCardPolicy.keyName,
+            "pm-16442-remove-card-item-type-policy",
+        )
     }
 
     @Test
@@ -95,6 +99,7 @@ class FlagKeyTest {
                 FlagKey.RestrictCipherItemDeletion,
                 FlagKey.PreAuthSettings,
                 FlagKey.UserManagedPrivilegedApps,
+                FlagKey.RemoveCardPolicy,
             ).all {
                 !it.defaultValue
             },

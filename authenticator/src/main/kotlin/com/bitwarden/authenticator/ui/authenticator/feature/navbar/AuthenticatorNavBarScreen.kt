@@ -54,6 +54,7 @@ import com.bitwarden.authenticator.ui.platform.feature.settings.navigateToSettin
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.max
 import com.bitwarden.ui.platform.base.util.toDp
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.RootTransitionProviders
 import com.bitwarden.ui.platform.util.toObjectNavigationRoute
 import kotlinx.coroutines.flow.launchIn
@@ -306,8 +307,8 @@ private sealed class AuthenticatorNavBarTab : Parcelable {
      */
     @Parcelize
     data object VerificationCodes : AuthenticatorNavBarTab() {
-        override val iconResSelected get() = R.drawable.ic_verification_codes_filled
-        override val iconRes get() = R.drawable.ic_verification_codes
+        override val iconResSelected get() = BitwardenDrawable.ic_verification_codes_filled
+        override val iconRes get() = BitwardenDrawable.ic_verification_codes
         override val labelRes get() = R.string.verification_codes
         override val contentDescriptionRes get() = R.string.verification_codes
         override val route get() = ItemListingRoute.toObjectNavigationRoute()
@@ -319,8 +320,8 @@ private sealed class AuthenticatorNavBarTab : Parcelable {
      */
     @Parcelize
     data object Settings : AuthenticatorNavBarTab() {
-        override val iconResSelected get() = R.drawable.ic_settings_filled
-        override val iconRes get() = R.drawable.ic_settings
+        override val iconResSelected get() = BitwardenDrawable.ic_settings_solid
+        override val iconRes get() = BitwardenDrawable.ic_settings
         override val labelRes get() = R.string.settings
         override val contentDescriptionRes get() = R.string.settings
         override val route get() = SettingsGraphRoute.toObjectNavigationRoute()

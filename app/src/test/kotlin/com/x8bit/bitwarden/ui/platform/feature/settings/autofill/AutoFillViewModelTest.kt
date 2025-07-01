@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
@@ -15,7 +16,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
 import io.mockk.every
 import io.mockk.just
@@ -81,28 +81,26 @@ class AutoFillViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(::isBuildVersionBelow)
-        every { isBuildVersionBelow(Build.VERSION_CODES.R) } returns true
+        mockkStatic(::isBuildVersionAtLeast)
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.R) } returns false
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(::isBuildVersionBelow)
+        unmockkStatic(::isBuildVersionAtLeast)
     }
 
     @Test
     fun `initial state should be correct when not set`() {
-        every { isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns false
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns true
 
         val viewModel = createViewModel(state = null)
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-
-        unmockkStatic(::isBuildVersionBelow)
     }
 
     @Test
     fun `initial state should be correct when set`() {
-        every { isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns false
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns true
 
         mutableIsAutofillEnabledStateFlow.value = true
         val state = DEFAULT_STATE.copy(
@@ -111,13 +109,11 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = state)
         assertEquals(state, viewModel.stateFlow.value)
-
-        unmockkStatic(::isBuildVersionBelow)
     }
 
     @Test
     fun `initial state should be correct when sdk is below min`() {
-        every { isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns true
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns false
 
         val expected = DEFAULT_STATE.copy(
             showPasskeyManagementRow = false,
@@ -125,13 +121,11 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(state = null)
 
         assertEquals(expected, viewModel.stateFlow.value)
-
-        unmockkStatic(::isBuildVersionBelow)
     }
 
     @Test
     fun `showInlineAutofillOption should be true when the build version is not below R`() {
-        every { isBuildVersionBelow(Build.VERSION_CODES.R) } returns false
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.R) } returns true
         val viewModel = createViewModel(state = null)
         assertEquals(
             DEFAULT_STATE.copy(
@@ -294,11 +288,12 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `on UseInlineAutofillClick should update the state and save the new value to settings`() {
+    fun `on AutofillStyleSelected should update the state and save the new value to settings`() {
         val viewModel = createViewModel()
-        viewModel.trySendAction(AutoFillAction.UseInlineAutofillClick(false))
+        val autofillStyle = AutofillStyle.POPUP
+        viewModel.trySendAction(AutoFillAction.AutofillStyleSelected(style = autofillStyle))
         assertEquals(
-            DEFAULT_STATE.copy(isUseInlineAutoFillEnabled = false),
+            DEFAULT_STATE.copy(autofillStyle = autofillStyle),
             viewModel.stateFlow.value,
         )
         verify { settingsRepository.isInlineAutofillEnabled = false }
@@ -441,6 +436,20 @@ class AutoFillViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when PrivilegedAppsClick action is handled the correct NavigateToPrivilegedAppsListScreen event is sent`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AutoFillAction.PrivilegedAppsClick)
+                assertEquals(
+                    AutoFillEvent.NavigateToPrivilegedAppsListScreen,
+                    awaitItem(),
+                )
+            }
+        }
+
     private fun createViewModel(
         state: AutoFillState? = DEFAULT_STATE,
     ): AutoFillViewModel = AutoFillViewModel(
@@ -458,7 +467,7 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     isAccessibilityAutofillEnabled = false,
     isAutoFillServicesEnabled = false,
     isCopyTotpAutomaticallyEnabled = false,
-    isUseInlineAutoFillEnabled = true,
+    autofillStyle = AutofillStyle.INLINE,
     showInlineAutofillOption = false,
     showPasskeyManagementRow = true,
     defaultUriMatchType = UriMatchType.DOMAIN,
@@ -474,6 +483,7 @@ private val DEFAULT_BROWSER_AUTOFILL_DATA = BrowserThirdPartyAutoFillData(
 )
 
 private val DEFAULT_AUTOFILL_STATUS = BrowserThirdPartyAutofillStatus(
+    braveStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
     chromeStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
     chromeBetaChannelStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
 )

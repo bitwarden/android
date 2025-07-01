@@ -25,12 +25,12 @@ import androidx.core.net.toUri
 import androidx.credentials.CredentialManager
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.util.toFormattedPattern
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import java.io.File
 import java.time.Clock
 
@@ -159,7 +159,7 @@ class IntentManagerImpl(
     override fun launchUri(uri: Uri) {
         if (uri.scheme.equals(other = "androidapp", ignoreCase = true)) {
             val packageName = uri.toString().removePrefix(prefix = "androidapp://")
-            if (isBuildVersionBelow(Build.VERSION_CODES.TIRAMISU)) {
+            if (!isBuildVersionAtLeast(Build.VERSION_CODES.TIRAMISU)) {
                 startActivity(createPlayStoreIntent(packageName))
             } else {
                 try {

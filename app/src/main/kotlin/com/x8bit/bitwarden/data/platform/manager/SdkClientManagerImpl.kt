@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import android.os.Build
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.sdk.Client
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 
 /**
  * Primary implementation of [SdkClientManager].
@@ -22,7 +22,7 @@ class SdkClientManagerImpl(
         // The SDK requires access to Android APIs that were not made public until API 31. In order
         // to work around this limitation the SDK must be manually loaded prior to initializing any
         // [Client] instance.
-        if (isBuildVersionBelow(Build.VERSION_CODES.S)) {
+        if (!isBuildVersionAtLeast(Build.VERSION_CODES.S)) {
             nativeLibraryManager.loadLibrary("bitwarden_uniffi")
         }
     }

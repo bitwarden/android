@@ -99,6 +99,7 @@ android {
             applicationIdSuffix = ".beta"
             isDebuggable = false
             isMinifyEnabled = true
+            isShrinkResources = true
             matchingFallbacks += listOf("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -111,6 +112,7 @@ android {
         release {
             isDebuggable = false
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -297,7 +299,6 @@ tasks {
         maxHeapSize = "2g"
         maxParallelForks = Runtime.getRuntime().availableProcessors()
         jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" + "-Duser.country=US"
-        android.sourceSets["main"].res.srcDirs("src/test/res")
     }
 }
 

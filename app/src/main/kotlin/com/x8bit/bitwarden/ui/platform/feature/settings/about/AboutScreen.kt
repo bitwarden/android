@@ -37,6 +37,7 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -97,7 +98,7 @@ fun AboutScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.about),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(AboutAction.BackClick) }
@@ -327,7 +328,7 @@ private fun CopyRow(
         modifier = modifier,
     ) {
         Icon(
-            painter = rememberVectorPainter(id = R.drawable.ic_copy),
+            painter = rememberVectorPainter(id = BitwardenDrawable.ic_copy),
             contentDescription = null,
             tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier.mirrorIfRtl(),

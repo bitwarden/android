@@ -36,6 +36,7 @@ import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
@@ -68,6 +69,7 @@ fun AutoFillScreen(
     onNavigateToBlockAutoFillScreen: () -> Unit,
     onNavigateToSetupAutofill: () -> Unit,
     onNavigateToAboutPrivilegedAppsScreen: () -> Unit,
+    onNavigateToPrivilegedAppsList: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -109,6 +111,10 @@ fun AutoFillScreen(
             AutoFillEvent.NavigateToAboutPrivilegedAppsScreen -> {
                 onNavigateToAboutPrivilegedAppsScreen()
             }
+
+            AutoFillEvent.NavigateToPrivilegedAppsListScreen -> {
+                onNavigateToPrivilegedAppsList()
+            }
         }
     }
 
@@ -130,7 +136,7 @@ fun AutoFillScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.autofill),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(AutoFillAction.BackClick) }
@@ -193,31 +199,29 @@ private fun AutoFillScreenContent(
                 .standardHorizontalMargin(),
         )
         Spacer(modifier = Modifier.height(height = 8.dp))
-        if (state.showInlineAutofillOption) {
-            BitwardenSwitch(
-                label = stringResource(id = R.string.inline_autofill),
-                supportingText = stringResource(
-                    id = R.string.use_inline_autofill_explanation_long,
-                ),
-                isChecked = state.isUseInlineAutoFillEnabled,
-                onCheckedChange = autoFillHandlers.onUseInlineAutofillClick,
-                enabled = state.canInteractWithInlineAutofillToggle,
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("InlineAutofillSwitch")
-                    .standardHorizontalMargin(),
-            )
-            Spacer(modifier = Modifier.height(height = 8.dp))
+
+        AnimatedVisibility(visible = state.showInlineAutofill) {
+            Column {
+                FillStyleSelector(
+                    selectedStyle = state.autofillStyle,
+                    onStyleChange = autoFillHandlers.onAutofillStyleChange,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
+                )
+                Spacer(modifier = Modifier.height(height = 8.dp))
+            }
         }
 
-        if (state.browserAutofillSettingsOptions.isNotEmpty()) {
-            BrowserAutofillSettingsCard(
-                options = state.browserAutofillSettingsOptions,
-                onOptionClicked = autoFillHandlers.onBrowserAutofillSelected,
-                enabled = state.isAutoFillServicesEnabled,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+        AnimatedVisibility(visible = state.showBrowserSettingOptions) {
+            Column {
+                BrowserAutofillSettingsCard(
+                    options = state.browserAutofillSettingsOptions,
+                    onOptionClicked = autoFillHandlers.onBrowserAutofillSelected,
+                    enabled = state.isAutoFillServicesEnabled,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
         }
 
         if (state.showPasskeyManagementRow) {
@@ -321,6 +325,26 @@ private fun AutoFillScreenContent(
         Spacer(modifier = Modifier.height(height = 16.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
+}
+
+@Composable
+private fun FillStyleSelector(
+    selectedStyle: AutofillStyle,
+    onStyleChange: (AutofillStyle) -> Unit,
+    modifier: Modifier = Modifier,
+    resources: Resources = LocalContext.current.resources,
+) {
+    BitwardenMultiSelectButton(
+        label = stringResource(id = R.string.display_autofill_suggestions),
+        supportingText = stringResource(id = R.string.use_inline_autofill_explanation_long),
+        options = AutofillStyle.entries.map { it.label() }.toImmutableList(),
+        selectedOption = selectedStyle.label(),
+        onOptionSelected = {
+            onStyleChange(AutofillStyle.entries.first { style -> style.label(resources) == it })
+        },
+        cardStyle = CardStyle.Full,
+        modifier = modifier.testTag(tag = "InlineAutofillSelector"),
+    )
 }
 
 @Composable

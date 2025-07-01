@@ -24,8 +24,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 
 /**
  * Represents a clickable row of text and can contains an optional [content] that appears to the
@@ -39,6 +39,8 @@ import com.x8bit.bitwarden.R
  * @param textTestTag The optional test tag for the inner text component.
  * @param isEnabled Indicates if the row is enabled or not, a disabled row will not be clickable
  * and it's contents will be dimmed.
+ * @param clickable An optional override for whether the row is clickable or not. Defaults to
+ * [isEnabled].
  * @param withDivider Indicates if a divider should be drawn on the bottom of the row, defaults
  * to `false`.
  * @param tooltip The data required to display a tooltip.
@@ -54,6 +56,7 @@ fun BitwardenTextRow(
     description: String? = null,
     textTestTag: String? = null,
     isEnabled: Boolean = true,
+    clickable: Boolean = isEnabled,
     withDivider: Boolean = false,
     tooltip: TooltipData? = null,
     content: (@Composable () -> Unit)? = null,
@@ -65,7 +68,7 @@ fun BitwardenTextRow(
             .cardStyle(
                 cardStyle = cardStyle,
                 onClick = onClick,
-                clickEnabled = isEnabled,
+                clickEnabled = clickable,
                 paddingHorizontal = 16.dp,
             )
             .semantics(mergeDescendants = true) { },
@@ -119,7 +122,7 @@ private fun RowScope.ToolTip(
 ) {
     Spacer(modifier = Modifier.width(width = 8.dp))
     BitwardenStandardIconButton(
-        vectorIconRes = R.drawable.ic_question_circle_small,
+        vectorIconRes = BitwardenDrawable.ic_question_circle_small,
         contentDescription = tooltip.contentDescription,
         onClick = tooltip.onClick,
         contentColor = BitwardenTheme.colorScheme.icon.secondary,

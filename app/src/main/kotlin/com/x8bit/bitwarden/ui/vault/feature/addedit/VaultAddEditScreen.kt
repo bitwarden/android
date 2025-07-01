@@ -715,7 +715,7 @@ private fun FolderSelectionBottomSheetContent(
                         onOptionSelected(addFolderText)
                         inEditMode = true
                     },
-                    leadingIcon = painterResource(id = R.drawable.ic_plus_small),
+                    leadingIcon = painterResource(id = BitwardenDrawable.ic_plus_small),
                     style = BitwardenTheme.typography.labelMedium,
                     innerPadding = PaddingValues(all = 16.dp),
                     cornerSize = 0.dp,

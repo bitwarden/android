@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.autofill.util
 
-import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.os.Build
 import android.service.autofill.Dataset
@@ -28,7 +27,6 @@ val FilledData.fillableAutofillIds: List<AutofillId>
 /**
  * Builds a [Dataset] for the Vault item.
  */
-@SuppressLint("NewApi")
 fun FilledData.buildVaultItemDataset(
     autofillAppInfo: AutofillAppInfo,
 ): Dataset {
@@ -70,7 +68,7 @@ fun FilledData.buildVaultItemDataset(
     return Dataset.Builder()
         .setAuthentication(pendingIntent.intentSender)
         .apply {
-            if (autofillAppInfo.sdkInt >= Build.VERSION_CODES.TIRAMISU) {
+            if (autofillAppInfo.isVersionAtLeast(version = Build.VERSION_CODES.TIRAMISU)) {
                 addVaultItemDataPostTiramisu(
                     autofillAppInfo = autofillAppInfo,
                     pendingIntent = pendingIntent,
@@ -132,8 +130,7 @@ private fun Dataset.Builder.addVaultItemDataPostTiramisu(
 /**
  * Adds the Vault data to the given [Dataset.Builder] for pre-Tiramisu versions.
  */
-@Suppress("DEPRECATION", "LongParameterList")
-@SuppressLint("NewApi")
+@Suppress("LongParameterList")
 private fun Dataset.Builder.addVaultItemDataPreTiramisu(
     autofillAppInfo: AutofillAppInfo,
     pendingIntent: PendingIntent,
@@ -142,7 +139,7 @@ private fun Dataset.Builder.addVaultItemDataPreTiramisu(
     inlinePresentationSpec: InlinePresentationSpec?,
     isLocked: Boolean,
 ): Dataset.Builder {
-    if (autofillAppInfo.sdkInt >= Build.VERSION_CODES.R) {
+    if (autofillAppInfo.isVersionAtLeast(version = Build.VERSION_CODES.R)) {
         inlinePresentationSpec
             ?.createVaultItemInlinePresentationOrNull(
                 autofillAppInfo = autofillAppInfo,
@@ -150,6 +147,7 @@ private fun Dataset.Builder.addVaultItemDataPreTiramisu(
                 isLocked = isLocked,
             )
             ?.let { inlinePresentation ->
+                @Suppress("DEPRECATION")
                 this.setInlinePresentation(inlinePresentation)
             }
     }

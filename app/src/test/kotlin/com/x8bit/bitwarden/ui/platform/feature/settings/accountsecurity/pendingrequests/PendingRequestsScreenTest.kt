@@ -12,8 +12,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.util.assertNoDialogExists
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.data.platform.util.isFdroid
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
@@ -52,9 +52,9 @@ class PendingRequestsScreenTest : BitwardenComposeTest() {
     @Before
     fun setUp() {
         mockkStatic(::isFdroid)
-        mockkStatic(::isBuildVersionBelow)
+        mockkStatic(::isBuildVersionAtLeast)
         every { isFdroid } returns false
-        every { isBuildVersionBelow(any()) } returns false
+        every { isBuildVersionAtLeast(any()) } returns true
         setContent(
             permissionsManager = permissionsManager,
         ) {
@@ -69,7 +69,7 @@ class PendingRequestsScreenTest : BitwardenComposeTest() {
     @After
     fun tearDown() {
         unmockkStatic(::isFdroid)
-        unmockkStatic(::isBuildVersionBelow)
+        unmockkStatic(::isBuildVersionAtLeast)
     }
 
     @Test

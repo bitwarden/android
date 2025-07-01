@@ -21,6 +21,7 @@ import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -69,7 +70,7 @@ fun AttachmentItemContent(
         Spacer(modifier = Modifier.width(8.dp))
 
         BitwardenStandardIconButton(
-            vectorIconRes = R.drawable.ic_download,
+            vectorIconRes = BitwardenDrawable.ic_download,
             contentDescription = stringResource(id = R.string.download),
             onClick = {
                 if (!attachmentItem.isDownloadAllowed) {

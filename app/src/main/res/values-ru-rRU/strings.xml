@@ -425,7 +425,9 @@
     <string name="privacy_policy">Политика конфиденциальности</string>
     <string name="passkey_management">Управление passkeys</string>
     <string name="autofill_services">Службы автозаполнения</string>
-    <string name="inline_autofill">Встроенное в клавиатуру автозаполнение</string>
+    <string name="display_autofill_suggestions">Показывать подсказки автозаполнения</string>
+    <string name="autofill_suggestions_inline">Встроенные (показывать в клавиатуре)</string>
+    <string name="autofill_suggestions_popup">Всплывающее окно (отображается поверх поля ввода)</string>
     <string name="accessibility">Cпециальные возможности</string>
     <string name="accessibility_description5">Требуется для использования быстрого действия Автозаполнение.</string>
     <string name="personal_ownership_policy_in_effect">Политика организации влияет на ваши варианты владения.</string>
@@ -910,9 +912,10 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">Операция с Passkey не удалась, поскольку не был выбран ни один элемент.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Операция с Passkey не удалась, поскольку запрос не поддерживается.</string>
     <string name="self_host_server_url">URL собственного сервера</string>
+    <string name="use_brave_autofill_integration">Использовать интеграцию автозаполнения в Brave</string>
     <string name="use_chrome_autofill_integration">Использовать интеграцию автозаполнения в Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Использовать интеграцию автозаполнения в Chrome (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Улучшает заполнение логина на поддерживаемых сайтах в Chrome. После включения вы будете направлены в настройки Chrome, чтобы включить автозаполнение сторонних сайтов.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Улучшает заполнение логина на поддерживаемых сайтах в выбранных браузерах. После включения вы будете направлены в настройки браузера, чтобы включить автозаполнение сторонних сайтов.</string>
     <string name="show_more">Больше</string>
     <string name="no_folder">Без папки</string>
     <string name="show_less">Меньше</string>
@@ -983,4 +986,13 @@
     <string name="learn_more_about_privileged_apps">Подробнее о привилегированных приложениях</string>
     <string name="privileged_apps">Привилегированные приложения</string>
     <string name="unrecognized_browser">Неизвестный браузер</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Узнайте больше об использовании passkey в Bitwarden.</string>
+    <string name="google">Google</string>
+    <string name="the_community">Сообщество</string>
+    <string name="you">ВЫ</string>
+    <string name="all_trusted_apps">Все доверенные приложения</string>
+    <string name="trusted_by_x">Trusted by %s</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
+    <string name="installed_apps">Установленные приложения</string>
+    <string name="delete_x">Удалить %s</string>
 </resources>

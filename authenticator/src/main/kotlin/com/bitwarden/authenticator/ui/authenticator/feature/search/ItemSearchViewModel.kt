@@ -9,7 +9,8 @@ import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRe
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.util.itemsOrEmpty
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.bitwarden.authenticator.ui.platform.components.model.IconData
+import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.authenticator.feature.util.toDisplayItem
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -155,7 +156,15 @@ class ItemSearchViewModel @Inject constructor(
 
             isNotEmpty() -> {
                 ItemSearchState.ViewState.Content(
-                    displayItems = toDisplayItemList()
+                    itemList = this
+                        .map {
+                            it.toDisplayItem(
+                                alertThresholdSeconds = 7,
+                                sharedVerificationCodesState = authenticatorRepository
+                                    .sharedCodesStateFlow
+                                    .value,
+                            )
+                        }
                         .sortAlphabetically(),
                 )
             }
@@ -167,39 +176,13 @@ class ItemSearchViewModel @Inject constructor(
             }
         }
 
-    private fun List<VerificationCodeItem>.toDisplayItemList(): List<ItemSearchState.DisplayItem> =
-        this.map {
-            it.toDisplayItem()
-        }
-
-    private fun VerificationCodeItem.toDisplayItem(): ItemSearchState.DisplayItem =
-        ItemSearchState.DisplayItem(
-            id = id,
-            authCode = code,
-            title = issuer ?: label ?: "--",
-            subtitle = if (issuer != null) {
-                // Only show label if it is not being used as the primary title:
-                label
-            } else {
-                null
-            },
-            periodSeconds = periodSeconds,
-            timeLeftSeconds = timeLeftSeconds,
-            alertThresholdSeconds = 7,
-            startIcon = IconData.Local(iconRes = R.drawable.ic_login_item),
-        )
-
     /**
-     * Sort a list of [ItemSearchState.DisplayItem] by their titles alphabetically giving digits and
+     * Sort a list of [VerificationCodeDisplayItem] by their titles alphabetically giving digits and
      * special characters higher precedence.
      */
-    @Suppress("MaxLineLength")
-    private fun List<ItemSearchState.DisplayItem>.sortAlphabetically() =
+    private fun List<VerificationCodeDisplayItem>.sortAlphabetically() =
         this.sortedWith { item1, item2 ->
-            SpecialCharWithPrecedenceComparator.compare(
-                item1.title.orEmpty(),
-                item2.title.orEmpty(),
-            )
+            SpecialCharWithPrecedenceComparator.compare(item1.title, item2.title)
         }
     //endregion Utility Functions
 }
@@ -222,7 +205,7 @@ data class ItemSearchState(
          */
         @Parcelize
         data class Content(
-            val displayItems: List<DisplayItem>,
+            val itemList: List<VerificationCodeDisplayItem>,
         ) : ViewState()
 
         /**
@@ -231,21 +214,6 @@ data class ItemSearchState(
         @Parcelize
         data class Empty(val message: Text?) : ViewState()
     }
-
-    /**
-     * An item to be displayed.
-     */
-    @Parcelize
-    data class DisplayItem(
-        val id: String,
-        val authCode: String,
-        val title: String,
-        val subtitle: String? = null,
-        val periodSeconds: Int,
-        val timeLeftSeconds: Int,
-        val alertThresholdSeconds: Int,
-        val startIcon: IconData,
-    ) : Parcelable
 }
 
 /**

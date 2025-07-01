@@ -25,6 +25,7 @@ import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.BiometricPromptData
 import androidx.credentials.provider.CreateEntry
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -34,7 +35,6 @@ import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -215,7 +215,7 @@ class CredentialProviderProcessorImpl(
     private fun CreateEntry.Builder.setBiometricPromptDataIfSupported(
         cipher: Cipher,
     ): CreateEntry.Builder {
-        return if (isBuildVersionBelow(Build.VERSION_CODES.VANILLA_ICE_CREAM)) {
+        return if (!isBuildVersionAtLeast(Build.VERSION_CODES.VANILLA_ICE_CREAM)) {
             this
         } else {
             setBiometricPromptData(

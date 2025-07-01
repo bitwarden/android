@@ -121,9 +121,13 @@ object CredentialProviderModule {
     @Singleton
     fun providePrivilegedAppRepository(
         privilegedAppDiskSource: PrivilegedAppDiskSource,
+        assetManager: AssetManager,
+        dispatcherManager: DispatcherManager,
         json: Json,
     ): PrivilegedAppRepository = PrivilegedAppRepositoryImpl(
         privilegedAppDiskSource = privilegedAppDiskSource,
+        assetManager = assetManager,
+        dispatcherManager = dispatcherManager,
         json = json,
     )
 
