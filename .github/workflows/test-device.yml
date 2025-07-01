@@ -58,16 +58,6 @@ jobs:
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
-      - name: Retrieve test data
-        uses: bitwarden/sm-action@14f92f1d294ae3c2b6a3845d389cd2c318b0dfd8 # v2.2.0
-        with:
-          access_token: ${{ secrets.BWS_ACCESS_TOKEN }}
-          secrets: |
-            e4b23903-31d8-4989-9193-b30900d543f0 > TEST_ACCOUNT_CREDS
-
-      - name: Configure .json test data file
-        run: printf %s '${{ env.TEST_ACCOUNT_CREDS }}' > app/src/androidTest/assets/TestData.json
-
       - name: Log in to Azure
         uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
         with:
@@ -85,6 +75,23 @@ jobs:
           --name app_play-keystore.jks --file ${{ github.workspace }}/keystores/app_play-keystore.jks --output none
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
           --name google-services.json --file ${{ github.workspace }}/app/src/standardRelease/google-services.json --output none
+
+      - name: Get E2E secrets from Azure
+        id: get-e2e-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: gh-test
+          secrets: "BWS-ACCESS-TOKEN"
+
+      - name: Retrieve test data
+        uses: bitwarden/sm-action@14f92f1d294ae3c2b6a3845d389cd2c318b0dfd8 # v2.2.0
+        with:
+          access_token: ${{ steps.get-e2e-secrets.outputs.BWS-ACCESS-TOKEN }}
+          secrets: |
+            e4b23903-31d8-4989-9193-b30900d543f0 > TEST_ACCOUNT_CREDS
+
+      - name: Configure .json test data file
+        run: printf %s '${{ env.TEST_ACCOUNT_CREDS }}' > app/src/androidTest/assets/TestData.json
 
       - name: Build release APK
         env:
