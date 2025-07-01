@@ -24,11 +24,7 @@ fun FilledPartition.buildDataset(
         autofillCipher = autofillCipher,
     )
     val datasetBuilder = Dataset.Builder()
-
-    authIntentSender
-        ?.let { intentSender ->
-            datasetBuilder.setAuthentication(intentSender)
-        }
+    authIntentSender?.let { intentSender -> datasetBuilder.setAuthentication(intentSender) }
 
     if (autofillAppInfo.isVersionAtLeast(version = Build.VERSION_CODES.TIRAMISU)) {
         applyToDatasetPostTiramisu(

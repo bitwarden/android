@@ -24,7 +24,9 @@ class SaveInfoBuilderTest {
 
     private val settingsRepository: SettingsRepository = mockk()
 
-    private val fillRequest: FillRequest = mockk()
+    private val fillRequest: FillRequest = mockk {
+        every { id } returns 55
+    }
     private val autofillIdOptional: AutofillId = mockk()
     private val autofillViewDataOptional = AutofillView.Data(
         autofillId = autofillIdOptional,
