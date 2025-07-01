@@ -516,14 +516,16 @@ private fun ItemListingContent(
 
                 when (state.sharedItems) {
                     is SharedCodesDisplayState.Codes -> {
-                        items(state.sharedItems.sections) { section ->
-                            BitwardenListHeaderText(
-                                label = section.label(),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
-                            )
-                            section.codes.forEach {
+                        state.sharedItems.sections.forEach { section ->
+                            item {
+                                BitwardenListHeaderText(
+                                    label = section.label(),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp),
+                                )
+                            }
+                            items(section.codes) {
                                 VaultVerificationCodeItem(
                                     authCode = it.authCode,
                                     primaryLabel = it.title,
@@ -544,13 +546,15 @@ private fun ItemListingContent(
                         }
                     }
 
-                    SharedCodesDisplayState.Error -> item {
-                        Text(
-                            text = stringResource(R.string.shared_codes_error),
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            style = MaterialTheme.typography.bodySmall,
-                        )
+                    SharedCodesDisplayState.Error -> {
+                        item {
+                            Text(
+                                text = stringResource(R.string.shared_codes_error),
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                style = MaterialTheme.typography.bodySmall,
+                            )
+                        }
                     }
                 }
 

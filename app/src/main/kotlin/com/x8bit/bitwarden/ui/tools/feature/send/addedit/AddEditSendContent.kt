@@ -34,13 +34,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.animation.AnimateNullableContentVisibility
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -49,7 +50,6 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendCustomDateChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendDeletionDateChooser
@@ -391,14 +391,26 @@ private fun AddEditSendOptions(
                         color = BitwardenTheme.colorScheme.text.secondary,
                         modifier = Modifier.fillMaxWidth(),
                     )
-                    state.common.currentAccessCount.takeUnless { isAddMode }?.let {
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = R.string.current_access_count.asText(it).invoke(),
-                            style = BitwardenTheme.typography.bodySmall,
-                            color = BitwardenTheme.colorScheme.text.secondary,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
+                    AnimateNullableContentVisibility(
+                        targetState = state
+                            .common
+                            .currentAccessCount
+                            ?.takeUnless { isAddMode || state.common.maxAccessCount == null },
+                        enter = fadeIn() + expandVertically(),
+                        exit = fadeOut() + shrinkVertically(),
+                    ) {
+                        Column {
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = stringResource(
+                                    id = R.string.current_access_count,
+                                    formatArgs = arrayOf(it),
+                                ),
+                                style = BitwardenTheme.typography.bodySmall,
+                                color = BitwardenTheme.colorScheme.text.secondary,
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
                     }
                 },
                 value = state.common.maxAccessCount,
