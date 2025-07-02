@@ -445,14 +445,15 @@ platform :android do
 
     supply(release_options)
 
-    rescue => error
-    message = error.to_s
+      rescue => error
+      message = error.to_s
 
-    if message.include?("You cannot rollout this release because it does not allow any existing users to upgrade to the newly added APKs")
-      UI.error("❌ App Store Error: Cannot rollout release because no existing users can upgrade to the new build.")
-      UI.error("This might mean the version is older than what is currently available on the track, pick a newer build.")
-    else
-      UI.error("❌ Unexpected error during release: #{message}")
+      if message.include?("You cannot rollout this release because it does not allow any existing users to upgrade to the newly added APKs")
+        UI.error("❌ App Store Error: Cannot rollout release because no existing users can upgrade to the new build.")
+        UI.error("This might mean the version is older than what is currently available on the track, pick a newer build.")
+      else
+        UI.error("❌ Unexpected error during release: #{message}")
+      end
     end
   end
 end
