@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.startregistration
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
@@ -84,7 +82,6 @@ fun StartRegistrationScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handler = rememberStartRegistrationHandler(viewModel = viewModel)
-    val context = LocalContext.current
     EventsEffect(viewModel) { event ->
         when (event) {
             is NavigateToPrivacyPolicy -> {
@@ -106,10 +103,6 @@ fun StartRegistrationScreen(
             }
 
             is StartRegistrationEvent.NavigateBack -> onNavigateBack.invoke()
-            is StartRegistrationEvent.ShowToast -> {
-                Toast.makeText(context, event.text, Toast.LENGTH_SHORT).show()
-            }
-
             is StartRegistrationEvent.NavigateToCompleteRegistration -> {
                 onNavigateToCompleteRegistration(
                     event.email,

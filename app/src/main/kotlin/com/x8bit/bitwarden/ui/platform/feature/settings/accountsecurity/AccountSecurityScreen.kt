@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 
 import android.content.res.Resources
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -93,8 +92,6 @@ fun AccountSecurityScreen(
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
     var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
     val unlockWithBiometricToggle: (cipher: Cipher) -> Unit = remember(viewModel) {
         {
@@ -139,10 +136,6 @@ fun AccountSecurityScreen(
                     onError = { showBiometricsPrompt = false },
                     cipher = event.cipher,
                 )
-            }
-
-            is AccountSecurityEvent.ShowToast -> {
-                Toast.makeText(context, event.text(resources), Toast.LENGTH_SHORT).show()
             }
 
             AccountSecurityEvent.NavigateToSetupUnlockScreen -> onNavigateToSetupUnlockScreen()

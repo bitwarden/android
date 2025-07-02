@@ -206,11 +206,6 @@ sealed class TrustedDeviceEvent {
     data class NavigateToLockScreen(
         val email: String,
     ) : TrustedDeviceEvent()
-
-    /**
-     * Displays the [message] as a toast.
-     */
-    data class ShowToast(val message: Text) : TrustedDeviceEvent()
 }
 
 /**

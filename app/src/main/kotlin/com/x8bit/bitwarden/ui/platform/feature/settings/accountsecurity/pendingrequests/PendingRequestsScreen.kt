@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pending
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Build
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,7 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -79,8 +77,6 @@ fun PendingRequestsScreen(
     onNavigateToLoginApproval: (fingerprint: String) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
     val pullToRefreshState = rememberBitwardenPullToRefreshState(
         isEnabled = state.isPullToRefreshEnabled,
         isRefreshing = state.isRefreshing,
@@ -93,10 +89,6 @@ fun PendingRequestsScreen(
             PendingRequestsEvent.NavigateBack -> onNavigateBack()
             is PendingRequestsEvent.NavigateToLoginApproval -> {
                 onNavigateToLoginApproval(event.fingerprint)
-            }
-
-            is PendingRequestsEvent.ShowToast -> {
-                Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
             }
         }
     }
