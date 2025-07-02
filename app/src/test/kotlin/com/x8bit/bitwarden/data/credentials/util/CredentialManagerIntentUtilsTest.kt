@@ -339,7 +339,7 @@ class CredentialManagerIntentUtilsTest {
     fun `getProviderGetPasswordRequestOrNull should return null when build version is below 34`() {
         val intent = mockk<Intent>()
 
-        every { isBuildVersionBelow(34) } returns true
+        every { isBuildVersionAtLeast(34) } returns false
 
         val assertionRequest = intent.getProviderGetPasswordRequestOrNull()
 
