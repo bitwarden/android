@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity() {
             val navController = rememberBitwardenNavController(name = "MainActivity")
             SetupEventsEffect(navController = navController)
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
+            handleScreenCaptureSettingChange(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
             LocalManagerProvider(featureFlagsState = state.featureFlagsState) {
                 ObserveScreenDataEffect(
                     onDataUpdate = remember(mainViewModel) {
