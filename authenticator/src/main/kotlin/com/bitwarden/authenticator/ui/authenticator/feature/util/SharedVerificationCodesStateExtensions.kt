@@ -12,6 +12,7 @@ import com.bitwarden.ui.util.asText
  */
 fun SharedVerificationCodesState.Success.toSharedCodesDisplayState(
     alertThresholdSeconds: Int,
+    currentSections: List<SharedCodesDisplayState.SharedCodesAccountSection> = emptyList(),
 ): SharedCodesDisplayState.Codes {
     val codesMap =
         mutableMapOf<AuthenticatorItem.Source.Shared, MutableList<VerificationCodeDisplayItem>>()
@@ -32,11 +33,17 @@ fun SharedVerificationCodesState.Success.toSharedCodesDisplayState(
     return codesMap
         .map {
             SharedCodesDisplayState.SharedCodesAccountSection(
+                id = it.key.userId,
                 label = R.string.shared_accounts_header.asText(
                     it.key.email,
                     it.key.environmentLabel,
+                    it.value.size,
                 ),
                 codes = it.value,
+                isExpanded = currentSections
+                    ?.find { section -> section.id == it.key.userId }
+                    ?.isExpanded
+                    ?: true,
             )
         }
         .let { SharedCodesDisplayState.Codes(it) }

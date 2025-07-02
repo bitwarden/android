@@ -26,8 +26,10 @@ sealed class SharedCodesDisplayState : Parcelable {
      */
     @Parcelize
     data class SharedCodesAccountSection(
+        val id: String,
         val label: Text,
         val codes: List<VerificationCodeDisplayItem>,
+        val isExpanded: Boolean,
     ) : Parcelable
 
     /**
