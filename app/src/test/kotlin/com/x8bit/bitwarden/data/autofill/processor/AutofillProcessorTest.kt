@@ -90,7 +90,9 @@ class AutofillProcessorTest {
     fun `processFillRequest should invoke callback with null when parse returns Unfillable`() {
         // Setup
         val autofillRequest = AutofillRequest.Unfillable
-        val fillRequest: FillRequest = mockk()
+        val fillRequest: FillRequest = mockk {
+            every { id } returns 55
+        }
         every { cancellationSignal.setOnCancelListener(any()) } just runs
         every {
             parser.parse(
@@ -124,7 +126,9 @@ class AutofillProcessorTest {
     fun `processFillRequest should invoke callback with filled response when has filledItems`() =
         runTest {
             // Setup
-            val fillRequest: FillRequest = mockk()
+            val fillRequest: FillRequest = mockk {
+                every { id } returns 55
+            }
             val filledData = FilledData(
                 filledPartitions = listOf(mockk()),
                 ignoreAutofillIds = emptyList(),
@@ -204,7 +208,9 @@ class AutofillProcessorTest {
     fun `processFillRequest should invoke callback with filled response when has filledItems and track exceptions thrown by callback`() =
         runTest {
             // Setup
-            val fillRequest: FillRequest = mockk()
+            val fillRequest: FillRequest = mockk {
+                every { id } returns 55
+            }
             val filledData = FilledData(
                 filledPartitions = listOf(mockk()),
                 ignoreAutofillIds = emptyList(),
@@ -466,7 +472,9 @@ class AutofillProcessorTest {
             every { packageName } returns PACKAGE_NAME
             every { partition } returns autofillPartition
         }
-        val fillRequest: FillRequest = mockk()
+        val fillRequest: FillRequest = mockk {
+            every { id } returns 55
+        }
         val saveInfo: SaveInfo = mockk()
         val filledData = FilledData(
             filledPartitions = listOf(mockk()),
