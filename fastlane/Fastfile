@@ -454,7 +454,7 @@ platform :android do
       else
         UI.error("❌ Unexpected error during release: #{message}")
       end
+      raise
     end
-    raise
   end
 end
