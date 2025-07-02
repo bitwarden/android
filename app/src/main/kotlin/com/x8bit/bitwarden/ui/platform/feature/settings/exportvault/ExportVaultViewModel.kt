@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.toExportFormat
 import com.x8bit.bitwarden.ui.platform.util.fileExtension
@@ -125,14 +126,14 @@ class ExportVaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(dialogState = null)
         }
-        val toastMessage = when (val result = action.result) {
+        val message = when (val result = action.result) {
             is RequestOtpResult.Error -> {
                 result.message?.asText() ?: R.string.generic_error_message.asText()
             }
 
             RequestOtpResult.Success -> R.string.code_sent.asText()
         }
-        sendEvent(ExportVaultEvent.ShowToast(message = toastMessage))
+        sendEvent(ExportVaultEvent.ShowSnackbar(message = message))
     }
 
     /**
@@ -397,7 +398,7 @@ class ExportVaultViewModel @Inject constructor(
             return
         }
 
-        sendEvent(ExportVaultEvent.ShowToast(R.string.export_vault_success.asText()))
+        sendEvent(ExportVaultEvent.ShowSnackbar(R.string.export_vault_success.asText()))
     }
 
     private fun handleReceiveVerifyOneTimePasscodeResult(
@@ -508,7 +509,23 @@ sealed class ExportVaultEvent {
     /**
      * Shows a toast with the given [message].
      */
-    data class ShowToast(val message: Text) : ExportVaultEvent()
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : ExportVaultEvent() {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 
     /**
      *  Navigates to select a location where to save the vault data with the [fileName].
