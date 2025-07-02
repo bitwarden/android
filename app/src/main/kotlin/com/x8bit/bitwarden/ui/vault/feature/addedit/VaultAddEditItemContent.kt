@@ -71,7 +71,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         },
     )
 
-    var isAdditionalOptionsExpanded = rememberSaveable { mutableStateOf(value = false) }
+    val isAdditionalOptionsExpanded = rememberSaveable { mutableStateOf(value = false) }
     val windowAdaptiveInfo = currentWindowAdaptiveInfo()
     LazyColumn(modifier = modifier, state = lazyListState) {
         item {

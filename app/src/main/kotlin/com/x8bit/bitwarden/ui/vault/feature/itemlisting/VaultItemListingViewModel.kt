@@ -141,8 +141,8 @@ class VaultItemListingViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
     private val networkConnectionManager: NetworkConnectionManager,
     private val featureFlagManager: FeatureFlagManager,
-    private val snackbarRelayManager: SnackbarRelayManager,
     private val relyingPartyParser: RelyingPartyParser,
+    snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -2343,7 +2343,7 @@ data class VaultItemListingState(
      */
     val hasAddItemFabButton: Boolean
         get() = if (restrictItemTypesPolicyOrgIds.isNotEmpty() &&
-            itemListingType == VaultItemListingState.ItemListingType.Vault.Card
+            itemListingType == ItemListingType.Vault.Card
         ) {
             false
         } else {
@@ -2546,7 +2546,7 @@ data class VaultItemListingState(
             val message: Text,
             val buttonText: Text,
             val header: Text? = null,
-            @DrawableRes val vectorRes: Int? = null,
+            @field:DrawableRes val vectorRes: Int? = null,
             val shouldShowAddButton: Boolean,
         ) : ViewState() {
             override val isPullToRefreshEnabled: Boolean get() = true

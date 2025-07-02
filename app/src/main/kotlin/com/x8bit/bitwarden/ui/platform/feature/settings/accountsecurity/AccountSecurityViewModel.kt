@@ -296,11 +296,8 @@ class AccountSecurityViewModel @Inject constructor(
             VaultTimeout.Type.ON_APP_RESTART -> VaultTimeout.OnAppRestart
             VaultTimeout.Type.NEVER -> VaultTimeout.Never
             VaultTimeout.Type.CUSTOM -> {
-                if (previousTimeout is VaultTimeout.Custom) {
-                    previousTimeout
-                } else {
-                    VaultTimeout.Custom(vaultTimeoutInMinutes = 0)
-                }
+                previousTimeout as? VaultTimeout.Custom
+                    ?: VaultTimeout.Custom(vaultTimeoutInMinutes = 0)
             }
         }
         handleVaultTimeoutSelect(vaultTimeout = vaultTimeout)
