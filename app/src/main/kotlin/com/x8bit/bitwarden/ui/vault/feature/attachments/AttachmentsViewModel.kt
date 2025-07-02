@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.attachments.util.toViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -281,7 +282,7 @@ class AttachmentsViewModel @Inject constructor(
 
             is CreateAttachmentResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(AttachmentsEvent.ShowToast(R.string.save_attachment_success.asText()))
+                sendEvent(AttachmentsEvent.ShowSnackbar(R.string.save_attachment_success.asText()))
             }
         }
     }
@@ -302,7 +303,7 @@ class AttachmentsViewModel @Inject constructor(
 
             DeleteAttachmentResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(AttachmentsEvent.ShowToast(R.string.attachment_deleted.asText()))
+                sendEvent(AttachmentsEvent.ShowSnackbar(R.string.attachment_deleted.asText()))
             }
         }
     }
@@ -430,11 +431,25 @@ sealed class AttachmentsEvent {
     data object ShowChooserSheet : AttachmentsEvent()
 
     /**
-     * Displays the given [message] as a toast.
+     * Displays the given [data] as a snackbar.
      */
-    data class ShowToast(
-        val message: Text,
-    ) : AttachmentsEvent()
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : AttachmentsEvent() {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 }
 
 /**
