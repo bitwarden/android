@@ -644,13 +644,6 @@ sealed class AccountSecurityEvent {
     ) : AccountSecurityEvent()
 
     /**
-     * Displays a toast with the given [Text].
-     */
-    data class ShowToast(
-        val text: Text,
-    ) : AccountSecurityEvent()
-
-    /**
      * Navigate to the setup unlock screen.
      */
     data object NavigateToSetupUnlockScreen : AccountSecurityEvent()
