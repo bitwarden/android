@@ -97,18 +97,13 @@ jobs:
           run: |
             mkdir -p ${{ github.workspace }}/secrets
             mkdir -p ${{ github.workspace }}/app/src/standardRelease
-            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-            --name app_play-keystore.jks --file ${{ github.workspace }}/keystores/app_play-keystore.jks --output none
-            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-            --name app_upload-keystore.jks --file ${{ github.workspace }}/keystores/app_upload-keystore.jks --output none
+            
             az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
             --name play_creds.json --file ${{ github.workspace }}/secrets/play_creds.json --output none
+
             az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-            --name app_beta_play-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_play-keystore.jks --output none
-            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-            --name app_beta_upload-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_upload-keystore.jks --output none
-            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-            --name google-services.json --file ${{ github.workspace }}/app/src/standardRelease/google-services.json --output none
+            --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
+
         - name: Format Release Notes
           run: |
             FORMATTED_MESSAGE="$(echo "${{ inputs.release-notes }}" | sed 's/  /\n/g')"

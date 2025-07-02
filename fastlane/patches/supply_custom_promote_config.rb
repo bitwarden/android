@@ -1,3 +1,11 @@
+# Patch Description:
+# Fixes issue where Fastlane 'Supply' doesn't recognize previous builds
+# when promoting to another track.
+#
+# Source: https://github.com/artsy/eigen/pull/10262
+# Author: Brian Beckerle (@brainbicycle)
+#
+
 module Supply
   class Options
     class << self
