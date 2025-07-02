@@ -93,7 +93,7 @@ class SettingsDiskSourceImpl(
 
     private val mutableHasSeenGeneratorCoachMarkFlow = bufferedMutableSharedFlow<Boolean?>()
 
-    private val mutableScreenCaptureAllowedFlow = bufferedMutableSharedFlow<Boolean?>(replay = 1)
+    private val mutableScreenCaptureAllowedFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableVaultRegisteredForExportFlow =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()

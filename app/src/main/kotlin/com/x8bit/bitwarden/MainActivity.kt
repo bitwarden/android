@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity() {
             val navController = rememberBitwardenNavController(name = "MainActivity")
             SetupEventsEffect(navController = navController)
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
+            updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
             LocalManagerProvider(featureFlagsState = state.featureFlagsState) {
                 ObserveScreenDataEffect(
                     onDataUpdate = remember(mainViewModel) {
@@ -185,10 +186,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 is MainEvent.UpdateAppTheme -> AppCompatDelegate.setDefaultNightMode(event.osTheme)
-
-                is MainEvent.ScreenCaptureSettingChange -> {
-                    handleScreenCaptureSettingChange(isScreenCaptureAllowed = event.isAllowed)
-                }
             }
         }
     }
@@ -217,7 +214,7 @@ class MainActivity : AppCompatActivity() {
         recreate()
     }
 
-    private fun handleScreenCaptureSettingChange(isScreenCaptureAllowed: Boolean) {
+    private fun updateScreenCapture(isScreenCaptureAllowed: Boolean) {
         if (isScreenCaptureAllowed) {
             window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         } else {
