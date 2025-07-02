@@ -1608,7 +1608,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `OverflowOptionClick Send DeleteClick with deleteSend success should emit ShowToast`() =
+    fun `OverflowOptionClick Send DeleteClick with deleteSend success should emit ShowSnackbar`() =
         runTest {
             val sendId = "sendId1234"
             coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Success
@@ -1621,7 +1621,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 assertEquals(
-                    VaultItemListingEvent.ShowToast(R.string.send_deleted.asText()),
+                    VaultItemListingEvent.ShowSnackbar(R.string.send_deleted.asText()),
                     awaitItem(),
                 )
             }
@@ -1682,7 +1682,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `OverflowOptionClick Send RemovePasswordClick with removePasswordSend success should emit ShowToast`() =
+    fun `OverflowOptionClick Send RemovePasswordClick with removePasswordSend success should emit ShowSnackbar`() =
         runTest {
             val sendId = "sendId1234"
             coEvery {
@@ -1697,7 +1697,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 assertEquals(
-                    VaultItemListingEvent.ShowToast(R.string.password_removed.asText()),
+                    VaultItemListingEvent.ShowSnackbar(R.string.password_removed.asText()),
                     awaitItem(),
                 )
             }

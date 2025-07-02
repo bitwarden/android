@@ -1522,7 +1522,7 @@ class VaultItemListingViewModel @Inject constructor(
 
             DeleteSendResult.Success -> {
                 clearDialogState()
-                sendEvent(VaultItemListingEvent.ShowToast(R.string.send_deleted.asText()))
+                sendEvent(VaultItemListingEvent.ShowSnackbar(R.string.send_deleted.asText()))
             }
         }
     }
@@ -1548,9 +1548,7 @@ class VaultItemListingViewModel @Inject constructor(
 
             is RemovePasswordSendResult.Success -> {
                 clearDialogState()
-                sendEvent(
-                    VaultItemListingEvent.ShowToast(text = R.string.password_removed.asText()),
-                )
+                sendEvent(VaultItemListingEvent.ShowSnackbar(R.string.password_removed.asText()))
             }
         }
     }
@@ -1900,6 +1898,8 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             is Fido2RegisterCredentialResult.Success -> {
+                // This must be a toast because we are finishing the activity and we want the
+                // user to have time to see the message.
                 sendEvent(VaultItemListingEvent.ShowToast(R.string.item_updated.asText()))
                 sendEvent(
                     VaultItemListingEvent.CompleteFido2Registration(
@@ -1913,6 +1913,8 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleRegisterFido2CredentialResultErrorReceive(
         error: Fido2RegisterCredentialResult.Error,
     ) {
+        // This must be a toast because we are finishing the activity and we want the
+        // user to have time to see the message.
         sendEvent(VaultItemListingEvent.ShowToast(R.string.an_error_has_occurred.asText()))
         sendEvent(
             VaultItemListingEvent.CompleteFido2Registration(
@@ -2892,7 +2894,21 @@ sealed class VaultItemListingEvent {
      */
     data class ShowSnackbar(
         val data: BitwardenSnackbarData,
-    ) : VaultItemListingEvent(), BackgroundEvent
+    ) : VaultItemListingEvent(), BackgroundEvent {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 
     /**
      * Complete the current FIDO 2 credential registration process.
