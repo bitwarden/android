@@ -186,19 +186,20 @@ class BitwardenCredentialManagerImpl(
                 }
             }
             .filter { it.isActiveWithFido2Credentials || it.isActiveWithPasswordCredentials }
-            .ifEmpty {
-                return@withContext emptyList<CredentialEntry>().asSuccess()
-            }
+            .ifEmpty { return@withContext emptyList<CredentialEntry>().asSuccess() }
 
-        val passwordCredentialResult =
-            getCredentialsRequest.callingAppInfo?.packageName?.let { packageName ->
+        val passwordCredentialResult = getCredentialsRequest
+            .callingAppInfo
+            ?.packageName
+            ?.let { packageName ->
                 getCredentialsRequest
                     .beginGetPasswordOptions
                     .toPasswordCredentialEntries(
                         userId = getCredentialsRequest.userId,
                         packageName = packageName,
                     )
-            } ?: emptyList()
+            }
+            ?: emptyList()
 
         val passkeyCredentialResult = getCredentialsRequest
             .beginGetPublicKeyCredentialOptions
@@ -351,11 +352,9 @@ class BitwardenCredentialManagerImpl(
     ): List<CredentialEntry> {
         if (this.isEmpty()) return emptyList()
 
-        val ciphers = autofillCipherProvider.getLoginAutofillCiphers(
-            packageName.toAndroidAppUriString(),
-        ).filter {
-            it.password.isNotEmpty()
-        }
+        val ciphers = autofillCipherProvider
+            .getLoginAutofillCiphers(packageName.toAndroidAppUriString())
+            .filter { it.password.isNotEmpty() }
 
         return credentialEntryBuilder
             .buildPasswordCredentialEntries(

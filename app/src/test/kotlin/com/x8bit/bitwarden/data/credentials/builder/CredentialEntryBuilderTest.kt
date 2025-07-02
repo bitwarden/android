@@ -334,7 +334,7 @@ class CredentialEntryBuilderTest {
 
     @Test
     fun `buildPasswordCredentialEntries should set biometric prompt data correctly`() = runTest {
-        mockkStatic(::isBuildVersionBelow)
+        mockkStatic(::isBuildVersionAtLeast)
         val options = listOf(mockBeginGetPasswordOption)
         val passwordAutofillViews: List<AutofillCipher.Login> = listOf(
             createMockPasswordCredentialAutofillCipherLogin(),
@@ -343,7 +343,7 @@ class CredentialEntryBuilderTest {
         every {
             mockBiometricsEncryptionManager.getOrCreateCipher(any())
         } returns mockk(relaxed = true)
-        every { isBuildVersionBelow(any()) } returns false
+        every { isBuildVersionAtLeast(any()) } returns true
 
         // Verify biometric prompt data is set when buildVersion is >= 35, cipher is
         // not null, and user is not verified

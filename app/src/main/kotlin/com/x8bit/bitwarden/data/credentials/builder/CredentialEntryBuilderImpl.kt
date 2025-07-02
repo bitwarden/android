@@ -122,11 +122,7 @@ class CredentialEntryBuilderImpl(
                 )
                 .setDisplayName(cipherView.name)
                 .setAutoSelectAllowed(this.size == 1)
-                .setIcon(
-                    getCredentialEntryIcon(
-                        isPassword = true,
-                    ),
-                )
+                .setIcon(getCredentialEntryIcon())
                 .also { builder ->
                     if (!isUserVerified) {
                         builder.setBiometricPromptDataIfSupported(
@@ -143,13 +139,11 @@ class CredentialEntryBuilderImpl(
     // are addressed. See https://issuetracker.google.com/issues/355141766 for details.
     private fun getCredentialEntryIcon(
         isPasskey: Boolean = false,
-        isPassword: Boolean = false,
     ): Icon = IconCompat
         .createWithResource(
             context,
             when {
                 isPasskey -> BitwardenDrawable.ic_bw_passkey
-                isPassword -> BitwardenDrawable.ic_key
                 else -> BitwardenDrawable.ic_globe
             },
         )
