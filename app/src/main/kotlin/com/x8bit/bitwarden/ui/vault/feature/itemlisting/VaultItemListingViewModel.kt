@@ -217,7 +217,12 @@ class VaultItemListingViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         snackbarRelayManager
-            .getSnackbarDataFlow(SnackbarRelay.SEND_DELETED, SnackbarRelay.SEND_UPDATED)
+            .getSnackbarDataFlow(
+                SnackbarRelay.CIPHER_DELETED,
+                SnackbarRelay.CIPHER_RESTORED,
+                SnackbarRelay.SEND_DELETED,
+                SnackbarRelay.SEND_UPDATED,
+            )
             .map { VaultItemListingsAction.Internal.SnackbarDataReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -2338,12 +2343,13 @@ data class VaultItemListingState(
      */
     val hasAddItemFabButton: Boolean
         get() = if (restrictItemTypesPolicyOrgIds.isNotEmpty() &&
-                itemListingType == VaultItemListingState.ItemListingType.Vault.Card) {
-                    false
-                } else {
-                    itemListingType.hasFab ||
-                        (viewState as? ViewState.NoItems)?.shouldShowAddButton == true
-                }
+            itemListingType == VaultItemListingState.ItemListingType.Vault.Card
+        ) {
+            false
+        } else {
+            itemListingType.hasFab ||
+                (viewState as? ViewState.NoItems)?.shouldShowAddButton == true
+        }
 
     /**
      * Whether or not this represents a listing screen for autofill.

@@ -141,7 +141,12 @@ class SearchViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
         snackbarRelayManager
-            .getSnackbarDataFlow(SnackbarRelay.SEND_DELETED, SnackbarRelay.SEND_UPDATED)
+            .getSnackbarDataFlow(
+                SnackbarRelay.CIPHER_DELETED,
+                SnackbarRelay.CIPHER_RESTORED,
+                SnackbarRelay.SEND_DELETED,
+                SnackbarRelay.SEND_UPDATED,
+            )
             .map { SearchAction.Internal.SnackbarDataReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
