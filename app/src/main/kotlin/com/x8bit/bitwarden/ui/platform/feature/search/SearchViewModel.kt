@@ -522,7 +522,7 @@ class SearchViewModel @Inject constructor(
 
             DeleteSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(SearchEvent.ShowToast(R.string.send_deleted.asText()))
+                sendEvent(SearchEvent.ShowSnackbar(R.string.send_deleted.asText()))
             }
         }
     }
@@ -561,7 +561,7 @@ class SearchViewModel @Inject constructor(
 
             is RemovePasswordSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(SearchEvent.ShowToast(R.string.password_removed.asText()))
+                sendEvent(SearchEvent.ShowSnackbar(R.string.password_removed.asText()))
             }
         }
     }
@@ -1293,14 +1293,21 @@ sealed class SearchEvent {
      */
     data class ShowSnackbar(
         val data: BitwardenSnackbarData,
-    ) : SearchEvent(), BackgroundEvent
-
-    /**
-     * Show a toast with the given [message].
-     */
-    data class ShowToast(
-        val message: Text,
-    ) : SearchEvent()
+    ) : SearchEvent(), BackgroundEvent {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 }
 
 /**
