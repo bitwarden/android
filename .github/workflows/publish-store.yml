@@ -36,7 +36,6 @@ on:
         type: choice
         options:
           - internal
-          - Staged for Production
           - Fastlane Automation Source
         required: true
         default: "internal"
@@ -45,7 +44,6 @@ on:
         type: choice
         options:
           - production
-          - Staged for Production
           - Fastlane Automation Target
         required: true
 env:
