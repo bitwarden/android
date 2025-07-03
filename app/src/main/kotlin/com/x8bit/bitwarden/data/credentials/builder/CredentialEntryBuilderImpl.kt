@@ -123,7 +123,7 @@ class CredentialEntryBuilderImpl(
                 .setDisplayName(cipherView.name)
                 .setAutoSelectAllowed(this.size == 1)
                 .setIcon(getCredentialEntryIcon())
-                .also { builder ->
+                .apply { builder ->
                     if (!isUserVerified) {
                         builder.setBiometricPromptDataIfSupported(
                             cipher = biometricsEncryptionManager

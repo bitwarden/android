@@ -198,8 +198,7 @@ class BitwardenCredentialManagerImpl(
                         userId = getCredentialsRequest.userId,
                         packageName = packageName,
                     )
-            }
-            ?: emptyList()
+            }.orEmpty()
 
         val passkeyCredentialResult = getCredentialsRequest
             .beginGetPublicKeyCredentialOptions
