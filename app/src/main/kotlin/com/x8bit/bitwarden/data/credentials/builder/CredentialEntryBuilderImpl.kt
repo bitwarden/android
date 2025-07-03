@@ -123,9 +123,9 @@ class CredentialEntryBuilderImpl(
                 .setDisplayName(cipherView.name)
                 .setAutoSelectAllowed(this.size == 1)
                 .setIcon(getCredentialEntryIcon())
-                .apply { builder ->
+                .apply {
                     if (!isUserVerified) {
-                        builder.setBiometricPromptDataIfSupported(
+                        setBiometricPromptDataIfSupported(
                             cipher = biometricsEncryptionManager
                                 .getOrCreateCipher(userId),
                         )
