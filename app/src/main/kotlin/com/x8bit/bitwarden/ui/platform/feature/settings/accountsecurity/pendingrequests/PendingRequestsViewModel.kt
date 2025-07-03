@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.core.util.isOverFiveMinutesOld
 import com.bitwarden.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -282,13 +281,6 @@ sealed class PendingRequestsEvent {
      */
     data class NavigateToLoginApproval(
         val fingerprint: String,
-    ) : PendingRequestsEvent()
-
-    /**
-     * Displays the [message] in a toast.
-     */
-    data class ShowToast(
-        val message: Text,
     ) : PendingRequestsEvent()
 }
 

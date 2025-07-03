@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.startregistration
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
@@ -47,6 +45,7 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -61,7 +60,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 
@@ -84,7 +82,6 @@ fun StartRegistrationScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handler = rememberStartRegistrationHandler(viewModel = viewModel)
-    val context = LocalContext.current
     EventsEffect(viewModel) { event ->
         when (event) {
             is NavigateToPrivacyPolicy -> {
@@ -106,10 +103,6 @@ fun StartRegistrationScreen(
             }
 
             is StartRegistrationEvent.NavigateBack -> onNavigateBack.invoke()
-            is StartRegistrationEvent.ShowToast -> {
-                Toast.makeText(context, event.text, Toast.LENGTH_SHORT).show()
-            }
-
             is StartRegistrationEvent.NavigateToCompleteRegistration -> {
                 onNavigateToCompleteRegistration(
                     event.email,

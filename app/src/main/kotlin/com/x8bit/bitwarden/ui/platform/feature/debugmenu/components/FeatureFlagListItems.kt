@@ -6,7 +6,7 @@ import androidx.compose.ui.res.stringResource
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
+import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 
 /**
  * Creates a list item for a [FlagKey].

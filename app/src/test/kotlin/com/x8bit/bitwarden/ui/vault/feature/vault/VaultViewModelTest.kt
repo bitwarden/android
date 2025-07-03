@@ -43,7 +43,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -86,7 +85,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val mutableSnackbarDataFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
     private val snackbarRelayManager: SnackbarRelayManager = mockk {
         every {
-            getSnackbarDataFlow(SnackbarRelay.LOGINS_IMPORTED)
+            getSnackbarDataFlow(relay = any(), relays = anyVararg())
         } returns mutableSnackbarDataFlow
     }
 
@@ -862,7 +861,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `vaultDataStateFlow Loaded with items when manually syncing with the sync button should update state to Content, show a success Toast, and dismiss pull to refresh`() =
+    fun `vaultDataStateFlow Loaded with items when manually syncing with the sync button should update state to Content, show a success Snackbar, and dismiss pull to refresh`() =
         runTest {
             val expectedState = createMockVaultState(
                 viewState = VaultState.ViewState.Content(
@@ -898,7 +897,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
                 assertEquals(expectedState, viewModel.stateFlow.value)
                 assertEquals(
-                    VaultEvent.ShowToast(R.string.syncing_complete.asText()),
+                    VaultEvent.ShowSnackbar(R.string.syncing_complete.asText()),
                     awaitItem(),
                 )
             }
@@ -925,7 +924,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `vaultDataStateFlow Loaded with empty items when manually syncing with the sync button should update state to NoItems, show a success Toast, and dismiss pull to refresh`() =
+    fun `vaultDataStateFlow Loaded with empty items when manually syncing with the sync button should update state to NoItems, show a success Snackbar, and dismiss pull to refresh`() =
         runTest {
             val expectedState = createMockVaultState(
                 viewState = VaultState.ViewState.NoItems,
@@ -945,7 +944,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
                 assertEquals(expectedState, viewModel.stateFlow.value)
                 assertEquals(
-                    VaultEvent.ShowToast(R.string.syncing_complete.asText()),
+                    VaultEvent.ShowSnackbar(R.string.syncing_complete.asText()),
                     awaitItem(),
                 )
             }

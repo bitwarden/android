@@ -1,5 +1,7 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.util
 
+import com.bitwarden.authenticator.data.authenticator.manager.util.createMockLocalAuthenticatorItemSource
+import com.bitwarden.authenticator.data.authenticator.manager.util.createMockSharedAuthenticatorItemSource
 import com.bitwarden.authenticator.data.authenticator.manager.util.createMockVerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
@@ -12,7 +14,10 @@ class VerificationCodeItemExtensionsTest {
     @Test
     fun `toDisplayItem should map Local items correctly`() {
         val alertThresholdSeconds = 7
-        val favoriteItem = createMockVerificationCodeItem(number = 1, favorite = true)
+        val favoriteItem = createMockVerificationCodeItem(
+            number = 1,
+            source = createMockLocalAuthenticatorItemSource(number = 1, isFavorite = true),
+        )
         val nonFavoriteItem = createMockVerificationCodeItem(number = 2)
 
         val expectedFavoriteItem = VerificationCodeDisplayItem(
@@ -134,15 +139,16 @@ class VerificationCodeItemExtensionsTest {
     @Test
     fun `toDisplayItem should map Shared items correctly`() {
         val alertThresholdSeconds = 7
-        val favoriteItem = createMockVerificationCodeItem(number = 1, favorite = true)
-            .copy(
-                source = AuthenticatorItem.Source.Shared(
-                    userId = "1",
-                    nameOfUser = "John Doe",
-                    email = "test@bitwarden.com",
-                    environmentLabel = "bitwarden.com",
-                ),
-            )
+        val favoriteItem = createMockVerificationCodeItem(
+            number = 1,
+            source = createMockSharedAuthenticatorItemSource(
+                number = 1,
+                userId = "1",
+                nameOfUser = "John Doe",
+                email = "test@bitwarden.com",
+                environmentLabel = "bitwarden.com",
+            ),
+        )
 
         val expectedFavoriteItem = VerificationCodeDisplayItem(
             id = favoriteItem.id,

@@ -307,11 +307,6 @@ sealed class StartRegistrationEvent {
     data object NavigateBack : StartRegistrationEvent()
 
     /**
-     * Placeholder event for showing a toast. Can be removed once there are real events.
-     */
-    data class ShowToast(val text: String) : StartRegistrationEvent()
-
-    /**
      * Navigates to the complete registration screen.
      */
     data class NavigateToCompleteRegistration(

@@ -157,6 +157,10 @@ class ItemListingViewModel @Inject constructor(
             ItemListingAction.SyncLearnMoreClick -> {
                 handleSyncLearnMoreClick()
             }
+
+            is ItemListingAction.SectionExpandedClick -> {
+                handleSectionExpandedClick(action)
+            }
         }
     }
 
@@ -452,6 +456,7 @@ class ItemListingViewModel @Inject constructor(
         }
     }
 
+    @Suppress("LongMethod")
     private fun handleAuthenticatorDataReceive(
         action: ItemListingAction.Internal.AuthCodesUpdated,
     ) {
@@ -473,10 +478,14 @@ class ItemListingViewModel @Inject constructor(
             SharedVerificationCodesState.SyncNotEnabled,
                 -> SharedCodesDisplayState.Codes(emptyList())
 
-            is SharedVerificationCodesState.Success ->
+            is SharedVerificationCodesState.Success -> {
+                val viewState = state.viewState as? ItemListingState.ViewState.Content
+                val currentCodes = viewState?.sharedItems as? SharedCodesDisplayState.Codes
                 action.sharedCodesState.toSharedCodesDisplayState(
                     alertThresholdSeconds = state.alertThresholdSeconds,
+                    currentSections = currentCodes?.sections.orEmpty(),
                 )
+            }
         }
 
         if (localItems.isEmpty() && sharedItemsState.isEmpty()) {
@@ -496,7 +505,7 @@ class ItemListingViewModel @Inject constructor(
                         it.toDisplayItem(
                             alertThresholdSeconds = state.alertThresholdSeconds,
                             sharedVerificationCodesState =
-                            authenticatorRepository.sharedCodesStateFlow.value,
+                                authenticatorRepository.sharedCodesStateFlow.value,
                         )
                     },
                 itemList = localItems
@@ -505,7 +514,7 @@ class ItemListingViewModel @Inject constructor(
                         it.toDisplayItem(
                             alertThresholdSeconds = state.alertThresholdSeconds,
                             sharedVerificationCodesState =
-                            authenticatorRepository.sharedCodesStateFlow.value,
+                                authenticatorRepository.sharedCodesStateFlow.value,
                         )
                     },
                 sharedItems = sharedItemsState,
@@ -570,6 +579,22 @@ class ItemListingViewModel @Inject constructor(
 
     private fun handleSyncLearnMoreClick() {
         sendEvent(ItemListingEvent.NavigateToSyncInformation)
+    }
+
+    private fun handleSectionExpandedClick(action: ItemListingAction.SectionExpandedClick) {
+        updateSharedItems { codes ->
+            codes.copy(
+                sections = codes.sections.map {
+                    it.copy(
+                        isExpanded = if (it == action.section) {
+                            !it.isExpanded
+                        } else {
+                            it.isExpanded
+                        },
+                    )
+                },
+            )
+        }
     }
 
     /**
@@ -644,6 +669,29 @@ class ItemListingViewModel @Inject constructor(
             userId = null,
             favorite = false,
         )
+    }
+
+    private inline fun updateContent(
+        crossinline block: (
+            ItemListingState.ViewState.Content,
+        ) -> ItemListingState.ViewState.Content,
+    ) {
+        val updatedContent = (state.viewState as? ItemListingState.ViewState.Content)
+            ?.let(block)
+            ?: return
+        mutableStateFlow.update { it.copy(viewState = updatedContent) }
+    }
+
+    private inline fun updateSharedItems(
+        crossinline block: (SharedCodesDisplayState.Codes) -> SharedCodesDisplayState.Codes,
+    ) {
+        updateContent {
+            it.copy(
+                sharedItems = (it.sharedItems as? SharedCodesDisplayState.Codes)
+                    ?.let(block)
+                    ?: it.sharedItems,
+            )
+        }
     }
 }
 
@@ -889,6 +937,13 @@ sealed class ItemListingAction {
      * The user tapped the learn more button on the sync action card.
      */
     data object SyncLearnMoreClick : ItemListingAction()
+
+    /**
+     * The user tapped the section header to expand or collapse the section.
+     */
+    data class SectionExpandedClick(
+        val section: SharedCodesDisplayState.SharedCodesAccountSection,
+    ) : ItemListingAction()
 
     /**
      * The user dismissed sync Bitwarden action card.

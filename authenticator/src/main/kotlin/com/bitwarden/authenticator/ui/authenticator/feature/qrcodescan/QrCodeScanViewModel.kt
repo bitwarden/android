@@ -13,7 +13,6 @@ import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.Defau
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isBase32
-import com.bitwarden.ui.util.Text
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
@@ -256,11 +255,6 @@ sealed class QrCodeScanEvent {
      * Navigate to manual code entry screen.
      */
     data object NavigateToManualCodeEntry : QrCodeScanEvent()
-
-    /**
-     * Show a toast with the given [message].
-     */
-    data class ShowToast(val message: Text) : QrCodeScanEvent()
 }
 
 /**

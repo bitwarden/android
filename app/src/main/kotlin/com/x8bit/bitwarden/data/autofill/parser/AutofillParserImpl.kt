@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.autofill.util.getMaxInlineSuggestionsCount
 import com.x8bit.bitwarden.data.autofill.util.toAutofillView
 import com.x8bit.bitwarden.data.autofill.util.website
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import timber.log.Timber
 
 /**
  * A list of URIs that should never be autofilled.
@@ -72,6 +73,7 @@ class AutofillParserImpl(
         autofillAppInfo: AutofillAppInfo,
         fillRequest: FillRequest?,
     ): AutofillRequest {
+        Timber.d("Parsing AssistStructure -- ${fillRequest?.id}")
         // Parse the `assistStructure` into internal models.
         val traversalDataList = assistStructure.traverse()
         // Take only the autofill views from the node that currently has focus.
@@ -133,6 +135,7 @@ class AutofillParserImpl(
 
         // Get inline information if available
         val isInlineAutofillEnabled = settingsRepository.isInlineAutofillEnabled
+        Timber.e("Autofill request isInlineEnabled=$isInlineAutofillEnabled -- ${fillRequest?.id}")
         val maxInlineSuggestionsCount = fillRequest.getMaxInlineSuggestionsCount(
             autofillAppInfo = autofillAppInfo,
             isInlineAutofillEnabled = isInlineAutofillEnabled,
