@@ -71,7 +71,9 @@ class LoginApprovalViewModel @Inject constructor(
                                             .userStateFlow
                                             .value
                                             ?.accounts
-                                            ?.find { it.userId == passwordlessRequestData.userId }
+                                            ?.find { account ->
+                                                account.userId == passwordlessRequestData.userId
+                                            }
                                             ?.email
                                             .orEmpty(),
                                     ),

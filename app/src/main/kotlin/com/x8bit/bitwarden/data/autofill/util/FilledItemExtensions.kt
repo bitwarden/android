@@ -30,11 +30,11 @@ fun FilledItem.applyToDatasetPostTiramisu(
  * Set up an overlay presentation for this [FilledItem] in the [datasetBuilder] for Android devices
  * running on APIs that predate Tiramisu.
  */
-@Suppress("Deprecation")
 fun FilledItem.applyToDatasetPreTiramisu(
     datasetBuilder: Dataset.Builder,
     remoteViews: RemoteViews,
 ) {
+    @Suppress("DEPRECATION")
     datasetBuilder.setValue(
         autofillId,
         value,

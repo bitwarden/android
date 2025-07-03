@@ -56,7 +56,7 @@ fun <T, R> MutableStateFlow<T>.observeWhenSubscribedAndUnlocked(
             .filterNotNull()
             .flatMapLatest { activeUserId ->
                 vaultUnlockFlow
-                    .map { it.any { it.userId == activeUserId } }
+                    .map { unlockData -> unlockData.any { it.userId == activeUserId } }
                     .distinctUntilChanged()
             },
     ) { isSubscribed, activeUserId, isUnlocked ->

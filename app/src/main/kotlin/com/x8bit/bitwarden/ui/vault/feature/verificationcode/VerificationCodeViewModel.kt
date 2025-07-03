@@ -366,8 +366,8 @@ class VerificationCodeViewModel @Inject constructor(
                             )
                         },
                 ),
-                dialogState = state.dialogState.takeUnless {
-                    it is VerificationCodeState.DialogState.Loading
+                dialogState = state.dialogState.takeUnless { dialogState ->
+                    dialogState is VerificationCodeState.DialogState.Loading
                 },
             )
         }
