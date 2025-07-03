@@ -240,9 +240,11 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `when unsubscribe custom action invoked should send UnsubscribeMarketingEmailsClick`() {
-        @Suppress("MaxLineLength")
         composeTestRule
-            .onNodeWithText("Get emails from Bitwarden for announcements, advice, and research opportunities. Unsubscribe at any time.")
+            .onNodeWithText(
+                text = "Get emails from Bitwarden for announcements, advice, and " +
+                    "research opportunities. Unsubscribe at any time.",
+            )
             .performCustomAccessibilityAction("Unsubscribe")
 
         verify { viewModel.trySendAction(StartRegistrationAction.UnsubscribeMarketingEmailsClick) }
@@ -265,16 +267,14 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
 
         verify { viewModel.trySendAction(StartRegistrationAction.PrivacyPolicyClick) }
     }
-
-    companion object {
-        private const val TEST_INPUT = "input"
-        private val DEFAULT_STATE = StartRegistrationState(
-            emailInput = "",
-            nameInput = "",
-            isReceiveMarketingEmailsToggled = false,
-            isContinueButtonEnabled = false,
-            selectedEnvironmentType = Environment.Type.US,
-            dialog = null,
-        )
-    }
 }
+
+private const val TEST_INPUT: String = "input"
+private val DEFAULT_STATE: StartRegistrationState = StartRegistrationState(
+    emailInput = "",
+    nameInput = "",
+    isReceiveMarketingEmailsToggled = false,
+    isContinueButtonEnabled = false,
+    selectedEnvironmentType = Environment.Type.US,
+    dialog = null,
+)
