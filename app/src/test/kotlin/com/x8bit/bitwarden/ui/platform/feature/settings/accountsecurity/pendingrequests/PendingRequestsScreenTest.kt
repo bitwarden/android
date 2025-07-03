@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pending
 
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
@@ -13,10 +14,12 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.data.platform.util.isFdroid
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import io.mockk.every
 import io.mockk.just
@@ -70,6 +73,15 @@ class PendingRequestsScreenTest : BitwardenComposeTest() {
     fun tearDown() {
         unmockkStatic(::isFdroid)
         unmockkStatic(::isBuildVersionAtLeast)
+    }
+
+    @Test
+    fun `on ShowSnackbar should display snackbar content`() {
+        val message = "message"
+        val data = BitwardenSnackbarData(message = message.asText())
+        composeTestRule.onNodeWithText(text = message).assertDoesNotExist()
+        mutableEventFlow.tryEmit(PendingRequestsEvent.ShowSnackbar(data = data))
+        composeTestRule.onNodeWithText(text = message).assertIsDisplayed()
     }
 
     @Test
