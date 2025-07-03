@@ -173,7 +173,7 @@ class PrivilegedAppsListScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithText("Trusted by YOU")
+            .onNodeWithText("Trusted by You")
             .assertIsDisplayed()
 
         mutableStateFlow.value = DEFAULT_STATE.copy(

@@ -33,21 +33,21 @@ data class PrivilegedAppListItem(
      * Represents the trust authority of a privileged app.
      */
     enum class PrivilegedAppTrustAuthority(
-        @StringRes val displayName: Int,
+        @field:StringRes val description: Int,
     ) {
         /**
          * The app is trusted by Google.
          */
-        GOOGLE(displayName = R.string.google),
+        GOOGLE(description = R.string.trusted_by_google),
 
         /**
          * The app is trusted by the Bitwarden community.
          */
-        COMMUNITY(displayName = R.string.the_community),
+        COMMUNITY(description = R.string.trusted_by_the_community),
 
         /**
          * The app is trusted by the user.
          */
-        USER(displayName = R.string.you),
+        USER(description = R.string.trusted_by_you),
     }
 }
