@@ -217,6 +217,10 @@ fun VaultItemListingScreen(
                     .completeProviderGetCredentialsRequest(event.result)
             }
 
+            is VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest -> {
+                credentialProviderCompletionManager.completePasswordGet(event.result)
+            }
+
             VaultItemListingEvent.ExitApp -> exitManager.exitApplication()
 
             is VaultItemListingEvent.NavigateToAddFolder -> {

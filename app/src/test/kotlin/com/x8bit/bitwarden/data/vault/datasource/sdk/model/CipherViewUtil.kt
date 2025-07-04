@@ -49,12 +49,14 @@ fun createMockCipherView(
     folderId: String? = "mockId-$number",
     clock: Clock = FIXED_CLOCK,
     fido2Credentials: List<Fido2Credential>? = null,
+    password: String = "mockPassword-$number",
     sshKey: SshKeyView? = createMockSshKeyView(number = number),
     login: LoginView? = createMockLoginView(
         number = number,
         totp = totp,
         clock = clock,
         fido2Credentials = fido2Credentials,
+        password = password,
     ),
     attachments: List<AttachmentView> = listOf(createMockAttachmentView(number = number)),
 ): CipherView =
@@ -104,10 +106,11 @@ fun createMockLoginView(
     hasUris: Boolean = true,
     uris: List<LoginUriView>? = listOf(createMockUriView(number = number)),
     fido2Credentials: List<Fido2Credential>? = createMockSdkFido2CredentialList(number, clock),
+    password: String = "mockPassword-$number",
 ): LoginView =
     LoginView(
         username = "mockUsername-$number",
-        password = "mockPassword-$number",
+        password = password,
         passwordRevisionDate = clock.instant(),
         autofillOnPageLoad = false,
         uris = uris.takeIf { hasUris },

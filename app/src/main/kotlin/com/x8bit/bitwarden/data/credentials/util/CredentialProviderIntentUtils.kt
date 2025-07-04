@@ -11,6 +11,7 @@ import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
+import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CREDENTIAL_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_USER_ID
@@ -74,6 +75,38 @@ fun Intent.getFido2AssertionRequestOrNull(): Fido2CredentialAssertionRequest? {
         userId = userId,
         cipherId = cipherId,
         credentialId = credentialId,
+        isUserPreVerified = isUserPreVerified,
+        requestData = ProviderGetCredentialRequest.asBundle(systemRequest),
+    )
+}
+
+/**
+ * Checks if this [Intent] contains a [ProviderGetPasswordCredentialRequest] related to an
+ * ongoing password credential GetPassword process.
+ */
+fun Intent.getProviderGetPasswordRequestOrNull(): ProviderGetPasswordCredentialRequest? {
+    if (!isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) return null
+
+    val systemRequest = PendingIntentHandler
+        .retrieveProviderGetCredentialRequest(this)
+        ?: return null
+
+    val cipherId = getStringExtra(EXTRA_KEY_CIPHER_ID)
+        ?: return null
+
+    val userId: String = getStringExtra(EXTRA_KEY_USER_ID)
+        ?: return null
+
+    // Extract the OS biometric prompt result from the request data because it is not included in
+    // the bundle returned by `ProviderGetCredentialRequest.asBundle()`.
+    val isUserPreVerified = systemRequest
+        .biometricPromptResult
+        ?.isSuccessful
+        ?: getBooleanExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, false)
+
+    return ProviderGetPasswordCredentialRequest(
+        userId = userId,
+        cipherId = cipherId,
         isUserPreVerified = isUserPreVerified,
         requestData = ProviderGetCredentialRequest.asBundle(systemRequest),
     )
