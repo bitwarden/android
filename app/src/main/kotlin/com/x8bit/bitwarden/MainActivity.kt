@@ -28,6 +28,7 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
 import com.x8bit.bitwarden.data.platform.manager.util.ObserveScreenDataEffect
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.util.validate
 import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.debugMenuDestination
@@ -67,6 +68,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var debugLaunchManager: DebugMenuLaunchManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        intent.validate()
         var shouldShowSplashScreen = true
         installSplashScreen().setKeepOnScreenCondition { shouldShowSplashScreen }
         super.onCreate(savedInstanceState)
@@ -115,6 +117,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        intent.validate()
         mainViewModel.trySendAction(action = MainAction.ReceiveNewIntent(intent = intent))
     }
 
