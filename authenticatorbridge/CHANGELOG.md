@@ -7,6 +7,10 @@ v1.1.0 (pending)
 
 ### Bug Fixes
 
+### Other changes
+
+- Replace internal Build version check functions with `isBuildVersionAtLeast` function in `core` module.
+
 v1.0.1
 --------
 

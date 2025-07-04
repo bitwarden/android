@@ -47,12 +47,21 @@ Some things to note:
 
 ## Dependencies
 
+> [!IMPORTANT]
+> The SDK does not come packaged with these dependencies, so consumers of the SDK must provide them.
+
+### Project Dependencies
+
+The following is a list of all project dependencies required by the SDK.
+
+- **bitwarden-core**
+  - [Core](../core)
+  - Purpose: Internal platform tools and extensions
+  - License: [LICENSE](../LICENSE.txt)
+
 ### Application Dependencies
 
 The following is a list of all third-party dependencies required by the SDK.
-
-> [!IMPORTANT]
-> The SDK does not come packaged with these dependencies, so consumers of the SDK must provide them.
 
 - **AndroidX Appcompat**
   - https://developer.android.com/jetpack/androidx/releases/appcompat
