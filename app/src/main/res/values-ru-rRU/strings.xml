@@ -987,11 +987,7 @@
     <string name="privileged_apps">Привилегированные приложения</string>
     <string name="unrecognized_browser">Неизвестный браузер</string>
     <string name="learn_more_about_using_passkeys_with_bitwarden">Узнайте больше об использовании passkey в Bitwarden.</string>
-    <string name="google">Google</string>
-    <string name="the_community">Сообщество</string>
-    <string name="you">ВЫ</string>
     <string name="all_trusted_apps">Все доверенные приложения</string>
-    <string name="trusted_by_x">Trusted by %s</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
     <string name="installed_apps">Установленные приложения</string>
     <string name="delete_x">Удалить %s</string>

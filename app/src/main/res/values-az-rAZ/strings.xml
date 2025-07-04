@@ -425,9 +425,9 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="privacy_policy">Gizlilik Siyasəti</string>
     <string name="passkey_management">Keçid açarını idarəetmə</string>
     <string name="autofill_services">Avto-doldurma xidmətləri</string>
-    <string name="display_autofill_suggestions">Display autofill suggestions</string>
-    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
-    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
+    <string name="display_autofill_suggestions">Avto-doldurma təkliflərini göstər</string>
+    <string name="autofill_suggestions_inline">Sətirdaxili (klaviaturada göstərir)</string>
+    <string name="autofill_suggestions_popup">Açılan pəncərə (giriş xanasının üzərində göstərir)</string>
     <string name="accessibility">Əlçatımlılığı istifadə et</string>
     <string name="accessibility_description5">Avto-doldurma Cəld Əməliyyat Xanasını istifadə etmək üçün tələb olunur.</string>
     <string name="personal_ownership_policy_in_effect">Bir təşkilat siyasəti, sahiblik seçimlərinizə təsir edir.</string>
@@ -909,10 +909,10 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Heç bir element seçilmədiyi üçün keçid açarı əməliyyatı uğursuz oldu.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Sorğu dəstəklənmədiyi üçün keçid açarı əməliyyatı uğursuz oldu.</string>
     <string name="self_host_server_url">Self-host server URL-si</string>
-    <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
+    <string name="use_brave_autofill_integration">Brave avto-doldurma inteqrasiyasını istifadə et</string>
     <string name="use_chrome_autofill_integration">Chrome avto-doldurma inteqrasiyasını istifadə et</string>
     <string name="use_chrome_beta_autofill_integration">Chrome avto-doldurma inteqrasiyasını istifadə et (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Seçilmiş brauzerlərdə dəstəklənən veb saytlar üçün giriş məlumatlarının doldurulmasını təkmilləşdirir. Fəallaşdırdıqdan sonra, üçüncü tərəf avto-doldurmanı fəallaşdırmaq üçün brauzer ayarlarına yönləndiriləcəksiniz.</string>
     <string name="show_more">Daha çox göstər</string>
     <string name="no_folder">Qovluq yoxdur</string>
     <string name="show_less">Daha az göstər</string>
@@ -985,13 +985,9 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="learn_more_about_privileged_apps">İmtiyazlı tətbiqlər barədə daha ətraflı</string>
     <string name="privileged_apps">İmtiyazlı tətbiqlər</string>
     <string name="unrecognized_browser">Tanınmayan brauzer</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
-    <string name="google">Google</string>
-    <string name="the_community">the Community</string>
-    <string name="you">YOU</string>
-    <string name="all_trusted_apps">All trusted apps</string>
-    <string name="trusted_by_x">Trusted by %s</string>
-    <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
-    <string name="installed_apps">Installed apps</string>
-    <string name="delete_x">Delete %s</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Bitwarden ilə keçid açarı istifadəsi barədə ətraflı öyrənin.</string>
+    <string name="all_trusted_apps">Bütün güvənli tətbiqlər</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">%s - güvənməyi dayandırmaq istədiyinizə əminsiniz?</string>
+    <string name="installed_apps">Quraşdırılmış tətbiqlər</string>
+    <string name="delete_x">%s - sil</string>
 </resources>
