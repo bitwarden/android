@@ -986,11 +986,7 @@ při opakování problémů.</string>
     <string name="privileged_apps">Privilegované aplikace</string>
     <string name="unrecognized_browser">Nerozpoznaný prohlížeč</string>
     <string name="learn_more_about_using_passkeys_with_bitwarden">Přečtěte si více o používání hesel s Bitwardenem.</string>
-    <string name="google">Google</string>
-    <string name="the_community">Komunita</string>
-    <string name="you">VY</string>
     <string name="all_trusted_apps">Všechny důvěryhodné aplikace</string>
-    <string name="trusted_by_x">Důvěryhodné od %s</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Jste si jisti, že chcete přestat důvěřovat %s?</string>
     <string name="installed_apps">Nainstalované aplikace</string>
     <string name="delete_x">Smazat %s</string>
