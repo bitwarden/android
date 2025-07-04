@@ -1,7 +1,5 @@
 package com.x8bit.bitwarden.data.autofill.manager
 
-import android.content.Context
-import android.widget.Toast
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
@@ -16,7 +14,6 @@ import java.time.Clock
  * Default implementation of the [AutofillTotpManager].
  */
 class AutofillTotpManagerImpl(
-    private val context: Context,
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val authRepository: AuthRepository,
@@ -39,13 +36,6 @@ class AutofillTotpManagerImpl(
                 text = totpResult.code,
                 toastDescriptorOverride = R.string.verification_code_totp.asText(),
             )
-            Toast
-                .makeText(
-                    context.applicationContext,
-                    R.string.verification_code_totp,
-                    Toast.LENGTH_LONG,
-                )
-                .show()
         }
     }
 }

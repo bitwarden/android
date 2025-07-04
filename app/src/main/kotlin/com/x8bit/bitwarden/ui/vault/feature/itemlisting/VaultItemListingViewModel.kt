@@ -9,6 +9,7 @@ import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.map
 import com.bitwarden.data.repository.util.baseIconUrl
@@ -142,6 +143,7 @@ class VaultItemListingViewModel @Inject constructor(
     private val networkConnectionManager: NetworkConnectionManager,
     private val featureFlagManager: FeatureFlagManager,
     private val relyingPartyParser: RelyingPartyParser,
+    private val toastManager: ToastManager,
     snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
@@ -1905,7 +1907,7 @@ class VaultItemListingViewModel @Inject constructor(
             is Fido2RegisterCredentialResult.Success -> {
                 // This must be a toast because we are finishing the activity and we want the
                 // user to have time to see the message.
-                sendEvent(VaultItemListingEvent.ShowToast(R.string.item_updated.asText()))
+                toastManager.show(messageId = R.string.item_updated)
                 sendEvent(
                     VaultItemListingEvent.CompleteFido2Registration(
                         RegisterFido2CredentialResult.Success(action.result.responseJson),
@@ -1920,7 +1922,7 @@ class VaultItemListingViewModel @Inject constructor(
     ) {
         // This must be a toast because we are finishing the activity and we want the
         // user to have time to see the message.
-        sendEvent(VaultItemListingEvent.ShowToast(R.string.an_error_has_occurred.asText()))
+        toastManager.show(messageId = R.string.an_error_has_occurred)
         sendEvent(
             VaultItemListingEvent.CompleteFido2Registration(
                 RegisterFido2CredentialResult.Error(
@@ -2887,13 +2889,6 @@ sealed class VaultItemListingEvent {
      * Show a share sheet with the given content.
      */
     data class ShowShareSheet(val content: String) : VaultItemListingEvent()
-
-    /**
-     * Show a toast with the given message.
-     *
-     * @property text the text to display.
-     */
-    data class ShowToast(val text: Text) : VaultItemListingEvent()
 
     /**
      * Show a snackbar to the user.

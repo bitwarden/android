@@ -93,7 +93,6 @@ object AutofillModule {
     @Singleton
     @Provides
     fun providesAutofillTotpManager(
-        @ApplicationContext context: Context,
         clock: Clock,
         clipboardManager: BitwardenClipboardManager,
         authRepository: AuthRepository,
@@ -101,7 +100,6 @@ object AutofillModule {
         vaultRepository: VaultRepository,
     ): AutofillTotpManager =
         AutofillTotpManagerImpl(
-            context = context,
             clock = clock,
             clipboardManager = clipboardManager,
             authRepository = authRepository,

@@ -20,6 +20,8 @@ import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManagerImpl
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepository
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
+import com.bitwarden.core.data.manager.toast.ToastManager
+import com.bitwarden.core.data.manager.toast.ToastManagerImpl
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.manager.DispatcherManagerImpl
 import com.bitwarden.data.repository.ServerConfigRepository
@@ -41,7 +43,19 @@ object PlatformManagerModule {
     @Singleton
     fun provideBitwardenClipboardManager(
         @ApplicationContext context: Context,
-    ): BitwardenClipboardManager = BitwardenClipboardManagerImpl(context)
+        toastManager: ToastManager,
+    ): BitwardenClipboardManager = BitwardenClipboardManagerImpl(
+        context = context,
+        toastManager = toastManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideToastManager(
+        @ApplicationContext context: Context,
+    ): ToastManager = ToastManagerImpl(
+        context = context,
+    )
 
     @Provides
     @Singleton

@@ -6,6 +6,7 @@ import android.os.PowerManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Toast
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginView
 import com.x8bit.bitwarden.R
@@ -41,6 +42,9 @@ class BitwardenAccessibilityProcessorTest {
     }
     private val launcherPackageNameManager: LauncherPackageNameManager = mockk()
     private val powerManager: PowerManager = mockk()
+    private val toastManager: ToastManager = mockk {
+        every { show(messageId = any(), duration = Toast.LENGTH_LONG) } just runs
+    }
 
     private val bitwardenAccessibilityProcessor: BitwardenAccessibilityProcessor =
         BitwardenAccessibilityProcessorImpl(
@@ -49,6 +53,7 @@ class BitwardenAccessibilityProcessorTest {
             accessibilityAutofillManager = accessibilityAutofillManager,
             launcherPackageNameManager = launcherPackageNameManager,
             powerManager = powerManager,
+            toastManager = toastManager,
         )
 
     @BeforeEach
@@ -58,12 +63,6 @@ class BitwardenAccessibilityProcessorTest {
             AccessibilityNodeInfo::shouldSkipPackage,
         )
         mockkStatic(::createAutofillSelectionIntent)
-        mockkStatic(Toast::class)
-        every {
-            Toast
-                .makeText(context, R.string.autofill_tile_uri_not_found, Toast.LENGTH_LONG)
-                .show()
-        } just runs
     }
 
     @AfterEach
@@ -73,7 +72,6 @@ class BitwardenAccessibilityProcessorTest {
             AccessibilityNodeInfo::shouldSkipPackage,
         )
         unmockkStatic(::createAutofillSelectionIntent)
-        unmockkStatic(Toast::class)
     }
 
     @Test
@@ -252,9 +250,10 @@ class BitwardenAccessibilityProcessorTest {
             accessibilityAutofillManager.accessibilityAction
             accessibilityAutofillManager.accessibilityAction = null
             accessibilityParser.parseForUriOrPackageName(rootNode = node)
-            Toast
-                .makeText(context, R.string.autofill_tile_uri_not_found, Toast.LENGTH_LONG)
-                .show()
+            toastManager.show(
+                messageId = R.string.autofill_tile_uri_not_found,
+                duration = Toast.LENGTH_LONG,
+            )
         }
     }
 
@@ -305,9 +304,10 @@ class BitwardenAccessibilityProcessorTest {
             accessibilityAutofillManager.accessibilityAction = null
             accessibilityParser.parseForUriOrPackageName(rootNode = node)
             accessibilityParser.parseForFillableFields(rootNode = node, uri = uri)
-            Toast
-                .makeText(context, R.string.autofill_tile_uri_not_found, Toast.LENGTH_LONG)
-                .show()
+            toastManager.show(
+                messageId = R.string.autofill_tile_uri_not_found,
+                duration = Toast.LENGTH_LONG,
+            )
         }
     }
 

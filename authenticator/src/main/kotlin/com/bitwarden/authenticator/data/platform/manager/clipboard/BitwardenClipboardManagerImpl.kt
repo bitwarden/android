@@ -4,11 +4,11 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Build
-import android.widget.Toast
 import androidx.compose.ui.text.AnnotatedString
 import androidx.core.content.getSystemService
 import androidx.core.os.persistableBundleOf
 import com.bitwarden.authenticator.R
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.util.Text
 
@@ -17,6 +17,7 @@ import com.bitwarden.ui.util.Text
  */
 class BitwardenClipboardManagerImpl(
     private val context: Context,
+    private val toastManager: ToastManager,
 ) : BitwardenClipboardManager {
     private val clipboardManager: ClipboardManager = requireNotNull(context.getSystemService())
 
@@ -35,14 +36,12 @@ class BitwardenClipboardManagerImpl(
                 },
         )
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-            val descriptor = toastDescriptorOverride ?: text
-            Toast
-                .makeText(
-                    context,
-                    context.resources.getString(R.string.value_has_been_copied, descriptor),
-                    Toast.LENGTH_SHORT,
-                )
-                .show()
+            toastManager.show(
+                message = context.resources.getString(
+                    R.string.value_has_been_copied,
+                    toastDescriptorOverride ?: text,
+                ),
+            )
         }
     }
 
