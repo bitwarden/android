@@ -33,7 +33,7 @@ fun ItemSearchContent(
         if (viewState.hasLocalAndSharedItems) {
             item {
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.local_codes),
+                    label = viewState.localListHeader(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
