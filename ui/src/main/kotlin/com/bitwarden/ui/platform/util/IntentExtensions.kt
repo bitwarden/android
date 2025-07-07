@@ -30,18 +30,14 @@ inline fun <reified T> Bundle.getSafeParcelableExtra(
  * Validate if there's anything suspicious with the intent received.
  */
 fun Intent.validate() {
-    @Suppress("TooGenericExceptionCaught")
     try {
         // This will force Android to attempt unparcelling the extras
         this.extras?.getBundle("trashstringwhichhasnousebuttocheckunparcel")
-    } catch (ex: Exception) {
-        if (ex is BadParcelableException ||
-            ex is ClassNotFoundException ||
-            ex is RuntimeException
-        ) {
-            this.replaceExtras(null as Bundle?)
-        } else {
-            throw ex // rethrow if it’s an unexpected exception
-        }
+    } catch (_: BadParcelableException) {
+        this.replaceExtras(null as Bundle?)
+    } catch (_: ClassNotFoundException) {
+        this.replaceExtras(null as Bundle?)
+    } catch (_: RuntimeException) {
+        this.replaceExtras(null as Bundle?)
     }
 }
