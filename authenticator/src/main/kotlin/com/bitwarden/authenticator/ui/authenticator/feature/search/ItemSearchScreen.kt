@@ -1,7 +1,6 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.search
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -75,29 +74,24 @@ fun ItemSearchScreen(
             )
         },
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-        ) {
-            val innerModifier = Modifier
-                .fillMaxSize()
+        when (val viewState = state.viewState) {
+            is ItemSearchState.ViewState.Content -> {
+                ItemSearchContent(
+                    viewState = viewState,
+                    searchHandlers = searchHandlers,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues = innerPadding),
+                )
+            }
 
-            when (val viewState = state.viewState) {
-                is ItemSearchState.ViewState.Content -> {
-                    ItemSearchContent(
-                        viewState = viewState,
-                        searchHandlers = searchHandlers,
-                        modifier = innerModifier,
-                    )
-                }
-
-                is ItemSearchState.ViewState.Empty -> {
-                    ItemSearchEmptyContent(
-                        viewState = viewState,
-                        modifier = innerModifier,
-                    )
-                }
+            is ItemSearchState.ViewState.Empty -> {
+                ItemSearchEmptyContent(
+                    viewState = viewState,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues = innerPadding),
+                )
             }
         }
     }
