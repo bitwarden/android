@@ -32,6 +32,7 @@ import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.imageRes
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.isContinueButtonEnabled
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.shouldUseNfc
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.showPasswordInput
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -249,7 +250,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                             )
                             TwoFactorLoginEvent.NavigateToWebAuth(uri = uri)
                         }
-                        ?: TwoFactorLoginEvent.ShowToast(
+                        ?: TwoFactorLoginEvent.ShowSnackbar(
                             message = R.string.there_was_an_error_starting_web_authn_two_factor_authentication.asText(),
                         ),
                 )
@@ -453,7 +454,7 @@ class TwoFactorLoginViewModel @Inject constructor(
             ResendEmailResult.Success -> {
                 if (action.isUserInitiated) {
                     sendEvent(
-                        TwoFactorLoginEvent.ShowToast(
+                        TwoFactorLoginEvent.ShowSnackbar(
                             message = R.string.verification_email_sent.asText(),
                         ),
                     )
@@ -710,11 +711,25 @@ sealed class TwoFactorLoginEvent {
     data class NavigateToRecoveryCode(val uri: Uri) : TwoFactorLoginEvent()
 
     /**
-     * Shows a toast with the given [message].
+     * Shows a snackbar with the given [data].
      */
-    data class ShowToast(
-        val message: Text,
-    ) : TwoFactorLoginEvent()
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : TwoFactorLoginEvent() {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 }
 
 /**

@@ -21,7 +21,7 @@ class Fido2CredentialAuthenticationUserInterfaceImpl(
     override suspend fun checkUser(
         options: CheckUserOptions,
         hint: UiHint,
-    ): CheckUserResult = CheckUserResult(true, true)
+    ): CheckUserResult = CheckUserResult(userPresent = true, userVerified = true)
 
     override suspend fun checkUserAndPickCredentialForCreation(
         options: CheckUserOptions,

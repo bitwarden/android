@@ -1,7 +1,6 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.search
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,6 +25,7 @@ import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaf
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.bottomDivider
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 
 /**
  * The search screen for authenticator items.
@@ -67,36 +67,31 @@ fun ItemSearchScreen(
                 onSearchTermChange = searchHandlers.onSearchTermChange,
                 scrollBehavior = scrollBehavior,
                 navigationIcon = NavigationIcon(
-                    navigationIcon = painterResource(id = R.drawable.ic_back),
+                    navigationIcon = painterResource(id = BitwardenDrawable.ic_back),
                     navigationIconContentDescription = stringResource(id = R.string.back),
                     onNavigationIconClick = searchHandlers.onBackClick,
                 ),
             )
         },
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-        ) {
-            val innerModifier = Modifier
-                .fillMaxSize()
+        when (val viewState = state.viewState) {
+            is ItemSearchState.ViewState.Content -> {
+                ItemSearchContent(
+                    viewState = viewState,
+                    searchHandlers = searchHandlers,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues = innerPadding),
+                )
+            }
 
-            when (val viewState = state.viewState) {
-                is ItemSearchState.ViewState.Content -> {
-                    ItemSearchContent(
-                        viewState = viewState,
-                        searchHandlers = searchHandlers,
-                        modifier = innerModifier,
-                    )
-                }
-
-                is ItemSearchState.ViewState.Empty -> {
-                    ItemSearchEmptyContent(
-                        viewState = viewState,
-                        modifier = innerModifier,
-                    )
-                }
+            is ItemSearchState.ViewState.Empty -> {
+                ItemSearchEmptyContent(
+                    viewState = viewState,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues = innerPadding),
+                )
             }
         }
     }

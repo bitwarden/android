@@ -130,6 +130,7 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 showInlineAutofillOption = true,
+                showPasskeyManagementRow = false,
             ),
             viewModel.stateFlow.value,
         )
@@ -287,11 +288,12 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `on UseInlineAutofillClick should update the state and save the new value to settings`() {
+    fun `on AutofillStyleSelected should update the state and save the new value to settings`() {
         val viewModel = createViewModel()
-        viewModel.trySendAction(AutoFillAction.UseInlineAutofillClick(false))
+        val autofillStyle = AutofillStyle.POPUP
+        viewModel.trySendAction(AutoFillAction.AutofillStyleSelected(style = autofillStyle))
         assertEquals(
-            DEFAULT_STATE.copy(isUseInlineAutoFillEnabled = false),
+            DEFAULT_STATE.copy(autofillStyle = autofillStyle),
             viewModel.stateFlow.value,
         )
         verify { settingsRepository.isInlineAutofillEnabled = false }
@@ -434,6 +436,20 @@ class AutoFillViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when PrivilegedAppsClick action is handled the correct NavigateToPrivilegedAppsListScreen event is sent`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AutoFillAction.PrivilegedAppsClick)
+                assertEquals(
+                    AutoFillEvent.NavigateToPrivilegedAppsListScreen,
+                    awaitItem(),
+                )
+            }
+        }
+
     private fun createViewModel(
         state: AutoFillState? = DEFAULT_STATE,
     ): AutoFillViewModel = AutoFillViewModel(
@@ -451,7 +467,7 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     isAccessibilityAutofillEnabled = false,
     isAutoFillServicesEnabled = false,
     isCopyTotpAutomaticallyEnabled = false,
-    isUseInlineAutoFillEnabled = true,
+    autofillStyle = AutofillStyle.INLINE,
     showInlineAutofillOption = false,
     showPasskeyManagementRow = true,
     defaultUriMatchType = UriMatchType.DOMAIN,

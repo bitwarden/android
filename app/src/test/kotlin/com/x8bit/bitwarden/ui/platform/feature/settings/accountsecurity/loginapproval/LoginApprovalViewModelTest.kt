@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginap
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
@@ -18,11 +19,16 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,6 +60,12 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
         } returns mutableAuthRequestSharedFlow
         coEvery { getAuthRequestByIdFlow(REQUEST_ID) } returns mutableAuthRequestSharedFlow
         every { userStateFlow } returns mutableUserStateFlow
+    }
+    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+        every { sendSnackbarData(data = any(), relay = SnackbarRelay.LOGIN_APPROVAL) } just runs
+    }
+    private val toastManager: ToastManager = mockk {
+        every { show(messageId = any()) } just runs
     }
 
     @BeforeEach
@@ -270,13 +282,15 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(LoginApprovalAction.ApproveRequestClick)
-            assertEquals(
-                LoginApprovalEvent.ShowToast(R.string.login_approved.asText()),
-                awaitItem(),
-            )
             assertEquals(LoginApprovalEvent.NavigateBack, awaitItem())
         }
 
+        verify {
+            snackbarRelayManager.sendSnackbarData(
+                data = BitwardenSnackbarData(message = R.string.login_approved.asText()),
+                relay = SnackbarRelay.LOGIN_APPROVAL,
+            )
+        }
         coVerify {
             mockAuthRepository.updateAuthRequest(
                 requestId = REQUEST_ID,
@@ -317,11 +331,10 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 viewModel.trySendAction(LoginApprovalAction.ApproveRequestClick)
-                assertEquals(
-                    LoginApprovalEvent.ShowToast(R.string.login_approved.asText()),
-                    awaitItem(),
-                )
                 assertEquals(LoginApprovalEvent.ExitApp, awaitItem())
+            }
+            verify {
+                toastManager.show(messageId = R.string.login_approved)
             }
         }
 
@@ -339,13 +352,14 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick)
-            assertEquals(
-                LoginApprovalEvent.ShowToast(R.string.log_in_denied.asText()),
-                awaitItem(),
-            )
             assertEquals(LoginApprovalEvent.NavigateBack, awaitItem())
         }
-
+        verify {
+            snackbarRelayManager.sendSnackbarData(
+                data = BitwardenSnackbarData(message = R.string.log_in_denied.asText()),
+                relay = SnackbarRelay.LOGIN_APPROVAL,
+            )
+        }
         coVerify {
             mockAuthRepository.updateAuthRequest(
                 requestId = REQUEST_ID,
@@ -386,11 +400,10 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick)
-                assertEquals(
-                    LoginApprovalEvent.ShowToast(R.string.log_in_denied.asText()),
-                    awaitItem(),
-                )
                 assertEquals(LoginApprovalEvent.ExitApp, awaitItem())
+            }
+            verify {
+                toastManager.show(messageId = R.string.log_in_denied)
             }
         }
 
@@ -429,6 +442,8 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
         clock = fixedClock,
         authRepository = mockAuthRepository,
         specialCircumstanceManager = mockSpecialCircumstanceManager,
+        snackbarRelayManager = snackbarRelayManager,
+        toastManager = toastManager,
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
             every { toLoginApprovalArgs() } returns LoginApprovalArgs(fingerprint = FINGERPRINT)

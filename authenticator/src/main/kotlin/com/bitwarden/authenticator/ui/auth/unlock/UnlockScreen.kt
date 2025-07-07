@@ -1,6 +1,5 @@
 package com.bitwarden.authenticator.ui.auth.unlock
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,7 +20,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -37,6 +35,7 @@ import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaf
 import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 
 /**
@@ -50,18 +49,11 @@ fun UnlockScreen(
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     onUnlocked: () -> Unit,
 ) {
-
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
     var showBiometricsPrompt by remember { mutableStateOf(true) }
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            is UnlockEvent.ShowToast -> {
-                Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
-            }
-
             UnlockEvent.NavigateToItemListing -> onUnlocked()
         }
     }
@@ -131,7 +123,7 @@ fun UnlockScreen(
                         .height(74.dp)
                         .fillMaxWidth(),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                    painter = painterResource(id = R.drawable.ic_logo_horizontal),
+                    painter = painterResource(id = BitwardenDrawable.ic_logo_horizontal),
                     contentDescription = stringResource(R.string.bitwarden_authenticator),
                 )
                 Spacer(modifier = Modifier.height(32.dp))

@@ -192,7 +192,7 @@ class SendViewModel @Inject constructor(
 
             DeleteSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(SendEvent.ShowToast(R.string.send_deleted.asText()))
+                sendEvent(SendEvent.ShowSnackbar(R.string.send_deleted.asText()))
             }
         }
     }
@@ -217,7 +217,7 @@ class SendViewModel @Inject constructor(
 
             is RemovePasswordSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(SendEvent.ShowToast(message = R.string.password_removed.asText()))
+                sendEvent(SendEvent.ShowSnackbar(message = R.string.password_removed.asText()))
             }
         }
     }
@@ -809,10 +809,19 @@ sealed class SendEvent {
      */
     data class ShowSnackbar(
         val data: BitwardenSnackbarData,
-    ) : SendEvent(), BackgroundEvent
-
-    /**
-     * Show a toast to the user.
-     */
-    data class ShowToast(val message: Text) : SendEvent()
+    ) : SendEvent(), BackgroundEvent {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 }

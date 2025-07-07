@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.autofill.model.FilledData
 import com.x8bit.bitwarden.data.autofill.model.FilledPartition
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.util.buildFilledItemOrNull
+import timber.log.Timber
 
 /**
  * The maximum amount of filled partitions the user will see. Viewing the rest will require opening
@@ -34,6 +35,7 @@ class FilledDataBuilderImpl(
     private val autofillCipherProvider: AutofillCipherProvider,
 ) : FilledDataBuilder {
     override suspend fun build(autofillRequest: AutofillRequest.Fillable): FilledData {
+        Timber.d("Autofill request constructing FilledData")
         val isVaultLocked = autofillCipherProvider.isVaultLocked()
 
         // Subtract one to make sure there is space for the vault item.
@@ -84,7 +86,7 @@ class FilledDataBuilderImpl(
                                 )
                             }
                     }
-                    ?: emptyList()
+                    .orEmpty()
             }
         }
 

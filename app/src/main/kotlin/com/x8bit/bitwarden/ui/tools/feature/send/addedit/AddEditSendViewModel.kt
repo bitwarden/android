@@ -408,14 +408,14 @@ class AddEditSendViewModel @Inject constructor(
     }
 
     private fun handleDeleteClick() {
-        onEdit {
+        onEdit { editItem ->
             mutableStateFlow.update {
                 it.copy(
                     dialogState = AddEditSendState.DialogState.Loading(R.string.deleting.asText()),
                 )
             }
             viewModelScope.launch {
-                val result = vaultRepo.deleteSend(it.sendItemId)
+                val result = vaultRepo.deleteSend(editItem.sendItemId)
                 sendAction(AddEditSendAction.Internal.DeleteSendResultReceive(result))
             }
         }
@@ -432,7 +432,7 @@ class AddEditSendViewModel @Inject constructor(
     }
 
     private fun handleRemovePasswordClick() {
-        onEdit {
+        onEdit { editItem ->
             mutableStateFlow.update {
                 it.copy(
                     dialogState = AddEditSendState.DialogState.Loading(
@@ -441,7 +441,7 @@ class AddEditSendViewModel @Inject constructor(
                 )
             }
             viewModelScope.launch {
-                val result = vaultRepo.removePasswordSend(it.sendItemId)
+                val result = vaultRepo.removePasswordSend(editItem.sendItemId)
                 sendAction(AddEditSendAction.Internal.RemovePasswordResultReceive(result))
             }
         }

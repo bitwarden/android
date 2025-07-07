@@ -3,47 +3,36 @@ package com.bitwarden.authenticator.ui.authenticator.feature.search
 import androidx.lifecycle.SavedStateHandle
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
+import com.bitwarden.authenticator.data.authenticator.manager.util.createMockSharedAuthenticatorItemSource
 import com.bitwarden.authenticator.data.authenticator.manager.util.createMockVerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
-import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
-import com.bitwarden.authenticator.data.authenticator.repository.util.itemsOrEmpty
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.util.asText
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class ItemSearchViewModelTest : BaseViewModelTest() {
 
     private val mutableAuthCodesStateFlow =
         MutableStateFlow<DataState<List<VerificationCodeItem>>>(DataState.Loading)
-    private val mutableSharedCodesFlow = MutableStateFlow(
-        SharedVerificationCodesState.Success(SHARED_ITEMS),
+    private val mutableSharedCodesFlow = MutableStateFlow<SharedVerificationCodesState>(
+        SharedVerificationCodesState.Success(items = SHARED_ITEMS),
     )
     private val mockAuthenticatorRepository = mockk<AuthenticatorRepository> {
         every { getLocalVerificationCodesFlow() } returns mutableAuthCodesStateFlow
         every { sharedCodesStateFlow } returns mutableSharedCodesFlow
     }
     private val mockClipboardManager = mockk<BitwardenClipboardManager>()
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(SharedVerificationCodesState::itemsOrEmpty)
-    }
-
-    @AfterEach
-    fun teardown() {
-        unmockkStatic(SharedVerificationCodesState::itemsOrEmpty)
-    }
 
     @Test
     fun `initial state is correct`() {
@@ -66,16 +55,17 @@ class ItemSearchViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             ItemSearchState.ViewState.Content(
-                displayItems = SHARED_AND_LOCAL_DISPLAY_ITEMS,
+                itemList = LOCAL_DISPLAY_ITEMS,
+                sharedItems = SHARED_DISPLAY_ITEMS,
             ),
             viewModel.stateFlow.value.viewState,
         )
     }
 
     @Test
-    fun `state contains only local items when shared items are not available`() {
+    fun `state contains only local items when there are no shared items`() {
         val viewModel = createViewModel()
-        every { mutableSharedCodesFlow.value.itemsOrEmpty } returns emptyList()
+        mutableSharedCodesFlow.value = SharedVerificationCodesState.Success(items = emptyList())
         mutableAuthCodesStateFlow.value = DataState.Loaded(LOCAL_ITEMS)
 
         viewModel.trySendAction(
@@ -84,30 +74,40 @@ class ItemSearchViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             ItemSearchState.ViewState.Content(
-                displayItems = listOf(SHARED_AND_LOCAL_DISPLAY_ITEMS[1]),
+                itemList = LOCAL_DISPLAY_ITEMS,
+                sharedItems = SharedCodesDisplayState.Codes(sections = emptyList()),
             ),
             viewModel.stateFlow.value.viewState,
         )
     }
 
-    private fun createItemSearchState(
-        viewState: ItemSearchState.ViewState = ItemSearchState.ViewState.Empty(message = null),
-    ) = ItemSearchState(
-        searchTerm = "",
-        viewState = viewState,
-    )
+    @Test
+    fun `state contains only local items when shared items are not available`() {
+        val viewModel = createViewModel()
+        mutableSharedCodesFlow.value = SharedVerificationCodesState.SyncNotEnabled
+        mutableAuthCodesStateFlow.value = DataState.Loaded(data = LOCAL_ITEMS)
 
-    private fun createViewModel(
-        initialState: ItemSearchState = createItemSearchState(),
-    ): ItemSearchViewModel {
-        return ItemSearchViewModel(
-            SavedStateHandle().apply {
-                set("state", initialState)
-            },
-            mockClipboardManager,
-            mockAuthenticatorRepository,
+        viewModel.trySendAction(ItemSearchAction.SearchTermChange(searchTerm = "I"))
+
+        assertEquals(
+            ItemSearchState.ViewState.Content(
+                itemList = LOCAL_DISPLAY_ITEMS.map { it.copy(showMoveToBitwarden = false) },
+                sharedItems = SharedCodesDisplayState.Codes(sections = emptyList()),
+            ),
+            viewModel.stateFlow.value.viewState,
         )
     }
+
+    private fun createViewModel(
+        initialState: ItemSearchState? = null,
+    ): ItemSearchViewModel =
+        ItemSearchViewModel(
+            savedStateHandle = SavedStateHandle().apply {
+                set("state", initialState)
+            },
+            clipboardManager = mockClipboardManager,
+            authenticatorRepository = mockAuthenticatorRepository,
+        )
 }
 
 private val LOCAL_ITEMS = listOf(
@@ -115,42 +115,55 @@ private val LOCAL_ITEMS = listOf(
 )
 
 private val SHARED_ITEMS = listOf(
-    VerificationCodeItem(
-        "123456",
-        periodSeconds = 60,
-        timeLeftSeconds = 30,
-        issueTime = 1,
-        issuer = "Issuer",
-        label = "accountName",
-        id = "123",
-        source = AuthenticatorItem.Source.Shared(
-            userId = "1",
-            nameOfUser = "John Test",
-            email = "test@test.com",
-            environmentLabel = "1234",
+    createMockVerificationCodeItem(
+        number = 2,
+        source = createMockSharedAuthenticatorItemSource(number = 2),
+    ),
+)
+
+private val SHARED_DISPLAY_ITEMS = SharedCodesDisplayState.Codes(
+    sections = listOf(
+        SharedCodesDisplayState.SharedCodesAccountSection(
+            id = "mockUserId-2",
+            label = R.string.shared_accounts_header.asText(
+                "mockEmail-2",
+                "mockkEnvironmentLabel-2",
+                1,
+            ),
+            codes = listOf(
+                VerificationCodeDisplayItem(
+                    id = "mockId-2",
+                    title = "mockIssuer-2",
+                    subtitle = "mockLabel-2",
+                    timeLeftSeconds = 120,
+                    periodSeconds = 30,
+                    alertThresholdSeconds = 7,
+                    authCode = "mockCode-2",
+                    favorite = false,
+                    allowLongPressActions = false,
+                    showMoveToBitwarden = false,
+                ),
+            ),
+            isExpanded = true,
         ),
     ),
 )
 
-private val SHARED_AND_LOCAL_DISPLAY_ITEMS = listOf(
-    ItemSearchState.DisplayItem(
-        id = SHARED_ITEMS[0].id,
-        authCode = SHARED_ITEMS[0].code,
-        title = SHARED_ITEMS[0].issuer!!,
-        periodSeconds = SHARED_ITEMS[0].periodSeconds,
-        timeLeftSeconds = SHARED_ITEMS[0].timeLeftSeconds,
-        alertThresholdSeconds = 7,
-        startIcon = IconData.Local(iconRes = R.drawable.ic_login_item),
-        subtitle = SHARED_ITEMS[0].label,
-    ),
-    ItemSearchState.DisplayItem(
+private val LOCAL_DISPLAY_ITEMS = listOf(
+    VerificationCodeDisplayItem(
         id = LOCAL_ITEMS[0].id,
         authCode = LOCAL_ITEMS[0].code,
         title = LOCAL_ITEMS[0].issuer!!,
         periodSeconds = LOCAL_ITEMS[0].periodSeconds,
         timeLeftSeconds = LOCAL_ITEMS[0].timeLeftSeconds,
         alertThresholdSeconds = 7,
-        startIcon = IconData.Local(iconRes = R.drawable.ic_login_item),
+        startIcon = IconData.Local(
+            iconRes = BitwardenDrawable.ic_login_item,
+            testTag = "BitwardenIcon",
+        ),
         subtitle = LOCAL_ITEMS[0].label,
+        favorite = false,
+        allowLongPressActions = true,
+        showMoveToBitwarden = true,
     ),
 )

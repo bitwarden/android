@@ -2,8 +2,6 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsEnabled
-import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filterToOne
@@ -40,6 +38,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     private var onNavigateToBlockAutoFillScreenCalled = false
     private var onNavigateToSetupAutoFillScreenCalled = false
     private var onNavigateToAboutPrivilegedAppsScreenCalled = false
+    private var onNavigateToPrivilegedAppsListCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<AutoFillEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -65,6 +64,9 @@ class AutoFillScreenTest : BitwardenComposeTest() {
                 onNavigateToSetupAutofill = { onNavigateToSetupAutoFillScreenCalled = true },
                 onNavigateToAboutPrivilegedAppsScreen = {
                     onNavigateToAboutPrivilegedAppsScreenCalled = true
+                },
+                onNavigateToPrivilegedAppsList = {
+                    onNavigateToPrivilegedAppsListCalled = true
                 },
                 viewModel = viewModel,
             )
@@ -229,60 +231,85 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on use inline auto fill toggle should send UseInlineAutofillClick`() {
+    fun `on inline autofill style selected should send AutofillStyleSelected`() {
         mutableStateFlow.update {
             it.copy(
                 isAutoFillServicesEnabled = true,
-                isUseInlineAutoFillEnabled = false,
+                autofillStyle = AutofillStyle.POPUP,
             )
         }
         composeTestRule
-            .onNodeWithText("Use inline autofill")
+            .onNodeWithContentDescription(
+                label = "Popup (shows over input field). Display autofill suggestions. " +
+                    "Choose how your autofill suggestions will appear when you sign in " +
+                    "to other apps on your device.",
+            )
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(AutoFillAction.UseInlineAutofillClick(true)) }
+
+        composeTestRule
+            .onNodeWithText(text = "Inline (shows in keyboard)")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(AutoFillAction.AutofillStyleSelected(AutofillStyle.INLINE))
+        }
     }
 
     @Test
-    fun `use inline autofill should be toggled on or off according to state`() {
-        composeTestRule
-            .onNodeWithText("Use inline autofill")
-            .performScrollTo()
-            .assertIsOff()
-        mutableStateFlow.update { it.copy(isUseInlineAutoFillEnabled = true) }
-        composeTestRule
-            .onNodeWithText("Use inline autofill")
-            .performScrollTo()
-            .assertIsOn()
-    }
-
-    @Test
-    fun `use inline autofill should be disabled or enabled according to state`() {
+    fun `autofill style should be display selection according to state`() {
         mutableStateFlow.update {
             it.copy(
                 isAutoFillServicesEnabled = true,
-                isUseInlineAutoFillEnabled = true,
+                autofillStyle = AutofillStyle.INLINE,
             )
+        }
+        composeTestRule
+            .onNodeWithContentDescription(
+                label = "Inline (shows in keyboard). Display autofill suggestions. " +
+                    "Choose how your autofill suggestions will appear when you sign in " +
+                    "to other apps on your device.",
+            )
+            .performScrollTo()
+            .assertIsDisplayed()
+        mutableStateFlow.update { it.copy(autofillStyle = AutofillStyle.POPUP) }
+        composeTestRule
+            .onNodeWithContentDescription(
+                label = "Popup (shows over input field). Display autofill suggestions. " +
+                    "Choose how your autofill suggestions will appear when you sign in " +
+                    "to other apps on your device.",
+            )
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `use display autofill suggestions should be visible or enabled according to state`() {
+        mutableStateFlow.update {
+            it.copy(isAutoFillServicesEnabled = true)
         }
 
         composeTestRule
-            .onNodeWithText("Use inline autofill")
+            .onNodeWithContentDescription(
+                label = "Inline (shows in keyboard). Display autofill suggestions. " +
+                    "Choose how your autofill suggestions will appear when you sign in " +
+                    "to other apps on your device.",
+            )
             .performScrollTo()
-            .assertIsOn()
-            .assertIsEnabled()
+            .assertIsDisplayed()
 
         mutableStateFlow.update {
-            it.copy(
-                isAutoFillServicesEnabled = false,
-                isUseInlineAutoFillEnabled = true,
-            )
+            it.copy(isAutoFillServicesEnabled = false)
         }
 
         composeTestRule
-            .onNodeWithText("Use inline autofill")
-            .performScrollTo()
-            .assertIsOn()
-            .assertIsNotEnabled()
+            .onNodeWithContentDescription(
+                label = "Inline (shows in keyboard). Display autofill suggestions. " +
+                    "Choose how your autofill suggestions will appear when you sign in " +
+                    "to other apps on your device.",
+            )
+            .assertDoesNotExist()
     }
 
     @Suppress("MaxLineLength")
@@ -315,11 +342,18 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `use inline autofill should be displayed according to state`() {
         mutableStateFlow.update {
-            it.copy(showInlineAutofillOption = true)
+            it.copy(
+                isAutoFillServicesEnabled = true,
+                showInlineAutofillOption = true,
+            )
         }
 
         composeTestRule
-            .onNodeWithText(text = "Use inline autofill")
+            .onNodeWithContentDescription(
+                label = "Inline (shows in keyboard). Display autofill suggestions. " +
+                    "Choose how your autofill suggestions will appear when you sign in " +
+                    "to other apps on your device.",
+            )
             .performScrollTo()
             .assertIsDisplayed()
 
@@ -327,7 +361,13 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             it.copy(showInlineAutofillOption = false)
         }
 
-        composeTestRule.onNodeWithText(text = "Use inline autofill").assertDoesNotExist()
+        composeTestRule
+            .onNodeWithContentDescription(
+                label = "Inline (shows in keyboard). Display autofill suggestions. " +
+                    "Choose how your autofill suggestions will appear when you sign in " +
+                    "to other apps on your device.",
+            )
+            .assertDoesNotExist()
     }
 
     @Test
@@ -517,6 +557,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `BrowserAutofillSettingsCard is only displayed when there are options in the list`() {
+        mutableStateFlow.update { it.copy(isAutoFillServicesEnabled = true) }
         val browserAutofillSupportingText =
             "Improves login filling for supported websites on selected browsers. " +
                 "Once enabled, you’ll be directed to browser settings to enable " +
@@ -627,6 +668,24 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(AutoFillAction.AboutPrivilegedAppsClick)
         }
     }
+
+    @Test
+    fun `on NavigateToPrivilegedAppsList should call onNavigateToPrivilegedAppsList`() {
+        mutableEventFlow.tryEmit(AutoFillEvent.NavigateToPrivilegedAppsListScreen)
+        assertTrue(onNavigateToPrivilegedAppsListCalled)
+    }
+
+    @Test
+    fun `privileged apps row click should send PrivilegedAppsClick`() {
+        mutableStateFlow.update { it.copy(isUserManagedPrivilegedAppsEnabled = true) }
+        composeTestRule
+            .onNodeWithText("Privileged apps")
+            .performScrollTo()
+            .performClick()
+        verify {
+            viewModel.trySendAction(AutoFillAction.PrivilegedAppsClick)
+        }
+    }
 }
 
 private val DEFAULT_STATE: AutoFillState = AutoFillState(
@@ -634,7 +693,7 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     isAccessibilityAutofillEnabled = false,
     isAutoFillServicesEnabled = false,
     isCopyTotpAutomaticallyEnabled = false,
-    isUseInlineAutoFillEnabled = false,
+    autofillStyle = AutofillStyle.INLINE,
     showInlineAutofillOption = true,
     showPasskeyManagementRow = true,
     defaultUriMatchType = UriMatchType.DOMAIN,

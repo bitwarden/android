@@ -8,6 +8,8 @@ import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
@@ -52,7 +54,11 @@ class AutoFillViewModel @Inject constructor(
                     .value,
                 isAutoFillServicesEnabled = settingsRepository.isAutofillEnabledStateFlow.value,
                 isCopyTotpAutomaticallyEnabled = !settingsRepository.isAutoCopyTotpDisabled,
-                isUseInlineAutoFillEnabled = settingsRepository.isInlineAutofillEnabled,
+                autofillStyle = if (settingsRepository.isInlineAutofillEnabled) {
+                    AutofillStyle.INLINE
+                } else {
+                    AutofillStyle.POPUP
+                },
                 showInlineAutofillOption = isBuildVersionAtLeast(Build.VERSION_CODES.R),
                 showPasskeyManagementRow = isBuildVersionAtLeast(
                     Build.VERSION_CODES.UPSIDE_DOWN_CAKE,
@@ -117,13 +123,18 @@ class AutoFillViewModel @Inject constructor(
         is AutoFillAction.DefaultUriMatchTypeSelect -> handleDefaultUriMatchTypeSelect(action)
         AutoFillAction.BlockAutoFillClick -> handleBlockAutoFillClick()
         AutoFillAction.UseAccessibilityAutofillClick -> handleUseAccessibilityAutofillClick()
-        is AutoFillAction.UseInlineAutofillClick -> handleUseInlineAutofillClick(action)
+        is AutoFillAction.AutofillStyleSelected -> handleAutofillStyleSelected(action)
         AutoFillAction.PasskeyManagementClick -> handlePasskeyManagementClick()
         is AutoFillAction.Internal -> handleInternalAction(action)
         AutoFillAction.AutofillActionCardCtaClick -> handleAutofillActionCardCtaClick()
         AutoFillAction.DismissShowAutofillActionCard -> handleDismissShowAutofillActionCard()
         is AutoFillAction.BrowserAutofillSelected -> handleBrowserAutofillSelected(action)
         AutoFillAction.AboutPrivilegedAppsClick -> handleAboutPrivilegedAppsClick()
+        AutoFillAction.PrivilegedAppsClick -> handlePrivilegedAppsClick()
+    }
+
+    private fun handlePrivilegedAppsClick() {
+        sendEvent(AutoFillEvent.NavigateToPrivilegedAppsListScreen)
     }
 
     private fun handleInternalAction(action: AutoFillAction.Internal) {
@@ -223,9 +234,9 @@ class AutoFillViewModel @Inject constructor(
         sendEvent(AutoFillEvent.NavigateToAccessibilitySettings)
     }
 
-    private fun handleUseInlineAutofillClick(action: AutoFillAction.UseInlineAutofillClick) {
-        settingsRepository.isInlineAutofillEnabled = action.isEnabled
-        mutableStateFlow.update { it.copy(isUseInlineAutoFillEnabled = action.isEnabled) }
+    private fun handleAutofillStyleSelected(action: AutoFillAction.AutofillStyleSelected) {
+        settingsRepository.isInlineAutofillEnabled = action.style == AutofillStyle.INLINE
+        mutableStateFlow.update { it.copy(autofillStyle = action.style) }
     }
 
     private fun handlePasskeyManagementClick() {
@@ -276,7 +287,7 @@ data class AutoFillState(
     val isAccessibilityAutofillEnabled: Boolean,
     val isAutoFillServicesEnabled: Boolean,
     val isCopyTotpAutomaticallyEnabled: Boolean,
-    val isUseInlineAutoFillEnabled: Boolean,
+    val autofillStyle: AutofillStyle,
     val showInlineAutofillOption: Boolean,
     val showPasskeyManagementRow: Boolean,
     val defaultUriMatchType: UriMatchType,
@@ -285,13 +296,31 @@ data class AutoFillState(
     val browserAutofillSettingsOptions: ImmutableList<BrowserAutofillSettingsOption>,
     val isUserManagedPrivilegedAppsEnabled: Boolean,
 ) : Parcelable {
+    /**
+     * Whether or not the dropdown controlling the [autofillStyle] value is displayed.
+     */
+    val showInlineAutofill: Boolean get() = isAutoFillServicesEnabled && showInlineAutofillOption
 
     /**
-     * Whether or not the toggle controlling the [isUseInlineAutoFillEnabled] value can be
-     * interacted with.
+     * Whether or not the toggles for enabling 3rd-party autofill support should be displayed.
      */
-    val canInteractWithInlineAutofillToggle: Boolean
-        get() = isAutoFillServicesEnabled
+    val showBrowserSettingOptions: Boolean
+        get() = isAutoFillServicesEnabled && browserAutofillSettingsOptions.isNotEmpty()
+}
+
+/**
+ * The visual style of autofill that should be used.
+ */
+enum class AutofillStyle(val label: Text) {
+    /**
+     * Displays the autofill data in the keyboard.
+     */
+    INLINE(label = R.string.autofill_suggestions_inline.asText()),
+
+    /**
+     * Displays the autofill data as a popup attached to the field you are filling.
+     */
+    POPUP(label = R.string.autofill_suggestions_popup.asText()),
 }
 
 @Suppress("MaxLineLength")
@@ -341,13 +370,6 @@ sealed class AutoFillEvent {
     data object NavigateToSettings : AutoFillEvent()
 
     /**
-     * Displays a toast with the given [Text].
-     */
-    data class ShowToast(
-        val text: Text,
-    ) : AutoFillEvent()
-
-    /**
      * Navigate to the Autofill settings of the specified [browserPackage].
      */
     data class NavigateToBrowserAutofillSettings(
@@ -363,6 +385,11 @@ sealed class AutoFillEvent {
      * Navigate to the about privileged apps screen.
      */
     data object NavigateToAboutPrivilegedAppsScreen : AutoFillEvent()
+
+    /**
+     * Navigate to the privileged apps list screen.
+     */
+    data object NavigateToPrivilegedAppsListScreen : AutoFillEvent()
 }
 
 /**
@@ -415,8 +442,8 @@ sealed class AutoFillAction {
     /**
      * User clicked use inline autofill button.
      */
-    data class UseInlineAutofillClick(
-        val isEnabled: Boolean,
+    data class AutofillStyleSelected(
+        val style: AutofillStyle,
     ) : AutoFillAction()
 
     /**
@@ -443,6 +470,11 @@ sealed class AutoFillAction {
      * User has clicked the about privileged apps help link.
      */
     data object AboutPrivilegedAppsClick : AutoFillAction()
+
+    /**
+     * User has clicked the privileged apps row.
+     */
+    data object PrivilegedAppsClick : AutoFillAction()
 
     /**
      * Internal actions.

@@ -22,18 +22,17 @@ class BitwardenGeneratorTileService : TileService() {
 
     override fun onClick() {
         if (isLocked) {
-            unlockAndRun(Runnable { launchGenerator() })
+            unlockAndRun { launchGenerator() }
         } else {
             launchGenerator()
         }
     }
 
-    @Suppress("DEPRECATION")
-    @SuppressLint("StartActivityAndCollapseDeprecated")
     private fun launchGenerator() {
         val intent = intentManager.createTileIntent("bitwarden://password_generator")
-
         if (!isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
+            @Suppress("DEPRECATION")
+            @SuppressLint("StartActivityAndCollapseDeprecated")
             startActivityAndCollapse(intent)
         } else {
             startActivityAndCollapse(intentManager.createTilePendingIntent(0, intent))

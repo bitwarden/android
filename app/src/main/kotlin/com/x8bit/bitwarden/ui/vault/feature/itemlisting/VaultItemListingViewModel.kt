@@ -9,9 +9,9 @@ import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.map
-import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.fido.Fido2CredentialAutofillView
@@ -49,11 +49,13 @@ import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.credentials.util.getCreatePasskeyCredentialRequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
@@ -102,7 +104,10 @@ import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -136,8 +141,10 @@ class VaultItemListingViewModel @Inject constructor(
     private val bitwardenCredentialManager: BitwardenCredentialManager,
     private val organizationEventManager: OrganizationEventManager,
     private val networkConnectionManager: NetworkConnectionManager,
-    private val snackbarRelayManager: SnackbarRelayManager,
+    private val featureFlagManager: FeatureFlagManager,
     private val relyingPartyParser: RelyingPartyParser,
+    private val toastManager: ToastManager,
+    snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -165,6 +172,7 @@ class VaultItemListingViewModel @Inject constructor(
             policyDisablesSend = policyManager
                 .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
                 .any(),
+            restrictItemTypesPolicyOrgIds = persistentListOf(),
             autofillSelectionData = specialCircumstance?.toAutofillSelectionDataOrNull(),
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
             totpData = specialCircumstance?.toTotpDataOrNull(),
@@ -195,8 +203,28 @@ class VaultItemListingViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        policyManager
+            .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            .combine(
+                featureFlagManager.getFeatureFlagFlow(FlagKey.RemoveCardPolicy),
+            ) { policies, enabledFlag ->
+                if (enabledFlag) {
+                    policies.map { it.organizationId }
+                } else {
+                    emptyList()
+                }
+            }
+            .map { VaultItemListingsAction.Internal.RestrictItemTypesPolicyUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         snackbarRelayManager
-            .getSnackbarDataFlow(SnackbarRelay.SEND_DELETED, SnackbarRelay.SEND_UPDATED)
+            .getSnackbarDataFlow(
+                SnackbarRelay.CIPHER_DELETED,
+                SnackbarRelay.CIPHER_RESTORED,
+                SnackbarRelay.SEND_DELETED,
+                SnackbarRelay.SEND_UPDATED,
+            )
             .map { VaultItemListingsAction.Internal.SnackbarDataReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -763,16 +791,29 @@ class VaultItemListingViewModel @Inject constructor(
         )
     }
 
+    private fun createVaultItemTypeSelectionExcludedOptions(): ImmutableList<CreateVaultItemType> {
+        // If policy is enable for any organization, exclude the card option
+        return if (state.restrictItemTypesPolicyOrgIds.isNotEmpty()) {
+            persistentListOf(
+                CreateVaultItemType.CARD,
+                CreateVaultItemType.FOLDER,
+                CreateVaultItemType.SSH_KEY,
+            )
+        } else {
+            persistentListOf(
+                CreateVaultItemType.SSH_KEY,
+                CreateVaultItemType.FOLDER,
+            )
+        }
+    }
+
     private fun handleAddVaultItemClick() {
         when (val itemListingType = state.itemListingType) {
             is VaultItemListingState.ItemListingType.Vault.Collection -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
-                            excludedOptions = persistentListOfNotNull(
-                                CreateVaultItemType.SSH_KEY,
-                                CreateVaultItemType.FOLDER,
-                            ),
+                            excludedOptions = createVaultItemTypeSelectionExcludedOptions(),
                         ),
                     )
                 }
@@ -782,10 +823,7 @@ class VaultItemListingViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
-                            excludedOptions = persistentListOfNotNull(
-                                CreateVaultItemType.SSH_KEY,
-                                CreateVaultItemType.FOLDER,
-                            ),
+                            excludedOptions = createVaultItemTypeSelectionExcludedOptions(),
                         ),
                     )
                 }
@@ -1427,9 +1465,29 @@ class VaultItemListingViewModel @Inject constructor(
                 handleGetCredentialEntriesResultReceive(action)
             }
 
+            is VaultItemListingsAction.Internal.RestrictItemTypesPolicyUpdateReceive -> {
+                handleRestrictItemTypesPolicyUpdateReceive(action)
+            }
+
             is VaultItemListingsAction.Internal.SnackbarDataReceived -> {
                 handleSnackbarDataReceived(action)
             }
+        }
+    }
+
+    private fun handleRestrictItemTypesPolicyUpdateReceive(
+        action: VaultItemListingsAction.Internal.RestrictItemTypesPolicyUpdateReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                restrictItemTypesPolicyOrgIds = action
+                    .restrictItemTypesPolicyOrdIds
+                    .toImmutableList(),
+            )
+        }
+
+        vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
+            updateStateWithVaultData(vaultData, clearDialogState = false)
         }
     }
 
@@ -1471,7 +1529,7 @@ class VaultItemListingViewModel @Inject constructor(
 
             DeleteSendResult.Success -> {
                 clearDialogState()
-                sendEvent(VaultItemListingEvent.ShowToast(R.string.send_deleted.asText()))
+                sendEvent(VaultItemListingEvent.ShowSnackbar(R.string.send_deleted.asText()))
             }
         }
     }
@@ -1497,9 +1555,7 @@ class VaultItemListingViewModel @Inject constructor(
 
             is RemovePasswordSendResult.Success -> {
                 clearDialogState()
-                sendEvent(
-                    VaultItemListingEvent.ShowToast(text = R.string.password_removed.asText()),
-                )
+                sendEvent(VaultItemListingEvent.ShowSnackbar(R.string.password_removed.asText()))
             }
         }
     }
@@ -1849,7 +1905,9 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             is Fido2RegisterCredentialResult.Success -> {
-                sendEvent(VaultItemListingEvent.ShowToast(R.string.item_updated.asText()))
+                // This must be a toast because we are finishing the activity and we want the
+                // user to have time to see the message.
+                toastManager.show(messageId = R.string.item_updated)
                 sendEvent(
                     VaultItemListingEvent.CompleteFido2Registration(
                         RegisterFido2CredentialResult.Success(action.result.responseJson),
@@ -1862,7 +1920,9 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleRegisterFido2CredentialResultErrorReceive(
         error: Fido2RegisterCredentialResult.Error,
     ) {
-        sendEvent(VaultItemListingEvent.ShowToast(R.string.an_error_has_occurred.asText()))
+        // This must be a toast because we are finishing the activity and we want the
+        // user to have time to see the message.
+        toastManager.show(messageId = R.string.an_error_has_occurred)
         sendEvent(
             VaultItemListingEvent.CompleteFido2Registration(
                 RegisterFido2CredentialResult.Error(
@@ -1932,11 +1992,11 @@ class VaultItemListingViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(
-                dialogState = when (error) {
-                    is ValidateOriginResult.Error.PrivilegedAppNotAllowed -> {
-                        @Suppress("MaxLineLength")
+                dialogState = when {
+                    shouldShowTrustPrompt(error) -> {
                         VaultItemListingState.DialogState.TrustPrivilegedAddPrompt(
-                            message = R.string.passkey_operation_failed_because_browser_x_is_not_trusted
+                            message = R.string
+                                .passkey_operation_failed_because_browser_x_is_not_trusted
                                 .asText(callingAppInfo.packageName),
                             selectedCipherId = selectedCipherId,
                         )
@@ -1952,6 +2012,10 @@ class VaultItemListingViewModel @Inject constructor(
             )
         }
     }
+
+    private fun shouldShowTrustPrompt(error: ValidateOriginResult.Error): Boolean =
+        error is ValidateOriginResult.Error.PrivilegedAppNotAllowed &&
+            featureFlagManager.getFeatureFlag(FlagKey.UserManagedPrivilegedApps)
 
     private fun handleFido2AssertionDataReceive(
         action: VaultItemListingsAction.Internal.Fido2AssertionDataReceive,
@@ -2119,6 +2183,7 @@ class VaultItemListingViewModel @Inject constructor(
                                 .fido2CredentialAutofillViewList,
                             totpData = state.totpData,
                             isPremiumUser = state.isPremium,
+                            restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                         )
                     }
 
@@ -2263,6 +2328,7 @@ data class VaultItemListingState(
     val isIconLoadingDisabled: Boolean,
     val dialogState: DialogState?,
     val policyDisablesSend: Boolean,
+    val restrictItemTypesPolicyOrgIds: ImmutableList<String>,
     // Internal
     private val isPullToRefreshSettingEnabled: Boolean,
     val totpData: TotpData? = null,
@@ -2278,8 +2344,14 @@ data class VaultItemListingState(
      * Whether or not the add FAB should be shown.
      */
     val hasAddItemFabButton: Boolean
-        get() = itemListingType.hasFab ||
-            (viewState is ViewState.NoItems && viewState.shouldShowAddButton)
+        get() = if (restrictItemTypesPolicyOrgIds.isNotEmpty() &&
+            itemListingType == ItemListingType.Vault.Card
+        ) {
+            false
+        } else {
+            itemListingType.hasFab ||
+                (viewState as? ViewState.NoItems)?.shouldShowAddButton == true
+        }
 
     /**
      * Whether or not this represents a listing screen for autofill.
@@ -2476,7 +2548,7 @@ data class VaultItemListingState(
             val message: Text,
             val buttonText: Text,
             val header: Text? = null,
-            @DrawableRes val vectorRes: Int? = null,
+            @field:DrawableRes val vectorRes: Int? = null,
             val shouldShowAddButton: Boolean,
         ) : ViewState() {
             override val isPullToRefreshEnabled: Boolean get() = true
@@ -2819,18 +2891,25 @@ sealed class VaultItemListingEvent {
     data class ShowShareSheet(val content: String) : VaultItemListingEvent()
 
     /**
-     * Show a toast with the given message.
-     *
-     * @property text the text to display.
-     */
-    data class ShowToast(val text: Text) : VaultItemListingEvent()
-
-    /**
      * Show a snackbar to the user.
      */
     data class ShowSnackbar(
         val data: BitwardenSnackbarData,
-    ) : VaultItemListingEvent(), BackgroundEvent
+    ) : VaultItemListingEvent(), BackgroundEvent {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 
     /**
      * Complete the current FIDO 2 credential registration process.
@@ -3158,6 +3237,13 @@ sealed class VaultItemListingsAction {
          */
         data class PolicyUpdateReceive(
             val policyDisablesSend: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that a restrict item types policy update has been received.
+         */
+        data class RestrictItemTypesPolicyUpdateReceive(
+            val restrictItemTypesPolicyOrdIds: List<String>,
         ) : Internal()
 
         /**

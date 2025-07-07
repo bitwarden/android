@@ -180,11 +180,6 @@ sealed class FoldersEvent {
      * Navigates to the screen to edit a folder.
      */
     data class NavigateToEditFolderScreen(val folderId: String) : FoldersEvent()
-
-    /**
-     * Shows a toast with the given [message].
-     */
-    data class ShowToast(val message: String) : FoldersEvent()
 }
 
 /**

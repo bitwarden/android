@@ -425,7 +425,9 @@ L\'escaneig es farà automàticament.</string>
     <string name="privacy_policy">Declaració de privadesa</string>
     <string name="passkey_management">Gestió de claus de pas</string>
     <string name="autofill_services">Serveis d\'emplenament automàtic</string>
-    <string name="inline_autofill">Utilitza l\'emplenament automàtic integrat</string>
+    <string name="display_autofill_suggestions">Display autofill suggestions</string>
+    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
+    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
     <string name="accessibility">Utilitza l\'accessibilitat</string>
     <string name="accessibility_description5">Necessari per utilitzar la fitxa d\'acció ràpida d\'emplenament automàtic.</string>
     <string name="personal_ownership_policy_in_effect">Una política d’organització afecta les vostres opcions de propietat.</string>
@@ -908,9 +910,10 @@ Voleu canviar a aquest compte?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
     <string name="self_host_server_url">Self-host server URL</string>
+    <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
     <string name="use_chrome_beta_autofill_integration">Use Chrome autofill integration (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Improves login filling for supported websites on Chrome. Once enabled, you’ll be directed to Chrome settings to enable third-party autofill.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
     <string name="show_more">Show more</string>
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
@@ -970,15 +973,20 @@ Voleu canviar a aquest compte?</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
     <string name="trust">Trust</string>
-    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
+    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but you trust to perform passkey operations.</string>
     <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
     <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
     <string name="trusted_by_you">Trusted by You</string>
     <string name="trusted_by_the_community">Trusted by the Community</string>
     <string name="trusted_by_google">Trusted by Google</string>
-    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through web browsers trusted by Google or the Bitwarden community.</string>
+    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through applications or web browsers trusted by Google or the Bitwarden community.</string>
     <string name="about_privileged_applications">About privileged applications</string>
     <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
     <string name="privileged_apps">Privileged apps</string>
     <string name="unrecognized_browser">Navegador no reconegut</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
+    <string name="all_trusted_apps">All trusted apps</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
+    <string name="installed_apps">Aplicacions instal·lades</string>
+    <string name="delete_x">Suprimeix %s</string>
 </resources>

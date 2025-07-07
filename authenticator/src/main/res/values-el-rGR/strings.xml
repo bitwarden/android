@@ -8,7 +8,7 @@
     <string name="generic_error_message">Δεν μπορέσαμε να επεξεργαστούμε το αίτημά σας. Παρακαλούμε δοκιμάστε ξανά ή επικοινωνήστε μαζί μας.</string>
     <string name="internet_connection_required_title">Απαιτείται σύνδεση στο διαδίκτυο</string>
     <string name="internet_connection_required_message">Συνδεθείτε στο διαδίκτυο πριν συνεχίσετε.</string>
-    <string name="okay">Okay</string>
+    <string name="okay">Εντάξει</string>
     <string name="syncing">Συγχρονισμός</string>
     <string name="copy">Αντιγραφή</string>
     <string name="edit_item">Επεξεργασία</string>
@@ -125,7 +125,7 @@
     <string name="take_me_to_app_settings">Μετάβαση στις ρυθμίσεις της εφαρμογής</string>
     <string name="something_went_wrong">Κάτι πήγε στραβά</string>
     <string name="please_try_again">Δοκιμάστε ξανά</string>
-    <string name="move_to_bitwarden">Move to Bitwarden</string>
+    <string name="copy_to_bitwarden_vault">Copy to Bitwarden vault</string>
     <string name="default_save_option">Προεπιλεγμένη επιλογή αποθήκευσης</string>
     <string name="save_to_bitwarden">Αποθήκευση στο Bitwarden</string>
     <string name="save_here">Αποθήκευση εδώ</string>
@@ -136,10 +136,15 @@
     <string name="choose_save_location_message">Αποθηκεύστε αυτό το κλειδί ελέγχου ταυτότητας εδώ ή προσθέστε το σε μια σύνδεση στο Bitwarden.</string>
     <string name="save_option_as_default">Αποθήκευση ως προεπιλογή</string>
     <string name="account_synced_from_bitwarden_app">Ο λογαριασμός συγχρονίστηκε από το Bitwarden</string>
-    <string name="local_codes">Local codes</string>
+    <string name="local_codes">Τοπικοί κωδικοί</string>
     <string name="required_information_missing">Required Information Missing</string>
     <string name="required_information_missing_message">"Required info is missing (e.g., ‘services’ or ‘secret’). Check your file and try again. Visit bitwarden.com/help for support"</string>
     <string name="file_could_not_be_processed">"File Could Not Be Processed"</string>
     <string name="file_could_not_be_processed_message">"File could not be processed. Ensure it’s valid JSON and try again. Need help? Visit bitwarden.com/help"</string>
-    <string name="get_help">Get Help</string>
+    <string name="get_help">Λήψη βοήθειας</string>
+    <string name="expand_advanced_options">Expand advanced options</string>
+    <string name="local_items_are_expanded_click_to_collapse">Local items are expanded, click to collapse.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
+    <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
+    <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
 </resources>

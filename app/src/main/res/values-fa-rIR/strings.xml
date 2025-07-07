@@ -425,7 +425,9 @@
     <string name="privacy_policy">سیاست حفظ حریم خصوصی</string>
     <string name="passkey_management">مدیریت کلید عبور</string>
     <string name="autofill_services">سرویس‌های پر کردن خودکار</string>
-    <string name="inline_autofill">از پر کردن خودکار درون خطی استفاده کنید</string>
+    <string name="display_autofill_suggestions">Display autofill suggestions</string>
+    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
+    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
     <string name="accessibility">از قابلیت دسترسی استفاده کنید</string>
     <string name="accessibility_description5">برای استفاده از کاشی اقدام سریع پر کردن خودکار لازم است.</string>
     <string name="personal_ownership_policy_in_effect">سیاست سازمانی بر تنظیمات مالکیت شما تأثیر می‌گذارد.</string>
@@ -660,7 +662,7 @@
     <string name="session_timeout_action">نشست را متوقف کن</string>
     <string name="account_fingerprint_phrase">عبارت اثر انگشت حساب کاربری</string>
     <string name="passkey_management_explanation_long">از Bitwarden برای ذخیره کلیدهای عبور جدید استفاده کنید و با کلیدهای عبور ذخیره شده در گاوصندوق خود وارد شوید.</string>
-    <string name="autofill_services_explanation_long">چهارچوب پر کردن خودکار اندروید برای کمک به پر کردن اطلاعات ورود به سیستم در سایر برنامه‌های دستگاه شما استفاده می‌شود.</string>
+    <string name="autofill_services_explanation_long">چارچوب پر کردن خودکار اندروید برای کمک به پر کردن اطلاعات ورود به سیستم در سایر برنامه‌های دستگاه شما استفاده می‌شود.</string>
     <string name="use_inline_autofill_explanation_long">اگر صفحه کلید انتخابی شما از آن پشتیبانی می‌کند، از پر کردن خودکار درون خطی استفاده کنید. در غیر این صورت، از لایه پیش‌فرض استفاده کنید.</string>
     <string name="additional_options">گزینه‌های اضافی</string>
     <string name="continue_to_web_app">با برنامه وب ادامه می‌دهید؟</string>
@@ -908,9 +910,10 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">عملیات کلید عبور ناموفق بود زیرا هیچ موردی انتخاب نشده است.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">عملیات کلید عبور ناموفق بود زیرا درخواست پشتیبانی نمی‌شود.</string>
     <string name="self_host_server_url">نشانی اینترنتی سرور خود میزبان</string>
+    <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">استفاده از قابلیت پر کردن خودکار کروم</string>
     <string name="use_chrome_beta_autofill_integration">استفاده از قابلیت پرکردن خودکار کروم (نسخه بتا)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">پر کردن خودکار ورود به حساب برای وب‌سایت‌های پشتیبانی شده در کروم را بهبود می‌بخشد. پس از فعال‌سازی، به تنظیمات کروم هدایت می‌شوید تا پر کردن خودکار از سوی شخص ثالث را فعال کنید.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
     <string name="show_more">نمایش بیشتر</string>
     <string name="no_folder">بدون پوشه</string>
     <string name="show_less">نمایش کمتر</string>
@@ -970,15 +973,20 @@
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">عملیات کلید عبور ناموفق بود زیرا مرورگر (%1$s) مورد اعتماد نیست. گزینه \"اعتماد\" را انتخاب کنید تا %1$s به فهرست برنامه‌های مورد اعتماد افزوده شود یا \"لغو\" را برای توقف عملیات انتخاب کنید.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">عملیات کلید عبور ناموفق بود زیرا مرورگر مورد اعتماد نیست.</string>
     <string name="trust">اعتماد</string>
-    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
+    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but you trust to perform passkey operations.</string>
     <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
     <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
     <string name="trusted_by_you">Trusted by You</string>
     <string name="trusted_by_the_community">Trusted by the Community</string>
     <string name="trusted_by_google">Trusted by Google</string>
-    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through web browsers trusted by Google or the Bitwarden community.</string>
+    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through applications or web browsers trusted by Google or the Bitwarden community.</string>
     <string name="about_privileged_applications">About privileged applications</string>
     <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
     <string name="privileged_apps">Privileged apps</string>
     <string name="unrecognized_browser">Unrecognized browser</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
+    <string name="all_trusted_apps">All trusted apps</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
+    <string name="installed_apps">Installed apps</string>
+    <string name="delete_x">Delete %s</string>
 </resources>

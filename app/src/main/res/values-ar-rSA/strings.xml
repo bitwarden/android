@@ -425,7 +425,9 @@
     <string name="privacy_policy">سياسة الخصوصيّة</string>
     <string name="passkey_management">إدارة مفتاح المرور</string>
     <string name="autofill_services">خدمات التعبئة التلقائية</string>
-    <string name="inline_autofill">استخدم \"الملء التلقائي المضمن\"</string>
+    <string name="display_autofill_suggestions">Display autofill suggestions</string>
+    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
+    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
     <string name="accessibility">استخدام إمكانية الوصول</string>
     <string name="accessibility_description5">مطلوب لاستخدام خط التشغيل السريع للتعبئة التلقائية.</string>
     <string name="personal_ownership_policy_in_effect">تؤثر سياسة مؤسسة على خيارات الملكية الخاصة بك.</string>
@@ -908,9 +910,10 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">فشلت عملية المرور لأنه لم يتم تحديد أي عنصر.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">فشلت عملية المرور لأن الطلب غير مدعوم.</string>
     <string name="self_host_server_url">رابط خادم الاستضافة الذاتية</string>
+    <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">استخدام ملء كروم التلقائي</string>
     <string name="use_chrome_beta_autofill_integration">استخدام ملء كروم التلقائي (بيتا)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">يحسّن تعبئة تسجيل الدخول للمواقع المدعومة على كروم. بمجرد التمكين، سوف يتم توجيهك إلى إعدادات كروم لتفعيل التعبئة التلقائية لطرف ثالث.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
     <string name="show_more">عرض المزيد</string>
     <string name="no_folder">لا يوجد مجلد</string>
     <string name="show_less">عرض أقل</string>
@@ -970,15 +973,20 @@
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
     <string name="trust">Trust</string>
-    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
+    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but you trust to perform passkey operations.</string>
     <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
     <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
     <string name="trusted_by_you">Trusted by You</string>
     <string name="trusted_by_the_community">Trusted by the Community</string>
     <string name="trusted_by_google">Trusted by Google</string>
-    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through web browsers trusted by Google or the Bitwarden community.</string>
+    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through applications or web browsers trusted by Google or the Bitwarden community.</string>
     <string name="about_privileged_applications">About privileged applications</string>
     <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
     <string name="privileged_apps">Privileged apps</string>
     <string name="unrecognized_browser">Unrecognized browser</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
+    <string name="all_trusted_apps">All trusted apps</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
+    <string name="installed_apps">Installed apps</string>
+    <string name="delete_x">Delete %s</string>
 </resources>

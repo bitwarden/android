@@ -424,7 +424,9 @@
     <string name="privacy_policy">Adatvédelmi Irányelvek</string>
     <string name="passkey_management">Belépőkulcs kezelés</string>
     <string name="autofill_services">Automatikus kitöltés</string>
-    <string name="inline_autofill">Szövegközi automatikus kitöltés használata</string>
+    <string name="display_autofill_suggestions">Automatikus kitöltési javaslatok megjelenítése</string>
+    <string name="autofill_suggestions_inline">Belső (a billentyűzeten jelenik meg)</string>
+    <string name="autofill_suggestions_popup">Felugró ablak (beviteli mező felett jelenik meg)</string>
     <string name="accessibility">Akadálymentes használat</string>
     <string name="accessibility_description5">Az automatikus kitöltési gyorsművelet csempe használatához szükséges.</string>
     <string name="personal_ownership_policy_in_effect">Egy szervezeti házirend befolyásolja a tulajdonjog beállításait.</string>
@@ -907,9 +909,10 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">A belépőkulcs művelet meghiúsult, mert nincs kiválasztott elem.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A belépőkulcs művelet meghiúsult, mert a kérés nem támogatott.</string>
     <string name="self_host_server_url">Saját üzemeltetésű szerver webcím</string>
+    <string name="use_brave_autofill_integration">Brave automatikus kitöltés integráció használata</string>
     <string name="use_chrome_autofill_integration">Chrome automatikus kitöltés integráció használata</string>
     <string name="use_chrome_beta_autofill_integration">Chrome automatikus kitöltés integráció használata (Béta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Javítja a bejelentkezési adatok kitöltését a támogatott webhelyeken a Chrome-ban. Az engedélyezést követően a Chrome beállításaiba kerülünk, ahol engedélyezhetjük a harmadik féltől származó automatikus kitöltést.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Javítja a bejelentkezési adatok kitöltését a támogatott webhelyeken a Chrome-ban. Az engedélyezést követően a böngésző beállításaiba kerülünk, ahol engedélyezhetjük a harmadik féltől származó automatikus kitöltést.</string>
     <string name="show_more">Több megjelenítése</string>
     <string name="no_folder">Nincs mappa</string>
     <string name="show_less">Kevesebb megjelenítése</string>
@@ -980,4 +983,9 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="learn_more_about_privileged_apps">További információ a kiváltságos alkalmazásokról</string>
     <string name="privileged_apps">Kiváltságos alkalmazások</string>
     <string name="unrecognized_browser">Felismerhetetlen böngésző</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">További információ a hozzáférési kulcsok használatáról a Bitwardenben.</string>
+    <string name="all_trusted_apps">Összes megbízható alkalmazás</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Boztos leállításra kerüljön %s megbízhatósága?</string>
+    <string name="installed_apps">Telepített alkalmazások</string>
+    <string name="delete_x">%s törlése</string>
 </resources>

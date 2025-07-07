@@ -305,8 +305,8 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="identification">Identification</string>
     <string name="logins">Hesaplar</string>
     <string name="secure_notes">Güvenli notlar</string>
-    <string name="personal_details">Personal Details</string>
-    <string name="contact_info">Contact Info</string>
+    <string name="personal_details">Kişisel Ayrıntılar</string>
+    <string name="contact_info">İletişim Bilgileri</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
     <string name="password_exposed">Bu parola, veri ihlallerinde %1$s kere açığa çıkmış. Değiştirmenizi tavsiye ederiz.</string>
     <string name="password_safe">Bilinen veri ihlallerinde bu parola bulunamadı. Güvenle kullanabilirsiniz.</string>
@@ -321,7 +321,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="type">Tür</string>
     <string name="move_down">Aşağı taşı</string>
     <string name="move_up">Yukarı taşı</string>
-    <string name="owner">Owner</string>
+    <string name="owner">Sahip</string>
     <string name="no_collections_to_list">Listelenecek koleksiyon yok.</string>
     <string name="moved_item_to_org">%1$s, %2$s kuruluşuna taşındı.</string>
     <string name="select_one_collection">En az bir koleksiyon seçmelisiniz.</string>
@@ -425,7 +425,9 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="privacy_policy">Gizlilik Politikası</string>
     <string name="passkey_management">Geçiş anahtarı yönetimi</string>
     <string name="autofill_services">Otomatik doldurma hizmetleri</string>
-    <string name="inline_autofill">Satır içi otomatik doldurmayı kullan</string>
+    <string name="display_autofill_suggestions">Otomatik doldurma önerilerini göster</string>
+    <string name="autofill_suggestions_inline">Satır içi (Klavyede görünür)</string>
+    <string name="autofill_suggestions_popup">Açılır pencere (Girdi alanının üzerinde görünür)</string>
     <string name="accessibility">Erişilebilirliği kullan</string>
     <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
     <string name="personal_ownership_policy_in_effect">Bir kuruluş ilkesi sahiplik seçeneklerinizi etkiliyor.</string>
@@ -442,8 +444,8 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="deletion_date_info">Bu Send belirtilen tarih ve saatte kalıcı olacak silinecek.</string>
     <string name="pending_delete">Silinmesi bekleniyor</string>
     <string name="expired">Süresi dolmuş</string>
-    <string name="expires_at">Expires at %s</string>
-    <string name="expires_tomorrow">Expires tomorrow</string>
+    <string name="expires_at">%s tarihinde süresi dolacak</string>
+    <string name="expires_tomorrow">Yarın sona eriyor</string>
     <string name="expires_on">%s tarihinde süresi dolacak</string>
     <string name="stops_logging_on">Stops logging on %1$s at %2$s</string>
     <string name="maximum_access_count">Maksimum erişim sayısı</string>
@@ -742,7 +744,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="write_this_password_down_and_keep_it_somewhere_safe">Bu parolayı not alıp güvenli bir yerde saklayın.</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">Hesabınıza erişimi kaybetmemenin diğer yollarını öğrenin</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Hesabınıza erişimi kaybetmemenin yollarını öğrenin</annotation></string>
-    <string name="help_with_server_geolocations">Help with server geolocations.</string>
+    <string name="help_with_server_geolocations">Sunucu coğrafyası konusunda yardım.</string>
     <string name="email_address_required">Eposta adresi (gerekli)</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"E-posta adresinizi onaylayarak hesap açılışına devam etmek için e-postadaki bağlantıya tıklayın. "</string>
     <string name="change_email_address">E-posta adresini değiştir</string>
@@ -789,15 +791,15 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">Bilgisayarınızda mevcut tarayıcınızı veya parola yöneticinizi açın.</string>
     <string name="export_your_passwords_this_option_is_usually_found_in_your_settings">Parolalarınızı dışa aktarın. Bu seçenek genellikle ayarlarınızda bulunur.</string>
     <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Select Import data</annotation> in the web app, then Done below to finish syncing.</string>
-    <string name="step_1_of_3">Step 1 of 3</string>
+    <string name="step_1_of_3">Adım 1/3</string>
     <string name="export_your_saved_logins">Export your saved logins</string>
     <string name="delete_this_file_after_import_is_complete">You’ll delete this file after import is complete.</string>
     <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">On your computer, open a new browser tab and <annotation emphasis="bold">go to <annotation arg="0">%1$s</annotation></annotation></string>
     <string name="log_in_to_the_bitwarden_web_app">Log in to the Bitwarden web app.</string>
-    <string name="step_2_of_3">Step 2 of 3</string>
+    <string name="step_2_of_3">Adım 2/3</string>
     <string name="log_in_to_bitwarden">Bitwarden\'a giriş yap</string>
-    <string name="step_3_of_3">Step 3 of 3</string>
-    <string name="import_logins_to_bitwarden">Import logins to Bitwarden</string>
+    <string name="step_3_of_3">Adım 3/3</string>
+    <string name="import_logins_to_bitwarden">Bitwarden için girişleri içe aktar</string>
     <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">In the Bitwarden navigation, <annotation emphasis="bold">find the Tools</annotation> option and <annotation emphasis="bold">select Import data.</annotation></string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Fill out the form and <annotation emphasis="bold">import your saved password file.</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">For your security, be sure to <annotation emphasis="bold">delete your saved password file.</annotation></string>
@@ -865,7 +867,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="mutual_tls">Mutual TLS</string>
     <string name="single_tap_passkey_creation">Single tap passkey creation</string>
     <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
-    <string name="learn_about_new_logins">Learn about new logins</string>
+    <string name="learn_about_new_logins">Yeni girişler hakkında bilgi edinin</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Learn more about generating secure login credentials with a guided tour.</string>
@@ -907,9 +909,10 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">İstek desteklenmediği için geçiş anahtarı işlemi başarısız oldu.</string>
     <string name="self_host_server_url">Kendi kendine barındırılan sunucu URL\'si</string>
+    <string name="use_brave_autofill_integration">Brave otomatik doldurma entegrasyonunu kullan</string>
     <string name="use_chrome_autofill_integration">Chrome otomatik doldurma entegrasyonunu kullan</string>
     <string name="use_chrome_beta_autofill_integration">Chrome otomatik doldurma entegrasyonunu kullan (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Improves login filling for supported websites on Chrome. Once enabled, you’ll be directed to Chrome settings to enable third-party autofill.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
     <string name="show_more">Daha fazla göster</string>
     <string name="no_folder">Klasör yok</string>
     <string name="show_less">Daha az göster</string>
@@ -969,15 +972,20 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
     <string name="trust">Trust</string>
-    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
+    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but you trust to perform passkey operations.</string>
     <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
     <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
     <string name="trusted_by_you">Trusted by You</string>
     <string name="trusted_by_the_community">Trusted by the Community</string>
     <string name="trusted_by_google">Trusted by Google</string>
-    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through web browsers trusted by Google or the Bitwarden community.</string>
+    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through applications or web browsers trusted by Google or the Bitwarden community.</string>
     <string name="about_privileged_applications">About privileged applications</string>
     <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
     <string name="privileged_apps">Privileged apps</string>
     <string name="unrecognized_browser">Tanınmayan tarayıcı</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Bitwarden ile geçiş anahtarlarını kullanma hakkında bilgi alın.</string>
+    <string name="all_trusted_apps">All trusted apps</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
+    <string name="installed_apps">Installed apps</string>
+    <string name="delete_x">Delete %s</string>
 </resources>

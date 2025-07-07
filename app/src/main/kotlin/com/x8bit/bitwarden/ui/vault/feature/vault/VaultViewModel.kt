@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
@@ -120,6 +121,7 @@ class VaultViewModel @Inject constructor(
             flightRecorderSnackBar = settingsRepository
                 .flightRecorderData
                 .toSnackbarData(clock = clock),
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
     },
 ) {
@@ -167,7 +169,11 @@ class VaultViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         snackbarRelayManager
-            .getSnackbarDataFlow(SnackbarRelay.LOGINS_IMPORTED)
+            .getSnackbarDataFlow(
+                SnackbarRelay.CIPHER_DELETED,
+                SnackbarRelay.CIPHER_RESTORED,
+                SnackbarRelay.LOGINS_IMPORTED,
+            )
             .map { VaultAction.Internal.SnackbarDataReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -175,6 +181,21 @@ class VaultViewModel @Inject constructor(
         settingsRepository
             .flightRecorderDataFlow
             .map { VaultAction.Internal.FlightRecorderDataReceive(data = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        policyManager
+            .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            .combine(
+                featureFlagManager.getFeatureFlagFlow(FlagKey.RemoveCardPolicy),
+            ) { policies, enabledFlag ->
+                if (enabledFlag && policies.isNotEmpty()) {
+                    policies.map { it.organizationId }
+                } else {
+                    null
+                }
+            }
+            .map { VaultAction.Internal.PolicyUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -233,9 +254,17 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleSelectAddItemType() {
+        // If policy is enable for any organization, exclude the card option
+        val excludedOptions = persistentListOfNotNull(
+            CreateVaultItemType.SSH_KEY,
+            CreateVaultItemType.CARD.takeUnless {
+                state.restrictItemTypesPolicyOrgIds.isNullOrEmpty()
+            },
+        )
+
         mutableStateFlow.update {
             it.copy(
-                dialog = VaultState.DialogState.SelectVaultAddItemType,
+                dialog = VaultState.DialogState.SelectVaultAddItemType(excludedOptions),
             )
         }
     }
@@ -647,6 +676,20 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal.FlightRecorderDataReceive -> {
                 handleFlightRecorderDataReceive(action)
             }
+
+            is VaultAction.Internal.PolicyUpdateReceive -> {
+                handlePolicyUpdateReceive(action)
+            }
+        }
+    }
+
+    private fun handlePolicyUpdateReceive(action: VaultAction.Internal.PolicyUpdateReceive) {
+        mutableStateFlow.update {
+            it.copy(restrictItemTypesPolicyOrgIds = action.restrictItemTypesPolicyOrdIds)
+        }
+
+        vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
+            updateVaultState(vaultData, clearDialog = false)
         }
     }
 
@@ -767,22 +810,20 @@ class VaultViewModel @Inject constructor(
             errorTitle = R.string.an_error_has_occurred.asText(),
             errorMessage = R.string.generic_error_message.asText(),
             isRefreshing = false,
+            restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
         )
     }
 
     private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
         if (state.dialog == VaultState.DialogState.Syncing) {
-            sendEvent(
-                VaultEvent.ShowToast(
-                    message = R.string.syncing_complete.asText(),
-                ),
-            )
+            sendEvent(VaultEvent.ShowSnackbar(message = R.string.syncing_complete.asText()))
         }
         updateVaultState(vaultData.data)
     }
 
     private fun updateVaultState(
         vaultData: VaultData,
+        clearDialog: Boolean = true,
     ) {
         mutableStateFlow.update {
             it.copy(
@@ -792,8 +833,9 @@ class VaultViewModel @Inject constructor(
                     isPremium = state.isPremium,
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
+                    restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                 ),
-                dialog = null,
+                dialog = if (clearDialog) null else state.dialog,
                 isRefreshing = false,
             )
         }
@@ -826,6 +868,7 @@ class VaultViewModel @Inject constructor(
                     isPremium = state.isPremium,
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
+                    restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                 ),
             )
         }
@@ -931,6 +974,7 @@ data class VaultState(
     private val isPullToRefreshSettingEnabled: Boolean,
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
+    val restrictItemTypesPolicyOrgIds: List<String>?,
 ) : Parcelable {
 
     /**
@@ -1025,6 +1069,7 @@ data class VaultState(
             val noFolderItems: List<VaultItem>,
             val collectionItems: List<CollectionItem>,
             val trashItemsCount: Int,
+            val showCardGroup: Boolean,
         ) : ViewState() {
             override val hasFab: Boolean get() = true
             override val isPullToRefreshEnabled: Boolean get() = true
@@ -1246,7 +1291,9 @@ data class VaultState(
          * Represents a dialog for selecting a vault item type to add.
          */
         @Parcelize
-        data object SelectVaultAddItemType : DialogState()
+        data class SelectVaultAddItemType(
+            val excludedOptions: ImmutableList<CreateVaultItemType>,
+        ) : DialogState()
 
         /**
          * Represents an error dialog with the given [title] and [message].
@@ -1327,14 +1374,25 @@ sealed class VaultEvent {
     data object PromptForAppReview : VaultEvent()
 
     /**
-     * Show a toast with the given [message].
-     */
-    data class ShowToast(val message: Text) : VaultEvent()
-
-    /**
      * Show a snackbar with the given [data].
      */
-    data class ShowSnackbar(val data: BitwardenSnackbarData) : VaultEvent(), BackgroundEvent
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : VaultEvent(), BackgroundEvent {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 
     /**
      * Navigate to the add folder screen
@@ -1612,6 +1670,13 @@ sealed class VaultAction {
         data class FlightRecorderDataReceive(
             val data: FlightRecorderDataSet,
         ) : Internal()
+
+        /**
+         * Indicates that a policy update has been received.
+         */
+        data class PolicyUpdateReceive(
+            val restrictItemTypesPolicyOrdIds: List<String>?,
+        ) : Internal()
     }
 }
 
@@ -1626,6 +1691,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
     errorTitle: Text,
     errorMessage: Text,
     isRefreshing: Boolean,
+    restrictItemTypesPolicyOrgIds: List<String>?,
 ) {
     this.update {
         if (vaultData != null) {
@@ -1636,6 +1702,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                     hasMasterPassword = hasMasterPassword,
                     vaultFilterType = vaultFilterType,
                     isIconLoadingDisabled = isIconLoadingDisabled,
+                    restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
                 ),
                 dialog = VaultState.DialogState.Error(
                     title = errorTitle,

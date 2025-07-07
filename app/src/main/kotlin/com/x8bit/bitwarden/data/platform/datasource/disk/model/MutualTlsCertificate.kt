@@ -17,12 +17,6 @@ data class MutualTlsCertificate(
     val leafCertificate: X509Certificate?
         get() = certificateChain.lastOrNull()
 
-    /**
-     * Root certificate of the chain.
-     */
-    val rootCertificate: X509Certificate?
-        get() = certificateChain.firstOrNull()
-
     override fun toString(): String = leafCertificate
         ?.let {
             buildString {
@@ -32,5 +26,5 @@ data class MutualTlsCertificate(
                 appendLine("Valid Until: ${it.notAfter}")
             }
         }
-        ?: ""
+        .orEmpty()
 }
