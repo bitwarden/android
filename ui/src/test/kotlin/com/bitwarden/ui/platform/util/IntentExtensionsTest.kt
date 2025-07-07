@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.util
+package com.bitwarden.ui.platform.util
 
 import android.content.Intent
 import android.os.Bundle

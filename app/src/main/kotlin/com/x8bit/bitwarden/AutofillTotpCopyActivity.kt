@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
-import com.x8bit.bitwarden.data.platform.util.validate
+import com.bitwarden.ui.platform.util.validate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

@@ -1,6 +1,6 @@
 @file:OmitFromCoverage
 
-package com.x8bit.bitwarden.data.platform.util
+package com.bitwarden.ui.platform.util
 
 import android.content.Intent
 import android.os.BadParcelableException
@@ -27,7 +27,7 @@ inline fun <reified T> Bundle.getSafeParcelableExtra(
 ): T? = BundleCompat.getParcelable(this, name, T::class.java)
 
 /**
- * Validate if there's anything suspicious
+ * Validate if there's anything suspicious with the intent received.
  */
 fun Intent.validate() {
     @Suppress("TooGenericExceptionCaught")

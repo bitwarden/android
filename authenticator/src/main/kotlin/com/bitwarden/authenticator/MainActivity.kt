@@ -14,13 +14,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.bitwarden.authenticator.data.platform.util.isSuspicious
 import com.bitwarden.authenticator.ui.platform.composition.LocalManagerProvider
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
 import com.bitwarden.authenticator.ui.platform.feature.rootnav.RootNavScreen
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.util.setupEdgeToEdge
+import com.bitwarden.ui.platform.util.validate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var debugLaunchManager: DebugMenuLaunchManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        sanitizeIntent()
+        intent.validate()
         var shouldShowSplashScreen = true
         installSplashScreen().setKeepOnScreenCondition { shouldShowSplashScreen }
         super.onCreate(savedInstanceState)
@@ -73,19 +73,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        sanitizeIntent()
+        intent.validate()
         mainViewModel.trySendAction(
             MainAction.ReceiveNewIntent(intent = intent),
         )
-    }
-
-    private fun sanitizeIntent() {
-        if (intent.isSuspicious) {
-            intent = Intent(
-                /* packageContext = */ this,
-                /* cls = */ MainActivity::class.java,
-            )
-        }
     }
 
     private fun observeViewModelEvents(navController: NavHostController) {
