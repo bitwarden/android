@@ -67,14 +67,10 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
  * Top level composable for the start registration screen.
  */
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("LongMethod")
 @Composable
 fun StartRegistrationScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToCompleteRegistration: (
-        emailAddress: String,
-        verificationToken: String,
-    ) -> Unit,
+    onNavigateToCompleteRegistration: (emailAddress: String, verificationToken: String) -> Unit,
     onNavigateToCheckEmail: (email: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
@@ -88,57 +84,31 @@ fun StartRegistrationScreen(
                 intentManager.launchUri("https://bitwarden.com/privacy/".toUri())
             }
 
-            is NavigateToTerms -> {
-                intentManager.launchUri("https://bitwarden.com/terms/".toUri())
-            }
-
+            is NavigateToTerms -> intentManager.launchUri("https://bitwarden.com/terms/".toUri())
             is StartRegistrationEvent.NavigateToUnsubscribe -> {
                 intentManager.launchUri("https://bitwarden.com/email-preferences/".toUri())
             }
 
             is StartRegistrationEvent.NavigateToServerSelectionInfo -> {
-                intentManager.launchUri(
-                    uri = "https://bitwarden.com/help/server-geographies/".toUri(),
-                )
+                intentManager.launchUri("https://bitwarden.com/help/server-geographies/".toUri())
             }
 
             is StartRegistrationEvent.NavigateBack -> onNavigateBack.invoke()
             is StartRegistrationEvent.NavigateToCompleteRegistration -> {
-                onNavigateToCompleteRegistration(
-                    event.email,
-                    event.verificationToken,
-                )
+                onNavigateToCompleteRegistration(event.email, event.verificationToken)
             }
 
-            is StartRegistrationEvent.NavigateToCheckEmail -> {
-                onNavigateToCheckEmail(
-                    event.email,
-                )
-            }
-
+            is StartRegistrationEvent.NavigateToCheckEmail -> onNavigateToCheckEmail(event.email)
             StartRegistrationEvent.NavigateToEnvironment -> onNavigateToEnvironment()
         }
     }
 
-    // Show dialog if needed:
-    when (val dialog = state.dialog) {
-        is StartRegistrationDialog.Error -> {
-            BitwardenBasicDialog(
-                title = dialog.title?.invoke(),
-                message = dialog.message(),
-                throwable = dialog.error,
-                onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(ErrorDialogDismiss) }
-                },
-            )
-        }
-
-        StartRegistrationDialog.Loading -> {
-            BitwardenLoadingDialog(text = stringResource(id = R.string.create_account))
-        }
-
-        null -> Unit
-    }
+    StartRegistrationDialogs(
+        dialog = state.dialog,
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(ErrorDialogDismiss) }
+        },
+    )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -163,6 +133,29 @@ fun StartRegistrationScreen(
             isContinueButtonEnabled = state.isContinueButtonEnabled,
             handler = handler,
         )
+    }
+}
+
+@Composable
+private fun StartRegistrationDialogs(
+    dialog: StartRegistrationDialog?,
+    onDismissRequest: () -> Unit,
+) {
+    when (dialog) {
+        is StartRegistrationDialog.Error -> {
+            BitwardenBasicDialog(
+                title = dialog.title?.invoke(),
+                message = dialog.message(),
+                throwable = dialog.error,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        StartRegistrationDialog.Loading -> {
+            BitwardenLoadingDialog(text = stringResource(id = R.string.create_account))
+        }
+
+        null -> Unit
     }
 }
 
@@ -273,7 +266,6 @@ private fun StartRegistrationContent(
     }
 }
 
-@Suppress("LongMethod", "MaxLineLength")
 @Composable
 private fun TermsAndPrivacyText(
     onTermsClick: () -> Unit,

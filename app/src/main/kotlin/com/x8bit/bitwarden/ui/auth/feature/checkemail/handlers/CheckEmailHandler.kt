@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.checkemail.handlers
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.x8bit.bitwarden.ui.auth.feature.checkemail.CheckEmailAction
+import com.x8bit.bitwarden.ui.auth.feature.checkemail.CheckEmailScreen
 import com.x8bit.bitwarden.ui.auth.feature.checkemail.CheckEmailViewModel
 
 /**

@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.exportvault
 
 import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,6 +46,8 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialo
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -65,8 +66,6 @@ fun ExportVaultScreen(
     viewModel: ExportVaultViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-
     val exportVaultLocationReceived: (Uri) -> Unit = remember {
         { viewModel.trySendAction(ExportVaultAction.ExportLocationReceive(it)) }
     }
@@ -75,15 +74,11 @@ fun ExportVaultScreen(
             exportVaultLocationReceived.invoke(it.uri)
         }
     }
-
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             ExportVaultEvent.NavigateBack -> onNavigateBack()
-
-            is ExportVaultEvent.ShowToast -> {
-                Toast.makeText(context, event.message(context.resources), Toast.LENGTH_SHORT).show()
-            }
-
+            is ExportVaultEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
             is ExportVaultEvent.NavigateToSelectExportDataLocation -> {
                 fileSaverLauncher.launch(
                     intentManager.createDocumentIntent(
@@ -153,6 +148,9 @@ fun ExportVaultScreen(
                     { viewModel.trySendAction(ExportVaultAction.CloseButtonClick) }
                 },
             )
+        },
+        snackbarHost = {
+            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
         },
     ) {
         ExportVaultScreenContent(

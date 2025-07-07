@@ -147,7 +147,7 @@ class VaultRepositoryImpl(
     private val vaultLockManager: VaultLockManager,
     private val totpCodeManager: TotpCodeManager,
     private val userLogoutManager: UserLogoutManager,
-    private val databaseSchemeManager: DatabaseSchemeManager,
+    databaseSchemeManager: DatabaseSchemeManager,
     pushManager: PushManager,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
@@ -498,23 +498,20 @@ class VaultRepositoryImpl(
         )
         return getVaultItemStateFlow(cipherId)
             .flatMapLatest { cipherDataState ->
-                val cipher = cipherDataState.data
-                    ?: return@flatMapLatest flowOf(DataState.Loaded(null))
-                totpCodeManager
-                    .getTotpCodeStateFlow(
-                        userId = userId,
-                        cipher = cipher,
-                    )
-                    .map { totpCodeDataState ->
-                        combineDataStates(
-                            totpCodeDataState,
-                            cipherDataState,
-                        ) { _, _ ->
-                            // We are only combining the DataStates to know the overall state,
-                            // we map it to the appropriate value below.
-                        }
-                            .mapNullable { totpCodeDataState.data }
+                cipherDataState
+                    .data
+                    ?.let {
+                        totpCodeManager
+                            .getTotpCodeStateFlow(userId = userId, cipher = it)
+                            .map { totpCodeDataState ->
+                                combineDataStates(totpCodeDataState, cipherDataState) { _, _ ->
+                                    // We are only combining the DataStates to know the overall
+                                    // state, we map it to the appropriate value below.
+                                }
+                                    .mapNullable { totpCodeDataState.data }
+                            }
                     }
+                    ?: flowOf(DataState.Loaded(null))
             }
             .stateIn(
                 scope = unconfinedScope,
@@ -608,12 +605,12 @@ class VaultRepositoryImpl(
             )
             .also {
                 if (it is VaultUnlockResult.Success) {
-                    encryptedBiometricsKey?.let {
+                    encryptedBiometricsKey?.let { key ->
                         // If this key is present, we store it and the associated IV for future use
                         // since we want to migrate the user to a more secure form of biometrics.
                         authDiskSource.storeUserBiometricUnlockKey(
                             userId = userId,
-                            biometricsKey = it,
+                            biometricsKey = key,
                         )
                         authDiskSource.storeUserBiometricInitVector(userId = userId, iv = cipher.iv)
                     }

@@ -425,9 +425,9 @@ A leitura será feita automaticamente.</string>
     <string name="privacy_policy">Política de Privacidade</string>
     <string name="passkey_management">Gerenciamento de chaves de acesso</string>
     <string name="autofill_services">Serviços de autopreenchimento</string>
-    <string name="display_autofill_suggestions">Display autofill suggestions</string>
-    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
-    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
+    <string name="display_autofill_suggestions">Exibir sugestões de preenchimento automático</string>
+    <string name="autofill_suggestions_inline">Nativa (mostrar no teclado)</string>
+    <string name="autofill_suggestions_popup">Popup (mostra sobre o campo de entrada)</string>
     <string name="accessibility">Usar acessibilidade</string>
     <string name="accessibility_description5">Necessário para usar o bloco de ação-rápida de auto-preenchimento.</string>
     <string name="personal_ownership_policy_in_effect">Uma política de organização está afetando suas opções de propriedade.</string>
@@ -456,7 +456,7 @@ A leitura será feita automaticamente.</string>
     <string name="password_info">Exigir opcionalmente uma senha para os usuários acessarem este Send.</string>
     <string name="remove_password">Remover senha</string>
     <string name="removing_send_password">Removendo senha</string>
-    <string name="password_removed">Password removed</string>
+    <string name="password_removed">Senha removida</string>
     <string name="add_a_send">Adicionar um Send</string>
     <string name="copy_link">Copiar link</string>
     <string name="share_link">Compartilhar link</string>
@@ -677,7 +677,7 @@ Você deseja mudar para esta conta?</string>
     <string name="privacy_policy_description_long">Confira a nossa política de privacidade em bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Explore mais recursos da sua conta no Bitwarden no aplicativo web.</string>
     <string name="learn_about_organizations_description_long">O Bitwarden permite compartilhar os seus itens do cofre com outros ao utilizar uma organização. Gostaria de visitar o site bitwarden.com para saber mais?</string>
-    <string name="created_x">Created %1$s</string>
+    <string name="created_x">Criado %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Sua organização requer que você defina uma senha mestra.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Configure um método de desbloqueio para alterar o tempo limite do cofre.</string>
     <string name="save_passkey_as_new_login">Salvar chave de acesso como um novo login</string>
@@ -910,10 +910,10 @@ Você deseja mudar para esta conta?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">A operação da chave de acesso falhou porque não foi selecionado nenhum item.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A operação com a chave de acesso falhou porque a solicitação não é compatível.</string>
     <string name="self_host_server_url">URL do servidor auto-hospedado</string>
-    <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
+    <string name="use_brave_autofill_integration">Usar a integração do autopreenchimento do Brave</string>
     <string name="use_chrome_autofill_integration">Usar integração com o preenchimento automático do Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Usar integração com o preenchimento automático do Chrome (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Melhora o preenchimento de logins para sites suportados em navegadores selecionados. Assim que ativado, você será direcionado para as configurações do navegador para habilitar o autopreenchimento de terceiros.</string>
     <string name="show_more">Mostrar mais</string>
     <string name="no_folder">Nenhuma pasta</string>
     <string name="show_less">Mostrar menos</string>
@@ -983,14 +983,10 @@ Você deseja mudar para esta conta?</string>
     <string name="about_privileged_applications">Sobre aplicativos privilegiados</string>
     <string name="learn_more_about_privileged_apps">Saiba mais sobre apps privilegiados</string>
     <string name="privileged_apps">Apps privilegiados</string>
-    <string name="unrecognized_browser">Unrecognized browser</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
-    <string name="google">Google</string>
-    <string name="the_community">the Community</string>
-    <string name="you">YOU</string>
-    <string name="all_trusted_apps">All trusted apps</string>
-    <string name="trusted_by_x">Trusted by %s</string>
-    <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
-    <string name="installed_apps">Installed apps</string>
-    <string name="delete_x">Delete %s</string>
+    <string name="unrecognized_browser">Navegador não reconhecido</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Saiba mais sobre o uso de senhas com o Bitwarden.</string>
+    <string name="all_trusted_apps">Todos os apps confiáveis</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Tem certeza de que deseja parar de confiar em %s?</string>
+    <string name="installed_apps">Apps instalados</string>
+    <string name="delete_x">Excluir %s</string>
 </resources>

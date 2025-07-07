@@ -181,10 +181,7 @@ private fun PrivilegedAppsListContent(
             ) { index, item ->
                 BitwardenTextRow(
                     text = item.label,
-                    description = stringResource(
-                        R.string.trusted_by_x,
-                        stringResource(item.trustAuthority.displayName),
-                    ),
+                    description = stringResource(item.trustAuthority.description),
                     clickable = false,
                     onClick = {},
                     cardStyle = state.installedApps

@@ -984,11 +984,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="privileged_apps">Kiváltságos alkalmazások</string>
     <string name="unrecognized_browser">Felismerhetetlen böngésző</string>
     <string name="learn_more_about_using_passkeys_with_bitwarden">További információ a hozzáférési kulcsok használatáról a Bitwardenben.</string>
-    <string name="google">Google</string>
-    <string name="the_community">a Közösség</string>
-    <string name="you">SAJÁT MAGAM</string>
     <string name="all_trusted_apps">Összes megbízható alkalmazás</string>
-    <string name="trusted_by_x">%s megbízhatónak tartja</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Boztos leállításra kerüljön %s megbízhatósága?</string>
     <string name="installed_apps">Telepített alkalmazások</string>
     <string name="delete_x">%s törlése</string>

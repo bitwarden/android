@@ -985,11 +985,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="privileged_apps">Bevoegde apps</string>
     <string name="unrecognized_browser">Onbekende browser</string>
     <string name="learn_more_about_using_passkeys_with_bitwarden">Meer informatie over het gebruik van passkeys met Bitwarden.</string>
-    <string name="google">Google</string>
-    <string name="the_community">de Gemeenschap</string>
-    <string name="you">JIJ</string>
     <string name="all_trusted_apps">Alle vertrouwde apps</string>
-    <string name="trusted_by_x">Vertrouwd door %s</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Weet je zeker dat je wilt stoppen met %s vertrouwen?</string>
     <string name="installed_apps">Geïnstalleerde apps</string>
     <string name="delete_x">%s verwijderen</string>

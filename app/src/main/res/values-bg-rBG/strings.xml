@@ -855,7 +855,7 @@
     <string name="need_some_inspiration">"Имате ли нужда от вдъхновение?"</string>
     <string name="check_out_the_passphrase_generator">"Изпробвайте генератора на пароли-фрази"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Сертификатът на сървъра не може да бъде потвърден. Възможно е да има проблем в конфигурацията на сертификатите, настройките за сървър-посредник на устройството или на сървъра на Битуорден.</string>
-    <string name="review_flow_launched">Review flow launched!</string>
+    <string name="review_flow_launched">Процесът на оценяване вече е наличен!</string>
     <string name="copy_private_key">Копиране на частния ключ</string>
     <string name="login_credentials">Данни за вписване</string>
     <string name="autofill_options">Опции за автоматично попълване</string>
@@ -987,11 +987,7 @@
     <string name="privileged_apps">Доверени приложения</string>
     <string name="unrecognized_browser">Неразпознат браузър</string>
     <string name="learn_more_about_using_passkeys_with_bitwarden">Научете повече относно използването на секретни ключове в Битуорден.</string>
-    <string name="google">Google</string>
-    <string name="the_community">общността</string>
-    <string name="you">Вие</string>
     <string name="all_trusted_apps">Всички доверени приложения</string>
-    <string name="trusted_by_x">Има доверие от %s</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Наистина ли искате да премахнете доверието от %s?</string>
     <string name="installed_apps">Инсталирани приложения</string>
     <string name="delete_x">Изтриване на %s</string>

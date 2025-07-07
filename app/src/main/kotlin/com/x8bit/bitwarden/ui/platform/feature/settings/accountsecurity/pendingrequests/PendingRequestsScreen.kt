@@ -61,6 +61,8 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingConten
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 
@@ -84,12 +86,15 @@ fun PendingRequestsScreen(
             { viewModel.trySendAction(PendingRequestsAction.RefreshPull) }
         },
     )
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             PendingRequestsEvent.NavigateBack -> onNavigateBack()
             is PendingRequestsEvent.NavigateToLoginApproval -> {
                 onNavigateToLoginApproval(event.fingerprint)
             }
+
+            is PendingRequestsEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
 
@@ -142,6 +147,9 @@ fun PendingRequestsScreen(
             )
         },
         pullToRefreshState = pullToRefreshState,
+        snackbarHost = {
+            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
+        },
     ) {
         when (val viewState = state.viewState) {
             is PendingRequestsState.ViewState.Content -> {

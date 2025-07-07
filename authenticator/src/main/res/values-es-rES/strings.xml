@@ -125,7 +125,7 @@
     <string name="take_me_to_app_settings">Llévame a la configuración de la aplicación</string>
     <string name="something_went_wrong">Algo salió mal</string>
     <string name="please_try_again">Por favor, reinténtalo</string>
-    <string name="move_to_bitwarden">Mover a Bitwarden</string>
+    <string name="copy_to_bitwarden_vault">Copy to Bitwarden vault</string>
     <string name="default_save_option">Ajuste de guardado por defecto</string>
     <string name="save_to_bitwarden">Guardar en Bitwarden</string>
     <string name="save_here">Guardar aquí</string>
@@ -142,4 +142,9 @@
     <string name="file_could_not_be_processed">"No se pudo procesar el archivo"</string>
     <string name="file_could_not_be_processed_message">"No se pudo procesar el archivo. Asegúrate de que sea un JSON válido e inténtalo de nuevo. ¿Necesitas ayuda? Visita bitwarden.com/help"</string>
     <string name="get_help">Obtener ayuda</string>
+    <string name="expand_advanced_options">Expand advanced options</string>
+    <string name="local_items_are_expanded_click_to_collapse">Local items are expanded, click to collapse.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
+    <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
+    <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
 </resources>

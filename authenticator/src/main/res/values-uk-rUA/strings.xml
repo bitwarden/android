@@ -125,7 +125,7 @@
     <string name="take_me_to_app_settings">Перейти до налаштувань програми</string>
     <string name="something_went_wrong">Щось пішло не так</string>
     <string name="please_try_again">Повторіть спробу</string>
-    <string name="move_to_bitwarden">Перемістити до Bitwarden</string>
+    <string name="copy_to_bitwarden_vault">Copy to Bitwarden vault</string>
     <string name="default_save_option">Типовий параметр збереження</string>
     <string name="save_to_bitwarden">Зберегти в Bitwarden</string>
     <string name="save_here">Зберегти тут</string>
@@ -142,4 +142,9 @@
     <string name="file_could_not_be_processed">"Неможливо обробити файл"</string>
     <string name="file_could_not_be_processed_message">"Не вдалося обробити файл. Перевірте правильність JSON і повторіть спробу. Потрібна допомога? Відвідайте bitwarden.com/help"</string>
     <string name="get_help">Отримати допомогу</string>
+    <string name="expand_advanced_options">Expand advanced options</string>
+    <string name="local_items_are_expanded_click_to_collapse">Local items are expanded, click to collapse.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
+    <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
+    <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
 </resources>

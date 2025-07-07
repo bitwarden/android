@@ -15,6 +15,9 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -36,6 +39,7 @@ class LoginApprovalViewModel @Inject constructor(
     private val clock: Clock,
     private val authRepository: AuthRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
+    private val snackbarRelayManager: SnackbarRelayManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginApprovalState, LoginApprovalEvent, LoginApprovalAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -71,7 +75,9 @@ class LoginApprovalViewModel @Inject constructor(
                                             .userStateFlow
                                             .value
                                             ?.accounts
-                                            ?.find { it.userId == passwordlessRequestData.userId }
+                                            ?.find { account ->
+                                                account.userId == passwordlessRequestData.userId
+                                            }
                                             ?.email
                                             .orEmpty(),
                                     ),
@@ -180,8 +186,7 @@ class LoginApprovalViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             is AuthRequestResult.Success -> {
-                sendEvent(LoginApprovalEvent.ShowToast(R.string.login_approved.asText()))
-                sendClosingEvent()
+                sendClosingEvent(message = R.string.login_approved.asText())
             }
 
             is AuthRequestResult.Error -> {
@@ -244,8 +249,7 @@ class LoginApprovalViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             is AuthRequestResult.Success -> {
-                sendEvent(LoginApprovalEvent.ShowToast(R.string.log_in_denied.asText()))
-                sendClosingEvent()
+                sendClosingEvent(message = R.string.log_in_denied.asText())
             }
 
             is AuthRequestResult.Error -> {
@@ -262,14 +266,26 @@ class LoginApprovalViewModel @Inject constructor(
         }
     }
 
-    private fun sendClosingEvent() {
-        val event = if (state.specialCircumstance?.shouldFinishWhenComplete == true) {
-            LoginApprovalEvent.ExitApp
-        } else {
-            LoginApprovalEvent.NavigateBack
+    private fun sendClosingEvent(message: Text? = null) {
+        val shouldFinishWhenComplete = state.specialCircumstance?.shouldFinishWhenComplete == true
+        message?.let {
+            if (shouldFinishWhenComplete) {
+                // We are about to exit the app, so we need to use a Toast here.
+                sendEvent(LoginApprovalEvent.ShowToast(it))
+            } else {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = it),
+                    relay = SnackbarRelay.LOGIN_APPROVAL,
+                )
+            }
         }
-
-        sendEvent(event)
+        sendEvent(
+            event = if (shouldFinishWhenComplete) {
+                LoginApprovalEvent.ExitApp
+            } else {
+                LoginApprovalEvent.NavigateBack
+            },
+        )
     }
 }
 
