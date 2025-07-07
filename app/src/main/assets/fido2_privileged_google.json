@@ -779,6 +779,42 @@
           }
         ]
       }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "cz.seznam.sbrowser",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "DB:95:40:66:10:78:83:6E:4E:B1:66:F6:9E:F4:07:30:9E:8D:AE:33:34:68:5E:C8:F6:FA:2F:13:81:B9:AC:F6"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.opera.mini.native",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "57:AC:BC:52:5F:1B:2E:BD:19:19:6C:D6:F0:14:39:7C:C9:10:FD:18:84:1E:0A:E8:50:FE:BC:3E:1E:59:3F:F2"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.opera.mini.native.beta",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "57:AC:BC:52:5F:1B:2E:BD:19:19:6C:D6:F0:14:39:7C:C9:10:FD:18:84:1E:0A:E8:50:FE:BC:3E:1E:59:3F:F2"
+          }
+        ]
+      }
     }
   ]
 }
