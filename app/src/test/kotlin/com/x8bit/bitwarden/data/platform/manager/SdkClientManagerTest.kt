@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -17,6 +18,9 @@ class SdkClientManagerTest {
 
     private val mockNativeLibraryManager = mockk<NativeLibraryManager> {
         every { loadLibrary(any()) } returns Result.success(Unit)
+    }
+    private val sdkRepoFactory: SdkRepositoryFactory = mockk {
+        every { getCipherRepository(userId = any()) } returns mockk()
     }
 
     @BeforeEach
@@ -82,5 +86,6 @@ class SdkClientManagerTest {
         clientProvider = { mockk(relaxed = true) },
         nativeLibraryManager = mockNativeLibraryManager,
         featureFlagManager = mockk(),
+        sdkRepoFactory = sdkRepoFactory,
     )
 }
