@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Аутентификатор</string>
     <string name="biometrics_direction">Биометрическая верификация</string>
     <string name="cancel">Отменить</string>
     <string name="add_item">Добавить элемент</string>
@@ -62,7 +61,7 @@
     <string name="secure_your_accounts_with_bitwarden_authenticator">Защитите свои учетные записи с помощью аутентификатора Bitwarden</string>
     <string name="get_verification_codes_for_all_your_accounts">Получите коды проверки для всех ваших учетных записей, поддерживающих 2-этапную проверку.</string>
     <string name="use_your_device_camera_to_scan_codes">Используйте камеру вашего устройства для сканирования кодов</string>
-    <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Сканируйте QR-код в настройках 
+    <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Сканируйте QR-код в настройках
 2-этапной верификации для любой учетной записи.</string>
     <string name="sign_in_using_unique_codes">Авторизуйтесь с помощью уникальных кодов</string>
     <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">При использовании 2-этапной верификации вы введете свое имя пользователя, пароль и код, сгенерированный в этом приложении.</string>
@@ -80,7 +79,7 @@
     <string name="export_confirmation_title">Подтвердите экспорт</string>
     <string name="export_vault_warning">Этот экспорт содержит ваши данные в незашифрованном формате. Не следует хранить или отправлять экспортированный файл по незащищенным каналам (например, по электронной почте). Удалите его сразу после завершения работы.</string>
     <string name="file_format">Формат файла</string>
-    <string name="export_vault_failure">Возникла проблема с экспортом вашего хранилища. Если проблема сохраняется, вам нужно экспортировать из 
+    <string name="export_vault_failure">Возникла проблема с экспортом вашего хранилища. Если проблема сохраняется, вам нужно экспортировать из
 веб хранилища.</string>
     <string name="export_success">Данные успешно экспортированы</string>
     <string name="unlock_with">Разблокируйте с помощью %1$s</string>

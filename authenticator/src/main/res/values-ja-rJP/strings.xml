@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Authenticator</string>
     <string name="biometrics_direction">生体認証</string>
     <string name="cancel">キャンセル</string>
     <string name="add_item">項目の追加</string>
