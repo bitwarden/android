@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden
 
+import android.app.ComponentCaller
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -23,12 +24,12 @@ import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.setupEdgeToEdge
+import com.bitwarden.ui.platform.util.validate
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityCompletionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
 import com.x8bit.bitwarden.data.platform.manager.util.ObserveScreenDataEffect
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.bitwarden.ui.platform.util.validate
 import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.debugMenuDestination
@@ -68,7 +69,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var debugLaunchManager: DebugMenuLaunchManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        intent.validate()
+        intent = intent.validate()
         var shouldShowSplashScreen = true
         installSplashScreen().setKeepOnScreenCondition { shouldShowSplashScreen }
         super.onCreate(savedInstanceState)
@@ -116,9 +117,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        intent.validate()
-        mainViewModel.trySendAction(action = MainAction.ReceiveNewIntent(intent = intent))
+        val newIntent = intent.validate()
+        super.onNewIntent(newIntent)
+        mainViewModel.trySendAction(action = MainAction.ReceiveNewIntent(intent = newIntent))
+    }
+
+    override fun onNewIntent(intent: Intent, caller: ComponentCaller) {
+        val newIntent = intent.validate()
+        super.onNewIntent(newIntent, caller)
+        mainViewModel.trySendAction(action = MainAction.ReceiveNewIntent(intent = newIntent))
     }
 
     override fun onResume() {

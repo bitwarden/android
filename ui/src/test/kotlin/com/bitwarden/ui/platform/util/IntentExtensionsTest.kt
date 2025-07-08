@@ -1,6 +1,7 @@
 package com.bitwarden.ui.platform.util
 
 import android.content.Intent
+import android.os.BadParcelableException
 import android.os.Bundle
 import io.mockk.every
 import io.mockk.mockk
@@ -26,7 +27,7 @@ class IntentExtensionsTest {
 
     @Test
     fun `validate should not modify the current intent`() {
-        val intent = mockk<Intent> (relaxed = true) {
+        val intent = mockk<Intent>(relaxed = true) {
             every { getStringExtra("token") } returns "myToken"
         }
 
@@ -39,7 +40,7 @@ class IntentExtensionsTest {
     fun `validate should remove extras if BadParcelableException is thrown`() {
         val mockIntent = mockk<Intent>(relaxed = true)
 
-        every { mockIntent.extras } throws android.os.BadParcelableException("Bad parcel")
+        every { mockIntent.extras } throws BadParcelableException("Bad parcel")
 
         mockIntent.validate()
         verify { mockIntent.replaceExtras(null as Bundle?) }
