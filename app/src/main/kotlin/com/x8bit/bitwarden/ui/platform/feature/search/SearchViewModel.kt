@@ -15,7 +15,7 @@ import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
-import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -34,6 +35,7 @@ import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrN
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -67,6 +69,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
+import timber.log.Timber
 import java.time.Clock
 import javax.inject.Inject
 
@@ -205,13 +209,12 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun handleAutofillItemClick(action: SearchAction.AutofillItemClick) {
-        val cipherView = getCipherViewOrNull(cipherId = action.itemId) ?: return
-        useCipherForAutofill(cipherView = cipherView)
+        useCipherForAutofill(cipherId = action.itemId)
     }
 
     private fun handleAutofillAndSaveItemClick(action: SearchAction.AutofillAndSaveItemClick) {
-        val cipherView = getCipherViewOrNull(cipherId = action.itemId) ?: return
-        val uris = cipherView.login?.uris.orEmpty()
+        val cipherListView = getCipherListViewOrNull(cipherId = action.itemId) ?: return
+        val uris = cipherListView.login?.uris.orEmpty()
 
         mutableStateFlow.update {
             it.copy(
@@ -222,20 +225,25 @@ class SearchViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            val result = vaultRepo.updateCipher(
-                cipherId = action.itemId,
-                cipherView = cipherView.copy(
-                    login = cipherView
-                        .login
-                        ?.copy(
-                            uris = uris + LoginUriView(
-                                uri = state.autofillSelectionData?.uri,
-                                match = null,
-                                uriChecksum = null,
-                            ),
+            val result = decryptCipherViewOrNull(cipherId = action.itemId)
+                ?.let { cipherView ->
+                    vaultRepo.updateCipher(
+                        cipherId = action.itemId,
+                        cipherView = cipherView.copy(
+                            login = cipherView
+                                .login
+                                ?.copy(
+                                    uris = uris + LoginUriView(
+                                        uri = state.autofillSelectionData?.uri,
+                                        match = null,
+                                        uriChecksum = null,
+                                    ),
+                                ),
                         ),
-                ),
-            )
+                    )
+                }
+                ?: UpdateCipherResult.Error(error = null, errorMessage = null)
+
             sendAction(
                 SearchAction.Internal.UpdateCipherResultReceive(
                     cipherId = action.itemId,
@@ -399,7 +407,7 @@ class SearchViewModel @Inject constructor(
 
     private fun handleCopyNoteClick(action: ListingItemOverflowAction.VaultAction.CopyNoteClick) {
         clipboardManager.setText(
-            text = action.notes,
+            text = action.cipherId,
             toastDescriptorOverride = R.string.notes.asText(),
         )
     }
@@ -407,34 +415,53 @@ class SearchViewModel @Inject constructor(
     private fun handleCopyNumberClick(
         action: ListingItemOverflowAction.VaultAction.CopyNumberClick,
     ) {
-        clipboardManager.setText(
-            text = action.number,
-            toastDescriptorOverride = R.string.number.asText(),
-        )
+        viewModelScope.launch {
+            decryptCipherViewOrNull(action.cipherId)
+                ?.let {
+                    clipboardManager.setText(
+                        text = it.card?.number.orEmpty(),
+                        toastDescriptorOverride = R.string.number.asText(),
+                    )
+                }
+        }
     }
 
     private fun handleCopyPasswordClick(
         action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
     ) {
-        clipboardManager.setText(
-            text = action.password,
-            toastDescriptorOverride = R.string.password.asText(),
-        )
-        organizationEventManager.trackEvent(
-            event = OrganizationEvent.CipherClientCopiedPassword(cipherId = action.cipherId),
-        )
+        viewModelScope.launch {
+            decryptCipherViewOrNull(action.cipherId)
+                ?.let { cipherView ->
+                    clipboardManager.setText(
+                        text = cipherView.login?.password.orEmpty(),
+                        toastDescriptorOverride = R.string.password.asText(),
+                    )
+                    organizationEventManager.trackEvent(
+                        event = OrganizationEvent.CipherClientCopiedPassword(
+                            cipherId = action.cipherId,
+                        ),
+                    )
+                }
+        }
     }
 
     private fun handleCopySecurityCodeClick(
         action: ListingItemOverflowAction.VaultAction.CopySecurityCodeClick,
     ) {
-        clipboardManager.setText(
-            text = action.securityCode,
-            toastDescriptorOverride = R.string.security_code.asText(),
-        )
-        organizationEventManager.trackEvent(
-            event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = action.cipherId),
-        )
+        viewModelScope.launch {
+            decryptCipherViewOrNull(action.cipherId)
+                ?.let { cipherView ->
+                    clipboardManager.setText(
+                        text = cipherView.card?.code.orEmpty(),
+                        toastDescriptorOverride = R.string.security_code.asText(),
+                    )
+                    organizationEventManager.trackEvent(
+                        event = OrganizationEvent.CipherClientCopiedCardCode(
+                            cipherId = action.cipherId,
+                        ),
+                    )
+                }
+        }
     }
 
     private fun handleCopyUsernameClick(
@@ -499,6 +526,24 @@ class SearchViewModel @Inject constructor(
             }
 
             is SearchAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
+
+            is SearchAction.Internal.DecryptCipherErrorReceive -> {
+                handleDecryptCipherErrorReceive(action)
+            }
+        }
+    }
+
+    private fun handleDecryptCipherErrorReceive(
+        action: SearchAction.Internal.DecryptCipherErrorReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = SearchState.DialogState.Error(
+                    title = R.string.decryption_error.asText(),
+                    message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                    throwable = action.error,
+                ),
+            )
         }
     }
 
@@ -596,8 +641,7 @@ class SearchViewModel @Inject constructor(
 
             UpdateCipherResult.Success -> {
                 // Complete the autofill selection flow
-                val cipherView = getCipherViewOrNull(cipherId = action.cipherId) ?: return
-                useCipherForAutofill(cipherView = cipherView)
+                useCipherForAutofill(cipherId = action.cipherId)
             }
         }
     }
@@ -732,17 +776,21 @@ class SearchViewModel @Inject constructor(
             }
     }
 
-    private fun useCipherForAutofill(cipherView: CipherView) {
-        when (state.autofillSelectionData?.framework) {
-            AutofillSelectionData.Framework.ACCESSIBILITY -> {
-                accessibilitySelectionManager.emitAccessibilitySelection(cipherView = cipherView)
-            }
+    private fun useCipherForAutofill(cipherId: String) {
+        viewModelScope.launch {
+            decryptCipherViewOrNull(cipherId)?.let {
+                when (state.autofillSelectionData?.framework) {
+                    AutofillSelectionData.Framework.ACCESSIBILITY -> {
+                        accessibilitySelectionManager.emitAccessibilitySelection(cipherView = it)
+                    }
 
-            AutofillSelectionData.Framework.AUTOFILL -> {
-                autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
-            }
+                    AutofillSelectionData.Framework.AUTOFILL -> {
+                        autofillSelectionManager.emitAutofillSelection(cipherView = it)
+                    }
 
-            null -> Unit
+                    null -> Unit
+                }
+            }
         }
     }
 
@@ -768,7 +816,8 @@ class SearchViewModel @Inject constructor(
                 viewState = when (val searchType = currentState.searchType) {
                     is SearchTypeData.Vault -> {
                         vaultData
-                            .cipherViewList
+                            .decryptCipherListResult
+                            .successes
                             .filterAndOrganize(searchType, state.searchTerm)
                             .toFilteredList(
                                 vaultFilterType = state
@@ -802,13 +851,31 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private fun getCipherViewOrNull(cipherId: String) =
+    private fun getCipherListViewOrNull(cipherId: String) =
         vaultRepo
             .vaultDataStateFlow
             .value
             .data
-            ?.cipherViewList
-            ?.firstOrNull { it.id == cipherId }
+            ?.decryptCipherListResult
+            ?.successes
+            .orEmpty()
+            .firstOrNull { it.id == cipherId }
+
+    private suspend fun decryptCipherViewOrNull(cipherId: String): CipherView? =
+        when (val result = vaultRepo.getCipher(cipherId = cipherId)) {
+            GetCipherResult.CipherNotFound -> {
+                Timber.e("Cipher not found.")
+                null
+            }
+
+            is GetCipherResult.Error -> {
+                Timber.e(result.error, "Failed to decrypt cipher.")
+                SearchAction.Internal.DecryptCipherErrorReceive(error = result.error)
+                null
+            }
+
+            is GetCipherResult.Success -> result.cipherView
+        }
 }
 
 /**
@@ -946,7 +1013,7 @@ data class SearchState(
              * Indicates the item type is a vault item.
              */
             @Parcelize
-            data class Vault(val type: CipherType) : ItemType()
+            data class Vault(val type: @RawValue CipherListViewType) : ItemType()
         }
     }
 }
@@ -1234,6 +1301,13 @@ sealed class SearchAction {
          */
         data class VaultDataReceive(
             val vaultData: DataState<VaultData>,
+        ) : Internal()
+
+        /**
+         * Indicates an error occurred while decrypting a cipher.
+         */
+        data class DecryptCipherErrorReceive(
+            val error: Throwable?,
         ) : Internal()
     }
 }

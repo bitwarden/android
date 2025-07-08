@@ -23,6 +23,7 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.EncryptionContext
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
@@ -202,30 +203,6 @@ interface VaultSdkSource {
         userId: String,
         cipher: Cipher,
     ): Result<CipherView>
-
-    /**
-     * Decrypts a list of [Cipher]s for the user with the given [userId], returning a list of
-     * [CipherListView] wrapped in a [Result].
-     *
-     * This should only be called after a successful call to [initializeCrypto] for the associated
-     * user.
-     */
-    suspend fun decryptCipherListCollection(
-        userId: String,
-        cipherList: List<Cipher>,
-    ): Result<List<CipherListView>>
-
-    /**
-     * Decrypts a list of [Cipher]s  for the user with the given [userId], returning a list of
-     * [CipherView] wrapped in a [Result].
-     *
-     * This should only be called after a successful call to [initializeCrypto] for the associated
-     * user.
-     */
-    suspend fun decryptCipherList(
-        userId: String,
-        cipherList: List<Cipher>,
-    ): Result<List<CipherView>>
 
     /**
      * Decrypts a [Collection] for the user with the given [userId], returning a [CollectionView]
@@ -485,4 +462,15 @@ interface VaultSdkSource {
         fido2CredentialStore: Fido2CredentialStore,
         relyingPartyId: String,
     ): Result<List<Fido2CredentialAutofillView>>
+
+    /**
+     * Decrypts a list of [Cipher]s for the user with the given [userId].
+     *
+     * @return A [DecryptCipherListResult] containing the decrypted [CipherListView]s and references
+     * to [Cipher]s that cannot be decrypted.
+     */
+    suspend fun decryptCipherListWithFailures(
+        userId: String,
+        cipherList: List<Cipher>,
+    ): Result<DecryptCipherListResult>
 }

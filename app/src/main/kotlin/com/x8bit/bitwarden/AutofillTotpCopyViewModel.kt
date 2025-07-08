@@ -7,12 +7,12 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.util.getTotpCopyIntentOrNull
 import com.x8bit.bitwarden.data.platform.util.launchWithTimeout
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.mapNotNull
 import javax.inject.Inject
 
 /**
@@ -54,20 +54,15 @@ class AutofillTotpCopyViewModel @Inject constructor(
                     return@launchWithTimeout
                 }
 
-                // Try and find the matching cipher.
-                vaultRepository
-                    .ciphersStateFlow
-                    .mapNotNull { it.data }
-                    .first()
-                    .find { it.id == cipherId }
-                    ?.let { cipherView ->
+                when (val result = vaultRepository.getCipher(cipherId = cipherId)) {
+                    GetCipherResult.CipherNotFound -> finishActivity()
+                    is GetCipherResult.Error -> finishActivity()
+                    is GetCipherResult.Success -> {
                         sendEvent(
-                            AutofillTotpCopyEvent.CompleteAutofill(
-                                cipherView = cipherView,
-                            ),
+                            AutofillTotpCopyEvent.CompleteAutofill(cipherView = result.cipherView),
                         )
                     }
-                    ?: finishActivity()
+                }
             }
     }
 

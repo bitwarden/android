@@ -11,14 +11,15 @@ import com.bitwarden.ui.platform.base.util.removeDiacritics
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
+import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
-import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
-import com.x8bit.bitwarden.data.platform.util.subtitle
+import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
@@ -79,10 +80,10 @@ val SearchTypeData.searchItemTestTag: String
  * Filters out any [CipherView]s that do not adhere to the [searchTypeData] and [searchTerm] and
  * sorts the remaining items.
  */
-fun List<CipherView>.filterAndOrganize(
+fun List<CipherListView>.filterAndOrganize(
     searchTypeData: SearchTypeData.Vault,
     searchTerm: String,
-): List<CipherView> =
+): List<CipherListView> =
     if (searchTerm.isBlank()) {
         emptyList()
     } else {
@@ -101,23 +102,29 @@ fun List<CipherView>.filterAndOrganize(
 /**
  * Determines a predicate to filter a list of [SendView] based on the [SearchTypeData.Sends].
  */
-private fun CipherView.filterBySearchType(
+private fun CipherListView.filterBySearchType(
     searchTypeData: SearchTypeData.Vault,
 ): Boolean =
     when (searchTypeData) {
         SearchTypeData.Vault.All -> deletedDate == null
-        is SearchTypeData.Vault.Cards -> type == CipherType.CARD && deletedDate == null
+        is SearchTypeData.Vault.Cards -> type is CipherListViewType.Card && deletedDate == null
         is SearchTypeData.Vault.Collection -> {
             searchTypeData.collectionId in this.collectionIds && deletedDate == null
         }
 
         is SearchTypeData.Vault.Folder -> folderId == searchTypeData.folderId && deletedDate == null
         SearchTypeData.Vault.NoFolder -> folderId == null && deletedDate == null
-        is SearchTypeData.Vault.Identities -> type == CipherType.IDENTITY && deletedDate == null
-        is SearchTypeData.Vault.Logins -> type == CipherType.LOGIN && deletedDate == null
-        is SearchTypeData.Vault.SecureNotes -> type == CipherType.SECURE_NOTE && deletedDate == null
-        is SearchTypeData.Vault.SshKeys -> type == CipherType.SSH_KEY && deletedDate == null
-        is SearchTypeData.Vault.VerificationCodes -> login?.totp != null && deletedDate == null
+        is SearchTypeData.Vault.Identities -> {
+            type is CipherListViewType.Identity && deletedDate == null
+        }
+
+        is SearchTypeData.Vault.Logins -> type is CipherListViewType.Login && deletedDate == null
+        is SearchTypeData.Vault.SecureNotes -> {
+            type is CipherListViewType.SecureNote && deletedDate == null
+        }
+
+        is SearchTypeData.Vault.SshKeys -> type is CipherListViewType.SshKey && deletedDate == null
+        is SearchTypeData.Vault.VerificationCodes -> organizationUseTotp && deletedDate == null
         is SearchTypeData.Vault.Trash -> deletedDate != null
     }
 
@@ -126,12 +133,16 @@ private fun CipherView.filterBySearchType(
  * this item should be removed from the list.
  */
 @Suppress("MagicNumber")
-private fun CipherView.matchedSearch(searchTerm: String): SortPriority? {
+private fun CipherListView.matchedSearch(searchTerm: String): SortPriority? {
     val term = searchTerm.removeDiacritics()
     val cipherName = name.removeDiacritics()
     val cipherId = id?.takeIf { term.length > 8 }.orEmpty().removeDiacritics()
-    val cipherSubtitle = subtitle.orEmpty().removeDiacritics()
-    val cipherUris = login?.uris.orEmpty().map { it.uri.orEmpty().removeDiacritics() }
+    val cipherSubtitle = subtitle.removeDiacritics()
+    val cipherUris = (this.type as? CipherListViewType.Login)
+        ?.v1
+        ?.uris
+        .orEmpty()
+        .map { it.uri.orEmpty().removeDiacritics() }
     return when {
         cipherName.contains(other = term, ignoreCase = true) -> SortPriority.HIGH
         cipherId.contains(other = term, ignoreCase = true) -> SortPriority.LOW
@@ -145,7 +156,7 @@ private fun CipherView.matchedSearch(searchTerm: String): SortPriority? {
  * Transforms a list of [CipherView] into [SearchState.ViewState].
  */
 @Suppress("LongParameterList")
-fun List<CipherView>.toViewState(
+fun List<CipherListView>.toViewState(
     searchTerm: String,
     baseIconUrl: String,
     hasMasterPassword: Boolean,
@@ -175,7 +186,7 @@ fun List<CipherView>.toViewState(
         }
     }
 
-private fun List<CipherView>.toDisplayItemList(
+private fun List<CipherListView>.toDisplayItemList(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
@@ -192,7 +203,7 @@ private fun List<CipherView>.toDisplayItemList(
         )
     }
 
-private fun CipherView.toDisplayItem(
+private fun CipherListView.toDisplayItem(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
@@ -229,13 +240,13 @@ private fun CipherView.toDisplayItem(
         itemType = SearchState.DisplayItem.ItemType.Vault(type = this.type),
     )
 
-private fun CipherView.toIconData(
+private fun CipherListView.toIconData(
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
 ): IconData =
-    when (this.type) {
-        CipherType.LOGIN -> {
-            login?.uris.toLoginIconData(
+    when (val cipherType = this.type) {
+        is CipherListViewType.Login -> {
+            cipherType.v1.uris.toLoginIconData(
                 baseIconUrl = baseIconUrl,
                 isIconLoadingDisabled = isIconLoadingDisabled,
                 usePasskeyDefaultIcon = this.isActiveWithFido2Credentials,
@@ -246,13 +257,13 @@ private fun CipherView.toIconData(
     }
 
 @get:DrawableRes
-private val CipherType.iconRes: Int
+private val CipherListViewType.iconRes: Int
     get() = when (this) {
-        CipherType.LOGIN -> BitwardenDrawable.ic_globe
-        CipherType.SECURE_NOTE -> BitwardenDrawable.ic_note
-        CipherType.CARD -> BitwardenDrawable.ic_payment_card
-        CipherType.IDENTITY -> BitwardenDrawable.ic_id_card
-        CipherType.SSH_KEY -> BitwardenDrawable.ic_ssh_key
+        is CipherListViewType.Login -> BitwardenDrawable.ic_globe
+        CipherListViewType.SecureNote -> BitwardenDrawable.ic_note
+        is CipherListViewType.Card -> BitwardenDrawable.ic_payment_card
+        CipherListViewType.Identity -> BitwardenDrawable.ic_id_card
+        CipherListViewType.SshKey -> BitwardenDrawable.ic_ssh_key
     }
 
 /**

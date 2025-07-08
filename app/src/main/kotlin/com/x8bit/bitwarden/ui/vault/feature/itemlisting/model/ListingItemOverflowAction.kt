@@ -4,9 +4,10 @@ import android.os.Parcelable
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherListViewType
 import com.x8bit.bitwarden.R
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 
 /**
  * Represents the actions for an individual item's overflow menu.
@@ -93,7 +94,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class ViewClick(
             val cipherId: String,
-            val cipherType: CipherType,
+            val cipherType: @RawValue CipherListViewType,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
             override val title: Text get() = R.string.view.asText()
@@ -105,7 +106,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class EditClick(
             val cipherId: String,
-            val cipherType: CipherType,
+            val cipherType: @RawValue CipherListViewType,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
             override val title: Text get() = R.string.edit.asText()
@@ -126,7 +127,6 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class CopyPasswordClick(
             val cipherId: String,
-            val password: String,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
             override val title: Text get() = R.string.copy_password.asText()
@@ -148,7 +148,7 @@ sealed class ListingItemOverflowAction : Parcelable {
          */
         @Parcelize
         data class CopyNumberClick(
-            val number: String,
+            val cipherId: String,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
             override val title: Text get() = R.string.copy_number.asText()
@@ -159,7 +159,6 @@ sealed class ListingItemOverflowAction : Parcelable {
          */
         @Parcelize
         data class CopySecurityCodeClick(
-            val securityCode: String,
             val cipherId: String,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
@@ -171,7 +170,7 @@ sealed class ListingItemOverflowAction : Parcelable {
          */
         @Parcelize
         data class CopyNoteClick(
-            val notes: String,
+            val cipherId: String,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
             override val title: Text get() = R.string.copy_notes.asText()

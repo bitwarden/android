@@ -18,6 +18,7 @@ import com.bitwarden.fido.Origin
 import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessaryOrNull
+import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilder
@@ -35,8 +36,8 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2Cred
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidAttestationResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKeyCredential
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.withContext
@@ -168,28 +169,26 @@ class BitwardenCredentialManagerImpl(
     override suspend fun getCredentialEntries(
         getCredentialsRequest: GetCredentialsRequest,
     ): Result<List<CredentialEntry>> = withContext(ioScope.coroutineContext) {
-        val cipherViews = vaultRepository
-            .ciphersStateFlow
+        val cipherListViews = vaultRepository
+            .vaultDataStateFlow
             .takeUntilLoaded()
-            .fold(initial = emptyList<CipherView>()) { _, dataState ->
+            .fold(initial = emptyList<CipherListView>()) { _, dataState ->
                 when (dataState) {
                     is DataState.Loaded -> {
-                        dataState.data
+                        dataState.data.decryptCipherListResult.successes
                     }
 
                     else -> emptyList()
                 }
             }
             .filter { it.isActiveWithFido2Credentials }
-            .ifEmpty {
-                return@withContext emptyList<CredentialEntry>().asSuccess()
-            }
+            .ifEmpty { return@withContext emptyList<CredentialEntry>().asSuccess() }
 
         getCredentialsRequest
             .beginGetPublicKeyCredentialOptions
             .toPublicKeyCredentialEntries(
                 userId = getCredentialsRequest.userId,
-                cipherViewsWithPublicKeyCredentials = cipherViews,
+                cipherListViews = cipherListViews,
             )
             .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
     }
@@ -200,7 +199,7 @@ class BitwardenCredentialManagerImpl(
 
     private suspend fun List<BeginGetPublicKeyCredentialOption>.toPublicKeyCredentialEntries(
         userId: String,
-        cipherViewsWithPublicKeyCredentials: List<CipherView>,
+        cipherListViews: List<CipherListView>,
     ): Result<List<CredentialEntry>> {
         val relyingPartyIds = this
             .mapNotNull { getPasskeyAssertionOptionsOrNull(it.requestJson)?.relyingPartyId }
@@ -209,27 +208,48 @@ class BitwardenCredentialManagerImpl(
                 return GetCredentialUnknownException("Relying party id required.").asFailure()
             }
 
-        val decryptResult = vaultRepository
-            .getDecryptedFido2CredentialAutofillViews(cipherViewsWithPublicKeyCredentials)
+        val cipherViews = cipherListViews
+            .mapNotNull { cipherListView ->
+                when (val result = vaultRepository.getCipher(cipherListView.id.orEmpty())) {
+                    GetCipherResult.CipherNotFound -> {
+                        Timber.e("Cipher not found while building public key credential entries.")
+                        null
+                    }
 
-        return when (decryptResult) {
-            is DecryptFido2CredentialAutofillViewResult.Error -> {
-                GetCredentialUnknownException("Error decrypting credentials.").asFailure()
-            }
+                    is GetCipherResult.Error -> {
+                        Timber.e(
+                            result.error,
+                            "Failed to decrypt cipher while building credential entries.",
+                        )
+                        null
+                    }
 
-            is DecryptFido2CredentialAutofillViewResult.Success -> {
-                credentialEntryBuilder
-                    .buildPublicKeyCredentialEntries(
-                        userId = userId,
-                        fido2CredentialAutofillViews = decryptResult
-                            .fido2CredentialAutofillViews
-                            .filter { it.rpId in relyingPartyIds },
-                        beginGetPublicKeyCredentialOptions = this,
-                        isUserVerified = isUserVerified,
-                    )
-                    .asSuccess()
+                    is GetCipherResult.Success -> result.cipherView
+                }
             }
-        }
+            .toTypedArray()
+
+        return vaultSdkSource
+            .decryptFido2CredentialAutofillViews(
+                userId = userId,
+                cipherViews = cipherViews,
+            )
+            .fold(
+                onSuccess = { fido2AutofillViews ->
+                    credentialEntryBuilder
+                        .buildPublicKeyCredentialEntries(
+                            userId = userId,
+                            fido2CredentialAutofillViews = fido2AutofillViews
+                                .filter { it.rpId in relyingPartyIds },
+                            beginGetPublicKeyCredentialOptions = this,
+                            isUserVerified = isUserVerified,
+                        )
+                        .asSuccess()
+                },
+                onFailure = {
+                    GetCredentialUnknownException("Error decrypting credentials.").asFailure()
+                },
+            )
     }
 
     private suspend fun registerFido2CredentialForUnprivilegedApp(

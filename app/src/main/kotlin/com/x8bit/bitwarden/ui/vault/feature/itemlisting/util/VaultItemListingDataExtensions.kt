@@ -4,23 +4,23 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import androidx.annotation.DrawableRes
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
-import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
+import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
-import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
+import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
-import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toOverflowActions
@@ -43,12 +43,12 @@ import java.time.format.FormatStyle
  * Determines a predicate to filter a list of [CipherView] based on the
  * [VaultItemListingState.ItemListingType].
  */
-fun CipherView.determineListingPredicate(
+fun CipherListView.determineListingPredicate(
     itemListingType: VaultItemListingState.ItemListingType.Vault,
 ): Boolean =
     when (itemListingType) {
         is VaultItemListingState.ItemListingType.Vault.Card -> {
-            type == CipherType.CARD && deletedDate == null
+            type is CipherListViewType.Card && deletedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.Collection -> {
@@ -60,19 +60,19 @@ fun CipherView.determineListingPredicate(
         }
 
         is VaultItemListingState.ItemListingType.Vault.Identity -> {
-            type == CipherType.IDENTITY && deletedDate == null
+            type is CipherListViewType.Identity && deletedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.Login -> {
-            type == CipherType.LOGIN && deletedDate == null
+            type is CipherListViewType.Login && deletedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.SecureNote -> {
-            type == CipherType.SECURE_NOTE && deletedDate == null
+            type is CipherListViewType.SecureNote && deletedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.SshKey -> {
-            type == CipherType.SSH_KEY && deletedDate == null
+            type is CipherListViewType.SshKey && deletedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.Trash -> {
@@ -109,14 +109,14 @@ fun VaultData.toViewState(
     isIconLoadingDisabled: Boolean,
     autofillSelectionData: AutofillSelectionData?,
     createCredentialRequestData: CreateCredentialRequest?,
-    fido2CredentialAutofillViews: List<Fido2CredentialAutofillView>?,
     totpData: TotpData?,
     isPremiumUser: Boolean,
     restrictItemTypesPolicyOrgIds: List<String>,
 ): VaultItemListingState.ViewState {
-    val filteredCipherViewList = cipherViewList
-        .filter { cipherView ->
-            cipherView.determineListingPredicate(itemListingType)
+    val filteredCipherViewList = decryptCipherListResult
+        .successes
+        .filter { cipherListView ->
+            cipherListView.determineListingPredicate(itemListingType)
         }
         .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds)
         .toFilteredList(vaultFilterType)
@@ -142,14 +142,14 @@ fun VaultData.toViewState(
                 isIconLoadingDisabled = isIconLoadingDisabled,
                 isAutofill = autofillSelectionData != null,
                 isFido2Creation = createCredentialRequestData != null,
-                fido2CredentialAutofillViews = fido2CredentialAutofillViews,
                 isPremiumUser = isPremiumUser,
             ),
             displayFolderList = folderList.map { folderView ->
                 VaultItemListingState.FolderDisplayItem(
                     id = requireNotNull(folderView.id),
                     name = folderView.name,
-                    count = this.cipherViewList
+                    count = this.decryptCipherListResult
+                        .successes
                         .count {
                             it.deletedDate == null &&
                                 !it.id.isNullOrBlank() &&
@@ -161,7 +161,8 @@ fun VaultData.toViewState(
                 VaultItemListingState.CollectionDisplayItem(
                     id = requireNotNull(collectionView.id),
                     name = collectionView.name,
-                    count = this.cipherViewList
+                    count = this.decryptCipherListResult
+                        .successes
                         .count {
                             !it.id.isNullOrBlank() &&
                                 it.deletedDate == null &&
@@ -334,13 +335,12 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
     }
 
 @Suppress("LongParameterList")
-private fun List<CipherView>.toDisplayItemList(
+private fun List<CipherListView>.toDisplayItemList(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isFido2Creation: Boolean,
-    fido2CredentialAutofillViews: List<Fido2CredentialAutofillView>?,
     isPremiumUser: Boolean,
 ): List<VaultItemListingState.DisplayItem> =
     this.map {
@@ -350,10 +350,6 @@ private fun List<CipherView>.toDisplayItemList(
             isIconLoadingDisabled = isIconLoadingDisabled,
             isAutofill = isAutofill,
             isFido2Creation = isFido2Creation,
-            fido2CredentialAutofillView = fido2CredentialAutofillViews
-                ?.firstOrNull { fido2CredentialAutofillView ->
-                    fido2CredentialAutofillView.cipherId == it.id
-                },
             isPremiumUser = isPremiumUser,
         )
     }
@@ -370,20 +366,19 @@ private fun List<SendView>.toDisplayItemList(
     }
 
 @Suppress("LongParameterList")
-private fun CipherView.toDisplayItem(
+private fun CipherListView.toDisplayItem(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isFido2Creation: Boolean,
-    fido2CredentialAutofillView: Fido2CredentialAutofillView?,
     isPremiumUser: Boolean,
 ): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
         title = name,
         titleTestTag = "CipherNameLabel",
-        secondSubtitle = this.toSecondSubtitle(fido2CredentialAutofillView?.rpId),
+        secondSubtitle = this.toSecondSubtitle(login?.fido2Credentials?.firstOrNull()?.rpId),
         secondSubtitleTestTag = "PasskeySite",
         subtitle = this.subtitle,
         subtitleTestTag = this.toSubtitleTestTag(
@@ -410,11 +405,11 @@ private fun CipherView.toDisplayItem(
         itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = this.type),
     )
 
-private fun CipherView.toSecondSubtitle(fido2CredentialRpId: String?): String? =
+private fun CipherListView.toSecondSubtitle(fido2CredentialRpId: String?): String? =
     fido2CredentialRpId
-        ?.takeIf { this.type == CipherType.LOGIN && it.isNotEmpty() && it != this.name }
+        ?.takeIf { this.type is CipherListViewType.Login && it.isNotEmpty() && it != this.name }
 
-private fun CipherView.toSubtitleTestTag(
+private fun CipherListView.toSubtitleTestTag(
     isAutofill: Boolean,
     isFido2Creation: Boolean,
 ): String =
@@ -424,22 +419,22 @@ private fun CipherView.toSubtitleTestTag(
         "CipherSubTitleLabel"
     }
 
-private fun CipherView.toIconTestTag(): String =
+private fun CipherListView.toIconTestTag(): String =
     when (type) {
-        CipherType.LOGIN -> "LoginCipherIcon"
-        CipherType.SECURE_NOTE -> "SecureNoteCipherIcon"
-        CipherType.CARD -> "CardCipherIcon"
-        CipherType.IDENTITY -> "IdentityCipherIcon"
-        CipherType.SSH_KEY -> "SshKeyCipherIcon"
+        is CipherListViewType.Login -> "LoginCipherIcon"
+        CipherListViewType.SecureNote -> "SecureNoteCipherIcon"
+        is CipherListViewType.Card -> "CardCipherIcon"
+        CipherListViewType.Identity -> "IdentityCipherIcon"
+        CipherListViewType.SshKey -> "SshKeyCipherIcon"
     }
 
-private fun CipherView.toIconData(
+private fun CipherListView.toIconData(
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
     usePasskeyDefaultIcon: Boolean,
 ): IconData {
     return when (this.type) {
-        CipherType.LOGIN -> {
+        is CipherListViewType.Login -> {
             login?.uris.toLoginIconData(
                 baseIconUrl = baseIconUrl,
                 isIconLoadingDisabled = isIconLoadingDisabled,
@@ -486,11 +481,11 @@ private fun SendView.toDisplayItem(
     )
 
 @get:DrawableRes
-private val CipherType.iconRes: Int
+private val CipherListViewType.iconRes: Int
     get() = when (this) {
-        CipherType.LOGIN -> BitwardenDrawable.ic_globe
-        CipherType.SECURE_NOTE -> BitwardenDrawable.ic_note
-        CipherType.CARD -> BitwardenDrawable.ic_payment_card
-        CipherType.IDENTITY -> BitwardenDrawable.ic_id_card
-        CipherType.SSH_KEY -> BitwardenDrawable.ic_ssh_key
+        is CipherListViewType.Login -> BitwardenDrawable.ic_globe
+        CipherListViewType.SecureNote -> BitwardenDrawable.ic_note
+        is CipherListViewType.Card -> BitwardenDrawable.ic_payment_card
+        CipherListViewType.Identity -> BitwardenDrawable.ic_id_card
+        CipherListViewType.SshKey -> BitwardenDrawable.ic_ssh_key
     }

@@ -1,24 +1,21 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.EncryptionContext
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
-import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.autofill.util.login
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
+import timber.log.Timber
 
 /**
  * Primary implementation of [Fido2CredentialStore].
  */
 @OmitFromCoverage
 class Fido2CredentialStoreImpl(
-    private val vaultSdkSource: VaultSdkSource,
-    private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
 ) : Fido2CredentialStore {
 
@@ -32,17 +29,13 @@ class Fido2CredentialStoreImpl(
                 ?.let { throw it }
                 ?: throw IllegalStateException("Sync failed.")
         }
-        val activeCipherIds = vaultRepository.ciphersStateFlow.value.data
-            ?.filter { it.isActiveWithFido2Credentials }
-            ?.map { it.id }
-            ?: emptyList()
-
-        return vaultRepository.ciphersListViewStateFlow.value.data
-            ?.filter { clv ->
-                activeCipherIds
-                    .contains(clv.id)
-            }
-            ?: emptyList()
+        return vaultRepository
+            .cipherListViewsWithFailuresStateFlow
+            .value
+            .data
+            ?.successes
+            .orEmpty()
+            .filter { it.login?.hasFido2 ?: false }
     }
 
     /**
@@ -53,8 +46,6 @@ class Fido2CredentialStoreImpl(
      * @param ripId Relying Party ID to find.
      */
     override suspend fun findCredentials(ids: List<ByteArray>?, ripId: String): List<CipherView> {
-        val userId = getActiveUserIdOrThrow()
-
         val syncResult = vaultRepository.syncForResult()
         if (syncResult is SyncVaultDataResult.Error) {
             syncResult.throwable
@@ -62,65 +53,83 @@ class Fido2CredentialStoreImpl(
                 ?: throw IllegalStateException("Sync failed.")
         }
 
-        val ciphersWithFido2Credentials = vaultRepository.ciphersStateFlow.value.data
-            ?.filter { it.isActiveWithFido2Credentials }
+        return vaultRepository
+            .cipherListViewsWithFailuresStateFlow
+            .value
+            .data
+            ?.successes
             .orEmpty()
+            .filterMatchingCredentials(
+                credentialIds = ids,
+                relyingPartyId = ripId,
+            )
+            .mapNotNull { cipherListView ->
+                cipherListView.id
+                    ?.let { cipherId ->
+                        when (val result = vaultRepository.getCipher(cipherId = cipherId)) {
+                            GetCipherResult.CipherNotFound -> {
+                                Timber.e("Cipher not found.")
+                                null
+                            }
 
-        return vaultSdkSource
-            .decryptFido2CredentialAutofillViews(
-                userId = userId,
-                cipherViews = ciphersWithFido2Credentials.toTypedArray(),
-            )
-            .map { decryptedFido2CredentialViews ->
-                decryptedFido2CredentialViews.filterMatchingCredentials(
-                    ids,
-                    ripId,
-                )
+                            is GetCipherResult.Error -> {
+                                Timber.e(result.error, "Failed to decrypt cipher.")
+                                null
+                            }
+
+                            is GetCipherResult.Success -> result.cipherView
+                        }
+                    }
             }
-            .map { matchingFido2Credentials ->
-                ciphersWithFido2Credentials.filter { cipherView ->
-                    matchingFido2Credentials.any { it.cipherId == cipherView.id }
-                }
-            }
-            .fold(
-                onSuccess = { it },
-                onFailure = { throw it },
-            )
     }
 
     /**
      * Save the provided [cred] to the users vault.
      */
     override suspend fun saveCredential(cred: EncryptionContext) {
-        vaultSdkSource
-            .decryptCipher(
-                userId = cred.encryptedFor,
-                cipher = cred.cipher,
-            )
-            .map { decryptedCipherView ->
-                decryptedCipherView.id
-                    ?.let { vaultRepository.updateCipher(it, decryptedCipherView) }
-                    ?: vaultRepository.createCipher(decryptedCipherView)
+        when (val result = vaultRepository.getCipher(cred.cipher.id.orEmpty())) {
+            GetCipherResult.CipherNotFound -> Unit
+            is GetCipherResult.Error -> result.error?.let { throw it }
+            is GetCipherResult.Success -> {
+                result.cipherView.id
+                    ?.let { id ->
+                        vaultRepository.updateCipher(
+                            cipherId = id,
+                            cipherView = result.cipherView,
+                        )
+                    }
+                    ?: vaultRepository.createCipher(cipherView = result.cipherView)
             }
-            .onFailure { throw it }
+        }
     }
-
-    private fun getActiveUserIdOrThrow() = authRepository.userStateFlow.value?.activeUserId
-        ?: throw IllegalStateException("Active user is required.")
 
     /**
      * Return a filtered list containing elements that match the given [relyingPartyId] and a
      * credential ID contained in [credentialIds].
      */
-    private fun List<Fido2CredentialAutofillView>.filterMatchingCredentials(
+    private fun List<CipherListView>.filterMatchingCredentials(
         credentialIds: List<ByteArray>?,
         relyingPartyId: String,
-    ): List<Fido2CredentialAutofillView> {
+    ): List<CipherListView> {
         val skipCredentialIdFiltering = credentialIds.isNullOrEmpty()
-        return filter { fido2CredentialView ->
-            fido2CredentialView.rpId == relyingPartyId &&
-                (skipCredentialIdFiltering ||
-                    credentialIds?.contains(fido2CredentialView.credentialId) == true)
+        return filter { cipherListView ->
+            val hasMatchingRpId = cipherListView.login
+                ?.fido2Credentials
+                .orEmpty()
+                .any { it.rpId == relyingPartyId }
+
+            val fido2CredentialIds = cipherListView.login
+                ?.fido2Credentials
+                .orEmpty()
+                .map { it.credentialId.toByteArray() }
+
+            hasMatchingRpId &&
+                (
+                    skipCredentialIdFiltering ||
+                        credentialIds
+                            .intersect(fido2CredentialIds)
+                            .isNotEmpty()
+                    )
         }
     }
 }

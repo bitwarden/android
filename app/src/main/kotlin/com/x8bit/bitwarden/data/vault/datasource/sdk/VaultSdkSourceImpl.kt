@@ -21,10 +21,10 @@ import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
-import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.EncryptionContext
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
@@ -289,26 +289,15 @@ class VaultSdkSourceImpl(
                 .decrypt(cipher = cipher)
         }
 
-    override suspend fun decryptCipherListCollection(
+    override suspend fun decryptCipherListWithFailures(
         userId: String,
         cipherList: List<Cipher>,
-    ): Result<List<CipherListView>> =
+    ): Result<DecryptCipherListResult> =
         runCatchingWithLogs {
             getClient(userId = userId)
                 .vault()
                 .ciphers()
-                .decryptList(ciphers = cipherList)
-        }
-
-    override suspend fun decryptCipherList(
-        userId: String,
-        cipherList: List<Cipher>,
-    ): Result<List<CipherView>> =
-        runCatchingWithLogs {
-            val ciphers = getClient(userId = userId).vault().ciphers()
-            withContext(context = dispatcherManager.default) {
-                cipherList.map { async { ciphers.decrypt(cipher = it) } }.awaitAll()
-            }
+                .decryptListWithFailures(cipherList)
         }
 
     override suspend fun decryptCollection(
