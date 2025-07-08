@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.network.model.OrganizationType
@@ -63,6 +64,7 @@ import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -120,7 +122,12 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlag(key = FlagKey.RestrictCipherItemDeletion) } returns false
     }
+    private val mutableSnackbarDataFlow: MutableSharedFlow<BitwardenSnackbarData> =
+        bufferedMutableSharedFlow()
     private val snackbarRelayManager: SnackbarRelayManager = mockk {
+        every {
+            getSnackbarDataFlow(relay = any(), relays = anyVararg())
+        } returns mutableSnackbarDataFlow
         every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
 
@@ -170,6 +177,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             organizationEventManager.trackEvent(
                 event = OrganizationEvent.CipherClientViewed(cipherId = differentVaultItemId),
             )
+        }
+    }
+
+    @Test
+    fun `snackbar relay emission should send ShowSnackbar`() = runTest {
+        val viewModel = createViewModel(DEFAULT_STATE)
+        val snackbarData = mockk<BitwardenSnackbarData>()
+        viewModel.eventFlow.test {
+            mutableSnackbarDataFlow.emit(snackbarData)
+            assertEquals(VaultItemEvent.ShowSnackbar(snackbarData), awaitItem())
         }
     }
 

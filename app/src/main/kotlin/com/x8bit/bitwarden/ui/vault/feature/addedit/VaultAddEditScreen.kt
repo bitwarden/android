@@ -68,6 +68,8 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialo
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.radio.BitwardenRadioButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialProviderCompletionManager
@@ -124,6 +126,7 @@ fun VaultAddEditScreen(
         orderedList = AddEditItemCoachMark.entries,
     )
     val scope = rememberCoroutineScope()
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is VaultAddEditEvent.NavigateToQrCodeScan -> {
@@ -189,6 +192,8 @@ fun VaultAddEditScreen(
                     )
                 }
             }
+
+            is VaultAddEditEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
 
@@ -393,6 +398,9 @@ fun VaultAddEditScreen(
                         )
                     },
                 )
+            },
+            snackbarHost = {
+                BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
             },
         ) {
             when (val viewState = state.viewState) {
