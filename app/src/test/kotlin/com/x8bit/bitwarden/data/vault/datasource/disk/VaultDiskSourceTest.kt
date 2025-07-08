@@ -94,6 +94,29 @@ class VaultDiskSourceTest {
     }
 
     @Test
+    fun `getCiphers should return all CiphersDao ciphers`() = runTest {
+        val cipherEntities = listOf(CIPHER_ENTITY)
+        val ciphers = listOf(CIPHER_1)
+
+        val result1 = vaultDiskSource.getCiphers(USER_ID)
+        assertEquals(emptyList<SyncResponseJson.Cipher>(), result1)
+        ciphersDao.insertCiphers(cipherEntities)
+        val result2 = vaultDiskSource.getCiphers(USER_ID)
+        assertEquals(ciphers, result2)
+    }
+
+    @Test
+    fun `getCipher should return CiphersDao cipher`() = runTest {
+        val cipherEntities = listOf(CIPHER_ENTITY)
+
+        val result1 = vaultDiskSource.getCipher(userId = USER_ID, cipherId = CIPHER_ENTITY.id)
+        assertNull(result1)
+        ciphersDao.insertCiphers(cipherEntities)
+        val result2 = vaultDiskSource.getCipher(userId = USER_ID, cipherId = CIPHER_ENTITY.id)
+        assertEquals(CIPHER_1, result2)
+    }
+
+    @Test
     fun `DeleteCipher should call deleteCipher`() = runTest {
         assertFalse(ciphersDao.deleteCipherCalled)
         ciphersDao.storedCiphers.add(CIPHER_ENTITY)

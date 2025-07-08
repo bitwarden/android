@@ -30,6 +30,23 @@ interface CiphersDao {
     ): Flow<List<CipherEntity>>
 
     /**
+     * Retrieves all ciphers from the database for a given [userId].
+     */
+    @Query("SELECT * FROM ciphers WHERE user_id = :userId")
+    suspend fun getAllCiphers(
+        userId: String,
+    ): List<CipherEntity>
+
+    /**
+     * Retrieves a cipher from the database for a given [userId] and [cipherId].
+     */
+    @Query("SELECT * FROM ciphers WHERE user_id = :userId AND id = :cipherId LIMIT 1")
+    suspend fun getCipher(
+        userId: String,
+        cipherId: String,
+    ): CipherEntity?
+
+    /**
      * Deletes all the stored ciphers associated with the given [userId]. This will return the
      * number of rows deleted by this query.
      */
