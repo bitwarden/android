@@ -53,7 +53,10 @@ import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
@@ -108,12 +111,13 @@ private const val KEY_STATE = "state"
 @Suppress("TooManyFunctions", "LargeClass", "LongParameterList", "LongMethod")
 class VaultAddEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    generatorRepository: GeneratorRepository,
+    snackbarRelayManager: SnackbarRelayManager,
     private val authRepository: AuthRepository,
     private val clipboardManager: BitwardenClipboardManager,
     private val policyManager: PolicyManager,
     private val vaultRepository: VaultRepository,
     private val bitwardenCredentialManager: BitwardenCredentialManager,
-    generatorRepository: GeneratorRepository,
     private val settingsRepository: SettingsRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val resourceManager: ResourceManager,
@@ -253,6 +257,12 @@ class VaultAddEditViewModel @Inject constructor(
                     shouldShowCoachMarkTour = shouldShowTour,
                 )
             }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.CIPHER_MOVED_TO_ORGANIZATION)
+            .map { VaultAddEditAction.Internal.SnackbarDataReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -1548,7 +1558,17 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Internal.AvailableFoldersReceive -> {
                 handleAvailableFoldersReceive(action)
             }
+
+            is VaultAddEditAction.Internal.SnackbarDataReceived -> {
+                handleSnackbarDataReceived(action)
+            }
         }
+    }
+
+    private fun handleSnackbarDataReceived(
+        action: VaultAddEditAction.Internal.SnackbarDataReceived,
+    ) {
+        sendEvent(VaultAddEditEvent.ShowSnackbar(action.data))
     }
 
     private fun handleAvailableFoldersReceive(
@@ -2716,6 +2736,13 @@ data class VaultAddEditState(
  */
 sealed class VaultAddEditEvent {
     /**
+     * Shows a snackbar with the given [data].
+     */
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : VaultAddEditEvent(), BackgroundEvent
+
+    /**
      * Shows a toast with the given [message].
      */
     data class ShowToast(val message: Text) : VaultAddEditEvent()
@@ -3370,6 +3397,13 @@ sealed class VaultAddEditAction {
          */
         data class GeneratorResultReceive(
             val generatorResult: GeneratorResult,
+        ) : Internal()
+
+        /**
+         * Indicates that snackbar data has been received.
+         */
+        data class SnackbarDataReceived(
+            val data: BitwardenSnackbarData,
         ) : Internal()
 
         /**

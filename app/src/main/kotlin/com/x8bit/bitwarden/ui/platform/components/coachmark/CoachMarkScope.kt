@@ -31,8 +31,7 @@ interface CoachMarkScope<T : Enum<T>> {
      * @param title The title of the coach mark, displayed in the tooltip.
      * @param description The description of the coach mark, providing more context
      * to the user. Displayed in the tooltip.
-     * @param shape The shape of the highlight. Defaults to [CoachMarkHighlightShape.SQUARE].
-     * Use [CoachMarkHighlightShape.OVAL] for a circular highlight.
+     * @param shape The shape of the highlight.
      * @param onDismiss An optional callback that is invoked when the coach mark is dismissed
      * (e.g., by clicking the close button). If provided, this function
      * will be executed after the coach mark is dismissed. If not provided,

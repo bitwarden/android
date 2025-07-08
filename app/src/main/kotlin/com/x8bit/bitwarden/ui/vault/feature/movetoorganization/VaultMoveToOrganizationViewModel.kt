@@ -16,6 +16,9 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,8 +40,9 @@ private const val KEY_STATE = "state"
 @Suppress("MaxLineLength", "TooManyFunctions")
 class VaultMoveToOrganizationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val vaultRepository: VaultRepository,
     authRepository: AuthRepository,
+    private val snackbarRelayManager: SnackbarRelayManager,
+    private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultMoveToOrganizationState, VaultMoveToOrganizationEvent, VaultMoveToOrganizationAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
@@ -165,8 +169,11 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
             }
 
             is ShareCipherResult.Success -> {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = action.message),
+                    relay = SnackbarRelay.CIPHER_MOVED_TO_ORGANIZATION,
+                )
                 sendEvent(VaultMoveToOrganizationEvent.NavigateBack)
-                sendEvent(VaultMoveToOrganizationEvent.ShowToast(action.successToast))
             }
         }
     }
@@ -302,7 +309,7 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                             cipherView = cipherView,
                             collectionIds = collectionIds,
                         ),
-                        successToast = R.string.item_updated.asText(),
+                        message = R.string.item_updated.asText(),
                     )
                 } else {
                     VaultMoveToOrganizationAction.Internal.ShareCipherResultReceive(
@@ -312,7 +319,7 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                             cipherView = cipherView,
                             collectionIds = collectionIds,
                         ),
-                        successToast = R.string.moved_item_to_org.asText(
+                        message = R.string.moved_item_to_org.asText(
                             requireNotNull(contentState.cipherToMove).name,
                             contentState.selectedOrganization.name,
                         ),
@@ -444,13 +451,6 @@ sealed class VaultMoveToOrganizationEvent {
      * Navigates back to the previous screen.
      */
     data object NavigateBack : VaultMoveToOrganizationEvent()
-
-    /**
-     * Show a toast with the given message.
-     *
-     * @property text the text to display.
-     */
-    data class ShowToast(val text: Text) : VaultMoveToOrganizationEvent()
 }
 
 /**
@@ -508,7 +508,7 @@ sealed class VaultMoveToOrganizationAction {
          */
         data class ShareCipherResultReceive(
             val shareCipherResult: ShareCipherResult,
-            val successToast: Text,
+            val message: Text,
         ) : Internal()
     }
 }

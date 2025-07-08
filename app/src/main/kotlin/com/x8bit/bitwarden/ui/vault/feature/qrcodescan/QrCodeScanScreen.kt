@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.vault.feature.qrcodescan
 
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
@@ -85,20 +84,12 @@ fun QrCodeScanScreen(
         { viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(it)) }
     }
 
-    val context = LocalContext.current
-
     val onEnterKeyManuallyClick = remember(viewModel) {
         { viewModel.trySendAction(QrCodeScanAction.ManualEntryTextClick) }
     }
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            is QrCodeScanEvent.ShowToast -> {
-                Toast
-                    .makeText(context, event.message.invoke(context.resources), Toast.LENGTH_SHORT)
-                    .show()
-            }
-
             is QrCodeScanEvent.NavigateBack -> {
                 onNavigateBack.invoke()
             }

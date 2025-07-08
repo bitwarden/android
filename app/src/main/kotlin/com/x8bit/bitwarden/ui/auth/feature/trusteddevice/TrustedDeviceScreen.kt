@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.trusteddevice
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -20,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -35,6 +33,7 @@ import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -44,7 +43,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 
 /**
  * The top level composable for the Reset Password screen.
@@ -59,7 +57,6 @@ fun TrustedDeviceScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handlers = remember(viewModel) { TrustedDeviceHandlers.create(viewModel = viewModel) }
 
-    val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is TrustedDeviceEvent.NavigateToApproveWithAdmin -> {
@@ -72,12 +69,6 @@ fun TrustedDeviceScreen(
 
             is TrustedDeviceEvent.NavigateToLockScreen -> {
                 onNavigateToLock(event.email)
-            }
-
-            is TrustedDeviceEvent.ShowToast -> {
-                Toast
-                    .makeText(context, event.message(context.resources), Toast.LENGTH_SHORT)
-                    .show()
             }
         }
     }

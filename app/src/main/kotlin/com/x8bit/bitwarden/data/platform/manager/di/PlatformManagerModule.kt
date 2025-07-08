@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.data.platform.manager.di
 import android.app.Application
 import android.content.Context
 import androidx.core.content.getSystemService
+import com.bitwarden.core.data.manager.toast.ToastManager
+import com.bitwarden.core.data.manager.toast.ToastManagerImpl
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.manager.DispatcherManagerImpl
 import com.bitwarden.data.repository.ServerConfigRepository
@@ -189,9 +191,19 @@ object PlatformManagerModule {
     fun provideBitwardenClipboardManager(
         @ApplicationContext context: Context,
         settingsRepository: SettingsRepository,
+        toastManager: ToastManager,
     ): BitwardenClipboardManager = BitwardenClipboardManagerImpl(
-        context,
-        settingsRepository,
+        context = context,
+        settingsRepository = settingsRepository,
+        toastManager = toastManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideToastManager(
+        @ApplicationContext context: Context,
+    ): ToastManager = ToastManagerImpl(
+        context = context,
     )
 
     @Provides

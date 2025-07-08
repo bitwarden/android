@@ -226,13 +226,6 @@ sealed class DeleteAccountConfirmationEvent {
      * Navigates back.
      */
     data object NavigateBack : DeleteAccountConfirmationEvent()
-
-    /**
-     * Displays the [message] in a toast.
-     */
-    data class ShowToast(
-        val message: Text,
-    ) : DeleteAccountConfirmationEvent()
 }
 
 /**

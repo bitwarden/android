@@ -20,14 +20,20 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util.createMockOrganizationList
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -55,6 +61,10 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
 
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
+    }
+
+    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+        every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
 
     @BeforeEach
@@ -394,14 +404,16 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
                 VaultMoveToOrganizationEvent.NavigateBack,
                 awaitItem(),
             )
-            assertEquals(
-                VaultMoveToOrganizationEvent.ShowToast(
-                    text = R.string.moved_item_to_org.asText(
+        }
+        verify {
+            snackbarRelayManager.sendSnackbarData(
+                data = BitwardenSnackbarData(
+                    message = R.string.moved_item_to_org.asText(
                         "mockName-1",
                         "mockOrganizationName-1",
                     ),
                 ),
-                awaitItem(),
+                relay = SnackbarRelay.CIPHER_MOVED_TO_ORGANIZATION,
             )
         }
         coVerify {
@@ -439,9 +451,11 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
                     VaultMoveToOrganizationEvent.NavigateBack,
                     awaitItem(),
                 )
-                assertEquals(
-                    VaultMoveToOrganizationEvent.ShowToast(R.string.item_updated.asText()),
-                    awaitItem(),
+            }
+            verify {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = R.string.item_updated.asText()),
+                    relay = SnackbarRelay.CIPHER_MOVED_TO_ORGANIZATION,
                 )
             }
             coVerify {
@@ -461,6 +475,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         savedStateHandle = savedStateHandle,
         authRepository = authRepo,
         vaultRepository = vaultRepo,
+        snackbarRelayManager = snackbarRelayManager,
     )
 
     private fun createSavedStateHandleWithState(

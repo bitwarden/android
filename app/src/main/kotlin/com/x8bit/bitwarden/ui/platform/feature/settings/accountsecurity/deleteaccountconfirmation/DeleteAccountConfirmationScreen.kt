@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccountconfirmation
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -51,15 +49,9 @@ fun DeleteAccountConfirmationScreen(
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             DeleteAccountConfirmationEvent.NavigateBack -> onNavigateBack()
-
-            is DeleteAccountConfirmationEvent.ShowToast -> {
-                Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
-            }
         }
     }
 

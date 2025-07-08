@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Build
-import android.widget.Toast
 import androidx.compose.ui.text.AnnotatedString
 import androidx.core.content.getSystemService
 import androidx.core.os.persistableBundleOf
@@ -12,6 +11,8 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.manager.toast.ToastManager
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.R
@@ -25,6 +26,7 @@ import java.util.concurrent.TimeUnit
 class BitwardenClipboardManagerImpl(
     private val context: Context,
     private val settingsRepository: SettingsRepository,
+    private val toastManager: ToastManager,
 ) : BitwardenClipboardManager {
     private val clipboardManager: ClipboardManager = requireNotNull(context.getSystemService())
 
@@ -45,14 +47,14 @@ class BitwardenClipboardManagerImpl(
                     )
                 },
         )
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+        if (isBuildVersionAtLeast(version = Build.VERSION_CODES.S_V2)) {
             val descriptor = toastDescriptorOverride
                 ?.let { context.resources.getString(R.string.value_has_been_copied, it) }
                 ?: context.resources.getString(
                     R.string.value_has_been_copied,
                     context.resources.getString(R.string.value),
                 )
-            Toast.makeText(context, descriptor, Toast.LENGTH_SHORT).show()
+            toastManager.show(message = descriptor)
         }
 
         val frequency = clearClipboardFrequencySeconds ?: return

@@ -36,8 +36,8 @@ class AboutPrivilegedAppsScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(
                 "To protect users from phishing attempts, by default, Bitwarden only completes " +
-                    "passkey operations through web browsers trusted by Google or the Bitwarden " +
-                    "community.",
+                    "passkey operations through applications or web browsers trusted by Google " +
+                    "or the Bitwarden community.",
             )
             .assertIsDisplayed()
 
@@ -48,7 +48,7 @@ class AboutPrivilegedAppsScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(
                 "These are applications or browsers that Bitwarden does not trust by default, " +
-                    "but You trust to perform passkey operations.",
+                    "but you trust to perform passkey operations.",
             )
             .assertIsDisplayed()
 

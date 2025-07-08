@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.autofill.util.buildDataset
 import com.x8bit.bitwarden.data.autofill.util.buildVaultItemDataset
 import com.x8bit.bitwarden.data.autofill.util.createTotpCopyIntentSender
 import com.x8bit.bitwarden.data.autofill.util.fillableAutofillIds
+import timber.log.Timber
 
 /**
  * The default implementation for [FillResponseBuilder]. This is a component for compiling fulfilled
@@ -22,12 +23,9 @@ class FillResponseBuilderImpl : FillResponseBuilder {
         saveInfo: SaveInfo?,
     ): FillResponse? =
         if (filledData.fillableAutofillIds.isNotEmpty()) {
+            Timber.w("Autofill request constructing FillResponse")
             val fillResponseBuilder = FillResponse.Builder()
-
-            saveInfo
-                ?.let { nonNullSaveInfo ->
-                    fillResponseBuilder.setSaveInfo(nonNullSaveInfo)
-                }
+            saveInfo?.let { nonNullSaveInfo -> fillResponseBuilder.setSaveInfo(nonNullSaveInfo) }
 
             filledData
                 .filledPartitions
@@ -52,12 +50,7 @@ class FillResponseBuilderImpl : FillResponseBuilder {
 
             fillResponseBuilder
                 // Add the Vault Item
-                .addDataset(
-                    filledData
-                        .buildVaultItemDataset(
-                            autofillAppInfo = autofillAppInfo,
-                        ),
-                )
+                .addDataset(filledData.buildVaultItemDataset(autofillAppInfo = autofillAppInfo))
                 .setIgnoredIds(*filledData.ignoreAutofillIds.toTypedArray())
                 .build()
         } else {
@@ -66,6 +59,7 @@ class FillResponseBuilderImpl : FillResponseBuilder {
             // with a presentation view. Neither of these make sense in the case where we have no
             // views to fill. What we are supposed to do when we cannot fulfill a request is
             // replace [FillResponse] with null in order to avoid this crash.
+            Timber.w("Autofill request has no fillable ids")
             null
         }
 }

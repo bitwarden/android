@@ -60,6 +60,7 @@ class AutofillParserTests {
         every { this@mockk.structure } returns assistStructure
     }
     private val fillRequest: FillRequest = mockk {
+        every { id } returns 55
         every { this@mockk.fillContexts } returns listOf(fillContext)
     }
     private val inlinePresentationSpecs: List<InlinePresentationSpec> = mockk()

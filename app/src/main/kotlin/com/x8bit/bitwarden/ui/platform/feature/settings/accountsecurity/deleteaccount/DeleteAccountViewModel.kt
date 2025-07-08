@@ -39,7 +39,7 @@ class DeleteAccountViewModel @Inject constructor(
             isUnlockWithPasswordEnabled = account.hasMasterPassword,
             isUserManagedByOrganization = account
                 .organizations
-                .any { it.userIsClaimedByOrganization } == true,
+                .any { it.userIsClaimedByOrganization },
         )
     },
 ) {
@@ -213,13 +213,6 @@ sealed class DeleteAccountEvent {
      * Navigates to the Delete Account Confirmation Screen.
      */
     data object NavigateToDeleteAccountConfirmationScreen : DeleteAccountEvent()
-
-    /**
-     * Displays the [message] in a toast.
-     */
-    data class ShowToast(
-        val message: Text,
-    ) : DeleteAccountEvent()
 }
 
 /**

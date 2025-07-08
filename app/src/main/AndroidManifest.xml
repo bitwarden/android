@@ -81,7 +81,6 @@
                 <data android:scheme="https" />
                 <data android:host="*.bitwarden.com" />
                 <data android:host="*.bitwarden.eu" />
-                <data android:host="*.bitwarden.pw" />
                 <data android:pathPattern="/redirect-connector.*" />
             </intent-filter>
             <intent-filter>
