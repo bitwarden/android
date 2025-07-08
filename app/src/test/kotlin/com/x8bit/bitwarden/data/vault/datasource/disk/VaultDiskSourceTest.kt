@@ -80,12 +80,12 @@ class VaultDiskSourceTest {
     }
 
     @Test
-    fun `getCiphers should emit all CiphersDao updates`() = runTest {
+    fun `getCiphersFlow should emit all CiphersDao updates`() = runTest {
         val cipherEntities = listOf(CIPHER_ENTITY)
         val ciphers = listOf(CIPHER_1)
 
         vaultDiskSource
-            .getCiphers(USER_ID)
+            .getCiphersFlow(USER_ID)
             .test {
                 assertEquals(emptyList<SyncResponseJson.Cipher>(), awaitItem())
                 ciphersDao.insertCiphers(cipherEntities)

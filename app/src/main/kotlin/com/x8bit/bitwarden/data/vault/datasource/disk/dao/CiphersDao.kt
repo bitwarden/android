@@ -22,10 +22,10 @@ interface CiphersDao {
     suspend fun insertCiphers(ciphers: List<CipherEntity>)
 
     /**
-     * Retrieves all ciphers from the database for a given [userId].
+     * Retrieves all ciphers from the database for a given [userId] as a [Flow].
      */
     @Query("SELECT * FROM ciphers WHERE user_id = :userId")
-    fun getAllCiphers(
+    fun getAllCiphersFlow(
         userId: String,
     ): Flow<List<CipherEntity>>
 

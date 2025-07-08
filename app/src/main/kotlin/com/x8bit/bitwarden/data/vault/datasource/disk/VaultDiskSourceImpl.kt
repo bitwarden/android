@@ -59,13 +59,13 @@ class VaultDiskSourceImpl(
         )
     }
 
-    override fun getCiphers(
+    override fun getCiphersFlow(
         userId: String,
     ): Flow<List<SyncResponseJson.Cipher>> =
         merge(
             forceCiphersFlow,
             ciphersDao
-                .getAllCiphers(userId = userId)
+                .getAllCiphersFlow(userId = userId)
                 .map { entities ->
                     withContext(context = dispatcherManager.default) {
                         entities
@@ -296,7 +296,7 @@ class VaultDiskSourceImpl(
 
     override suspend fun resyncVaultData(userId: String) {
         coroutineScope {
-            val deferredCiphers = async { getCiphers(userId = userId).first() }
+            val deferredCiphers = async { getCiphersFlow(userId = userId).first() }
             val deferredCollections = async { getCollections(userId = userId).first() }
             val deferredFolders = async { getFolders(userId = userId).first() }
             val deferredSends = async { getSends(userId = userId).first() }
