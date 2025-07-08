@@ -1,5 +1,6 @@
 package com.bitwarden.authenticator
 
+import android.app.ComponentCaller
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var debugLaunchManager: DebugMenuLaunchManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        intent.validate()
+        intent = intent.validate()
         var shouldShowSplashScreen = true
         installSplashScreen().setKeepOnScreenCondition { shouldShowSplashScreen }
         super.onCreate(savedInstanceState)
@@ -72,11 +73,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        intent.validate()
-        mainViewModel.trySendAction(
-            MainAction.ReceiveNewIntent(intent = intent),
-        )
+        val newIntent = intent.validate()
+        super.onNewIntent(newIntent)
+        mainViewModel.trySendAction(MainAction.ReceiveNewIntent(intent = newIntent))
+    }
+
+    override fun onNewIntent(intent: Intent, caller: ComponentCaller) {
+        val newIntent = intent.validate()
+        super.onNewIntent(newIntent, caller)
+        mainViewModel.trySendAction(MainAction.ReceiveNewIntent(intent = newIntent))
     }
 
     private fun observeViewModelEvents(navController: NavHostController) {

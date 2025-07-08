@@ -7,6 +7,7 @@ import android.os.BadParcelableException
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.content.IntentCompat
+import androidx.core.content.IntentSanitizer
 import androidx.core.os.BundleCompat
 import com.bitwarden.annotation.OmitFromCoverage
 
@@ -27,17 +28,19 @@ inline fun <reified T> Bundle.getSafeParcelableExtra(
 ): T? = BundleCompat.getParcelable(this, name, T::class.java)
 
 /**
- * Validate if there's anything suspicious with the intent received.
+ * Validate if there's anything suspicious with the intent received and returns a new valid intent.
  */
-fun Intent.validate() {
+fun Intent.validate(): Intent =
     try {
         // This will force Android to attempt unparcelling the extras
-        this.extras?.getBundle("trashstringwhichhasnousebuttocheckunparcel")
+        IntentSanitizer.Builder()
+            .allowAnyComponent()
+            .build()
+            .sanitizeByFiltering(this)
     } catch (_: BadParcelableException) {
         this.replaceExtras(null as Bundle?)
     } catch (_: ClassNotFoundException) {
         this.replaceExtras(null as Bundle?)
-    } catch (_: RuntimeException) {
+    } catch (@Suppress("TooGenericExceptionCaught") _: RuntimeException) {
         this.replaceExtras(null as Bundle?)
     }
-}
