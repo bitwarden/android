@@ -16,9 +16,8 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.performCustomAccessibilityAction
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
@@ -72,7 +71,16 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
     @Test
     fun `close click should send CloseClick action`() {
         composeTestRule.onNodeWithContentDescription("Close").performClick()
-        verify { viewModel.trySendAction(CloseClick) }
+        verify { viewModel.trySendAction(StartRegistrationAction.CloseClick) }
+    }
+
+    @Test
+    fun `on ShowSnackbar should display snackbar content`() {
+        val message = "message"
+        val data = BitwardenSnackbarData(message = message.asText())
+        composeTestRule.onNodeWithText(text = message).assertDoesNotExist()
+        mutableEventFlow.tryEmit(StartRegistrationEvent.ShowSnackbar(data = data))
+        composeTestRule.onNodeWithText(text = message).assertIsDisplayed()
     }
 
     @Test
@@ -135,7 +143,7 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
     @Test
     fun `email input change should send EmailInputChange action`() {
         composeTestRule.onNodeWithText("Email address (required)").performTextInput(TEST_INPUT)
-        verify { viewModel.trySendAction(EmailInputChange(TEST_INPUT)) }
+        verify { viewModel.trySendAction(StartRegistrationAction.EmailInputChange(TEST_INPUT)) }
     }
 
     @Test
