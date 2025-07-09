@@ -74,7 +74,6 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import javax.inject.Inject
-import kotlin.collections.map
 
 private const val KEY_STATE = "state"
 
