@@ -960,6 +960,24 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `sendVerificationCodeEmail with isUserInitiated false should not show loading and snackbar on success`() = runTest {
+        coEvery { authRepository.resendVerificationCodeEmail() } returns ResendEmailResult.Success
+        val viewModel = createViewModel()
+        // Simulate initial email send (not user initiated)
+        viewModel.trySendAction(
+            TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
+                ResendEmailResult.Success,
+                isUserInitiated = false,
+            ),
+        )
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem()) // No loading dialog
+        }
+        viewModel.eventFlow.test { expectNoEvents() } // No snackbar
+    }
+
+    @Test
     fun `ResendEmailClick returns success should emit ShowSnackbar`() = runTest {
         coEvery {
             authRepository.resendVerificationCodeEmail()

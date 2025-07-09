@@ -126,7 +126,7 @@ class TwoFactorLoginViewModel @Inject constructor(
         viewModelScope.launch {
             // If the auth method is email and it is not to verify the device, call resendEmail.
             if (state.authMethod == TwoFactorAuthMethod.EMAIL && !state.isNewDeviceVerification) {
-                trySendAction(TwoFactorLoginAction.Internal.SendVerificationCodeEmail)
+                sendAction(TwoFactorLoginAction.Internal.SendVerificationCodeEmail)
             }
         }
     }
@@ -138,7 +138,7 @@ class TwoFactorLoginViewModel @Inject constructor(
             TwoFactorLoginAction.ContinueButtonClick -> handleContinueButtonClick()
             TwoFactorLoginAction.DialogDismiss -> handleDialogDismiss()
             is TwoFactorLoginAction.RememberMeToggle -> handleRememberMeToggle(action)
-            TwoFactorLoginAction.ResendEmailClick -> handleSendVerificationCodeEmail()
+            TwoFactorLoginAction.ResendEmailClick -> handleResendEmailClick()
             is TwoFactorLoginAction.SelectAuthMethod -> handleSelectAuthMethod(action)
             is TwoFactorLoginAction.Internal -> handleInternalAction(action)
         }
@@ -486,9 +486,23 @@ class TwoFactorLoginViewModel @Inject constructor(
     }
 
     /**
-     * Send the verification code email.
+     * Resend the verification code email.
+     */
+    private fun handleResendEmailClick() {
+        sendVerificationCodeEmail(isUserInitiated = true)
+    }
+
+    /**
+     * send the verification code email without user interaction.
      */
     private fun handleSendVerificationCodeEmail() {
+        sendVerificationCodeEmail(isUserInitiated = false)
+    }
+
+    /**
+     * Send the verification code email.
+     */
+    private fun sendVerificationCodeEmail(isUserInitiated: Boolean) {
         // Ensure that the user is in fact verifying with email.
         if (state.authMethod != TwoFactorAuthMethod.EMAIL) {
             return
@@ -513,7 +527,7 @@ class TwoFactorLoginViewModel @Inject constructor(
             sendAction(
                 TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
                     resendEmailResult = result,
-                    isUserInitiated = true,
+                    isUserInitiated = isUserInitiated,
                 ),
             )
         }
