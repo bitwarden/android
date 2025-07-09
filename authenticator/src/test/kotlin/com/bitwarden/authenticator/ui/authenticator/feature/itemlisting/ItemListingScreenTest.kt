@@ -9,9 +9,9 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import androidx.core.net.toUri
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.platform.base.AuthenticatorComposeTest
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.FakePermissionManager
@@ -346,7 +346,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
     }
 
     @Test
-    fun `clicking Move to Bitwarden should send MoveToBitwardenClick`() {
+    fun `clicking Copy to Bitwarden vault should send DropdownMenuClick with COPY_TO_BITWARDEN`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
                 actionCard = ItemListingState.ActionCardState.None,
@@ -360,21 +360,22 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
             .performTouchInput { longClick() }
 
         composeTestRule
-            .onNodeWithText("Move to Bitwarden")
+            .onNodeWithText(text = "Copy to Bitwarden vault")
             .performClick()
 
         verify {
             viewModel.trySendAction(
                 ItemListingAction.DropdownMenuClick(
-                    menuAction = VaultDropdownMenuAction.MOVE,
+                    menuAction = VaultDropdownMenuAction.COPY_TO_BITWARDEN,
                     item = LOCAL_CODE,
                 ),
             )
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `Move to Bitwarden long press action should not show when showMoveToBitwarden is false`() {
+    fun `Copy to Bitwarden vault long press action should not show when showMoveToBitwarden is false`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
                 actionCard = ItemListingState.ActionCardState.None,
@@ -388,7 +389,7 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
             .performTouchInput { longClick() }
 
         composeTestRule
-            .onNodeWithText("Move to Bitwarden")
+            .onNodeWithText(text = "Copy to Bitwarden vault")
             .assertDoesNotExist()
     }
 
@@ -417,6 +418,118 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
             .onNodeWithText("Account synced from Bitwarden app")
             .assertIsDisplayed()
     }
+
+    @Test
+    fun `local codes header should be displayed and expanded when syncing is enabled`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.Content(
+                actionCard = ItemListingState.ActionCardState.None,
+                favoriteItems = emptyList(),
+                itemList = listOf(LOCAL_CODE),
+                sharedItems = SharedCodesDisplayState.Codes(
+                    sections = listOf(
+                        SHARED_ACCOUNTS_SECTION,
+                    ),
+                ),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Local codes (1)")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(LOCAL_CODE.title)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `shared codes header click should emit SectionExpandedClick`() {
+        val sharedItems = SharedCodesDisplayState.Codes(
+            sections = listOf(SHARED_ACCOUNTS_SECTION),
+        )
+        val viewState = ItemListingState.ViewState.Content(
+            actionCard = ItemListingState.ActionCardState.None,
+            favoriteItems = emptyList(),
+            itemList = listOf(LOCAL_CODE),
+            sharedItems = sharedItems,
+        )
+        mutableStateFlow.value = DEFAULT_STATE.copy(viewState = viewState)
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("test@test.com | bitwarden.com (1)")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(ItemListingAction.SectionExpandedClick(SHARED_ACCOUNTS_SECTION))
+        }
+    }
+
+    @Test
+    fun `shared codes header should be displayed and collapsed when syncing is enabled`() {
+        val sharedItems = SharedCodesDisplayState.Codes(
+            sections = listOf(SHARED_ACCOUNTS_SECTION),
+        )
+        val viewState = ItemListingState.ViewState.Content(
+            actionCard = ItemListingState.ActionCardState.None,
+            favoriteItems = emptyList(),
+            itemList = listOf(LOCAL_CODE),
+            sharedItems = sharedItems,
+        )
+        mutableStateFlow.value = DEFAULT_STATE.copy(viewState = viewState)
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("test@test.com | bitwarden.com (1)")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(SHARED_ACCOUNTS_SECTION.codes[0].title)
+            .assertIsDisplayed()
+
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = viewState.copy(
+                sharedItems = sharedItems.copy(
+                    sections = listOf(SHARED_ACCOUNTS_SECTION.copy(isExpanded = false)),
+                ),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("test@test.com | bitwarden.com (1)")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(SHARED_ACCOUNTS_SECTION.codes[0].title)
+            .assertIsNotDisplayed()
+    }
+
+    @Test
+    fun `local codes should be displayed based on expanding header state`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.Content(
+                actionCard = ItemListingState.ActionCardState.None,
+                favoriteItems = emptyList(),
+                itemList = listOf(LOCAL_CODE),
+                sharedItems = SharedCodesDisplayState.Codes(
+                    sections = listOf(
+                        SHARED_ACCOUNTS_SECTION,
+                    ),
+                ),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText(LOCAL_CODE.title)
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Local codes (1)")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(LOCAL_CODE.title)
+            .assertIsNotDisplayed()
+    }
 }
 
 private val APP_THEME = AppTheme.DEFAULT
@@ -436,7 +549,8 @@ private val LOCAL_CODE = VerificationCodeDisplayItem(
 )
 
 private val SHARED_ACCOUNTS_SECTION = SharedCodesDisplayState.SharedCodesAccountSection(
-    label = "test@test.com".asText(),
+    id = "id",
+    label = "test@test.com | bitwarden.com (1)".asText(),
     codes = listOf(
         VerificationCodeDisplayItem(
             id = "1",
@@ -451,6 +565,7 @@ private val SHARED_ACCOUNTS_SECTION = SharedCodesDisplayState.SharedCodesAccount
             showMoveToBitwarden = false,
         ),
     ),
+    isExpanded = true,
 )
 
 private val DEFAULT_STATE = ItemListingState(

@@ -18,9 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.button.BitwardenTextSelectionButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextSelectionButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
@@ -70,7 +71,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         },
     )
 
-    var isAdditionalOptionsExpanded = rememberSaveable { mutableStateOf(value = false) }
+    val isAdditionalOptionsExpanded = rememberSaveable { mutableStateOf(value = false) }
     val windowAdaptiveInfo = currentWindowAdaptiveInfo()
     LazyColumn(modifier = modifier, state = lazyListState) {
         item {
@@ -127,9 +128,9 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                 actions = {
                     BitwardenStandardIconButton(
                         vectorIconRes = if (state.common.favorite) {
-                            R.drawable.ic_favorite_full
+                            BitwardenDrawable.ic_favorite_full
                         } else {
-                            R.drawable.ic_favorite_empty
+                            BitwardenDrawable.ic_favorite_empty
                         },
                         contentDescription = if (state.common.favorite) {
                             stringResource(id = R.string.favorite)

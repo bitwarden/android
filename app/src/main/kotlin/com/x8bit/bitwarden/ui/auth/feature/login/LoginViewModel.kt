@@ -416,11 +416,6 @@ sealed class LoginEvent {
         val password: String?,
         val isNewDeviceVerification: Boolean = false,
     ) : LoginEvent()
-
-    /**
-     * Shows a toast with the given [message].
-     */
-    data class ShowToast(val message: String) : LoginEvent()
 }
 
 /**

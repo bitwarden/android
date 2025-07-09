@@ -42,7 +42,9 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
@@ -52,7 +54,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialo
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -217,7 +218,7 @@ private fun LandingScreenContent(
         Spacer(modifier = Modifier.weight(1f))
 
         Image(
-            painter = rememberVectorPainter(id = R.drawable.bitwarden_logo),
+            painter = rememberVectorPainter(id = BitwardenDrawable.bitwarden_logo),
             colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
             contentDescription = null,
             modifier = Modifier
@@ -319,7 +320,7 @@ private fun LandingScreenContent(
             BitwardenTextButton(
                 label = stringResource(id = R.string.app_settings),
                 onClick = onAppSettingsClick,
-                icon = rememberVectorPainter(id = R.drawable.ic_cog),
+                icon = rememberVectorPainter(id = BitwardenDrawable.ic_cog),
                 modifier = Modifier
                     .standardHorizontalMargin()
                     .fillMaxWidth(),

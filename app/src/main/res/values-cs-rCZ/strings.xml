@@ -269,8 +269,8 @@ Načtení proběhne automaticky.</string>
     <string name="icons_url">URL serveru ikon</string>
     <string name="vault_is_locked">Trezor je uzamčený</string>
     <string name="go_to_my_vault">Přejít do trezoru</string>
-    <string name="collections">Kolekce</string>
-    <string name="no_items_collection">V této kolekci nejsou žádné položky.</string>
+    <string name="collections">Sbírky</string>
+    <string name="no_items_collection">V této sbírce nejsou žádné položky.</string>
     <string name="no_items_folder">V této složce nejsou žádné položky.</string>
     <string name="no_items_trash">V koši nejsou žádné položky.</string>
     <string name="autofill_accessibility_summary">Pomůže při vyplňování uživatelského jména a hesla v jiných aplikacích a na webu.</string>
@@ -322,9 +322,9 @@ Načtení proběhne automaticky.</string>
     <string name="move_down">Přesunout dolů</string>
     <string name="move_up">Přesunout nahoru</string>
     <string name="owner">Vlastník</string>
-    <string name="no_collections_to_list">Žádné kolekce k zobrazení.</string>
+    <string name="no_collections_to_list">Žádné sbírky k zobrazení.</string>
     <string name="moved_item_to_org">Položka %1$s byla přesunuta do %2$s.</string>
-    <string name="select_one_collection">Musíte vybrat alespoň jednu kolekci.</string>
+    <string name="select_one_collection">Musíte vybrat alespoň jednu sbírku.</string>
     <string name="share">Sdílet</string>
     <string name="move_to_organization">Přesunout do organizace</string>
     <string name="no_orgs_to_list">Žádné organizace k zobrazení.</string>
@@ -425,7 +425,9 @@ Načtení proběhne automaticky.</string>
     <string name="privacy_policy">Zásady ochrany osobních údajů</string>
     <string name="passkey_management">Správa přístupových klíčů</string>
     <string name="autofill_services">Služby automatického vyplňování</string>
-    <string name="inline_autofill">Použít automatické vyplňování</string>
+    <string name="display_autofill_suggestions">Zobrazit návrhy automatického vyplňování</string>
+    <string name="autofill_suggestions_inline">Inline (zobrazí se v klávesnici)</string>
+    <string name="autofill_suggestions_popup">Vyskakovací okno (zobrazí se přes vstupní pole)</string>
     <string name="accessibility">Použít přístupnost</string>
     <string name="accessibility_description5">Vyžadováno pro použití v dlaždici rychlé akce automatického vyplňování.</string>
     <string name="personal_ownership_policy_in_effect">Zásady organizace ovlivňují možnosti vlastnictví.</string>
@@ -454,7 +456,7 @@ Načtení proběhne automaticky.</string>
     <string name="password_info">Vyžadovat totot heslo pro přístup k tomuto Send.</string>
     <string name="remove_password">Odebrat heslo</string>
     <string name="removing_send_password">Odebírání hesla</string>
-    <string name="send_password_removed">Heslo bylo odebráno.</string>
+    <string name="password_removed">Heslo bylo odebráno</string>
     <string name="add_a_send">Nový Send</string>
     <string name="copy_link">Kopírovat odkaz</string>
     <string name="share_link">Sdílet odkaz</string>
@@ -659,8 +661,8 @@ Chcete se přepnout na tento účet?</string>
     <string name="session_timeout_action">Akce časového limitu relace</string>
     <string name="account_fingerprint_phrase">Fráze otisku prstu účtu</string>
     <string name="passkey_management_explanation_long">Použijte Bitwarden pro ukládání nových přístupových klíčů a přihlašování se pomocí přístupových klíčů uložených ve Vašem trezoru.</string>
-    <string name="autofill_services_explanation_long">Android Autofill Framework se používá k vyplnění přihlašovacích údajů do jiných aplikací na Vašem zařízení.</string>
-    <string name="use_inline_autofill_explanation_long">Pokud to Vaše vybraná klávesnice podporuje, použije se inline automatické vyplňování. V opačném případě se použije výchozí překrytí.</string>
+    <string name="autofill_services_explanation_long">Povolí Bitwardenu používat uložené přihlašovací údaje k přihlášení do jiných aplikací na Vašem zařízení.</string>
+    <string name="use_inline_autofill_explanation_long">Zvolte, jak se budou Vaše návrhy automatického vyplňování zobrazovat při přihlášení do jiných aplikací na Vašem zařízení.</string>
     <string name="additional_options">Další volby</string>
     <string name="continue_to_web_app">Pokračovat do webové aplikace?</string>
     <string name="continue_to_x">Pokračovat do %1$s?</string>
@@ -674,7 +676,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="privacy_policy_description_long">Podívejte se na naše Zásady ochrany osobních údajů na bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Prozkoumejte další funkce Vašeho účtu Bitwarden ve webové aplikaci.</string>
     <string name="learn_about_organizations_description_long">Bitwarden Vám umožňuje sdílet položky v trezoru s ostatními prostřednictvím organizace. Více informací naleznete na bitwarden.com.</string>
-    <string name="created_xy">Vytvořeno %1$s, %2$s</string>
+    <string name="created_x">Vytvořeno: %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Vaše organizace vyžaduje nastavení hlavního hesla.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Nastavte volbu odemknutí, abyste změnili časový limit Vašeho trezoru.</string>
     <string name="save_passkey_as_new_login">Uložit přístupový klíč jako nové přihlášení</string>
@@ -907,9 +909,10 @@ Chcete se přepnout na tento účet?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operace přístupového klíče se nezdařila, protože nebyla vybrána žádná položka.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operace přístupového klíče se nezdařila, protože je požadavek nepodporovaný.</string>
     <string name="self_host_server_url">Adresa URL serveru vlastního hostování</string>
+    <string name="use_brave_autofill_integration">Použít integraci automatického vyplňování Brave</string>
     <string name="use_chrome_autofill_integration">Použít integraci automatického vyplňování Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Použít integraci automatického vyplňování Chrome (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Zlepšuje vyplňování přihlašovacích údajů pro podporované webové stránky na Chrome. Pokud je povoleno, budete přesměrováni na nastavení Chrome, abyste povolili automatické vyplňování třetích stran.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Zlepšuje vyplňování přihlašovacích údajů pro podporované webové stránky. Pokud je povoleno, budete přesměrováni na nastavení prohlížeče, abyste povolili automatické vyplňování třetích stran.</string>
     <string name="show_more">Zobrazit další</string>
     <string name="no_folder">Žádná složka</string>
     <string name="show_less">Zobrazit méně</string>
@@ -981,4 +984,10 @@ při opakování problémů.</string>
     <string name="about_privileged_applications">O privilegovaných aplikacích</string>
     <string name="learn_more_about_privileged_apps">Další informace o privilegovaných aplikacích</string>
     <string name="privileged_apps">Privilegované aplikace</string>
+    <string name="unrecognized_browser">Nerozpoznaný prohlížeč</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Přečtěte si více o používání hesel s Bitwardenem.</string>
+    <string name="all_trusted_apps">Všechny důvěryhodné aplikace</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Jste si jisti, že chcete přestat důvěřovat %s?</string>
+    <string name="installed_apps">Nainstalované aplikace</string>
+    <string name="delete_x">Smazat %s</string>
 </resources>

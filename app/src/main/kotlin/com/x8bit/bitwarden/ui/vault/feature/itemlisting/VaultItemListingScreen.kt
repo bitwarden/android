@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,7 +13,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
@@ -28,6 +26,7 @@ import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionI
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -95,8 +94,6 @@ fun VaultItemListingScreen(
     viewModel: VaultItemListingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
     val userVerificationHandlers = remember(viewModel) {
         VaultItemListingUserVerificationHandlers.create(viewModel = viewModel)
     }
@@ -119,10 +116,6 @@ fun VaultItemListingScreen(
 
             is VaultItemListingEvent.ShowShareSheet -> {
                 intentManager.shareText(event.content)
-            }
-
-            is VaultItemListingEvent.ShowToast -> {
-                Toast.makeText(context, event.text(resources), Toast.LENGTH_SHORT).show()
             }
 
             is VaultItemListingEvent.NavigateToAddVaultItem -> {
@@ -499,7 +492,7 @@ private fun VaultItemListingScaffold(
                 title = state.appBarTitle(),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = NavigationIcon(
-                    navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
+                    navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                     navigationIconContentDescription = stringResource(id = R.string.back),
                     onNavigationIconClick = vaultItemListingHandlers.backClick,
                 )
@@ -538,7 +531,7 @@ private fun VaultItemListingScaffold(
             if (state.hasAddItemFabButton) {
                 BitwardenFloatingActionButton(
                     onClick = vaultItemListingHandlers.addVaultItemClick,
-                    painter = rememberVectorPainter(id = R.drawable.ic_plus_large),
+                    painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
                     contentDescription = stringResource(id = R.string.add_item),
                     modifier = Modifier.testTag(tag = "AddItemButton"),
                 )

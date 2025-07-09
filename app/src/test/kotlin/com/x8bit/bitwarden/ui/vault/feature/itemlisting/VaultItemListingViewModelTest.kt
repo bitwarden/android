@@ -14,6 +14,7 @@ import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
@@ -23,8 +24,11 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -58,6 +62,7 @@ import com.x8bit.bitwarden.data.credentials.model.createMockFido2CredentialAsser
 import com.x8bit.bitwarden.data.credentials.model.createMockGetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -65,6 +70,7 @@ import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingMa
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
@@ -87,7 +93,6 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialRes
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -155,6 +160,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     private val clipboardManager: BitwardenClipboardManager = mockk {
         every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
     }
+    private val toastManager: ToastManager = mockk {
+        every { show(messageId = any()) } just runs
+    }
 
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository = mockk<AuthRepository> {
@@ -196,9 +204,14 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             authRepository = mockAuthRepository,
             dispatcherManager = FakeDispatcherManager(),
         )
+    private val mutableActivePoliciesFlow: MutableStateFlow<List<SyncResponseJson.Policy>> =
+        MutableStateFlow(emptyList())
     private val policyManager: PolicyManager = mockk {
         every { getActivePolicies(type = PolicyTypeJson.DISABLE_SEND) } returns emptyList()
         every { getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND) } returns emptyFlow()
+        every {
+            getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+        } returns mutableActivePoliciesFlow
     }
     private val bitwardenCredentialManager: BitwardenCredentialManager = mockk {
         every { isUserVerified } returns false
@@ -229,6 +242,16 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
     private val privilegedAppRepository = mockk<PrivilegedAppRepository> {
         coEvery { addTrustedPrivilegedApp(any(), any()) } just runs
+    }
+
+    private val mutableRemoveCardPolicyFeatureFlow = MutableStateFlow(false)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every {
+            getFeatureFlagFlow(FlagKey.RemoveCardPolicy)
+        } returns mutableRemoveCardPolicyFeatureFlow
+        every {
+            getFeatureFlag(FlagKey.UserManagedPrivilegedApps)
+        } returns true
     }
 
     private val initialState = createVaultItemListingState()
@@ -343,6 +366,64 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
             }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is enable`() =
+        runTest {
+            mutableRemoveCardPolicyFeatureFlow.value = true
+
+            val viewModel = createVaultItemListingViewModel()
+            assertEquals(
+                initialState.copy(restrictItemTypesPolicyOrgIds = persistentListOf()),
+                viewModel.stateFlow.value,
+            )
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+
+            assertEquals(
+                initialState.copy(
+                    restrictItemTypesPolicyOrgIds = persistentListOf("Test Organization"),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is disabled`() =
+        runTest {
+            val viewModel = createVaultItemListingViewModel()
+            assertEquals(
+                initialState,
+                viewModel.stateFlow.value,
+            )
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+
+            assertEquals(
+                initialState.copy(restrictItemTypesPolicyOrgIds = persistentListOf()),
+                viewModel.stateFlow.value,
+            )
         }
 
     @Test
@@ -1227,6 +1308,108 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `AddVaultItemClick inside a collection should show item selection dialog state`() {
+        val viewModel = createVaultItemListingViewModel(
+            savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                vaultItemListingType = VaultItemListingType.Collection(collectionId = "id"),
+            ),
+        )
+        viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
+        assertEquals(
+            createVaultItemListingState(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Collection(
+                    collectionId = "id",
+                ),
+                dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
+                    excludedOptions = persistentListOf(
+                        CreateVaultItemType.SSH_KEY,
+                        CreateVaultItemType.FOLDER,
+                    ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `AddVaultItemClick inside a folder should hide card item selection dialog state when RESTRICT_ITEM_TYPES policy is enabled`() =
+        runTest {
+            mutableRemoveCardPolicyFeatureFlow.value = true
+            val viewModel = createVaultItemListingViewModel(
+                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                    vaultItemListingType = VaultItemListingType.Folder(folderId = "id"),
+                ),
+            )
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+            viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
+            assertEquals(
+                createVaultItemListingState(
+                    itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
+                        folderId = "id",
+                    ),
+                    dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
+                        excludedOptions = persistentListOf(
+                            CreateVaultItemType.CARD,
+                            CreateVaultItemType.FOLDER,
+                            CreateVaultItemType.SSH_KEY,
+                        ),
+                    ),
+                ).copy(restrictItemTypesPolicyOrgIds = persistentListOf("Test Organization")),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `AddVaultItemClick inside a collection should hide card item selection dialog state when RESTRICT_ITEM_TYPES policy is enabled`() =
+        runTest {
+            mutableRemoveCardPolicyFeatureFlow.value = true
+            val viewModel = createVaultItemListingViewModel(
+                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                    vaultItemListingType = VaultItemListingType.Collection(collectionId = "id"),
+                ),
+            )
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+            viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
+            assertEquals(
+                createVaultItemListingState(
+                    itemListingType = VaultItemListingState.ItemListingType.Vault.Collection(
+                        collectionId = "id",
+                    ),
+                    dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
+                        excludedOptions = persistentListOf(
+                            CreateVaultItemType.CARD,
+                            CreateVaultItemType.FOLDER,
+                            CreateVaultItemType.SSH_KEY,
+                        ),
+                    ),
+                ).copy(restrictItemTypesPolicyOrgIds = persistentListOf("Test Organization")),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
     fun `AddVaultItemClick for vault item should emit NavigateToAddVaultItem`() = runTest {
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
@@ -1429,7 +1612,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `OverflowOptionClick Send DeleteClick with deleteSend success should emit ShowToast`() =
+    fun `OverflowOptionClick Send DeleteClick with deleteSend success should emit ShowSnackbar`() =
         runTest {
             val sendId = "sendId1234"
             coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Success
@@ -1442,7 +1625,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 assertEquals(
-                    VaultItemListingEvent.ShowToast(R.string.send_deleted.asText()),
+                    VaultItemListingEvent.ShowSnackbar(R.string.send_deleted.asText()),
                     awaitItem(),
                 )
             }
@@ -1503,7 +1686,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `OverflowOptionClick Send RemovePasswordClick with removePasswordSend success should emit ShowToast`() =
+    fun `OverflowOptionClick Send RemovePasswordClick with removePasswordSend success should emit ShowSnackbar`() =
         runTest {
             val sendId = "sendId1234"
             coEvery {
@@ -1518,7 +1701,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 assertEquals(
-                    VaultItemListingEvent.ShowToast(R.string.password_removed.asText()),
+                    VaultItemListingEvent.ShowSnackbar(R.string.password_removed.asText()),
                     awaitItem(),
                 )
             }
@@ -1849,7 +2032,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                                 subtitleTestTag = "PasskeyName",
                                 iconData = IconData.Network(
                                     uri = "https://icons.bitwarden.net/www.mockuri.com/icon.png",
-                                    fallbackIconRes = R.drawable.ic_bw_passkey,
+                                    fallbackIconRes = BitwardenDrawable.ic_bw_passkey,
                                 ),
                                 isAutofill = true,
                             ),
@@ -1981,7 +2164,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                                     subtitleTestTag = "PasskeyName",
                                     iconData = IconData.Network(
                                         uri = "https://icons.bitwarden.net/www.mockuri.com/icon.png",
-                                        fallbackIconRes = R.drawable.ic_bw_passkey,
+                                        fallbackIconRes = BitwardenDrawable.ic_bw_passkey,
                                     ),
                                     isCredentialCreation = true,
                                 ),
@@ -2692,7 +2875,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ValidateOriginResult should update dialog state on PrivilegedAppNotAllowed error`() =
+    fun `ValidateOriginResult should show TrustPrivilegedAddPrompt dialog when feature flag is on`() =
         runTest {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
@@ -2712,6 +2895,36 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     message = R.string.passkey_operation_failed_because_browser_x_is_not_trusted
                         .asText("mockPackageName"),
                     selectedCipherId = null,
+                ),
+                viewModel.stateFlow.value.dialogState,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ValidateOriginResult should show not show TrustPrivilegedAppPrompt dialog when feature flag is off`() =
+        runTest {
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.ProviderCreateCredential(
+                    createCredentialRequest = createMockCreateCredentialRequest(number = 1),
+                )
+            coEvery {
+                originManager.validateOrigin(
+                    relyingPartyId = DEFAULT_RELYING_PARTY_ID,
+                    callingAppInfo = mockCallingAppInfo,
+                )
+            } returns ValidateOriginResult.Error.PrivilegedAppNotAllowed
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.UserManagedPrivilegedApps)
+            } returns false
+
+            val viewModel = createVaultItemListingViewModel()
+
+            assertEquals(
+                VaultItemListingState.DialogState.CredentialManagerOperationFail(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.passkey_operation_failed_because_browser_is_not_privileged
+                        .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -2810,11 +3023,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultItemListingEvent.ShowToast(R.string.an_error_has_occurred.asText()),
-                    awaitItem(),
-                )
-
-                assertEquals(
                     VaultItemListingEvent.CompleteFido2Registration(
                         RegisterFido2CredentialResult.Error(
                             R.string.passkey_registration_failed_due_to_an_internal_error.asText(),
@@ -2822,6 +3030,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ),
                     awaitItem(),
                 )
+            }
+            verify {
+                toastManager.show(messageId = R.string.an_error_has_occurred)
             }
         }
 
@@ -2842,11 +3053,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultItemListingEvent.ShowToast(R.string.item_updated.asText()),
-                    awaitItem(),
-                )
-
-                assertEquals(
                     VaultItemListingEvent.CompleteFido2Registration(
                         RegisterFido2CredentialResult.Success(
                             responseJson = "mockResponse",
@@ -2854,6 +3060,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ),
                     awaitItem(),
                 )
+            }
+            verify {
+                toastManager.show(messageId = R.string.item_updated)
             }
         }
 
@@ -5111,7 +5320,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             originManager = originManager,
             networkConnectionManager = networkConnectionManager,
             privilegedAppRepository = privilegedAppRepository,
+            featureFlagManager = featureFlagManager,
             snackbarRelayManager = snackbarRelayManager,
+            toastManager = toastManager,
             relyingPartyParser = relyingPartyParser,
         )
 
@@ -5139,6 +5350,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             createCredentialRequest = null,
             isPremium = true,
             isRefreshing = false,
+            restrictItemTypesPolicyOrgIds = persistentListOf(),
         )
 }
 

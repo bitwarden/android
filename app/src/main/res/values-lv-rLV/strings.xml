@@ -296,9 +296,9 @@ Nolasīšana notiks automātiski.</string>
     <string name="autofill_and_save">Automātiski aizpildīt un saglabāt</string>
     <string name="organization">Apvienība</string>
     <string name="try_again">Mēģini vēlreiz</string>
-    <string name="created">Created: %1$s</string>
-    <string name="password_last_updated">Password last updated: %1$s</string>
-    <string name="last_edited">Last edited: %1$s</string>
+    <string name="created">Izveidots: %1$s</string>
+    <string name="password_last_updated">Parole pēdējoreiz atjaunināta: %1$s</string>
+    <string name="last_edited">Pēdējoreiz labots: %1$s</string>
     <string name="invalid_email">Nederīga e-pasta adrese.</string>
     <string name="cards">Kartes</string>
     <string name="identities">Identitātes</string>
@@ -425,7 +425,9 @@ Nolasīšana notiks automātiski.</string>
     <string name="privacy_policy">Privātuma nosacījumi</string>
     <string name="passkey_management">Piekļuves atslēgu pārvaldība</string>
     <string name="autofill_services">Automātiskā aizpilde</string>
-    <string name="inline_autofill">Izmantot iekļauto automātisko aizpildi</string>
+    <string name="display_autofill_suggestions">Attēlot automātiskās aizpildes ieteikumus</string>
+    <string name="autofill_suggestions_inline">Iekšēji (rādās tastatūrā)</string>
+    <string name="autofill_suggestions_popup">Izlecoši (rādās virs ievades lauka)</string>
     <string name="accessibility">Izmantot pieejamību</string>
     <string name="accessibility_description5">Nepieciešams, lai izmantotu automātiskāš aizpildes ātrās piekļuves darbības lauciņu.</string>
     <string name="personal_ownership_policy_in_effect">Apvienības nosacījumi ietekmē Tavas īpašumtiesību iespējas.</string>
@@ -454,7 +456,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="password_info">Pēc izvēles pieprasīt paroli, lai lietotāji varētu piekļūt šim Send.</string>
     <string name="remove_password">Noņemt paroli</string>
     <string name="removing_send_password">Noņem paroli</string>
-    <string name="send_password_removed">Parole ir noņemta</string>
+    <string name="password_removed">Parole noņemta</string>
     <string name="add_a_send">Pievienot Send</string>
     <string name="copy_link">Ievietot saiti starpliktuvē</string>
     <string name="share_link">Kopīgot saiti</string>
@@ -675,7 +677,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="privacy_policy_description_long">Mūsu privātuma nosacījumi ir pārskatāmi bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Vairāk sava Bitwarden konta iespēju var izpētīt tīmekļa vietnē.</string>
     <string name="learn_about_organizations_description_long">Bitwarden nodrošina iespēju kopīgot savas glabātavas vienumus ar citiem, kad tiek izmantota apvienība. Vairāk var uzzināt tīmekļvietnē bitwarden.com.</string>
-    <string name="created_xy">Izveidots %1$s, %2$s</string>
+    <string name="created_x">Izveidots %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Apvienība pieprasa iestatīt galveno paroli.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Jāuzstāda atslēgšanas iespēja, lai mainītu glabātavas noildzes darbību.</string>
     <string name="save_passkey_as_new_login">Saglabāt piekļuves atslēgu kā jaunu pieteikšanās vienumu</string>
@@ -908,9 +910,10 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Darbība ar piekļuves atslēgu neizdevās, jo netika atlasīts neviens vienums.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Darbība ar piekļuves atslēgu neizdevās, jo pieprasījums netiek atbalstīts.</string>
     <string name="self_host_server_url">Pašmitināta servera URL</string>
+    <string name="use_brave_autofill_integration">Izmantot Brave automātiskās aizpildes iekļaušanu</string>
     <string name="use_chrome_autofill_integration">Izmantot Chrome automātiskās aizpildes iekļaušanu</string>
     <string name="use_chrome_beta_autofill_integration">Izmantot Chrome automātiskās aizpildes iekļaušanu (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Uzlabo pieteikšanās vietumu aizpildīšanu atbalstītās tīmekļvietnēs Crome pārlūkā. Uzreiz pēc iespējošanas notiks novirzīšana uz Chrome iestatījumiem, lai iespējotu trešo pušu automātisko aizpildi.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Uzlabo pieteikšanās vietumu aizpildīšanu atbalstītās tīmekļvietnēs atlasītos pārlūkos. Uzreiz pēc iespējošanas notiks novirzīšana uz pārlūka iestatījumiem, lai iespējotu trešo pušu automātisko aizpildi.</string>
     <string name="show_more">Rādīt vairāk</string>
     <string name="no_folder">Nav mapes</string>
     <string name="show_less">Rādīt mazāk</string>
@@ -980,4 +983,10 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="about_privileged_applications">Par priviliģētajām lietotnēm</string>
     <string name="learn_more_about_privileged_apps">Uzzināt vairāk par priviliģētajām lietotnēm</string>
     <string name="privileged_apps">Priviliģētās lietotnes</string>
+    <string name="unrecognized_browser">Neatpazīts pārlūks</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Uzzināt vairāk par paroles vārdkopu izmantošanu ar Bitwarden.</string>
+    <string name="all_trusted_apps">Visas uzticamās lietotnes</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Vai tiešām pārtraukt uzticēties %s?</string>
+    <string name="installed_apps">Uzstādītās lietotnes</string>
+    <string name="delete_x">Izdzēst %s</string>
 </resources>

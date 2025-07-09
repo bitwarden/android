@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pending
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Build
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,7 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -42,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
 import com.bitwarden.ui.platform.base.util.cardStyle
@@ -55,7 +54,6 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.data.platform.util.isFdroid
 import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
@@ -63,6 +61,8 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingConten
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 
@@ -79,8 +79,6 @@ fun PendingRequestsScreen(
     onNavigateToLoginApproval: (fingerprint: String) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
     val pullToRefreshState = rememberBitwardenPullToRefreshState(
         isEnabled = state.isPullToRefreshEnabled,
         isRefreshing = state.isRefreshing,
@@ -88,6 +86,7 @@ fun PendingRequestsScreen(
             { viewModel.trySendAction(PendingRequestsAction.RefreshPull) }
         },
     )
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             PendingRequestsEvent.NavigateBack -> onNavigateBack()
@@ -95,9 +94,7 @@ fun PendingRequestsScreen(
                 onNavigateToLoginApproval(event.fingerprint)
             }
 
-            is PendingRequestsEvent.ShowToast -> {
-                Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
-            }
+            is PendingRequestsEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
 
@@ -113,7 +110,7 @@ fun PendingRequestsScreen(
 
     val hideBottomSheet = state.hideBottomSheet ||
         isFdroid ||
-        isBuildVersionBelow(Build.VERSION_CODES.TIRAMISU) ||
+        !isBuildVersionAtLeast(Build.VERSION_CODES.TIRAMISU) ||
         permissionsManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS) ||
         permissionsManager.shouldShowRequestPermissionRationale(
             permission = Manifest.permission.POST_NOTIFICATIONS,
@@ -150,6 +147,9 @@ fun PendingRequestsScreen(
             )
         },
         pullToRefreshState = pullToRefreshState,
+        snackbarHost = {
+            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
+        },
     ) {
         when (val viewState = state.viewState) {
             is PendingRequestsState.ViewState.Content -> {
@@ -248,7 +248,7 @@ private fun PendingRequestsContent(
 
         BitwardenOutlinedButton(
             label = stringResource(id = R.string.decline_all_requests),
-            icon = rememberVectorPainter(id = R.drawable.ic_trash),
+            icon = rememberVectorPainter(id = BitwardenDrawable.ic_trash),
             onClick = { shouldShowDeclineAllRequestsConfirm = true },
             modifier = Modifier
                 .testTag("DeclineAllRequestsButton")
@@ -341,7 +341,7 @@ private fun PendingRequestsEmpty(
         Spacer(modifier = Modifier.height(16.dp))
         Spacer(modifier = Modifier.weight(1f))
         Image(
-            painter = rememberVectorPainter(id = R.drawable.pending_requests),
+            painter = rememberVectorPainter(id = BitwardenDrawable.pending_requests),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -379,7 +379,7 @@ private fun PendingRequestsBottomSheetContent(
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Spacer(modifier = Modifier.height(height = 24.dp))
         Image(
-            painter = rememberVectorPainter(id = R.drawable.img_2fa),
+            painter = rememberVectorPainter(id = BitwardenDrawable.img_2fa),
             contentDescription = null,
             modifier = Modifier
                 .standardHorizontalMargin()

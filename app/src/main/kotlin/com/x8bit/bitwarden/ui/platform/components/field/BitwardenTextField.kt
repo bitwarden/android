@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.components.field
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,9 +14,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -49,24 +52,24 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.PopupProperties
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.nullableTestTag
+import com.bitwarden.ui.platform.base.util.simpleVerticalScrollbar
 import com.bitwarden.ui.platform.base.util.toPx
 import com.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
 import com.bitwarden.ui.platform.components.appbar.color.bitwardenMenuItemColors
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
+import com.bitwarden.ui.platform.components.icon.BitwardenIcon
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenCutCopyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
-import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIcon
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -94,6 +97,7 @@ import kotlinx.collections.immutable.toImmutableList
  * an entire line before breaking. `false` by default.
  * @param visualTransformation Transforms the visual representation of the input [value].
  * @param keyboardType the preferred type of keyboard input.
+ * @param keyboardActions the callbacks of keyboard actions.
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
  * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param cardStyle Indicates the type of card style to be applied.
@@ -120,6 +124,7 @@ fun BitwardenTextField(
     textStyle: TextStyle = BitwardenTheme.typography.bodyLarge,
     shouldAddCustomLineBreaks: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     isError: Boolean = false,
     autoFocus: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -154,6 +159,7 @@ fun BitwardenTextField(
         textStyle = textStyle,
         shouldAddCustomLineBreaks = shouldAddCustomLineBreaks,
         keyboardType = keyboardType,
+        keyboardActions = keyboardActions,
         isError = isError,
         autoFocus = autoFocus,
         visualTransformation = visualTransformation,
@@ -191,6 +197,7 @@ fun BitwardenTextField(
  * an entire line before breaking. `false` by default.
  * @param visualTransformation Transforms the visual representation of the input [value].
  * @param keyboardType the preferred type of keyboard input.
+ * @param keyboardActions the callbacks of keyboard actions.
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
  * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param cardStyle Indicates the type of card style to be applied.
@@ -201,6 +208,7 @@ fun BitwardenTextField(
  * defining the layout of the actions.
  */
 @Suppress("LongMethod", "CyclomaticComplexMethod")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BitwardenTextField(
     label: String?,
@@ -219,6 +227,7 @@ fun BitwardenTextField(
     textStyle: TextStyle = BitwardenTheme.typography.bodyLarge,
     shouldAddCustomLineBreaks: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     isError: Boolean = false,
     autoFocus: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -263,7 +272,15 @@ fun BitwardenTextField(
     var lastTextValue by remember(value) { mutableStateOf(value = value) }
     CompositionLocalProvider(value = LocalTextToolbar provides textToolbar) {
         var hasFocused by remember { mutableStateOf(value = false) }
-        Box(modifier = modifier.defaultMinSize(minHeight = 60.dp)) {
+        val filteredAutoCompleteList = autoCompleteOptions
+            .filter { it.startsWith(textFieldValue.text) && it != textFieldValue.text }
+            .toImmutableList()
+        val isDropDownExpanded = filteredAutoCompleteList.isNotEmpty() && hasFocused
+        ExposedDropdownMenuBox(
+            expanded = isDropDownExpanded,
+            onExpandedChange = { hasFocused = false },
+            modifier = modifier.defaultMinSize(minHeight = 60.dp),
+        ) {
             Column(
                 modifier = Modifier
                     .onGloballyPositioned { widthPx = it.size.width }
@@ -298,7 +315,7 @@ fun BitwardenTextField(
                         {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(text = it)
-                                tooltip?.let {
+                                tooltip?.let { tooltipData ->
                                     val targetSize = if (textFieldValue.text.isEmpty() || focused) {
                                         16.dp
                                     } else {
@@ -306,13 +323,13 @@ fun BitwardenTextField(
                                     }
                                     val size by animateDpAsState(
                                         targetValue = targetSize,
-                                        label = "${it.contentDescription}_animation",
+                                        label = "${tooltipData.contentDescription}_animation",
                                     )
                                     Spacer(modifier = Modifier.width(width = 8.dp))
                                     BitwardenStandardIconButton(
-                                        vectorIconRes = R.drawable.ic_question_circle_small,
-                                        contentDescription = it.contentDescription,
-                                        onClick = it.onClick,
+                                        vectorIconRes = BitwardenDrawable.ic_question_circle_small,
+                                        contentDescription = tooltipData.contentDescription,
+                                        onClick = tooltipData.onClick,
                                         contentColor = BitwardenTheme.colorScheme.icon.secondary,
                                         modifier = Modifier.size(size),
                                     )
@@ -343,6 +360,7 @@ fun BitwardenTextField(
                     readOnly = readOnly,
                     textStyle = textStyle,
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
+                    keyboardActions = keyboardActions,
                     trailingIcon = actions?.let {
                         {
                             BitwardenRowOfActions(
@@ -357,6 +375,7 @@ fun BitwardenTextField(
                     visualTransformation = visualTransformation,
                     modifier = Modifier
                         .nullableTestTag(tag = textFieldTestTag)
+                        .menuAnchor(type = MenuAnchorType.PrimaryEditable)
                         .fillMaxWidth()
                         .onFocusChanged { focusState ->
                             focused = focusState.isFocused
@@ -380,17 +399,14 @@ fun BitwardenTextField(
                     }
                     ?: Spacer(modifier = Modifier.height(height = cardStyle?.let { 6.dp } ?: 0.dp))
             }
-            val filteredAutoCompleteList = autoCompleteOptions
-                .filter { option ->
-                    option.startsWith(textFieldValue.text) && option != textFieldValue.text
-                }
-                .toImmutableList()
-            DropdownMenu(
-                expanded = filteredAutoCompleteList.isNotEmpty() && hasFocused,
+            val scrollState = rememberScrollState()
+            ExposedDropdownMenu(
+                expanded = isDropDownExpanded,
                 shape = BitwardenTheme.shapes.menu,
                 containerColor = BitwardenTheme.colorScheme.background.primary,
-                properties = PopupProperties(),
                 onDismissRequest = { hasFocused = false },
+                scrollState = scrollState,
+                modifier = Modifier.simpleVerticalScrollbar(state = scrollState),
             ) {
                 filteredAutoCompleteList.forEach {
                     DropdownMenuItem(

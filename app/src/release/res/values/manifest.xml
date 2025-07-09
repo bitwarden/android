@@ -9,9 +9,8 @@
          Authenticator App release variant: -->
         <item>B06B54566AF2FBCC762700C8844B84EC410C230EACC3878FCF0248C0D9772A95</item>
 
-        <!-- These are the SHA-256 digest for one-off builds created from branches by the Github
-        Action of the Authenticator App release variant. Uncomment this to one off builds generated
-        from the Authenticator App repo. -->
-<!--        <item>52f393fb529fbf2ab5bb018bf17bf0f829d2fbebce099915aba42deab5a2fbb8</item>-->
+        <!-- These are the SHA-256 digest for APK signing key of the Authenticator App release
+        variant. -->
+        <item>52f393fb529fbf2ab5bb018bf17bf0f829d2fbebce099915aba42deab5a2fbb8</item>
     </string-array>
 </resources>

@@ -291,14 +291,14 @@ Skenovanie prebehne automaticky.</string>
     <string name="host">Hostiteľ</string>
     <string name="reg_ex">Regulárny výraz</string>
     <string name="starts_with">Začína na</string>
-    <string name="uri_match_detection">Spôsob mapovania URI</string>
-    <string name="match_detection">Spôsob mapovania</string>
+    <string name="uri_match_detection">Zisťovanie zhody URI</string>
+    <string name="match_detection">Zisťovanie zhody</string>
     <string name="autofill_and_save">Auto-vyplniť a uložiť</string>
     <string name="organization">Organizácia</string>
     <string name="try_again">Skúsiť Znovu</string>
-    <string name="created">Created: %1$s</string>
-    <string name="password_last_updated">Password last updated: %1$s</string>
-    <string name="last_edited">Last edited: %1$s</string>
+    <string name="created">Vytvorené: %1$s</string>
+    <string name="password_last_updated">Naposledy upravené heslo: %1$s</string>
+    <string name="last_edited">Naposledy upravené: %1$s</string>
     <string name="invalid_email">Neplatná e-mailová adresa.</string>
     <string name="cards">Karty</string>
     <string name="identities">Identity</string>
@@ -355,8 +355,8 @@ Skenovanie prebehne automaticky.</string>
     <string name="two_minutes">2 minúty</string>
     <string name="clear_clipboard">Vymazať schránku</string>
     <string name="clear_clipboard_description">Automaticky vymazať skopírované hodnoty zo schránky.</string>
-    <string name="default_uri_match_detection">Predvolený spôsob detekcie zhody URI</string>
-    <string name="default_uri_match_detection_description">Vyberte si predvolený spôsob mapovania, ktorý bude použitý pre prihlasovacie údaje pri využití funkcií, ako je napríklad automatické vypĺňanie hesiel.</string>
+    <string name="default_uri_match_detection">Predvolené zisťovanie zhody URI</string>
+    <string name="default_uri_match_detection_description">Vyberte si predvolený spôsob zisťovania zhody URI, ktorý bude použitý pre prihlasovacie údaje pri využití funkcií, ako je napríklad automatické vypĺňanie hesiel.</string>
     <string name="theme">Motív</string>
     <string name="theme_description">Zmeniť motív aplikácie.</string>
     <string name="copy_notes">Kopírovať poznámku</string>
@@ -425,7 +425,9 @@ Skenovanie prebehne automaticky.</string>
     <string name="privacy_policy">Zásady ochrany osobných údajov</string>
     <string name="passkey_management">Správa prístupových kľúčov</string>
     <string name="autofill_services">Služba automatického vypĺňania</string>
-    <string name="inline_autofill">Použiť vnorené automatické vypĺňanie</string>
+    <string name="display_autofill_suggestions">Zobraziť návrhy na automatické vypĺňanie</string>
+    <string name="autofill_suggestions_inline">Inline (zobrazí sa na klávesnici)</string>
+    <string name="autofill_suggestions_popup">Vyskakovacie okno (zobrazí sa cez vstupné pole)</string>
     <string name="accessibility">Použiť dostupnosť</string>
     <string name="accessibility_description5">Vyžaduje sa pre použitie dlaždice rýchleho automatického vypĺňania.</string>
     <string name="personal_ownership_policy_in_effect">Politika organizácie ovplyvňuje vaše možnosti vlastníctva.</string>
@@ -454,7 +456,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="password_info">Voliteľne môžete vyžadovať heslo pre používateľov na prístup k tomuto Sendu.</string>
     <string name="remove_password">Odstrániť heslo</string>
     <string name="removing_send_password">Odstraňuje sa heslo</string>
-    <string name="send_password_removed">Heslo bolo odstránené.</string>
+    <string name="password_removed">Heslo bolo odstránené</string>
     <string name="add_a_send">Pridať Send</string>
     <string name="copy_link">Kopírovať odkaz</string>
     <string name="share_link">Zdieľať odkaz</string>
@@ -675,7 +677,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="privacy_policy_description_long">Pozrite si naše zásady ochrany osobných údajov na bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Preskúmajte ďalšie funkcie svojho účtu na Bitwarden vo webovej aplikácii.</string>
     <string name="learn_about_organizations_description_long">Bitwarden vám umožňuje zdieľať vaše položky trezora s ostatnými pomocou organizácie. Viac informácií nájdete na webovej stránke bitwarden.com.</string>
-    <string name="created_xy">Vytvorené %1$s, %2$s</string>
+    <string name="created_x">Vytvorené: %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Vaša organizácia vyžaduje, aby ste nastavili hlavné heslo.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Nastavte možnosť odomknutia, aby ste zmenili akciu pri vypršaní času trezoru.</string>
     <string name="save_passkey_as_new_login">Uložiť prístupový kľúč ako nové prihlásenie</string>
@@ -908,9 +910,10 @@ Chcete prepnúť na tento účet?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operácia prístupového kľúča zlyhala, pretože nebola vybraná žiadna položka.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operácia prístupového kľúča zlyhala, pretože požiadavka nie podporovaná.</string>
     <string name="self_host_server_url">Adresa URL vlastného hostingu</string>
+    <string name="use_brave_autofill_integration">Použiť integráciu automatického vypĺňania Brave</string>
     <string name="use_chrome_autofill_integration">Použiť integráciu automatického vyplňovania Chromu</string>
     <string name="use_chrome_beta_autofill_integration">Použiť integráciu automatického vyplňovania Chromu (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Vylepšuje vypĺňanie prihlasovacích údajov pre podporované webové stránky v Chrome. Po zapnutí budete presmerovaní do nastavení Chromu, kde môžete povoliť automatické vypĺňanie od tretích strán.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Vylepšuje vypĺňanie prihlasovacích údajov pre podporované webové stránky v Brave. Po zapnutí budete presmerovaní do nastavení Brave, kde môžete povoliť automatické vypĺňanie od tretích strán.</string>
     <string name="show_more">Zobraziť viac</string>
     <string name="no_folder">Žiadny priečinok</string>
     <string name="show_less">Zobraziť menej</string>
@@ -924,7 +927,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="recorded_logs_title">Zaznamenané logy</string>
     <string name="no_logs_recorded">Žiadne zaznamenané logy</string>
     <string name="experiencing_an_issue">Máte problém?</string>
-    <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Povoľte dočasné logovanie na zhromažďovanie a kontrolu logov lokálne. Ak je povolené, stav aplikácií a sieťové hovory môžu byť zaznamenávané – ale nikdy citlivé informácie o trezore.</string>
+    <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Povoľte dočasné logovanie na zhromažďovanie a kontrolu logov lokálne. Ak je povolené, stav aplikácií a sieťové volania môžu byť zaznamenávané – ale nikdy citlivé informácie o trezore.</string>
     <string name="to_get_started_set_a_logging_duration">Ak chcete začať, nastavte trvanie logovania. Po uplynutí tejto doby sa logovanie automaticky vypne, čím získate čas na zachytenie činnosti pri reprodukovaní prípadných problémov.</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Logy sa po 30 dňoch automaticky odstránia. Bitwarden má prístup k údajom logovania len keď ich zdieľate.</string>
     <string name="for_details_on_what_is_and_isnt_logged">Pre viac informácií, čo je a nie je logované, navštívte \n<annotation link="helpCenter">Centrum pomoci Bitwarden.</annotation></string>
@@ -980,4 +983,10 @@ Chcete prepnúť na tento účet?</string>
     <string name="about_privileged_applications">O privilegovaných aplikáciách</string>
     <string name="learn_more_about_privileged_apps">Viac informácií o privilegovaných aplikáciách</string>
     <string name="privileged_apps">Privilegované aplikácie</string>
+    <string name="unrecognized_browser">Neznámy prehliadač</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Ďalšie informácie o používaní prístupových kľúčov s Bitwardenom.</string>
+    <string name="all_trusted_apps">Všetky dôveryhodné aplikácie</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Naozaj už nechcete dôverovať %s?</string>
+    <string name="installed_apps">Nainštalované aplikácie</string>
+    <string name="delete_x">Odstrániť %s</string>
 </resources>

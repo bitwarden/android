@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -84,12 +83,6 @@ fun ManualCodeEntryScreen(
                 intent.data = Uri.parse("package:" + context.packageName)
 
                 intentManager.startActivity(intent = intent)
-            }
-
-            is ManualCodeEntryEvent.ShowToast -> {
-                Toast
-                    .makeText(context, event.message.invoke(context.resources), Toast.LENGTH_SHORT)
-                    .show()
             }
 
             is ManualCodeEntryEvent.NavigateToQrCodeScreen -> {

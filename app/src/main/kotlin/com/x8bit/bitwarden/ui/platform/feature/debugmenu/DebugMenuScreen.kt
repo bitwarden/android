@@ -32,6 +32,7 @@ import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
@@ -68,7 +69,7 @@ fun DebugMenuScreen(
                 title = stringResource(R.string.debug_menu),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = NavigationIcon(
-                    navigationIcon = rememberVectorPainter(R.drawable.ic_back),
+                    navigationIcon = rememberVectorPainter(BitwardenDrawable.ic_back),
                     navigationIconContentDescription = stringResource(id = R.string.back),
                     onNavigationIconClick = remember(viewModel) {
                         {

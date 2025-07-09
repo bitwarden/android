@@ -40,12 +40,6 @@ import org.junit.jupiter.api.Test
 
 @Suppress("LargeClass")
 class StartRegistrationViewModelTest : BaseViewModelTest() {
-    /**
-     * Saved state handle that has valid inputs. Useful for tests that want to test things
-     * after the user has entered all valid inputs.
-     */
-    private val validInputHandle = SavedStateHandle(mapOf("state" to VALID_INPUT_STATE))
-
     private val mockAuthRepository = mockk<AuthRepository> {
         every { captchaTokenResultFlow } returns flowOf()
     }
@@ -64,7 +58,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should be correct`() {
-        val viewModel = createStartRegistrationViewModel()
+        val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
     }
 
@@ -78,18 +72,13 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             selectedEnvironmentType = Environment.Type.US,
             dialog = null,
         )
-        val handle = SavedStateHandle(mapOf("state" to savedState))
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = handle,
-            authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository,
-        )
+        val viewModel = createViewModel(savedState)
         assertEquals(savedState, viewModel.stateFlow.value)
     }
 
     @Test
     fun `ContinueClick with blank email should show email required`() = runTest {
-        val viewModel = createStartRegistrationViewModel()
+        val viewModel = createViewModel()
         val input = "a"
         viewModel.trySendAction(EmailInputChange(input))
         val expectedState = DEFAULT_STATE.copy(
@@ -108,7 +97,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `ContinueClick with invalid email should show invalid email`() = runTest {
-        val viewModel = createStartRegistrationViewModel()
+        val viewModel = createViewModel()
         val input = " "
         viewModel.trySendAction(EmailInputChange(input))
         val expectedState = DEFAULT_STATE.copy(
@@ -127,23 +116,16 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `ContinueClick with all inputs valid should show and hide loading dialog`() = runTest {
-        val repo = mockk<AuthRepository> {
-            every { captchaTokenResultFlow } returns flowOf()
-            coEvery {
-                sendVerificationEmail(
-                    email = EMAIL,
-                    name = NAME,
-                    receiveMarketingEmails = true,
-                )
-            } returns SendVerificationEmailResult.Success(
-                emailVerificationToken = "verification_token",
+        coEvery {
+            mockAuthRepository.sendVerificationEmail(
+                email = EMAIL,
+                name = NAME,
+                receiveMarketingEmails = true,
             )
-        }
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = validInputHandle,
-            authRepository = repo,
-            environmentRepository = fakeEnvironmentRepository,
+        } returns SendVerificationEmailResult.Success(
+            emailVerificationToken = "verification_token",
         )
+        val viewModel = createViewModel(VALID_INPUT_STATE)
         viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
             assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
             viewModel.trySendAction(ContinueClick)
@@ -163,21 +145,14 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
     @Test
     fun `ContinueClick register returns error should update errorDialogState`() = runTest {
         val error = Throwable("Fail!")
-        val repo = mockk<AuthRepository> {
-            every { captchaTokenResultFlow } returns flowOf()
-            coEvery {
-                sendVerificationEmail(
-                    email = EMAIL,
-                    name = NAME,
-                    receiveMarketingEmails = true,
-                )
-            } returns SendVerificationEmailResult.Error(errorMessage = "mock_error", error = error)
-        }
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = validInputHandle,
-            authRepository = repo,
-            environmentRepository = fakeEnvironmentRepository,
-        )
+        coEvery {
+            mockAuthRepository.sendVerificationEmail(
+                email = EMAIL,
+                name = NAME,
+                receiveMarketingEmails = true,
+            )
+        } returns SendVerificationEmailResult.Error(errorMessage = "mock_error", error = error)
+        val viewModel = createViewModel(VALID_INPUT_STATE)
         viewModel.stateFlow.test {
             assertEquals(VALID_INPUT_STATE, awaitItem())
             viewModel.trySendAction(ContinueClick)
@@ -206,23 +181,16 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             every {
                 generateUriForCaptcha(captchaId = "mock_captcha_id")
             } returns mockkUri
-            val repo = mockk<AuthRepository> {
-                every { captchaTokenResultFlow } returns flowOf()
-                coEvery {
-                    sendVerificationEmail(
-                        email = EMAIL,
-                        name = NAME,
-                        receiveMarketingEmails = true,
-                    )
-                } returns SendVerificationEmailResult.Success(
-                    emailVerificationToken = "verification_token",
+            coEvery {
+                mockAuthRepository.sendVerificationEmail(
+                    email = EMAIL,
+                    name = NAME,
+                    receiveMarketingEmails = true,
                 )
-            }
-            val viewModel = StartRegistrationViewModel(
-                savedStateHandle = validInputHandle,
-                authRepository = repo,
-                environmentRepository = fakeEnvironmentRepository,
+            } returns SendVerificationEmailResult.Success(
+                emailVerificationToken = "verification_token",
             )
+            val viewModel = createViewModel(VALID_INPUT_STATE)
             viewModel.eventFlow.test {
                 viewModel.trySendAction(ContinueClick)
                 assertEquals(
@@ -243,23 +211,16 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             every {
                 generateUriForCaptcha(captchaId = "mock_captcha_id")
             } returns mockkUri
-            val repo = mockk<AuthRepository> {
-                every { captchaTokenResultFlow } returns flowOf()
-                coEvery {
-                    sendVerificationEmail(
-                        email = EMAIL,
-                        name = NAME,
-                        receiveMarketingEmails = true,
-                    )
-                } returns SendVerificationEmailResult.Success(
-                    emailVerificationToken = null,
+            coEvery {
+                mockAuthRepository.sendVerificationEmail(
+                    email = EMAIL,
+                    name = NAME,
+                    receiveMarketingEmails = true,
                 )
-            }
-            val viewModel = StartRegistrationViewModel(
-                savedStateHandle = validInputHandle,
-                authRepository = repo,
-                environmentRepository = fakeEnvironmentRepository,
+            } returns SendVerificationEmailResult.Success(
+                emailVerificationToken = null,
             )
+            val viewModel = createViewModel(VALID_INPUT_STATE)
             viewModel.eventFlow.test {
                 viewModel.trySendAction(ContinueClick)
                 assertEquals(
@@ -273,7 +234,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `BackClick should emit NavigateBack`() = runTest {
-        val viewModel = createStartRegistrationViewModel()
+        val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(CloseClick)
             assertEquals(NavigateBack, awaitItem())
@@ -282,7 +243,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `PrivacyPolicyClick should emit NavigatePrivacyPolicy`() = runTest {
-        val viewModel = createStartRegistrationViewModel()
+        val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(PrivacyPolicyClick)
             assertEquals(NavigateToPrivacyPolicy, awaitItem())
@@ -291,7 +252,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `TermsClick should emit NavigateToTerms`() = runTest {
-        val viewModel = createStartRegistrationViewModel()
+        val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(TermsClick)
             assertEquals(NavigateToTerms, awaitItem())
@@ -300,7 +261,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `UnsubscribeMarketingEmailsClick should emit NavigateToUnsubscribe`() = runTest {
-        val viewModel = createStartRegistrationViewModel()
+        val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(UnsubscribeMarketingEmailsClick)
             assertEquals(NavigateToUnsubscribe, awaitItem())
@@ -310,7 +271,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
     @Test
     fun `EnvironmentTypeSelect should update value of selected region for US or EU`() = runTest {
         val inputEnvironmentType = Environment.Type.EU
-        val viewModel = createStartRegistrationViewModel()
+        val viewModel = createViewModel()
         viewModel.stateFlow.test {
             awaitItem()
             viewModel.trySendAction(
@@ -328,7 +289,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
     @Test
     fun `EnvironmentTypeSelect should emit NavigateToEnvironment for self-hosted`() = runTest {
         val inputEnvironmentType = Environment.Type.SELF_HOSTED
-        val viewModel = createStartRegistrationViewModel()
+        val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(
                 EnvironmentTypeSelect(
@@ -344,7 +305,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `EmailInputChange update email`() = runTest {
-        val viewModel = createStartRegistrationViewModel()
+        val viewModel = createViewModel()
         viewModel.trySendAction(EmailInputChange("input"))
         viewModel.stateFlow.test {
             assertEquals(
@@ -359,7 +320,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `NameInputChange update name`() = runTest {
-        val viewModel = createStartRegistrationViewModel()
+        val viewModel = createViewModel()
         viewModel.trySendAction(NameInputChange("input"))
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE.copy(nameInput = "input"), awaitItem())
@@ -368,7 +329,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `ReceiveMarketingEmailsToggle update isReceiveMarketingEmailsToggled`() = runTest {
-        val viewModel = createStartRegistrationViewModel()
+        val viewModel = createViewModel()
         viewModel.trySendAction(ReceiveMarketingEmailsToggle(false))
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE.copy(isReceiveMarketingEmailsToggled = false), awaitItem())
@@ -377,7 +338,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `ServerGeologyHelpClickAction should emit NavigateToServerSelectionInfo`() = runTest {
-        val viewModel = createStartRegistrationViewModel()
+        val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(StartRegistrationAction.ServerGeologyHelpClick)
@@ -385,30 +346,33 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         }
     }
 
-    fun createStartRegistrationViewModel(): StartRegistrationViewModel = StartRegistrationViewModel(
-        savedStateHandle = SavedStateHandle(),
-        authRepository = mockAuthRepository,
-        environmentRepository = fakeEnvironmentRepository,
-    )
-
-    companion object {
-        private const val EMAIL = "test@test.com"
-        private const val NAME = "name"
-        private val DEFAULT_STATE = StartRegistrationState(
-            emailInput = "",
-            nameInput = "",
-            isReceiveMarketingEmailsToggled = true,
-            isContinueButtonEnabled = false,
-            selectedEnvironmentType = Environment.Type.US,
-            dialog = null,
+    private fun createViewModel(
+        state: StartRegistrationState? = null,
+    ): StartRegistrationViewModel =
+        StartRegistrationViewModel(
+            authRepository = mockAuthRepository,
+            environmentRepository = fakeEnvironmentRepository,
+            savedStateHandle = SavedStateHandle().apply {
+                set(key = "state", value = state)
+            },
         )
-        private val VALID_INPUT_STATE = StartRegistrationState(
-            emailInput = EMAIL,
-            nameInput = NAME,
-            isReceiveMarketingEmailsToggled = true,
-            isContinueButtonEnabled = true,
-            selectedEnvironmentType = Environment.Type.US,
-            dialog = null,
-        )
-    }
 }
+
+private const val EMAIL: String = "test@test.com"
+private const val NAME: String = "name"
+private val DEFAULT_STATE: StartRegistrationState = StartRegistrationState(
+    emailInput = "",
+    nameInput = "",
+    isReceiveMarketingEmailsToggled = true,
+    isContinueButtonEnabled = false,
+    selectedEnvironmentType = Environment.Type.US,
+    dialog = null,
+)
+private val VALID_INPUT_STATE: StartRegistrationState = StartRegistrationState(
+    emailInput = EMAIL,
+    nameInput = NAME,
+    isReceiveMarketingEmailsToggled = true,
+    isContinueButtonEnabled = true,
+    selectedEnvironmentType = Environment.Type.US,
+    dialog = null,
+)

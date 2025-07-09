@@ -227,14 +227,6 @@ data class PasswordHistoryState(
  * Defines the set of events that can occur in the password history screen.
  */
 sealed class PasswordHistoryEvent {
-
-    /**
-     * Event to show a toast message.
-     *
-     * @property message The message to be displayed in the toast.
-     */
-    data class ShowToast(val message: String) : PasswordHistoryEvent()
-
     /**
      * Event to navigate back to the previous screen.
      */

@@ -425,7 +425,9 @@ Het scannen gebeurt automatisch.</string>
     <string name="privacy_policy">Privacybeleid</string>
     <string name="passkey_management">Passkey-beheer</string>
     <string name="autofill_services">Automatisch aanvullen</string>
-    <string name="inline_autofill">Automatisch aanvullen in de regel gebruiken</string>
+    <string name="display_autofill_suggestions">Suggesties voor automatisch invullen weergeven</string>
+    <string name="autofill_suggestions_inline">Inline (toont in toetsenbord)</string>
+    <string name="autofill_suggestions_popup">Popup (toont over invoerveld)</string>
     <string name="accessibility">Toegankelijkheid gebruiken</string>
     <string name="accessibility_description5">Vereist voor het gebruik van Autofill Quick-Action Tile.</string>
     <string name="personal_ownership_policy_in_effect">Een organisatiebeleid heeft invloed op je eigendomsopties.</string>
@@ -454,7 +456,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="password_info">Vereis dit wachtwoord om de Send te bekijken.</string>
     <string name="remove_password">Wachtwoord verwijderen</string>
     <string name="removing_send_password">Wachtwoord verwijderen</string>
-    <string name="send_password_removed">Wachtwoord is verwijderd.</string>
+    <string name="password_removed">Wachtwoord verwijderd</string>
     <string name="add_a_send">Send toevoegen</string>
     <string name="copy_link">Link kopiëren</string>
     <string name="share_link">Link delen</string>
@@ -675,7 +677,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="privacy_policy_description_long">Bekijk ons privacybeleid op bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Ontdek meer functies van je Bitwarden-account in de webapp.</string>
     <string name="learn_about_organizations_description_long">Met Bitwarden kun je je kluis-items met anderen delen door gebruik te maken van een organisatie. Lees meer op de website bitwarden.com.</string>
-    <string name="created_xy">Aangemaakt %1$s, %2$s</string>
+    <string name="created_x">Aangemaakt: %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Je organisatie vereist dat je een hoofdwachtwoord instelt.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Stel een ontgrendelingsmethode in om je kluis time-out actie te wijzigen.</string>
     <string name="save_passkey_as_new_login">Passkey als nieuwe login opslaan</string>
@@ -908,9 +910,10 @@ Wilt u naar dit account wisselen?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey-bewerking mislukt omdat er geen item geselecteerd is.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey-bewerking mislukt omdat het verzoek niet ondersteund is.</string>
     <string name="self_host_server_url">URL zelfgehoste server</string>
+    <string name="use_brave_autofill_integration">Brave-integratie voor automatisch invullen gebruiken</string>
     <string name="use_chrome_autofill_integration">Gebruik de Chrome-integratie voor automatisch invullen</string>
     <string name="use_chrome_beta_autofill_integration">Gebruik de Chrome-integratie voor automatisch invullen (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Verbetert het invullen van inloggegevens voor ondersteunde websites op Chrome. Eenmaal ingeschakeld word je doorgestuurd naar Chrome-instellingen voor het inschakelen van automatisch invullen door derden.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Verbetert het invullen van inloggegevens voor ondersteunde websites op geselecteerde webbrowsers. Eenmaal ingeschakeld word je doorgestuurd naar de instellingen van de webbrowser voor het inschakelen van automatisch invullen door derden.</string>
     <string name="show_more">Meer weergeven</string>
     <string name="no_folder">Geen map</string>
     <string name="show_less">Minder weergeven</string>
@@ -980,4 +983,10 @@ Wilt u naar dit account wisselen?</string>
     <string name="about_privileged_applications">Over bevoegde applicaties</string>
     <string name="learn_more_about_privileged_apps">Meer informatie over bevoegde apps</string>
     <string name="privileged_apps">Bevoegde apps</string>
+    <string name="unrecognized_browser">Onbekende browser</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Meer informatie over het gebruik van passkeys met Bitwarden.</string>
+    <string name="all_trusted_apps">Alle vertrouwde apps</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Weet je zeker dat je wilt stoppen met %s vertrouwen?</string>
+    <string name="installed_apps">Geïnstalleerde apps</string>
+    <string name="delete_x">%s verwijderen</string>
 </resources>

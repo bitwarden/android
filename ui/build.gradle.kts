@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -35,9 +37,6 @@ android {
         unitTests.isIncludeAndroidResources = true
         unitTests.isReturnDefaultValues = true
     }
-    kotlinOptions {
-        jvmTarget = libs.versions.jvmTarget.get()
-    }
     @Suppress("UnstableApiUsage")
     testFixtures {
         enable = true
@@ -46,6 +45,7 @@ android {
 
 dependencies {
     implementation(project(":annotation"))
+    implementation(project(":core"))
 
     implementation(libs.androidx.appcompat)
     implementation(platform(libs.androidx.compose.bom))
@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.bumptech.glide)
     implementation(libs.kotlinx.serialization)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.collections.immutable)
@@ -86,6 +87,12 @@ dependencies {
     testFixturesImplementation(libs.mockk.mockk)
     testFixturesImplementation(libs.robolectric.robolectric)
     testFixturesImplementation(libs.square.turbine)
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
+    }
 }
 
 tasks {

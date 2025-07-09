@@ -30,8 +30,15 @@ import kotlinx.serialization.json.Json
 import java.time.Clock
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.days
+import kotlin.time.toJavaDuration
+
+/**
+ * The amount of time to delay before updating the push token against Bitwarden server.
+ */
+private val PUSH_TOKEN_UPDATE_DELAY: Duration = 7.days
 
 /**
  * Primary implementation of [PushManager].
@@ -279,11 +286,6 @@ class PushManagerImpl @Inject constructor(
         val userId = activeUserId ?: return
         if (!isLoggedIn(userId)) return
 
-        // If the last registered token is from less than a day before, skip this for now
-        val lastRegistration = pushDiskSource.getLastPushTokenRegistrationDate(userId)?.toInstant()
-        val dayBefore = clock.instant().minus(1, ChronoUnit.DAYS)
-        if (lastRegistration?.isAfter(dayBefore) == true) return
-
         ioScope.launch {
             pushDiskSource.registeredPushToken?.let {
                 registerPushTokenIfNecessaryInternal(
@@ -296,14 +298,11 @@ class PushManagerImpl @Inject constructor(
 
     private suspend fun registerPushTokenIfNecessaryInternal(userId: String, token: String) {
         val currentToken = pushDiskSource.getCurrentPushToken(userId)
-
         if (token == currentToken) {
-            // Our token is up-to-date, so just update the last registration date
-            pushDiskSource.storeLastPushTokenRegistrationDate(
-                userId = userId,
-                registrationDate = ZonedDateTime.ofInstant(clock.instant(), ZoneOffset.UTC),
-            )
-            return
+            val lastRegistration =
+                pushDiskSource.getLastPushTokenRegistrationDate(userId)?.toInstant() ?: return
+            val updateTime = clock.instant().minus(PUSH_TOKEN_UPDATE_DELAY.toJavaDuration())
+            if (updateTime.isBefore(lastRegistration)) return
         }
 
         pushService

@@ -40,6 +40,7 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -57,7 +58,6 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 
 /**
  * Top level composable for the complete registration screen.
@@ -139,7 +139,7 @@ fun CompleteRegistrationScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.create_account),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = handler.onBackClick,
             )
@@ -327,7 +327,7 @@ private fun CompleteRegistrationContentHeader(
 @Composable
 private fun OrderedHeaderContent() {
     Image(
-        painter = rememberVectorPainter(id = R.drawable.lock),
+        painter = rememberVectorPainter(id = BitwardenDrawable.lock),
         contentDescription = null,
         modifier = Modifier.size(100.dp),
     )

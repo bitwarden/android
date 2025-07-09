@@ -53,6 +53,7 @@ import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenCutCopyTextToolbar
@@ -159,7 +160,7 @@ fun BitwardenPasswordField(
                     {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(text = it)
-                            tooltip?.let {
+                            tooltip?.let { tooltipData ->
                                 val targetSize = if (textFieldValue.text.isEmpty() || focused) {
                                     16.dp
                                 } else {
@@ -167,13 +168,13 @@ fun BitwardenPasswordField(
                                 }
                                 val size by animateDpAsState(
                                     targetValue = targetSize,
-                                    label = "${it.contentDescription}_animation",
+                                    label = "${tooltipData.contentDescription}_animation",
                                 )
                                 Spacer(modifier = Modifier.width(width = 8.dp))
                                 BitwardenStandardIconButton(
-                                    vectorIconRes = R.drawable.ic_question_circle_small,
-                                    contentDescription = it.contentDescription,
-                                    onClick = it.onClick,
+                                    vectorIconRes = BitwardenDrawable.ic_question_circle_small,
+                                    contentDescription = tooltipData.contentDescription,
+                                    onClick = tooltipData.onClick,
                                     contentColor = BitwardenTheme.colorScheme.icon.secondary,
                                     modifier = Modifier.size(size),
                                 )
@@ -209,9 +210,9 @@ fun BitwardenPasswordField(
                             BitwardenStandardIconButton(
                                 modifier = Modifier.nullableTestTag(tag = showPasswordTestTag),
                                 vectorIconRes = if (showPassword) {
-                                    R.drawable.ic_eye_slash
+                                    BitwardenDrawable.ic_eye_slash
                                 } else {
-                                    R.drawable.ic_eye
+                                    BitwardenDrawable.ic_eye
                                 },
                                 contentDescription = stringResource(
                                     id = if (showPassword) R.string.hide else R.string.show,

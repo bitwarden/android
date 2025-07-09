@@ -13,6 +13,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTextEntryDialog
@@ -20,7 +22,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialo
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import kotlinx.collections.immutable.ImmutableList
@@ -157,7 +158,7 @@ private fun CustomFieldBoolean(
         cardStyle = cardStyle,
         actions = {
             BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_cog,
+                vectorIconRes = BitwardenDrawable.ic_cog,
                 contentDescription = stringResource(id = R.string.edit),
                 onClick = onEditValue,
                 modifier = Modifier.testTag(tag = "CustomFieldSettingsButton"),
@@ -194,7 +195,7 @@ private fun CustomFieldHiddenField(
         passwordFieldTestTag = "CustomFieldValue",
         actions = {
             BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_cog,
+                vectorIconRes = BitwardenDrawable.ic_cog,
                 contentDescription = stringResource(id = R.string.edit),
                 onClick = onEditValue,
                 modifier = Modifier.testTag("CustomFieldSettingsButton"),
@@ -225,7 +226,7 @@ private fun CustomFieldTextField(
         textFieldTestTag = "CustomFieldValue",
         actions = {
             BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_cog,
+                vectorIconRes = BitwardenDrawable.ic_cog,
                 contentDescription = stringResource(id = R.string.edit),
                 onClick = onEditValue,
                 modifier = Modifier.testTag("CustomFieldSettingsButton"),
@@ -264,7 +265,7 @@ private fun CustomFieldLinkedField(
         },
         actions = {
             BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_cog,
+                vectorIconRes = BitwardenDrawable.ic_cog,
                 contentDescription = stringResource(id = R.string.edit),
                 onClick = onEditValue,
                 modifier = Modifier.testTag("CustomFieldSettingsButton"),

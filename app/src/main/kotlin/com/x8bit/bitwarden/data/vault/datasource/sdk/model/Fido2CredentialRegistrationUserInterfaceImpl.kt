@@ -22,14 +22,14 @@ class Fido2CredentialRegistrationUserInterfaceImpl(
     override suspend fun checkUser(
         options: CheckUserOptions,
         hint: UiHint,
-    ): CheckUserResult = CheckUserResult(true, true)
+    ): CheckUserResult = CheckUserResult(userPresent = true, userVerified = true)
 
     override suspend fun checkUserAndPickCredentialForCreation(
         options: CheckUserOptions,
         newCredential: Fido2CredentialNewView,
     ): CheckUserAndPickCredentialForCreationResult = CheckUserAndPickCredentialForCreationResult(
         cipher = CipherViewWrapper(selectedCipherView),
-        checkUserResult = CheckUserResult(true, true),
+        checkUserResult = CheckUserResult(userPresent = true, userVerified = true),
     )
 
     override suspend fun isVerificationEnabled(): Boolean = isVerificationSupported

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.InitOrgCryptoRequest
+import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.Kdf

@@ -7,11 +7,12 @@ import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
-import com.bitwarden.authenticator.data.authenticator.repository.util.itemsOrEmpty
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.bitwarden.authenticator.ui.platform.components.model.IconData
+import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.authenticator.feature.util.toDisplayItem
+import com.bitwarden.authenticator.ui.authenticator.feature.util.toSharedCodesDisplayState
 import com.bitwarden.core.data.repository.model.DataState
-import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.removeDiacritics
 import com.bitwarden.ui.util.Text
@@ -84,8 +85,10 @@ class ItemSearchViewModel @Inject constructor(
         action: ItemSearchAction.Internal.AuthenticatorDataReceive,
     ) {
         action.localData.data?.let { localItems ->
-            val allItems = localItems + action.sharedData.itemsOrEmpty
-            updateStateWithAuthenticatorData(allItems)
+            updateStateWithAuthenticatorData(
+                localCodes = localItems,
+                sharedData = action.sharedData,
+            )
         }
     }
 
@@ -95,23 +98,24 @@ class ItemSearchViewModel @Inject constructor(
             .value
             .data
             ?.let { authenticatorData ->
-                val allItems = authenticatorData +
-                    authenticatorRepository.sharedCodesStateFlow.value.itemsOrEmpty
                 updateStateWithAuthenticatorData(
-                    authenticatorData = allItems,
+                    localCodes = authenticatorData,
+                    sharedData = authenticatorRepository.sharedCodesStateFlow.value,
                 )
             }
     }
 
     private fun updateStateWithAuthenticatorData(
-        authenticatorData: List<VerificationCodeItem>,
+        localCodes: List<VerificationCodeItem>,
+        sharedData: SharedVerificationCodesState,
     ) {
         mutableStateFlow.update { currentState ->
             currentState.copy(
-                searchTerm = currentState.searchTerm,
-                viewState = authenticatorData
-                    .filterAndOrganize(state.searchTerm)
-                    .toViewState(searchTerm = state.searchTerm),
+                viewState = toViewState(
+                    searchTerm = state.searchTerm,
+                    localCodes = localCodes,
+                    sharedData = sharedData,
+                ),
             )
         }
     }
@@ -134,73 +138,65 @@ class ItemSearchViewModel @Inject constructor(
     @Suppress("MagicNumber")
     private fun VerificationCodeItem.matchedSearch(searchTerm: String): SortPriority? {
         val term = searchTerm.removeDiacritics()
-        val itemName = otpAuthUriLabel?.removeDiacritics()
+        val itemName = otpAuthUriLabel.removeDiacritics()
         val itemId = id.takeIf { term.length > 8 }.orEmpty().removeDiacritics()
         val itemIssuer = issuer.orEmpty().removeDiacritics()
         return when {
-            itemName?.contains(other = term, ignoreCase = true) ?: false -> SortPriority.HIGH
+            itemName.contains(other = term, ignoreCase = true) -> SortPriority.HIGH
             itemId.contains(other = term, ignoreCase = true) -> SortPriority.LOW
             itemIssuer.contains(other = term, ignoreCase = true) -> SortPriority.LOW
             else -> null
         }
     }
 
-    private fun List<VerificationCodeItem>.toViewState(
+    private fun toViewState(
         searchTerm: String,
-    ): ItemSearchState.ViewState =
-        when {
-            searchTerm.isEmpty() -> {
-                ItemSearchState.ViewState.Empty(message = null)
-            }
+        localCodes: List<VerificationCodeItem>,
+        sharedData: SharedVerificationCodesState,
+    ): ItemSearchState.ViewState {
+        if (searchTerm.isEmpty()) {
+            return ItemSearchState.ViewState.Empty(message = null)
+        }
 
-            isNotEmpty() -> {
-                ItemSearchState.ViewState.Content(
-                    displayItems = toDisplayItemList()
-                        .sortAlphabetically(),
-                )
-            }
+        val filteredLocalCodes = localCodes.filterAndOrganize(searchTerm = searchTerm)
+        val sharedItemsState = when (sharedData) {
+            SharedVerificationCodesState.Error -> SharedCodesDisplayState.Error
+            SharedVerificationCodesState.AppNotInstalled,
+            SharedVerificationCodesState.FeatureNotEnabled,
+            SharedVerificationCodesState.Loading,
+            SharedVerificationCodesState.OsVersionNotSupported,
+            SharedVerificationCodesState.SyncNotEnabled,
+                -> SharedCodesDisplayState.Codes(emptyList())
 
-            else -> {
+            is SharedVerificationCodesState.Success -> {
+                sharedData
+                    .copy(items = sharedData.items.filterAndOrganize(searchTerm = searchTerm))
+                    .toSharedCodesDisplayState(alertThresholdSeconds = 7)
+            }
+        }
+
+        return when {
+            filteredLocalCodes.isEmpty() && sharedItemsState.isEmpty() -> {
                 ItemSearchState.ViewState.Empty(
                     message = R.string.there_are_no_items_that_match_the_search.asText(),
                 )
             }
-        }
 
-    private fun List<VerificationCodeItem>.toDisplayItemList(): List<ItemSearchState.DisplayItem> =
-        this.map {
-            it.toDisplayItem()
+            else -> {
+                ItemSearchState.ViewState.Content(
+                    itemList = filteredLocalCodes.map {
+                        it.toDisplayItem(
+                            alertThresholdSeconds = 7,
+                            sharedVerificationCodesState = authenticatorRepository
+                                .sharedCodesStateFlow
+                                .value,
+                        )
+                    },
+                    sharedItems = sharedItemsState,
+                )
+            }
         }
-
-    private fun VerificationCodeItem.toDisplayItem(): ItemSearchState.DisplayItem =
-        ItemSearchState.DisplayItem(
-            id = id,
-            authCode = code,
-            title = issuer ?: label ?: "--",
-            subtitle = if (issuer != null) {
-                // Only show label if it is not being used as the primary title:
-                label
-            } else {
-                null
-            },
-            periodSeconds = periodSeconds,
-            timeLeftSeconds = timeLeftSeconds,
-            alertThresholdSeconds = 7,
-            startIcon = IconData.Local(iconRes = R.drawable.ic_login_item),
-        )
-
-    /**
-     * Sort a list of [ItemSearchState.DisplayItem] by their titles alphabetically giving digits and
-     * special characters higher precedence.
-     */
-    @Suppress("MaxLineLength")
-    private fun List<ItemSearchState.DisplayItem>.sortAlphabetically() =
-        this.sortedWith { item1, item2 ->
-            SpecialCharWithPrecedenceComparator.compare(
-                item1.title.orEmpty(),
-                item2.title.orEmpty(),
-            )
-        }
+    }
     //endregion Utility Functions
 }
 
@@ -222,8 +218,19 @@ data class ItemSearchState(
          */
         @Parcelize
         data class Content(
-            val displayItems: List<DisplayItem>,
-        ) : ViewState()
+            val itemList: List<VerificationCodeDisplayItem>,
+            val sharedItems: SharedCodesDisplayState,
+        ) : ViewState() {
+            /**
+             * The header to display for the local codes.
+             */
+            val localListHeader: Text get() = R.string.local_codes.asText(itemList.size)
+
+            /**
+             * Whether or not there should be a "Local codes" header shown above local codes.
+             */
+            val hasLocalAndSharedItems get() = !sharedItems.isEmpty() && itemList.isNotEmpty()
+        }
 
         /**
          * Show the empty state.
@@ -231,21 +238,6 @@ data class ItemSearchState(
         @Parcelize
         data class Empty(val message: Text?) : ViewState()
     }
-
-    /**
-     * An item to be displayed.
-     */
-    @Parcelize
-    data class DisplayItem(
-        val id: String,
-        val authCode: String,
-        val title: String,
-        val subtitle: String? = null,
-        val periodSeconds: Int,
-        val timeLeftSeconds: Int,
-        val alertThresholdSeconds: Int,
-        val startIcon: IconData,
-    ) : Parcelable
 }
 
 /**

@@ -1,7 +1,5 @@
 package com.x8bit.bitwarden.data.autofill.manager
 
-import android.content.Context
-import android.widget.Toast
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
@@ -18,26 +16,16 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
 
 class AutofillTotpManagerTest {
-    private val context: Context = mockk {
-        every { applicationContext } returns this
-    }
-    private val toast: Toast = mockk {
-        every { show() } just runs
-    }
     private val loginView: LoginView = mockk()
     private val cipherView: CipherView = mockk {
         every { id } returns "cipherId"
@@ -54,26 +42,12 @@ class AutofillTotpManagerTest {
     private val vaultRepository: VaultRepository = mockk()
 
     private val autofillTotpManager: AutofillTotpManager = AutofillTotpManagerImpl(
-        context = context,
         clock = FIXED_CLOCK,
         clipboardManager = clipboardManager,
         authRepository = authRepository,
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
     )
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(Toast::class)
-        every {
-            Toast.makeText(context, R.string.verification_code_totp, Toast.LENGTH_LONG)
-        } returns toast
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(Toast::class)
-    }
 
     @Test
     fun `tryCopyTotpToClipboard when isAutoCopyTotpDisabled is true should do nothing`() = runTest {
@@ -89,7 +63,6 @@ class AutofillTotpManagerTest {
                 text = any<String>(),
                 toastDescriptorOverride = any<Text>(),
             )
-            toast.show()
         }
     }
 
@@ -110,7 +83,6 @@ class AutofillTotpManagerTest {
                     text = any<String>(),
                     toastDescriptorOverride = any<Text>(),
                 )
-                toast.show()
             }
             verify(exactly = 1) {
                 settingsRepository.isAutoCopyTotpDisabled
@@ -135,7 +107,6 @@ class AutofillTotpManagerTest {
                     text = any<String>(),
                     toastDescriptorOverride = any<Text>(),
                 )
-                toast.show()
             }
             verify(exactly = 1) {
                 settingsRepository.isAutoCopyTotpDisabled
@@ -144,7 +115,7 @@ class AutofillTotpManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `tryCopyTotpToClipboard when isAutoCopyTotpDisabled is false, has premium and has totp should set the clipboard and toast`() =
+    fun `tryCopyTotpToClipboard when isAutoCopyTotpDisabled is false, has premium and has totp should set the clipboard`() =
         runTest {
             val generateTotpResult = GenerateTotpResult.Success(
                 code = TOTP_RESULT_VALUE,
@@ -168,7 +139,6 @@ class AutofillTotpManagerTest {
                     toastDescriptorOverride = R.string.verification_code_totp.asText(),
                 )
                 settingsRepository.isAutoCopyTotpDisabled
-                toast.show()
             }
             coVerify(exactly = 1) {
                 vaultRepository.generateTotp(time = FIXED_CLOCK.instant(), totpCode = TOTP_CODE)

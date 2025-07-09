@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
+import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -7,19 +8,22 @@ import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
 import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import com.bitwarden.ui.platform.base.util.composableWithStayTransitions
+import com.bitwarden.ui.platform.util.ParcelableRouteSerializer
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 /**
  * The type-safe route for the vault item listing screen.
  */
-@Serializable
-sealed class VaultItemListingRoute {
+@Parcelize
+@Serializable(with = VaultItemListingRoute.Serializer::class)
+sealed class VaultItemListingRoute : Parcelable {
     /**
      * The type of item to be displayed.
      */
@@ -31,31 +35,56 @@ sealed class VaultItemListingRoute {
     abstract val itemId: String?
 
     /**
+     * Custom serializer to support polymorphic routes.
+     */
+    class Serializer : ParcelableRouteSerializer<VaultItemListingRoute>(
+        kClass = VaultItemListingRoute::class,
+    )
+
+    /**
      * The type-safe route for the cipher specific vault item listing screen.
      */
-    @Serializable
+    @Parcelize
+    @Serializable(with = CipherItemListing.Serializer::class)
     data class CipherItemListing(
         override val type: ItemListingType,
         override val itemId: String?,
-    ) : VaultItemListingRoute()
+    ) : VaultItemListingRoute() {
+        /**
+         * Custom serializer to support polymorphic routes.
+         */
+        class Serializer : ParcelableRouteSerializer<CipherItemListing>(CipherItemListing::class)
+    }
 
     /**
      * The type-safe route for the send specific vault item listing screen.
      */
-    @Serializable
+    @Parcelize
+    @Serializable(with = SendItemListing.Serializer::class)
     data class SendItemListing(
         override val type: ItemListingType,
         override val itemId: String?,
-    ) : VaultItemListingRoute()
+    ) : VaultItemListingRoute() {
+        /**
+         * Custom serializer to support polymorphic routes.
+         */
+        class Serializer : ParcelableRouteSerializer<SendItemListing>(SendItemListing::class)
+    }
 
     /**
      * The type-safe route for the root vault item listing screen.
      */
-    @Serializable
+    @Parcelize
+    @Serializable(with = AsRoot.Serializer::class)
     data class AsRoot(
         override val type: ItemListingType,
         override val itemId: String?,
-    ) : VaultItemListingRoute()
+    ) : VaultItemListingRoute() {
+        /**
+         * Custom serializer to support polymorphic routes.
+         */
+        class Serializer : ParcelableRouteSerializer<AsRoot>(AsRoot::class)
+    }
 }
 
 /**
@@ -86,9 +115,7 @@ data class VaultItemListingArgs(
  * Constructs a [VaultItemListingArgs] from the [SavedStateHandle] and internal route data.
  */
 fun SavedStateHandle.toVaultItemListingArgs(): VaultItemListingArgs {
-    // We just need to pull the serializable data out of the route, since they are always the same
-    // it does not matter which instance we fetch.
-    val route = this.toRoute<VaultItemListingRoute.SendItemListing>()
+    val route = this.toRoute<VaultItemListingRoute>()
     return VaultItemListingArgs(
         vaultItemListingType = when (route.type) {
             ItemListingType.LOGIN -> VaultItemListingType.Login

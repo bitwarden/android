@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.hilt)
@@ -32,9 +34,6 @@ android {
         sourceCompatibility(libs.versions.jvmTarget.get())
         targetCompatibility(libs.versions.jvmTarget.get())
     }
-    kotlinOptions {
-        jvmTarget = libs.versions.jvmTarget.get()
-    }
 }
 
 dependencies {
@@ -52,6 +51,12 @@ dependencies {
     testImplementation(libs.junit.vintage)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk.mockk)
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
+    }
 }
 
 tasks {

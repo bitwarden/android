@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">身份验证器</string>
     <string name="biometrics_direction">生物识别验证</string>
     <string name="cancel">取消</string>
     <string name="add_item">添加项目</string>
@@ -126,7 +125,7 @@
     <string name="take_me_to_app_settings">跳转到应用设置</string>
     <string name="something_went_wrong">出错了</string>
     <string name="please_try_again">请重试</string>
-    <string name="move_to_bitwarden">转到 Bitwarden</string>
+    <string name="copy_to_bitwarden_vault">Copy to Bitwarden vault</string>
     <string name="default_save_option">默认保存选项</string>
     <string name="save_to_bitwarden">保存到 Bitwarden</string>
     <string name="save_here">另存至此</string>
@@ -143,4 +142,9 @@
     <string name="file_could_not_be_processed">"无法处理文件"</string>
     <string name="file_could_not_be_processed_message">"无法处理文件。请确保它是有效的 JSON 文件后重试。需要帮助吗？请访问 bitwarden.com/help"</string>
     <string name="get_help">获取帮助</string>
+    <string name="expand_advanced_options">Expand advanced options</string>
+    <string name="local_items_are_expanded_click_to_collapse">Local items are expanded, click to collapse.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
+    <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
+    <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
 </resources>

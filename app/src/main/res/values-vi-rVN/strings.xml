@@ -425,7 +425,9 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="privacy_policy">Chính sách Bảo mật</string>
     <string name="passkey_management">Quản lý mã khoá</string>
     <string name="autofill_services">Tự động điền mật khẩu</string>
-    <string name="inline_autofill">Tự động điền biểu mẫu</string>
+    <string name="display_autofill_suggestions">Display autofill suggestions</string>
+    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
+    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
     <string name="accessibility">Dùng trợ năng</string>
     <string name="accessibility_description5">Yêu cầu sử dụng Ô Quick-Action Tự động điền.</string>
     <string name="personal_ownership_policy_in_effect">Chính sách của tổ chức đang ảnh hưởng đến các tùy chọn quyền sở hữu của bạn.</string>
@@ -454,7 +456,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="password_info">Yêu cầu nhập mật khẩu này để truy cập mục Gửi.</string>
     <string name="remove_password">Xóa mật khẩu</string>
     <string name="removing_send_password">Đang xóa mật khẩu</string>
-    <string name="send_password_removed">Mật khẩu đã được xóa.</string>
+    <string name="password_removed">Password removed</string>
     <string name="add_a_send">Mục Gửi mới</string>
     <string name="copy_link">Sao chép liên kết</string>
     <string name="share_link">Chia sẻ liên kết</string>
@@ -675,7 +677,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="privacy_policy_description_long">Đọc chính sách bảo mật trên bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Khám phá thêm các tính năng của tài khoản Bitwarden của bạn trên bản web.</string>
     <string name="learn_about_organizations_description_long">Bitwarden cho phép bạn chia sẻ các mục trong kho mật khẩu với người khác bằng cách tạo một tổ chức. Tìm hiểu thêm trên bitwarden.com.</string>
-    <string name="created_xy">Đã tạo vào %1$s, %2$s</string>
+    <string name="created_x">Created %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Tổ chức của bạn yêu cầu bạn đặt mật khẩu chính.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Thiết lập khóa khi hết thời gian chờ kho.</string>
     <string name="save_passkey_as_new_login">Lưu mã khoá như đăng nhập mới</string>
@@ -908,9 +910,10 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Hoạt động mã khóa không thành công vì không có mục nào được chọn.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Hoạt động mã khóa không thành công vì yêu cầu không hỗ trợ.</string>
     <string name="self_host_server_url">URL máy chủ tự lưu trữ</string>
+    <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Dùng tích hợp điền tự động Chrome</string>
     <string name="use_chrome_beta_autofill_integration">Dùng tích hợp điền tự động Chrome (Thử nghiệm)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">Cải thiện việc điền thông tin đăng nhập cho các trang web được hỗ trợ trên Chrome. Sau khi bật, bạn sẽ được chuyển hướng đến cài đặt Chrome để bật tính năng tự động điền của bên thứ ba.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
     <string name="show_more">Xem thêm</string>
     <string name="no_folder">Chưa phân loại</string>
     <string name="show_less">Thu gọn</string>
@@ -969,17 +972,23 @@ bất kỳ sự cố nào.</string>
     <string name="dynamic_colors">Màu động</string>
     <string name="dynamic_colors_description">Dựa theo hình nền của bạn</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Màu động sử dụng màu hệ thống và có thể khó nhìn.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not trusted. Select \"Trust\" to add %1$s to the list of trusted applications or \"Cancel\"\ to abort the operation.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
     <string name="trust">Trust</string>
-    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
+    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but you trust to perform passkey operations.</string>
     <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
     <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
     <string name="trusted_by_you">Trusted by You</string>
     <string name="trusted_by_the_community">Trusted by the Community</string>
     <string name="trusted_by_google">Trusted by Google</string>
-    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through web browsers trusted by Google or the Bitwarden community.</string>
+    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through applications or web browsers trusted by Google or the Bitwarden community.</string>
     <string name="about_privileged_applications">About privileged applications</string>
     <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
     <string name="privileged_apps">Privileged apps</string>
+    <string name="unrecognized_browser">Unrecognized browser</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
+    <string name="all_trusted_apps">All trusted apps</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
+    <string name="installed_apps">Installed apps</string>
+    <string name="delete_x">Delete %s</string>
 </resources>

@@ -4,10 +4,13 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -39,7 +42,9 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.feature.item.util.createCommonContent
@@ -59,6 +64,7 @@ import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -116,6 +122,14 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlag(key = FlagKey.RestrictCipherItemDeletion) } returns false
     }
+    private val mutableSnackbarDataFlow: MutableSharedFlow<BitwardenSnackbarData> =
+        bufferedMutableSharedFlow()
+    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+        every {
+            getSnackbarDataFlow(relay = any(), relays = anyVararg())
+        } returns mutableSnackbarDataFlow
+        every { sendSnackbarData(data = any(), relay = any()) } just runs
+    }
 
     @BeforeEach
     fun setup() {
@@ -163,6 +177,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             organizationEventManager.trackEvent(
                 event = OrganizationEvent.CipherClientViewed(cipherId = differentVaultItemId),
             )
+        }
+    }
+
+    @Test
+    fun `snackbar relay emission should send ShowSnackbar`() = runTest {
+        val viewModel = createViewModel(DEFAULT_STATE)
+        val snackbarData = mockk<BitwardenSnackbarData>()
+        viewModel.eventFlow.test {
+            mutableSnackbarDataFlow.emit(snackbarData)
+            assertEquals(VaultItemEvent.ShowSnackbar(snackbarData), awaitItem())
         }
     }
 
@@ -278,7 +302,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Test
         @Suppress("MaxLineLength")
-        fun `ConfirmDeleteClick with DeleteCipherResult Success should should ShowToast and NavigateBack`() =
+        fun `ConfirmDeleteClick with DeleteCipherResult Success should should send snackbar data and NavigateBack`() =
             runTest {
                 every {
                     mockCipherView.toViewState(
@@ -312,12 +336,14 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 viewModel.eventFlow.test {
                     assertEquals(
-                        VaultItemEvent.ShowToast(R.string.item_soft_deleted.asText()),
-                        awaitItem(),
-                    )
-                    assertEquals(
                         VaultItemEvent.NavigateBack,
                         awaitItem(),
+                    )
+                }
+                verify {
+                    snackbarRelayManager.sendSnackbarData(
+                        data = BitwardenSnackbarData(message = R.string.item_soft_deleted.asText()),
+                        relay = SnackbarRelay.CIPHER_DELETED,
                     )
                 }
             }
@@ -410,12 +436,14 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 viewModel.eventFlow.test {
                     assertEquals(
-                        VaultItemEvent.ShowToast(R.string.item_deleted.asText()),
-                        awaitItem(),
-                    )
-                    assertEquals(
                         VaultItemEvent.NavigateBack,
                         awaitItem(),
+                    )
+                }
+                verify {
+                    snackbarRelayManager.sendSnackbarData(
+                        data = BitwardenSnackbarData(message = R.string.item_deleted.asText()),
+                        relay = SnackbarRelay.CIPHER_DELETED,
                     )
                 }
                 coVerify { vaultRepo.hardDeleteCipher(cipherId = VAULT_ITEM_ID) }
@@ -467,7 +495,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Test
         @Suppress("MaxLineLength")
-        fun `ConfirmRestoreClick with RestoreCipherResult Success should should ShowToast and NavigateBack`() =
+        fun `ConfirmRestoreClick with RestoreCipherResult Success should should send snackbar data and NavigateBack`() =
             runTest {
                 every {
                     mockCipherView.toViewState(
@@ -502,12 +530,14 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 viewModel.eventFlow.test {
                     assertEquals(
-                        VaultItemEvent.ShowToast(R.string.item_restored.asText()),
-                        awaitItem(),
-                    )
-                    assertEquals(
                         VaultItemEvent.NavigateBack,
                         awaitItem(),
+                    )
+                }
+                verify {
+                    snackbarRelayManager.sendSnackbarData(
+                        data = BitwardenSnackbarData(message = R.string.item_restored.asText()),
+                        relay = SnackbarRelay.CIPHER_RESTORED,
                     )
                 }
             }
@@ -1074,7 +1104,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `on AttachmentFileLocationReceive success should hide loading dialog, copy file, delete file, and show toast`() =
+        fun `on AttachmentFileLocationReceive success should hide loading dialog, copy file, delete file, and show snackbar`() =
             runTest {
                 val file = mockk<File>()
                 val viewModel = createViewModel(state = DEFAULT_STATE, tempAttachmentFile = file)
@@ -1099,7 +1129,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 viewModel.eventFlow.test {
                     assertEquals(
-                        VaultItemEvent.ShowToast(R.string.save_attachment_success.asText()),
+                        VaultItemEvent.ShowSnackbar(R.string.save_attachment_success.asText()),
                         awaitItem(),
                     )
                 }
@@ -2435,6 +2465,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         environmentRepository = environmentRepository,
         settingsRepository = settingsRepository,
         featureFlagManager = featureFlagManager,
+        snackbarRelayManager = snackbarRelayManager,
     )
 
     private fun createViewState(
@@ -2541,7 +2572,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     code = "987",
                     isVisible = false,
                 ),
-                paymentCardBrandIconData = IconData.Local(R.drawable.ic_payment_card_brand_visa),
+                paymentCardBrandIconData = IconData.Local(
+                    BitwardenDrawable.ic_payment_card_brand_visa,
+                ),
             )
 
         private val DEFAULT_SSH_KEY_TYPE: VaultItemState.ViewState.Content.ItemType.SshKey =
@@ -2620,7 +2653,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 canEdit = true,
                 favorite = false,
                 passwordHistoryCount = 1,
-                iconData = IconData.Local(R.drawable.ic_globe),
+                iconData = IconData.Local(BitwardenDrawable.ic_globe),
                 relatedLocations = persistentListOf(),
             )
 

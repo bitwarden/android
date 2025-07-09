@@ -5,13 +5,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 
 /**
@@ -56,7 +57,7 @@ fun CustomField(
                     passwordFieldTestTag = "CustomFieldValue",
                     actions = {
                         BitwardenStandardIconButton(
-                            vectorIconRes = R.drawable.ic_copy,
+                            vectorIconRes = BitwardenDrawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy),
                             onClick = { onCopyCustomHiddenField(customField.value) },
                             modifier = Modifier.testTag("CustomFieldCopyValueButton"),
@@ -85,7 +86,7 @@ fun CustomField(
                 label = customField.name,
                 value = customField.vaultLinkedFieldType.label.invoke(),
                 leadingIconData = IconData.Local(
-                    iconRes = R.drawable.ic_linked,
+                    iconRes = BitwardenDrawable.ic_linked,
                     contentDescription = R.string.field_type_linked.asText(),
                 ),
                 onValueChange = { },
@@ -108,7 +109,7 @@ fun CustomField(
                 actions = {
                     if (customField.isCopyable) {
                         BitwardenStandardIconButton(
-                            vectorIconRes = R.drawable.ic_copy,
+                            vectorIconRes = BitwardenDrawable.ic_copy,
                             contentDescription = stringResource(id = R.string.copy),
                             onClick = { onCopyCustomTextField(customField.value) },
                             modifier = Modifier.testTag("CustomFieldCopyValueButton"),

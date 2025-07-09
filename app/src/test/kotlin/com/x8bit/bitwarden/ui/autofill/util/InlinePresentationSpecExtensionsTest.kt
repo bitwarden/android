@@ -11,6 +11,7 @@ import android.widget.inline.InlinePresentationSpec
 import androidx.autofill.inline.UiVersions
 import androidx.autofill.inline.v1.InlineSuggestionUi
 import androidx.core.content.ContextCompat
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
@@ -61,7 +62,7 @@ class InlinePresentationSpecExtensionsTest {
         val autofillCipher: AutofillCipher.Card = mockk {
             every { this@mockk.name } returns AUTOFILL_CIPHER_NAME
             every { this@mockk.subtitle } returns AUTOFILL_CIPHER_SUBTITLE
-            every { this@mockk.iconRes } returns R.drawable.ic_payment_card
+            every { this@mockk.iconRes } returns BitwardenDrawable.ic_payment_card
         }
         val pendingIntent: PendingIntent = mockk()
         every {
@@ -94,7 +95,7 @@ class InlinePresentationSpecExtensionsTest {
     fun `createCipherInlinePresentationOrNull should return presentation with card icon when card cipher and compatible`() {
         // Setup
         val icon: Icon = mockk()
-        val iconRes = R.drawable.ic_payment_card
+        val iconRes = BitwardenDrawable.ic_payment_card
         val autofillCipher: AutofillCipher.Card = mockk {
             every { this@mockk.name } returns AUTOFILL_CIPHER_NAME
             every { this@mockk.subtitle } returns AUTOFILL_CIPHER_SUBTITLE
@@ -154,11 +155,11 @@ class InlinePresentationSpecExtensionsTest {
             ContextCompat.getString(testContext, R.string.type_login)
         } returns LOGIN
         val icon: Icon = mockk()
-        val iconRes = R.drawable.ic_globe
+        val iconRes = BitwardenDrawable.ic_globe
         val autofillCipher: AutofillCipher.Login = mockk {
             every { this@mockk.name } returns AUTOFILL_CIPHER_NAME
             every { this@mockk.subtitle } returns AUTOFILL_CIPHER_SUBTITLE
-            every { this@mockk.iconRes } returns R.drawable.ic_globe
+            every { this@mockk.iconRes } returns BitwardenDrawable.ic_globe
         }
         val pendingIntent: PendingIntent = mockk()
         prepareForCompatibleCipherInlinePresentation(
@@ -251,7 +252,7 @@ class InlinePresentationSpecExtensionsTest {
             Icon
                 .createWithResource(
                     testContext,
-                    R.drawable.icon,
+                    BitwardenDrawable.icon,
                 )
                 .setTintBlendMode(BlendMode.DST)
             testContext.getString(R.string.app_name)
@@ -290,7 +291,7 @@ class InlinePresentationSpecExtensionsTest {
             Icon
                 .createWithResource(
                     testContext,
-                    R.drawable.icon,
+                    BitwardenDrawable.icon,
                 )
                 .setTintBlendMode(BlendMode.DST)
             testContext.getString(R.string.app_name)
@@ -387,7 +388,7 @@ class InlinePresentationSpecExtensionsTest {
             Icon
                 .createWithResource(
                     testContext,
-                    R.drawable.icon,
+                    BitwardenDrawable.icon,
                 )
                 .setTintBlendMode(BlendMode.DST)
         } returns icon

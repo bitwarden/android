@@ -10,11 +10,11 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVer
 import com.bitwarden.authenticator.data.platform.manager.BitwardenEncodingManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toDisplayItem
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toSharedCodesDisplayState
+import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.authenticator.feature.util.toDisplayItem
+import com.bitwarden.authenticator.ui.authenticator.feature.util.toSharedCodesDisplayState
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
@@ -378,7 +378,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on MoveToBitwardenClick receive should call startAddTotpLoginItemFlow`() {
+    fun `on CopyToBitwardenClick receive should call startAddTotpLoginItemFlow`() {
         val expectedUriString = "expectedUriString"
         val entity: AuthenticatorItemEntity = mockk {
             every { toOtpAuthUriString() } returns expectedUriString
@@ -394,7 +394,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(
             ItemListingAction.DropdownMenuClick(
-                menuAction = VaultDropdownMenuAction.MOVE,
+                menuAction = VaultDropdownMenuAction.COPY_TO_BITWARDEN,
                 item = LOCAL_CODE,
             ),
         )
@@ -403,7 +403,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `on MoveToBitwardenClick should show error dialog when startAddTotpLoginItemFlow returns false`() {
+    fun `on CopyToBitwardenClick should show error dialog when startAddTotpLoginItemFlow returns false`() {
         val expectedState = DEFAULT_STATE.copy(
             dialog = ItemListingState.DialogState.Error(
                 title = R.string.something_went_wrong.asText(),
@@ -423,7 +423,10 @@ class ItemListingViewModelTest : BaseViewModelTest() {
 
         val viewModel = createViewModel()
         viewModel.trySendAction(
-            ItemListingAction.DropdownMenuClick(VaultDropdownMenuAction.MOVE, LOCAL_CODE),
+            ItemListingAction.DropdownMenuClick(
+                menuAction = VaultDropdownMenuAction.COPY_TO_BITWARDEN,
+                item = LOCAL_CODE,
+            ),
         )
         assertEquals(
             expectedState,
@@ -442,7 +445,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `should copy text to clipboard when DropdownMenuClick COPY is triggered`() = runTest {
+    fun `should copy text to clipboard when DropdownMenuClick COPY_CODE is triggered`() = runTest {
         val viewModel = createViewModel()
 
         every { clipboardManager.setText(text = LOCAL_CODE.authCode) } just runs
@@ -450,7 +453,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(
                 ItemListingAction.DropdownMenuClick(
-                    menuAction = VaultDropdownMenuAction.COPY,
+                    menuAction = VaultDropdownMenuAction.COPY_CODE,
                     item = LOCAL_CODE,
                 ),
             )
@@ -495,6 +498,31 @@ class ItemListingViewModelTest : BaseViewModelTest() {
             ),
         )
 
+        assertEquals(
+            expectedState,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `on SectionExpandedClick should update expanded state for clicked section`() = runTest {
+        val expectedState = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.Content(
+                actionCard = ItemListingState.ActionCardState.None,
+                favoriteItems = LOCAL_FAVORITE_ITEMS.map { it.copy(showMoveToBitwarden = true) },
+                itemList = LOCAL_NON_FAVORITE_ITEMS.map { it.copy(showMoveToBitwarden = true) },
+                sharedItems = SHARED_DISPLAY_ITEMS.copy(
+                    sections = SHARED_DISPLAY_ITEMS.sections.map { it.copy(isExpanded = false) },
+                ),
+            ),
+        )
+        mutableVerificationCodesFlow.value = DataState.Loaded(LOCAL_VERIFICATION_ITEMS)
+        mutableSharedCodesFlow.value =
+            SharedVerificationCodesState.Success(SHARED_VERIFICATION_ITEMS)
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            ItemListingAction.SectionExpandedClick(section = SHARED_DISPLAY_ITEMS.sections.first()),
+        )
         assertEquals(
             expectedState,
             viewModel.stateFlow.value,

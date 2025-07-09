@@ -11,6 +11,7 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -39,7 +40,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
@@ -85,11 +85,11 @@ class SearchViewModel @Inject constructor(
     private val accessibilitySelectionManager: AccessibilitySelectionManager,
     private val autofillSelectionManager: AutofillSelectionManager,
     private val organizationEventManager: OrganizationEventManager,
-    private val snackbarRelayManager: SnackbarRelayManager,
     private val vaultRepo: VaultRepository,
     private val authRepo: AuthRepository,
     environmentRepo: EnvironmentRepository,
     settingsRepo: SettingsRepository,
+    snackbarRelayManager: SnackbarRelayManager,
     specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<SearchState, SearchEvent, SearchAction>(
     // We load the state from the savedStateHandle for testing purposes.
@@ -141,7 +141,12 @@ class SearchViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
         snackbarRelayManager
-            .getSnackbarDataFlow(SnackbarRelay.SEND_DELETED, SnackbarRelay.SEND_UPDATED)
+            .getSnackbarDataFlow(
+                SnackbarRelay.CIPHER_DELETED,
+                SnackbarRelay.CIPHER_RESTORED,
+                SnackbarRelay.SEND_DELETED,
+                SnackbarRelay.SEND_UPDATED,
+            )
             .map { SearchAction.Internal.SnackbarDataReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -522,7 +527,7 @@ class SearchViewModel @Inject constructor(
 
             DeleteSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(SearchEvent.ShowToast(R.string.send_deleted.asText()))
+                sendEvent(SearchEvent.ShowSnackbar(R.string.send_deleted.asText()))
             }
         }
     }
@@ -561,7 +566,7 @@ class SearchViewModel @Inject constructor(
 
             is RemovePasswordSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(SearchEvent.ShowToast(R.string.password_removed.asText()))
+                sendEvent(SearchEvent.ShowSnackbar(R.string.password_removed.asText()))
             }
         }
     }
@@ -1293,14 +1298,21 @@ sealed class SearchEvent {
      */
     data class ShowSnackbar(
         val data: BitwardenSnackbarData,
-    ) : SearchEvent(), BackgroundEvent
-
-    /**
-     * Show a toast with the given [message].
-     */
-    data class ShowToast(
-        val message: Text,
-    ) : SearchEvent()
+    ) : SearchEvent(), BackgroundEvent {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 }
 
 /**

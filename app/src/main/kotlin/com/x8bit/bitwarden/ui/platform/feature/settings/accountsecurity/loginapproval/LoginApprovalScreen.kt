@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval
 
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,7 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -57,16 +55,10 @@ fun LoginApprovalScreen(
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             LoginApprovalEvent.ExitApp -> exitManager.exitApplication()
             LoginApprovalEvent.NavigateBack -> onNavigateBack()
-
-            is LoginApprovalEvent.ShowToast -> {
-                Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
-            }
         }
     }
 

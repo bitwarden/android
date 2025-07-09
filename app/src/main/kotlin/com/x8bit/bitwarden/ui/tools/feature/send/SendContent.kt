@@ -14,13 +14,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
+import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
 
 private const val SEND_TYPES_COUNT: Int = 2
@@ -69,7 +70,7 @@ fun SendContent(
             BitwardenGroupItem(
                 label = stringResource(id = R.string.type_text),
                 supportingLabel = state.textTypeCount.toString(),
-                startIcon = rememberVectorPainter(id = R.drawable.ic_file_text),
+                startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_file_text),
                 onClick = sendHandlers.onTextTypeClick,
                 cardStyle = CardStyle.Top(dividerPadding = 56.dp),
                 modifier = Modifier
@@ -83,7 +84,7 @@ fun SendContent(
             BitwardenGroupItem(
                 label = stringResource(id = R.string.type_file),
                 supportingLabel = state.fileTypeCount.toString(),
-                startIcon = rememberVectorPainter(id = R.drawable.ic_file),
+                startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_file),
                 onClick = sendHandlers.onFileTypeClick,
                 cardStyle = CardStyle.Bottom,
                 modifier = Modifier

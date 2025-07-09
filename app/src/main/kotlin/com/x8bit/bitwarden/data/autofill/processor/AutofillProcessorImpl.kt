@@ -53,8 +53,12 @@ class AutofillProcessorImpl(
         fillCallback: FillCallback,
         request: FillRequest,
     ) {
+        Timber.d("Begin processing Autofill fill request -- ${request.id}")
         // Set the listener so that any long running work is cancelled when it is no longer needed.
-        cancellationSignal.setOnCancelListener { job.cancel() }
+        cancellationSignal.setOnCancelListener {
+            Timber.d("Autofill job cancelled")
+            job.cancel()
+        }
         // Process the OS data and handle invoking the callback with the result.
         job.cancel()
         job = scope.launch {
@@ -122,6 +126,7 @@ class AutofillProcessorImpl(
         )
         when (autofillRequest) {
             is AutofillRequest.Fillable -> {
+                Timber.d("Autofill request is Fillable -- ${fillRequest.id}")
                 // Fulfill the [autofillRequest].
                 val filledData = filledDataBuilder.build(
                     autofillRequest = autofillRequest,
@@ -141,6 +146,7 @@ class AutofillProcessorImpl(
 
                 @Suppress("TooGenericExceptionCaught")
                 try {
+                    Timber.d("Autofill request success: Fillable -- ${fillRequest.id}")
                     fillCallback.onSuccess(response)
                 } catch (e: RuntimeException) {
                     // This is to catch any TransactionTooLargeExceptions that could occur here.
@@ -153,6 +159,7 @@ class AutofillProcessorImpl(
                 // If we are unable to fulfill the request, we should invoke the callback
                 // with null. This effectively disables autofill for this view set and
                 // allows the [AutofillService] to be unbound.
+                Timber.d("Autofill request success: Unfillable -- ${fillRequest.id}")
                 fillCallback.onSuccess(null)
             }
         }

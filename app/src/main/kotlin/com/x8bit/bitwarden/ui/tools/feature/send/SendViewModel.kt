@@ -9,6 +9,8 @@ import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -23,7 +25,6 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -191,7 +192,7 @@ class SendViewModel @Inject constructor(
 
             DeleteSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(SendEvent.ShowToast(R.string.send_deleted.asText()))
+                sendEvent(SendEvent.ShowSnackbar(R.string.send_deleted.asText()))
             }
         }
     }
@@ -216,7 +217,7 @@ class SendViewModel @Inject constructor(
 
             is RemovePasswordSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(SendEvent.ShowToast(message = R.string.password_removed.asText()))
+                sendEvent(SendEvent.ShowSnackbar(message = R.string.password_removed.asText()))
             }
         }
     }
@@ -518,8 +519,8 @@ data class SendState(
                  * Indicates the type of send this, a text or file.
                  */
                 enum class Type(@DrawableRes val iconRes: Int) {
-                    FILE(iconRes = R.drawable.ic_file),
-                    TEXT(iconRes = R.drawable.ic_file_text),
+                    FILE(iconRes = BitwardenDrawable.ic_file),
+                    TEXT(iconRes = BitwardenDrawable.ic_file_text),
                 }
             }
         }
@@ -808,10 +809,19 @@ sealed class SendEvent {
      */
     data class ShowSnackbar(
         val data: BitwardenSnackbarData,
-    ) : SendEvent(), BackgroundEvent
-
-    /**
-     * Show a toast to the user.
-     */
-    data class ShowToast(val message: Text) : SendEvent()
+    ) : SendEvent(), BackgroundEvent {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 }

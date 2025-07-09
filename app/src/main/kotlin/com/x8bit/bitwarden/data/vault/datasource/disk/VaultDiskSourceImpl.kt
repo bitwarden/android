@@ -59,13 +59,13 @@ class VaultDiskSourceImpl(
         )
     }
 
-    override fun getCiphers(
+    override fun getCiphersFlow(
         userId: String,
     ): Flow<List<SyncResponseJson.Cipher>> =
         merge(
             forceCiphersFlow,
             ciphersDao
-                .getAllCiphers(userId = userId)
+                .getAllCiphersFlow(userId = userId)
                 .map { entities ->
                     withContext(context = dispatcherManager.default) {
                         entities
@@ -80,6 +80,35 @@ class VaultDiskSourceImpl(
                     }
                 },
         )
+
+    override suspend fun getCiphers(userId: String): List<SyncResponseJson.Cipher> {
+        val entities = ciphersDao.getAllCiphers(userId = userId)
+        return withContext(context = dispatcherManager.default) {
+            entities
+                .map { entity ->
+                    async {
+                        json.decodeFromStringWithErrorCallback<SyncResponseJson.Cipher>(
+                            string = entity.cipherJson,
+                        ) { Timber.e(it, "Failed to deserialize Cipher in Vault") }
+                    }
+                }
+                .awaitAll()
+        }
+    }
+
+    override suspend fun getCipher(
+        userId: String,
+        cipherId: String,
+    ): SyncResponseJson.Cipher? =
+        ciphersDao
+            .getCipher(userId = userId, cipherId = cipherId)
+            ?.let { entity ->
+                withContext(context = dispatcherManager.default) {
+                    json.decodeFromStringWithErrorCallback<SyncResponseJson.Cipher>(
+                        string = entity.cipherJson,
+                    ) { Timber.e(it, "Failed to deserialize Cipher in Vault") }
+                }
+            }
 
     override suspend fun deleteCipher(userId: String, cipherId: String) {
         ciphersDao.deleteCipher(userId, cipherId)
@@ -296,7 +325,7 @@ class VaultDiskSourceImpl(
 
     override suspend fun resyncVaultData(userId: String) {
         coroutineScope {
-            val deferredCiphers = async { getCiphers(userId = userId).first() }
+            val deferredCiphers = async { getCiphersFlow(userId = userId).first() }
             val deferredCollections = async { getCollections(userId = userId).first() }
             val deferredFolders = async { getFolders(userId = userId).first() }
             val deferredSends = async { getSends(userId = userId).first() }

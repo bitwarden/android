@@ -33,6 +33,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 
@@ -80,7 +81,7 @@ fun BitwardenTimePickerDialog(
         },
         inputToggleButton = {
             BitwardenStandardIconButton(
-                vectorIconRes = R.drawable.ic_keyboard,
+                vectorIconRes = BitwardenDrawable.ic_keyboard,
                 contentDescription = stringResource(id = R.string.switch_input_mode),
                 onClick = { showTimeInput = !showTimeInput },
             )

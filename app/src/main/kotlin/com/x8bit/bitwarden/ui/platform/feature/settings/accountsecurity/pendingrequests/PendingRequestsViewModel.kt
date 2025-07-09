@@ -5,12 +5,15 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.core.util.isOverFiveMinutesOld
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -33,6 +36,7 @@ private const val KEY_STATE = "state"
 class PendingRequestsViewModel @Inject constructor(
     private val clock: Clock,
     private val authRepository: AuthRepository,
+    snackbarRelayManager: SnackbarRelayManager,
     settingsRepository: SettingsRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<PendingRequestsState, PendingRequestsEvent, PendingRequestsAction>(
@@ -51,6 +55,11 @@ class PendingRequestsViewModel @Inject constructor(
         settingsRepository
             .getPullToRefreshEnabledFlow()
             .map { PendingRequestsAction.Internal.PullToRefreshEnableReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.LOGIN_APPROVAL)
+            .map { PendingRequestsAction.Internal.SnackbarDataReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -118,6 +127,10 @@ class PendingRequestsViewModel @Inject constructor(
                 handlePullToRefreshEnableReceive(action)
             }
 
+            is PendingRequestsAction.Internal.SnackbarDataReceive -> {
+                handleSnackbarDataReceive(action)
+            }
+
             is PendingRequestsAction.Internal.AuthRequestsResultReceive -> {
                 handleAuthRequestsResultReceived(action)
             }
@@ -130,6 +143,12 @@ class PendingRequestsViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(isPullToRefreshSettingEnabled = action.isPullToRefreshEnabled)
         }
+    }
+
+    private fun handleSnackbarDataReceive(
+        action: PendingRequestsAction.Internal.SnackbarDataReceive,
+    ) {
+        sendEvent(PendingRequestsEvent.ShowSnackbar(action.data))
     }
 
     private fun handleAuthRequestsResultReceived(
@@ -285,11 +304,11 @@ sealed class PendingRequestsEvent {
     ) : PendingRequestsEvent()
 
     /**
-     * Displays the [message] in a toast.
+     * Show a snackbar to the user.
      */
-    data class ShowToast(
-        val message: Text,
-    ) : PendingRequestsEvent()
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : PendingRequestsEvent(), BackgroundEvent
 }
 
 /**
@@ -338,6 +357,13 @@ sealed class PendingRequestsAction {
          */
         data class PullToRefreshEnableReceive(
             val isPullToRefreshEnabled: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that a snackbar data was received.
+         */
+        data class SnackbarDataReceive(
+            val data: BitwardenSnackbarData,
         ) : Internal()
 
         /**

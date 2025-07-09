@@ -7,7 +7,7 @@ import androidx.credentials.provider.BiometricPromptResult
 import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
-import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CREDENTIAL_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_USER_ID
@@ -31,19 +31,19 @@ class CredentialManagerIntentUtilsTest {
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(::isBuildVersionBelow)
+        mockkStatic(::isBuildVersionAtLeast)
         mockkObject(
             PendingIntentHandler.Companion,
             BeginGetCredentialRequest.Companion,
             ProviderCreateCredentialRequest.Companion,
             ProviderGetCredentialRequest.Companion,
         )
-        every { isBuildVersionBelow(any()) } returns false
+        every { isBuildVersionAtLeast(any()) } returns true
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(::isBuildVersionBelow)
+        unmockkStatic(::isBuildVersionAtLeast)
         unmockkObject(
             BeginGetCredentialRequest.Companion,
             PendingIntentHandler.Companion,
@@ -122,7 +122,7 @@ class CredentialManagerIntentUtilsTest {
     fun `getCreateCredentialRequestOrNull should return null when build version is below 34`() {
         val intent = mockk<Intent>()
 
-        every { isBuildVersionBelow(34) } returns true
+        every { isBuildVersionAtLeast(34) } returns false
 
         assertNull(intent.getCreateCredentialRequestOrNull())
     }
@@ -215,7 +215,7 @@ class CredentialManagerIntentUtilsTest {
     fun `getFido2AssertionRequestOrNull should return null when build version is below 34`() {
         val intent = mockk<Intent>()
 
-        every { isBuildVersionBelow(34) } returns true
+        every { isBuildVersionAtLeast(34) } returns false
 
         val assertionRequest = intent.getFido2AssertionRequestOrNull()
 
@@ -291,7 +291,7 @@ class CredentialManagerIntentUtilsTest {
     @Test
     fun `getGetCredentialsRequestOrNull should return null when build version is below 34`() {
         val intent = mockk<Intent>()
-        every { isBuildVersionBelow(34) } returns true
+        every { isBuildVersionAtLeast(34) } returns false
         val result = intent.getGetCredentialsRequestOrNull()
         assertNull(result)
     }

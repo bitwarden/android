@@ -26,6 +26,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.assertScrollableNodeDoesNotExist
@@ -36,7 +38,7 @@ import com.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
@@ -134,6 +136,15 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         val id = "id1234"
         mutableEventFlow.tryEmit(VaultItemEvent.NavigateToPasswordHistory(itemId = id))
         assertEquals(id, onNavigateToPasswordHistoryId)
+    }
+
+    @Test
+    fun `on ShowSnackbar should display snackbar content`() {
+        val message = "message"
+        val data = BitwardenSnackbarData(message = message.asText())
+        composeTestRule.onNodeWithText(text = message).assertDoesNotExist()
+        mutableEventFlow.tryEmit(VaultItemEvent.ShowSnackbar(data = data))
+        composeTestRule.onNodeWithText(text = message).assertIsDisplayed()
     }
 
     @Test
@@ -3188,7 +3199,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
         canEdit = true,
         favorite = false,
         passwordHistoryCount = null,
-        iconData = IconData.Local(iconRes = R.drawable.ic_globe),
+        iconData = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
         relatedLocations = persistentListOf(),
     )
 
@@ -3247,7 +3258,7 @@ private val DEFAULT_CARD: VaultItemState.ViewState.Content.ItemType.Card =
             code = "the security code",
             isVisible = false,
         ),
-        paymentCardBrandIconData = IconData.Local(R.drawable.ic_payment_card_brand_visa),
+        paymentCardBrandIconData = IconData.Local(BitwardenDrawable.ic_payment_card_brand_visa),
     )
 
 private val DEFAULT_SSH_KEY: VaultItemState.ViewState.Content.ItemType.SshKey =
@@ -3274,7 +3285,7 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         canEdit = true,
         favorite = false,
         passwordHistoryCount = null,
-        iconData = IconData.Local(iconRes = R.drawable.ic_globe),
+        iconData = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
         relatedLocations = persistentListOf(),
     )
 
@@ -3336,25 +3347,25 @@ private val EMPTY_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content =
 
 private val EMPTY_IDENTITY_VIEW_STATE: VaultItemState.ViewState.Content =
     VaultItemState.ViewState.Content(
-        common = EMPTY_COMMON.copy(iconData = IconData.Local(R.drawable.ic_id_card)),
+        common = EMPTY_COMMON.copy(iconData = IconData.Local(BitwardenDrawable.ic_id_card)),
         type = EMPTY_IDENTITY_TYPE,
     )
 
 private val EMPTY_CARD_VIEW_STATE: VaultItemState.ViewState.Content =
     VaultItemState.ViewState.Content(
-        common = EMPTY_COMMON.copy(iconData = IconData.Local(R.drawable.ic_payment_card)),
+        common = EMPTY_COMMON.copy(iconData = IconData.Local(BitwardenDrawable.ic_payment_card)),
         type = EMPTY_CARD_TYPE,
     )
 
 private val EMPTY_SECURE_NOTE_VIEW_STATE =
     VaultItemState.ViewState.Content(
-        common = EMPTY_COMMON.copy(iconData = IconData.Local(R.drawable.ic_note)),
+        common = EMPTY_COMMON.copy(iconData = IconData.Local(BitwardenDrawable.ic_note)),
         type = VaultItemState.ViewState.Content.ItemType.SecureNote,
     )
 
 private val EMPTY_SSH_KEY_VIEW_STATE =
     VaultItemState.ViewState.Content(
-        common = EMPTY_COMMON.copy(iconData = IconData.Local(R.drawable.ic_ssh_key)),
+        common = EMPTY_COMMON.copy(iconData = IconData.Local(BitwardenDrawable.ic_ssh_key)),
         type = EMPTY_SSH_KEY_TYPE,
     )
 
@@ -3366,25 +3377,25 @@ private val DEFAULT_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content =
 
 private val DEFAULT_IDENTITY_VIEW_STATE: VaultItemState.ViewState.Content =
     VaultItemState.ViewState.Content(
-        common = DEFAULT_COMMON.copy(iconData = IconData.Local(R.drawable.ic_id_card)),
+        common = DEFAULT_COMMON.copy(iconData = IconData.Local(BitwardenDrawable.ic_id_card)),
         type = DEFAULT_IDENTITY,
     )
 
 private val DEFAULT_CARD_VIEW_STATE: VaultItemState.ViewState.Content =
     VaultItemState.ViewState.Content(
-        common = DEFAULT_COMMON.copy(iconData = IconData.Local(R.drawable.ic_payment_card)),
+        common = DEFAULT_COMMON.copy(iconData = IconData.Local(BitwardenDrawable.ic_payment_card)),
         type = DEFAULT_CARD,
     )
 
 private val DEFAULT_SECURE_NOTE_VIEW_STATE: VaultItemState.ViewState.Content =
     VaultItemState.ViewState.Content(
-        common = DEFAULT_COMMON.copy(iconData = IconData.Local(R.drawable.ic_note)),
+        common = DEFAULT_COMMON.copy(iconData = IconData.Local(BitwardenDrawable.ic_note)),
         type = VaultItemState.ViewState.Content.ItemType.SecureNote,
     )
 
 private val DEFAULT_SSH_KEY_VIEW_STATE: VaultItemState.ViewState.Content =
     VaultItemState.ViewState.Content(
-        common = DEFAULT_COMMON.copy(iconData = IconData.Local(R.drawable.ic_ssh_key)),
+        common = DEFAULT_COMMON.copy(iconData = IconData.Local(BitwardenDrawable.ic_ssh_key)),
         type = DEFAULT_SSH_KEY,
     )
 
