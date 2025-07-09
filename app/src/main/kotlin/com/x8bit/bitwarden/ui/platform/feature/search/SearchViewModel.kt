@@ -156,7 +156,8 @@ class SearchViewModel @Inject constructor(
             .getFeatureFlagFlow(FlagKey.RemoveCardPolicy)
             .flatMapLatest { isFlagEnabled ->
                 if (isFlagEnabled) {
-                    policyManager.getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+                    policyManager
+                        .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
                         .map { policies ->
                             policies.map { it.organizationId }
                         }
