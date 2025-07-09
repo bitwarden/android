@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.model.Environment.Type
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidEmail
 import com.bitwarden.ui.util.Text
@@ -14,6 +15,9 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -32,6 +36,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class StartRegistrationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    snackbarRelayManager: SnackbarRelayManager,
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<StartRegistrationState, StartRegistrationEvent, StartRegistrationAction>(
@@ -56,6 +61,11 @@ class StartRegistrationViewModel @Inject constructor(
         environmentRepository
             .environmentStateFlow
             .map { StartRegistrationAction.Internal.UpdatedEnvironmentReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.ENVIRONMENT_SAVED)
+            .map { StartRegistrationAction.Internal.SnackbarDataReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -89,6 +99,10 @@ class StartRegistrationViewModel @Inject constructor(
                 handleReceiveSendVerificationEmailResult(action)
             }
 
+            is StartRegistrationAction.Internal.SnackbarDataReceived -> {
+                handleSnackbarDataReceived(action)
+            }
+
             is StartRegistrationAction.Internal.UpdatedEnvironmentReceive -> {
                 handleUpdatedEnvironmentReceive(action)
             }
@@ -113,6 +127,12 @@ class StartRegistrationViewModel @Inject constructor(
         // Update the environment in the repo; the VM state will update accordingly because it is
         // listening for changes.
         environmentRepository.environment = environment
+    }
+
+    private fun handleSnackbarDataReceived(
+        action: StartRegistrationAction.Internal.SnackbarDataReceived,
+    ) {
+        sendEvent(StartRegistrationEvent.ShowSnackbar(action.data))
     }
 
     private fun handleUpdatedEnvironmentReceive(
@@ -340,6 +360,13 @@ sealed class StartRegistrationEvent {
      * Navigates to the server selection info.
      */
     data object NavigateToServerSelectionInfo : StartRegistrationEvent()
+
+    /**
+     * Show a snackbar with the given [data].
+     */
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : StartRegistrationEvent(), BackgroundEvent
 }
 
 /**
@@ -412,6 +439,13 @@ sealed class StartRegistrationAction {
          */
         data class ReceiveSendVerificationEmailResult(
             val sendVerificationEmailResult: SendVerificationEmailResult,
+        ) : Internal()
+
+        /**
+         * Indicates that snackbar data has been received.
+         */
+        data class SnackbarDataReceived(
+            val data: BitwardenSnackbarData,
         ) : Internal()
 
         /**
