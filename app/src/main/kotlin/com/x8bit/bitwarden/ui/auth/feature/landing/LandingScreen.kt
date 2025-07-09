@@ -54,6 +54,8 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialo
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -71,16 +73,15 @@ fun LandingScreen(
     viewModel: LandingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             LandingEvent.NavigateToCreateAccount -> onNavigateToCreateAccount()
-            is LandingEvent.NavigateToLogin -> onNavigateToLogin(
-                event.emailAddress,
-            )
-
+            is LandingEvent.NavigateToLogin -> onNavigateToLogin(event.emailAddress)
             LandingEvent.NavigateToEnvironment -> onNavigateToEnvironment()
             LandingEvent.NavigateToStartRegistration -> onNavigateToStartRegistration()
             LandingEvent.NavigateToSettings -> onNavigateToPreAuthSettings()
+            is LandingEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
 
@@ -169,6 +170,9 @@ fun LandingScreen(
                 topAppBarScrollBehavior = scrollBehavior,
                 modifier = Modifier.fillMaxSize(),
             )
+        },
+        snackbarHost = {
+            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
         },
     ) {
         LandingScreenContent(

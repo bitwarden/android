@@ -922,7 +922,7 @@ class VaultRepositoryImpl(
     }
 
     private suspend fun clearFolderIdFromCiphers(folderId: String, userId: String) {
-        vaultDiskSource.getCiphers(userId).firstOrNull()?.forEach {
+        vaultDiskSource.getCiphersFlow(userId).firstOrNull()?.forEach {
             if (it.folderId == folderId) {
                 vaultDiskSource.saveCipher(
                     userId, it.copy(folderId = null),
@@ -941,7 +941,7 @@ class VaultRepositoryImpl(
             .map { it.toEncryptedSdkFolder() }
 
         val ciphers = vaultDiskSource
-            .getCiphers(userId)
+            .getCiphersFlow(userId)
             .firstOrNull()
             .orEmpty()
             .map { it.toEncryptedSdkCipher() }
@@ -1067,7 +1067,7 @@ class VaultRepositoryImpl(
         userId: String,
     ): Flow<DataState<List<CipherView>>> =
         vaultDiskSource
-            .getCiphers(userId = userId)
+            .getCiphersFlow(userId = userId)
             .onStart { mutableCiphersStateFlow.updateToPendingOrLoading() }
             .map {
                 waitUntilUnlocked(userId = userId)
@@ -1088,7 +1088,7 @@ class VaultRepositoryImpl(
         userId: String,
     ): Flow<DataState<List<CipherListView>>> =
         vaultDiskSource
-            .getCiphers(userId = userId)
+            .getCiphersFlow(userId = userId)
             .onStart { mutableCiphersListViewStateFlow.updateToPendingOrLoading() }
             .map {
                 waitUntilUnlocked(userId = userId)
@@ -1488,7 +1488,7 @@ class VaultRepositoryImpl(
                                 )
                                 vaultDiskSource.resyncVaultData(userId = userId)
                                 val itemsAvailable = vaultDiskSource
-                                    .getCiphers(userId)
+                                    .getCiphersFlow(userId)
                                     .firstOrNull()
                                     ?.isNotEmpty() == true
                                 return SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)

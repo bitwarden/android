@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidEmail
 import com.bitwarden.ui.util.Text
@@ -17,6 +18,9 @@ import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -38,6 +42,7 @@ class LandingViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     private val environmentRepository: EnvironmentRepository,
     private val featureFlagManager: FeatureFlagManager,
+    snackbarRelayManager: SnackbarRelayManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LandingState, LandingEvent, LandingAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -98,6 +103,11 @@ class LandingViewModel @Inject constructor(
                 action?.let(::handleAction)
             }
             .launchIn(viewModelScope)
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.ENVIRONMENT_SAVED)
+            .map { LandingAction.Internal.SnackbarDataReceived(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
         featureFlagManager
             .getFeatureFlagFlow(key = FlagKey.PreAuthSettings)
             .map { LandingAction.Internal.PreAuthSettingFlagReceive(it) }
@@ -135,6 +145,8 @@ class LandingViewModel @Inject constructor(
             is LandingAction.Internal.PreAuthSettingFlagReceive -> {
                 handlePreAuthSettingFlagReceive(action)
             }
+
+            is LandingAction.Internal.SnackbarDataReceived -> handleSnackbarDataReceived(action)
         }
     }
 
@@ -265,6 +277,10 @@ class LandingViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(showSettingsButton = action.isEnabled) }
     }
 
+    private fun handleSnackbarDataReceived(action: LandingAction.Internal.SnackbarDataReceived) {
+        sendEvent(LandingEvent.ShowSnackbar(action.data))
+    }
+
     /**
      * If the user state account is changed to an active but not "logged in" account we can
      * pre-populate the email field with this account.
@@ -353,6 +369,13 @@ sealed class LandingEvent {
      * Navigates to the self-hosted/custom environment screen.
      */
     data object NavigateToEnvironment : LandingEvent()
+
+    /**
+     * Show a snackbar with the given [data].
+     */
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : LandingEvent(), BackgroundEvent
 }
 
 /**
@@ -440,6 +463,13 @@ sealed class LandingAction {
          */
         data class PreAuthSettingFlagReceive(
             val isEnabled: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that snackbar data has been received.
+         */
+        data class SnackbarDataReceived(
+            val data: BitwardenSnackbarData,
         ) : Internal()
 
         /**
