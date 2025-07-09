@@ -1,8 +1,11 @@
 package com.x8bit.bitwarden.ui.vault.feature.util
 
 import com.bitwarden.ui.platform.components.icon.model.IconData
-import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.CopyableCipherFields
+import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.model.VaultTrailingIcon
 import kotlinx.collections.immutable.ImmutableList
@@ -12,7 +15,7 @@ import kotlinx.collections.immutable.toImmutableList
  * Creates the list of overflow actions to be displayed for a [CipherView].
  */
 @Suppress("LongMethod")
-fun CipherView.toOverflowActions(
+fun CipherListView.toOverflowActions(
     hasMasterPassword: Boolean,
     isPremiumUser: Boolean,
 ): List<ListingItemOverflowAction.VaultAction> =
@@ -23,14 +26,11 @@ fun CipherView.toOverflowActions(
                 this.login?.username?.let {
                     ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = it)
                 },
-                this.login?.password
-                    ?.let {
-                        ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                            cipherId = cipherId,
-                            password = it,
-                            requiresPasswordReprompt = hasMasterPassword,
-                        )
-                    }
+                ListingItemOverflowAction.VaultAction
+                    .CopyPasswordClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = hasMasterPassword,
+                    )
                     .takeIf { this.viewPassword },
                 this.login?.totp
                     ?.let {
@@ -40,30 +40,26 @@ fun CipherView.toOverflowActions(
                         )
                     }
                     .takeIf {
-                        this.type == CipherType.LOGIN &&
+                        this.type is CipherListViewType.Login &&
                             (this.organizationUseTotp || isPremiumUser)
                     },
-                this.card?.number?.let {
-                    ListingItemOverflowAction.VaultAction.CopyNumberClick(
-                        number = it,
-                        requiresPasswordReprompt = hasMasterPassword,
-                    )
-                },
-                this.card?.code?.let {
-                    ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
-                        securityCode = it,
+                ListingItemOverflowAction.VaultAction
+                    .CopyNumberClick(
                         cipherId = cipherId,
                         requiresPasswordReprompt = hasMasterPassword,
                     )
-                },
-                this.notes
-                    ?.let {
-                        ListingItemOverflowAction.VaultAction.CopyNoteClick(
-                            notes = it,
-                            requiresPasswordReprompt = hasMasterPassword,
-                        )
-                    }
-                    .takeIf { this.type == CipherType.SECURE_NOTE },
+                    .takeIf { this.copyableFields.contains(CopyableCipherFields.CARD_NUMBER) },
+                ListingItemOverflowAction.VaultAction
+                    .CopySecurityCodeClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = hasMasterPassword,
+                    )
+                    .takeIf { this.type is CipherListViewType.Card },
+                ListingItemOverflowAction.VaultAction
+                    .CopyNoteClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = hasMasterPassword,
+                    ).takeIf { this.type is CipherListViewType.SecureNote },
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = cipherId,
                     cipherType = this.type,
@@ -85,12 +81,12 @@ fun CipherView.toOverflowActions(
 /**
  * Checks if the list is empty and if not returns an icon in a list.
  */
-fun CipherView.toLabelIcons(): ImmutableList<IconData> {
+fun CipherListView.toLabelIcons(): ImmutableList<IconData> {
     return listOfNotNull(
         VaultTrailingIcon.COLLECTION.takeIf {
             this.collectionIds.isNotEmpty() || this.organizationId?.isNotEmpty() == true
         },
-        VaultTrailingIcon.ATTACHMENT.takeIf { this.attachments?.isNotEmpty() == true },
+        VaultTrailingIcon.ATTACHMENT.takeIf { this.attachments > 0U },
     )
         .map {
             IconData.Local(

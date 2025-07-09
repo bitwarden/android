@@ -1,8 +1,9 @@
 package com.x8bit.bitwarden.data.platform.manager.ciphermatching
 
-import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.LoginUriView
 import com.bitwarden.vault.UriMatchType
+import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.firstWithTimeoutOrNull
@@ -33,9 +34,9 @@ class CipherMatchingManagerImpl(
     private val vaultRepository: VaultRepository,
 ) : CipherMatchingManager {
     override suspend fun filterCiphersForMatches(
-        ciphers: List<CipherView>,
+        cipherListViews: List<CipherListView>,
         matchUri: String,
-    ): List<CipherView> {
+    ): List<CipherListView> {
         val equivalentDomainsData = vaultRepository
             .domainsStateFlow
             .mapNotNull { it.data }
@@ -58,14 +59,14 @@ class CipherMatchingManagerImpl(
             matchUri = matchUri,
         )
 
-        val exactMatchingCiphers = mutableListOf<CipherView>()
-        val fuzzyMatchingCiphers = mutableListOf<CipherView>()
+        val exactMatchingCiphers = mutableListOf<CipherListView>()
+        val fuzzyMatchingCiphers = mutableListOf<CipherListView>()
 
-        ciphers
-            .forEach { cipherView ->
+        cipherListViews
+            .forEach { cipherListView ->
                 val matchResult = checkForCipherMatch(
                     resourceCacheManager = resourceCacheManager,
-                    cipherView = cipherView,
+                    cipherListView = cipherListView,
                     defaultUriMatchType = defaultUriMatchType,
                     isAndroidApp = isAndroidApp,
                     matchUri = matchUri,
@@ -73,8 +74,8 @@ class CipherMatchingManagerImpl(
                 )
 
                 when (matchResult) {
-                    MatchResult.EXACT -> exactMatchingCiphers.add(cipherView)
-                    MatchResult.FUZZY -> fuzzyMatchingCiphers.add(cipherView)
+                    MatchResult.EXACT -> exactMatchingCiphers.add(cipherListView)
+                    MatchResult.FUZZY -> fuzzyMatchingCiphers.add(cipherListView)
                     MatchResult.NONE -> Unit
                 }
             }
@@ -135,10 +136,10 @@ private fun getMatchingDomains(
 }
 
 /**
- * Check to see if [cipherView] matches [matchUri] in some way. The returned [MatchResult] will
+ * Check to see if [cipherListView] matches [matchUri] in some way. The returned [MatchResult] will
  * provide details on the match quality.
  *
- * @param cipherView The cipher to be judged for a match.
+ * @param cipherListView The cipher to be judged for a match.
  * @param resourceCacheManager The [ResourceCacheManager] for fetching cached resources.
  * @param defaultUriMatchType The global default [UriMatchType].
  * @param isAndroidApp Whether or not the [matchUri] belongs to an Android app.
@@ -148,13 +149,13 @@ private fun getMatchingDomains(
 @Suppress("LongParameterList")
 private fun checkForCipherMatch(
     resourceCacheManager: ResourceCacheManager,
-    cipherView: CipherView,
+    cipherListView: CipherListView,
     defaultUriMatchType: UriMatchType,
     isAndroidApp: Boolean,
     matchingDomains: MatchingDomains,
     matchUri: String,
 ): MatchResult {
-    val matchResults = cipherView
+    val matchResults = cipherListView
         .login
         ?.uris
         ?.map { loginUriView ->

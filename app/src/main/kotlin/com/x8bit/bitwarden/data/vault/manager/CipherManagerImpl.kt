@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
@@ -50,6 +51,30 @@ class CipherManagerImpl(
     private val reviewPromptManager: ReviewPromptManager,
 ) : CipherManager {
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
+
+    override suspend fun getCipher(cipherId: String): GetCipherResult {
+        val userId = activeUserId
+            ?: return GetCipherResult.Error(
+                error = NoActiveUserException(),
+                errorMessage = null,
+            )
+
+        return vaultDiskSource
+            .getCipher(userId = userId, cipherId = cipherId)
+            ?.toEncryptedSdkCipher()
+            ?.let { cipher ->
+                vaultSdkSource
+                    .decryptCipher(
+                        userId = userId,
+                        cipher = cipher,
+                    )
+                    .fold(
+                        onSuccess = { GetCipherResult.Success(cipherView = it) },
+                        onFailure = { GetCipherResult.Error(error = it, errorMessage = null) },
+                    )
+            }
+            ?: GetCipherResult.CipherNotFound
+    }
 
     override suspend fun createCipher(cipherView: CipherView): CreateCipherResult {
         val userId = activeUserId

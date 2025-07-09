@@ -1,17 +1,19 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import android.net.Uri
-import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
+import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
-import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.autofill.util.card
+import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.vault.feature.util.getFilteredCollections
 import com.x8bit.bitwarden.ui.vault.feature.util.getFilteredFolders
@@ -44,7 +46,8 @@ fun VaultData.toViewState(
 ): VaultState.ViewState {
 
     val filteredCipherViewListWithDeletedItems =
-        cipherViewList
+        decryptCipherListResult
+            .successes
             .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds ?: emptyList())
             .toFilteredList(vaultFilterType)
 
@@ -73,7 +76,7 @@ fun VaultData.toViewState(
         val totpItems = filteredCipherViewList.filter { it.login?.totp != null }
         val shouldShowUnGroupedItems = filteredCollectionViewList.isEmpty() &&
             noFolderItems.size < NO_FOLDER_ITEM_THRESHOLD
-        val cardCount = filteredCipherViewList.count { it.type == CipherType.CARD }
+        val cardCount = filteredCipherViewList.count { it.type is CipherListViewType.Card }
         VaultState.ViewState.Content(
             itemTypesCount = itemTypesCount,
             totpItemsCount = if (isPremium) {
@@ -81,12 +84,14 @@ fun VaultData.toViewState(
             } else {
                 totpItems.count { it.organizationUseTotp }
             },
-            loginItemsCount = filteredCipherViewList.count { it.type == CipherType.LOGIN },
+            loginItemsCount = filteredCipherViewList.count { it.type is CipherListViewType.Login },
             cardItemsCount = cardCount,
-            identityItemsCount = filteredCipherViewList.count { it.type == CipherType.IDENTITY },
+            identityItemsCount = filteredCipherViewList
+                .count { it.type is CipherListViewType.Identity },
             secureNoteItemsCount = filteredCipherViewList
-                .count { it.type == CipherType.SECURE_NOTE },
-            sshKeyItemsCount = filteredCipherViewList.count { it.type == CipherType.SSH_KEY },
+                .count { it.type is CipherListViewType.SecureNote },
+            sshKeyItemsCount = filteredCipherViewList
+                .count { it.type is CipherListViewType.SshKey },
             favoriteItems = filteredCipherViewList
                 .filter { it.favorite }
                 .mapNotNull {
@@ -201,10 +206,10 @@ fun List<LoginUriView>?.toLoginIconData(
 }
 
 /**
- * Transforms a [CipherView] into a [VaultState.ViewState.VaultItem].
+ * Transforms a [CipherListView] into a [VaultState.ViewState.VaultItem].
  */
 @Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod")
-private fun CipherView.toVaultItemOrNull(
+private fun CipherListView.toVaultItemOrNull(
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     baseIconUrl: String,
@@ -212,7 +217,7 @@ private fun CipherView.toVaultItemOrNull(
 ): VaultState.ViewState.VaultItem? {
     val id = this.id ?: return null
     return when (type) {
-        CipherType.LOGIN -> VaultState.ViewState.VaultItem.Login(
+        is CipherListViewType.Login -> VaultState.ViewState.VaultItem.Login(
             id = id,
             name = name.asText(),
             username = login?.username?.asText(),
@@ -230,7 +235,7 @@ private fun CipherView.toVaultItemOrNull(
                 reprompt == CipherRepromptType.PASSWORD,
         )
 
-        CipherType.SECURE_NOTE -> VaultState.ViewState.VaultItem.SecureNote(
+        CipherListViewType.SecureNote -> VaultState.ViewState.VaultItem.SecureNote(
             id = id,
             name = name.asText(),
             overflowOptions = toOverflowActions(
@@ -242,13 +247,11 @@ private fun CipherView.toVaultItemOrNull(
                 reprompt == CipherRepromptType.PASSWORD,
         )
 
-        CipherType.CARD -> VaultState.ViewState.VaultItem.Card(
+        is CipherListViewType.Card -> VaultState.ViewState.VaultItem.Card(
             id = id,
             name = name.asText(),
             brand = card?.brand?.findVaultCardBrandWithNameOrNull(),
-            lastFourDigits = card?.number
-                ?.takeLast(4)
-                ?.asText(),
+            lastFourDigits = subtitle.asText(),
             overflowOptions = toOverflowActions(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
@@ -258,15 +261,10 @@ private fun CipherView.toVaultItemOrNull(
                 reprompt == CipherRepromptType.PASSWORD,
         )
 
-        CipherType.IDENTITY -> VaultState.ViewState.VaultItem.Identity(
+        CipherListViewType.Identity -> VaultState.ViewState.VaultItem.Identity(
             id = id,
             name = name.asText(),
-            fullName = when {
-                identity?.firstName.isNullOrBlank() -> identity?.lastName?.orNullIfBlank()
-                identity?.lastName.isNullOrBlank() -> identity?.firstName
-                else -> "${identity?.firstName} ${identity?.lastName}"
-            }
-                ?.asText(),
+            fullName = subtitle.asText(),
             overflowOptions = toOverflowActions(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
@@ -276,26 +274,14 @@ private fun CipherView.toVaultItemOrNull(
                 reprompt == CipherRepromptType.PASSWORD,
         )
 
-        CipherType.SSH_KEY -> VaultState.ViewState.VaultItem.SshKey(
+        CipherListViewType.SshKey -> VaultState.ViewState.VaultItem.SshKey(
             id = id,
             name = name.asText(),
-            publicKey = sshKey
-                ?.publicKey
-                .orEmpty()
-                .asText(),
-            privateKey = sshKey
-                ?.privateKey
-                .orEmpty()
-                .asText(),
-            fingerprint = sshKey
-                ?.fingerprint
-                .orEmpty()
-                .asText(),
+            extraIconList = toLabelIcons(),
             overflowOptions = toOverflowActions(
                 hasMasterPassword = hasMasterPassword,
                 isPremiumUser = isPremiumUser,
             ),
-            extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
                 reprompt == CipherRepromptType.PASSWORD,
         )
@@ -303,12 +289,12 @@ private fun CipherView.toVaultItemOrNull(
 }
 
 /**
- * Filters out all [CipherView]s that are not part of the given [VaultFilterType].
+ * Filters out all [CipherListView]s that are not part of the given [VaultFilterType].
  */
 @JvmName("toFilteredCipherList")
-fun List<CipherView>.toFilteredList(
+fun List<CipherListView>.toFilteredList(
     vaultFilterType: VaultFilterType,
-): List<CipherView> =
+): List<CipherListView> =
     this
         // Filter out any items with invalid IDs in the unlikely case they exist
         .filterNot { it.id.isNullOrBlank() }
@@ -327,7 +313,7 @@ fun List<CipherView>.toFilteredList(
  */
 @JvmName("toFilteredFolderList")
 fun List<FolderView>.toFilteredList(
-    cipherList: List<CipherView>,
+    cipherList: List<CipherListView>,
     vaultFilterType: VaultFilterType,
 ): List<FolderView> =
     this
@@ -363,24 +349,24 @@ fun List<CollectionView>.toFilteredList(
         }
 
 /**
- * Filters out [CipherType.CARD] [CipherView]s that are in [restrictItemTypesPolicyOrgIds] list.
+ * Filters out [CipherType.CARD] [CipherListView]s that are in [restrictItemTypesPolicyOrgIds] list.
  * When [restrictItemTypesPolicyOrgIds] is not empty, individual vault items are also removed.
  */
-fun List<CipherView>.applyRestrictItemTypesPolicy(
+fun List<CipherListView>.applyRestrictItemTypesPolicy(
     restrictItemTypesPolicyOrgIds: List<String>,
-): List<CipherView> =
+): List<CipherListView> =
     this
-        .filterNot { cipherView ->
+        .filterNot { cipherListView ->
             if (restrictItemTypesPolicyOrgIds.isEmpty()) {
                 // No policy, so don't apply removal
                 false
-            } else if (cipherView.type != CipherType.CARD) {
+            } else if (cipherListView.type !is CipherListViewType.Card) {
                 // Policy only for cards
                 false
             } else {
                 // If a policy is enable for a given organization then
                 // also hide cards from individual vault
-                cipherView.organizationId.isNullOrEmpty() ||
-                    restrictItemTypesPolicyOrgIds.contains(cipherView.organizationId)
+                cipherListView.organizationId.isNullOrEmpty() ||
+                    restrictItemTypesPolicyOrgIds.contains(cipherListView.organizationId)
             }
         }

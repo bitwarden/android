@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.manager
 
 import android.net.Uri
 import com.bitwarden.vault.CipherView
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
@@ -16,6 +17,14 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
  */
 @Suppress("TooManyFunctions")
 interface CipherManager {
+
+    /**
+     * Attempt to retrieve a cipher, specified by [cipherId].
+     */
+    suspend fun getCipher(
+        cipherId: String,
+    ): GetCipherResult
+
     /**
      * Attempt to create a cipher.
      */
