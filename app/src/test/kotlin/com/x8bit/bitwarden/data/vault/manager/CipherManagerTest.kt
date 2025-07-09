@@ -20,6 +20,7 @@ import com.bitwarden.network.service.CiphersService
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
+import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.EncryptionContext
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -35,6 +36,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockEncryptionC
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkAttachment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
@@ -113,7 +115,10 @@ class CipherManagerTest {
     @AfterEach
     fun tearDown() {
         unmockkStatic(Uri::class, Instant::class)
-        unmockkStatic(Cipher::toEncryptedNetworkCipherResponse)
+        unmockkStatic(
+            Cipher::toEncryptedNetworkCipherResponse,
+            SyncResponseJson.Cipher::toEncryptedSdkCipher,
+        )
         unmockkConstructor(NoActiveUserException::class)
         unmockkConstructor(IllegalStateException::class)
     }
@@ -595,6 +600,77 @@ class CipherManagerTest {
 
             assertEquals(UpdateCipherResult.Success, result)
         }
+
+    @Test
+    fun `getCipher with no active user should return Failure`() = runTest {
+        fakeAuthDiskSource.userState = null
+
+        val result = cipherManager.getCipher(cipherId = "cipherId")
+
+        assertEquals(GetCipherResult.Failure(NoActiveUserException()), result)
+    }
+
+    @Test
+    fun `getCipher with decryption error should return Failure`() = runTest {
+        mockkStatic(SyncResponseJson.Cipher::toEncryptedSdkCipher)
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val cipherId = "cipherId"
+        val sdkCipher = mockk<Cipher>()
+        val cipher = mockk<SyncResponseJson.Cipher> {
+            every { toEncryptedSdkCipher() } returns sdkCipher
+        }
+        val expected = Throwable("Fail")
+        coEvery {
+            vaultDiskSource.getCipher(userId = "mockId-1", cipherId = cipherId)
+        } returns cipher
+        coEvery {
+            vaultSdkSource.decryptCipher(userId = "mockId-1", cipher = sdkCipher)
+        } returns expected.asFailure()
+
+        val result = cipherManager.getCipher(cipherId = "cipherId")
+
+        assertEquals(GetCipherResult.Failure(expected), result)
+    }
+
+    @Test
+    fun `getCipher with no cipher found should return CipherNotFound`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val cipherId = "cipherId"
+        coEvery { vaultDiskSource.getCipher(userId = "mockId-1", cipherId = cipherId) } returns null
+
+        val result = cipherManager.getCipher(cipherId = cipherId)
+
+        assertEquals(GetCipherResult.CipherNotFound, result)
+        coVerify(exactly = 1) {
+            vaultDiskSource.getCipher(userId = "mockId-1", cipherId = cipherId)
+        }
+    }
+
+    @Test
+    fun `getCipher with cipher found should return Success`() = runTest {
+        mockkStatic(SyncResponseJson.Cipher::toEncryptedSdkCipher)
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val cipherId = "cipherId"
+        val sdkCipher = mockk<Cipher>()
+        val cipher = mockk<SyncResponseJson.Cipher> {
+            every { toEncryptedSdkCipher() } returns sdkCipher
+        }
+        val expected = mockk<CipherView>()
+        coEvery {
+            vaultDiskSource.getCipher(userId = "mockId-1", cipherId = cipherId)
+        } returns cipher
+        coEvery {
+            vaultSdkSource.decryptCipher(userId = "mockId-1", cipher = sdkCipher)
+        } returns expected.asSuccess()
+
+        val result = cipherManager.getCipher(cipherId = cipherId)
+
+        assertEquals(GetCipherResult.Success(expected), result)
+        coVerify(exactly = 1) {
+            vaultDiskSource.getCipher(userId = "mockId-1", cipherId = cipherId)
+            vaultSdkSource.decryptCipher(userId = "mockId-1", cipher = sdkCipher)
+        }
+    }
 
     @Test
     fun `hardDeleteCipher with no active user should return DeleteCipherResult Error`() = runTest {
