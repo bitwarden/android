@@ -247,7 +247,7 @@ private fun TwoFactorLoginScreenContent(
         Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
             text = if (state.isNewDeviceVerification) {
-                R.string.enter_verification_code_new_device.asText(state.displayEmail).invoke()
+                R.string.enter_verification_code_new_device.asText().invoke()
             } else {
                 state.authMethod.description(
                     state.displayEmail,
