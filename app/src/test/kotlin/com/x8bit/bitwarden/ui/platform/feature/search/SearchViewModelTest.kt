@@ -75,7 +75,6 @@ import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -1779,7 +1778,7 @@ private val DEFAULT_STATE: SearchState = SearchState(
     totpData = null,
     autofillSelectionData = null,
     isPremium = true,
-    restrictItemTypesPolicyOrgIds = emptyList<String>().toImmutableList(),
+    restrictItemTypesPolicyOrgIds = persistentListOf(),
 )
 
 private val DEFAULT_USER_STATE = UserState(

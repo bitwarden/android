@@ -64,8 +64,11 @@ import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -80,6 +83,7 @@ private const val KEY_STATE = "state"
 /**
  * View model for the search screen.
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 @Suppress("LongParameterList", "TooManyFunctions", "LargeClass")
 @HiltViewModel
 class SearchViewModel @Inject constructor(
@@ -131,7 +135,7 @@ class SearchViewModel @Inject constructor(
                 totpData = specialCircumstance?.toTotpDataOrNull(),
                 hasMasterPassword = userState.activeAccount.hasMasterPassword,
                 isPremium = userState.activeAccount.isPremium,
-                restrictItemTypesPolicyOrgIds = emptyList<String>().toImmutableList(),
+                restrictItemTypesPolicyOrgIds = persistentListOf(),
             )
         },
 ) {
@@ -148,18 +152,23 @@ class SearchViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        policyManager
-            .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
-            .combine(
-                featureFlagManager.getFeatureFlagFlow(FlagKey.RemoveCardPolicy),
-            ) { policies, enabledFlag ->
-                if (enabledFlag) {
-                    policies.map { it.organizationId }
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.RemoveCardPolicy)
+            .flatMapLatest { isFlagEnabled ->
+                if (isFlagEnabled) {
+                    policyManager.getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+                        .map { policies ->
+                            policies.map { it.organizationId }
+                        }
                 } else {
-                    emptyList()
+                    flowOf(emptyList<String>())
                 }
             }
-            .map { SearchAction.Internal.RestrictItemTypesPolicyUpdateReceive(it) }
+            .map { organizationIds ->
+                SearchAction.Internal.RestrictItemTypesPolicyUpdateReceive(
+                    restrictItemTypesPolicyOrdIds = organizationIds,
+                )
+            }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
