@@ -392,11 +392,8 @@ class VaultItemListingViewModel @Inject constructor(
     ) {
         clearDialogState()
         viewModelScope.launch {
-            when (val result = vaultRepository.getCipher(action.cipherViewId)) {
-                GetCipherResult.CipherNotFound -> sendPasskeyItemNotFoundError()
-                is GetCipherResult.Error -> sendPasskeyDecryptionError(result.error)
-                is GetCipherResult.Success -> registerFido2Credential(result.cipherView)
-            }
+            getCipherViewForFido2OrNull(action.cipherViewId)
+                ?.let { cipherView -> registerFido2Credential(cipherView) }
         }
     }
 
@@ -766,20 +763,17 @@ class VaultItemListingViewModel @Inject constructor(
                 return
             }
         viewModelScope.launch {
-            when (val result = vaultRepository.getCipher(cipherId = selectedCipherId)) {
-                GetCipherResult.CipherNotFound -> sendPasskeyItemNotFoundError()
-                is GetCipherResult.Error -> sendPasskeyDecryptionError(result.error)
-                is GetCipherResult.Success -> {
+            getCipherViewForFido2OrNull(selectedCipherId)
+                ?.let { cipherView ->
                     trustPrivilegedApp(
                         packageName = request.callingAppInfo.packageName,
                         signature = signature,
                     )
                     authenticateFido2Credential(
                         request = request.providerRequest,
-                        cipherView = result.cipherView,
+                        cipherView = cipherView,
                     )
                 }
-            }
         }
     }
 
@@ -914,15 +908,15 @@ class VaultItemListingViewModel @Inject constructor(
         createCredentialRequest: CreateCredentialRequest,
     ) {
         viewModelScope.launch {
-            when (val result = vaultRepository.getCipher(cipherId = action.id)) {
-                is GetCipherResult.Success -> {
+            getCipherViewForFido2OrNull(action.id)
+                ?.let { cipherView ->
                     createCredentialRequest
                         .providerRequest
                         .getCreatePasskeyCredentialRequestOrNull()
                         ?.let { createPasskeyCredentialRequest ->
                             handleItemClickForCreatePublicKeyCredentialRequest(
                                 cipherId = action.id,
-                                cipherView = result.cipherView,
+                                cipherView = cipherView,
                             )
                         }
                         ?: run {
@@ -937,10 +931,6 @@ class VaultItemListingViewModel @Inject constructor(
                             )
                         }
                 }
-
-                GetCipherResult.CipherNotFound -> sendPasskeyItemNotFoundError()
-                is GetCipherResult.Error -> sendPasskeyDecryptionError(result.error)
-            }
         }
     }
 
@@ -1791,11 +1781,8 @@ class VaultItemListingViewModel @Inject constructor(
         bitwardenCredentialManager.authenticationAttempts = 0
 
         viewModelScope.launch {
-            when (val result = vaultRepository.getCipher(cipherId = selectedCipherId)) {
-                is GetCipherResult.Success -> continueCredentialManagerOperation(result.cipherView)
-                is GetCipherResult.Error -> sendPasskeyDecryptionError(result.error)
-                GetCipherResult.CipherNotFound -> sendPasskeyItemNotFoundError()
-            }
+            getCipherViewForFido2OrNull(selectedCipherId)
+                ?.let { cipherView -> continueCredentialManagerOperation(cipherView) }
         }
     }
 
@@ -2086,23 +2073,19 @@ class VaultItemListingViewModel @Inject constructor(
         }
         viewModelScope.launch {
             val request = action.data
-            when (val result = vaultRepository.getCipher(request.cipherId)) {
-                is GetCipherResult.Success -> {
+            getCipherViewForFido2OrNull(request.cipherId)
+                ?.let { cipherView ->
                     if (state.hasMasterPassword &&
-                        result.cipherView.reprompt == CipherRepromptType.PASSWORD
+                        cipherView.reprompt == CipherRepromptType.PASSWORD
                     ) {
                         repromptMasterPasswordForUserVerification(request.cipherId)
                     } else {
                         verifyUserAndAuthenticateCredential(
                             request = request.providerRequest,
-                            selectedCipher = result.cipherView,
+                            selectedCipher = cipherView,
                         )
                     }
                 }
-
-                GetCipherResult.CipherNotFound -> sendPasskeyItemNotFoundError()
-                is GetCipherResult.Error -> sendPasskeyDecryptionError(result.error)
-            }
         }
     }
 
@@ -2273,28 +2256,36 @@ class VaultItemListingViewModel @Inject constructor(
 
     /**
      * Attempts to decrypt a cipher with the given [cipherId], or null.
-     *
-     * @param cipherId The ID of the cipher to decrypt.
-     * @param showDecryptionErrorDialog Whether or not to show a dialog if the decryption fails.
-     * Defaults to `true`.
      */
     private suspend fun getCipherViewOrNull(
         cipherId: String,
-        showDecryptionErrorDialog: Boolean = true,
     ) = when (val result = vaultRepository.getCipher(cipherId)) {
         is GetCipherResult.Success -> result.cipherView
         is GetCipherResult.Error -> {
             Timber.e(result.error, "Failed to decrypt cipher.")
-            if (showDecryptionErrorDialog) {
-                sendAction(
-                    VaultItemListingsAction.Internal.DecryptCipherErrorReceive(result.error),
-                )
-            }
+            sendAction(
+                VaultItemListingsAction.Internal.DecryptCipherErrorReceive(result.error),
+            )
             null
         }
 
         is GetCipherResult.CipherNotFound -> null
     }
+
+    private suspend fun getCipherViewForFido2OrNull(cipherId: String): CipherView? =
+        when (val result = vaultRepository.getCipher(cipherId)) {
+            GetCipherResult.CipherNotFound -> {
+                sendPasskeyItemNotFoundError()
+                null
+            }
+
+            is GetCipherResult.Error -> {
+                sendPasskeyDecryptionError(result.error)
+                null
+            }
+
+            is GetCipherResult.Success -> result.cipherView
+        }
 
     private fun sendUserVerificationEvent(isRequired: Boolean, selectedCipher: CipherView) {
         sendEvent(
