@@ -122,6 +122,13 @@ class TwoFactorLoginViewModel @Inject constructor(
             .map { TwoFactorLoginAction.Internal.ReceiveWebAuthResult(webAuthResult = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        viewModelScope.launch {
+            // If the auth method is email and it is not to verify the device, call resendEmail.
+            if (state.authMethod == TwoFactorAuthMethod.EMAIL && !state.isNewDeviceVerification) {
+                trySendAction(TwoFactorLoginAction.Internal.SendVerificationCodeEmail)
+            }
+        }
     }
 
     override fun handleAction(action: TwoFactorLoginAction) {
@@ -131,7 +138,7 @@ class TwoFactorLoginViewModel @Inject constructor(
             TwoFactorLoginAction.ContinueButtonClick -> handleContinueButtonClick()
             TwoFactorLoginAction.DialogDismiss -> handleDialogDismiss()
             is TwoFactorLoginAction.RememberMeToggle -> handleRememberMeToggle(action)
-            TwoFactorLoginAction.ResendEmailClick -> handleResendEmailClick()
+            TwoFactorLoginAction.ResendEmailClick -> handleSendVerificationCodeEmail()
             is TwoFactorLoginAction.SelectAuthMethod -> handleSelectAuthMethod(action)
             is TwoFactorLoginAction.Internal -> handleInternalAction(action)
         }
@@ -158,6 +165,10 @@ class TwoFactorLoginViewModel @Inject constructor(
 
             is TwoFactorLoginAction.Internal.ReceiveResendEmailResult -> {
                 handleReceiveResendEmailResult(action)
+            }
+
+            TwoFactorLoginAction.Internal.SendVerificationCodeEmail -> {
+                handleSendVerificationCodeEmail()
             }
         }
     }
@@ -475,9 +486,9 @@ class TwoFactorLoginViewModel @Inject constructor(
     }
 
     /**
-     * Resend the verification code email.
+     * Send the verification code email.
      */
-    private fun handleResendEmailClick() {
+    private fun handleSendVerificationCodeEmail() {
         // Ensure that the user is in fact verifying with email.
         if (state.authMethod != TwoFactorAuthMethod.EMAIL) {
             return
@@ -823,5 +834,10 @@ sealed class TwoFactorLoginAction {
         data class ReceiveWebAuthResult(
             val webAuthResult: WebAuthResult,
         ) : Internal()
+
+        /**
+         * Indicates that the verification code email should be sent.
+         */
+        data object SendVerificationCodeEmail : Internal()
     }
 }

@@ -98,6 +98,66 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `init with email auth method and not new device verification should call resendEmail`() {
+        val initialState = DEFAULT_STATE.copy(
+            authMethod = TwoFactorAuthMethod.EMAIL,
+            isNewDeviceVerification = false,
+        )
+        coEvery { authRepository.resendVerificationCodeEmail() } returns ResendEmailResult.Success
+
+        createViewModel(state = initialState)
+
+        coVerify(exactly = 1) {
+            authRepository.resendVerificationCodeEmail()
+        }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `init with email auth method and new device verification should not call resendEmail`() {
+        val initialState = DEFAULT_STATE.copy(
+            authMethod = TwoFactorAuthMethod.EMAIL,
+            isNewDeviceVerification = true,
+        )
+        coEvery { authRepository.resendVerificationCodeEmail() } returns ResendEmailResult.Success
+
+        createViewModel(state = initialState)
+
+        coVerify(exactly = 0) {
+            authRepository.resendVerificationCodeEmail()
+        }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `init with non-email auth method and not new device verification should not call resendEmail`() {
+        val initialState = DEFAULT_STATE.copy(
+            authMethod = TwoFactorAuthMethod.AUTHENTICATOR_APP,
+            isNewDeviceVerification = false,
+        )
+        coEvery { authRepository.resendVerificationCodeEmail() } returns ResendEmailResult.Success
+
+        createViewModel(state = initialState)
+
+        coVerify(exactly = 0) {
+            authRepository.resendVerificationCodeEmail()
+        }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `init with non-email auth method and new device verification should not call resendEmail`() {
+        val initialState = DEFAULT_STATE.copy(
+            authMethod = TwoFactorAuthMethod.AUTHENTICATOR_APP,
+            isNewDeviceVerification = true,
+        )
+        createViewModel(state = initialState)
+
+        coVerify(exactly = 0) { authRepository.resendVerificationCodeEmail() }
+    }
+
+    @Test
     fun `yubiKeyResultFlow update should populate the input field and attempt login`() {
         val initialState = DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.YUBI_KEY)
         val token = "token"
