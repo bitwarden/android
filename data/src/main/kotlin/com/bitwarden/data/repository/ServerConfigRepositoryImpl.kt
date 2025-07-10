@@ -62,12 +62,12 @@ internal class ServerConfigRepositoryImpl(
                         if (specificValue != null) {
                             Log.d(
                                 "ServerConfigRepository",
-                                "Feature 'enable-pm-bwa-sync': $specificValue"
+                                "Feature 'enable-pm-bwa-sync': $specificValue",
                             )
                         } else {
                             Log.d(
                                 "ServerConfigRepository",
-                                "Feature 'enable-pm-bwa-sync' not found."
+                                "Feature 'enable-pm-bwa-sync' not found.",
                             )
                         }
                     }
