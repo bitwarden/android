@@ -47,10 +47,10 @@ class AppearanceViewModel @Inject constructor(
 
         if (state.isDynamicColorsSupported) {
             settingsRepository
-            .isDynamicColorsEnabledFlow
-            .map { AppearanceAction.Internal.DynamicColorsStateUpdateReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
+                .isDynamicColorsEnabledFlow
+                .map { AppearanceAction.Internal.DynamicColorsStateUpdateReceive(it) }
+                .onEach(::sendAction)
+                .launchIn(viewModelScope)
         }
     }
 
