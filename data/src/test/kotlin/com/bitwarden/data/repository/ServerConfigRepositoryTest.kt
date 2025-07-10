@@ -1,5 +1,6 @@
 package com.bitwarden.data.repository
 
+import android.util.Log
 import app.cash.turbine.test
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
@@ -11,9 +12,13 @@ import com.bitwarden.network.model.ConfigResponseJson.EnvironmentJson
 import com.bitwarden.network.model.ConfigResponseJson.ServerJson
 import com.bitwarden.network.service.ConfigService
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonPrimitive
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNull
@@ -47,6 +52,15 @@ class ServerConfigRepositoryTest {
     @BeforeEach
     fun setUp() {
         fakeConfigDiskSource.serverConfig = null
+
+        mockkStatic(Log::class)
+        every { Log.d(any(), any()) } returns 1
+        every { Log.d(any(), any(), any()) } returns 1
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(Log::class)
     }
 
     @Test

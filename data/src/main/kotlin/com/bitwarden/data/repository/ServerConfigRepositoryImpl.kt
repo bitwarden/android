@@ -57,7 +57,6 @@ internal class ServerConfigRepositoryImpl(
 
                     Log.d("ServerConfigRepository", "Will check for flags")
                     if (featureStatesMap != null) {
-                        // Option 3: Specifically print the value for "enable-pm-bwa-sync"
                         val specificValue = featureStatesMap["enable-pm-bwa-sync"]
                         if (specificValue != null) {
                             Log.d(
