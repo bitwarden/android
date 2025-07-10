@@ -6,7 +6,6 @@ import com.bitwarden.vault.LoginUriView
  * Models the items returned by the TotpCodeManager.
  *
  * @property code The verification code for the item.
- * @property totpCode The totp code for the item.
  * @property periodSeconds The time span where the code is valid in seconds.
  * @property timeLeftSeconds The seconds remaining until a new code is required.
  * @property issueTime The time the verification code was issued.
@@ -19,7 +18,6 @@ import com.bitwarden.vault.LoginUriView
  */
 data class VerificationCodeItem(
     val code: String,
-    val totpCode: String,
     val periodSeconds: Int,
     val timeLeftSeconds: Int,
     val issueTime: Long,

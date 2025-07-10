@@ -20,4 +20,5 @@ val CipherListView.login: LoginListView?
 /**
  * Returns the [CardListView] if the cipher is of type [CipherListViewType.Card], otherwise null.
  */
-val CipherListView.card get() = (this.type as? CipherListViewType.Card)?.v1
+val CipherListView.card: CardListView?
+    get() = (this.type as? CipherListViewType.Card)?.v1

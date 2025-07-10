@@ -11,25 +11,32 @@ import com.bitwarden.vault.LocalDataView
 import com.bitwarden.vault.LoginListView
 import com.bitwarden.vault.LoginUriView
 import java.time.Instant
+import java.time.ZonedDateTime
 
 /**
- * Creates a mock [CipherListView].
+ * Default date time used for [ZonedDateTime] properties of mock objects.
+ */
+private const val DEFAULT_TIMESTAMP = "2023-10-27T12:00:00Z"
+
+/**
+ * Creates a mock [CipherListView] for testing. Defaults to a Login cipher. Set [type] to override
+ * the default behavior.
  */
 @Suppress("LongParameterList")
 fun createMockCipherListView(
     number: Int,
     id: String = "mockId-$number",
     organizationId: String? = "mockOrganizationId-$number",
-    folderId: String? = "mockFolderId-$number",
+    folderId: String? = "mockId-$number",
     type: CipherListViewType = CipherListViewType.Login(
         createMockLoginListView(number = 1),
     ),
     reprompt: CipherRepromptType = CipherRepromptType.NONE,
     name: String = "mockName-$number",
     favorite: Boolean = false,
-    collectionIds: List<String> = listOf("mockCollectionId1-$number", "mockCollectionId2-$number"),
-    revisionDate: Instant = Instant.parse("mockRevisionDate-$number"),
-    creationDate: Instant = Instant.parse("mockCreationDate-$number"),
+    collectionIds: List<String> = listOf("mockId-$number"),
+    revisionDate: Instant = Instant.parse(DEFAULT_TIMESTAMP),
+    creationDate: Instant = Instant.parse(DEFAULT_TIMESTAMP),
     attachments: UInt = 0U,
     organizationUseTotp: Boolean = false,
     edit: Boolean = false,
@@ -52,7 +59,7 @@ fun createMockCipherListView(
     collectionIds = collectionIds,
     revisionDate = revisionDate,
     creationDate = creationDate,
-    deletedDate = if (isDeleted) Instant.now() else null,
+    deletedDate = if (isDeleted) Instant.parse(DEFAULT_TIMESTAMP) else null,
     attachments = attachments,
     organizationUseTotp = organizationUseTotp,
     edit = edit,
@@ -65,6 +72,9 @@ fun createMockCipherListView(
     copyableFields = copyableFields,
 )
 
+/**
+ * Creates a mock [LoginListView] for testing.
+ */
 @Suppress("LongParameterList")
 fun createMockLoginListView(
     number: Int,
@@ -83,6 +93,9 @@ fun createMockLoginListView(
     uris = uris,
 )
 
+/**
+ * Creates a mock [Fido2CredentialListView] for testing.
+ */
 @Suppress("LongParameterList")
 fun createMockFido2CredentialListView(
     number: Int,
@@ -99,6 +112,9 @@ fun createMockFido2CredentialListView(
     userDisplayName = userDisplayName,
 )
 
+/**
+ * Creates a mock [CardListView] for testing.
+ */
 fun createMockCardListView(
     number: Int,
     brand: String = "mockBrand-$number",
