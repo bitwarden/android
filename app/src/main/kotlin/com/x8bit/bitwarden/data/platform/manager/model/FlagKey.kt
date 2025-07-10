@@ -35,7 +35,6 @@ sealed class FlagKey<out T : Any> {
                 MobileErrorReporting,
                 FlightRecorder,
                 RestrictCipherItemDeletion,
-                PreAuthSettings,
                 UserManagedPrivilegedApps,
                 RemoveCardPolicy,
             )
@@ -163,14 +162,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object RestrictCipherItemDeletion : FlagKey<Boolean>() {
         override val keyName: String = "pm-15493-restrict-item-deletion-to-can-manage-permission"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key to enable the settings menu before login.
-     */
-    data object PreAuthSettings : FlagKey<Boolean>() {
-        override val keyName: String = "enable-pm-prelogin-settings"
         override val defaultValue: Boolean = false
     }
 

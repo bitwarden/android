@@ -319,17 +319,15 @@ private fun LandingScreenContent(
                     .testTag("CreateAccountLabel"),
             )
         }
-        if (state.showSettingsButton) {
-            Spacer(modifier = Modifier.height(height = 8.dp))
-            BitwardenTextButton(
-                label = stringResource(id = R.string.app_settings),
-                onClick = onAppSettingsClick,
-                icon = rememberVectorPainter(id = BitwardenDrawable.ic_cog),
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
-            )
-        }
+        Spacer(modifier = Modifier.height(height = 8.dp))
+        BitwardenTextButton(
+            label = stringResource(id = R.string.app_settings),
+            onClick = onAppSettingsClick,
+            icon = rememberVectorPainter(id = BitwardenDrawable.ic_cog),
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .fillMaxWidth(),
+        )
 
         Spacer(modifier = Modifier.height(height = 12.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())

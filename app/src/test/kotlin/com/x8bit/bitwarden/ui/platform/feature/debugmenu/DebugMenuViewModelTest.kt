@@ -158,7 +158,6 @@ private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf
     FlagKey.MobileErrorReporting to true,
     FlagKey.FlightRecorder to true,
     FlagKey.RestrictCipherItemDeletion to true,
-    FlagKey.PreAuthSettings to true,
     FlagKey.UserManagedPrivilegedApps to true,
     FlagKey.RemoveCardPolicy to true,
 )
@@ -178,7 +177,6 @@ private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf
     FlagKey.MobileErrorReporting to false,
     FlagKey.FlightRecorder to false,
     FlagKey.RestrictCipherItemDeletion to false,
-    FlagKey.PreAuthSettings to false,
     FlagKey.UserManagedPrivilegedApps to false,
     FlagKey.RemoveCardPolicy to false,
 )

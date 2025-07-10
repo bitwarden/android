@@ -66,10 +66,6 @@ class FlagKeyTest {
             "pm-15493-restrict-item-deletion-to-can-manage-permission",
         )
         assertEquals(
-            FlagKey.PreAuthSettings.keyName,
-            "enable-pm-prelogin-settings",
-        )
-        assertEquals(
             FlagKey.UserManagedPrivilegedApps.keyName,
             "pm-18970-user-managed-privileged-apps",
         )
@@ -97,7 +93,6 @@ class FlagKeyTest {
                 FlagKey.MobileErrorReporting,
                 FlagKey.FlightRecorder,
                 FlagKey.RestrictCipherItemDeletion,
-                FlagKey.PreAuthSettings,
                 FlagKey.UserManagedPrivilegedApps,
                 FlagKey.RemoveCardPolicy,
             ).all {

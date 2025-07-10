@@ -54,7 +54,6 @@ class LandingViewModel @Inject constructor(
             selectedEnvironmentLabel = environmentRepository.environment.label,
             dialog = null,
             accountSummaries = authRepository.userStateFlow.value?.toAccountSummaries().orEmpty(),
-            showSettingsButton = featureFlagManager.getFeatureFlag(key = FlagKey.PreAuthSettings),
         ),
 ) {
 
@@ -108,11 +107,6 @@ class LandingViewModel @Inject constructor(
             .map { LandingAction.Internal.SnackbarDataReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
-        featureFlagManager
-            .getFeatureFlagFlow(key = FlagKey.PreAuthSettings)
-            .map { LandingAction.Internal.PreAuthSettingFlagReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: LandingAction) {
@@ -140,10 +134,6 @@ class LandingViewModel @Inject constructor(
             is LandingAction.Internal.UpdateEmailState -> handleInternalEmailStateUpdate(action)
             is LandingAction.Internal.UpdatedEnvironmentReceive -> {
                 handleUpdatedEnvironmentReceive(action)
-            }
-
-            is LandingAction.Internal.PreAuthSettingFlagReceive -> {
-                handlePreAuthSettingFlagReceive(action)
             }
 
             is LandingAction.Internal.SnackbarDataReceived -> handleSnackbarDataReceived(action)
@@ -271,12 +261,6 @@ class LandingViewModel @Inject constructor(
         }
     }
 
-    private fun handlePreAuthSettingFlagReceive(
-        action: LandingAction.Internal.PreAuthSettingFlagReceive,
-    ) {
-        mutableStateFlow.update { it.copy(showSettingsButton = action.isEnabled) }
-    }
-
     private fun handleSnackbarDataReceived(action: LandingAction.Internal.SnackbarDataReceived) {
         sendEvent(LandingEvent.ShowSnackbar(action.data))
     }
@@ -307,7 +291,6 @@ data class LandingState(
     val selectedEnvironmentLabel: String,
     val dialog: DialogState?,
     val accountSummaries: List<AccountSummary>,
-    val showSettingsButton: Boolean,
 ) : Parcelable {
     /**
      * Determines whether the app bar should be visible based on the presence of account summaries.
@@ -458,13 +441,6 @@ sealed class LandingAction {
      * Actions for internal use by the ViewModel.
      */
     sealed class Internal : LandingAction() {
-        /**
-         * Indicates that there has been a change to the pre-auth settings feature flag.
-         */
-        data class PreAuthSettingFlagReceive(
-            val isEnabled: Boolean,
-        ) : Internal()
-
         /**
          * Indicates that snackbar data has been received.
          */
