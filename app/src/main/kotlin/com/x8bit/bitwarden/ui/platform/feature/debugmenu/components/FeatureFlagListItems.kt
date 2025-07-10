@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 
 /**
  * Creates a list item for a [FlagKey].
@@ -38,7 +38,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.SimpleLoginSelfHostAlias,
     FlagKey.ChromeAutofill,
     FlagKey.MobileErrorReporting,
-    FlagKey.FlightRecorder,
     FlagKey.RestrictCipherItemDeletion,
     FlagKey.PreAuthSettings,
     FlagKey.UserManagedPrivilegedApps,
@@ -100,7 +99,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.SimpleLoginSelfHostAlias -> stringResource(R.string.simple_login_self_hosted_aliases)
     FlagKey.ChromeAutofill -> stringResource(R.string.enable_chrome_autofill)
     FlagKey.MobileErrorReporting -> stringResource(R.string.enable_error_reporting_dialog)
-    FlagKey.FlightRecorder -> stringResource(R.string.enable_flight_recorder)
     FlagKey.RestrictCipherItemDeletion -> stringResource(R.string.restrict_item_deletion)
     FlagKey.PreAuthSettings -> stringResource(R.string.enable_pre_auth_settings)
     FlagKey.UserManagedPrivilegedApps -> {
