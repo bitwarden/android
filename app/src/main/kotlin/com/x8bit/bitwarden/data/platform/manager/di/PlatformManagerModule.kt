@@ -138,13 +138,11 @@ object PlatformManagerModule {
         addTotpItemFromAuthenticatorManager: AddTotpItemFromAuthenticatorManager,
         @ApplicationContext context: Context,
         dispatcherManager: DispatcherManager,
-        featureFlagManager: FeatureFlagManager,
     ): AuthenticatorBridgeProcessor = AuthenticatorBridgeProcessorImpl(
         authenticatorBridgeRepository = authenticatorBridgeRepository,
         addTotpItemFromAuthenticatorManager = addTotpItemFromAuthenticatorManager,
         context = context,
         dispatcherManager = dispatcherManager,
-        featureFlagManager = featureFlagManager,
     )
 
     @Provides

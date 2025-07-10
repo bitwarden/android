@@ -10,10 +10,6 @@ class FlagKeyTest {
     @Test
     fun `Feature flags have the correct key name set`() {
         assertEquals(
-            FlagKey.AuthenticatorSync.keyName,
-            "enable-pm-bwa-sync",
-        )
-        assertEquals(
             FlagKey.EmailVerification.keyName,
             "email-verification",
         )
@@ -75,7 +71,6 @@ class FlagKeyTest {
     fun `All feature flags have the correct default value set`() {
         assertTrue(
             listOf(
-                FlagKey.AuthenticatorSync,
                 FlagKey.EmailVerification,
                 FlagKey.ImportLoginsFlow,
                 FlagKey.CredentialExchangeProtocolImport,

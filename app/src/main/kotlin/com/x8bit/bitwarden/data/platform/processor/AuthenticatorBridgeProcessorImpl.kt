@@ -18,8 +18,6 @@ import com.bitwarden.authenticatorbridge.util.toSymmetricEncryptionKeyData
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
 import com.x8bit.bitwarden.data.platform.util.createAddTotpItemFromAuthenticatorIntent
 import com.x8bit.bitwarden.ui.vault.util.getTotpDataOrNull
@@ -33,7 +31,6 @@ import timber.log.Timber
 class AuthenticatorBridgeProcessorImpl(
     private val authenticatorBridgeRepository: AuthenticatorBridgeRepository,
     private val addTotpItemFromAuthenticatorManager: AddTotpItemFromAuthenticatorManager,
-    private val featureFlagManager: FeatureFlagManager,
     dispatcherManager: DispatcherManager,
     context: Context,
 ) : AuthenticatorBridgeProcessor {
@@ -44,12 +41,9 @@ class AuthenticatorBridgeProcessorImpl(
 
     override val binder: IAuthenticatorBridgeService.Stub?
         get() {
-            return if (
-                !featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) ||
-                !isBuildVersionAtLeast(Build.VERSION_CODES.S)
-            ) {
-                // If the feature flag is not enabled, OR if version is below Android 12,
-                // return a null binder which will no-op all service calls
+            return if (!isBuildVersionAtLeast(Build.VERSION_CODES.S)) {
+                // If version is below Android 12, return a null binder which will no-op all
+                // service calls
                 null
             } else {
                 // Otherwise, return real binder implementation:
