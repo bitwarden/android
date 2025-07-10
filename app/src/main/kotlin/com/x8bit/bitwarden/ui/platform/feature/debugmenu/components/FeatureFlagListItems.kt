@@ -39,7 +39,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.ChromeAutofill,
     FlagKey.MobileErrorReporting,
     FlagKey.RestrictCipherItemDeletion,
-    FlagKey.PreAuthSettings,
     FlagKey.UserManagedPrivilegedApps,
     FlagKey.RemoveCardPolicy,
         -> {
@@ -100,9 +99,9 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.ChromeAutofill -> stringResource(R.string.enable_chrome_autofill)
     FlagKey.MobileErrorReporting -> stringResource(R.string.enable_error_reporting_dialog)
     FlagKey.RestrictCipherItemDeletion -> stringResource(R.string.restrict_item_deletion)
-    FlagKey.PreAuthSettings -> stringResource(R.string.enable_pre_auth_settings)
     FlagKey.UserManagedPrivilegedApps -> {
         stringResource(R.string.user_trusted_privileged_app_management)
     }
+
     FlagKey.RemoveCardPolicy -> stringResource(R.string.remove_card_policy)
 }
