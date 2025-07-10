@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
-import com.bitwarden.core.DateTime
 import com.bitwarden.core.DeriveKeyConnectorRequest
 import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.InitOrgCryptoRequest
@@ -54,6 +53,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.DeriveKeyConnectorRes
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialSearchUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
@@ -71,6 +71,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.security.MessageDigest
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
 @Suppress("LargeClass")
 class VaultSdkSourceTest {
@@ -1030,7 +1033,7 @@ class VaultSdkSourceTest {
         val totpResponse = TotpResponse("TestCode", 30u)
         coEvery { clientVault.generateTotp(any(), any()) } returns totpResponse
 
-        val time = DateTime.now()
+        val time = FIXED_CLOCK.instant()
         val result = vaultSdkSource.generateTotp(
             userId = userId,
             totp = "Totp",
@@ -1047,6 +1050,39 @@ class VaultSdkSourceTest {
 
         coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `generateTotpForCipherListView should call SDK and return a Result with correct data`() =
+        runTest {
+            val userId = "userId"
+            val totpResponse = TotpResponse("TestCode", 30u)
+            val cipherListView = createMockCipherListView(number = 1)
+            val time = FIXED_CLOCK.instant()
+
+            coEvery {
+                clientVault.generateTotpCipherView(
+                    view = cipherListView,
+                    time = time,
+                )
+            } returns totpResponse
+
+            val result = vaultSdkSource.generateTotpForCipherListView(
+                userId = userId,
+                cipherListView = cipherListView,
+                time = time,
+            )
+
+            assertEquals(totpResponse.asSuccess(), result)
+            coVerify {
+                clientVault.generateTotpCipherView(
+                    view = cipherListView,
+                    time = time,
+                )
+            }
+
+            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
+        }
 
     @Test
     fun `moveToOrganization should call SDK and a Result with correct data`() = runTest {
@@ -1438,4 +1474,8 @@ private val DEFAULT_FIDO_2_AUTH_REQUEST = AuthenticateFido2CredentialRequest(
     ),
     isUserVerificationSupported = true,
     selectedCipherView = createMockCipherView(number = 1),
+)
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse("2023-10-27T12:00:00Z"),
+    ZoneOffset.UTC,
 )

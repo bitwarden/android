@@ -45,7 +45,11 @@ class TotpCodeManagerTest {
     fun `getTotpCodeStateFlow should have loaded data with a valid values passed in`() = runTest {
         val totpResponse = TotpResponse("123456", 30u)
         coEvery {
-            vaultSdkSource.generateTotp(any(), any(), any())
+            vaultSdkSource.generateTotp(
+                userId = any(),
+                totp = any(),
+                time = any(),
+            )
         } returns totpResponse.asSuccess()
 
         val expected = createVerificationCodeItem()
@@ -61,7 +65,11 @@ class TotpCodeManagerTest {
         runTest {
             val totpResponse = TotpResponse("123456", 30u)
             coEvery {
-                vaultSdkSource.generateTotp(any(), any(), any())
+                vaultSdkSource.generateTotp(
+                    userId = any(),
+                    totp = any(),
+                    time = any(),
+                )
             } returns totpResponse.asSuccess()
 
             val cipherView = createMockCipherView(1).copy(
@@ -80,7 +88,11 @@ class TotpCodeManagerTest {
     fun `getTotpCodesStateFlow should have loaded data with empty list if unable to generate auth code`() =
         runTest {
             coEvery {
-                vaultSdkSource.generateTotp(any(), any(), any())
+                vaultSdkSource.generateTotp(
+                    userId = any(),
+                    totp = any(),
+                    time = any(),
+                )
             } returns Exception().asFailure()
 
             val cipherView = createMockCipherView(1).copy(
@@ -98,7 +110,11 @@ class TotpCodeManagerTest {
     fun `getTotpCodeStateFlow should have loaded item with valid data passed in`() = runTest {
         val totpResponse = TotpResponse("123456", 30u)
         coEvery {
-            vaultSdkSource.generateTotp(any(), any(), any())
+            vaultSdkSource.generateTotp(
+                userId = any(),
+                totp = any(),
+                time = any(),
+            )
         } returns totpResponse.asSuccess()
 
         val cipherView = createMockCipherView(
@@ -118,7 +134,11 @@ class TotpCodeManagerTest {
         runTest {
             val totpResponse = TotpResponse("123456", 30u)
             coEvery {
-                vaultSdkSource.generateTotp(any(), any(), any())
+                vaultSdkSource.generateTotp(
+                    userId = any(),
+                    totp = any(),
+                    time = any(),
+                )
             } returns totpResponse.asSuccess()
 
             val cipherView = createMockCipherView(1).copy(

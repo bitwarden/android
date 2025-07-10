@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.DeriveKeyConnectorRes
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
 import java.io.File
+import java.time.Instant
 
 /**
  * Source of vault information and functionality from the Bitwarden SDK.
@@ -403,6 +404,15 @@ interface VaultSdkSource {
         userId: String,
         totp: String,
         time: DateTime,
+    ): Result<TotpResponse>
+
+    /**
+     * Generate a verification code for the given [cipherListView] and [time].
+     */
+    suspend fun generateTotpForCipherListView(
+        userId: String,
+        cipherListView: CipherListView,
+        time: Instant,
     ): Result<TotpResponse>
 
     /**

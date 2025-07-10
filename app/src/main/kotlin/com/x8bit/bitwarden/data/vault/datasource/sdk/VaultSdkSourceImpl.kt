@@ -48,6 +48,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.time.Instant
 
 /**
  * Primary implementation of [VaultSdkSource] that serves as a convenience wrapper around a
@@ -447,6 +448,19 @@ class VaultSdkSourceImpl(
             .vault()
             .generateTotp(
                 key = totp,
+                time = time,
+            )
+    }
+
+    override suspend fun generateTotpForCipherListView(
+        userId: String,
+        cipherListView: CipherListView,
+        time: Instant,
+    ): Result<TotpResponse> = runCatchingWithLogs {
+        getClient(userId = userId)
+            .vault()
+            .generateTotpCipherView(
+                view = cipherListView,
                 time = time,
             )
     }
