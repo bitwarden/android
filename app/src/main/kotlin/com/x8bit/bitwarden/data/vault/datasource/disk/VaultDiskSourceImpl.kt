@@ -52,6 +52,7 @@ class VaultDiskSourceImpl(
                 CipherEntity(
                     id = cipher.id,
                     userId = userId,
+                    hasTotp = cipher.login?.totp != null,
                     cipherType = json.encodeToString(cipher.type),
                     cipherJson = json.encodeToString(cipher),
                 ),
@@ -93,6 +94,26 @@ class VaultDiskSourceImpl(
                     }
                 }
                 .awaitAll()
+        }
+    }
+
+    override suspend fun getTotpCiphers(userId: String): List<SyncResponseJson.Cipher> {
+        val entities = ciphersDao.getAllTotpCiphers(userId = userId)
+        return withContext(context = dispatcherManager.default) {
+            entities
+                .map { entity ->
+                    async {
+                        json.decodeFromStringWithErrorCallback<SyncResponseJson.Cipher>(
+                            string = entity.cipherJson,
+                        ) { Timber.e(it, "Failed to deserialize TOTP Cipher in Vault") }
+                    }
+                }
+                .awaitAll()
+                .filter {
+                    // A safety-check since after the DB migration, we will temporarily think
+                    // all ciphers contain a totp code
+                    it.login?.totp != null
+                }
         }
     }
 
@@ -249,6 +270,7 @@ class VaultDiskSourceImpl(
                         CipherEntity(
                             id = cipher.id,
                             userId = userId,
+                            hasTotp = cipher.login?.totp != null,
                             cipherType = json.encodeToString(cipher.type),
                             cipherJson = json.encodeToString(cipher),
                         )
