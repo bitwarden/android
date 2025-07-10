@@ -99,10 +99,6 @@ class DebugMenuRepositoryTest {
             debugMenuRepository.resetFeatureFlagOverrides()
             verify(exactly = 1) {
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
-                    FlagKey.PasswordManagerSync,
-                    FlagKey.PasswordManagerSync.defaultValue,
-                )
-                mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
                     FlagKey.BitwardenAuthenticationEnabled,
                     FlagKey.BitwardenAuthenticationEnabled.defaultValue,
                 )
