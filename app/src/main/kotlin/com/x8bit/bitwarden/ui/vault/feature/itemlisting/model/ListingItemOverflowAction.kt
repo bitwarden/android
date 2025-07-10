@@ -170,7 +170,7 @@ sealed class ListingItemOverflowAction : Parcelable {
          * Click on the copy secure note overflow option.
          */
         @Parcelize
-        data class CopyNoteClick constructor(
+        data class CopyNoteClick(
             val notes: String,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {

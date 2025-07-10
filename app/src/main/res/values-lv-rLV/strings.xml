@@ -425,9 +425,9 @@ Nolasīšana notiks automātiski.</string>
     <string name="privacy_policy">Privātuma nosacījumi</string>
     <string name="passkey_management">Piekļuves atslēgu pārvaldība</string>
     <string name="autofill_services">Automātiskā aizpilde</string>
-    <string name="display_autofill_suggestions">Display autofill suggestions</string>
-    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
-    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
+    <string name="display_autofill_suggestions">Attēlot automātiskās aizpildes ieteikumus</string>
+    <string name="autofill_suggestions_inline">Iekšēji (rādās tastatūrā)</string>
+    <string name="autofill_suggestions_popup">Izlecoši (rādās virs ievades lauka)</string>
     <string name="accessibility">Izmantot pieejamību</string>
     <string name="accessibility_description5">Nepieciešams, lai izmantotu automātiskāš aizpildes ātrās piekļuves darbības lauciņu.</string>
     <string name="personal_ownership_policy_in_effect">Apvienības nosacījumi ietekmē Tavas īpašumtiesību iespējas.</string>
@@ -985,11 +985,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="privileged_apps">Priviliģētās lietotnes</string>
     <string name="unrecognized_browser">Neatpazīts pārlūks</string>
     <string name="learn_more_about_using_passkeys_with_bitwarden">Uzzināt vairāk par paroles vārdkopu izmantošanu ar Bitwarden.</string>
-    <string name="google">Google</string>
-    <string name="the_community">kopiena</string>
-    <string name="you">TU</string>
     <string name="all_trusted_apps">Visas uzticamās lietotnes</string>
-    <string name="trusted_by_x">%s uzticas</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Vai tiešām pārtraukt uzticēties %s?</string>
     <string name="installed_apps">Uzstādītās lietotnes</string>
     <string name="delete_x">Izdzēst %s</string>

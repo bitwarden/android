@@ -22,6 +22,7 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertRemovalConfirmationDialogIsDisplayed
@@ -230,6 +231,15 @@ class LandingScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `on ShowSnackbar should display snackbar content`() {
+        val message = "message"
+        val data = BitwardenSnackbarData(message = message.asText())
+        composeTestRule.onNodeWithText(text = message).assertDoesNotExist()
+        mutableEventFlow.tryEmit(LandingEvent.ShowSnackbar(data = data))
+        composeTestRule.onNodeWithText(text = message).assertIsDisplayed()
+    }
+
+    @Test
     fun `continue button should be enabled or disabled according to the state`() {
         composeTestRule.onNodeWithText("Continue").assertIsEnabled()
 
@@ -274,20 +284,7 @@ class LandingScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `app settings button should be displayed according to state`() {
-        mutableStateFlow.update { it.copy(showSettingsButton = false) }
-        composeTestRule
-            .onNodeWithText(text = "App settings")
-            .assertDoesNotExist()
-        mutableStateFlow.update { it.copy(showSettingsButton = true) }
-        composeTestRule
-            .onNodeWithText(text = "App settings")
-            .assertExists()
-    }
-
-    @Test
     fun `on app settings click should send AppSettingsClick action`() {
-        mutableStateFlow.update { it.copy(showSettingsButton = true) }
         composeTestRule
             .onNodeWithText(text = "App settings")
             .performScrollTo()
@@ -517,5 +514,4 @@ private val DEFAULT_STATE = LandingState(
     selectedEnvironmentLabel = Environment.Us.label,
     dialog = null,
     accountSummaries = emptyList(),
-    showSettingsButton = false,
 )

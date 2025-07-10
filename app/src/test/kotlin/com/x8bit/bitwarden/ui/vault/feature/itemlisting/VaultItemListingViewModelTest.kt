@@ -14,6 +14,7 @@ import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
@@ -158,6 +159,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     )
     private val clipboardManager: BitwardenClipboardManager = mockk {
         every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
+    }
+    private val toastManager: ToastManager = mockk {
+        every { show(messageId = any()) } just runs
     }
 
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
@@ -1608,7 +1612,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `OverflowOptionClick Send DeleteClick with deleteSend success should emit ShowToast`() =
+    fun `OverflowOptionClick Send DeleteClick with deleteSend success should emit ShowSnackbar`() =
         runTest {
             val sendId = "sendId1234"
             coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Success
@@ -1621,7 +1625,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 assertEquals(
-                    VaultItemListingEvent.ShowToast(R.string.send_deleted.asText()),
+                    VaultItemListingEvent.ShowSnackbar(R.string.send_deleted.asText()),
                     awaitItem(),
                 )
             }
@@ -1682,7 +1686,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `OverflowOptionClick Send RemovePasswordClick with removePasswordSend success should emit ShowToast`() =
+    fun `OverflowOptionClick Send RemovePasswordClick with removePasswordSend success should emit ShowSnackbar`() =
         runTest {
             val sendId = "sendId1234"
             coEvery {
@@ -1697,7 +1701,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 assertEquals(
-                    VaultItemListingEvent.ShowToast(R.string.password_removed.asText()),
+                    VaultItemListingEvent.ShowSnackbar(R.string.password_removed.asText()),
                     awaitItem(),
                 )
             }
@@ -3019,11 +3023,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultItemListingEvent.ShowToast(R.string.an_error_has_occurred.asText()),
-                    awaitItem(),
-                )
-
-                assertEquals(
                     VaultItemListingEvent.CompleteFido2Registration(
                         RegisterFido2CredentialResult.Error(
                             R.string.passkey_registration_failed_due_to_an_internal_error.asText(),
@@ -3031,6 +3030,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ),
                     awaitItem(),
                 )
+            }
+            verify {
+                toastManager.show(messageId = R.string.an_error_has_occurred)
             }
         }
 
@@ -3051,11 +3053,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultItemListingEvent.ShowToast(R.string.item_updated.asText()),
-                    awaitItem(),
-                )
-
-                assertEquals(
                     VaultItemListingEvent.CompleteFido2Registration(
                         RegisterFido2CredentialResult.Success(
                             responseJson = "mockResponse",
@@ -3063,6 +3060,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ),
                     awaitItem(),
                 )
+            }
+            verify {
+                toastManager.show(messageId = R.string.item_updated)
             }
         }
 
@@ -5322,6 +5322,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             privilegedAppRepository = privilegedAppRepository,
             featureFlagManager = featureFlagManager,
             snackbarRelayManager = snackbarRelayManager,
+            toastManager = toastManager,
             relyingPartyParser = relyingPartyParser,
         )
 

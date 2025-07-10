@@ -101,7 +101,7 @@ jobs:
         with:
           access_token: ${{ steps.get-e2e-secrets.outputs.BWS-ACCESS-TOKEN }}
           secrets: |
-            e4b23903-31d8-4989-9193-b30900d543f0 > TEST_ACCOUNT_CREDS
+            63e93f73-5118-4a62-9db8-b3160176aa8a > TEST_ACCOUNT_CREDS
 
       - name: Configure .json test data file
         run: printf %s '${{ env.TEST_ACCOUNT_CREDS }}' > app/src/androidTest/assets/TestData.json

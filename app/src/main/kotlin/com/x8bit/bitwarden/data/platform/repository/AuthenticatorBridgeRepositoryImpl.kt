@@ -95,10 +95,9 @@ class AuthenticatorBridgeRepositoryImpl(
 
                 // Vault is unlocked, query vault disk source for totp logins:
                 val totpUris = vaultDiskSource
-                    .getCiphers(userId)
-                    .first()
-                    // Filter out any ciphers without a totp item and also deleted ciphers
-                    .filter { it.login?.totp != null && it.deletedDate == null }
+                    .getTotpCiphers(userId = userId)
+                    // Filter out any deleted ciphers.
+                    .filter { it.deletedDate == null }
                     .mapNotNull {
                         val decryptedCipher = vaultSdkSource
                             .decryptCipher(

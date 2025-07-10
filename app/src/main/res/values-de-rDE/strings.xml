@@ -425,9 +425,9 @@ Das Scannen erfolgt automatisch.</string>
     <string name="privacy_policy">Datenschutzbestimmungen</string>
     <string name="passkey_management">Passkey-Verwaltung</string>
     <string name="autofill_services">Auto-Ausfüllen-Dienste</string>
-    <string name="display_autofill_suggestions">Display autofill suggestions</string>
-    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
-    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
+    <string name="display_autofill_suggestions">Vorschläge zum Auto-Ausfüllen anzeigen</string>
+    <string name="autofill_suggestions_inline">Inline (angezeigt in der Tastatur)</string>
+    <string name="autofill_suggestions_popup">Pop-up (angezeigt über dem Eingabefeld)</string>
     <string name="accessibility">Bedienungshilfen verwenden</string>
     <string name="accessibility_description5">Benötigt für die Verwendung der Auto-Ausfüllen-Schnellaktionskachel.</string>
     <string name="personal_ownership_policy_in_effect">Eine Organisationsrichtlinie beeinflusst deine Eigentümer-Optionen.</string>
@@ -662,7 +662,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="account_fingerprint_phrase">Fingerabdruck-Phrase des Kontos</string>
     <string name="passkey_management_explanation_long">Verwende Bitwarden, um neue Passkeys zu speichern und dich mit Passkeys aus deinem Tresor anzumelden.</string>
     <string name="autofill_services_explanation_long">Das Android Autofill Framework wird verwendet, um Zugangsdaten in andere Apps auf deinem Gerät auszufüllen.</string>
-    <string name="use_inline_autofill_explanation_long">Inline Auto-Ausfüllen verwenden, falls deine ausgewählte Tastatur dies unterstützt. Andernfalls wird das Standard Auto-Ausfüllen-Overlay verwendet.</string>
+    <string name="use_inline_autofill_explanation_long">Wähle wie deine Vorschläge zum Auto-Ausfüllen angezeigt werden sollen, wenn du dich in anderen Apps auf deinem Gerät anmeldest.</string>
     <string name="additional_options">Weitere Optionen</string>
     <string name="continue_to_web_app">Weiter zur Web-App?</string>
     <string name="continue_to_x">Weiter zu %1$s?</string>
@@ -984,11 +984,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="privileged_apps">Autorisierte Apps</string>
     <string name="unrecognized_browser">Unbekannter Browser</string>
     <string name="learn_more_about_using_passkeys_with_bitwarden">Erfahre mehr über die Verwendung von Passkeys mit Bitwarden.</string>
-    <string name="google">Google</string>
-    <string name="the_community">der Community</string>
-    <string name="you">DU</string>
     <string name="all_trusted_apps">Alle vertrauenswürdigen Apps</string>
-    <string name="trusted_by_x">Vertraut von %s</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Bist du sicher, dass du aufhören willst, %s zu vertrauen?</string>
     <string name="installed_apps">Installierte Apps</string>
     <string name="delete_x">%s löschen</string>

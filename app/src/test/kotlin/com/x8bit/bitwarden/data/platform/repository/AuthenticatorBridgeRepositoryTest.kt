@@ -27,7 +27,6 @@ import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -98,8 +97,8 @@ class AuthenticatorBridgeRepositoryTest {
 
         // Add some ciphers to vaultDiskSource for each user,
         // and setup mock decryption for them:
-        every { vaultDiskSource.getCiphers(USER_1_ID) } returns flowOf(USER_1_CIPHERS)
-        every { vaultDiskSource.getCiphers(USER_2_ID) } returns flowOf(USER_2_CIPHERS)
+        coEvery { vaultDiskSource.getTotpCiphers(USER_1_ID) } returns USER_1_CIPHERS
+        coEvery { vaultDiskSource.getTotpCiphers(USER_2_ID) } returns USER_2_CIPHERS
         mockkStatic(SyncResponseJson.Cipher::toEncryptedSdkCipher)
         every {
             USER_1_TOTP_CIPHER.toEncryptedSdkCipher()
@@ -137,8 +136,8 @@ class AuthenticatorBridgeRepositoryTest {
             )
             verify { authRepository.userStateFlow }
             verify { vaultRepository.vaultUnlockDataStateFlow }
-            verify { vaultDiskSource.getCiphers(USER_1_ID) }
-            verify { vaultDiskSource.getCiphers(USER_2_ID) }
+            coVerify { vaultDiskSource.getTotpCiphers(USER_1_ID) }
+            coVerify { vaultDiskSource.getTotpCiphers(USER_2_ID) }
             verify { vaultRepository.isVaultUnlocked(USER_1_ID) }
             verify { vaultRepository.isVaultUnlocked(USER_2_ID) }
             coVerify {
@@ -186,7 +185,7 @@ class AuthenticatorBridgeRepositoryTest {
             }
             verify { vaultRepository.vaultUnlockDataStateFlow }
             verify { vaultRepository.lockVault(USER_2_ID, isUserInitiated = false) }
-            verify { vaultDiskSource.getCiphers(USER_2_ID) }
+            coVerify { vaultDiskSource.getTotpCiphers(USER_2_ID) }
             coVerify { vaultSdkSource.decryptCipher(USER_2_ID, USER_2_ENCRYPTED_SDK_TOTP_CIPHER) }
         }
 
@@ -206,7 +205,7 @@ class AuthenticatorBridgeRepositoryTest {
                 sharedAccounts,
             )
             verify { vaultRepository.vaultUnlockDataStateFlow }
-            verify { vaultDiskSource.getCiphers(USER_1_ID) }
+            coVerify { vaultDiskSource.getTotpCiphers(USER_1_ID) }
             verify { vaultRepository.isVaultUnlocked(USER_1_ID) }
             coVerify { vaultSdkSource.decryptCipher(USER_1_ID, USER_1_ENCRYPTED_SDK_TOTP_CIPHER) }
             verify { authRepository.userStateFlow }
@@ -226,7 +225,7 @@ class AuthenticatorBridgeRepositoryTest {
             }
             verify { vaultRepository.vaultUnlockDataStateFlow }
             verify { vaultRepository.lockVault(USER_2_ID, isUserInitiated = false) }
-            verify { vaultDiskSource.getCiphers(USER_2_ID) }
+            coVerify { vaultDiskSource.getTotpCiphers(USER_2_ID) }
             coVerify { vaultSdkSource.decryptCipher(USER_2_ID, USER_2_ENCRYPTED_SDK_TOTP_CIPHER) }
         }
 
@@ -261,7 +260,7 @@ class AuthenticatorBridgeRepositoryTest {
             }
             verify { vaultRepository.vaultUnlockDataStateFlow }
             verify { vaultRepository.lockVault(USER_2_ID, isUserInitiated = false) }
-            verify { vaultDiskSource.getCiphers(USER_2_ID) }
+            coVerify { vaultDiskSource.getTotpCiphers(USER_2_ID) }
             coVerify { vaultSdkSource.decryptCipher(USER_2_ID, USER_2_ENCRYPTED_SDK_TOTP_CIPHER) }
         }
 
@@ -282,10 +281,8 @@ class AuthenticatorBridgeRepositoryTest {
             }
 
             // None of these calls should happen until after user 1's vault state is not UNLOCKING:
-            verify(exactly = 0) {
-                vaultRepository.isVaultUnlocked(userId = USER_1_ID)
-                vaultDiskSource.getCiphers(USER_1_ID)
-            }
+            verify(exactly = 0) { vaultRepository.isVaultUnlocked(userId = USER_1_ID) }
+            coVerify(exactly = 0) { vaultDiskSource.getTotpCiphers(USER_1_ID) }
 
             // Then move out of UNLOCKING state, and things should proceed as normal:
             vaultUnlockStateFlow.value = listOf(
@@ -296,8 +293,8 @@ class AuthenticatorBridgeRepositoryTest {
             deferred.await()
 
             verify { authRepository.userStateFlow }
-            verify { vaultDiskSource.getCiphers(USER_1_ID) }
-            verify { vaultDiskSource.getCiphers(USER_2_ID) }
+            coVerify { vaultDiskSource.getTotpCiphers(USER_1_ID) }
+            coVerify { vaultDiskSource.getTotpCiphers(USER_2_ID) }
             verify { vaultRepository.isVaultUnlocked(USER_1_ID) }
             verify { vaultRepository.isVaultUnlocked(USER_2_ID) }
             verify { vaultRepository.vaultUnlockDataStateFlow }

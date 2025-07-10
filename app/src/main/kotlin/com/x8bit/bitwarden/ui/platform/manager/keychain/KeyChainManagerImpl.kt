@@ -18,7 +18,7 @@ class KeyChainManagerImpl(
     override suspend fun choosePrivateKeyAlias(
         currentServerUrl: String?,
     ): PrivateKeyAliasSelectionResult =
-        callbackFlow<PrivateKeyAliasSelectionResult> {
+        callbackFlow {
             try {
                 KeyChain.choosePrivateKeyAlias(
                     activity,

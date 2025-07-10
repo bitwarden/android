@@ -49,7 +49,6 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -101,12 +100,7 @@ class AddEditSendViewModel @Inject constructor(
                         isHideEmailAddressEnabled = !policyManager
                             .getActivePolicies<PolicyInformation.SendOptions>()
                             .any { it.shouldDisableHideEmail ?: false },
-                        deletionDate = ZonedDateTime
-                            .now(clock)
-                            // We want the default time to be midnight, so we remove all values
-                            // beyond days
-                            .truncatedTo(ChronoUnit.DAYS)
-                            .plusWeeks(1),
+                        deletionDate = ZonedDateTime.now(clock).plusWeeks(1),
                         expirationDate = null,
                         sendUrl = null,
                         hasPassword = false,
@@ -408,14 +402,14 @@ class AddEditSendViewModel @Inject constructor(
     }
 
     private fun handleDeleteClick() {
-        onEdit {
+        onEdit { editItem ->
             mutableStateFlow.update {
                 it.copy(
                     dialogState = AddEditSendState.DialogState.Loading(R.string.deleting.asText()),
                 )
             }
             viewModelScope.launch {
-                val result = vaultRepo.deleteSend(it.sendItemId)
+                val result = vaultRepo.deleteSend(editItem.sendItemId)
                 sendAction(AddEditSendAction.Internal.DeleteSendResultReceive(result))
             }
         }
@@ -432,7 +426,7 @@ class AddEditSendViewModel @Inject constructor(
     }
 
     private fun handleRemovePasswordClick() {
-        onEdit {
+        onEdit { editItem ->
             mutableStateFlow.update {
                 it.copy(
                     dialogState = AddEditSendState.DialogState.Loading(
@@ -441,7 +435,7 @@ class AddEditSendViewModel @Inject constructor(
                 )
             }
             viewModelScope.launch {
-                val result = vaultRepo.removePasswordSend(it.sendItemId)
+                val result = vaultRepo.removePasswordSend(editItem.sendItemId)
                 sendAction(AddEditSendAction.Internal.RemovePasswordResultReceive(result))
             }
         }

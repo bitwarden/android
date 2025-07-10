@@ -36,6 +36,7 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
+import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -46,7 +47,6 @@ import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenPushRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 
@@ -166,7 +166,6 @@ private fun AboutScreenContent(
             onSubmitCrashLogsCheckedChange = onSubmitCrashLogsCheckedChange,
         )
         FlightRecorderCard(
-            isVisible = state.shouldShowFlightRecorder,
             isFlightRecorderEnabled = state.isFlightRecorderEnabled,
             logExpiration = state.flightRecorderSubtext,
             onFlightRecorderCheckedChange = onFlightRecorderCheckedChange,
@@ -279,14 +278,12 @@ private fun ColumnScope.CrashLogsCard(
 
 @Composable
 private fun ColumnScope.FlightRecorderCard(
-    isVisible: Boolean,
     isFlightRecorderEnabled: Boolean,
     logExpiration: Text?,
     onFlightRecorderCheckedChange: (Boolean) -> Unit,
     onFlightRecorderTooltipClick: () -> Unit,
     onViewRecordedLogsClick: () -> Unit,
 ) {
-    if (!isVisible) return
     BitwardenSwitch(
         label = stringResource(id = R.string.flight_recorder),
         isChecked = isFlightRecorderEnabled,
@@ -349,7 +346,6 @@ private fun AboutScreenContent_preview() {
                 copyrightInfo = "".asText(),
                 shouldShowCrashLogsButton = true,
                 isFlightRecorderEnabled = true,
-                shouldShowFlightRecorder = true,
                 flightRecorderSubtext = "Expires 3/21/25 at 3:20 PM".asText(),
             ),
             onHelpCenterClick = {},

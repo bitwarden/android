@@ -498,9 +498,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(DEFAULT_STATE, stateTurbine.awaitItem())
                 assertEquals(
-                    ExportVaultEvent.ShowToast(
-                        message = R.string.code_sent.asText(),
-                    ),
+                    ExportVaultEvent.ShowSnackbar(message = R.string.code_sent.asText()),
                     eventTurbine.awaitItem(),
                 )
             }
@@ -529,7 +527,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(DEFAULT_STATE, stateTurbine.awaitItem())
                 assertEquals(
-                    ExportVaultEvent.ShowToast(
+                    ExportVaultEvent.ShowSnackbar(
                         message = R.string.generic_error_message.asText(),
                     ),
                     eventTurbine.awaitItem(),
@@ -715,7 +713,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ExportLocationReceive should emit ShowToast on success`() = runTest {
+    fun `ExportLocationReceive should emit ShowSnackbar on success`() = runTest {
         val exportData = "TestExportVaultData"
         val viewModel = createViewModel(
             DEFAULT_STATE.copy(
@@ -731,7 +729,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
             coVerify { fileManager.stringToUri(fileUri = any(), dataString = exportData) }
 
             assertEquals(
-                ExportVaultEvent.ShowToast(R.string.export_vault_success.asText()),
+                ExportVaultEvent.ShowSnackbar(R.string.export_vault_success.asText()),
                 awaitItem(),
             )
         }

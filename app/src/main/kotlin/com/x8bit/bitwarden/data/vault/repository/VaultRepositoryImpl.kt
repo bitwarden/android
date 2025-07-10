@@ -147,7 +147,7 @@ class VaultRepositoryImpl(
     private val vaultLockManager: VaultLockManager,
     private val totpCodeManager: TotpCodeManager,
     private val userLogoutManager: UserLogoutManager,
-    private val databaseSchemeManager: DatabaseSchemeManager,
+    databaseSchemeManager: DatabaseSchemeManager,
     pushManager: PushManager,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
@@ -498,23 +498,20 @@ class VaultRepositoryImpl(
         )
         return getVaultItemStateFlow(cipherId)
             .flatMapLatest { cipherDataState ->
-                val cipher = cipherDataState.data
-                    ?: return@flatMapLatest flowOf(DataState.Loaded(null))
-                totpCodeManager
-                    .getTotpCodeStateFlow(
-                        userId = userId,
-                        cipher = cipher,
-                    )
-                    .map { totpCodeDataState ->
-                        combineDataStates(
-                            totpCodeDataState,
-                            cipherDataState,
-                        ) { _, _ ->
-                            // We are only combining the DataStates to know the overall state,
-                            // we map it to the appropriate value below.
-                        }
-                            .mapNullable { totpCodeDataState.data }
+                cipherDataState
+                    .data
+                    ?.let {
+                        totpCodeManager
+                            .getTotpCodeStateFlow(userId = userId, cipher = it)
+                            .map { totpCodeDataState ->
+                                combineDataStates(totpCodeDataState, cipherDataState) { _, _ ->
+                                    // We are only combining the DataStates to know the overall
+                                    // state, we map it to the appropriate value below.
+                                }
+                                    .mapNullable { totpCodeDataState.data }
+                            }
                     }
+                    ?: flowOf(DataState.Loaded(null))
             }
             .stateIn(
                 scope = unconfinedScope,
@@ -608,12 +605,12 @@ class VaultRepositoryImpl(
             )
             .also {
                 if (it is VaultUnlockResult.Success) {
-                    encryptedBiometricsKey?.let {
+                    encryptedBiometricsKey?.let { key ->
                         // If this key is present, we store it and the associated IV for future use
                         // since we want to migrate the user to a more secure form of biometrics.
                         authDiskSource.storeUserBiometricUnlockKey(
                             userId = userId,
-                            biometricsKey = it,
+                            biometricsKey = key,
                         )
                         authDiskSource.storeUserBiometricInitVector(userId = userId, iv = cipher.iv)
                     }
@@ -925,7 +922,7 @@ class VaultRepositoryImpl(
     }
 
     private suspend fun clearFolderIdFromCiphers(folderId: String, userId: String) {
-        vaultDiskSource.getCiphers(userId).firstOrNull()?.forEach {
+        vaultDiskSource.getCiphersFlow(userId).firstOrNull()?.forEach {
             if (it.folderId == folderId) {
                 vaultDiskSource.saveCipher(
                     userId, it.copy(folderId = null),
@@ -944,7 +941,7 @@ class VaultRepositoryImpl(
             .map { it.toEncryptedSdkFolder() }
 
         val ciphers = vaultDiskSource
-            .getCiphers(userId)
+            .getCiphersFlow(userId)
             .firstOrNull()
             .orEmpty()
             .map { it.toEncryptedSdkCipher() }
@@ -1070,7 +1067,7 @@ class VaultRepositoryImpl(
         userId: String,
     ): Flow<DataState<List<CipherView>>> =
         vaultDiskSource
-            .getCiphers(userId = userId)
+            .getCiphersFlow(userId = userId)
             .onStart { mutableCiphersStateFlow.updateToPendingOrLoading() }
             .map {
                 waitUntilUnlocked(userId = userId)
@@ -1091,7 +1088,7 @@ class VaultRepositoryImpl(
         userId: String,
     ): Flow<DataState<List<CipherListView>>> =
         vaultDiskSource
-            .getCiphers(userId = userId)
+            .getCiphersFlow(userId = userId)
             .onStart { mutableCiphersListViewStateFlow.updateToPendingOrLoading() }
             .map {
                 waitUntilUnlocked(userId = userId)
@@ -1491,7 +1488,7 @@ class VaultRepositoryImpl(
                                 )
                                 vaultDiskSource.resyncVaultData(userId = userId)
                                 val itemsAvailable = vaultDiskSource
-                                    .getCiphers(userId)
+                                    .getCiphersFlow(userId)
                                     .firstOrNull()
                                     ?.isNotEmpty() == true
                                 return SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)

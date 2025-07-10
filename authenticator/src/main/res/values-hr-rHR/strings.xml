@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Autentifikator</string>
     <string name="biometrics_direction">Biometrijska autentifikacija</string>
     <string name="cancel">Odustani</string>
     <string name="add_item">Dodaj stavku</string>
@@ -8,7 +7,7 @@
     <string name="generic_error_message">Trenutno ne možemo obraditi tvoj zahtjev. Pokušaj ponovno ili nas kontaktiraj.</string>
     <string name="internet_connection_required_title">Potrebna je veza s internetom</string>
     <string name="internet_connection_required_message">Spoji se na internet prije nastavka.</string>
-    <string name="okay">Okay</string>
+    <string name="okay">U redu</string>
     <string name="syncing">Sinkronizacija</string>
     <string name="copy">Kopiraj</string>
     <string name="edit_item">Uredi</string>
@@ -17,9 +16,9 @@
     <string name="name">Ime</string>
     <string name="add_item_rotation">Dodaj stavku rotacije</string>
     <string name="scan_a_qr_code">Skeniraj QR kôd</string>
-    <string name="scan_qr_code">Skeniraj QR kôd</string>
+    <string name="scan_qr_code"><annotation link="scanQrCode">Skeniraj QR kôd</annotation></string>
     <string name="point_your_camera_at_the_qr_code">Usmjeri kameru na QR kôd.</string>
-    <string name="cannot_scan_qr_code_enter_key_manually">Cannot scan QR code? <annotation link="enterKeyManually">Enter key manually</annotation></string>
+    <string name="cannot_scan_qr_code_enter_key_manually">Ne možeš skenirati QR kôd? <annotation link="enterKeyManually">Ručno unesi ključ</annotation></string>
     <string name="enter_key_manually">Ručno unesi ključ.</string>
     <string name="cannot_add_authenticator_key">Nije moguće dodati ključ autentifikatora?</string>
     <string name="no_thanks">Ne hvala</string>
@@ -117,15 +116,15 @@
     <string name="download_bitwarden_card_message">Pohrani sve svoje prijave i sinkroniziraj kôdove za provjeru izravno s aplikacijom Autentifikator.</string>
     <string name="download_now">Preuzmi sada</string>
     <string name="sync_with_bitwarden_app">Sinkroniziraj s Bitwarden aplikacijom</string>
-    <string name="this_feature_is_not_not_yet_available_for_self_hosted_users">This feature is not yet available for self-hosted users. <annotation link="learnMore">Learn more</annotation></string>
+    <string name="this_feature_is_not_not_yet_available_for_self_hosted_users">Ova značajka još nije dostupna za korsnike na vlastitom poslužitelju. <annotation link="learnMore">Saznaj više</annotation></string>
     <string name="shared_codes_error">Nije moguće sinkronizirati kodove iz aplikacije Bitwarden. Provjeri jesu li obje aplikacije ažurirane. I dalje možeš pristupiti svojim postojećim kodovima u aplikaciji Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s od %2$s</string>
+    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sinkroniziraj s Bitwardenom</string>
-    <string name="sync_with_bitwarden_action_card_message">Dopusti sinkronizaciju aplikacije Autentifikator u postavkama kako bi ovdje mogli vidjeti sve svoje kodove za provjeru.</string>
+    <string name="sync_with_bitwarden_action_card_message">Za pregled svih svojih kodova za provjeru, treba odobriti sinkronizaciju na svim tvojim računima.</string>
     <string name="take_me_to_app_settings">U postavke aplikacije</string>
     <string name="something_went_wrong">Dogodila se greška</string>
     <string name="please_try_again">Molimo pokušaj ponovo</string>
-    <string name="move_to_bitwarden">Premjesti u Bitwarden</string>
+    <string name="copy_to_bitwarden_vault">Kopiraj u Bitwarden trezor</string>
     <string name="default_save_option">Zadana opcija spremanja</string>
     <string name="save_to_bitwarden">Spremi u Bitwarden</string>
     <string name="save_here">Spremi ovdje</string>
@@ -136,10 +135,15 @@
     <string name="choose_save_location_message">Ovdje spremi autentifikatorski ključ ili ga dodaj prijavi u Bitwarden aplikaciji.</string>
     <string name="save_option_as_default">Spremi opciju kao zadanu</string>
     <string name="account_synced_from_bitwarden_app">Račun sinkroniziran iz aplikacije Bitwarden</string>
-    <string name="local_codes">Lokalni kodovi</string>
+    <string name="local_codes">Lokalni kodovi (%1$d)</string>
     <string name="required_information_missing">Potrebni podaci nedostaju</string>
     <string name="required_information_missing_message">"Nedostaju potrebni podaci (npr. „usluge” ili „tajno”). Provjeri svoju datoteku i pokušaj ponovno. Posjeti bitwarden.com/help za podršku"</string>
     <string name="file_could_not_be_processed">"Datoteka se ne može obraditi"</string>
     <string name="file_could_not_be_processed_message">"Datoteka se ne može obraditi. Provjeri je li JSON ispravan i pokušaj ponovno. Za pomoć posjeti bitwarden.com/help"</string>
     <string name="get_help">Potraži pomoć</string>
+    <string name="expand_advanced_options">Proširi napredne mogućnosti</string>
+    <string name="local_items_are_expanded_click_to_collapse">Lokalne stavke su proširene. Klikni za sažimanje.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Lokalne stavke su sažete. Klikni za proširivanje.</string>
+    <string name="items_expanded_click_to_collapse">Stavke su proširene. Klikni za sažimanje.</string>
+    <string name="items_are_collapsed_click_to_expand">Stavke su sažete. Klikni za proširivanje.</string>
 </resources>

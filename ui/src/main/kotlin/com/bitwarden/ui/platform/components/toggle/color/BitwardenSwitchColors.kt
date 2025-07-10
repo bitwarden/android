@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.toggle.color
+package com.bitwarden.ui.platform.components.toggle.color
 
 import androidx.compose.material3.SwitchColors
 import androidx.compose.runtime.Composable

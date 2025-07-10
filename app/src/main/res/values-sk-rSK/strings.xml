@@ -291,8 +291,8 @@ Skenovanie prebehne automaticky.</string>
     <string name="host">Hostiteľ</string>
     <string name="reg_ex">Regulárny výraz</string>
     <string name="starts_with">Začína na</string>
-    <string name="uri_match_detection">Spôsob mapovania URI</string>
-    <string name="match_detection">Spôsob mapovania</string>
+    <string name="uri_match_detection">Zisťovanie zhody URI</string>
+    <string name="match_detection">Zisťovanie zhody</string>
     <string name="autofill_and_save">Auto-vyplniť a uložiť</string>
     <string name="organization">Organizácia</string>
     <string name="try_again">Skúsiť Znovu</string>
@@ -355,8 +355,8 @@ Skenovanie prebehne automaticky.</string>
     <string name="two_minutes">2 minúty</string>
     <string name="clear_clipboard">Vymazať schránku</string>
     <string name="clear_clipboard_description">Automaticky vymazať skopírované hodnoty zo schránky.</string>
-    <string name="default_uri_match_detection">Predvolený spôsob detekcie zhody URI</string>
-    <string name="default_uri_match_detection_description">Vyberte si predvolený spôsob mapovania, ktorý bude použitý pre prihlasovacie údaje pri využití funkcií, ako je napríklad automatické vypĺňanie hesiel.</string>
+    <string name="default_uri_match_detection">Predvolené zisťovanie zhody URI</string>
+    <string name="default_uri_match_detection_description">Vyberte si predvolený spôsob zisťovania zhody URI, ktorý bude použitý pre prihlasovacie údaje pri využití funkcií, ako je napríklad automatické vypĺňanie hesiel.</string>
     <string name="theme">Motív</string>
     <string name="theme_description">Zmeniť motív aplikácie.</string>
     <string name="copy_notes">Kopírovať poznámku</string>
@@ -927,7 +927,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="recorded_logs_title">Zaznamenané logy</string>
     <string name="no_logs_recorded">Žiadne zaznamenané logy</string>
     <string name="experiencing_an_issue">Máte problém?</string>
-    <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Povoľte dočasné logovanie na zhromažďovanie a kontrolu logov lokálne. Ak je povolené, stav aplikácií a sieťové hovory môžu byť zaznamenávané – ale nikdy citlivé informácie o trezore.</string>
+    <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Povoľte dočasné logovanie na zhromažďovanie a kontrolu logov lokálne. Ak je povolené, stav aplikácií a sieťové volania môžu byť zaznamenávané – ale nikdy citlivé informácie o trezore.</string>
     <string name="to_get_started_set_a_logging_duration">Ak chcete začať, nastavte trvanie logovania. Po uplynutí tejto doby sa logovanie automaticky vypne, čím získate čas na zachytenie činnosti pri reprodukovaní prípadných problémov.</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Logy sa po 30 dňoch automaticky odstránia. Bitwarden má prístup k údajom logovania len keď ich zdieľate.</string>
     <string name="for_details_on_what_is_and_isnt_logged">Pre viac informácií, čo je a nie je logované, navštívte \n<annotation link="helpCenter">Centrum pomoci Bitwarden.</annotation></string>
@@ -985,11 +985,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="privileged_apps">Privilegované aplikácie</string>
     <string name="unrecognized_browser">Neznámy prehliadač</string>
     <string name="learn_more_about_using_passkeys_with_bitwarden">Ďalšie informácie o používaní prístupových kľúčov s Bitwardenom.</string>
-    <string name="google">Google</string>
-    <string name="the_community">komunity</string>
-    <string name="you">VÁS</string>
     <string name="all_trusted_apps">Všetky dôveryhodné aplikácie</string>
-    <string name="trusted_by_x">Dôveryhodné podľa %s</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Naozaj už nechcete dôverovať %s?</string>
     <string name="installed_apps">Nainštalované aplikácie</string>
     <string name="delete_x">Odstrániť %s</string>

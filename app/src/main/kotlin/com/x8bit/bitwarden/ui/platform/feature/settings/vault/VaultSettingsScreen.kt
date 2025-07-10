@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -61,16 +59,11 @@ fun VaultSettingsScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
     val snackbarHostState = rememberBitwardenSnackbarHostState()
-    val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             VaultSettingsEvent.NavigateBack -> onNavigateBack()
             VaultSettingsEvent.NavigateToExportVault -> onNavigateToExportVault()
             VaultSettingsEvent.NavigateToFolders -> onNavigateToFolders()
-            is VaultSettingsEvent.ShowToast -> {
-                Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
-            }
-
             is VaultSettingsEvent.NavigateToImportVault -> {
                 if (state.isNewImportLoginsFlowEnabled) {
                     onNavigateToImportLogins()

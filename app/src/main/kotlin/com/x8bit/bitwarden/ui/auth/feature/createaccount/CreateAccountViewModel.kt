@@ -480,11 +480,6 @@ sealed class CreateAccountEvent {
     data object NavigateBack : CreateAccountEvent()
 
     /**
-     * Placeholder event for showing a toast. Can be removed once there are real events.
-     */
-    data class ShowToast(val text: String) : CreateAccountEvent()
-
-    /**
      * Navigates to the captcha verification screen.
      */
     data class NavigateToCaptcha(val uri: Uri) : CreateAccountEvent()

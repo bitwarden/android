@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.manager.di
 
 import android.content.Context
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.service.AccountsService
 import com.bitwarden.network.service.AuthRequestsService
@@ -107,23 +108,23 @@ object AuthManagerModule {
     @Provides
     @Singleton
     fun provideUserLogoutManager(
-        @ApplicationContext context: Context,
         authDiskSource: AuthDiskSource,
         generatorDiskSource: GeneratorDiskSource,
         passwordHistoryDiskSource: PasswordHistoryDiskSource,
         pushDiskSource: PushDiskSource,
         settingsDiskSource: SettingsDiskSource,
+        toastManager: ToastManager,
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         dispatcherManager: DispatcherManager,
     ): UserLogoutManager =
         UserLogoutManagerImpl(
-            context = context,
             authDiskSource = authDiskSource,
             generatorDiskSource = generatorDiskSource,
             passwordHistoryDiskSource = passwordHistoryDiskSource,
             pushDiskSource = pushDiskSource,
             settingsDiskSource = settingsDiskSource,
+            toastManager = toastManager,
             vaultDiskSource = vaultDiskSource,
             vaultSdkSource = vaultSdkSource,
             dispatcherManager = dispatcherManager,

@@ -173,7 +173,7 @@ class VaultRepositoryTest {
         MutableStateFlow(listOf(createMockCipher(1)))
     private val vaultDiskSource: VaultDiskSource = mockk {
         coEvery { resyncVaultData(any()) } just runs
-        every { getCiphers(any()) } returns mutableGetCiphersFlow
+        every { getCiphersFlow(any()) } returns mutableGetCiphersFlow
     }
     private val totpCodeManager: TotpCodeManager = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk {
@@ -533,7 +533,7 @@ class VaultRepositoryTest {
             val mutableCiphersStateFlow =
                 bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>(replay = 1)
             every {
-                vaultDiskSource.getCiphers(userId = MOCK_USER_STATE.activeUserId)
+                vaultDiskSource.getCiphersFlow(userId = MOCK_USER_STATE.activeUserId)
             } returns mutableCiphersStateFlow
             coEvery {
                 vaultSdkSource.decryptCipherList(
@@ -566,7 +566,7 @@ class VaultRepositoryTest {
         val mutableCiphersStateFlow =
             bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>(replay = 1)
         every {
-            vaultDiskSource.getCiphers(userId = MOCK_USER_STATE.activeUserId)
+            vaultDiskSource.getCiphersFlow(userId = MOCK_USER_STATE.activeUserId)
         } returns mutableCiphersStateFlow
         coEvery {
             vaultSdkSource.decryptCipherList(
@@ -2811,7 +2811,7 @@ class VaultRepositoryTest {
                 )
 
             coEvery {
-                vaultDiskSource.getCiphers(MOCK_USER_STATE.activeUserId)
+                vaultDiskSource.getCiphersFlow(MOCK_USER_STATE.activeUserId)
             } returns mutableCiphersStateFlow
 
             coEvery {
@@ -4141,7 +4141,7 @@ class VaultRepositoryTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         coEvery { vaultDiskSource.deleteFolder(userId = userId, folderId = folderId) } just runs
         coEvery {
-            vaultDiskSource.getCiphers(userId)
+            vaultDiskSource.getCiphersFlow(userId)
         } returns flowOf()
 
         mutableSyncFolderDeleteFlow.tryEmit(
@@ -4150,7 +4150,7 @@ class VaultRepositoryTest {
 
         coVerify {
             vaultDiskSource.deleteFolder(userId = userId, folderId = folderId)
-            vaultDiskSource.getCiphers(userId)
+            vaultDiskSource.getCiphersFlow(userId)
         }
     }
 
@@ -4393,7 +4393,7 @@ class VaultRepositoryTest {
             val orgCipher = createMockCipher(3).copy(deletedDate = null)
 
             coEvery {
-                vaultDiskSource.getCiphers(userId)
+                vaultDiskSource.getCiphersFlow(userId)
             } returns flowOf(listOf(userCipher, deletedCipher, orgCipher))
 
             coEvery {
@@ -4430,7 +4430,7 @@ class VaultRepositoryTest {
             val userId = "mockId-1"
 
             coEvery {
-                vaultDiskSource.getCiphers(userId)
+                vaultDiskSource.getCiphersFlow(userId)
             } returns flowOf(listOf(createMockCipher(1)))
 
             coEvery {
@@ -4793,7 +4793,7 @@ class VaultRepositoryTest {
         foldersFlow: Flow<List<SyncResponseJson.Folder>> = bufferedMutableSharedFlow(),
         sendsFlow: Flow<List<SyncResponseJson.Send>> = bufferedMutableSharedFlow(),
     ) {
-        coEvery { vaultDiskSource.getCiphers(MOCK_USER_STATE.activeUserId) } returns ciphersFlow
+        coEvery { vaultDiskSource.getCiphersFlow(MOCK_USER_STATE.activeUserId) } returns ciphersFlow
         coEvery {
             vaultDiskSource.getCollections(MOCK_USER_STATE.activeUserId)
         } returns collectionsFlow

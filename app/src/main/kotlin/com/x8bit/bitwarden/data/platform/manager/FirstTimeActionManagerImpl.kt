@@ -246,7 +246,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
         return authDiskSource
             .getShowImportLoginsFlow(userId)
             .combine(
-                vaultDiskSource.getCiphers(userId),
+                vaultDiskSource.getCiphersFlow(userId),
             ) { showImportLogins, ciphers ->
                 showImportLogins ?: true && ciphers.isEmpty()
             }
@@ -260,7 +260,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
         return settingsDiskSource
             .getShowImportLoginsSettingBadgeFlow(userId)
             .combine(
-                vaultDiskSource.getCiphers(userId),
+                vaultDiskSource.getCiphersFlow(userId),
             ) { showImportLogins, ciphers ->
                 showImportLogins ?: false && ciphers.isEmpty()
             }
@@ -297,7 +297,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
             .flatMapLatest { activeUserId ->
                 combine(
                     flow = this,
-                    flow2 = vaultDiskSource.getCiphers(activeUserId),
+                    flow2 = vaultDiskSource.getCiphersFlow(activeUserId),
                 ) { receiverCurrentValue, ciphers ->
                     receiverCurrentValue && ciphers.none {
                         it.login != null && it.organizationId == null

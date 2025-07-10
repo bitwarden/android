@@ -985,11 +985,7 @@ Pretende mudar para esta conta?</string>
     <string name="privileged_apps">Apps privilegiadas</string>
     <string name="unrecognized_browser">Navegador não reconhecido</string>
     <string name="learn_more_about_using_passkeys_with_bitwarden">Saiba mais sobre a utilização de chaves de acesso com o Bitwarden.</string>
-    <string name="google">Google</string>
-    <string name="the_community">a Comunidade</string>
-    <string name="you">SI</string>
     <string name="all_trusted_apps">Todas as apps de confiança</string>
-    <string name="trusted_by_x">Confiadas por %s</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Tem a certeza de que quer deixar de confiar em %s?</string>
     <string name="installed_apps">Apps instaladas</string>
     <string name="delete_x">Eliminar %s</string>

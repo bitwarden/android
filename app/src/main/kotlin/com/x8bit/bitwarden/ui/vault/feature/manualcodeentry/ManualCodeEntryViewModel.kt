@@ -123,11 +123,6 @@ sealed class ManualCodeEntryEvent {
      * Navigate to the app settings.
      */
     data object NavigateToAppSettings : ManualCodeEntryEvent()
-
-    /**
-     * Show a toast with the given [message].
-     */
-    data class ShowToast(val message: Text) : ManualCodeEntryEvent()
 }
 
 /**

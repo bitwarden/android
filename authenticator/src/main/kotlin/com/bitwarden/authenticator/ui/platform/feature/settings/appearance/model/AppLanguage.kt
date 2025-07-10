@@ -53,7 +53,7 @@ enum class AppLanguage(
     ),
     ENGLISH_BRITISH(
         localeName = "en-GB",
-        text = "English (British)".asText(),
+        text = "English (United Kingdom)".asText(),
     ),
     SPANISH(
         localeName = "es",

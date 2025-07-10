@@ -9,6 +9,12 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 enum class SnackbarRelay {
+    CIPHER_DELETED,
+    CIPHER_MOVED_TO_ORGANIZATION,
+    CIPHER_RESTORED,
+    ENVIRONMENT_SAVED,
+    LOGIN_APPROVAL,
+    LOGIN_SUCCESS,
     LOGINS_IMPORTED,
     SEND_DELETED,
     SEND_UPDATED,

@@ -36,8 +36,11 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -72,7 +75,7 @@ import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenTwoBut
 import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
 import com.bitwarden.authenticator.ui.platform.components.fab.ExpandableFabIcon
 import com.bitwarden.authenticator.ui.platform.components.fab.ExpandableFloatingActionButton
-import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
+import com.bitwarden.authenticator.ui.platform.components.header.AuthenticatorExpandingHeader
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderTextWithSupportLabel
 import com.bitwarden.authenticator.ui.platform.components.model.IconResource
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
@@ -85,6 +88,7 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import kotlinx.coroutines.launch
 
@@ -245,6 +249,9 @@ fun ItemListingScreen(
                 onSyncLearnMoreClick = remember(viewModel) {
                     { viewModel.trySendAction(ItemListingAction.SyncLearnMoreClick) }
                 },
+                onSectionExpandedClick = remember(viewModel) {
+                    { viewModel.trySendAction(ItemListingAction.SectionExpandedClick(it)) }
+                },
             )
         }
 
@@ -358,6 +365,7 @@ private fun ItemListingContent(
     onSyncWithBitwardenClick: () -> Unit,
     onDismissSyncWithBitwardenClick: () -> Unit,
     onSyncLearnMoreClick: () -> Unit,
+    onSectionExpandedClick: (SharedCodesDisplayState.SharedCodesAccountSection) -> Unit,
 ) {
     BitwardenScaffold(
         modifier = Modifier
@@ -414,80 +422,45 @@ private fun ItemListingContent(
         floatingActionButtonPosition = FabPosition.EndOverlay,
         snackbarHost = { FirstTimeSyncSnackbarHost(state = snackbarHostState) },
     ) { paddingValues ->
-        Column(
+        var isLocalHeaderExpanded by rememberSaveable { mutableStateOf(true) }
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
         ) {
-            LazyColumn {
-                item {
-                    ActionCard(
-                        actionCardState = state.actionCard,
-                        onDownloadBitwardenClick = onDownloadBitwardenClick,
-                        onDownloadBitwardenDismissClick = onDismissDownloadBitwardenClick,
-                        onSyncWithBitwardenClick = onSyncWithBitwardenClick,
-                        onSyncWithBitwardenDismissClick = onDismissSyncWithBitwardenClick,
-                        onSyncLearnMoreClick = onSyncLearnMoreClick,
-                        modifier = Modifier.padding(all = 16.dp),
+            item(key = "action_card") {
+                ActionCard(
+                    actionCardState = state.actionCard,
+                    onDownloadBitwardenClick = onDownloadBitwardenClick,
+                    onDownloadBitwardenDismissClick = onDismissDownloadBitwardenClick,
+                    onSyncWithBitwardenClick = onSyncWithBitwardenClick,
+                    onSyncWithBitwardenDismissClick = onDismissSyncWithBitwardenClick,
+                    onSyncLearnMoreClick = onSyncLearnMoreClick,
+                    modifier = Modifier
+                        .padding(all = 16.dp)
+                        .animateItem(),
+                )
+            }
+            if (state.favoriteItems.isNotEmpty()) {
+                item(key = "favorites_header") {
+                    BitwardenListHeaderTextWithSupportLabel(
+                        label = stringResource(id = R.string.favorites),
+                        supportingLabel = state.favoriteItems.count().toString(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .animateItem(),
                     )
                 }
-                if (state.favoriteItems.isNotEmpty()) {
-                    item {
-                        BitwardenListHeaderTextWithSupportLabel(
-                            label = stringResource(id = R.string.favorites),
-                            supportingLabel = state.favoriteItems.count().toString(),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                        )
-                    }
 
-                    item {
-                        Spacer(modifier = Modifier.height(4.dp))
-                    }
-
-                    items(state.favoriteItems) {
-                        VaultVerificationCodeItem(
-                            authCode = it.authCode,
-                            primaryLabel = it.title,
-                            secondaryLabel = it.subtitle,
-                            periodSeconds = it.periodSeconds,
-                            timeLeftSeconds = it.timeLeftSeconds,
-                            alertThresholdSeconds = it.alertThresholdSeconds,
-                            startIcon = it.startIcon,
-                            onItemClick = { onItemClick(it.authCode) },
-                            onDropdownMenuClick = { action ->
-                                onDropdownMenuClick(action, it)
-                            },
-                            showMoveToBitwarden = it.showMoveToBitwarden,
-                            allowLongPress = it.allowLongPressActions,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                    }
-
-                    item {
-                        HorizontalDivider(
-                            thickness = 1.dp,
-                            color = MaterialTheme.colorScheme.outlineVariant,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(all = 16.dp),
-                        )
-                    }
+                item {
+                    Spacer(modifier = Modifier.height(4.dp))
                 }
 
-                if (state.shouldShowLocalHeader) {
-                    item {
-                        BitwardenListHeaderText(
-                            label = stringResource(id = R.string.local_codes),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                        )
-                    }
-                }
-
-                items(state.itemList) {
+                items(
+                    items = state.favoriteItems,
+                    key = { "favorite_item_${it.id}" },
+                ) {
                     VaultVerificationCodeItem(
                         authCode = it.authCode,
                         primaryLabel = it.title,
@@ -506,24 +479,87 @@ private fun ItemListingContent(
                     )
                 }
 
-                // If there are any items in the local lists, add a spacer between
-                // local codes and shared codes:
-                if (state.itemList.isNotEmpty() || state.favoriteItems.isNotEmpty()) {
-                    item {
-                        Spacer(Modifier.height(16.dp))
-                    }
+                item(key = "favorites_divider") {
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(all = 16.dp)
+                            .animateItem(),
+                    )
                 }
+            }
 
-                when (state.sharedItems) {
-                    is SharedCodesDisplayState.Codes -> {
-                        items(state.sharedItems.sections) { section ->
-                            BitwardenListHeaderText(
+            if (state.shouldShowLocalHeader) {
+                item(key = "local_items_header") {
+                    AuthenticatorExpandingHeader(
+                        label = stringResource(id = R.string.local_codes, state.itemList.size),
+                        isExpanded = isLocalHeaderExpanded,
+                        onClick = { isLocalHeaderExpanded = !isLocalHeaderExpanded },
+                        onClickLabel = if (isLocalHeaderExpanded) {
+                            stringResource(R.string.local_items_are_expanded_click_to_collapse)
+                        } else {
+                            stringResource(R.string.local_items_are_collapsed_click_to_expand)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItem(),
+                    )
+                }
+            }
+
+            if (isLocalHeaderExpanded) {
+                items(
+                    items = state.itemList,
+                    key = { "local_item_${it.id}" },
+                ) {
+                    VaultVerificationCodeItem(
+                        authCode = it.authCode,
+                        primaryLabel = it.title,
+                        secondaryLabel = it.subtitle,
+                        periodSeconds = it.periodSeconds,
+                        timeLeftSeconds = it.timeLeftSeconds,
+                        alertThresholdSeconds = it.alertThresholdSeconds,
+                        startIcon = it.startIcon,
+                        onItemClick = { onItemClick(it.authCode) },
+                        onDropdownMenuClick = { action ->
+                            onDropdownMenuClick(action, it)
+                        },
+                        showMoveToBitwarden = it.showMoveToBitwarden,
+                        allowLongPress = it.allowLongPressActions,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItem(),
+                    )
+                }
+            }
+
+            when (state.sharedItems) {
+                is SharedCodesDisplayState.Codes -> {
+                    state.sharedItems.sections.forEachIndexed { index, section ->
+                        item(key = "sharedSection_${section.label}") {
+                            AuthenticatorExpandingHeader(
                                 label = section.label(),
+                                isExpanded = section.isExpanded,
+                                onClick = {
+                                    onSectionExpandedClick(section)
+                                },
+                                onClickLabel = if (section.isExpanded) {
+                                    stringResource(R.string.items_expanded_click_to_collapse)
+                                } else {
+                                    stringResource(R.string.items_are_collapsed_click_to_expand)
+                                },
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
+                                    .animateItem(),
                             )
-                            section.codes.forEach {
+                        }
+                        if (section.isExpanded) {
+                            items(
+                                items = section.codes,
+                                key = { code -> "code_${code.id}" },
+                            ) {
                                 VaultVerificationCodeItem(
                                     authCode = it.authCode,
                                     primaryLabel = it.title,
@@ -538,27 +574,33 @@ private fun ItemListingContent(
                                     },
                                     showMoveToBitwarden = it.showMoveToBitwarden,
                                     allowLongPress = it.allowLongPressActions,
-                                    modifier = Modifier.fillMaxWidth(),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .animateItem(),
                                 )
                             }
                         }
                     }
+                }
 
-                    SharedCodesDisplayState.Error -> item {
+                SharedCodesDisplayState.Error -> {
+                    item(key = "shared_codes_error") {
                         Text(
                             text = stringResource(R.string.shared_codes_error),
-                            modifier = Modifier.padding(horizontal = 16.dp),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .animateItem(),
                         )
                     }
                 }
+            }
 
-                // Add a spacer item to prevent the FAB from hiding verification codes at the
-                // bottom of the list
-                item {
-                    Spacer(Modifier.height(72.dp))
-                }
+            // Add a spacer item to prevent the FAB from hiding verification codes at the
+            // bottom of the list
+            item {
+                Spacer(Modifier.height(72.dp))
             }
         }
     }
@@ -864,4 +906,73 @@ private fun EmptyListingContentPreview() {
         onSyncLearnMoreClick = { },
         onDismissSyncWithBitwardenClick = { },
     )
+}
+
+@Suppress("LongMethod")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Preview(showBackground = true)
+private fun ContentPreview() {
+    BitwardenTheme {
+        ItemListingContent(
+            state = ItemListingState.ViewState.Content(
+                actionCard = ItemListingState.ActionCardState.None,
+                favoriteItems = emptyList(),
+                itemList = listOf(
+                    VerificationCodeDisplayItem(
+                        id = "",
+                        title = "Local item",
+                        subtitle = "with a subtitle",
+                        timeLeftSeconds = 20,
+                        periodSeconds = 30,
+                        alertThresholdSeconds = 15,
+                        authCode = "123456",
+                        favorite = false,
+                        showMoveToBitwarden = true,
+                        allowLongPressActions = true,
+                    ),
+                ),
+                sharedItems = SharedCodesDisplayState.Codes(
+                    sections = listOf(
+                        SharedCodesDisplayState.SharedCodesAccountSection(
+                            id = "id",
+                            label =
+                                "longemailaddress+verification+codes@email.com | Bitawrden.eu (1)"
+                                    .asText(),
+                            codes = listOf(
+                                VerificationCodeDisplayItem(
+                                    id = "",
+                                    title = "Shared item",
+                                    subtitle = "with a subtitle",
+                                    timeLeftSeconds = 15,
+                                    periodSeconds = 30,
+                                    alertThresholdSeconds = 15,
+                                    authCode = "123456",
+                                    favorite = false,
+                                    showMoveToBitwarden = false,
+                                    allowLongPressActions = false,
+                                ),
+                            ),
+                            isExpanded = true,
+                        ),
+                    ),
+                ),
+            ),
+            snackbarHostState = remember { SnackbarHostState() },
+            scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
+                rememberTopAppBarState(),
+            ),
+            onNavigateToSearch = { },
+            onScanQrCodeClick = { },
+            onEnterSetupKeyClick = { },
+            onItemClick = { },
+            onDropdownMenuClick = { _, _ -> },
+            onDownloadBitwardenClick = { },
+            onDismissDownloadBitwardenClick = { },
+            onSyncWithBitwardenClick = { },
+            onDismissSyncWithBitwardenClick = { },
+            onSyncLearnMoreClick = { },
+            onSectionExpandedClick = { },
+        )
+    }
 }

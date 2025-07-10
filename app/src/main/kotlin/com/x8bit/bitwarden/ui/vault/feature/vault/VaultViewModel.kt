@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
@@ -66,14 +67,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import javax.inject.Inject
-import kotlin.collections.emptyList
-import kotlin.collections.map
+
+private const val LOGIN_SUCCESS_SNACKBAR_DELAY: Long = 550L
 
 /**
  * Manages [VaultState], handles [VaultAction], and launches [VaultEvent] for the [VaultScreen].
@@ -169,8 +171,20 @@ class VaultViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        snackbarRelayManager
-            .getSnackbarDataFlow(SnackbarRelay.LOGINS_IMPORTED)
+        merge(
+            snackbarRelayManager
+                .getSnackbarDataFlow(SnackbarRelay.LOGIN_SUCCESS)
+                .onEach {
+                    // When the login success relay is triggered, the current activity is about to
+                    // be recreated. Adding this delay prevents the Snackbar from disappearing.
+                    delay(timeMillis = LOGIN_SUCCESS_SNACKBAR_DELAY)
+                },
+            snackbarRelayManager.getSnackbarDataFlow(
+                SnackbarRelay.CIPHER_DELETED,
+                SnackbarRelay.CIPHER_RESTORED,
+                SnackbarRelay.LOGINS_IMPORTED,
+            ),
+        )
             .map { VaultAction.Internal.SnackbarDataReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -252,15 +266,12 @@ class VaultViewModel @Inject constructor(
 
     private fun handleSelectAddItemType() {
         // If policy is enable for any organization, exclude the card option
-        var excludedOptions =
-            if (!state.restrictItemTypesPolicyOrgIds.isNullOrEmpty()) {
-                persistentListOf(
-                    CreateVaultItemType.SSH_KEY,
-                    CreateVaultItemType.CARD,
-                )
-            } else {
-                persistentListOf(CreateVaultItemType.SSH_KEY)
-            }
+        val excludedOptions = persistentListOfNotNull(
+            CreateVaultItemType.SSH_KEY,
+            CreateVaultItemType.CARD.takeUnless {
+                state.restrictItemTypesPolicyOrgIds.isNullOrEmpty()
+            },
+        )
 
         mutableStateFlow.update {
             it.copy(
@@ -816,11 +827,7 @@ class VaultViewModel @Inject constructor(
 
     private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
         if (state.dialog == VaultState.DialogState.Syncing) {
-            sendEvent(
-                VaultEvent.ShowToast(
-                    message = R.string.syncing_complete.asText(),
-                ),
-            )
+            sendEvent(VaultEvent.ShowSnackbar(message = R.string.syncing_complete.asText()))
         }
         updateVaultState(vaultData.data)
     }
@@ -1378,14 +1385,25 @@ sealed class VaultEvent {
     data object PromptForAppReview : VaultEvent()
 
     /**
-     * Show a toast with the given [message].
-     */
-    data class ShowToast(val message: Text) : VaultEvent()
-
-    /**
      * Show a snackbar with the given [data].
      */
-    data class ShowSnackbar(val data: BitwardenSnackbarData) : VaultEvent(), BackgroundEvent
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : VaultEvent(), BackgroundEvent {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 
     /**
      * Navigate to the add folder screen

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.InitOrgCryptoRequest
+import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.Kdf
@@ -22,6 +23,7 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.EncryptionContext
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
@@ -225,6 +227,17 @@ interface VaultSdkSource {
         userId: String,
         cipherList: List<Cipher>,
     ): Result<List<CipherView>>
+
+    /**
+     * Decrypts a list of [Cipher]s for the user with the given [userId].
+     *
+     * @return A [DecryptCipherListResult] containing the decrypted [CipherListView]s and references
+     * to [Cipher]s that cannot be decrypted.
+     */
+    suspend fun decryptCipherListWithFailures(
+        userId: String,
+        cipherList: List<Cipher>,
+    ): Result<DecryptCipherListResult>
 
     /**
      * Decrypts a [Collection] for the user with the given [userId], returning a [CollectionView]

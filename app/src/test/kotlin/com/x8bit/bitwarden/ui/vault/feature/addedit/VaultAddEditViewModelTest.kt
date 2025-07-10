@@ -71,7 +71,9 @@ import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
@@ -196,6 +198,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     private val featureFlagManager: FeatureFlagManager = mockk {
         every { getFeatureFlag(key = FlagKey.RestrictCipherItemDeletion) } returns false
+    }
+    private val mutableSnackbarDataFlow: MutableSharedFlow<BitwardenSnackbarData> =
+        bufferedMutableSharedFlow()
+    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+        every {
+            getSnackbarDataFlow(relay = any(), relays = anyVararg())
+        } returns mutableSnackbarDataFlow
     }
 
     @BeforeEach
@@ -498,6 +507,16 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAddEditAction.Common.CloseClick)
             assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
+        }
+    }
+
+    @Test
+    fun `snackbar relay emission should send ShowSnackbar`() = runTest {
+        val viewModel = createAddVaultItemViewModel()
+        val snackbarData = mockk<BitwardenSnackbarData>()
+        viewModel.eventFlow.test {
+            mutableSnackbarDataFlow.emit(snackbarData)
+            assertEquals(VaultAddEditEvent.ShowSnackbar(snackbarData), awaitItem())
         }
     }
 
@@ -3474,6 +3493,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 bitwardenCredentialManager = bitwardenCredentialManager,
                 generatorRepository = generatorRepository,
                 settingsRepository = settingsRepository,
+                snackbarRelayManager = snackbarRelayManager,
                 specialCircumstanceManager = specialCircumstanceManager,
                 resourceManager = resourceManager,
                 clock = fixedClock,
@@ -4860,6 +4880,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             bitwardenCredentialManager = bitwardenCredentialManager,
             generatorRepository = generatorRepo,
             settingsRepository = settingsRepository,
+            snackbarRelayManager = snackbarRelayManager,
             specialCircumstanceManager = specialCircumstanceManager,
             resourceManager = bitwardenResourceManager,
             clock = clock,

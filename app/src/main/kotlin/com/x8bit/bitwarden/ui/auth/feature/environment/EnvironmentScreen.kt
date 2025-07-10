@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.environment
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,7 +19,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -44,6 +42,8 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialo
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalKeyChainManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -64,7 +64,6 @@ fun EnvironmentScreen(
     viewModel: EnvironmentViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     val certificateImportFilePickerLauncher = intentManager.getActivityResultLauncher { result ->
         intentManager.getFileDataFromActivityResult(result)?.let {
             viewModel.trySendAction(
@@ -73,13 +72,11 @@ fun EnvironmentScreen(
         }
     }
     val scope = rememberCoroutineScope()
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is EnvironmentEvent.NavigateBack -> onNavigateBack.invoke()
-            is EnvironmentEvent.ShowToast -> {
-                Toast.makeText(context, event.message(context.resources), Toast.LENGTH_SHORT).show()
-            }
-
+            is EnvironmentEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
             is EnvironmentEvent.ShowCertificateImportFileChooser -> {
                 certificateImportFilePickerLauncher.launch(
                     intentManager.createFileChooserIntent(withCameraIntents = false),
@@ -205,6 +202,9 @@ fun EnvironmentScreen(
                     )
                 },
             )
+        },
+        snackbarHost = {
+            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
         },
     ) {
         Column(
