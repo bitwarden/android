@@ -61,6 +61,11 @@ interface CipherManager {
     ): DownloadAttachmentResult
 
     /**
+     * Attempt to retrieve a decrypted cipher based on the [cipherId].
+     */
+    suspend fun getCipher(cipherId: String): GetCipherResult
+
+    /**
      * Attempt to delete a cipher.
      */
     suspend fun hardDeleteCipher(

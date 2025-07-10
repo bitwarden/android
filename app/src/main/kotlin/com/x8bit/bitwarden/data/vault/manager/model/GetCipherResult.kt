@@ -6,7 +6,6 @@ import com.bitwarden.vault.CipherView
  * Models result of getting a cipher.
  */
 sealed class GetCipherResult {
-
     /**
      * Cipher retrieved successfully.
      *
@@ -19,14 +18,12 @@ sealed class GetCipherResult {
     /**
      * Cipher not found.
      */
-    object CipherNotFound : GetCipherResult()
+    data object CipherNotFound : GetCipherResult()
 
     /**
-     * Generic error while retrieving cipher. The optional [errorMessage] may be displayed directly
-     * in the UI when present.
+     * Generic error while retrieving cipher.
      */
-    data class Error(
-        val errorMessage: String?,
-        val error: Throwable?,
+    data class Failure(
+        val error: Throwable,
     ) : GetCipherResult()
 }

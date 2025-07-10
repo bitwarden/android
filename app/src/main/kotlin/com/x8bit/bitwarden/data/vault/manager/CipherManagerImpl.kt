@@ -243,6 +243,24 @@ class CipherManagerImpl(
             }
     }
 
+    override suspend fun getCipher(cipherId: String): GetCipherResult {
+        val userId = activeUserId ?: return GetCipherResult.Failure(NoActiveUserException())
+        return vaultDiskSource
+            .getCipher(userId = userId, cipherId = cipherId)
+            ?.let { syncResponseCipher ->
+                vaultSdkSource
+                    .decryptCipher(
+                        userId = userId,
+                        cipher = syncResponseCipher.toEncryptedSdkCipher(),
+                    )
+                    .fold(
+                        onSuccess = { GetCipherResult.Success(it) },
+                        onFailure = { GetCipherResult.Failure(it) },
+                    )
+            }
+            ?: GetCipherResult.CipherNotFound
+    }
+
     override suspend fun restoreCipher(
         cipherId: String,
         cipherView: CipherView,

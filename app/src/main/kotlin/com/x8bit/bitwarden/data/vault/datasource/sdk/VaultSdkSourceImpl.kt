@@ -300,6 +300,17 @@ class VaultSdkSourceImpl(
                 .decryptListWithFailures(cipherList)
         }
 
+    override suspend fun decryptCipherListWithFailures(
+        userId: String,
+        cipherList: List<Cipher>,
+    ): Result<DecryptCipherListResult> =
+        runCatchingWithLogs {
+            getClient(userId = userId)
+                .vault()
+                .ciphers()
+                .decryptListWithFailures(cipherList)
+        }
+
     override suspend fun decryptCollection(
         userId: String,
         collection: Collection,

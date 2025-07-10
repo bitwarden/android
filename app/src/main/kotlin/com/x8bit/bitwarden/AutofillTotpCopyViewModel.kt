@@ -54,13 +54,12 @@ class AutofillTotpCopyViewModel @Inject constructor(
                     return@launchWithTimeout
                 }
 
+                // Try and find the matching cipher.
                 when (val result = vaultRepository.getCipher(cipherId = cipherId)) {
                     GetCipherResult.CipherNotFound -> finishActivity()
-                    is GetCipherResult.Error -> finishActivity()
+                    is GetCipherResult.Failure -> finishActivity()
                     is GetCipherResult.Success -> {
-                        sendEvent(
-                            AutofillTotpCopyEvent.CompleteAutofill(cipherView = result.cipherView),
-                        )
+                        sendEvent(AutofillTotpCopyEvent.CompleteAutofill(result.cipherView))
                     }
                 }
             }

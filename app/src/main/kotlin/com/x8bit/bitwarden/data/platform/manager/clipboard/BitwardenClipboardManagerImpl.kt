@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager.clipboard
 
 import android.content.ClipData
+import android.content.ClipDescription
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Build
@@ -43,11 +44,15 @@ class BitwardenClipboardManagerImpl(
                 .newPlainText("", text)
                 .apply {
                     description.extras = persistableBundleOf(
-                        "android.content.extra.IS_SENSITIVE" to isSensitive,
+                        if (isBuildVersionAtLeast(version = Build.VERSION_CODES.TIRAMISU)) {
+                            ClipDescription.EXTRA_IS_SENSITIVE to isSensitive
+                        } else {
+                            "android.content.extra.IS_SENSITIVE" to isSensitive
+                        },
                     )
                 },
         )
-        if (isBuildVersionAtLeast(version = Build.VERSION_CODES.S_V2)) {
+        if (!isBuildVersionAtLeast(version = Build.VERSION_CODES.TIRAMISU)) {
             val descriptor = toastDescriptorOverride
                 ?.let { context.resources.getString(R.string.value_has_been_copied, it) }
                 ?: context.resources.getString(
