@@ -61,6 +61,10 @@ jobs:
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
+      - name: Install saucectl
+        run: |
+          npm i -g saucectl
+
       - name: Log in to Azure
         uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
         with:
@@ -120,14 +124,9 @@ jobs:
         run: |
           ./gradlew :app:assembleStandardReleaseAndroidTest
 
-      - name: Install saucectl
-        run: |
-          curl -L https://github.com/saucelabs/saucectl/releases/latest/download/saucectl_linux_amd64.tar.gz | tar -xz
-          sudo mv saucectl /usr/local/bin/
-
       - name: Upload app APK to SauceLabs storage
         run: |
-          saucectl storage upload --app app/build/outputs/apk/standard/release/com.x8bit.bitwarden.apk
+          saucectl storage upload app/build/outputs/apk/standard/release/com.x8bit.bitwarden.apk
         env:
           SAUCE_USERNAME: ${{ steps.get-e2e-secrets.outputs.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ steps.get-e2e-secrets.outputs.SAUCE_ACCESS_KEY }}
