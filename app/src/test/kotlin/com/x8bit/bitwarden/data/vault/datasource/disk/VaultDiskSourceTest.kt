@@ -106,6 +106,21 @@ class VaultDiskSourceTest {
     }
 
     @Test
+    fun `getTotpCiphers should return all CiphersDao totp ciphers`() = runTest {
+        val cipherEntities = listOf(
+            CIPHER_ENTITY,
+            CIPHER_ENTITY.copy(id = "otherCipherId", hasTotp = false),
+        )
+        val ciphers = listOf(CIPHER_1)
+
+        val result1 = vaultDiskSource.getTotpCiphers(USER_ID)
+        assertEquals(emptyList<SyncResponseJson.Cipher>(), result1)
+        ciphersDao.insertCiphers(cipherEntities)
+        val result2 = vaultDiskSource.getTotpCiphers(USER_ID)
+        assertEquals(ciphers, result2)
+    }
+
+    @Test
     fun `getCipher should return CiphersDao cipher`() = runTest {
         val cipherEntities = listOf(CIPHER_ENTITY)
 
@@ -450,6 +465,7 @@ private const val CIPHER_JSON = """
 private val CIPHER_ENTITY = CipherEntity(
     id = "mockId-1",
     userId = USER_ID,
+    hasTotp = true,
     cipherType = "1",
     cipherJson = CIPHER_JSON,
 )

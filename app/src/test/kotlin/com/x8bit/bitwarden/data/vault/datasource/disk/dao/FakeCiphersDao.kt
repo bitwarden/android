@@ -41,6 +41,9 @@ class FakeCiphersDao : CiphersDao {
     override suspend fun getAllCiphers(userId: String): List<CipherEntity> =
         storedCiphers.filter { it.userId == userId }
 
+    override suspend fun getAllTotpCiphers(userId: String): List<CipherEntity> =
+        storedCiphers.filter { it.userId == userId && it.hasTotp }
+
     override suspend fun getCipher(userId: String, cipherId: String): CipherEntity? =
         storedCiphers.find { it.userId == userId && it.id == cipherId }
 
