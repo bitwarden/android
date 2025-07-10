@@ -1,5 +1,6 @@
 package com.bitwarden.data.repository
 
+import android.util.Log
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.manager.DispatcherManager
@@ -40,6 +41,8 @@ internal class ServerConfigRepositoryImpl(
                 .isAfter(
                     clock.instant().plusSeconds(MINIMUM_CONFIG_SYNC_INTERVAL_SEC),
                 )
+        Log.d("ServerConfigRepository", "needsRefresh: $needsRefresh")
+        Log.d("ServerConfigRepository", "lastSync: ${localConfig?.lastSync}")
 
         if (needsRefresh || forceRefresh) {
             configService
@@ -50,6 +53,24 @@ internal class ServerConfigRepositoryImpl(
                         serverData = configResponse,
                     )
                     configDiskSource.serverConfig = serverConfig
+                    val featureStatesMap = serverConfig.serverData.featureStates
+
+                    Log.d("ServerConfigRepository", "Will check for flags")
+                    if (featureStatesMap != null) {
+                        // Option 3: Specifically print the value for "enable-pm-bwa-sync"
+                        val specificValue = featureStatesMap["enable-pm-bwa-sync"]
+                        if (specificValue != null) {
+                            Log.d(
+                                "ServerConfigRepository",
+                                "Feature 'enable-pm-bwa-sync': $specificValue"
+                            )
+                        } else {
+                            Log.d(
+                                "ServerConfigRepository",
+                                "Feature 'enable-pm-bwa-sync' not found."
+                            )
+                        }
+                    }
                     return serverConfig
                 }
         }

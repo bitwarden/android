@@ -1,6 +1,5 @@
 package com.bitwarden.authenticator.data.platform.repository
 
-import com.bitwarden.authenticator.BuildConfig
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.bitwarden.authenticator.data.platform.manager.getFlagValueOrDefault
 import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
@@ -22,7 +21,7 @@ class DebugMenuRepositoryImpl(
         .onSubscription { emit(Unit) }
 
     override val isDebugMenuEnabled: Boolean
-        get() = BuildConfig.HAS_DEBUG_MENU
+        get() = true // BuildConfig.HAS_DEBUG_MENU
 
     override fun <T : Any> updateFeatureFlag(key: FlagKey<T>, value: T) {
         featureFlagOverrideDiskSource.saveFeatureFlag(key = key, value = value)
