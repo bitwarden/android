@@ -25,6 +25,7 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.EncryptionContext
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
@@ -309,6 +310,17 @@ class VaultSdkSourceImpl(
             withContext(context = dispatcherManager.default) {
                 cipherList.map { async { ciphers.decrypt(cipher = it) } }.awaitAll()
             }
+        }
+
+    override suspend fun decryptCipherListWithFailures(
+        userId: String,
+        cipherList: List<Cipher>,
+    ): Result<DecryptCipherListResult> =
+        runCatchingWithLogs {
+            getClient(userId = userId)
+                .vault()
+                .ciphers()
+                .decryptListWithFailures(cipherList)
         }
 
     override suspend fun decryptCollection(
