@@ -32,11 +32,11 @@ inline fun <reified T> Bundle.getSafeParcelableExtra(
  */
 fun Intent.validate(): Intent =
     try {
-        // This will force Android to attempt unparcelling the extras
-        IntentSanitizer.Builder()
-            .allowAnyComponent()
-            .build()
-            .sanitizeByFiltering(this)
+        // This will force Android to attempt to fetch each item and verify it is valid
+        this.extras?.let { bundle ->
+            bundle.keySet().forEach { @Suppress("DEPRECATION") bundle.get(it) }
+        }
+        this
     } catch (_: BadParcelableException) {
         this.replaceExtras(null as Bundle?)
     } catch (_: ClassNotFoundException) {
