@@ -58,10 +58,6 @@ class FlagKeyTest {
             "mobile-error-reporting",
         )
         assertEquals(
-            FlagKey.FlightRecorder.keyName,
-            "enable-pm-flight-recorder",
-        )
-        assertEquals(
             FlagKey.RestrictCipherItemDeletion.keyName,
             "pm-15493-restrict-item-deletion-to-can-manage-permission",
         )
@@ -95,7 +91,6 @@ class FlagKeyTest {
                 FlagKey.CipherKeyEncryption,
                 FlagKey.ChromeAutofill,
                 FlagKey.MobileErrorReporting,
-                FlagKey.FlightRecorder,
                 FlagKey.RestrictCipherItemDeletion,
                 FlagKey.PreAuthSettings,
                 FlagKey.UserManagedPrivilegedApps,
