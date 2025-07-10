@@ -3180,7 +3180,7 @@ class VaultRepositoryTest {
             )
 
             every {
-                totpCodeManager.getTotpCodeStateFlow(userId = userId, any())
+                totpCodeManager.getTotpCodeStateFlow(userId = userId, cipher = any())
             } returns stateFlow
 
             setupDataStateFlow(userId = userId)

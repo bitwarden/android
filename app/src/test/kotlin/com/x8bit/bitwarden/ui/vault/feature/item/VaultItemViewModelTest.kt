@@ -2482,7 +2482,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             periodSeconds = 30,
             timeLeftSeconds = 30,
             verificationCode = "123456",
-            totpCode = "mockTotp-1",
         )
 
     private fun setupMockUri() {
@@ -2549,8 +2548,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 passwordRevisionDate = R.string.password_last_updated.asText("12/31/69 06:16 PM"),
                 isPremiumUser = true,
                 totpCodeItemData = TotpCodeItemData(
-                    totpCode = "otpauth://totp/Example:alice@google.com" +
-                        "?secret=JBSWY3DPEHPK3PXP&issuer=Example",
                     verificationCode = "123456",
                     timeLeftSeconds = 15,
                     periodSeconds = 30,

@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
-import com.bitwarden.core.DateTime
 import com.bitwarden.core.DeriveKeyConnectorRequest
 import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.InitOrgCryptoRequest
@@ -71,6 +70,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.security.MessageDigest
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
 @Suppress("LargeClass")
 class VaultSdkSourceTest {
@@ -1030,7 +1032,7 @@ class VaultSdkSourceTest {
         val totpResponse = TotpResponse("TestCode", 30u)
         coEvery { clientVault.generateTotp(any(), any()) } returns totpResponse
 
-        val time = DateTime.now()
+        val time = FIXED_CLOCK.instant()
         val result = vaultSdkSource.generateTotp(
             userId = userId,
             totp = "Totp",
@@ -1468,4 +1470,8 @@ private val DEFAULT_FIDO_2_AUTH_REQUEST = AuthenticateFido2CredentialRequest(
     ),
     isUserVerificationSupported = true,
     selectedCipherView = createMockCipherView(number = 1),
+)
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse("2023-10-27T12:00:00Z"),
+    ZoneOffset.UTC,
 )
