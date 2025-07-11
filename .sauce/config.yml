@@ -19,7 +19,7 @@ reporters:
     filename: saucectl-report.xml
 espresso:
   app: storage:filename=com.x8bit.bitwarden.apk
-  testApp: storage:filename=com.x8bit.bitwarden-androidTest.apk
+  testApp: storage:filename=com.x8bit.bitwarden-standard-release-androidTest.apk
 suites:
   - name: "Android - Sanity"
     devices:
