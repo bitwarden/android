@@ -1049,6 +1049,37 @@ class VaultSdkSourceTest {
     }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `generateTotpForCipherListView should call SDK and return a Result with correct data`() =
+        runTest {
+            val userId = "userId"
+            val totpResponse = TotpResponse("TestCode", 30u)
+
+            coEvery {
+                clientVault.generateTotpCipherView(
+                    view = any(),
+                    time = any(),
+                )
+            } returns totpResponse
+
+            val result = vaultSdkSource.generateTotpForCipherListView(
+                userId = userId,
+                cipherListView = mockk(),
+                time = mockk(),
+            )
+
+            assertEquals(totpResponse.asSuccess(), result)
+            coVerify {
+                clientVault.generateTotpCipherView(
+                    view = any(),
+                    time = any(),
+                )
+            }
+
+            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
+        }
+
+    @Test
     fun `moveToOrganization should call SDK and a Result with correct data`() = runTest {
         val userId = "userId"
         val organizationId = "organizationId"
