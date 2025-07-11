@@ -23,7 +23,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
         -> Unit
 
     FlagKey.BitwardenAuthenticationEnabled,
-    FlagKey.PasswordManagerSync,
         -> BooleanFlagItem(
         label = flagKey.getDisplayLabel(),
         key = flagKey as FlagKey<Boolean>,
@@ -63,6 +62,4 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
 
     FlagKey.BitwardenAuthenticationEnabled ->
         stringResource(R.string.bitwarden_authentication_enabled)
-
-    FlagKey.PasswordManagerSync -> stringResource(R.string.password_manager_sync)
 }

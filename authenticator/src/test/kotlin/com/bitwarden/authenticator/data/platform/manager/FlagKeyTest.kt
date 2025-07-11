@@ -12,10 +12,6 @@ class FlagKeyTest {
             FlagKey.BitwardenAuthenticationEnabled.keyName,
             "bitwarden-authentication-enabled",
         )
-        assertEquals(
-            FlagKey.PasswordManagerSync.keyName,
-            "enable-pm-bwa-sync",
-        )
     }
 
     @Test
@@ -23,7 +19,6 @@ class FlagKeyTest {
         assertTrue(
             listOf(
                 FlagKey.BitwardenAuthenticationEnabled,
-                FlagKey.PasswordManagerSync,
             ).all {
                 !it.defaultValue
             },
