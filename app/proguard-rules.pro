@@ -132,3 +132,10 @@
 -keep class androidx.test.ext.junit.** { *; }
 -keep class androidx.test.ext.** { *; }
 -keep class androidx.test.** { *; }
+
+# Keep Compose test classes
+-keep class androidx.compose.ui.test.** { *; }
+-keep class androidx.compose.ui.test.junit4.** { *; }
+
+# Keep Gson classes
+-keep class com.google.gson.** { *; }

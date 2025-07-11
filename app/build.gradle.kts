@@ -286,7 +286,6 @@ dependencies {
     testImplementation(testFixtures(project(":network")))
     testImplementation(testFixtures(project(":ui")))
 
-    testImplementation(libs.androidx.compose.ui.test)
     testImplementation(libs.google.hilt.android.testing)
     testImplementation(platform(libs.junit.bom))
     testRuntimeOnly(libs.junit.platform.launcher)
@@ -301,10 +300,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit.ktx)
     androidTestImplementation(libs.androidx.ui.test.junit4.android)
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.6.0")
-    androidTestImplementation("androidx.test:runner:1.6.0")
-    androidTestImplementation("androidx.test:rules:1.6.0")
-    androidTestImplementation("com.google.code.gson:gson:2.8.9")
+    androidTestImplementation(libs.androidx.compose.ui.test)
+    androidTestImplementation(libs.google.gson)
 }
 
 tasks {
