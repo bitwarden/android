@@ -31,7 +31,6 @@ detekt = "1.23.8"
 firebaseBom = "33.16.0"
 glide = "1.0.0-beta01"
 googleGuava = "33.4.8-jre"
-googleGson = "2.10.1"
 googleProtoBufJava = "4.31.1"
 googleProtoBufPlugin = "0.9.5"
 googleServices = "4.4.3"
@@ -102,7 +101,6 @@ detekt-detekt-rules = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libra
 google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 google-firebase-cloud-messaging = { module = "com.google.firebase:firebase-messaging" }
 google-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
-google-gson = { module = "com.google.code.gson:gson", version.ref = "googleGson" }
 google-guava = { module = "com.google.guava:guava", version.ref = "googleGuava" }
 google-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 google-hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }

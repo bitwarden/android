@@ -301,7 +301,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit.ktx)
     androidTestImplementation(libs.androidx.ui.test.junit4.android)
     androidTestImplementation(libs.androidx.compose.ui.test)
-    androidTestImplementation(libs.google.gson)
 }
 
 tasks {

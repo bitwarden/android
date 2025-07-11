@@ -137,5 +137,7 @@
 -keep class androidx.compose.ui.test.** { *; }
 -keep class androidx.compose.ui.test.junit4.** { *; }
 
-# Keep Gson classes
--keep class com.google.gson.** { *; }
+# Keep Kotlin standard library classes
+-keep class kotlin.** { *; }
+-keep class kotlinx.** { *; }
+-keep class kotlin.io.** { *; }
