@@ -25,7 +25,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
         Unit
     }
 
-    FlagKey.AuthenticatorSync,
     FlagKey.EmailVerification,
     FlagKey.ImportLoginsFlow,
     FlagKey.CredentialExchangeProtocolImport,
@@ -82,7 +81,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.DummyString,
         -> this.keyName
 
-    FlagKey.AuthenticatorSync -> stringResource(R.string.authenticator_sync)
     FlagKey.EmailVerification -> stringResource(R.string.email_verification)
     FlagKey.ImportLoginsFlow -> stringResource(R.string.import_logins_flow)
     FlagKey.CredentialExchangeProtocolImport -> stringResource(R.string.cxp_import)
