@@ -1,16 +1,146 @@
-
-name: Publish
-
+name: Publish to Google Play
+run-name: "Promoting ${{ inputs.product }} ${{ inputs.version-code }} from ${{ inputs.track-from }} to ${{ inputs.track-target }}"
 on:
   workflow_dispatch:
+    inputs:
+      product:
+        description: "Which app is being released."
+        type: choice
+        options:
+          - Password Manager
+          - Authenticator
+      version-name:
+        description: "Version name to promote to production ex 2025.1.1"
+        type: string
+      version-code:
+        description: "Build number to promote to production."
+        required: true
+        type: string
+      rollout-percentage:
+          description: "Percentage of users who will receive this version update."
+          required: true
+          type: choice
+          options:
+            - 10%
+            - 30%
+            - 50%
+            - 100%
+          default: 10%
+      release-notes:
+        description: "Change notes to be included with this release."
+        type: string
+        default: "Bug fixes."
+        required: true
+      track-from:
+        description: "Track to promote from."
+        type: choice
+        options:
+          - internal
+          - Fastlane Automation Source
+        required: true
+        default: "internal"
+      track-target:
+        description: "Track to promote to."
+        type: choice
+        options:
+          - production
+          - Fastlane Automation Target
+        required: true
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_ACTION_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-permissions: {}
+permissions:
+  contents: read
+  packages: read
 
 jobs:
-    publish:
+    promote:
       runs-on: ubuntu-24.04
       name: Promote build to Production in Play Store
 
       steps:
-        - name: TEST STEP
-          run: exit 0
+        - name: Log inputs to job summary
+          run: |
+            echo "<details><summary>Job Inputs</summary>" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            echo '${{ toJson(inputs) }}' >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "</details>" >> $GITHUB_STEP_SUMMARY
+
+        - name: Check out repo
+          uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+        - name: Configure Ruby
+          uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
+          with:
+            bundler-cache: true
+
+        - name: Install Fastlane
+          run: |
+            gem install bundler:2.2.27
+            bundle config path vendor/bundle
+            bundle install --jobs 4 --retry 3
+
+        - name: Log in to Azure
+          uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
+          with:
+            creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+
+        - name: Retrieve secrets
+          env:
+            ACCOUNT_NAME: bitwardenci
+            CONTAINER_NAME: mobile
+          run: |
+            mkdir -p ${{ github.workspace }}/secrets
+            mkdir -p ${{ github.workspace }}/app/src/standardRelease
+            
+            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+            --name play_creds.json --file ${{ github.workspace }}/secrets/play_creds.json --output none
+
+            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+            --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
+
+        - name: Format Release Notes
+          run: |
+            FORMATTED_MESSAGE="$(echo "${{ inputs.release-notes }}" | sed 's/  /\n/g')"
+            echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+            echo "$FORMATTED_MESSAGE" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+        - name: Promote Play Store version to production
+          env:
+            PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_BETA_KEYSTORE_PASSWORD }}
+            PLAY_KEY_PASSWORD: ${{ secrets.PLAY_BETA_KEY_PASSWORD }}
+            VERSION_CODE_INPUT: ${{ inputs.version-code }}
+            VERSION_NAME: ${{inputs.version-name}}
+            ROLLOUT_PERCENTAGE: ${{ inputs.rollout-percentage }}
+            PRODUCT: ${{ inputs.product }}
+            TRACK_FROM: ${{ inputs.track-from }}
+            TRACK_TARGET: ${{ inputs.track-target }}
+          run: |
+            if [ "$PRODUCT" = "Password Manager" ]; then
+              PACKAGE_NAME="com.x8bit.bitwarden"
+            elif [ "$PRODUCT" = "Authenticator" ]; then
+              PACKAGE_NAME="com.bitwarden.authenticator"
+            else
+              echo "Unsupported product: $PRODUCT"
+              exit 1
+            fi
+
+            VERSION_CODE=$(echo "${VERSION_CODE_INPUT}" | tr -d ',')
+
+            decimal=$(echo "scale=2; ${ROLLOUT_PERCENTAGE/\%/} / 100" | bc)
+
+            bundle exec fastlane updateReleaseNotes \
+              releaseNotes:"$RELEASE_NOTES" \
+              versionCode:"$VERSION_CODE"
+
+            bundle exec fastlane promoteToProduction \
+              versionCode:"$VERSION_CODE" \
+              versionName:"$VERSION_NAME" \
+              rolloutPercentage:"$decimal" \
+              packageName:"$PACKAGE_NAME" \
+              releaseNotes:"$RELEASE_NOTES" \
+              track:"$TRACK_FROM" \
+              trackPromoteTo:"$TRACK_TARGET"
