@@ -1,10 +1,13 @@
 package com.x8bit.bitwarden
 
+import android.app.ComponentCaller
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.ui.platform.util.validate
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -26,6 +29,7 @@ class AutofillTotpCopyActivity : AppCompatActivity() {
     private val autofillTotpCopyViewModel: AutofillTotpCopyViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        intent = intent.validate()
         super.onCreate(savedInstanceState)
 
         observeViewModelEvents()
@@ -35,6 +39,14 @@ class AutofillTotpCopyActivity : AppCompatActivity() {
                 intent = intent,
             ),
         )
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent.validate())
+    }
+
+    override fun onNewIntent(intent: Intent, caller: ComponentCaller) {
+        super.onNewIntent(intent.validate(), caller)
     }
 
     private fun observeViewModelEvents() {

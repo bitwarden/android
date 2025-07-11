@@ -1,10 +1,12 @@
 package com.x8bit.bitwarden
 
+import android.app.ComponentCaller
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.ui.platform.util.validate
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -21,6 +23,7 @@ class AuthCallbackActivity : AppCompatActivity() {
     private val viewModel: AuthCallbackViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        intent = intent.validate()
         super.onCreate(savedInstanceState)
 
         viewModel.trySendAction(AuthCallbackAction.IntentReceive(intent = intent))
@@ -34,5 +37,13 @@ class AuthCallbackActivity : AppCompatActivity() {
             }
         startActivity(intent)
         finish()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent.validate())
+    }
+
+    override fun onNewIntent(intent: Intent, caller: ComponentCaller) {
+        super.onNewIntent(intent.validate(), caller)
     }
 }

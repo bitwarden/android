@@ -1,8 +1,9 @@
 @file:OmitFromCoverage
 
-package com.x8bit.bitwarden.data.platform.util
+package com.bitwarden.ui.platform.util
 
 import android.content.Intent
+import android.os.BadParcelableException
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.content.IntentCompat
@@ -24,3 +25,21 @@ inline fun <reified T> Intent.getSafeParcelableExtra(
 inline fun <reified T> Bundle.getSafeParcelableExtra(
     name: String,
 ): T? = BundleCompat.getParcelable(this, name, T::class.java)
+
+/**
+ * Validate if there's anything suspicious with the intent received and returns a new valid intent.
+ */
+fun Intent.validate(): Intent =
+    try {
+        // This will force Android to attempt to fetch each item and verify it is valid
+        this.extras?.let { bundle ->
+            bundle.keySet().forEach { @Suppress("DEPRECATION") bundle.get(it) }
+        }
+        this
+    } catch (_: BadParcelableException) {
+        this.replaceExtras(null as Bundle?)
+    } catch (_: ClassNotFoundException) {
+        this.replaceExtras(null as Bundle?)
+    } catch (@Suppress("TooGenericExceptionCaught") _: RuntimeException) {
+        this.replaceExtras(null as Bundle?)
+    }

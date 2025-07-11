@@ -18,7 +18,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.model.AutofillTotpCopyData
-import com.x8bit.bitwarden.data.platform.util.getSafeParcelableExtra
+import com.bitwarden.ui.platform.util.getSafeParcelableExtra
 import kotlin.random.Random
 
 private const val AUTOFILL_SAVE_ITEM_DATA_KEY = "autofill-save-item-data"
