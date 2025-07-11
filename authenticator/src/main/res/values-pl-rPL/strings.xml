@@ -142,8 +142,8 @@
     <string name="file_could_not_be_processed_message">"Plik nie może być przetworzony. Upewnij się, że plik JSON jest prawidłowy i spróbuj ponownie. Potrzebujesz pomocy? Odwiedź bitwarden.com/help"</string>
     <string name="get_help">Uzyskaj pomoc</string>
     <string name="expand_advanced_options">Rozwiń zaawansowane opcje</string>
-    <string name="local_items_are_expanded_click_to_collapse">Local items are expanded, click to collapse.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
-    <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
-    <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="local_items_are_expanded_click_to_collapse">Lokalne elementy są rozwinięte, kliknij, aby zwinąć.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Lokalne elementy są zwijane, kliknij, aby rozwinąć.</string>
+    <string name="items_expanded_click_to_collapse">Elementy są rozwinięte, kliknij, aby zwinąć.</string>
+    <string name="items_are_collapsed_click_to_expand">Elementy są zwinięte, kliknij, aby rozwinąć.</string>
 </resources>
