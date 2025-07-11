@@ -15,6 +15,7 @@ import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.network.model.CipherTypeJson
 import com.bitwarden.network.model.CreateFileSendResponse
 import com.bitwarden.network.model.CreateSendJsonResponse
 import com.bitwarden.network.model.FolderJsonRequest
@@ -41,6 +42,7 @@ import com.bitwarden.network.service.SyncService
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
+import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.Folder
@@ -4405,7 +4407,63 @@ class VaultRepositoryTest {
             } returns "TestResult".asSuccess()
 
             val expected = ExportVaultDataResult.Success(vaultData = "TestResult")
-            val result = vaultRepository.exportVaultDataToString(format = format)
+            val result = vaultRepository.exportVaultDataToString(
+                format = format,
+                restrictedTypes = emptyList(),
+            )
+
+            coVerify {
+                vaultSdkSource.exportVaultDataToString(
+                    userId = userId,
+                    ciphers = listOf(userCipher.toEncryptedSdkCipher()),
+                    folders = listOf(createMockSdkFolder(1)),
+                    format = ExportFormat.Json,
+                )
+            }
+
+            assertEquals(
+                expected,
+                result,
+            )
+        }
+
+    @Test
+    fun `exportVaultDataToString with restrictedTypes should filter out restricted cipher types`() =
+        runTest {
+            val format = ExportFormat.Json
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+
+            val userCipher = createMockCipher(1).copy(
+                type = CipherTypeJson.LOGIN,
+                collectionIds = null,
+                deletedDate = null,
+            )
+            val userCipherCard = createMockCipher(2).copy(
+                type = CipherTypeJson.CARD,
+                collectionIds = null,
+                deletedDate = null,
+            )
+            val deletedCipher = createMockCipher(2).copy(collectionIds = null)
+            val orgCipher = createMockCipher(3).copy(deletedDate = null)
+
+            coEvery {
+                vaultDiskSource.getCiphersFlow(userId)
+            } returns flowOf(listOf(userCipher, userCipherCard, deletedCipher, orgCipher))
+
+            coEvery {
+                vaultDiskSource.getFolders(userId)
+            } returns flowOf(listOf(createMockFolder(1)))
+
+            coEvery {
+                vaultSdkSource.exportVaultDataToString(userId, any(), any(), format)
+            } returns "TestResult".asSuccess()
+
+            val expected = ExportVaultDataResult.Success(vaultData = "TestResult")
+            val result = vaultRepository.exportVaultDataToString(
+                format = format,
+                restrictedTypes = listOf(CipherType.CARD),
+            )
 
             coVerify {
                 vaultSdkSource.exportVaultDataToString(
@@ -4442,7 +4500,10 @@ class VaultRepositoryTest {
             } returns error.asFailure()
 
             val expected = ExportVaultDataResult.Error(error = error)
-            val result = vaultRepository.exportVaultDataToString(format = format)
+            val result = vaultRepository.exportVaultDataToString(
+                format = format,
+                restrictedTypes = emptyList(),
+            )
 
             assertEquals(
                 expected,
