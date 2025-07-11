@@ -16,8 +16,6 @@ jobs:
     env:
       JAVA_VERSION: 17
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-      SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
 
     steps:
       - name: Check out repo
@@ -94,7 +92,7 @@ jobs:
         uses: bitwarden/gh-actions/get-keyvault-secrets@main
         with:
           keyvault: gh-android
-          secrets: "BWS-ACCESS-TOKEN"
+          secrets: "BWS-ACCESS-TOKEN, SAUCE-LABS-USERNAME, SAUCE-LABS-ACCESS-KEY"
         id: get-e2e-secrets
 
       - name: Log out from Azure
@@ -128,21 +126,21 @@ jobs:
         run: |
           saucectl storage upload app/build/outputs/apk/standard/release/com.x8bit.bitwarden.apk
         env:
-          SAUCE_USERNAME: ${{ steps.get-e2e-secrets.outputs.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ steps.get-e2e-secrets.outputs.SAUCE_ACCESS_KEY }}
+          SAUCE_USERNAME: ${{ steps.get-e2e-secrets.outputs.SAUCE-LABS-USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ steps.get-e2e-secrets.outputs.SAUCE-LABS-ACCESS-KEY }}
 
       - name: Upload test APK to SauceLabs storage
         run: |
-          saucectl storage upload --app app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-standard-release-androidTest.apk
+          saucectl storage upload app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-standard-release-androidTest.apk
         env:
-          SAUCE_USERNAME: ${{ steps.get-e2e-secrets.outputs.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ steps.get-e2e-secrets.outputs.SAUCE_ACCESS_KEY }}
+          SAUCE_USERNAME: ${{ steps.get-e2e-secrets.outputs.SAUCE-LABS-USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ steps.get-e2e-secrets.outputs.SAUCE-LABS-ACCESS-KEY }}
 
       - name: Run tests on SauceLabs
         run: saucectl run --config .sauce/config.yml
         env:
-          SAUCE_USERNAME: ${{ steps.get-e2e-secrets.outputs.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ steps.get-e2e-secrets.outputs.SAUCE_ACCESS_KEY }}
+          SAUCE_USERNAME: ${{ steps.get-e2e-secrets.outputs.SAUCE-LABS-USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ steps.get-e2e-secrets.outputs.SAUCE-LABS-ACCESS-KEY }}
 
       - name: Upload SauceLabs test report
         if: always()
