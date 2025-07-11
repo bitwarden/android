@@ -9,6 +9,7 @@ import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
@@ -262,6 +263,12 @@ interface VaultRepository : CipherManager, VaultLockManager {
 
     /**
      * Attempt to get the user's vault data for export.
+     *
+     * @param format The export format to use.
+     * @param restrictedTypes A list of restricted types to export.
      */
-    suspend fun exportVaultDataToString(format: ExportFormat): ExportVaultDataResult
+    suspend fun exportVaultDataToString(
+        format: ExportFormat,
+        restrictedTypes: List<CipherType>,
+    ): ExportVaultDataResult
 }
