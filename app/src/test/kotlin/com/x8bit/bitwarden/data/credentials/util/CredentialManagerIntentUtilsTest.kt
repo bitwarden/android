@@ -275,6 +275,121 @@ class CredentialManagerIntentUtilsTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `getProviderGetPasswordRequestOrNull should return ProviderGetPasswordCredentialRequest when present`() {
+        val intent = mockk<Intent> {
+            every { getStringExtra(EXTRA_KEY_USER_ID) } returns "mockUserId"
+            every { getStringExtra(EXTRA_KEY_CIPHER_ID) } returns "mockCipherId"
+        }
+
+        every { ProviderGetCredentialRequest.asBundle(any()) } returns bundleOf()
+        every {
+            PendingIntentHandler.retrieveProviderGetCredentialRequest(intent)
+        } returns mockk(relaxed = true) {
+            every { biometricPromptResult } returns mockk(relaxed = true) {
+                every { isSuccessful } returns false
+            }
+        }
+
+        val assertionRequest = intent.getProviderGetPasswordRequestOrNull()
+
+        assertNotNull(assertionRequest)
+        assertEquals("mockUserId", assertionRequest.userId)
+        assertEquals("mockCipherId", assertionRequest.cipherId)
+        assertEquals(false, assertionRequest.isUserPreVerified)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getProviderGetPasswordRequestOrNull should set user verification based on biometric prompt result`() {
+        val intent = mockk<Intent> {
+            every { getStringExtra(EXTRA_KEY_USER_ID) } returns "mockUserId"
+            every { getStringExtra(EXTRA_KEY_CIPHER_ID) } returns "mockCipherId"
+            every {
+                getBooleanExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, false)
+            } returns false
+        }
+        val mockBiometricPromptResult = mockk<BiometricPromptResult>(relaxed = true) {
+            every { isSuccessful } returns false
+        }
+        val mockGetCredentialRequest =
+            mockk<ProviderGetCredentialRequest>(relaxed = true) {
+                every { biometricPromptResult } returns mockBiometricPromptResult
+            }
+        every { ProviderCreateCredentialRequest.asBundle(any()) } returns bundleOf()
+        every {
+            PendingIntentHandler.retrieveProviderGetCredentialRequest(intent)
+        } returns mockGetCredentialRequest
+
+        // Verify false is returned when biometric prompt is unsuccessful
+        var assertionRequest = intent.getProviderGetPasswordRequestOrNull()
+        assertFalse(assertionRequest!!.isUserPreVerified)
+
+        // Verify true is returned when biometric prompt is successful
+        every { mockBiometricPromptResult.isSuccessful } returns true
+        assertionRequest = intent.getProviderGetPasswordRequestOrNull()
+        assert(assertionRequest!!.isUserPreVerified)
+
+        // Verify false is returned when biometric prompt result is null
+        every { mockGetCredentialRequest.biometricPromptResult } returns null
+        assertionRequest = intent.getProviderGetPasswordRequestOrNull()
+        assertFalse(assertionRequest!!.isUserPreVerified)
+    }
+
+    @Test
+    fun `getProviderGetPasswordRequestOrNull should return null when build version is below 34`() {
+        val intent = mockk<Intent>()
+
+        every { isBuildVersionAtLeast(34) } returns false
+
+        val assertionRequest = intent.getProviderGetPasswordRequestOrNull()
+
+        assertNull(assertionRequest)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getProviderGetPasswordRequestOrNull should return null when retrieveProviderGetCredentialRequest is null`() {
+        val intent = mockk<Intent>()
+
+        every {
+            PendingIntentHandler.retrieveProviderGetCredentialRequest(any())
+        } returns null
+
+        val assertionRequest = intent.getProviderGetPasswordRequestOrNull()
+
+        assertNull(assertionRequest)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getProviderGetPasswordRequestOrNull should return null when extras are not correctly set`() {
+        every {
+            PendingIntentHandler.retrieveProviderGetCredentialRequest(any())
+        } returns mockk()
+
+        // Verify cipher ID is required
+        assertNull(
+            mockk<Intent> {
+                every { getStringExtra(EXTRA_KEY_CREDENTIAL_ID) } returns "mockCredentialId"
+                every { getStringExtra(EXTRA_KEY_CIPHER_ID) } returns null
+                every { getStringExtra(EXTRA_KEY_USER_ID) } returns "mockUserId"
+            }
+                .getProviderGetPasswordRequestOrNull(),
+        )
+
+        // Verify user ID is required
+        assertNull(
+            mockk<Intent> {
+                every { getStringExtra(EXTRA_KEY_CREDENTIAL_ID) } returns "mockCredentialId"
+                every { getStringExtra(EXTRA_KEY_CIPHER_ID) } returns "mockCipherId"
+                every { getStringExtra(EXTRA_KEY_USER_ID) } returns null
+            }
+                .getProviderGetPasswordRequestOrNull(),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `getGetCredentialsRequestOrNull should return GetCredentialRequest when present`() {
         val intent = mockk<Intent> {
             every { getStringExtra("user_id") } returns "mockUserId"

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.autofill.util
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -178,6 +179,51 @@ class CipherViewExtensionsTest {
         assertFalse(
             createMockCipherView(number = 1, fido2Credentials = null)
                 .isActiveWithFido2Credentials,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isActiveWithPasswordCredentials should return true when type is login, deleted date is null, and password credentials are not empty`() {
+        assertTrue(
+            createMockCipherView(
+                number = 1,
+                login = createMockLoginView(number = 1),
+            )
+                .isActiveWithPasswordCredentials,
+        )
+    }
+
+    @Test
+    fun `isActiveWithPasswordCredentials should return false when deleted date is not null`() {
+        assertFalse(
+            createMockCipherView(number = 1, isDeleted = true)
+                .isActiveWithPasswordCredentials,
+        )
+    }
+
+    @Test
+    fun `isActiveWithPasswordCredentials should return false when type is not login`() {
+        assertFalse(
+            createMockCipherView(number = 1, cipherType = CipherType.CARD)
+                .isActiveWithPasswordCredentials,
+        )
+    }
+
+    @Test
+    fun `isActiveWithPasswordCredentials should return false when login is null`() {
+        assertFalse(
+            createMockCipherView(number = 1)
+                .copy(login = null)
+                .isActiveWithPasswordCredentials,
+        )
+    }
+
+    @Test
+    fun `isActiveWithPasswordCredentials should return false when password is empty`() {
+        assertFalse(
+            createMockCipherView(number = 1, password = "")
+                .isActiveWithPasswordCredentials,
         )
     }
 }
