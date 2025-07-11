@@ -318,15 +318,14 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `Continue buttons should only be enabled when code is 8 digit enough on isNewDeviceVerification`() {
-        val initialState = DEFAULT_STATE.copy(isNewDeviceVerification = true)
-        val viewModel = createViewModel(initialState)
-        viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged("123456"))
+    fun `Continue buttons should only be enabled when code is not empty`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged(""))
 
         // 6 digit should be false when isNewDeviceVerification is true.
         assertEquals(
-            initialState.copy(
-                codeInput = "123456",
+            DEFAULT_STATE.copy(
+                codeInput = "",
                 isContinueButtonEnabled = false,
             ),
             viewModel.stateFlow.value,
@@ -335,7 +334,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         // Set it to true.
         viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged("12345678"))
         assertEquals(
-            initialState.copy(
+            DEFAULT_STATE.copy(
                 codeInput = "12345678",
                 isContinueButtonEnabled = true,
             ),

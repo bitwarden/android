@@ -190,12 +190,10 @@ class TwoFactorLoginViewModel @Inject constructor(
      * Update the state with the new text and enable or disable the continue button.
      */
     private fun handleCodeInputChanged(action: TwoFactorLoginAction.CodeInputChanged) {
-        @Suppress("MagicNumber")
-        val minLength = if (state.isNewDeviceVerification) 8 else 6
         mutableStateFlow.update {
             it.copy(
                 codeInput = action.input,
-                isContinueButtonEnabled = action.input.length >= minLength,
+                isContinueButtonEnabled = action.input.isNotEmpty(),
             )
         }
     }
