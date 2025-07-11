@@ -120,7 +120,11 @@ jobs:
 
       - name: Build test APK (espresso)
         run: |
-          ./gradlew :app:assembleStandardReleaseAndroidTest
+          bundle exec fastlane assembleStandardReleaseAndroidTest \
+            storeFile:app_play-keystore.jks \
+            storePassword:'${{ env.PLAY_KEYSTORE_PASSWORD }}' \
+            keyAlias:bitwarden \
+            keyPassword:'${{ env.PLAY_KEYSTORE_PASSWORD }}'
 
       - name: Upload app APK to SauceLabs storage
         run: |
