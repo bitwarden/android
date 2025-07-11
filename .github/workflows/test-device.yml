@@ -128,15 +128,15 @@ jobs:
         run: |
           saucectl storage upload app/build/outputs/apk/standard/release/com.x8bit.bitwarden.apk
         env:
-          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+          SAUCE_USERNAME: ${{ steps.get-e2e-secrets.outputs.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ steps.get-e2e-secrets.outputs.SAUCE_ACCESS_KEY }}
 
       - name: Upload test APK to SauceLabs storage
         run: |
           saucectl storage upload --app app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-standard-release-androidTest.apk
         env:
-          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+          SAUCE_USERNAME: ${{ steps.get-e2e-secrets.outputs.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ steps.get-e2e-secrets.outputs.SAUCE_ACCESS_KEY }}
 
       - name: Run tests on SauceLabs
         run: saucectl run --config .sauce/config.yml
