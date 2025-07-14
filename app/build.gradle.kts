@@ -257,11 +257,10 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization)
+    implementation(platform(libs.square.okhttp.bom))
     implementation(libs.square.okhttp)
-    implementation(libs.square.okhttp.logging)
     implementation(platform(libs.square.retrofit.bom))
     implementation(libs.square.retrofit)
-    implementation(libs.square.retrofit.kotlinx.serialization)
     implementation(libs.timber)
     implementation(libs.zxing.zxing.core)
 
@@ -289,7 +288,6 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.robolectric.robolectric)
-    testImplementation(libs.square.okhttp.mockwebserver)
     testImplementation(libs.square.turbine)
 }
 
