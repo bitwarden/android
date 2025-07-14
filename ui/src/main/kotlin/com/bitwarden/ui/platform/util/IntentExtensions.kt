@@ -7,7 +7,6 @@ import android.os.BadParcelableException
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.content.IntentCompat
-import androidx.core.content.IntentSanitizer
 import androidx.core.os.BundleCompat
 import com.bitwarden.annotation.OmitFromCoverage
 
