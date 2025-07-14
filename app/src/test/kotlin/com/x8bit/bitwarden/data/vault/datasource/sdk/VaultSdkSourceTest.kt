@@ -1049,7 +1049,6 @@ class VaultSdkSourceTest {
     }
 
     @Test
-    @Suppress("MaxLineLength")
     fun `generateTotpForCipherListView should call SDK and return a Result with correct data`() =
         runTest {
             val userId = "userId"
