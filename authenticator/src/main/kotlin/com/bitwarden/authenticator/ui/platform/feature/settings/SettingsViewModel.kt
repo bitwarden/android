@@ -10,9 +10,7 @@ import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.util.isSyncWithBitwardenEnabled
-import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
@@ -49,7 +47,6 @@ class SettingsViewModel @Inject constructor(
     private val authenticatorBridgeManager: AuthenticatorBridgeManager,
     private val settingsRepository: SettingsRepository,
     private val clipboardManager: BitwardenClipboardManager,
-    featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: createInitialState(
@@ -58,8 +55,6 @@ class SettingsViewModel @Inject constructor(
             appTheme = settingsRepository.appTheme,
             unlockWithBiometricsEnabled = settingsRepository.isUnlockWithBiometricsEnabled,
             isSubmitCrashLogsEnabled = settingsRepository.isCrashLoggingEnabled,
-            isSyncWithBitwardenFeatureEnabled =
-            featureFlagManager.getFeatureFlag(FlagKey.PasswordManagerSync),
             accountSyncState = authenticatorBridgeManager.accountSyncStateFlow.value,
             defaultSaveOption = settingsRepository.defaultSaveOption,
             sharedAccountsState = authenticatorRepository.sharedCodesStateFlow.value,
@@ -323,13 +318,12 @@ class SettingsViewModel @Inject constructor(
             unlockWithBiometricsEnabled: Boolean,
             isSubmitCrashLogsEnabled: Boolean,
             accountSyncState: AccountSyncState,
-            isSyncWithBitwardenFeatureEnabled: Boolean,
             sharedAccountsState: SharedVerificationCodesState,
         ): SettingsState {
             val currentYear = Year.now(clock)
             val copyrightInfo = "© Bitwarden Inc. 2015-$currentYear".asText()
-            // Show sync with Bitwarden row if feature is enabled and the OS is supported:
-            val shouldShowSyncWithBitwarden = isSyncWithBitwardenFeatureEnabled &&
+            // Show sync with Bitwarden row if the OS is supported:
+            val shouldShowSyncWithBitwarden =
                 accountSyncState != AccountSyncState.OsVersionNotSupported
             // Show default save options only if the user had enabled sync with Bitwarden:
             // (They can enable it via the "Sync with Bitwarden" row.

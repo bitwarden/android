@@ -51,7 +51,6 @@ class LandingViewModelTest : BaseViewModelTest() {
     }
     private val featureFlagManager: FeatureFlagManager = mockk(relaxed = true) {
         every { getFeatureFlag(FlagKey.EmailVerification) } returns false
-        every { getFeatureFlag(FlagKey.PreAuthSettings) } returns false
     }
 
     @Test
@@ -228,20 +227,6 @@ class LandingViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(LandingAction.AppSettingsClick)
             assertEquals(LandingEvent.NavigateToSettings, awaitItem())
-        }
-    }
-
-    @Test
-    fun `PreAuthSettingFlagReceive should update the state accordingly`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE, awaitItem())
-
-            viewModel.trySendAction(LandingAction.Internal.PreAuthSettingFlagReceive(true))
-            assertEquals(DEFAULT_STATE.copy(showSettingsButton = true), awaitItem())
-
-            viewModel.trySendAction(LandingAction.Internal.PreAuthSettingFlagReceive(false))
-            assertEquals(DEFAULT_STATE.copy(showSettingsButton = false), awaitItem())
         }
     }
 
@@ -654,5 +639,4 @@ private val DEFAULT_STATE = LandingState(
     selectedEnvironmentLabel = Environment.Us.label,
     dialog = null,
     accountSummaries = emptyList(),
-    showSettingsButton = false,
 )

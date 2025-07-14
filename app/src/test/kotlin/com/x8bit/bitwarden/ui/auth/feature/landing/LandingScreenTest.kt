@@ -284,20 +284,7 @@ class LandingScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `app settings button should be displayed according to state`() {
-        mutableStateFlow.update { it.copy(showSettingsButton = false) }
-        composeTestRule
-            .onNodeWithText(text = "App settings")
-            .assertDoesNotExist()
-        mutableStateFlow.update { it.copy(showSettingsButton = true) }
-        composeTestRule
-            .onNodeWithText(text = "App settings")
-            .assertExists()
-    }
-
-    @Test
     fun `on app settings click should send AppSettingsClick action`() {
-        mutableStateFlow.update { it.copy(showSettingsButton = true) }
         composeTestRule
             .onNodeWithText(text = "App settings")
             .performScrollTo()
@@ -527,5 +514,4 @@ private val DEFAULT_STATE = LandingState(
     selectedEnvironmentLabel = Environment.Us.label,
     dialog = null,
     accountSummaries = emptyList(),
-    showSettingsButton = false,
 )
