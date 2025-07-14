@@ -11,13 +11,14 @@ class RealDeviceE2ETests : BaseE2ETest() {
 
     @Test
     fun testVaultLockUnlockFlow() {
-        MainPage(composeTestRule)
+        var vault = MainPage(composeTestRule)
             .startLogin()
             .turnOnScreenRecording()
             .openEnvironmentSettings()
             .setupEnvironment(testData.baseUrl)
             .performLogin(testData.email, testData.password)
-            .navigateToSettingsPage()
+        vault.assertVaultIsUnlocked()
+        vault.navigateToSettingsPage()
             .navigateToAccountSecurity()
             .lockVault()
             .performUnlockVault(testData.password)
