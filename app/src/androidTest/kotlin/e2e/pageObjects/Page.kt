@@ -38,7 +38,7 @@ abstract class Page(protected val composeTestRule: ComposeTestRule) {
         return composeTestRule.onNodeWithTag(testTag)
     }
 
-    protected fun getElementByText(text: String): SemanticsNodeInteraction{
+    protected fun getElementByText(text: String): SemanticsNodeInteraction {
         waitForIdle()
         waitUntil(TIMEOUT_MILLIS) {
             try {
@@ -66,7 +66,7 @@ abstract class Page(protected val composeTestRule: ComposeTestRule) {
      */
     protected fun waitUntil(
         timeoutMillis: Long,
-        condition: () -> Boolean
+        condition: () -> Boolean,
     ) {
         composeTestRule.waitUntil(timeoutMillis) { condition() }
     }

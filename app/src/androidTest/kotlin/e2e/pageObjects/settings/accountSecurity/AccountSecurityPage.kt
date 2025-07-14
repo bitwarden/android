@@ -9,7 +9,7 @@ import e2e.pageObjects.vault.UnlockVaultPage
  * Page Object representing the Account Security screen of the Bitwarden app.
  * This class encapsulates all the UI elements and actions available on the account security screen.
  */
-class AccountSecurityPage(composeTestRule: ComposeTestRule) : Page(composeTestRule)  {
+class AccountSecurityPage(composeTestRule: ComposeTestRule) : Page(composeTestRule) {
 
     // UI Elements
     private val lockNowLabel by lazy { getElement("LockNowLabel") }

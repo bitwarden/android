@@ -11,7 +11,7 @@ import e2e.pageObjects.vault.VaultPage
  * Page Object representing the Login screen of the Bitwarden app.
  * This class encapsulates all the UI elements and actions available on the login screen.
  */
-class LoginPage(composeTestRule: ComposeTestRule) : Page(composeTestRule){
+class LoginPage(composeTestRule: ComposeTestRule) : Page(composeTestRule) {
 
     // UI Elements
     private val emailField by lazy { getElement("EmailAddressEntry") }
@@ -23,7 +23,6 @@ class LoginPage(composeTestRule: ComposeTestRule) : Page(composeTestRule){
     private val otherSettingsButton by lazy { getElement("OtherSettingsButton") }
     private val allowScreenCaptureToggle by lazy { getElement("AllowScreenCaptureSwitch") }
     private val goBackButton by lazy { getElement("CloseButton") }
-
 
     /**
      * Enters the master password in the password field
@@ -43,14 +42,14 @@ class LoginPage(composeTestRule: ComposeTestRule) : Page(composeTestRule){
         return VaultPage(composeTestRule)
     }
 
-    fun openEnvironmentSettings() : EnvironmentSettingsPage {
+    fun openEnvironmentSettings(): EnvironmentSettingsPage {
         regionSelectorButton.performClick()
         getElementByText("Self-hosted")
             .performClick()
         return EnvironmentSettingsPage(composeTestRule)
     }
 
-    fun turnOnScreenRecording() : LoginPage {
+    fun turnOnScreenRecording(): LoginPage {
         openSettingsButton.performClick()
         otherSettingsButton.performClick()
         allowScreenCaptureToggle.performClick()

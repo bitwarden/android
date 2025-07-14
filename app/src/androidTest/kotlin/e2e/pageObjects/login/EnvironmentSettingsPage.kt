@@ -6,12 +6,12 @@ import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.e2e.pages.LoginPage
 import e2e.pageObjects.Page
 
-class EnvironmentSettingsPage(composeTestRule: ComposeTestRule) : Page(composeTestRule){
+class EnvironmentSettingsPage(composeTestRule: ComposeTestRule) : Page(composeTestRule) {
 
     private val serverURLField by lazy { getElement("ServerUrlEntry") }
     private val saveButton by lazy { getElement("SaveButton") }
 
-    fun setupEnvironment(url: String) : LoginPage {
+    fun setupEnvironment(url: String): LoginPage {
         serverURLField
             .performClick()
             .performTextInput(url)
