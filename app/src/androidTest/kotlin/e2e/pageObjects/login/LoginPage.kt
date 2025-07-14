@@ -19,6 +19,11 @@ class LoginPage(composeTestRule: ComposeTestRule) : Page(composeTestRule){
     private val continueButton by lazy { getElement("ContinueButton") }
     private val loginWithMasterPasswordButton by lazy { getElement("LogInWithMasterPasswordButton") }
     private val regionSelectorButton by lazy { getElement("RegionSelectorDropdown") }
+    private val openSettingsButton by lazy { getElement("AppSettingsButton") }
+    private val otherSettingsButton by lazy { getElement("OtherSettingsButton") }
+    private val allowScreenCaptureToggle by lazy { getElement("AllowScreenCaptureSwitch") }
+    private val goBackButton by lazy { getElement("CloseButton") }
+
 
     /**
      * Enters the master password in the password field
@@ -43,5 +48,14 @@ class LoginPage(composeTestRule: ComposeTestRule) : Page(composeTestRule){
         getElementByText("Self-hosted")
             .performClick()
         return EnvironmentSettingsPage(composeTestRule)
+    }
+
+    fun turnOnScreenRecording() : LoginPage {
+        openSettingsButton.performClick()
+        otherSettingsButton.performClick()
+        allowScreenCaptureToggle.performClick()
+        goBackButton.performClick()
+        goBackButton.performClick()
+        return this
     }
 }
