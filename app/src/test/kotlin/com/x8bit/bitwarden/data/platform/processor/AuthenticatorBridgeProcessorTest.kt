@@ -21,8 +21,6 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
 import com.x8bit.bitwarden.data.platform.util.createAddTotpItemFromAuthenticatorIntent
 import com.x8bit.bitwarden.ui.vault.model.TotpData
@@ -49,7 +47,6 @@ import org.junit.jupiter.api.Test
 
 class AuthenticatorBridgeProcessorTest {
 
-    private val featureFlagManager = mockk<FeatureFlagManager>()
     private val addTotpItemFromAuthenticatorManager = AddTotpItemFromAuthenticatorManagerImpl()
     private val authenticatorBridgeRepository = mockk<AuthenticatorBridgeRepository>()
     private val context = mockk<Context> {
@@ -64,7 +61,6 @@ class AuthenticatorBridgeProcessorTest {
             addTotpItemFromAuthenticatorManager = addTotpItemFromAuthenticatorManager,
             authenticatorBridgeRepository = authenticatorBridgeRepository,
             context = context,
-            featureFlagManager = featureFlagManager,
             dispatcherManager = FakeDispatcherManager(),
         )
         mockkStatic(::createAddTotpItemFromAuthenticatorIntent)
@@ -91,30 +87,16 @@ class AuthenticatorBridgeProcessorTest {
     }
 
     @Test
-    fun `when AuthenticatorSync feature flag is off, should return null binder`() {
+    fun `when running Android level greater than S, should return non-null binder`() {
         mockkStatic(::isBuildVersionAtLeast)
         every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns true
-        every { featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) } returns false
-        assertNull(bridgeServiceProcessor.binder)
-    }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `when AuthenticatorSync feature flag is on and running Android level greater than S, should return non-null binder`() {
-        mockkStatic(::isBuildVersionAtLeast)
-        every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns true
-        every { featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) } returns true
         assertNotNull(bridgeServiceProcessor.binder)
     }
 
     @Test
-    fun `when below Android level S, should never return a binder regardless of feature flag`() {
+    fun `when below Android level S, should never return a binder`() {
         mockkStatic(::isBuildVersionAtLeast)
         every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns false
-        every { featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) } returns false
-        assertNull(bridgeServiceProcessor.binder)
-
-        every { featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) } returns true
         assertNull(bridgeServiceProcessor.binder)
     }
 
@@ -310,7 +292,6 @@ class AuthenticatorBridgeProcessorTest {
     private fun getDefaultBinder(): IAuthenticatorBridgeService.Stub {
         mockkStatic(::isBuildVersionAtLeast)
         every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns true
-        every { featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) } returns true
         return bridgeServiceProcessor.binder!!
     }
 }

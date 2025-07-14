@@ -1,7 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.appearance
 
+import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -9,12 +11,16 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLang
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class AppearanceViewModelTest : BaseViewModelTest() {
@@ -33,6 +39,17 @@ class AppearanceViewModelTest : BaseViewModelTest() {
         every { isDynamicColorsEnabledFlow } returns mutableIsDynamicColorsEnabledFlow
     }
 
+    @BeforeEach
+    fun setUp() {
+        mockkStatic(::isBuildVersionAtLeast)
+        every { isBuildVersionAtLeast(any()) } returns true
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(::isBuildVersionAtLeast)
+    }
+
     @Test
     fun `initial state should be correct when not set`() {
         val viewModel = createViewModel(state = null)
@@ -44,6 +61,20 @@ class AppearanceViewModelTest : BaseViewModelTest() {
         val state = DEFAULT_STATE.copy(theme = AppTheme.DARK)
         val viewModel = createViewModel(state = state)
         assertEquals(state, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `initial state should be correct when build version is below 31`() {
+        every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns false
+        val viewModel = createViewModel(state = null)
+        assertEquals(
+            DEFAULT_STATE.copy(isDynamicColorsSupported = false),
+            viewModel.stateFlow.value,
+        )
+
+        verify(exactly = 0) {
+            mockSettingsRepository.isDynamicColorsEnabledFlow
+        }
     }
 
     @Test
@@ -210,6 +241,7 @@ class AppearanceViewModelTest : BaseViewModelTest() {
             language = AppLanguage.DEFAULT,
             showWebsiteIcons = true,
             theme = AppTheme.DEFAULT,
+            isDynamicColorsSupported = true,
             isDynamicColorsEnabled = false,
             dialogState = null,
         )

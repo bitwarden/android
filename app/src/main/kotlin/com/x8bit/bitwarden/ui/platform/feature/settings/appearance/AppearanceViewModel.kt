@@ -1,8 +1,10 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.appearance
 
+import android.os.Build
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -31,6 +33,7 @@ class AppearanceViewModel @Inject constructor(
             showWebsiteIcons = !settingsRepository.isIconLoadingDisabled,
             theme = settingsRepository.appTheme,
             isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
+            isDynamicColorsSupported = isBuildVersionAtLeast(Build.VERSION_CODES.S),
             dialogState = null,
         ),
 ) {
@@ -42,11 +45,13 @@ class AppearanceViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        settingsRepository
-            .isDynamicColorsEnabledFlow
-            .map { AppearanceAction.Internal.DynamicColorsStateUpdateReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
+        if (state.isDynamicColorsSupported) {
+            settingsRepository
+                .isDynamicColorsEnabledFlow
+                .map { AppearanceAction.Internal.DynamicColorsStateUpdateReceive(it) }
+                .onEach(::sendAction)
+                .launchIn(viewModelScope)
+        }
     }
 
     override fun handleAction(action: AppearanceAction): Unit = when (action) {
@@ -139,6 +144,7 @@ data class AppearanceState(
     val language: AppLanguage,
     val showWebsiteIcons: Boolean,
     val theme: AppTheme,
+    val isDynamicColorsSupported: Boolean,
     val isDynamicColorsEnabled: Boolean,
     val dialogState: DialogState?,
 ) : Parcelable {

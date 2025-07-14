@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -49,7 +47,6 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 /**
  * The top level composable for the Login with Device screen.
  */
-@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginWithDeviceScreen(
@@ -59,8 +56,6 @@ fun LoginWithDeviceScreen(
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             LoginWithDeviceEvent.NavigateBack -> onNavigateBack()
@@ -70,10 +65,6 @@ fun LoginWithDeviceScreen(
 
             is LoginWithDeviceEvent.NavigateToTwoFactorLogin -> {
                 onNavigateToTwoFactorLogin(event.emailAddress)
-            }
-
-            is LoginWithDeviceEvent.ShowToast -> {
-                Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
             }
         }
     }

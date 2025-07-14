@@ -73,7 +73,7 @@ class FeatureFlagManagerTest {
         )
 
         val flagValue = manager.getFeatureFlag(
-            key = FlagKey.PasswordManagerSync,
+            key = FlagKey.DummyBoolean,
             forceRefresh = false,
         )
         assertFalse(flagValue)
@@ -169,7 +169,7 @@ class FeatureFlagManagerTest {
         fakeServerConfigRepository.serverConfigValue = null
 
         val flagValue = manager.getFeatureFlag(
-            key = FlagKey.PasswordManagerSync,
+            key = FlagKey.DummyBoolean,
             forceRefresh = false,
         )
 
