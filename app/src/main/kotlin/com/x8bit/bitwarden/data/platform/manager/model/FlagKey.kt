@@ -21,7 +21,6 @@ sealed class FlagKey<out T : Any> {
          */
         val activeFlags: List<FlagKey<*>> by lazy {
             listOf(
-                AuthenticatorSync,
                 EmailVerification,
                 ImportLoginsFlow,
                 CredentialExchangeProtocolImport,
@@ -38,14 +37,6 @@ sealed class FlagKey<out T : Any> {
                 RemoveCardPolicy,
             )
         }
-    }
-
-    /**
-     * Data object holding the key for syncing with the Bitwarden Authenticator app.
-     */
-    data object AuthenticatorSync : FlagKey<Boolean>() {
-        override val keyName: String = "enable-pm-bwa-sync"
-        override val defaultValue: Boolean = false
     }
 
     /**

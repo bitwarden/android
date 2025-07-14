@@ -22,11 +22,9 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
@@ -46,7 +44,6 @@ import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -104,9 +101,6 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         every {
             getActivePoliciesFlow(type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN)
         } returns mutableRemovePinPolicyFlow
-    }
-    private val featureFlagManager: FeatureFlagManager = mockk(relaxed = true) {
-        every { getFeatureFlag(FlagKey.AuthenticatorSync) } returns false
     }
 
     @BeforeEach
@@ -818,74 +812,25 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `when featureFlagManger returns true for AuthenticatorSync, and version is at least 31 should show authenticator sync UI`() {
+    fun `when version is at least 31 should show authenticator sync UI`() {
         every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns true
-        val vm = createViewModel(
-            initialState = null,
-            featureFlagManager = mockk {
-                every { getFeatureFlag(FlagKey.AuthenticatorSync) } returns true
-                every { getFeatureFlagFlow(FlagKey.AuthenticatorSync) } returns emptyFlow()
-            },
-        )
+        val vm = createViewModel(initialState = null)
         assertEquals(
             DEFAULT_STATE.copy(shouldShowEnableAuthenticatorSync = true),
             vm.stateFlow.value,
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `when featureFlagManger returns true for AuthenticatorSync, and version is under 31 should not show authenticator sync UI`() {
+    fun `when version is under 31 should not show authenticator sync UI`() {
         every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns false
-        every { featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) } returns true
-        every { featureFlagManager.getFeatureFlagFlow(FlagKey.AuthenticatorSync) } returns emptyFlow()
         val vm = createViewModel(initialState = null)
         assertEquals(
             DEFAULT_STATE,
             vm.stateFlow.value,
         )
     }
-
-    @Test
-    fun `when featureFlagManger updates value AuthenticatorSync, should update UI`() = runTest {
-        every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns true
-        val featureFlagFlow = MutableStateFlow(false)
-        val vm = createViewModel(
-            initialState = null,
-            featureFlagManager = mockk {
-                every { getFeatureFlag(FlagKey.AuthenticatorSync) } returns false
-                every { getFeatureFlagFlow(FlagKey.AuthenticatorSync) } returns featureFlagFlow
-            },
-        )
-        vm.stateFlow.test {
-            assertEquals(DEFAULT_STATE, awaitItem())
-            featureFlagFlow.value = true
-            assertEquals(DEFAULT_STATE.copy(shouldShowEnableAuthenticatorSync = true), awaitItem())
-            featureFlagFlow.value = false
-            assertEquals(DEFAULT_STATE, awaitItem())
-        }
-    }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `when featureFlagManger updates value AuthenticatorSync, authenticator sync row should never show if below API 31`() =
-        runTest {
-            every { isBuildVersionAtLeast(Build.VERSION_CODES.S) } returns false
-            val featureFlagFlow = MutableStateFlow(false)
-            every { featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) } returns false
-            every {
-                featureFlagManager.getFeatureFlagFlow(FlagKey.AuthenticatorSync)
-            } returns featureFlagFlow
-            val vm = createViewModel(initialState = null)
-            vm.stateFlow.test {
-                assertEquals(DEFAULT_STATE, awaitItem())
-                featureFlagFlow.value = true
-                featureFlagFlow.value = false
-                expectNoEvents()
-            }
-        }
 
     @Test
     fun `when showUnlockBadgeFlow updates value, should update state`() = runTest {
@@ -951,7 +896,6 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         initialState: AccountSecurityState? = DEFAULT_STATE,
         authRepository: AuthRepository = this.authRepository,
-        featureFlagManager: FeatureFlagManager = this.featureFlagManager,
         vaultRepository: VaultRepository = this.vaultRepository,
         environmentRepository: EnvironmentRepository = this.fakeEnvironmentRepository,
         settingsRepository: SettingsRepository = this.settingsRepository,
@@ -959,7 +903,6 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         policyManager: PolicyManager = this.policyManager,
     ): AccountSecurityViewModel = AccountSecurityViewModel(
         authRepository = authRepository,
-        featureFlagManager = featureFlagManager,
         vaultRepository = vaultRepository,
         settingsRepository = settingsRepository,
         environmentRepository = environmentRepository,

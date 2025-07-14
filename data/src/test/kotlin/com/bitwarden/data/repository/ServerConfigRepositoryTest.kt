@@ -119,6 +119,30 @@ class ServerConfigRepositoryTest {
             assertEquals(fakeConfigDiskSource.serverConfig, awaitItem())
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `serverConfigStateFlow should fetch new server configurations when minimum config sync interval is reached `() =
+        runTest {
+
+            val testConfig = SERVER_CONFIG.copy(
+                lastSync = fixedClock.instant().minusSeconds(60 * 60 + 1).toEpochMilli(),
+                serverData = CONFIG_RESPONSE_JSON.copy(
+                    version = "old version!!",
+                ),
+            )
+            fakeConfigDiskSource.serverConfig = testConfig
+
+            coEvery {
+                configService.getConfig()
+            } returns CONFIG_RESPONSE_JSON.asSuccess()
+
+            repository.getServerConfig(forceRefresh = false)
+
+            repository.serverConfigStateFlow.test {
+                assertNotEquals(testConfig, awaitItem())
+            }
+        }
 }
 
 private val SERVER_CONFIG = ServerConfig(

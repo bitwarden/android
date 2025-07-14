@@ -9,9 +9,7 @@ import com.bitwarden.authenticator.data.authenticator.manager.model.Verification
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.util.toAuthenticatorItems
-import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
-import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
@@ -45,15 +43,6 @@ class AuthenticatorRepositoryTest {
     private val mockFileManager = mockk<FileManager>()
     private val mockImportManager = mockk<ImportManager>()
     private val mockDispatcherManager = FakeDispatcherManager()
-    private val mutablePasswordSyncFlagStateFlow = MutableStateFlow(true)
-    private val mockFeatureFlagManager = mockk<FeatureFlagManager> {
-        every {
-            getFeatureFlagFlow(FlagKey.PasswordManagerSync)
-        } returns mutablePasswordSyncFlagStateFlow
-        every {
-            getFeatureFlag(FlagKey.PasswordManagerSync)
-        } returns mutablePasswordSyncFlagStateFlow.value
-    }
     private val settingsRepository: SettingsRepository = mockk {
         every { previouslySyncedBitwardenAccountIds } returns emptySet()
     }
@@ -61,7 +50,6 @@ class AuthenticatorRepositoryTest {
     private val authenticatorRepository = AuthenticatorRepositoryImpl(
         authenticatorDiskSource = fakeAuthenticatorDiskSource,
         authenticatorBridgeManager = mockAuthenticatorBridgeManager,
-        featureFlagManager = mockFeatureFlagManager,
         totpCodeManager = mockTotpCodeManager,
         fileManager = mockFileManager,
         importManager = mockImportManager,
@@ -90,29 +78,6 @@ class AuthenticatorRepositoryTest {
     }
 
     @Test
-    fun `sharedCodesStateFlow value should be FeatureNotEnabled when feature flag is off`() =
-        runTest {
-            val repository = AuthenticatorRepositoryImpl(
-                authenticatorDiskSource = fakeAuthenticatorDiskSource,
-                authenticatorBridgeManager = mockAuthenticatorBridgeManager,
-                featureFlagManager = mockFeatureFlagManager,
-                totpCodeManager = mockTotpCodeManager,
-                fileManager = mockFileManager,
-                importManager = mockImportManager,
-                dispatcherManager = mockDispatcherManager,
-                settingRepository = settingsRepository,
-            )
-            mutablePasswordSyncFlagStateFlow.value = false
-            mutableAccountSyncStateFlow.value = AccountSyncState.Success(emptyList())
-            repository.sharedCodesStateFlow.test {
-                assertEquals(
-                    SharedVerificationCodesState.FeatureNotEnabled,
-                    awaitItem(),
-                )
-            }
-        }
-
-    @Test
     fun `ciphersStateFlow should emit sorted authenticator items when disk source changes`() =
         runTest {
             val mockItem = createMockAuthenticatorItemEntity(1)
@@ -122,27 +87,6 @@ class AuthenticatorRepositoryTest {
                 authenticatorRepository.ciphersStateFlow.value,
             )
         }
-
-    @Test
-    fun `sharedCodesStateFlow should emit FeatureNotEnabled when feature flag is off`() = runTest {
-        val repository = AuthenticatorRepositoryImpl(
-            authenticatorDiskSource = fakeAuthenticatorDiskSource,
-            authenticatorBridgeManager = mockAuthenticatorBridgeManager,
-            featureFlagManager = mockFeatureFlagManager,
-            totpCodeManager = mockTotpCodeManager,
-            fileManager = mockFileManager,
-            importManager = mockImportManager,
-            dispatcherManager = mockDispatcherManager,
-            settingRepository = settingsRepository,
-        )
-        mutablePasswordSyncFlagStateFlow.value = false
-        repository.sharedCodesStateFlow.test {
-            assertEquals(
-                SharedVerificationCodesState.FeatureNotEnabled,
-                awaitItem(),
-            )
-        }
-    }
 
     @Suppress("MaxLineLength")
     @Test
