@@ -105,6 +105,45 @@ jobs:
           secrets: |
             63e93f73-5118-4a62-9db8-b3160176aa8a > TEST_ACCOUNT_CREDS
 
+      - name: Configure .json test data file
+        run: printf %s '${{ env.TEST_ACCOUNT_CREDS }}' > app/src/androidTest/assets/TestData.json
+
+      - name: Build release APK
+        env:
+          PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
+        run: |
+          bundle exec fastlane assemblePlayStoreReleaseApk \
+            storeFile:app_play-keystore.jks \
+            storePassword:'${{ env.PLAY_KEYSTORE_PASSWORD }}' \
+            keyAlias:bitwarden \
+            keyPassword:'${{ env.PLAY_KEYSTORE_PASSWORD }}'
+
+      - name: Build test APK (espresso)
+        run: |
+          ./gradlew :app:assembleStandardReleaseAndroidTest
+
+      - name: Signing test APK
+        run: |
+          $ANDROID_SDK_ROOT/build-tools/34.0.0/apksigner sign \
+            --ks keystores/app_play-keystore.jks \
+            --ks-key-alias bitwarden \
+            --ks-pass pass:${{ secrets.PLAY_KEYSTORE_PASSWORD }} \
+            --key-pass pass:${{ secrets.PLAY_KEYSTORE_PASSWORD }} \
+            app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-standard-release-androidTest.apk
+
+      - name: Upload app APK to SauceLabs storage
+        run: |
+          saucectl storage upload app/build/outputs/apk/standard/release/com.x8bit.bitwarden.apk
+        env:
+          SAUCE_USERNAME: ${{ steps.get-e2e-secrets.outputs.SAUCE-LABS-USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ steps.get-e2e-secrets.outputs.SAUCE-LABS-ACCESS-KEY }}
+
+      - name: Upload test APK to SauceLabs storage
+        run: |
+          saucectl storage upload app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-standard-release-androidTest.apk
+        env:
+          SAUCE_USERNAME: ${{ steps.get-e2e-secrets.outputs.SAUCE-LABS-USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ steps.get-e2e-secrets.outputs.SAUCE-LABS-ACCESS-KEY }}
 
       - name: Run tests on SauceLabs
         run: saucectl run --config .sauce/config.yml
