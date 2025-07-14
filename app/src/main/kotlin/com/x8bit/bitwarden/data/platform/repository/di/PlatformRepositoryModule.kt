@@ -21,8 +21,8 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepositoryImpl
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepositoryImpl
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
-import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,15 +41,13 @@ object PlatformRepositoryModule {
     fun providesAuthenticatorBridgeRepository(
         authRepository: AuthRepository,
         authDiskSource: AuthDiskSource,
-        vaultRepository: VaultRepository,
         vaultDiskSource: VaultDiskSource,
-        vaultSdkSource: VaultSdkSource,
+        scopedVaultSdkSource: ScopedVaultSdkSource,
     ): AuthenticatorBridgeRepository = AuthenticatorBridgeRepositoryImpl(
         authRepository = authRepository,
         authDiskSource = authDiskSource,
-        vaultRepository = vaultRepository,
         vaultDiskSource = vaultDiskSource,
-        vaultSdkSource = vaultSdkSource,
+        scopedVaultSdkSource = scopedVaultSdkSource,
     )
 
     @Provides
