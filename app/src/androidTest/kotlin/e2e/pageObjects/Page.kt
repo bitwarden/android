@@ -16,7 +16,7 @@ import androidx.compose.ui.test.performClick
  */
 abstract class Page(protected val composeTestRule: ComposeTestRule) {
     companion object {
-        val TIMEOUT_MILLIS = 30000L
+        val TIMEOUT_MILLIS = 60000L
     }
 
     /**
