@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">المصادِق</string>
     <string name="biometrics_direction">المصادقة البيومترية</string>
     <string name="cancel">إلغاء</string>
     <string name="add_item">أضف عنصرا</string>

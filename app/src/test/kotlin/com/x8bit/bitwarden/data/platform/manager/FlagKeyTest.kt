@@ -10,10 +10,6 @@ class FlagKeyTest {
     @Test
     fun `Feature flags have the correct key name set`() {
         assertEquals(
-            FlagKey.AuthenticatorSync.keyName,
-            "enable-pm-bwa-sync",
-        )
-        assertEquals(
             FlagKey.EmailVerification.keyName,
             "email-verification",
         )
@@ -58,16 +54,8 @@ class FlagKeyTest {
             "mobile-error-reporting",
         )
         assertEquals(
-            FlagKey.FlightRecorder.keyName,
-            "enable-pm-flight-recorder",
-        )
-        assertEquals(
             FlagKey.RestrictCipherItemDeletion.keyName,
             "pm-15493-restrict-item-deletion-to-can-manage-permission",
-        )
-        assertEquals(
-            FlagKey.PreAuthSettings.keyName,
-            "enable-pm-prelogin-settings",
         )
         assertEquals(
             FlagKey.UserManagedPrivilegedApps.keyName,
@@ -83,7 +71,6 @@ class FlagKeyTest {
     fun `All feature flags have the correct default value set`() {
         assertTrue(
             listOf(
-                FlagKey.AuthenticatorSync,
                 FlagKey.EmailVerification,
                 FlagKey.ImportLoginsFlow,
                 FlagKey.CredentialExchangeProtocolImport,
@@ -95,9 +82,7 @@ class FlagKeyTest {
                 FlagKey.CipherKeyEncryption,
                 FlagKey.ChromeAutofill,
                 FlagKey.MobileErrorReporting,
-                FlagKey.FlightRecorder,
                 FlagKey.RestrictCipherItemDeletion,
-                FlagKey.PreAuthSettings,
                 FlagKey.UserManagedPrivilegedApps,
                 FlagKey.RemoveCardPolicy,
             ).all {

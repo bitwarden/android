@@ -67,12 +67,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import javax.inject.Inject
+
+private const val LOGIN_SUCCESS_SNACKBAR_DELAY: Long = 550L
 
 /**
  * Manages [VaultState], handles [VaultAction], and launches [VaultEvent] for the [VaultScreen].
@@ -168,12 +171,20 @@ class VaultViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        snackbarRelayManager
-            .getSnackbarDataFlow(
+        merge(
+            snackbarRelayManager
+                .getSnackbarDataFlow(SnackbarRelay.LOGIN_SUCCESS)
+                .onEach {
+                    // When the login success relay is triggered, the current activity is about to
+                    // be recreated. Adding this delay prevents the Snackbar from disappearing.
+                    delay(timeMillis = LOGIN_SUCCESS_SNACKBAR_DELAY)
+                },
+            snackbarRelayManager.getSnackbarDataFlow(
                 SnackbarRelay.CIPHER_DELETED,
                 SnackbarRelay.CIPHER_RESTORED,
                 SnackbarRelay.LOGINS_IMPORTED,
-            )
+            ),
+        )
             .map { VaultAction.Internal.SnackbarDataReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)

@@ -80,17 +80,55 @@ class VaultDiskSourceTest {
     }
 
     @Test
-    fun `getCiphers should emit all CiphersDao updates`() = runTest {
+    fun `getCiphersFlow should emit all CiphersDao updates`() = runTest {
         val cipherEntities = listOf(CIPHER_ENTITY)
         val ciphers = listOf(CIPHER_1)
 
         vaultDiskSource
-            .getCiphers(USER_ID)
+            .getCiphersFlow(USER_ID)
             .test {
                 assertEquals(emptyList<SyncResponseJson.Cipher>(), awaitItem())
                 ciphersDao.insertCiphers(cipherEntities)
                 assertEquals(ciphers, awaitItem())
             }
+    }
+
+    @Test
+    fun `getCiphers should return all CiphersDao ciphers`() = runTest {
+        val cipherEntities = listOf(CIPHER_ENTITY)
+        val ciphers = listOf(CIPHER_1)
+
+        val result1 = vaultDiskSource.getCiphers(USER_ID)
+        assertEquals(emptyList<SyncResponseJson.Cipher>(), result1)
+        ciphersDao.insertCiphers(cipherEntities)
+        val result2 = vaultDiskSource.getCiphers(USER_ID)
+        assertEquals(ciphers, result2)
+    }
+
+    @Test
+    fun `getTotpCiphers should return all CiphersDao totp ciphers`() = runTest {
+        val cipherEntities = listOf(
+            CIPHER_ENTITY,
+            CIPHER_ENTITY.copy(id = "otherCipherId", hasTotp = false),
+        )
+        val ciphers = listOf(CIPHER_1)
+
+        val result1 = vaultDiskSource.getTotpCiphers(USER_ID)
+        assertEquals(emptyList<SyncResponseJson.Cipher>(), result1)
+        ciphersDao.insertCiphers(cipherEntities)
+        val result2 = vaultDiskSource.getTotpCiphers(USER_ID)
+        assertEquals(ciphers, result2)
+    }
+
+    @Test
+    fun `getCipher should return CiphersDao cipher`() = runTest {
+        val cipherEntities = listOf(CIPHER_ENTITY)
+
+        val result1 = vaultDiskSource.getCipher(userId = USER_ID, cipherId = CIPHER_ENTITY.id)
+        assertNull(result1)
+        ciphersDao.insertCiphers(cipherEntities)
+        val result2 = vaultDiskSource.getCipher(userId = USER_ID, cipherId = CIPHER_ENTITY.id)
+        assertEquals(CIPHER_1, result2)
     }
 
     @Test
@@ -427,6 +465,7 @@ private const val CIPHER_JSON = """
 private val CIPHER_ENTITY = CipherEntity(
     id = "mockId-1",
     userId = USER_ID,
+    hasTotp = true,
     cipherType = "1",
     cipherJson = CIPHER_JSON,
 )

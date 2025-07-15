@@ -21,8 +21,11 @@ import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.manager.FileManager
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -44,6 +47,7 @@ class EnvironmentViewModel @Inject constructor(
     private val fileManager: FileManager,
     private val certificateManager: CertificateManager,
     private val featureFlagManager: FeatureFlagManager,
+    private val snackbarRelayManager: SnackbarRelayManager,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EnvironmentState, EnvironmentEvent, EnvironmentAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -168,7 +172,10 @@ class EnvironmentViewModel @Inject constructor(
             ),
         )
 
-        showToast(message = R.string.environment_saved.asText())
+        snackbarRelayManager.sendSnackbarData(
+            data = BitwardenSnackbarData(message = R.string.environment_saved.asText()),
+            relay = SnackbarRelay.ENVIRONMENT_SAVED,
+        )
         sendEvent(EnvironmentEvent.NavigateBack)
     }
 
@@ -187,7 +194,7 @@ class EnvironmentViewModel @Inject constructor(
     private fun handleCertificateInstallationResultReceive(
         action: EnvironmentAction.CertificateInstallationResultReceive,
     ) {
-        showToast(
+        showSnackbar(
             message = if (action.success) {
                 R.string.certificate_installed.asText()
             } else {
@@ -337,19 +344,19 @@ class EnvironmentViewModel @Inject constructor(
             }
 
             is ImportPrivateKeyResult.Error.UnsupportedKey -> {
-                showToast(message = R.string.unsupported_certificate_type.asText())
+                showSnackbar(message = R.string.unsupported_certificate_type.asText())
             }
 
             is ImportPrivateKeyResult.Error.KeyStoreOperationFailed -> {
-                showToast(message = R.string.certificate_installation_failed.asText())
+                showSnackbar(message = R.string.certificate_installation_failed.asText())
             }
 
             is ImportPrivateKeyResult.Error.UnrecoverableKey -> {
-                showToast(message = R.string.certificate_password_incorrect.asText())
+                showSnackbar(message = R.string.certificate_password_incorrect.asText())
             }
 
             is ImportPrivateKeyResult.Error.InvalidCertificateChain -> {
-                showToast(R.string.invalid_certificate_chain.asText())
+                showSnackbar(message = R.string.invalid_certificate_chain.asText())
             }
         }
     }
@@ -387,7 +394,7 @@ class EnvironmentViewModel @Inject constructor(
 
             is PrivateKeyAliasSelectionResult.Error -> {
                 sendEvent(
-                    EnvironmentEvent.ShowToast(
+                    EnvironmentEvent.ShowSnackbar(
                         message = R.string.error_loading_certificate.asText(),
                     ),
                 )
@@ -408,8 +415,8 @@ class EnvironmentViewModel @Inject constructor(
         }
     }
 
-    private fun showToast(message: Text) {
-        sendEvent(EnvironmentEvent.ShowToast(message))
+    private fun showSnackbar(message: Text) {
+        sendEvent(EnvironmentEvent.ShowSnackbar(message))
     }
 
     private fun showErrorDialog(message: Text, throwable: Throwable? = null) {
@@ -533,11 +540,25 @@ sealed class EnvironmentEvent {
     ) : EnvironmentEvent()
 
     /**
-     * Show a toast with the given message.
+     * Show a snackbar with the given [data].
      */
-    data class ShowToast(
-        val message: Text,
-    ) : EnvironmentEvent()
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : EnvironmentEvent() {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 }
 
 /**

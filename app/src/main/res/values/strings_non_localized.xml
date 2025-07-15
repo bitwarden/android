@@ -24,9 +24,7 @@
     <string name="simple_login_self_hosted_aliases">SimpleLogin self-hosted aliases</string>
     <string name="enable_chrome_autofill">Enable chrome autofill</string>
     <string name="enable_error_reporting_dialog">Enable error reporting dialog</string>
-    <string name="enable_flight_recorder">Enable flight recorder</string>
     <string name="restrict_item_deletion">Restrict item deletion</string>
-    <string name="enable_pre_auth_settings">Enabled pre-auth settings</string>
     <string name="generate_crash">Generate crash</string>
     <string name="generate_error_report">Generate error report</string>
     <string name="error_reports">Error reports</string>

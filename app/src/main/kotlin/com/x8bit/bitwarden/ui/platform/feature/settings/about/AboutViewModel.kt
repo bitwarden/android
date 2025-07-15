@@ -10,10 +10,8 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.ciBuildInfo
@@ -41,7 +39,6 @@ private const val KEY_STATE = "state"
 class AboutViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
-    featureFlagManager: FeatureFlagManager,
     private val clock: Clock,
     private val logsManager: LogsManager,
     private val environmentRepository: EnvironmentRepository,
@@ -57,7 +54,6 @@ class AboutViewModel @Inject constructor(
             isFlightRecorderEnabled = settingsRepository
                 .flightRecorderData
                 .hasActiveFlightRecorderData,
-            shouldShowFlightRecorder = featureFlagManager.getFeatureFlag(FlagKey.FlightRecorder),
             flightRecorderSubtext = settingsRepository
                 .flightRecorderData
                 .getStopsLoggingStringForActiveLog(clock = clock),
@@ -67,11 +63,6 @@ class AboutViewModel @Inject constructor(
     init {
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.FlightRecorder)
-            .map { AboutAction.Internal.FlightRecorderReceive(isEnabled = it) }
-            .onEach(::sendAction)
             .launchIn(viewModelScope)
         settingsRepository
             .flightRecorderDataFlow
@@ -96,15 +87,10 @@ class AboutViewModel @Inject constructor(
 
     private fun handleInternalAction(action: AboutAction.Internal) {
         when (action) {
-            is AboutAction.Internal.FlightRecorderReceive -> handleFlightRecorderReceive(action)
             is AboutAction.Internal.FlightRecorderDataReceive -> {
                 handleFlightRecorderDataReceive(action)
             }
         }
-    }
-
-    private fun handleFlightRecorderReceive(action: AboutAction.Internal.FlightRecorderReceive) {
-        mutableStateFlow.update { it.copy(shouldShowFlightRecorder = action.isEnabled) }
     }
 
     private fun handleFlightRecorderDataReceive(
@@ -190,7 +176,6 @@ data class AboutState(
     val isSubmitCrashLogsEnabled: Boolean,
     val shouldShowCrashLogsButton: Boolean,
     val isFlightRecorderEnabled: Boolean,
-    val shouldShowFlightRecorder: Boolean,
     val flightRecorderSubtext: Text?,
     val copyrightInfo: Text,
 ) : Parcelable
@@ -302,11 +287,6 @@ sealed class AboutAction {
      * Actions for internal use by the ViewModel.
      */
     sealed class Internal : AboutAction() {
-        /**
-         * Indicates that the flight recorder feature has been enabled or disabled.
-         */
-        data class FlightRecorderReceive(val isEnabled: Boolean) : Internal()
-
         /**
          * Indicates that the flight recorder data has changed.
          */

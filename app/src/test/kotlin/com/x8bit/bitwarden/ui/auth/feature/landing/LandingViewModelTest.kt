@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
@@ -17,6 +18,9 @@ import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
 import io.mockk.every
@@ -39,10 +43,14 @@ class LandingViewModelTest : BaseViewModelTest() {
         every { lockVault(any(), any()) } just runs
     }
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
-
+    private val mutableSnackbarSharedFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
+    private val snackbarRelayManager = mockk<SnackbarRelayManager> {
+        every {
+            getSnackbarDataFlow(SnackbarRelay.ENVIRONMENT_SAVED)
+        } returns mutableSnackbarSharedFlow
+    }
     private val featureFlagManager: FeatureFlagManager = mockk(relaxed = true) {
         every { getFeatureFlag(FlagKey.EmailVerification) } returns false
-        every { getFeatureFlag(FlagKey.PreAuthSettings) } returns false
     }
 
     @Test
@@ -219,20 +227,6 @@ class LandingViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(LandingAction.AppSettingsClick)
             assertEquals(LandingEvent.NavigateToSettings, awaitItem())
-        }
-    }
-
-    @Test
-    fun `PreAuthSettingFlagReceive should update the state accordingly`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE, awaitItem())
-
-            viewModel.trySendAction(LandingAction.Internal.PreAuthSettingFlagReceive(true))
-            assertEquals(DEFAULT_STATE.copy(showSettingsButton = true), awaitItem())
-
-            viewModel.trySendAction(LandingAction.Internal.PreAuthSettingFlagReceive(false))
-            assertEquals(DEFAULT_STATE.copy(showSettingsButton = false), awaitItem())
         }
     }
 
@@ -603,6 +597,16 @@ class LandingViewModelTest : BaseViewModelTest() {
         assertTrue(viewModel.stateFlow.value.emailInput.isEmpty())
     }
 
+    @Test
+    fun `SnackbarDataReceive should update emit ShowSnackbar`() = runTest {
+        val viewModel = createViewModel()
+        val snackbarData = BitwardenSnackbarData(message = "Test".asText())
+        viewModel.eventFlow.test {
+            mutableSnackbarSharedFlow.tryEmit(snackbarData)
+            assertEquals(LandingEvent.ShowSnackbar(data = snackbarData), awaitItem())
+        }
+    }
+
     //region Helper methods
 
     private fun createViewModel(
@@ -620,6 +624,7 @@ class LandingViewModelTest : BaseViewModelTest() {
         vaultRepository = vaultRepository,
         environmentRepository = fakeEnvironmentRepository,
         featureFlagManager = featureFlagManager,
+        snackbarRelayManager = snackbarRelayManager,
         savedStateHandle = savedStateHandle,
     )
 
@@ -634,5 +639,4 @@ private val DEFAULT_STATE = LandingState(
     selectedEnvironmentLabel = Environment.Us.label,
     dialog = null,
     accountSummaries = emptyList(),
-    showSettingsButton = false,
 )

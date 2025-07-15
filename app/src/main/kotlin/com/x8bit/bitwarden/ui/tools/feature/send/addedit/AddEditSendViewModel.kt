@@ -49,7 +49,6 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -101,12 +100,7 @@ class AddEditSendViewModel @Inject constructor(
                         isHideEmailAddressEnabled = !policyManager
                             .getActivePolicies<PolicyInformation.SendOptions>()
                             .any { it.shouldDisableHideEmail ?: false },
-                        deletionDate = ZonedDateTime
-                            .now(clock)
-                            // We want the default time to be midnight, so we remove all values
-                            // beyond days
-                            .truncatedTo(ChronoUnit.DAYS)
-                            .plusWeeks(1),
+                        deletionDate = ZonedDateTime.now(clock).plusWeeks(1),
                         expirationDate = null,
                         sendUrl = null,
                         hasPassword = false,

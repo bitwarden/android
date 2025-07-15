@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginap
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
@@ -62,6 +63,9 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
     }
     private val snackbarRelayManager: SnackbarRelayManager = mockk {
         every { sendSnackbarData(data = any(), relay = SnackbarRelay.LOGIN_APPROVAL) } just runs
+    }
+    private val toastManager: ToastManager = mockk {
+        every { show(messageId = any()) } just runs
     }
 
     @BeforeEach
@@ -327,11 +331,10 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 viewModel.trySendAction(LoginApprovalAction.ApproveRequestClick)
-                assertEquals(
-                    LoginApprovalEvent.ShowToast(R.string.login_approved.asText()),
-                    awaitItem(),
-                )
                 assertEquals(LoginApprovalEvent.ExitApp, awaitItem())
+            }
+            verify {
+                toastManager.show(messageId = R.string.login_approved)
             }
         }
 
@@ -397,11 +400,10 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick)
-                assertEquals(
-                    LoginApprovalEvent.ShowToast(R.string.log_in_denied.asText()),
-                    awaitItem(),
-                )
                 assertEquals(LoginApprovalEvent.ExitApp, awaitItem())
+            }
+            verify {
+                toastManager.show(messageId = R.string.log_in_denied)
             }
         }
 
@@ -441,6 +443,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
         authRepository = mockAuthRepository,
         specialCircumstanceManager = mockSpecialCircumstanceManager,
         snackbarRelayManager = snackbarRelayManager,
+        toastManager = toastManager,
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
             every { toLoginApprovalArgs() } returns LoginApprovalArgs(fingerprint = FINGERPRINT)

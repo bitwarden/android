@@ -1,8 +1,7 @@
 package com.x8bit.bitwarden.data.auth.manager
 
-import android.content.Context
-import android.widget.Toast
 import androidx.annotation.StringRes
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.R
@@ -27,15 +26,15 @@ import timber.log.Timber
  */
 @Suppress("LongParameterList")
 class UserLogoutManagerImpl(
-    private val context: Context,
     private val authDiskSource: AuthDiskSource,
     private val generatorDiskSource: GeneratorDiskSource,
     private val passwordHistoryDiskSource: PasswordHistoryDiskSource,
     private val pushDiskSource: PushDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
+    private val toastManager: ToastManager,
     private val vaultDiskSource: VaultDiskSource,
-    dispatcherManager: DispatcherManager,
     private val vaultSdkSource: VaultSdkSource,
+    dispatcherManager: DispatcherManager,
 ) : UserLogoutManager {
     private val scope = CoroutineScope(dispatcherManager.unconfined)
     private val mainScope = CoroutineScope(dispatcherManager.main)
@@ -117,7 +116,7 @@ class UserLogoutManagerImpl(
     }
 
     private fun showToast(@StringRes message: Int) {
-        mainScope.launch { Toast.makeText(context, message, Toast.LENGTH_SHORT).show() }
+        mainScope.launch { toastManager.show(messageId = message) }
     }
 
     private fun switchUserIfAvailable(

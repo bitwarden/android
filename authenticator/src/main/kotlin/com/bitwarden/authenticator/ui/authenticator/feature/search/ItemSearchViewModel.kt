@@ -222,6 +222,11 @@ data class ItemSearchState(
             val sharedItems: SharedCodesDisplayState,
         ) : ViewState() {
             /**
+             * The header to display for the local codes.
+             */
+            val localListHeader: Text get() = R.string.local_codes.asText(itemList.size)
+
+            /**
              * Whether or not there should be a "Local codes" header shown above local codes.
              */
             val hasLocalAndSharedItems get() = !sharedItems.isEmpty() && itemList.isNotEmpty()

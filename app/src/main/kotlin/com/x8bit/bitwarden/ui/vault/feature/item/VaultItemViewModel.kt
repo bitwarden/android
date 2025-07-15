@@ -9,6 +9,7 @@ import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.core.data.repository.util.mapNullable
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.repository.util.baseIconUrl
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.util.Text
@@ -214,6 +215,12 @@ class VaultItemViewModel @Inject constructor(
 
         settingsRepository.isIconLoadingDisabledFlow
             .map { VaultItemAction.Internal.IsIconLoadingDisabledUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.CIPHER_MOVED_TO_ORGANIZATION)
+            .map { VaultItemAction.Internal.SnackbarDataReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -937,6 +944,7 @@ class VaultItemViewModel @Inject constructor(
         when (action) {
             is VaultItemAction.Internal.CopyValue -> handleCopyValue(action)
             is VaultItemAction.Internal.PasswordBreachReceive -> handlePasswordBreachReceive(action)
+            is VaultItemAction.Internal.SnackbarDataReceived -> handleSnackbarDataReceived(action)
             is VaultItemAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
             is VaultItemAction.Internal.DeleteCipherReceive -> handleDeleteCipherReceive(action)
             is VaultItemAction.Internal.RestoreCipherReceive -> handleRestoreCipherReceive(action)
@@ -956,6 +964,10 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleCopyValue(action: VaultItemAction.Internal.CopyValue) {
         clipboardManager.setText(action.value)
+    }
+
+    private fun handleSnackbarDataReceived(action: VaultItemAction.Internal.SnackbarDataReceived) {
+        sendEvent(VaultItemEvent.ShowSnackbar(action.data))
     }
 
     private fun handlePasswordBreachReceive(
@@ -1784,7 +1796,7 @@ sealed class VaultItemEvent {
      */
     data class ShowSnackbar(
         val data: BitwardenSnackbarData,
-    ) : VaultItemEvent() {
+    ) : VaultItemEvent(), BackgroundEvent {
         constructor(
             message: Text,
             messageHeader: Text? = null,
@@ -2105,6 +2117,13 @@ sealed class VaultItemAction {
          */
         data class PasswordBreachReceive(
             val result: BreachCountResult,
+        ) : Internal()
+
+        /**
+         * Indicates that snackbar data has been received.
+         */
+        data class SnackbarDataReceived(
+            val data: BitwardenSnackbarData,
         ) : Internal()
 
         /**

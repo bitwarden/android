@@ -64,9 +64,11 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
     fun `handleUpdateFeatureFlag should update the feature flag via the repository`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(
-            DebugMenuAction.UpdateFeatureFlag(FlagKey.PasswordManagerSync, false),
+            DebugMenuAction.UpdateFeatureFlag(FlagKey.BitwardenAuthenticationEnabled, false),
         )
-        verify { mockDebugMenuRepository.updateFeatureFlag(FlagKey.PasswordManagerSync, false) }
+        verify {
+            mockDebugMenuRepository.updateFeatureFlag(FlagKey.BitwardenAuthenticationEnabled, false)
+        }
     }
 
     private fun createViewModel(): DebugMenuViewModel = DebugMenuViewModel(
@@ -77,12 +79,10 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
 
 private val DEFAULT_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.BitwardenAuthenticationEnabled to true,
-    FlagKey.PasswordManagerSync to true,
 )
 
 private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.BitwardenAuthenticationEnabled to false,
-    FlagKey.PasswordManagerSync to false,
 )
 
 private val DEFAULT_STATE = DebugMenuState(
