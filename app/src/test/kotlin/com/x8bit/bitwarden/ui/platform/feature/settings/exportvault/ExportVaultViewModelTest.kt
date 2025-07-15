@@ -162,6 +162,32 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmExportVaultClicked correct password should call exportVaultDataToString without restricted item types when policy is disabled and feature flag is enabled`() {
+        val password = "password"
+        coEvery {
+            authRepository.validatePassword(
+                password = password,
+            )
+        } returns ValidatePasswordResult.Success(isValid = true)
+        every {
+            featureFlagManager.getFeatureFlag(FlagKey.RemoveCardPolicy)
+        } returns true
+
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
+
+        viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+
+        coVerify {
+            vaultRepository.exportVaultDataToString(
+                format = any(),
+                restrictedTypes = listOf(),
+            )
+        }
+    }
+
     @Test
     fun `ConfirmExportVaultClicked with verified code should call exportVaultDataToString`() {
         val passcode = "1234"
