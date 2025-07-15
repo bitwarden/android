@@ -972,10 +972,12 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     isUserInitiated = false,
                 ),
             )
-            viewModel.stateFlow.test {
-                assertEquals(DEFAULT_STATE, awaitItem()) // No loading dialog
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                // No loading dialog
+                assertEquals(DEFAULT_STATE, stateFlow.awaitItem())
+                // No snackbar
+                eventFlow.expectNoEvents()
             }
-            viewModel.eventFlow.test { expectNoEvents() } // No snackbar
         }
 
     @Test
