@@ -7,7 +7,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class RealDeviceE2ETests : BaseE2ETest() {
+class RealDeviceE2eTests : BaseE2eTest() {
 
     @Test
     fun testVaultLockUnlockFlow() {

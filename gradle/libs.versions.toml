@@ -28,6 +28,7 @@ androidxWork = "2.10.2"
 bitwardenSdk = "1.0.0-20250708.105256-238"
 crashlytics = "3.0.4"
 detekt = "1.23.8"
+espressoCore = "3.6.1"
 firebaseBom = "33.16.0"
 glide = "1.0.0-beta01"
 googleGuava = "33.4.8-jre"
@@ -37,6 +38,7 @@ googleServices = "4.4.3"
 googleReview = "2.0.2"
 hilt = "2.56.2"
 junit5 = "5.13.2"
+junitKtx = "1.2.1"
 jvmTarget = "17"
 # kotlin and ksp **must** use compatible versions, do not update either without the other.
 kotlin = "2.2.0"
@@ -53,11 +55,8 @@ sonarqube = "6.2.0.5505"
 testng = "7.11.0"
 timber = "5.0.1"
 turbine = "1.2.1"
-zxing = "3.5.3"
 uiautomator = "2.3.0"
-espressoCore = "3.6.1"
-junitKtx = "1.2.1"
-uiTestJunit4Android = "1.8.2"
+zxing = "3.5.3"
 
 [libraries]
 # Format: <maintainer>-<artifact-name>
@@ -81,9 +80,12 @@ androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-mani
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
+
 #noinspection CredentialDependency - Used for Passkey support, which is not available below Android 14
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "androidxCredentials" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
@@ -93,6 +95,8 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidxRoom" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "androidxSecurityCrypto" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxSplash" }
+androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
+androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
 bitwarden-sdk = { module = "com.bitwarden:sdk-android-temp", version.ref = "bitwardenSdk" }
 bumptech-glide = { module = "com.github.bumptech.glide:compose", version.ref = "glide" }
@@ -130,10 +134,6 @@ square-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" 
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 zxing-zxing-core = { module = "com.google.zxing:core", version.ref = "zxing" }
 testng = { group = "org.testng", name = "testng", version.ref = "testng" }
-androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
-androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

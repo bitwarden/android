@@ -7,7 +7,7 @@ import com.x8bit.bitwarden.MainActivity
 import data.TestDataReader
 import org.junit.Rule
 
-open class BaseE2ETest {
+open class BaseE2eTest {
 
     @get:Rule
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
