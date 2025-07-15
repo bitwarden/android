@@ -13,14 +13,17 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: read
+      id-token: write
     steps:
       - name: Check out repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Log in to Azure
-        uses: Azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5 # v2.3.0
+        uses: bitwarden/gh-actions/azure-login@main
         with:
-          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
 
       - name: Retrieve secrets
         id: retrieve-secrets
@@ -39,6 +42,9 @@ jobs:
           config: crowdin-bwpm.yml
           upload_sources: true
           upload_translations: false
+
+      - name: Log out from Azure
+        uses: bitwarden/gh-actions/azure-logout@main
 
       - name: Upload sources for Authenticator
         uses: crowdin/github-action@b8012bd5491b8aa8578b73ab5b5f5e7c94aaa6e2 # v2.7.0

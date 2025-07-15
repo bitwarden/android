@@ -28,6 +28,7 @@ jobs:
       contents: read
       pull-requests: write
       security-events: write
+      id-token: write
 
     steps:
       - name: Check out repo
@@ -35,16 +36,33 @@ jobs:
         with:
           ref: ${{  github.event.pull_request.head.sha }}
 
+      - name: Log in to Azure
+        uses: bitwarden/gh-actions/azure-login@main
+        with:
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
+
+      - name: Get Azure Key Vault secrets
+        id: get-kv-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: gh-org-bitwarden
+          secrets: "CHECKMARX-TENANT,CHECKMARX-CLIENT-ID,CHECKMARX-SECRET"
+
+      - name: Log out from Azure
+        uses: bitwarden/gh-actions/azure-logout@main
+
       - name: Scan with Checkmarx
         uses: checkmarx/ast-github-action@ef93013c95adc60160bc22060875e90800d3ecfc # 2.3.19
         env:
           INCREMENTAL: "${{ contains(github.event_name, 'pull_request') && '--sast-incremental' || '' }}"
         with:
           project_name: ${{ github.repository }}
-          cx_tenant: ${{ secrets.CHECKMARX_TENANT }}
+          cx_tenant: ${{ steps.get-kv-secrets.outputs.CHECKMARX-TENANT }}
           base_uri: https://ast.checkmarx.net/
-          cx_client_id: ${{ secrets.CHECKMARX_CLIENT_ID }}
-          cx_client_secret: ${{ secrets.CHECKMARX_SECRET }}
+          cx_client_id: ${{ steps.get-kv-secrets.outputs.CHECKMARX-CLIENT-ID }}
+          cx_client_secret: ${{ steps.get-kv-secrets.outputs.CHECKMARX-SECRET }}
           additional_params: |
             --report-format sarif \
             --filter "state=TO_VERIFY;PROPOSED_NOT_EXPLOITABLE;CONFIRMED;URGENT" \
@@ -64,6 +82,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      id-token: write
 
     steps:
       - name: Check out repo
@@ -72,10 +91,27 @@ jobs:
           fetch-depth: 0
           ref: ${{  github.event.pull_request.head.sha }}
 
+      - name: Log in to Azure
+        uses: bitwarden/gh-actions/azure-login@main
+        with:
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
+
+      - name: Get Azure Key Vault secrets
+        id: get-kv-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: gh-org-bitwarden
+          secrets: "SONAR-TOKEN"
+
+      - name: Log out from Azure
+        uses: bitwarden/gh-actions/azure-logout@main
+
       - name: Scan with SonarCloud
         uses: sonarsource/sonarqube-scan-action@aa494459d7c39c106cc77b166de8b4250a32bb97 # v5.1.0
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ steps.get-kv-secrets.outputs.SONAR-TOKEN }}
         with:
           args: >
             -Dsonar.organization=${{ github.repository_owner }}
