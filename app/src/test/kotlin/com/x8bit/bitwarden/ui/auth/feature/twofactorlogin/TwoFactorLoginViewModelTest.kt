@@ -98,7 +98,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    @Suppress("MaxLineLength")
     fun `init with email auth method and not new device verification should call resendEmail`() {
         val initialState = DEFAULT_STATE.copy(
             authMethod = TwoFactorAuthMethod.EMAIL,
