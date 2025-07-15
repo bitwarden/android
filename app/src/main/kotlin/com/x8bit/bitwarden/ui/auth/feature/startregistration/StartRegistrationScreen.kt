@@ -60,6 +60,8 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 
@@ -78,6 +80,7 @@ fun StartRegistrationScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handler = rememberStartRegistrationHandler(viewModel = viewModel)
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel) { event ->
         when (event) {
             is NavigateToPrivacyPolicy -> {
@@ -100,6 +103,7 @@ fun StartRegistrationScreen(
 
             is StartRegistrationEvent.NavigateToCheckEmail -> onNavigateToCheckEmail(event.email)
             StartRegistrationEvent.NavigateToEnvironment -> onNavigateToEnvironment()
+            is StartRegistrationEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
 
@@ -123,6 +127,9 @@ fun StartRegistrationScreen(
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = handler.onCloseClick,
             )
+        },
+        snackbarHost = {
+            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
         },
     ) {
         StartRegistrationContent(

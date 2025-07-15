@@ -35,8 +35,17 @@ class FakeCiphersDao : CiphersDao {
         return count
     }
 
-    override fun getAllCiphers(userId: String): Flow<List<CipherEntity>> =
+    override fun getAllCiphersFlow(userId: String): Flow<List<CipherEntity>> =
         ciphersFlow.map { ciphers -> ciphers.filter { it.userId == userId } }
+
+    override suspend fun getAllCiphers(userId: String): List<CipherEntity> =
+        storedCiphers.filter { it.userId == userId }
+
+    override suspend fun getAllTotpCiphers(userId: String): List<CipherEntity> =
+        storedCiphers.filter { it.userId == userId && it.hasTotp }
+
+    override suspend fun getCipher(userId: String, cipherId: String): CipherEntity? =
+        storedCiphers.find { it.userId == userId && it.id == cipherId }
 
     override suspend fun insertCiphers(ciphers: List<CipherEntity>) {
         storedCiphers.addAll(ciphers)

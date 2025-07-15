@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.startregistration
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
@@ -26,6 +27,9 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEv
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToPrivacyPolicy
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToTerms
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToUnsubscribe
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -43,7 +47,12 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
     private val mockAuthRepository = mockk<AuthRepository> {
         every { captchaTokenResultFlow } returns flowOf()
     }
-
+    private val mutableSnackbarSharedFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
+    private val snackbarRelayManager = mockk<SnackbarRelayManager> {
+        every {
+            getSnackbarDataFlow(SnackbarRelay.ENVIRONMENT_SAVED)
+        } returns mutableSnackbarSharedFlow
+    }
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
 
     @BeforeEach
@@ -346,12 +355,23 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `SnackbarDataReceive should update emit ShowSnackbar`() = runTest {
+        val viewModel = createViewModel()
+        val snackbarData = BitwardenSnackbarData(message = "Test".asText())
+        viewModel.eventFlow.test {
+            mutableSnackbarSharedFlow.tryEmit(snackbarData)
+            assertEquals(StartRegistrationEvent.ShowSnackbar(data = snackbarData), awaitItem())
+        }
+    }
+
     private fun createViewModel(
         state: StartRegistrationState? = null,
     ): StartRegistrationViewModel =
         StartRegistrationViewModel(
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
+            snackbarRelayManager = snackbarRelayManager,
             savedStateHandle = SavedStateHandle().apply {
                 set(key = "state", value = state)
             },

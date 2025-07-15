@@ -49,6 +49,7 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.serialization)
+    implementation(platform(libs.square.okhttp.bom))
     implementation(libs.square.okhttp)
     implementation(libs.square.okhttp.logging)
     implementation(platform(libs.square.retrofit.bom))

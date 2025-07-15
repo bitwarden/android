@@ -33,7 +33,7 @@ class FirstTimeActionManagerTest {
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
     private val mutableCiphersListFlow = MutableStateFlow(emptyList<SyncResponseJson.Cipher>())
     private val vaultDiskSource = mockk<VaultDiskSource> {
-        every { getCiphers(any()) } returns mutableCiphersListFlow
+        every { getCiphersFlow(any()) } returns mutableCiphersListFlow
     }
 
     private val mutableImportLoginsFlow = MutableStateFlow(false)

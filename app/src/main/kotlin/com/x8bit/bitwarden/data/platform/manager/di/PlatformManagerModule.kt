@@ -69,6 +69,8 @@ import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManage
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
+import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactoryImpl
 import com.x8bit.bitwarden.data.platform.processor.AuthenticatorBridgeProcessor
 import com.x8bit.bitwarden.data.platform.processor.AuthenticatorBridgeProcessorImpl
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
@@ -136,13 +138,11 @@ object PlatformManagerModule {
         addTotpItemFromAuthenticatorManager: AddTotpItemFromAuthenticatorManager,
         @ApplicationContext context: Context,
         dispatcherManager: DispatcherManager,
-        featureFlagManager: FeatureFlagManager,
     ): AuthenticatorBridgeProcessor = AuthenticatorBridgeProcessorImpl(
         authenticatorBridgeRepository = authenticatorBridgeRepository,
         addTotpItemFromAuthenticatorManager = addTotpItemFromAuthenticatorManager,
         context = context,
         dispatcherManager = dispatcherManager,
-        featureFlagManager = featureFlagManager,
     )
 
     @Provides
@@ -245,9 +245,11 @@ object PlatformManagerModule {
     fun provideSdkClientManager(
         featureFlagManager: FeatureFlagManager,
         nativeLibraryManager: NativeLibraryManager,
+        sdkRepositoryFactory: SdkRepositoryFactory,
     ): SdkClientManager = SdkClientManagerImpl(
         featureFlagManager = featureFlagManager,
         nativeLibraryManager = nativeLibraryManager,
+        sdkRepoFactory = sdkRepositoryFactory,
     )
 
     @Provides
@@ -384,6 +386,14 @@ object PlatformManagerModule {
         settingsDiskSource = settingsDiskSource,
         autofillEnabledManager = autofillEnabledManager,
         accessibilityEnabledManager = accessibilityEnabledManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideSdkRepositoryFactory(
+        vaultDiskSource: VaultDiskSource,
+    ): SdkRepositoryFactory = SdkRepositoryFactoryImpl(
+        vaultDiskSource = vaultDiskSource,
     )
 
     @Provides

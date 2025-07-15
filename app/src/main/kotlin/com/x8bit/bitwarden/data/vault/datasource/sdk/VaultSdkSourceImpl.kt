@@ -25,6 +25,7 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.EncryptionContext
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
@@ -47,6 +48,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.time.Instant
 
 /**
  * Primary implementation of [VaultSdkSource] that serves as a convenience wrapper around a
@@ -311,6 +313,17 @@ class VaultSdkSourceImpl(
             }
         }
 
+    override suspend fun decryptCipherListWithFailures(
+        userId: String,
+        cipherList: List<Cipher>,
+    ): Result<DecryptCipherListResult> =
+        runCatchingWithLogs {
+            getClient(userId = userId)
+                .vault()
+                .ciphers()
+                .decryptListWithFailures(cipherList)
+        }
+
     override suspend fun decryptCollection(
         userId: String,
         collection: Collection,
@@ -435,6 +448,19 @@ class VaultSdkSourceImpl(
             .vault()
             .generateTotp(
                 key = totp,
+                time = time,
+            )
+    }
+
+    override suspend fun generateTotpForCipherListView(
+        userId: String,
+        cipherListView: CipherListView,
+        time: Instant?,
+    ): Result<TotpResponse> = runCatchingWithLogs {
+        getClient(userId = userId)
+            .vault()
+            .generateTotpCipherView(
+                view = cipherListView,
                 time = time,
             )
     }

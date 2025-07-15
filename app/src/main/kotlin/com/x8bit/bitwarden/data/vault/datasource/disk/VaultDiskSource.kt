@@ -15,9 +15,24 @@ interface VaultDiskSource {
     suspend fun saveCipher(userId: String, cipher: SyncResponseJson.Cipher)
 
     /**
+     * Retrieves all ciphers from the data source for a given [userId] as a [Flow].
+     */
+    fun getCiphersFlow(userId: String): Flow<List<SyncResponseJson.Cipher>>
+
+    /**
      * Retrieves all ciphers from the data source for a given [userId].
      */
-    fun getCiphers(userId: String): Flow<List<SyncResponseJson.Cipher>>
+    suspend fun getCiphers(userId: String): List<SyncResponseJson.Cipher>
+
+    /**
+     * Retrieves all ciphers from the data source for a given [userId] that contain TOTP codes.
+     */
+    suspend fun getTotpCiphers(userId: String): List<SyncResponseJson.Cipher>
+
+    /**
+     * Retrieves a cipher from the data source for a given [userId] and [cipherId].
+     */
+    suspend fun getCipher(userId: String, cipherId: String): SyncResponseJson.Cipher?
 
     /**
      * Deletes a cipher from the data source for the given [userId] and [cipherId].
@@ -72,13 +87,13 @@ interface VaultDiskSource {
     /**
      * Replaces all [vault] data for a given [userId] with the new `vault`.
      *
-     * This will always cause the [getCiphers], [getCollections], and [getFolders] functions to
+     * This will always cause the [getCiphersFlow], [getCollections], and [getFolders] functions to
      * re-emit even if the underlying data has not changed.
      */
     suspend fun replaceVaultData(userId: String, vault: SyncResponseJson)
 
     /**
-     * Trigger re-emissions from the [getCiphers], [getCollections], [getFolders], and [getSends]
+     * Trigger re-emissions from the [getCiphersFlow], [getCollections], [getFolders], and [getSends]
      * functions.
      */
     suspend fun resyncVaultData(userId: String)

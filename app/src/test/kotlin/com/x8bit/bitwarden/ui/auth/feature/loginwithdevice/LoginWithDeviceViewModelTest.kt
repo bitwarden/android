@@ -13,6 +13,9 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -20,6 +23,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -41,6 +45,9 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             createAuthRequestWithUpdates(email = EMAIL, authRequestType = any())
         } returns mutableCreateAuthRequestWithUpdatesFlow
         coEvery { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
+    }
+    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+        every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
 
     @BeforeEach
@@ -178,8 +185,8 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 )
             } returns LoginResult.Success
             val viewModel = createViewModel()
-            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-                assertEquals(DEFAULT_STATE, stateFlow.awaitItem())
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
                 mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
                     CreateAuthRequestResult.Success(
                         authRequest = AUTH_REQUEST,
@@ -197,7 +204,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                             message = R.string.logging_in.asText(),
                         ),
                     ),
-                    stateFlow.awaitItem(),
+                    awaitItem(),
                 )
                 assertEquals(
                     DEFAULT_STATE.copy(
@@ -207,14 +214,16 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                         dialogState = null,
                         loginData = DEFAULT_LOGIN_DATA,
                     ),
-                    stateFlow.awaitItem(),
-                )
-                assertEquals(
-                    LoginWithDeviceEvent.ShowToast(R.string.login_approved.asText()),
-                    eventFlow.awaitItem(),
+                    awaitItem(),
                 )
             }
 
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = R.string.login_approved.asText()),
+                    relay = SnackbarRelay.LOGIN_SUCCESS,
+                )
+            }
             coVerify(exactly = 1) {
                 authRepository.login(
                     email = EMAIL,
@@ -247,8 +256,8 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             )
             val viewModel = createViewModel(initialState)
 
-            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-                assertEquals(initialState, stateFlow.awaitItem())
+            viewModel.stateFlow.test {
+                assertEquals(initialState, awaitItem())
                 mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
                     CreateAuthRequestResult.Success(
                         authRequest = AUTH_REQUEST,
@@ -266,7 +275,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                         ),
                         loginData = DEFAULT_LOGIN_DATA,
                     ),
-                    stateFlow.awaitItem(),
+                    awaitItem(),
                 )
                 assertEquals(
                     initialState.copy(
@@ -276,14 +285,16 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                         dialogState = null,
                         loginData = DEFAULT_LOGIN_DATA,
                     ),
-                    stateFlow.awaitItem(),
-                )
-                assertEquals(
-                    LoginWithDeviceEvent.ShowToast(R.string.login_approved.asText()),
-                    eventFlow.awaitItem(),
+                    awaitItem(),
                 )
             }
 
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = R.string.login_approved.asText()),
+                    relay = SnackbarRelay.LOGIN_SUCCESS,
+                )
+            }
             coVerify(exactly = 1) {
                 authRepository.completeTdeLogin(
                     asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
@@ -741,6 +752,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     ): LoginWithDeviceViewModel =
         LoginWithDeviceViewModel(
             authRepository = authRepository,
+            snackbarRelayManager = snackbarRelayManager,
             savedStateHandle = SavedStateHandle().apply {
                 set("state", state)
                 every { toLoginWithDeviceArgs() } returns LoginWithDeviceArgs(

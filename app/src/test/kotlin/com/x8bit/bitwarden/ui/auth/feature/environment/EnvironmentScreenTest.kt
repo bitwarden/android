@@ -16,6 +16,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.auth.feature.environment.EnvironmentState.DialogState
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
@@ -62,6 +63,15 @@ class EnvironmentScreenTest : BitwardenComposeTest() {
     fun `NavigateBack event should invoke onNavigateBack`() {
         mutableEventFlow.tryEmit(EnvironmentEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `on ShowSnackbar should display snackbar content`() {
+        val message = "message"
+        val data = BitwardenSnackbarData(message = message.asText())
+        composeTestRule.onNodeWithText(text = message).assertDoesNotExist()
+        mutableEventFlow.tryEmit(EnvironmentEvent.ShowSnackbar(data = data))
+        composeTestRule.onNodeWithText(text = message).assertIsDisplayed()
     }
 
     @Test

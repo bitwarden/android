@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name" translatable="false">Authenticator</string>
+
     <string name="export_format_label_json">.json</string>
     <string name="export_format_label_csv">.csv</string>
     <string name="import_format_label_bitwarden_json">Bitwarden (.json)</string>
@@ -12,6 +14,5 @@
     <string name="debug_menu">Debug Menu</string>
     <string name="reset_values">Reset values</string>
     <string name="bitwarden_authentication_enabled">Bitwarden authentication enabled</string>
-    <string name="password_manager_sync">Password manager sync</string>
 
 </resources>
