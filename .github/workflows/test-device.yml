@@ -14,15 +14,15 @@ jobs:
     name: Check main build against real devices
     runs-on: ubuntu-24.04
     env:
-      JAVA_VERSION: 17
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      _JAVA_VERSION: 17
+      _GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Check out repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@v4
+        uses: gradle/actions/wrapper-validation@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4.3.1
 
       - name: Cache Gradle files
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
@@ -153,7 +153,7 @@ jobs:
 
       - name: Upload SauceLabs test report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: saucectl-report
           path: saucectl-report.xml
