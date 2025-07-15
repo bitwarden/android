@@ -182,13 +182,6 @@ sealed class VaultSettingsEvent {
     data object NavigateToFolders : VaultSettingsEvent()
 
     /**
-     * Shows a toast with the given [message].
-     */
-    data class ShowToast(
-        val message: String,
-    ) : VaultSettingsEvent()
-
-    /**
      * Shows a snackbar with the given [data].
      */
     data class ShowSnackbar(val data: BitwardenSnackbarData) : VaultSettingsEvent(), BackgroundEvent

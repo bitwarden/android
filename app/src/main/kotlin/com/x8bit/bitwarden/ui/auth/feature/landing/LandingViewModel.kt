@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidEmail
 import com.bitwarden.ui.util.Text
@@ -17,6 +18,9 @@ import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -38,6 +42,7 @@ class LandingViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     private val environmentRepository: EnvironmentRepository,
     private val featureFlagManager: FeatureFlagManager,
+    snackbarRelayManager: SnackbarRelayManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LandingState, LandingEvent, LandingAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -49,7 +54,6 @@ class LandingViewModel @Inject constructor(
             selectedEnvironmentLabel = environmentRepository.environment.label,
             dialog = null,
             accountSummaries = authRepository.userStateFlow.value?.toAccountSummaries().orEmpty(),
-            showSettingsButton = featureFlagManager.getFeatureFlag(key = FlagKey.PreAuthSettings),
         ),
 ) {
 
@@ -98,9 +102,9 @@ class LandingViewModel @Inject constructor(
                 action?.let(::handleAction)
             }
             .launchIn(viewModelScope)
-        featureFlagManager
-            .getFeatureFlagFlow(key = FlagKey.PreAuthSettings)
-            .map { LandingAction.Internal.PreAuthSettingFlagReceive(it) }
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.ENVIRONMENT_SAVED)
+            .map { LandingAction.Internal.SnackbarDataReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -132,9 +136,7 @@ class LandingViewModel @Inject constructor(
                 handleUpdatedEnvironmentReceive(action)
             }
 
-            is LandingAction.Internal.PreAuthSettingFlagReceive -> {
-                handlePreAuthSettingFlagReceive(action)
-            }
+            is LandingAction.Internal.SnackbarDataReceived -> handleSnackbarDataReceived(action)
         }
     }
 
@@ -259,10 +261,8 @@ class LandingViewModel @Inject constructor(
         }
     }
 
-    private fun handlePreAuthSettingFlagReceive(
-        action: LandingAction.Internal.PreAuthSettingFlagReceive,
-    ) {
-        mutableStateFlow.update { it.copy(showSettingsButton = action.isEnabled) }
+    private fun handleSnackbarDataReceived(action: LandingAction.Internal.SnackbarDataReceived) {
+        sendEvent(LandingEvent.ShowSnackbar(action.data))
     }
 
     /**
@@ -291,7 +291,6 @@ data class LandingState(
     val selectedEnvironmentLabel: String,
     val dialog: DialogState?,
     val accountSummaries: List<AccountSummary>,
-    val showSettingsButton: Boolean,
 ) : Parcelable {
     /**
      * Determines whether the app bar should be visible based on the presence of account summaries.
@@ -353,6 +352,13 @@ sealed class LandingEvent {
      * Navigates to the self-hosted/custom environment screen.
      */
     data object NavigateToEnvironment : LandingEvent()
+
+    /**
+     * Show a snackbar with the given [data].
+     */
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : LandingEvent(), BackgroundEvent
 }
 
 /**
@@ -436,10 +442,10 @@ sealed class LandingAction {
      */
     sealed class Internal : LandingAction() {
         /**
-         * Indicates that there has been a change to the pre-auth settings feature flag.
+         * Indicates that snackbar data has been received.
          */
-        data class PreAuthSettingFlagReceive(
-            val isEnabled: Boolean,
+        data class SnackbarDataReceived(
+            val data: BitwardenSnackbarData,
         ) : Internal()
 
         /**

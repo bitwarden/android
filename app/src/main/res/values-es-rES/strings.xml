@@ -382,7 +382,7 @@ El escaneo se realizará automáticamente.</string>
     <string name="code_sent">¡Código Enviado!</string>
     <string name="confirm_your_identity">Confirme su identidad para continuar.</string>
     <string name="export_vault_warning">Ésta exportación contiene sus datos de la caja fuerte en un formato no cifrado. No debería almacenar o enviar el archivo exportado por canales no seguros (como el correo electrónico). Elimínelo inmediatamente cuando termine de utilizarlo.</string>
-    <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
+    <string name="export_vault_file_pw_protect_info">Esta exportación de archivo estará protegida por contraseña, y requerirá la contraseña del archivo para descifrarla.</string>
     <string name="export_vault_confirmation_title">Confirmar exportación de la caja fuerte</string>
     <string name="warning">Advertencia</string>
     <string name="export_vault_failure">Hubo un problema al exportar su caja fuerte. Si el problema persiste, deberá exportar desde la caja fuerte en la web.</string>
@@ -432,7 +432,7 @@ El escaneo se realizará automáticamente.</string>
     <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
     <string name="personal_ownership_policy_in_effect">Una política de organización está afectando sus opciones de propiedad.</string>
     <string name="send">Send</string>
-    <string name="send_details">Send Details</string>
+    <string name="send_details">Detalles del Send</string>
     <string name="all_sends">Todos los Sends</string>
     <string name="text">Texto</string>
     <string name="text_to_share">Texto a compartir</string>
@@ -456,20 +456,20 @@ El escaneo se realizará automáticamente.</string>
     <string name="password_info">Opcionalmente requieren una contraseña para que los usuarios accedan al Send.</string>
     <string name="remove_password">Eliminar contraseña</string>
     <string name="removing_send_password">Eliminando contraseña</string>
-    <string name="password_removed">Password removed</string>
+    <string name="password_removed">Contraseña eliminada</string>
     <string name="add_a_send">Añadir un Send</string>
     <string name="copy_link">Copiar enlace</string>
     <string name="share_link">Compartir enlace</string>
     <string name="send_link">Enlace Send</string>
     <string name="search_sends">Buscar Sends</string>
     <string name="edit_send">Editar Send</string>
-    <string name="edit_file_send">Edit file Send</string>
-    <string name="edit_text_send">Edit text Send</string>
-    <string name="add_file_send">New file Send</string>
-    <string name="add_text_send">New text Send</string>
+    <string name="edit_file_send">Editar Send de archivo</string>
+    <string name="edit_text_send">Editar Send de texto</string>
+    <string name="add_file_send">Nuevo Send de archivo</string>
+    <string name="add_text_send">Nuevo Send de texto</string>
     <string name="are_you_sure_delete_send">¿Seguro que quieres eliminar este Send?</string>
     <string name="send_deleted">Send eliminado</string>
-    <string name="send_updated">Send updated</string>
+    <string name="send_updated">Send actualizado</string>
     <string name="one_day">1 día</string>
     <string name="two_days">2 días</string>
     <string name="three_days">3 días</string>
@@ -631,7 +631,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="approve_with_master_password">Aprobar con contraseña maestra</string>
     <string name="turn_off_using_public_device">Deshabilitar usando un dispositivo público</string>
     <string name="remember_this_device">Recordar este dispositivo</string>
-    <string name="passkey">Passkey</string>
+    <string name="passkey">Clave de acceso</string>
     <string name="passkey_will_not_be_copied">La contraseña maestra no será copiada</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">La contraseña maestra no será copiada al elemento clonado.
 ¿Deseas continuar clonando este elemento?</string>
@@ -695,15 +695,15 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="passkey_operation_failed_because_app_could_not_be_verified">La operación de la clave de acceso falló porque la aplicación no pudo ser verificada</string>
     <string name="confirm_file_password">Confirmar contraseña del archivo</string>
     <string name="file_password">Contraseña del archivo</string>
-    <string name="password_protected">Password Protected</string>
+    <string name="password_protected">Protegido con Contraseña</string>
     <string name="password_used_to_export">Esta contraseña se usará para exportar e importar este archivo</string>
     <string name="autofill_suggestion">Sugerencias de autocompletado</string>
     <string name="continue_to_complete_web_authn_verification">Continue to complete WebAuthn verification.</string>
-    <string name="launch_web_authn">Launch WebAuthn</string>
-    <string name="there_was_an_error_starting_web_authn_two_factor_authentication">There was an error starting WebAuthn two factor authentication</string>
+    <string name="launch_web_authn">Iniciar WebAuthn</string>
+    <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Hubo un error al iniciar autenticación de doble factor WebAuthn</string>
     <string name="self_hosted_server_url">Self-hosted server URL</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">La operación de la clave de acceso falló porque el usuario no pudo ser verificado.</string>
-    <string name="user_verification_direction">User verification</string>
+    <string name="user_verification_direction">Verificación de usuario</string>
     <string name="create_account_on">Crea una cuenta en</string>
     <string name="create_account_on_with_colon">Crea una cuenta en:</string>
     <string name="we_sent_an_email_to">Hemos enviado un correo electrónico a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
@@ -719,13 +719,13 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="welcome_message_2">Set up biometric unlock and autofill to log into your accounts without typing a single letter.</string>
     <string name="quick_and_easy_login">Quick and easy login</string>
     <string name="level_up_your_logins">Level up your logins</string>
-    <string name="welcome_message_3">Use the generator to create and save strong, unique passwords for all your accounts.</string>
+    <string name="welcome_message_3">Usa el generador para crear contraseñas seguras y únicas para todas tus cuentas.</string>
     <string name="your_data_when_and_where_you_need_it">Your data, when and where you need it</string>
     <string name="welcome_message_4">Save unlimited passwords across unlimited devices with Bitwarden mobile, browser, and desktop apps.</string>
     <string name="remove_passkey">Eliminar clave de acceso</string>
     <string name="passkey_removed">Clave de acceso eliminada</string>
-    <string name="what_makes_a_password_strong">What makes a password strong?</string>
-    <string name="a_secure_memorable_password">A secure, memorable password</string>
+    <string name="what_makes_a_password_strong">¿Qué hace segura una contraseña?</string>
+    <string name="a_secure_memorable_password">Una contraseña segura y memorable</string>
     <string name="account_setup">Configuración de la cuenta</string>
     <string name="set_up_unlock">Set up unlock</string>
     <string name="set_up_later">Configurar más tarde</string>
@@ -767,12 +767,12 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="turn_on_later">Activar más tarde</string>
     <string name="turn_on_autofill_later">¿Activar autocompletado más tarde?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
-    <string name="what_bitwarden_has_to_offer">You can now explore everything Bitwarden has to offer and start managing your passwords securely.</string>
-    <string name="youre_all_set">You\'re all set!</string>
+    <string name="what_bitwarden_has_to_offer">Ahora puedes explorar todo lo que Bitwarden ofrece y empezar a gestionar tus contraseñas de forma segura.</string>
+    <string name="youre_all_set">¡Todo listo!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
-    <string name="master_password_hint_not_specified">Master password hint</string>
-    <string name="new_master_password_hint">New master password hint</string>
-    <string name="get_started">Get started</string>
+    <string name="master_password_hint_not_specified">Pista de la contraseña maestra</string>
+    <string name="new_master_password_hint">Nueva pista de la contraseña maestra</string>
+    <string name="get_started">Empezar</string>
     <string name="save_and_protect_your_data">Save and protect your data</string>
     <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
     <string name="new_login">Nuevo inicio de sesión</string>
@@ -794,7 +794,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Export your passwords.</annotation> This option is usually found in your settings.</string>
     <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Select Import data</annotation> in the web app, then Done below to finish syncing.</string>
     <string name="step_1_of_3">Paso 1 de 3</string>
-    <string name="export_your_saved_logins">Export your saved logins</string>
+    <string name="export_your_saved_logins">Exportar tus inicios de sesión guardados</string>
     <string name="delete_this_file_after_import_is_complete">You’ll delete this file after import is complete.</string>
     <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">On your computer, open a new browser tab and <annotation emphasis="bold">go to <annotation arg="0">%1$s</annotation></annotation></string>
     <string name="log_in_to_the_bitwarden_web_app">Inicia sesión en la aplicación web de Bitwarden.</string>
@@ -821,7 +821,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="got_it">Entendido</string>
     <string name="no_logins_were_imported">No se importaron inicios de sesión</string>
     <string name="import_error">Error de importación</string>
-    <string name="logins_imported">Logins imported</string>
+    <string name="logins_imported">Inicios de sesión importados</string>
     <string name="remember_to_delete_your_imported_password_file_from_your_computer">Recuerda eliminar tu archivo de contraseñas importado de tu ordenador</string>
     <string name="type_ssh_key">Clave SSH</string>
     <string name="public_key">Clave pública</string>
@@ -849,7 +849,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="cxp_export">CXP Export</string>
     <string name="choose_three_or_four_random_words">Elige tres o cuatro palabras aleatorias</string>
     <string name="pick_three_or_four_random_unrelated_words">Elige tres o cuatro palabras aleatorias sin relación que puedas memorizar fácilmente. Piensa en <annotation emphasis="bold">objetos, lugares o cosas</annotation> que te gusten.</string>
-    <string name="combine_those_words_together">Combine those words together</string>
+    <string name="combine_those_words_together">Combinar estas palabras juntas</string>
     <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Put the words together in any order to form your passphrase. <annotation emphasis="bold">Use hyphens, spaces, or leave them as one long word</annotation>—your choice!</string>
     <string name="make_it_yours">Hazlo tuyo</string>
     <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Add a number or symbol</annotation> to make it even stronger. Now you have a unique, secure, and memorable passphrase!</string>
@@ -872,7 +872,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
-    <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Learn more about generating secure login credentials with a guided tour.</string>
+    <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Saber más acerca de generar credenciales seguras de inicio de sesión con un tour guiado.</string>
     <string name="import_client_certificate">Importar certificado de cliente</string>
     <string name="enter_the_client_certificate_password_and_alias">Introduce la contraseña del certificado de cliente y el alias deseado para este certificado.</string>
     <string name="alias">Alias</string>
@@ -959,14 +959,14 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="app_settings">Ajustes de la aplicación</string>
     <string name="replace_existing_certificate">¿Reemplazar certificado existente?</string>
     <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with the alias \"%s\" already exists. Do you want to replace it?\nReplacing the certificate may impact your connection to any environments currently using it.</string>
-    <string name="replace_certificate">Replace certificate</string>
+    <string name="replace_certificate">Reemplazar certificado</string>
     <string name="unable_to_read_certificate">No se puede leer el certificado.</string>
     <string name="cannot_delete_your_account">No se puede eliminar tu cuenta</string>
     <string name="cannot_delete_your_account_explanation">Esta acción no se puede completar porque tu cuenta es de propiedad de una organización. Contacta con el administrador de tu organización para más detalles.</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
-    <string name="view_file_send">View file Send</string>
-    <string name="view_text_send">View text Send</string>
-    <string name="delete_send">Delete Send</string>
+    <string name="view_file_send">Ver Send de archivo</string>
+    <string name="view_text_send">Ver Send de texto</string>
+    <string name="delete_send">Eliminar Send</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
     <string name="dynamic_colors">Colores dinámicos</string>
     <string name="dynamic_colors_description">Aplicar colores dinámicos en base a tu fondo de pantalla</string>
@@ -980,18 +980,14 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="trusted_by_you">Confiado por Ti</string>
     <string name="trusted_by_the_community">Confiado por la Comunidad</string>
     <string name="trusted_by_google">Confiado por Google</string>
-    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through web browsers trusted by Google or the Bitwarden community.</string>
+    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through applications or web browsers trusted by Google or the Bitwarden community.</string>
     <string name="about_privileged_applications">Acerca de las aplicaciones privilegiadas</string>
-    <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
+    <string name="learn_more_about_privileged_apps">Saber más acerca de las aplicaciones privilegiadas</string>
     <string name="privileged_apps">Aplicaciones privilegiadas</string>
     <string name="unrecognized_browser">Navegador no reconocido</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
-    <string name="google">Google</string>
-    <string name="the_community">the Community</string>
-    <string name="you">YOU</string>
-    <string name="all_trusted_apps">All trusted apps</string>
-    <string name="trusted_by_x">Trusted by %s</string>
-    <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
-    <string name="installed_apps">Installed apps</string>
-    <string name="delete_x">Delete %s</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Saber más acerca del uso de claves de acceso en Bitwarden.</string>
+    <string name="all_trusted_apps">Todas las aplicaciones de confianza</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">¿Estás seguro de que quieres dejar de confiar en %s?</string>
+    <string name="installed_apps">Aplicaciones instaladas</string>
+    <string name="delete_x">Eliminar %s</string>
 </resources>

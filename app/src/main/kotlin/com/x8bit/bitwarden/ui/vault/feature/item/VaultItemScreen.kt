@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -14,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -37,6 +35,8 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
@@ -63,9 +63,6 @@ fun VaultItemScreen(
     onNavigateToPasswordHistory: (vaultItemId: String) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
-
     val fileChooserLauncher = intentManager.getActivityResultLauncher { activityResult ->
         intentManager.getFileDataFromActivityResult(activityResult)
             ?.let {
@@ -75,7 +72,7 @@ fun VaultItemScreen(
             }
             ?: viewModel.trySendAction(VaultItemAction.Common.NoAttachmentFileLocationReceive)
     }
-
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             VaultItemEvent.NavigateBack -> onNavigateBack()
@@ -109,9 +106,7 @@ fun VaultItemScreen(
                 onNavigateToMoveToOrganization(event.itemId, true)
             }
 
-            is VaultItemEvent.ShowToast -> {
-                Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
-            }
+            is VaultItemEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
 
             is VaultItemEvent.NavigateToSelectAttachmentSaveLocation -> {
                 fileChooserLauncher.launch(
@@ -247,6 +242,9 @@ fun VaultItemScreen(
                         .padding(bottom = 16.dp),
                 )
             }
+        },
+        snackbarHost = {
+            BitwardenSnackbarHost(bitwardenHostState = snackbarHostState)
         },
     ) {
         VaultItemContent(

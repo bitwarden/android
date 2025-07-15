@@ -9,6 +9,7 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
+import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
@@ -18,8 +19,10 @@ import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
@@ -49,6 +52,9 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         every {
             getActivePolicies(type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT)
         } returns emptyList()
+        every {
+            getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+        } returns emptyList()
     }
 
     private val clock: Clock = Clock.fixed(
@@ -57,9 +63,26 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     )
 
     private val vaultRepository: VaultRepository = mockk {
-        coEvery { exportVaultDataToString(any()) } returns ExportVaultDataResult.Success("data")
+        coEvery {
+            exportVaultDataToString(
+                format = any(),
+                restrictedTypes = emptyList(),
+            )
+        } returns ExportVaultDataResult.Success("data")
+        coEvery {
+            exportVaultDataToString(
+                format = any(),
+                restrictedTypes = listOf(CipherType.CARD),
+            )
+        } returns ExportVaultDataResult.Success("data")
     }
     private val fileManager: FileManager = mockk()
+
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every {
+            getFeatureFlag(FlagKey.RemoveCardPolicy)
+        } returns false
+    }
 
     @Test
     fun `initial state should be correct`() = runTest {
@@ -106,7 +129,62 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
 
         coVerify {
-            vaultRepository.exportVaultDataToString(any())
+            vaultRepository.exportVaultDataToString(any(), emptyList())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmExportVaultClicked correct password should call exportVaultDataToString with restricted item types when policy and feature flags enabled`() {
+        val password = "password"
+        coEvery {
+            authRepository.validatePassword(
+                password = password,
+            )
+        } returns ValidatePasswordResult.Success(isValid = true)
+        every {
+            policyManager.getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+        } returns listOf(createMockPolicy())
+        every {
+            featureFlagManager.getFeatureFlag(FlagKey.RemoveCardPolicy)
+        } returns true
+
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
+
+        viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+
+        coVerify {
+            vaultRepository.exportVaultDataToString(
+                format = any(),
+                restrictedTypes = listOf(CipherType.CARD),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmExportVaultClicked correct password should call exportVaultDataToString without restricted item types when policy is disabled and feature flag is enabled`() {
+        val password = "password"
+        coEvery {
+            authRepository.validatePassword(
+                password = password,
+            )
+        } returns ValidatePasswordResult.Success(isValid = true)
+        every {
+            featureFlagManager.getFeatureFlag(FlagKey.RemoveCardPolicy)
+        } returns true
+
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
+
+        viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+
+        coVerify {
+            vaultRepository.exportVaultDataToString(
+                format = any(),
+                restrictedTypes = listOf(),
+            )
         }
     }
 
@@ -135,7 +213,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         coVerify {
-            vaultRepository.exportVaultDataToString(any())
+            vaultRepository.exportVaultDataToString(any(), emptyList())
         }
     }
 
@@ -168,7 +246,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         coVerify(exactly = 0) {
-            vaultRepository.exportVaultDataToString(any())
+            vaultRepository.exportVaultDataToString(any(), emptyList())
         }
     }
 
@@ -214,6 +292,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
             authRepository.validatePassword(password)
             vaultRepository.exportVaultDataToString(
                 format = ExportFormat.EncryptedJson(filePassword),
+                restrictedTypes = emptyList(),
             )
         }
     }
@@ -498,9 +577,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(DEFAULT_STATE, stateTurbine.awaitItem())
                 assertEquals(
-                    ExportVaultEvent.ShowToast(
-                        message = R.string.code_sent.asText(),
-                    ),
+                    ExportVaultEvent.ShowSnackbar(message = R.string.code_sent.asText()),
                     eventTurbine.awaitItem(),
                 )
             }
@@ -529,7 +606,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(DEFAULT_STATE, stateTurbine.awaitItem())
                 assertEquals(
-                    ExportVaultEvent.ShowToast(
+                    ExportVaultEvent.ShowSnackbar(
                         message = R.string.generic_error_message.asText(),
                     ),
                     eventTurbine.awaitItem(),
@@ -715,7 +792,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ExportLocationReceive should emit ShowToast on success`() = runTest {
+    fun `ExportLocationReceive should emit ShowSnackbar on success`() = runTest {
         val exportData = "TestExportVaultData"
         val viewModel = createViewModel(
             DEFAULT_STATE.copy(
@@ -731,7 +808,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
             coVerify { fileManager.stringToUri(fileUri = any(), dataString = exportData) }
 
             assertEquals(
-                ExportVaultEvent.ShowToast(R.string.export_vault_success.asText()),
+                ExportVaultEvent.ShowSnackbar(R.string.export_vault_success.asText()),
                 awaitItem(),
             )
         }
@@ -748,6 +825,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         fileManager = fileManager,
         vaultRepository = vaultRepository,
         clock = clock,
+        featureFlagManager = featureFlagManager,
     )
 }
 

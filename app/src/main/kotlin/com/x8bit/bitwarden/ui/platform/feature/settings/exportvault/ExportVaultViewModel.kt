@@ -9,6 +9,7 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
+import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -16,11 +17,14 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.toExportFormat
 import com.x8bit.bitwarden.ui.platform.util.fileExtension
@@ -40,15 +44,16 @@ private const val KEY_STATE = "state"
 /**
  * Manages application state for the Export Vault screen.
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 @HiltViewModel
 class ExportVaultViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    policyManager: PolicyManager,
+    private val policyManager: PolicyManager,
     savedStateHandle: SavedStateHandle,
     private val vaultRepository: VaultRepository,
     private val fileManager: FileManager,
     private val clock: Clock,
+    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<ExportVaultState, ExportVaultEvent, ExportVaultAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: ExportVaultState(
@@ -125,14 +130,14 @@ class ExportVaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(dialogState = null)
         }
-        val toastMessage = when (val result = action.result) {
+        val message = when (val result = action.result) {
             is RequestOtpResult.Error -> {
                 result.message?.asText() ?: R.string.generic_error_message.asText()
             }
 
             RequestOtpResult.Success -> R.string.code_sent.asText()
         }
-        sendEvent(ExportVaultEvent.ShowToast(message = toastMessage))
+        sendEvent(ExportVaultEvent.ShowSnackbar(message = message))
     }
 
     /**
@@ -397,7 +402,7 @@ class ExportVaultViewModel @Inject constructor(
             return
         }
 
-        sendEvent(ExportVaultEvent.ShowToast(R.string.export_vault_success.asText()))
+        sendEvent(ExportVaultEvent.ShowSnackbar(R.string.export_vault_success.asText()))
     }
 
     private fun handleReceiveVerifyOneTimePasscodeResult(
@@ -432,6 +437,7 @@ class ExportVaultViewModel @Inject constructor(
                         state.passwordInput
                     },
                 ),
+                restrictedTypes = getRestrictedItemTypes(),
             )
 
             sendAction(
@@ -452,6 +458,22 @@ class ExportVaultViewModel @Inject constructor(
                 ),
             )
         }
+    }
+
+    private fun getRestrictedItemTypes(): List<CipherType> {
+        val isRemoveCardPolicyFeatureEnabled =
+            featureFlagManager.getFeatureFlag(FlagKey.RemoveCardPolicy)
+        if (!isRemoveCardPolicyFeatureEnabled) {
+            return emptyList()
+        }
+
+        val hasActiveRestrictItemTypesPolicy =
+            policyManager.getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES).isNotEmpty()
+        if (!hasActiveRestrictItemTypesPolicy) {
+            return emptyList()
+        }
+
+        return listOf(CipherType.CARD)
     }
 }
 
@@ -508,7 +530,23 @@ sealed class ExportVaultEvent {
     /**
      * Shows a toast with the given [message].
      */
-    data class ShowToast(val message: Text) : ExportVaultEvent()
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : ExportVaultEvent() {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 
     /**
      *  Navigates to select a location where to save the vault data with the [fileName].

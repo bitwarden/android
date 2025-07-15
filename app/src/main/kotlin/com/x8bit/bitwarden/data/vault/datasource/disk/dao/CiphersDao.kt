@@ -22,12 +22,37 @@ interface CiphersDao {
     suspend fun insertCiphers(ciphers: List<CipherEntity>)
 
     /**
+     * Retrieves all ciphers from the database for a given [userId] as a [Flow].
+     */
+    @Query("SELECT * FROM ciphers WHERE user_id = :userId")
+    fun getAllCiphersFlow(
+        userId: String,
+    ): Flow<List<CipherEntity>>
+
+    /**
      * Retrieves all ciphers from the database for a given [userId].
      */
     @Query("SELECT * FROM ciphers WHERE user_id = :userId")
-    fun getAllCiphers(
+    suspend fun getAllCiphers(
         userId: String,
-    ): Flow<List<CipherEntity>>
+    ): List<CipherEntity>
+
+    /**
+     * Retrieves all ciphers from the database for a given [userId].
+     */
+    @Query("SELECT * FROM ciphers WHERE user_id = :userId AND has_totp = 1")
+    suspend fun getAllTotpCiphers(
+        userId: String,
+    ): List<CipherEntity>
+
+    /**
+     * Retrieves a cipher from the database for a given [userId] and [cipherId].
+     */
+    @Query("SELECT * FROM ciphers WHERE user_id = :userId AND id = :cipherId LIMIT 1")
+    suspend fun getCipher(
+        userId: String,
+        cipherId: String,
+    ): CipherEntity?
 
     /**
      * Deletes all the stored ciphers associated with the given [userId]. This will return the

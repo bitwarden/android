@@ -4,7 +4,6 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -16,6 +15,9 @@ import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.util.toAuthRequestType
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -35,6 +37,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class LoginWithDeviceViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val snackbarRelayManager: SnackbarRelayManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginWithDeviceState, LoginWithDeviceEvent, LoginWithDeviceAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -255,7 +258,10 @@ class LoginWithDeviceViewModel @Inject constructor(
             }
 
             is LoginResult.Success -> {
-                sendEvent(LoginWithDeviceEvent.ShowToast(R.string.login_approved.asText()))
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = R.string.login_approved.asText()),
+                    relay = SnackbarRelay.LOGIN_SUCCESS,
+                )
                 mutableStateFlow.update { it.copy(dialogState = null) }
             }
 
@@ -523,13 +529,6 @@ sealed class LoginWithDeviceEvent {
     data class NavigateToTwoFactorLogin(
         val emailAddress: String,
     ) : LoginWithDeviceEvent()
-
-    /**
-     * Shows a toast with the given [message].
-     */
-    data class ShowToast(
-        val message: Text,
-    ) : LoginWithDeviceEvent(), BackgroundEvent
 }
 
 /**

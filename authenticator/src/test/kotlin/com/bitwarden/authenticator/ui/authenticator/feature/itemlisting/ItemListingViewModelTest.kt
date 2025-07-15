@@ -504,6 +504,31 @@ class ItemListingViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `on SectionExpandedClick should update expanded state for clicked section`() = runTest {
+        val expectedState = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.Content(
+                actionCard = ItemListingState.ActionCardState.None,
+                favoriteItems = LOCAL_FAVORITE_ITEMS.map { it.copy(showMoveToBitwarden = true) },
+                itemList = LOCAL_NON_FAVORITE_ITEMS.map { it.copy(showMoveToBitwarden = true) },
+                sharedItems = SHARED_DISPLAY_ITEMS.copy(
+                    sections = SHARED_DISPLAY_ITEMS.sections.map { it.copy(isExpanded = false) },
+                ),
+            ),
+        )
+        mutableVerificationCodesFlow.value = DataState.Loaded(LOCAL_VERIFICATION_ITEMS)
+        mutableSharedCodesFlow.value =
+            SharedVerificationCodesState.Success(SHARED_VERIFICATION_ITEMS)
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            ItemListingAction.SectionExpandedClick(section = SHARED_DISPLAY_ITEMS.sections.first()),
+        )
+        assertEquals(
+            expectedState,
+            viewModel.stateFlow.value,
+        )
+    }
+
     private fun createViewModel() = ItemListingViewModel(
         authenticatorRepository = authenticatorRepository,
         authenticatorBridgeManager = authenticatorBridgeManager,

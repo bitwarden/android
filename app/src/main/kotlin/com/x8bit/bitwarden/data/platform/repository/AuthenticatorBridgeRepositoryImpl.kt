@@ -1,39 +1,43 @@
 package com.x8bit.bitwarden.data.platform.repository
 
 import com.bitwarden.authenticatorbridge.model.SharedAccountData
+import com.bitwarden.core.InitOrgCryptoRequest
+import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.core.data.util.flatMap
+import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
+import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.repository.util.sanitizeTotpUri
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
-import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
-import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
+import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
-import com.x8bit.bitwarden.data.vault.repository.util.statusFor
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
-import kotlinx.coroutines.flow.first
+import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 
 /**
  * Default implementation of [AuthenticatorBridgeRepository].
  */
 class AuthenticatorBridgeRepositoryImpl(
-    private val authRepository: AuthRepository,
     private val authDiskSource: AuthDiskSource,
-    private val vaultRepository: VaultRepository,
     private val vaultDiskSource: VaultDiskSource,
-    private val vaultSdkSource: VaultSdkSource,
+    private val scopedVaultSdkSource: ScopedVaultSdkSource,
 ) : AuthenticatorBridgeRepository {
 
     override val authenticatorSyncSymmetricKey: ByteArray?
         get() {
-            val doAnyAccountsHaveAuthenticatorSyncEnabled = authRepository
-                .userStateFlow
-                .value
+            val doAnyAccountsHaveAuthenticatorSyncEnabled = authDiskSource
+                .userState
                 ?.accounts
-                ?.any {
+                ?.keys
+                ?.any { userId ->
                     // Authenticator sync is enabled if any accounts have an authenticator
                     // sync key stored:
-                    authDiskSource.getAuthenticatorSyncUnlockKey(it.userId) != null
+                    authDiskSource.getAuthenticatorSyncUnlockKey(userId = userId) != null
                 }
                 ?: false
             return if (doAnyAccountsHaveAuthenticatorSyncEnabled) {
@@ -43,95 +47,117 @@ class AuthenticatorBridgeRepositoryImpl(
             }
         }
 
-    @Suppress("LongMethod")
     override suspend fun getSharedAccounts(): SharedAccountData {
-        val allAccounts = authRepository.userStateFlow.value?.accounts ?: emptyList()
-
-        return allAccounts
-            .mapNotNull { account ->
-                val userId = account.userId
-
+        return authDiskSource
+            .userState
+            ?.accounts
+            .orEmpty()
+            .mapNotNull { (userId, account) ->
                 // Grab the user's authenticator sync unlock key. If it is null,
-                // the user has not enabled authenticator sync.
+                // the user has not enabled authenticator sync and we skip the account.
                 val decryptedUserKey = authDiskSource.getAuthenticatorSyncUnlockKey(userId)
                     ?: return@mapNotNull null
-
-                // Wait for any unlocking actions to finish:
-                vaultRepository.vaultUnlockDataStateFlow.first {
-                    it.statusFor(userId) != VaultUnlockData.Status.UNLOCKING
-                }
-
-                // Unlock vault if necessary:
-                val isVaultAlreadyUnlocked = vaultRepository.isVaultUnlocked(userId = userId)
-                if (!isVaultAlreadyUnlocked) {
-                    val unlockResult = vaultRepository
-                        .unlockVaultWithDecryptedUserKey(
+                val vaultUnlockResult = unlockClient(
+                    userId = userId,
+                    account = account,
+                    decryptedUserKey = decryptedUserKey,
+                )
+                when (vaultUnlockResult) {
+                    is VaultUnlockResult.AuthenticationError,
+                    is VaultUnlockResult.BiometricDecodingError,
+                    is VaultUnlockResult.GenericError,
+                    is VaultUnlockResult.InvalidStateError,
+                        -> {
+                        // Not being able to unlock the user's vault with the
+                        // decrypted unlock key is an unexpected case, but if it does
+                        // happen we omit the account from list of shared accounts
+                        // and remove that user's authenticator sync unlock key.
+                        // This gives the user a way to potentially re-enable syncing
+                        // (going to Account Security and re-enabling the toggle)
+                        authDiskSource.storeAuthenticatorSyncUnlockKey(
                             userId = userId,
-                            decryptedUserKey = decryptedUserKey,
+                            authenticatorSyncUnlockKey = null,
                         )
-
-                    when (unlockResult) {
-                        is VaultUnlockResult.AuthenticationError,
-                        is VaultUnlockResult.BiometricDecodingError,
-                        is VaultUnlockResult.GenericError,
-                        is VaultUnlockResult.InvalidStateError,
-                            -> {
-                            // Not being able to unlock the user's vault with the
-                            // decrypted unlock key is an unexpected case, but if it does
-                            // happen we omit the account from list of shared accounts
-                            // and remove that user's authenticator sync unlock key.
-                            // This gives the user a way to potentially re-enable syncing
-                            // (going to Account Security and re-enabling the toggle)
-                            authDiskSource.storeAuthenticatorSyncUnlockKey(
-                                userId = userId,
-                                authenticatorSyncUnlockKey = null,
-                            )
-                            return@mapNotNull null
-                        }
-                        // Proceed
-                        VaultUnlockResult.Success -> Unit
+                        // Destroy our stand-alone instance of the vault.
+                        scopedVaultSdkSource.clearCrypto(userId = userId)
+                        return@mapNotNull null
                     }
+                    // Proceed
+                    VaultUnlockResult.Success -> Unit
                 }
 
                 // Vault is unlocked, query vault disk source for totp logins:
                 val totpUris = vaultDiskSource
-                    .getCiphers(userId)
-                    .first()
-                    // Filter out any ciphers without a totp item and also deleted ciphers
-                    .filter { it.login?.totp != null && it.deletedDate == null }
+                    .getTotpCiphers(userId = userId)
+                    // Filter out any deleted ciphers.
+                    .filter { it.deletedDate == null }
                     .mapNotNull {
-                        val decryptedCipher = vaultSdkSource
-                            .decryptCipher(
-                                userId = userId,
-                                cipher = it.toEncryptedSdkCipher(),
-                            )
+                        scopedVaultSdkSource
+                            .decryptCipher(userId = userId, cipher = it.toEncryptedSdkCipher())
                             .getOrNull()
-
-                        val rawTotp = decryptedCipher?.login?.totp
-                        val cipherName = decryptedCipher?.name
-                        val username = decryptedCipher?.login?.username
-
-                        rawTotp.sanitizeTotpUri(cipherName, username)
+                            ?.let { decryptedCipher ->
+                                val rawTotp = decryptedCipher.login?.totp
+                                val cipherName = decryptedCipher.name
+                                val username = decryptedCipher.login?.username
+                                rawTotp.sanitizeTotpUri(issuer = cipherName, username = username)
+                            }
                     }
 
-                // Lock the user's vault if we unlocked it for this operation:
-                if (!isVaultAlreadyUnlocked) {
-                    vaultRepository.lockVault(
-                        userId = userId,
-                        isUserInitiated = false,
-                    )
-                }
+                // Lock and destroy our stand-alone instance of the vault:
+                scopedVaultSdkSource.clearCrypto(userId = userId)
 
                 SharedAccountData.Account(
-                    userId = account.userId,
-                    name = account.name,
-                    email = account.email,
-                    environmentLabel = account.environment.label,
+                    userId = userId,
+                    name = account.profile.name,
+                    email = account.profile.email,
+                    environmentLabel = account
+                        .settings
+                        .environmentUrlData
+                        .toEnvironmentUrlsOrDefault()
+                        .label,
                     totpUris = totpUris,
                 )
             }
-            .let {
-                SharedAccountData(it)
+            .let(::SharedAccountData)
+    }
+
+    private suspend fun unlockClient(
+        userId: String,
+        account: AccountJson,
+        decryptedUserKey: String,
+    ): VaultUnlockResult {
+        val privateKey = authDiskSource
+            .getPrivateKey(userId = userId)
+            ?: return VaultUnlockResult.InvalidStateError(MissingPropertyException("Private key"))
+        return scopedVaultSdkSource
+            .initializeCrypto(
+                userId = userId,
+                request = InitUserCryptoRequest(
+                    userId = userId,
+                    kdfParams = account.profile.toSdkParams(),
+                    email = account.profile.email,
+                    privateKey = privateKey,
+                    method = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = decryptedUserKey,
+                    ),
+                    signingKey = null,
+                ),
+            )
+            .flatMap { result ->
+                // Initialize the SDK for organizations if necessary
+                val organizationKeys = authDiskSource.getOrganizationKeys(userId = userId)
+                if (organizationKeys != null && result is InitializeCryptoResult.Success) {
+                    scopedVaultSdkSource.initializeOrganizationCrypto(
+                        userId = userId,
+                        request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                    )
+                } else {
+                    result.asSuccess()
+                }
             }
+            .fold(
+                onFailure = { VaultUnlockResult.GenericError(error = it) },
+                onSuccess = { it.toVaultUnlockResult() },
+            )
     }
 }

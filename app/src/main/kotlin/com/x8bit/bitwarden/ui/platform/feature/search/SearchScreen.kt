@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.search
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,7 +11,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -65,8 +63,6 @@ fun SearchScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val searchHandlers = remember(viewModel) { SearchHandlers.create(viewModel) }
-    val context = LocalContext.current
-
     RegisterScreenDataOnLifecycleEffect(
         appResumeStateManager = appResumeStateManager,
     ) {
@@ -116,11 +112,6 @@ fun SearchScreen(
             is SearchEvent.NavigateToUrl -> intentManager.launchUri(event.url.toUri())
             is SearchEvent.ShowShareSheet -> intentManager.shareText(event.content)
             is SearchEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
-            is SearchEvent.ShowToast -> {
-                Toast
-                    .makeText(context, event.message(context.resources), Toast.LENGTH_SHORT)
-                    .show()
-            }
         }
     }
 

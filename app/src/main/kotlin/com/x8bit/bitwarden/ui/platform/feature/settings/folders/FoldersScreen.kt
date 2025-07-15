@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.folders
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -56,16 +54,12 @@ fun FoldersScreen(
     viewModel: FoldersViewModel = hiltViewModel(),
 ) {
     val state = viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is FoldersEvent.NavigateBack -> onNavigateBack()
             is FoldersEvent.NavigateToAddFolderScreen -> onNavigateToAddFolderScreen()
-            is FoldersEvent.NavigateToEditFolderScreen ->
+            is FoldersEvent.NavigateToEditFolderScreen -> {
                 onNavigateToEditFolderScreen(event.folderId)
-
-            is FoldersEvent.ShowToast -> {
-                Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
             }
         }
     }

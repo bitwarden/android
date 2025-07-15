@@ -425,9 +425,9 @@
     <string name="privacy_policy">Политика приватности</string>
     <string name="passkey_management">Управљање приступног кључа</string>
     <string name="autofill_services">Услуге Аутоматског попуњавања</string>
-    <string name="display_autofill_suggestions">Display autofill suggestions</string>
-    <string name="autofill_suggestions_inline">Inline (shows in keyboard)</string>
-    <string name="autofill_suggestions_popup">Popup (shows over input field)</string>
+    <string name="display_autofill_suggestions">Показати предлоге за ауто-пуњење</string>
+    <string name="autofill_suggestions_inline">Унутра (приказује се на тастатури)</string>
+    <string name="autofill_suggestions_popup">Попап (приказ преко поља за унос)</string>
     <string name="accessibility">Користите приступачност</string>
     <string name="accessibility_description5">Неопходно је за коришћење плочице брзе акције ауто-попуњавања.</string>
     <string name="personal_ownership_policy_in_effect">Политика организације утичу на ваше могућности власништва.</string>
@@ -910,10 +910,10 @@
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
     <string name="self_host_server_url">Self-host server URL</string>
-    <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
+    <string name="use_brave_autofill_integration">Користи Brave-ову интеграцију за аутоматско попуњавање</string>
     <string name="use_chrome_autofill_integration">Користи Chrome-ову интеграцију за аутоматско попуњавање</string>
     <string name="use_chrome_beta_autofill_integration">Користи Chrome-ову интеграцију за аутоматско попуњавање (Beta)</string>
-    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Improves login filling for supported websites on selected browsers. Once enabled, you’ll be directed to browser settings to enable third-party autofill.</string>
+    <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Побољшава попуњавање пријаве за подржане веб странице на одабраним прегледачима. Једном омогућено, биће вам усмерен на подешавања прегледача да бисте омогућили аутоматско копирање треће стране.</string>
     <string name="show_more">Прикажи више</string>
     <string name="no_folder">Нема фасцикле</string>
     <string name="show_less">Прикажи мање</string>
@@ -984,13 +984,9 @@
     <string name="learn_more_about_privileged_apps">Сазнајте више о привилегованим апликацијама</string>
     <string name="privileged_apps">Привилеговане апликације</string>
     <string name="unrecognized_browser">Непрепознати претраживач</string>
-    <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
-    <string name="google">Google</string>
-    <string name="the_community">the Community</string>
-    <string name="you">YOU</string>
-    <string name="all_trusted_apps">All trusted apps</string>
-    <string name="trusted_by_x">Trusted by %s</string>
-    <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
-    <string name="installed_apps">Installed apps</string>
-    <string name="delete_x">Delete %s</string>
+    <string name="learn_more_about_using_passkeys_with_bitwarden">Сазнајте више о коришћењу кључа за приступ са Bitwarden-ом.</string>
+    <string name="all_trusted_apps">Све оверене апликације</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Јесте ли сигурни да желите престати да верујете %s?</string>
+    <string name="installed_apps">Инсталиранe апликацијe</string>
+    <string name="delete_x">Обрисати %s</string>
 </resources>

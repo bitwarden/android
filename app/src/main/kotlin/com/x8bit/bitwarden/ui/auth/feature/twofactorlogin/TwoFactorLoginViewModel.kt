@@ -32,6 +32,7 @@ import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.imageRes
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.isContinueButtonEnabled
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.shouldUseNfc
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.showPasswordInput
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -121,6 +122,13 @@ class TwoFactorLoginViewModel @Inject constructor(
             .map { TwoFactorLoginAction.Internal.ReceiveWebAuthResult(webAuthResult = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        viewModelScope.launch {
+            // If the auth method is email and it is not to verify the device, call resendEmail.
+            if (state.authMethod == TwoFactorAuthMethod.EMAIL && !state.isNewDeviceVerification) {
+                sendAction(TwoFactorLoginAction.Internal.SendVerificationCodeEmail)
+            }
+        }
     }
 
     override fun handleAction(action: TwoFactorLoginAction) {
@@ -158,6 +166,10 @@ class TwoFactorLoginViewModel @Inject constructor(
             is TwoFactorLoginAction.Internal.ReceiveResendEmailResult -> {
                 handleReceiveResendEmailResult(action)
             }
+
+            TwoFactorLoginAction.Internal.SendVerificationCodeEmail -> {
+                handleSendVerificationCodeEmail()
+            }
         }
     }
 
@@ -189,12 +201,10 @@ class TwoFactorLoginViewModel @Inject constructor(
      * Update the state with the new text and enable or disable the continue button.
      */
     private fun handleCodeInputChanged(action: TwoFactorLoginAction.CodeInputChanged) {
-        @Suppress("MagicNumber")
-        val minLength = if (state.isNewDeviceVerification) 8 else 6
         mutableStateFlow.update {
             it.copy(
                 codeInput = action.input,
-                isContinueButtonEnabled = action.input.length >= minLength,
+                isContinueButtonEnabled = action.input.isNotEmpty(),
             )
         }
     }
@@ -249,7 +259,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                             )
                             TwoFactorLoginEvent.NavigateToWebAuth(uri = uri)
                         }
-                        ?: TwoFactorLoginEvent.ShowToast(
+                        ?: TwoFactorLoginEvent.ShowSnackbar(
                             message = R.string.there_was_an_error_starting_web_authn_two_factor_authentication.asText(),
                         ),
                 )
@@ -453,7 +463,7 @@ class TwoFactorLoginViewModel @Inject constructor(
             ResendEmailResult.Success -> {
                 if (action.isUserInitiated) {
                     sendEvent(
-                        TwoFactorLoginEvent.ShowToast(
+                        TwoFactorLoginEvent.ShowSnackbar(
                             message = R.string.verification_email_sent.asText(),
                         ),
                     )
@@ -477,6 +487,20 @@ class TwoFactorLoginViewModel @Inject constructor(
      * Resend the verification code email.
      */
     private fun handleResendEmailClick() {
+        sendVerificationCodeEmail(isUserInitiated = true)
+    }
+
+    /**
+     * send the verification code email without user interaction.
+     */
+    private fun handleSendVerificationCodeEmail() {
+        sendVerificationCodeEmail(isUserInitiated = false)
+    }
+
+    /**
+     * Send the verification code email.
+     */
+    private fun sendVerificationCodeEmail(isUserInitiated: Boolean) {
         // Ensure that the user is in fact verifying with email.
         if (state.authMethod != TwoFactorAuthMethod.EMAIL) {
             return
@@ -501,7 +525,7 @@ class TwoFactorLoginViewModel @Inject constructor(
             sendAction(
                 TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
                     resendEmailResult = result,
-                    isUserInitiated = true,
+                    isUserInitiated = isUserInitiated,
                 ),
             )
         }
@@ -710,11 +734,25 @@ sealed class TwoFactorLoginEvent {
     data class NavigateToRecoveryCode(val uri: Uri) : TwoFactorLoginEvent()
 
     /**
-     * Shows a toast with the given [message].
+     * Shows a snackbar with the given [data].
      */
-    data class ShowToast(
-        val message: Text,
-    ) : TwoFactorLoginEvent()
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : TwoFactorLoginEvent() {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 }
 
 /**
@@ -808,5 +846,10 @@ sealed class TwoFactorLoginAction {
         data class ReceiveWebAuthResult(
             val webAuthResult: WebAuthResult,
         ) : Internal()
+
+        /**
+         * Indicates that the verification code email should be sent.
+         */
+        data object SendVerificationCodeEmail : Internal()
     }
 }

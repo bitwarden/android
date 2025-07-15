@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.tools.feature.send
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -13,7 +12,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
@@ -56,7 +54,7 @@ import kotlinx.collections.immutable.persistentListOf
 /**
  * UI for the send screen.
  */
-@Suppress("LongMethod", "CyclomaticComplexMethod")
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendScreen(
@@ -70,7 +68,6 @@ fun SendScreen(
     appResumeStateManager: AppResumeStateManager = LocalAppResumeStateManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     val pullToRefreshState = rememberBitwardenPullToRefreshState(
         isEnabled = state.isPullToRefreshEnabled,
         isRefreshing = state.isRefreshing,
@@ -116,18 +113,8 @@ fun SendScreen(
                 intentManager.launchUri("https://bitwarden.com/products/send".toUri())
             }
 
-            is SendEvent.ShowShareSheet -> {
-                intentManager.shareText(event.url)
-            }
-
+            is SendEvent.ShowShareSheet -> intentManager.shareText(event.url)
             is SendEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
-
-            is SendEvent.ShowToast -> {
-                Toast
-                    .makeText(context, event.message(context.resources), Toast.LENGTH_SHORT)
-                    .show()
-            }
-
             SendEvent.NavigateToFileSends -> onNavigateToSendFilesList()
             SendEvent.NavigateToTextSends -> onNavigateToSendTextList()
         }

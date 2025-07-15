@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 
 /**
  * Creates a list item for a [FlagKey].
@@ -25,7 +25,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
         Unit
     }
 
-    FlagKey.AuthenticatorSync,
     FlagKey.EmailVerification,
     FlagKey.ImportLoginsFlow,
     FlagKey.CredentialExchangeProtocolImport,
@@ -38,9 +37,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.SimpleLoginSelfHostAlias,
     FlagKey.ChromeAutofill,
     FlagKey.MobileErrorReporting,
-    FlagKey.FlightRecorder,
     FlagKey.RestrictCipherItemDeletion,
-    FlagKey.PreAuthSettings,
     FlagKey.UserManagedPrivilegedApps,
     FlagKey.RemoveCardPolicy,
         -> {
@@ -84,7 +81,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.DummyString,
         -> this.keyName
 
-    FlagKey.AuthenticatorSync -> stringResource(R.string.authenticator_sync)
     FlagKey.EmailVerification -> stringResource(R.string.email_verification)
     FlagKey.ImportLoginsFlow -> stringResource(R.string.import_logins_flow)
     FlagKey.CredentialExchangeProtocolImport -> stringResource(R.string.cxp_import)
@@ -100,11 +96,10 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.SimpleLoginSelfHostAlias -> stringResource(R.string.simple_login_self_hosted_aliases)
     FlagKey.ChromeAutofill -> stringResource(R.string.enable_chrome_autofill)
     FlagKey.MobileErrorReporting -> stringResource(R.string.enable_error_reporting_dialog)
-    FlagKey.FlightRecorder -> stringResource(R.string.enable_flight_recorder)
     FlagKey.RestrictCipherItemDeletion -> stringResource(R.string.restrict_item_deletion)
-    FlagKey.PreAuthSettings -> stringResource(R.string.enable_pre_auth_settings)
     FlagKey.UserManagedPrivilegedApps -> {
         stringResource(R.string.user_trusted_privileged_app_management)
     }
+
     FlagKey.RemoveCardPolicy -> stringResource(R.string.remove_card_policy)
 }

@@ -7,10 +7,8 @@ import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.util.getStopsLoggingStringForActiveLog
@@ -23,7 +21,6 @@ import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -42,10 +39,6 @@ class AboutViewModelTest : BaseViewModelTest() {
     private val logsManager: LogsManager = mockk {
         every { isEnabled } returns false
         every { isEnabled = any() } just runs
-    }
-    private val featureFlagManager = mockk<FeatureFlagManager> {
-        every { getFeatureFlag(FlagKey.FlightRecorder) } returns true
-        every { getFeatureFlagFlow(FlagKey.FlightRecorder) } returns flowOf(true)
     }
     private val mutableFlightRecorderFlow = MutableStateFlow(FlightRecorderDataSet(emptySet()))
     private val settingsRepository = mockk<SettingsRepository> {
@@ -228,7 +221,6 @@ class AboutViewModelTest : BaseViewModelTest() {
         clock = FIXED_CLOCK,
         environmentRepository = environmentRepository,
         logsManager = logsManager,
-        featureFlagManager = featureFlagManager,
         settingsRepository = settingsRepository,
     )
 }
@@ -245,6 +237,5 @@ private val DEFAULT_ABOUT_STATE: AboutState = AboutState(
     isSubmitCrashLogsEnabled = false,
     shouldShowCrashLogsButton = true,
     isFlightRecorderEnabled = false,
-    shouldShowFlightRecorder = true,
     flightRecorderSubtext = null,
 )

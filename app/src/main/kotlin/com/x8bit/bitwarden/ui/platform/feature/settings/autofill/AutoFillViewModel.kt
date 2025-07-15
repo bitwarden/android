@@ -370,13 +370,6 @@ sealed class AutoFillEvent {
     data object NavigateToSettings : AutoFillEvent()
 
     /**
-     * Displays a toast with the given [Text].
-     */
-    data class ShowToast(
-        val text: Text,
-    ) : AutoFillEvent()
-
-    /**
      * Navigate to the Autofill settings of the specified [browserPackage].
      */
     data class NavigateToBrowserAutofillSettings(

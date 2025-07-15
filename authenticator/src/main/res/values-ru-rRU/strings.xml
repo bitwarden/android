@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Аутентификатор</string>
     <string name="biometrics_direction">Биометрическая верификация</string>
     <string name="cancel">Отменить</string>
     <string name="add_item">Добавить элемент</string>
@@ -119,7 +118,7 @@
     <string name="download_bitwarden_card_message">Храните все свои логины и синхронизируйте коды проверки непосредственно с приложением \"Аутентификатор\".</string>
     <string name="download_now">Скачать сейчас</string>
     <string name="sync_with_bitwarden_app">Синхронизация с приложением Bitwarden</string>
-    <string name="this_feature_is_not_not_yet_available_for_self_hosted_users">This feature is not yet available for self-hosted users. <annotation link="learnMore">Learn more</annotation></string>
+    <string name="this_feature_is_not_not_yet_available_for_self_hosted_users">Эта функция пока недоступна для пользователей, использующих собственный хостинг. <annotation link="learnMore">Узнать больше</annotation></string>
     <string name="shared_codes_error">Невозможно синхронизировать коды из приложения Bitwarden. Убедитесь, что оба приложения обновлены. Вы по-прежнему можете получить доступ к существующим кодам в приложении Bitwarden.</string>
     <string name="shared_accounts_header">%1$s | %2$s</string>
     <string name="sync_with_the_bitwarden_app">Синхронизация с приложением Bitwarden</string>
@@ -127,7 +126,7 @@
     <string name="take_me_to_app_settings">Перейдите к настройкам приложения</string>
     <string name="something_went_wrong">Что-то пошло не так</string>
     <string name="please_try_again">Пожалуйста, попробуйте еще раз</string>
-    <string name="move_to_bitwarden">Перейти в Bitwarden</string>
+    <string name="copy_to_bitwarden_vault">Скопировать в хранилище Bitwarden</string>
     <string name="default_save_option">Вариант сохранения по умолчанию</string>
     <string name="save_to_bitwarden">Сохранить в Bitwarden</string>
     <string name="save_here">Сохранить здесь</string>
@@ -144,4 +143,9 @@
     <string name="file_could_not_be_processed">"Файл не удалось обработать"</string>
     <string name="file_could_not_be_processed_message">"Файл не удалось обработать. Убедитесь, что это корректный JSON, и повторите попытку. Нужна помощь? Посетите bitwarden.com/help"</string>
     <string name="get_help">Получить помощь</string>
+    <string name="expand_advanced_options">Развернуть дополнительные параметры</string>
+    <string name="local_items_are_expanded_click_to_collapse">Локальные элементы развернуты, нажмите, чтобы свернуть.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Локальные элементы свернуты, нажмите, чтобы развернуть.</string>
+    <string name="items_expanded_click_to_collapse">Элементы развернуты, нажмите, чтобы свернуть.</string>
+    <string name="items_are_collapsed_click_to_expand">Элементы свернуты, нажмите, чтобы развернуть.</string>
 </resources>

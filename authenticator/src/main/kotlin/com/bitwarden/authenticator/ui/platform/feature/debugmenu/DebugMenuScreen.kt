@@ -147,7 +147,6 @@ private fun FeatureFlagContent_preview() {
         FeatureFlagContent(
             featureFlagMap = mapOf(
                 FlagKey.BitwardenAuthenticationEnabled to true,
-                FlagKey.PasswordManagerSync to false,
             ),
             onValueChange = { _, _ -> },
             onResetValues = { },

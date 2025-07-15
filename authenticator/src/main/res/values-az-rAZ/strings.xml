@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Kimlik doğrulayıcı</string>
     <string name="biometrics_direction">Biometrik doğrulama</string>
     <string name="cancel">İmtina</string>
     <string name="add_item">Element əlavə et</string>
@@ -125,7 +124,7 @@
     <string name="take_me_to_app_settings">Məni tətbiq ayarlarına apar</string>
     <string name="something_went_wrong">Nəsə səhv getdi</string>
     <string name="please_try_again">Lütfən yenidən sınayın</string>
-    <string name="move_to_bitwarden">\"Bitwarden\"ə daşı</string>
+    <string name="copy_to_bitwarden_vault">Copy to Bitwarden vault</string>
     <string name="default_save_option">İlkin saxlama seçimi</string>
     <string name="save_to_bitwarden">\"Bitwarden\"də saxla</string>
     <string name="save_here">Burada saxla</string>
@@ -142,4 +141,9 @@
     <string name="file_could_not_be_processed">"Fayl emal oluna bilmədi"</string>
     <string name="file_could_not_be_processed_message">"Fayl emal edilə bilmədi. Bunun yararlı JSON faylı olduğuna əmin olub yenidən sınayın. Kömək lazımdır? bitwarden.com/help ünvanını ziyarət edin"</string>
     <string name="get_help">Kömək al</string>
+    <string name="expand_advanced_options">Expand advanced options</string>
+    <string name="local_items_are_expanded_click_to_collapse">Local items are expanded, click to collapse.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
+    <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
+    <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
 </resources>

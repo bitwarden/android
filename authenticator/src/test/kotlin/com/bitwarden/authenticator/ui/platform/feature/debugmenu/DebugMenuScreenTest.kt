@@ -52,7 +52,7 @@ class DebugMenuScreenTest : AuthenticatorComposeTest() {
     @Test
     fun `feature flag content should not display if the state is empty`() {
         composeTestRule
-            .onNodeWithText("Password manager sync", ignoreCase = true)
+            .onNodeWithText("Bitwarden authentication enabled", ignoreCase = true)
             .assertDoesNotExist()
     }
 
@@ -61,13 +61,13 @@ class DebugMenuScreenTest : AuthenticatorComposeTest() {
         mutableStateFlow.tryEmit(
             DebugMenuState(
                 featureFlags = mapOf(
-                    FlagKey.PasswordManagerSync to true,
+                    FlagKey.BitwardenAuthenticationEnabled to true,
                 ),
             ),
         )
 
         composeTestRule
-            .onNodeWithText("Password manager sync", ignoreCase = true)
+            .onNodeWithText("Bitwarden authentication enabled", ignoreCase = true)
             .assertExists()
     }
 
@@ -76,18 +76,18 @@ class DebugMenuScreenTest : AuthenticatorComposeTest() {
         mutableStateFlow.tryEmit(
             DebugMenuState(
                 featureFlags = mapOf(
-                    FlagKey.PasswordManagerSync to true,
+                    FlagKey.BitwardenAuthenticationEnabled to true,
                 ),
             ),
         )
         composeTestRule
-            .onNodeWithText("Password manager sync", ignoreCase = true)
+            .onNodeWithText("Bitwarden authentication enabled", ignoreCase = true)
             .performClick()
 
         verify {
             viewModel.trySendAction(
                 DebugMenuAction.UpdateFeatureFlag(
-                    FlagKey.PasswordManagerSync,
+                    FlagKey.BitwardenAuthenticationEnabled,
                     false,
                 ),
             )

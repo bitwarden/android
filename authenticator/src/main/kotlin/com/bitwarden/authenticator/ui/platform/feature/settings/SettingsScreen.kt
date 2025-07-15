@@ -351,7 +351,7 @@ private fun VaultSettings(
         BitwardenTextRow(
             text = stringResource(id = R.string.sync_with_bitwarden_app),
             description = annotatedStringResource(
-                id = R.string.this_feature_is_not_not_yet_available_for_self_hosted_users,
+                id = R.string.learn_more_link,
                 style = spanStyleOf(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textStyle = MaterialTheme.typography.bodyMedium,

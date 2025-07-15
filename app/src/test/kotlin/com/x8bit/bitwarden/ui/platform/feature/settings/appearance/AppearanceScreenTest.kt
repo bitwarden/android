@@ -11,15 +11,19 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -36,12 +40,19 @@ class AppearanceScreenTest : BitwardenComposeTest() {
 
     @Before
     fun setup() {
+        mockkStatic(::isBuildVersionAtLeast)
+        every { isBuildVersionAtLeast(any()) } returns true
         setContent {
             AppearanceScreen(
                 onNavigateBack = { haveCalledNavigateBack = true },
                 viewModel = viewModel,
             )
         }
+    }
+
+    @After
+    fun tearDown() {
+        unmockkStatic(::isBuildVersionAtLeast)
     }
 
     @Test
@@ -168,6 +179,19 @@ class AppearanceScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `dynamic colors should be displayed based on state`() {
+        composeTestRule.onNodeWithText("Dynamic colors")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(isDynamicColorsSupported = false)
+        }
+        composeTestRule.onNodeWithText("Dynamic colors")
+            .assertIsNotDisplayed()
+    }
+
+    @Test
     fun `on DynamicColorsToggle should send DynamicColorsToggle`() {
         composeTestRule.onNodeWithText("Dynamic colors")
             .performScrollTo()
@@ -203,5 +227,6 @@ private val DEFAULT_STATE = AppearanceState(
     showWebsiteIcons = false,
     theme = AppTheme.DEFAULT,
     isDynamicColorsEnabled = false,
+    isDynamicColorsSupported = true,
     dialogState = null,
 )

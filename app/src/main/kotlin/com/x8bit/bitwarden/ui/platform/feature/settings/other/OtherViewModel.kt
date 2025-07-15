@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManage
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
@@ -152,7 +153,7 @@ class OtherViewModel @Inject constructor(
     }
 
     private fun handleManualVaultSyncReceive() {
-        sendEvent(OtherEvent.ShowToast(R.string.syncing_complete.asText()))
+        sendEvent(OtherEvent.ShowSnackbar(R.string.syncing_complete.asText()))
     }
 }
 
@@ -203,9 +204,23 @@ sealed class OtherEvent {
     /**
      * Show a toast with the given message.
      */
-    data class ShowToast(
-        val message: Text,
-    ) : OtherEvent()
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : OtherEvent() {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 }
 
 /**

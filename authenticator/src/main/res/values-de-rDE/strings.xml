@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Authenticator</string>
     <string name="biometrics_direction">Biometrische Verifizierung</string>
     <string name="cancel">Abbrechen</string>
     <string name="add_item">Eintrag hinzufügen</string>
@@ -125,7 +124,7 @@
     <string name="take_me_to_app_settings">Bring mich zu den App-Einstellungen</string>
     <string name="something_went_wrong">Etwas ist schiefgelaufen</string>
     <string name="please_try_again">Bitte versuche es erneut</string>
-    <string name="move_to_bitwarden">Zu Bitwarden verschieben</string>
+    <string name="copy_to_bitwarden_vault">In den Bitwarden-Tresor kopieren</string>
     <string name="default_save_option">Standard-Speicheroption</string>
     <string name="save_to_bitwarden">In Bitwarden speichern</string>
     <string name="save_here">Hier speichern</string>
@@ -142,4 +141,9 @@
     <string name="file_could_not_be_processed">"Datei konnte nicht verarbeitet werden"</string>
     <string name="file_could_not_be_processed_message">"Datei konnte nicht verarbeitet werden. Stelle sicher, dass es sich um ein gültiges JSON handelt und versuche es erneut. Benötigst du Hilfe? Besuche bitwarden.com/help"</string>
     <string name="get_help">Hilfe erhalten</string>
+    <string name="expand_advanced_options">Erweiterte Optionen ausklappen</string>
+    <string name="local_items_are_expanded_click_to_collapse">Lokale Einträge sind ausgeklappt, klicke zum Einklappen.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Lokale Einträge sind eingeklappt, klicke zum Ausklappen.</string>
+    <string name="items_expanded_click_to_collapse">Einträge sind ausgeklappt, klicke zum Einklappen.</string>
+    <string name="items_are_collapsed_click_to_expand">Einträge sind eingeklappt, klicke zum Ausklappen.</string>
 </resources>

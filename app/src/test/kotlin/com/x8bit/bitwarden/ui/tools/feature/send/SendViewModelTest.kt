@@ -239,7 +239,7 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `DeleteSendClick with deleteSend success should emit ShowToast`() = runTest {
+    fun `DeleteSendClick with deleteSend success should emit ShowSnackbar`() = runTest {
         val sendId = "sendId1234"
         val sendItem = mockk<SendState.ViewState.Content.SendItem> {
             every { id } returns sendId
@@ -249,7 +249,7 @@ class SendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SendAction.DeleteSendClick(sendItem))
-            assertEquals(SendEvent.ShowToast(R.string.send_deleted.asText()), awaitItem())
+            assertEquals(SendEvent.ShowSnackbar(R.string.send_deleted.asText()), awaitItem())
         }
     }
 
@@ -289,7 +289,7 @@ class SendViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `RemovePasswordClick with removePasswordSend success should emit ShowToast`() = runTest {
+    fun `RemovePasswordClick with removePasswordSend success should emit ShowSnackbar`() = runTest {
         val sendId = "sendId1234"
         val sendItem = mockk<SendState.ViewState.Content.SendItem> {
             every { id } returns sendId
@@ -301,7 +301,7 @@ class SendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SendAction.RemovePasswordClick(sendItem))
-            assertEquals(SendEvent.ShowToast(R.string.password_removed.asText()), awaitItem())
+            assertEquals(SendEvent.ShowSnackbar(R.string.password_removed.asText()), awaitItem())
         }
     }
 
