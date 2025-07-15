@@ -69,6 +69,12 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 emptyList(),
             )
         } returns ExportVaultDataResult.Success("data")
+        coEvery {
+            exportVaultDataToString(
+                any(),
+                listOf(CipherType.CARD),
+            )
+        } returns ExportVaultDataResult.Success("data")
     }
     private val fileManager: FileManager = mockk()
 
