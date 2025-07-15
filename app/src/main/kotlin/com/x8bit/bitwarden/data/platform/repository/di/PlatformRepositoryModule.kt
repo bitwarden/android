@@ -4,7 +4,6 @@ import android.view.autofill.AutofillManager
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
@@ -21,8 +20,8 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepositoryImpl
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepositoryImpl
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
-import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,17 +38,13 @@ object PlatformRepositoryModule {
     @Provides
     @Singleton
     fun providesAuthenticatorBridgeRepository(
-        authRepository: AuthRepository,
         authDiskSource: AuthDiskSource,
-        vaultRepository: VaultRepository,
         vaultDiskSource: VaultDiskSource,
-        vaultSdkSource: VaultSdkSource,
+        scopedVaultSdkSource: ScopedVaultSdkSource,
     ): AuthenticatorBridgeRepository = AuthenticatorBridgeRepositoryImpl(
-        authRepository = authRepository,
         authDiskSource = authDiskSource,
-        vaultRepository = vaultRepository,
         vaultDiskSource = vaultDiskSource,
-        vaultSdkSource = vaultSdkSource,
+        scopedVaultSdkSource = scopedVaultSdkSource,
     )
 
     @Provides
