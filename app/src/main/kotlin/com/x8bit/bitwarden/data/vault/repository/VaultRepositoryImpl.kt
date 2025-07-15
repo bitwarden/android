@@ -931,7 +931,10 @@ class VaultRepositoryImpl(
         }
     }
 
-    override suspend fun exportVaultDataToString(format: ExportFormat): ExportVaultDataResult {
+    override suspend fun exportVaultDataToString(
+        format: ExportFormat,
+        restrictedTypes: List<CipherType>,
+    ): ExportVaultDataResult {
         val userId = activeUserId
             ?: return ExportVaultDataResult.Error(error = NoActiveUserException())
         val folders = vaultDiskSource
@@ -945,7 +948,11 @@ class VaultRepositoryImpl(
             .firstOrNull()
             .orEmpty()
             .map { it.toEncryptedSdkCipher() }
-            .filter { it.collectionIds.isEmpty() && it.deletedDate == null }
+            .filter {
+                it.collectionIds.isEmpty() &&
+                    it.deletedDate == null &&
+                    !restrictedTypes.contains(it.type)
+            }
 
         return vaultSdkSource
             .exportVaultDataToString(
