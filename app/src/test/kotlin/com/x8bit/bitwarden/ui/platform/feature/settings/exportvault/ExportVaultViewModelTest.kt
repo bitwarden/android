@@ -65,14 +65,14 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     private val vaultRepository: VaultRepository = mockk {
         coEvery {
             exportVaultDataToString(
-                any(),
-                emptyList(),
+                format = any(),
+                restrictedTypes = emptyList(),
             )
         } returns ExportVaultDataResult.Success("data")
         coEvery {
             exportVaultDataToString(
-                any(),
-                listOf(CipherType.CARD),
+                format = any(),
+                restrictedTypes = listOf(CipherType.CARD),
             )
         } returns ExportVaultDataResult.Success("data")
     }
