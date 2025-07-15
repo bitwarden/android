@@ -4,7 +4,6 @@ import android.view.autofill.AutofillManager
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
@@ -39,12 +38,10 @@ object PlatformRepositoryModule {
     @Provides
     @Singleton
     fun providesAuthenticatorBridgeRepository(
-        authRepository: AuthRepository,
         authDiskSource: AuthDiskSource,
         vaultDiskSource: VaultDiskSource,
         scopedVaultSdkSource: ScopedVaultSdkSource,
     ): AuthenticatorBridgeRepository = AuthenticatorBridgeRepositoryImpl(
-        authRepository = authRepository,
         authDiskSource = authDiskSource,
         vaultDiskSource = vaultDiskSource,
         scopedVaultSdkSource = scopedVaultSdkSource,

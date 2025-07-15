@@ -9,7 +9,6 @@ import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.repository.util.sanitizeTotpUri
@@ -24,7 +23,6 @@ import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
  * Default implementation of [AuthenticatorBridgeRepository].
  */
 class AuthenticatorBridgeRepositoryImpl(
-    private val authRepository: AuthRepository,
     private val authDiskSource: AuthDiskSource,
     private val vaultDiskSource: VaultDiskSource,
     private val scopedVaultSdkSource: ScopedVaultSdkSource,
@@ -32,14 +30,14 @@ class AuthenticatorBridgeRepositoryImpl(
 
     override val authenticatorSyncSymmetricKey: ByteArray?
         get() {
-            val doAnyAccountsHaveAuthenticatorSyncEnabled = authRepository
-                .userStateFlow
-                .value
+            val doAnyAccountsHaveAuthenticatorSyncEnabled = authDiskSource
+                .userState
                 ?.accounts
-                ?.any {
+                ?.keys
+                ?.any { userId ->
                     // Authenticator sync is enabled if any accounts have an authenticator
                     // sync key stored:
-                    authDiskSource.getAuthenticatorSyncUnlockKey(it.userId) != null
+                    authDiskSource.getAuthenticatorSyncUnlockKey(userId = userId) != null
                 }
                 ?: false
             return if (doAnyAccountsHaveAuthenticatorSyncEnabled) {
@@ -49,11 +47,11 @@ class AuthenticatorBridgeRepositoryImpl(
             }
         }
 
-    @Suppress("LongMethod")
     override suspend fun getSharedAccounts(): SharedAccountData {
-        val allAccounts = authDiskSource.userState?.accounts.orEmpty()
-
-        return allAccounts
+        return authDiskSource
+            .userState
+            ?.accounts
+            .orEmpty()
             .mapNotNull { (userId, account) ->
                 // Grab the user's authenticator sync unlock key. If it is null,
                 // the user has not enabled authenticator sync and we skip the account.
@@ -94,18 +92,15 @@ class AuthenticatorBridgeRepositoryImpl(
                     // Filter out any deleted ciphers.
                     .filter { it.deletedDate == null }
                     .mapNotNull {
-                        val decryptedCipher = scopedVaultSdkSource
-                            .decryptCipher(
-                                userId = userId,
-                                cipher = it.toEncryptedSdkCipher(),
-                            )
+                        scopedVaultSdkSource
+                            .decryptCipher(userId = userId, cipher = it.toEncryptedSdkCipher())
                             .getOrNull()
-
-                        val rawTotp = decryptedCipher?.login?.totp
-                        val cipherName = decryptedCipher?.name
-                        val username = decryptedCipher?.login?.username
-
-                        rawTotp.sanitizeTotpUri(cipherName, username)
+                            ?.let { decryptedCipher ->
+                                val rawTotp = decryptedCipher.login?.totp
+                                val cipherName = decryptedCipher.name
+                                val username = decryptedCipher.login?.username
+                                rawTotp.sanitizeTotpUri(issuer = cipherName, username = username)
+                            }
                     }
 
                 // Lock and destroy our stand-alone instance of the vault:
@@ -123,9 +118,7 @@ class AuthenticatorBridgeRepositoryImpl(
                     totpUris = totpUris,
                 )
             }
-            .let {
-                SharedAccountData(it)
-            }
+            .let(::SharedAccountData)
     }
 
     private suspend fun unlockClient(
