@@ -34,7 +34,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.SingleTapPasskeyAuthentication,
     FlagKey.AnonAddySelfHostAlias,
     FlagKey.SimpleLoginSelfHostAlias,
-    FlagKey.ChromeAutofill,
     FlagKey.RestrictCipherItemDeletion,
     FlagKey.UserManagedPrivilegedApps,
     FlagKey.RemoveCardPolicy,
@@ -91,7 +90,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
 
     FlagKey.AnonAddySelfHostAlias -> stringResource(R.string.anon_addy_self_hosted_aliases)
     FlagKey.SimpleLoginSelfHostAlias -> stringResource(R.string.simple_login_self_hosted_aliases)
-    FlagKey.ChromeAutofill -> stringResource(R.string.enable_chrome_autofill)
     FlagKey.RestrictCipherItemDeletion -> stringResource(R.string.restrict_item_deletion)
     FlagKey.UserManagedPrivilegedApps -> {
         stringResource(R.string.user_trusted_privileged_app_management)
