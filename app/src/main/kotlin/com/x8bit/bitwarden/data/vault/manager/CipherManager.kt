@@ -17,14 +17,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
  */
 @Suppress("TooManyFunctions")
 interface CipherManager {
-
-    /**
-     * Attempt to retrieve a cipher, specified by [cipherId].
-     */
-    suspend fun getCipher(
-        cipherId: String,
-    ): GetCipherResult
-
     /**
      * Attempt to create a cipher.
      */

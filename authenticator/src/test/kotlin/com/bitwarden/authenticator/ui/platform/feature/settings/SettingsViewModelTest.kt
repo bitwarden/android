@@ -7,9 +7,7 @@ import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.util.isSyncWithBitwardenEnabled
-import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
@@ -58,9 +56,6 @@ class SettingsViewModelTest : BaseViewModelTest() {
         every { isCrashLoggingEnabled } returns true
     }
     private val clipboardManager: BitwardenClipboardManager = mockk()
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.PasswordManagerSync) } returns true
-    }
 
     @BeforeEach
     fun setup() {
@@ -74,25 +69,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    @Suppress("MaxLineLength")
-    fun `initialState should be correct when saved state is null and password manager feature flag is off`() {
-        every {
-            featureFlagManager.getFeatureFlag(FlagKey.PasswordManagerSync)
-        } returns false
-        val viewModel = createViewModel(savedState = null)
-        val expectedState = DEFAULT_STATE.copy(
-            showSyncWithBitwarden = false,
-            showDefaultSaveOptionRow = false,
-        )
-        assertEquals(
-            expectedState,
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `initialState should be correct when saved state is null and password manager feature flag is on but OS version is too low`() {
+    fun `initialState should be correct when saved state is null but OS version is too low`() {
         every {
             authenticatorBridgeManager.accountSyncStateFlow
         } returns MutableStateFlow(AccountSyncState.OsVersionNotSupported)
@@ -108,14 +85,10 @@ class SettingsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    @Suppress("MaxLineLength")
-    fun `initialState should be correct when saved state is null and password manager feature flag is on and OS version is supported`() {
+    fun `initialState should be correct when saved state is null and OS version is supported`() {
         every {
             authenticatorBridgeManager.accountSyncStateFlow
         } returns MutableStateFlow(AccountSyncState.Loading)
-        every {
-            featureFlagManager.getFeatureFlag(FlagKey.PasswordManagerSync)
-        } returns true
         val viewModel = createViewModel(savedState = null)
         val expectedState = DEFAULT_STATE.copy(
             showSyncWithBitwarden = true,
@@ -233,7 +206,6 @@ class SettingsViewModelTest : BaseViewModelTest() {
         authenticatorRepository = authenticatorRepository,
         settingsRepository = settingsRepository,
         clipboardManager = clipboardManager,
-        featureFlagManager = featureFlagManager,
     )
 }
 

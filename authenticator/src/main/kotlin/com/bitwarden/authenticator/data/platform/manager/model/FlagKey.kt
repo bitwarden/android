@@ -22,7 +22,6 @@ sealed class FlagKey<out T : Any> {
         val activeFlags: List<FlagKey<*>> by lazy {
             listOf(
                 BitwardenAuthenticationEnabled,
-                PasswordManagerSync,
             )
         }
     }
@@ -32,14 +31,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object BitwardenAuthenticationEnabled : FlagKey<Boolean>() {
         override val keyName: String = "bitwarden-authentication-enabled"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Indicates whether syncing with the main Bitwarden password manager app should be enabled..
-     */
-    data object PasswordManagerSync : FlagKey<Boolean>() {
-        override val keyName: String = "enable-pm-bwa-sync"
         override val defaultValue: Boolean = false
     }
 

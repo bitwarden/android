@@ -11,7 +11,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultTrailingIcon
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class CipherViewExtensionsTest {
+class CipherListViewExtensionsTest {
 
     @Test
     fun `toOverflowActions should return all actions for a login cipher when a user has premium`() {
@@ -157,8 +157,6 @@ class CipherViewExtensionsTest {
 
     @Test
     fun `toOverflowActions should return all actions for a card cipher`() {
-        val number = "1322-2414-7634-2354"
-        val securityCode = "123"
         val cipher = createMockCipherListView(
             number = 1,
             type = CipherListViewType.Card(
@@ -269,7 +267,6 @@ class CipherViewExtensionsTest {
 
     @Test
     fun `toOverflowActions should return all actions for a secure note cipher`() {
-        val notes = "so secure"
         val cipher = createMockCipherListView(
             number = 1,
             type = CipherListViewType.SecureNote,
