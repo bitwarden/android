@@ -7,12 +7,13 @@ on:
 
 permissions:
   contents: write
+  id-token: write
   actions: read
 
 jobs:
   publish-release-password-manager:
     name: Publish Password Manager Release
-    uses: bitwarden/gh-actions/.github/workflows/_publish-mobile-github-release.yml@BRE-769-Use-Fastlane-to-keep-github-releases-in-sync-with-mobile-deploy-versions
+    uses: bitwarden/gh-actions/.github/workflows/_publish-mobile-github-release.yml@main
     with:
       release_name: "Password Manager"
       workflow_name: "publish-github-release.yml"
@@ -24,7 +25,7 @@ jobs:
 
   publish-release-authenticator:
     name: Publish Authenticator Release
-    uses: bitwarden/gh-actions/.github/workflows/_publish-mobile-github-release.yml@BRE-769-Use-Fastlane-to-keep-github-releases-in-sync-with-mobile-deploy-versions
+    uses: bitwarden/gh-actions/.github/workflows/_publish-mobile-github-release.yml@main
     with:
       release_name: "Authenticator"
       workflow_name: "publish-github-release.yml"
