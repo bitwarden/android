@@ -41,6 +41,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
@@ -51,6 +52,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockUriView
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -123,6 +125,9 @@ class SearchViewModelTest : BaseViewModelTest() {
     private val vaultRepository: VaultRepository = mockk {
         every { vaultFilterType } returns VaultFilterType.AllVaults
         every { vaultDataStateFlow } returns mutableVaultDataStateFlow
+        coEvery { getCipher(any()) } returns GetCipherResult.Success(
+            createMockCipherView(number = 1, clock = clock),
+        )
     }
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
@@ -941,6 +946,14 @@ class SearchViewModelTest : BaseViewModelTest() {
         runTest {
             val notes = "notes"
             val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.getCipher(CIPHER_ID)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    notes = notes,
+                ),
+            )
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyNoteClick(
@@ -960,8 +973,18 @@ class SearchViewModelTest : BaseViewModelTest() {
     @Test
     fun `OverflowOptionClick Vault CopyNumberClick should call setText on the ClipboardManager`() =
         runTest {
-            val number = "12345-4321-9876-6789"
+            val cardNumber = "12345-4321-9876-6789"
             val viewModel = createViewModel()
+
+            coEvery {
+                vaultRepository.getCipher(CIPHER_ID)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    card = createMockCardView(number = 1, cardNumber = cardNumber),
+                ),
+            )
+
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyNumberClick(
@@ -972,7 +995,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             )
             verify(exactly = 1) {
                 clipboardManager.setText(
-                    text = number,
+                    text = cardNumber,
                     toastDescriptorOverride = R.string.number.asText(),
                 )
             }
@@ -1042,6 +1065,14 @@ class SearchViewModelTest : BaseViewModelTest() {
             val password = "passTheWord"
             val cipherId = "mockId-1"
             val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.getCipher(CIPHER_ID)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    password = password,
+                ),
+            )
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyPasswordClick(
@@ -1068,6 +1099,14 @@ class SearchViewModelTest : BaseViewModelTest() {
             val securityCode = "234"
             val cipherId = "cipherId"
             val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    card = createMockCardView(number = 1, code = securityCode),
+                ),
+            )
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
@@ -1706,6 +1745,27 @@ class SearchViewModelTest : BaseViewModelTest() {
             )
         }
 
+    @Test
+    fun `DecryptCipherErrorReceive should display error dialog`() = runTest {
+        val viewModel = createViewModel()
+        val throwable = Throwable("Decryption failed")
+        viewModel.trySendAction(
+            SearchAction.Internal.DecryptCipherErrorReceive(
+                error = throwable,
+            ),
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = SearchState.DialogState.Error(
+                    title = R.string.decryption_error.asText(),
+                    message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                    throwable = throwable,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
     @Suppress("CyclomaticComplexMethod")
     private fun createViewModel(
         initialState: SearchState? = null,
@@ -1802,10 +1862,12 @@ class SearchViewModelTest : BaseViewModelTest() {
             ),
         )
         mutableVaultDataStateFlow.value = dataState
-        return createMockCipherView(
+        val cipherView = createMockCipherView(
             number = 1,
             fido2Credentials = createMockSdkFido2CredentialList(number = 1),
         )
+        coEvery { vaultRepository.getCipher(CIPHER_ID) } returns GetCipherResult.Success(cipherView)
+        return cipherView
     }
 
     private fun setupMockUri() {

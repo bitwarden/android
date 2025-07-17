@@ -439,10 +439,15 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun handleCopyNoteClick(action: ListingItemOverflowAction.VaultAction.CopyNoteClick) {
-        clipboardManager.setText(
-            text = action.cipherId,
-            toastDescriptorOverride = R.string.notes.asText(),
-        )
+        viewModelScope.launch {
+            decryptCipherViewOrNull(action.cipherId)
+                ?.let {
+                    clipboardManager.setText(
+                        text = it.notes.orEmpty(),
+                        toastDescriptorOverride = R.string.notes.asText(),
+                    )
+                }
+        }
     }
 
     private fun handleCopyNumberClick(
