@@ -29,7 +29,7 @@ fun createMockCipherListView(
     organizationId: String? = "mockOrganizationId-$number",
     folderId: String? = "mockId-$number",
     type: CipherListViewType = CipherListViewType.Login(
-        createMockLoginListView(number = 1),
+        createMockLoginListView(number = number),
     ),
     reprompt: CipherRepromptType = CipherRepromptType.NONE,
     name: String = "mockName-$number",
@@ -37,9 +37,9 @@ fun createMockCipherListView(
     collectionIds: List<String> = listOf("mockId-$number"),
     revisionDate: Instant = Instant.parse(DEFAULT_TIMESTAMP),
     creationDate: Instant = Instant.parse(DEFAULT_TIMESTAMP),
-    attachments: UInt = 0U,
+    attachments: UInt = 1U,
     organizationUseTotp: Boolean = false,
-    edit: Boolean = false,
+    edit: Boolean = true,
     viewPassword: Boolean = false,
     permissions: CipherPermissions? = createMockSdkCipherPermissions(),
     localData: LocalDataView? = null,
@@ -79,12 +79,12 @@ fun createMockCipherListView(
 fun createMockLoginListView(
     number: Int,
     fido2Credentials: List<Fido2CredentialListView> = listOf(
-        createMockFido2CredentialListView(number = 1),
+        createMockFido2CredentialListView(number = number),
     ),
     hasFido2: Boolean = true,
     username: String = "mockUsername-$number",
     totp: String? = "mockTotp-$number",
-    uris: List<LoginUriView> = listOf(createMockUriView(number = 1)),
+    uris: List<LoginUriView> = listOf(createMockUriView(number = number)),
 ): LoginListView = LoginListView(
     fido2Credentials = fido2Credentials,
     hasFido2 = hasFido2,
