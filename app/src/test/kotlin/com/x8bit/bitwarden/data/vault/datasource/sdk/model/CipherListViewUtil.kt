@@ -40,13 +40,19 @@ fun createMockCipherListView(
     attachments: UInt = 1U,
     organizationUseTotp: Boolean = false,
     edit: Boolean = true,
-    viewPassword: Boolean = false,
+    viewPassword: Boolean = true,
     permissions: CipherPermissions? = createMockSdkCipherPermissions(),
     localData: LocalDataView? = null,
     key: String = "mockKey-$number",
     subtitle: String = "mockSubtitle-$number",
     hasOldAttachments: Boolean = false,
-    copyableFields: List<CopyableCipherFields> = emptyList(),
+    copyableFields: List<CopyableCipherFields> = listOf(
+        CopyableCipherFields.LOGIN_USERNAME,
+        CopyableCipherFields.LOGIN_PASSWORD,
+        CopyableCipherFields.LOGIN_TOTP,
+    )
+        .takeIf { type is CipherListViewType.Login }
+        .orEmpty(),
     isDeleted: Boolean = false,
 ): CipherListView = CipherListView(
     id = id,
@@ -81,12 +87,12 @@ fun createMockLoginListView(
     fido2Credentials: List<Fido2CredentialListView> = listOf(
         createMockFido2CredentialListView(number = number),
     ),
-    hasFido2: Boolean = true,
+    hasFido2: Boolean = false,
     username: String = "mockUsername-$number",
     totp: String? = "mockTotp-$number",
     uris: List<LoginUriView> = listOf(createMockUriView(number = number)),
 ): LoginListView = LoginListView(
-    fido2Credentials = fido2Credentials,
+    fido2Credentials = fido2Credentials.takeIf { hasFido2 },
     hasFido2 = hasFido2,
     username = username,
     totp = totp,

@@ -25,13 +25,16 @@ fun CipherListView.toOverflowActions(
             listOfNotNull(
                 this.login?.username?.let {
                     ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = it)
-                },
+                }.takeIf { this.copyableFields.contains(CopyableCipherFields.LOGIN_USERNAME) },
                 ListingItemOverflowAction.VaultAction
                     .CopyPasswordClick(
                         cipherId = cipherId,
                         requiresPasswordReprompt = hasMasterPassword,
                     )
-                    .takeIf { this.viewPassword },
+                    .takeIf {
+                        this.viewPassword &&
+                            this.copyableFields.contains(CopyableCipherFields.LOGIN_PASSWORD)
+                    },
                 this.login?.totp
                     ?.let {
                         ListingItemOverflowAction.VaultAction.CopyTotpClick(
@@ -41,7 +44,8 @@ fun CipherListView.toOverflowActions(
                     }
                     .takeIf {
                         this.type is CipherListViewType.Login &&
-                            (this.organizationUseTotp || isPremiumUser)
+                            (this.organizationUseTotp || isPremiumUser) &&
+                            this.copyableFields.contains(CopyableCipherFields.LOGIN_TOTP)
                     },
                 ListingItemOverflowAction.VaultAction
                     .CopyNumberClick(
@@ -54,12 +58,18 @@ fun CipherListView.toOverflowActions(
                         cipherId = cipherId,
                         requiresPasswordReprompt = hasMasterPassword,
                     )
-                    .takeIf { this.type is CipherListViewType.Card },
+                    .takeIf {
+                        this.type is CipherListViewType.Card &&
+                            this.copyableFields.contains(CopyableCipherFields.CARD_SECURITY_CODE)
+                    },
                 ListingItemOverflowAction.VaultAction
                     .CopyNoteClick(
                         cipherId = cipherId,
                         requiresPasswordReprompt = hasMasterPassword,
-                    ).takeIf { this.type is CipherListViewType.SecureNote },
+                    ).takeIf {
+                        this.type is CipherListViewType.SecureNote &&
+                            this.copyableFields.contains(CopyableCipherFields.SECURE_NOTES)
+                    },
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = cipherId,
                     cipherType = this.type,

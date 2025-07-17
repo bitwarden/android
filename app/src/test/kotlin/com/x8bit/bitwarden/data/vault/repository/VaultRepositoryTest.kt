@@ -1988,7 +1988,12 @@ class VaultRepositoryTest {
                 val domainsStateFlow = vaultRepository.domainsStateFlow.testIn(backgroundScope)
 
                 assertEquals(
-                    DataState.Loaded(createMockDecryptCipherListResult(number = 1)),
+                    DataState.Loaded(
+                        createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = emptyList(),
+                        ),
+                    ),
                     ciphersStateFlow.awaitItem(),
                 )
                 assertEquals(

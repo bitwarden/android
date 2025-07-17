@@ -18,7 +18,8 @@ import kotlinx.collections.immutable.persistentListOf
  */
 fun createMockDisplayItemForCipher(
     number: Int,
-    cipherType: CipherListViewType = CipherListViewType.Login(createMockLoginListView(number = 1)),
+    cipherType: CipherListViewType =
+        CipherListViewType.Login(createMockLoginListView(number = number)),
     @DrawableRes fallbackIconRes: Int = BitwardenDrawable.ic_globe,
 ): SearchState.DisplayItem =
     when (cipherType) {
@@ -27,7 +28,7 @@ fun createMockDisplayItemForCipher(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
-                subtitle = "mockUsername-$number",
+                subtitle = "mockSubtitle-$number",
                 subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Network(
                     uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
@@ -59,16 +60,12 @@ fun createMockDisplayItemForCipher(
                     ),
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = "mockId-$number",
-                        cipherType = CipherListViewType.Login(
-                            createMockLoginListView(number = 1),
-                        ),
+                        cipherType = cipherType,
                         requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-$number",
-                        cipherType = CipherListViewType.Login(
-                            createMockLoginListView(number = 1),
-                        ),
+                        cipherType = cipherType,
                         requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.LaunchClick(
@@ -132,7 +129,7 @@ fun createMockDisplayItemForCipher(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
-                subtitle = "mockBrand-$number, *er-$number",
+                subtitle = "mockSubtitle-$number",
                 subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Local(BitwardenDrawable.ic_payment_card),
                 extraIconList = persistentListOf(
@@ -269,7 +266,7 @@ fun createMockDisplayItemForSend(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "SendNameLabel",
-                subtitle = "Oct 27, 2023, 12:00 PM",
+                subtitle = "Oct 27, 2023, 12:00 PM",
                 subtitleTestTag = "SendDateLabel",
                 iconData = IconData.Local(BitwardenDrawable.ic_file),
                 extraIconList = persistentListOf(
@@ -315,7 +312,7 @@ fun createMockDisplayItemForSend(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "SendNameLabel",
-                subtitle = "Oct 27, 2023, 12:00 PM",
+                subtitle = "Oct 27, 2023, 12:00 PM",
                 subtitleTestTag = "SendDateLabel",
                 iconData = IconData.Local(BitwardenDrawable.ic_file_text),
                 extraIconList = persistentListOf(

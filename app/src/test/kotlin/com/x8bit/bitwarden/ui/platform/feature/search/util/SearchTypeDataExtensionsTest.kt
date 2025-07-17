@@ -8,6 +8,7 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.CopyableCipherFields
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
@@ -377,11 +378,13 @@ class SearchTypeDataExtensionsTest {
         val sends = listOf(
             createMockCipherListView(
                 number = 0,
-                type = CipherListViewType.Card(createMockCardListView(number = 1)),
-            )
-                .copy(
-                    reprompt = CipherRepromptType.PASSWORD,
+                type = CipherListViewType.Card(createMockCardListView(number = 0)),
+                reprompt = CipherRepromptType.PASSWORD,
+                copyableFields = listOf(
+                    CopyableCipherFields.CARD_NUMBER,
+                    CopyableCipherFields.CARD_SECURITY_CODE,
                 ),
+            ),
             createMockCipherListView(number = 1),
             createMockCipherListView(number = 2),
         )
@@ -400,7 +403,7 @@ class SearchTypeDataExtensionsTest {
                 displayItems = listOf(
                     createMockDisplayItemForCipher(
                         number = 0,
-                        cipherType = CipherListViewType.Card(createMockCardListView(number = 1)),
+                        cipherType = CipherListViewType.Card(createMockCardListView(number = 0)),
                     )
                         .copy(
                             autofillSelectionOptions = listOf(
@@ -460,17 +463,16 @@ class SearchTypeDataExtensionsTest {
             every { host } returns "www.mockuri.com"
         }
         val result = listOf(
-            createMockCipherListView(number = 1),
             createMockCipherListView(
-                number = 2,
+                number = 1,
                 type = CipherListViewType.Login(
                     createMockLoginListView(
-                        number = 2,
-                        hasFido2 = false,
-                        fido2Credentials = emptyList(),
+                        number = 1,
+                        hasFido2 = true,
                     ),
                 ),
             ),
+            createMockCipherListView(number = 2),
         ).toViewState(
             searchTerm = "mock",
             baseIconUrl = "https://vault.bitwarden.com/icons",
@@ -485,6 +487,12 @@ class SearchTypeDataExtensionsTest {
                 displayItems = listOf(
                     createMockDisplayItemForCipher(
                         number = 1,
+                        cipherType = CipherListViewType.Login(
+                            createMockLoginListView(
+                                number = 1,
+                                hasFido2 = true,
+                            ),
+                        ),
                         fallbackIconRes = BitwardenDrawable.ic_bw_passkey,
                     ),
                     createMockDisplayItemForCipher(number = 2),

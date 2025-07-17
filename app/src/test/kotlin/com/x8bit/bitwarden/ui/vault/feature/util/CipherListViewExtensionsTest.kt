@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.util
 
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.vault.CipherListViewType
+import com.bitwarden.vault.CopyableCipherFields
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
@@ -9,20 +10,27 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockUriView
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.model.VaultTrailingIcon
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class CipherListViewExtensionsTest {
 
     @Test
     fun `toOverflowActions should return all actions for a login cipher when a user has premium`() {
-        val cipher = createMockCipherListView(number = 1).copy(
-            id = id,
-            type = CipherListViewType.Login(
-                createMockLoginListView(number = 1).copy(
-                    username = username,
-                    uris = listOf(createMockUriView(number = 1).copy(uri = uri)),
+        val loginListView = createMockLoginListView(
+            number = 1,
+            username = username,
+            totp = totpCode,
+            uris = listOf(
+                createMockUriView(
+                    number = 1,
+                    uri = uri,
                 ),
             ),
+        )
+        val cipher = createMockCipherListView(number = 1).copy(
+            id = id,
+            type = CipherListViewType.Login(loginListView),
         )
 
         val result = cipher.toOverflowActions(hasMasterPassword = false, isPremiumUser = true)
@@ -40,12 +48,12 @@ class CipherListViewExtensionsTest {
                 ),
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = id,
-                    cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
+                    cipherType = CipherListViewType.Login(loginListView),
                     requiresPasswordReprompt = false,
                 ),
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = id,
-                    cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
+                    cipherType = CipherListViewType.Login(loginListView),
                     requiresPasswordReprompt = false,
                 ),
                 ListingItemOverflowAction.VaultAction.LaunchClick(url = uri),
@@ -56,52 +64,35 @@ class CipherListViewExtensionsTest {
 
     @Test
     fun `toOverflowActions should not return TOTP action when a user does not have premium`() {
-        val cipher = createMockCipherListView(number = 1).copy(
-            id = id,
-            type = CipherListViewType.Login(
-                createMockLoginListView(number = 1).copy(
-                    username = username,
-                    uris = listOf(createMockUriView(number = 1).copy(uri = uri)),
-                ),
+        val type = CipherListViewType.Login(
+            createMockLoginListView(number = 1).copy(
+                username = username,
+                uris = listOf(createMockUriView(number = 1).copy(uri = uri)),
             ),
+        )
+        val cipher = createMockCipherListView(
+            number = 1,
+            id = id,
+            type = type,
         )
 
         val result = cipher.toOverflowActions(hasMasterPassword = false, isPremiumUser = false)
 
-        assertEquals(
-            listOf(
-                ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = username),
-                ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                    requiresPasswordReprompt = false,
-                    cipherId = id,
-                ),
-                ListingItemOverflowAction.VaultAction.ViewClick(
-                    cipherId = id,
-                    cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
-                    requiresPasswordReprompt = false,
-                ),
-                ListingItemOverflowAction.VaultAction.EditClick(
-                    cipherId = id,
-                    cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
-                    requiresPasswordReprompt = false,
-                ),
-                ListingItemOverflowAction.VaultAction.LaunchClick(url = uri),
-            ),
-            result,
+        assertTrue(
+            result.none { it is ListingItemOverflowAction.VaultAction.CopyTotpClick },
         )
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `toOverflowActions should return the correct actions when viewPassword is false for a login cipher`() {
+        val loginListView = createMockLoginListView(number = 1).copy(
+            username = username,
+            uris = listOf(createMockUriView(number = 1).copy(uri = uri)),
+        )
         val cipher = createMockCipherListView(number = 1).copy(
             id = id,
-            type = CipherListViewType.Login(
-                createMockLoginListView(number = 1).copy(
-                    username = username,
-                    uris = listOf(createMockUriView(number = 1).copy(uri = uri)),
-                ),
-            ),
+            type = CipherListViewType.Login(loginListView),
             viewPassword = false,
         )
         val result = cipher.toOverflowActions(hasMasterPassword = true, isPremiumUser = false)
@@ -111,12 +102,12 @@ class CipherListViewExtensionsTest {
                 ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = username),
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = id,
-                    cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
+                    cipherType = CipherListViewType.Login(loginListView),
                     requiresPasswordReprompt = true,
                 ),
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = id,
-                    cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
+                    cipherType = CipherListViewType.Login(loginListView),
                     requiresPasswordReprompt = true,
                 ),
                 ListingItemOverflowAction.VaultAction.LaunchClick(url = uri),
@@ -127,19 +118,19 @@ class CipherListViewExtensionsTest {
 
     @Test
     fun `toOverflowActions should return minimum actions for a login cipher`() {
+        val loginListView = createMockLoginListView(
+            number = 1,
+            uris = emptyList(),
+            username = "",
+            totp = null,
+        )
         val cipher = createMockCipherListView(
             number = 1,
             isDeleted = true,
-            type = CipherListViewType.Login(
-                createMockLoginListView(
-                    number = 1,
-                    uris = emptyList(),
-                    username = "",
-                    totp = null,
-                ),
-            ),
+            type = CipherListViewType.Login(loginListView),
+            id = id,
+            copyableFields = emptyList(),
         )
-            .copy(id = id)
 
         val result = cipher.toOverflowActions(hasMasterPassword = true, isPremiumUser = false)
 
@@ -147,7 +138,7 @@ class CipherListViewExtensionsTest {
             listOf(
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = id,
-                    cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
+                    cipherType = CipherListViewType.Login(loginListView),
                     requiresPasswordReprompt = true,
                 ),
             ),
@@ -162,8 +153,12 @@ class CipherListViewExtensionsTest {
             type = CipherListViewType.Card(
                 createMockCardListView(number = 1),
             ),
+            id = id,
+            copyableFields = listOf(
+                CopyableCipherFields.CARD_NUMBER,
+                CopyableCipherFields.CARD_SECURITY_CODE,
+            ),
         )
-            .copy(id = id)
 
         val result = cipher.toOverflowActions(hasMasterPassword = true, isPremiumUser = false)
 
@@ -270,8 +265,9 @@ class CipherListViewExtensionsTest {
         val cipher = createMockCipherListView(
             number = 1,
             type = CipherListViewType.SecureNote,
+            id = id,
+            copyableFields = listOf(CopyableCipherFields.SECURE_NOTES),
         )
-            .copy(id = id)
 
         val result = cipher.toOverflowActions(hasMasterPassword = true, isPremiumUser = false)
 
@@ -321,68 +317,47 @@ class CipherListViewExtensionsTest {
 
     @Test
     fun `toOverflowActions should not return Edit action when cipher cannot be edited`() {
+        val type = CipherListViewType.Login(createMockLoginListView(number = 1))
         val cipher = createMockCipherListView(
             number = 1,
+            id = id,
             isDeleted = false,
             edit = false,
-            type = CipherListViewType.Login(
-                createMockLoginListView(number = 1)
-                    .copy(
-                        username = "",
-                        uris = emptyList(),
-                        totp = null,
-                    ),
-            ),
+            type = type,
         )
-            .copy(id = id)
-
         val result = cipher.toOverflowActions(hasMasterPassword = true, isPremiumUser = false)
 
-        assertEquals(
-            listOf(
-                ListingItemOverflowAction.VaultAction.ViewClick(
-                    cipherId = id,
-                    cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
-                    requiresPasswordReprompt = true,
-                ),
-            ),
-            result,
+        assertTrue(
+            result.none { it is ListingItemOverflowAction.VaultAction.EditClick },
         )
     }
 
     @Test
     fun `toOverflowActions should return Edit action when cipher can be edited`() {
+        val loginListView = createMockLoginListView(
+            number = 1,
+            username = "",
+            uris = emptyList(),
+            totp = null,
+        )
         val cipher = createMockCipherListView(
             number = 1,
+            id = id,
             isDeleted = false,
             edit = true,
-            type = CipherListViewType.Login(
-                createMockLoginListView(number = 1)
-                    .copy(
-                        username = "",
-                        uris = emptyList(),
-                        totp = null,
-                    ),
-            ),
+            type = CipherListViewType.Login(loginListView),
         )
-            .copy(id = id)
 
         val result = cipher.toOverflowActions(hasMasterPassword = true, isPremiumUser = false)
 
-        assertEquals(
-            listOf(
-                ListingItemOverflowAction.VaultAction.ViewClick(
-                    cipherId = id,
-                    cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
-                    requiresPasswordReprompt = true,
-                ),
+        assertTrue(
+            result.contains(
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = id,
-                    cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
+                    cipherType = CipherListViewType.Login(loginListView),
                     requiresPasswordReprompt = true,
                 ),
             ),
-            result,
         )
     }
 
