@@ -52,23 +52,23 @@ class AutofillCipherProviderImpl(
     }
 
     override suspend fun getCardAutofillCiphers(): List<AutofillCipher.Card> {
-        val cipherViews = getUnlockedCipherListViewsOrNull() ?: return emptyList()
+        val cipherListViews = getUnlockedCipherListViewsOrNull() ?: return emptyList()
 
-        return cipherViews
+        return cipherListViews
             .mapNotNull { cipherListView ->
                 cipherListView
                     // We only care about non-deleted card ciphers.
                     .takeIf {
                         // Must be card type.
-                        cipherListView.type is CipherListViewType.Card &&
+                        it.type is CipherListViewType.Card &&
                             // Must not be deleted.
-                            cipherListView.deletedDate == null &&
+                            it.deletedDate == null &&
                             // Must not require a reprompt.
                             it.reprompt == CipherRepromptType.NONE
                     }
-                    ?.let { nonNullCipherView ->
-                        decryptCipherOrNull(nonNullCipherView.id)
-                            ?.let { cipherView ->
+                    ?.let { nonNullCipherListView ->
+                        nonNullCipherListView.id?.let { cipherId ->
+                            decryptCipherOrNull(cipherId = cipherId)?.let { cipherView ->
                                 AutofillCipher.Card(
                                     cipherId = cipherView.id,
                                     name = cipherView.name,
@@ -80,6 +80,7 @@ class AutofillCipherProviderImpl(
                                     number = cipherView.card?.number.orEmpty(),
                                 )
                             }
+                        }
                     }
             }
     }
@@ -106,8 +107,8 @@ class AutofillCipherProviderImpl(
                 matchUri = uri,
             )
             .mapNotNull { cipherListView ->
-                decryptCipherOrNull(cipherId = cipherListView.id ?: return@mapNotNull null)
-                    ?.let { cipherView ->
+                cipherListView.id?.let { cipherId ->
+                    decryptCipherOrNull(cipherId = cipherId)?.let { cipherView ->
                         AutofillCipher.Login(
                             cipherId = cipherView.id,
                             isTotpEnabled = cipherView.login?.totp != null,
@@ -117,6 +118,7 @@ class AutofillCipherProviderImpl(
                             username = cipherView.login?.username.orEmpty(),
                         )
                     }
+                }
             }
     }
 
@@ -131,9 +133,8 @@ class AutofillCipherProviderImpl(
             ?.data
             ?.successes
 
-    private suspend fun decryptCipherOrNull(cipherId: String?): CipherView? {
-        cipherId ?: return null
-        return when (val result = vaultRepository.getCipher(cipherId = cipherId)) {
+    private suspend fun decryptCipherOrNull(cipherId: String): CipherView? =
+        when (val result = vaultRepository.getCipher(cipherId = cipherId)) {
             GetCipherResult.CipherNotFound -> {
                 Timber.e("Cipher not found for autofill.")
                 null
@@ -144,5 +145,4 @@ class AutofillCipherProviderImpl(
             }
             is GetCipherResult.Success -> result.cipherView
         }
-    }
 }
