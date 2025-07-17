@@ -66,6 +66,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipherPe
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewExceptPasswordsCollectionView
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
@@ -176,6 +177,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every { vaultDataStateFlow } returns mutableVaultDataFlow
         every { totpCodeFlow } returns totpTestCodeFlow
         every { foldersStateFlow } returns mutableFolderStateFlow
+        coEvery {
+            getCipher(any())
+        } returns GetCipherResult.Success(
+            cipherView = createMockCipherView(number = 1),
+        )
     }
 
     private val mockAuthRepository = mockk<AuthRepository>(relaxed = true)
@@ -1381,6 +1387,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 featureFlagManager.getFeatureFlag(FlagKey.RestrictCipherItemDeletion)
             } returns true
 
+            coEvery {
+                vaultRepository.getCipher("mockId-1")
+            } returns GetCipherResult.Success(cipherView)
             every {
                 cipherView.toViewState(
                     isClone = false,
@@ -1458,6 +1467,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 featureFlagManager.getFeatureFlag(FlagKey.RestrictCipherItemDeletion)
             } returns true
 
+            coEvery {
+                vaultRepository.getCipher("mockId-1")
+            } returns GetCipherResult.Success(cipherView)
             every {
                 cipherView.toViewState(
                     isClone = false,
@@ -1613,6 +1625,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
 
+            coEvery {
+                vaultRepository.getCipher("mockId-1")
+            } returns GetCipherResult.Success(cipherView)
             every {
                 cipherView.toViewState(
                     isClone = false,
@@ -1750,6 +1765,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
 
+            coEvery {
+                vaultRepository.getCipher("mockId-1")
+            } returns GetCipherResult.Success(cipherView)
             every {
                 cipherView.toViewState(
                     isClone = false,
@@ -1820,6 +1838,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
 
+            coEvery {
+                vaultRepository.getCipher("mockId-1")
+            } returns GetCipherResult.Success(cipherView)
             every {
                 cipherView.toViewState(
                     isClone = false,
