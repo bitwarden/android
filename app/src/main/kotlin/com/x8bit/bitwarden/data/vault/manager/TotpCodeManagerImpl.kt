@@ -79,6 +79,7 @@ class TotpCodeManagerImpl(
         cipherListView: CipherListView?,
     ): StateFlow<DataState<VerificationCodeItem?>> {
         val cipherId = cipherListView?.id ?: return MutableStateFlow(DataState.Loaded(null))
+        cipherListView.login?.totp ?: return MutableStateFlow(DataState.Loaded(null))
 
         return mutableCipherListViewVerificationCodeStateFlowMap.getOrPut(cipherListView) {
             // Define a per-item scope so that we can clear the Flow from the scope when it is
@@ -86,19 +87,10 @@ class TotpCodeManagerImpl(
             val itemScope = CoroutineScope(dispatcherManager.unconfined)
 
             flow<DataState<VerificationCodeItem?>> {
-                // If the item does not have a totpCode simply return null.
-                cipherListView
-                    .login
-                    ?.totp
-                    ?: run {
-                        emit(DataState.Loaded(null))
-                        return@flow
-                    }
-
                 var item: VerificationCodeItem? = null
                 while (currentCoroutineContext().isActive) {
-                    val time = (clock.millis() / ONE_SECOND_MILLISECOND).toInt()
                     val dateTime = clock.instant()
+                    val time = dateTime.epochSecond.toInt()
                     if (item == null || item.isExpired(clock = clock)) {
                         vaultSdkSource
                             .generateTotpForCipherListView(
@@ -129,12 +121,9 @@ class TotpCodeManagerImpl(
                                 return@flow
                             }
                     } else {
-                        item.let {
-                            item = it.copy(
-                                timeLeftSeconds = it.periodSeconds -
-                                    (time % it.periodSeconds),
-                            )
-                        }
+                        item = item.copy(
+                            timeLeftSeconds = item.periodSeconds - (time % item.periodSeconds),
+                        )
                     }
 
                     item?.let {
