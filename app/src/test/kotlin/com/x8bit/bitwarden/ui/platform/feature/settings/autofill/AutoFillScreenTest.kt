@@ -31,6 +31,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
+@Suppress("LargeClass")
 class AutoFillScreenTest : BitwardenComposeTest() {
 
     private var isSystemSettingsRequestSuccess = false
@@ -484,6 +485,76 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithContentDescription(label = "Starts with", substring = true)
             .assertExists()
+    }
+
+    @Test
+    fun `on default URI match Advanced type click should display warning dialog`() {
+        composeTestRule
+            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Regular expression")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Warning")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Test
+    fun `on Advanced warning dialog cancel should not change the default URI match type`() {
+        composeTestRule
+            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Regular expression")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(
+                AutoFillAction.DefaultUriMatchTypeSelect(
+                    defaultUriMatchType = UriMatchType.REGULAR_EXPRESSION,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `on Advanced warning dialog confirm should update the default URI match type`() {
+        composeTestRule
+            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Regular expression")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Continue")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                AutoFillAction.DefaultUriMatchTypeSelect(
+                    defaultUriMatchType = UriMatchType.REGULAR_EXPRESSION,
+                ),
+            )
+        }
     }
 
     @Test

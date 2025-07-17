@@ -990,4 +990,5 @@ Do you want to switch to this account?</string>
     <string name="installed_apps">Installed apps</string>
     <string name="delete_x">Delete %s</string>
     <string name="advanced_options">Advanced options</string>
+    <string name="advanced_options_warning">“Regular expression” is an advanced option with increased risk of exposing credentials. More about match detection</string>
 </resources>

@@ -387,21 +387,59 @@ private fun DefaultUriMatchTypeRow(
     modifier: Modifier = Modifier,
     resources: Resources = LocalContext.current.resources,
 ) {
+    var showAdvancedOptionWarningDialog by rememberSaveable { mutableStateOf(false) }
+    var pendingSelectedOption by rememberSaveable { mutableStateOf<UriMatchType?>(null) }
+
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.default_uri_match_detection),
-        options = UriMatchType.entries.filter { !it.isAdvancedMatching() }.map { it.displayLabel() }.toImmutableList(),
+        options = UriMatchType.entries.filter { !it.isAdvancedMatching() }
+            .map { it.displayLabel() }.toImmutableList(),
         selectedOption = selectedUriMatchType.displayLabel(),
         sectionTitle = stringResource(id = R.string.advanced_options),
-        sectionOptions = UriMatchType.entries.filter { it.isAdvancedMatching() }.map { it.displayLabel() }.toImmutableList(),
+        sectionOptions = UriMatchType.entries.filter { it.isAdvancedMatching() }
+            .map { it.displayLabel() }.toImmutableList(),
         onOptionSelected = { selectedOption ->
-            onUriMatchTypeSelect(
+            val newSelectedType =
                 UriMatchType
                     .entries
-                    .first { it.displayLabel.toString(resources) == selectedOption },
-            )
+                    .first { it.displayLabel.toString(resources) == selectedOption }
+
+            newSelectedType.let { type ->
+                if (type.isAdvancedMatching()) {
+                    pendingSelectedOption = type
+                    showAdvancedOptionWarningDialog = true
+                } else {
+                    onUriMatchTypeSelect(type)
+                    pendingSelectedOption = null
+                }
+            }
         },
         supportingText = stringResource(id = R.string.default_uri_match_detection_description),
         cardStyle = CardStyle.Full,
         modifier = modifier,
     )
+
+    if (showAdvancedOptionWarningDialog) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.warning),
+            message = stringResource(id = R.string.advanced_options_warning),
+            confirmButtonText = stringResource(id = R.string.continue_text),
+            dismissButtonText = stringResource(id = R.string.cancel),
+            onConfirmClick = {
+                pendingSelectedOption?.let {
+                    onUriMatchTypeSelect(it)
+                }
+                showAdvancedOptionWarningDialog = false
+                pendingSelectedOption = null
+            },
+            onDismissClick = {
+                showAdvancedOptionWarningDialog = false
+                pendingSelectedOption = null
+            },
+            onDismissRequest = {
+                showAdvancedOptionWarningDialog = false
+                pendingSelectedOption = null
+            },
+        )
+    }
 }
