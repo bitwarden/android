@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.manager.ciphermatching
 
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.LoginListView
 import com.bitwarden.vault.LoginUriView
 import com.bitwarden.vault.UriMatchType
@@ -78,7 +79,7 @@ class CipherMatchingManagerTest {
         )
     }
     private val defaultMatchCipher: CipherListView = mockk {
-        every { login } returns defaultMatchLoginView
+        every { type } returns CipherListViewType.Login(defaultMatchLoginView)
     }
     private val exactMatchLoginUriViewOne: LoginUriView = mockk {
         every { match } returns UriMatchType.EXACT
@@ -95,7 +96,7 @@ class CipherMatchingManagerTest {
         )
     }
     private val exactMatchCipher: CipherListView = mockk {
-        every { login } returns exactMatchLoginView
+        every { type } returns CipherListViewType.Login(exactMatchLoginView)
     }
     private val hostMatchLoginUriViewMatching: LoginUriView = mockk {
         every { match } returns UriMatchType.HOST
@@ -112,7 +113,7 @@ class CipherMatchingManagerTest {
         )
     }
     private val hostMatchCipher: CipherListView = mockk {
-        every { login } returns hostMatchLoginView
+        every { type } returns CipherListViewType.Login(hostMatchLoginView)
     }
     private val hostNoPortMatchLoginUriViewMatching: LoginUriView = mockk {
         every { match } returns UriMatchType.HOST
@@ -129,7 +130,7 @@ class CipherMatchingManagerTest {
         )
     }
     private val hostNoPortMatchCipher: CipherListView = mockk {
-        every { login } returns hostNoPortMatchLoginView
+        every { type } returns CipherListViewType.Login(hostNoPortMatchLoginView)
     }
     private val neverMatchLoginUriView: LoginUriView = mockk {
         every { match } returns UriMatchType.NEVER
@@ -139,7 +140,7 @@ class CipherMatchingManagerTest {
         every { uris } returns listOf(neverMatchLoginUriView)
     }
     private val neverMatchCipher: CipherListView = mockk {
-        every { login } returns neverMatchLoginView
+        every { type } returns CipherListViewType.Login(neverMatchLoginView)
     }
     private val regexMatchLoginUriViewMatching: LoginUriView = mockk {
         every { match } returns UriMatchType.REGULAR_EXPRESSION
@@ -156,7 +157,7 @@ class CipherMatchingManagerTest {
         )
     }
     private val regexMatchCipher: CipherListView = mockk {
-        every { login } returns regexMatchLoginView
+        every { type } returns CipherListViewType.Login(regexMatchLoginView)
     }
     private val startsWithMatchLoginUriViewMatching: LoginUriView = mockk {
         every { match } returns UriMatchType.STARTS_WITH
@@ -173,7 +174,7 @@ class CipherMatchingManagerTest {
         )
     }
     private val startsWithMatchCipher: CipherListView = mockk {
-        every { login } returns startsWithMatchLoginView
+        every { type } returns CipherListViewType.Login(startsWithMatchLoginView)
     }
     private val ciphers: List<CipherListView> = listOf(
         defaultMatchCipher,
