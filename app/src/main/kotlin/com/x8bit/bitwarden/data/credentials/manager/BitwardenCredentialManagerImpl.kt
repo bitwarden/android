@@ -170,14 +170,11 @@ class BitwardenCredentialManagerImpl(
         getCredentialsRequest: GetCredentialsRequest,
     ): Result<List<CredentialEntry>> = withContext(ioScope.coroutineContext) {
         val cipherListViews = vaultRepository
-            .vaultDataStateFlow
+            .decryptCipherListResultStateFlow
             .takeUntilLoaded()
             .fold(initial = emptyList<CipherListView>()) { _, dataState ->
                 when (dataState) {
-                    is DataState.Loaded -> {
-                        dataState.data.decryptCipherListResult.successes
-                    }
-
+                    is DataState.Loaded -> dataState.data.successes
                     else -> emptyList()
                 }
             }
@@ -228,6 +225,7 @@ class BitwardenCredentialManagerImpl(
                 }
             }
             .toTypedArray()
+            .ifEmpty { return emptyList<CredentialEntry>().asSuccess() }
 
         return vaultSdkSource
             .decryptFido2CredentialAutofillViews(

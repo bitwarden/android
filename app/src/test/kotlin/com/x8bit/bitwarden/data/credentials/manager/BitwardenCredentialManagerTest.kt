@@ -14,6 +14,7 @@ import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
@@ -43,6 +44,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2Creden
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPublicKeyAssertionResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPublicKeyAttestationResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKeyCredential
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
@@ -893,6 +895,60 @@ class BitwardenCredentialManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `getCredentialEntries with public key credential options should return null when getCipher result is Failure`() =
+        runTest {
+            val mockBeginGetPublicKeyCredentialOption = mockk<BeginGetPublicKeyCredentialOption> {
+                every { requestJson } returns DEFAULT_FIDO2_AUTH_REQUEST_JSON
+            }
+            val mockGetCredentialsRequest = mockk<GetCredentialsRequest> {
+                every { callingAppInfo } returns mockCallingAppInfo
+                every {
+                    beginGetPublicKeyCredentialOptions
+                } returns listOf(mockBeginGetPublicKeyCredentialOption)
+                every { userId } returns "mockUserId"
+            }
+            coEvery {
+                mockVaultRepository.getCipher(any())
+            } returns GetCipherResult.Failure(error = RuntimeException())
+
+            mutableDecryptCipherListResultStateFlow.value = DataState.Loaded(
+                createMockDecryptCipherListResult(number = 1),
+            )
+            val result = bitwardenCredentialManager.getCredentialEntries(
+                getCredentialsRequest = mockGetCredentialsRequest,
+            )
+            assertTrue(result.getOrNull()?.isEmpty() ?: false)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getCredentialEntries with public key credential options should return empty list when getCipher result is CipherNotFound`() =
+        runTest {
+            val mockBeginGetPublicKeyCredentialOption = mockk<BeginGetPublicKeyCredentialOption> {
+                every { requestJson } returns DEFAULT_FIDO2_AUTH_REQUEST_JSON
+            }
+            val mockGetCredentialsRequest = mockk<GetCredentialsRequest> {
+                every { callingAppInfo } returns mockCallingAppInfo
+                every {
+                    beginGetPublicKeyCredentialOptions
+                } returns listOf(mockBeginGetPublicKeyCredentialOption)
+                every { userId } returns "mockUserId"
+            }
+            coEvery {
+                mockVaultRepository.getCipher(any())
+            } returns GetCipherResult.CipherNotFound
+
+            mutableDecryptCipherListResultStateFlow.value = DataState.Loaded(
+                createMockDecryptCipherListResult(number = 1),
+            )
+            val result = bitwardenCredentialManager.getCredentialEntries(
+                getCredentialsRequest = mockGetCredentialsRequest,
+            )
+            assertTrue(result.getOrNull()?.isEmpty() ?: false)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `getCredentialEntries with public key credential options should return error when FIDO 2 credential decryption fails`() =
         runTest {
             val mockBeginGetPublicKeyCredentialOption = mockk<BeginGetPublicKeyCredentialOption>()
@@ -904,6 +960,15 @@ class BitwardenCredentialManagerTest {
                 every { beginGetPasswordOptions } returns emptyList()
                 every { userId } returns "mockUserId"
             }
+            coEvery {
+                mockVaultRepository.getCipher(any())
+            } returns GetCipherResult.Success(createMockCipherView(number = 1))
+            coEvery {
+                mockVaultSdkSource.decryptFido2CredentialAutofillViews(
+                    userId = "mockUserId",
+                    cipherViews = arrayOf(createMockCipherView(number = 1)),
+                )
+            } returns RuntimeException().asFailure()
             every {
                 mockBeginGetPublicKeyCredentialOption.requestJson
             } returns DEFAULT_FIDO2_AUTH_REQUEST_JSON
@@ -975,6 +1040,7 @@ class BitwardenCredentialManagerTest {
     @Test
     fun `getCredentialEntries should build public key credential entries when decryption succeeds`() =
         runTest {
+            val mockCipherView = createMockCipherView(number = 1)
             val mockBeginGetPublicKeyCredentialOption = mockk<BeginGetPublicKeyCredentialOption>()
             val mockGetCredentialsRequest = mockk<GetCredentialsRequest> {
                 every { callingAppInfo } returns mockCallingAppInfo
@@ -990,6 +1056,15 @@ class BitwardenCredentialManagerTest {
                     rpId = "mockRelyingPartyId-1",
                 ),
             )
+            coEvery {
+                mockVaultRepository.getCipher(cipherId = "mockId-1")
+            } returns GetCipherResult.Success(mockCipherView)
+            coEvery {
+                mockVaultSdkSource.decryptFido2CredentialAutofillViews(
+                    userId = "mockUserId",
+                    cipherViews = arrayOf(mockCipherView),
+                )
+            } returns fido2CredentialAutofillViews.asSuccess()
             every {
                 mockBeginGetPublicKeyCredentialOption.requestJson
             } returns DEFAULT_FIDO2_AUTH_REQUEST_JSON
