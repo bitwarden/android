@@ -22,4 +22,15 @@
         </trust-anchors>
     </domain-config>
 
+    <debug-overrides cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <!-- Trust pre-installed CAs -->
+            <certificates src="system" />
+            <!-- Additionally trust user added CAs -->
+            <certificates
+                src="user"
+                tools:ignore="AcceptsUserCertificates" />
+        </trust-anchors>
+    </debug-overrides>
+    
 </network-security-config>
