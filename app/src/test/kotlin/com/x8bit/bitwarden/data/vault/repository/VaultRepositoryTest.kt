@@ -3185,7 +3185,7 @@ class VaultRepositoryTest {
             )
 
             every {
-                totpCodeManager.getTotpCodeStateFlow(userId = userId, cipher = any())
+                totpCodeManager.getTotpCodeStateFlow(userId = userId, cipherListView = any())
             } returns stateFlow
 
             setupDataStateFlow(userId = userId)
@@ -3252,7 +3252,10 @@ class VaultRepositoryTest {
         )
 
         every {
-            totpCodeManager.getTotpCodesStateFlow(userId = userId, any())
+            totpCodeManager.getTotpCodesForCipherListViewsStateFlow(
+                userId = userId,
+                cipherListViews = any(),
+            )
         } returns stateFlow
 
         setupDataStateFlow(userId = userId)

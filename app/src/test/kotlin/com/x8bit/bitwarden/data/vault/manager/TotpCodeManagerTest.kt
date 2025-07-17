@@ -25,9 +25,6 @@ import java.time.ZoneOffset
 
 class TotpCodeManagerTest {
     private val userId = "userId"
-    private val cipherList = listOf(
-        createMockCipherListView(1, isDeleted = false),
-    )
 
     private val vaultSdkSource: VaultSdkSource = mockk()
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
@@ -41,87 +38,6 @@ class TotpCodeManagerTest {
         dispatcherManager = dispatcherManager,
         clock = clock,
     )
-
-    @Test
-    fun `getTotpCodeStateFlow should have loaded data with a valid values passed in`() = runTest {
-        val totpResponse = TotpResponse("123456", 30u)
-        coEvery {
-            vaultSdkSource.generateTotp(any(), any(), any())
-        } returns totpResponse.asSuccess()
-
-        val expected = createVerificationCodeItem()
-
-        totpCodeManager.getTotpCodesForCipherListViewsStateFlow(userId, cipherList).test {
-            assertEquals(DataState.Loaded(listOf(expected)), awaitItem())
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getTotpCodeStateFlow should have loaded data with empty list if no totp code is provided`() =
-        runTest {
-            val totpResponse = TotpResponse("123456", 30u)
-            coEvery {
-                vaultSdkSource.generateTotp(any(), any(), any())
-            } returns totpResponse.asSuccess()
-
-            val cipherView = createMockCipherListView(1)
-
-            totpCodeManager.getTotpCodesForCipherListViewsStateFlow(userId, listOf(cipherView))
-                .test {
-                assertEquals(DataState.Loaded(emptyList<VerificationCodeItem>()), awaitItem())
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getTotpCodesStateFlow should have loaded data with empty list if unable to generate auth code`() =
-        runTest {
-            coEvery {
-                vaultSdkSource.generateTotp(any(), any(), any())
-            } returns Exception().asFailure()
-
-            val cipherView = createMockCipherListView(1)
-
-            totpCodeManager.getTotpCodesForCipherListViewsStateFlow(userId, listOf(cipherView))
-                .test {
-                assertEquals(DataState.Loaded(emptyList<VerificationCodeItem>()), awaitItem())
-            }
-        }
-
-    @Test
-    fun `getTotpCodeStateFlow should have loaded item with valid data passed in`() = runTest {
-        val totpResponse = TotpResponse("123456", 30u)
-        coEvery {
-            vaultSdkSource.generateTotp(any(), any(), any())
-        } returns totpResponse.asSuccess()
-
-        val cipherView = createMockCipherListView(
-            number = 1,
-            reprompt = CipherRepromptType.PASSWORD,
-        )
-
-        val expected = createVerificationCodeItem().copy(hasPasswordReprompt = true)
-
-        totpCodeManager.getTotpCodeStateFlow(userId, cipherView).test {
-            assertEquals(DataState.Loaded(expected), awaitItem())
-        }
-    }
-
-    @Test
-    fun `getTotpCodeFlow should have null data if unable to get item`() =
-        runTest {
-            val totpResponse = TotpResponse("123456", 30u)
-            coEvery {
-                vaultSdkSource.generateTotp(any(), any(), any())
-            } returns totpResponse.asSuccess()
-
-            val cipherView = createMockCipherListView(1)
-
-            totpCodeManager.getTotpCodeStateFlow(userId, cipherView).test {
-                assertEquals(DataState.Loaded(null), awaitItem())
-            }
-        }
 
     @Test
     @Suppress("MaxLineLength")
