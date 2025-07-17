@@ -52,6 +52,7 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.BrowserAutofillSettingsCard
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.handlers.AutoFillHandlers
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.isAdvancedMatching
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.collections.immutable.toImmutableList
 
@@ -388,8 +389,10 @@ private fun DefaultUriMatchTypeRow(
 ) {
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.default_uri_match_detection),
-        options = UriMatchType.entries.map { it.displayLabel() }.toImmutableList(),
+        options = UriMatchType.entries.filter { !it.isAdvancedMatching() }.map { it.displayLabel() }.toImmutableList(),
         selectedOption = selectedUriMatchType.displayLabel(),
+        sectionTitle = stringResource(id = R.string.advanced_options),
+        sectionOptions = UriMatchType.entries.filter { it.isAdvancedMatching() }.map { it.displayLabel() }.toImmutableList(),
         onOptionSelected = { selectedOption ->
             onUriMatchTypeSelect(
                 UriMatchType

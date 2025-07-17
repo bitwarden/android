@@ -52,4 +52,32 @@ class UriMatchTypeExtensionsTest {
             UriMatchType.STARTS_WITH.toSdkUriMatchType(),
         )
     }
+
+    @Test
+    fun `isAdvancedMatching should return the correct value for each type`() {
+        assertEquals(
+            false,
+            UriMatchType.DOMAIN.isAdvancedMatching(),
+        )
+        assertEquals(
+            false,
+            UriMatchType.EXACT.isAdvancedMatching(),
+        )
+        assertEquals(
+            false,
+            UriMatchType.HOST.isAdvancedMatching(),
+        )
+        assertEquals(
+            false,
+            UriMatchType.NEVER.isAdvancedMatching(),
+        )
+        assertEquals(
+            true,
+            UriMatchType.REGULAR_EXPRESSION.isAdvancedMatching(),
+        )
+        assertEquals(
+            true,
+            UriMatchType.STARTS_WITH.isAdvancedMatching(),
+        )
+    }
 }

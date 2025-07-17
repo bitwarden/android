@@ -2,13 +2,17 @@ package com.x8bit.bitwarden.ui.platform.components.dropdown
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -60,6 +64,8 @@ fun BitwardenMultiSelectButton(
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
     actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
+    sectionTitle: String? = null,
+    sectionOptions: ImmutableList<String>? = null,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
@@ -96,6 +102,28 @@ fun BitwardenMultiSelectButton(
                         onOptionSelected(optionString)
                     },
                 )
+            }
+
+            if (sectionTitle != null && sectionOptions != null) {
+                Text(
+                    modifier = Modifier
+                        .testTag("SectionTest")
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    text = sectionTitle,
+                    color = BitwardenTheme.colorScheme.text.secondary,
+                    style = BitwardenTheme.typography.titleSmall,
+                )
+                sectionOptions.forEach { optionString ->
+                    BitwardenSelectionRow(
+                        text = optionString.asText(),
+                        isSelected = optionString == selectedOption,
+                        onClick = {
+                            shouldShowDialog = false
+                            onOptionSelected(optionString)
+                        },
+                    )
+                }
             }
         }
     }
