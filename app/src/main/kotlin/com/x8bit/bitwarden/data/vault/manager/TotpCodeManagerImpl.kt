@@ -87,6 +87,7 @@ class TotpCodeManagerImpl(
             val itemScope = CoroutineScope(dispatcherManager.unconfined)
 
             flow<DataState<VerificationCodeItem?>> {
+
                 var item: VerificationCodeItem? = null
                 while (currentCoroutineContext().isActive) {
                     val dateTime = clock.instant()
