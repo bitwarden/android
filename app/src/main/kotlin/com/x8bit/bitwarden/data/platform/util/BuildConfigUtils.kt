@@ -22,6 +22,11 @@ val versionData: String
     get() = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
 
 /**
+ * A string that represents a displayable SDK version.
+ */
+val sdkData: String get() = BuildConfig.SDK_VERSION
+
+/**
  * A string that represents device data.
  */
 val deviceData: String get() = "$deviceBrandModel $osInfo $buildInfo"
