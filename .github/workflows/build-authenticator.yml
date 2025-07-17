@@ -32,6 +32,7 @@ env:
 permissions:
   contents: read
   packages: read
+  id-token: write
 
 jobs:
   build:
@@ -39,6 +40,15 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
+      - name: Log inputs to job summary
+        run: |
+          echo "<details><summary>Job Inputs</summary>" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo '${{ toJson(inputs) }}' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "</details>" >> $GITHUB_STEP_SUMMARY
+
       - name: Check out repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
@@ -113,9 +123,18 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Log in to Azure
-        uses: Azure/login@cb79c773a3cfa27f31f25eb3f677781210c9ce3d # v1.6.1
+        uses: bitwarden/gh-actions/azure-login@main
         with:
-          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
+
+      - name: Get Azure Key Vault secrets
+        id: get-kv-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: gh-android
+          secrets: "BWA-AAB-KEYSTORE-STORE-PASSWORD,BWA-AAB-KEYSTORE-KEY-PASSWORD,BWA-APK-KEYSTORE-STORE-PASSWORD,BWA-APK-KEYSTORE-KEY-PASSWORD"
 
       - name: Retrieve secrets
         env:
@@ -158,6 +177,9 @@ jobs:
 
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
           --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
+
+      - name: AZ Logout
+        uses: bitwarden/gh-actions/azure-logout@main
 
       - name: Verify Play Store credentials
         if: ${{ inputs.publish-to-play-store }}
@@ -213,18 +235,18 @@ jobs:
         run: |
           bundle exec fastlane bundleAuthenticatorRelease \
           storeFile:${{ github.workspace }}/keystores/authenticator_aab-keystore.jks \
-          storePassword:'${{ secrets.BWA_AAB_KEYSTORE_STORE_PASSWORD }}' \
+          storePassword:'${{ steps.get-kv-secrets.outputs.BWA-AAB-KEYSTORE-STORE-PASSWORD }}' \
           keyAlias:authenticatorupload \
-          keyPassword:'${{ secrets.BWA_AAB_KEYSTORE_KEY_PASSWORD }}'
+          keyPassword:'${{ steps.get-kv-secrets.outputs.BWA-AAB-KEYSTORE-KEY-PASSWORD }}'
 
       - name: Generate release Play Store APK
         if: ${{ matrix.variant == 'apk' }}
         run: |
           bundle exec fastlane buildAuthenticatorRelease \
           storeFile:${{ github.workspace }}/keystores/authenticator_apk-keystore.jks \
-          storePassword:'${{ secrets.BWA_APK_KEYSTORE_STORE_PASSWORD }}' \
+          storePassword:'${{ steps.get-kv-secrets.outputs.BWA-APK-KEYSTORE-STORE-PASSWORD }}' \
           keyAlias:bitwardenauthenticator \
-          keyPassword:'${{ secrets.BWA_APK_KEYSTORE_KEY_PASSWORD }}'
+          keyPassword:'${{ steps.get-kv-secrets.outputs.BWA-APK-KEYSTORE-KEY-PASSWORD }}'
 
       - name: Upload release Play Store .aab artifact
         if: ${{ matrix.variant == 'aab' }}

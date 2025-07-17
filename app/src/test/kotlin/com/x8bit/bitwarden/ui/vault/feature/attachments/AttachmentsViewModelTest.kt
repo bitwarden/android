@@ -334,7 +334,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `SaveClick should send ShowToast when createAttachment succeeds`() = runTest {
+    fun `SaveClick should send ShowSnackbar when createAttachment succeeds`() = runTest {
         val cipherView = createMockCipherView(number = 1)
         val fileName = "test.png"
         val uri = mockk<Uri>()
@@ -373,7 +373,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(AttachmentsAction.SaveClick)
             assertEquals(
-                AttachmentsEvent.ShowToast(R.string.save_attachment_success.asText()),
+                AttachmentsEvent.ShowSnackbar(R.string.save_attachment_success.asText()),
                 awaitItem(),
             )
         }
@@ -480,7 +480,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `DeleteClick with deleteCipherAttachment success should emit ShowToast`() = runTest {
+    fun `DeleteClick with deleteCipherAttachment success should emit ShowSnackbar`() = runTest {
         val cipherId = "mockId-1"
         val attachmentId = "mockId-1"
         val cipherView = createMockCipherView(number = 1)
@@ -497,7 +497,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(AttachmentsAction.DeleteClick(cipherId))
             assertEquals(
-                AttachmentsEvent.ShowToast(R.string.attachment_deleted.asText()),
+                AttachmentsEvent.ShowSnackbar(R.string.attachment_deleted.asText()),
                 awaitItem(),
             )
         }

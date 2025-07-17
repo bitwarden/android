@@ -248,9 +248,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
-            // We skip the first 3 events because they are the
-            // default appTheme, appLanguage and ScreenCaptureUpdate
-            awaitItem()
+            // We skip the first 2 events because they are the default appTheme and appLanguage
             awaitItem()
             awaitItem()
 
@@ -301,9 +299,7 @@ class MainViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
 
             viewModel.eventFlow.test {
-                // We skip the first 3 events because they are the
-                // default appTheme, appLanguage and ScreenCaptureUpdate
-                awaitItem()
+                // We skip the first 2 events because they are the default appTheme and appLanguage
                 awaitItem()
                 awaitItem()
 
@@ -324,9 +320,7 @@ class MainViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             val cipherView = mockk<CipherView>()
             viewModel.eventFlow.test {
-                // We skip the first 3 events because they are the
-                // default appTheme, appLanguage and ScreenCaptureUpdate
-                awaitItem()
+                // We skip the first 2 events because they are the default appTheme and appLanguage
                 awaitItem()
                 awaitItem()
 
@@ -343,9 +337,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val cipherView = mockk<CipherView>()
         viewModel.eventFlow.test {
-            // We skip the first 3 events because they are the
-            // default appTheme, appLanguage and ScreenCaptureUpdate
-            awaitItem()
+            // We skip the first 2 events because they are the default appTheme and appLanguage
             awaitItem()
             awaitItem()
 
@@ -378,9 +370,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-            // We skip the first 3 events because they are the
-            // default appTheme, appLanguage and ScreenCaptureUpdate
-            eventFlow.awaitItem()
+            // We skip the first 2 events because they are the default appTheme and appLanguage
             eventFlow.awaitItem()
             eventFlow.awaitItem()
 
@@ -403,9 +393,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
-            // We skip the first 3 events because they are the
-            // default appTheme, appLanguage and ScreenCaptureUpdate
-            awaitItem()
+            // We skip the first 2 events because they are the default appTheme and appLanguage
             awaitItem()
             awaitItem()
 
@@ -613,9 +601,7 @@ class MainViewModelTest : BaseViewModelTest() {
             } returns EmailTokenResult.Error(message = null, error = Throwable("Fail!"))
 
             viewModel.eventFlow.test {
-                // We skip the first 3 events because they are the
-                // default appTheme, appLanguage and ScreenCaptureUpdate
-                awaitItem()
+                // We skip the first 2 events because they are the default appTheme and appLanguage
                 awaitItem()
                 awaitItem()
 
@@ -649,9 +635,7 @@ class MainViewModelTest : BaseViewModelTest() {
             } returns EmailTokenResult.Error(message = expectedMessage, error = null)
 
             viewModel.eventFlow.test {
-                // We skip the first 3 events because they are the
-                // default appTheme, appLanguage and ScreenCaptureUpdate
-                awaitItem()
+                // We skip the first 2 events because they are the default appTheme and appLanguage
                 awaitItem()
                 awaitItem()
 
@@ -1048,12 +1032,24 @@ class MainViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `changes in the allowed screen capture value should update the state`() {
+        val viewModel = createViewModel()
+
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+
+        mutableScreenCaptureAllowedFlow.value = false
+
+        assertEquals(
+            DEFAULT_STATE.copy(isScreenCaptureAllowed = false),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
     fun `send NavigateToDebugMenu action when OpenDebugMenu action is sent`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            // We skip the first 3 events because they are the
-            // default appTheme, appLanguage and ScreenCaptureUpdate
-            awaitItem()
+            // We skip the first 2 events because they are the default appTheme and appLanguage
             awaitItem()
             awaitItem()
 
@@ -1147,22 +1143,6 @@ class MainViewModelTest : BaseViewModelTest() {
         verify { settingsRepository.appLanguage = AppLanguage.SPANISH }
     }
 
-    @Test
-    fun `on ScreenCaptureUpdate should trigger the ScreenCaptureSettingChange event`() = runTest {
-        val viewModel = createViewModel()
-
-        viewModel.eventFlow.test {
-            // We skip the first 3 events because they are the
-            // default appTheme, appLanguage and ScreenCaptureUpdate
-            awaitItem()
-            awaitItem()
-            awaitItem()
-
-            viewModel.trySendAction(MainAction.Internal.ScreenCaptureUpdate(true))
-            assertEquals(MainEvent.ScreenCaptureSettingChange(true), awaitItem())
-        }
-    }
-
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,
     ) = MainViewModel(
@@ -1188,6 +1168,7 @@ class MainViewModelTest : BaseViewModelTest() {
 
 private val DEFAULT_STATE: MainState = MainState(
     theme = AppTheme.DEFAULT,
+    isScreenCaptureAllowed = true,
     isErrorReportingDialogEnabled = false,
     isDynamicColorsEnabled = false,
 )

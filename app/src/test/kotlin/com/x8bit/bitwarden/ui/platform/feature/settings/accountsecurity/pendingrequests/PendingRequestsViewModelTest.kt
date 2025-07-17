@@ -4,12 +4,15 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -40,6 +43,12 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
     private val settingsRepository = mockk<SettingsRepository> {
         every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshStateFlow
     }
+    private val mutableSnackbarDataFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
+    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+        every {
+            getSnackbarDataFlow(relay = any(), relays = anyVararg())
+        } returns mutableSnackbarDataFlow
+    }
 
     @Test
     fun `init should call getAuthRequestsWithUpdates`() {
@@ -49,6 +58,16 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         )
         coVerify {
             authRepository.getAuthRequestsWithUpdates()
+        }
+    }
+
+    @Test
+    fun `when SnackbarRelay flow updates, snackbar is shown`() = runTest {
+        val viewModel = createViewModel()
+        val expectedSnackbarData = BitwardenSnackbarData(message = "test message".asText())
+        viewModel.eventFlow.test {
+            mutableSnackbarDataFlow.tryEmit(expectedSnackbarData)
+            assertEquals(PendingRequestsEvent.ShowSnackbar(expectedSnackbarData), awaitItem())
         }
     }
 
@@ -373,6 +392,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         clock = fixedClock,
         authRepository = authRepository,
         settingsRepository = settingsRepository,
+        snackbarRelayManager = snackbarRelayManager,
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
     )
 }

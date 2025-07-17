@@ -3,31 +3,37 @@ package com.x8bit.bitwarden.data.platform.repository
 import com.bitwarden.authenticatorbridge.model.SharedAccountData
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.bitwarden.authenticatorbridge.util.toSymmetricEncryptionKeyData
+import com.bitwarden.core.InitOrgCryptoRequest
+import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.crypto.Kdf
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
+import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherView
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.util.sanitizeTotpUri
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
-import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
-import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
-import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -39,19 +45,16 @@ import java.time.ZonedDateTime
 
 class AuthenticatorBridgeRepositoryTest {
 
-    private val authRepository = mockk<AuthRepository>()
-    private val vaultSdkSource = mockk<VaultSdkSource>()
+    private val scopedVaultSdkSource = mockk<ScopedVaultSdkSource>()
     private val vaultDiskSource = mockk<VaultDiskSource>()
-    private val vaultRepository = mockk<VaultRepository>()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
 
-    private val authenticatorBridgeRepository = AuthenticatorBridgeRepositoryImpl(
-        authRepository = authRepository,
-        authDiskSource = fakeAuthDiskSource,
-        vaultRepository = vaultRepository,
-        vaultDiskSource = vaultDiskSource,
-        vaultSdkSource = vaultSdkSource,
-    )
+    private val authenticatorBridgeRepository: AuthenticatorBridgeRepository =
+        AuthenticatorBridgeRepositoryImpl(
+            authDiskSource = fakeAuthDiskSource,
+            vaultDiskSource = vaultDiskSource,
+            scopedVaultSdkSource = scopedVaultSdkSource,
+        )
 
     @BeforeEach
     fun setup() {
@@ -66,7 +69,7 @@ class AuthenticatorBridgeRepositoryTest {
             SYMMETRIC_KEY.symmetricEncryptionKey.byteArray
 
         // Setup authRepository to return default USER_STATE:
-        every { authRepository.userStateFlow } returns MutableStateFlow(USER_STATE)
+        fakeAuthDiskSource.userState = USER_STATE_JSON
 
         // Setup authDiskSource to have each user's authenticator sync unlock key:
         fakeAuthDiskSource.storeAuthenticatorSyncUnlockKey(
@@ -77,30 +80,69 @@ class AuthenticatorBridgeRepositoryTest {
             userId = USER_2_ID,
             authenticatorSyncUnlockKey = USER_2_UNLOCK_KEY,
         )
-        // Setup vaultRepository to not be stuck unlocking:
-        every { vaultRepository.vaultUnlockDataStateFlow } returns MutableStateFlow(
-            listOf(
-                VaultUnlockData(USER_1_ID, VaultUnlockData.Status.UNLOCKED),
-                VaultUnlockData(USER_2_ID, VaultUnlockData.Status.UNLOCKED),
-            ),
-        )
-        // Setup vaultRepository to be unlocked for user 1:
-        every { vaultRepository.isVaultUnlocked(USER_1_ID) } returns true
-        // But locked for user 2:
-        every { vaultRepository.isVaultUnlocked(USER_2_ID) } returns false
-        every { vaultRepository.lockVault(USER_2_ID, isUserInitiated = false) } returns Unit
+        fakeAuthDiskSource.storePrivateKey(userId = USER_1_ID, privateKey = USER_1_PRIVATE_KEY)
+        fakeAuthDiskSource.storePrivateKey(userId = USER_2_ID, privateKey = USER_2_PRIVATE_KEY)
         coEvery {
-            vaultRepository.unlockVaultWithDecryptedUserKey(
-                userId = USER_2_ID,
-                decryptedUserKey = USER_2_UNLOCK_KEY,
+            scopedVaultSdkSource.initializeCrypto(
+                userId = USER_1_ID,
+                request = InitUserCryptoRequest(
+                    userId = USER_1_ID,
+                    kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
+                    email = USER_1_EMAIL,
+                    privateKey = USER_1_PRIVATE_KEY,
+                    method = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = USER_1_UNLOCK_KEY,
+                    ),
+                    signingKey = null,
+                ),
             )
-        } returns VaultUnlockResult.Success
+        } returns InitializeCryptoResult.Success.asSuccess()
+        coEvery {
+            scopedVaultSdkSource.initializeCrypto(
+                userId = USER_2_ID,
+                request = InitUserCryptoRequest(
+                    userId = USER_2_ID,
+                    kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
+                    email = USER_2_EMAIL,
+                    privateKey = USER_2_PRIVATE_KEY,
+                    method = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = USER_2_UNLOCK_KEY,
+                    ),
+                    signingKey = null,
+                ),
+            )
+        } returns InitializeCryptoResult.Success.asSuccess()
+        fakeAuthDiskSource.storeOrganizationKeys(
+            userId = USER_1_ID,
+            organizationKeys = USER_1_ORG_KEYS,
+        )
+        fakeAuthDiskSource.storeOrganizationKeys(
+            userId = USER_2_ID,
+            organizationKeys = USER_2_ORG_KEYS,
+        )
+        coEvery {
+            scopedVaultSdkSource.initializeOrganizationCrypto(
+                userId = USER_1_ID,
+                request = InitOrgCryptoRequest(organizationKeys = USER_1_ORG_KEYS),
+            )
+        } returns InitializeCryptoResult.Success.asSuccess()
+        coEvery {
+            scopedVaultSdkSource.initializeOrganizationCrypto(
+                userId = USER_2_ID,
+                request = InitOrgCryptoRequest(organizationKeys = USER_2_ORG_KEYS),
+            )
+        } returns InitializeCryptoResult.Success.asSuccess()
+        every { scopedVaultSdkSource.clearCrypto(userId = USER_1_ID) } just runs
+        every { scopedVaultSdkSource.clearCrypto(userId = USER_2_ID) } just runs
 
         // Add some ciphers to vaultDiskSource for each user,
         // and setup mock decryption for them:
-        every { vaultDiskSource.getCiphers(USER_1_ID) } returns flowOf(USER_1_CIPHERS)
-        every { vaultDiskSource.getCiphers(USER_2_ID) } returns flowOf(USER_2_CIPHERS)
-        mockkStatic(SyncResponseJson.Cipher::toEncryptedSdkCipher)
+        coEvery { vaultDiskSource.getTotpCiphers(USER_1_ID) } returns USER_1_CIPHERS
+        coEvery { vaultDiskSource.getTotpCiphers(USER_2_ID) } returns USER_2_CIPHERS
+        mockkStatic(
+            SyncResponseJson.Cipher::toEncryptedSdkCipher,
+            EnvironmentUrlDataJson::toEnvironmentUrlsOrDefault,
+        )
         every {
             USER_1_TOTP_CIPHER.toEncryptedSdkCipher()
         } returns USER_1_ENCRYPTED_SDK_TOTP_CIPHER
@@ -108,10 +150,10 @@ class AuthenticatorBridgeRepositoryTest {
             USER_2_TOTP_CIPHER.toEncryptedSdkCipher()
         } returns USER_2_ENCRYPTED_SDK_TOTP_CIPHER
         coEvery {
-            vaultSdkSource.decryptCipher(USER_1_ID, USER_1_ENCRYPTED_SDK_TOTP_CIPHER)
+            scopedVaultSdkSource.decryptCipher(USER_1_ID, USER_1_ENCRYPTED_SDK_TOTP_CIPHER)
         } returns USER_1_DECRYPTED_TOTP_CIPHER.asSuccess()
         coEvery {
-            vaultSdkSource.decryptCipher(USER_2_ID, USER_2_ENCRYPTED_SDK_TOTP_CIPHER)
+            scopedVaultSdkSource.decryptCipher(USER_2_ID, USER_2_ENCRYPTED_SDK_TOTP_CIPHER)
         } returns USER_2_DECRYPTED_TOTP_CIPHER.asSuccess()
         mockkStatic(String::sanitizeTotpUri)
         every {
@@ -121,50 +163,26 @@ class AuthenticatorBridgeRepositoryTest {
 
     @AfterEach
     fun teardown() {
-        confirmVerified(authRepository, vaultSdkSource, vaultRepository, vaultDiskSource)
-        unmockkStatic(SyncResponseJson.Cipher::toEncryptedSdkCipher)
-        unmockkStatic(String::sanitizeTotpUri)
+        confirmVerified(scopedVaultSdkSource, vaultDiskSource)
+        unmockkStatic(
+            SyncResponseJson.Cipher::toEncryptedSdkCipher,
+            EnvironmentUrlDataJson::toEnvironmentUrlsOrDefault,
+            String::sanitizeTotpUri,
+        )
     }
 
     @Test
-    @Suppress("MaxLineLength")
-    fun `syncAccounts with user 1 vault unlocked and all data present should send expected shared accounts data`() =
-        runTest {
-            val sharedAccounts = authenticatorBridgeRepository.getSharedAccounts()
-            assertEquals(
-                BOTH_ACCOUNT_SUCCESS,
-                sharedAccounts,
-            )
-            verify { authRepository.userStateFlow }
-            verify { vaultRepository.vaultUnlockDataStateFlow }
-            verify { vaultDiskSource.getCiphers(USER_1_ID) }
-            verify { vaultDiskSource.getCiphers(USER_2_ID) }
-            verify { vaultRepository.isVaultUnlocked(USER_1_ID) }
-            verify { vaultRepository.isVaultUnlocked(USER_2_ID) }
-            coVerify {
-                vaultRepository.unlockVaultWithDecryptedUserKey(
-                    userId = USER_2_ID,
-                    decryptedUserKey = USER_2_UNLOCK_KEY,
-                )
-            }
-            verify { vaultRepository.lockVault(USER_2_ID, isUserInitiated = false) }
-            coVerify { vaultSdkSource.decryptCipher(USER_1_ID, USER_1_ENCRYPTED_SDK_TOTP_CIPHER) }
-            coVerify { vaultSdkSource.decryptCipher(USER_2_ID, USER_2_ENCRYPTED_SDK_TOTP_CIPHER) }
-        }
-
-    @Test
-    fun `syncAccounts when userStateFlow is null should return an empty list`() = runTest {
-        every { authRepository.userStateFlow } returns MutableStateFlow(null)
+    fun `getSharedAccounts when userStateFlow is null should return an empty list`() = runTest {
+        fakeAuthDiskSource.userState = null
 
         val sharedData = authenticatorBridgeRepository.getSharedAccounts()
 
         assertTrue(sharedData.accounts.isEmpty())
-        verify { authRepository.userStateFlow }
     }
 
     @Test
     @Suppress("MaxLineLength")
-    fun `syncAccounts when there is no authenticator sync unlock key for user 1 should omit user 1 from list`() =
+    fun `getSharedAccounts when there is no authenticator sync unlock key for user 1 should omit user 1 from list`() =
         runTest {
             fakeAuthDiskSource.storeAuthenticatorSyncUnlockKey(
                 userId = USER_1_ID,
@@ -176,146 +194,167 @@ class AuthenticatorBridgeRepositoryTest {
                 authenticatorBridgeRepository.getSharedAccounts(),
             )
 
-            verify { authRepository.userStateFlow }
-            verify { vaultRepository.isVaultUnlocked(USER_2_ID) }
-            coVerify {
-                vaultRepository.unlockVaultWithDecryptedUserKey(
+            coVerify(exactly = 1) {
+                scopedVaultSdkSource.initializeCrypto(
                     userId = USER_2_ID,
-                    decryptedUserKey = USER_2_UNLOCK_KEY,
+                    request = InitUserCryptoRequest(
+                        userId = USER_2_ID,
+                        kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
+                        email = USER_2_EMAIL,
+                        privateKey = USER_2_PRIVATE_KEY,
+                        method = InitUserCryptoMethod.DecryptedKey(
+                            decryptedUserKey = USER_2_UNLOCK_KEY,
+                        ),
+                        signingKey = null,
+                    ),
+                )
+                scopedVaultSdkSource.initializeOrganizationCrypto(
+                    userId = USER_2_ID,
+                    request = InitOrgCryptoRequest(organizationKeys = USER_2_ORG_KEYS),
+                )
+                vaultDiskSource.getTotpCiphers(userId = USER_2_ID)
+                scopedVaultSdkSource.decryptCipher(
+                    userId = USER_2_ID,
+                    cipher = USER_2_ENCRYPTED_SDK_TOTP_CIPHER,
                 )
             }
-            verify { vaultRepository.vaultUnlockDataStateFlow }
-            verify { vaultRepository.lockVault(USER_2_ID, isUserInitiated = false) }
-            verify { vaultDiskSource.getCiphers(USER_2_ID) }
-            coVerify { vaultSdkSource.decryptCipher(USER_2_ID, USER_2_ENCRYPTED_SDK_TOTP_CIPHER) }
+            verify(exactly = 1) {
+                scopedVaultSdkSource.clearCrypto(userId = USER_2_ID)
+            }
         }
 
     @Test
     @Suppress("MaxLineLength")
-    fun `syncAccounts when vault is locked for both users should unlock and re-lock vault for both users and filter out deleted ciphers`() =
+    fun `getSharedAccounts should unlock and re-lock vault for both users and filter out deleted ciphers`() =
         runTest {
-            every { vaultRepository.isVaultUnlocked(USER_1_ID) } returns false
-            coEvery {
-                vaultRepository.unlockVaultWithDecryptedUserKey(USER_1_ID, USER_1_UNLOCK_KEY)
-            } returns VaultUnlockResult.Success
-            every { vaultRepository.lockVault(USER_1_ID, isUserInitiated = false) } returns Unit
-
-            val sharedAccounts = authenticatorBridgeRepository.getSharedAccounts()
             assertEquals(
                 BOTH_ACCOUNT_SUCCESS,
-                sharedAccounts,
+                authenticatorBridgeRepository.getSharedAccounts(),
             )
-            verify { vaultRepository.vaultUnlockDataStateFlow }
-            verify { vaultDiskSource.getCiphers(USER_1_ID) }
-            verify { vaultRepository.isVaultUnlocked(USER_1_ID) }
-            coVerify { vaultSdkSource.decryptCipher(USER_1_ID, USER_1_ENCRYPTED_SDK_TOTP_CIPHER) }
-            verify { authRepository.userStateFlow }
-            coVerify {
-                vaultRepository.unlockVaultWithDecryptedUserKey(
+
+            coVerify(exactly = 1) {
+                scopedVaultSdkSource.initializeCrypto(
                     userId = USER_1_ID,
-                    decryptedUserKey = USER_1_UNLOCK_KEY,
+                    request = InitUserCryptoRequest(
+                        userId = USER_1_ID,
+                        kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
+                        email = USER_1_EMAIL,
+                        privateKey = USER_1_PRIVATE_KEY,
+                        method = InitUserCryptoMethod.DecryptedKey(
+                            decryptedUserKey = USER_1_UNLOCK_KEY,
+                        ),
+                        signingKey = null,
+                    ),
                 )
-            }
-            verify { vaultRepository.lockVault(USER_1_ID, isUserInitiated = false) }
-            verify { vaultRepository.isVaultUnlocked(USER_2_ID) }
-            coVerify {
-                vaultRepository.unlockVaultWithDecryptedUserKey(
+                scopedVaultSdkSource.initializeOrganizationCrypto(
+                    userId = USER_1_ID,
+                    request = InitOrgCryptoRequest(organizationKeys = USER_1_ORG_KEYS),
+                )
+                vaultDiskSource.getTotpCiphers(userId = USER_1_ID)
+                scopedVaultSdkSource.decryptCipher(
+                    userId = USER_1_ID,
+                    cipher = USER_1_ENCRYPTED_SDK_TOTP_CIPHER,
+                )
+                scopedVaultSdkSource.initializeCrypto(
                     userId = USER_2_ID,
-                    decryptedUserKey = USER_2_UNLOCK_KEY,
+                    request = InitUserCryptoRequest(
+                        userId = USER_2_ID,
+                        kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
+                        email = USER_2_EMAIL,
+                        privateKey = USER_2_PRIVATE_KEY,
+                        method = InitUserCryptoMethod.DecryptedKey(
+                            decryptedUserKey = USER_2_UNLOCK_KEY,
+                        ),
+                        signingKey = null,
+                    ),
+                )
+                scopedVaultSdkSource.initializeOrganizationCrypto(
+                    userId = USER_2_ID,
+                    request = InitOrgCryptoRequest(organizationKeys = USER_2_ORG_KEYS),
+                )
+                vaultDiskSource.getTotpCiphers(userId = USER_2_ID)
+                scopedVaultSdkSource.decryptCipher(
+                    userId = USER_2_ID,
+                    cipher = USER_2_ENCRYPTED_SDK_TOTP_CIPHER,
                 )
             }
-            verify { vaultRepository.vaultUnlockDataStateFlow }
-            verify { vaultRepository.lockVault(USER_2_ID, isUserInitiated = false) }
-            verify { vaultDiskSource.getCiphers(USER_2_ID) }
-            coVerify { vaultSdkSource.decryptCipher(USER_2_ID, USER_2_ENCRYPTED_SDK_TOTP_CIPHER) }
+            verify(exactly = 1) {
+                scopedVaultSdkSource.clearCrypto(userId = USER_1_ID)
+                scopedVaultSdkSource.clearCrypto(userId = USER_2_ID)
+            }
         }
 
     @Test
     @Suppress("MaxLineLength")
-    fun `syncAccounts when for user 1 vault is locked and unlock fails should reset authenticator sync unlock key and omit user from the list`() =
+    fun `getSharedAccounts when for user 1 vault fails to unlock should reset authenticator sync unlock key and omit user from the list`() =
         runTest {
-            every { vaultRepository.isVaultUnlocked(USER_1_ID) } returns false
-            val error = Throwable("Fail")
             coEvery {
-                vaultRepository.unlockVaultWithDecryptedUserKey(USER_1_ID, USER_1_UNLOCK_KEY)
-            } returns VaultUnlockResult.InvalidStateError(error = error)
-
-            val sharedAccounts = authenticatorBridgeRepository.getSharedAccounts()
-            assertEquals(SharedAccountData(listOf(USER_2_SHARED_ACCOUNT)), sharedAccounts)
-            assertNull(fakeAuthDiskSource.getAuthenticatorSyncUnlockKey(USER_1_ID))
-            verify { vaultRepository.vaultUnlockDataStateFlow }
-            verify { vaultRepository.isVaultUnlocked(USER_1_ID) }
-            verify { authRepository.userStateFlow }
-            coVerify {
-                vaultRepository.unlockVaultWithDecryptedUserKey(
+                scopedVaultSdkSource.initializeCrypto(
                     userId = USER_1_ID,
-                    decryptedUserKey = USER_1_UNLOCK_KEY,
+                    request = InitUserCryptoRequest(
+                        userId = USER_1_ID,
+                        kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
+                        email = USER_1_EMAIL,
+                        privateKey = USER_1_PRIVATE_KEY,
+                        method = InitUserCryptoMethod.DecryptedKey(
+                            decryptedUserKey = USER_1_UNLOCK_KEY,
+                        ),
+                        signingKey = null,
+                    ),
                 )
-            }
-            verify { vaultRepository.isVaultUnlocked(USER_2_ID) }
-            coVerify {
-                vaultRepository.unlockVaultWithDecryptedUserKey(
-                    userId = USER_2_ID,
-                    decryptedUserKey = USER_2_UNLOCK_KEY,
-                )
-            }
-            verify { vaultRepository.vaultUnlockDataStateFlow }
-            verify { vaultRepository.lockVault(USER_2_ID, isUserInitiated = false) }
-            verify { vaultDiskSource.getCiphers(USER_2_ID) }
-            coVerify { vaultSdkSource.decryptCipher(USER_2_ID, USER_2_ENCRYPTED_SDK_TOTP_CIPHER) }
-        }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `syncAccounts when when the vault repository never leaves unlocking state should never callback`() =
-        runTest {
-            val vaultUnlockStateFlow = MutableStateFlow(
-                listOf(
-                    VaultUnlockData(USER_1_ID, VaultUnlockData.Status.UNLOCKING),
-                    VaultUnlockData(USER_2_ID, VaultUnlockData.Status.UNLOCKED),
-                ),
-            )
-            every { vaultRepository.vaultUnlockDataStateFlow } returns vaultUnlockStateFlow
-            val deferred = async {
-                val sharedAccounts = authenticatorBridgeRepository.getSharedAccounts()
-                assertEquals(BOTH_ACCOUNT_SUCCESS, sharedAccounts)
-            }
-
-            // None of these calls should happen until after user 1's vault state is not UNLOCKING:
-            verify(exactly = 0) {
-                vaultRepository.isVaultUnlocked(userId = USER_1_ID)
-                vaultDiskSource.getCiphers(USER_1_ID)
-            }
-
-            // Then move out of UNLOCKING state, and things should proceed as normal:
-            vaultUnlockStateFlow.value = listOf(
-                VaultUnlockData(USER_1_ID, VaultUnlockData.Status.UNLOCKED),
-                VaultUnlockData(USER_2_ID, VaultUnlockData.Status.UNLOCKED),
+            } returns InitializeCryptoResult.AuthenticationError(error = Throwable()).asSuccess()
+            assertEquals(
+                SharedAccountData(listOf(USER_2_SHARED_ACCOUNT)),
+                authenticatorBridgeRepository.getSharedAccounts(),
             )
 
-            deferred.await()
-
-            verify { authRepository.userStateFlow }
-            verify { vaultDiskSource.getCiphers(USER_1_ID) }
-            verify { vaultDiskSource.getCiphers(USER_2_ID) }
-            verify { vaultRepository.isVaultUnlocked(USER_1_ID) }
-            verify { vaultRepository.isVaultUnlocked(USER_2_ID) }
-            verify { vaultRepository.vaultUnlockDataStateFlow }
-            coVerify {
-                vaultRepository.unlockVaultWithDecryptedUserKey(
+            assertNull(fakeAuthDiskSource.getAuthenticatorSyncUnlockKey(USER_1_ID))
+            coVerify(exactly = 1) {
+                scopedVaultSdkSource.initializeCrypto(
+                    userId = USER_1_ID,
+                    request = InitUserCryptoRequest(
+                        userId = USER_1_ID,
+                        kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
+                        email = USER_1_EMAIL,
+                        privateKey = USER_1_PRIVATE_KEY,
+                        method = InitUserCryptoMethod.DecryptedKey(
+                            decryptedUserKey = USER_1_UNLOCK_KEY,
+                        ),
+                        signingKey = null,
+                    ),
+                )
+                scopedVaultSdkSource.initializeCrypto(
                     userId = USER_2_ID,
-                    decryptedUserKey = USER_2_UNLOCK_KEY,
+                    request = InitUserCryptoRequest(
+                        userId = USER_2_ID,
+                        kdfParams = Kdf.Argon2id(iterations = 0U, memory = 0U, parallelism = 0U),
+                        email = USER_2_EMAIL,
+                        privateKey = USER_2_PRIVATE_KEY,
+                        method = InitUserCryptoMethod.DecryptedKey(
+                            decryptedUserKey = USER_2_UNLOCK_KEY,
+                        ),
+                        signingKey = null,
+                    ),
+                )
+                scopedVaultSdkSource.initializeOrganizationCrypto(
+                    userId = USER_2_ID,
+                    request = InitOrgCryptoRequest(organizationKeys = USER_2_ORG_KEYS),
+                )
+                vaultDiskSource.getTotpCiphers(userId = USER_2_ID)
+                scopedVaultSdkSource.decryptCipher(
+                    userId = USER_2_ID,
+                    cipher = USER_2_ENCRYPTED_SDK_TOTP_CIPHER,
                 )
             }
-            verify { vaultRepository.lockVault(USER_2_ID, isUserInitiated = false) }
-            coVerify { vaultSdkSource.decryptCipher(USER_1_ID, USER_1_ENCRYPTED_SDK_TOTP_CIPHER) }
-            coVerify { vaultSdkSource.decryptCipher(USER_2_ID, USER_2_ENCRYPTED_SDK_TOTP_CIPHER) }
+            verify(exactly = 1) {
+                scopedVaultSdkSource.clearCrypto(userId = USER_1_ID)
+                scopedVaultSdkSource.clearCrypto(userId = USER_2_ID)
+            }
         }
 
     @Test
     @Suppress("MaxLineLength")
     fun `authenticatorSyncSymmetricKey should read from authDiskSource when one user has authenticator sync enabled`() {
-        every { authRepository.userStateFlow } returns MutableStateFlow(USER_STATE)
         fakeAuthDiskSource.storeAuthenticatorSyncUnlockKey(
             userId = USER_1_ID,
             authenticatorSyncUnlockKey = USER_1_UNLOCK_KEY,
@@ -328,13 +367,11 @@ class AuthenticatorBridgeRepositoryTest {
         fakeAuthDiskSource.authenticatorSyncSymmetricKey = syncKey
 
         assertEquals(syncKey, authenticatorBridgeRepository.authenticatorSyncSymmetricKey)
-        verify { authRepository.userStateFlow }
     }
 
     @Test
     @Suppress("MaxLineLength")
     fun `authenticatorSyncSymmetricKey should return null when no user has authenticator sync enabled`() {
-        every { authRepository.userStateFlow } returns MutableStateFlow(USER_STATE)
         fakeAuthDiskSource.storeAuthenticatorSyncUnlockKey(
             userId = USER_1_ID,
             authenticatorSyncUnlockKey = null,
@@ -350,7 +387,6 @@ class AuthenticatorBridgeRepositoryTest {
         val syncKey = generateSecretKey().getOrThrow().encoded
         fakeAuthDiskSource.authenticatorSyncSymmetricKey = syncKey
         assertNull(authenticatorBridgeRepository.authenticatorSyncSymmetricKey)
-        verify { authRepository.userStateFlow }
     }
 }
 
@@ -365,28 +401,65 @@ private val SYMMETRIC_KEY = generateSecretKey()
 private const val USER_1_ID = "user1Id"
 private const val USER_2_ID = "user2Id"
 
+private const val USER_1_EMAIL = "john@doe.com"
+private const val USER_2_EMAIL = "jane@doe.com"
+
+private const val USER_1_PRIVATE_KEY = "user1PrivateKey"
+private const val USER_2_PRIVATE_KEY = "user2PrivateKey"
+
 private const val USER_1_UNLOCK_KEY = "user1UnlockKey"
 private const val USER_2_UNLOCK_KEY = "user2UnlockKey"
 
-private val ACCOUNT_1 = mockk<UserState.Account> {
-    every { userId } returns USER_1_ID
-    every { name } returns "John Doe"
-    every { email } returns "john@doe.com"
-    every { environment.label } returns "bitwarden.com"
-}
+private val USER_1_ORG_KEYS = mapOf("test_1" to "test_1_data")
+private val USER_2_ORG_KEYS = mapOf("test_2" to "test_2_data")
 
-private val ACCOUNT_2 = mockk<UserState.Account> {
-    every { userId } returns USER_2_ID
-    every { name } returns "Jane Doe"
-    every { email } returns "Jane@doe.com"
-    every { environment.label } returns "bitwarden.com"
-}
+private val ACCOUNT_JSON_1 = AccountJson(
+    profile = mockk {
+        every { userId } returns USER_1_ID
+        every { name } returns "John Doe"
+        every { email } returns USER_1_EMAIL
+        every { kdfType } returns KdfTypeJson.ARGON2_ID
+        every { kdfIterations } returns 0
+        every { kdfMemory } returns 0
+        every { kdfParallelism } returns 0
+    },
+    tokens = AccountTokensJson(
+        accessToken = "accessToken1",
+        refreshToken = "refreshToken1",
+    ),
+    settings = AccountJson.Settings(
+        environmentUrlData = EnvironmentUrlDataJson(
+            base = "https://vault.bitwarden.com",
+        ),
+    ),
+)
 
-private val USER_STATE = UserState(
+private val ACCOUNT_JSON_2 = AccountJson(
+    profile = mockk {
+        every { userId } returns USER_2_ID
+        every { name } returns "Jane Doe"
+        every { email } returns USER_2_EMAIL
+        every { kdfType } returns KdfTypeJson.ARGON2_ID
+        every { kdfIterations } returns 0
+        every { kdfMemory } returns 0
+        every { kdfParallelism } returns 0
+    },
+    tokens = AccountTokensJson(
+        accessToken = "accessToken2",
+        refreshToken = "refreshToken2",
+    ),
+    settings = AccountJson.Settings(
+        environmentUrlData = EnvironmentUrlDataJson(
+            base = "https://vault.bitwarden.com",
+        ),
+    ),
+)
+
+private val USER_STATE_JSON = UserStateJson(
     activeUserId = USER_1_ID,
-    accounts = listOf(
-        ACCOUNT_1,
-        ACCOUNT_2,
+    accounts = mapOf(
+        USER_1_ID to ACCOUNT_JSON_1,
+        USER_2_ID to ACCOUNT_JSON_2,
     ),
 )
 
@@ -429,18 +502,18 @@ private val USER_1_EXPECTED_TOTP_LIST = listOf("totp")
 private val USER_2_EXPECTED_TOTP_LIST = listOf("totp")
 
 private val USER_1_SHARED_ACCOUNT = SharedAccountData.Account(
-    userId = ACCOUNT_1.userId,
-    name = ACCOUNT_1.name,
-    email = ACCOUNT_1.email,
-    environmentLabel = ACCOUNT_1.environment.label,
+    userId = ACCOUNT_JSON_1.profile.userId,
+    name = ACCOUNT_JSON_1.profile.name,
+    email = ACCOUNT_JSON_1.profile.email,
+    environmentLabel = Environment.Us.label,
     totpUris = USER_1_EXPECTED_TOTP_LIST,
 )
 
 private val USER_2_SHARED_ACCOUNT = SharedAccountData.Account(
-    userId = ACCOUNT_2.userId,
-    name = ACCOUNT_2.name,
-    email = ACCOUNT_2.email,
-    environmentLabel = ACCOUNT_2.environment.label,
+    userId = ACCOUNT_JSON_2.profile.userId,
+    name = ACCOUNT_JSON_2.profile.name,
+    email = ACCOUNT_JSON_2.profile.email,
+    environmentLabel = Environment.Us.label,
     totpUris = USER_2_EXPECTED_TOTP_LIST,
 )
 

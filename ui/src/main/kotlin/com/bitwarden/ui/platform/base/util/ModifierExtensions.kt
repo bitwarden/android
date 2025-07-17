@@ -3,6 +3,7 @@
 package com.bitwarden.ui.platform.base.util
 
 import android.os.Build
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -21,9 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.key.Key
@@ -77,6 +81,42 @@ fun Modifier.scrolledContainerBackground(
         },
     )
 }
+
+/**
+ * Draws a very simple non-intractable scrollbar on the end side of the component.
+ */
+@OmitFromCoverage
+@Composable
+fun Modifier.simpleVerticalScrollbar(
+    state: ScrollState,
+    scrollbarWidth: Dp = 6.dp,
+    color: Color = BitwardenTheme.colorScheme.stroke.divider,
+    layoutDirection: LayoutDirection = LocalLayoutDirection.current,
+): Modifier =
+    this then Modifier.drawWithContent {
+        drawContent()
+        val viewHeight = state.viewportSize.toFloat()
+        val contentHeight = state.maxValue + viewHeight
+        val scrollbarHeight = (10.dp.toPx()..viewHeight)
+            .takeUnless { it.isEmpty() }
+            ?.let { (viewHeight * (viewHeight / contentHeight)).coerceIn(range = it) }
+            ?: 0f
+        val variableZone = viewHeight - scrollbarHeight
+        val scrollbarYOffset = (state.value.toFloat() / state.maxValue) * variableZone
+        val halfScrollbarWidthPx = scrollbarWidth.toPx() / 2
+        drawRoundRect(
+            cornerRadius = CornerRadius(x = halfScrollbarWidthPx, y = halfScrollbarWidthPx),
+            color = color,
+            topLeft = Offset(
+                x = when (layoutDirection) {
+                    LayoutDirection.Ltr -> this.size.width - scrollbarWidth.toPx()
+                    LayoutDirection.Rtl -> 0f
+                },
+                y = scrollbarYOffset,
+            ),
+            size = Size(width = scrollbarWidth.toPx(), height = scrollbarHeight),
+        )
+    }
 
 /**
  * Adds a bottom divider specified by the given [topAppBarScrollBehavior] and its current scroll

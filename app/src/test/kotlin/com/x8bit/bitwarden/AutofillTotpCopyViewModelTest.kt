@@ -2,15 +2,18 @@ package com.x8bit.bitwarden
 
 import android.content.Intent
 import app.cash.turbine.test
-import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.model.AutofillTotpCopyData
 import com.x8bit.bitwarden.data.autofill.util.getTotpCopyIntentOrNull
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
+import io.mockk.awaits
+import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
@@ -24,8 +27,6 @@ import org.junit.jupiter.api.Test
 class AutofillTotpCopyViewModelTest : BaseViewModelTest() {
     private lateinit var autofillTotpCopyViewModel: AutofillTotpCopyViewModel
 
-    private val mutableCiphersStateFlow: MutableStateFlow<DataState<List<CipherView>>> =
-        MutableStateFlow(DataState.Loading)
     private val mutableVaultUnlockDataStateFlow: MutableStateFlow<List<VaultUnlockData>> =
         MutableStateFlow(emptyList())
 
@@ -33,7 +34,6 @@ class AutofillTotpCopyViewModelTest : BaseViewModelTest() {
         every { activeUserId } returns null
     }
     private val vaultRepository: VaultRepository = mockk {
-        every { ciphersStateFlow } returns mutableCiphersStateFlow
         every { vaultUnlockDataStateFlow } returns mutableVaultUnlockDataStateFlow
     }
 
@@ -78,11 +78,9 @@ class AutofillTotpCopyViewModelTest : BaseViewModelTest() {
             every { intent.getTotpCopyIntentOrNull() } returns totpCopyData
             every { authRepository.activeUserId } returns ACTIVE_USER_ID
             every { vaultRepository.isVaultUnlocked(userId = ACTIVE_USER_ID) } returns true
-            mutableCiphersStateFlow.value = DataState.Loaded(
-                listOf(
-                    cipherView,
-                ),
-            )
+            coEvery {
+                vaultRepository.getCipher(cipherId = CIPHER_ID)
+            } returns GetCipherResult.Success(cipherView)
             mutableVaultUnlockDataStateFlow.value = listOf(vaultUnlockData)
 
             // Test
@@ -187,11 +185,9 @@ class AutofillTotpCopyViewModelTest : BaseViewModelTest() {
             every { intent.getTotpCopyIntentOrNull() } returns totpCopyData
             every { authRepository.activeUserId } returns ACTIVE_USER_ID
             every { vaultRepository.isVaultUnlocked(userId = ACTIVE_USER_ID) } returns true
-            mutableCiphersStateFlow.value = DataState.Loaded(
-                listOf(
-                    cipherView,
-                ),
-            )
+            coEvery {
+                vaultRepository.getCipher(cipherId = CIPHER_ID)
+            } returns GetCipherResult.CipherNotFound
             mutableVaultUnlockDataStateFlow.value = listOf(vaultUnlockData)
 
             // Test
@@ -221,6 +217,7 @@ class AutofillTotpCopyViewModelTest : BaseViewModelTest() {
         every { intent.getTotpCopyIntentOrNull() } returns totpCopyData
         every { authRepository.activeUserId } returns ACTIVE_USER_ID
         every { vaultRepository.isVaultUnlocked(userId = ACTIVE_USER_ID) } returns true
+        coEvery { vaultRepository.getCipher(cipherId = CIPHER_ID) } just awaits
         mutableVaultUnlockDataStateFlow.value = listOf(vaultUnlockData)
 
         // Test

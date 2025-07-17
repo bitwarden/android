@@ -986,12 +986,8 @@
     <string name="privileged_apps">特权 App</string>
     <string name="unrecognized_browser">无法识别的浏览器</string>
     <string name="learn_more_about_using_passkeys_with_bitwarden">进一步了解 Bitwarden 通行密钥的使用。</string>
-    <string name="google">Google</string>
-    <string name="the_community">社区</string>
-    <string name="you">您</string>
     <string name="all_trusted_apps">所有信任的 App</string>
-    <string name="trusted_by_x">被 %s 信任</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">确定要停止信任 %s 吗？</string>
     <string name="installed_apps">已安装的 App</string>
-    <string name="delete_x">删除于 %s</string>
+    <string name="delete_x">删除 %s</string>
 </resources>

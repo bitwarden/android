@@ -118,13 +118,6 @@ sealed class UnlockEvent {
      * Navigates to the item listing screen.
      */
     data object NavigateToItemListing : UnlockEvent()
-
-    /**
-     * Displays a toast to the user.
-     */
-    data class ShowToast(
-        val message: Text,
-    ) : UnlockEvent()
 }
 
 /**

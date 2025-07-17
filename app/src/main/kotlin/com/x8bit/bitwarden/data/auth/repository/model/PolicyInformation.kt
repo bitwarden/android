@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
+import com.bitwarden.network.model.SyncResponseJson
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

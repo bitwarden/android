@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Kimlik Doğrulayıcı</string>
     <string name="biometrics_direction">Biyometrik doğrulama</string>
     <string name="cancel">İptal</string>
     <string name="add_item">Öğe ekle</string>
@@ -125,7 +124,7 @@
     <string name="take_me_to_app_settings">Beni uygulama ayarlarına götür</string>
     <string name="something_went_wrong">Bir sorun oluştu</string>
     <string name="please_try_again">Lütfen tekrar deneyin</string>
-    <string name="move_to_bitwarden">Bitwarden\'a taşı</string>
+    <string name="copy_to_bitwarden_vault">Bitwarden kasasına kopyala</string>
     <string name="default_save_option">Varsayılan kaydetme seçeneği</string>
     <string name="save_to_bitwarden">Bitwarden\'a Kaydet</string>
     <string name="save_here">Buraya kaydet</string>
@@ -142,4 +141,9 @@
     <string name="file_could_not_be_processed">"Dosya İşlenemedi"</string>
     <string name="file_could_not_be_processed_message">"Dosya işlenemedi. Geçerli JSON olduğundan emin olun ve tekrar deneyin. Yardıma mı ihtiyacınız var? bitwarden.com/help adresini ziyaret edin"</string>
     <string name="get_help">Yardım Al</string>
+    <string name="expand_advanced_options">Gelişmiş seçenekleri genişlet</string>
+    <string name="local_items_are_expanded_click_to_collapse">Yerel öğeler genişletildi, daraltmak için tıklayın.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Yerel öğeler daraltıldı, genişletmek için tıklayın.</string>
+    <string name="items_expanded_click_to_collapse">Öğeler genişletildi, daraltmak için tıklayın.</string>
+    <string name="items_are_collapsed_click_to_expand">Öğeler daraltıldı, genişletmek için tıklayın.</string>
 </resources>

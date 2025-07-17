@@ -41,6 +41,7 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.EncryptionContext
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
@@ -1048,6 +1049,36 @@ class VaultSdkSourceTest {
     }
 
     @Test
+    fun `generateTotpForCipherListView should call SDK and return a Result with correct data`() =
+        runTest {
+            val userId = "userId"
+            val totpResponse = TotpResponse("TestCode", 30u)
+
+            coEvery {
+                clientVault.generateTotpCipherView(
+                    view = any(),
+                    time = any(),
+                )
+            } returns totpResponse
+
+            val result = vaultSdkSource.generateTotpForCipherListView(
+                userId = userId,
+                cipherListView = mockk(),
+                time = mockk(),
+            )
+
+            assertEquals(totpResponse.asSuccess(), result)
+            coVerify {
+                clientVault.generateTotpCipherView(
+                    view = any(),
+                    time = any(),
+                )
+            }
+
+            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
+        }
+
+    @Test
     fun `moveToOrganization should call SDK and a Result with correct data`() = runTest {
         val userId = "userId"
         val organizationId = "organizationId"
@@ -1367,6 +1398,43 @@ class VaultSdkSourceTest {
                 relyingPartyId = relyingPartyId,
             )
 
+            assertTrue(result.isFailure)
+        }
+
+    @Test
+    fun `decryptCipherListWithFailures should return Success when successful`() = runTest {
+        val userId = "userId"
+        val mockCipherList = mockk<List<Cipher>>()
+        val expectedResult = mockk<DecryptCipherListResult>()
+
+        coEvery {
+            clientVault.ciphers().decryptListWithFailures(
+                ciphers = mockCipherList,
+            )
+        } returns expectedResult
+
+        val result = vaultSdkSource.decryptCipherListWithFailures(
+            userId = userId,
+            cipherList = mockCipherList,
+        )
+
+        assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `decryptCipherListWithFailures should return Failure when Bitwarden exception is thrown`() =
+        runTest {
+            val userId = "userId"
+            val mockCipherList = mockk<List<Cipher>>()
+            coEvery {
+                clientVault.ciphers().decryptListWithFailures(
+                    ciphers = mockCipherList,
+                )
+            } throws BitwardenException.E("mockException")
+            val result = vaultSdkSource.decryptCipherListWithFailures(
+                userId = userId,
+                cipherList = mockCipherList,
+            )
             assertTrue(result.isFailure)
         }
 }

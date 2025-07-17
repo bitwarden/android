@@ -16,12 +16,17 @@ import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.manager.FileManager
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -41,6 +46,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         every { getMutualTlsKeyAliases() } returns emptyList()
     }
     private val mockFileManager = mockk<FileManager>()
+    private val snackbarRelayManager = mockk<SnackbarRelayManager> {
+        every { sendSnackbarData(data = any(), relay = any()) } just runs
+    }
 
     @Suppress("MaxLineLength")
     @Test
@@ -161,7 +169,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `SaveClick should emit NavigateBack and ShowToast and update the environment when all URLs are valid`() =
+    fun `SaveClick should emit NavigateBack, send a snackbar to the ENVIRONMENT SAVED relay, and update the environment when all URLs are valid`() =
         runTest {
             assertEquals(
                 Environment.Us,
@@ -196,11 +204,6 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 viewModel.trySendAction(EnvironmentAction.SaveClick)
-
-                assertEquals(
-                    EnvironmentEvent.ShowToast(R.string.environment_saved.asText()),
-                    awaitItem(),
-                )
                 assertEquals(
                     EnvironmentEvent.NavigateBack,
                     awaitItem(),
@@ -222,11 +225,17 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                     fakeEnvironmentRepository.environment,
                 )
             }
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = R.string.environment_saved.asText()),
+                    relay = SnackbarRelay.ENVIRONMENT_SAVED,
+                )
+            }
         }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `SaveClick should emit NavigateBack and ShowToast and update the environment when some URLs are valid and others are null`() =
+    fun `SaveClick should emit NavigateBack, send a snackbar to the ENVIRONMENT SAVED relay, and update the environment when some URLs are valid and others are null`() =
         runTest {
             assertEquals(
                 Environment.Us,
@@ -244,11 +253,6 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 viewModel.trySendAction(EnvironmentAction.SaveClick)
-
-                assertEquals(
-                    EnvironmentEvent.ShowToast(R.string.environment_saved.asText()),
-                    awaitItem(),
-                )
                 assertEquals(
                     EnvironmentEvent.NavigateBack,
                     awaitItem(),
@@ -268,6 +272,12 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                         ),
                     ),
                     fakeEnvironmentRepository.environment,
+                )
+            }
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = R.string.environment_saved.asText()),
+                    relay = SnackbarRelay.ENVIRONMENT_SAVED,
                 )
             }
         }
@@ -368,7 +378,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SystemCertificateSelectionResultReceive should show toast when error`() = runTest {
+    fun `SystemCertificateSelectionResultReceive should show snackbar when error`() = runTest {
         val viewModel = createViewModel()
         viewModel.trySendAction(
             EnvironmentAction.SystemCertificateSelectionResultReceive(
@@ -377,7 +387,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         )
         viewModel.eventFlow.test {
             assertEquals(
-                EnvironmentEvent.ShowToast(R.string.error_loading_certificate.asText()),
+                EnvironmentEvent.ShowSnackbar(R.string.error_loading_certificate.asText()),
                 awaitItem(),
             )
         }
@@ -448,7 +458,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CertificateInstallationResultReceive should show toast based on result`() = runTest {
+    fun `CertificateInstallationResultReceive should show snackbar based on result`() = runTest {
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
@@ -458,7 +468,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 ),
             )
             assertEquals(
-                EnvironmentEvent.ShowToast(R.string.certificate_installed.asText()),
+                EnvironmentEvent.ShowSnackbar(R.string.certificate_installed.asText()),
                 awaitItem(),
             )
 
@@ -468,7 +478,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 ),
             )
             assertEquals(
-                EnvironmentEvent.ShowToast(R.string.certificate_installation_failed.asText()),
+                EnvironmentEvent.ShowSnackbar(R.string.certificate_installation_failed.asText()),
                 awaitItem(),
             )
         }
@@ -518,7 +528,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ImportKeyResultReceive should show toast with correct message on error`() = runTest {
+    fun `ImportKeyResultReceive should show snackbar with correct message on error`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(
@@ -529,7 +539,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 ),
             )
             assertEquals(
-                EnvironmentEvent.ShowToast(R.string.unsupported_certificate_type.asText()),
+                EnvironmentEvent.ShowSnackbar(R.string.unsupported_certificate_type.asText()),
                 awaitItem(),
             )
 
@@ -541,7 +551,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 ),
             )
             assertEquals(
-                EnvironmentEvent.ShowToast(R.string.certificate_installation_failed.asText()),
+                EnvironmentEvent.ShowSnackbar(R.string.certificate_installation_failed.asText()),
                 awaitItem(),
             )
 
@@ -553,7 +563,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 ),
             )
             assertEquals(
-                EnvironmentEvent.ShowToast(R.string.certificate_password_incorrect.asText()),
+                EnvironmentEvent.ShowSnackbar(R.string.certificate_password_incorrect.asText()),
                 awaitItem(),
             )
 
@@ -565,7 +575,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 ),
             )
             assertEquals(
-                EnvironmentEvent.ShowToast(R.string.invalid_certificate_chain.asText()),
+                EnvironmentEvent.ShowSnackbar(R.string.invalid_certificate_chain.asText()),
                 awaitItem(),
             )
         }
@@ -807,6 +817,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
             featureFlagManager = mockFeatureFlagManager,
             certificateManager = mockCertificateManager,
             fileManager = mockFileManager,
+            snackbarRelayManager = snackbarRelayManager,
             savedStateHandle = savedStateHandle,
         )
 

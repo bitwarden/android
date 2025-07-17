@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.disk.database
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -26,8 +27,11 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.entity.SendEntity
         FolderEntity::class,
         SendEntity::class,
     ],
-    version = 6,
+    version = 7,
     exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 6, to = 7),
+    ],
 )
 @TypeConverters(ZonedDateTimeTypeConverter::class)
 abstract class VaultDatabase : RoomDatabase() {

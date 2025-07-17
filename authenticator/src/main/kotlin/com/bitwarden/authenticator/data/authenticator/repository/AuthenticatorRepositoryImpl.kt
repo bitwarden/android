@@ -16,11 +16,9 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVer
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
 import com.bitwarden.authenticator.data.authenticator.repository.util.sortAlphabetically
 import com.bitwarden.authenticator.data.authenticator.repository.util.toAuthenticatorItems
-import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
-import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
@@ -64,7 +62,6 @@ private const val STOP_TIMEOUT_DELAY_MS: Long = 5_000L
 class AuthenticatorRepositoryImpl @Inject constructor(
     private val authenticatorBridgeManager: AuthenticatorBridgeManager,
     private val authenticatorDiskSource: AuthenticatorDiskSource,
-    private val featureFlagManager: FeatureFlagManager,
     private val totpCodeManager: TotpCodeManager,
     private val fileManager: FileManager,
     private val importManager: ImportManager,
@@ -155,17 +152,9 @@ class AuthenticatorRepositoryImpl @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override val sharedCodesStateFlow: StateFlow<SharedVerificationCodesState> by lazy {
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.PasswordManagerSync)
-            .flatMapLatest { isFeatureEnabled ->
-                if (isFeatureEnabled) {
-                    authenticatorBridgeManager
-                        .accountSyncStateFlow
-                        .flatMapLatest { it.toSharedVerificationCodesStateFlow() }
-                } else {
-                    flowOf(SharedVerificationCodesState.FeatureNotEnabled)
-                }
-            }
+        authenticatorBridgeManager
+            .accountSyncStateFlow
+            .flatMapLatest { it.toSharedVerificationCodesStateFlow() }
             .stateIn(
                 scope = unconfinedScope,
                 started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_DELAY_MS),

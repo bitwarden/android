@@ -552,13 +552,6 @@ data class VaultUnlockState(
  */
 sealed class VaultUnlockEvent {
     /**
-     * Displays a toast to the user.
-     */
-    data class ShowToast(
-        val text: Text,
-    ) : VaultUnlockEvent()
-
-    /**
      * Prompts the user for biometrics unlock.
      */
     data class PromptForBiometrics(val cipher: Cipher) : BackgroundEvent, VaultUnlockEvent()

@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.vaultunlock
 
-import android.widget.Toast
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -93,9 +91,6 @@ fun VaultUnlockScreen(
         LocalCredentialProviderCompletionManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
-
     LaunchedEffect(state.requiresBiometricsLogin) {
         if (state.requiresBiometricsLogin && !biometricsManager.isBiometricsSupported) {
             viewModel.trySendAction(VaultUnlockAction.BiometricsNoLongerSupported)
@@ -111,10 +106,6 @@ fun VaultUnlockScreen(
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            is VaultUnlockEvent.ShowToast -> {
-                Toast.makeText(context, event.text(resources), Toast.LENGTH_SHORT).show()
-            }
-
             is VaultUnlockEvent.PromptForBiometrics -> {
                 biometricsManager.promptBiometrics(
                     onSuccess = onBiometricsUnlockSuccess,

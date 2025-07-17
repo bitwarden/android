@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Ověřovací aplikace</string>
     <string name="biometrics_direction">Biometrické ověření</string>
     <string name="cancel">Zrušit</string>
     <string name="add_item">Přidat položku</string>
@@ -119,13 +118,13 @@
     <string name="sync_with_bitwarden_app">Synchronizovat s aplikací Bitwarden</string>
     <string name="this_feature_is_not_not_yet_available_for_self_hosted_users">Tato funkce zatím není dostupná pro vlastní hostované uživatele. <annotation link="learnMore">Další informace</annotation></string>
     <string name="shared_codes_error">Nelze synchronizovat kódy z aplikace Bitwarden. Zkontrolujte, zda jsou obě aplikace aktuální. Ke stávajícím kódům máte stále přístup v aplikaci Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s</string>
+    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Synchronizovat s aplikací Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Pokud chcete zobrazit všechny ověřovací kódy, budete muset povolit synchronizaci na všech Vašich účtech.</string>
     <string name="take_me_to_app_settings">Přejít do nastavení aplikace</string>
     <string name="something_went_wrong">Něco se pokazilo</string>
     <string name="please_try_again">Zkuste to znovu</string>
-    <string name="move_to_bitwarden">Přesunout do Bitwardenu</string>
+    <string name="copy_to_bitwarden_vault">Kopírovat do trezoru Bitwarden</string>
     <string name="default_save_option">Výchozí volby ukládání</string>
     <string name="save_to_bitwarden">Uložit do Bitwardenu</string>
     <string name="save_here">Uložit zde</string>
@@ -136,10 +135,15 @@
     <string name="choose_save_location_message">Uložte tento ověřovací klíč zde nebo ho přidejte do Vaší aplikace Bitwarden.</string>
     <string name="save_option_as_default">Uložit volbu jako výchozí</string>
     <string name="account_synced_from_bitwarden_app">Účet je synchronizován s aplikací Bitwarden</string>
-    <string name="local_codes">Místní kódy</string>
+    <string name="local_codes">Místní kódy (%1$d)</string>
     <string name="required_information_missing">Chybí požadované informace</string>
     <string name="required_information_missing_message">"Chybí požadované informace (např. \"služby\" nebo \"tajné\"). Zkontrolujte soubor a zkuste to znovu. Navštivte bitwarden.com/help pro pomoc."</string>
     <string name="file_could_not_be_processed">"Soubor nelze zpracovat"</string>
     <string name="file_could_not_be_processed_message">"Soubor nelze zpracovat. Ujistěte se, že je to platný JSON a zkuste to znovu. Potřebujete pomoc? Navštivte bitwarden.com/help"</string>
     <string name="get_help">Získat pomoc</string>
+    <string name="expand_advanced_options">Rozbalit rozšířené volby</string>
+    <string name="local_items_are_expanded_click_to_collapse">Místní položky jsou rozbaleny; klepnutím sbalíte.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Místní položky jsou sbaleny; klepnutím rozbalíte.</string>
+    <string name="items_expanded_click_to_collapse">Položky jsou rozbaleny; klepnutím sbalíte.</string>
+    <string name="items_are_collapsed_click_to_expand">Položky jsou sbaleny; klepnutím rozbalíte.</string>
 </resources>

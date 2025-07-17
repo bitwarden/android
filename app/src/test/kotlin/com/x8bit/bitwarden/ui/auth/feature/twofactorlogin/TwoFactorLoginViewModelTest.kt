@@ -98,6 +98,64 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `init with email auth method and not new device verification should call resendEmail`() {
+        val initialState = DEFAULT_STATE.copy(
+            authMethod = TwoFactorAuthMethod.EMAIL,
+            isNewDeviceVerification = false,
+        )
+        coEvery { authRepository.resendVerificationCodeEmail() } returns ResendEmailResult.Success
+
+        createViewModel(state = initialState)
+
+        coVerify(exactly = 1) {
+            authRepository.resendVerificationCodeEmail()
+        }
+    }
+
+    @Test
+    fun `init with email auth method and new device verification should not call resendEmail`() {
+        val initialState = DEFAULT_STATE.copy(
+            authMethod = TwoFactorAuthMethod.EMAIL,
+            isNewDeviceVerification = true,
+        )
+        coEvery { authRepository.resendVerificationCodeEmail() } returns ResendEmailResult.Success
+
+        createViewModel(state = initialState)
+
+        coVerify(exactly = 0) {
+            authRepository.resendVerificationCodeEmail()
+        }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `init with non-email auth method and not new device verification should not call resendEmail`() {
+        val initialState = DEFAULT_STATE.copy(
+            authMethod = TwoFactorAuthMethod.AUTHENTICATOR_APP,
+            isNewDeviceVerification = false,
+        )
+        coEvery { authRepository.resendVerificationCodeEmail() } returns ResendEmailResult.Success
+
+        createViewModel(state = initialState)
+
+        coVerify(exactly = 0) {
+            authRepository.resendVerificationCodeEmail()
+        }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `init with non-email auth method and new device verification should not call resendEmail`() {
+        val initialState = DEFAULT_STATE.copy(
+            authMethod = TwoFactorAuthMethod.AUTHENTICATOR_APP,
+            isNewDeviceVerification = true,
+        )
+        createViewModel(state = initialState)
+
+        coVerify(exactly = 0) { authRepository.resendVerificationCodeEmail() }
+    }
+
+    @Test
     fun `yubiKeyResultFlow update should populate the input field and attempt login`() {
         val initialState = DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.YUBI_KEY)
         val token = "token"
@@ -318,15 +376,14 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `Continue buttons should only be enabled when code is 8 digit enough on isNewDeviceVerification`() {
-        val initialState = DEFAULT_STATE.copy(isNewDeviceVerification = true)
-        val viewModel = createViewModel(initialState)
-        viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged("123456"))
+    fun `Continue buttons should only be enabled when code is not empty`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged(""))
 
         // 6 digit should be false when isNewDeviceVerification is true.
         assertEquals(
-            initialState.copy(
-                codeInput = "123456",
+            DEFAULT_STATE.copy(
+                codeInput = "",
                 isContinueButtonEnabled = false,
             ),
             viewModel.stateFlow.value,
@@ -335,7 +392,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         // Set it to true.
         viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged("12345678"))
         assertEquals(
-            initialState.copy(
+            DEFAULT_STATE.copy(
                 codeInput = "12345678",
                 isContinueButtonEnabled = true,
             ),
@@ -513,7 +570,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ContinueButtonClick login should emit ShowToast when auth method is WEB_AUTH and data is null`() =
+    fun `ContinueButtonClick login should emit ShowSnackbar when auth method is WEB_AUTH and data is null`() =
         runTest {
             val response = GetTokenResponseJson.TwoFactorRequired(
                 authMethodsData = emptyMap(),
@@ -528,8 +585,10 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
                 assertEquals(
-                    TwoFactorLoginEvent.ShowToast(
-                        message = R.string.there_was_an_error_starting_web_authn_two_factor_authentication.asText(),
+                    TwoFactorLoginEvent.ShowSnackbar(
+                        message = R.string
+                            .there_was_an_error_starting_web_authn_two_factor_authentication
+                            .asText(),
                     ),
                     awaitItem(),
                 )
@@ -899,7 +958,28 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ResendEmailClick returns success should emit ShowToast`() = runTest {
+    @Suppress("MaxLineLength")
+    fun `sendVerificationCodeEmail with isUserInitiated false should not show loading and snackbar on success`() =
+        runTest {
+            coEvery { authRepository.resendVerificationCodeEmail() } returns ResendEmailResult.Success
+            val viewModel = createViewModel()
+            // Simulate initial email send (not user initiated)
+            viewModel.trySendAction(
+                TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
+                    ResendEmailResult.Success,
+                    isUserInitiated = false,
+                ),
+            )
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                // No loading dialog
+                assertEquals(DEFAULT_STATE, stateFlow.awaitItem())
+                // No snackbar
+                eventFlow.expectNoEvents()
+            }
+        }
+
+    @Test
+    fun `ResendEmailClick returns success should emit ShowSnackbar`() = runTest {
         coEvery {
             authRepository.resendVerificationCodeEmail()
         } returns ResendEmailResult.Success
@@ -924,7 +1004,9 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             )
 
             assertEquals(
-                TwoFactorLoginEvent.ShowToast(message = R.string.verification_email_sent.asText()),
+                TwoFactorLoginEvent.ShowSnackbar(
+                    message = R.string.verification_email_sent.asText(),
+                ),
                 awaitItem(),
             )
         }
@@ -1050,7 +1132,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `ReceiveResendEmailResult with ResendEmailResult Success and isUserInitiated true should ShowToast`() =
+    fun `ReceiveResendEmailResult with ResendEmailResult Success and isUserInitiated true should ShowSnackbar`() =
         runTest {
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
@@ -1061,7 +1143,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 assertEquals(
-                    TwoFactorLoginEvent.ShowToast(
+                    TwoFactorLoginEvent.ShowSnackbar(
                         message = R.string.verification_email_sent.asText(),
                     ),
                     awaitItem(),
@@ -1192,8 +1274,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    @Suppress("MaxLineLength")
-    fun `ReceiveResendEmailResult with ResendEmailResult Success should ShowToast`() =
+    fun `ReceiveResendEmailResult with ResendEmailResult Success should ShowSnackbar`() =
         runTest {
             val initialState = DEFAULT_STATE.copy(
                 authMethod = TwoFactorAuthMethod.EMAIL,
@@ -1208,7 +1289,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 assertEquals(
-                    TwoFactorLoginEvent.ShowToast(
+                    TwoFactorLoginEvent.ShowSnackbar(
                         message = R.string.verification_email_sent.asText(),
                     ),
                     awaitItem(),

@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,7 +13,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
@@ -96,8 +94,6 @@ fun VaultItemListingScreen(
     viewModel: VaultItemListingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
     val userVerificationHandlers = remember(viewModel) {
         VaultItemListingUserVerificationHandlers.create(viewModel = viewModel)
     }
@@ -120,10 +116,6 @@ fun VaultItemListingScreen(
 
             is VaultItemListingEvent.ShowShareSheet -> {
                 intentManager.shareText(event.content)
-            }
-
-            is VaultItemListingEvent.ShowToast -> {
-                Toast.makeText(context, event.text(resources), Toast.LENGTH_SHORT).show()
             }
 
             is VaultItemListingEvent.NavigateToAddVaultItem -> {

@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.ui.autofill.iconTint
+import timber.log.Timber
 
 /**
  * Try creating an [InlinePresentation] for [autofillCipher] with this [InlinePresentationSpec]. If
@@ -84,7 +85,7 @@ private fun InlinePresentationSpec.createInlinePresentationOrNull(
     val isInlineCompatible = UiVersions
         .getVersions(style)
         .contains(UiVersions.INLINE_UI_VERSION_1)
-
+    Timber.d("Autofill request isInlineCompatible=$isInlineCompatible")
     if (!isInlineCompatible) return null
 
     val icon = Icon

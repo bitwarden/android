@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.bitwarden.data.repository.model.Environment
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationScreen
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationViewModel
 
 /**

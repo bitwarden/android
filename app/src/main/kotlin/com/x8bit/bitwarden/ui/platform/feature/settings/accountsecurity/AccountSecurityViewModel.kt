@@ -17,10 +17,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
@@ -51,7 +49,6 @@ class AccountSecurityViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val environmentRepository: EnvironmentRepository,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
-    private val featureFlagManager: FeatureFlagManager,
     private val firstTimeActionManager: FirstTimeActionManager,
     policyManager: PolicyManager,
     savedStateHandle: SavedStateHandle,
@@ -74,9 +71,7 @@ class AccountSecurityViewModel @Inject constructor(
                 ?.activeAccount
                 ?.hasMasterPassword != false,
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
-            shouldShowEnableAuthenticatorSync =
-                featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) &&
-                    isBuildVersionAtLeast(Build.VERSION_CODES.S),
+            shouldShowEnableAuthenticatorSync = isBuildVersionAtLeast(Build.VERSION_CODES.S),
             userId = userId,
             vaultTimeout = settingsRepository.vaultTimeout,
             vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
@@ -121,13 +116,6 @@ class AccountSecurityViewModel @Inject constructor(
                 )
             }
             .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.AuthenticatorSync)
-            .onEach {
-                trySendAction(AccountSecurityAction.Internal.AuthenticatorSyncFeatureFlagUpdate(it))
-            }
             .launchIn(viewModelScope)
 
         firstTimeActionManager
@@ -296,11 +284,8 @@ class AccountSecurityViewModel @Inject constructor(
             VaultTimeout.Type.ON_APP_RESTART -> VaultTimeout.OnAppRestart
             VaultTimeout.Type.NEVER -> VaultTimeout.Never
             VaultTimeout.Type.CUSTOM -> {
-                if (previousTimeout is VaultTimeout.Custom) {
-                    previousTimeout
-                } else {
-                    VaultTimeout.Custom(vaultTimeoutInMinutes = 0)
-                }
+                previousTimeout as? VaultTimeout.Custom
+                    ?: VaultTimeout.Custom(vaultTimeoutInMinutes = 0)
             }
         }
         handleVaultTimeoutSelect(vaultTimeout = vaultTimeout)
@@ -377,10 +362,6 @@ class AccountSecurityViewModel @Inject constructor(
 
     private fun handleInternalAction(action: AccountSecurityAction.Internal) {
         when (action) {
-            is AccountSecurityAction.Internal.AuthenticatorSyncFeatureFlagUpdate -> {
-                handleAuthenticatorSyncFeatureFlagUpdate(action)
-            }
-
             is AccountSecurityAction.Internal.BiometricsKeyResultReceive -> {
                 handleBiometricsKeyResultReceive(action)
             }
@@ -447,18 +428,6 @@ class AccountSecurityViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 shouldShowUnlockActionCard = action.showUnlockBadge,
-            )
-        }
-    }
-
-    private fun handleAuthenticatorSyncFeatureFlagUpdate(
-        action: AccountSecurityAction.Internal.AuthenticatorSyncFeatureFlagUpdate,
-    ) {
-        val shouldShowAuthenticatorSync =
-            action.isEnabled && isBuildVersionAtLeast(Build.VERSION_CODES.S)
-        mutableStateFlow.update {
-            it.copy(
-                shouldShowEnableAuthenticatorSync = shouldShowAuthenticatorSync,
             )
         }
     }
@@ -644,13 +613,6 @@ sealed class AccountSecurityEvent {
     ) : AccountSecurityEvent()
 
     /**
-     * Displays a toast with the given [Text].
-     */
-    data class ShowToast(
-        val text: Text,
-    ) : AccountSecurityEvent()
-
-    /**
      * Navigate to the setup unlock screen.
      */
     data object NavigateToSetupUnlockScreen : AccountSecurityEvent()
@@ -787,13 +749,6 @@ sealed class AccountSecurityAction {
      * Models actions that can be sent by the view model itself.
      */
     sealed class Internal : AccountSecurityAction() {
-
-        /**
-         * The feature flag value for authenticator syncing was updated.
-         */
-        data class AuthenticatorSyncFeatureFlagUpdate(
-            val isEnabled: Boolean,
-        ) : Internal()
 
         /**
          * A biometrics key result has been received.

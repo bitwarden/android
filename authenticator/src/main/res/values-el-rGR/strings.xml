@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Authenticator</string>
     <string name="biometrics_direction">Βιομετρική επαλήθευση</string>
     <string name="cancel">Ακύρωση</string>
     <string name="add_item">Προσθήκη στοιχείου</string>
@@ -125,7 +124,7 @@
     <string name="take_me_to_app_settings">Μετάβαση στις ρυθμίσεις της εφαρμογής</string>
     <string name="something_went_wrong">Κάτι πήγε στραβά</string>
     <string name="please_try_again">Δοκιμάστε ξανά</string>
-    <string name="move_to_bitwarden">Μετακίνηση στο Bitwarden</string>
+    <string name="copy_to_bitwarden_vault">Copy to Bitwarden vault</string>
     <string name="default_save_option">Προεπιλεγμένη επιλογή αποθήκευσης</string>
     <string name="save_to_bitwarden">Αποθήκευση στο Bitwarden</string>
     <string name="save_here">Αποθήκευση εδώ</string>
@@ -142,4 +141,9 @@
     <string name="file_could_not_be_processed">"File Could Not Be Processed"</string>
     <string name="file_could_not_be_processed_message">"File could not be processed. Ensure it’s valid JSON and try again. Need help? Visit bitwarden.com/help"</string>
     <string name="get_help">Λήψη βοήθειας</string>
+    <string name="expand_advanced_options">Expand advanced options</string>
+    <string name="local_items_are_expanded_click_to_collapse">Local items are expanded, click to collapse.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
+    <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
+    <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
 </resources>

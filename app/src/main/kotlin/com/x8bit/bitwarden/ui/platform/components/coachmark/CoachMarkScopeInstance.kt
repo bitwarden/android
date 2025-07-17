@@ -31,7 +31,7 @@ import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighl
 import com.x8bit.bitwarden.ui.platform.components.tooltip.BitwardenToolTip
 import com.x8bit.bitwarden.ui.platform.components.tooltip.BitwardenToolTipState
 import com.x8bit.bitwarden.ui.platform.components.tooltip.rememberBitwardenToolTipState
-import okhttp3.internal.toImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import org.jetbrains.annotations.VisibleForTesting
 
 /**

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Autentikator</string>
     <string name="biometrics_direction">Verifikasi biometrik</string>
     <string name="cancel">Cancel</string>
     <string name="add_item">Tambahkan item</string>
@@ -119,13 +118,13 @@
     <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
     <string name="this_feature_is_not_not_yet_available_for_self_hosted_users">This feature is not yet available for self-hosted users. <annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
-    <string name="shared_accounts_header">%1$s | %2$s</string>
+    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
     <string name="sync_with_bitwarden_action_card_message">In order to view all of your verification codes, you’ll need to allow for syncing on all of your accounts.</string>
     <string name="take_me_to_app_settings">Take me to the app settings</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="please_try_again">Please try again</string>
-    <string name="move_to_bitwarden">Move to Bitwarden</string>
+    <string name="copy_to_bitwarden_vault">Copy to Bitwarden vault</string>
     <string name="default_save_option">Default save option</string>
     <string name="save_to_bitwarden">Save to Bitwarden</string>
     <string name="save_here">Save here</string>
@@ -136,10 +135,15 @@
     <string name="choose_save_location_message">Save this authenticator key here, or add it to a login in your Bitwarden app.</string>
     <string name="save_option_as_default">Save option as default</string>
     <string name="account_synced_from_bitwarden_app">Account synced from Bitwarden app</string>
-    <string name="local_codes">Local codes</string>
+    <string name="local_codes">Local codes (%1$d)</string>
     <string name="required_information_missing">Required Information Missing</string>
     <string name="required_information_missing_message">"Required info is missing (e.g., ‘services’ or ‘secret’). Check your file and try again. Visit bitwarden.com/help for support"</string>
     <string name="file_could_not_be_processed">"File Could Not Be Processed"</string>
     <string name="file_could_not_be_processed_message">"File could not be processed. Ensure it’s valid JSON and try again. Need help? Visit bitwarden.com/help"</string>
     <string name="get_help">Get Help</string>
+    <string name="expand_advanced_options">Expand advanced options</string>
+    <string name="local_items_are_expanded_click_to_collapse">Local items are expanded, click to collapse.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
+    <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
+    <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
 </resources>
