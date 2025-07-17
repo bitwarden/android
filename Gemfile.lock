@@ -5,6 +5,7 @@ GEM
       base64
       nkf
       rexml
+    abbrev (0.1.2)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     artifactory (3.0.17)
@@ -34,6 +35,7 @@ GEM
     colored2 (3.1.2)
     commander (4.6.0)
       highline (~> 2.0.0)
+    csv (3.3.5)
     date (3.4.1)
     declarative (0.0.20)
     digest-crc (0.7.0)
@@ -179,6 +181,7 @@ GEM
     nkf (0.2.0)
     optparse (0.6.0)
     os (1.1.4)
+    ostruct (0.6.1)
     plist (3.7.2)
     public_suffix (6.0.2)
     rake (13.3.0)
@@ -230,12 +233,17 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  abbrev
+  csv
   fastlane
   fastlane-plugin-firebase_app_distribution
+  logger
+  mutex_m
+  ostruct
   time
 
 RUBY VERSION
-   ruby 3.3.1p55
+   ruby 3.4.2p28
 
 BUNDLED WITH
-   2.6.6
+   2.6.9
