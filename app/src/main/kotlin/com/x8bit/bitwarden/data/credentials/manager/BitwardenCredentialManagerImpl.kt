@@ -216,7 +216,7 @@ class BitwardenCredentialManagerImpl(
                         null
                     }
 
-                    is GetCipherResult.Error -> {
+                    is GetCipherResult.Failure -> {
                         Timber.e(
                             result.error,
                             "Failed to decrypt cipher while building credential entries.",

@@ -29,9 +29,10 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.assertScrollableNodeDoesNotExist
 import com.bitwarden.ui.util.onNodeWithTextAfterScroll
-import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherListViewType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
@@ -1015,7 +1016,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             overflowOptions = persistentListOf(
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = cipherId,
-                    cipherType = CipherType.LOGIN,
+                    cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
                     requiresPasswordReprompt = true,
                 ),
             ),
@@ -1081,7 +1082,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         val cipherId = "12345"
         val overflowAction = ListingItemOverflowAction.VaultAction.ViewClick(
             cipherId = cipherId,
-            cipherType = CipherType.LOGIN,
+            cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
             requiresPasswordReprompt = true,
         )
         val vaultItem = VaultState.ViewState.VaultItem.Login(
@@ -1267,7 +1268,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         val cipherId = "12345"
         val overflowAction = ListingItemOverflowAction.VaultAction.ViewClick(
             cipherId = cipherId,
-            cipherType = CipherType.LOGIN,
+            cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
             requiresPasswordReprompt = true,
         )
         val vaultItem = VaultState.ViewState.VaultItem.Login(
@@ -1337,7 +1338,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         val cipherId = "12345"
         val overflowAction = ListingItemOverflowAction.VaultAction.ViewClick(
             cipherId = cipherId,
-            cipherType = CipherType.LOGIN,
+            cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
             requiresPasswordReprompt = true,
         )
         val vaultItem = VaultState.ViewState.VaultItem.Login(
@@ -1849,9 +1850,6 @@ class VaultScreenTest : BitwardenComposeTest() {
                         VaultState.ViewState.VaultItem.SshKey(
                             id = "mockId",
                             name = "mockSshKey".asText(),
-                            publicKey = "mockPublicKey".asText(),
-                            privateKey = "mockPrivateKey".asText(),
-                            fingerprint = "mockFingerprint".asText(),
                             overflowOptions = emptyList(),
                             shouldShowMasterPasswordReprompt = false,
                         ),

@@ -30,7 +30,7 @@ class Fido2CredentialStoreImpl(
                 ?: throw IllegalStateException("Sync failed.")
         }
         return vaultRepository
-            .cipherListViewsWithFailuresStateFlow
+            .decryptCipherListResultStateFlow
             .value
             .data
             ?.successes
@@ -54,7 +54,7 @@ class Fido2CredentialStoreImpl(
         }
 
         return vaultRepository
-            .cipherListViewsWithFailuresStateFlow
+            .decryptCipherListResultStateFlow
             .value
             .data
             ?.successes
@@ -72,7 +72,7 @@ class Fido2CredentialStoreImpl(
                                 null
                             }
 
-                            is GetCipherResult.Error -> {
+                            is GetCipherResult.Failure -> {
                                 Timber.e(result.error, "Failed to decrypt cipher.")
                                 null
                             }
@@ -89,7 +89,7 @@ class Fido2CredentialStoreImpl(
     override suspend fun saveCredential(cred: EncryptionContext) {
         when (val result = vaultRepository.getCipher(cred.cipher.id.orEmpty())) {
             GetCipherResult.CipherNotFound -> Unit
-            is GetCipherResult.Error -> result.error?.let { throw it }
+            is GetCipherResult.Failure -> result.error?.let { throw it }
             is GetCipherResult.Success -> {
                 result.cipherView.id
                     ?.let { id ->

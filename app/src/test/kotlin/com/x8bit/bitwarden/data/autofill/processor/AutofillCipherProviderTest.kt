@@ -84,7 +84,7 @@ class AutofillCipherProviderTest {
         MutableStateFlow<DataState<DecryptCipherListResult>>(DataState.Loading)
     private val vaultRepository: VaultRepository = mockk {
         every {
-            cipherListViewsWithFailuresStateFlow
+            decryptCipherListResultStateFlow
         } returns mutableCipherListViewsWithFailuresStateFlow
         every { vaultUnlockDataStateFlow } returns mutableVaultStateFlow
         every { isVaultUnlocked(ACTIVE_USER_ID) } answers {

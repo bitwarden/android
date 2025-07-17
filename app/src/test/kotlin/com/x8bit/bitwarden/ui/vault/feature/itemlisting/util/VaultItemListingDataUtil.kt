@@ -4,8 +4,9 @@ import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
-import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherListViewType
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.persistentListOf
@@ -15,13 +16,14 @@ import kotlinx.collections.immutable.persistentListOf
  */
 fun createMockDisplayItemForCipher(
     number: Int,
-    cipherType: CipherType = CipherType.LOGIN,
+    cipherType: CipherListViewType =
+        CipherListViewType.Login(createMockLoginListView(number = number)),
     subtitle: String? = "mockUsername-$number",
     secondSubtitleTestTag: String? = null,
     requiresPasswordReprompt: Boolean = true,
 ): VaultItemListingState.DisplayItem =
     when (cipherType) {
-        CipherType.LOGIN -> {
+        is CipherListViewType.Login -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
@@ -51,7 +53,6 @@ fun createMockDisplayItemForCipher(
                         username = "mockUsername-$number",
                     ),
                     ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                        password = "mockPassword-$number",
                         requiresPasswordReprompt = requiresPasswordReprompt,
                         cipherId = "mockId-$number",
                     ),
@@ -82,7 +83,7 @@ fun createMockDisplayItemForCipher(
             )
         }
 
-        CipherType.SECURE_NOTE -> {
+        CipherListViewType.SecureNote -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
@@ -106,7 +107,7 @@ fun createMockDisplayItemForCipher(
                 ),
                 overflowOptions = listOf(
                     ListingItemOverflowAction.VaultAction.CopyNoteClick(
-                        notes = "mockNotes-$number",
+                        cipherId = "mockId-$number",
                         requiresPasswordReprompt = requiresPasswordReprompt,
                     ),
                     ListingItemOverflowAction.VaultAction.ViewClick(
@@ -129,7 +130,7 @@ fun createMockDisplayItemForCipher(
             )
         }
 
-        CipherType.CARD -> {
+        is CipherListViewType.Card -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
@@ -153,11 +154,10 @@ fun createMockDisplayItemForCipher(
                 ),
                 overflowOptions = listOf(
                     ListingItemOverflowAction.VaultAction.CopyNumberClick(
-                        number = "mockNumber-$number",
+                        cipherId = "mockId-$number",
                         requiresPasswordReprompt = requiresPasswordReprompt,
                     ),
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
-                        securityCode = "mockCode-$number",
                         cipherId = "mockId-$number",
                         requiresPasswordReprompt = requiresPasswordReprompt,
                     ),
@@ -181,7 +181,7 @@ fun createMockDisplayItemForCipher(
             )
         }
 
-        CipherType.IDENTITY -> {
+        CipherListViewType.Identity -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
@@ -224,7 +224,7 @@ fun createMockDisplayItemForCipher(
             )
         }
 
-        CipherType.SSH_KEY -> {
+        CipherListViewType.SshKey -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",

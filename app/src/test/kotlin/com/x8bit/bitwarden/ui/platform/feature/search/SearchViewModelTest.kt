@@ -15,7 +15,8 @@ import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
-import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
@@ -40,9 +41,12 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
@@ -161,9 +165,9 @@ class SearchViewModelTest : BaseViewModelTest() {
     fun setup() {
         mockkStatic(
             SavedStateHandle::toSearchArgs,
-            List<CipherView>::toViewState,
-            List<CipherView>::filterAndOrganize,
-            List<CipherView>::toFilteredList,
+            List<CipherListView>::toViewState,
+            List<CipherListView>::filterAndOrganize,
+            List<CipherListView>::toFilteredList,
         )
     }
 
@@ -171,9 +175,9 @@ class SearchViewModelTest : BaseViewModelTest() {
     fun tearDown() {
         unmockkStatic(
             SavedStateHandle::toSearchArgs,
-            List<CipherView>::toViewState,
-            List<CipherView>::filterAndOrganize,
-            List<CipherView>::toFilteredList,
+            List<CipherListView>::toViewState,
+            List<CipherListView>::filterAndOrganize,
+            List<CipherListView>::toFilteredList,
         )
     }
 
@@ -233,7 +237,11 @@ class SearchViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 SearchAction.ItemClick(
                     itemId = "mock",
-                    itemType = SearchState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
+                    itemType = SearchState.DisplayItem.ItemType.Vault(
+                        type = CipherListViewType.Login(
+                            createMockLoginListView(number = 1),
+                        ),
+                    ),
                 ),
             )
             assertEquals(
@@ -255,7 +263,11 @@ class SearchViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 SearchAction.ItemClick(
                     itemId = "mock",
-                    itemType = SearchState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
+                    itemType = SearchState.DisplayItem.ItemType.Vault(
+                        type = CipherListViewType.Login(
+                            createMockLoginListView(number = 1),
+                        ),
+                    ),
                 ),
             )
             assertEquals(
@@ -680,7 +692,9 @@ class SearchViewModelTest : BaseViewModelTest() {
                         masterPasswordRepromptData = MasterPasswordRepromptData.ViewItem(
                             cipherId = cipherId,
                             itemType = SearchState.DisplayItem.ItemType.Vault(
-                                type = CipherType.LOGIN,
+                                type = CipherListViewType.Login(
+                                    createMockLoginListView(number = 1),
+                                ),
                             ),
                         ),
                     ),
@@ -713,7 +727,9 @@ class SearchViewModelTest : BaseViewModelTest() {
                         masterPasswordRepromptData = MasterPasswordRepromptData.OverflowItem(
                             action = ListingItemOverflowAction.VaultAction.EditClick(
                                 cipherId = cipherId,
-                                cipherType = CipherType.LOGIN,
+                                cipherType = CipherListViewType.Login(
+                                    createMockLoginListView(number = 1),
+                                ),
                                 requiresPasswordReprompt = true,
                             ),
                         ),
@@ -928,7 +944,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyNoteClick(
-                        notes = notes,
+                        cipherId = "mockId-1",
                         requiresPasswordReprompt = false,
                     ),
                 ),
@@ -949,7 +965,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyNumberClick(
-                        number = number,
+                        cipherId = "mockId-1",
                         requiresPasswordReprompt = true,
                     ),
                 ),
@@ -1029,7 +1045,6 @@ class SearchViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                        password = password,
                         requiresPasswordReprompt = true,
                         cipherId = cipherId,
                     ),
@@ -1056,7 +1071,6 @@ class SearchViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
-                        securityCode = securityCode,
                         cipherId = cipherId,
                         requiresPasswordReprompt = true,
                     ),
@@ -1103,7 +1117,9 @@ class SearchViewModelTest : BaseViewModelTest() {
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = cipherId,
-                        cipherType = CipherType.LOGIN,
+                        cipherType = CipherListViewType.Login(
+                            createMockLoginListView(number = 1),
+                        ),
                         requiresPasswordReprompt = true,
                     ),
                 ),
@@ -1141,7 +1157,9 @@ class SearchViewModelTest : BaseViewModelTest() {
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = cipherId,
-                        cipherType = CipherType.LOGIN,
+                        cipherType = CipherListViewType.Login(
+                            createMockLoginListView(number = 1),
+                        ),
                         requiresPasswordReprompt = true,
                     ),
                 ),
@@ -1159,7 +1177,7 @@ class SearchViewModelTest : BaseViewModelTest() {
     @Test
     fun `vaultDataStateFlow Loaded with items should update ViewState to Content`() = runTest {
         setupMockUri()
-        val ciphers = listOf(createMockCipherView(number = 1))
+        val ciphers = listOf(createMockCipherListView(number = 1))
         val expectedViewState = SearchState.ViewState.Content(
             displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
         )
@@ -1184,7 +1202,10 @@ class SearchViewModelTest : BaseViewModelTest() {
         } returns expectedViewState
         val dataState = DataState.Loaded(
             data = VaultData(
-                cipherViewList = ciphers,
+                decryptCipherListResult = createMockDecryptCipherListResult(
+                    number = 1,
+                    successes = ciphers,
+                ),
                 folderViewList = listOf(createMockFolderView(number = 1)),
                 collectionViewList = listOf(createMockCollectionView(number = 1)),
                 sendViewList = listOf(createMockSendView(number = 1)),
@@ -1210,7 +1231,10 @@ class SearchViewModelTest : BaseViewModelTest() {
     fun `vaultDataStateFlow Loaded with empty items should update ViewState to Empty`() = runTest {
         val dataState = DataState.Loaded(
             data = VaultData(
-                cipherViewList = emptyList(),
+                decryptCipherListResult = createMockDecryptCipherListResult(
+                    number = 1,
+                    successes = emptyList(),
+                ),
                 folderViewList = emptyList(),
                 collectionViewList = emptyList(),
                 sendViewList = emptyList(),
@@ -1229,7 +1253,10 @@ class SearchViewModelTest : BaseViewModelTest() {
     fun `vaultDataStateFlow Loaded with trash items should update ViewState to Empty`() = runTest {
         val dataState = DataState.Loaded(
             data = VaultData(
-                cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
+                decryptCipherListResult = createMockDecryptCipherListResult(
+                    number = 1,
+                    successes = listOf(createMockCipherListView(number = 1, isDeleted = true)),
+                ),
                 folderViewList = listOf(createMockFolderView(number = 1)),
                 collectionViewList = listOf(createMockCollectionView(number = 1)),
                 sendViewList = listOf(createMockSendView(number = 1)),
@@ -1261,7 +1288,7 @@ class SearchViewModelTest : BaseViewModelTest() {
     @Test
     fun `vaultDataStateFlow Pending with data should update state to Content`() = runTest {
         setupMockUri()
-        val ciphers = listOf(createMockCipherView(number = 1))
+        val ciphers = listOf(createMockCipherListView(number = 1))
         val expectedViewState = SearchState.ViewState.Content(
             displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
         )
@@ -1287,7 +1314,10 @@ class SearchViewModelTest : BaseViewModelTest() {
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Pending(
                 data = VaultData(
-                    cipherViewList = ciphers,
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = ciphers,
+                    ),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
                     sendViewList = listOf(createMockSendView(number = 1)),
@@ -1314,7 +1344,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Pending(
                 data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1)),
+                    decryptCipherListResult = createMockDecryptCipherListResult(number = 1),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
                     sendViewList = listOf(createMockSendView(number = 1)),
@@ -1335,7 +1365,10 @@ class SearchViewModelTest : BaseViewModelTest() {
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Pending(
                 data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(createMockCipherListView(number = 1, isDeleted = true)),
+                    ),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
                     sendViewList = listOf(createMockSendView(number = 1)),
@@ -1373,7 +1406,7 @@ class SearchViewModelTest : BaseViewModelTest() {
     @Test
     fun `vaultDataStateFlow Error with data should update state to Content`() = runTest {
         setupMockUri()
-        val ciphers = listOf(createMockCipherView(number = 1))
+        val ciphers = listOf(createMockCipherListView(number = 1))
         val expectedViewState = SearchState.ViewState.Content(
             displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
         )
@@ -1398,7 +1431,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         } returns expectedViewState
         val dataState = DataState.Error(
             data = VaultData(
-                cipherViewList = listOf(createMockCipherView(number = 1)),
+                decryptCipherListResult = createMockDecryptCipherListResult(number = 1),
                 folderViewList = listOf(createMockFolderView(number = 1)),
                 collectionViewList = listOf(createMockCollectionView(number = 1)),
                 sendViewList = listOf(createMockSendView(number = 1)),
@@ -1421,7 +1454,10 @@ class SearchViewModelTest : BaseViewModelTest() {
     fun `vaultDataStateFlow Error with empty data should update state to Empty`() = runTest {
         val dataState = DataState.Error(
             data = VaultData(
-                cipherViewList = emptyList(),
+                decryptCipherListResult = createMockDecryptCipherListResult(
+                    number = 1,
+                    successes = emptyList(),
+                ),
                 folderViewList = emptyList(),
                 collectionViewList = emptyList(),
                 sendViewList = emptyList(),
@@ -1444,7 +1480,10 @@ class SearchViewModelTest : BaseViewModelTest() {
     fun `vaultDataStateFlow Error with trash data should update state to Empty`() = runTest {
         val dataState = DataState.Error(
             data = VaultData(
-                cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
+                decryptCipherListResult = createMockDecryptCipherListResult(
+                    number = 1,
+                    successes = listOf(createMockCipherListView(number = 1, isDeleted = true)),
+                ),
                 folderViewList = listOf(createMockFolderView(number = 1)),
                 collectionViewList = listOf(createMockCollectionView(number = 1)),
                 sendViewList = listOf(createMockSendView(number = 1)),
@@ -1488,7 +1527,7 @@ class SearchViewModelTest : BaseViewModelTest() {
     @Test
     fun `vaultDataStateFlow NoNetwork with data should update state to Content`() = runTest {
         setupMockUri()
-        val ciphers = listOf(createMockCipherView(number = 1))
+        val ciphers = listOf(createMockCipherListView(number = 1))
         val expectedViewState = SearchState.ViewState.Content(
             displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
         )
@@ -1513,7 +1552,10 @@ class SearchViewModelTest : BaseViewModelTest() {
         } returns expectedViewState
         val dataState = DataState.NoNetwork(
             data = VaultData(
-                cipherViewList = ciphers,
+                decryptCipherListResult = createMockDecryptCipherListResult(
+                    number = 1,
+                    successes = ciphers,
+                ),
                 folderViewList = listOf(createMockFolderView(number = 1)),
                 collectionViewList = listOf(createMockCollectionView(number = 1)),
                 sendViewList = listOf(createMockSendView(number = 1)),
@@ -1541,7 +1583,10 @@ class SearchViewModelTest : BaseViewModelTest() {
     fun `vaultDataStateFlow NoNetwork with empty data should update state to Empty`() = runTest {
         val dataState = DataState.NoNetwork(
             data = VaultData(
-                cipherViewList = emptyList(),
+                decryptCipherListResult = createMockDecryptCipherListResult(
+                    number = 1,
+                    successes = emptyList(),
+                ),
                 folderViewList = emptyList(),
                 collectionViewList = emptyList(),
                 sendViewList = emptyList(),
@@ -1563,7 +1608,10 @@ class SearchViewModelTest : BaseViewModelTest() {
     fun `vaultDataStateFlow NoNetwork with trash data should update state to Empty`() = runTest {
         val dataState = DataState.NoNetwork(
             data = VaultData(
-                cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
+                decryptCipherListResult = createMockDecryptCipherListResult(
+                    number = 1,
+                    successes = listOf(createMockCipherListView(number = 1, isDeleted = true)),
+                ),
                 folderViewList = listOf(createMockFolderView(number = 1)),
                 collectionViewList = listOf(createMockCollectionView(number = 1)),
                 sendViewList = listOf(createMockSendView(number = 1)),
@@ -1718,11 +1766,8 @@ class SearchViewModelTest : BaseViewModelTest() {
             autofillSelectionData = autofillSelectionData,
             shouldFinishWhenComplete = true,
         )
-        val cipherView = createMockCipherView(
-            number = 1,
-            fido2Credentials = createMockSdkFido2CredentialList(number = 1),
-        )
-        val ciphers = listOf(cipherView)
+        val cipherListView = createMockCipherListView(number = 1)
+        val ciphers = listOf(cipherListView)
         val expectedViewState = SearchState.ViewState.Content(
             displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
         )
@@ -1747,14 +1792,20 @@ class SearchViewModelTest : BaseViewModelTest() {
         } returns expectedViewState
         val dataState = DataState.Loaded(
             data = VaultData(
-                cipherViewList = ciphers,
+                decryptCipherListResult = createMockDecryptCipherListResult(
+                    number = 1,
+                    successes = ciphers,
+                ),
                 folderViewList = listOf(createMockFolderView(number = 1)),
                 collectionViewList = listOf(createMockCollectionView(number = 1)),
                 sendViewList = listOf(createMockSendView(number = 1)),
             ),
         )
         mutableVaultDataStateFlow.value = dataState
-        return cipherView
+        return createMockCipherView(
+            number = 1,
+            fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+        )
     }
 
     private fun setupMockUri() {

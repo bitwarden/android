@@ -2261,7 +2261,7 @@ class VaultItemListingViewModel @Inject constructor(
         cipherId: String,
     ) = when (val result = vaultRepository.getCipher(cipherId)) {
         is GetCipherResult.Success -> result.cipherView
-        is GetCipherResult.Error -> {
+        is GetCipherResult.Failure -> {
             Timber.e(result.error, "Failed to decrypt cipher.")
             sendAction(
                 VaultItemListingsAction.Internal.DecryptCipherErrorReceive(result.error),
@@ -2279,7 +2279,7 @@ class VaultItemListingViewModel @Inject constructor(
                 null
             }
 
-            is GetCipherResult.Error -> {
+            is GetCipherResult.Failure -> {
                 sendPasskeyDecryptionError(result.error)
                 null
             }

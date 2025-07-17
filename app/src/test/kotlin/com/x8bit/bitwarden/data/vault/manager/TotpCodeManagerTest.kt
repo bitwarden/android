@@ -11,9 +11,7 @@ import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.util.createVerificationCodeItem
 import io.mockk.coEvery
@@ -28,7 +26,7 @@ import java.time.ZoneOffset
 class TotpCodeManagerTest {
     private val userId = "userId"
     private val cipherList = listOf(
-        createMockCipherView(1, isDeleted = false),
+        createMockCipherListView(1, isDeleted = false),
     )
 
     private val vaultSdkSource: VaultSdkSource = mockk()
@@ -53,7 +51,7 @@ class TotpCodeManagerTest {
 
         val expected = createVerificationCodeItem()
 
-        totpCodeManager.getTotpCodesStateFlow(userId, cipherList).test {
+        totpCodeManager.getTotpCodesForCipherListViewsStateFlow(userId, cipherList).test {
             assertEquals(DataState.Loaded(listOf(expected)), awaitItem())
         }
     }
@@ -67,13 +65,10 @@ class TotpCodeManagerTest {
                 vaultSdkSource.generateTotp(any(), any(), any())
             } returns totpResponse.asSuccess()
 
-            val cipherView = createMockCipherView(1).copy(
-                login = createMockLoginView(number = 1, clock = clock).copy(
-                    totp = null,
-                ),
-            )
+            val cipherView = createMockCipherListView(1)
 
-            totpCodeManager.getTotpCodesStateFlow(userId, listOf(cipherView)).test {
+            totpCodeManager.getTotpCodesForCipherListViewsStateFlow(userId, listOf(cipherView))
+                .test {
                 assertEquals(DataState.Loaded(emptyList<VerificationCodeItem>()), awaitItem())
             }
         }
@@ -86,13 +81,10 @@ class TotpCodeManagerTest {
                 vaultSdkSource.generateTotp(any(), any(), any())
             } returns Exception().asFailure()
 
-            val cipherView = createMockCipherView(1).copy(
-                login = createMockLoginView(number = 1, clock = clock).copy(
-                    totp = null,
-                ),
-            )
+            val cipherView = createMockCipherListView(1)
 
-            totpCodeManager.getTotpCodesStateFlow(userId, listOf(cipherView)).test {
+            totpCodeManager.getTotpCodesForCipherListViewsStateFlow(userId, listOf(cipherView))
+                .test {
                 assertEquals(DataState.Loaded(emptyList<VerificationCodeItem>()), awaitItem())
             }
         }
@@ -104,9 +96,9 @@ class TotpCodeManagerTest {
             vaultSdkSource.generateTotp(any(), any(), any())
         } returns totpResponse.asSuccess()
 
-        val cipherView = createMockCipherView(
+        val cipherView = createMockCipherListView(
             number = 1,
-            repromptType = CipherRepromptType.PASSWORD,
+            reprompt = CipherRepromptType.PASSWORD,
         )
 
         val expected = createVerificationCodeItem().copy(hasPasswordReprompt = true)
@@ -124,9 +116,7 @@ class TotpCodeManagerTest {
                 vaultSdkSource.generateTotp(any(), any(), any())
             } returns totpResponse.asSuccess()
 
-            val cipherView = createMockCipherView(1).copy(
-                login = null,
-            )
+            val cipherView = createMockCipherListView(1)
 
             totpCodeManager.getTotpCodeStateFlow(userId, cipherView).test {
                 assertEquals(DataState.Loaded(null), awaitItem())

@@ -56,6 +56,7 @@ fun createMockCipherView(
         clock = clock,
         fido2Credentials = fido2Credentials,
     ),
+    card: CardView? = createMockCardView(number = number).takeIf { cipherType == CipherType.CARD },
     attachments: List<AttachmentView> = listOf(createMockAttachmentView(number = number)),
 ): CipherView =
     CipherView(
@@ -76,7 +77,7 @@ fun createMockCipherView(
         },
         revisionDate = clock.instant(),
         attachments = attachments,
-        card = createMockCardView(number = number).takeIf { cipherType == CipherType.CARD },
+        card = card,
         fields = listOf(createMockFieldView(number = number)),
         identity = createMockIdentityView(number = number).takeIf {
             cipherType == CipherType.IDENTITY
@@ -104,10 +105,12 @@ fun createMockLoginView(
     hasUris: Boolean = true,
     uris: List<LoginUriView>? = listOf(createMockUriView(number = number)),
     fido2Credentials: List<Fido2Credential>? = createMockSdkFido2CredentialList(number, clock),
+    username: String? = "mockUsername-$number",
+    password: String? = "mockPassword-$number",
 ): LoginView =
     LoginView(
-        username = "mockUsername-$number",
-        password = "mockPassword-$number",
+        username = username,
+        password = password,
         passwordRevisionDate = clock.instant(),
         autofillOnPageLoad = false,
         uris = uris.takeIf { hasUris },
@@ -188,13 +191,22 @@ fun createMockAttachmentView(number: Int, key: String? = "mockKey-$number"): Att
 /**
  * Create a mock [CardView] with a given [number].
  */
-fun createMockCardView(number: Int, brand: String = "mockBrand-$number"): CardView =
+@Suppress("LongParameterList")
+fun createMockCardView(
+    number: Int,
+    brand: String = "mockBrand-$number",
+    cardNumber: String? = "mockCardNumber-$number",
+    expMonth: String? = "mockExpMonth-$number",
+    code: String? = "mockCode-$number",
+    expYear: String? = "mockExpirationYear-$number",
+    cardholderName: String? = "mockCardholderName-$number",
+): CardView =
     CardView(
-        number = "mockNumber-$number",
-        expMonth = "mockExpMonth-$number",
-        code = "mockCode-$number",
-        expYear = "mockExpirationYear-$number",
-        cardholderName = "mockCardholderName-$number",
+        number = cardNumber,
+        expMonth = expMonth,
+        code = code,
+        expYear = expYear,
+        cardholderName = cardholderName,
         brand = brand,
     )
 

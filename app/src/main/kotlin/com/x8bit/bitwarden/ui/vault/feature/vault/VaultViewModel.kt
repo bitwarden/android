@@ -15,6 +15,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
+import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -577,45 +578,25 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleCopyNoteClick(action: ListingItemOverflowAction.VaultAction.CopyNoteClick) {
-        clipboardManager.setText(
-            text = action.cipherId,
-            toastDescriptorOverride = R.string.notes.asText(),
-        )
+        viewModelScope.launch {
+            getCipherForCopyOrNull(action.cipherId)?.let {
+                clipboardManager.setText(
+                    text = it.notes.orEmpty(),
+                    toastDescriptorOverride = R.string.notes.asText(),
+                )
+            }
+        }
     }
 
     private fun handleCopyNumberClick(
         action: ListingItemOverflowAction.VaultAction.CopyNumberClick,
     ) {
         viewModelScope.launch {
-            when (val result = vaultRepository.getCipher(action.cipherId)) {
-                GetCipherResult.CipherNotFound -> {
-                    Timber.e("Cipher not found while copying number")
-                    sendAction(
-                        VaultAction.Internal.DecryptionErrorReceive(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
-                            error = null,
-                        ),
-                    )
-                }
-
-                is GetCipherResult.Error -> {
-                    Timber.e(result.error, "Failed to decrypt cipher while copying number.")
-                    sendAction(
-                        VaultAction.Internal.DecryptionErrorReceive(
-                            title = R.string.decryption_error.asText(),
-                            message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
-                            error = result.error,
-                        ),
-                    )
-                }
-
-                is GetCipherResult.Success -> {
-                    clipboardManager.setText(
-                        text = result.cipherView.card?.number.orEmpty(),
-                        toastDescriptorOverride = R.string.number.asText(),
-                    )
-                }
+            getCipherForCopyOrNull(cipherId = action.cipherId)?.let {
+                clipboardManager.setText(
+                    text = it.card?.number.orEmpty(),
+                    toastDescriptorOverride = R.string.number.asText(),
+                )
             }
         }
     }
@@ -624,39 +605,16 @@ class VaultViewModel @Inject constructor(
         action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
     ) {
         viewModelScope.launch {
-            when (val result = vaultRepository.getCipher(action.cipherId)) {
-                GetCipherResult.CipherNotFound -> {
-                    Timber.e("Cipher not found while copying password.")
-                    sendAction(
-                        VaultAction.Internal.DecryptionErrorReceive(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
-                            error = null,
-                        ),
-                    )
-                }
-
-                is GetCipherResult.Error -> {
-                    sendAction(
-                        VaultAction.Internal.DecryptionErrorReceive(
-                            title = R.string.decryption_error.asText(),
-                            message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
-                            error = result.error,
-                        ),
-                    )
-                }
-
-                is GetCipherResult.Success -> {
-                    clipboardManager.setText(
-                        text = result.cipherView.login?.password.orEmpty(),
-                        toastDescriptorOverride = R.string.password.asText(),
-                    )
-                    organizationEventManager.trackEvent(
-                        event = OrganizationEvent.CipherClientCopiedPassword(
-                            cipherId = action.cipherId,
-                        ),
-                    )
-                }
+            getCipherForCopyOrNull(cipherId = action.cipherId)?.let {
+                clipboardManager.setText(
+                    text = it.login?.password.orEmpty(),
+                    toastDescriptorOverride = R.string.password.asText(),
+                )
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientCopiedPassword(
+                        cipherId = action.cipherId,
+                    ),
+                )
             }
         }
     }
@@ -665,39 +623,16 @@ class VaultViewModel @Inject constructor(
         action: ListingItemOverflowAction.VaultAction.CopySecurityCodeClick,
     ) {
         viewModelScope.launch {
-            when (val result = vaultRepository.getCipher(action.cipherId)) {
-                GetCipherResult.CipherNotFound -> {
-                    Timber.e("Cipher not found while copying security code.")
-                    sendAction(
-                        VaultAction.Internal.DecryptionErrorReceive(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
-                            error = null,
-                        ),
-                    )
-                }
-
-                is GetCipherResult.Error -> {
-                    sendAction(
-                        VaultAction.Internal.DecryptionErrorReceive(
-                            title = R.string.decryption_error.asText(),
-                            message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
-                            error = result.error,
-                        ),
-                    )
-                }
-
-                is GetCipherResult.Success -> {
-                    clipboardManager.setText(
-                        text = result.cipherView.card?.code.orEmpty(),
-                        toastDescriptorOverride = R.string.security_code.asText(),
-                    )
-                    organizationEventManager.trackEvent(
-                        event = OrganizationEvent.CipherClientCopiedCardCode(
-                            cipherId = action.cipherId,
-                        ),
-                    )
-                }
+            getCipherForCopyOrNull(cipherId = action.cipherId)?.let {
+                clipboardManager.setText(
+                    text = it.card?.code.orEmpty(),
+                    toastDescriptorOverride = R.string.security_code.asText(),
+                )
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientCopiedCardCode(
+                        cipherId = action.cipherId,
+                    ),
+                )
             }
         }
     }
@@ -1058,6 +993,35 @@ class VaultViewModel @Inject constructor(
             }
         }
     }
+
+    private suspend fun getCipherForCopyOrNull(cipherId: String): CipherView? =
+        when (val result = vaultRepository.getCipher(cipherId)) {
+            GetCipherResult.CipherNotFound -> {
+                Timber.e("Cipher not found while copying number")
+                sendAction(
+                    VaultAction.Internal.DecryptionErrorReceive(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.generic_error_message.asText(),
+                        error = null,
+                    ),
+                )
+                null
+            }
+
+            is GetCipherResult.Failure -> {
+                Timber.e(result.error, "Failed to decrypt cipher while copying number.")
+                sendAction(
+                    VaultAction.Internal.DecryptionErrorReceive(
+                        title = R.string.decryption_error.asText(),
+                        message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                        error = result.error,
+                    ),
+                )
+                null
+            }
+
+            is GetCipherResult.Success -> result.cipherView
+        }
 }
 
 /**

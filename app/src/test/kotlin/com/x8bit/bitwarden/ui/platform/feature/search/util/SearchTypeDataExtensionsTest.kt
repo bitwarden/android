@@ -4,14 +4,15 @@ import android.net.Uri
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
+import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
-import com.bitwarden.vault.CipherType
-import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
@@ -246,35 +247,35 @@ class SearchTypeDataExtensionsTest {
 
     @Test
     fun `CipherViews filterAndOrganize should return empty list when search term is blank`() {
-        val ciphers = listOf(createMockCipherView(number = 1))
+        val ciphers = listOf(createMockCipherListView(number = 1))
         val result = ciphers.filterAndOrganize(
             searchTypeData = SearchTypeData.Vault.Logins,
             searchTerm = "",
         )
-        assertEquals(emptyList<CipherView>(), result)
+        assertEquals(emptyList<CipherListView>(), result)
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `CipherViews filterAndOrganize should return filtered list when search term is not blank`() {
         val ciphers = listOf(
-            createMockCipherView(number = 1),
-            createMockCipherView(number = 2),
+            createMockCipherListView(number = 1),
+            createMockCipherListView(number = 2),
         )
         val result = ciphers.filterAndOrganize(
             searchTypeData = SearchTypeData.Vault.Logins,
             searchTerm = "1",
         )
-        assertEquals(listOf(createMockCipherView(number = 1)), result)
+        assertEquals(listOf(createMockCipherListView(number = 1)), result)
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `CipherViews filterAndOrganize should return list organized by priority when search term is not blank`() {
-        val match1 = createMockCipherView(number = 1).copy(name = "match1")
-        val match2 = createMockCipherView(number = 2).copy(name = "match2")
+        val match1 = createMockCipherListView(number = 1).copy(name = "match1")
+        val match2 = createMockCipherListView(number = 2).copy(name = "match2")
         val ciphers = listOf(
-            createMockCipherView(number = 0),
+            createMockCipherListView(number = 0),
             match2,
             match1,
         )
@@ -287,9 +288,9 @@ class SearchTypeDataExtensionsTest {
 
     @Test
     fun `CipherViews filterAndOrganize should return list without deleted items`() {
-        val match1 = createMockCipherView(number = 1, isDeleted = true).copy(name = "match1")
-        val match2 = createMockCipherView(number = 2).copy(name = "match2")
-        val match3 = createMockCipherView(number = 3, isDeleted = true).copy(name = "match3")
+        val match1 = createMockCipherListView(number = 1, isDeleted = true).copy(name = "match1")
+        val match2 = createMockCipherListView(number = 2).copy(name = "match2")
+        val match3 = createMockCipherListView(number = 3, isDeleted = true).copy(name = "match3")
         val ciphers = listOf(match1, match2, match3)
         val result = ciphers.filterAndOrganize(
             searchTypeData = SearchTypeData.Vault.Logins,
@@ -300,9 +301,9 @@ class SearchTypeDataExtensionsTest {
 
     @Test
     fun `CipherViews filterAndOrganize should return list with only deleted items`() {
-        val match1 = createMockCipherView(number = 1, isDeleted = true).copy(name = "match1")
-        val match2 = createMockCipherView(number = 2).copy(name = "match2")
-        val match3 = createMockCipherView(number = 3, isDeleted = true).copy(name = "match3")
+        val match1 = createMockCipherListView(number = 1, isDeleted = true).copy(name = "match1")
+        val match2 = createMockCipherListView(number = 2).copy(name = "match2")
+        val match3 = createMockCipherListView(number = 3, isDeleted = true).copy(name = "match3")
         val ciphers = listOf(match1, match2, match3)
         val result = ciphers.filterAndOrganize(
             searchTypeData = SearchTypeData.Vault.Trash,
@@ -315,9 +316,9 @@ class SearchTypeDataExtensionsTest {
     @Test
     fun `CipherViews toViewState should return empty state with no message when search term is blank`() {
         val ciphers = listOf(
-            createMockCipherView(number = 0),
-            createMockCipherView(number = 1),
-            createMockCipherView(number = 2),
+            createMockCipherListView(number = 0),
+            createMockCipherListView(number = 1),
+            createMockCipherListView(number = 2),
         )
 
         val result = ciphers.toViewState(
@@ -340,9 +341,9 @@ class SearchTypeDataExtensionsTest {
             every { host } returns "www.mockuri.com"
         }
         val sends = listOf(
-            createMockCipherView(number = 0),
-            createMockCipherView(number = 1),
-            createMockCipherView(number = 2),
+            createMockCipherListView(number = 0),
+            createMockCipherListView(number = 1),
+            createMockCipherListView(number = 2),
         )
 
         val result = sends.toViewState(
@@ -374,15 +375,15 @@ class SearchTypeDataExtensionsTest {
             every { host } returns "www.mockuri.com"
         }
         val sends = listOf(
-            createMockCipherView(
+            createMockCipherListView(
                 number = 0,
-                cipherType = CipherType.CARD,
+                type = CipherListViewType.Card(createMockCardListView(number = 1)),
             )
                 .copy(
                     reprompt = CipherRepromptType.PASSWORD,
                 ),
-            createMockCipherView(number = 1),
-            createMockCipherView(number = 2),
+            createMockCipherListView(number = 1),
+            createMockCipherListView(number = 2),
         )
 
         val result = sends.toViewState(
@@ -399,7 +400,7 @@ class SearchTypeDataExtensionsTest {
                 displayItems = listOf(
                     createMockDisplayItemForCipher(
                         number = 0,
-                        cipherType = CipherType.CARD,
+                        cipherType = CipherListViewType.Card(createMockCardListView(number = 1)),
                     )
                         .copy(
                             autofillSelectionOptions = listOf(
@@ -435,7 +436,7 @@ class SearchTypeDataExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `CipherViews toViewState should return empty state with message when search term is not blank and ciphers is empty`() {
-        val result = emptyList<CipherView>().toViewState(
+        val result = emptyList<CipherListView>().toViewState(
             searchTerm = "a",
             baseIconUrl = "www.test.com",
             isIconLoadingDisabled = false,
@@ -459,11 +460,17 @@ class SearchTypeDataExtensionsTest {
             every { host } returns "www.mockuri.com"
         }
         val result = listOf(
-            createMockCipherView(
-                number = 1,
-                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+            createMockCipherListView(number = 1),
+            createMockCipherListView(
+                number = 2,
+                type = CipherListViewType.Login(
+                    createMockLoginListView(
+                        number = 2,
+                        hasFido2 = false,
+                        fido2Credentials = emptyList(),
+                    ),
+                ),
             ),
-            createMockCipherView(number = 2),
         ).toViewState(
             searchTerm = "mock",
             baseIconUrl = "https://vault.bitwarden.com/icons",

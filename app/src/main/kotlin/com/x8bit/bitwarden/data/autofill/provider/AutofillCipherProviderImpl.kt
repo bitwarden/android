@@ -125,7 +125,7 @@ class AutofillCipherProviderImpl(
      */
     private suspend fun getUnlockedCipherListViewsOrNull(): List<CipherListView>? =
         vaultRepository
-            .cipherListViewsWithFailuresStateFlow
+            .decryptCipherListResultStateFlow
             .takeUnless { isVaultLocked() }
             ?.firstWithTimeoutOrNull(timeMillis = GET_CIPHERS_TIMEOUT_MS) { it.data != null }
             ?.data
@@ -138,7 +138,7 @@ class AutofillCipherProviderImpl(
                 Timber.e("Cipher not found for autofill.")
                 null
             }
-            is GetCipherResult.Error -> {
+            is GetCipherResult.Failure -> {
                 Timber.e(result.error, "Failed to decrypt cipher for autofill.")
                 null
             }

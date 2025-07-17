@@ -3167,7 +3167,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             every {
                 vaultRepository
-                    .cipherListViewsWithFailuresStateFlow
+                    .decryptCipherListResultStateFlow
                     .value
                     .data
                     ?.successes
@@ -3224,7 +3224,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             } returns ValidateOriginResult.Success("mockOrigin")
             every {
                 vaultRepository
-                    .cipherListViewsWithFailuresStateFlow
+                    .decryptCipherListResultStateFlow
                     .value
                     .data
                     ?.successes
@@ -3272,7 +3272,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             every {
                 vaultRepository
-                    .cipherListViewsWithFailuresStateFlow
+                    .decryptCipherListResultStateFlow
                     .value
                     .data
                     ?.successes
@@ -3324,7 +3324,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             every {
                 vaultRepository
-                    .cipherListViewsWithFailuresStateFlow
+                    .decryptCipherListResultStateFlow
                     .value
                     .data
                     ?.successes
@@ -3416,7 +3416,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             } returns UserVerificationRequirement.REQUIRED
             every {
                 vaultRepository
-                    .cipherListViewsWithFailuresStateFlow
+                    .decryptCipherListResultStateFlow
                     .value
                     .data
                     ?.successes
@@ -3477,7 +3477,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             } returns UserVerificationRequirement.PREFERRED
             every {
                 vaultRepository
-                    .cipherListViewsWithFailuresStateFlow
+                    .decryptCipherListResultStateFlow
                     .value
                     .data
                     ?.successes
@@ -3539,7 +3539,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             } returns UserVerificationRequirement.DISCOURAGED
             every {
                 vaultRepository
-                    .cipherListViewsWithFailuresStateFlow
+                    .decryptCipherListResultStateFlow
                     .value
                     .data
                     ?.successes
@@ -3596,7 +3596,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             every { bitwardenCredentialManager.isUserVerified } returns true
             every {
                 vaultRepository
-                    .cipherListViewsWithFailuresStateFlow
+                    .decryptCipherListResultStateFlow
                     .value
                     .data
                     ?.successes
@@ -3648,7 +3648,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             every { bitwardenCredentialManager.isUserVerified } returns true
             every {
                 vaultRepository
-                    .cipherListViewsWithFailuresStateFlow
+                    .decryptCipherListResultStateFlow
                     .value
                     .data
                     ?.successes
@@ -3691,7 +3691,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             every {
                 vaultRepository
-                    .cipherListViewsWithFailuresStateFlow
+                    .decryptCipherListResultStateFlow
                     .value
                     .data
             } returns null
@@ -3733,7 +3733,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             every {
                 vaultRepository
-                    .cipherListViewsWithFailuresStateFlow
+                    .decryptCipherListResultStateFlow
                     .value
                     .data
                     ?.successes
@@ -3796,7 +3796,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         every {
             vaultRepository
-                .cipherListViewsWithFailuresStateFlow
+                .decryptCipherListResultStateFlow
                 .value
                 .data
                 ?.successes
@@ -3841,7 +3841,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { bitwardenCredentialManager.isUserVerified } returns true
         every {
             vaultRepository
-                .cipherListViewsWithFailuresStateFlow
+                .decryptCipherListResultStateFlow
                 .value
                 .data
                 ?.successes
@@ -3898,7 +3898,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { bitwardenCredentialManager.isUserVerified } returns true
         every {
             vaultRepository
-                .cipherListViewsWithFailuresStateFlow
+                .decryptCipherListResultStateFlow
                 .value
                 .data
                 ?.successes
@@ -3965,7 +3965,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             every { bitwardenCredentialManager.isUserVerified } returns true
             every {
                 vaultRepository
-                    .cipherListViewsWithFailuresStateFlow
+                    .decryptCipherListResultStateFlow
                     .value
                     .data
                     ?.successes
@@ -4241,7 +4241,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             }
             every {
                 vaultRepository
-                    .cipherListViewsWithFailuresStateFlow
+                    .decryptCipherListResultStateFlow
                     .value
                     .data
                     ?.successes
@@ -5174,7 +5174,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 )
             } returns Fido2CredentialAssertionResult.Success("")
             every {
-                vaultRepository.cipherListViewsWithFailuresStateFlow
+                vaultRepository.decryptCipherListResultStateFlow
             } returns MutableStateFlow(
                 DataState.Loaded(
                     data = createMockDecryptCipherListResult(
@@ -5245,7 +5245,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 )
 
             every {
-                vaultRepository.cipherListViewsWithFailuresStateFlow
+                vaultRepository.decryptCipherListResultStateFlow
             } returns MutableStateFlow(
                 DataState.Loaded(
                     data = createMockDecryptCipherListResult(
@@ -5318,7 +5318,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 )
 
             every {
-                vaultRepository.cipherListViewsWithFailuresStateFlow
+                vaultRepository.decryptCipherListResultStateFlow
             } returns MutableStateFlow(
                 DataState.Loaded(
                     data = createMockDecryptCipherListResult(

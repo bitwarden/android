@@ -1793,7 +1793,7 @@ class VaultAddEditViewModel @Inject constructor(
                             null
                         }
 
-                        is GetCipherResult.Error -> {
+                        is GetCipherResult.Failure -> {
                             Timber.e(result.error, "Failed to decrypt cipher.")
                             null
                         }

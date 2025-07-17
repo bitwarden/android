@@ -66,7 +66,7 @@ interface VaultRepository : CipherManager, VaultLockManager {
      * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself
      * must be collected in order to trigger state changes.
      */
-    val cipherListViewsWithFailuresStateFlow: StateFlow<DataState<DecryptCipherListResult>>
+    val decryptCipherListResultStateFlow: StateFlow<DataState<DecryptCipherListResult>>
 
     /**
      * Flow that represents all collections for the active user.

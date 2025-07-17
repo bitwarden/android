@@ -32,6 +32,7 @@ import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
+import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.DecryptCipherListResult
@@ -169,7 +170,7 @@ class VaultRepositoryImpl(
 
     private val mutableSendDataStateFlow = MutableStateFlow<DataState<SendData>>(DataState.Loading)
 
-    private val mutableCipherListViewsWithFailuresStateFlow =
+    private val mutableDecryptCipherListResultFlow =
         MutableStateFlow<DataState<DecryptCipherListResult>>(DataState.Loading)
 
     private val mutableFoldersStateFlow =
@@ -185,7 +186,7 @@ class VaultRepositoryImpl(
 
     override val vaultDataStateFlow: StateFlow<DataState<VaultData>> =
         combine(
-            cipherListViewsWithFailuresStateFlow,
+            decryptCipherListResultStateFlow,
             foldersStateFlow,
             collectionsStateFlow,
             sendDataStateFlow,
@@ -213,8 +214,8 @@ class VaultRepositoryImpl(
     override val totpCodeFlow: Flow<TotpCodeResult>
         get() = mutableTotpCodeResultFlow.asSharedFlow()
 
-    override val cipherListViewsWithFailuresStateFlow: StateFlow<DataState<DecryptCipherListResult>>
-        get() = mutableCipherListViewsWithFailuresStateFlow.asStateFlow()
+    override val decryptCipherListResultStateFlow: StateFlow<DataState<DecryptCipherListResult>>
+        get() = mutableDecryptCipherListResultFlow.asStateFlow()
 
     override val domainsStateFlow: StateFlow<DataState<DomainsData>>
         get() = mutableDomainsStateFlow.asStateFlow()
@@ -253,7 +254,7 @@ class VaultRepositoryImpl(
             .launchIn(unconfinedScope)
 
         // Setup ciphers MutableStateFlow
-        mutableCipherListViewsWithFailuresStateFlow
+        mutableDecryptCipherListResultFlow
             .observeWhenSubscribedAndUnlocked(
                 userStateFlow = authDiskSource.userStateFlow,
                 vaultUnlockFlow = vaultUnlockDataStateFlow,
@@ -340,7 +341,7 @@ class VaultRepositoryImpl(
     }
 
     private fun clearUnlockedData() {
-        mutableCipherListViewsWithFailuresStateFlow.update { DataState.Loading }
+        mutableDecryptCipherListResultFlow.update { DataState.Loading }
         mutableFoldersStateFlow.update { DataState.Loading }
         mutableCollectionsStateFlow.update { DataState.Loading }
         mutableSendDataStateFlow.update { DataState.Loading }
@@ -355,7 +356,7 @@ class VaultRepositoryImpl(
     override fun sync(forced: Boolean) {
         val userId = activeUserId ?: return
         if (!syncJob.isCompleted) return
-        mutableCipherListViewsWithFailuresStateFlow.updateToPendingOrLoading()
+        mutableDecryptCipherListResultFlow.updateToPendingOrLoading()
         mutableDomainsStateFlow.updateToPendingOrLoading()
         mutableFoldersStateFlow.updateToPendingOrLoading()
         mutableCollectionsStateFlow.updateToPendingOrLoading()
@@ -478,7 +479,7 @@ class VaultRepositoryImpl(
             .flatMapLatest { cipherDataState ->
                 val cipherList = cipherDataState.data ?: emptyList()
                 totpCodeManager
-                    .getTotpCodesStateFlow(
+                    .getTotpCodesForCipherListViewsStateFlow(
                         userId = userId,
                         cipherListViews = cipherList,
                     )
@@ -1068,7 +1069,7 @@ class VaultRepositoryImpl(
     ): Flow<DataState<DecryptCipherListResult>> =
         vaultDiskSource
             .getCiphersFlow(userId = userId)
-            .onStart { mutableCipherListViewsWithFailuresStateFlow.updateToPendingOrLoading() }
+            .onStart { mutableDecryptCipherListResultFlow.updateToPendingOrLoading() }
             .map {
                 waitUntilUnlocked(userId = userId)
                 vaultSdkSource
@@ -1091,7 +1092,7 @@ class VaultRepositoryImpl(
                     .takeUnless { settingsDiskSource.getLastSyncTime(userId = userId) == null }
                     ?: DataState.Loading
             }
-            .onEach { mutableCipherListViewsWithFailuresStateFlow.value = it }
+            .onEach { mutableDecryptCipherListResultFlow.value = it }
 
     private fun observeVaultDiskDomains(
         userId: String,
@@ -1175,7 +1176,7 @@ class VaultRepositoryImpl(
             .onEach { mutableSendDataStateFlow.value = it }
 
     private fun updateVaultStateFlowsToError(throwable: Throwable) {
-        mutableCipherListViewsWithFailuresStateFlow.update { currentState ->
+        mutableDecryptCipherListResultFlow.update { currentState ->
             throwable.toNetworkOrErrorState(
                 data = currentState.data,
             )
@@ -1243,7 +1244,7 @@ class VaultRepositoryImpl(
         val revisionDate = syncCipherUpsertData.revisionDate
         val isUpdate = syncCipherUpsertData.isUpdate
 
-        val localCipher = cipherListViewsWithFailuresStateFlow
+        val localCipher = decryptCipherListResultStateFlow
             .mapNotNull { it.data?.successes }
             .first()
             .find { it.id == cipherId }

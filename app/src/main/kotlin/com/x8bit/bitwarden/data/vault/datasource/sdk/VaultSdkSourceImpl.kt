@@ -21,6 +21,7 @@ import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
+import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
@@ -288,17 +289,6 @@ class VaultSdkSourceImpl(
                 .vault()
                 .ciphers()
                 .decrypt(cipher = cipher)
-        }
-
-    override suspend fun decryptCipherListWithFailures(
-        userId: String,
-        cipherList: List<Cipher>,
-    ): Result<DecryptCipherListResult> =
-        runCatchingWithLogs {
-            getClient(userId = userId)
-                .vault()
-                .ciphers()
-                .decryptListWithFailures(cipherList)
         }
 
     override suspend fun decryptCipherListWithFailures(

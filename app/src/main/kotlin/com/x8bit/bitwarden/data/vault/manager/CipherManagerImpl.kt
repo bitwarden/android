@@ -52,30 +52,6 @@ class CipherManagerImpl(
 ) : CipherManager {
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
-    override suspend fun getCipher(cipherId: String): GetCipherResult {
-        val userId = activeUserId
-            ?: return GetCipherResult.Error(
-                error = NoActiveUserException(),
-                errorMessage = null,
-            )
-
-        return vaultDiskSource
-            .getCipher(userId = userId, cipherId = cipherId)
-            ?.toEncryptedSdkCipher()
-            ?.let { cipher ->
-                vaultSdkSource
-                    .decryptCipher(
-                        userId = userId,
-                        cipher = cipher,
-                    )
-                    .fold(
-                        onSuccess = { GetCipherResult.Success(cipherView = it) },
-                        onFailure = { GetCipherResult.Error(error = it, errorMessage = null) },
-                    )
-            }
-            ?: GetCipherResult.CipherNotFound
-    }
-
     override suspend fun createCipher(cipherView: CipherView): CreateCipherResult {
         val userId = activeUserId
             ?: return CreateCipherResult.Error(

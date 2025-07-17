@@ -924,7 +924,7 @@ class SearchViewModel @Inject constructor(
                 null
             }
 
-            is GetCipherResult.Error -> {
+            is GetCipherResult.Failure -> {
                 Timber.e(result.error, "Failed to decrypt cipher.")
                 SearchAction.Internal.DecryptCipherErrorReceive(error = result.error)
                 null
