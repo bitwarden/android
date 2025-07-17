@@ -3,8 +3,10 @@ package com.x8bit.bitwarden.data.vault.manager
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherView
+import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import kotlinx.coroutines.CoroutineScope
@@ -35,6 +37,9 @@ class TotpCodeManagerImpl(
 
     private val mutableVerificationCodeStateFlowMap =
         mutableMapOf<CipherView, StateFlow<DataState<VerificationCodeItem?>>>()
+
+    private val mutableCipherListViewVerificationCodeStateFlowMap =
+        mutableMapOf<CipherListView, StateFlow<DataState<VerificationCodeItem?>>>()
 
     override fun getTotpCodesStateFlow(
         userId: String,
@@ -73,6 +78,43 @@ class TotpCodeManagerImpl(
             cipher = cipher,
         )
 
+    override fun getTotpCodesForCipherListViewsStateFlow(
+        userId: String,
+        cipherListViews: List<CipherListView>,
+    ): StateFlow<DataState<List<VerificationCodeItem>>> {
+        // Generate state flows
+        val stateFlows = cipherListViews.map { cipherListView ->
+            getTotpCodeStateFlowInternal(userId, cipherListView)
+        }
+        return combine(stateFlows) { results ->
+            when {
+                results.any { it is DataState.Loading } -> {
+                    DataState.Loading
+                }
+
+                else -> {
+                    DataState.Loaded(
+                        data = results.mapNotNull { (it as DataState.Loaded).data },
+                    )
+                }
+            }
+        }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = DataState.Loading,
+            )
+    }
+
+    override fun getTotpCodeStateFlow(
+        userId: String,
+        cipherListView: CipherListView,
+    ): StateFlow<DataState<VerificationCodeItem?>> =
+        getTotpCodeStateFlowInternal(
+            userId = userId,
+            cipherListView = cipherListView,
+        )
+
     @Suppress("LongMethod")
     private fun getTotpCodeStateFlowInternal(
         userId: String,
@@ -108,7 +150,6 @@ class TotpCodeManagerImpl(
                             .onSuccess { response ->
                                 item = VerificationCodeItem(
                                     code = response.code,
-                                    totpCode = totpCode,
                                     periodSeconds = response.period.toInt(),
                                     timeLeftSeconds = response.period.toInt() -
                                         time % response.period.toInt(),
@@ -129,12 +170,9 @@ class TotpCodeManagerImpl(
                                 return@flow
                             }
                     } else {
-                        item?.let {
-                            item = it.copy(
-                                timeLeftSeconds = it.periodSeconds -
-                                    (time % it.periodSeconds),
-                            )
-                        }
+                        item = item.copy(
+                            timeLeftSeconds = item.periodSeconds - (time % item.periodSeconds),
+                        )
                     }
 
                     item?.let {
@@ -145,6 +183,78 @@ class TotpCodeManagerImpl(
             }
                 .onCompletion {
                     mutableVerificationCodeStateFlowMap.remove(cipher)
+                    itemScope.cancel()
+                }
+                .stateIn(
+                    scope = itemScope,
+                    started = SharingStarted.WhileSubscribed(),
+                    initialValue = DataState.Loading,
+                )
+        }
+    }
+
+    @Suppress("LongMethod")
+    private fun getTotpCodeStateFlowInternal(
+        userId: String,
+        cipherListView: CipherListView?,
+    ): StateFlow<DataState<VerificationCodeItem?>> {
+        val cipherId = cipherListView?.id ?: return MutableStateFlow(DataState.Loaded(null))
+        cipherListView.login?.totp ?: return MutableStateFlow(DataState.Loaded(null))
+
+        return mutableCipherListViewVerificationCodeStateFlowMap.getOrPut(cipherListView) {
+            // Define a per-item scope so that we can clear the Flow from the scope when it is
+            // no longer needed.
+            val itemScope = CoroutineScope(dispatcherManager.unconfined)
+
+            flow<DataState<VerificationCodeItem?>> {
+
+                var item: VerificationCodeItem? = null
+                while (currentCoroutineContext().isActive) {
+                    val dateTime = clock.instant()
+                    val time = dateTime.epochSecond.toInt()
+                    if (item == null || item.isExpired(clock = clock)) {
+                        vaultSdkSource
+                            .generateTotpForCipherListView(
+                                cipherListView = cipherListView,
+                                userId = userId,
+                                time = dateTime,
+                            )
+                            .onSuccess { response ->
+                                item = VerificationCodeItem(
+                                    code = response.code,
+                                    periodSeconds = response.period.toInt(),
+                                    timeLeftSeconds = response.period.toInt() -
+                                        time % response.period.toInt(),
+                                    issueTime = clock.millis(),
+                                    uriLoginViewList = cipherListView.login?.uris,
+                                    id = cipherId,
+                                    name = cipherListView.name,
+                                    username = cipherListView.login?.username,
+                                    hasPasswordReprompt = when (cipherListView.reprompt) {
+                                        CipherRepromptType.PASSWORD -> true
+                                        CipherRepromptType.NONE -> false
+                                    },
+                                    orgUsesTotp = cipherListView.organizationUseTotp,
+                                )
+                            }
+                            .onFailure {
+                                emit(DataState.Loaded(null))
+                                return@flow
+                            }
+                    } else {
+                        item = item.copy(
+                            timeLeftSeconds = item.periodSeconds - (time % item.periodSeconds),
+                        )
+                    }
+
+                    item?.let {
+                        emit(DataState.Loaded(it))
+                    }
+                    delay(ONE_SECOND_MILLISECOND)
+                }
+            }
+                .onCompletion {
+                    mutableCipherListViewVerificationCodeStateFlowMap.remove(cipherListView)
                     itemScope.cancel()
                 }
                 .stateIn(
