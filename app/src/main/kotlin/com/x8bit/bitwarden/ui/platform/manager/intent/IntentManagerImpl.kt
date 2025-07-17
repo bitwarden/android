@@ -119,7 +119,7 @@ class IntentManagerImpl(
         try {
             val intent = Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE)
                 .apply {
-                    data = Uri.parse("package:${context.packageName}")
+                    data = "package:${context.packageName}".toUri()
                 }
             context.startActivity(intent)
             true
@@ -129,7 +129,7 @@ class IntentManagerImpl(
 
     override fun startApplicationDetailsSettingsActivity() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        intent.data = Uri.parse("package:" + context.packageName)
+        intent.data = "package:${context.packageName}".toUri()
         startActivity(intent = intent)
     }
 
@@ -210,8 +210,21 @@ class IntentManagerImpl(
         return if (uri != null) getLocalFileData(uri) else getCameraFileData()
     }
 
-    override fun getFileDataFromIntent(intent: Intent): IntentManager.FileData? =
-        intent.clipData?.getItemAt(0)?.uri?.let { getLocalFileData(it) }
+    override fun getFileDataFromIntent(
+        intent: Intent,
+    ): IntentManager.FileData? = intent
+        .clipData
+        ?.getItemAt(0)
+        ?.uri
+        ?.takeUnless { uri ->
+            val uriString = uri.toString()
+            context
+                .packageManager
+                .getPackageInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_PROVIDERS)
+                .providers
+                ?.any { uriString.contains(other = it.authority) } == true
+        }
+        ?.let { getLocalFileData(it) }
 
     override fun getShareDataFromIntent(intent: Intent): IntentManager.ShareData? {
         if (intent.action != Intent.ACTION_SEND) return null
