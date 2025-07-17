@@ -98,6 +98,64 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `init with email auth method and not new device verification should call resendEmail`() {
+        val initialState = DEFAULT_STATE.copy(
+            authMethod = TwoFactorAuthMethod.EMAIL,
+            isNewDeviceVerification = false,
+        )
+        coEvery { authRepository.resendVerificationCodeEmail() } returns ResendEmailResult.Success
+
+        createViewModel(state = initialState)
+
+        coVerify(exactly = 1) {
+            authRepository.resendVerificationCodeEmail()
+        }
+    }
+
+    @Test
+    fun `init with email auth method and new device verification should not call resendEmail`() {
+        val initialState = DEFAULT_STATE.copy(
+            authMethod = TwoFactorAuthMethod.EMAIL,
+            isNewDeviceVerification = true,
+        )
+        coEvery { authRepository.resendVerificationCodeEmail() } returns ResendEmailResult.Success
+
+        createViewModel(state = initialState)
+
+        coVerify(exactly = 0) {
+            authRepository.resendVerificationCodeEmail()
+        }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `init with non-email auth method and not new device verification should not call resendEmail`() {
+        val initialState = DEFAULT_STATE.copy(
+            authMethod = TwoFactorAuthMethod.AUTHENTICATOR_APP,
+            isNewDeviceVerification = false,
+        )
+        coEvery { authRepository.resendVerificationCodeEmail() } returns ResendEmailResult.Success
+
+        createViewModel(state = initialState)
+
+        coVerify(exactly = 0) {
+            authRepository.resendVerificationCodeEmail()
+        }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `init with non-email auth method and new device verification should not call resendEmail`() {
+        val initialState = DEFAULT_STATE.copy(
+            authMethod = TwoFactorAuthMethod.AUTHENTICATOR_APP,
+            isNewDeviceVerification = true,
+        )
+        createViewModel(state = initialState)
+
+        coVerify(exactly = 0) { authRepository.resendVerificationCodeEmail() }
+    }
+
+    @Test
     fun `yubiKeyResultFlow update should populate the input field and attempt login`() {
         val initialState = DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.YUBI_KEY)
         val token = "token"
@@ -898,6 +956,27 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `sendVerificationCodeEmail with isUserInitiated false should not show loading and snackbar on success`() =
+        runTest {
+            coEvery { authRepository.resendVerificationCodeEmail() } returns ResendEmailResult.Success
+            val viewModel = createViewModel()
+            // Simulate initial email send (not user initiated)
+            viewModel.trySendAction(
+                TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
+                    ResendEmailResult.Success,
+                    isUserInitiated = false,
+                ),
+            )
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                // No loading dialog
+                assertEquals(DEFAULT_STATE, stateFlow.awaitItem())
+                // No snackbar
+                eventFlow.expectNoEvents()
+            }
+        }
 
     @Test
     fun `ResendEmailClick returns success should emit ShowSnackbar`() = runTest {

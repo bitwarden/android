@@ -9,6 +9,7 @@ import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.SyncResponseJson
@@ -18,8 +19,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.util.sanitizeTotpUri
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.ScopedVaultSdkSource
@@ -35,7 +34,6 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -47,14 +45,12 @@ import java.time.ZonedDateTime
 
 class AuthenticatorBridgeRepositoryTest {
 
-    private val authRepository = mockk<AuthRepository>()
     private val scopedVaultSdkSource = mockk<ScopedVaultSdkSource>()
     private val vaultDiskSource = mockk<VaultDiskSource>()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
 
     private val authenticatorBridgeRepository: AuthenticatorBridgeRepository =
         AuthenticatorBridgeRepositoryImpl(
-            authRepository = authRepository,
             authDiskSource = fakeAuthDiskSource,
             vaultDiskSource = vaultDiskSource,
             scopedVaultSdkSource = scopedVaultSdkSource,
@@ -73,7 +69,6 @@ class AuthenticatorBridgeRepositoryTest {
             SYMMETRIC_KEY.symmetricEncryptionKey.byteArray
 
         // Setup authRepository to return default USER_STATE:
-        every { authRepository.userStateFlow } returns MutableStateFlow(USER_STATE)
         fakeAuthDiskSource.userState = USER_STATE_JSON
 
         // Setup authDiskSource to have each user's authenticator sync unlock key:
@@ -168,7 +163,7 @@ class AuthenticatorBridgeRepositoryTest {
 
     @AfterEach
     fun teardown() {
-        confirmVerified(authRepository, scopedVaultSdkSource, vaultDiskSource)
+        confirmVerified(scopedVaultSdkSource, vaultDiskSource)
         unmockkStatic(
             SyncResponseJson.Cipher::toEncryptedSdkCipher,
             EnvironmentUrlDataJson::toEnvironmentUrlsOrDefault,
@@ -360,7 +355,6 @@ class AuthenticatorBridgeRepositoryTest {
     @Test
     @Suppress("MaxLineLength")
     fun `authenticatorSyncSymmetricKey should read from authDiskSource when one user has authenticator sync enabled`() {
-        every { authRepository.userStateFlow } returns MutableStateFlow(USER_STATE)
         fakeAuthDiskSource.storeAuthenticatorSyncUnlockKey(
             userId = USER_1_ID,
             authenticatorSyncUnlockKey = USER_1_UNLOCK_KEY,
@@ -373,13 +367,11 @@ class AuthenticatorBridgeRepositoryTest {
         fakeAuthDiskSource.authenticatorSyncSymmetricKey = syncKey
 
         assertEquals(syncKey, authenticatorBridgeRepository.authenticatorSyncSymmetricKey)
-        verify { authRepository.userStateFlow }
     }
 
     @Test
     @Suppress("MaxLineLength")
     fun `authenticatorSyncSymmetricKey should return null when no user has authenticator sync enabled`() {
-        every { authRepository.userStateFlow } returns MutableStateFlow(USER_STATE)
         fakeAuthDiskSource.storeAuthenticatorSyncUnlockKey(
             userId = USER_1_ID,
             authenticatorSyncUnlockKey = null,
@@ -395,7 +387,6 @@ class AuthenticatorBridgeRepositoryTest {
         val syncKey = generateSecretKey().getOrThrow().encoded
         fakeAuthDiskSource.authenticatorSyncSymmetricKey = syncKey
         assertNull(authenticatorBridgeRepository.authenticatorSyncSymmetricKey)
-        verify { authRepository.userStateFlow }
     }
 }
 
@@ -472,28 +463,6 @@ private val USER_STATE_JSON = UserStateJson(
     ),
 )
 
-private val ACCOUNT_1 = mockk<UserState.Account> {
-    every { userId } returns USER_1_ID
-    every { name } returns "John Doe"
-    every { email } returns USER_1_EMAIL
-    every { environment.label } returns "bitwarden.com"
-}
-
-private val ACCOUNT_2 = mockk<UserState.Account> {
-    every { userId } returns USER_2_ID
-    every { name } returns "Jane Doe"
-    every { email } returns USER_2_EMAIL
-    every { environment.label } returns "bitwarden.com"
-}
-
-private val USER_STATE = UserState(
-    activeUserId = USER_1_ID,
-    accounts = listOf(
-        ACCOUNT_1,
-        ACCOUNT_2,
-    ),
-)
-
 private val USER_1_TOTP_CIPHER = mockk<SyncResponseJson.Cipher> {
     every { login?.totp } returns "encryptedTotp1"
     every { login?.username } returns "username"
@@ -533,18 +502,18 @@ private val USER_1_EXPECTED_TOTP_LIST = listOf("totp")
 private val USER_2_EXPECTED_TOTP_LIST = listOf("totp")
 
 private val USER_1_SHARED_ACCOUNT = SharedAccountData.Account(
-    userId = ACCOUNT_1.userId,
-    name = ACCOUNT_1.name,
-    email = ACCOUNT_1.email,
-    environmentLabel = ACCOUNT_1.environment.label,
+    userId = ACCOUNT_JSON_1.profile.userId,
+    name = ACCOUNT_JSON_1.profile.name,
+    email = ACCOUNT_JSON_1.profile.email,
+    environmentLabel = Environment.Us.label,
     totpUris = USER_1_EXPECTED_TOTP_LIST,
 )
 
 private val USER_2_SHARED_ACCOUNT = SharedAccountData.Account(
-    userId = ACCOUNT_2.userId,
-    name = ACCOUNT_2.name,
-    email = ACCOUNT_2.email,
-    environmentLabel = ACCOUNT_2.environment.label,
+    userId = ACCOUNT_JSON_2.profile.userId,
+    name = ACCOUNT_JSON_2.profile.name,
+    email = ACCOUNT_JSON_2.profile.email,
+    environmentLabel = Environment.Us.label,
     totpUris = USER_2_EXPECTED_TOTP_LIST,
 )
 
