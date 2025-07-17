@@ -195,7 +195,7 @@ fun createMockAttachmentView(number: Int, key: String? = "mockKey-$number"): Att
 fun createMockCardView(
     number: Int,
     brand: String = "mockBrand-$number",
-    cardNumber: String? = "mockCardNumber-$number",
+    cardNumber: String? = "mockNumber-$number",
     expMonth: String? = "mockExpMonth-$number",
     code: String? = "mockCode-$number",
     expYear: String? = "mockExpirationYear-$number",
