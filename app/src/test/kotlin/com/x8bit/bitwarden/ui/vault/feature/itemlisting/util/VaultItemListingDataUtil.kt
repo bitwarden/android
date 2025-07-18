@@ -30,6 +30,7 @@ fun createMockDisplayItemForCipher(
     ),
     isAutofill: Boolean = false,
     isCredentialCreation: Boolean = false,
+    shouldShowMasterPasswordReprompt: Boolean = false,
 ): VaultItemListingState.DisplayItem =
     when (cipherType) {
         is CipherListViewType.Login -> {
@@ -83,7 +84,7 @@ fun createMockDisplayItemForCipher(
                 optionsTestTag = "CipherOptionsButton",
                 isAutofill = isAutofill,
                 isCredentialCreation = isCredentialCreation,
-                shouldShowMasterPasswordReprompt = false,
+                shouldShowMasterPasswordReprompt = shouldShowMasterPasswordReprompt,
                 iconTestTag = "LoginCipherIcon",
                 itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = cipherType),
             )
@@ -290,7 +291,7 @@ fun createMockDisplayItemForSend(
                 titleTestTag = "SendNameLabel",
                 secondSubtitle = null,
                 secondSubtitleTestTag = null,
-                subtitle = "Oct 27, 2023, 12:00 PM",
+                subtitle = "Oct 27, 2023, 12:00 PM",
                 subtitleTestTag = "SendDateLabel",
                 iconData = IconData.Local(BitwardenDrawable.ic_file),
                 extraIconList = persistentListOf(
@@ -339,7 +340,7 @@ fun createMockDisplayItemForSend(
                 titleTestTag = "SendNameLabel",
                 secondSubtitle = null,
                 secondSubtitleTestTag = null,
-                subtitle = "Oct 27, 2023, 12:00 PM",
+                subtitle = "Oct 27, 2023, 12:00 PM",
                 subtitleTestTag = "SendDateLabel",
                 iconData = IconData.Local(BitwardenDrawable.ic_file_text),
                 extraIconList = persistentListOf(

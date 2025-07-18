@@ -14,6 +14,7 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.CopyableCipherFields
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
@@ -431,21 +432,27 @@ class VaultItemListingDataExtensionsTest {
             createMockCipherListView(
                 number = 1,
                 isDeleted = false,
-                type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
                 folderId = "mockId-1",
             )
                 .copy(reprompt = CipherRepromptType.PASSWORD),
             createMockCipherListView(
                 number = 2,
                 isDeleted = false,
-                type = CipherListViewType.Card(v1 = createMockCardListView(number = 1)),
+                type = CipherListViewType.Card(createMockCardListView(number = 2)),
                 folderId = "mockId-1",
+                copyableFields = listOf(
+                    CopyableCipherFields.CARD_NUMBER,
+                    CopyableCipherFields.CARD_SECURITY_CODE,
+                ),
             ),
             createMockCipherListView(
                 number = 3,
                 isDeleted = false,
                 type = CipherListViewType.SecureNote,
                 folderId = "mockId-1",
+                copyableFields = listOf(
+                    CopyableCipherFields.SECURE_NOTES,
+                ),
             ),
             createMockCipherListView(
                 number = 4,
@@ -483,28 +490,26 @@ class VaultItemListingDataExtensionsTest {
                     createMockDisplayItemForCipher(
                         number = 1,
                         cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
-                        subtitle = null,
-                    )
-                        .copy(
-                            secondSubtitleTestTag = "PasskeySite",
-                            shouldShowMasterPasswordReprompt = true,
-                        ),
+                        subtitle = "mockSubtitle-1",
+                        secondSubtitleTestTag = "PasskeySite",
+                        shouldShowMasterPasswordReprompt = true,
+                    ),
                     createMockDisplayItemForCipher(
                         number = 2,
-                        cipherType = CipherListViewType.Card(createMockCardListView(number = 1)),
-                        subtitle = null,
-                    )
-                        .copy(secondSubtitleTestTag = "PasskeySite"),
+                        cipherType = CipherListViewType.Card(createMockCardListView(number = 2)),
+                        subtitle = "mockSubtitle-2",
+                        secondSubtitleTestTag = "PasskeySite",
+                    ),
                     createMockDisplayItemForCipher(
                         number = 3,
                         cipherType = CipherListViewType.SecureNote,
-                        subtitle = null,
+                        subtitle = "mockSubtitle-3",
                     )
                         .copy(secondSubtitleTestTag = "PasskeySite"),
                     createMockDisplayItemForCipher(
                         number = 4,
                         cipherType = CipherListViewType.Identity,
-                        subtitle = null,
+                        subtitle = "mockSubtitle-4",
                     )
                         .copy(secondSubtitleTestTag = "PasskeySite"),
                 ),
@@ -523,19 +528,27 @@ class VaultItemListingDataExtensionsTest {
         every { Uri.parse(any()) } returns uriMock
         every { uriMock.host } returns "www.mockuri.com"
 
+        val loginListView = createMockLoginListView(
+            number = 1,
+            hasFido2 = true,
+        )
         val cipherViewList = listOf(
             createMockCipherListView(
                 number = 1,
                 isDeleted = false,
-                type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+                type = CipherListViewType.Login(v1 = loginListView),
                 folderId = "mockId-1",
-            )
-                .copy(reprompt = CipherRepromptType.PASSWORD),
+                reprompt = CipherRepromptType.PASSWORD,
+            ),
             createMockCipherListView(
                 number = 2,
                 isDeleted = false,
                 type = CipherListViewType.Card(v1 = createMockCardListView(number = 2)),
                 folderId = "mockId-1",
+                copyableFields = listOf(
+                    CopyableCipherFields.CARD_NUMBER,
+                    CopyableCipherFields.CARD_SECURITY_CODE,
+                ),
             ),
         )
 
@@ -570,24 +583,22 @@ class VaultItemListingDataExtensionsTest {
                 displayItemList = listOf(
                     createMockDisplayItemForCipher(
                         number = 1,
-                        cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
-                        subtitle = null,
-                    )
-                        .copy(
-                            secondSubtitle = "mockRpId-1",
-                            secondSubtitleTestTag = "PasskeySite",
-                            subtitleTestTag = "PasskeyName",
-                            iconData = IconData.Network(
-                                uri = "https://icons.bitwarden.net/www.mockuri.com/icon.png",
-                                fallbackIconRes = BitwardenDrawable.ic_bw_passkey,
-                            ),
-                            isAutofill = true,
-                            shouldShowMasterPasswordReprompt = true,
+                        cipherType = CipherListViewType.Login(loginListView),
+                        subtitle = "mockSubtitle-1",
+                        secondSubtitle = "mockRpId-1",
+                        secondSubtitleTestTag = "PasskeySite",
+                        subtitleTestTag = "PasskeyName",
+                        iconData = IconData.Network(
+                            uri = "https://icons.bitwarden.net/www.mockuri.com/icon.png",
+                            fallbackIconRes = BitwardenDrawable.ic_bw_passkey,
                         ),
+                        isAutofill = true,
+                        shouldShowMasterPasswordReprompt = true,
+                    ),
                     createMockDisplayItemForCipher(
                         number = 2,
                         cipherType = CipherListViewType.Card(createMockCardListView(number = 2)),
-                        subtitle = null,
+                        subtitle = "mockSubtitle-2",
                     )
                         .copy(
                             secondSubtitleTestTag = "PasskeySite",
@@ -603,7 +614,7 @@ class VaultItemListingDataExtensionsTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `toViewState should transform a list of CipherViews into a ViewState with correct value for repromt`() {
+    fun `toViewState should transform a list of CipherViews into a ViewState with correct value for reprompt`() {
         mockkStatic(CipherView::subtitle)
         mockkStatic(Uri::class)
         val uriMock = mockk<Uri>()
@@ -611,14 +622,20 @@ class VaultItemListingDataExtensionsTest {
         every { Uri.parse(any()) } returns uriMock
         every { uriMock.host } returns "www.mockuri.com"
 
+        val type = CipherListViewType.Login(
+            createMockLoginListView(
+                number = 1,
+                hasFido2 = true,
+            ),
+        )
         val cipherViewList = listOf(
             createMockCipherListView(
                 number = 1,
                 isDeleted = false,
-                type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+                type = type,
                 folderId = "mockId-1",
-            )
-                .copy(reprompt = CipherRepromptType.PASSWORD),
+                reprompt = CipherRepromptType.PASSWORD,
+            ),
         )
 
         val result = VaultData(
@@ -652,8 +669,8 @@ class VaultItemListingDataExtensionsTest {
                 displayItemList = listOf(
                     createMockDisplayItemForCipher(
                         number = 1,
-                        cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
-                        subtitle = null,
+                        cipherType = type,
+                        subtitle = "mockSubtitle-1",
                         requiresPasswordReprompt = false,
                     )
                         .copy(
@@ -1248,26 +1265,30 @@ class VaultItemListingDataExtensionsTest {
                 number = 1,
                 successes = listOf(
                     createMockCipherListView(
-                    number = 1,
-                    organizationId = "restrict_item_type_policy_id",
-                    type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
-                ),
+                        number = 1,
+                        organizationId = "restrict_item_type_policy_id",
+                        type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+                    ),
                     createMockCipherListView(
-                    number = 2,
-                    organizationId = "restrict_item_type_policy_id",
-                    type = CipherListViewType.Card(v1 = createMockCardListView(number = 2)),
-                ),
+                        number = 2,
+                        organizationId = "restrict_item_type_policy_id",
+                        type = CipherListViewType.Card(v1 = createMockCardListView(number = 2)),
+                    ),
                     createMockCipherListView(
-                    number = 3,
-                    organizationId = null,
-                    type = CipherListViewType.Card(v1 = createMockCardListView(number = 3)),
-                ),
+                        number = 3,
+                        organizationId = null,
+                        type = CipherListViewType.Card(v1 = createMockCardListView(number = 3)),
+                    ),
                     createMockCipherListView(
-                    number = 4,
-                    organizationId = "another_id",
-                    type = CipherListViewType.Card(v1 = createMockCardListView(number = 4)),
+                        number = 4,
+                        organizationId = "another_id",
+                        type = CipherListViewType.Card(v1 = createMockCardListView(number = 4)),
+                        copyableFields = listOf(
+                            CopyableCipherFields.CARD_NUMBER,
+                            CopyableCipherFields.CARD_SECURITY_CODE,
+                        ),
+                    ),
                 ),
-            ),
             ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
@@ -1294,7 +1315,7 @@ class VaultItemListingDataExtensionsTest {
                     createMockDisplayItemForCipher(
                         number = 4,
                         cipherType = CipherListViewType.Card(createMockCardListView(number = 4)),
-                        subtitle = null,
+                        subtitle = "mockSubtitle-4",
                     ).copy(secondSubtitleTestTag = "PasskeySite"),
                 ),
                 displayFolderList = emptyList(),
