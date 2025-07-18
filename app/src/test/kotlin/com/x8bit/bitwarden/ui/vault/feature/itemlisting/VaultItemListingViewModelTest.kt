@@ -1480,7 +1480,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AddVaultItemClick for send item should emit NavigateToAddVaultItem`() = runTest {
+    fun `AddVaultItemClick for text send item should emit NavigateToAddVaultItem`() = runTest {
         val viewModel = createVaultItemListingViewModel(
             createSavedStateHandleWithVaultItemListingType(VaultItemListingType.SendText),
         )
@@ -1492,6 +1492,47 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Test
+    fun `AddVaultItemClick for file send item with premium should emit NavigateToAddVaultItem`() =
+        runTest {
+            val viewModel = createVaultItemListingViewModel(
+                createSavedStateHandleWithVaultItemListingType(VaultItemListingType.SendFile),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
+                assertEquals(
+                    VaultItemListingEvent.NavigateToAddSendItem(sendType = SendItemType.FILE),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `AddVaultItemClick for file send item without premium should display error dialog`() =
+        runTest {
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = false)),
+            )
+            val viewModel = createVaultItemListingViewModel(
+                createSavedStateHandleWithVaultItemListingType(VaultItemListingType.SendFile),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
+                expectNoEvents()
+            }
+            assertEquals(
+                createVaultItemListingState(
+                    itemListingType = VaultItemListingState.ItemListingType.Send.SendFile,
+                    dialogState = VaultItemListingState.DialogState.Error(
+                        title = R.string.send.asText(),
+                        message = R.string.send_file_premium_required.asText(),
+                    ),
+                    isPremium = false,
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `ItemTypeToAddSelected sends NavigateToAddFolder for folder selection`() = runTest {
@@ -5523,6 +5564,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         itemListingType: VaultItemListingState.ItemListingType = VaultItemListingState.ItemListingType.Vault.Login,
         viewState: VaultItemListingState.ViewState = VaultItemListingState.ViewState.Loading,
         dialogState: VaultItemListingState.DialogState? = null,
+        isPremium: Boolean = true,
     ): VaultItemListingState =
         VaultItemListingState(
             itemListingType = itemListingType,
@@ -5540,7 +5582,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             policyDisablesSend = false,
             hasMasterPassword = true,
             createCredentialRequest = null,
-            isPremium = true,
+            isPremium = isPremium,
             isRefreshing = false,
             restrictItemTypesPolicyOrgIds = persistentListOf(),
         )

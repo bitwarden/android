@@ -69,6 +69,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var debugLaunchManager: DebugMenuLaunchManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        window.decorView.filterTouchesWhenObscured = true
         intent = intent.validate()
         var shouldShowSplashScreen = true
         installSplashScreen().setKeepOnScreenCondition { shouldShowSplashScreen }
