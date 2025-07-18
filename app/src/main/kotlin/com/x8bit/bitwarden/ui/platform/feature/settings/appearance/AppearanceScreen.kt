@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.model.CardStyle
@@ -208,7 +209,7 @@ private fun ThemeSelectionRow(
                 AppTheme.entries.first { selectedTheme == it.displayLabel.toString(resources) },
             )
         },
-        supportingText = stringResource(id = R.string.theme_description),
+        supportingText = annotatedStringResource(id = R.string.theme_description),
         cardStyle = CardStyle.Full,
         modifier = modifier,
     )

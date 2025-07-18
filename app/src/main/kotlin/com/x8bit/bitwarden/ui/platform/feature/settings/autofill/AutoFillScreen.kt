@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -344,7 +345,9 @@ private fun FillStyleSelector(
 ) {
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.display_autofill_suggestions),
-        supportingText = stringResource(id = R.string.use_inline_autofill_explanation_long),
+        supportingText = annotatedStringResource(
+            id = R.string.use_inline_autofill_explanation_long,
+        ),
         options = AutofillStyle.entries.map { it.label() }.toImmutableList(),
         selectedOption = selectedStyle.label(),
         onOptionSelected = {
@@ -404,14 +407,8 @@ private fun DefaultUriMatchTypeRow(
     var showAdvancedDialog by rememberSaveable { mutableStateOf(false) }
     var optionPendingConfirmation by rememberSaveable { mutableStateOf<UriMatchType?>(null) }
 
-    BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.default_uri_match_detection),
-        options = UriMatchType.entries.filter { !it.isAdvancedMatching() }
-            .map { it.displayLabel() }.toImmutableList(),
-        selectedOption = selectedUriMatchType.displayLabel(),
-        sectionTitle = stringResource(id = R.string.advanced_options),
-        sectionOptions = UriMatchType.entries.filter { it.isAdvancedMatching() }
-            .map { it.displayLabel() }.toImmutableList(),
+    UriMatchSelectionButton(
+        selectedUriMatchType = selectedUriMatchType,
         onOptionSelected = { selectedOption ->
             val newSelectedType =
                 UriMatchType
@@ -427,8 +424,6 @@ private fun DefaultUriMatchTypeRow(
                 showAdvancedDialog = false
             }
         },
-        supportingText = stringResource(id = R.string.default_uri_match_detection_description),
-        cardStyle = CardStyle.Full,
         modifier = modifier,
     )
 
@@ -445,7 +440,7 @@ private fun DefaultUriMatchTypeRow(
                 showAdvancedDialog = false
                 optionPendingConfirmation = null
             },
-            onMoreAboutMatchDetectionClick = onMoreAboutMatchDetectionClick
+            onMoreAboutMatchDetectionClick = onMoreAboutMatchDetectionClick,
         )
     }
 }
@@ -456,6 +451,7 @@ private fun BuildAdvancedMatchDetectionWarning(
     onDialogConfirm: () -> Unit,
     onDialogDismiss: () -> Unit,
     onMoreAboutMatchDetectionClick: () -> Unit,
+    resources: Resources = LocalContext.current.resources,
 ) {
     val moreAboutMatchDetectionStr = stringResource(R.string.more_about_match_detection)
 
@@ -463,16 +459,23 @@ private fun BuildAdvancedMatchDetectionWarning(
         titleAnnotatedString = stringResource(id = R.string.warning).toAnnotatedString(),
         messageAnnotatedString = annotatedStringResource(
             id = R.string.advanced_options_warning,
-            args = arrayOf(pendingOption.displayLabel()),
-            onAnnotationClick = { annotationValue ->
-                when (annotationValue) {
-                    "moreAboutMatchDetection" -> onMoreAboutMatchDetectionClick()
-                }
-            },
+            args = arrayOf(pendingOption.displayLabel.toString(resources)),
             style = spanStyleOf(
                 color = BitwardenTheme.colorScheme.text.primary,
                 textStyle = BitwardenTheme.typography.bodyMedium,
             ),
+        ).plus(
+            AnnotatedString("\n")
+                .plus(
+                    annotatedStringResource(
+                        id = R.string.more_about_match_detection,
+                        onAnnotationClick = { annotationValue ->
+                            when (annotationValue) {
+                                "moreAboutMatchDetection" -> onMoreAboutMatchDetectionClick()
+                            }
+                        },
+                    ),
+                ),
         ),
         confirmButtonText = stringResource(id = R.string.continue_text),
         dismissButtonText = stringResource(id = R.string.cancel),
@@ -488,8 +491,50 @@ private fun BuildAdvancedMatchDetectionWarning(
                             onMoreAboutMatchDetectionClick()
                             true
                         },
-                    )
+                    ),
                 )
             },
+    )
+}
+
+@Composable
+private fun UriMatchSelectionButton(
+    selectedUriMatchType: UriMatchType,
+    onOptionSelected: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    resources: Resources = LocalContext.current.resources,
+) {
+    var supportingAnnotatedString =
+        annotatedStringResource(id = R.string.default_uri_match_detection_description)
+
+    if (selectedUriMatchType.isAdvancedMatching()) {
+        supportingAnnotatedString = supportingAnnotatedString
+            .plus(
+                AnnotatedString("\n")
+                    .plus(
+                        annotatedStringResource(
+                            id = R.string.advanced_options_warning,
+                            args = arrayOf(selectedUriMatchType.displayLabel.toString(resources)),
+                            style = spanStyleOf(
+                                textStyle = BitwardenTheme.typography.bodySmall,
+                                color = BitwardenTheme.colorScheme.text.secondary,
+                            ),
+                        ),
+                    ),
+            )
+    }
+
+    BitwardenMultiSelectButton(
+        label = stringResource(id = R.string.default_uri_match_detection),
+        options = UriMatchType.entries.filter { !it.isAdvancedMatching() }
+            .map { it.displayLabel() }.toImmutableList(),
+        selectedOption = selectedUriMatchType.displayLabel(),
+        sectionTitle = stringResource(id = R.string.advanced_options),
+        sectionOptions = UriMatchType.entries.filter { it.isAdvancedMatching() }
+            .map { it.displayLabel() }.toImmutableList(),
+        onOptionSelected = onOptionSelected,
+        supportingText = supportingAnnotatedString,
+        cardStyle = CardStyle.Full,
+        modifier = modifier,
     )
 }

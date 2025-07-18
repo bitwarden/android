@@ -24,6 +24,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.role
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,7 +52,7 @@ fun BitwardenTextSelectionButton(
     cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    supportingText: String? = null,
+    supportingText: AnnotatedString? = null,
     tooltip: TooltipData? = null,
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,

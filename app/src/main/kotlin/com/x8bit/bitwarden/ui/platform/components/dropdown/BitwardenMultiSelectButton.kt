@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.button.BitwardenTextSelectionButton
@@ -59,7 +60,7 @@ fun BitwardenMultiSelectButton(
     cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
-    supportingText: String? = null,
+    supportingText: AnnotatedString? = null,
     tooltip: TooltipData? = null,
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
