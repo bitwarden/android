@@ -12,10 +12,14 @@ import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
@@ -65,6 +69,10 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
     )
     private val clipboardManager: BitwardenClipboardManager = mockk {
         every { setText(any<String>(), toastDescriptorOverride = any<Text>()) } just runs
+    }
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
+    private val authRepository = mockk<AuthRepository> {
+        every { userStateFlow } returns mutableUserStateFlow
     }
     private val environmentRepository: EnvironmentRepository = mockk {
         every { environment } returns Environment.Us
@@ -380,6 +388,38 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                     message = R.string.validation_field_required.asText(
                         R.string.name.asText(),
                     ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `SaveClick for file without premium show error dialog`() {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACCOUNT.copy(isPremium = false)),
+        )
+        val initialState = DEFAULT_STATE.copy(
+            isPremium = false,
+            viewState = DEFAULT_VIEW_STATE.copy(
+                common = DEFAULT_COMMON_STATE.copy(name = "test"),
+                selectedType = AddEditSendState.ViewState.Content.SendType.File(
+                    uri = null,
+                    name = null,
+                    displaySize = null,
+                    sizeBytes = null,
+                ),
+            ),
+        )
+        val viewModel = createViewModel(initialState)
+
+        viewModel.trySendAction(AddEditSendAction.SaveClick)
+
+        assertEquals(
+            initialState.copy(
+                dialogState = AddEditSendState.DialogState.Error(
+                    title = R.string.send.asText(),
+                    message = R.string.send_file_premium_required.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -966,6 +1006,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 toAddEditSendArgs()
             } returns AddEditSendArgs(sendType = sendType, addEditSendType = addEditSendType)
         },
+        authRepo = authRepository,
         environmentRepo = environmentRepository,
         specialCircumstanceManager = specialCircumstanceManager,
         clock = clock,
@@ -1013,4 +1054,30 @@ private val DEFAULT_STATE = AddEditSendState(
     baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
     policyDisablesSend = false,
     sendType = SendItemType.TEXT,
+    isPremium = true,
+)
+
+private val DEFAULT_ACCOUNT = UserState.Account(
+    userId = "activeUserId",
+    name = "Active User",
+    email = "active@bitwarden.com",
+    environment = Environment.Us,
+    avatarColorHex = "#aa00aa",
+    isPremium = true,
+    isLoggedIn = true,
+    isVaultUnlocked = true,
+    needsPasswordReset = false,
+    isBiometricsEnabled = false,
+    organizations = emptyList(),
+    needsMasterPassword = false,
+    trustedDevice = null,
+    hasMasterPassword = true,
+    isUsingKeyConnector = false,
+    onboardingStatus = OnboardingStatus.COMPLETE,
+    firstTimeState = FirstTimeState(showImportLoginsCard = true),
+)
+
+private val DEFAULT_USER_STATE = UserState(
+    activeUserId = "activeUserId",
+    accounts = listOf(DEFAULT_ACCOUNT),
 )
