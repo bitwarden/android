@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Godkender-app</string>
     <string name="enter_verification_code_app">Angiv den 6-cifrede bekræftelseskode fra godkender-appen.</string>
     <string name="enter_verification_code_email">Angiv den 6-cifrede bekræftelseskode e-mailet til %1$s.</string>
-    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
+    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the code sent to your email to verify your identity.</string>
     <string name="recovery_code_title">Gendannelseskode</string>
     <string name="remember">Husk</string>
     <string name="remember_email">Husk e-mail</string>

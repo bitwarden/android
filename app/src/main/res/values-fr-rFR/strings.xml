@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Application d\'authentification</string>
     <string name="enter_verification_code_app">Saisissez le code de vérification à 6 chiffres depuis votre application d\'authentification.</string>
     <string name="enter_verification_code_email">Saisissez le code de vérification à 6 chiffres qui a été envoyé par courriel à %1$s.</string>
-    <string name="enter_verification_code_new_device">Nous ne reconnaissons pas cet appareil. Entrez le code de vérification à 8 chiffres qui a été envoyé à %1$s.</string>
+    <string name="enter_verification_code_new_device">Nous ne reconnaissons pas cet appareil. Entrez le code de vérification à 8 chiffres qui a été envoyé à [%1$s].</string>
     <string name="recovery_code_title">Code de récupération</string>
     <string name="remember">Remember</string>
     <string name="remember_email">Se souvenir de l\'e-mail</string>
@@ -567,7 +567,7 @@ sélectionnez « Ajouter un TOTP » pour stocker la clé en toute sécurité</
     <string name="email_required_parenthesis">Courriel (requis)</string>
     <string name="domain_name">domain name</string>
     <string name="domain_name_required_parenthesis">Nom de domaine (requis)</string>
-    <string name="api_key">API key</string>
+    <string name="api_key">Clé API</string>
     <string name="api_key_required_parenthesis">Clé API (requise)</string>
     <string name="service">Service</string>
     <string name="addy_io">addy.io</string>
@@ -576,7 +576,7 @@ sélectionnez « Ajouter un TOTP » pour stocker la clé en toute sécurité</
     <string name="duck_duck_go">DuckDuckGo</string>
     <string name="fastmail">Fastmail</string>
     <string name="forward_email">ForwardEmail</string>
-    <string name="api_access_token_required_parenthesis">API access token (required)</string>
+    <string name="api_access_token_required_parenthesis">Jeton d’accès API (requis)</string>
     <string name="api_access_token">Jeton d\'accès API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Êtes-vous sûr(e) de vouloir remplacer le nom d\'utilisateur actuel ?</string>
     <string name="generate_username">Générer un nom d\'utilisateur</string>

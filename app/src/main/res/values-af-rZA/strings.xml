@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Waarmerktoep</string>
     <string name="enter_verification_code_app">Voer die 6-syferbevestigingskode van u waarmerktoep in.</string>
     <string name="enter_verification_code_email">Voer die 6-syferbevestigingskode in wat aan %1$s gestuur is.</string>
-    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
+    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the code sent to your email to verify your identity.</string>
     <string name="recovery_code_title">Terugstelkode</string>
     <string name="remember">Remember</string>
     <string name="remember_email">Remember email</string>

@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Приложение за удостоверяване</string>
     <string name="enter_verification_code_app">Въведете шестцифрения код за потвърждение от приложението за удостоверяване.</string>
     <string name="enter_verification_code_email">Въведете шестцифрения код за потвърждение, който е бил изпратен на %1$s.</string>
-    <string name="enter_verification_code_new_device">Това устройство е непознато. Въведете 8-цифрения код за потвърждаване, който беше изпратен на %1$s.</string>
+    <string name="enter_verification_code_new_device">Това устройство е непознато. Въведете 8-цифрения код за потвърждаване, който беше изпратен на [%1$s].</string>
     <string name="recovery_code_title">Код за възстановяване</string>
     <string name="remember">Запомняне</string>
     <string name="remember_email">Запомняне на е-пощата</string>

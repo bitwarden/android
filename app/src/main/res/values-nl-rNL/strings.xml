@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Authenticatie-app</string>
     <string name="enter_verification_code_app">Voer de 6-cijferige verificatiecode uit je authenticatie-app in.</string>
     <string name="enter_verification_code_email">Voer de 6-cijferige verificatiecode in die via e-mail is verstuurd naar %1$s.</string>
-    <string name="enter_verification_code_new_device">We herkennen dit apparaat niet. Voer de 8-cijferige verificatiecode in die gemaild is naar %1$s.</string>
+    <string name="enter_verification_code_new_device">We herkennen dit apparaat niet. Voer de 8-cijferige verificatiecode in die gemaild is naar [%1$s].</string>
     <string name="recovery_code_title">Herstelcode</string>
     <string name="remember">Onthouden</string>
     <string name="remember_email">E-mailadres onthouden</string>

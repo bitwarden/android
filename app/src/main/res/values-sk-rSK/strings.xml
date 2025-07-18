@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Overovacia aplikácia</string>
     <string name="enter_verification_code_app">Zadajte 6-miestny verifikačný kód z vašej overovacej aplikácie.</string>
     <string name="enter_verification_code_email">Zadajte 6-miestny verifikačný kód, ktorý bol zaslaný e-mailom na %1$s.</string>
-    <string name="enter_verification_code_new_device">Nespoznávame toto zariadenie. Zadajte 8-miestny overovací kód zaslaný na %1$s.</string>
+    <string name="enter_verification_code_new_device">Nespoznávame toto zariadenie. Zadajte 8-miestny overovací kód zaslaný na [%1$s].</string>
     <string name="recovery_code_title">Záchranný kód</string>
     <string name="remember">Zapamätať si</string>
     <string name="remember_email">Zapamätať si e-mail</string>

@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Ověřovací aplikace</string>
     <string name="enter_verification_code_app">Zadejte 6místný kód z ověřovací aplikace.</string>
     <string name="enter_verification_code_email">Zadejte 6místný kód z e-mailu, který byl zaslán na %1$s.</string>
-    <string name="enter_verification_code_new_device">Toto zařízení nelze rozpoznat. Zadejte osmimístný ověřovací kód, který byl zaslán e-mailem na %1$s.</string>
+    <string name="enter_verification_code_new_device">Toto zařízení nepoznáváme. Zadejte kód zaslaný na Váš e-mail pro ověření Vaší totožnosti.</string>
     <string name="recovery_code_title">Kód pro obnovení</string>
     <string name="remember">Zapamatovat</string>
     <string name="remember_email">Pamatovat si e-mail</string>

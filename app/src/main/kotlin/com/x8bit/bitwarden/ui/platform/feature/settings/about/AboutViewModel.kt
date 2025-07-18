@@ -3,12 +3,12 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.about
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.ciBuildInfo
 import com.x8bit.bitwarden.data.platform.util.deviceData
 import com.x8bit.bitwarden.data.platform.util.isFdroid
+import com.x8bit.bitwarden.data.platform.util.sdkData
 import com.x8bit.bitwarden.data.platform.util.versionData
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.util.getStopsLoggingStringForActiveLog
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,10 +44,22 @@ class AboutViewModel @Inject constructor(
     private val logsManager: LogsManager,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
+    serverConfigRepository: ServerConfigRepository,
 ) : BaseViewModel<AboutState, AboutEvent, AboutAction>(
-    initialState = savedStateHandle[KEY_STATE]
-        ?: AboutState(
-            version = R.string.version.asText().concat(": $versionData".asText()),
+    initialState = savedStateHandle[KEY_STATE] ?: run {
+        val serverData = serverConfigRepository.serverConfigStateFlow.value?.serverData
+        AboutState(
+            version = "Version: $versionData".asText(),
+            sdkVersion = "\uD83E\uDD80 SDK: $sdkData".asText(),
+            serverData = StringBuilder()
+                .append("\uD83C\uDF29 Server:")
+                .apply {
+                    serverData?.server?.name?.let { append(" $it") }
+                    serverData?.version?.let { append(" $it") }
+                    serverData?.environment?.cloudRegion?.let { append(" @ $it") }
+                }
+                .toString()
+                .asText(),
             deviceData = deviceData.asText(),
             ciData = ciBuildInfo?.let { "\n$it" }.orEmpty().asText(),
             isSubmitCrashLogsEnabled = logsManager.isEnabled,
@@ -58,7 +71,8 @@ class AboutViewModel @Inject constructor(
                 .flightRecorderData
                 .getStopsLoggingStringForActiveLog(clock = clock),
             copyrightInfo = "© Bitwarden Inc. 2015-${Year.now(clock).value}".asText(),
-        ),
+        )
+    },
 ) {
     init {
         stateFlow
@@ -136,7 +150,11 @@ class AboutViewModel @Inject constructor(
                 .concat(state.version)
                 .concat("\n".asText())
                 .concat(state.deviceData)
-                .concat(state.ciData),
+                .concat(state.ciData)
+                .concat("\n".asText())
+                .concat(state.sdkVersion)
+                .concat("\n".asText())
+                .concat(state.serverData),
         )
     }
 
@@ -171,6 +189,8 @@ class AboutViewModel @Inject constructor(
 @Parcelize
 data class AboutState(
     val version: Text,
+    val sdkVersion: Text,
+    val serverData: Text,
     val deviceData: Text,
     val ciData: Text,
     val isSubmitCrashLogsEnabled: Boolean,
