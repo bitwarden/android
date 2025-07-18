@@ -16,11 +16,11 @@ import androidx.compose.ui.test.performClick
  */
 abstract class Page(protected val composeTestRule: ComposeTestRule) {
     companion object {
-        val TIMEOUT_MILLIS = 30000L
+       const val TIMEOUT_MILLIS = 30000L
     }
 
     /**
-     * Waits for an element with the specified test tag to be present and returns its SemanticsNodeInteraction.
+     * Waits for an element with the specified test tag to be present.
      * @param testTag The test tag of the element to wait for
      * @return SemanticsNodeInteraction for the found element
      * @throws AssertionError if the element is not found within the timeout period

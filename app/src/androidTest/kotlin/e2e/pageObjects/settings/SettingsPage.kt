@@ -1,7 +1,7 @@
 package e2e.pageObjects.settings
 
 import androidx.compose.ui.test.junit4.ComposeTestRule
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.performClick
 import e2e.pageObjects.Page
 import e2e.pageObjects.settings.accountSecurity.AccountSecurityPage
 

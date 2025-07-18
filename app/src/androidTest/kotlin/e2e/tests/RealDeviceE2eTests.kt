@@ -1,6 +1,5 @@
 package e2e.tests
 
-import androidx.compose.ui.test.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import e2e.pageObjects.login.MainPage
 import org.junit.Test

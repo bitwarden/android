@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.e2e.pages
 
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.junit4.ComposeTestRule
-import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import e2e.pageObjects.Page
 import e2e.pageObjects.login.EnvironmentSettingsPage
 import e2e.pageObjects.vault.VaultPage
@@ -17,7 +17,9 @@ class LoginPage(composeTestRule: ComposeTestRule) : Page(composeTestRule) {
     private val emailField by lazy { getElement("EmailAddressEntry") }
     private val masterPasswordField by lazy { getElement("MasterPasswordEntry") }
     private val continueButton by lazy { getElement("ContinueButton") }
-    private val loginWithMasterPasswordButton by lazy { getElement("LogInWithMasterPasswordButton") }
+    private val loginWithMasterPasswordButton by lazy {
+        getElement("LogInWithMasterPasswordButton")
+    }
     private val regionSelectorButton by lazy { getElement("RegionSelectorDropdown") }
     private val openSettingsButton by lazy { getElement("AppSettingsButton") }
     private val otherSettingsButton by lazy { getElement("OtherSettingsButton") }

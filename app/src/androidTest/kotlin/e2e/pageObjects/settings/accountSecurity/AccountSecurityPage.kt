@@ -1,6 +1,8 @@
 package e2e.pageObjects.settings.accountSecurity
 
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.assertIsNotDisplayed
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import e2e.pageObjects.Page
 import e2e.pageObjects.vault.UnlockVaultPage
