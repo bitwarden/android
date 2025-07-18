@@ -838,11 +838,26 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             is VaultItemListingState.ItemListingType.Send -> {
-                sendEvent(
-                    VaultItemListingEvent.NavigateToAddSendItem(
-                        sendType = itemListingType.toSendItemType(),
-                    ),
-                )
+                when (val sendType = itemListingType.toSendItemType()) {
+                    SendItemType.FILE -> {
+                        if (state.isPremium) {
+                            sendEvent(VaultItemListingEvent.NavigateToAddSendItem(sendType))
+                        } else {
+                            mutableStateFlow.update {
+                                it.copy(
+                                    dialogState = VaultItemListingState.DialogState.Error(
+                                        title = R.string.send.asText(),
+                                        message = R.string.send_file_premium_required.asText(),
+                                    ),
+                                )
+                            }
+                        }
+                    }
+
+                    SendItemType.TEXT -> {
+                        sendEvent(VaultItemListingEvent.NavigateToAddSendItem(sendType))
+                    }
+                }
             }
         }
     }
