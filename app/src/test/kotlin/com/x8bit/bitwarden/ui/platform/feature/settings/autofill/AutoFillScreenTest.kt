@@ -14,6 +14,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.assertNoDialogExists
+import com.bitwarden.ui.util.performCustomAccessibilityAction
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
@@ -553,6 +554,36 @@ class AutoFillScreenTest : BitwardenComposeTest() {
                 AutoFillAction.DefaultUriMatchTypeSelect(
                     defaultUriMatchType = UriMatchType.REGULAR_EXPRESSION,
                 ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on Advanced warning dialog click on more about match detection should send MoreAboutMatchDetectionClick event`() {
+        composeTestRule
+            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Regular expression")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Warning")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+
+        composeTestRule
+            .onAllNodesWithText(text = "“Regular expression” is an advanced option with increased risk of exposing credentials.\nMore about match detection")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performCustomAccessibilityAction("More about match detection")
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                AutoFillAction.MoreAboutMatchDetectionClick,
             )
         }
     }

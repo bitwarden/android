@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -58,6 +59,47 @@ fun BitwardenTwoButtonDialog(
     confirmTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
     dismissTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
 ) {
+    BitwardenTwoButtonDialog(
+        titleAnnotatedString = title?.let { AnnotatedString(title) },
+        messageAnnotatedString = AnnotatedString(message),
+        confirmButtonText = confirmButtonText,
+        dismissButtonText = dismissButtonText,
+        onConfirmClick = onConfirmClick,
+        onDismissClick = onDismissClick,
+        onDismissRequest = onDismissRequest,
+        confirmTextColor = confirmTextColor,
+        dismissTextColor = dismissTextColor,
+    )
+}
+
+/**
+ * Represents a Bitwarden-styled dialog with two buttons.
+ *
+ * @param titleAnnotatedString the optional title to show as AnnonatedString.
+ * @param messageAnnotatedString message to show as AnnonatedString.
+ * @param confirmButtonText text to show on confirm button.
+ * @param dismissButtonText text to show on dismiss button.
+ * @param onConfirmClick called when the confirm button is clicked.
+ * @param onDismissClick called when the dismiss button is clicked.
+ * @param onDismissRequest called when the user attempts to dismiss the dialog (for example by
+ * tapping outside of it).
+ * @param confirmTextColor The color of the confirm text.
+ * @param dismissTextColor The color of the dismiss text.
+ */
+@Composable
+@Suppress("LongMethod")
+fun BitwardenTwoButtonDialog(
+    titleAnnotatedString: AnnotatedString?,
+    messageAnnotatedString: AnnotatedString,
+    confirmButtonText: String,
+    dismissButtonText: String,
+    onConfirmClick: () -> Unit,
+    onDismissClick: () -> Unit,
+    onDismissRequest: () -> Unit,
+    confirmTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
+    dismissTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
+    messageModifier: Modifier? = null,
+) {
     Dialog(
         onDismissRequest = onDismissRequest,
         properties = DialogProperties(usePlatformDefaultWidth = false),
@@ -84,13 +126,13 @@ fun BitwardenTwoButtonDialog(
             horizontalAlignment = Alignment.End,
         ) {
             Spacer(modifier = Modifier.height(24.dp))
-            title?.let {
+            titleAnnotatedString?.let {
                 Text(
                     modifier = Modifier
                         .testTag("AlertTitleText")
                         .padding(horizontal = 24.dp)
                         .fillMaxWidth(),
-                    text = title,
+                    text = titleAnnotatedString,
                     color = BitwardenTheme.colorScheme.text.primary,
                     style = BitwardenTheme.typography.headlineSmall,
                 )
@@ -100,13 +142,16 @@ fun BitwardenTwoButtonDialog(
                 BitwardenHorizontalDivider()
             }
             Text(
-                modifier = Modifier
-                    .testTag("AlertContentText")
-                    .weight(1f, fill = false)
-                    .verticalScroll(scrollState)
-                    .padding(horizontal = 24.dp)
-                    .fillMaxWidth(),
-                text = message,
+                modifier = (messageModifier ?: Modifier)
+                    .then(
+                        Modifier
+                            .testTag("AlertContentText")
+                            .weight(1f, fill = false)
+                            .verticalScroll(scrollState)
+                            .padding(horizontal = 24.dp)
+                            .fillMaxWidth(),
+                    ),
+                text = messageAnnotatedString,
                 color = BitwardenTheme.colorScheme.text.primary,
                 style = BitwardenTheme.typography.bodyMedium,
             )

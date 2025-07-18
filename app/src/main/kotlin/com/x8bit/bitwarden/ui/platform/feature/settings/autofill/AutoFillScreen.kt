@@ -25,11 +25,18 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
+import com.bitwarden.ui.platform.base.util.spanStyleOf
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.model.CardStyle
@@ -37,6 +44,7 @@ import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
@@ -109,6 +117,10 @@ fun AutoFillScreen(
 
             AutoFillEvent.NavigateToPrivilegedAppsListScreen -> {
                 onNavigateToPrivilegedAppsList()
+            }
+
+            AutoFillEvent.NavigateToMatchDetectionInfo -> {
+                intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
             }
         }
     }
@@ -300,6 +312,7 @@ private fun AutoFillScreenContent(
         DefaultUriMatchTypeRow(
             selectedUriMatchType = state.defaultUriMatchType,
             onUriMatchTypeSelect = autoFillHandlers.onDefaultUriMatchTypeSelect,
+            onMoreAboutMatchDetectionClick = autoFillHandlers.onMoreAboutMatchDetectionClick,
             modifier = Modifier
                 .testTag("DefaultUriMatchDetectionChooser")
                 .standardHorizontalMargin()
@@ -384,11 +397,12 @@ private fun AccessibilityAutofillSwitch(
 private fun DefaultUriMatchTypeRow(
     selectedUriMatchType: UriMatchType,
     onUriMatchTypeSelect: (UriMatchType) -> Unit,
+    onMoreAboutMatchDetectionClick: () -> Unit,
     modifier: Modifier = Modifier,
     resources: Resources = LocalContext.current.resources,
 ) {
-    var showAdvancedOptionWarningDialog by rememberSaveable { mutableStateOf(false) }
-    var pendingSelectedOption by rememberSaveable { mutableStateOf<UriMatchType?>(null) }
+    var showAdvancedDialog by rememberSaveable { mutableStateOf(false) }
+    var optionPendingConfirmation by rememberSaveable { mutableStateOf<UriMatchType?>(null) }
 
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.default_uri_match_detection),
@@ -404,14 +418,13 @@ private fun DefaultUriMatchTypeRow(
                     .entries
                     .first { it.displayLabel.toString(resources) == selectedOption }
 
-            newSelectedType.let { type ->
-                if (type.isAdvancedMatching()) {
-                    pendingSelectedOption = type
-                    showAdvancedOptionWarningDialog = true
-                } else {
-                    onUriMatchTypeSelect(type)
-                    pendingSelectedOption = null
-                }
+            if (newSelectedType.isAdvancedMatching()) {
+                optionPendingConfirmation = newSelectedType
+                showAdvancedDialog = true
+            } else {
+                onUriMatchTypeSelect(newSelectedType)
+                optionPendingConfirmation = null
+                showAdvancedDialog = false
             }
         },
         supportingText = stringResource(id = R.string.default_uri_match_detection_description),
@@ -419,27 +432,64 @@ private fun DefaultUriMatchTypeRow(
         modifier = modifier,
     )
 
-    if (showAdvancedOptionWarningDialog) {
-        BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.warning),
-            message = stringResource(id = R.string.advanced_options_warning),
-            confirmButtonText = stringResource(id = R.string.continue_text),
-            dismissButtonText = stringResource(id = R.string.cancel),
-            onConfirmClick = {
-                pendingSelectedOption?.let {
-                    onUriMatchTypeSelect(it)
-                }
-                showAdvancedOptionWarningDialog = false
-                pendingSelectedOption = null
+    val currentOptionToConfirm = optionPendingConfirmation
+    if (showAdvancedDialog && currentOptionToConfirm != null) {
+        BuildAdvancedMatchDetectionWarning(
+            pendingOption = currentOptionToConfirm,
+            onDialogConfirm = {
+                onUriMatchTypeSelect(currentOptionToConfirm)
+                showAdvancedDialog = false
+                optionPendingConfirmation = null
             },
-            onDismissClick = {
-                showAdvancedOptionWarningDialog = false
-                pendingSelectedOption = null
+            onDialogDismiss = {
+                showAdvancedDialog = false
+                optionPendingConfirmation = null
             },
-            onDismissRequest = {
-                showAdvancedOptionWarningDialog = false
-                pendingSelectedOption = null
-            },
+            onMoreAboutMatchDetectionClick = onMoreAboutMatchDetectionClick
         )
     }
+}
+
+@Composable
+private fun BuildAdvancedMatchDetectionWarning(
+    pendingOption: UriMatchType,
+    onDialogConfirm: () -> Unit,
+    onDialogDismiss: () -> Unit,
+    onMoreAboutMatchDetectionClick: () -> Unit,
+) {
+    val moreAboutMatchDetectionStr = stringResource(R.string.more_about_match_detection)
+
+    BitwardenTwoButtonDialog(
+        titleAnnotatedString = stringResource(id = R.string.warning).toAnnotatedString(),
+        messageAnnotatedString = annotatedStringResource(
+            id = R.string.advanced_options_warning,
+            args = arrayOf(pendingOption.displayLabel()),
+            onAnnotationClick = { annotationValue ->
+                when (annotationValue) {
+                    "moreAboutMatchDetection" -> onMoreAboutMatchDetectionClick()
+                }
+            },
+            style = spanStyleOf(
+                color = BitwardenTheme.colorScheme.text.primary,
+                textStyle = BitwardenTheme.typography.bodyMedium,
+            ),
+        ),
+        confirmButtonText = stringResource(id = R.string.continue_text),
+        dismissButtonText = stringResource(id = R.string.cancel),
+        onConfirmClick = onDialogConfirm,
+        onDismissClick = onDialogDismiss,
+        onDismissRequest = onDialogDismiss,
+        messageModifier = Modifier
+            .semantics {
+                customActions = listOf(
+                    CustomAccessibilityAction(
+                        label = moreAboutMatchDetectionStr,
+                        action = {
+                            onMoreAboutMatchDetectionClick()
+                            true
+                        },
+                    )
+                )
+            },
+    )
 }
