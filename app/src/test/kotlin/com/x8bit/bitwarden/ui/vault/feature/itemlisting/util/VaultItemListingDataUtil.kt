@@ -14,13 +14,22 @@ import kotlinx.collections.immutable.persistentListOf
 /**
  * Create a mock [VaultItemListingState.DisplayItem] with a given [number].
  */
+@Suppress("LongParameterList")
 fun createMockDisplayItemForCipher(
     number: Int,
     cipherType: CipherListViewType =
         CipherListViewType.Login(createMockLoginListView(number = number)),
     subtitle: String? = "mockUsername-$number",
+    subtitleTestTag: String = "CipherSubTitleLabel",
+    secondSubtitle: String? = null,
     secondSubtitleTestTag: String? = null,
     requiresPasswordReprompt: Boolean = true,
+    iconData: IconData = IconData.Network(
+        uri = "https://icons.bitwarden.net/www.mockuri.com/icon.png",
+        fallbackIconRes = BitwardenDrawable.ic_globe,
+    ),
+    isAutofill: Boolean = false,
+    isCredentialCreation: Boolean = false,
 ): VaultItemListingState.DisplayItem =
     when (cipherType) {
         is CipherListViewType.Login -> {
@@ -28,14 +37,11 @@ fun createMockDisplayItemForCipher(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
-                secondSubtitle = null,
+                secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
-                subtitleTestTag = "CipherSubTitleLabel",
-                iconData = IconData.Network(
-                    uri = "https://icons.bitwarden.net/www.mockuri.com/icon.png",
-                    fallbackIconRes = BitwardenDrawable.ic_globe,
-                ),
+                subtitleTestTag = subtitleTestTag,
+                iconData = iconData,
                 extraIconList = persistentListOf(
                     IconData.Local(
                         iconRes = BitwardenDrawable.ic_collections,
@@ -75,8 +81,8 @@ fun createMockDisplayItemForCipher(
                     ),
                 ),
                 optionsTestTag = "CipherOptionsButton",
-                isAutofill = false,
-                isCredentialCreation = false,
+                isAutofill = isAutofill,
+                isCredentialCreation = isCredentialCreation,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "LoginCipherIcon",
                 itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = cipherType),
@@ -88,7 +94,7 @@ fun createMockDisplayItemForCipher(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
-                secondSubtitle = null,
+                secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
                 subtitleTestTag = "CipherSubTitleLabel",
@@ -135,7 +141,7 @@ fun createMockDisplayItemForCipher(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
-                secondSubtitle = null,
+                secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
                 subtitleTestTag = "CipherSubTitleLabel",
@@ -186,7 +192,7 @@ fun createMockDisplayItemForCipher(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
-                secondSubtitle = null,
+                secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
                 subtitleTestTag = "CipherSubTitleLabel",
@@ -229,7 +235,7 @@ fun createMockDisplayItemForCipher(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
-                secondSubtitle = null,
+                secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
                 subtitleTestTag = "CipherSubTitleLabel",

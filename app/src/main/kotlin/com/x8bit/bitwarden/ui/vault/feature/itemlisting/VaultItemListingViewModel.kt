@@ -908,29 +908,28 @@ class VaultItemListingViewModel @Inject constructor(
         createCredentialRequest: CreateCredentialRequest,
     ) {
         viewModelScope.launch {
-            getCipherViewForFido2OrNull(action.id)
-                ?.let { cipherView ->
-                    createCredentialRequest
-                        .providerRequest
-                        .getCreatePasskeyCredentialRequestOrNull()
-                        ?.let { createPasskeyCredentialRequest ->
-                            handleItemClickForCreatePublicKeyCredentialRequest(
-                                cipherId = action.id,
-                                cipherView = cipherView,
-                            )
-                        }
-                        ?: run {
-                            sendAction(
-                                VaultItemListingsAction.Internal.PasskeyOperationFailureReceive(
-                                    title = R.string.an_error_has_occurred.asText(),
-                                    message = R.string
-                                        .passkey_operation_failed_because_the_request_is_unsupported
-                                        .asText(),
-                                    error = null,
-                                ),
-                            )
-                        }
-                }
+            getCipherViewForFido2OrNull(action.id)?.let { cipherView ->
+                createCredentialRequest
+                    .providerRequest
+                    .getCreatePasskeyCredentialRequestOrNull()
+                    ?.let { createPasskeyCredentialRequest ->
+                        handleItemClickForCreatePublicKeyCredentialRequest(
+                            cipherId = action.id,
+                            cipherView = cipherView,
+                        )
+                    }
+                    ?: run {
+                        sendAction(
+                            VaultItemListingsAction.Internal.PasskeyOperationFailureReceive(
+                                title = R.string.an_error_has_occurred.asText(),
+                                message = R.string
+                                    .passkey_operation_failed_because_the_request_is_unsupported
+                                    .asText(),
+                                error = null,
+                            ),
+                        )
+                    }
+            }
         }
     }
 
@@ -1135,10 +1134,14 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleCopyNoteClick(action: ListingItemOverflowAction.VaultAction.CopyNoteClick) {
-        clipboardManager.setText(
-            text = action.cipherId,
-            toastDescriptorOverride = R.string.notes.asText(),
-        )
+        viewModelScope.launch {
+            getCipherViewOrNull(action.cipherId)?.let {
+                clipboardManager.setText(
+                    text = it.notes.orEmpty(),
+                    toastDescriptorOverride = R.string.notes.asText(),
+                )
+            }
+        }
     }
 
     private fun handleCopyNumberClick(
