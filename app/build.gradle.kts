@@ -47,6 +47,8 @@ android {
     namespace = "com.x8bit.bitwarden"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
+    testBuildType = "release"
+
     room {
         schemaDirectory("$projectDir/schemas")
     }
@@ -248,6 +250,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.uiautomator)
+    implementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.junit.ktx)
+    implementation(libs.androidx.ui.test.junit4.android)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
@@ -284,7 +290,6 @@ dependencies {
     testImplementation(testFixtures(project(":network")))
     testImplementation(testFixtures(project(":ui")))
 
-    testImplementation(libs.androidx.compose.ui.test)
     testImplementation(libs.google.hilt.android.testing)
     testImplementation(platform(libs.junit.bom))
     testRuntimeOnly(libs.junit.platform.launcher)
@@ -294,6 +299,11 @@ dependencies {
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.robolectric.robolectric)
     testImplementation(libs.square.turbine)
+    androidTestImplementation(libs.androidx.uiautomator)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.junit.ktx)
+    androidTestImplementation(libs.androidx.ui.test.junit4.android)
+    androidTestImplementation(libs.androidx.compose.ui.test)
 }
 
 tasks {
