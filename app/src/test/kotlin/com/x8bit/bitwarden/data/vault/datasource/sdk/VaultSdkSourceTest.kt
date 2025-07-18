@@ -36,7 +36,6 @@ import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
-import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
@@ -654,54 +653,6 @@ class VaultSdkSourceTest {
         coVerify {
             ciphersClient.decrypt(cipher = mockCipher)
             sdkClientManager.getOrCreateClient(userId = userId)
-        }
-    }
-
-    @Test
-    fun `Cipher decryptListCollection should call SDK and return a Result with correct data`() =
-        runBlocking {
-            val userId = "userId"
-            val mockCiphers = mockk<List<Cipher>>()
-            val expectedResult = mockk<List<CipherListView>>()
-            coEvery { ciphersClient.decryptList(ciphers = mockCiphers) } returns expectedResult
-            val result = vaultSdkSource.decryptCipherListCollection(
-                userId = userId,
-                cipherList = mockCiphers,
-            )
-            assertEquals(
-                expectedResult.asSuccess(),
-                result,
-            )
-            coVerify {
-                ciphersClient.decryptList(ciphers = mockCiphers)
-                sdkClientManager.getOrCreateClient(userId = userId)
-            }
-        }
-
-    @Test
-    fun `Cipher decryptList should call SDK and return a Result with correct data`() = runBlocking {
-        val userId = "userId"
-        val mockCipher1 = mockk<Cipher>()
-        val mockCipher2 = mockk<Cipher>()
-        val cipherView1 = mockk<CipherView>()
-        val cipherView2 = mockk<CipherView>()
-        coEvery { ciphersClient.decrypt(cipher = mockCipher1) } returns cipherView1
-        coEvery { ciphersClient.decrypt(cipher = mockCipher2) } returns cipherView2
-        val result = vaultSdkSource.decryptCipherList(
-            userId = userId,
-            cipherList = listOf(mockCipher1, mockCipher2),
-        )
-        assertEquals(
-            listOf(cipherView1, cipherView2).asSuccess(),
-            result,
-        )
-        coVerify(exactly = 1) {
-            ciphersClient.decrypt(cipher = mockCipher1)
-            ciphersClient.decrypt(cipher = mockCipher2)
-            // It's important that we only fetch the client once
-            sdkClientManager.getOrCreateClient(userId = userId)
-            client.vault()
-            clientVault.ciphers()
         }
     }
 

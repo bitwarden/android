@@ -6,6 +6,12 @@ import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.LoginListView
 
 /**
+ * Returns true when the cipher is not deleted and contains at least one FIDO 2 credential.
+ */
+val CipherListView.isActiveWithFido2Credentials: Boolean
+    get() = deletedDate == null && login?.hasFido2 ?: false
+
+/**
  * Returns the [LoginListView] if the cipher is of type [CipherListViewType.Login], otherwise null.
  */
 val CipherListView.login: LoginListView?

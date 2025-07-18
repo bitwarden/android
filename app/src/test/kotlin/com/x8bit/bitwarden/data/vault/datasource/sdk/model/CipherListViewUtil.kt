@@ -29,7 +29,7 @@ fun createMockCipherListView(
     organizationId: String? = "mockOrganizationId-$number",
     folderId: String? = "mockId-$number",
     type: CipherListViewType = CipherListViewType.Login(
-        createMockLoginListView(number = 1),
+        createMockLoginListView(number = number),
     ),
     reprompt: CipherRepromptType = CipherRepromptType.NONE,
     name: String = "mockName-$number",
@@ -37,16 +37,22 @@ fun createMockCipherListView(
     collectionIds: List<String> = listOf("mockId-$number"),
     revisionDate: Instant = Instant.parse(DEFAULT_TIMESTAMP),
     creationDate: Instant = Instant.parse(DEFAULT_TIMESTAMP),
-    attachments: UInt = 0U,
+    attachments: UInt = 1U,
     organizationUseTotp: Boolean = false,
-    edit: Boolean = false,
-    viewPassword: Boolean = false,
+    edit: Boolean = true,
+    viewPassword: Boolean = true,
     permissions: CipherPermissions? = createMockSdkCipherPermissions(),
     localData: LocalDataView? = null,
     key: String = "mockKey-$number",
     subtitle: String = "mockSubtitle-$number",
     hasOldAttachments: Boolean = false,
-    copyableFields: List<CopyableCipherFields> = emptyList(),
+    copyableFields: List<CopyableCipherFields> = listOf(
+        CopyableCipherFields.LOGIN_USERNAME,
+        CopyableCipherFields.LOGIN_PASSWORD,
+        CopyableCipherFields.LOGIN_TOTP,
+    )
+        .takeIf { type is CipherListViewType.Login }
+        .orEmpty(),
     isDeleted: Boolean = false,
 ): CipherListView = CipherListView(
     id = id,
@@ -79,14 +85,14 @@ fun createMockCipherListView(
 fun createMockLoginListView(
     number: Int,
     fido2Credentials: List<Fido2CredentialListView> = listOf(
-        createMockFido2CredentialListView(number = 1),
+        createMockFido2CredentialListView(number = number),
     ),
-    hasFido2: Boolean = true,
+    hasFido2: Boolean = false,
     username: String = "mockUsername-$number",
     totp: String? = "mockTotp-$number",
-    uris: List<LoginUriView> = listOf(createMockUriView(number = 1)),
+    uris: List<LoginUriView> = listOf(createMockUriView(number = number)),
 ): LoginListView = LoginListView(
-    fido2Credentials = fido2Credentials,
+    fido2Credentials = fido2Credentials.takeIf { hasFido2 },
     hasFido2 = hasFido2,
     username = username,
     totp = totp,

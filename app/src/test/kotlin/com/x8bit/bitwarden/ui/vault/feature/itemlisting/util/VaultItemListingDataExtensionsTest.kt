@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 import android.net.Uri
 import androidx.core.os.bundleOf
 import androidx.credentials.provider.ProviderCreateCredentialRequest
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
@@ -11,19 +12,21 @@ import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
-import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.CopyableCipherFields
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.platform.util.subtitle
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
@@ -41,6 +44,10 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import java.time.format.FormatStyle
+import java.time.temporal.TemporalAccessor
+
+private const val DEFAULT_FORMATTED_DATE_TIME = "Oct 27, 2023, 12:00 PM"
 
 @Suppress("LargeClass")
 class VaultItemListingDataExtensionsTest {
@@ -60,10 +67,10 @@ class VaultItemListingDataExtensionsTest {
     @Test
     @Suppress("MaxLineLength")
     fun `determineListingPredicate should return the correct predicate for non trash Login cipherView`() {
-        val cipherView = createMockCipherView(
+        val cipherView = createMockCipherListView(
             number = 1,
             isDeleted = false,
-            cipherType = CipherType.LOGIN,
+            type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
         )
 
         mapOf(
@@ -89,10 +96,10 @@ class VaultItemListingDataExtensionsTest {
     @Test
     @Suppress("MaxLineLength")
     fun `determineListingPredicate should return the correct predicate for trash Login cipherView`() {
-        val cipherView = createMockCipherView(
+        val cipherView = createMockCipherListView(
             number = 1,
             isDeleted = true,
-            cipherType = CipherType.LOGIN,
+            type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
         )
 
         mapOf(
@@ -118,10 +125,10 @@ class VaultItemListingDataExtensionsTest {
     @Test
     @Suppress("MaxLineLength")
     fun `determineListingPredicate should return the correct predicate for non trash Card cipherView`() {
-        val cipherView = createMockCipherView(
+        val cipherView = createMockCipherListView(
             number = 1,
             isDeleted = false,
-            cipherType = CipherType.CARD,
+            type = CipherListViewType.Card(v1 = createMockCardListView(number = 1)),
         )
 
         mapOf(
@@ -147,10 +154,10 @@ class VaultItemListingDataExtensionsTest {
     @Test
     @Suppress("MaxLineLength")
     fun `determineListingPredicate should return the correct predicate for trash Card cipherView`() {
-        val cipherView = createMockCipherView(
+        val cipherView = createMockCipherListView(
             number = 1,
             isDeleted = true,
-            cipherType = CipherType.CARD,
+            type = CipherListViewType.Card(v1 = createMockCardListView(number = 1)),
         )
 
         mapOf(
@@ -176,10 +183,10 @@ class VaultItemListingDataExtensionsTest {
     @Test
     @Suppress("MaxLineLength")
     fun `determineListingPredicate should return the correct predicate for non trash Identity cipherView`() {
-        val cipherView = createMockCipherView(
+        val cipherView = createMockCipherListView(
             number = 1,
             isDeleted = false,
-            cipherType = CipherType.IDENTITY,
+            type = CipherListViewType.Identity,
         )
 
         mapOf(
@@ -205,10 +212,10 @@ class VaultItemListingDataExtensionsTest {
     @Test
     @Suppress("MaxLineLength")
     fun `determineListingPredicate should return the correct predicate for trash Identity cipherView`() {
-        val cipherView = createMockCipherView(
+        val cipherView = createMockCipherListView(
             number = 1,
             isDeleted = true,
-            cipherType = CipherType.IDENTITY,
+            type = CipherListViewType.Identity,
         )
 
         mapOf(
@@ -234,10 +241,10 @@ class VaultItemListingDataExtensionsTest {
     @Test
     @Suppress("MaxLineLength")
     fun `determineListingPredicate should return the correct predicate for non trash SecureNote cipherView`() {
-        val cipherView = createMockCipherView(
+        val cipherView = createMockCipherListView(
             number = 1,
             isDeleted = false,
-            cipherType = CipherType.SECURE_NOTE,
+            type = CipherListViewType.SecureNote,
         )
 
         mapOf(
@@ -263,10 +270,10 @@ class VaultItemListingDataExtensionsTest {
     @Test
     @Suppress("MaxLineLength")
     fun `determineListingPredicate should return the correct predicate for a trash SshKey cipherView`() {
-        val cipherView = createMockCipherView(
+        val cipherView = createMockCipherListView(
             number = 1,
             isDeleted = true,
-            cipherType = CipherType.SSH_KEY,
+            type = CipherListViewType.SshKey,
         )
 
         mapOf(
@@ -293,10 +300,10 @@ class VaultItemListingDataExtensionsTest {
     @Test
     @Suppress("MaxLineLength")
     fun `determineListingPredicate should return the correct predicate for a non trash SshKey cipherView`() {
-        val cipherView = createMockCipherView(
+        val cipherView = createMockCipherListView(
             number = 1,
             isDeleted = false,
-            cipherType = CipherType.SSH_KEY,
+            type = CipherListViewType.SshKey,
         )
 
         mapOf(
@@ -323,10 +330,10 @@ class VaultItemListingDataExtensionsTest {
     @Test
     @Suppress("MaxLineLength")
     fun `determineListingPredicate should return the correct predicate for item not in a folder`() {
-        val cipherView = createMockCipherView(
+        val cipherView = createMockCipherListView(
             number = 1,
             isDeleted = false,
-            cipherType = CipherType.SECURE_NOTE,
+            type = CipherListViewType.SecureNote,
             folderId = null,
         )
 
@@ -353,10 +360,10 @@ class VaultItemListingDataExtensionsTest {
     @Test
     @Suppress("MaxLineLength")
     fun `determineListingPredicate should return the correct predicate for trash SecureNote cipherView`() {
-        val cipherView = createMockCipherView(
+        val cipherView = createMockCipherListView(
             number = 1,
             isDeleted = true,
-            cipherType = CipherType.SECURE_NOTE,
+            type = CipherListViewType.SecureNote,
         )
 
         mapOf(
@@ -427,35 +434,44 @@ class VaultItemListingDataExtensionsTest {
         every { uriMock.host } returns "www.mockuri.com"
 
         val cipherViewList = listOf(
-            createMockCipherView(
+            createMockCipherListView(
                 number = 1,
                 isDeleted = false,
-                cipherType = CipherType.LOGIN,
                 folderId = "mockId-1",
             )
                 .copy(reprompt = CipherRepromptType.PASSWORD),
-            createMockCipherView(
+            createMockCipherListView(
                 number = 2,
                 isDeleted = false,
-                cipherType = CipherType.CARD,
+                type = CipherListViewType.Card(createMockCardListView(number = 2)),
                 folderId = "mockId-1",
+                copyableFields = listOf(
+                    CopyableCipherFields.CARD_NUMBER,
+                    CopyableCipherFields.CARD_SECURITY_CODE,
+                ),
             ),
-            createMockCipherView(
+            createMockCipherListView(
                 number = 3,
                 isDeleted = false,
-                cipherType = CipherType.SECURE_NOTE,
+                type = CipherListViewType.SecureNote,
                 folderId = "mockId-1",
+                copyableFields = listOf(
+                    CopyableCipherFields.SECURE_NOTES,
+                ),
             ),
-            createMockCipherView(
+            createMockCipherListView(
                 number = 4,
                 isDeleted = false,
-                cipherType = CipherType.IDENTITY,
+                type = CipherListViewType.Identity,
                 folderId = "mockId-1",
             ),
         )
 
         val result = VaultData(
-            cipherViewList = cipherViewList,
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = cipherViewList,
+            ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
             sendViewList = listOf(),
@@ -467,7 +483,6 @@ class VaultItemListingDataExtensionsTest {
             isIconLoadingDisabled = false,
             autofillSelectionData = null,
             createCredentialRequestData = null,
-            fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
@@ -479,29 +494,27 @@ class VaultItemListingDataExtensionsTest {
                 displayItemList = listOf(
                     createMockDisplayItemForCipher(
                         number = 1,
-                        cipherType = CipherType.LOGIN,
-                        subtitle = null,
-                    )
-                        .copy(
-                            secondSubtitleTestTag = "PasskeySite",
-                            shouldShowMasterPasswordReprompt = true,
-                        ),
+                        cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
+                        subtitle = "mockSubtitle-1",
+                        secondSubtitleTestTag = "PasskeySite",
+                        shouldShowMasterPasswordReprompt = true,
+                    ),
                     createMockDisplayItemForCipher(
                         number = 2,
-                        cipherType = CipherType.CARD,
-                        subtitle = null,
-                    )
-                        .copy(secondSubtitleTestTag = "PasskeySite"),
+                        cipherType = CipherListViewType.Card(createMockCardListView(number = 2)),
+                        subtitle = "mockSubtitle-2",
+                        secondSubtitleTestTag = "PasskeySite",
+                    ),
                     createMockDisplayItemForCipher(
                         number = 3,
-                        cipherType = CipherType.SECURE_NOTE,
-                        subtitle = null,
+                        cipherType = CipherListViewType.SecureNote,
+                        subtitle = "mockSubtitle-3",
                     )
                         .copy(secondSubtitleTestTag = "PasskeySite"),
                     createMockDisplayItemForCipher(
                         number = 4,
-                        cipherType = CipherType.IDENTITY,
-                        subtitle = null,
+                        cipherType = CipherListViewType.Identity,
+                        subtitle = "mockSubtitle-4",
                     )
                         .copy(secondSubtitleTestTag = "PasskeySite"),
                 ),
@@ -520,32 +533,35 @@ class VaultItemListingDataExtensionsTest {
         every { Uri.parse(any()) } returns uriMock
         every { uriMock.host } returns "www.mockuri.com"
 
+        val loginListView = createMockLoginListView(
+            number = 1,
+            hasFido2 = true,
+        )
         val cipherViewList = listOf(
-            createMockCipherView(
+            createMockCipherListView(
                 number = 1,
                 isDeleted = false,
-                cipherType = CipherType.LOGIN,
+                type = CipherListViewType.Login(v1 = loginListView),
                 folderId = "mockId-1",
-                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
-            )
-                .copy(reprompt = CipherRepromptType.PASSWORD),
-            createMockCipherView(
+                reprompt = CipherRepromptType.PASSWORD,
+            ),
+            createMockCipherListView(
                 number = 2,
                 isDeleted = false,
-                cipherType = CipherType.CARD,
+                type = CipherListViewType.Card(v1 = createMockCardListView(number = 2)),
                 folderId = "mockId-1",
-                fido2Credentials = createMockSdkFido2CredentialList(number = 2),
-            ),
-        )
-        val fido2CredentialAutofillViews = listOf(
-            createMockFido2CredentialAutofillView(
-                cipherId = "mockId-1",
-                number = 1,
+                copyableFields = listOf(
+                    CopyableCipherFields.CARD_NUMBER,
+                    CopyableCipherFields.CARD_SECURITY_CODE,
+                ),
             ),
         )
 
         val result = VaultData(
-            cipherViewList = cipherViewList,
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = cipherViewList,
+            ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
             sendViewList = listOf(),
@@ -561,7 +577,6 @@ class VaultItemListingDataExtensionsTest {
                 uri = null,
             ),
             createCredentialRequestData = null,
-            fido2CredentialAutofillViews = fido2CredentialAutofillViews,
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
@@ -573,24 +588,22 @@ class VaultItemListingDataExtensionsTest {
                 displayItemList = listOf(
                     createMockDisplayItemForCipher(
                         number = 1,
-                        cipherType = CipherType.LOGIN,
-                        subtitle = null,
-                    )
-                        .copy(
-                            secondSubtitle = "mockRpId-1",
-                            secondSubtitleTestTag = "PasskeySite",
-                            subtitleTestTag = "PasskeyName",
-                            iconData = IconData.Network(
-                                uri = "https://icons.bitwarden.net/www.mockuri.com/icon.png",
-                                fallbackIconRes = BitwardenDrawable.ic_bw_passkey,
-                            ),
-                            isAutofill = true,
-                            shouldShowMasterPasswordReprompt = true,
+                        cipherType = CipherListViewType.Login(loginListView),
+                        subtitle = "mockSubtitle-1",
+                        secondSubtitle = "mockRpId-1",
+                        secondSubtitleTestTag = "PasskeySite",
+                        subtitleTestTag = "PasskeyName",
+                        iconData = IconData.Network(
+                            uri = "https://icons.bitwarden.net/www.mockuri.com/icon.png",
+                            fallbackIconRes = BitwardenDrawable.ic_bw_passkey,
                         ),
+                        isAutofill = true,
+                        shouldShowMasterPasswordReprompt = true,
+                    ),
                     createMockDisplayItemForCipher(
                         number = 2,
-                        cipherType = CipherType.CARD,
-                        subtitle = null,
+                        cipherType = CipherListViewType.Card(createMockCardListView(number = 2)),
+                        subtitle = "mockSubtitle-2",
                     )
                         .copy(
                             secondSubtitleTestTag = "PasskeySite",
@@ -606,7 +619,7 @@ class VaultItemListingDataExtensionsTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `toViewState should transform a list of CipherViews into a ViewState with correct value for repromt`() {
+    fun `toViewState should transform a list of CipherViews into a ViewState with correct value for reprompt`() {
         mockkStatic(CipherView::subtitle)
         mockkStatic(Uri::class)
         val uriMock = mockk<Uri>()
@@ -614,25 +627,27 @@ class VaultItemListingDataExtensionsTest {
         every { Uri.parse(any()) } returns uriMock
         every { uriMock.host } returns "www.mockuri.com"
 
+        val type = CipherListViewType.Login(
+            createMockLoginListView(
+                number = 1,
+                hasFido2 = true,
+            ),
+        )
         val cipherViewList = listOf(
-            createMockCipherView(
+            createMockCipherListView(
                 number = 1,
                 isDeleted = false,
-                cipherType = CipherType.LOGIN,
+                type = type,
                 folderId = "mockId-1",
-                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
-            )
-                .copy(reprompt = CipherRepromptType.PASSWORD),
-        )
-        val fido2CredentialAutofillViews = listOf(
-            createMockFido2CredentialAutofillView(
-                cipherId = "mockId-1",
-                number = 1,
+                reprompt = CipherRepromptType.PASSWORD,
             ),
         )
 
         val result = VaultData(
-            cipherViewList = cipherViewList,
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = cipherViewList,
+            ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
             sendViewList = listOf(),
@@ -648,7 +663,6 @@ class VaultItemListingDataExtensionsTest {
                 uri = null,
             ),
             createCredentialRequestData = null,
-            fido2CredentialAutofillViews = fido2CredentialAutofillViews,
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
@@ -660,8 +674,8 @@ class VaultItemListingDataExtensionsTest {
                 displayItemList = listOf(
                     createMockDisplayItemForCipher(
                         number = 1,
-                        cipherType = CipherType.LOGIN,
-                        subtitle = null,
+                        cipherType = type,
+                        subtitle = "mockSubtitle-1",
                         requiresPasswordReprompt = false,
                     )
                         .copy(
@@ -687,7 +701,10 @@ class VaultItemListingDataExtensionsTest {
     fun `toViewState should transform an empty list of CipherViews into a NoItems ViewState with the appropriate data`() {
         mockkObject(ProviderCreateCredentialRequest.Companion)
         val vaultData = VaultData(
-            cipherViewList = listOf(),
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(),
+            ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
             sendViewList = listOf(),
@@ -715,7 +732,6 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
-                fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
@@ -739,7 +755,6 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
-                fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
@@ -761,7 +776,6 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
-                fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
@@ -784,7 +798,6 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
-                fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
@@ -806,7 +819,6 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
-                fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
@@ -828,7 +840,6 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
-                fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
@@ -850,7 +861,6 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
-                fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
@@ -876,7 +886,6 @@ class VaultItemListingDataExtensionsTest {
                     uri = "https://www.test.com",
                 ),
                 createCredentialRequestData = null,
-                fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
@@ -902,7 +911,6 @@ class VaultItemListingDataExtensionsTest {
                     isUserPreVerified = false,
                     requestData = bundleOf(),
                 ),
-                fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
                 restrictItemTypesPolicyOrgIds = emptyList(),
@@ -926,7 +934,6 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
                 createCredentialRequestData = null,
-                fido2CredentialAutofillViews = null,
                 totpData = mockk<TotpData> {
                     every { accountName } returns "accountName"
                     every { issuer } returns "issuer"
@@ -939,28 +946,37 @@ class VaultItemListingDataExtensionsTest {
 
     @Test
     fun `toViewState should transform a list of SendViews into a ViewState`() {
-        val sendViewList = listOf(
-            createMockSendView(number = 1, type = SendType.FILE),
-            createMockSendView(number = 2, type = SendType.TEXT),
-        )
+        mockkStatic(TemporalAccessor::toFormattedDateTimeStyle) {
+            every {
+                any<TemporalAccessor>().toFormattedDateTimeStyle(
+                    dateStyle = FormatStyle.MEDIUM,
+                    timeStyle = FormatStyle.SHORT,
+                    clock = clock,
+                )
+            } returns DEFAULT_FORMATTED_DATE_TIME
+            val sendViewList = listOf(
+                createMockSendView(number = 1, type = SendType.FILE),
+                createMockSendView(number = 2, type = SendType.TEXT),
+            )
 
-        val result = sendViewList.toViewState(
-            itemListingType = VaultItemListingState.ItemListingType.Send.SendFile,
-            baseWebSendUrl = Environment.Us.environmentUrlData.baseWebSendUrl,
-            clock = clock,
-        )
+            val result = sendViewList.toViewState(
+                itemListingType = VaultItemListingState.ItemListingType.Send.SendFile,
+                baseWebSendUrl = Environment.Us.environmentUrlData.baseWebSendUrl,
+                clock = clock,
+            )
 
-        assertEquals(
-            VaultItemListingState.ViewState.Content(
-                displayCollectionList = emptyList(),
-                displayItemList = listOf(
-                    createMockDisplayItemForSend(number = 1, sendType = SendType.FILE),
-                    createMockDisplayItemForSend(number = 2, sendType = SendType.TEXT),
+            assertEquals(
+                VaultItemListingState.ViewState.Content(
+                    displayCollectionList = emptyList(),
+                    displayItemList = listOf(
+                        createMockDisplayItemForSend(number = 1, sendType = SendType.FILE),
+                        createMockDisplayItemForSend(number = 2, sendType = SendType.TEXT),
+                    ),
+                    displayFolderList = emptyList(),
                 ),
-                displayFolderList = emptyList(),
-            ),
-            result,
-        )
+                result,
+            )
+        }
     }
 
     @Test
@@ -1152,7 +1168,10 @@ class VaultItemListingDataExtensionsTest {
     @Test
     fun `toViewState should properly filter and return the correct folders`() {
         val vaultData = VaultData(
-            cipherViewList = listOf(createMockCipherView(number = 1)),
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(createMockCipherListView(number = 1)),
+            ),
             collectionViewList = emptyList(),
             folderViewList = listOf(
                 FolderView("1", "test", clock.instant()),
@@ -1172,7 +1191,6 @@ class VaultItemListingDataExtensionsTest {
             isIconLoadingDisabled = false,
             autofillSelectionData = null,
             createCredentialRequestData = null,
-            fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
@@ -1197,7 +1215,10 @@ class VaultItemListingDataExtensionsTest {
     @Test
     fun `toViewState should properly filter and return the correct collections`() {
         val vaultData = VaultData(
-            cipherViewList = emptyList(),
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = emptyList(),
+            ),
             collectionViewList = listOf(
                 createMockCollectionView(1, "test"),
                 createMockCollectionView(2, "test/test"),
@@ -1217,7 +1238,6 @@ class VaultItemListingDataExtensionsTest {
             isIconLoadingDisabled = false,
             autofillSelectionData = null,
             createCredentialRequestData = null,
-            fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = emptyList(),
@@ -1255,33 +1275,38 @@ class VaultItemListingDataExtensionsTest {
         every { uriMock.host } returns "www.mockuri.com"
 
         val vaultData = VaultData(
-            cipherViewList = listOf(
-                createMockCipherView(
-                    number = 1,
-                    organizationId = "restrict_item_type_policy_id",
-                    cipherType = CipherType.LOGIN,
-                ),
-                createMockCipherView(
-                    number = 2,
-                    organizationId = "restrict_item_type_policy_id",
-                    cipherType = CipherType.CARD,
-                ),
-                createMockCipherView(
-                    number = 3,
-                    organizationId = null,
-                    cipherType = CipherType.CARD,
-                ),
-                createMockCipherView(
-                    number = 4,
-                    organizationId = "another_id",
-                    cipherType = CipherType.CARD,
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(
+                        number = 1,
+                        organizationId = "restrict_item_type_policy_id",
+                        type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+                    ),
+                    createMockCipherListView(
+                        number = 2,
+                        organizationId = "restrict_item_type_policy_id",
+                        type = CipherListViewType.Card(v1 = createMockCardListView(number = 2)),
+                    ),
+                    createMockCipherListView(
+                        number = 3,
+                        organizationId = null,
+                        type = CipherListViewType.Card(v1 = createMockCardListView(number = 3)),
+                    ),
+                    createMockCipherListView(
+                        number = 4,
+                        organizationId = "another_id",
+                        type = CipherListViewType.Card(v1 = createMockCardListView(number = 4)),
+                        copyableFields = listOf(
+                            CopyableCipherFields.CARD_NUMBER,
+                            CopyableCipherFields.CARD_SECURITY_CODE,
+                        ),
+                    ),
                 ),
             ),
-
             collectionViewList = listOf(),
             folderViewList = listOf(),
             sendViewList = listOf(),
-            fido2CredentialAutofillViewList = listOf(),
         )
 
         val actual = vaultData.toViewState(
@@ -1292,7 +1317,6 @@ class VaultItemListingDataExtensionsTest {
             isIconLoadingDisabled = false,
             autofillSelectionData = null,
             createCredentialRequestData = null,
-            fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
@@ -1304,8 +1328,8 @@ class VaultItemListingDataExtensionsTest {
                 displayItemList = listOf(
                     createMockDisplayItemForCipher(
                         number = 4,
-                        cipherType = CipherType.CARD,
-                        subtitle = null,
+                        cipherType = CipherListViewType.Card(createMockCardListView(number = 4)),
+                        subtitle = "mockSubtitle-4",
                     ).copy(secondSubtitleTestTag = "PasskeySite"),
                 ),
                 displayFolderList = emptyList(),
@@ -1325,11 +1349,13 @@ class VaultItemListingDataExtensionsTest {
         every { uriMock.host } returns "www.mockuri.com"
 
         val vaultData = VaultData(
-            cipherViewList = listOf(),
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(),
+            ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
             sendViewList = listOf(),
-            fido2CredentialAutofillViewList = listOf(),
         )
 
         val actual = vaultData.toViewState(
@@ -1340,7 +1366,6 @@ class VaultItemListingDataExtensionsTest {
             isIconLoadingDisabled = false,
             autofillSelectionData = null,
             createCredentialRequestData = null,
-            fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
             restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),

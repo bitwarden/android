@@ -23,8 +23,9 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertMasterPasswordDialogDisplayed
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.isProgressBar
-import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherListViewType
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
@@ -259,7 +260,9 @@ class SearchScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(
                 SearchAction.ItemClick(
                     itemId = "mockId-1",
-                    itemType = SearchState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
+                    itemType = SearchState.DisplayItem.ItemType.Vault(
+                        type = CipherListViewType.Login(createMockLoginListView(number = 1)),
+                    ),
                 ),
             )
         }
@@ -405,7 +408,9 @@ class SearchScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(
                 SearchAction.ItemClick(
                     itemId = "mockId-1",
-                    itemType = SearchState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
+                    itemType = SearchState.DisplayItem.ItemType.Vault(
+                        type = CipherListViewType.Login(createMockLoginListView(number = 1)),
+                    ),
                 ),
             )
         }
@@ -637,7 +642,7 @@ class SearchScreenTest : BitwardenComposeTest() {
                 SearchAction.OverflowOptionClick(
                     overflowAction = ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = "mockId-1",
-                        cipherType = CipherType.LOGIN,
+                        cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
                         requiresPasswordReprompt = true,
                     ),
                 ),
@@ -658,7 +663,7 @@ class SearchScreenTest : BitwardenComposeTest() {
                 SearchAction.OverflowOptionClick(
                     overflowAction = ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-1",
-                        cipherType = CipherType.LOGIN,
+                        cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
                         requiresPasswordReprompt = true,
                     ),
                 ),
@@ -697,7 +702,6 @@ class SearchScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                        password = "mockPassword-1",
                         requiresPasswordReprompt = true,
                         cipherId = "mockId-1",
                     ),
@@ -796,7 +800,8 @@ class SearchScreenTest : BitwardenComposeTest() {
                     masterPasswordRepromptData = MasterPasswordRepromptData.OverflowItem(
                         action = ListingItemOverflowAction.VaultAction.EditClick(
                             cipherId = "mockId-1",
-                            cipherType = CipherType.LOGIN,
+                            cipherType =
+                                CipherListViewType.Login(createMockLoginListView(number = 1)),
                             requiresPasswordReprompt = true,
                         ),
                     ),

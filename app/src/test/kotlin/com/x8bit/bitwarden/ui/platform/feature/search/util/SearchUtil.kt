@@ -5,8 +5,10 @@ import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
-import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherListViewType
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.persistentListOf
@@ -16,16 +18,17 @@ import kotlinx.collections.immutable.persistentListOf
  */
 fun createMockDisplayItemForCipher(
     number: Int,
-    cipherType: CipherType = CipherType.LOGIN,
+    cipherType: CipherListViewType =
+        CipherListViewType.Login(createMockLoginListView(number = number)),
     @DrawableRes fallbackIconRes: Int = BitwardenDrawable.ic_globe,
 ): SearchState.DisplayItem =
     when (cipherType) {
-        CipherType.LOGIN -> {
+        is CipherListViewType.Login -> {
             SearchState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
-                subtitle = "mockUsername-$number",
+                subtitle = "mockSubtitle-$number",
                 subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Network(
                     uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
@@ -48,7 +51,6 @@ fun createMockDisplayItemForCipher(
                         username = "mockUsername-$number",
                     ),
                     ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                        password = "mockPassword-$number",
                         requiresPasswordReprompt = true,
                         cipherId = "mockId-$number",
                     ),
@@ -58,12 +60,12 @@ fun createMockDisplayItemForCipher(
                     ),
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = "mockId-$number",
-                        cipherType = CipherType.LOGIN,
+                        cipherType = cipherType,
                         requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-$number",
-                        cipherType = CipherType.LOGIN,
+                        cipherType = cipherType,
                         requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.LaunchClick(
@@ -78,7 +80,7 @@ fun createMockDisplayItemForCipher(
             )
         }
 
-        CipherType.SECURE_NOTE -> {
+        CipherListViewType.SecureNote -> {
             SearchState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
@@ -100,17 +102,17 @@ fun createMockDisplayItemForCipher(
                 ),
                 overflowOptions = listOf(
                     ListingItemOverflowAction.VaultAction.CopyNoteClick(
-                        notes = "mockNotes-$number",
+                        cipherId = "mockId-$number",
                         requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = "mockId-$number",
-                        cipherType = CipherType.SECURE_NOTE,
+                        cipherType = CipherListViewType.SecureNote,
                         requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-$number",
-                        cipherType = CipherType.SECURE_NOTE,
+                        cipherType = CipherListViewType.SecureNote,
                         requiresPasswordReprompt = true,
                     ),
                 ),
@@ -122,12 +124,12 @@ fun createMockDisplayItemForCipher(
             )
         }
 
-        CipherType.CARD -> {
+        is CipherListViewType.Card -> {
             SearchState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
-                subtitle = "mockBrand-$number, *er-$number",
+                subtitle = "mockSubtitle-$number",
                 subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Local(BitwardenDrawable.ic_payment_card),
                 extraIconList = persistentListOf(
@@ -144,22 +146,25 @@ fun createMockDisplayItemForCipher(
                 ),
                 overflowOptions = listOf(
                     ListingItemOverflowAction.VaultAction.CopyNumberClick(
-                        number = "mockNumber-$number",
+                        cipherId = "mockId-$number",
                         requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
-                        securityCode = "mockCode-$number",
                         cipherId = "mockId-$number",
                         requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = "mockId-$number",
-                        cipherType = CipherType.CARD,
+                        cipherType = CipherListViewType.Card(
+                            createMockCardListView(number = number),
+                        ),
                         requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-$number",
-                        cipherType = CipherType.CARD,
+                        cipherType = CipherListViewType.Card(
+                            createMockCardListView(number = number),
+                        ),
                         requiresPasswordReprompt = true,
                     ),
                 ),
@@ -171,7 +176,7 @@ fun createMockDisplayItemForCipher(
             )
         }
 
-        CipherType.IDENTITY -> {
+        CipherListViewType.Identity -> {
             SearchState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
@@ -194,12 +199,12 @@ fun createMockDisplayItemForCipher(
                 overflowOptions = listOf(
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = "mockId-$number",
-                        cipherType = CipherType.IDENTITY,
+                        cipherType = CipherListViewType.Identity,
                         requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-$number",
-                        cipherType = CipherType.IDENTITY,
+                        cipherType = CipherListViewType.Identity,
                         requiresPasswordReprompt = true,
                     ),
                 ),
@@ -211,7 +216,7 @@ fun createMockDisplayItemForCipher(
             )
         }
 
-        CipherType.SSH_KEY -> {
+        CipherListViewType.SshKey -> {
             SearchState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
@@ -229,12 +234,12 @@ fun createMockDisplayItemForCipher(
                 overflowOptions = listOf(
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = "mockId-$number",
-                        cipherType = CipherType.SSH_KEY,
+                        cipherType = CipherListViewType.SshKey,
                         requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-$number",
-                        cipherType = CipherType.SSH_KEY,
+                        cipherType = CipherListViewType.SshKey,
                         requiresPasswordReprompt = true,
                     ),
                 ),

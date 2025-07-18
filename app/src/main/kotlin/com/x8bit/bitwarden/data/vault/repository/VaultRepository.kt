@@ -12,13 +12,13 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
-import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
@@ -60,20 +60,13 @@ interface VaultRepository : CipherManager, VaultLockManager {
     val vaultDataStateFlow: StateFlow<DataState<VaultData>>
 
     /**
-     * Flow that represents all ciphers for the active user.
+     * Flow that represents all ciphers for the active user, including references to ciphers that
+     * cannot be decrypted.
      *
      * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself
      * must be collected in order to trigger state changes.
      */
-    val ciphersStateFlow: StateFlow<DataState<List<CipherView>>>
-
-    /**
-     * Flow that represents all ciphers for the active user.
-     *
-     * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself
-     * must be collected in order to trigger state changes.
-     */
-    val ciphersListViewStateFlow: StateFlow<DataState<List<CipherListView>>>
+    val decryptCipherListResultStateFlow: StateFlow<DataState<DecryptCipherListResult>>
 
     /**
      * Flow that represents all collections for the active user.
@@ -163,13 +156,6 @@ interface VaultRepository : CipherManager, VaultLockManager {
      * This may emit an empty list if any issues arise during code generation.
      */
     fun getAuthCodesFlow(): StateFlow<DataState<List<VerificationCodeItem>>>
-
-    /**
-     * Get the decrypted list of fido credentials for the current ciphers and user id.
-     */
-    suspend fun getDecryptedFido2CredentialAutofillViews(
-        cipherViewList: List<CipherView>,
-    ): DecryptFido2CredentialAutofillViewResult
 
     /**
      * Silently discovers FIDO 2 credentials for a given [userId] and [relyingPartyId].
@@ -271,4 +257,10 @@ interface VaultRepository : CipherManager, VaultLockManager {
         format: ExportFormat,
         restrictedTypes: List<CipherType>,
     ): ExportVaultDataResult
+
+    /**
+     * Flow that represents the data for a specific vault list item as found by ID. This may emit
+     * `null` if the item cannot be found.
+     */
+    fun getVaultListItemStateFlow(itemId: String): StateFlow<DataState<CipherListView?>>
 }
