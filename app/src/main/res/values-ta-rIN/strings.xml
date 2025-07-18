@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">அங்கீகரிப்பான் செயலி</string>
     <string name="enter_verification_code_app">உங்கள் அங்கீகார செயலியிலிருந்து ௬ இலக்க சரிபார்ப்புக் குறியீட்டை உள்ளிடவும்.</string>
     <string name="enter_verification_code_email">%1$s க்கு மின்னஞ்சல் செய்த ௬ இலக்க சரிபார்ப்புக் குறியீட்டை உள்ளிடவும்.</string>
-    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
+    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the code sent to your email to verify your identity.</string>
     <string name="recovery_code_title">மீட்புக் குறியீடு</string>
     <string name="remember">Remember</string>
     <string name="remember_email">Remember email</string>

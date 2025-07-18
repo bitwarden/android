@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Authenticator app</string>
     <string name="enter_verification_code_app">Enter the 6 digit verification code from your authenticator app.</string>
     <string name="enter_verification_code_email">Enter the 6 digit verification code that was emailed to %1$s.</string>
-    <string name="enter_verification_code_new_device">We don\'t recognise this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
+    <string name="enter_verification_code_new_device">We don\'t recognise this device. Enter the 8 digit verification code that was emailed to [%1$s].</string>
     <string name="recovery_code_title">Recovery code</string>
     <string name="remember">Remember</string>
     <string name="remember_email">Remember email</string>

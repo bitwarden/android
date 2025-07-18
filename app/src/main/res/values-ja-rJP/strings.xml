@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">認証アプリ</string>
     <string name="enter_verification_code_app">認証アプリに表示された6桁の認証コードを入力してください。</string>
     <string name="enter_verification_code_email">%1$s に送信された6桁の認証コードを入力してください。</string>
-    <string name="enter_verification_code_new_device">このデバイスは未確認です。本人確認のため、 %1$s に送信されたメールに書かれている 8 桁の認証コードを入力してください。</string>
+    <string name="enter_verification_code_new_device">このデバイスは未確認です。本人確認のため、 [%1$s] に送信されたメールに書かれている 8 桁の認証コードを入力してください。</string>
     <string name="recovery_code_title">リカバリーコード</string>
     <string name="remember">ログイン状態を記憶</string>
     <string name="remember_email">メールアドレスを記録</string>

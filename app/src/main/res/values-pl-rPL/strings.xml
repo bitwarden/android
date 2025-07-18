@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Aplikacja uwierzytelniająca</string>
     <string name="enter_verification_code_app">Wpisz 6-cyfrowy kod weryfikacyjny z aplikacji uwierzytelniającej.</string>
     <string name="enter_verification_code_email">Wpisz 6-cyfrowy kod weryfikacyjny wysłany na adres %1$s.</string>
-    <string name="enter_verification_code_new_device">Nie rozpoznajemy tego urządzenia. Wpisz 8-cyfrowy kod weryfikacyjny, który został wysłany na adres %1$s.</string>
+    <string name="enter_verification_code_new_device">Nie rozpoznajemy tego urządzenia. Wpisz 8-cyfrowy kod weryfikacyjny, który został wysłany na adres [%1$s].</string>
     <string name="recovery_code_title">Kod odzyskiwania</string>
     <string name="remember">Zapamiętaj</string>
     <string name="remember_email">Zapamiętaj adres e-mail</string>
@@ -496,10 +496,10 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="fido2_authenticate_web_authn">Uwierzytelnianie WebAuthn</string>
     <string name="fido2_return_to_app">Wróć do aplikacji</string>
     <string name="reset_password_auto_enroll_invite_warning">Zasada organizacji umożliwia administratorom organizacji zmianę Twojego hasła głównego.</string>
-    <string name="vault_timeout_policy_in_effect">Zasady organizacji mają wpływ na czas blokowania aplikacji. Maksymalny dozwolony czas wynosi %1$s godz. i %2$s min.</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Zasady organizacji mają wpływ na czas blokowania aplikacji. Maksymalny dozwolony czas wynosi %1$s godz. i %2$s min. Twój czas blokowania aplikacji to %3$s.</string>
-    <string name="vault_timeout_action_policy_in_effect">Zasada organizacji wymusza czas blokowania aplikacji na %1$s.</string>
-    <string name="vault_timeout_to_large">Czas blokowania aplikacji przekracza limit określony przez organizację.</string>
+    <string name="vault_timeout_policy_in_effect">Zasady organizacji mają wpływ na czas blokowania sejfu. Maksymalny dozwolony czas wynosi %1$s godz. i %2$s min.</string>
+    <string name="vault_timeout_policy_with_action_in_effect">Zasady organizacji mają wpływ na czas blokowania sejfu. Maksymalny dozwolony czas wynosi %1$s godz. i %2$s min. Twój czas blokowania sejfu to %3$s.</string>
+    <string name="vault_timeout_action_policy_in_effect">Zasady organizacji wymuszają sposób blokowania sejfu na %1$s.</string>
+    <string name="vault_timeout_to_large">Czas blokowania sejfu przekracza limit określony przez organizację.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Co najmniej jedna zasada organizacji uniemożliwia wyeksportowanie osobistego sejfu.</string>
     <string name="add_account">Dodaj konto</string>
     <string name="account_unlocked">Odblokowane</string>
@@ -678,7 +678,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="learn_about_organizations_description_long">Bitwarden pozwala na udostępnianie zawartości sejfu innym użytkownikom za pośrednictwem organizacji. Dowiedz się więcej na stronie bitwarden.com.</string>
     <string name="created_x">Utworzono %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Twoja organizacja wymaga ustawienia hasła głównego.</string>
-    <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Ustaw metodę odblokowania, aby zmienić czas blokowania aplikacji.</string>
+    <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Ustaw opcje odblokowania, aby zmienić czas blokowania sejfu.</string>
     <string name="save_passkey_as_new_login">Zapisz klucz dostępu jako nowe dane logowania</string>
     <string name="overwrite_passkey">Zastąpić klucz dostępu?</string>
     <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">Element zawiera już klucz dostępu. Czy na pewno chcesz zastąpić obecny klucz dostępu?</string>
@@ -689,7 +689,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="passkeys_not_supported_for_this_app">Klucze dostępu nie są obsługiwane dla tej aplikacji</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Operacja klucza dostępu nie powiodła się, ponieważ przeglądarka nie jest dozwolona</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Operacja klucza dostępu nie powiodła się, ponieważ podpis przeglądarki się nie zgadza</string>
-    <string name="passkey_operation_failed_because_of_missing_asset_links">Operacja klucza dostępu nie powiodła się, ponieważ brakuje połączeń zasobów</string>
+    <string name="passkey_operation_failed_because_of_missing_asset_links">Operacja klucza dostępu nie powiodła się, ponieważ brakuje powiązań zasobów</string>
     <string name="passkey_operation_failed_because_app_could_not_be_verified">Operacja klucza dostępu nie powiodła się, ponieważ aplikacja nie mogła zostać zweryfikowana</string>
     <string name="confirm_file_password">Potwierdź hasło pliku</string>
     <string name="file_password">Hasło pliku</string>
@@ -706,7 +706,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="create_account_on_with_colon">Utwórz konto na:</string>
     <string name="we_sent_an_email_to">Wysłaliśmy wiadomość na adres <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Kontynuując, akceptujesz <annotation link="termsOfService">Regulamin</annotation> i <annotation link="privacyPolicy">Politykę prywatności</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Aktywując, akceptujesz <annotation link="termsOfService">Regulamin</annotation> i <annotation link="privacyPolicy">Politykę prywatności</annotation></string>
+    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Zaznaczając tę opcję, akceptujesz <annotation link="termsOfService">Regulamin</annotation> i <annotation link="privacyPolicy">Politykę prywatności</annotation></string>
     <string name="unsubscribe">Anuluj subskrypcję</string>
     <string name="check_your_email">Sprawdź swoją pocztę e-mail</string>
     <string name="open_email_app">Otwórz aplikację poczty e-mail</string>
@@ -746,7 +746,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Dowiedz się więcej o sposobach zapobiegania blokowaniu konta</annotation></string>
     <string name="help_with_server_geolocations">Pomoc z geolokalizacjami serwera.</string>
     <string name="email_address_required">Adres e-mail (wymagane)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Kliknij link w wiadomości e-mail, aby zweryfikować adres e-mail i utworzyć konto."</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Kliknij link w wiadomości, aby zweryfikować adres e-mail i utworzyć konto."</string>
     <string name="change_email_address">Zmień adres e-mail</string>
     <string name="next">Dalej</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden nie może odzyskać utraconego hasła głównego.</string>

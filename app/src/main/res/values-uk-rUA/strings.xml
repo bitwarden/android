@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Програма автентифікації</string>
     <string name="enter_verification_code_app">Введіть 6-значний код підтвердження з програми автентифікації.</string>
     <string name="enter_verification_code_email">Введіть 6-значний код підтвердження, надісланий на %1$s.</string>
-    <string name="enter_verification_code_new_device">Ми не впізнаємо цей пристрій. Введіть восьмизначний код підтвердження, надісланий на %1$s.</string>
+    <string name="enter_verification_code_new_device">Ми не впізнаємо цей пристрій. Введіть восьмизначний код підтвердження, надісланий на [%1$s].</string>
     <string name="recovery_code_title">Код відновлення</string>
     <string name="remember">Запам\'ятати</string>
     <string name="remember_email">Запам\'ятати е-пошту</string>

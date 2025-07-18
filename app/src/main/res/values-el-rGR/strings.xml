@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Εφαρμογή αυθεντικοποίησης</string>
     <string name="enter_verification_code_app">Εισάγετε τον 6ψήφιο κωδικό από την εφαρμογή επαλήθευσης.</string>
     <string name="enter_verification_code_email">Εισαγωγή 6ψήφιου κωδικού επαλήθευσης που σταλθηκε με μήνυμα στο %1$s.</string>
-    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
+    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the code sent to your email to verify your identity.</string>
     <string name="recovery_code_title">Κωδικός ανάκτησης</string>
     <string name="remember">Απομνημόνευση</string>
     <string name="remember_email">Απομνημόνευση email</string>
