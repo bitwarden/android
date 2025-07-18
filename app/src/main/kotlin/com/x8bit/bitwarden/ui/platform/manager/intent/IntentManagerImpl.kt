@@ -52,7 +52,7 @@ private const val TEMP_CAMERA_IMAGE_NAME: String = "temp_camera_image.jpg"
 private const val TEMP_CAMERA_IMAGE_DIR: String = "camera_temp"
 
 /**
- * Key for the user id included in FIDO 2 provider "create entries".
+ * Key for the user id included in Credential provider "create entries".
  *
  * @see IntentManager.createFido2CreationPendingIntent
  */
@@ -73,7 +73,8 @@ const val EXTRA_KEY_CREDENTIAL_ID: String = "credential_id"
 const val EXTRA_KEY_CIPHER_ID: String = "cipher_id"
 
 /**
- * Key for the user verification performed during vault unlock while processing a FIDO 2 request.
+ * Key for the user verification performed during vault unlock while
+ * processing a Credential request.
  */
 const val EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK: String = "uv_performed_during_unlock"
 
@@ -354,6 +355,27 @@ class IntentManagerImpl(
         val intent = Intent(action)
             .setPackage(context.packageName)
             .putExtra(EXTRA_KEY_USER_ID, userId)
+
+        return PendingIntent.getActivity(
+            /* context = */ context,
+            /* requestCode = */ requestCode,
+            /* intent = */ intent,
+            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
+        )
+    }
+
+    override fun createPasswordGetCredentialPendingIntent(
+        action: String,
+        userId: String,
+        cipherId: String?,
+        isUserVerified: Boolean,
+        requestCode: Int,
+    ): PendingIntent {
+        val intent = Intent(action)
+            .setPackage(context.packageName)
+            .putExtra(EXTRA_KEY_USER_ID, userId)
+            .putExtra(EXTRA_KEY_CIPHER_ID, cipherId)
+            .putExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, isUserVerified)
 
         return PendingIntent.getActivity(
             /* context = */ context,
