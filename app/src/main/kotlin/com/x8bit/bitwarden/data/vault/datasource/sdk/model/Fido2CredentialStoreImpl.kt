@@ -123,13 +123,13 @@ class Fido2CredentialStoreImpl(
                 .orEmpty()
                 .map { it.credentialId.toByteArray() }
 
+            val hasIntersectingCredentials = credentialIds
+                ?.intersect(fido2CredentialIds)
+                .orEmpty()
+                .isNotEmpty()
+
             hasMatchingRpId &&
-                (
-                    skipCredentialIdFiltering ||
-                        credentialIds
-                            .intersect(fido2CredentialIds)
-                            .isNotEmpty()
-                    )
+                (skipCredentialIdFiltering || hasIntersectingCredentials)
         }
     }
 }
