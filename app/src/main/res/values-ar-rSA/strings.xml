@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">تطبيق المُصادَقة</string>
     <string name="enter_verification_code_app">أدخل رمز التحقق من 6 أرقام من تطبيق المصادقة الخاص بك.</string>
     <string name="enter_verification_code_email">أدخل رمز التحقق المكون من 6 أرقام الذي تم ارساله إلى %1$s.</string>
-    <string name="enter_verification_code_new_device">نحن لا نعرف هذا الجهاز. أدخل رمز التحقق المكون من 8 أرقام الذي تم مراسلته بالبريد الإلكتروني إلى %1$s.</string>
+    <string name="enter_verification_code_new_device">نحن لا نعرف هذا الجهاز. أدخل رمز التحقق المكون من 8 أرقام الذي تم مراسلته بالبريد الإلكتروني إلى [%1$s].</string>
     <string name="recovery_code_title">رمز الاسترداد</string>
     <string name="remember">تذكر</string>
     <string name="remember_email">تذكر البريد الإلكتروني</string>

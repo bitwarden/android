@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Kimlik doğrulama uygulaması</string>
     <string name="enter_verification_code_app">Kimlik doğrulama uygulamanızdaki 6 haneli doğrulama kodunu girin.</string>
     <string name="enter_verification_code_email">%1$s adresine e-postayla gönderdiğimiz 6 haneli doğrulama kodunu girin.</string>
-    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
+    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the code sent to your email to verify your identity.</string>
     <string name="recovery_code_title">Kurtarma kodu</string>
     <string name="remember">Hatırla</string>
     <string name="remember_email">E-postayı hatırla</string>

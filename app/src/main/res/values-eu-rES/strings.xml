@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Autentifikazio aplikazioa</string>
     <string name="enter_verification_code_app">Sartu zure autentifikazio aplikazioaren 6 digituko egiaztatze-kodea.</string>
     <string name="enter_verification_code_email">Sartu %1$s-era bidalitako 6 digituko egiaztatze-kodea.</string>
-    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
+    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the code sent to your email to verify your identity.</string>
     <string name="recovery_code_title">Berreskuratze-kodea</string>
     <string name="remember">Remember</string>
     <string name="remember_email">Remember email</string>

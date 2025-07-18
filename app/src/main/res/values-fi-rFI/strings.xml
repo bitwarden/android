@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Todennussovellus</string>
     <string name="enter_verification_code_app">Syötä todennussovelluksesi näyttämä kuusinumeroinen todennuskoodi.</string>
     <string name="enter_verification_code_email">Syötä osoitteeseen %1$s lähetetty kuusinumeroinen todennuskoodi.</string>
-    <string name="enter_verification_code_new_device">Laitetta ei tunnisteta. Syötä osoitteeseen %1$s lähetetty kahdeksan numeroinen vahvistuskoodi.</string>
+    <string name="enter_verification_code_new_device">Laitetta ei tunnisteta. Syötä osoitteeseen [%1$s] lähetetty kahdeksan numeroinen vahvistuskoodi.</string>
     <string name="recovery_code_title">Palautuskoodi</string>
     <string name="remember">Muista</string>
     <string name="remember_email">Muista sähköpostiosoite</string>
