@@ -13,6 +13,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -41,7 +42,7 @@ class SdkCipherRepositoryTest {
 
     @AfterEach
     fun tearDown() {
-        mockkStatic(
+        unmockkStatic(
             SyncResponseJson.Cipher::toEncryptedSdkCipher,
             Cipher::toEncryptedNetworkCipherResponse,
         )

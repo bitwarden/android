@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Authenticator app</string>
     <string name="enter_verification_code_app">Ilagay ang 6 na numerong code pamberipika mula sa authenticator app mo.</string>
     <string name="enter_verification_code_email">Ilagay ang 6 na numerong code pamberipikang in-email sa %1$s.</string>
-    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
+    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the code sent to your email to verify your identity.</string>
     <string name="recovery_code_title">Code pang-recover</string>
     <string name="remember">Remember</string>
     <string name="remember_email">Remember email</string>

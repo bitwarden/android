@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">ದೃಢೀಕರಣ ಅಪ್ಲಿಕೇಶನ್</string>
     <string name="enter_verification_code_app">ನಿಮ್ಮ ದೃಢೀಕರಣ ಅಪ್ಲಿಕೇಶನ್‌ನಿಂದ 6 ಅಂಕಿಯ ಪರಿಶೀಲನಾ ಕೋಡ್ ಅನ್ನು ನಮೂದಿಸಿ.</string>
     <string name="enter_verification_code_email">%1$s ಇಮೇಲ್ ಮಾಡಲಾದ 6 ಅಂಕಿಯ ಪರಿಶೀಲನಾ ಕೋಡ್ ಅನ್ನು ನಮೂದಿಸಿ.</string>
-    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
+    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the code sent to your email to verify your identity.</string>
     <string name="recovery_code_title">ಮರುಪಡೆಯುವಿಕೆ ಕೋಡ್</string>
     <string name="remember">Remember</string>
     <string name="remember_email">Remember email</string>

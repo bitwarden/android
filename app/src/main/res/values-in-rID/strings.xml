@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Aplikasi Autentikasi</string>
     <string name="enter_verification_code_app">Masukkan 6 digit kode verifikasi dari aplikasi autentikasi Anda.</string>
     <string name="enter_verification_code_email">Masukkan 6 digit kode verifikasi yang dikirim melalui email ke %1$s.</string>
-    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
+    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the code sent to your email to verify your identity.</string>
     <string name="recovery_code_title">Kode Pemulihan</string>
     <string name="remember">Remember</string>
     <string name="remember_email">Remember email</string>

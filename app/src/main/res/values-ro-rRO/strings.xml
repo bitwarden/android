@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Aplicația Autentificator</string>
     <string name="enter_verification_code_app">Introducere cod de verificare din 6 cifre din aplicația de autentificare.</string>
     <string name="enter_verification_code_email">Introducere cod de verificare din 6 cifre, care a fost trimis prin e-mail la %1$s.</string>
-    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
+    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the code sent to your email to verify your identity.</string>
     <string name="recovery_code_title">Cod de recuperare</string>
     <string name="remember">Remember</string>
     <string name="remember_email">Remember email</string>

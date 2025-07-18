@@ -120,7 +120,6 @@ class VaultItemViewModel @Inject constructor(
                 TotpCodeItemData(
                     periodSeconds = it.periodSeconds,
                     timeLeftSeconds = it.timeLeftSeconds,
-                    totpCode = it.totpCode,
                     verificationCode = it.code,
                 )
             }

@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Authenticator App</string>
     <string name="enter_verification_code_app">Gib den 6-stelligen Verifizierungscode aus deiner Authenticator App ein.</string>
     <string name="enter_verification_code_email">Gib den 6-stelligen Bestätigungscode ein, der an %1$s gesendet wurde.</string>
-    <string name="enter_verification_code_new_device">Wir erkennen dieses Gerät nicht. Gib den 8-stelligen Verifizierungscode ein, der an %1$s gesendet wurde.</string>
+    <string name="enter_verification_code_new_device">Wir erkennen dieses Gerät nicht. Gib den 8-stelligen Verifizierungscode ein, der an [%1$s] gesendet wurde.</string>
     <string name="recovery_code_title">Wiederherstellungscode</string>
     <string name="remember">Merken</string>
     <string name="remember_email">E-Mail-Adresse merken</string>

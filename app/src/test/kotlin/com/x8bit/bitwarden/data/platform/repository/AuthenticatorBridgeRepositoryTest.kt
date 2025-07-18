@@ -94,6 +94,7 @@ class AuthenticatorBridgeRepositoryTest {
                         decryptedUserKey = USER_1_UNLOCK_KEY,
                     ),
                     signingKey = null,
+                    securityState = null,
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
@@ -109,6 +110,7 @@ class AuthenticatorBridgeRepositoryTest {
                         decryptedUserKey = USER_2_UNLOCK_KEY,
                     ),
                     signingKey = null,
+                    securityState = null,
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
@@ -206,6 +208,7 @@ class AuthenticatorBridgeRepositoryTest {
                             decryptedUserKey = USER_2_UNLOCK_KEY,
                         ),
                         signingKey = null,
+                        securityState = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeOrganizationCrypto(
@@ -244,6 +247,7 @@ class AuthenticatorBridgeRepositoryTest {
                             decryptedUserKey = USER_1_UNLOCK_KEY,
                         ),
                         signingKey = null,
+                        securityState = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeOrganizationCrypto(
@@ -266,6 +270,7 @@ class AuthenticatorBridgeRepositoryTest {
                             decryptedUserKey = USER_2_UNLOCK_KEY,
                         ),
                         signingKey = null,
+                        securityState = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeOrganizationCrypto(
@@ -300,6 +305,7 @@ class AuthenticatorBridgeRepositoryTest {
                             decryptedUserKey = USER_1_UNLOCK_KEY,
                         ),
                         signingKey = null,
+                        securityState = null,
                     ),
                 )
             } returns InitializeCryptoResult.AuthenticationError(error = Throwable()).asSuccess()
@@ -321,6 +327,7 @@ class AuthenticatorBridgeRepositoryTest {
                             decryptedUserKey = USER_1_UNLOCK_KEY,
                         ),
                         signingKey = null,
+                        securityState = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeCrypto(
@@ -334,6 +341,7 @@ class AuthenticatorBridgeRepositoryTest {
                             decryptedUserKey = USER_2_UNLOCK_KEY,
                         ),
                         signingKey = null,
+                        securityState = null,
                     ),
                 )
                 scopedVaultSdkSource.initializeOrganizationCrypto(
