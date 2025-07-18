@@ -291,7 +291,7 @@ fun createMockDisplayItemForSend(
                 titleTestTag = "SendNameLabel",
                 secondSubtitle = null,
                 secondSubtitleTestTag = null,
-                subtitle = "Oct 27, 2023, 12:00 PM",
+                subtitle = "Oct 27, 2023, 12:00 PM",
                 subtitleTestTag = "SendDateLabel",
                 iconData = IconData.Local(BitwardenDrawable.ic_file),
                 extraIconList = persistentListOf(
@@ -340,7 +340,7 @@ fun createMockDisplayItemForSend(
                 titleTestTag = "SendNameLabel",
                 secondSubtitle = null,
                 secondSubtitleTestTag = null,
-                subtitle = "Oct 27, 2023, 12:00 PM",
+                subtitle = "Oct 27, 2023, 12:00 PM",
                 subtitleTestTag = "SendDateLabel",
                 iconData = IconData.Local(BitwardenDrawable.ic_file_text),
                 extraIconList = persistentListOf(

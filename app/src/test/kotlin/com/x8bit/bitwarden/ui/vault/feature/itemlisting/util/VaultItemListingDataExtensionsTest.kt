@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 import android.net.Uri
 import androidx.core.os.bundleOf
 import androidx.credentials.provider.ProviderCreateCredentialRequest
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
@@ -43,6 +44,10 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import java.time.format.FormatStyle
+import java.time.temporal.TemporalAccessor
+
+private const val DEFAULT_FORMATTED_DATE_TIME = "Oct 27, 2023, 12:00 PM"
 
 @Suppress("LargeClass")
 class VaultItemListingDataExtensionsTest {
@@ -941,28 +946,37 @@ class VaultItemListingDataExtensionsTest {
 
     @Test
     fun `toViewState should transform a list of SendViews into a ViewState`() {
-        val sendViewList = listOf(
-            createMockSendView(number = 1, type = SendType.FILE),
-            createMockSendView(number = 2, type = SendType.TEXT),
-        )
+        mockkStatic(TemporalAccessor::toFormattedDateTimeStyle) {
+            every {
+                any<TemporalAccessor>().toFormattedDateTimeStyle(
+                    dateStyle = FormatStyle.MEDIUM,
+                    timeStyle = FormatStyle.SHORT,
+                    clock = clock,
+                )
+            } returns DEFAULT_FORMATTED_DATE_TIME
+            val sendViewList = listOf(
+                createMockSendView(number = 1, type = SendType.FILE),
+                createMockSendView(number = 2, type = SendType.TEXT),
+            )
 
-        val result = sendViewList.toViewState(
-            itemListingType = VaultItemListingState.ItemListingType.Send.SendFile,
-            baseWebSendUrl = Environment.Us.environmentUrlData.baseWebSendUrl,
-            clock = clock,
-        )
+            val result = sendViewList.toViewState(
+                itemListingType = VaultItemListingState.ItemListingType.Send.SendFile,
+                baseWebSendUrl = Environment.Us.environmentUrlData.baseWebSendUrl,
+                clock = clock,
+            )
 
-        assertEquals(
-            VaultItemListingState.ViewState.Content(
-                displayCollectionList = emptyList(),
-                displayItemList = listOf(
-                    createMockDisplayItemForSend(number = 1, sendType = SendType.FILE),
-                    createMockDisplayItemForSend(number = 2, sendType = SendType.TEXT),
+            assertEquals(
+                VaultItemListingState.ViewState.Content(
+                    displayCollectionList = emptyList(),
+                    displayItemList = listOf(
+                        createMockDisplayItemForSend(number = 1, sendType = SendType.FILE),
+                        createMockDisplayItemForSend(number = 2, sendType = SendType.TEXT),
+                    ),
+                    displayFolderList = emptyList(),
                 ),
-                displayFolderList = emptyList(),
-            ),
-            result,
-        )
+                result,
+            )
+        }
     }
 
     @Test

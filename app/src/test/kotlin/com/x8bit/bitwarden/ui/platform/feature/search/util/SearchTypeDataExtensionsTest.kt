@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import android.net.Uri
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
@@ -27,6 +28,10 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import java.time.format.FormatStyle
+import java.time.temporal.TemporalAccessor
+
+private const val DEFAULT_FORMATTED_DATE_TIME = "Oct 27, 2023, 12:00 PM"
 
 class SearchTypeDataExtensionsTest {
 
@@ -566,28 +571,37 @@ class SearchTypeDataExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `SendViews toViewState should return content state when search term is not blank and sends is not empty`() {
-        val sends = listOf(
-            createMockSendView(number = 0),
-            createMockSendView(number = 1),
-            createMockSendView(number = 2),
-        )
+        mockkStatic(TemporalAccessor::toFormattedDateTimeStyle) {
+            every {
+                any<TemporalAccessor>().toFormattedDateTimeStyle(
+                    dateStyle = FormatStyle.MEDIUM,
+                    timeStyle = FormatStyle.SHORT,
+                    clock = clock,
+                )
+            } returns DEFAULT_FORMATTED_DATE_TIME
+            val sends = listOf(
+                createMockSendView(number = 0),
+                createMockSendView(number = 1),
+                createMockSendView(number = 2),
+            )
 
-        val result = sends.toViewState(
-            searchTerm = "mock",
-            baseWebSendUrl = "https://vault.bitwarden.com/#/send/",
-            clock = clock,
-        )
+            val result = sends.toViewState(
+                searchTerm = "mock",
+                baseWebSendUrl = "https://vault.bitwarden.com/#/send/",
+                clock = clock,
+            )
 
-        assertEquals(
-            SearchState.ViewState.Content(
-                displayItems = listOf(
-                    createMockDisplayItemForSend(number = 0),
-                    createMockDisplayItemForSend(number = 1),
-                    createMockDisplayItemForSend(number = 2),
+            assertEquals(
+                SearchState.ViewState.Content(
+                    displayItems = listOf(
+                        createMockDisplayItemForSend(number = 0),
+                        createMockDisplayItemForSend(number = 1),
+                        createMockDisplayItemForSend(number = 2),
+                    ),
                 ),
-            ),
-            result,
-        )
+                result,
+            )
+        }
     }
 
     @Suppress("MaxLineLength")
