@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.data.datasource.disk.model.ServerConfig
+import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
@@ -44,6 +46,10 @@ class AboutViewModelTest : BaseViewModelTest() {
     private val settingsRepository = mockk<SettingsRepository> {
         every { flightRecorderDataFlow } returns mutableFlightRecorderFlow
         every { flightRecorderData } returns FlightRecorderDataSet(emptySet())
+    }
+    private val mutableServerConfigStateFlow = MutableStateFlow<ServerConfig?>(null)
+    private val serverConfigRepository: ServerConfigRepository = mockk {
+        every { serverConfigStateFlow } returns mutableServerConfigStateFlow
     }
 
     @AfterEach
@@ -185,6 +191,10 @@ class AboutViewModelTest : BaseViewModelTest() {
             .concat("\n".asText())
             .concat(state.deviceData)
             .concat(state.ciData)
+            .concat("\n".asText())
+            .concat(state.sdkVersion)
+            .concat("\n".asText())
+            .concat(state.serverData)
 
         every { clipboardManager.setText(expectedText, true, null) } just runs
 
@@ -222,6 +232,7 @@ class AboutViewModelTest : BaseViewModelTest() {
         environmentRepository = environmentRepository,
         logsManager = logsManager,
         settingsRepository = settingsRepository,
+        serverConfigRepository = serverConfigRepository,
     )
 }
 
@@ -231,6 +242,8 @@ private val FIXED_CLOCK = Clock.fixed(
 )
 private val DEFAULT_ABOUT_STATE: AboutState = AboutState(
     version = "Version: <version_name> (<version_code>)".asText(),
+    sdkVersion = "\uD83E\uDD80 SDK: 1.0.0-20250708.105256-238".asText(),
+    serverData = "\uD83C\uDF29 Server: 2025.7.1".asText(),
     deviceData = "<device_data>".asText(),
     ciData = "<ci_info>".asText(),
     copyrightInfo = "© Bitwarden Inc. 2015-${Year.now(FIXED_CLOCK).value}".asText(),
