@@ -1644,6 +1644,79 @@ class VaultViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyNoteClick should not call setText on the ClipboardManager when decryption fails`() =
+        runTest {
+            val cipherId = "cipherId"
+            val throwable = Throwable("Decryption failed")
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.Failure(error = throwable)
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = false,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.decryption_error.asText(),
+                        message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                        error = throwable,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyNoteClick should not call setText on the ClipboardManager when cipher is not found`() =
+        runTest {
+            val cipherId = "cipherId"
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.CipherNotFound
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = false,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.generic_error_message.asText(),
+                        error = null,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
     @Test
     fun `OverflowOptionClick Vault CopyNumberClick should call setText on the ClipboardManager`() =
         runTest {
@@ -1676,6 +1749,79 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `OverflowOptionClick Vault CopyNumberClick should not call setText on the ClipboardManager when decryption fails`() =
+        runTest {
+            val cipherId = "cipherId"
+            val throwable = Throwable("Decryption failed")
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.Failure(error = throwable)
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNumberClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.decryption_error.asText(),
+                        message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                        error = throwable,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyNumberClick should not call setText on the ClipboardManager when cipher is not found`() =
+        runTest {
+            val cipherId = "cipherId"
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.CipherNotFound
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNumberClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.generic_error_message.asText(),
+                        error = null,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `OverflowOptionClick Vault CopyPasswordClick should call setText on the ClipboardManager`() =
         runTest {
             val password = "mockPassword-1"
@@ -1698,6 +1844,81 @@ class VaultViewModelTest : BaseViewModelTest() {
                     event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
                 )
             }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyPasswordClick should not call setText on the ClipboardManager when decryption fails`() =
+        runTest {
+            val cipherId = "cipherId"
+            val throwable = Throwable("Decryption failed")
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.Failure(error = throwable)
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                        requiresPasswordReprompt = true,
+                        cipherId = cipherId,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+                organizationEventManager.trackEvent(event = any())
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.decryption_error.asText(),
+                        message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                        error = throwable,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyPasswordClick should not call setText on the ClipboardManager when cipher is not found`() =
+        runTest {
+            val cipherId = "cipherId"
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.CipherNotFound
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                        requiresPasswordReprompt = true,
+                        cipherId = cipherId,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+                organizationEventManager.trackEvent(event = any())
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.generic_error_message.asText(),
+                        error = null,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
         }
 
     @Suppress("MaxLineLength")
@@ -1792,6 +2013,81 @@ class VaultViewModelTest : BaseViewModelTest() {
                     event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = cipherId),
                 )
             }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopySecurityCodeClick should send DecryptionErrorReceive when decryption fails`() =
+        runTest {
+            val cipherId = "cipherId"
+            val throwable = Throwable("Decryption failed")
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.Failure(error = throwable)
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+                organizationEventManager.trackEvent(event = any())
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.decryption_error.asText(),
+                        message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                        error = throwable,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopySecurityCodeClick should send DecryptionErrorReceive when cipher is not found`() =
+        runTest {
+            val cipherId = "cipherId"
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.CipherNotFound
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+                organizationEventManager.trackEvent(event = any())
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.generic_error_message.asText(),
+                        error = null,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
         }
 
     @Suppress("MaxLineLength")
@@ -2374,6 +2670,29 @@ class VaultViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
         }
+
+    @Test
+    fun `DecryptionErrorReceived should show decryption error dialog`() = runTest {
+        val viewModel = createViewModel()
+        val throwable = Throwable("Decryption failed")
+        viewModel.trySendAction(
+            VaultAction.Internal.DecryptionErrorReceive(
+                title = R.string.decryption_error.asText(),
+                message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                error = throwable,
+            ),
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.Error(
+                    title = R.string.decryption_error.asText(),
+                    message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                    error = throwable,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(

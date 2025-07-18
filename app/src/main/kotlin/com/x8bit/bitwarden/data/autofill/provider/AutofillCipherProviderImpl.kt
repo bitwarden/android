@@ -107,18 +107,17 @@ class AutofillCipherProviderImpl(
                 matchUri = uri,
             )
             .mapNotNull { cipherListView ->
-                cipherListView.id?.let { cipherId ->
-                    decryptCipherOrNull(cipherId = cipherId)?.let { cipherView ->
-                        AutofillCipher.Login(
-                            cipherId = cipherView.id,
-                            isTotpEnabled = cipherView.login?.totp != null,
-                            name = cipherView.name,
-                            password = cipherView.login?.password.orEmpty(),
-                            subtitle = cipherView.subtitle.orEmpty(),
-                            username = cipherView.login?.username.orEmpty(),
-                        )
-                    }
-                }
+                cipherListView.id?.let { decryptCipherOrNull(cipherId = it) }
+            }
+            .map { cipherView ->
+                AutofillCipher.Login(
+                    cipherId = cipherView.id,
+                    isTotpEnabled = cipherView.login?.totp != null,
+                    name = cipherView.name,
+                    password = cipherView.login?.password.orEmpty(),
+                    subtitle = cipherView.subtitle.orEmpty(),
+                    username = cipherView.login?.username.orEmpty(),
+                )
             }
     }
 

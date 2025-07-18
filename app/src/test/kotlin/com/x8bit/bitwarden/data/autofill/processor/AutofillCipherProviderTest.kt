@@ -27,8 +27,10 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,6 +41,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import timber.log.Timber
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AutofillCipherProviderTest {
@@ -415,6 +418,127 @@ class AutofillCipherProviderTest {
 
         assertEquals(emptyList<AutofillCipher.Login>(), actual)
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getLoginAutofillCiphers when decryption fails should log the error and omit cipher from results`() =
+        runTest {
+            mockkObject(Timber.Forest)
+            val cipherListViews = listOf(
+                loginCipherListViewWithTotp,
+                loginCipherListViewWithoutTotp,
+            )
+
+            coEvery {
+                vaultRepository.getCipher(LOGIN_WITH_TOTP_CIPHER_ID)
+            } returns GetCipherResult.Failure(
+                error = Exception("Decryption failed"),
+            )
+
+            coEvery {
+                vaultRepository.getCipher(LOGIN_WITHOUT_TOTP_CIPHER_ID)
+            } returns GetCipherResult.Success(
+                cipherView = loginCipherViewWithoutTotp,
+            )
+            coEvery {
+                cipherMatchingManager.filterCiphersForMatches(
+                    cipherListViews = cipherListViews,
+                    matchUri = URI,
+                )
+            } returns cipherListViews
+
+            mutableCipherListViewsWithFailuresStateFlow.value = DataState.Loaded(
+                data = DecryptCipherListResult(
+                    successes = cipherListViews,
+                    failures = emptyList(),
+                ),
+            )
+            mutableVaultStateFlow.value = listOf(
+                VaultUnlockData(
+                    userId = ACTIVE_USER_ID,
+                    status = VaultUnlockData.Status.UNLOCKED,
+                ),
+            )
+            val expected = listOf(
+                LOGIN_AUTOFILL_CIPHER_WITHOUT_TOTP,
+            )
+
+            every { loginCipherViewWithoutTotp.subtitle } returns LOGIN_SUBTITLE
+
+            val actual = autofillCipherProvider.getLoginAutofillCiphers(
+                uri = URI,
+            )
+
+            assertEquals(
+                expected,
+                actual,
+            )
+
+            verify(exactly = 1) {
+                Timber.Forest.e(
+                    t = any(),
+                    message = "Failed to decrypt cipher for autofill.",
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getLoginAutofillCiphers when decryption result is CipherNotFound should log the error and omit cipher from results`() =
+        runTest {
+            mockkObject(Timber.Forest)
+            val cipherListViews = listOf(
+                loginCipherListViewWithTotp,
+                loginCipherListViewWithoutTotp,
+            )
+
+            coEvery {
+                vaultRepository.getCipher(LOGIN_WITH_TOTP_CIPHER_ID)
+            } returns GetCipherResult.CipherNotFound
+
+            coEvery {
+                vaultRepository.getCipher(LOGIN_WITHOUT_TOTP_CIPHER_ID)
+            } returns GetCipherResult.Success(
+                cipherView = loginCipherViewWithoutTotp,
+            )
+            coEvery {
+                cipherMatchingManager.filterCiphersForMatches(
+                    cipherListViews = cipherListViews,
+                    matchUri = URI,
+                )
+            } returns cipherListViews
+
+            mutableCipherListViewsWithFailuresStateFlow.value = DataState.Loaded(
+                data = DecryptCipherListResult(
+                    successes = cipherListViews,
+                    failures = emptyList(),
+                ),
+            )
+            mutableVaultStateFlow.value = listOf(
+                VaultUnlockData(
+                    userId = ACTIVE_USER_ID,
+                    status = VaultUnlockData.Status.UNLOCKED,
+                ),
+            )
+            val expected = listOf(
+                LOGIN_AUTOFILL_CIPHER_WITHOUT_TOTP,
+            )
+
+            every { loginCipherViewWithoutTotp.subtitle } returns LOGIN_SUBTITLE
+
+            val actual = autofillCipherProvider.getLoginAutofillCiphers(
+                uri = URI,
+            )
+
+            assertEquals(
+                expected,
+                actual,
+            )
+
+            verify(exactly = 1) {
+                Timber.Forest.e("Cipher not found for autofill.")
+            }
+        }
 }
 
 private const val ACTIVE_USER_ID = "activeUserId"
