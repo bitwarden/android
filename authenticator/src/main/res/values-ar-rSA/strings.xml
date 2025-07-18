@@ -116,7 +116,7 @@
     <string name="download_bitwarden_card_message">تخزين جميع تسجيلات الدخول الخاصة بك ومزامنة رموز التحقق مباشرة مع تطبيق المصادقة.</string>
     <string name="download_now">تنزيل الآن</string>
     <string name="sync_with_bitwarden_app">المزامنة مع تطبيق Bitwarden</string>
-    <string name="this_feature_is_not_not_yet_available_for_self_hosted_users">This feature is not yet available for self-hosted users. <annotation link="learnMore">Learn more</annotation></string>
+    <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">غير قادر على مزامنة الرموز من تطبيق Bitwarden. تأكد من تحديث كلا التطبيقين. لا يزال بإمكانك الوصول إلى الرموز الموجودة في تطبيق Bitwarden.</string>
     <string name="shared_accounts_header">%1$s | %2$s</string>
     <string name="sync_with_the_bitwarden_app">المزامنة مع تطبيق Bitwarden</string>
