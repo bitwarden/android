@@ -23,9 +23,9 @@ fun CipherListView.toOverflowActions(
         .id
         ?.let { cipherId ->
             listOfNotNull(
-                this.login?.username?.let {
-                    ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = it)
-                }.takeIf { this.copyableFields.contains(CopyableCipherFields.LOGIN_USERNAME) },
+                this.login?.username
+                    ?.let { ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = it) }
+                    .takeIf { this.copyableFields.contains(CopyableCipherFields.LOGIN_USERNAME) },
                 ListingItemOverflowAction.VaultAction
                     .CopyPasswordClick(
                         cipherId = cipherId,
@@ -66,7 +66,8 @@ fun CipherListView.toOverflowActions(
                     .CopyNoteClick(
                         cipherId = cipherId,
                         requiresPasswordReprompt = hasMasterPassword,
-                    ).takeIf {
+                    )
+                    .takeIf {
                         this.type is CipherListViewType.SecureNote &&
                             this.copyableFields.contains(CopyableCipherFields.SECURE_NOTES)
                     },

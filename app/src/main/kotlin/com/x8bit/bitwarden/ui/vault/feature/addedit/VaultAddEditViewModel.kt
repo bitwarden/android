@@ -1536,6 +1536,7 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Internal.DetermineContentStateResultReceive -> {
                 handleDetermineContentStateResultReceive(action)
             }
+
             is VaultAddEditAction.Internal.GeneratorResultReceive -> {
                 handleGeneratorResultReceive(action)
             }
@@ -1743,9 +1744,9 @@ class VaultAddEditViewModel @Inject constructor(
                 viewModelScope.launch {
                     mutableStateFlow.value
                         .determineContentState(
-                        vaultData = vaultDataState.data,
-                        userData = action.userData,
-                    )
+                            vaultData = vaultDataState.data,
+                            userData = action.userData,
+                        )
                 }
             }
 
@@ -1786,8 +1787,10 @@ class VaultAddEditViewModel @Inject constructor(
             viewState = internalVaultData.decryptCipherListResult.successes
                 .find { it.id == vaultAddEditType.vaultItemId }
                 ?.let {
-                    when (val result =
-                        vaultRepository.getCipher(vaultAddEditType.vaultItemId.orEmpty())) {
+                    val result = vaultRepository.getCipher(
+                        vaultAddEditType.vaultItemId.orEmpty(),
+                    )
+                    when (result) {
                         GetCipherResult.CipherNotFound -> {
                             Timber.e("Cipher not found")
                             null
