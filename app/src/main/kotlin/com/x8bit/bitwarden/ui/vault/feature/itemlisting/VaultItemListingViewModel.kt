@@ -2235,7 +2235,7 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             is PasswordRegisterResult.Success -> {
-                sendEvent(VaultItemListingEvent.ShowToast(R.string.item_updated.asText()))
+                sendEvent(VaultItemListingEvent.ShowSnackbar(R.string.item_updated.asText()))
                 sendEvent(
                     VaultItemListingEvent.CompletePasswordRegistration(
                         RegisterPasswordResult.Success,
@@ -2263,7 +2263,7 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleRegisterPasswordCredentialResultErrorReceive(
         error: PasswordRegisterResult.Error,
     ) {
-        sendEvent(VaultItemListingEvent.ShowToast(R.string.an_error_has_occurred.asText()))
+        sendEvent(VaultItemListingEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
         sendEvent(
             VaultItemListingEvent.CompletePasswordRegistration(
                 RegisterPasswordResult.Error(
