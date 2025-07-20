@@ -467,7 +467,8 @@ class VaultItemListingViewModel @Inject constructor(
             .selectedCipherId
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.credential_operation_failed_because_user_could_not_be_verified.asText(),
+                    R.string.credential_operation_failed_because_user_could_not_be_verified
+                        .asText(),
                 )
                 return
             }
@@ -478,7 +479,8 @@ class VaultItemListingViewModel @Inject constructor(
             ?.activeAccount
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.credential_operation_failed_because_user_could_not_be_verified.asText(),
+                    R.string.credential_operation_failed_because_user_could_not_be_verified
+                        .asText(),
                 )
                 return
             }

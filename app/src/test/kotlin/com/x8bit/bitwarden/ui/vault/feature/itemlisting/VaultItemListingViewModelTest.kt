@@ -4847,7 +4847,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.CredentialManagerOperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.credential_operation_failed_because_user_verification_was_cancelled
+                message =
+                    R.string.credential_operation_failed_because_user_verification_was_cancelled
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
