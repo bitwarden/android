@@ -5084,7 +5084,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 number = 1,
                 totp = "mockTotp-1",
                 clock = clock,
-                password = "mock-password",
+                password = "mockPassword-1",
+                fido2Credentials = null,
             )
             val mockGetPasswordRequest = createMockProviderGetPasswordCredentialRequest()
                 .copy(cipherId = "mockId-1")

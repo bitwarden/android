@@ -411,7 +411,7 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleUserVerificationLockOut() {
         bitwardenCredentialManager.isUserVerified = false
         showCredentialManagerErrorDialog(
-            R.string.passkey_operation_failed_because_user_is_locked_out.asText(),
+            R.string.credential_operation_failed_because_user_is_locked_out.asText(),
         )
     }
 
