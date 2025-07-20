@@ -425,7 +425,7 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleUserVerificationFail() {
         bitwardenCredentialManager.isUserVerified = false
         showCredentialManagerErrorDialog(
-            R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+            R.string.credential_operation_failed_because_user_could_not_be_verified.asText(),
         )
     }
 
@@ -448,6 +448,14 @@ class VaultItemListingViewModel @Inject constructor(
                         ),
                     )
                 }
+            ?: state.providerGetPasswordCredentialRequest
+                ?.let {
+                    sendEvent(
+                        VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
+                            result = GetPasswordCredentialResult.Cancelled,
+                        ),
+                    )
+                }
     }
 
     private fun handleUserVerificationNotSupported(
@@ -459,7 +467,7 @@ class VaultItemListingViewModel @Inject constructor(
             .selectedCipherId
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    R.string.credential_operation_failed_because_user_could_not_be_verified.asText(),
                 )
                 return
             }
@@ -470,7 +478,7 @@ class VaultItemListingViewModel @Inject constructor(
             ?.activeAccount
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    R.string.credential_operation_failed_because_user_could_not_be_verified.asText(),
                 )
                 return
             }
@@ -602,7 +610,7 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleDismissUserVerificationDialogClick() {
         showCredentialManagerErrorDialog(
-            R.string.passkey_operation_failed_because_user_verification_was_cancelled.asText(),
+            R.string.credential_operation_failed_because_user_verification_was_cancelled.asText(),
         )
     }
 
@@ -1706,18 +1714,6 @@ class VaultItemListingViewModel @Inject constructor(
             is MasterPasswordRepromptData.ViewItem -> {
                 trySendAction(VaultItemListingsAction.ItemClick(id = data.id, type = data.itemType))
             }
-
-            is MasterPasswordRepromptData.ProviderGetCredential -> {
-                sendEvent(
-                    VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
-                        result = GetPasswordCredentialResult.Success(
-                            credential = getCipherViewOrNull(cipherId = data.cipherId)
-                                ?.login
-                                ?: return,
-                        ),
-                    ),
-                )
-            }
         }
     }
 
@@ -1787,7 +1783,7 @@ class VaultItemListingViewModel @Inject constructor(
             }
         } else {
             showCredentialManagerErrorDialog(
-                R.string.passkey_operation_failed_because_user_verification_attempts_exceeded
+                R.string.credential_operation_failed_because_user_verification_attempts_exceeded
                     .asText(),
             )
         }
@@ -1800,7 +1796,7 @@ class VaultItemListingViewModel @Inject constructor(
         val cipherView = getCipherViewOrNull(cipherId = selectedCipherId)
             ?: run {
                 showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
+                    R.string.credential_operation_failed_because_the_selected_item_does_not_exist
                         .asText(),
                 )
                 return
@@ -2185,42 +2181,6 @@ class VaultItemListingViewModel @Inject constructor(
                 handlePasswordCredentialResult(selectedCipher)
             }
         }
-
-        data
-            .firstOrNull { it.id == action.data.cipherId }
-            ?.let { cipher ->
-                if (state.hasMasterPassword && cipher.reprompt == CipherRepromptType.PASSWORD) {
-                    repromptMasterPasswordForProviderGetCredential(action.data.cipherId)
-                } else {
-                    val result = cipher.login
-                        ?.let { GetPasswordCredentialResult.Success(it) }
-                        ?: GetPasswordCredentialResult.Error(
-                            message = R.string
-                                .password_operation_failed_because_the_selected_item_does_not_exist
-                                .asText(),
-                        )
-                    sendEvent(
-                        VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(result),
-                    )
-                }
-            }
-            ?: run {
-                showCredentialManagerErrorDialog(
-                    R.string.password_operation_failed_because_no_item_was_selected.asText(),
-                )
-            }
-    }
-
-    private fun repromptMasterPasswordForProviderGetCredential(cipherId: String) {
-        mutableStateFlow.update {
-            it.copy(
-                dialogState = VaultItemListingState
-                    .DialogState
-                    .UserVerificationMasterPasswordPrompt(
-                        selectedCipherId = cipherId,
-                    ),
-            )
-        }
     }
 
     private fun repromptMasterPasswordForUserVerification(cipherId: String) {
@@ -2483,7 +2443,7 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun showUserVerificationErrorDialog() {
         showCredentialManagerErrorDialog(
-            R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+            R.string.credential_operation_failed_because_user_could_not_be_verified.asText(),
         )
     }
 
@@ -3529,12 +3489,5 @@ sealed class MasterPasswordRepromptData {
     data class ViewItem(
         val id: String,
         val itemType: VaultItemListingState.DisplayItem.ItemType,
-    ) : MasterPasswordRepromptData()
-
-    /**
-     * Cipher was selected in response to a ProviderGetCredentialRequest.
-     */
-    data class ProviderGetCredential(
-        val cipherId: String,
     ) : MasterPasswordRepromptData()
 }
