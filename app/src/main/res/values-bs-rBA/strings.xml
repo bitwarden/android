@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Aplikacije za potvrdu autentičnosti</string>
     <string name="enter_verification_code_app">Unesite 6-ocifreni verifikacioni kod iz Vaše aplikacije za potvrdu autentičnosti.</string>
     <string name="enter_verification_code_email">Unesite 6-ocifreni verifikacioni kod koji je e-poštom poslan na %1$s.</string>
-    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
+    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the code sent to your email to verify your identity.</string>
     <string name="recovery_code_title">Kod za oporavak</string>
     <string name="remember">Remember</string>
     <string name="remember_email">Remember email</string>

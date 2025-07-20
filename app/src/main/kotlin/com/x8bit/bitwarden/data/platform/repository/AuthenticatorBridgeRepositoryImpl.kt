@@ -141,6 +141,7 @@ class AuthenticatorBridgeRepositoryImpl(
                         decryptedUserKey = decryptedUserKey,
                     ),
                     signingKey = null,
+                    securityState = null,
                 ),
             )
             .flatMap { result ->

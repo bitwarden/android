@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Aplicació autenticadora</string>
     <string name="enter_verification_code_app">Introduïu el codi de verificació de 6 dígits de l\'aplicació autenticadora.</string>
     <string name="enter_verification_code_email">Introduïu el codi de verificació de 6 dígits que s\'ha enviat per correu electrònic a %1$s.</string>
-    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
+    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the code sent to your email to verify your identity.</string>
     <string name="recovery_code_title">Codi de recuperació</string>
     <string name="remember">Recorda-ho</string>
     <string name="remember_email">Recorda el correu electronic</string>

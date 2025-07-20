@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">ऑथेंटिकेटर ऐप</string>
     <string name="enter_verification_code_app">अपने ऑथेंटिकेटर ऐप से वेरिफिकेशन कोड डालें।</string>
     <string name="enter_verification_code_email">%1$s को ईमेल किया गया वेरिफिकेशन कोड डालें।</string>
-    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
+    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the code sent to your email to verify your identity.</string>
     <string name="recovery_code_title">रिकवरी कोड</string>
     <string name="remember">Remember</string>
     <string name="remember_email">Remember email</string>

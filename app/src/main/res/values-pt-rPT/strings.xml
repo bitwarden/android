@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Aplicação de autenticação</string>
     <string name="enter_verification_code_app">Introduza o código de verificação de 6 dígitos da sua aplicação de autenticação.</string>
     <string name="enter_verification_code_email">Introduza o código de verificação de 6 dígitos que foi enviado por e-mail para %1$s.</string>
-    <string name="enter_verification_code_new_device">Não reconhecemos este dispositivo. Introduza o código de verificação de 8 dígitos que foi enviado por e-mail para %1$s.</string>
+    <string name="enter_verification_code_new_device">Não reconhecemos este dispositivo. Introduza o código de verificação de 8 dígitos que foi enviado por e-mail para [%1$s].</string>
     <string name="recovery_code_title">Código de recuperação</string>
     <string name="remember">Memorizar</string>
     <string name="remember_email">Memorizar e-mail</string>

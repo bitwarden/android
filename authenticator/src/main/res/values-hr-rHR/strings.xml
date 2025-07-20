@@ -116,7 +116,7 @@
     <string name="download_bitwarden_card_message">Pohrani sve svoje prijave i sinkroniziraj kôdove za provjeru izravno s aplikacijom Autentifikator.</string>
     <string name="download_now">Preuzmi sada</string>
     <string name="sync_with_bitwarden_app">Sinkroniziraj s Bitwarden aplikacijom</string>
-    <string name="this_feature_is_not_not_yet_available_for_self_hosted_users">Ova značajka još nije dostupna za korsnike na vlastitom poslužitelju. <annotation link="learnMore">Saznaj više</annotation></string>
+    <string name="learn_more_link"><annotation link="learnMore">Saznaj više</annotation></string>
     <string name="shared_codes_error">Nije moguće sinkronizirati kodove iz aplikacije Bitwarden. Provjeri jesu li obje aplikacije ažurirane. I dalje možeš pristupiti svojim postojećim kodovima u aplikaciji Bitwarden.</string>
     <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sinkroniziraj s Bitwardenom</string>

@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">แอป Authenticator</string>
     <string name="enter_verification_code_app">ป้อนรหัสยืนยัน 6 หลักจากคุณแอป authenticator</string>
     <string name="enter_verification_code_email">ป้อนรหัสยืนยัน6หลักที่ส่งอีเมลไปที่ %1$s</string>
-    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
+    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the code sent to your email to verify your identity.</string>
     <string name="recovery_code_title">รหัสกู้คืน</string>
     <string name="remember">Remember</string>
     <string name="remember_email">Remember email</string>

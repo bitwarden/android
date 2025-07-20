@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Приложение-аутентификатор</string>
     <string name="enter_verification_code_app">Введите 6-значный код подтверждения из вашего приложения-аутентификатора.</string>
     <string name="enter_verification_code_email">Введите 6-значный код подтверждения, который был отправлен на %1$s.</string>
-    <string name="enter_verification_code_new_device">Мы не распознали это устройство. Введите 8-значный код подтверждения, который был отправлен на email %1$s.</string>
+    <string name="enter_verification_code_new_device">Мы не распознали это устройство. Введите 8-значный код подтверждения, который был отправлен на email [%1$s].</string>
     <string name="recovery_code_title">Код восстановления</string>
     <string name="remember">Запомнить</string>
     <string name="remember_email">Запомнить email</string>
