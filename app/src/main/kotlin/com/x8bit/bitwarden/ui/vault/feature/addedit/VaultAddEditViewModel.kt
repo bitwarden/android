@@ -55,7 +55,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordCredentialResult
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordResult
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
