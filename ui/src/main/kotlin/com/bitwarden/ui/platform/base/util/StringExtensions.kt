@@ -45,14 +45,14 @@ fun String?.orZeroWidthSpace(): String = this.orNullIfBlank() ?: ZERO_WIDTH_CHAR
  *
  * This validates that the email is valid by asserting that:
  * * The string starts with a string of characters including periods, underscores, percent symbols,
- * plus's, minus's, forward slash's, and alphanumeric characters.
+ * plus's, minus's, forward slash's, asterisks, and alphanumeric characters.
  * * Followed by an '@' symbol.
  * * Followed by a string of characters including periods, minus's, and alphanumeric characters.
  * * Followed by a period.
  * * Followed by at least 2 more alphanumeric characters.
  */
 fun String.isValidEmail(): Boolean =
-    this.matches(regex = "^[A-Za-z0-9._%+-/]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$".toRegex())
+    this.matches(regex = "^[A-Za-z0-9._%+-/*]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$".toRegex())
 
 /**
  * Returns `true` if the given [String] is a non-blank, valid URI and `false` otherwise.
