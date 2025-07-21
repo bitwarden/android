@@ -28,6 +28,7 @@ class StringExtensionsTest {
             "test.test@test.test.com" to true,
             "test/test@test.test.com" to true,
             "test.test@test/test.com" to false,
+            "test*test@test.com" to true,
         )
         invalidEmails.forEach {
             assertEquals(it.first.isValidEmail(), it.second)
