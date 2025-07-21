@@ -36,6 +36,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.applyRestrictItemTypesPol
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import com.x8bit.bitwarden.ui.vault.model.TotpData
+import com.x8bit.bitwarden.ui.vault.util.toSdkCipherType
 import java.time.Clock
 import java.time.format.FormatStyle
 
@@ -402,7 +403,9 @@ private fun CipherListView.toDisplayItem(
         isCredentialCreation = isFido2Creation,
         shouldShowMasterPasswordReprompt = (reprompt == CipherRepromptType.PASSWORD) &&
             hasMasterPassword,
-        itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = this.type),
+        itemType = VaultItemListingState.DisplayItem.ItemType.Vault(
+            type = this.type.toSdkCipherType(),
+        ),
     )
 
 private fun CipherListView.toSecondSubtitle(fido2CredentialRpId: String?): String? =

@@ -1330,7 +1330,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                                     number = 1,
                                     type = CipherListViewType.SshKey,
                                 ),
-                        ),
+                            ),
                         ),
                         collectionViewList = listOf(),
                         folderViewList = listOf(),
@@ -2120,7 +2120,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = cipherId,
-                        cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
+                        cipherType = CipherType.LOGIN,
                         requiresPasswordReprompt = true,
                     ),
                 ),
@@ -2159,9 +2159,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     VaultAction.OverflowOptionClick(
                         ListingItemOverflowAction.VaultAction.ViewClick(
                             cipherId = cipherId,
-                            cipherType = CipherListViewType.Login(
-                                createMockLoginListView(number = 1),
-                            ),
+                            cipherType = CipherType.LOGIN,
                             requiresPasswordReprompt = false,
                         ),
                     ),

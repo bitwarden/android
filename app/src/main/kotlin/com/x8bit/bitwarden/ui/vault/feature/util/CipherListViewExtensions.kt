@@ -8,6 +8,7 @@ import com.bitwarden.vault.CopyableCipherFields
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.model.VaultTrailingIcon
+import com.x8bit.bitwarden.ui.vault.util.toSdkCipherType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -73,12 +74,12 @@ fun CipherListView.toOverflowActions(
                     },
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = cipherId,
-                    cipherType = this.type,
+                    cipherType = this.type.toSdkCipherType(),
                     requiresPasswordReprompt = hasMasterPassword,
                 ),
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = cipherId,
-                    cipherType = this.type,
+                    cipherType = this.type.toSdkCipherType(),
                     requiresPasswordReprompt = hasMasterPassword,
                 )
                     .takeUnless { this.deletedDate != null || !this.edit },

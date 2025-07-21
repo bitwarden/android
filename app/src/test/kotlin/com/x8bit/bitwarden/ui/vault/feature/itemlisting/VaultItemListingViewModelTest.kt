@@ -647,9 +647,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     VaultItemListingsAction.ItemClick(
                         id = "mockId-1",
                         type = VaultItemListingState.DisplayItem.ItemType.Vault(
-                            type = CipherListViewType.Login(
-                                v1 = createMockLoginListView(number = 1),
-                            ),
+                            type = CipherType.LOGIN,
                         ),
                     ),
                 )
@@ -702,7 +700,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     VaultItemListingsAction.ItemClick(
                         id = "mockId-1",
                         type = VaultItemListingState.DisplayItem.ItemType.Vault(
-                            type = type,
+                            type = CipherType.LOGIN,
                         ),
                     ),
                 )
@@ -740,7 +738,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             VaultItemListingsAction.ItemClick(
                 id = cipherView.id.orEmpty(),
                 type = VaultItemListingState.DisplayItem.ItemType.Vault(
-                    type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+                    type = CipherType.LOGIN,
                 ),
             ),
         )
@@ -797,7 +795,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 VaultItemListingsAction.ItemClick(
                     id = cipherView.id.orEmpty(),
                     type = VaultItemListingState.DisplayItem.ItemType.Vault(
-                        type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+                        type = CipherType.LOGIN,
                     ),
                 ),
             )
@@ -852,7 +850,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 VaultItemListingsAction.ItemClick(
                     id = cipherView.id.orEmpty(),
                     type = VaultItemListingState.DisplayItem.ItemType.Vault(
-                        type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+                        type = CipherType.LOGIN,
                     ),
                 ),
             )
@@ -923,7 +921,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 VaultItemListingsAction.ItemClick(
                     id = cipherView.id.orEmpty(),
                     type = VaultItemListingState.DisplayItem.ItemType.Vault(
-                        type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+                        type = CipherType.LOGIN,
                     ),
                 ),
             )
@@ -976,7 +974,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 VaultItemListingsAction.ItemClick(
                     id = cipherView.id.orEmpty(),
                     type = VaultItemListingState.DisplayItem.ItemType.Vault(
-                        type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+                        type = CipherType.LOGIN,
                     ),
                 ),
             )
@@ -1000,7 +998,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 VaultItemListingsAction.ItemClick(
                     id = "mock",
                     type = VaultItemListingState.DisplayItem.ItemType.Vault(
-                        type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+                        type = CipherType.LOGIN,
                     ),
                 ),
             )
@@ -1275,9 +1273,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         masterPasswordRepromptData = MasterPasswordRepromptData.OverflowItem(
                             action = ListingItemOverflowAction.VaultAction.EditClick(
                                 cipherId = cipherId,
-                                cipherType = CipherListViewType.Login(
-                                    v1 = createMockLoginListView(number = 1),
-                                ),
+                                cipherType = CipherType.LOGIN,
                                 requiresPasswordReprompt = true,
                             ),
                         ),
@@ -1323,9 +1319,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         masterPasswordRepromptData = MasterPasswordRepromptData.ViewItem(
                             id = cipherId,
                             itemType = VaultItemListingState.DisplayItem.ItemType.Vault(
-                                type = CipherListViewType.Login(
-                                    v1 = createMockLoginListView(number = 1),
-                                ),
+                                type = CipherType.LOGIN,
                             ),
                         ),
                     ),
@@ -2027,9 +2021,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = cipherId,
-                        cipherType = CipherListViewType.Login(
-                            v1 = createMockLoginListView(number = 1),
-                        ),
+                        cipherType = CipherType.LOGIN,
                         requiresPasswordReprompt = true,
                     ),
                 ),
@@ -2067,9 +2059,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = cipherId,
-                        cipherType = CipherListViewType.Login(
-                            v1 = createMockLoginListView(number = 1),
-                        ),
+                        cipherType = CipherType.LOGIN,
                         requiresPasswordReprompt = true,
                     ),
                 ),
@@ -2191,12 +2181,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         displayItemList = listOf(
                             createMockDisplayItemForCipher(
                                 number = 1,
-                                cipherType = CipherListViewType.Login(
-                                    createMockLoginListView(
-                                        number = 1,
-                                        hasFido2 = true,
-                                    ),
-                                ),
+                                cipherType = CipherType.LOGIN,
                                 subtitle = "mockSubtitle-1",
                                 secondSubtitleTestTag = "PasskeySite",
                                 secondSubtitle = "mockRpId-1",
@@ -2338,12 +2323,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         displayItemList = listOf(
                             createMockDisplayItemForCipher(
                                 number = 1,
-                                cipherType = CipherListViewType.Login(
-                                    createMockLoginListView(
-                                        number = 1,
-                                        hasFido2 = true,
-                                    ),
-                                ),
+                                cipherType = CipherType.LOGIN,
                                 subtitle = "mockSubtitle-1",
                                 secondSubtitle = "mockRpId-1",
                                 secondSubtitleTestTag = "PasskeySite",

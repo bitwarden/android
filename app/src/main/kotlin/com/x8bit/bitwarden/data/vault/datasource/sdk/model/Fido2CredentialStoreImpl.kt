@@ -66,19 +66,9 @@ class Fido2CredentialStoreImpl(
             .mapNotNull { cipherListView ->
                 cipherListView.id
                     ?.let { cipherId ->
-                        when (val result = vaultRepository.getCipher(cipherId = cipherId)) {
-                            GetCipherResult.CipherNotFound -> {
-                                Timber.e("Cipher not found.")
-                                null
-                            }
-
-                            is GetCipherResult.Failure -> {
-                                Timber.e(result.error, "Failed to decrypt cipher.")
-                                null
-                            }
-
-                            is GetCipherResult.Success -> result.cipherView
-                        }
+                        vaultRepository
+                            .getCipher(cipherId = cipherId)
+                            .toCipherViewOrNull()
                     }
             }
     }
@@ -87,21 +77,19 @@ class Fido2CredentialStoreImpl(
      * Save the provided [cred] to the users vault.
      */
     override suspend fun saveCredential(cred: EncryptionContext) {
-        when (val result = vaultRepository.getCipher(cred.cipher.id.orEmpty())) {
-            GetCipherResult.CipherNotFound -> Unit
-            is GetCipherResult.Failure -> result.error?.let { throw it }
-            is GetCipherResult.Success -> {
-                result.cipherView.id
-                    ?.let { id ->
+        vaultRepository.getCipher(cred.cipher.id.orEmpty())
+            .toCipherViewOrNull()
+            ?.let { cipherView ->
+                cipherView.id
+                    ?.let { cipherId ->
                         vaultRepository.updateCipher(
-                            cipherId = id,
-                            cipherView = result.cipherView,
+                            cipherId = cipherId,
+                            cipherView = cipherView,
                         )
                     }
-                    ?: vaultRepository.createCipher(cipherView = result.cipherView)
+                    ?: vaultRepository.createCipher(cipherView = cipherView)
             }
         }
-    }
 
     /**
      * Return a filtered list containing elements that match the given [relyingPartyId] and a
@@ -130,6 +118,22 @@ class Fido2CredentialStoreImpl(
 
             hasMatchingRpId &&
                 (skipCredentialIdFiltering || hasIntersectingCredentials)
+        }
+    }
+
+    private fun GetCipherResult.toCipherViewOrNull(): CipherView? {
+        return when (this) {
+            GetCipherResult.CipherNotFound -> {
+                Timber.e("Cipher not found for FIDO 2 credential.")
+                null
+            }
+
+            is GetCipherResult.Failure -> {
+                Timber.e(this.error, "Failed to decrypt cipher for FIDO 2 credential.")
+                null
+            }
+
+            is GetCipherResult.Success -> this.cipherView
         }
     }
 }

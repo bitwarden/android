@@ -4,9 +4,8 @@ import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
-import com.bitwarden.vault.CipherListViewType
+import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.persistentListOf
@@ -17,8 +16,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Suppress("LongParameterList")
 fun createMockDisplayItemForCipher(
     number: Int,
-    cipherType: CipherListViewType =
-        CipherListViewType.Login(createMockLoginListView(number = number)),
+    cipherType: CipherType = CipherType.LOGIN,
     subtitle: String? = "mockUsername-$number",
     subtitleTestTag: String = "CipherSubTitleLabel",
     secondSubtitle: String? = null,
@@ -33,7 +31,7 @@ fun createMockDisplayItemForCipher(
     shouldShowMasterPasswordReprompt: Boolean = false,
 ): VaultItemListingState.DisplayItem =
     when (cipherType) {
-        is CipherListViewType.Login -> {
+        CipherType.LOGIN -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
@@ -90,7 +88,7 @@ fun createMockDisplayItemForCipher(
             )
         }
 
-        CipherListViewType.SecureNote -> {
+        CipherType.SECURE_NOTE -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
@@ -137,7 +135,7 @@ fun createMockDisplayItemForCipher(
             )
         }
 
-        is CipherListViewType.Card -> {
+        CipherType.CARD -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
@@ -188,7 +186,7 @@ fun createMockDisplayItemForCipher(
             )
         }
 
-        CipherListViewType.Identity -> {
+        CipherType.IDENTITY -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
@@ -231,7 +229,7 @@ fun createMockDisplayItemForCipher(
             )
         }
 
-        CipherListViewType.SshKey -> {
+        CipherType.SSH_KEY -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",

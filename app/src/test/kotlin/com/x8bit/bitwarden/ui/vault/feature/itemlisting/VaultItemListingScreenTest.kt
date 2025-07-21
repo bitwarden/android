@@ -28,11 +28,10 @@ import com.bitwarden.ui.util.assertMasterPasswordDialogDisplayed
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.isProgressBar
 import com.bitwarden.ui.util.onNodeWithTextAfterScroll
-import com.bitwarden.vault.CipherListViewType
+import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
@@ -1383,7 +1382,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
                 VaultItemListingsAction.OverflowOptionClick(
                     action = ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-1",
-                        cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
+                        cipherType = CipherType.LOGIN,
                         requiresPasswordReprompt = true,
                     ),
                 ),
@@ -2462,7 +2461,7 @@ private fun createCipherDisplayItem(
         overflowOptions = listOf(
             ListingItemOverflowAction.VaultAction.EditClick(
                 cipherId = "mockId-$number",
-                cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
+                cipherType = CipherType.LOGIN,
                 requiresPasswordReprompt = true,
             ),
         ),
@@ -2472,8 +2471,6 @@ private fun createCipherDisplayItem(
         shouldShowMasterPasswordReprompt = false,
         iconTestTag = null,
         itemType = VaultItemListingState.DisplayItem.ItemType.Vault(
-            type = CipherListViewType.Login(
-                createMockLoginListView(number = 1),
-            ),
+            type = CipherType.LOGIN,
         ),
     )

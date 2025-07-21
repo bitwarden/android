@@ -14,6 +14,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CopyableCipherFields
 import com.bitwarden.vault.FolderView
@@ -494,26 +495,26 @@ class VaultItemListingDataExtensionsTest {
                 displayItemList = listOf(
                     createMockDisplayItemForCipher(
                         number = 1,
-                        cipherType = CipherListViewType.Login(createMockLoginListView(number = 1)),
+                        cipherType = CipherType.LOGIN,
                         subtitle = "mockSubtitle-1",
                         secondSubtitleTestTag = "PasskeySite",
                         shouldShowMasterPasswordReprompt = true,
                     ),
                     createMockDisplayItemForCipher(
                         number = 2,
-                        cipherType = CipherListViewType.Card(createMockCardListView(number = 2)),
+                        cipherType = CipherType.CARD,
                         subtitle = "mockSubtitle-2",
                         secondSubtitleTestTag = "PasskeySite",
                     ),
                     createMockDisplayItemForCipher(
                         number = 3,
-                        cipherType = CipherListViewType.SecureNote,
+                        cipherType = CipherType.SECURE_NOTE,
                         subtitle = "mockSubtitle-3",
                     )
                         .copy(secondSubtitleTestTag = "PasskeySite"),
                     createMockDisplayItemForCipher(
                         number = 4,
-                        cipherType = CipherListViewType.Identity,
+                        cipherType = CipherType.IDENTITY,
                         subtitle = "mockSubtitle-4",
                     )
                         .copy(secondSubtitleTestTag = "PasskeySite"),
@@ -588,7 +589,7 @@ class VaultItemListingDataExtensionsTest {
                 displayItemList = listOf(
                     createMockDisplayItemForCipher(
                         number = 1,
-                        cipherType = CipherListViewType.Login(loginListView),
+                        cipherType = CipherType.LOGIN,
                         subtitle = "mockSubtitle-1",
                         secondSubtitle = "mockRpId-1",
                         secondSubtitleTestTag = "PasskeySite",
@@ -602,7 +603,7 @@ class VaultItemListingDataExtensionsTest {
                     ),
                     createMockDisplayItemForCipher(
                         number = 2,
-                        cipherType = CipherListViewType.Card(createMockCardListView(number = 2)),
+                        cipherType = CipherType.CARD,
                         subtitle = "mockSubtitle-2",
                     )
                         .copy(
@@ -674,7 +675,7 @@ class VaultItemListingDataExtensionsTest {
                 displayItemList = listOf(
                     createMockDisplayItemForCipher(
                         number = 1,
-                        cipherType = type,
+                        cipherType = CipherType.LOGIN,
                         subtitle = "mockSubtitle-1",
                         requiresPasswordReprompt = false,
                     )
@@ -1328,7 +1329,7 @@ class VaultItemListingDataExtensionsTest {
                 displayItemList = listOf(
                     createMockDisplayItemForCipher(
                         number = 4,
-                        cipherType = CipherListViewType.Card(createMockCardListView(number = 4)),
+                        cipherType = CipherType.CARD,
                         subtitle = "mockSubtitle-4",
                     ).copy(secondSubtitleTestTag = "PasskeySite"),
                 ),

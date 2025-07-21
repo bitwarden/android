@@ -24,8 +24,8 @@ import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
-import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -1231,11 +1231,11 @@ class VaultItemListingViewModel @Inject constructor(
             event = VaultItemListingEvent.NavigateToEditCipher(
                 cipherId = action.cipherId,
                 cipherType = when (action.cipherType) {
-                    is CipherListViewType.Login -> VaultItemCipherType.LOGIN
-                    CipherListViewType.SecureNote -> VaultItemCipherType.SECURE_NOTE
-                    is CipherListViewType.Card -> VaultItemCipherType.CARD
-                    CipherListViewType.Identity -> VaultItemCipherType.IDENTITY
-                    CipherListViewType.SshKey -> VaultItemCipherType.SSH_KEY
+                    CipherType.LOGIN -> VaultItemCipherType.LOGIN
+                    CipherType.SECURE_NOTE -> VaultItemCipherType.SECURE_NOTE
+                    CipherType.CARD -> VaultItemCipherType.CARD
+                    CipherType.IDENTITY -> VaultItemCipherType.IDENTITY
+                    CipherType.SSH_KEY -> VaultItemCipherType.SSH_KEY
                 },
             ),
         )
@@ -1252,11 +1252,11 @@ class VaultItemListingViewModel @Inject constructor(
             event = VaultItemListingEvent.NavigateToVaultItem(
                 id = action.cipherId,
                 type = when (action.cipherType) {
-                    is CipherListViewType.Login -> VaultItemCipherType.LOGIN
-                    CipherListViewType.SecureNote -> VaultItemCipherType.SECURE_NOTE
-                    is CipherListViewType.Card -> VaultItemCipherType.CARD
-                    CipherListViewType.Identity -> VaultItemCipherType.IDENTITY
-                    CipherListViewType.SshKey -> VaultItemCipherType.SSH_KEY
+                    CipherType.LOGIN -> VaultItemCipherType.LOGIN
+                    CipherType.SECURE_NOTE -> VaultItemCipherType.SECURE_NOTE
+                    CipherType.CARD -> VaultItemCipherType.CARD
+                    CipherType.IDENTITY -> VaultItemCipherType.IDENTITY
+                    CipherType.SSH_KEY -> VaultItemCipherType.SSH_KEY
                 },
             ),
         )
@@ -2723,7 +2723,7 @@ data class VaultItemListingState(
             /**
              * Indicates the item type is a vault item.
              */
-            data class Vault(val type: CipherListViewType) : ItemType()
+            data class Vault(val type: CipherType) : ItemType()
         }
     }
 

@@ -28,6 +28,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
 import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
+import com.x8bit.bitwarden.ui.vault.util.toSdkCipherType
 import java.time.Clock
 import java.time.format.FormatStyle
 
@@ -237,7 +238,7 @@ private fun CipherListView.toDisplayItem(
             },
         shouldDisplayMasterPasswordReprompt = hasMasterPassword &&
             reprompt == CipherRepromptType.PASSWORD,
-        itemType = SearchState.DisplayItem.ItemType.Vault(type = this.type),
+        itemType = SearchState.DisplayItem.ItemType.Vault(type = this.type.toSdkCipherType()),
     )
 
 private fun CipherListView.toIconData(

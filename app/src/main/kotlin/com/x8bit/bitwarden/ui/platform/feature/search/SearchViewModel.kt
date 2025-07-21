@@ -15,7 +15,7 @@ import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
-import com.bitwarden.vault.CipherListViewType
+import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
@@ -77,7 +77,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import kotlinx.parcelize.RawValue
 import timber.log.Timber
 import java.time.Clock
 import javax.inject.Inject
@@ -926,12 +925,13 @@ class SearchViewModel @Inject constructor(
         when (val result = vaultRepo.getCipher(cipherId = cipherId)) {
             GetCipherResult.CipherNotFound -> {
                 Timber.e("Cipher not found.")
+                sendAction(SearchAction.Internal.DecryptCipherErrorReceive(error = null))
                 null
             }
 
             is GetCipherResult.Failure -> {
                 Timber.e(result.error, "Failed to decrypt cipher.")
-                SearchAction.Internal.DecryptCipherErrorReceive(error = result.error)
+                sendAction(SearchAction.Internal.DecryptCipherErrorReceive(error = result.error))
                 null
             }
 
@@ -1075,7 +1075,7 @@ data class SearchState(
              * Indicates the item type is a vault item.
              */
             @Parcelize
-            data class Vault(val type: @RawValue CipherListViewType) : ItemType()
+            data class Vault(val type: CipherType) : ItemType()
         }
     }
 }

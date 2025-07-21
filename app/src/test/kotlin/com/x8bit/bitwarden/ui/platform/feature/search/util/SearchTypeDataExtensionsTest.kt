@@ -8,6 +8,7 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.CopyableCipherFields
 import com.bitwarden.vault.FolderView
@@ -408,7 +409,7 @@ class SearchTypeDataExtensionsTest {
                 displayItems = listOf(
                     createMockDisplayItemForCipher(
                         number = 0,
-                        cipherType = CipherListViewType.Card(createMockCardListView(number = 0)),
+                        cipherType = CipherType.CARD,
                     )
                         .copy(
                             autofillSelectionOptions = listOf(
@@ -492,12 +493,7 @@ class SearchTypeDataExtensionsTest {
                 displayItems = listOf(
                     createMockDisplayItemForCipher(
                         number = 1,
-                        cipherType = CipherListViewType.Login(
-                            createMockLoginListView(
-                                number = 1,
-                                hasFido2 = true,
-                            ),
-                        ),
+                        cipherType = CipherType.LOGIN,
                         fallbackIconRes = BitwardenDrawable.ic_bw_passkey,
                     ),
                     createMockDisplayItemForCipher(number = 2),

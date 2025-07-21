@@ -4,10 +4,9 @@ import android.os.Parcelable
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.bitwarden.vault.CipherListViewType
+import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
 import kotlinx.parcelize.Parcelize
-import kotlinx.parcelize.RawValue
 
 /**
  * Represents the actions for an individual item's overflow menu.
@@ -94,7 +93,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class ViewClick(
             val cipherId: String,
-            val cipherType: @RawValue CipherListViewType,
+            val cipherType: CipherType,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
             override val title: Text get() = R.string.view.asText()
@@ -106,7 +105,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class EditClick(
             val cipherId: String,
-            val cipherType: @RawValue CipherListViewType,
+            val cipherType: CipherType,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
             override val title: Text get() = R.string.edit.asText()

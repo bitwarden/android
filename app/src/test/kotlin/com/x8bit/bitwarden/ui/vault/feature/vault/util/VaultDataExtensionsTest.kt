@@ -1182,12 +1182,12 @@ private fun createMockSshKeyVaultItem(number: Int): VaultState.ViewState.VaultIt
         overflowOptions = listOf(
             ListingItemOverflowAction.VaultAction.ViewClick(
                 cipherId = "mockId-$number",
-                cipherType = CipherListViewType.SshKey,
+                cipherType = CipherType.SSH_KEY,
                 requiresPasswordReprompt = true,
             ),
             ListingItemOverflowAction.VaultAction.EditClick(
                 cipherId = "mockId-$number",
-                cipherType = CipherListViewType.SshKey,
+                cipherType = CipherType.SSH_KEY,
                 requiresPasswordReprompt = true,
             ),
         ),

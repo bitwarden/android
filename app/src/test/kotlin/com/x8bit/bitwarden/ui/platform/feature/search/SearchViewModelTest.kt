@@ -16,7 +16,7 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherListView
-import com.bitwarden.vault.CipherListViewType
+import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
@@ -47,7 +47,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
@@ -243,9 +242,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 SearchAction.ItemClick(
                     itemId = "mock",
                     itemType = SearchState.DisplayItem.ItemType.Vault(
-                        type = CipherListViewType.Login(
-                            createMockLoginListView(number = 1),
-                        ),
+                        type = CipherType.LOGIN,
                     ),
                 ),
             )
@@ -269,9 +266,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 SearchAction.ItemClick(
                     itemId = "mock",
                     itemType = SearchState.DisplayItem.ItemType.Vault(
-                        type = CipherListViewType.Login(
-                            createMockLoginListView(number = 1),
-                        ),
+                        type = CipherType.LOGIN,
                     ),
                 ),
             )
@@ -697,9 +692,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                         masterPasswordRepromptData = MasterPasswordRepromptData.ViewItem(
                             cipherId = cipherId,
                             itemType = SearchState.DisplayItem.ItemType.Vault(
-                                type = CipherListViewType.Login(
-                                    createMockLoginListView(number = 1),
-                                ),
+                                type = CipherType.LOGIN,
                             ),
                         ),
                     ),
@@ -732,9 +725,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                         masterPasswordRepromptData = MasterPasswordRepromptData.OverflowItem(
                             action = ListingItemOverflowAction.VaultAction.EditClick(
                                 cipherId = cipherId,
-                                cipherType = CipherListViewType.Login(
-                                    createMockLoginListView(number = 1),
-                                ),
+                                cipherType = CipherType.LOGIN,
                                 requiresPasswordReprompt = true,
                             ),
                         ),
@@ -1156,9 +1147,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = cipherId,
-                        cipherType = CipherListViewType.Login(
-                            createMockLoginListView(number = 1),
-                        ),
+                        cipherType = CipherType.LOGIN,
                         requiresPasswordReprompt = true,
                     ),
                 ),
@@ -1196,9 +1185,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = cipherId,
-                        cipherType = CipherListViewType.Login(
-                            createMockLoginListView(number = 1),
-                        ),
+                        cipherType = CipherType.LOGIN,
                         requiresPasswordReprompt = true,
                     ),
                 ),
