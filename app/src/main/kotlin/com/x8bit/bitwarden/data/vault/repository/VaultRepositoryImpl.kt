@@ -314,7 +314,7 @@ class VaultRepositoryImpl(
 
         pushManager
             .fullSyncFlow
-            .onEach { syncIfNecessary() }
+            .onEach { sync(forced = false) }
             .launchIn(unconfinedScope)
 
         pushManager
