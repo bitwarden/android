@@ -429,6 +429,15 @@ class ExportVaultViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
+            // Check if the export vault policy prevents exporting the vault.
+            syncExportVaultPolicy()
+            if (state.policyPreventsExport) {
+                updateStateWithError(
+                    message = R.string.disable_personal_vault_export_policy_in_effect.asText(),
+                )
+                return@launch
+            }
+
             val result = vaultRepository.exportVaultDataToString(
                 format = state.exportFormat.toExportFormat(
                     password = if (state.exportFormat == ExportVaultFormat.JSON_ENCRYPTED) {
@@ -475,6 +484,15 @@ class ExportVaultViewModel @Inject constructor(
 
         return listOf(CipherType.CARD)
     }
+
+    private suspend fun syncExportVaultPolicy() {
+        // Sync vault policies to ensure we have the latest data.
+        vaultRepository.syncForResult()
+        // Check if the policy prevents exporting the vault.
+        state.policyPreventsExport = policyManager
+            .getActivePolicies(type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT)
+            .any()
+    }
 }
 
 /**
@@ -490,7 +508,7 @@ data class ExportVaultState(
     val filePasswordInput: String,
     val passwordInput: String,
     val passwordStrengthState: PasswordStrengthState,
-    val policyPreventsExport: Boolean,
+    var policyPreventsExport: Boolean,
     val showSendCodeButton: Boolean,
 ) : Parcelable {
     /**
