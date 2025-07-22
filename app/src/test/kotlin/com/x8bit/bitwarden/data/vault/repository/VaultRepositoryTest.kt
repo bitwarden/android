@@ -3275,7 +3275,7 @@ class VaultRepositoryTest {
     }
 
     @Test
-    fun `fullSyncFlow emission should trigger sync if necessary`() {
+    fun `fullSyncFlow emission should trigger unforced sync`() {
         val userId = "mockId-1"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         every {
