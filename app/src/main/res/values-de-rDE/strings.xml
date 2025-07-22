@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s kopiert</string>
     <string name="verify_master_password">Master-Passwort verifizieren</string>
     <string name="verify_pin">PIN überprüfen</string>
-    <string name="version">Version</string>
     <string name="view">Ansicht</string>
     <string name="yes">Ja</string>
     <string name="account">Benutzerkonto</string>
@@ -426,8 +425,8 @@ Das Scannen erfolgt automatisch.</string>
     <string name="passkey_management">Passkey-Verwaltung</string>
     <string name="autofill_services">Auto-Ausfüllen-Dienste</string>
     <string name="display_autofill_suggestions">Vorschläge zum Auto-Ausfüllen anzeigen</string>
-    <string name="autofill_suggestions_inline">Inline (angezeigt in der Tastatur)</string>
-    <string name="autofill_suggestions_popup">Pop-up (angezeigt über dem Eingabefeld)</string>
+    <string name="autofill_suggestions_inline">Inline (wird in der Tastatur angezeigt)</string>
+    <string name="autofill_suggestions_popup">Pop-up (wird über dem Eingabefeld angezeigt)</string>
     <string name="accessibility">Bedienungshilfen verwenden</string>
     <string name="accessibility_description5">Benötigt für die Verwendung der Auto-Ausfüllen-Schnellaktionskachel.</string>
     <string name="personal_ownership_policy_in_effect">Eine Organisationsrichtlinie beeinflusst deine Eigentümer-Optionen.</string>

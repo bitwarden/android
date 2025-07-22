@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s copiado(a)</string>
     <string name="verify_master_password">Verificar a palavra-passe mestra</string>
     <string name="verify_pin">Verificar PIN</string>
-    <string name="version">Versão</string>
     <string name="view">Ver</string>
     <string name="yes">Sim</string>
     <string name="account">Conta</string>
@@ -979,7 +978,7 @@ Pretende mudar para esta conta?</string>
     <string name="trusted_by_you">Confiadas por si</string>
     <string name="trusted_by_the_community">Confiadas pela comunidade</string>
     <string name="trusted_by_google">Confiadas pela Google</string>
-    <string name="privileged_apps_description">Para proteger os utilizadores de tentativas de phishing, por predefinição, o Bitwarden apenas realiza operações de chave de acesso através de navegadores Web da confiança da Google ou da comunidade Bitwarden.</string>
+    <string name="privileged_apps_description">Para proteger os utilizadores de tentativas de phishing, por predefinição, o Bitwarden só realiza operações de chave-mestra através de aplicações ou navegadores web da confiança da Google ou da comunidade Bitwarden.</string>
     <string name="about_privileged_applications">Sobre aplicações privilegiadas</string>
     <string name="learn_more_about_privileged_apps">Saiba mais sobre as aplicações privilegiadas</string>
     <string name="privileged_apps">Apps privilegiadas</string>

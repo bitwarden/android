@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s kopioitiin</string>
     <string name="verify_master_password">Vahvista pääsalasana</string>
     <string name="verify_pin">Vahvista PIN-koodi</string>
-    <string name="version">Versio</string>
     <string name="view">Näytä</string>
     <string name="yes">Kyllä</string>
     <string name="account">Käyttäjätili</string>

@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s har kopierats</string>
     <string name="verify_master_password">Bekräfta huvudlösenord</string>
     <string name="verify_pin">Bekräfta PIN-kod</string>
-    <string name="version">Version</string>
     <string name="view">Visa</string>
     <string name="yes">Ja</string>
     <string name="account">Konto</string>

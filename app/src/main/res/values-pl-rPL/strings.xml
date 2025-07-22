@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">Skopiowano %1$s</string>
     <string name="verify_master_password">Zweryfikuj hasło główne</string>
     <string name="verify_pin">Zweryfikuj kod PIN</string>
-    <string name="version">Wersja</string>
     <string name="view">Pokaż</string>
     <string name="yes">Tak</string>
     <string name="account">Konto</string>
@@ -738,7 +737,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Podpowiedź zostanie wysłana na adres e-mail na żądanie.</string>
     <string name="write_your_password_down">Zapisz hasło</string>
     <string name="keep_it_secret_keep_it_safe">Przechowuj hasło w bezpiecznym i tajnym miejscu.</string>
-    <string name="prevent_account_lockout">Zapobiegaj zablokowaniu konta</string>
+    <string name="prevent_account_lockout">Zapobiegaj blokowaniu konta</string>
     <string name="generate_master_password">Wygeneruj hasło główne</string>
     <string name="generate_button_label">Generuj</string>
     <string name="write_this_password_down_and_keep_it_somewhere_safe">Zapisz to hasło i przechowuj je w bezpiecznym miejscu.</string>
@@ -755,8 +754,8 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Wybierz unikalne i mocne hasło, aby Twoje dane były bezpieczne.</string>
     <string name="minimum_characters">%1$s znaków</string>
     <string name="expired_link">Link wygasł</string>
-    <string name="please_restart_registration_or_try_logging_in">Zacznij rejestrację od początku lub spróbuj się zalogować. Możesz mieć już konto.</string>
-    <string name="restart_registration">Zacznij rejestrację od początku</string>
+    <string name="please_restart_registration_or_try_logging_in">Rozpocznij rejestrację od początku lub spróbuj się zalogować. Możesz mieć już konto.</string>
+    <string name="restart_registration">Rozpocznij rejestrację od początku</string>
     <string name="authenticator_sync">Synchronizacja uwierzytelniania</string>
     <string name="allow_bitwarden_authenticator_syncing">Włącz synchronizację uwierzytelniania</string>
     <string name="there_was_an_issue_validating_the_registration_token">Wystąpił błąd podczas sprawdzania poprawności tokenu rejestracyjnego.</string>

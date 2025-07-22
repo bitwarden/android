@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s 항목을 복사했습니다.</string>
     <string name="verify_master_password">마스터 비밀번호 확인</string>
     <string name="verify_pin">PIN 확인</string>
-    <string name="version">버전</string>
     <string name="view">보기</string>
     <string name="yes">예</string>
     <string name="account">계정</string>

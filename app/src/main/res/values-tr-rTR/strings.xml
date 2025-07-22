@@ -64,11 +64,10 @@
     <string name="website_uri">Web sitesi (URI)</string>
     <string name="username">Kullanıcı adı</string>
     <string name="validation_field_required">%1$s alanı gereklidir.</string>
-    <string name="you_must_attach_a_file_to_save_this_send">You must attach a file to save this send.</string>
+    <string name="you_must_attach_a_file_to_save_this_send">Bu Send\'i kaydetmek için bir dosya eklemelisiniz.</string>
     <string name="value_has_been_copied">%1$s kopyalandı</string>
     <string name="verify_master_password">Ana parolayı doğrula</string>
     <string name="verify_pin">PIN\'i doğrula</string>
-    <string name="version">Sürüm</string>
     <string name="view">Görüntüle</string>
     <string name="yes">Evet</string>
     <string name="account">Hesap</string>
@@ -127,8 +126,8 @@
     <string name="no_text_sends">There are no text Sends in your vault.</string>
     <string name="no_file_sends">There are no file Sends in your vault.</string>
     <string name="no_ssh_keys">Kasanızda hiç SSH anahtarı yok.</string>
-    <string name="new_text_send">New text Send</string>
-    <string name="new_file_send">New file Send</string>
+    <string name="new_text_send">Yeni Send metni</string>
+    <string name="new_file_send">Yeni Send dosyası</string>
     <string name="no_username">Kullanıcı adı yok</string>
     <string name="options">Seçenekler</string>
     <string name="other">Diğer</string>
@@ -150,11 +149,11 @@
     <string name="unlock_with">Kilidi %1$s ile aç</string>
     <string name="unlock_with_pin">Kilidi PIN koduyla aç</string>
     <string name="verification_code">Doğrulama kodu</string>
-    <string name="view_login">View login</string>
-    <string name="view_card">View card</string>
-    <string name="view_identity">View identity</string>
-    <string name="view_note">View note</string>
-    <string name="view_passkey">View passkey</string>
+    <string name="view_login">Hesabı görüntüle</string>
+    <string name="view_card">Kartı görüntüle</string>
+    <string name="view_identity">Kimliği görüntüle</string>
+    <string name="view_note">Notu görüntüle</string>
+    <string name="view_passkey">Geçiş anahtarını görüntüle</string>
     <string name="web_vault">Bitwarden web kasası</string>
     <string name="items">Kayıtlar</string>
     <string name="items_for_uri">%1$s kayıtları</string>
@@ -229,7 +228,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="april">Nisan</string>
     <string name="august">Ağustos</string>
     <string name="brand">Marka</string>
-    <string name="card_details">Card Details</string>
+    <string name="card_details">Kart Detayları</string>
     <string name="cardholder_name">Kart sahibinin adı</string>
     <string name="city_town">Şehir</string>
     <string name="company">Şirket</string>
@@ -302,7 +301,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="invalid_email">Geçersiz e-posta adresi.</string>
     <string name="cards">Kartlar</string>
     <string name="identities">Kimlikler</string>
-    <string name="identification">Identification</string>
+    <string name="identification">Kimlik</string>
     <string name="logins">Hesaplar</string>
     <string name="secure_notes">Güvenli notlar</string>
     <string name="personal_details">Kişisel Ayrıntılar</string>
@@ -757,7 +756,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="expired_link">Bağlantının süresi dolmuş</string>
     <string name="please_restart_registration_or_try_logging_in">Lütfen kaydı yeniden başlatın veya giriş yapmayı deneyin. Mevcut bir hesabınız olabilir.</string>
     <string name="restart_registration">Kaydı yeniden başlat</string>
-    <string name="authenticator_sync">Authenticator Sync</string>
+    <string name="authenticator_sync">Authenticator Eşitlemesi</string>
     <string name="allow_bitwarden_authenticator_syncing">Allow authenticator syncing</string>
     <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
     <string name="turn_on_autofill">Otomatik doldurmayı etkinleştir</string>
@@ -855,7 +854,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="check_out_the_passphrase_generator">"Check out the passphrase generator"</string>
     <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
     <string name="review_flow_launched">Review flow launched!</string>
-    <string name="copy_private_key">Copy private key</string>
+    <string name="copy_private_key">Özel anahtarı kopyala</string>
     <string name="login_credentials">Hesap Bilgileri</string>
     <string name="autofill_options">Otomatik Doldurma Seçenekleri</string>
     <string name="use_this_button_to_generate_a_new_unique_password">Yeni ve benzersiz bir parola üretmek için bu düğmeyi kullanın.</string>

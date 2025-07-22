@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s تم نسخه</string>
     <string name="verify_master_password">التحقق من كلمة المرور الرئيسية</string>
     <string name="verify_pin">التحقق من رقم التعريف الشخصي</string>
-    <string name="version">إصدار</string>
     <string name="view">انظر</string>
     <string name="yes">نعم</string>
     <string name="account">حساب</string>
