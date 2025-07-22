@@ -80,6 +80,7 @@ class UserLogoutManagerImpl(
         // Save any data that will still need to be retained after otherwise clearing all dat
         val vaultTimeoutInMinutes = settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
         val vaultTimeoutAction = settingsDiskSource.getVaultTimeoutAction(userId = userId)
+        val pinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
 
         switchUserIfAvailable(
             currentUserId = userId,
@@ -101,6 +102,10 @@ class UserLogoutManagerImpl(
                 vaultTimeoutAction = vaultTimeoutAction,
             )
         }
+        authDiskSource.storePinProtectedUserKey(
+            userId = userId,
+            pinProtectedUserKey = pinProtectedUserKey,
+        )
     }
 
     private fun clearData(userId: String) {
