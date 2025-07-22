@@ -7,7 +7,6 @@ import e2e.pageObjects.settings.accountSecurity.AccountSecurityPage
 
 class SettingsPage(composeTestRule: ComposeTestRule) : Page(composeTestRule) {
 
-    // UI Elements
     private val accountSecurityButton by lazy { getElement("AccountSecuritySettingsButton") }
 
     /**

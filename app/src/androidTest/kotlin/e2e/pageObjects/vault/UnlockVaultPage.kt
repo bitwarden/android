@@ -8,7 +8,6 @@ import e2e.pageObjects.Page
 
 class UnlockVaultPage(composeTestRule: ComposeTestRule) : Page(composeTestRule) {
 
-    // UI Elements
     private val passwordEntryTag by lazy { getElement("MasterPasswordEntry") }
     private val unlockVaultButtonTag by lazy { getElement("UnlockVaultButton") }
 

@@ -47,6 +47,7 @@ android {
     namespace = "com.x8bit.bitwarden"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
+    // Required for SauceLabs integration
     testBuildType = "release"
 
     room {
@@ -299,11 +300,11 @@ dependencies {
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.robolectric.robolectric)
     testImplementation(libs.square.turbine)
-    androidTestImplementation(libs.androidx.uiautomator)
+    androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit.ktx)
     androidTestImplementation(libs.androidx.ui.test.junit4.android)
-    androidTestImplementation(libs.androidx.compose.ui.test)
+    androidTestImplementation(libs.androidx.uiautomator)
 }
 
 tasks {

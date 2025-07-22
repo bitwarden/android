@@ -8,7 +8,6 @@ import e2e.pageObjects.settings.SettingsPage
 
 class VaultPage(composeTestRule: ComposeTestRule) : Page(composeTestRule) {
 
-    // UI Elements
     private val settingsMenuButton by lazy { getElement("SettingsTab") }
     private val addItemButton by lazy { getElement("AddItemButton") }
 

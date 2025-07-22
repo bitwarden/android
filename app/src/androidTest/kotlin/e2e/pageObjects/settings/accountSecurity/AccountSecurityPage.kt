@@ -13,7 +13,6 @@ import e2e.pageObjects.vault.UnlockVaultPage
  */
 class AccountSecurityPage(composeTestRule: ComposeTestRule) : Page(composeTestRule) {
 
-    // UI Elements
     private val lockNowLabel by lazy { getElement("LockNowLabel") }
 
     /**

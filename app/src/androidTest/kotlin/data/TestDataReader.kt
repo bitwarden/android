@@ -7,13 +7,13 @@ import java.nio.charset.StandardCharsets
 
 object TestDataReader {
     fun getTestData(fileName: String): TestData {
-        val context = InstrumentationRegistry.getInstrumentation().context.assets
-        val inputStream: InputStream = context.open(fileName)
-        val size = inputStream.available()
-        val buffer = ByteArray(size)
-        inputStream.read(buffer)
-        inputStream.close()
-        val jsonString = String(buffer, StandardCharsets.UTF_8)
+        val assets = InstrumentationRegistry.getInstrumentation().context.assets
+        val jsonString = assets
+            .open(fileName)
+            .use { inputStream ->
+                inputStream.bufferedReader(StandardCharsets.UTF_8)
+                    .readText()
+            }
         return Json.decodeFromString<TestData>(jsonString)
     }
 }

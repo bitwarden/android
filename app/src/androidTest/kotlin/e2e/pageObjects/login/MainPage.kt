@@ -7,7 +7,6 @@ import e2e.pageObjects.Page
 
 class MainPage(composeTestRule: ComposeTestRule) : Page(composeTestRule) {
 
-    // UI Elements
     private val loginButton by lazy { getElement("ChooseLoginButton") }
     private val createAccountButton by lazy { getElement("ChooseAccountCreationButton") }
 

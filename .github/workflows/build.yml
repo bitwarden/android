@@ -113,8 +113,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: [ "prod", "dev" ]
-        artifact: [ "apk", "aab" ]
+        variant: ["prod", "dev"]
+        artifact: ["apk", "aab"]
     steps:
       - name: Check out repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -658,11 +658,6 @@ jobs:
         run: |
           npm i -g saucectl
 
-      - name: Log in to Azure
-        uses: Azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5 # v2.3.0
-        with:
-          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
-
       - name: Retrieve secrets
         env:
           ACCOUNT_NAME: bitwardenci
@@ -676,7 +671,7 @@ jobs:
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
           --name google-services.json --file ${{ github.workspace }}/app/src/standardRelease/google-services.json --output none
 
-      - name: Log in to Azure (Bitwarden)
+      - name: Log in to Azure
         uses: bitwarden/gh-actions/azure-login@main
         with:
           subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}

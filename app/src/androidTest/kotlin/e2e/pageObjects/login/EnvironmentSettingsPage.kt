@@ -8,11 +8,11 @@ import e2e.pageObjects.Page
 
 class EnvironmentSettingsPage(composeTestRule: ComposeTestRule) : Page(composeTestRule) {
 
-    private val serverURLField by lazy { getElement("ServerUrlEntry") }
+    private val serverUrlField by lazy { getElement("ServerUrlEntry") }
     private val saveButton by lazy { getElement("SaveButton") }
 
     fun setupEnvironment(url: String): LoginPage {
-        serverURLField
+        serverUrlField
             .performClick()
             .performTextInput(url)
         saveButton.performClick()

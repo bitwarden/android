@@ -13,7 +13,6 @@ import e2e.pageObjects.vault.VaultPage
  */
 class LoginPage(composeTestRule: ComposeTestRule) : Page(composeTestRule) {
 
-    // UI Elements
     private val emailField by lazy { getElement("EmailAddressEntry") }
     private val masterPasswordField by lazy { getElement("MasterPasswordEntry") }
     private val continueButton by lazy { getElement("ContinueButton") }
