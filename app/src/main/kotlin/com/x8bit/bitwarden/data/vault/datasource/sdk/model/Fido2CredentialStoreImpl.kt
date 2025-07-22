@@ -5,6 +5,7 @@ import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.EncryptionContext
+import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -35,7 +36,7 @@ class Fido2CredentialStoreImpl(
             .data
             ?.successes
             .orEmpty()
-            .filter { it.login?.hasFido2 ?: false }
+            .filter { it.isActiveWithFido2Credentials }
     }
 
     /**
@@ -59,6 +60,7 @@ class Fido2CredentialStoreImpl(
             .data
             ?.successes
             .orEmpty()
+            .filter { it.isActiveWithFido2Credentials }
             .filterMatchingCredentials(
                 credentialIds = ids,
                 relyingPartyId = ripId,
