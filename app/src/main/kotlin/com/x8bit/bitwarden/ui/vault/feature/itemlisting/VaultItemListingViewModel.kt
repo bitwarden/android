@@ -1814,8 +1814,8 @@ class VaultItemListingViewModel @Inject constructor(
                 AutofillSelectionData.Framework.ACCESSIBILITY -> {
                     accessibilitySelectionManager.emitAccessibilitySelection(
                         cipherView = cipherView,
-                )
-            }
+                    )
+                }
 
                 AutofillSelectionData.Framework.AUTOFILL -> {
                     autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
@@ -2119,7 +2119,6 @@ class VaultItemListingViewModel @Inject constructor(
 
     private suspend fun sendPasskeyItemNotFoundError() {
         sendAction(
-            @Suppress("MaxLineLength")
             VaultItemListingsAction.Internal.PasskeyOperationFailureReceive(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string
@@ -2287,7 +2286,13 @@ class VaultItemListingViewModel @Inject constructor(
             null
         }
 
-        is GetCipherResult.CipherNotFound -> null
+        is GetCipherResult.CipherNotFound -> {
+            Timber.e("Cipher not found.")
+            sendAction(
+                VaultItemListingsAction.Internal.DecryptCipherErrorReceive(error = null),
+            )
+            null
+        }
     }
 
     private suspend fun getCipherViewForFido2OrNull(cipherId: String): CipherView? =

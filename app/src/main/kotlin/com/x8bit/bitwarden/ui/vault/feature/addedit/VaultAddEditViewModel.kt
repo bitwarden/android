@@ -1720,11 +1720,10 @@ class VaultAddEditViewModel @Inject constructor(
                 viewModelScope.launch {
                     sendAction(
                         VaultAddEditAction.Internal.DetermineContentStateResultReceive(
-                            vaultAddEditState = mutableStateFlow.value
-                                .determineContentState(
-                                    vaultData = vaultDataState.data,
-                                    userData = action.userData,
-                                ),
+                            vaultAddEditState = state.determineContentState(
+                                vaultData = vaultDataState.data,
+                                userData = action.userData,
+                            ),
                         ),
                     )
                 }
@@ -1742,21 +1741,27 @@ class VaultAddEditViewModel @Inject constructor(
 
             is DataState.NoNetwork -> {
                 viewModelScope.launch {
-                    mutableStateFlow.value
-                        .determineContentState(
-                            vaultData = vaultDataState.data,
-                            userData = action.userData,
-                        )
+                    sendAction(
+                        VaultAddEditAction.Internal.DetermineContentStateResultReceive(
+                            state.determineContentState(
+                                vaultData = vaultDataState.data,
+                                userData = action.userData,
+                            ),
+                        ),
+                    )
                 }
             }
 
             is DataState.Pending -> {
                 viewModelScope.launch {
-                    mutableStateFlow.value
-                        .determineContentState(
-                            vaultData = vaultDataState.data,
-                            userData = action.userData,
-                        )
+                    sendAction(
+                        VaultAddEditAction.Internal.DetermineContentStateResultReceive(
+                            state.determineContentState(
+                                vaultData = vaultDataState.data,
+                                userData = action.userData,
+                            ),
+                        ),
+                    )
                 }
             }
         }
