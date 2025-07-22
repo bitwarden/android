@@ -265,6 +265,7 @@ Scanning will happen automatically.</string>
     <string name="address">Address</string>
     <string name="expiration">Expiration</string>
     <string name="show_website_icons">Show website icons</string>
+    <string name="show_website_icons_help">Show website icons help</string>
     <string name="show_website_icons_description">Show a recognizable image next to each login</string>
     <string name="icons_url">Icons server URL</string>
     <string name="vault_is_locked">Vault is locked</string>
