@@ -988,4 +988,6 @@ Do you want to switch to this account?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
     <string name="installed_apps">Installed apps</string>
     <string name="delete_x">Delete %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
+    <string name="decryption_error">Decryption error</string>
 </resources>

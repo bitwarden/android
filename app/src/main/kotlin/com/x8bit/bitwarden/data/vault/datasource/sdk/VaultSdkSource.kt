@@ -206,30 +206,6 @@ interface VaultSdkSource {
     ): Result<CipherView>
 
     /**
-     * Decrypts a list of [Cipher]s for the user with the given [userId], returning a list of
-     * [CipherListView] wrapped in a [Result].
-     *
-     * This should only be called after a successful call to [initializeCrypto] for the associated
-     * user.
-     */
-    suspend fun decryptCipherListCollection(
-        userId: String,
-        cipherList: List<Cipher>,
-    ): Result<List<CipherListView>>
-
-    /**
-     * Decrypts a list of [Cipher]s  for the user with the given [userId], returning a list of
-     * [CipherView] wrapped in a [Result].
-     *
-     * This should only be called after a successful call to [initializeCrypto] for the associated
-     * user.
-     */
-    suspend fun decryptCipherList(
-        userId: String,
-        cipherList: List<Cipher>,
-    ): Result<List<CipherView>>
-
-    /**
      * Decrypts a list of [Cipher]s for the user with the given [userId].
      *
      * @return A [DecryptCipherListResult] containing the decrypted [CipherListView]s and references

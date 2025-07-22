@@ -13,12 +13,22 @@ import kotlinx.collections.immutable.persistentListOf
 /**
  * Create a mock [VaultItemListingState.DisplayItem] with a given [number].
  */
+@Suppress("LongParameterList")
 fun createMockDisplayItemForCipher(
     number: Int,
     cipherType: CipherType = CipherType.LOGIN,
     subtitle: String? = "mockUsername-$number",
+    subtitleTestTag: String = "CipherSubTitleLabel",
+    secondSubtitle: String? = null,
     secondSubtitleTestTag: String? = null,
     requiresPasswordReprompt: Boolean = true,
+    iconData: IconData = IconData.Network(
+        uri = "https://icons.bitwarden.net/www.mockuri.com/icon.png",
+        fallbackIconRes = BitwardenDrawable.ic_globe,
+    ),
+    isAutofill: Boolean = false,
+    isCredentialCreation: Boolean = false,
+    shouldShowMasterPasswordReprompt: Boolean = false,
 ): VaultItemListingState.DisplayItem =
     when (cipherType) {
         CipherType.LOGIN -> {
@@ -26,14 +36,11 @@ fun createMockDisplayItemForCipher(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
-                secondSubtitle = null,
+                secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
-                subtitleTestTag = "CipherSubTitleLabel",
-                iconData = IconData.Network(
-                    uri = "https://icons.bitwarden.net/www.mockuri.com/icon.png",
-                    fallbackIconRes = BitwardenDrawable.ic_globe,
-                ),
+                subtitleTestTag = subtitleTestTag,
+                iconData = iconData,
                 extraIconList = persistentListOf(
                     IconData.Local(
                         iconRes = BitwardenDrawable.ic_collections,
@@ -51,7 +58,6 @@ fun createMockDisplayItemForCipher(
                         username = "mockUsername-$number",
                     ),
                     ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                        password = "mockPassword-$number",
                         requiresPasswordReprompt = requiresPasswordReprompt,
                         cipherId = "mockId-$number",
                     ),
@@ -74,9 +80,9 @@ fun createMockDisplayItemForCipher(
                     ),
                 ),
                 optionsTestTag = "CipherOptionsButton",
-                isAutofill = false,
-                isCredentialCreation = false,
-                shouldShowMasterPasswordReprompt = false,
+                isAutofill = isAutofill,
+                isCredentialCreation = isCredentialCreation,
+                shouldShowMasterPasswordReprompt = shouldShowMasterPasswordReprompt,
                 iconTestTag = "LoginCipherIcon",
                 itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = cipherType),
             )
@@ -87,7 +93,7 @@ fun createMockDisplayItemForCipher(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
-                secondSubtitle = null,
+                secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
                 subtitleTestTag = "CipherSubTitleLabel",
@@ -106,7 +112,7 @@ fun createMockDisplayItemForCipher(
                 ),
                 overflowOptions = listOf(
                     ListingItemOverflowAction.VaultAction.CopyNoteClick(
-                        notes = "mockNotes-$number",
+                        cipherId = "mockId-$number",
                         requiresPasswordReprompt = requiresPasswordReprompt,
                     ),
                     ListingItemOverflowAction.VaultAction.ViewClick(
@@ -134,7 +140,7 @@ fun createMockDisplayItemForCipher(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
-                secondSubtitle = null,
+                secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
                 subtitleTestTag = "CipherSubTitleLabel",
@@ -153,11 +159,10 @@ fun createMockDisplayItemForCipher(
                 ),
                 overflowOptions = listOf(
                     ListingItemOverflowAction.VaultAction.CopyNumberClick(
-                        number = "mockNumber-$number",
+                        cipherId = "mockId-$number",
                         requiresPasswordReprompt = requiresPasswordReprompt,
                     ),
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
-                        securityCode = "mockCode-$number",
                         cipherId = "mockId-$number",
                         requiresPasswordReprompt = requiresPasswordReprompt,
                     ),
@@ -186,7 +191,7 @@ fun createMockDisplayItemForCipher(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
-                secondSubtitle = null,
+                secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
                 subtitleTestTag = "CipherSubTitleLabel",
@@ -229,7 +234,7 @@ fun createMockDisplayItemForCipher(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
-                secondSubtitle = null,
+                secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
                 subtitle = subtitle,
                 subtitleTestTag = "CipherSubTitleLabel",

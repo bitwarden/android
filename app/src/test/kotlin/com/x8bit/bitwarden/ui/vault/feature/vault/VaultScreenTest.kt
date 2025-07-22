@@ -1849,9 +1849,6 @@ class VaultScreenTest : BitwardenComposeTest() {
                         VaultState.ViewState.VaultItem.SshKey(
                             id = "mockId",
                             name = "mockSshKey".asText(),
-                            publicKey = "mockPublicKey".asText(),
-                            privateKey = "mockPrivateKey".asText(),
-                            fingerprint = "mockFingerprint".asText(),
                             overflowOptions = emptyList(),
                             shouldShowMasterPasswordReprompt = false,
                         ),
