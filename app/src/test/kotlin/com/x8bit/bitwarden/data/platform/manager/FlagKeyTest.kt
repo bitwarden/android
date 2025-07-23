@@ -50,10 +50,6 @@ class FlagKeyTest {
             "android-chrome-autofill",
         )
         assertEquals(
-            FlagKey.MobileErrorReporting.keyName,
-            "mobile-error-reporting",
-        )
-        assertEquals(
             FlagKey.RestrictCipherItemDeletion.keyName,
             "pm-15493-restrict-item-deletion-to-can-manage-permission",
         )
@@ -81,7 +77,6 @@ class FlagKeyTest {
                 FlagKey.SimpleLoginSelfHostAlias,
                 FlagKey.CipherKeyEncryption,
                 FlagKey.ChromeAutofill,
-                FlagKey.MobileErrorReporting,
                 FlagKey.RestrictCipherItemDeletion,
                 FlagKey.UserManagedPrivilegedApps,
                 FlagKey.RemoveCardPolicy,

@@ -31,7 +31,6 @@ sealed class FlagKey<out T : Any> {
                 AnonAddySelfHostAlias,
                 SimpleLoginSelfHostAlias,
                 ChromeAutofill,
-                MobileErrorReporting,
                 RestrictCipherItemDeletion,
                 UserManagedPrivilegedApps,
                 RemoveCardPolicy,
@@ -44,14 +43,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object EmailVerification : FlagKey<Boolean>() {
         override val keyName: String = "email-verification"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the key for syncing with the Bitwarden Authenticator app.
-     */
-    data object MobileErrorReporting : FlagKey<Boolean>() {
-        override val keyName: String = "mobile-error-reporting"
         override val defaultValue: Boolean = false
     }
 
