@@ -31,6 +31,7 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
@@ -194,7 +195,7 @@ private fun PrivilegedAppsListContent(
                         BitwardenStandardIconButton(
                             vectorIconRes = BitwardenDrawable.ic_delete,
                             contentDescription =
-                                stringResource(R.string.delete_x, item.packageName),
+                                stringResource(BitwardenString.delete_x, item.packageName),
                             onClick = remember(item) {
                                 { onDeleteClick(item) }
                             },
