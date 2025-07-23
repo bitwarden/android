@@ -222,7 +222,6 @@ class SpecialCircumstanceExtensionsTest {
             }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `toGetCredentialsRequestOrNull should return a non-null value for GetCredentials`() {
         val getCredentialsRequest = createMockGetCredentialsRequest(number = 1)
@@ -272,10 +271,9 @@ class SpecialCircumstanceExtensionsTest {
             }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `toPasswordGetRequestOrNull should return a non-null value for PasswordGetCredentials`() {
-        val passwordGetCredentialsRequest = createMockProviderGetPasswordCredentialRequest()
+        val passwordGetCredentialsRequest = createMockProviderGetPasswordCredentialRequest(1)
         assertEquals(
             passwordGetCredentialsRequest,
             SpecialCircumstance

@@ -22,8 +22,9 @@ import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessaryOrNull
 import com.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
-import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
+import com.x8bit.bitwarden.data.autofill.util.isActiveWithCopyablePassword
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
+import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilder
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
@@ -31,6 +32,7 @@ import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
+import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.getAppOrigin
 import com.x8bit.bitwarden.data.platform.util.getAppSigningSignatureFingerprint
 import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString
@@ -54,10 +56,10 @@ import timber.log.Timber
 class BitwardenCredentialManagerImpl(
     private val vaultSdkSource: VaultSdkSource,
     private val fido2CredentialStore: Fido2CredentialStore,
-    private val autofillCipherProvider: AutofillCipherProvider,
     private val credentialEntryBuilder: CredentialEntryBuilder,
     private val json: Json,
     private val vaultRepository: VaultRepository,
+    private val cipherMatchingManager: CipherMatchingManager,
     dispatcherManager: DispatcherManager,
 ) : BitwardenCredentialManager,
     Fido2CredentialStore by fido2CredentialStore {
@@ -173,7 +175,7 @@ class BitwardenCredentialManagerImpl(
     override suspend fun getCredentialEntries(
         getCredentialsRequest: GetCredentialsRequest,
     ): Result<List<CredentialEntry>> = withContext(ioScope.coroutineContext) {
-        val fido2CipherListViews = vaultRepository
+        val cipherListViews = vaultRepository
             .decryptCipherListResultStateFlow
             .takeUntilLoaded()
             .fold(initial = emptyList<CipherListView>()) { _, dataState ->
@@ -182,7 +184,7 @@ class BitwardenCredentialManagerImpl(
                     else -> emptyList()
                 }
             }
-            .filter { it.isActiveWithFido2Credentials }
+            .filter { it.isActiveWithFido2Credentials || it.isActiveWithCopyablePassword }
             .ifEmpty { return@withContext emptyList<CredentialEntry>().asSuccess() }
 
         val passwordCredentialResult = getCredentialsRequest
@@ -193,7 +195,10 @@ class BitwardenCredentialManagerImpl(
                     .beginGetPasswordOptions
                     .toPasswordCredentialEntries(
                         userId = getCredentialsRequest.userId,
-                        packageName = packageName,
+                        cipherListViews = cipherMatchingManager.filterCiphersForMatches(
+                            cipherListViews = cipherListViews,
+                            matchUri = packageName.toAndroidAppUriString(),
+                        ),
                     )
             }
             .orEmpty()
@@ -202,7 +207,8 @@ class BitwardenCredentialManagerImpl(
             .beginGetPublicKeyCredentialOptions
             .toPublicKeyCredentialEntries(
                 userId = getCredentialsRequest.userId,
-                cipherListViews = fido2CipherListViews,
+                cipherListViews = cipherListViews
+                    .filter { it.isActiveWithFido2Credentials },
             )
             .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
 
@@ -231,6 +237,12 @@ class BitwardenCredentialManagerImpl(
             }
 
         val cipherViews = cipherListViews
+            .filter { cipherListView ->
+                cipherListView.login
+                    ?.fido2Credentials
+                    .orEmpty()
+                    .any { credential -> credential.rpId in relyingPartyIds }
+            }
             .mapNotNull { cipherListView ->
                 when (val result = vaultRepository.getCipher(cipherListView.id.orEmpty())) {
                     GetCipherResult.CipherNotFound -> {
@@ -262,8 +274,7 @@ class BitwardenCredentialManagerImpl(
                     credentialEntryBuilder
                         .buildPublicKeyCredentialEntries(
                             userId = userId,
-                            fido2CredentialAutofillViews = fido2AutofillViews
-                                .filter { it.rpId in relyingPartyIds },
+                            fido2CredentialAutofillViews = fido2AutofillViews,
                             beginGetPublicKeyCredentialOptions = this,
                             isUserVerified = isUserVerified,
                         )
@@ -364,20 +375,16 @@ class BitwardenCredentialManagerImpl(
             },
         )
 
-    private suspend fun List<BeginGetPasswordOption>.toPasswordCredentialEntries(
+    private fun List<BeginGetPasswordOption>.toPasswordCredentialEntries(
         userId: String,
-        packageName: String,
+        cipherListViews: List<CipherListView>,
     ): List<CredentialEntry> {
         if (this.isEmpty()) return emptyList()
-
-        val ciphers = autofillCipherProvider
-            .getLoginAutofillCiphers(packageName.toAndroidAppUriString())
-            .filter { it.password.isNotEmpty() }
 
         return credentialEntryBuilder
             .buildPasswordCredentialEntries(
                 userId = userId,
-                passwordCredentialAutofillViews = ciphers,
+                cipherListViews = cipherListViews,
                 beginGetPasswordCredentialOptions = this,
                 isUserVerified = isUserVerified,
             )

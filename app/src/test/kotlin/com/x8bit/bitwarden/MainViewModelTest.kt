@@ -812,7 +812,7 @@ class MainViewModelTest : BaseViewModelTest() {
     @Test
     fun `on ReceiveFirstIntent with password get request data should set the special circumstance to ProviderGetPasswordRequest`() {
         val viewModel = createViewModel()
-        val mockProviderGetCredentialRequest = createMockProviderGetPasswordCredentialRequest()
+        val mockProviderGetCredentialRequest = createMockProviderGetPasswordCredentialRequest(1)
         val passwordGetCredentialIntent = createMockIntent(
             mockProviderGetPasswordRequest = mockProviderGetCredentialRequest,
         )

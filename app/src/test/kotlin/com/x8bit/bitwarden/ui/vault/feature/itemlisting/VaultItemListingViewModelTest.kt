@@ -86,8 +86,8 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -750,7 +750,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.CredentialManagerOperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
+                message = R.string
+                    .credential_operation_failed_because_the_selected_item_does_not_exist
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -3373,18 +3374,18 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderGetPasswordRequest(
-                    createMockProviderGetPasswordCredentialRequest(),
+                    createMockProviderGetPasswordCredentialRequest(1),
                 )
-            val mockPasswordCredential = createMockLoginView(1)
+            val mockPasswordCredential = createMockLoginListView(1)
             every {
-                vaultRepository
-                    .ciphersStateFlow
-                    .value
-                    .data
-            } returns listOf(
-                createMockCipherView(
-                    number = 1,
-                    login = mockPasswordCredential,
+                vaultRepository.decryptCipherListResultStateFlow.value.data
+            } returns createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(
+                        number = 1,
+                        type = CipherListViewType.Login(mockPasswordCredential),
+                    ),
                 ),
             )
             val viewModel = createVaultItemListingViewModel()
@@ -5075,7 +5076,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
                     R.string.an_error_has_occurred.asText(),
-                    R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
+                    R.string.credential_operation_failed_because_the_selected_item_does_not_exist
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
@@ -5088,17 +5089,20 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderGetPasswordRequest(
-                    createMockProviderGetPasswordCredentialRequest(),
+                    createMockProviderGetPasswordCredentialRequest(1),
                 )
 
             every {
                 vaultRepository
-                    .ciphersStateFlow
+                    .decryptCipherListResultStateFlow
                     .value
                     .data
-            } returns listOf(
-                createMockCipherView(
-                    number = 1,
+            } returns createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(
+                        number = 1,
+                    ),
                 ),
             )
             val viewModel = createVaultItemListingViewModel()
@@ -5121,18 +5125,21 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderGetPasswordRequest(
-                    createMockProviderGetPasswordCredentialRequest(),
+                    createMockProviderGetPasswordCredentialRequest(1),
                 )
             every {
                 vaultRepository
-                    .ciphersStateFlow
+                    .decryptCipherListResultStateFlow
                     .value
                     .data
             } returns null
 
             val dataState = DataState.Loaded(
                 data = VaultData(
-                    cipherViewList = emptyList(),
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = emptyList(),
+                    ),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
                     sendViewList = listOf(createMockSendView(number = 1)),
@@ -5145,11 +5152,12 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string
-                        .password_operation_failed_because_the_selected_item_does_not_exist
+                        .credential_operation_failed_because_the_selected_item_does_not_exist
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
+            coVerify(exactly = 0) { vaultRepository.getCipher(any()) }
         }
 
     @Suppress("MaxLineLength")
@@ -5157,8 +5165,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `GetPasswordRequest should show error dialog when cipher state flow data has no matching cipher`() =
         runTest {
             setupMockUri()
-            val mockGetPasswordRequest = createMockProviderGetPasswordCredentialRequest()
-            val mockCipherView = createMockCipherView(
+            val mockGetPasswordRequest = createMockProviderGetPasswordCredentialRequest(1)
+            val mockCipherListView = createMockCipherListView(
                 number = 1,
             )
             specialCircumstanceManager.specialCircumstance =
@@ -5167,27 +5175,36 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 )
             every {
                 vaultRepository
-                    .ciphersStateFlow
+                    .decryptCipherListResultStateFlow
                     .value
                     .data
-            } returns listOf(mockCipherView)
+            } returns createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(mockCipherListView),
+            )
+            coEvery {
+                vaultRepository.getCipher("mockId-1")
+            } returns GetCipherResult.CipherNotFound
 
             val dataState = DataState.Loaded(
                 data = VaultData(
-                    cipherViewList = listOf(mockCipherView),
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(mockCipherListView),
+                    ),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
                     sendViewList = listOf(createMockSendView(number = 1)),
                 ),
             )
-            val viewModel = createVaultItemListingViewModel()
             mutableVaultDataStateFlow.value = dataState
+            val viewModel = createVaultItemListingViewModel()
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string
-                        .password_operation_failed_because_the_selected_item_does_not_exist
+                        .credential_operation_failed_because_the_selected_item_does_not_exist
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
@@ -5198,11 +5215,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `PasswordGetCredentialRequest should prompt for master password when password is protected and user has master password`() {
         setupMockUri()
-        val mockGetPasswordRequest = createMockProviderGetPasswordCredentialRequest()
-            .copy(cipherId = "mockId-1")
-        val mockCipherView = createMockCipherView(
+        val mockGetPasswordRequest = createMockProviderGetPasswordCredentialRequest(1)
+        val mockCipherListView = createMockCipherListView(
             number = 1,
-            repromptType = CipherRepromptType.PASSWORD,
+            reprompt = CipherRepromptType.PASSWORD,
         )
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.ProviderGetPasswordRequest(
@@ -5211,15 +5227,29 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { bitwardenCredentialManager.isUserVerified } returns true
         every {
             vaultRepository
-                .ciphersStateFlow
+                .decryptCipherListResultStateFlow
                 .value
                 .data
-        } returns listOf(mockCipherView)
+        } returns createMockDecryptCipherListResult(
+            number = 1,
+            successes = listOf(mockCipherListView),
+        )
+        coEvery {
+            vaultRepository.getCipher("mockId-1")
+        } returns GetCipherResult.Success(
+            createMockCipherView(
+                number = 1,
+                repromptType = CipherRepromptType.PASSWORD,
+            ),
+        )
         every { authRepository.activeUserId } returns null
 
         val dataState = DataState.Loaded(
             data = VaultData(
-                cipherViewList = listOf(mockCipherView),
+                decryptCipherListResult = createMockDecryptCipherListResult(
+                    number = 1,
+                    successes = listOf(mockCipherListView),
+                ),
                 folderViewList = listOf(createMockFolderView(number = 1)),
                 collectionViewList = listOf(createMockCollectionView(number = 1)),
                 sendViewList = listOf(createMockSendView(number = 1)),
@@ -5240,6 +5270,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `UserVerificationSuccess should set isUserVerified to true, and return password credential when verification result is received`() =
         runTest {
+            val mockLoginListView = createMockLoginListView(
+                number = 1,
+                totp = "mockTotp-1",
+            )
             val mockLoginView = createMockLoginView(
                 number = 1,
                 totp = "mockTotp-1",
@@ -5247,7 +5281,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 password = "mockPassword-1",
                 fido2Credentials = null,
             )
-            val mockGetPasswordRequest = createMockProviderGetPasswordCredentialRequest()
+            val mockGetPasswordRequest = createMockProviderGetPasswordCredentialRequest(1)
                 .copy(cipherId = "mockId-1")
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderGetPasswordRequest(
@@ -5264,13 +5298,16 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             }
             every {
                 vaultRepository
-                    .ciphersStateFlow
+                    .decryptCipherListResultStateFlow
                     .value
                     .data
-            } returns listOf(
-                createMockCipherView(
-                    number = 1,
-                    login = mockLoginView,
+            } returns createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(
+                        number = 1,
+                        type = CipherListViewType.Login(mockLoginListView),
+                    ),
                 ),
             )
 
@@ -5298,7 +5335,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderGetPasswordRequest(
-                    createMockProviderGetPasswordCredentialRequest(),
+                    createMockProviderGetPasswordCredentialRequest(1),
                 )
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(VaultItemListingsAction.UserVerificationCancelled)
@@ -5737,7 +5774,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string
-                        .passkey_operation_failed_because_the_selected_item_does_not_exist
+                        .credential_operation_failed_because_the_selected_item_does_not_exist
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,

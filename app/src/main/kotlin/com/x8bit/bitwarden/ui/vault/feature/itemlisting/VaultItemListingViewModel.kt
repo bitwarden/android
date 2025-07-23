@@ -2182,19 +2182,31 @@ class VaultItemListingViewModel @Inject constructor(
                 ),
             )
         }
+
+        val cipherListView = vaultRepository.vaultDataStateFlow.value.data
+            ?.decryptCipherListResult
+            ?.successes
+            ?.find { it.id == action.data.cipherId }
+            ?: run {
+                sendCredentialItemNotFoundError()
+                return
+            }
+
+        if (
+            state.hasMasterPassword &&
+            cipherListView.reprompt == CipherRepromptType.PASSWORD
+        ) {
+            repromptMasterPasswordForUserVerification(action.data.cipherId)
+            return
+        }
+
         viewModelScope.launch {
             val request = action.data
             getCipherViewForCredentialOrNull(request.cipherId)
                 ?.let { cipherView ->
-                    if (state.hasMasterPassword &&
-                        cipherView.reprompt == CipherRepromptType.PASSWORD
-                    ) {
-                        repromptMasterPasswordForUserVerification(request.cipherId)
-                    } else {
-                        handlePasswordCredentialResult(
-                            selectedCipher = cipherView,
-                        )
-                    }
+                    handlePasswordCredentialResult(
+                        selectedCipher = cipherView,
+                    )
                 }
         }
     }
@@ -2209,8 +2221,8 @@ class VaultItemListingViewModel @Inject constructor(
         )
     }
 
-    private suspend fun sendCredentialItemNotFoundError() {
-        sendAction(
+    private fun sendCredentialItemNotFoundError() {
+        trySendAction(
             VaultItemListingsAction.Internal.CredentialOperationFailureReceive(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string
