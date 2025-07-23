@@ -24,7 +24,6 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
-import com.x8bit.bitwarden.data.autofill.util.isActiveWithPasswordCredentials
 import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilder
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
@@ -174,7 +173,7 @@ class BitwardenCredentialManagerImpl(
     override suspend fun getCredentialEntries(
         getCredentialsRequest: GetCredentialsRequest,
     ): Result<List<CredentialEntry>> = withContext(ioScope.coroutineContext) {
-        val cipherListViews = vaultRepository
+        val fido2CipherListViews = vaultRepository
             .decryptCipherListResultStateFlow
             .takeUntilLoaded()
             .fold(initial = emptyList<CipherListView>()) { _, dataState ->
@@ -183,7 +182,7 @@ class BitwardenCredentialManagerImpl(
                     else -> emptyList()
                 }
             }
-            .filter { it.isActiveWithFido2Credentials || it.isActiveWithPasswordCredentials }
+            .filter { it.isActiveWithFido2Credentials }
             .ifEmpty { return@withContext emptyList<CredentialEntry>().asSuccess() }
 
         val passwordCredentialResult = getCredentialsRequest
@@ -203,7 +202,7 @@ class BitwardenCredentialManagerImpl(
             .beginGetPublicKeyCredentialOptions
             .toPublicKeyCredentialEntries(
                 userId = getCredentialsRequest.userId,
-                cipherListViews = cipherListViews,
+                cipherListViews = fido2CipherListViews,
             )
             .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
 
