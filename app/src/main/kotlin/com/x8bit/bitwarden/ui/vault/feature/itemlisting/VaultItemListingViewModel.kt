@@ -36,7 +36,6 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySele
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
-import com.x8bit.bitwarden.data.autofill.util.isActiveWithPasswordCredentials
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.manager.OriginManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
@@ -2504,7 +2503,8 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun showUserVerificationErrorDialog() {
         showCredentialManagerErrorDialog(
-            message = R.string.credential_operation_failed_because_user_could_not_be_verified.asText(),
+            message = R.string.credential_operation_failed_because_user_could_not_be_verified
+                .asText(),
         )
     }
 

@@ -25,7 +25,6 @@ import com.bitwarden.fido.Origin
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.Fido2CredentialStore
-import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.bitwarden.vault.CipherListViewType
