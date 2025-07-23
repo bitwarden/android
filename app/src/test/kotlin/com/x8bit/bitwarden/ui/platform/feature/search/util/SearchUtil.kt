@@ -25,7 +25,7 @@ fun createMockDisplayItemForCipher(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
-                subtitle = "mockUsername-$number",
+                subtitle = "mockSubtitle-$number",
                 subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Network(
                     uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
@@ -48,7 +48,6 @@ fun createMockDisplayItemForCipher(
                         username = "mockUsername-$number",
                     ),
                     ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                        password = "mockPassword-$number",
                         requiresPasswordReprompt = true,
                         cipherId = "mockId-$number",
                     ),
@@ -58,12 +57,12 @@ fun createMockDisplayItemForCipher(
                     ),
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = "mockId-$number",
-                        cipherType = CipherType.LOGIN,
+                        cipherType = cipherType,
                         requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-$number",
-                        cipherType = CipherType.LOGIN,
+                        cipherType = cipherType,
                         requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.LaunchClick(
@@ -100,7 +99,7 @@ fun createMockDisplayItemForCipher(
                 ),
                 overflowOptions = listOf(
                     ListingItemOverflowAction.VaultAction.CopyNoteClick(
-                        notes = "mockNotes-$number",
+                        cipherId = "mockId-$number",
                         requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.ViewClick(
@@ -127,7 +126,7 @@ fun createMockDisplayItemForCipher(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 titleTestTag = "CipherNameLabel",
-                subtitle = "mockBrand-$number, *er-$number",
+                subtitle = "mockSubtitle-$number",
                 subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Local(BitwardenDrawable.ic_payment_card),
                 extraIconList = persistentListOf(
@@ -144,11 +143,10 @@ fun createMockDisplayItemForCipher(
                 ),
                 overflowOptions = listOf(
                     ListingItemOverflowAction.VaultAction.CopyNumberClick(
-                        number = "mockNumber-$number",
+                        cipherId = "mockId-$number",
                         requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
-                        securityCode = "mockCode-$number",
                         cipherId = "mockId-$number",
                         requiresPasswordReprompt = true,
                     ),

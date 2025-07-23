@@ -2460,7 +2460,9 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         itemType = VaultItemListingState.DisplayItem.ItemType.Sends(type = SendType.TEXT),
     )
 
-private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayItem =
+private fun createCipherDisplayItem(
+    @Suppress("SameParameterValue") number: Int,
+): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = "mockId-$number",
         title = "mockTitle-$number",
@@ -2483,5 +2485,7 @@ private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayI
         isCredentialCreation = false,
         shouldShowMasterPasswordReprompt = false,
         iconTestTag = null,
-        itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
+        itemType = VaultItemListingState.DisplayItem.ItemType.Vault(
+            type = CipherType.LOGIN,
+        ),
     )

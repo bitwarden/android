@@ -1,17 +1,25 @@
 package com.x8bit.bitwarden.data.autofill.processor
 
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.vault.CardListView
 import com.bitwarden.vault.CardView
+import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.DecryptCipherListResult
+import com.bitwarden.vault.LoginListView
 import com.bitwarden.vault.LoginView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProviderImpl
+import com.x8bit.bitwarden.data.autofill.util.card
+import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.subtitle
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
@@ -19,8 +27,10 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,23 +41,60 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import timber.log.Timber
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AutofillCipherProviderTest {
+    private val cardListView: CardListView = mockk {
+        every { brand } returns "Visa"
+    }
+    private val cardCipherListView: CipherListView = mockk {
+        every { card } returns cardListView
+        every { deletedDate } returns null
+        every { id } returns CARD_CIPHER_ID
+        every { name } returns CARD_NAME
+        every { reprompt } returns CipherRepromptType.NONE
+        every { type } returns CipherListViewType.Card(v1 = cardListView)
+    }
     private val cardView: CardView = mockk {
         every { cardholderName } returns CARD_CARDHOLDER_NAME
         every { code } returns CARD_CODE
         every { expMonth } returns CARD_EXP_MONTH
         every { expYear } returns CARD_EXP_YEAR
         every { number } returns CARD_NUMBER
+        every { brand } returns null
     }
     private val cardCipherView: CipherView = mockk {
         every { card } returns cardView
         every { deletedDate } returns null
-        every { id } returns CIPHER_ID
+        every { id } returns CARD_CIPHER_ID
         every { name } returns CARD_NAME
         every { reprompt } returns CipherRepromptType.NONE
         every { type } returns CipherType.CARD
+    }
+    private val loginListViewWithoutTotp: LoginListView = mockk {
+        every { username } returns LOGIN_USERNAME
+        every { totp } returns null
+    }
+    private val loginCipherListViewWithoutTotp: CipherListView = mockk {
+        every { deletedDate } returns null
+        every { id } returns LOGIN_WITHOUT_TOTP_CIPHER_ID
+        every { login } returns loginListViewWithoutTotp
+        every { name } returns LOGIN_NAME
+        every { reprompt } returns CipherRepromptType.NONE
+        every { type } returns CipherListViewType.Login(v1 = loginListViewWithoutTotp)
+    }
+    private val loginListViewWithTotp: LoginListView = mockk {
+        every { username } returns LOGIN_USERNAME
+        every { totp } returns "TOTP-CODE"
+    }
+    private val loginCipherListViewWithTotp: CipherListView = mockk {
+        every { deletedDate } returns null
+        every { id } returns LOGIN_WITH_TOTP_CIPHER_ID
+        every { login } returns loginListViewWithTotp
+        every { name } returns LOGIN_NAME
+        every { reprompt } returns CipherRepromptType.NONE
+        every { type } returns CipherListViewType.Login(v1 = loginListViewWithTotp)
     }
     private val loginViewWithoutTotp: LoginView = mockk {
         every { password } returns LOGIN_PASSWORD
@@ -56,7 +103,7 @@ class AutofillCipherProviderTest {
     }
     private val loginCipherViewWithoutTotp: CipherView = mockk {
         every { deletedDate } returns null
-        every { id } returns CIPHER_ID
+        every { id } returns LOGIN_WITHOUT_TOTP_CIPHER_ID
         every { login } returns loginViewWithoutTotp
         every { name } returns LOGIN_NAME
         every { reprompt } returns CipherRepromptType.NONE
@@ -69,7 +116,7 @@ class AutofillCipherProviderTest {
     }
     private val loginCipherViewWithTotp: CipherView = mockk {
         every { deletedDate } returns null
-        every { id } returns CIPHER_ID
+        every { id } returns LOGIN_WITH_TOTP_CIPHER_ID
         every { login } returns loginViewWithTotp
         every { name } returns LOGIN_NAME
         every { reprompt } returns CipherRepromptType.NONE
@@ -82,11 +129,12 @@ class AutofillCipherProviderTest {
     private val mutableVaultStateFlow = MutableStateFlow<List<VaultUnlockData>>(
         emptyList(),
     )
-    private val mutableCiphersStateFlow = MutableStateFlow<DataState<List<CipherView>>>(
-        DataState.Loading,
-    )
+    private val mutableCipherListViewsWithFailuresStateFlow =
+        MutableStateFlow<DataState<DecryptCipherListResult>>(DataState.Loading)
     private val vaultRepository: VaultRepository = mockk {
-        every { ciphersStateFlow } returns mutableCiphersStateFlow
+        every {
+            decryptCipherListResultStateFlow
+        } returns mutableCipherListViewsWithFailuresStateFlow
         every { vaultUnlockDataStateFlow } returns mutableVaultStateFlow
         every { isVaultUnlocked(ACTIVE_USER_ID) } answers {
             mutableVaultStateFlow.value.statusFor(ACTIVE_USER_ID) == VaultUnlockData.Status.UNLOCKED
@@ -187,7 +235,7 @@ class AutofillCipherProviderTest {
     fun `getCardAutofillCiphers when unlocked should return empty list when retrieving ciphers times out`() =
         runTest {
             coEvery { vaultRepository.isVaultUnlocked(ACTIVE_USER_ID) } returns true
-            mutableCiphersStateFlow.value = DataState.Loading
+            mutableCipherListViewsWithFailuresStateFlow.value = DataState.Loading
 
             // Test
             val actual = async {
@@ -206,26 +254,36 @@ class AutofillCipherProviderTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getCardAutofillCiphers when unlocked should return non-null, non-deleted, and non-reprompt card ciphers`() =
+    fun `getCardAutofillCiphers when unlocked should decrypt then return non-null, non-deleted, and non-reprompt card ciphers`() =
         runTest {
-            val deletedCardCipherView: CipherView = mockk {
+            val deletedCardCipherView: CipherListView = mockk {
                 every { deletedDate } returns mockk()
-                every { type } returns CipherType.CARD
+                every { type } returns CipherListViewType.Card(cardListView)
             }
-            val repromptCardCipherView: CipherView = mockk {
+            val repromptCardCipherView: CipherListView = mockk {
                 every { deletedDate } returns null
                 every { reprompt } returns CipherRepromptType.PASSWORD
-                every { type } returns CipherType.CARD
+                every { type } returns CipherListViewType.Card(cardListView)
             }
-            val cipherViews = listOf(
-                cardCipherView,
-                deletedCardCipherView,
-                repromptCardCipherView,
-                loginCipherViewWithTotp,
-                loginCipherViewWithoutTotp,
+            val decryptCipherListViewsResult = DecryptCipherListResult(
+                successes = listOf(
+                    cardCipherListView,
+                    deletedCardCipherView,
+                    repromptCardCipherView,
+                    loginCipherListViewWithTotp,
+                    loginCipherListViewWithoutTotp,
+                ),
+                failures = emptyList(),
             )
-            mutableCiphersStateFlow.value = DataState.Loaded(
-                data = cipherViews,
+
+            coEvery {
+                vaultRepository.getCipher(CARD_CIPHER_ID)
+            } returns GetCipherResult.Success(
+                cipherView = cardCipherView,
+            )
+
+            mutableCipherListViewsWithFailuresStateFlow.value = DataState.Loaded(
+                data = decryptCipherListViewsResult,
             )
             mutableVaultStateFlow.value = listOf(
                 VaultUnlockData(
@@ -236,11 +294,12 @@ class AutofillCipherProviderTest {
             val expected = listOf(
                 CARD_AUTOFILL_CIPHER,
             )
-            every { cardCipherView.subtitle } returns CARD_SUBTITLE
+            every { cardCipherListView.subtitle } returns CARD_SUBTITLE
 
             // Test & Verify
             val actual = autofillCipherProvider.getCardAutofillCiphers()
 
+            coVerify(exactly = 1) { vaultRepository.getCipher(CARD_CIPHER_ID) }
             assertEquals(expected, actual)
         }
 
@@ -259,7 +318,7 @@ class AutofillCipherProviderTest {
     fun `getLoginAutofillCiphers when unlocked should return empty list when retrieving ciphers times out`() =
         runTest {
             coEvery { vaultRepository.isVaultUnlocked(ACTIVE_USER_ID) } returns true
-            mutableCiphersStateFlow.value = DataState.Loading
+            mutableCipherListViewsWithFailuresStateFlow.value = DataState.Loading
 
             // Test
             val actual = async {
@@ -278,36 +337,46 @@ class AutofillCipherProviderTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getLoginAutofillCiphers when unlocked should return matched, non-deleted, non-reprompt, login ciphers`() =
+    fun `getLoginAutofillCiphers when unlocked should decrypt then return matched, non-deleted, non-reprompt, login ciphers`() =
         runTest {
-            val deletedLoginCipherView: CipherView = mockk {
+            val deletedLoginCipherView: CipherListView = mockk {
                 every { deletedDate } returns mockk()
-                every { type } returns CipherType.LOGIN
+                every { type } returns CipherListViewType.Login(v1 = mockk())
             }
-            val repromptLoginCipherView: CipherView = mockk {
+            val repromptLoginCipherView: CipherListView = mockk {
                 every { deletedDate } returns null
                 every { reprompt } returns CipherRepromptType.PASSWORD
-                every { type } returns CipherType.LOGIN
+                every { type } returns CipherListViewType.Login(v1 = mockk())
             }
             val cipherViews = listOf(
-                cardCipherView,
-                loginCipherViewWithTotp,
-                loginCipherViewWithoutTotp,
+                cardCipherListView,
+                loginCipherListViewWithTotp,
+                loginCipherListViewWithoutTotp,
                 deletedLoginCipherView,
                 repromptLoginCipherView,
             )
+            val decryptCipherListResult = DecryptCipherListResult(
+                successes = cipherViews,
+                failures = emptyList(),
+            )
             val filteredCipherViews = listOf(
-                loginCipherViewWithTotp,
-                loginCipherViewWithoutTotp,
+                loginCipherListViewWithTotp,
+                loginCipherListViewWithoutTotp,
             )
             coEvery {
+                vaultRepository.getCipher(LOGIN_WITH_TOTP_CIPHER_ID)
+            } returns GetCipherResult.Success(cipherView = loginCipherViewWithTotp)
+            coEvery {
+                vaultRepository.getCipher(LOGIN_WITHOUT_TOTP_CIPHER_ID)
+            } returns GetCipherResult.Success(cipherView = loginCipherViewWithoutTotp)
+            coEvery {
                 cipherMatchingManager.filterCiphersForMatches(
-                    ciphers = filteredCipherViews,
+                    cipherListViews = filteredCipherViews,
                     matchUri = URI,
                 )
             } returns filteredCipherViews
-            mutableCiphersStateFlow.value = DataState.Loaded(
-                data = cipherViews,
+            mutableCipherListViewsWithFailuresStateFlow.value = DataState.Loaded(
+                data = decryptCipherListResult,
             )
             mutableVaultStateFlow.value = listOf(
                 VaultUnlockData(
@@ -329,9 +398,10 @@ class AutofillCipherProviderTest {
 
             // Verify
             assertEquals(expected, actual)
+            coVerify(exactly = 1) { vaultRepository.getCipher(LOGIN_WITH_TOTP_CIPHER_ID) }
             coVerify {
                 cipherMatchingManager.filterCiphersForMatches(
-                    ciphers = filteredCipherViews,
+                    cipherListViews = filteredCipherViews,
                     matchUri = URI,
                 )
             }
@@ -348,6 +418,127 @@ class AutofillCipherProviderTest {
 
         assertEquals(emptyList<AutofillCipher.Login>(), actual)
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getLoginAutofillCiphers when decryption fails should log the error and omit cipher from results`() =
+        runTest {
+            mockkObject(Timber.Forest)
+            val cipherListViews = listOf(
+                loginCipherListViewWithTotp,
+                loginCipherListViewWithoutTotp,
+            )
+
+            coEvery {
+                vaultRepository.getCipher(LOGIN_WITH_TOTP_CIPHER_ID)
+            } returns GetCipherResult.Failure(
+                error = Exception("Decryption failed"),
+            )
+
+            coEvery {
+                vaultRepository.getCipher(LOGIN_WITHOUT_TOTP_CIPHER_ID)
+            } returns GetCipherResult.Success(
+                cipherView = loginCipherViewWithoutTotp,
+            )
+            coEvery {
+                cipherMatchingManager.filterCiphersForMatches(
+                    cipherListViews = cipherListViews,
+                    matchUri = URI,
+                )
+            } returns cipherListViews
+
+            mutableCipherListViewsWithFailuresStateFlow.value = DataState.Loaded(
+                data = DecryptCipherListResult(
+                    successes = cipherListViews,
+                    failures = emptyList(),
+                ),
+            )
+            mutableVaultStateFlow.value = listOf(
+                VaultUnlockData(
+                    userId = ACTIVE_USER_ID,
+                    status = VaultUnlockData.Status.UNLOCKED,
+                ),
+            )
+            val expected = listOf(
+                LOGIN_AUTOFILL_CIPHER_WITHOUT_TOTP,
+            )
+
+            every { loginCipherViewWithoutTotp.subtitle } returns LOGIN_SUBTITLE
+
+            val actual = autofillCipherProvider.getLoginAutofillCiphers(
+                uri = URI,
+            )
+
+            assertEquals(
+                expected,
+                actual,
+            )
+
+            verify(exactly = 1) {
+                Timber.Forest.e(
+                    t = any(),
+                    message = "Failed to decrypt cipher for autofill.",
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getLoginAutofillCiphers when decryption result is CipherNotFound should log the error and omit cipher from results`() =
+        runTest {
+            mockkObject(Timber.Forest)
+            val cipherListViews = listOf(
+                loginCipherListViewWithTotp,
+                loginCipherListViewWithoutTotp,
+            )
+
+            coEvery {
+                vaultRepository.getCipher(LOGIN_WITH_TOTP_CIPHER_ID)
+            } returns GetCipherResult.CipherNotFound
+
+            coEvery {
+                vaultRepository.getCipher(LOGIN_WITHOUT_TOTP_CIPHER_ID)
+            } returns GetCipherResult.Success(
+                cipherView = loginCipherViewWithoutTotp,
+            )
+            coEvery {
+                cipherMatchingManager.filterCiphersForMatches(
+                    cipherListViews = cipherListViews,
+                    matchUri = URI,
+                )
+            } returns cipherListViews
+
+            mutableCipherListViewsWithFailuresStateFlow.value = DataState.Loaded(
+                data = DecryptCipherListResult(
+                    successes = cipherListViews,
+                    failures = emptyList(),
+                ),
+            )
+            mutableVaultStateFlow.value = listOf(
+                VaultUnlockData(
+                    userId = ACTIVE_USER_ID,
+                    status = VaultUnlockData.Status.UNLOCKED,
+                ),
+            )
+            val expected = listOf(
+                LOGIN_AUTOFILL_CIPHER_WITHOUT_TOTP,
+            )
+
+            every { loginCipherViewWithoutTotp.subtitle } returns LOGIN_SUBTITLE
+
+            val actual = autofillCipherProvider.getLoginAutofillCiphers(
+                uri = URI,
+            )
+
+            assertEquals(
+                expected,
+                actual,
+            )
+
+            verify(exactly = 1) {
+                Timber.Forest.e("Cipher not found for autofill.")
+            }
+        }
 }
 
 private const val ACTIVE_USER_ID = "activeUserId"
@@ -358,10 +549,12 @@ private const val CARD_EXP_YEAR = "2029"
 private const val CARD_NAME = "John's Card"
 private const val CARD_NUMBER = "1234567890"
 private const val CARD_SUBTITLE = "7890"
-private const val CIPHER_ID = "1234567890"
+private const val LOGIN_WITH_TOTP_CIPHER_ID = "1234567890"
+private const val LOGIN_WITHOUT_TOTP_CIPHER_ID = "ABCDEFGHIJ"
+private const val CARD_CIPHER_ID = "0987654321"
 private val CARD_AUTOFILL_CIPHER = AutofillCipher.Card(
     cardholderName = CARD_CARDHOLDER_NAME,
-    cipherId = CIPHER_ID,
+    cipherId = CARD_CIPHER_ID,
     code = CARD_CODE,
     expirationMonth = CARD_EXP_MONTH,
     expirationYear = CARD_EXP_YEAR,
@@ -374,7 +567,7 @@ private const val LOGIN_PASSWORD = "Password123"
 private const val LOGIN_SUBTITLE = "John Doe"
 private const val LOGIN_USERNAME = "John-Bitwarden"
 private val LOGIN_AUTOFILL_CIPHER_WITH_TOTP = AutofillCipher.Login(
-    cipherId = CIPHER_ID,
+    cipherId = LOGIN_WITH_TOTP_CIPHER_ID,
     isTotpEnabled = true,
     name = LOGIN_NAME,
     password = LOGIN_PASSWORD,
@@ -382,7 +575,7 @@ private val LOGIN_AUTOFILL_CIPHER_WITH_TOTP = AutofillCipher.Login(
     username = LOGIN_USERNAME,
 )
 private val LOGIN_AUTOFILL_CIPHER_WITHOUT_TOTP = AutofillCipher.Login(
-    cipherId = CIPHER_ID,
+    cipherId = LOGIN_WITHOUT_TOTP_CIPHER_ID,
     isTotpEnabled = false,
     name = LOGIN_NAME,
     password = LOGIN_PASSWORD,

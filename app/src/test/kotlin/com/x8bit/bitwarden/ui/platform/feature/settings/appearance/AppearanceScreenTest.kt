@@ -10,15 +10,19 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,12 +41,17 @@ class AppearanceScreenTest : BitwardenComposeTest() {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
     }
+    private val intentManager: IntentManager = mockk {
+        every { launchUri(uri = any()) } just runs
+    }
 
     @Before
     fun setup() {
         mockkStatic(::isBuildVersionAtLeast)
         every { isBuildVersionAtLeast(any()) } returns true
-        setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             AppearanceScreen(
                 onNavigateBack = { haveCalledNavigateBack = true },
                 viewModel = viewModel,
@@ -173,9 +182,28 @@ class AppearanceScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `on show website icons tooltip click should send ShowWebsiteIconsToggled`() {
+        composeTestRule
+            .onNodeWithContentDescription(label = "Show website icons help")
+            .performScrollTo()
+            .performClick()
+        verify {
+            viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsTooltipClick)
+        }
+    }
+
+    @Test
     fun `on NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(AppearanceEvent.NavigateBack)
         assertTrue(haveCalledNavigateBack)
+    }
+
+    @Test
+    fun `on NavigateToWebsiteIconsHelp should call launchUri`() {
+        mutableEventFlow.tryEmit(AppearanceEvent.NavigateToWebsiteIconsHelp)
+        verify {
+            intentManager.launchUri("https://bitwarden.com/help/website-icons/".toUri())
+        }
     }
 
     @Test

@@ -101,7 +101,8 @@
     <string name="one_minute">1 minute</string>
     <string name="four_hours">4 hours</string>
     <string name="immediately">Immediately</string>
-    <string name="vault_timeout_log_out_confirmation">Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
     <string name="logging_in">Logging in...</string>
     <string name="login_to_bitwarden">Log in to Bitwarden</string>
     <string name="master_password_confirmation_val_message">Password confirmation is not correct.</string>
@@ -264,6 +265,7 @@ Scanning will happen automatically.</string>
     <string name="address">Address</string>
     <string name="expiration">Expiration</string>
     <string name="show_website_icons">Show website icons</string>
+    <string name="show_website_icons_help">Show website icons help</string>
     <string name="show_website_icons_description">Show a recognizable image next to each login</string>
     <string name="icons_url">Icons server URL</string>
     <string name="vault_is_locked">Vault is locked</string>
@@ -341,7 +343,7 @@ Scanning will happen automatically.</string>
     <string name="pin">PIN</string>
     <string name="unlock">Unlock</string>
     <string name="thirty_minutes">30 minutes</string>
-    <string name="set_pin_description">Your PIN must be at least 4 characters. Your PIN settings will be reset if you ever fully log out of the application.</string>
+    <string name="set_pin_description">Your PIN must be at least 4 characters. Your PIN settings will be reset if you manually log out of the Bitwarden app.</string>
     <string name="logged_in_as_on">Logged in as %1$s on %2$s.</string>
     <string name="vault_locked_master_password">Your vault is locked. Verify your master password to continue.</string>
     <string name="vault_locked_pin">Your vault is locked. Verify your PIN code to continue.</string>
@@ -995,4 +997,6 @@ Do you want to switch to this account?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
     <string name="installed_apps">Installed apps</string>
     <string name="delete_x">Delete %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
+    <string name="decryption_error">Decryption error</string>
 </resources>

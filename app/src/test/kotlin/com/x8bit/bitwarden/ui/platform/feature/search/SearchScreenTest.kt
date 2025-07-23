@@ -259,7 +259,9 @@ class SearchScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(
                 SearchAction.ItemClick(
                     itemId = "mockId-1",
-                    itemType = SearchState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
+                    itemType = SearchState.DisplayItem.ItemType.Vault(
+                        type = CipherType.LOGIN,
+                    ),
                 ),
             )
         }
@@ -405,7 +407,9 @@ class SearchScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(
                 SearchAction.ItemClick(
                     itemId = "mockId-1",
-                    itemType = SearchState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
+                    itemType = SearchState.DisplayItem.ItemType.Vault(
+                        type = CipherType.LOGIN,
+                    ),
                 ),
             )
         }
@@ -697,7 +701,6 @@ class SearchScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                        password = "mockPassword-1",
                         requiresPasswordReprompt = true,
                         cipherId = "mockId-1",
                     ),

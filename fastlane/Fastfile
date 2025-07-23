@@ -13,6 +13,9 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
+require_relative 'patches/supply_custom_promote_config'
+require_relative 'patches/supply_custom_promote'
+
 default_platform(:android)
 
 platform :android do
@@ -417,5 +420,75 @@ platform :android do
       aab: "authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab",
       mapping: "authenticator/build/outputs/mapping/release/mapping.txt",
     )
+  end
+
+  desc "Retrieve build from Github releases"
+    lane :retrieveBuildFromGithub do |options|
+
+    version_codes = Actions.lane_context[SharedValues::GOOGLE_PLAY_TRACK_VERSION_CODES]
+    UI.message("Version codes in beta track: #{version_codes}")
+  end
+
+  desc "Update release notes for all locales."
+  lane :updateReleaseNotes do |options|
+    changelog = options[:releaseNotes]
+    version_code = options[:versionCode]
+
+    auth_locales = ["en-US"]
+    pw_manager_locales = ["ca", "cs-CZ", "da-DK", "de-DE", "en-US", "es-ES", "et", "fr-FR", "hr", "hu-HU", "id", "it-IT", "iw-IL", "ja-JP", "nl-NL", "pl-PL", "pt-BR", "pt-PT", "ro", "ru-RU", "sk", "sv-SE", "tr-TR", "uk", "vi", "zh-CN", "zh-TW"]
+    if options[:packageName] == "com.bitwarden.authenticator"
+      locales = auth_locales
+    else
+      locales = pw_manager_locales
+    end
+    locales.each do |locale|
+      dir = "metadata/android/#{locale}/changelogs"
+      FileUtils.mkdir_p(dir)
+      File.write("#{dir}/#{version_code}.txt", changelog)
+    end
+  end
+
+  desc "Promote to production."
+  lane :promoteToProduction do |options|
+    release_options = {
+      package_name: options[:packageName],
+      version_code: options[:versionCode].to_i,
+      version_name: options[:versionName],
+      track: options[:track],
+      track_promote_to: options[:trackPromoteTo],
+      skip_release_verification: true,
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+    }
+
+    if options[:releaseNotes].nil? or options[:releaseNotes].to_s.empty?
+      release_options[:skip_upload_metadata] = true
+    else
+      release_options[:skip_upload_metadata] = false
+    end
+
+    if options[:rolloutPercentage].to_f < 1
+      release_options[:track_promote_release_status] = "inProgress"
+      release_options[:rollout] = options[:rolloutPercentage]
+    else
+      release_options[:release_status] = "completed"
+    end
+
+    begin
+    UI.message("🚀 Starting release to #{options[:trackPromoteTo]}...")
+
+    supply(release_options)
+
+      rescue => error
+      message = error.to_s
+
+      if message.include?("You cannot rollout this release because it does not allow any existing users to upgrade to the newly added APKs")
+        UI.error("❌ App Store Error: Cannot rollout release because no existing users can upgrade to the new build.")
+        UI.error("This might mean the version is older than what is currently available on the track, pick a newer build.")
+      else
+        UI.error("❌ Unexpected error during release: #{message}")
+      end
+      raise
+    end
   end
 end

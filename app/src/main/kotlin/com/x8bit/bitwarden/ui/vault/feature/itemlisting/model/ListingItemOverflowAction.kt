@@ -126,7 +126,6 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class CopyPasswordClick(
             val cipherId: String,
-            val password: String,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
             override val title: Text get() = R.string.copy_password.asText()
@@ -148,7 +147,7 @@ sealed class ListingItemOverflowAction : Parcelable {
          */
         @Parcelize
         data class CopyNumberClick(
-            val number: String,
+            val cipherId: String,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
             override val title: Text get() = R.string.copy_number.asText()
@@ -159,7 +158,6 @@ sealed class ListingItemOverflowAction : Parcelable {
          */
         @Parcelize
         data class CopySecurityCodeClick(
-            val securityCode: String,
             val cipherId: String,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
@@ -171,7 +169,7 @@ sealed class ListingItemOverflowAction : Parcelable {
          */
         @Parcelize
         data class CopyNoteClick(
-            val notes: String,
+            val cipherId: String,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
             override val title: Text get() = R.string.copy_notes.asText()
