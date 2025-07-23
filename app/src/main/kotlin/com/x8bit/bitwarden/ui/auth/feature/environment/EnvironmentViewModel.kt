@@ -16,8 +16,6 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.manager.FileManager
@@ -28,7 +26,6 @@ import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -46,7 +43,6 @@ class EnvironmentViewModel @Inject constructor(
     private val environmentRepository: EnvironmentRepository,
     private val fileManager: FileManager,
     private val certificateManager: CertificateManager,
-    private val featureFlagManager: FeatureFlagManager,
     private val snackbarRelayManager: SnackbarRelayManager,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EnvironmentState, EnvironmentEvent, EnvironmentAction>(
@@ -70,21 +66,13 @@ class EnvironmentViewModel @Inject constructor(
             keyAlias = keyAlias,
             keyHost = keyHost,
             dialog = null,
-            showMutualTlsOptions = featureFlagManager.getFeatureFlag(FlagKey.MutualTls),
         )
     },
 ) {
 
     init {
         stateFlow
-            .onEach {
-                savedStateHandle[KEY_STATE] = it
-            }
-            .launchIn(viewModelScope)
-
-        featureFlagManager.getFeatureFlagFlow(FlagKey.MutualTls)
-            .map { EnvironmentAction.Internal.MutualTlsFeatureFlagUpdate(it) }
-            .onEach(::handleAction)
+            .onEach { savedStateHandle[KEY_STATE] = it }
             .launchIn(viewModelScope)
     }
 
@@ -275,10 +263,6 @@ class EnvironmentViewModel @Inject constructor(
             is EnvironmentAction.Internal.ImportKeyResultReceive -> {
                 handleSaveKeyResultReceive(action)
             }
-
-            is EnvironmentAction.Internal.MutualTlsFeatureFlagUpdate -> {
-                handleMutualTlsFeatureFlagUpdate(action)
-            }
         }
     }
 
@@ -358,16 +342,6 @@ class EnvironmentViewModel @Inject constructor(
             is ImportPrivateKeyResult.Error.InvalidCertificateChain -> {
                 showSnackbar(message = R.string.invalid_certificate_chain.asText())
             }
-        }
-    }
-
-    private fun handleMutualTlsFeatureFlagUpdate(
-        action: EnvironmentAction.Internal.MutualTlsFeatureFlagUpdate,
-    ) {
-        mutableStateFlow.update {
-            it.copy(
-                showMutualTlsOptions = action.enabled,
-            )
         }
     }
 
@@ -472,7 +446,6 @@ data class EnvironmentState(
     val iconsServerUrl: String,
     val keyAlias: String,
     val dialog: DialogState?,
-    val showMutualTlsOptions: Boolean,
     // internal
     private val keyHost: MutualTlsKeyHost?,
 ) : Parcelable {
@@ -691,13 +664,6 @@ sealed class EnvironmentAction {
          */
         data class ImportKeyResultReceive(
             val result: ImportPrivateKeyResult,
-        ) : Internal()
-
-        /**
-         * Indicates the mutual TLS feature flag was updated.
-         */
-        data class MutualTlsFeatureFlagUpdate(
-            val enabled: Boolean,
         ) : Internal()
     }
 }
