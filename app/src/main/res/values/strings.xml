@@ -85,7 +85,7 @@
     <string name="edit_card">Edit card</string>
     <string name="edit_identity">Edit identity</string>
     <string name="edit_note">Edit note</string>
-    <string name="edit_passkey">Edit passkey</string>
+    <string name="edit_ssh_key">Edit SSH key</string>
     <string name="enter_email_for_hint">Enter your account email address to receive your master password hint.</string>
     <string name="favorite">Favorite</string>
     <string name="unfavorite">Unfavorite</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">New identity</string>
     <string name="no_notes">There are no notes in your vault.</string>
     <string name="new_note">New note</string>
-    <string name="new_passkey">New passkey</string>
     <string name="new_item">New item</string>
     <string name="new_ssh_key">New SSH key</string>
     <string name="no_text_sends">There are no text Sends in your vault.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">View card</string>
     <string name="view_identity">View identity</string>
     <string name="view_note">View note</string>
-    <string name="view_passkey">View passkey</string>
+    <string name="view_ssh_key">View SSH key</string>
     <string name="web_vault">Bitwarden web vault</string>
     <string name="items">Items</string>
     <string name="items_for_uri">Items for %1$s</string>
