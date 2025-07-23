@@ -1,16 +1,16 @@
 package com.x8bit.bitwarden.data.platform.manager.ciphermatching
 
-import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.CipherListView
 
 /**
  * A manager for matching ciphers based on special criteria.
  */
 interface CipherMatchingManager {
     /**
-     * Filter [ciphers] for entries that match the [matchUri] in some fashion.
+     * Filter [cipherListViews] for entries that match the [matchUri] in some fashion.
      */
     suspend fun filterCiphersForMatches(
-        ciphers: List<CipherView>,
+        cipherListViews: List<CipherListView>,
         matchUri: String,
-    ): List<CipherView>
+    ): List<CipherListView>
 }

@@ -657,8 +657,8 @@ private fun SessionTimeoutActionRow(
 
     if (shouldShowLogoutActionConfirmationDialog) {
         BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.warning),
-            message = stringResource(id = R.string.vault_timeout_log_out_confirmation),
+            title = stringResource(id = R.string.vault_timeout_log_out_confirmation_title),
+            message = stringResource(id = R.string.vault_timeout_log_out_confirmation_message),
             confirmButtonText = stringResource(id = R.string.yes),
             dismissButtonText = stringResource(id = R.string.cancel),
             onConfirmClick = {

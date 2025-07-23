@@ -352,7 +352,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onAllNodesWithText(
                 text = "Your PIN must be at least 4 characters. Your PIN settings will be reset " +
-                    "if you ever fully log out of the application.",
+                    "if you manually log out of the Bitwarden app.",
             )
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
@@ -1101,14 +1101,14 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Warning")
+            .onAllNodesWithText("Set session timeout to \"Log out\"?")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
             .onAllNodesWithText(
-                "Logging out will remove all access to your vault and requires online " +
-                    "authentication after the timeout period. Are you sure you want to use this " +
-                    "setting?",
+                text = "After the timeout period, you will be logged out. You will need to be " +
+                    "connected to the internet to log in and access your vault again. Your " +
+                    "settings and PIN saved on this device won\'t change.",
             )
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
@@ -1140,7 +1140,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Warning")
+            .onAllNodesWithText("Set session timeout to \"Log out\"?")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
@@ -1169,7 +1169,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Warning")
+            .onAllNodesWithText("Set session timeout to \"Log out\"?")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
