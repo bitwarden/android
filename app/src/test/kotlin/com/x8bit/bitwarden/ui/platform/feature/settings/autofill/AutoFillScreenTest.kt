@@ -506,8 +506,9 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             .assertExists()
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on Advanced warning dialog cancel should not change the default URI match type`() {
+    fun `on Advanced matching warning dialog cancel should not change the default URI match type`() {
         composeTestRule
             .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
             .performScrollTo()
@@ -533,7 +534,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on Advanced warning dialog confirm should update the default URI match type`() {
+    fun `on Advanced matching warning dialog confirm should update the default URI match type`() {
         composeTestRule
             .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
             .performScrollTo()
@@ -560,7 +561,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on Advanced warning dialog click on more about match detection should send MoreAboutMatchDetectionClick event`() {
+    fun `on Advanced matching warning dialog click on more about match detection should send MoreAboutMatchDetectionClick event`() {
         composeTestRule
             .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
             .performScrollTo()

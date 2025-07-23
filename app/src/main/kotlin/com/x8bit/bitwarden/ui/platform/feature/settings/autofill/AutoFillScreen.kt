@@ -532,6 +532,7 @@ private fun UriMatchSelectionButton(
         sectionTitle = stringResource(id = R.string.advanced_options),
         sectionOptions = UriMatchType.entries.filter { it.isAdvancedMatching() }
             .map { it.displayLabel() }.toImmutableList(),
+        sectionTestTag = "AdvancedOptionsSection",
         onOptionSelected = onOptionSelected,
         supportingText = supportingAnnotatedString,
         cardStyle = CardStyle.Full,

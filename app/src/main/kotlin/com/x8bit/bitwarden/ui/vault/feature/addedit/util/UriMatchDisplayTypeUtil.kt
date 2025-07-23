@@ -30,3 +30,12 @@ fun UriMatchDisplayType.toUriMatchType(): UriMatchType? =
         UriMatchDisplayType.EXACT -> UriMatchType.EXACT
         UriMatchDisplayType.NEVER -> UriMatchType.NEVER
     }
+
+/**
+ * Checks if the [UriMatchDisplayType] is considered an advanced matching strategy.
+ */
+fun UriMatchDisplayType.isAdvancedMatching(): Boolean =
+    when (this) {
+        UriMatchDisplayType.REGULAR_EXPRESSION, UriMatchDisplayType.STARTS_WITH -> true
+        else -> false
+    }

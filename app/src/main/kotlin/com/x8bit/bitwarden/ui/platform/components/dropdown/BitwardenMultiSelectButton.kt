@@ -47,6 +47,9 @@ import kotlinx.collections.immutable.persistentListOf
  * @param insets Inner padding to be applied withing the card.
  * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param actionsPadding Padding to be applied to the [actions] block.
+ * @param sectionTitle An optional title for a secondary section of options in the selection dialog.
+ * @param sectionOptions An optional list of strings representing options in a section.
+ * @param sectionTestTag An optional test tag to be applied to the [sectionTitle] Text composable
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
  * defining the layout of the actions.
@@ -67,6 +70,7 @@ fun BitwardenMultiSelectButton(
     actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
     sectionTitle: String? = null,
     sectionOptions: ImmutableList<String>? = null,
+    sectionTestTag: String? = null,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
@@ -94,38 +98,78 @@ fun BitwardenMultiSelectButton(
             title = label,
             onDismissRequest = { shouldShowDialog = false },
         ) {
-            options.forEach { optionString ->
-                BitwardenSelectionRow(
-                    text = optionString.asText(),
-                    isSelected = optionString == selectedOption,
-                    onClick = {
-                        shouldShowDialog = false
-                        onOptionSelected(optionString)
-                    },
-                )
-            }
+            BitwardenMultiSelectDialogContent(
+                options = options,
+                selectedOption = selectedOption,
+                sectionTitle = sectionTitle,
+                sectionOptions = sectionOptions,
+                sectionTestTag = sectionTestTag,
+                onOptionSelected = { selectedItem ->
+                    shouldShowDialog = false
+                    onOptionSelected(selectedItem)
+                },
+            )
+        }
+    }
+}
 
-            if (sectionTitle != null && sectionOptions != null) {
-                Text(
-                    modifier = Modifier
-                        .testTag("SectionTest")
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    text = sectionTitle,
-                    color = BitwardenTheme.colorScheme.text.secondary,
-                    style = BitwardenTheme.typography.titleSmall,
-                )
-                sectionOptions.forEach { optionString ->
-                    BitwardenSelectionRow(
-                        text = optionString.asText(),
-                        isSelected = optionString == selectedOption,
-                        onClick = {
-                            shouldShowDialog = false
-                            onOptionSelected(optionString)
-                        },
-                    )
-                }
-            }
+/**
+ * Renders the list of items and an optional section within a multi-select dialog.
+ *
+ * This composable is typically used as the content for [BitwardenSelectionDialog].
+ *
+ * @param options A list of strings representing the available options in the dialog.
+ * @param selectedOption The currently selected option that is displayed in the [OutlinedTextField]
+ * (or `null` if no option is selected).
+ * @param onOptionSelected A lambda that is invoked when an option
+ * is selected from the dropdown menu.
+ * @param sectionTitle An optional title for a secondary section of options in the selection dialog.
+ * @param sectionOptions An optional list of strings representing options in a section.
+ * @param sectionTestTag An optional test tag to be applied to the [sectionTitle] Text composable
+ */
+@Composable
+fun BitwardenMultiSelectDialogContent(
+    options: ImmutableList<String>,
+    selectedOption: String?,
+    onOptionSelected: (String) -> Unit,
+    sectionTitle: String? = null,
+    sectionOptions: ImmutableList<String>? = null,
+    sectionTestTag: String? = null,
+) {
+    options.forEach { optionString ->
+        BitwardenSelectionRow(
+            text = optionString.asText(),
+            isSelected = optionString == selectedOption,
+            onClick = {
+                onOptionSelected(optionString)
+            },
+        )
+    }
+
+    if (sectionTitle != null && sectionOptions != null) {
+        Text(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+                .then(
+                    if (sectionTestTag != null) {
+                        Modifier.testTag(sectionTestTag)
+                    } else {
+                        Modifier
+                    },
+                ),
+            text = sectionTitle,
+            color = BitwardenTheme.colorScheme.text.secondary,
+            style = BitwardenTheme.typography.titleSmall,
+        )
+        sectionOptions.forEach { optionString ->
+            BitwardenSelectionRow(
+                text = optionString.asText(),
+                isSelected = optionString == selectedOption,
+                onClick = {
+                    onOptionSelected(optionString)
+                },
+            )
         }
     }
 }

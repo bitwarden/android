@@ -48,6 +48,7 @@ import com.bitwarden.ui.util.onAllNodesWithContentDescriptionAfterScroll
 import com.bitwarden.ui.util.onAllNodesWithTextAfterScroll
 import com.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.bitwarden.ui.util.onNodeWithTextAfterScroll
+import com.bitwarden.ui.util.performCustomAccessibilityAction
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -1386,6 +1387,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText("Regular expression")
+            .performScrollTo()
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
@@ -1475,6 +1477,159 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `on match detection when an Advanced option is selected should display warning dialog`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) {
+                copy(
+                    uriList = listOf(
+                        UriItem(id = "TestId", uri = null, match = null, checksum = null),
+                    ),
+                )
+            }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "Options"))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Match detection")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Starts with")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Warning")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on advanced match detection warning dialog click on cancel should not change the default URI match type`() {
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "Options"))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Match detection")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Starts with")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.UriValueChange(
+                    UriItem(
+                        id = "TestId",
+                        uri = null,
+                        match = UriMatchType.REGULAR_EXPRESSION,
+                        checksum = null,
+                    ),
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `on Advanced matching warning dialog confirm should call UriValueChange`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) {
+                copy(
+                    uriList = listOf(
+                        UriItem(id = "TestId", uri = null, match = null, checksum = null),
+                    ),
+                )
+            }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "Options"))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Match detection")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Starts with")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Continue")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.UriValueChange(
+                    UriItem(
+                        id = "TestId",
+                        uri = null,
+                        match = UriMatchType.STARTS_WITH,
+                        checksum = null,
+                    ),
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on Advanced matching warning dialog click on more about match detection should call launchUri`() {
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "Options"))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Match detection")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Starts with")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Warning")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+
+        composeTestRule
+            .onAllNodesWithText(text = "“Starts with” is an advanced option with increased risk of exposing credentials.\nMore about match detection")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performCustomAccessibilityAction("More about match detection")
+
+        verify(exactly = 1) {
+            intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
+        }
     }
 
     @Test
