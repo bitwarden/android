@@ -398,7 +398,7 @@ class VaultItemListingViewModel @Inject constructor(
     ) {
         clearDialogState()
         viewModelScope.launch {
-            getCipherViewForFido2OrNull(action.cipherViewId)
+            getCipherViewForCredentialOrNull(action.cipherViewId)
                 ?.let { cipherView -> registerFido2Credential(cipherView) }
         }
     }
@@ -951,7 +951,7 @@ class VaultItemListingViewModel @Inject constructor(
                     }
                     ?: run {
                         sendAction(
-                            VaultItemListingsAction.Internal.PasskeyOperationFailureReceive(
+                            VaultItemListingsAction.Internal.CredentialOperationFailureReceive(
                                 title = R.string.an_error_has_occurred.asText(),
                                 message = R.string
                                     .passkey_operation_failed_because_the_request_is_unsupported
@@ -1532,14 +1532,14 @@ class VaultItemListingViewModel @Inject constructor(
                 handleDecryptCipherErrorReceive(action)
             }
 
-            is VaultItemListingsAction.Internal.PasskeyOperationFailureReceive -> {
-                handlePasskeyOperationFailureReceive(action)
+            is VaultItemListingsAction.Internal.CredentialOperationFailureReceive -> {
+                handleCredentialOperationFailureReceive(action)
             }
         }
     }
 
-    private fun handlePasskeyOperationFailureReceive(
-        action: VaultItemListingsAction.Internal.PasskeyOperationFailureReceive,
+    private fun handleCredentialOperationFailureReceive(
+        action: VaultItemListingsAction.Internal.CredentialOperationFailureReceive,
     ) {
         showCredentialManagerErrorDialog(
             title = action.title,
@@ -2166,6 +2166,33 @@ class VaultItemListingViewModel @Inject constructor(
                     } else {
                         verifyUserAndAuthenticateCredential(
                             request = request.providerRequest,
+                            selectedCipher = cipherView,
+                        )
+                    }
+                }
+        }
+    }
+
+    private fun handleProviderGetPasswordCredentialRequestReceive(
+        action: VaultItemListingsAction.Internal.ProviderGetPasswordCredentialRequestReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Loading(
+                    message = R.string.loading.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            val request = action.data
+            getCipherViewForCredentialOrNull(request.cipherId)
+                ?.let { cipherView ->
+                    if (state.hasMasterPassword &&
+                        cipherView.reprompt == CipherRepromptType.PASSWORD
+                    ) {
+                        repromptMasterPasswordForUserVerification(request.cipherId)
+                    } else {
+                        handlePasswordCredentialResult(
                             selectedCipher = cipherView,
                         )
                     }
@@ -3511,9 +3538,9 @@ sealed class VaultItemListingsAction {
         ) : Internal()
 
         /**
-         * Indicates that a passkey operation failure was received.
+         * Indicates that a credential operation failure was received.
          */
-        data class PasskeyOperationFailureReceive(
+        data class CredentialOperationFailureReceive(
             val title: Text,
             val message: Text,
             val error: Throwable?,
