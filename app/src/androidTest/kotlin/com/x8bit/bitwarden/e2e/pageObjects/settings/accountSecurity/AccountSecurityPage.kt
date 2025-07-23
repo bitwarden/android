@@ -1,11 +1,11 @@
-package e2e.pageObjects.settings.accountSecurity
+package com.x8bit.bitwarden.e2e.pageObjects.settings.accountSecurity
 
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.junit4.ComposeTestRule
-import e2e.pageObjects.Page
-import e2e.pageObjects.vault.UnlockVaultPage
+import com.x8bit.bitwarden.e2e.pageObjects.Page
+import com.x8bit.bitwarden.e2e.pageObjects.vault.UnlockVaultPage
 
 /**
  * Page Object representing the Account Security screen of the Bitwarden app.

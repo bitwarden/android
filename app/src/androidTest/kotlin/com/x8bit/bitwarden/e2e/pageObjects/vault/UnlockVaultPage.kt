@@ -1,10 +1,10 @@
-package e2e.pageObjects.vault
+package com.x8bit.bitwarden.e2e.pageObjects.vault
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import e2e.pageObjects.Page
+import com.x8bit.bitwarden.e2e.pageObjects.Page
 
 class UnlockVaultPage(composeTestRule: ComposeTestRule) : Page(composeTestRule) {
 

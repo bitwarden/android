@@ -1,4 +1,4 @@
-package e2e.pageObjects
+package com.x8bit.bitwarden.e2e.pageObjects
 
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed

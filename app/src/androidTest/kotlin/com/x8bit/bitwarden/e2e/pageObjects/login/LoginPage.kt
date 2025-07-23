@@ -1,11 +1,10 @@
-package com.x8bit.bitwarden.e2e.pages
+package com.x8bit.bitwarden.e2e.pageObjects.login
 
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.junit4.ComposeTestRule
-import e2e.pageObjects.Page
-import e2e.pageObjects.login.EnvironmentSettingsPage
-import e2e.pageObjects.vault.VaultPage
+import com.x8bit.bitwarden.e2e.pageObjects.Page
+import com.x8bit.bitwarden.e2e.pageObjects.vault.VaultPage
 
 /**
  * Page Object representing the Login screen of the Bitwarden app.

@@ -1,10 +1,9 @@
-package e2e.pageObjects.login
+package com.x8bit.bitwarden.e2e.pageObjects.login
 
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import com.x8bit.bitwarden.e2e.pages.LoginPage
-import e2e.pageObjects.Page
+import com.x8bit.bitwarden.e2e.pageObjects.Page
 
 class EnvironmentSettingsPage(composeTestRule: ComposeTestRule) : Page(composeTestRule) {
 

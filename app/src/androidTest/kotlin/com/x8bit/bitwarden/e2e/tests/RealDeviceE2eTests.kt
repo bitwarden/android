@@ -1,7 +1,7 @@
-package e2e.tests
+package com.x8bit.bitwarden.e2e.tests
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import e2e.pageObjects.login.MainPage
+import com.x8bit.bitwarden.e2e.pageObjects.login.MainPage
 import org.junit.Test
 import org.junit.runner.RunWith
 

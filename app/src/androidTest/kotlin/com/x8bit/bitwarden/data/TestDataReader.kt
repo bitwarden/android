@@ -1,8 +1,7 @@
-package data
+package com.x8bit.bitwarden.data
 
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.serialization.json.Json
-import java.io.InputStream
 import java.nio.charset.StandardCharsets
 
 object TestDataReader {

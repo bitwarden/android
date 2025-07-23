@@ -1,4 +1,4 @@
-package data
+package com.x8bit.bitwarden.data
 
 import kotlinx.serialization.Serializable
 
