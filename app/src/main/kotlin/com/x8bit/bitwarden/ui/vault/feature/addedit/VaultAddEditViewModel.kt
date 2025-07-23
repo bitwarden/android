@@ -2235,7 +2235,7 @@ data class VaultAddEditState(
                 VaultItemCipherType.CARD -> R.string.new_card.asText()
                 VaultItemCipherType.IDENTITY -> R.string.new_identity.asText()
                 VaultItemCipherType.SECURE_NOTE -> R.string.new_note.asText()
-                VaultItemCipherType.SSH_KEY -> R.string.new_passkey.asText()
+                VaultItemCipherType.SSH_KEY -> R.string.new_ssh_key.asText()
             }
 
             is VaultAddEditType.EditItem -> when (cipherType) {
@@ -2243,7 +2243,7 @@ data class VaultAddEditState(
                 VaultItemCipherType.CARD -> R.string.edit_card.asText()
                 VaultItemCipherType.IDENTITY -> R.string.edit_identity.asText()
                 VaultItemCipherType.SECURE_NOTE -> R.string.edit_note.asText()
-                VaultItemCipherType.SSH_KEY -> R.string.edit_passkey.asText()
+                VaultItemCipherType.SSH_KEY -> R.string.edit_ssh_key.asText()
             }
         }
 
