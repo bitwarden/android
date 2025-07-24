@@ -42,14 +42,12 @@ import com.x8bit.bitwarden.data.credentials.util.getCreateCredentialRequestOrNul
 import com.x8bit.bitwarden.data.credentials.util.getFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.credentials.util.getGetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -144,13 +142,6 @@ class MainViewModelTest : BaseViewModelTest() {
         every { clearResumeScreen() } just runs
     }
 
-    private val mutableMobileErrorReportingFeatureFlow = MutableStateFlow(false)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(key = FlagKey.MobileErrorReporting) } returns false
-        every {
-            getFeatureFlagFlow(key = FlagKey.MobileErrorReporting)
-        } returns mutableMobileErrorReportingFeatureFlow
-    }
     private val mockBiometricsPromptResult = mockk<BiometricPromptResult>(relaxed = true) {
         every { isSuccessful } returns true
     }
@@ -1136,14 +1127,12 @@ class MainViewModelTest : BaseViewModelTest() {
             set(SPECIAL_CIRCUMSTANCE_KEY, initialSpecialCircumstance)
         },
         appResumeManager = appResumeManager,
-        featureFlagManager = featureFlagManager,
     )
 }
 
 private val DEFAULT_STATE: MainState = MainState(
     theme = AppTheme.DEFAULT,
     isScreenCaptureAllowed = true,
-    isErrorReportingDialogEnabled = false,
     isDynamicColorsEnabled = false,
 )
 
