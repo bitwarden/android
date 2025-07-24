@@ -7,9 +7,9 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidEmail
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -187,7 +187,7 @@ class LandingViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = LandingState.DialogState.Error(
-                        message = R.string.invalid_email.asText(),
+                        message = BitwardenString.invalid_email.asText(),
                     ),
                 )
             }

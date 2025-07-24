@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.hexToColor
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -193,7 +193,8 @@ class VaultUnlockViewModel @Inject constructor(
             state.getCredentialsRequest != null -> {
                 sendEvent(
                     VaultUnlockEvent.GetCredentialsError(
-                        R.string.credential_operation_failed_because_user_could_not_be_verified
+                        BitwardenString
+                            .credential_operation_failed_because_user_could_not_be_verified
                             .asText(),
                     ),
                 )
@@ -202,7 +203,7 @@ class VaultUnlockViewModel @Inject constructor(
             state.fido2CredentialAssertionRequest != null -> {
                 sendEvent(
                     VaultUnlockEvent.Fido2CredentialAssertionError(
-                        R.string.passkey_operation_failed_because_user_could_not_be_verified
+                        BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
                             .asText(),
                     ),
                 )
@@ -282,7 +283,7 @@ class VaultUnlockViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
                         message = it.vaultUnlockType.emptyInputDialogMessage,
                     ),
                 )
@@ -347,9 +348,9 @@ class VaultUnlockViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = if (action.isBiometricLogin) {
-                                R.string.generic_error_message.asText()
+                                BitwardenString.generic_error_message.asText()
                             } else {
                                 state.vaultUnlockType.unlockScreenErrorMessage
                             },
@@ -365,8 +366,8 @@ class VaultUnlockViewModel @Inject constructor(
                     it.copy(
                         isBiometricsValid = false,
                         dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                            title = R.string.biometrics_failed.asText(),
-                            message = R.string.biometrics_decoding_failure.asText(),
+                            title = BitwardenString.biometrics_failed.asText(),
+                            message = BitwardenString.biometrics_decoding_failure.asText(),
                         ),
                     )
                 }
@@ -378,8 +379,8 @@ class VaultUnlockViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = (result as? VaultUnlockResult.InvalidStateError)?.error
                                 ?: (result as? VaultUnlockResult.GenericError)?.error,
                         ),

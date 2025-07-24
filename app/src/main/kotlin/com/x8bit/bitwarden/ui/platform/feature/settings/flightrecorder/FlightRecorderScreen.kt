@@ -31,8 +31,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.FlightRecorderDuration
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -65,16 +65,16 @@ fun FlightRecorderScreen(
     BitwardenScaffold(
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.enable_flight_recorder_title),
+                title = stringResource(id = BitwardenString.enable_flight_recorder_title),
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(FlightRecorderAction.BackClick) }
                 },
                 scrollBehavior = scrollBehavior,
                 actions = {
                     BitwardenTextButton(
-                        label = stringResource(id = R.string.save),
+                        label = stringResource(id = BitwardenString.save),
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(FlightRecorderAction.SaveClick) }
                         },
@@ -111,7 +111,7 @@ private fun FlightRecorderContent(
     ) {
         Spacer(modifier = Modifier.height(height = 24.dp))
         Text(
-            text = stringResource(id = R.string.experiencing_an_issue),
+            text = stringResource(id = BitwardenString.experiencing_an_issue),
             color = BitwardenTheme.colorScheme.text.primary,
             style = BitwardenTheme.typography.titleMedium,
             textAlign = TextAlign.Center,
@@ -122,7 +122,7 @@ private fun FlightRecorderContent(
         Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
             text = stringResource(
-                id = R.string.enable_temporary_logging_to_collect_and_inspect_logs_locally,
+                id = BitwardenString.enable_temporary_logging_to_collect_and_inspect_logs_locally,
             ),
             color = BitwardenTheme.colorScheme.text.primary,
             style = BitwardenTheme.typography.bodyMedium,
@@ -133,7 +133,7 @@ private fun FlightRecorderContent(
         )
         Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
-            text = stringResource(id = R.string.to_get_started_set_a_logging_duration),
+            text = stringResource(id = BitwardenString.to_get_started_set_a_logging_duration),
             color = BitwardenTheme.colorScheme.text.primary,
             style = BitwardenTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
@@ -151,7 +151,9 @@ private fun FlightRecorderContent(
         )
         Spacer(modifier = Modifier.height(height = 24.dp))
         Text(
-            text = stringResource(id = R.string.logs_will_be_automatically_deleted_after_30_days),
+            text = stringResource(
+                id = BitwardenString.logs_will_be_automatically_deleted_after_30_days,
+            ),
             color = BitwardenTheme.colorScheme.text.secondary,
             style = BitwardenTheme.typography.bodySmall,
             textAlign = TextAlign.Center,
@@ -161,9 +163,9 @@ private fun FlightRecorderContent(
         )
         Spacer(modifier = Modifier.height(height = 8.dp))
         BitwardenHyperTextLink(
-            annotatedResId = R.string.for_details_on_what_is_and_isnt_logged,
+            annotatedResId = BitwardenString.for_details_on_what_is_and_isnt_logged,
             annotationKey = "helpCenter",
-            accessibilityString = stringResource(id = R.string.bitwarden_help_center),
+            accessibilityString = stringResource(id = BitwardenString.bitwarden_help_center),
             onClick = onHelpCenterClick,
             color = BitwardenTheme.colorScheme.text.secondary,
             style = BitwardenTheme.typography.bodySmall,
@@ -185,7 +187,7 @@ private fun DurationSelectButton(
     val resources = LocalContext.current.resources
     val options = FlightRecorderDuration.entries.map { it.displayText() }.toImmutableList()
     BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.logging_duration),
+        label = stringResource(id = BitwardenString.logging_duration),
         options = options,
         selectedOption = selectedOption.displayText(),
         onOptionSelected = { selectedOption ->

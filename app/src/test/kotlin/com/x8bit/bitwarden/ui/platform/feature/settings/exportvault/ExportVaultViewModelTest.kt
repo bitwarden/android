@@ -8,9 +8,9 @@ import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherType
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -238,8 +238,8 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     error = error,
                 ),
             ),
@@ -304,9 +304,9 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required.asText(
-                        R.string.master_password.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.validation_field_required.asText(
+                        BitwardenString.master_password.asText(),
                     ),
                 ),
             ),
@@ -333,9 +333,9 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required.asText(
-                        R.string.file_password.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.validation_field_required.asText(
+                        BitwardenString.file_password.asText(),
                     ),
                 ),
                 exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
@@ -375,9 +375,9 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required.asText(
-                        R.string.confirm_file_password.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.validation_field_required.asText(
+                        BitwardenString.confirm_file_password.asText(),
                     ),
                 ),
                 exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
@@ -425,8 +425,8 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.master_password_confirmation_val_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.master_password_confirmation_val_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -449,8 +449,8 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.invalid_master_password.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.invalid_master_password.asText(),
                 ),
                 passwordInput = password,
             ),
@@ -480,8 +480,8 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     error = error,
                 ),
                 passwordInput = password,
@@ -570,14 +570,14 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = ExportVaultState.DialogState.Loading(
-                            message = R.string.sending.asText(),
+                            message = BitwardenString.sending.asText(),
                         ),
                     ),
                     stateTurbine.awaitItem(),
                 )
                 assertEquals(DEFAULT_STATE, stateTurbine.awaitItem())
                 assertEquals(
-                    ExportVaultEvent.ShowSnackbar(message = R.string.code_sent.asText()),
+                    ExportVaultEvent.ShowSnackbar(message = BitwardenString.code_sent.asText()),
                     eventTurbine.awaitItem(),
                 )
             }
@@ -599,7 +599,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = ExportVaultState.DialogState.Loading(
-                            message = R.string.sending.asText(),
+                            message = BitwardenString.sending.asText(),
                         ),
                     ),
                     stateTurbine.awaitItem(),
@@ -607,7 +607,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 assertEquals(DEFAULT_STATE, stateTurbine.awaitItem())
                 assertEquals(
                     ExportVaultEvent.ShowSnackbar(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                     eventTurbine.awaitItem(),
                 )
@@ -628,8 +628,8 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.export_vault_failure.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.export_vault_failure.asText(),
                     error = error,
                 ),
             ),
@@ -752,8 +752,8 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.export_vault_failure.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.export_vault_failure.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -783,8 +783,8 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 exportData = exportData,
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.export_vault_failure.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.export_vault_failure.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -808,7 +808,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
             coVerify { fileManager.stringToUri(fileUri = any(), dataString = exportData) }
 
             assertEquals(
-                ExportVaultEvent.ShowSnackbar(R.string.export_vault_success.asText()),
+                ExportVaultEvent.ShowSnackbar(BitwardenString.export_vault_success.asText()),
                 awaitItem(),
             )
         }

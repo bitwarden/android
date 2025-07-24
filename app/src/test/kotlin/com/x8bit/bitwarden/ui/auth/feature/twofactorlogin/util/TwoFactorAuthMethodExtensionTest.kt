@@ -2,9 +2,9 @@ package com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util
 
 import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
-import com.x8bit.bitwarden.R
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -12,17 +12,18 @@ class TwoFactorAuthMethodExtensionTest {
     @Test
     fun `title returns the expected value`() {
         mapOf(
-            TwoFactorAuthMethod.AUTHENTICATOR_APP to R.string.authenticator_app_title.asText(),
-            TwoFactorAuthMethod.EMAIL to R.string.email.asText(),
-            TwoFactorAuthMethod.DUO to R.string.duo_title.asText(),
-            TwoFactorAuthMethod.YUBI_KEY to R.string.yubi_key_title.asText(),
+            TwoFactorAuthMethod.AUTHENTICATOR_APP to BitwardenString.authenticator_app_title
+                .asText(),
+            TwoFactorAuthMethod.EMAIL to BitwardenString.email.asText(),
+            TwoFactorAuthMethod.DUO to BitwardenString.duo_title.asText(),
+            TwoFactorAuthMethod.YUBI_KEY to BitwardenString.yubi_key_title.asText(),
             TwoFactorAuthMethod.U2F to "".asText(),
             TwoFactorAuthMethod.REMEMBER to "".asText(),
-            TwoFactorAuthMethod.DUO_ORGANIZATION to R.string.duo_org_title.asText(
-                R.string.organization.asText(),
+            TwoFactorAuthMethod.DUO_ORGANIZATION to BitwardenString.duo_org_title.asText(
+                BitwardenString.organization.asText(),
             ),
-            TwoFactorAuthMethod.WEB_AUTH to R.string.fido2_authenticate_web_authn.asText(),
-            TwoFactorAuthMethod.RECOVERY_CODE to R.string.recovery_code_title.asText(),
+            TwoFactorAuthMethod.WEB_AUTH to BitwardenString.fido2_authenticate_web_authn.asText(),
+            TwoFactorAuthMethod.RECOVERY_CODE to BitwardenString.recovery_code_title.asText(),
         )
             .forEach { (type, title) ->
                 assertEquals(
@@ -36,21 +37,23 @@ class TwoFactorAuthMethodExtensionTest {
     fun `description returns the expected value`() {
         mapOf(
             TwoFactorAuthMethod.AUTHENTICATOR_APP to
-                R.string.enter_verification_code_app.asText(),
+                BitwardenString.enter_verification_code_app.asText(),
             TwoFactorAuthMethod.EMAIL to
-                R.string.enter_verification_code_email.asText("ex***@email.com"),
+                BitwardenString.enter_verification_code_email.asText("ex***@email.com"),
             TwoFactorAuthMethod.DUO to
-                R.string.follow_the_steps_from_duo_to_finish_logging_in.asText(),
-            TwoFactorAuthMethod.YUBI_KEY to R.string.yubi_key_instruction.asText(),
+                BitwardenString.follow_the_steps_from_duo_to_finish_logging_in.asText(),
+            TwoFactorAuthMethod.YUBI_KEY to BitwardenString.yubi_key_instruction.asText(),
             TwoFactorAuthMethod.U2F to "".asText(),
             TwoFactorAuthMethod.REMEMBER to "".asText(),
             TwoFactorAuthMethod.DUO_ORGANIZATION to
-                R.string.duo_two_step_login_is_required_for_your_account
+                BitwardenString.duo_two_step_login_is_required_for_your_account
                     .asText()
                     .concat(" ".asText())
-                    .concat(R.string.follow_the_steps_from_duo_to_finish_logging_in.asText()),
+                    .concat(
+                        BitwardenString.follow_the_steps_from_duo_to_finish_logging_in.asText(),
+                    ),
             TwoFactorAuthMethod.WEB_AUTH to
-                R.string.continue_to_complete_web_authn_verification.asText(),
+                BitwardenString.continue_to_complete_web_authn_verification.asText(),
             TwoFactorAuthMethod.RECOVERY_CODE to "".asText(),
         )
             .forEach { (type, title) ->
@@ -64,15 +67,15 @@ class TwoFactorAuthMethodExtensionTest {
     @Test
     fun `button returns the expected value`() {
         mapOf(
-            TwoFactorAuthMethod.AUTHENTICATOR_APP to R.string.continue_text.asText(),
-            TwoFactorAuthMethod.EMAIL to R.string.continue_text.asText(),
-            TwoFactorAuthMethod.DUO to R.string.launch_duo.asText(),
-            TwoFactorAuthMethod.YUBI_KEY to R.string.continue_text.asText(),
-            TwoFactorAuthMethod.U2F to R.string.continue_text.asText(),
-            TwoFactorAuthMethod.REMEMBER to R.string.continue_text.asText(),
-            TwoFactorAuthMethod.DUO_ORGANIZATION to R.string.launch_duo.asText(),
-            TwoFactorAuthMethod.WEB_AUTH to R.string.launch_web_authn.asText(),
-            TwoFactorAuthMethod.RECOVERY_CODE to R.string.continue_text.asText(),
+            TwoFactorAuthMethod.AUTHENTICATOR_APP to BitwardenString.continue_text.asText(),
+            TwoFactorAuthMethod.EMAIL to BitwardenString.continue_text.asText(),
+            TwoFactorAuthMethod.DUO to BitwardenString.launch_duo.asText(),
+            TwoFactorAuthMethod.YUBI_KEY to BitwardenString.continue_text.asText(),
+            TwoFactorAuthMethod.U2F to BitwardenString.continue_text.asText(),
+            TwoFactorAuthMethod.REMEMBER to BitwardenString.continue_text.asText(),
+            TwoFactorAuthMethod.DUO_ORGANIZATION to BitwardenString.launch_duo.asText(),
+            TwoFactorAuthMethod.WEB_AUTH to BitwardenString.launch_web_authn.asText(),
+            TwoFactorAuthMethod.RECOVERY_CODE to BitwardenString.continue_text.asText(),
         )
             .forEach { (type, buttonLabel) ->
                 assertEquals(buttonLabel, type.button)

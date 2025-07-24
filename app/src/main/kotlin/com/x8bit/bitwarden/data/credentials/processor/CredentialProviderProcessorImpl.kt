@@ -27,7 +27,7 @@ import androidx.credentials.provider.CreateEntry
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.manager.DispatcherManager
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
@@ -106,7 +106,7 @@ class CredentialProviderProcessorImpl(
         // Return an unlock action if the current account is locked.
         if (!userState.activeAccount.isVaultUnlocked) {
             val authenticationAction = AuthenticationAction(
-                title = context.getString(R.string.unlock),
+                title = context.getString(BitwardenString.unlock),
                 pendingIntent = intentManager.createFido2UnlockPendingIntent(
                     action = UNLOCK_ACCOUNT_INTENT,
                     userId = userState.activeUserId,
@@ -193,7 +193,7 @@ class CredentialProviderProcessorImpl(
             )
             .setDescription(
                 context.getString(
-                    R.string.your_passkey_will_be_saved_to_your_bitwarden_vault_for_x,
+                    BitwardenString.your_passkey_will_be_saved_to_your_bitwarden_vault_for_x,
                     accountName,
                 ),
             )

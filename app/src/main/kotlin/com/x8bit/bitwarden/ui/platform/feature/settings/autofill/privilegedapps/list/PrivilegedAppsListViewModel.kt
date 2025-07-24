@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.manager.BitwardenPackageManager
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.credentials.model.PrivilegedAppAllowListJson
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.credentials.repository.model.PrivilegedAppData
@@ -105,7 +105,7 @@ class PrivilegedAppsListViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = PrivilegedAppsListState.DialogState.General(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
             )
         }

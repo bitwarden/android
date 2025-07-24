@@ -4,6 +4,7 @@ import android.net.Uri
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
@@ -12,7 +13,6 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.CopyableCipherFields
 import com.bitwarden.vault.FolderView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
@@ -456,7 +456,7 @@ class SearchTypeDataExtensionsTest {
 
         assertEquals(
             SearchState.ViewState.Empty(
-                message = R.string.there_are_no_items_that_match_the_search.asText(),
+                message = BitwardenString.there_are_no_items_that_match_the_search.asText(),
             ),
             result,
         )
@@ -611,7 +611,7 @@ class SearchTypeDataExtensionsTest {
 
         assertEquals(
             SearchState.ViewState.Empty(
-                message = R.string.there_are_no_items_that_match_the_search.asText(),
+                message = BitwardenString.there_are_no_items_that_match_the_search.asText(),
             ),
             result,
         )

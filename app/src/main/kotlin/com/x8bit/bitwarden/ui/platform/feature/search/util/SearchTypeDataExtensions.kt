@@ -10,6 +10,7 @@ import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.util.removeDiacritics
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
@@ -17,7 +18,6 @@ import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
@@ -182,7 +182,7 @@ fun List<CipherListView>.toViewState(
 
         else -> {
             SearchState.ViewState.Empty(
-                message = R.string.there_are_no_items_that_match_the_search.asText(),
+                message = BitwardenString.there_are_no_items_that_match_the_search.asText(),
             )
         }
     }
@@ -341,7 +341,7 @@ fun List<SendView>.toViewState(
 
         else -> {
             SearchState.ViewState.Empty(
-                message = R.string.there_are_no_items_that_match_the_search.asText(),
+                message = BitwardenString.there_are_no_items_that_match_the_search.asText(),
             )
         }
     }

@@ -33,8 +33,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -66,11 +66,11 @@ fun DebugMenuScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(R.string.debug_menu),
+                title = stringResource(BitwardenString.debug_menu),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(BitwardenDrawable.ic_back),
-                    navigationIconContentDescription = stringResource(id = R.string.back),
+                    navigationIconContentDescription = stringResource(id = BitwardenString.back),
                     onNavigationIconClick = remember(viewModel) {
                         {
                             viewModel.trySendAction(DebugMenuAction.NavigateBack)
@@ -114,7 +114,7 @@ fun DebugMenuScreen(
             )
             Spacer(Modifier.height(16.dp))
             BitwardenFilledButton(
-                label = stringResource(R.string.reset_coach_mark_tour_status),
+                label = stringResource(BitwardenString.reset_coach_mark_tour_status),
                 onClick = remember(viewModel) {
                     {
                         viewModel.trySendAction(DebugMenuAction.ResetCoachMarkTourStatuses)
@@ -129,14 +129,14 @@ fun DebugMenuScreen(
             BitwardenHorizontalDivider()
             Spacer(Modifier.height(height = 16.dp))
             BitwardenListHeaderText(
-                label = stringResource(R.string.error_reports),
+                label = stringResource(BitwardenString.error_reports),
                 modifier = Modifier
                     .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenFilledButton(
-                label = stringResource(R.string.generate_error_report),
+                label = stringResource(BitwardenString.generate_error_report),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(DebugMenuAction.GenerateErrorReportClick) }
                 },
@@ -147,7 +147,7 @@ fun DebugMenuScreen(
             )
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenFilledButton(
-                label = stringResource(R.string.generate_crash),
+                label = stringResource(BitwardenString.generate_crash),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(DebugMenuAction.GenerateCrashClick) }
                 },
@@ -173,7 +173,7 @@ private fun FeatureFlagContent(
         modifier = modifier,
     ) {
         BitwardenListHeaderText(
-            label = stringResource(R.string.feature_flags),
+            label = stringResource(BitwardenString.feature_flags),
             modifier = Modifier
                 .standardHorizontalMargin()
                 .padding(horizontal = 16.dp),
@@ -193,7 +193,7 @@ private fun FeatureFlagContent(
         }
         Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenFilledButton(
-            label = stringResource(R.string.reset_values),
+            label = stringResource(BitwardenString.reset_values),
             onClick = onResetValues,
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -213,14 +213,14 @@ private fun OnboardingOverrideContent(
 ) {
     Column(modifier) {
         BitwardenListHeaderText(
-            label = stringResource(R.string.onboarding_override),
+            label = stringResource(BitwardenString.onboarding_override),
             modifier = Modifier
                 .standardHorizontalMargin()
                 .padding(horizontal = 16.dp),
         )
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenFilledButton(
-            label = stringResource(R.string.restart_onboarding_cta),
+            label = stringResource(BitwardenString.restart_onboarding_cta),
             onClick = onStartOnboarding,
             modifier = Modifier
                 .fillMaxWidth()
@@ -228,7 +228,7 @@ private fun OnboardingOverrideContent(
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = stringResource(R.string.restart_onboarding_details),
+            text = stringResource(BitwardenString.restart_onboarding_details),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .standardHorizontalMargin(),
@@ -238,7 +238,7 @@ private fun OnboardingOverrideContent(
         )
         Spacer(Modifier.height(16.dp))
         BitwardenFilledButton(
-            label = stringResource(R.string.restart_onboarding_carousel),
+            label = stringResource(BitwardenString.restart_onboarding_carousel),
             onClick = onStartOnboardingCarousel,
             modifier = Modifier
                 .fillMaxWidth()
@@ -246,7 +246,7 @@ private fun OnboardingOverrideContent(
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = stringResource(R.string.restart_onboarding_carousel_details),
+            text = stringResource(BitwardenString.restart_onboarding_carousel_details),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .standardHorizontalMargin(),

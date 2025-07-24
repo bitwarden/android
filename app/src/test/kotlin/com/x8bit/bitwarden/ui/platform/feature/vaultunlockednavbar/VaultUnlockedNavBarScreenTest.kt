@@ -5,7 +5,7 @@ import androidx.compose.ui.test.performClick
 import androidx.navigation.navOptions
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.createMockNavHostController
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.SettingsGraphRoute
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorGraphRoute
@@ -77,8 +77,8 @@ class VaultUnlockedNavBarScreenTest : BitwardenComposeTest() {
     fun `NavigateToVaultScreen should navigate to VaultScreen`() {
         mutableEventFlow.tryEmit(
             VaultUnlockedNavBarEvent.NavigateToVaultScreen(
-                labelRes = R.string.my_vault,
-                contentDescRes = R.string.my_vault,
+                labelRes = BitwardenString.my_vault,
+                contentDescRes = BitwardenString.my_vault,
             ),
         )
         composeTestRule.runOnIdle {
@@ -95,8 +95,8 @@ class VaultUnlockedNavBarScreenTest : BitwardenComposeTest() {
     fun `NavigateToVaultScreen shortcut event should navigate to VaultScreen`() {
         mutableEventFlow.tryEmit(
             VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen(
-                labelRes = R.string.my_vault,
-                contentDescRes = R.string.my_vault,
+                labelRes = BitwardenString.my_vault,
+                contentDescRes = BitwardenString.my_vault,
             ),
         )
         composeTestRule.runOnIdle {
@@ -189,8 +189,8 @@ class VaultUnlockedNavBarScreenTest : BitwardenComposeTest() {
 
         mutableStateFlow.tryEmit(
             VaultUnlockedNavBarState(
-                vaultNavBarLabelRes = R.string.vaults,
-                vaultNavBarContentDescriptionRes = R.string.vaults,
+                vaultNavBarLabelRes = BitwardenString.vaults,
+                vaultNavBarContentDescriptionRes = BitwardenString.vaults,
                 notificationState = VaultUnlockedNavBarNotificationState(
                     settingsTabNotificationCount = 0,
                 ),
@@ -229,8 +229,8 @@ class VaultUnlockedNavBarScreenTest : BitwardenComposeTest() {
 }
 
 private val DEFAULT_STATE = VaultUnlockedNavBarState(
-    vaultNavBarLabelRes = R.string.my_vault,
-    vaultNavBarContentDescriptionRes = R.string.my_vault,
+    vaultNavBarLabelRes = BitwardenString.my_vault,
+    vaultNavBarContentDescriptionRes = BitwardenString.my_vault,
     notificationState = VaultUnlockedNavBarNotificationState(
         settingsTabNotificationCount = 0,
     ),

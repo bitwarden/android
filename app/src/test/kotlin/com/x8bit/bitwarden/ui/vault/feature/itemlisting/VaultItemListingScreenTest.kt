@@ -23,13 +23,13 @@ import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertMasterPasswordDialogDisplayed
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.isProgressBar
 import com.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.bitwarden.vault.CipherType
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
@@ -1950,7 +1950,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 dialogState = VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
                     message = dialogMessage.asText(),
                 ),
             )
@@ -2342,7 +2342,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) {
             viewModel.trySendAction(
                 VaultItemListingsAction.DismissCredentialManagerErrorDialogClick(
-                    message = R.string.passkey_operation_failed_because_the_browser_is_not_trusted
+                    message = BitwardenString.passkey_operation_failed_because_the_browser_is_not_trusted
                         .asText(),
                 ),
             )
@@ -2419,23 +2419,23 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         extraIconList = persistentListOf(
             IconData.Local(
                 iconRes = BitwardenDrawable.ic_send_disabled,
-                contentDescription = R.string.disabled.asText(),
+                contentDescription = BitwardenString.disabled.asText(),
             ),
             IconData.Local(
                 iconRes = BitwardenDrawable.ic_key,
-                contentDescription = R.string.password.asText(),
+                contentDescription = BitwardenString.password.asText(),
             ),
             IconData.Local(
                 iconRes = BitwardenDrawable.ic_send_max_access_count_reached,
-                contentDescription = R.string.maximum_access_count_reached.asText(),
+                contentDescription = BitwardenString.maximum_access_count_reached.asText(),
             ),
             IconData.Local(
                 iconRes = BitwardenDrawable.ic_send_expired,
-                contentDescription = R.string.expired.asText(),
+                contentDescription = BitwardenString.expired.asText(),
             ),
             IconData.Local(
                 iconRes = BitwardenDrawable.ic_send_pending_delete,
-                contentDescription = R.string.pending_delete.asText(),
+                contentDescription = BitwardenString.pending_delete.asText(),
             ),
         ),
         overflowOptions = listOf(

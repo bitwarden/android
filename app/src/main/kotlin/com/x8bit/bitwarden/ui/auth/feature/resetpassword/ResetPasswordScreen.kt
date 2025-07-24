@@ -35,8 +35,8 @@ import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActio
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthIndicator
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
@@ -94,10 +94,10 @@ fun ResetPasswordScreen(
     }
     if (shouldShowLogoutConfirmationDialog) {
         BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.log_out),
-            message = stringResource(id = R.string.logout_confirmation),
-            confirmButtonText = stringResource(id = R.string.yes),
-            dismissButtonText = stringResource(id = R.string.cancel),
+            title = stringResource(id = BitwardenString.log_out),
+            message = stringResource(id = BitwardenString.logout_confirmation),
+            confirmButtonText = stringResource(id = BitwardenString.yes),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
             onConfirmClick = {
                 shouldShowLogoutConfirmationDialog = false
                 onLogoutClicked()
@@ -114,22 +114,22 @@ fun ResetPasswordScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.update_master_password),
+                title = stringResource(id = BitwardenString.update_master_password),
                 navigationIcon = null,
                 scrollBehavior = scrollBehavior,
                 actions = {
                     BitwardenTextButton(
-                        label = stringResource(id = R.string.save),
+                        label = stringResource(id = BitwardenString.save),
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(ResetPasswordAction.SaveClick) }
                         },
                         modifier = Modifier.testTag("SaveButton"),
                     )
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(R.string.more),
+                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
-                                text = stringResource(R.string.log_out),
+                                text = stringResource(BitwardenString.log_out),
                                 onClick = { shouldShowLogoutConfirmationDialog = true },
                             ),
                         ),
@@ -179,9 +179,9 @@ private fun ResetPasswordScreenContent(
         Spacer(modifier = Modifier.height(height = 12.dp))
         val instructionsTextId =
             if (state.resetReason == ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN) {
-                R.string.update_weak_master_password_warning
+                BitwardenString.update_weak_master_password_warning
             } else {
-                R.string.update_master_password_warning
+                BitwardenString.update_master_password_warning
             }
         BitwardenInfoCalloutCard(
             text = stringResource(id = instructionsTextId),
@@ -194,7 +194,7 @@ private fun ResetPasswordScreenContent(
 
         if (state.resetReason == ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN) {
             val passwordPolicyContent = listOf(
-                stringResource(id = R.string.master_password_policy_in_effect),
+                stringResource(id = BitwardenString.master_password_policy_in_effect),
             )
                 .plus(state.policies.map { it() })
                 .joinToString("\n  •  ")
@@ -207,7 +207,7 @@ private fun ResetPasswordScreenContent(
 
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenPasswordField(
-                label = stringResource(id = R.string.current_master_password_required),
+                label = stringResource(id = BitwardenString.current_master_password_required),
                 value = state.currentPasswordInput,
                 onValueChange = onCurrentPasswordInputChanged,
                 passwordFieldTestTag = "MasterPasswordField",
@@ -220,7 +220,7 @@ private fun ResetPasswordScreenContent(
 
         var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
         BitwardenPasswordField(
-            label = stringResource(id = R.string.new_master_password_required),
+            label = stringResource(id = BitwardenString.new_master_password_required),
             value = state.passwordInput,
             onValueChange = onPasswordInputChanged,
             showPassword = isPasswordVisible,
@@ -246,7 +246,7 @@ private fun ResetPasswordScreenContent(
         )
 
         BitwardenPasswordField(
-            label = stringResource(id = R.string.retype_new_master_password_required),
+            label = stringResource(id = BitwardenString.retype_new_master_password_required),
             value = state.retypePasswordInput,
             onValueChange = onRetypePasswordInputChanged,
             showPassword = isPasswordVisible,
@@ -259,24 +259,26 @@ private fun ResetPasswordScreenContent(
         )
 
         BitwardenTextField(
-            label = stringResource(id = R.string.new_master_password_hint),
+            label = stringResource(id = BitwardenString.new_master_password_hint),
             value = state.passwordHintInput,
             onValueChange = onPasswordHintInputChanged,
             supportingContent = {
                 Column {
                     Text(
                         text = stringResource(
-                            R.string.bitwarden_cannot_reset_a_lost_or_forgotten_master_password,
+                            BitwardenString
+                                .bitwarden_cannot_reset_a_lost_or_forgotten_master_password,
                         ),
                         style = BitwardenTheme.typography.bodySmall,
                         color = BitwardenTheme.colorScheme.text.secondary,
                         modifier = Modifier.fillMaxWidth(),
                     )
                     BitwardenHyperTextLink(
-                        annotatedResId = R.string.learn_about_ways_to_prevent_account_lockout,
+                        annotatedResId =
+                            BitwardenString.learn_about_ways_to_prevent_account_lockout,
                         annotationKey = "onPreventAccountLockout",
                         accessibilityString = stringResource(
-                            R.string.learn_about_ways_to_prevent_account_lockout,
+                            BitwardenString.learn_about_ways_to_prevent_account_lockout,
                         ),
                         onClick = onLearnToPreventLockout,
                     )

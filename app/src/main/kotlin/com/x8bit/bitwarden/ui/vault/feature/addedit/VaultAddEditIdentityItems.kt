@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
@@ -32,7 +32,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     item {
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenListHeaderText(
-            label = stringResource(id = R.string.personal_details),
+            label = stringResource(id = BitwardenString.personal_details),
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin()
@@ -53,7 +53,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.first_name),
+            label = stringResource(id = BitwardenString.first_name),
             value = identityState.firstName,
             onValueChange = identityItemTypeHandlers.onFirstNameTextChange,
             textFieldTestTag = "IdentityFirstNameEntry",
@@ -65,7 +65,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.middle_name),
+            label = stringResource(id = BitwardenString.middle_name),
             value = identityState.middleName,
             onValueChange = identityItemTypeHandlers.onMiddleNameTextChange,
             textFieldTestTag = "IdentityMiddleNameEntry",
@@ -77,7 +77,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.last_name),
+            label = stringResource(id = BitwardenString.last_name),
             value = identityState.lastName,
             onValueChange = identityItemTypeHandlers.onLastNameTextChange,
             textFieldTestTag = "IdentityLastNameEntry",
@@ -89,7 +89,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.username),
+            label = stringResource(id = BitwardenString.username),
             value = identityState.username,
             onValueChange = identityItemTypeHandlers.onUsernameTextChange,
             textFieldTestTag = "IdentityUsernameEntry",
@@ -101,7 +101,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.company),
+            label = stringResource(id = BitwardenString.company),
             value = identityState.company,
             onValueChange = identityItemTypeHandlers.onCompanyTextChange,
             textFieldTestTag = "IdentityCompanyEntry",
@@ -114,7 +114,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     item {
         Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
-            label = stringResource(id = R.string.identification),
+            label = stringResource(id = BitwardenString.identification),
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin()
@@ -124,7 +124,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.ssn),
+            label = stringResource(id = BitwardenString.ssn),
             value = identityState.ssn,
             onValueChange = identityItemTypeHandlers.onSsnTextChange,
             textFieldTestTag = "IdentitySsnEntry",
@@ -136,7 +136,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.passport_number),
+            label = stringResource(id = BitwardenString.passport_number),
             value = identityState.passportNumber,
             onValueChange = identityItemTypeHandlers.onPassportNumberTextChange,
             textFieldTestTag = "IdentityPassportNumberEntry",
@@ -148,7 +148,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.license_number),
+            label = stringResource(id = BitwardenString.license_number),
             value = identityState.licenseNumber,
             onValueChange = identityItemTypeHandlers.onLicenseNumberTextChange,
             textFieldTestTag = "IdentityLicenseNumberEntry",
@@ -161,7 +161,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     item {
         Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
-            label = stringResource(id = R.string.contact_info),
+            label = stringResource(id = BitwardenString.contact_info),
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin()
@@ -171,7 +171,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.email),
+            label = stringResource(id = BitwardenString.email),
             value = identityState.email,
             onValueChange = identityItemTypeHandlers.onEmailTextChange,
             textFieldTestTag = "IdentityEmailEntry",
@@ -183,7 +183,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.phone),
+            label = stringResource(id = BitwardenString.phone),
             value = identityState.phone,
             onValueChange = identityItemTypeHandlers.onPhoneTextChange,
             textFieldTestTag = "IdentityPhoneEntry",
@@ -196,7 +196,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     item {
         Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
-            label = stringResource(id = R.string.address),
+            label = stringResource(id = BitwardenString.address),
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin()
@@ -206,7 +206,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.address1),
+            label = stringResource(id = BitwardenString.address1),
             value = identityState.address1,
             onValueChange = identityItemTypeHandlers.onAddress1TextChange,
             textFieldTestTag = "IdentityAddressOneEntry",
@@ -218,7 +218,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.address2),
+            label = stringResource(id = BitwardenString.address2),
             value = identityState.address2,
             onValueChange = identityItemTypeHandlers.onAddress2TextChange,
             textFieldTestTag = "IdentityAddressTwoEntry",
@@ -230,7 +230,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.address3),
+            label = stringResource(id = BitwardenString.address3),
             value = identityState.address3,
             onValueChange = identityItemTypeHandlers.onAddress3TextChange,
             textFieldTestTag = "IdentityAddressThreeEntry",
@@ -242,7 +242,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.city_town),
+            label = stringResource(id = BitwardenString.city_town),
             value = identityState.city,
             onValueChange = identityItemTypeHandlers.onCityTextChange,
             textFieldTestTag = "IdentityCityEntry",
@@ -254,7 +254,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.state_province),
+            label = stringResource(id = BitwardenString.state_province),
             value = identityState.state,
             onValueChange = identityItemTypeHandlers.onStateTextChange,
             textFieldTestTag = "IdentityStateEntry",
@@ -266,7 +266,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.zip_postal_code),
+            label = stringResource(id = BitwardenString.zip_postal_code),
             value = identityState.zip,
             onValueChange = identityItemTypeHandlers.onZipTextChange,
             textFieldTestTag = "IdentityPostalCodeEntry",
@@ -278,7 +278,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.country),
+            label = stringResource(id = BitwardenString.country),
             value = identityState.country,
             onValueChange = identityItemTypeHandlers.onCountryTextChange,
             textFieldTestTag = "IdentityCountryEntry",
@@ -298,7 +298,7 @@ private fun TitleMultiSelectButton(
 ) {
     val resources = LocalContext.current.resources
     BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.title),
+        label = stringResource(id = BitwardenString.title),
         options = VaultIdentityTitle
             .entries
             .map { it.value() }

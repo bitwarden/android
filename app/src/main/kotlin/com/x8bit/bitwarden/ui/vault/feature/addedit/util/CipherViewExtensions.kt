@@ -3,6 +3,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -13,7 +14,6 @@ import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.LoginUriView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
@@ -166,7 +166,7 @@ fun CipherView?.validateCipherOrReturnErrorState(
     if (currentAccount == null ||
         (vaultAddEditType is VaultAddEditType.EditItem && this == null)
     ) {
-        VaultAddEditState.ViewState.Error(R.string.generic_error_message.asText())
+        VaultAddEditState.ViewState.Error(BitwardenString.generic_error_message.asText())
     } else {
         lambda(currentAccount, this)
     }
@@ -186,7 +186,7 @@ fun List<FolderView>.toAvailableFolders(
     listOf(
         VaultAddEditState.Folder(
             id = null,
-            name = resourceManager.getString(R.string.folder_none),
+            name = resourceManager.getString(BitwardenString.folder_none),
         ),
     )
         .plus(
@@ -287,7 +287,7 @@ private fun String.appendCloneTextIfRequired(
     resourceManager: ResourceManager,
 ): String =
     if (isClone) {
-        plus(" - ${resourceManager.getString(R.string.clone)}")
+        plus(" - ${resourceManager.getString(BitwardenString.clone)}")
     } else {
         this
     }
@@ -329,7 +329,7 @@ private fun List<Fido2Credential>?.getPrimaryFido2CredentialOrNull(
  * Return the creation date and time of the primary FIDO2 credential, formatted as
  * "MMM d, yyyy, hh:mm a".
  */
-private fun Fido2Credential.getCreationDateTime(clock: Clock) = R.string.created_x.asText(
+private fun Fido2Credential.getCreationDateTime(clock: Clock) = BitwardenString.created_x.asText(
     creationDate.toFormattedDateTimeStyle(
         dateStyle = FormatStyle.MEDIUM,
         timeStyle = FormatStyle.SHORT,

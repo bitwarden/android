@@ -32,7 +32,6 @@ import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -79,10 +78,10 @@ fun PrivilegedAppsListScreen(
     BitwardenScaffold(
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(R.string.privileged_apps),
+                title = stringResource(BitwardenString.privileged_apps),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                navigationIconContentDescription = stringResource(id = R.string.back),
+                navigationIconContentDescription = stringResource(id = BitwardenString.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(PrivilegedAppsListAction.BackClick) }
                 },
@@ -112,18 +111,18 @@ private fun PrivilegedAppListDialogs(
 ) {
     when (val dialogState = state.dialogState) {
         is PrivilegedAppsListState.DialogState.Loading -> {
-            BitwardenLoadingDialog(stringResource(R.string.loading))
+            BitwardenLoadingDialog(stringResource(BitwardenString.loading))
         }
 
         is PrivilegedAppsListState.DialogState.ConfirmDeleteTrustedApp -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(R.string.delete),
+                title = stringResource(BitwardenString.delete),
                 message = stringResource(
-                    R.string.are_you_sure_you_want_to_stop_trusting_x,
+                    BitwardenString.are_you_sure_you_want_to_stop_trusting_x,
                     dialogState.app.packageName,
                 ),
-                confirmButtonText = stringResource(R.string.okay),
-                dismissButtonText = stringResource(R.string.cancel),
+                confirmButtonText = stringResource(BitwardenString.okay),
+                dismissButtonText = stringResource(BitwardenString.cancel),
                 onConfirmClick = { onConfirmDeleteTrustedAppClick(dialogState.app) },
                 onDismissClick = onDismissDialogClick,
                 onDismissRequest = onDismissDialogClick,
@@ -133,7 +132,7 @@ private fun PrivilegedAppListDialogs(
         is PrivilegedAppsListState.DialogState.General -> {
             BitwardenBasicDialog(
                 title = dialogState.title?.invoke()
-                    ?: stringResource(R.string.an_error_has_occurred),
+                    ?: stringResource(BitwardenString.an_error_has_occurred),
                 message = dialogState.message.invoke(),
                 onDismissRequest = onDismissDialogClick,
             )
@@ -162,7 +161,7 @@ private fun PrivilegedAppsListContent(
                         .animateItem(),
                 )
                 BitwardenListHeaderText(
-                    label = stringResource(R.string.installed_apps),
+                    label = stringResource(BitwardenString.installed_apps),
                     supportingLabel = state.installedApps.size.toString(),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -208,7 +207,7 @@ private fun PrivilegedAppsListContent(
         if (state.notInstalledApps.isNotEmpty()) {
             item {
                 BitwardenExpandingHeader(
-                    collapsedText = stringResource(R.string.all_trusted_apps),
+                    collapsedText = stringResource(BitwardenString.all_trusted_apps),
                     isExpanded = showAllTrustedApps,
                     onClick = remember(state) {
                         { showAllTrustedApps = !showAllTrustedApps }
@@ -229,7 +228,7 @@ private fun PrivilegedAppsListContent(
                             .animateItem(),
                     )
                     BitwardenListHeaderText(
-                        label = stringResource(R.string.trusted_by_you),
+                        label = stringResource(BitwardenString.trusted_by_you),
                         supportingLabel = state.notInstalledUserTrustedApps.size.toString(),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -282,7 +281,7 @@ private fun PrivilegedAppsListContent(
                             .animateItem(),
                     )
                     BitwardenListHeaderText(
-                        label = stringResource(R.string.trusted_by_the_community),
+                        label = stringResource(BitwardenString.trusted_by_the_community),
                         supportingLabel = state.notInstalledCommunityTrustedApps.size.toString(),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -316,7 +315,7 @@ private fun PrivilegedAppsListContent(
                 item(key = "trusted_by_google") {
                     Spacer(modifier = Modifier.height(16.dp))
                     BitwardenListHeaderText(
-                        label = stringResource(R.string.trusted_by_google),
+                        label = stringResource(BitwardenString.trusted_by_google),
                         supportingLabel = state.notInstalledGoogleTrustedApps.size.toString(),
                         modifier = Modifier
                             .fillMaxWidth()

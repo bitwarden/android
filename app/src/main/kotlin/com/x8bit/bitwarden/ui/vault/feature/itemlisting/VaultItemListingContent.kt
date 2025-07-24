@@ -20,7 +20,7 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -53,10 +53,10 @@ fun VaultItemListingContent(
     when (val option = showConfirmationDialog) {
         is ListingItemOverflowAction.SendAction.DeleteClick -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = R.string.delete),
-                message = stringResource(id = R.string.are_you_sure_delete_send),
-                confirmButtonText = stringResource(id = R.string.yes),
-                dismissButtonText = stringResource(id = R.string.cancel),
+                title = stringResource(id = BitwardenString.delete),
+                message = stringResource(id = BitwardenString.are_you_sure_delete_send),
+                confirmButtonText = stringResource(id = BitwardenString.yes),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
                 onConfirmClick = {
                     showConfirmationDialog = null
                     onOverflowItemClick(option)
@@ -104,7 +104,9 @@ fun VaultItemListingContent(
             item {
                 Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenInfoCalloutCard(
-                    text = stringResource(id = R.string.add_this_authenticator_key_to_a_login),
+                    text = stringResource(
+                        id = BitwardenString.add_this_authenticator_key_to_a_login,
+                    ),
                     modifier = Modifier
                         .standardHorizontalMargin()
                         .fillMaxWidth(),
@@ -116,7 +118,7 @@ fun VaultItemListingContent(
             item {
                 Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenInfoCalloutCard(
-                    text = stringResource(id = R.string.send_disabled_warning),
+                    text = stringResource(id = BitwardenString.send_disabled_warning),
                     modifier = Modifier
                         .standardHorizontalMargin()
                         .fillMaxWidth(),
@@ -128,7 +130,7 @@ fun VaultItemListingContent(
             item {
                 Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.collections),
+                    label = stringResource(id = BitwardenString.collections),
                     supportingLabel = state.displayCollectionList.count().toString(),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -159,7 +161,7 @@ fun VaultItemListingContent(
             item {
                 Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.folders),
+                    label = stringResource(id = BitwardenString.folders),
                     supportingLabel = state.displayFolderList.count().toString(),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -190,7 +192,7 @@ fun VaultItemListingContent(
             item {
                 Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.items),
+                    label = stringResource(id = BitwardenString.items),
                     supportingLabel = state.displayItemList.size.toString(),
                     modifier = Modifier
                         .fillMaxWidth()

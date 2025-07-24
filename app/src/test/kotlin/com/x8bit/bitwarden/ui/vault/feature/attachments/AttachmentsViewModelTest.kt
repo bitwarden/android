@@ -6,10 +6,10 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -92,7 +92,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS,
             dialogState = AttachmentsState.DialogState.Error(
                 title = null,
-                message = R.string.premium_required.asText(),
+                message = BitwardenString.premium_required.asText(),
                 throwable = null,
             ),
             isPremiumUser = false,
@@ -106,8 +106,8 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             assertEquals(
                 state.copy(
                     dialogState = AttachmentsState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.premium_required.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.premium_required.asText(),
                         throwable = null,
                     ),
                 ),
@@ -132,8 +132,9 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             assertEquals(
                 state.copy(
                     dialogState = AttachmentsState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required.asText(R.string.file.asText()),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.validation_field_required
+                            .asText(BitwardenString.file.asText()),
                         throwable = null,
                     ),
                 ),
@@ -176,8 +177,8 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             assertEquals(
                 state.copy(
                     dialogState = AttachmentsState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.max_file_size.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.max_file_size.asText(),
                         throwable = null,
                     ),
                 ),
@@ -234,7 +235,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     state.copy(
                         dialogState = AttachmentsState.DialogState.Loading(
-                            message = R.string.saving.asText(),
+                            message = BitwardenString.saving.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -242,7 +243,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     state.copy(
                         dialogState = AttachmentsState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = error.message!!.asText(),
                             throwable = error,
                         ),
@@ -306,7 +307,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     state.copy(
                         dialogState = AttachmentsState.DialogState.Loading(
-                            message = R.string.saving.asText(),
+                            message = BitwardenString.saving.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -314,8 +315,8 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     state.copy(
                         dialogState = AttachmentsState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = error,
                         ),
                     ),
@@ -373,7 +374,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(AttachmentsAction.SaveClick)
             assertEquals(
-                AttachmentsEvent.ShowSnackbar(R.string.save_attachment_success.asText()),
+                AttachmentsEvent.ShowSnackbar(BitwardenString.save_attachment_success.asText()),
                 awaitItem(),
             )
         }
@@ -461,7 +462,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = AttachmentsState.DialogState.Loading(
-                        message = R.string.deleting.asText(),
+                        message = BitwardenString.deleting.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -469,8 +470,8 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = AttachmentsState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         throwable = error,
                     ),
                 ),
@@ -497,7 +498,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(AttachmentsAction.DeleteClick(cipherId))
             assertEquals(
-                AttachmentsEvent.ShowSnackbar(R.string.attachment_deleted.asText()),
+                AttachmentsEvent.ShowSnackbar(BitwardenString.attachment_deleted.asText()),
                 awaitItem(),
             )
         }
@@ -512,7 +513,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = AttachmentsState.ViewState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -542,7 +543,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = AttachmentsState.ViewState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -570,11 +571,11 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = AttachmentsState.ViewState.Error(
-                    message = R.string.internet_connection_required_title
+                    message = BitwardenString.internet_connection_required_title
                         .asText()
                         .concat(
                             " ".asText(),
-                            R.string.internet_connection_required_message.asText(),
+                            BitwardenString.internet_connection_required_message.asText(),
                         ),
                 ),
             ),
@@ -605,7 +606,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = AttachmentsState.ViewState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,

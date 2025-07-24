@@ -7,9 +7,9 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Toast
 import com.bitwarden.core.data.manager.toast.ToastManager
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.LauncherPackageNameManager
 import com.x8bit.bitwarden.data.autofill.accessibility.model.AccessibilityAction
@@ -251,7 +251,7 @@ class BitwardenAccessibilityProcessorTest {
             accessibilityAutofillManager.accessibilityAction = null
             accessibilityParser.parseForUriOrPackageName(rootNode = node)
             toastManager.show(
-                messageId = R.string.autofill_tile_uri_not_found,
+                messageId = BitwardenString.autofill_tile_uri_not_found,
                 duration = Toast.LENGTH_LONG,
             )
         }
@@ -305,7 +305,7 @@ class BitwardenAccessibilityProcessorTest {
             accessibilityParser.parseForUriOrPackageName(rootNode = node)
             accessibilityParser.parseForFillableFields(rootNode = node, uri = uri)
             toastManager.show(
-                messageId = R.string.autofill_tile_uri_not_found,
+                messageId = BitwardenString.autofill_tile_uri_not_found,
                 duration = Toast.LENGTH_LONG,
             )
         }

@@ -26,9 +26,9 @@ import androidx.credentials.CredentialManager
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.MainActivity
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import java.io.File
@@ -251,7 +251,7 @@ class IntentManagerImpl(
             Intent(Intent.ACTION_OPEN_DOCUMENT)
                 .addCategory(Intent.CATEGORY_OPENABLE)
                 .setType("*/*"),
-            ContextCompat.getString(context, R.string.file_source),
+            ContextCompat.getString(context, BitwardenString.file_source),
         )
 
         if (withCameraIntents) {

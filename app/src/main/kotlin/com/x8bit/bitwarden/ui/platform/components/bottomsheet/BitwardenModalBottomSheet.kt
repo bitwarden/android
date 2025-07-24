@@ -18,8 +18,8 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import kotlinx.coroutines.launch
 
@@ -70,7 +70,7 @@ fun BitwardenModalBottomSheet(
                     navigationIcon = NavigationIcon(
                         navigationIcon = rememberVectorPainter(BitwardenDrawable.ic_close),
                         onNavigationIconClick = animatedOnDismiss,
-                        navigationIconContentDescription = stringResource(R.string.close),
+                        navigationIconContentDescription = stringResource(BitwardenString.close),
                     ),
                     actions = {
                         topBarActions(animatedOnDismiss)

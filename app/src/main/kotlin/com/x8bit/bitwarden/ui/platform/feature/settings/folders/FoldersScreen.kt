@@ -31,8 +31,8 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
@@ -71,10 +71,10 @@ fun FoldersScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.folders),
+                title = stringResource(id = BitwardenString.folders),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(FoldersAction.CloseButtonClick) }
                 },
@@ -86,7 +86,7 @@ fun FoldersScreen(
                     { viewModel.trySendAction(FoldersAction.AddFolderButtonClick) }
                 },
                 painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
-                contentDescription = stringResource(id = R.string.add_item),
+                contentDescription = stringResource(id = BitwardenString.add_item),
                 modifier = Modifier
                     .testTag(tag = "AddItemButton")
                     .navigationBarsPadding(),
@@ -133,7 +133,7 @@ private fun FoldersContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = stringResource(id = R.string.no_folders_to_list),
+                text = stringResource(id = BitwardenString.no_folders_to_list),
                 textAlign = TextAlign.Center,
                 style = BitwardenTheme.typography.bodyMedium,
                 color = BitwardenTheme.colorScheme.text.primary,

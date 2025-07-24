@@ -33,8 +33,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
@@ -131,7 +131,7 @@ private fun DeleteAccountConfirmationContent(
             .verticalScroll(rememberScrollState()),
     ) {
         Text(
-            text = stringResource(id = R.string.a_verification_code_was_sent_to_your_email),
+            text = stringResource(id = BitwardenString.a_verification_code_was_sent_to_your_email),
             textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -143,7 +143,7 @@ private fun DeleteAccountConfirmationContent(
         BitwardenPasswordField(
             value = state.verificationCode,
             onValueChange = onVerificationCodeTextChange,
-            label = stringResource(id = R.string.verification_code),
+            label = stringResource(id = BitwardenString.verification_code),
             keyboardType = KeyboardType.Number,
             imeAction = ImeAction.Done,
             autoFocus = true,
@@ -154,7 +154,7 @@ private fun DeleteAccountConfirmationContent(
         )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            text = stringResource(id = R.string.confirm_your_identity),
+            text = stringResource(id = BitwardenString.confirm_your_identity),
             textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -164,7 +164,7 @@ private fun DeleteAccountConfirmationContent(
         )
         Spacer(modifier = Modifier.height(12.dp))
         BitwardenFilledErrorButton(
-            label = stringResource(id = R.string.delete_account),
+            label = stringResource(id = BitwardenString.delete_account),
             onClick = onDeleteAccountClick,
             isEnabled = state.verificationCode.isNotBlank(),
             modifier = Modifier
@@ -173,7 +173,7 @@ private fun DeleteAccountConfirmationContent(
         )
         Spacer(modifier = Modifier.height(12.dp))
         BitwardenOutlinedButton(
-            label = stringResource(id = R.string.resend_code),
+            label = stringResource(id = BitwardenString.resend_code),
             onClick = onResendCodeClick,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -199,10 +199,10 @@ private fun DeleteAccountConfirmationScaffold(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.verification_code),
+                title = stringResource(id = BitwardenString.verification_code),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = onCloseClick,
             )
         },

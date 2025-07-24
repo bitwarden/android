@@ -19,9 +19,9 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.requestFocus
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
@@ -132,13 +132,17 @@ class VaultUnlockScreenTest : BitwardenComposeTest() {
     fun `on GetCredentialsError should call completeProviderGetCredentialsRequest on CredentialProviderCompletionManager`() {
         mutableEventFlow.tryEmit(
             VaultUnlockEvent.GetCredentialsError(
-                R.string.credential_operation_failed_because_user_could_not_be_verified.asText(),
+                BitwardenString
+                    .credential_operation_failed_because_user_could_not_be_verified
+                    .asText(),
             ),
         )
         verify(exactly = 1) {
             credentialProviderCompletionManager.completeProviderGetCredentialsRequest(
                 result = GetCredentialsResult.Error(
-                    R.string.credential_operation_failed_because_user_could_not_be_verified.asText(),
+                    BitwardenString
+                        .credential_operation_failed_because_user_could_not_be_verified
+                        .asText(),
                 ),
             )
         }

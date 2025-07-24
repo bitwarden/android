@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherRepromptType
@@ -16,7 +17,6 @@ import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
 import com.bitwarden.vault.SshKeyView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -50,8 +50,8 @@ import java.util.UUID
 class CipherViewExtensionsTest {
 
     private val resourceManager: ResourceManager = mockk {
-        every { getString(R.string.clone) } returns "Clone"
-        every { getString(R.string.folder_none) } returns "No Folder"
+        every { getString(BitwardenString.clone) } returns "Clone"
+        every { getString(BitwardenString.folder_none) } returns "No Folder"
     }
 
     @BeforeEach
@@ -215,7 +215,7 @@ class CipherViewExtensionsTest {
                     ),
                     totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
                     canViewPassword = false,
-                    fido2CredentialCreationDateTime = R.string.created_x.asText(
+                    fido2CredentialCreationDateTime = BitwardenString.created_x.asText(
                         "Oct 27, 2023, 12:00 PM",
                     ),
                 ),
@@ -276,7 +276,7 @@ class CipherViewExtensionsTest {
                     ),
                     totp = totp,
                     canViewPassword = false,
-                    fido2CredentialCreationDateTime = R.string.created_x.asText(
+                    fido2CredentialCreationDateTime = BitwardenString.created_x.asText(
                         "Oct 27, 2023, 12:00 PM",
                     ),
                 ),
@@ -429,7 +429,7 @@ class CipherViewExtensionsTest {
             ) { _, _ -> providedState }
 
         assertEquals(
-            VaultAddEditState.ViewState.Error(R.string.generic_error_message.asText()),
+            VaultAddEditState.ViewState.Error(BitwardenString.generic_error_message.asText()),
             result,
         )
     }
@@ -445,7 +445,7 @@ class CipherViewExtensionsTest {
             ) { _, _ -> providedState }
 
         assertEquals(
-            VaultAddEditState.ViewState.Error(R.string.generic_error_message.asText()),
+            VaultAddEditState.ViewState.Error(BitwardenString.generic_error_message.asText()),
             result,
         )
     }

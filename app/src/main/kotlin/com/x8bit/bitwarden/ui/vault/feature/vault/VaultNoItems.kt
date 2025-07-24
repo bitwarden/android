@@ -24,8 +24,8 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 
 /**
@@ -47,7 +47,7 @@ fun VaultNoItems(
     ) {
         if (policyDisablesSend) {
             BitwardenInfoCalloutCard(
-                text = stringResource(id = R.string.send_disabled_warning),
+                text = stringResource(id = BitwardenString.send_disabled_warning),
                 modifier = Modifier
                     .standardHorizontalMargin()
                     .fillMaxWidth(),
@@ -113,11 +113,11 @@ private fun VaultNoItems_preview() {
         ) {
             VaultNoItems(
                 vectorRes = BitwardenDrawable.img_vault_items,
-                headerText = stringResource(id = R.string.save_and_protect_your_data),
+                headerText = stringResource(id = BitwardenString.save_and_protect_your_data),
                 message = stringResource(
-                    R.string.the_vault_protects_more_than_just_passwords,
+                    BitwardenString.the_vault_protects_more_than_just_passwords,
                 ),
-                buttonText = stringResource(R.string.new_login),
+                buttonText = stringResource(BitwardenString.new_login),
                 addItemClickAction = {},
                 policyDisablesSend = false,
             )
@@ -135,9 +135,9 @@ private fun VaultNoItemsPolicyDisabled_preview() {
         ) {
             VaultNoItems(
                 message = stringResource(
-                    R.string.the_vault_protects_more_than_just_passwords,
+                    BitwardenString.the_vault_protects_more_than_just_passwords,
                 ),
-                buttonText = stringResource(R.string.new_login),
+                buttonText = stringResource(BitwardenString.new_login),
                 addItemClickAction = {},
                 policyDisablesSend = true,
             )

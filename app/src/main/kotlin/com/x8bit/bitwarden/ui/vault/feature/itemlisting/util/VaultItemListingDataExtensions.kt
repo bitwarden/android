@@ -9,6 +9,7 @@ import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
@@ -16,7 +17,6 @@ import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.autofill.util.login
@@ -177,44 +177,44 @@ fun VaultData.toViewState(
         val message = autofillSelectionData
             ?.uri
             ?.toHostOrPathOrNull()
-            ?.let { R.string.no_items_for_uri.asText(it) }
+            ?.let { BitwardenString.no_items_for_uri.asText(it) }
             ?: createCredentialRequestData
                 ?.relyingPartyIdOrNull
                 ?.toHostOrPathOrNull()
-                ?.let { R.string.no_items_for_uri.asText(it) }
-            ?: totpData?.let { R.string.search_for_a_login_or_add_a_new_login.asText() }
+                ?.let { BitwardenString.no_items_for_uri.asText(it) }
+            ?: totpData?.let { BitwardenString.search_for_a_login_or_add_a_new_login.asText() }
             ?: run {
                 when (itemListingType) {
                     is VaultItemListingState.ItemListingType.Vault.Folder -> {
-                        R.string.no_items_folder
+                        BitwardenString.no_items_folder
                     }
 
                     is VaultItemListingState.ItemListingType.Vault.Collection -> {
-                        R.string.no_items_collection
+                        BitwardenString.no_items_collection
                     }
 
                     VaultItemListingState.ItemListingType.Vault.Trash -> {
-                        R.string.no_items_trash
+                        BitwardenString.no_items_trash
                     }
 
                     VaultItemListingState.ItemListingType.Vault.Card -> {
-                        R.string.no_cards
+                        BitwardenString.no_cards
                     }
 
                     VaultItemListingState.ItemListingType.Vault.Identity -> {
-                        R.string.no_identities
+                        BitwardenString.no_identities
                     }
 
                     VaultItemListingState.ItemListingType.Vault.Login -> {
-                        R.string.no_logins
+                        BitwardenString.no_logins
                     }
 
                     VaultItemListingState.ItemListingType.Vault.SecureNote -> {
-                        R.string.no_notes
+                        BitwardenString.no_notes
                     }
 
                     VaultItemListingState.ItemListingType.Vault.SshKey -> {
-                        R.string.no_ssh_keys
+                        BitwardenString.no_ssh_keys
                     }
                 }
                     .asText()
@@ -227,34 +227,37 @@ fun VaultData.toViewState(
 
         VaultItemListingState.ViewState.NoItems(
             header = totpData
-                ?.let { R.string.no_items_for_vault.asText(it.issuer ?: it.accountName ?: "--") },
+                ?.let {
+                    BitwardenString.no_items_for_vault
+                        .asText(it.issuer ?: it.accountName ?: "--")
+                },
             message = message,
             shouldShowAddButton = shouldShowAddButton,
             buttonText = createCredentialRequestData
-                ?.let { R.string.save_passkey_as_new_login.asText() }
+                ?.let { BitwardenString.save_passkey_as_new_login.asText() }
                 ?: run {
                     when (itemListingType) {
                         VaultItemListingState.ItemListingType.Vault.Card -> {
-                            R.string.new_card
+                            BitwardenString.new_card
                         }
 
                         VaultItemListingState.ItemListingType.Vault.Identity -> {
-                            R.string.new_identity
+                            BitwardenString.new_identity
                         }
 
                         VaultItemListingState.ItemListingType.Vault.Login -> {
-                            R.string.new_login
+                            BitwardenString.new_login
                         }
 
                         VaultItemListingState.ItemListingType.Vault.SecureNote -> {
-                            R.string.new_note
+                            BitwardenString.new_note
                         }
 
                         VaultItemListingState.ItemListingType.Vault.SshKey -> {
-                            R.string.new_ssh_key
+                            BitwardenString.new_ssh_key
                         }
 
-                        else -> R.string.new_item
+                        else -> BitwardenString.new_item
                     }
                         .asText()
                 },
@@ -284,14 +287,14 @@ fun List<SendView>.toViewState(
     } else {
         VaultItemListingState.ViewState.NoItems(
             message = when (itemListingType) {
-                VaultItemListingState.ItemListingType.Send.SendFile -> R.string.no_file_sends
-                VaultItemListingState.ItemListingType.Send.SendText -> R.string.no_text_sends
+                VaultItemListingState.ItemListingType.Send.SendFile -> BitwardenString.no_file_sends
+                VaultItemListingState.ItemListingType.Send.SendText -> BitwardenString.no_text_sends
             }
                 .asText(),
             shouldShowAddButton = true,
             buttonText = when (itemListingType) {
-                VaultItemListingState.ItemListingType.Send.SendFile -> R.string.new_file_send
-                VaultItemListingState.ItemListingType.Send.SendText -> R.string.new_text_send
+                VaultItemListingState.ItemListingType.Send.SendFile -> BitwardenString.new_file_send
+                VaultItemListingState.ItemListingType.Send.SendText -> BitwardenString.new_text_send
             }
                 .asText(),
         )

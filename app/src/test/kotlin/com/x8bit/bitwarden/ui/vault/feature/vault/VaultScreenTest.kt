@@ -25,12 +25,12 @@ import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.assertScrollableNodeDoesNotExist
 import com.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.bitwarden.vault.CipherType
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
@@ -133,7 +133,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Vaults").assertDoesNotExist()
 
         mutableStateFlow.update {
-            it.copy(appBarTitle = R.string.vaults.asText())
+            it.copy(appBarTitle = BitwardenString.vaults.asText())
         }
 
         composeTestRule.onNodeWithText("My vault").assertDoesNotExist()
@@ -1974,12 +1974,12 @@ class VaultScreenTest : BitwardenComposeTest() {
             mutableStateFlow.update {
                 it.copy(
                     flightRecorderSnackBar = BitwardenSnackbarData(
-                        message = R.string.flight_recorder_banner_message.asText(
+                        message = BitwardenString.flight_recorder_banner_message.asText(
                             "4/12/25",
                             "9:15 AM",
                         ),
-                        messageHeader = R.string.flight_recorder_banner_title.asText(),
-                        actionLabel = R.string.go_to_settings.asText(),
+                        messageHeader = BitwardenString.flight_recorder_banner_title.asText(),
+                        actionLabel = BitwardenString.go_to_settings.asText(),
                         withDismissAction = true,
                     ),
                 )
@@ -1999,12 +1999,12 @@ class VaultScreenTest : BitwardenComposeTest() {
             mutableStateFlow.update {
                 it.copy(
                     flightRecorderSnackBar = BitwardenSnackbarData(
-                        message = R.string.flight_recorder_banner_message.asText(
+                        message = BitwardenString.flight_recorder_banner_message.asText(
                             "4/12/25",
                             "9:15 AM",
                         ),
-                        messageHeader = R.string.flight_recorder_banner_title.asText(),
-                        actionLabel = R.string.go_to_settings.asText(),
+                        messageHeader = BitwardenString.flight_recorder_banner_title.asText(),
+                        actionLabel = BitwardenString.go_to_settings.asText(),
                         withDismissAction = true,
                     ),
                 )
@@ -2055,7 +2055,7 @@ private val VAULT_FILTER_DATA = VaultFilterData(
 )
 
 private val DEFAULT_STATE: VaultState = VaultState(
-    appBarTitle = R.string.my_vault.asText(),
+    appBarTitle = BitwardenString.my_vault.asText(),
     avatarColorString = "#aa00aa",
     initials = "AU",
     accountSummaries = persistentListOf(

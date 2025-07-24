@@ -5,9 +5,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
@@ -114,15 +114,19 @@ class OtherViewModel @Inject constructor(
     private fun handleSyncNowButtonClicked() {
         if (networkConnectionManager.isNetworkConnected) {
             mutableStateFlow.update {
-                it.copy(dialogState = OtherState.DialogState.Loading(R.string.syncing.asText()))
+                it.copy(
+                    dialogState = OtherState.DialogState.Loading(
+                        BitwardenString.syncing.asText(),
+                    ),
+                )
             }
             vaultRepo.sync(forced = true)
         } else {
             mutableStateFlow.update {
                 it.copy(
                     dialogState = OtherState.DialogState.Error(
-                        R.string.internet_connection_required_title.asText(),
-                        R.string.internet_connection_required_message.asText(),
+                        BitwardenString.internet_connection_required_title.asText(),
+                        BitwardenString.internet_connection_required_message.asText(),
                     ),
                 )
             }
@@ -153,7 +157,7 @@ class OtherViewModel @Inject constructor(
     }
 
     private fun handleManualVaultSyncReceive() {
-        sendEvent(OtherEvent.ShowSnackbar(R.string.syncing_complete.asText()))
+        sendEvent(OtherEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()))
     }
 }
 

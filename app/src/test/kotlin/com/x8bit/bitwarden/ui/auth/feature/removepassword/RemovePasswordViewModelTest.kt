@@ -5,8 +5,8 @@ import app.cash.turbine.test
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
@@ -39,9 +39,9 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = RemovePasswordState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required
-                        .asText(R.string.master_password.asText()),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.validation_field_required
+                        .asText(BitwardenString.master_password.asText()),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -64,7 +64,7 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = RemovePasswordState.DialogState.Loading(
-                        title = R.string.deleting.asText(),
+                        title = BitwardenString.deleting.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -72,8 +72,8 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = RemovePasswordState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         error = error,
                     ),
                 ),
@@ -98,7 +98,7 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = RemovePasswordState.DialogState.Loading(
-                        title = R.string.deleting.asText(),
+                        title = BitwardenString.deleting.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -106,8 +106,8 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = RemovePasswordState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.invalid_master_password.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.invalid_master_password.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -130,7 +130,7 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = RemovePasswordState.DialogState.Loading(
-                        title = R.string.deleting.asText(),
+                        title = BitwardenString.deleting.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -154,7 +154,7 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = RemovePasswordState.DialogState.LeaveConfirmationPrompt(
-                        R.string.leave_organization_name.asText("My org".asText()),
+                        BitwardenString.leave_organization_name.asText("My org".asText()),
                     ),
                 ),
                 awaitItem(),
@@ -210,7 +210,7 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = RemovePasswordState.DialogState.Loading(
-                            title = R.string.loading.asText(),
+                            title = BitwardenString.loading.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -218,8 +218,8 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = RemovePasswordState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -266,11 +266,11 @@ private const val KEY_CONNECTOR_URL: String = "bitwarden.com"
 private val DEFAULT_STATE = RemovePasswordState(
     input = "",
     dialogState = null,
-    description = R.string
+    description = BitwardenString
         .password_no_longer_required_confirm_domain.asText(),
-    labelOrg = R.string.key_connector_organization.asText(),
+    labelOrg = BitwardenString.key_connector_organization.asText(),
     orgName = ORGANIZATION_NAME.asText(),
-    labelDomain = R.string.key_connector_domain.asText(),
+    labelDomain = BitwardenString.key_connector_domain.asText(),
     domainName = KEY_CONNECTOR_URL.asText(),
     organizationId = "mockId-1",
 )

@@ -17,7 +17,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
@@ -39,7 +39,7 @@ fun LazyListScope.vaultAddEditCardItems(
     item {
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenListHeaderText(
-            label = stringResource(id = R.string.card_details),
+            label = stringResource(id = BitwardenString.card_details),
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin()
@@ -50,7 +50,7 @@ fun LazyListScope.vaultAddEditCardItems(
     item {
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
-            label = stringResource(id = R.string.cardholder_name),
+            label = stringResource(id = BitwardenString.cardholder_name),
             value = cardState.cardHolderName,
             onValueChange = cardHandlers.onCardHolderNameTextChange,
             textFieldTestTag = "CardholderNameEntry",
@@ -63,7 +63,7 @@ fun LazyListScope.vaultAddEditCardItems(
     item {
         var showNumber by rememberSaveable { mutableStateOf(value = false) }
         BitwardenPasswordField(
-            label = stringResource(id = R.string.number),
+            label = stringResource(id = BitwardenString.number),
             value = cardState.number,
             onValueChange = cardHandlers.onNumberTextChange,
             showPassword = showNumber,
@@ -82,7 +82,7 @@ fun LazyListScope.vaultAddEditCardItems(
     item {
         val resources = LocalContext.current.resources
         BitwardenMultiSelectButton(
-            label = stringResource(id = R.string.brand),
+            label = stringResource(id = BitwardenString.brand),
             options = VaultCardBrand
                 .entries
                 .map { it.longName() }
@@ -105,7 +105,7 @@ fun LazyListScope.vaultAddEditCardItems(
     item {
         val resources = LocalContext.current.resources
         BitwardenMultiSelectButton(
-            label = stringResource(id = R.string.expiration_month),
+            label = stringResource(id = BitwardenString.expiration_month),
             options = VaultCardExpirationMonth
                 .entries
                 .map { it.value() }
@@ -127,7 +127,7 @@ fun LazyListScope.vaultAddEditCardItems(
     }
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.expiration_year),
+            label = stringResource(id = BitwardenString.expiration_year),
             value = cardState.expirationYear,
             onValueChange = cardHandlers.onExpirationYearTextChange,
             keyboardType = KeyboardType.Number,
@@ -141,7 +141,7 @@ fun LazyListScope.vaultAddEditCardItems(
     item {
         var showSecurityCode by rememberSaveable { mutableStateOf(value = false) }
         BitwardenPasswordField(
-            label = stringResource(id = R.string.security_code),
+            label = stringResource(id = BitwardenString.security_code),
             value = cardState.securityCode,
             onValueChange = cardHandlers.onSecurityCodeTextChange,
             showPassword = showSecurityCode,

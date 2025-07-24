@@ -28,8 +28,8 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.content.model.ContentBlockData
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import kotlinx.collections.immutable.persistentListOf
@@ -57,10 +57,10 @@ fun PreventAccountLockoutScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(R.string.prevent_account_lockout),
+                title = stringResource(BitwardenString.prevent_account_lockout),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = remember(viewModel) {
                     {
                         viewModel.trySendAction(PreventAccountLockoutAction.CloseClickAction)
@@ -83,7 +83,7 @@ private fun PreventAccountLockoutContent(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            text = stringResource(R.string.never_lose_access_to_your_vault),
+            text = stringResource(BitwardenString.never_lose_access_to_your_vault),
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -94,7 +94,7 @@ private fun PreventAccountLockoutContent(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = stringResource(
-                R.string.the_best_way_to_make_sure_you_can_always_access_your_vault,
+                BitwardenString.the_best_way_to_make_sure_you_can_always_access_your_vault,
             ),
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.bodyMedium,
@@ -105,15 +105,15 @@ private fun PreventAccountLockoutContent(modifier: Modifier = Modifier) {
         BitwardenContentCard(
             contentItems = persistentListOf(
                 ContentBlockData(
-                    headerText = stringResource(R.string.create_a_hint),
+                    headerText = stringResource(BitwardenString.create_a_hint),
                     subtitleText = stringResource(
-                        R.string.your_hint_will_be_send_to_you_via_email_when_you_request_it,
+                        BitwardenString.your_hint_will_be_send_to_you_via_email_when_you_request_it,
                     ),
                     iconVectorResource = BitwardenDrawable.ic_light_bulb,
                 ),
                 ContentBlockData(
-                    headerText = stringResource(R.string.write_your_password_down),
-                    subtitleText = stringResource(R.string.keep_it_secret_keep_it_safe),
+                    headerText = stringResource(BitwardenString.write_your_password_down),
+                    subtitleText = stringResource(BitwardenString.keep_it_secret_keep_it_safe),
                     iconVectorResource = BitwardenDrawable.ic_pencil,
                 ),
             ),

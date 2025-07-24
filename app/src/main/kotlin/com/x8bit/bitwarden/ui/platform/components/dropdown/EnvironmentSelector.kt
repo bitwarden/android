@@ -24,8 +24,8 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
@@ -89,7 +89,7 @@ fun EnvironmentSelector(
             )
             Icon(
                 painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_down_small),
-                contentDescription = stringResource(id = R.string.region),
+                contentDescription = stringResource(id = BitwardenString.region),
                 tint = BitwardenTheme.colorScheme.icon.secondary,
             )
         }
@@ -97,7 +97,7 @@ fun EnvironmentSelector(
         if (isHelpEnabled) {
             BitwardenStandardIconButton(
                 vectorIconRes = BitwardenDrawable.ic_question_circle_small,
-                contentDescription = stringResource(R.string.help_with_server_geolocations),
+                contentDescription = stringResource(BitwardenString.help_with_server_geolocations),
                 onClick = onHelpClick,
                 contentColor = BitwardenTheme.colorScheme.icon.secondary,
                 // Align with design but keep accessible touch target of IconButton.

@@ -6,8 +6,8 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
@@ -94,8 +94,8 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             emailInput = input,
             isContinueButtonEnabled = true,
             dialog = StartRegistrationDialog.Error(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.invalid_email.asText(),
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.invalid_email.asText(),
             ),
         )
         viewModel.trySendAction(ContinueClick)
@@ -112,9 +112,9 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         val expectedState = DEFAULT_STATE.copy(
             emailInput = input,
             dialog = StartRegistrationDialog.Error(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.validation_field_required
-                    .asText(R.string.email_address.asText()),
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.validation_field_required
+                    .asText(BitwardenString.email_address.asText()),
             ),
         )
         viewModel.trySendAction(ContinueClick)
@@ -172,7 +172,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VALID_INPUT_STATE.copy(
                     dialog = StartRegistrationDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
                         message = "mock_error".asText(),
                         error = error,
                     ),

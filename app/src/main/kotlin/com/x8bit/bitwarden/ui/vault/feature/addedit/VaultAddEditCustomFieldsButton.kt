@@ -10,7 +10,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTextEntryDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
@@ -37,7 +37,7 @@ fun VaultAddEditCustomFieldsButton(
 
     if (shouldShowChooserDialog) {
         BitwardenSelectionDialog(
-            title = stringResource(id = R.string.select_type_field),
+            title = stringResource(id = BitwardenString.select_type_field),
             onDismissRequest = { shouldShowChooserDialog = false },
         ) {
             options.forEach { type ->
@@ -55,8 +55,8 @@ fun VaultAddEditCustomFieldsButton(
 
     if (shouldShowNameDialog) {
         BitwardenTextEntryDialog(
-            title = stringResource(id = R.string.custom_field_name),
-            textFieldLabel = stringResource(id = R.string.name),
+            title = stringResource(id = BitwardenString.custom_field_name),
+            textFieldLabel = stringResource(id = BitwardenString.name),
             onDismissRequest = { shouldShowNameDialog = false },
             onConfirmClick = {
                 shouldShowNameDialog = false
@@ -67,7 +67,7 @@ fun VaultAddEditCustomFieldsButton(
     }
     val focusManager = LocalFocusManager.current
     BitwardenOutlinedButton(
-        label = stringResource(id = R.string.add_field),
+        label = stringResource(id = BitwardenString.add_field),
         onClick = {
             // Clear any current focused item such as an unrelated text field.
             focusManager.clearFocus()

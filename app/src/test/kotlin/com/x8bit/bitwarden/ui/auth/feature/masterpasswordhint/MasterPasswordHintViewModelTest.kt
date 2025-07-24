@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
@@ -58,8 +58,8 @@ class MasterPasswordHintViewModelTest : BaseViewModelTest() {
 
         val expectedErrorState = MasterPasswordHintState(
             dialog = MasterPasswordHintState.DialogState.Error(
-                title = R.string.internet_connection_required_title.asText(),
-                message = R.string.internet_connection_required_message.asText(),
+                title = BitwardenString.internet_connection_required_title.asText(),
+                message = BitwardenString.internet_connection_required_message.asText(),
             ),
             emailInput = email,
         )
@@ -80,9 +80,9 @@ class MasterPasswordHintViewModelTest : BaseViewModelTest() {
 
         val expectedErrorState = MasterPasswordHintState(
             dialog = MasterPasswordHintState.DialogState.Error(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.validation_field_required.asText(
-                    R.string.email_address.asText(),
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.validation_field_required.asText(
+                    BitwardenString.email_address.asText(),
                 ),
             ),
             emailInput = emptyEmail,
@@ -104,8 +104,8 @@ class MasterPasswordHintViewModelTest : BaseViewModelTest() {
 
         val expectedErrorState = MasterPasswordHintState(
             dialog = MasterPasswordHintState.DialogState.Error(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.invalid_email.asText(),
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.invalid_email.asText(),
             ),
             emailInput = invalidEmail,
         )

@@ -13,6 +13,7 @@ import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -598,7 +599,10 @@ class MainViewModelTest : BaseViewModelTest() {
 
                 viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
                 assertEquals(
-                    MainEvent.ShowToast(R.string.there_was_an_issue_validating_the_registration_token.asText()),
+                    MainEvent.ShowToast(
+                        BitwardenString.there_was_an_issue_validating_the_registration_token
+                            .asText(),
+                    ),
                     awaitItem(),
                 )
             }
