@@ -164,14 +164,7 @@ class VaultViewModel @Inject constructor(
 
         authRepository
             .userStateFlow
-            .combine(
-                featureFlagManager.getFeatureFlagFlow(FlagKey.ImportLoginsFlow),
-            ) { userState, importLoginsEnabled ->
-                VaultAction.Internal.UserStateUpdateReceive(
-                    userState = userState,
-                    importLoginsFlowEnabled = importLoginsEnabled,
-                )
-            }
+            .map { VaultAction.Internal.UserStateUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -805,8 +798,6 @@ class VaultViewModel @Inject constructor(
                 .any(),
         )
         val appBarTitle = vaultFilterData.toAppBarTitle()
-        val shouldShowImportActionCard = action.importLoginsFlowEnabled &&
-            firstTimeState.showImportLoginsCard
 
         mutableStateFlow.update {
             val accountSummaries = userState.toAccountSummaries()
@@ -818,7 +809,7 @@ class VaultViewModel @Inject constructor(
                 accountSummaries = accountSummaries,
                 vaultFilterData = vaultFilterData,
                 isPremium = userState.activeAccount.isPremium,
-                showImportActionCard = shouldShowImportActionCard,
+                showImportActionCard = firstTimeState.showImportLoginsCard,
             )
         }
     }
@@ -1704,7 +1695,6 @@ sealed class VaultAction {
          */
         data class UserStateUpdateReceive(
             val userState: UserState?,
-            val importLoginsFlowEnabled: Boolean,
         ) : Internal()
 
         /**

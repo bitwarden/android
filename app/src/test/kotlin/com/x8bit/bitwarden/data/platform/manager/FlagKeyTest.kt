@@ -14,10 +14,6 @@ class FlagKeyTest {
             "email-verification",
         )
         assertEquals(
-            FlagKey.ImportLoginsFlow.keyName,
-            "import-logins-flow",
-        )
-        assertEquals(
             FlagKey.CredentialExchangeProtocolImport.keyName,
             "cxp-import-mobile",
         )
@@ -56,7 +52,6 @@ class FlagKeyTest {
         assertTrue(
             listOf(
                 FlagKey.EmailVerification,
-                FlagKey.ImportLoginsFlow,
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
                 FlagKey.SingleTapPasskeyCreation,

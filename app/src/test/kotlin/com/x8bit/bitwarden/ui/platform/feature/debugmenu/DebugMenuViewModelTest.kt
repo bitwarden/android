@@ -145,7 +145,6 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
 
 private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf(
     FlagKey.EmailVerification to true,
-    FlagKey.ImportLoginsFlow to true,
     FlagKey.CredentialExchangeProtocolImport to true,
     FlagKey.CredentialExchangeProtocolExport to true,
     FlagKey.SingleTapPasskeyCreation to true,
@@ -157,7 +156,6 @@ private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf
 
 private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf(
     FlagKey.EmailVerification to false,
-    FlagKey.ImportLoginsFlow to false,
     FlagKey.CredentialExchangeProtocolImport to false,
     FlagKey.CredentialExchangeProtocolExport to false,
     FlagKey.SingleTapPasskeyCreation to false,

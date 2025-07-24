@@ -22,7 +22,6 @@ sealed class FlagKey<out T : Any> {
         val activeFlags: List<FlagKey<*>> by lazy {
             listOf(
                 EmailVerification,
-                ImportLoginsFlow,
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
                 SingleTapPasskeyCreation,
@@ -39,14 +38,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object EmailVerification : FlagKey<Boolean>() {
         override val keyName: String = "email-verification"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the import logins feature.
-     */
-    data object ImportLoginsFlow : FlagKey<Boolean>() {
-        override val keyName: String = "import-logins-flow"
         override val defaultValue: Boolean = false
     }
 

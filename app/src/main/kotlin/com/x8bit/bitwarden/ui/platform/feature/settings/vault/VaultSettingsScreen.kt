@@ -21,7 +21,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -34,13 +33,10 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 
 /**
  * Displays the vault settings screen.
@@ -54,7 +50,6 @@ fun VaultSettingsScreen(
     onNavigateToFolders: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
     viewModel: VaultSettingsViewModel = hiltViewModel(),
-    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -64,14 +59,7 @@ fun VaultSettingsScreen(
             VaultSettingsEvent.NavigateBack -> onNavigateBack()
             VaultSettingsEvent.NavigateToExportVault -> onNavigateToExportVault()
             VaultSettingsEvent.NavigateToFolders -> onNavigateToFolders()
-            is VaultSettingsEvent.NavigateToImportVault -> {
-                if (state.isNewImportLoginsFlowEnabled) {
-                    onNavigateToImportLogins()
-                } else {
-                    intentManager.launchUri(event.url.toUri())
-                }
-            }
-
+            is VaultSettingsEvent.NavigateToImportVault -> onNavigateToImportLogins()
             is VaultSettingsEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
@@ -105,7 +93,7 @@ fun VaultSettingsScreen(
         ) {
             Spacer(modifier = Modifier.height(12.dp))
             AnimatedVisibility(
-                visible = state.shouldShowImportCard,
+                visible = state.showImportActionCard,
                 label = "ImportLoginsActionCard",
                 exit = actionCardExitAnimation(),
             ) {
@@ -159,38 +147,18 @@ fun VaultSettingsScreen(
                     .fillMaxWidth(),
             )
 
-            if (state.isNewImportLoginsFlowEnabled) {
-                BitwardenTextRow(
-                    text = stringResource(BitwardenString.import_items),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) }
-                    },
-                    withDivider = false,
-                    cardStyle = CardStyle.Bottom,
-                    modifier = Modifier
-                        .testTag("ImportItemsLinkItemView")
-                        .standardHorizontalMargin()
-                        .fillMaxWidth(),
-                )
-            } else {
-                BitwardenExternalLinkRow(
-                    text = stringResource(BitwardenString.import_items),
-                    onConfirmClick = remember(viewModel) {
-                        { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) }
-                    },
-                    withDivider = false,
-                    dialogTitle = stringResource(id = BitwardenString.continue_to_web_app),
-                    dialogMessage = stringResource(
-                        id = BitwardenString.you_can_import_data_to_your_vault_on_x,
-                        state.importUrl,
-                    ),
-                    cardStyle = CardStyle.Bottom,
-                    modifier = Modifier
-                        .testTag("ImportItemsLinkItemView")
-                        .standardHorizontalMargin()
-                        .fillMaxWidth(),
-                )
-            }
+            BitwardenTextRow(
+                text = stringResource(BitwardenString.import_items),
+                onClick = remember(viewModel) {
+                    { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) }
+                },
+                withDivider = false,
+                cardStyle = CardStyle.Bottom,
+                modifier = Modifier
+                    .testTag("ImportItemsLinkItemView")
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
+            )
             Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
