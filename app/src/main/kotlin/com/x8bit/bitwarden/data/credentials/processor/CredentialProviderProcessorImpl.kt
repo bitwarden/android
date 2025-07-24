@@ -225,7 +225,7 @@ class CredentialProviderProcessorImpl(
             )
             .setDescription(
                 context.getString(
-                    R.string.your_passkey_will_be_saved_to_your_bitwarden_vault_for_x, // TODO text
+                    BitwardenString.your_passkey_will_be_saved_to_your_bitwarden_vault_for_x, // TODO text
                     accountName,
                 ),
             )

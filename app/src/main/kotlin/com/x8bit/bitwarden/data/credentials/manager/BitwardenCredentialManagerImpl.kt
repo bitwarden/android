@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.credentials.manager
 
 import android.util.Base64
+import androidx.credentials.CreatePasswordRequest
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.exceptions.GetCredentialUnknownException
@@ -24,6 +25,7 @@ import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessaryOrNull
 import com.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
+import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithCopyablePassword
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilder
@@ -44,6 +46,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2Credenti
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidAttestationResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKeyCredential
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.withContext

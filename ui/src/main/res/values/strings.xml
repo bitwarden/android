@@ -678,6 +678,7 @@ Do you want to switch to this account?</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Follow the steps from Duo to finish logging in.</string>
     <string name="launch_duo">Launch Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Your passkey will be saved to your Bitwarden vault for %1$s</string>
+    <string name="your_password_will_be_saved_to_your_bitwarden_vault_for_x">Your password will be saved to your Bitwarden vault for %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Passkeys not supported for this app</string>
     <string name="passkey_operation_failed_because_browser_is_not_privileged">Passkey operation failed because browser is not privileged</string>
     <string name="passkey_operation_failed_because_browser_signature_does_not_match">Passkey operation failed because browser signature does not match</string>
@@ -694,6 +695,7 @@ Do you want to switch to this account?</string>
     <string name="self_hosted_server_url">Self-hosted server URL</string>
     <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
+    <string name="password_operation_failed_because_user_could_not_be_verified">Password operation failed because user could not be verified.</string>
     <string name="user_verification_direction">User verification</string>
     <string name="create_account_on">Create account on</string>
     <string name="create_account_on_with_colon">Create account on:</string>
@@ -908,6 +910,9 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="password_operation_failed_because_the_request_is_invalid">Password operation failed because the request is invalid.</string>
+    <string name="password_registration_failed_due_to_an_internal_error">Password registration failed due to an internal error.</string>
+    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
