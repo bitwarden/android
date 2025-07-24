@@ -15,8 +15,6 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Us
 @Suppress("LongMethod")
 fun ServiceType.toUsernameGeneratorRequest(
     website: String?,
-    allowAddyIoSelfHostUrl: Boolean,
-    allowSimpleLoginSelfHostUrl: Boolean,
 ): GeneratorRequestResult {
     return when (this) {
         is ServiceType.AddyIo -> {
@@ -26,7 +24,7 @@ fun ServiceType.toUsernameGeneratorRequest(
                 )
             val domain = this.domainName.orNullIfBlank()
                 ?: return GeneratorRequestResult.MissingField(BitwardenString.domain_name.asText())
-            val baseUrl = if (allowAddyIoSelfHostUrl && selfHostServerUrl.isNotBlank()) {
+            val baseUrl = if (selfHostServerUrl.isNotBlank()) {
                 selfHostServerUrl.prefixHttpsIfNecessary()
             } else {
                 ServiceType.AddyIo.DEFAULT_ADDY_IO_URL
@@ -103,7 +101,7 @@ fun ServiceType.toUsernameGeneratorRequest(
         }
 
         is ServiceType.SimpleLogin -> {
-            val baseUrl = if (allowSimpleLoginSelfHostUrl && selfHostServerUrl.isNotBlank()) {
+            val baseUrl = if (selfHostServerUrl.isNotBlank()) {
                 selfHostServerUrl.prefixHttpsIfNecessary()
             } else {
                 ServiceType.SimpleLogin.DEFAULT_SIMPLE_LOGIN_URL

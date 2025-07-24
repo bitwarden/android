@@ -16,13 +16,11 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePoliciesFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -83,7 +81,6 @@ class GeneratorViewModel @Inject constructor(
     private val policyManager: PolicyManager,
     private val reviewPromptManager: ReviewPromptManager,
     private val firstTimeActionManager: FirstTimeActionManager,
-    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val generatorMode = savedStateHandle.toGeneratorArgs().type
@@ -113,11 +110,6 @@ class GeneratorViewModel @Inject constructor(
                 .any(),
             website = (generatorMode as? GeneratorMode.Modal.Username)?.website,
             shouldShowCoachMarkTour = false,
-            shouldShowAnonAddySelfHostServerUrlField = featureFlagManager.getFeatureFlag(
-                FlagKey.AnonAddySelfHostAlias,
-            ),
-            shouldShowSimpleLoginSelfHostServerField =
-                featureFlagManager.getFeatureFlag(FlagKey.SimpleLoginSelfHostAlias),
         )
     },
 ) {
@@ -140,26 +132,6 @@ class GeneratorViewModel @Inject constructor(
             .map { shouldShowCoachMarkTour ->
                 GeneratorAction.Internal.ShouldShowGeneratorCoachMarkValueChangeReceive(
                     shouldShowCoachMarkTour = shouldShowCoachMarkTour,
-                )
-            }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.AnonAddySelfHostAlias)
-            .map { shouldShowAnonAddySelfHostServerUrlField ->
-                GeneratorAction.Internal.ShouldShowAnonAddySelfHostValueChangeReceive(
-                    shouldShowAnonAddySelfHostServerUrlField =
-                        shouldShowAnonAddySelfHostServerUrlField,
-                )
-            }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager.getFeatureFlagFlow(FlagKey.SimpleLoginSelfHostAlias)
-            .map { shouldShowSimpleLoginSelfHostServerField ->
-                GeneratorAction.Internal.ShouldShowSimpleLoginSelfHostValueChangeReceive(
-                    shouldShowSelfHostServerField = shouldShowSimpleLoginSelfHostServerField,
                 )
             }
             .onEach(::sendAction)
@@ -300,14 +272,6 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.Internal.ShouldShowGeneratorCoachMarkValueChangeReceive -> {
                 handleShouldShowCoachMarkValueChange(action)
-            }
-
-            is GeneratorAction.Internal.ShouldShowAnonAddySelfHostValueChangeReceive -> {
-                handleShouldShowAnonAddySelfHostValueChange(action)
-            }
-
-            is GeneratorAction.Internal.ShouldShowSimpleLoginSelfHostValueChangeReceive -> {
-                handleShouldShowSimpleLoginSelfHostValueChange(action)
             }
         }
     }
@@ -856,14 +820,6 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
-    private fun handleShouldShowSimpleLoginSelfHostValueChange(
-        action: GeneratorAction.Internal.ShouldShowSimpleLoginSelfHostValueChangeReceive,
-    ) {
-        mutableStateFlow.update {
-            it.copy(shouldShowSimpleLoginSelfHostServerField = action.shouldShowSelfHostServerField)
-        }
-    }
-
     private fun handlePasswordGeneratorPolicyReceive(
         action: GeneratorAction.Internal.PasswordGeneratorPolicyReceive,
     ) {
@@ -1275,17 +1231,6 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
-    private fun handleShouldShowAnonAddySelfHostValueChange(
-        action: GeneratorAction.Internal.ShouldShowAnonAddySelfHostValueChangeReceive,
-    ) {
-        mutableStateFlow.update {
-            it.copy(
-                shouldShowAnonAddySelfHostServerUrlField =
-                    action.shouldShowAnonAddySelfHostServerUrlField,
-            )
-        }
-    }
-
     private fun handleAddyIoSelfHostServerUrlChange(
         action: GeneratorAction
         .MainType
@@ -1614,11 +1559,7 @@ class GeneratorViewModel @Inject constructor(
     ) {
         val request = alias
             .selectedServiceType
-            ?.toUsernameGeneratorRequest(
-                website = state.website,
-                allowAddyIoSelfHostUrl = state.shouldShowAnonAddySelfHostServerUrlField,
-                allowSimpleLoginSelfHostUrl = state.shouldShowSimpleLoginSelfHostServerField,
-            )
+            ?.toUsernameGeneratorRequest(website = state.website)
             ?: run {
                 mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }
                 return
@@ -1951,8 +1892,6 @@ data class GeneratorState(
     val website: String? = null,
     var passcodePolicyOverride: PasscodePolicyOverride? = null,
     private val shouldShowCoachMarkTour: Boolean,
-    val shouldShowAnonAddySelfHostServerUrlField: Boolean,
-    val shouldShowSimpleLoginSelfHostServerField: Boolean,
 ) : Parcelable {
 
     /**
@@ -2822,20 +2761,6 @@ sealed class GeneratorAction {
          */
         data class ShouldShowGeneratorCoachMarkValueChangeReceive(
             val shouldShowCoachMarkTour: Boolean,
-        ) : Internal()
-
-        /**
-         * The value for the shouldShowAnonAddySelfHostServerUrlField feature flag has changed.
-         */
-        data class ShouldShowAnonAddySelfHostValueChangeReceive(
-            val shouldShowAnonAddySelfHostServerUrlField: Boolean,
-        ) : Internal()
-
-        /**
-         * The value for the shouldShowSimpleLoginSelfHostServerField has changed.
-         */
-        data class ShouldShowSimpleLoginSelfHostValueChangeReceive(
-            val shouldShowSelfHostServerField: Boolean,
         ) : Internal()
     }
 }

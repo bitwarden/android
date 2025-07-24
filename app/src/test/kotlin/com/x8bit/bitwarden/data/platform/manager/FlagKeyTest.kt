@@ -38,10 +38,6 @@ class FlagKeyTest {
             "single-tap-passkey-authentication",
         )
         assertEquals(
-            FlagKey.AnonAddySelfHostAlias.keyName,
-            "anon-addy-self-host-alias",
-        )
-        assertEquals(
             FlagKey.RestrictCipherItemDeletion.keyName,
             "pm-15493-restrict-item-deletion-to-can-manage-permission",
         )
@@ -65,8 +61,6 @@ class FlagKeyTest {
                 FlagKey.CredentialExchangeProtocolExport,
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
-                FlagKey.AnonAddySelfHostAlias,
-                FlagKey.SimpleLoginSelfHostAlias,
                 FlagKey.CipherKeyEncryption,
                 FlagKey.RestrictCipherItemDeletion,
                 FlagKey.UserManagedPrivilegedApps,

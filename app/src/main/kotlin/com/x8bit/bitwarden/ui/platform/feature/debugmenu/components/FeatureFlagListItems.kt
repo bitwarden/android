@@ -32,8 +32,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.CipherKeyEncryption,
     FlagKey.SingleTapPasskeyCreation,
     FlagKey.SingleTapPasskeyAuthentication,
-    FlagKey.AnonAddySelfHostAlias,
-    FlagKey.SimpleLoginSelfHostAlias,
     FlagKey.RestrictCipherItemDeletion,
     FlagKey.UserManagedPrivilegedApps,
     FlagKey.RemoveCardPolicy,
@@ -88,10 +86,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
         stringResource(BitwardenString.single_tap_passkey_authentication)
     }
 
-    FlagKey.AnonAddySelfHostAlias -> stringResource(BitwardenString.anon_addy_self_hosted_aliases)
-    FlagKey.SimpleLoginSelfHostAlias -> {
-        stringResource(BitwardenString.simple_login_self_hosted_aliases)
-    }
     FlagKey.RestrictCipherItemDeletion -> stringResource(BitwardenString.restrict_item_deletion)
     FlagKey.UserManagedPrivilegedApps -> {
         stringResource(BitwardenString.user_trusted_privileged_app_management)
