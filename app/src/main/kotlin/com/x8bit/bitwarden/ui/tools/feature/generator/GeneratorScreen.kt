@@ -523,10 +523,6 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
                         plusAddressedEmailHandlers = plusAddressedEmailHandlers,
                         catchAllEmailHandlers = catchAllEmailHandlers,
                         randomWordHandlers = randomWordHandlers,
-                        shouldShowSelfHostServerUrlField =
-                            state.shouldShowAnonAddySelfHostServerUrlField,
-                        shouldShowSimpleLoginSelfHostServerUrlField =
-                            state.shouldShowSimpleLoginSelfHostServerField,
                     )
                 }
             }
@@ -1108,8 +1104,6 @@ private fun UsernameTypeItems(
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
     catchAllEmailHandlers: CatchAllEmailHandlers,
     randomWordHandlers: RandomWordHandlers,
-    shouldShowSelfHostServerUrlField: Boolean,
-    shouldShowSimpleLoginSelfHostServerUrlField: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -1134,9 +1128,6 @@ private fun UsernameTypeItems(
                 ForwardedEmailAliasTypeContent(
                     usernameTypeState = selectedType,
                     forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
-                    shouldShowSelfHostServerUrlField = shouldShowSelfHostServerUrlField,
-                    shouldShowSimpleLoginSelfHostServerUrlField =
-                        shouldShowSimpleLoginSelfHostServerUrlField,
                 )
             }
 
@@ -1197,8 +1188,6 @@ private fun UsernameOptionsItem(
 private fun ForwardedEmailAliasTypeContent(
     usernameTypeState: GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias,
     forwardedEmailAliasHandlers: ForwardedEmailAliasHandlers,
-    shouldShowSelfHostServerUrlField: Boolean,
-    shouldShowSimpleLoginSelfHostServerUrlField: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -1243,20 +1232,18 @@ private fun ForwardedEmailAliasTypeContent(
                         .fillMaxWidth(),
                 )
 
-                if (shouldShowSelfHostServerUrlField) {
-                    Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-                    BitwardenTextField(
-                        label = stringResource(id = BitwardenString.self_host_server_url),
-                        value = usernameTypeState.selectedServiceType.selfHostServerUrl,
-                        onValueChange = forwardedEmailAliasHandlers.onAddyIoSelfHostServerUrlChange,
-                        textFieldTestTag = "AnonAddySelfHostUrlEntry",
-                        cardStyle = CardStyle.Full,
-                        modifier = Modifier
-                            .standardHorizontalMargin()
-                            .fillMaxWidth(),
-                    )
-                }
+                BitwardenTextField(
+                    label = stringResource(id = BitwardenString.self_host_server_url),
+                    value = usernameTypeState.selectedServiceType.selfHostServerUrl,
+                    onValueChange = forwardedEmailAliasHandlers.onAddyIoSelfHostServerUrlChange,
+                    textFieldTestTag = "AnonAddySelfHostUrlEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
             }
 
             is ServiceType.DuckDuckGo -> {
@@ -1343,21 +1330,19 @@ private fun ForwardedEmailAliasTypeContent(
                         .fillMaxWidth(),
                 )
 
-                if (shouldShowSimpleLoginSelfHostServerUrlField) {
-                    Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-                    BitwardenTextField(
-                        label = stringResource(id = BitwardenString.self_host_server_url),
-                        value = usernameTypeState.selectedServiceType.selfHostServerUrl,
-                        onValueChange =
-                            forwardedEmailAliasHandlers.onSimpleLoginSelfHostServerUrlChange,
-                        textFieldTestTag = "SimpleLoginSelfHostServerUrlEntry",
-                        cardStyle = CardStyle.Full,
-                        modifier = Modifier
-                            .standardHorizontalMargin()
-                            .fillMaxWidth(),
-                    )
-                }
+                BitwardenTextField(
+                    label = stringResource(id = BitwardenString.self_host_server_url),
+                    value = usernameTypeState.selectedServiceType.selfHostServerUrl,
+                    onValueChange = forwardedEmailAliasHandlers
+                        .onSimpleLoginSelfHostServerUrlChange,
+                    textFieldTestTag = "SimpleLoginSelfHostServerUrlEntry",
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
             }
 
             null -> {

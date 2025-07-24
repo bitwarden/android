@@ -16,11 +16,7 @@ internal class ServiceTypeExtensionsTest {
             domainName = "test.com",
             selfHostServerUrl = "http://test.com",
         )
-        val request = addyIoServiceType.toUsernameGeneratorRequest(
-            website = null,
-            allowAddyIoSelfHostUrl = true,
-            allowSimpleLoginSelfHostUrl = true,
-        )
+        val request = addyIoServiceType.toUsernameGeneratorRequest(website = null)
 
         assertEquals(
             GeneratorRequestResult.MissingField(BitwardenString.api_access_token.asText()),
@@ -34,11 +30,7 @@ internal class ServiceTypeExtensionsTest {
             apiAccessToken = "testToken",
             selfHostServerUrl = "http://test.com",
         )
-        val request = addyIoServiceType.toUsernameGeneratorRequest(
-            website = null,
-            allowAddyIoSelfHostUrl = true,
-            allowSimpleLoginSelfHostUrl = true,
-        )
+        val request = addyIoServiceType.toUsernameGeneratorRequest(website = null)
 
         assertEquals(
             GeneratorRequestResult.MissingField(BitwardenString.domain_name.asText()),
@@ -66,30 +58,7 @@ internal class ServiceTypeExtensionsTest {
                     website = website,
                 ),
             ),
-            addyIoServiceType.toUsernameGeneratorRequest(
-                website = website,
-                allowAddyIoSelfHostUrl = true,
-                allowSimpleLoginSelfHostUrl = true,
-            ),
-        )
-
-        // Verify the correct request is returned when allowAddyIoSelfHostUrl is false
-        assertEquals(
-            GeneratorRequestResult.Success(
-                result = UsernameGeneratorRequest.Forwarded(
-                    service = ForwarderServiceType.AddyIo(
-                        apiToken = "testToken",
-                        domain = "test.com",
-                        baseUrl = ServiceType.AddyIo.DEFAULT_ADDY_IO_URL,
-                    ),
-                    website = website,
-                ),
-            ),
-            addyIoServiceType.toUsernameGeneratorRequest(
-                website = website,
-                allowAddyIoSelfHostUrl = false,
-                allowSimpleLoginSelfHostUrl = true,
-            ),
+            addyIoServiceType.toUsernameGeneratorRequest(website = website),
         )
     }
 
@@ -101,11 +70,7 @@ internal class ServiceTypeExtensionsTest {
             domainName = "test.com",
         )
         val website = "bitwarden.com"
-        val request = addyIoServiceType.toUsernameGeneratorRequest(
-            website = website,
-            allowAddyIoSelfHostUrl = true,
-            allowSimpleLoginSelfHostUrl = true,
-        )
+        val request = addyIoServiceType.toUsernameGeneratorRequest(website = website)
 
         assertEquals(
             GeneratorRequestResult.Success(
@@ -125,11 +90,7 @@ internal class ServiceTypeExtensionsTest {
     @Test
     fun `toUsernameGeneratorRequest for DuckDuckGo returns null when apiKey is blank`() {
         val duckDuckGoServiceType = ServiceType.DuckDuckGo(apiKey = "")
-        val request = duckDuckGoServiceType.toUsernameGeneratorRequest(
-            website = null,
-            allowAddyIoSelfHostUrl = true,
-            allowSimpleLoginSelfHostUrl = true,
-        )
+        val request = duckDuckGoServiceType.toUsernameGeneratorRequest(website = null)
 
         assertEquals(
             GeneratorRequestResult.MissingField(BitwardenString.api_key.asText()),
@@ -141,11 +102,7 @@ internal class ServiceTypeExtensionsTest {
     fun `toUsernameGeneratorRequest for DuckDuckGo returns correct request`() {
         val duckDuckGoServiceType = ServiceType.DuckDuckGo(apiKey = "testKey")
         val website = "bitwarden.com"
-        val request = duckDuckGoServiceType.toUsernameGeneratorRequest(
-            website = website,
-            allowAddyIoSelfHostUrl = true,
-            allowSimpleLoginSelfHostUrl = true,
-        )
+        val request = duckDuckGoServiceType.toUsernameGeneratorRequest(website = website)
 
         assertEquals(
             GeneratorRequestResult.Success(
@@ -161,11 +118,7 @@ internal class ServiceTypeExtensionsTest {
     @Test
     fun `toUsernameGeneratorRequest for FirefoxRelay returns null when apiAccessToken is blank`() {
         val firefoxRelayServiceType = ServiceType.FirefoxRelay(apiAccessToken = "")
-        val request = firefoxRelayServiceType.toUsernameGeneratorRequest(
-            website = null,
-            allowAddyIoSelfHostUrl = true,
-            allowSimpleLoginSelfHostUrl = true,
-        )
+        val request = firefoxRelayServiceType.toUsernameGeneratorRequest(website = null)
 
         assertEquals(
             GeneratorRequestResult.MissingField(BitwardenString.api_access_token.asText()),
@@ -177,11 +130,7 @@ internal class ServiceTypeExtensionsTest {
     fun `toUsernameGeneratorRequest for FirefoxRelay returns correct request`() {
         val firefoxRelayServiceType = ServiceType.FirefoxRelay(apiAccessToken = "testToken")
         val website = "bitwarden.com"
-        val request = firefoxRelayServiceType.toUsernameGeneratorRequest(
-            website = website,
-            allowAddyIoSelfHostUrl = true,
-            allowSimpleLoginSelfHostUrl = true,
-        )
+        val request = firefoxRelayServiceType.toUsernameGeneratorRequest(website = website)
 
         assertEquals(
             GeneratorRequestResult.Success(
@@ -197,11 +146,7 @@ internal class ServiceTypeExtensionsTest {
     @Test
     fun `toUsernameGeneratorRequest for FastMail returns null when apiKey is blank`() {
         val fastMailServiceType = ServiceType.FastMail(apiKey = "")
-        val request = fastMailServiceType.toUsernameGeneratorRequest(
-            website = null,
-            allowAddyIoSelfHostUrl = true,
-            allowSimpleLoginSelfHostUrl = true,
-        )
+        val request = fastMailServiceType.toUsernameGeneratorRequest(website = null)
 
         assertEquals(
             GeneratorRequestResult.MissingField(BitwardenString.api_key.asText()),
@@ -215,11 +160,7 @@ internal class ServiceTypeExtensionsTest {
             apiKey = "testKey",
         )
         val website = "bitwarden.com"
-        val request = fastMailServiceType.toUsernameGeneratorRequest(
-            website = website,
-            allowAddyIoSelfHostUrl = true,
-            allowSimpleLoginSelfHostUrl = true,
-        )
+        val request = fastMailServiceType.toUsernameGeneratorRequest(website = website)
 
         assertEquals(
             GeneratorRequestResult.Success(
@@ -238,11 +179,7 @@ internal class ServiceTypeExtensionsTest {
             apiKey = "",
             domainName = "domainName",
         )
-        val request = forwardMailServiceType.toUsernameGeneratorRequest(
-            website = null,
-            allowAddyIoSelfHostUrl = true,
-            allowSimpleLoginSelfHostUrl = true,
-        )
+        val request = forwardMailServiceType.toUsernameGeneratorRequest(website = null)
 
         assertEquals(
             GeneratorRequestResult.MissingField(BitwardenString.api_key.asText()),
@@ -256,11 +193,7 @@ internal class ServiceTypeExtensionsTest {
             apiKey = "apiKey",
             domainName = "",
         )
-        val request = forwardMailServiceType.toUsernameGeneratorRequest(
-            website = null,
-            allowAddyIoSelfHostUrl = true,
-            allowSimpleLoginSelfHostUrl = true,
-        )
+        val request = forwardMailServiceType.toUsernameGeneratorRequest(website = null)
 
         assertEquals(
             GeneratorRequestResult.MissingField(BitwardenString.domain_name.asText()),
@@ -275,11 +208,7 @@ internal class ServiceTypeExtensionsTest {
             domainName = "domainName",
         )
         val website = "bitwarden.com"
-        val request = forwardEmailServiceType.toUsernameGeneratorRequest(
-            website = website,
-            allowAddyIoSelfHostUrl = true,
-            allowSimpleLoginSelfHostUrl = true,
-        )
+        val request = forwardEmailServiceType.toUsernameGeneratorRequest(website = website)
 
         assertEquals(
             GeneratorRequestResult.Success(
@@ -298,11 +227,7 @@ internal class ServiceTypeExtensionsTest {
     @Test
     fun `toUsernameGeneratorRequest for SimpleLogin returns null when apiKey is blank`() {
         val simpleLoginServiceType = ServiceType.SimpleLogin(apiKey = "")
-        val request = simpleLoginServiceType.toUsernameGeneratorRequest(
-            website = null,
-            allowAddyIoSelfHostUrl = true,
-            allowSimpleLoginSelfHostUrl = true,
-        )
+        val request = simpleLoginServiceType.toUsernameGeneratorRequest(website = null)
 
         assertEquals(
             GeneratorRequestResult.MissingField(BitwardenString.api_key.asText()),
@@ -312,14 +237,10 @@ internal class ServiceTypeExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toUsernameGeneratorRequest for SimpleLogin returns correct request when allowSimpleLoginSelfHostServer is false and selfHostServerUrl is blank`() {
+    fun `toUsernameGeneratorRequest for SimpleLogin returns correct request when selfHostServerUrl is blank`() {
         val simpleLoginServiceType = ServiceType.SimpleLogin(apiKey = "testKey")
         val website = "bitwarden.com"
-        val request = simpleLoginServiceType.toUsernameGeneratorRequest(
-            website = website,
-            allowAddyIoSelfHostUrl = true,
-            allowSimpleLoginSelfHostUrl = true,
-        )
+        val request = simpleLoginServiceType.toUsernameGeneratorRequest(website = website)
 
         assertEquals(
             GeneratorRequestResult.Success(
@@ -337,42 +258,13 @@ internal class ServiceTypeExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toUsernameGeneratorRequest for SimpleLogin returns correct request when allowSimpleLoginSelfHostServer is true and selfHostServerUrl is blank`() {
-        val simpleLoginServiceType = ServiceType.SimpleLogin(apiKey = "testKey")
-        val website = "bitwarden.com"
-        val request = simpleLoginServiceType.toUsernameGeneratorRequest(
-            website = website,
-            allowAddyIoSelfHostUrl = true,
-            allowSimpleLoginSelfHostUrl = true,
-        )
-
-        assertEquals(
-            GeneratorRequestResult.Success(
-                result = UsernameGeneratorRequest.Forwarded(
-                    service = ForwarderServiceType.SimpleLogin(
-                        apiKey = "testKey",
-                        ServiceType.SimpleLogin.DEFAULT_SIMPLE_LOGIN_URL,
-                    ),
-                    website = website,
-                ),
-            ),
-            request,
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `toUsernameGeneratorRequest for SimpleLogin returns correct request when allowSimpleLoginSelfHostServer is true and selfHostServerUrl is not blank`() {
+    fun `toUsernameGeneratorRequest for SimpleLogin returns correct request when selfHostServerUrl is not blank`() {
         val simpleLoginServiceType = ServiceType.SimpleLogin(
             apiKey = "testKey",
             selfHostServerUrl = "https://simplelogin.local",
         )
         val website = "bitwarden.com"
-        val request = simpleLoginServiceType.toUsernameGeneratorRequest(
-            website = website,
-            allowAddyIoSelfHostUrl = true,
-            allowSimpleLoginSelfHostUrl = true,
-        )
+        val request = simpleLoginServiceType.toUsernameGeneratorRequest(website = website)
 
         assertEquals(
             GeneratorRequestResult.Success(

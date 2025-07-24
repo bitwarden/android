@@ -15,14 +15,12 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchAllUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
@@ -124,18 +122,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         every { markCoachMarkTourCompleted(CoachMarkTourType.GENERATOR) } just runs
         every { shouldShowGeneratorCoachMarkFlow } returns mutableShouldShowGeneratorCoachMarkFlow
     }
-    private val mutableAnonAddySelfHostAliasFlow = MutableStateFlow(true)
-    private val mutableShouldShowSimpleLoginSelfHostFlow = MutableStateFlow(true)
-    private val featureFlagManager = mockk<FeatureFlagManager> {
-        every { getFeatureFlag(FlagKey.AnonAddySelfHostAlias) } returns true
-        every {
-            getFeatureFlagFlow(FlagKey.AnonAddySelfHostAlias)
-        } returns mutableAnonAddySelfHostAliasFlow
-        every { getFeatureFlag(FlagKey.SimpleLoginSelfHostAlias) } returns true
-        every {
-            getFeatureFlagFlow(FlagKey.SimpleLoginSelfHostAlias)
-        } returns mutableShouldShowSimpleLoginSelfHostFlow
-    }
 
     @BeforeEach
     fun setup() {
@@ -178,8 +164,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             currentEmailAddress = "currentEmail",
             website = null,
             shouldShowCoachMarkTour = true,
-            shouldShowAnonAddySelfHostServerUrlField = true,
-            shouldShowSimpleLoginSelfHostServerField = true,
         )
 
         val viewModel = createViewModel(
@@ -213,8 +197,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             generatorMode = GeneratorMode.Modal.Password,
             currentEmailAddress = "currentEmail",
             shouldShowCoachMarkTour = true,
-            shouldShowAnonAddySelfHostServerUrlField = true,
-            shouldShowSimpleLoginSelfHostServerField = true,
         )
 
         val viewModel = createViewModel(
@@ -2412,8 +2394,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             ),
             currentEmailAddress = "currentEmail",
             shouldShowCoachMarkTour = true,
-            shouldShowAnonAddySelfHostServerUrlField = true,
-            shouldShowSimpleLoginSelfHostServerField = true,
         )
 
     private fun createPassphraseState(
@@ -2433,8 +2413,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             ),
             currentEmailAddress = "currentEmail",
             shouldShowCoachMarkTour = true,
-            shouldShowAnonAddySelfHostServerUrlField = true,
-            shouldShowSimpleLoginSelfHostServerField = true,
         )
 
     private fun createUsernameModeState(
@@ -2451,8 +2429,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             generatorMode = GeneratorMode.Modal.Username(website = null),
             currentEmailAddress = "currentEmail",
             shouldShowCoachMarkTour = true,
-            shouldShowAnonAddySelfHostServerUrlField = true,
-            shouldShowSimpleLoginSelfHostServerField = true,
         )
 
     private fun createForwardedEmailAliasState(
@@ -2469,8 +2445,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             ),
             currentEmailAddress = "currentEmail",
             shouldShowCoachMarkTour = true,
-            shouldShowAnonAddySelfHostServerUrlField = true,
-            shouldShowSimpleLoginSelfHostServerField = true,
         )
 
     private fun createAddyIoState(
@@ -2486,8 +2460,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             ),
             currentEmailAddress = "currentEmail",
             shouldShowCoachMarkTour = true,
-            shouldShowAnonAddySelfHostServerUrlField = true,
-            shouldShowSimpleLoginSelfHostServerField = true,
         )
 
     private fun createDuckDuckGoState(
@@ -2503,8 +2475,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             ),
             currentEmailAddress = "currentEmail",
             shouldShowCoachMarkTour = true,
-            shouldShowAnonAddySelfHostServerUrlField = true,
-            shouldShowSimpleLoginSelfHostServerField = true,
         )
 
     private fun createFastMailState(
@@ -2520,8 +2490,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             ),
             currentEmailAddress = "currentEmail",
             shouldShowCoachMarkTour = true,
-            shouldShowAnonAddySelfHostServerUrlField = true,
-            shouldShowSimpleLoginSelfHostServerField = true,
         )
 
     private fun createFirefoxRelayState(
@@ -2537,8 +2505,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             ),
             currentEmailAddress = "currentEmail",
             shouldShowCoachMarkTour = true,
-            shouldShowAnonAddySelfHostServerUrlField = true,
-            shouldShowSimpleLoginSelfHostServerField = true,
         )
 
     private fun createForwardEmailState(
@@ -2554,8 +2520,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             ),
             currentEmailAddress = "currentEmail",
             shouldShowCoachMarkTour = true,
-            shouldShowAnonAddySelfHostServerUrlField = true,
-            shouldShowSimpleLoginSelfHostServerField = true,
         )
 
     private fun createSimpleLoginState(
@@ -2571,8 +2535,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             ),
             currentEmailAddress = "currentEmail",
             shouldShowCoachMarkTour = true,
-            shouldShowAnonAddySelfHostServerUrlField = true,
-            shouldShowSimpleLoginSelfHostServerField = true,
         )
 
     private fun createPlusAddressedEmailState(
@@ -2588,8 +2550,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             ),
             currentEmailAddress = "currentEmail",
             shouldShowCoachMarkTour = true,
-            shouldShowAnonAddySelfHostServerUrlField = true,
-            shouldShowSimpleLoginSelfHostServerField = true,
         )
 
     private fun createCatchAllEmailState(
@@ -2605,8 +2565,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             ),
             currentEmailAddress = "currentEmail",
             shouldShowCoachMarkTour = true,
-            shouldShowAnonAddySelfHostServerUrlField = true,
-            shouldShowSimpleLoginSelfHostServerField = true,
         )
 
     private fun createRandomWordState(
@@ -2624,8 +2582,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             ),
             currentEmailAddress = "currentEmail",
             shouldShowCoachMarkTour = true,
-            shouldShowAnonAddySelfHostServerUrlField = true,
-            shouldShowSimpleLoginSelfHostServerField = true,
         )
 
     private fun createSavedStateHandleWithState(state: GeneratorState) =
@@ -2643,7 +2599,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         policyManager = policyManager,
         reviewPromptManager = reviewPromptManager,
         firstTimeActionManager = firstTimeActionManager,
-        featureFlagManager = featureFlagManager,
     )
 
     private fun createViewModel(
