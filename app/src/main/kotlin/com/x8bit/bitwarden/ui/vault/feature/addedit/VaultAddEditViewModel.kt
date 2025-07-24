@@ -495,7 +495,7 @@ class VaultAddEditViewModel @Inject constructor(
 
             else ->
                 showGenericErrorDialog(
-                    R.string.credential_operation_failed_because_the_request_is_invalid.asText(),
+                    BitwardenString.credential_operation_failed_because_the_request_is_invalid.asText(),
                 )
         }
     }
@@ -700,7 +700,7 @@ class VaultAddEditViewModel @Inject constructor(
                 }
             }
             ?: showPasswordErrorDialog(
-                R.string.password_operation_failed_because_the_request_is_invalid.asText(),
+                BitwardenString.password_operation_failed_because_the_request_is_invalid.asText(),
             )
     }
 
@@ -2088,7 +2088,7 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
         when (action.result) {
             is PasswordRegisterResult.Error -> {
-                sendEvent(VaultAddEditEvent.ShowToast(R.string.an_error_has_occurred.asText()))
+                sendEvent(VaultAddEditEvent.ShowToast(BitwardenString.an_error_has_occurred.asText()))
                 sendEvent(
                     VaultAddEditEvent.CompletePasswordRegistration(
                         RegisterPasswordResult.Error(
@@ -2099,7 +2099,7 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is PasswordRegisterResult.Success -> {
-                sendEvent(VaultAddEditEvent.ShowToast(R.string.item_updated.asText()))
+                sendEvent(VaultAddEditEvent.ShowToast(BitwardenString.item_updated.asText()))
                 sendEvent(
                     VaultAddEditEvent.CompletePasswordRegistration(
                         RegisterPasswordResult.Success,

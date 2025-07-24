@@ -533,7 +533,7 @@ private fun VaultAddEditItemDialogs(
 
         is VaultAddEditState.DialogState.PasswordError -> {
             BitwardenBasicDialog(
-                title = stringResource(id = R.string.an_error_has_occurred),
+                title = stringResource(id = BitwardenString.an_error_has_occurred),
                 message = dialogState.message(),
                 onDismissRequest = { onPasswordErrorDismiss(dialogState.message) },
             )
