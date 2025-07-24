@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s הועתק</string>
     <string name="verify_master_password">אמת סיסמה ראשית</string>
     <string name="verify_pin">אמת PIN</string>
-    <string name="version">גרסה</string>
     <string name="view">הצג</string>
     <string name="yes">כן</string>
     <string name="account">חשבון</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">ערוך כרטיס</string>
     <string name="edit_identity">ערוך זהות</string>
     <string name="edit_note">ערוך פתק</string>
-    <string name="edit_passkey">ערוך מפתח גישה</string>
+    <string name="edit_ssh_key">Edit SSH key</string>
     <string name="enter_email_for_hint">הזן את כתובת דוא\"ל החשבון שלך כדי לקבל את הרמז לסיסמה הראשית שלך.</string>
     <string name="favorite">מועדף</string>
     <string name="unfavorite">הסר ממועדפים</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">דקה 1</string>
     <string name="four_hours">4 שעות</string>
     <string name="immediately">מיד</string>
-    <string name="vault_timeout_log_out_confirmation">יציאה תסיר כל גישה לכספת שלך ודורשת אימות מקוון לאחר תקופת פסק הזמן. האם אתה בטוח שברצונך להשתמש בהגדרה זו?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
     <string name="logging_in">מתחבר...</string>
     <string name="login_to_bitwarden">היכנס אל Bitwarden</string>
     <string name="master_password_confirmation_val_message">אישור הסיסמה אינו נכון.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">זהות חדשה</string>
     <string name="no_notes">אין הערות בכספת שלך.</string>
     <string name="new_note">הערה חדשה</string>
-    <string name="new_passkey">מפתח גישה חדש</string>
     <string name="new_item">פריט חדש</string>
     <string name="new_ssh_key">מפתח SSH חדש</string>
     <string name="no_text_sends">אין סֵנְדים של טקסט בכספת שלך.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">הצג כרטיס</string>
     <string name="view_identity">הצג זהות</string>
     <string name="view_note">הצג פתק</string>
-    <string name="view_passkey">הצג מפתח גישה</string>
+    <string name="view_ssh_key">View SSH key</string>
     <string name="web_vault">כספת הרשת של Bitwarden</string>
     <string name="items"> פריטים </string>
     <string name="items_for_uri">פריטים עבור %1$s</string>
@@ -265,6 +264,7 @@
     <string name="address">כתובת</string>
     <string name="expiration">תוקף</string>
     <string name="show_website_icons">הצג סמלי אתר אינטרנט</string>
+    <string name="show_website_icons_help">Show website icons help</string>
     <string name="show_website_icons_description">הצג תמונה מוכרת ליד כל כניסה</string>
     <string name="icons_url">URL של שרת הסמלים</string>
     <string name="vault_is_locked">הכספת נעולה</string>
@@ -701,6 +701,7 @@
     <string name="launch_web_authn">פתח WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">אירעה שגיאה בהתחלת אימות דו־גורמי של WebAuthn</string>
     <string name="self_hosted_server_url">URL של שרת אירוח עצמי</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">פעולת מפתח גישה נכשלה בגלל שלא היה ניתן לאמת את המשתמש.</string>
     <string name="user_verification_direction">אימות משתמש</string>
     <string name="create_account_on">צור חשבון ב־</string>
@@ -865,7 +866,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">אתה תצטרך רק להגדיר מפתח מאמת עבור כניסות שדורשות אימות דו־גורמי עם קוד. המפתח יצור באופן רציף קודים בני שש ספרות בהם תוכל להשתמש כדי להיכנס.</string>
     <string name="coachmark_3_of_3">3 מתוך 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">אתה מוכרח להוסיף כתובת אינטרנט על מנת להשתמש במילוי אוטומטי כדי לגשת לחשבון זה.</string>
-    <string name="mutual_tls">TLS הדדי</string>
     <string name="single_tap_passkey_creation">יצירת מפתח גישה בהקשה אחת</string>
     <string name="single_tap_passkey_authentication">כניסה עם מפתח גישה בהקשה אחת</string>
     <string name="learn_about_new_logins">למד על כניסות חדשות</string>
@@ -909,6 +909,12 @@
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">פעולת מפתח גישה נכשלה בגלל שניסיונות אימות משתמש חרגו.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">פעולת מפתח גישה נכשלה בגלל שלא נבחר פריט.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">URL של שרת אירוח עצמי</string>
     <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">השתמש בשילוב מילוי אוטומטי של Chrome</string>
@@ -967,9 +973,9 @@
     <string name="view_text_send">View text Send</string>
     <string name="delete_send">Delete Send</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
-    <string name="dynamic_colors">Dynamic colors</string>
-    <string name="dynamic_colors_description">Apply dynamic colors based on your wallpaper</string>
-    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamic colors uses the system colors and may not meet all accessibility guidelines.</string>
+    <string name="use_dynamic_colors">Use dynamic colors</string>
+    <string name="use_dynamic_colors_question">Use dynamic colors?</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">This color scheme automatically applies system colors to Bitwarden based on your current wallpaper. These colors may not meet all accessibility guidelines.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
     <string name="trust">Trust</string>
@@ -989,4 +995,6 @@
     <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
     <string name="installed_apps">Installed apps</string>
     <string name="delete_x">Delete %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
+    <string name="decryption_error">Decryption error</string>
 </resources>

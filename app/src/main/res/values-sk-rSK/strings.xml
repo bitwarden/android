@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">Skopírované: %1$s</string>
     <string name="verify_master_password">Overenie hlavného hesla</string>
     <string name="verify_pin">Overiť PIN</string>
-    <string name="version">Verzia</string>
     <string name="view">Zobraziť</string>
     <string name="yes">Áno</string>
     <string name="account">Účet</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Upraviť kartu</string>
     <string name="edit_identity">Upraviť identitu</string>
     <string name="edit_note">Upraviť poznámku</string>
-    <string name="edit_passkey">Upraviť prístupový kľúč</string>
+    <string name="edit_ssh_key">Upraviť kľúč SSH</string>
     <string name="enter_email_for_hint">Zadajte e-mailovú adresu na zaslanie nápovede k vášmu hlavnému heslu.</string>
     <string name="favorite">Obľúbené</string>
     <string name="unfavorite">Odstrániť z obľúbených</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 minúta</string>
     <string name="four_hours">4 hodiny</string>
     <string name="immediately">Okamžite</string>
-    <string name="vault_timeout_log_out_confirmation">Odhlásenie bude vyžadovať online prihlásenie po vypršaní časového limitu. Naozaj chcete použiť toto nastavenie?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Nastaviť časový limit na \"Odhlásiť\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">Po uplynutí časového limitu budete odhlásení. Na opätovné prihlásenie a prístup k trezoru budete musieť byť pripojení k internetu. Vaše nastavenia a PIN kód uložené v tomto zariadení sa nezmenia.</string>
     <string name="logging_in">Prihlasovanie...</string>
     <string name="login_to_bitwarden">Prihlásiť sa do Bitwardenu</string>
     <string name="master_password_confirmation_val_message">Potvrdenie hesla nie je správne.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Nová identita</string>
     <string name="no_notes">V trezore sa nenachádzajú žiadne poznámky.</string>
     <string name="new_note">Nová poznámka</string>
-    <string name="new_passkey">Nový prístupový kľúč</string>
     <string name="new_item">Nová položka</string>
     <string name="new_ssh_key">Nový kľúč SSH</string>
     <string name="no_text_sends">V trezore sa nenachádzajú žiadne textové Sendy.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Zobraziť kartu</string>
     <string name="view_identity">Zobraziť identitu</string>
     <string name="view_note">Zobraziť poznámku</string>
-    <string name="view_passkey">Zobraziť prístupový kľúč</string>
+    <string name="view_ssh_key">Zobraziť kľúč SSH</string>
     <string name="web_vault">Webový trezor Bitwarden</string>
     <string name="items">Položky</string>
     <string name="items_for_uri">Položky pre %1$s</string>
@@ -265,6 +264,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="address">Adresa</string>
     <string name="expiration">Expirácia</string>
     <string name="show_website_icons">Zobrazovať favikony stránok</string>
+    <string name="show_website_icons_help">Zobrazovať favikony stránok pre ľahšiu orientáciu</string>
     <string name="show_website_icons_description">Pri každom prihlásení zobrazí rozpoznateľný obrázok.</string>
     <string name="icons_url">URL servera ikôn</string>
     <string name="vault_is_locked">Trezor je uzamknutý</string>
@@ -701,6 +701,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="launch_web_authn">Spustiť WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Došlo k chybe pri spustení dvojfaktorového overovania WebAuthn</string>
     <string name="self_hosted_server_url">Adresa URL vlastného hostingu</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Operácia s poverením zlyhala, pretože používateľ sa nedá overiť.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Operácia prístupového kľúča zlyhala, pretože používateľ sa nedá overiť.</string>
     <string name="user_verification_direction">Overenie používateľa</string>
     <string name="create_account_on">Vytvoriť účet na</string>
@@ -865,7 +866,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Kľúč overovateľa budete musieť nastaviť pre prihlásenia, ktoré vyžadujú dvojstupňové overenie kódom. Tento kľúč bude neustále generovať 6-ciferné kódy, ktoré môžete použiť na prihlásenie.</string>
     <string name="coachmark_3_of_3">3 z 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Ak chcete používať automatické vypĺňanie na prístup k tomuto účtu, musíte pridať webovú adresu.</string>
-    <string name="mutual_tls">Mutual TLS</string>
     <string name="single_tap_passkey_creation">Vytvorenie prístupového kľúča jedným klepnutím</string>
     <string name="single_tap_passkey_authentication">Prihlásenie prístupovým kľúčom jedným klepnutím</string>
     <string name="learn_about_new_logins">Viac o nových prihláseniach</string>
@@ -909,6 +909,12 @@ Chcete prepnúť na tento účet?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Operácia prístupového kľúča zlyhala, pretože počet pokusov o overenie používateľa bol prekročený.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operácia prístupového kľúča zlyhala, pretože nebola vybraná žiadna položka.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operácia prístupového kľúča zlyhala, pretože požiadavka nie podporovaná.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operácia s heslom zlyhala, pretože vybraná položka neexistuje.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Operácia s heslom zlyhala, pretože nebola vybraná žiadna položka.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operácia s poverením zlyhala, pretože počet pokusov o overenie používateľa bol prekročený.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Operácia s poverením zlyhala, pretože používateľ je zablokovaný.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Operácia s poverením zlyhala, pretože vybraná položka neexistuje.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Operácia s poverením zlyhala, pretože overenie používateľa bolo zrušené.</string>
     <string name="self_host_server_url">Adresa URL vlastného hostingu</string>
     <string name="use_brave_autofill_integration">Použiť integráciu automatického vypĺňania Brave</string>
     <string name="use_chrome_autofill_integration">Použiť integráciu automatického vyplňovania Chromu</string>
@@ -967,8 +973,8 @@ Chcete prepnúť na tento účet?</string>
     <string name="view_text_send">Zobraziť textový Send</string>
     <string name="delete_send">Odstrániť Send</string>
     <string name="missing_send_resync_your_vault">Chýba Send, znovu synchronizujte trezor</string>
-    <string name="dynamic_colors">Dynamické farby</string>
-    <string name="dynamic_colors_description">Použiť dynamické farby na základe tapety</string>
+    <string name="use_dynamic_colors">Použiť dynamické farby</string>
+    <string name="use_dynamic_colors_question">Použiť dynamické farby?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamické farby používajú systémové farby a nemusia spĺňať všetky usmernenia o prístupnosti.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Operácia prístupového kľúča zlyhala, pretože prehliadač (%1$s) nie je dôveryhodný. Vyberte \"Dôverovať\", aby ste pridali %1$s na zoznam dôveryhodných aplikácií alebo \"Zrušiť\", aby ste operáciu zrušili.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Operácia prístupového kľúča zlyhala, pretože prehliadač nie je dôveryhodný.</string>
@@ -989,4 +995,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Naozaj už nechcete dôverovať %s?</string>
     <string name="installed_apps">Nainštalované aplikácie</string>
     <string name="delete_x">Odstrániť %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Nepodarilo sa dešifrovať šifru. Kontaktujte podporu.</string>
+    <string name="decryption_error">Chyba dešifrovania</string>
 </resources>

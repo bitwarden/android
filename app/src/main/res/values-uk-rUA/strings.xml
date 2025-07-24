@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s скопійовано</string>
     <string name="verify_master_password">Перевірити головний пароль</string>
     <string name="verify_pin">Перевірка PIN</string>
-    <string name="version">Версія</string>
     <string name="view">Переглянути</string>
     <string name="yes">Так</string>
     <string name="account">Обліковий запис</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Редагувати картку</string>
     <string name="edit_identity">Редагувати посвідчення</string>
     <string name="edit_note">Редагувати нотатку</string>
-    <string name="edit_passkey">Редагувати ключ доступу</string>
+    <string name="edit_ssh_key">Edit SSH key</string>
     <string name="enter_email_for_hint">Введіть свою адресу е-пошти, щоб отримати підказку для головного пароля.</string>
     <string name="favorite">Обране</string>
     <string name="unfavorite">Вилучити з обраного</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 хвилина</string>
     <string name="four_hours">4 години</string>
     <string name="immediately">Негайно</string>
-    <string name="vault_timeout_log_out_confirmation">Вихід скасує всі права доступу до вашого сховища і вимагатиме автентифікацію після завершення часу очікування. Ви дійсно хочете використати цей параметр?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
     <string name="logging_in">Вхід...</string>
     <string name="login_to_bitwarden">Увійти в Bitwarden</string>
     <string name="master_password_confirmation_val_message">Підтвердження пароля неправильне.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Нове посвідчення</string>
     <string name="no_notes">У вашому сховищі немає нотаток.</string>
     <string name="new_note">Нова нотатка</string>
-    <string name="new_passkey">Новий ключ доступу</string>
     <string name="new_item">Новий запис</string>
     <string name="new_ssh_key">Новий ключ SSH</string>
     <string name="no_text_sends">У вашому сховищі немає текстових відправлень.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Переглянути картку</string>
     <string name="view_identity">Переглянути посвідчення</string>
     <string name="view_note">Переглянути нотатку</string>
-    <string name="view_passkey">Переглянути ключ доступу</string>
+    <string name="view_ssh_key">View SSH key</string>
     <string name="web_vault">Вебсховище Bitwarden</string>
     <string name="items">Записи</string>
     <string name="items_for_uri">Записи для %1$s</string>
@@ -265,6 +264,7 @@
     <string name="address">Адреса</string>
     <string name="expiration">Термін дії</string>
     <string name="show_website_icons">Показувати піктограми вебсайтів</string>
+    <string name="show_website_icons_help">Show website icons help</string>
     <string name="show_website_icons_description">Показувати зображення біля кожного запису</string>
     <string name="icons_url">URL-адреса сервера піктограм</string>
     <string name="vault_is_locked">Сховище заблоковано</string>
@@ -701,6 +701,7 @@
     <string name="launch_web_authn">Запустити WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Сталася помилка під час запуску двоетапної перевірки WebAuthn</string>
     <string name="self_hosted_server_url">URL-адреса власного сервера</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Не вдалося виконати операцію з ключем доступу, оскільки неможливо перевірити користувача.</string>
     <string name="user_verification_direction">Перевірка користувача</string>
     <string name="create_account_on">Створити обліковий запис на</string>
@@ -865,7 +866,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">Вам потрібно налаштувати ключ автентифікації лише для входів, які потребують двоетапної перевірки за допомогою коду. Ключ буде постійно генерувати шестизначні коди, які ви можете використовувати, щоб увійти.</string>
     <string name="coachmark_3_of_3">3 з 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Необхідно додати вебадресу, щоб використовувати автозаповнення для цього облікового запису.</string>
-    <string name="mutual_tls">Взаємний TLS</string>
     <string name="single_tap_passkey_creation">Створення ключа доступу одним дотиком</string>
     <string name="single_tap_passkey_authentication">Вхід з ключем доступу одним дотиком</string>
     <string name="learn_about_new_logins">Докладніше про нові записи</string>
@@ -909,6 +909,12 @@
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Не вдалося виконати операцію з ключем доступу через перевищення спроб перевірки користувача.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Не вдалося виконати операцію з ключем доступу, тому що не вибрано жодного елемента.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Не вдалося виконати операцію з ключем доступу, оскільки запит не підтримується.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">URL-адреса власного сервера</string>
     <string name="use_brave_autofill_integration">Використовувати інтеграцію автозаповнення з Brave</string>
     <string name="use_chrome_autofill_integration">Використовувати інтеграцію автозаповнення з Chrome</string>
@@ -969,8 +975,8 @@
     <string name="view_text_send">Переглянути текстове відправлення</string>
     <string name="delete_send">Видалити відправлення</string>
     <string name="missing_send_resync_your_vault">Немає відправлення. Повторно синхронізуйте сховище.</string>
-    <string name="dynamic_colors">Динамічні кольори</string>
-    <string name="dynamic_colors_description">Застосувати динамічні кольори на основі ваших шпалер</string>
+    <string name="use_dynamic_colors">Use dynamic colors</string>
+    <string name="use_dynamic_colors_question">Use dynamic colors?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Для динамічних кольорів використовуються системні кольори, які можуть не відповідати всім рекомендаціям щодо доступності.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Не вдалося виконати операцію з ключем доступу, оскільки браузер (%1$s) не розпізнано. Виберіть \"Довіряти\", щоб додати %1$s до списку локальних довірених програм.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Не вдалося виконати операцію з ключем доступу, оскільки браузер не є довіреним.</string>
@@ -991,4 +997,6 @@
     <string name="are_you_sure_you_want_to_stop_trusting_x">Ви дійсно хочете скасувати довіру для %s?</string>
     <string name="installed_apps">Встановлені програми</string>
     <string name="delete_x">Видалити %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
+    <string name="decryption_error">Decryption error</string>
 </resources>
