@@ -38,10 +38,6 @@ class FlagKeyTest {
             "single-tap-passkey-authentication",
         )
         assertEquals(
-            FlagKey.MutualTls.keyName,
-            "mutual-tls",
-        )
-        assertEquals(
             FlagKey.AnonAddySelfHostAlias.keyName,
             "anon-addy-self-host-alias",
         )

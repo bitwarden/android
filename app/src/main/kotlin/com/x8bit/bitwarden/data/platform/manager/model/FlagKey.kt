@@ -25,7 +25,6 @@ sealed class FlagKey<out T : Any> {
                 ImportLoginsFlow,
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
-                MutualTls,
                 SingleTapPasskeyCreation,
                 SingleTapPasskeyAuthentication,
                 AnonAddySelfHostAlias,
@@ -77,14 +76,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object CipherKeyEncryption : FlagKey<Boolean>() {
         override val keyName: String = "cipher-key-encryption"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the Mutual TLS feature.
-     */
-    data object MutualTls : FlagKey<Boolean>() {
-        override val keyName: String = "mutual-tls"
         override val defaultValue: Boolean = false
     }
 

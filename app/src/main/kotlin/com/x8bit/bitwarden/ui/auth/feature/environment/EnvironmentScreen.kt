@@ -323,59 +323,58 @@ fun EnvironmentScreen(
                     .standardHorizontalMargin(),
             )
 
-            if (state.showMutualTlsOptions) {
-                Spacer(modifier = Modifier.height(height = 16.dp))
+            Spacer(modifier = Modifier.height(height = 16.dp))
 
-                BitwardenListHeaderText(
-                    label = stringResource(id = R.string.client_certificate_mtls),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
-                )
-                Spacer(modifier = Modifier.height(height = 8.dp))
+            BitwardenListHeaderText(
+                label = stringResource(id = R.string.client_certificate_mtls),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
-                BitwardenTextField(
-                    label = stringResource(id = R.string.certificate_alias),
-                    value = state.keyAlias,
-                    supportingText = stringResource(
-                        id = R.string.certificate_used_for_client_authentication,
-                    ),
-                    onValueChange = {},
-                    readOnly = true,
-                    cardStyle = CardStyle.Full,
-                    textFieldTestTag = "KeyAliasEntry",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .focusProperties { canFocus = false }
-                        .standardHorizontalMargin(),
-                )
-                Spacer(modifier = Modifier.height(height = 16.dp))
+            BitwardenTextField(
+                label = stringResource(id = R.string.certificate_alias),
+                value = state.keyAlias,
+                supportingText = stringResource(
+                    id = R.string.certificate_used_for_client_authentication,
+                ),
+                onValueChange = {},
+                readOnly = true,
+                cardStyle = CardStyle.Full,
+                textFieldTestTag = "KeyAliasEntry",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusProperties { canFocus = false }
+                    .standardHorizontalMargin(),
+            )
+            Spacer(modifier = Modifier.height(height = 16.dp))
 
-                BitwardenFilledButton(
-                    label = stringResource(id = R.string.import_certificate),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(EnvironmentAction.ImportCertificateClick) }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .testTag("ImportCertificateButton"),
-                )
+            BitwardenFilledButton(
+                label = stringResource(id = R.string.import_certificate),
+                onClick = remember(viewModel) {
+                    { viewModel.trySendAction(EnvironmentAction.ImportCertificateClick) }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .testTag("ImportCertificateButton"),
+            )
 
-                Spacer(modifier = Modifier.height(height = 12.dp))
+            Spacer(modifier = Modifier.height(height = 12.dp))
 
-                BitwardenOutlinedButton(
-                    label = stringResource(id = R.string.choose_system_certificate),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(EnvironmentAction.ChooseSystemCertificateClick) }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .testTag("ChooseSystemCertificateButton"),
-                )
-            }
+            BitwardenOutlinedButton(
+                label = stringResource(id = R.string.choose_system_certificate),
+                onClick = remember(viewModel) {
+                    { viewModel.trySendAction(EnvironmentAction.ChooseSystemCertificateClick) }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .testTag("ChooseSystemCertificateButton"),
+            )
+
             Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }

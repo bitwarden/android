@@ -30,7 +30,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.CredentialExchangeProtocolImport,
     FlagKey.CredentialExchangeProtocolExport,
     FlagKey.CipherKeyEncryption,
-    FlagKey.MutualTls,
     FlagKey.SingleTapPasskeyCreation,
     FlagKey.SingleTapPasskeyAuthentication,
     FlagKey.AnonAddySelfHostAlias,
@@ -85,7 +84,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.CredentialExchangeProtocolImport -> stringResource(R.string.cxp_import)
     FlagKey.CredentialExchangeProtocolExport -> stringResource(R.string.cxp_export)
     FlagKey.CipherKeyEncryption -> stringResource(R.string.cipher_key_encryption)
-    FlagKey.MutualTls -> stringResource(R.string.mutual_tls)
     FlagKey.SingleTapPasskeyCreation -> stringResource(R.string.single_tap_passkey_creation)
     FlagKey.SingleTapPasskeyAuthentication -> {
         stringResource(R.string.single_tap_passkey_authentication)
