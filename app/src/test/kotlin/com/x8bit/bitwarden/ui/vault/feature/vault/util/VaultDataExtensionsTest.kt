@@ -6,17 +6,22 @@ import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.LoginUriView
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSshKeyView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
@@ -46,7 +51,10 @@ class VaultDataExtensionsTest {
     @Test
     fun `toViewState for AllVaults should transform full VaultData into ViewState Content without filtering`() {
         val vaultData = VaultData(
-            cipherViewList = listOf(createMockCipherView(number = 1)),
+            decryptCipherListResult = DecryptCipherListResult(
+                successes = listOf(createMockCipherListView(number = 1)),
+                failures = emptyList(),
+            ),
             collectionViewList = listOf(createMockCollectionView(number = 1)),
             folderViewList = listOf(
                 FolderView("1", "test", clock.instant()),
@@ -118,9 +126,12 @@ class VaultDataExtensionsTest {
     @Test
     fun `toViewState for MyVault should transform full VaultData into ViewState Content with filtering of non-user data`() {
         val vaultData = VaultData(
-            cipherViewList = listOf(
-                createMockCipherView(number = 1).copy(organizationId = null),
-                createMockCipherView(number = 2),
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(number = 1).copy(organizationId = null),
+                    createMockCipherListView(number = 2),
+                ),
             ),
             collectionViewList = listOf(createMockCollectionView(number = 1)),
             folderViewList = listOf(createMockFolderView(number = 1)),
@@ -166,9 +177,12 @@ class VaultDataExtensionsTest {
     @Test
     fun `toViewState for OrganizationVault should transform full VaultData into ViewState Content with filtering of non-organization data`() {
         val vaultData = VaultData(
-            cipherViewList = listOf(
-                createMockCipherView(number = 1),
-                createMockCipherView(number = 2),
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(number = 1),
+                    createMockCipherListView(number = 2),
+                ),
             ),
             collectionViewList = listOf(
                 createMockCollectionView(number = 1),
@@ -233,7 +247,10 @@ class VaultDataExtensionsTest {
     @Test
     fun `toViewState should transform empty VaultData into ViewState NoItems`() {
         val vaultData = VaultData(
-            cipherViewList = emptyList(),
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = emptyList(),
+            ),
             collectionViewList = emptyList(),
             folderViewList = emptyList(),
             sendViewList = emptyList(),
@@ -257,7 +274,10 @@ class VaultDataExtensionsTest {
     @Test
     fun `toViewState should not transform ciphers with no ID into ViewState items`() {
         val vaultData = VaultData(
-            cipherViewList = listOf(createMockCipherView(number = 1).copy(id = null)),
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(createMockCipherListView(number = 1).copy(id = null)),
+            ),
             collectionViewList = listOf(createMockCollectionView(number = 1)),
             folderViewList = listOf(createMockFolderView(number = 1)),
             sendViewList = listOf(createMockSendView(number = 1)),
@@ -282,7 +302,10 @@ class VaultDataExtensionsTest {
     @Test
     fun `toViewState should return 1 for totpItemsCount if user has premium and has one totp item`() {
         val vaultData = VaultData(
-            cipherViewList = listOf(createMockCipherView(number = 1)),
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(createMockCipherListView(number = 1)),
+            ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
             sendViewList = listOf(),
@@ -321,7 +344,10 @@ class VaultDataExtensionsTest {
     @Test
     fun `toViewState should return 0 for totpItemsCount if user does not have premium and has any totp items`() {
         val vaultData = VaultData(
-            cipherViewList = listOf(createMockCipherView(number = 1)),
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(createMockCipherListView(number = 1)),
+            ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
             sendViewList = listOf(),
@@ -360,7 +386,12 @@ class VaultDataExtensionsTest {
     @Test
     fun `toViewState should return 1 for totpItemsCount if user does not have premium and has at least 1 totp items with org TOTP true`() {
         val vaultData = VaultData(
-            cipherViewList = listOf(createMockCipherView(number = 1).copy(organizationUseTotp = true)),
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(number = 1).copy(organizationUseTotp = true),
+                ),
+            ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
             sendViewList = listOf(),
@@ -398,9 +429,12 @@ class VaultDataExtensionsTest {
     @Test
     fun `toViewState should omit non org related totp codes when user does not have premium`() {
         val vaultData = VaultData(
-            cipherViewList = listOf(
-                createMockCipherView(number = 1).copy(organizationUseTotp = true),
-                createMockCipherView(number = 2),
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(number = 1).copy(organizationUseTotp = true),
+                    createMockCipherListView(number = 2),
+                ),
             ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
@@ -622,10 +656,13 @@ class VaultDataExtensionsTest {
     @Test
     fun `toViewState should only count deleted items for the trash count`() {
         val vaultData = VaultData(
-            cipherViewList = listOf(
-                createMockCipherView(number = 1, isDeleted = true),
-                createMockCipherView(number = 2, isDeleted = true),
-                createMockCipherView(number = 3, isDeleted = false),
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(number = 1, isDeleted = true),
+                    createMockCipherListView(number = 2, isDeleted = true),
+                    createMockCipherListView(number = 3, isDeleted = false),
+                ),
             ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
@@ -664,9 +701,12 @@ class VaultDataExtensionsTest {
     @Test
     fun `toViewState should show content with trashed items only`() {
         val vaultData = VaultData(
-            cipherViewList = listOf(
-                createMockCipherView(number = 1, isDeleted = true),
-                createMockCipherView(number = 2, isDeleted = true),
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(number = 1, isDeleted = true),
+                    createMockCipherListView(number = 2, isDeleted = true),
+                ),
             ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
@@ -709,9 +749,12 @@ class VaultDataExtensionsTest {
         every { Uri.parse(any()) } returns uriMock
         every { uriMock.host } returns "www.mockuri1.com"
         val vaultData = VaultData(
-            cipherViewList = List(100) {
-                createMockCipherView(number = it, folderId = null)
-            },
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = List(100) {
+                    createMockCipherListView(number = it, folderId = null)
+                },
+            ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
             sendViewList = listOf(),
@@ -760,9 +803,12 @@ class VaultDataExtensionsTest {
         val uriMock = mockk<Uri>()
         every { Uri.parse(any()) } returns uriMock
         every { uriMock.host } returns "www.mockuri1.com"
-        val mockCipher = createMockCipherView(number = 1, folderId = null)
+        val mockCipher = createMockCipherListView(number = 1, folderId = null)
         val vaultData = VaultData(
-            cipherViewList = listOf(mockCipher),
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(mockCipher),
+            ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
             sendViewList = listOf(),
@@ -818,7 +864,10 @@ class VaultDataExtensionsTest {
     @Test
     fun `toViewState should properly filter nested items out`() {
         val vaultData = VaultData(
-            listOf(createMockCipherView(number = 1)),
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(createMockCipherListView(number = 1)),
+            ),
             collectionViewList = listOf(
                 createMockCollectionView(1, "test"),
                 createMockCollectionView(2, "test/test"),
@@ -901,31 +950,33 @@ class VaultDataExtensionsTest {
     @Test
     fun `toViewState should excluded card vault items and adjust type count for ciphers with orgId in restrictItemTypesPolicyOrgIds and set showCardGroup to true if there are remaining cards`() {
         val vaultData = VaultData(
-            cipherViewList = listOf(
-                createMockCipherView(
-                    number = 1,
-                    cipherType = CipherType.CARD,
-                ),
-                createMockCipherView(
-                    number = 2,
-                    organizationId = "restrict_item_type_policy_id",
-                    cipherType = CipherType.CARD,
-                ),
-                createMockCipherView(
-                    number = 3,
-                    organizationId = "another_id",
-                    cipherType = CipherType.CARD,
-                ),
-                createMockCipherView(
-                    number = 4,
-                    organizationId = null,
-                    cipherType = CipherType.CARD,
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(
+                        number = 1,
+                        type = CipherListViewType.Card(v1 = createMockCardListView(number = 1)),
+                    ),
+                    createMockCipherListView(
+                        number = 2,
+                        organizationId = "restrict_item_type_policy_id",
+                        type = CipherListViewType.Card(v1 = createMockCardListView(number = 2)),
+                    ),
+                    createMockCipherListView(
+                        number = 3,
+                        organizationId = "another_id",
+                        type = CipherListViewType.Card(v1 = createMockCardListView(number = 3)),
+                    ),
+                    createMockCipherListView(
+                        number = 4,
+                        organizationId = null,
+                        type = CipherListViewType.Card(v1 = createMockCardListView(number = 4)),
+                    ),
                 ),
             ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
             sendViewList = listOf(),
-            fido2CredentialAutofillViewList = null,
         )
 
         val actual = vaultData.toViewState(
@@ -961,27 +1012,29 @@ class VaultDataExtensionsTest {
     @Test
     fun `toViewState should excluded card vault items for ciphers with orgId in restrictItemTypesPolicyOrgIds and set showCardGroup to false if there are no remaining cards`() {
         val vaultData = VaultData(
-            cipherViewList = listOf(
-                createMockCipherView(
-                    number = 1,
-                    organizationId = "restrict_item_type_policy_id",
-                    cipherType = CipherType.LOGIN,
-                ),
-                createMockCipherView(
-                    number = 2,
-                    organizationId = "restrict_item_type_policy_id",
-                    cipherType = CipherType.CARD,
-                ),
-                createMockCipherView(
-                    number = 3,
-                    organizationId = "restrict_item_type_policy_id",
-                    cipherType = CipherType.CARD,
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(
+                        number = 1,
+                        organizationId = "restrict_item_type_policy_id",
+                        type = CipherListViewType.Login(v1 = createMockLoginListView(number = 1)),
+                    ),
+                    createMockCipherListView(
+                        number = 2,
+                        organizationId = "restrict_item_type_policy_id",
+                        type = CipherListViewType.Card(v1 = createMockCardListView(number = 2)),
+                    ),
+                    createMockCipherListView(
+                        number = 3,
+                        organizationId = "restrict_item_type_policy_id",
+                        type = CipherListViewType.Card(v1 = createMockCardListView(number = 3)),
+                    ),
                 ),
             ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
             sendViewList = listOf(),
-            fido2CredentialAutofillViewList = null,
         )
 
         val actual = vaultData.toViewState(
@@ -1016,14 +1069,16 @@ class VaultDataExtensionsTest {
     @Test
     fun `toViewState should include SSH key vault items and type count`() {
         val vaultData = VaultData(
-            cipherViewList = listOf(
-                createMockCipherView(number = 1),
-                createMockCipherView(number = 2, cipherType = CipherType.SSH_KEY),
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(number = 1),
+                    createMockCipherListView(number = 2, type = CipherListViewType.SshKey),
+                ),
             ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
             sendViewList = listOf(),
-            fido2CredentialAutofillViewList = null,
         )
 
         val actual = vaultData.toViewState(
@@ -1060,25 +1115,25 @@ class VaultDataExtensionsTest {
     @Test
     fun `toViewState should transform SSH key vault items into correct vault item`() {
         val vaultData = VaultData(
-            cipherViewList = listOf(
-                createMockCipherView(number = 1, cipherType = CipherType.SSH_KEY, folderId = null),
-                createMockCipherView(
-                    number = 2,
-                    cipherType = CipherType.SSH_KEY,
-                    repromptType = CipherRepromptType.PASSWORD,
-                    folderId = null,
-                    sshKey = createMockSshKeyView(number = 1)
-                        .copy(
-                            publicKey = "publicKey",
-                            privateKey = "privateKey",
-                            fingerprint = "fingerprint",
-                        ),
-                ),
-                createMockCipherView(
-                    number = 3,
-                    cipherType = CipherType.SSH_KEY,
-                    folderId = null,
-                    sshKey = null,
+            decryptCipherListResult = createMockDecryptCipherListResult(
+                number = 1,
+                successes = listOf(
+                    createMockCipherListView(
+                        number = 1,
+                        type = CipherListViewType.SshKey,
+                        folderId = null,
+                    ),
+                    createMockCipherListView(
+                        number = 2,
+                        type = CipherListViewType.SshKey,
+                        reprompt = CipherRepromptType.PASSWORD,
+                        folderId = null,
+                    ),
+                    createMockCipherListView(
+                        number = 3,
+                        type = CipherListViewType.SshKey,
+                        folderId = null,
+                    ),
                 ),
             ),
             collectionViewList = listOf(),
@@ -1107,18 +1162,8 @@ class VaultDataExtensionsTest {
                 noFolderItems = listOf(
                     createMockSshKeyVaultItem(number = 1),
                     createMockSshKeyVaultItem(number = 2)
-                        .copy(
-                            publicKey = "publicKey".asText(),
-                            privateKey = "privateKey".asText(),
-                            fingerprint = "fingerprint".asText(),
-                            shouldShowMasterPasswordReprompt = true,
-                        ),
-                    createMockSshKeyVaultItem(number = 3)
-                        .copy(
-                            publicKey = "".asText(),
-                            privateKey = "".asText(),
-                            fingerprint = "".asText(),
-                        ),
+                        .copy(shouldShowMasterPasswordReprompt = true),
+                    createMockSshKeyVaultItem(number = 3),
                 ),
                 trashItemsCount = 0,
                 totpItemsCount = 0,
@@ -1134,9 +1179,6 @@ private fun createMockSshKeyVaultItem(number: Int): VaultState.ViewState.VaultIt
     VaultState.ViewState.VaultItem.SshKey(
         id = "mockId-$number",
         name = "mockName-$number".asText(),
-        publicKey = "mockPublicKey-$number".asText(),
-        privateKey = "mockPrivateKey-$number".asText(),
-        fingerprint = "mockKeyFingerprint-$number".asText(),
         overflowOptions = listOf(
             ListingItemOverflowAction.VaultAction.ViewClick(
                 cipherId = "mockId-$number",

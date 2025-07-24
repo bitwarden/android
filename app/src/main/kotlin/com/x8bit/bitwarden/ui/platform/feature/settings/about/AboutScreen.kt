@@ -340,6 +340,8 @@ private fun AboutScreenContent_preview() {
         AboutScreenContent(
             state = AboutState(
                 version = "Version: 1.0.0 (1)".asText(),
+                sdkVersion = "\uD83E\uDD80 SDK: 1.0.0-20250708.105256-238".asText(),
+                serverData = "\uD83C\uDF29 Server: 2025.7.1 @ US".asText(),
                 deviceData = "device_data".asText(),
                 ciData = "ci_data".asText(),
                 isSubmitCrashLogsEnabled = false,

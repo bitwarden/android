@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Hitelesítő alkalmazás</string>
     <string name="enter_verification_code_app">Add meg a 6 számjegyű ellenőrző kódot a hitelesítő alkalmazásodból.</string>
     <string name="enter_verification_code_email">6 számjegyű ellenőrző kód megadása, ami %1$s e-mail címre lett küldve.</string>
-    <string name="enter_verification_code_new_device">Nem ismerhető fel ez az eszköz. Írjuk be a 8 számjegyű ellenőrző kódot, amelyet emailben lett elküldve %1$s email címre.</string>
+    <string name="enter_verification_code_new_device">Nem ismerhető fel ez az eszköz. Írjuk be a 8 számjegyű ellenőrző kódot, amelyet emailben lett elküldve [%1$s] email címre.</string>
     <string name="recovery_code_title">Helyreállító kód</string>
     <string name="remember">Megjegyzés</string>
     <string name="remember_email">Email cím megjegyzése</string>

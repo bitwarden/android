@@ -118,7 +118,7 @@
     <string name="download_bitwarden_card_message">Храните все свои логины и синхронизируйте коды проверки непосредственно с приложением \"Аутентификатор\".</string>
     <string name="download_now">Скачать сейчас</string>
     <string name="sync_with_bitwarden_app">Синхронизация с приложением Bitwarden</string>
-    <string name="this_feature_is_not_not_yet_available_for_self_hosted_users">Эта функция пока недоступна для пользователей, использующих собственный хостинг. <annotation link="learnMore">Узнать больше</annotation></string>
+    <string name="learn_more_link"><annotation link="learnMore">Узнать больше</annotation></string>
     <string name="shared_codes_error">Невозможно синхронизировать коды из приложения Bitwarden. Убедитесь, что оба приложения обновлены. Вы по-прежнему можете получить доступ к существующим кодам в приложении Bitwarden.</string>
     <string name="shared_accounts_header">%1$s | %2$s</string>
     <string name="sync_with_the_bitwarden_app">Синхронизация с приложением Bitwarden</string>

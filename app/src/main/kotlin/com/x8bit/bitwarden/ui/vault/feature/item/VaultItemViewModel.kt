@@ -120,7 +120,6 @@ class VaultItemViewModel @Inject constructor(
                 TotpCodeItemData(
                     periodSeconds = it.periodSeconds,
                     timeLeftSeconds = it.timeLeftSeconds,
-                    totpCode = it.totpCode,
                     verificationCode = it.code,
                 )
             }
@@ -1281,7 +1280,7 @@ data class VaultItemState(
             VaultItemCipherType.CARD -> R.string.view_card.asText()
             VaultItemCipherType.IDENTITY -> R.string.view_identity.asText()
             VaultItemCipherType.SECURE_NOTE -> R.string.view_note.asText()
-            VaultItemCipherType.SSH_KEY -> R.string.view_passkey.asText()
+            VaultItemCipherType.SSH_KEY -> R.string.view_ssh_key.asText()
         }
 
     /**

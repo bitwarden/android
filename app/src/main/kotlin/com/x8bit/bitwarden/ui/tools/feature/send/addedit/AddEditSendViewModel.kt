@@ -15,6 +15,7 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -65,6 +66,7 @@ private const val MAX_FILE_SIZE_BYTES: Long = 100 * 1024 * 1024
 @HiltViewModel
 class AddEditSendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    authRepo: AuthRepository,
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val environmentRepo: EnvironmentRepository,
@@ -131,6 +133,7 @@ class AddEditSendViewModel @Inject constructor(
             policyDisablesSend = policyManager
                 .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
                 .any(),
+            isPremium = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
         )
     },
 ) {
@@ -499,6 +502,19 @@ class AddEditSendViewModel @Inject constructor(
             }
             (content.selectedType as? AddEditSendState.ViewState.Content.SendType.File)
                 ?.let { fileType ->
+                    if (!state.isPremium) {
+                        // We should never get here without a premium account, but we do one last
+                        // check just in case.
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialogState = AddEditSendState.DialogState.Error(
+                                    title = R.string.send.asText(),
+                                    message = R.string.send_file_premium_required.asText(),
+                                ),
+                            )
+                        }
+                        return@onContent
+                    }
                     if (fileType.name.isNullOrBlank()) {
                         mutableStateFlow.update {
                             it.copy(
@@ -686,6 +702,7 @@ data class AddEditSendState(
     val isShared: Boolean,
     val baseWebSendUrl: String,
     val policyDisablesSend: Boolean,
+    val isPremium: Boolean,
 ) : Parcelable {
 
     /**

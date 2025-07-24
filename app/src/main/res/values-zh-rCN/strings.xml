@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">验证器 App</string>
     <string name="enter_verification_code_app">请输入您的验证器 App 中的 6 位数验证码。</string>
     <string name="enter_verification_code_email">请输入发送到 %1$s 的 6 位数验证码。</string>
-    <string name="enter_verification_code_new_device">我们无法识别这个设备。请输入发送到 %1$s 的 8 位数验证码。</string>
+    <string name="enter_verification_code_new_device">我们无法识别这个设备。请输入发送到您电子邮箱中的代码以验证您的身份。</string>
     <string name="recovery_code_title">恢复代码</string>
     <string name="remember">记住</string>
     <string name="remember_email">记住电子邮箱</string>
@@ -980,7 +980,7 @@
     <string name="trusted_by_you">被您信任</string>
     <string name="trusted_by_the_community">被社区信任</string>
     <string name="trusted_by_google">被 Google 信任</string>
-    <string name="privileged_apps_description">为保护用户免遭钓鱼攻击，默认情况下，Bitwarden 仅允许使用被 Google 或 Bitwarden 社区信任的网页浏览器完成通行密钥操作。</string>
+    <string name="privileged_apps_description">为保护用户免遭钓鱼攻击，默认情况下，Bitwarden 仅使用被 Google 或 Bitwarden 社区信任的应用程序或网页浏览器完成通行密钥操作。</string>
     <string name="about_privileged_applications">关于特权 App</string>
     <string name="learn_more_about_privileged_apps">进一步了解特权 App</string>
     <string name="privileged_apps">特权 App</string>

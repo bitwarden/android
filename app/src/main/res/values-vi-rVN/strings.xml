@@ -62,7 +62,7 @@
     <string name="sync">Đồng bộ</string>
     <string name="uri">Đường dẫn (URI)</string>
     <string name="website_uri">Trang web (URI)</string>
-    <string name="username">Tên người dùng</string>
+    <string name="username">Tên đăng nhập</string>
     <string name="validation_field_required">Vui lòng nhập %1$s.</string>
     <string name="you_must_attach_a_file_to_save_this_send">Bạn phải đính kèm một tệp để lưu Send này.</string>
     <string name="value_has_been_copied">Đã sao chép %1$s</string>
@@ -102,7 +102,7 @@
     <string name="one_minute">1 phút</string>
     <string name="four_hours">4 giờ</string>
     <string name="immediately">Tức thì</string>
-    <string name="vault_timeout_log_out_confirmation">Đăng xuất sẽ xóa toàn bộ quyền truy cập vào kho của bạn và yêu cầu xác minh lại sau khi hết thời gian chờ. Bạn có chắc chắn muốn sử dụng cài đặt này không?</string>
+    <string name="vault_timeout_log_out_confirmation">Đăng xuất sẽ xóa toàn bộ quyền truy cập vào kho của bạn và yêu cầu xác minh lại sau khi đóng kho. Bạn có chắc chắn muốn sử dụng cài đặt này không?</string>
     <string name="logging_in">Đang đăng nhập...</string>
     <string name="login_to_bitwarden">Đăng nhập Bitwarden</string>
     <string name="master_password_confirmation_val_message">Mật khẩu nhập lại không trùng khớp.</string>
@@ -129,7 +129,7 @@
     <string name="no_ssh_keys">Không có khóa SSH nào trong kho của bạn.</string>
     <string name="new_text_send">Send văn bản mới</string>
     <string name="new_file_send">Send tập tin mới</string>
-    <string name="no_username">Không tên người dùng</string>
+    <string name="no_username">Không tên đăng nhập</string>
     <string name="options">Tùy chọn</string>
     <string name="other">Khác</string>
     <string name="password_generator">Trình tạo mật khẩu</string>
@@ -170,8 +170,8 @@
     <string name="authenticator_app_title">Ứng dụng xác thực</string>
     <string name="enter_verification_code_app">Nhập mã xác nhận 6 chữ số từ ứng dụng xác thực của bạn.</string>
     <string name="enter_verification_code_email">Nhập mã xác nhận 6 chữ số đã được gửi tới email %1$s.</string>
-    <string name="enter_verification_code_new_device">Chúng tôi không nhận diện được thiết bị này. Vui lòng nhập mã xác minh 8 chữ số đã được gửi đến email %1$s.</string>
-    <string name="recovery_code_title">Mã phục hồi</string>
+    <string name="enter_verification_code_new_device">Chúng tôi không nhận diện được thiết bị này. Vui lòng nhập mã xác minh 8 chữ số đã được gửi đến email [%1$s].</string>
+    <string name="recovery_code_title">Mã khôi phục</string>
     <string name="remember">Ghi nhớ</string>
     <string name="remember_email">Ghi nhớ email</string>
     <string name="send_verification_code_again">Gửi lại mã</string>
@@ -191,7 +191,7 @@
     <string name="point_your_camera_at_the_qr_code">Hướng máy ảnh của bạn vào mã QR.
 Quá trình quét sẽ diễn ra tự động.</string>
     <string name="copy_totp">Sao chép TOTP</string>
-    <string name="copy_totp_automatically_description">Nếu tài khoản đăng nhập có khóa xác thực, mã xác minh TOTP sẽ được sao chép vào bộ nhớ tạm khi bạn tự động điền thông tin đăng nhập.</string>
+    <string name="copy_totp_automatically_description">Nếu tài khoản đăng nhập có khóa xác thực, mã xác minh TOTP sẽ được sao chép vào bảng nhớ tạm khi bạn tự động điền thông tin đăng nhập.</string>
     <string name="copy_totp_automatically">Tự động sao chép mã TOTP</string>
     <string name="premium_required">Cần là thành viên Cao cấp để sử dụng tính năng này.</string>
     <string name="attachment_deleted">Đã xóa tệp đính kèm</string>
@@ -273,7 +273,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="no_items_collection">Không có mục nào trong bộ sưu tập này.</string>
     <string name="no_items_folder">Không có mục nào trong thư mục này.</string>
     <string name="no_items_trash">Không có gì trong thùng rác</string>
-    <string name="autofill_accessibility_summary">Hỗ trợ điền tên người dùng và mật khẩu vào các trường tương ứng trong các ứng dụng khác và trên trang web.</string>
+    <string name="autofill_accessibility_summary">Hỗ trợ điền tên đăng nhập và mật khẩu vào các trường tương ứng trong các ứng dụng khác và trên trang web.</string>
     <string name="autofill_service_description">Dịch vụ tự động điền của Bitwarden sử dụng Khung Tự động điền của Android để hỗ trợ điền thông tin đăng nhập, thẻ tín dụng và thông tin danh tính vào các ứng dụng khác trên thiết bị của bạn.</string>
     <string name="bitwarden_autofill_go_to_settings">Chúng tôi không thể mở cài đặt tự động điền cho bạn. Bạn có thể đi đến cài đặt tự động điền theo cách thủ công bằng cách vào Cài đặt &gt; Hệ thống &gt; Ngôn ngữ và nhập liệu &gt; Nâng cao &gt; Dịch vụ tự động điền.</string>
     <string name="custom_field_name">Tên trường tùy chỉnh</string>
@@ -309,7 +309,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="contact_info">Thông tin liên hệ</string>
     <string name="check_password_for_data_breaches">Kiểm tra xem mật khẩu có bị lộ</string>
     <string name="password_exposed">Mật khẩu này đã bị lộ %1$s lần trong các vụ rò rỉ dữ liệu. Bạn nên thay đổi nó.</string>
-    <string name="password_safe">Mật khẩu này không được tìm thấy trong các vụ rò rỉ dữ liệu nào trước đây. Nó an toàn để sử dụng.</string>
+    <string name="password_safe">Không tìm thấy mật khẩu này trong các vụ rò rỉ dữ liệu trước đây. Nó an toàn để sử dụng.</string>
     <string name="identity_name">Tên định danh</string>
     <string name="value">Giá trị</string>
     <string name="password_history">Lịch sử mật khẩu</string>
@@ -353,8 +353,8 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="thirty_seconds">30 giây</string>
     <string name="twenty_seconds">20 giây</string>
     <string name="two_minutes">2 phút</string>
-    <string name="clear_clipboard">Xóa bộ nhớ tạm</string>
-    <string name="clear_clipboard_description">Tự động xóa mọi thứ đã sao chép khỏi bộ nhớ tạm.</string>
+    <string name="clear_clipboard">Xóa bảng nhớ tạm</string>
+    <string name="clear_clipboard_description">Tự động xóa mọi thứ đã sao chép khỏi bảng nhớ tạm.</string>
     <string name="default_uri_match_detection">Cách nhận diện đường dẫn (URI)</string>
     <string name="default_uri_match_detection_description">Chọn cách thức mặc định hệ thống so khớp đường dẫn (URI) để xử lý đăng nhập khi thực hiện các thao tác như tự động điền.</string>
     <string name="theme">Chủ đề</string>
@@ -408,8 +408,8 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="log_in_sso">Đăng nhập một lần cho doanh nghiệp</string>
     <string name="log_in_sso_summary">Đăng nhập nhanh chóng thông qua cổng đăng nhập một lần của tổ chức của bạn. Vui lòng nhập mã định danh của tổ chức để bắt đầu.</string>
     <string name="org_identifier">Mã định danh tổ chức</string>
-    <string name="login_sso_error">Hiện tại không thể đăng nhập bằng SSO</string>
-    <string name="set_master_password">Tạo mật khẩu chính</string>
+    <string name="login_sso_error">Hiện tại không thể đăng nhập bằng Đăng nhập một lần</string>
+    <string name="set_master_password">Đặt mật khẩu chính</string>
     <string name="master_password_policy_in_effect">Các chính sách của tổ chức yêu cầu mật khẩu chính của bạn phải đáp ứng các yêu cầu sau:</string>
     <string name="policy_in_effect_min_complexity">Độ mạnh tối thiểu %1$s</string>
     <string name="policy_in_effect_min_length">Độ dài tối thiểu %1$s</string>
@@ -420,7 +420,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="master_password_policy_validation_title">Mật khẩu không đúng</string>
     <string name="master_password_policy_validation_message">Mật khẩu không đáp ứng yêu cầu của tổ chức. Vui lòng kiểm tra chính sách mật khẩu và thử lại.</string>
     <string name="loading">Đang tải</string>
-    <string name="accept_policies_error">Điều khoản Dịch vụ và Chính sách Bảo mật chưa được xác nhận.</string>
+    <string name="accept_policies_error">Bạn chưa đồng ý với Điều khoản Dịch vụ và Chính sách Bảo mật.</string>
     <string name="terms_of_service">Điều khoản Dịch vụ</string>
     <string name="privacy_policy">Chính sách Bảo mật</string>
     <string name="passkey_management">Quản lý mã khoá</string>
@@ -447,7 +447,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="expires_at">Hết hạn vào %s</string>
     <string name="expires_tomorrow">Hết hạn ngày mai</string>
     <string name="expires_on">Hết hạn vào %s</string>
-    <string name="stops_logging_on">Ngừng đăng nhập %1$s vào %2$s</string>
+    <string name="stops_logging_on">Ngừng ghi %1$s lúc %2$s</string>
     <string name="maximum_access_count">Số lần truy cập tối đa</string>
     <string name="maximum_access_count_info">Nếu được thiết lập, người dùng sẽ không thể truy cập Send này khi đã đạt tới số lần truy cập tối đa.</string>
     <string name="maximum_access_count_reached">Đã vượt số lần truy cập tối đa</string>
@@ -497,8 +497,8 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="fido2_return_to_app">Quay lại ứng dụng</string>
     <string name="reset_password_auto_enroll_invite_warning">Tổ chức này có chính sách doanh nghiệp sẽ tự động đặt lại mật khẩu chính cho bạn. Đăng ký sẽ cho phép quản trị viên tổ chức thay đổi mật khẩu chính của bạn.</string>
     <string name="vault_timeout_policy_in_effect">Tổ chức của bạn đã đặt thời gian mở kho tối đa là %1$s giờ và %2$s phút.</string>
-    <string name="vault_timeout_policy_with_action_in_effect">Chính sách tổ chức của bạn đang ảnh hưởng đến thời gian mở kho. Thời gian mở kho tối đa là %1$s giờ và %2$s phút. Kho sẽ %3$s sau khi hết thời gian mở kho.</string>
-    <string name="vault_timeout_action_policy_in_effect">Tổ chức của bạn sẽ %1$s sau khi hết thời gian mở kho.</string>
+    <string name="vault_timeout_policy_with_action_in_effect">Chính sách tổ chức của bạn đang ảnh hưởng đến thời gian mở kho. Thời gian mở kho tối đa là %1$s giờ và %2$s phút. Kho sẽ %3$s sau khi đóng kho.</string>
+    <string name="vault_timeout_action_policy_in_effect">Tổ chức bạn đã thiết lập hành động sau khi đóng kho là %1$s.</string>
     <string name="vault_timeout_to_large">Thời gian mở kho vượt quá giới hạn do tổ chức của bạn đặt ra.</string>
     <string name="disable_personal_vault_export_policy_in_effect">Các chính sách của tổ chức ngăn cản bạn xuất kho lưu trữ cá nhân của mình.</string>
     <string name="add_account">Thêm tài khoản</string>
@@ -559,7 +559,7 @@ chọn Thêm TOTP để lưu khóa an toàn</string>
     <string name="approve_login_requests">Phê duyệt yêu cầu đăng nhập</string>
     <string name="no_thanks">Không, cảm ơn</string>
     <string name="confim_log_in_attemp_for_x">Phê duyệt đăng nhập cho %1$s</string>
-    <string name="username_type">Loại tên người dùng</string>
+    <string name="username_type">Loại tên đăng nhập</string>
     <string name="plus_addressed_email">Địa chỉ email có hậu tố</string>
     <string name="catch_all_email">Catch-all email</string>
     <string name="forwarded_email_alias">Địa chỉ email thay thế</string>
@@ -578,13 +578,13 @@ chọn Thêm TOTP để lưu khóa an toàn</string>
     <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">Token truy cập API (bắt buộc)</string>
     <string name="api_access_token">Token truy cập API</string>
-    <string name="are_you_sure_you_want_to_overwrite_the_current_username">Bạn có chắc chắn muốn ghi đè lên tên người dùng hiện tại không?</string>
-    <string name="generate_username">Tạo tên người dùng</string>
+    <string name="are_you_sure_you_want_to_overwrite_the_current_username">Bạn có chắc chắn muốn ghi đè lên tên đăng nhập hiện tại không?</string>
+    <string name="generate_username">Tạo tên đăng nhập</string>
     <string name="plus_addressed_email_description">Sử dụng tính năng địa chỉ phụ của nhà cung cấp dịch vụ email của bạn</string>
     <string name="catch_all_email_description">Sử dụng hộp thư bạn đã thiết lập để nhận tất cả email gửi đến tên miền của bạn.</string>
     <string name="forwarded_email_description">Tạo một địa chỉ email ảo bằng dịch vụ chuyển tiếp email bên ngoài.</string>
     <string name="accessibility_service_disclosure">Thông báo về Dịch vụ Trợ năng</string>
-    <string name="accessibility_disclosure_text">Bitwarden sử dụng Dịch vụ trợ năng để tìm kiếm các trường đăng nhập trong ứng dụng và trang web, sau đó thiết lập ID trường thích hợp để nhập tên người dùng &amp; mật khẩu khi tìm thấy ứng dụng hoặc trang web tương ứng. Chúng tôi không lưu trữ bất kỳ thông tin nào được dịch vụ cung cấp, cũng như không cố gắng kiểm soát bất kỳ yếu tố nào trên màn hình ngoài việc nhập thông tin đăng nhập.</string>
+    <string name="accessibility_disclosure_text">Bitwarden sử dụng Dịch vụ trợ năng để tìm kiếm các trường đăng nhập trong ứng dụng và trang web, sau đó thiết lập ID trường thích hợp để nhập tên đăng nhập &amp; mật khẩu khi tìm thấy ứng dụng hoặc trang web tương ứng. Chúng tôi không lưu trữ bất kỳ thông tin nào được dịch vụ cung cấp, cũng như không cố gắng kiểm soát bất kỳ yếu tố nào trên màn hình ngoài việc nhập thông tin đăng nhập.</string>
     <string name="accept">Đồng ý</string>
     <string name="decline">Từ chối</string>
     <string name="login_request_has_already_expired">Yêu cầu đăng nhập đã hết hạn.</string>
@@ -629,7 +629,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="approve_with_my_other_device">Phê duyệt bằng thiết bị khác</string>
     <string name="request_admin_approval">Yêu cầu quản trị viên phê duyệt</string>
     <string name="approve_with_master_password">Phê duyệt bằng mật khẩu chính</string>
-    <string name="turn_off_using_public_device">Tắt khi sử dụng thiết bị công cộng</string>
+    <string name="turn_off_using_public_device">Tắt nếu sử dụng thiết bị công cộng</string>
     <string name="remember_this_device">Lưu thiết bị này</string>
     <string name="passkey">Mã khoá</string>
     <string name="passkey_will_not_be_copied">Mã khóa sẽ không được sao chép</string>
@@ -658,8 +658,8 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="bitwarden_help_center">Trung tâm hỗ trợ Bitwarden</string>
     <string name="sync_now">Đồng bộ ngay</string>
     <string name="unlock_options">Tùy chọn mở khóa</string>
-    <string name="session_timeout">Thời gian hết phiên</string>
-    <string name="session_timeout_action">Hành động sau khi hết phiên</string>
+    <string name="session_timeout">Thời gian đóng kho</string>
+    <string name="session_timeout_action">Hành động sau khi đóng kho</string>
     <string name="account_fingerprint_phrase">Cụm từ xác thực tài khoản</string>
     <string name="passkey_management_explanation_long">Sử dụng Bitwarden để lưu các mã khoá mới và đăng nhập bằng các mã khoá đã lưu trong kho của bạn.</string>
     <string name="autofill_services_explanation_long">Cho phép Bitwarden sử dụng thông tin đăng nhập đã lưu của bạn để đăng nhập vào các ứng dụng khác trên thiết bị của bạn.</string>
@@ -679,7 +679,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="learn_about_organizations_description_long">Bitwarden cho phép bạn chia sẻ các mục trong kho lưu trữ với người khác bằng cách tạo một tổ chức. Tìm hiểu thêm trên bitwarden.com.</string>
     <string name="created_x">Tạo bởi %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Tổ chức của bạn yêu cầu bạn thiết lập mật khẩu chính.</string>
-    <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Thiết lập phương thức mở khóa để thay đổi hành động hết thời gian mở kho.</string>
+    <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Thiết lập phương thức mở khóa để thay đổi hành động khi đóng kho.</string>
     <string name="save_passkey_as_new_login">Lưu mã khoá như đăng nhập mới</string>
     <string name="overwrite_passkey">Ghi đè mã khoá?</string>
     <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">Mục này đã chứa mã khoá. Bạn có chắc muốn ghi đè mã khoá hiện tại không?</string>
@@ -877,7 +877,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="alias">Tên gọi</string>
     <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Sử dụng trình tạo để tạo mật khẩu, cụm mật khẩu và tên người dùng an toàn. "</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Cụm mật khẩu là mật khẩu mạnh, thường dễ nhớ và dễ nhập hơn mật khẩu ngẫu nhiên. Chúng hữu ích khi đăng nhập vào các tài khoản không có tính năng Tự động điền, như dịch vụ phát trực tuyến trên TV của bạn.</string>
-    <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Tên người dùng duy nhất giúp tăng cường bảo mật và có thể ngăn chặn tin tặc tìm ra tài khoản của bạn.</string>
+    <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Tên đăng nhập duy nhất giúp tăng cường bảo mật và có thể ngăn chặn tin tặc tìm ra tài khoản của bạn.</string>
     <string name="coachmark_1_of_6">1 TRONG 6</string>
     <string name="coachmark_2_of_6">2 TRONG 6</string>
     <string name="coachmark_3_of_6">3 TRONG 6</string>
@@ -927,7 +927,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="recorded_logs_title">Nhật ký đã lưu</string>
     <string name="no_logs_recorded">Chưa ghi nhật ký nào</string>
     <string name="experiencing_an_issue">Bạn đang gặp vấn đề?</string>
-    <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Bật tính năng ghi nhật ký tạm thời để thu thập và kiểm tra nhật cục bộ. Khi tính năng này được bật, trạng thái ứng dụng và các yêu cầu mạng có thể được ghi lại—không bao giờ gồm thông tin nhạy cảm trong kho lưu trữ.</string>
+    <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Bật tính năng ghi nhật ký tạm thời để thu thập và kiểm tra cục bộ. Khi tính năng này được bật, trạng thái ứng dụng và các yêu cầu mạng có thể được ghi lại—không bao giờ bao gồm thông tin nhạy cảm trong kho lưu trữ.</string>
     <string name="to_get_started_set_a_logging_duration">Để bắt đầu, hãy thiết lập thời gian ghi nhật ký. Ghi nhật ký 
 sẽ tự động tắt sau khoảng thời gian này, cho phép bạn ghi lại hoạt động trong quá trình tái hiện 
 các vấn đề.</string>
@@ -969,7 +969,7 @@ các vấn đề.</string>
     <string name="view_text_send">Xem văn bản Send</string>
     <string name="delete_send">Xóa Send</string>
     <string name="missing_send_resync_your_vault">Thiếu Send, đồng bộ lại kho của bạn</string>
-    <string name="dynamic_colors">Màu động</string>
+    <string name="dynamic_colors">Màu sắc tự động điều chỉnh</string>
     <string name="dynamic_colors_description">Dựa theo hình nền của bạn</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Màu sắc động sử dụng các màu hệ thống và có thể khó nhìn.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Vận hành mã khóa thất bại vì trình duyệt (%1$s) không được nhận diện. Chọn \"Tin tưởng\" để thêm %1$s vào danh sách các ứng dụng được tin cậy cục bộ.</string>

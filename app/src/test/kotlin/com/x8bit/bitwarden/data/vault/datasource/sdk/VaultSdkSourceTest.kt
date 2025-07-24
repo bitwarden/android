@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
-import com.bitwarden.core.DateTime
 import com.bitwarden.core.DeriveKeyConnectorRequest
 import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.InitOrgCryptoRequest
@@ -37,7 +36,6 @@ import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
-import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
@@ -71,6 +69,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.security.MessageDigest
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
 @Suppress("LargeClass")
 class VaultSdkSourceTest {
@@ -656,54 +657,6 @@ class VaultSdkSourceTest {
     }
 
     @Test
-    fun `Cipher decryptListCollection should call SDK and return a Result with correct data`() =
-        runBlocking {
-            val userId = "userId"
-            val mockCiphers = mockk<List<Cipher>>()
-            val expectedResult = mockk<List<CipherListView>>()
-            coEvery { ciphersClient.decryptList(ciphers = mockCiphers) } returns expectedResult
-            val result = vaultSdkSource.decryptCipherListCollection(
-                userId = userId,
-                cipherList = mockCiphers,
-            )
-            assertEquals(
-                expectedResult.asSuccess(),
-                result,
-            )
-            coVerify {
-                ciphersClient.decryptList(ciphers = mockCiphers)
-                sdkClientManager.getOrCreateClient(userId = userId)
-            }
-        }
-
-    @Test
-    fun `Cipher decryptList should call SDK and return a Result with correct data`() = runBlocking {
-        val userId = "userId"
-        val mockCipher1 = mockk<Cipher>()
-        val mockCipher2 = mockk<Cipher>()
-        val cipherView1 = mockk<CipherView>()
-        val cipherView2 = mockk<CipherView>()
-        coEvery { ciphersClient.decrypt(cipher = mockCipher1) } returns cipherView1
-        coEvery { ciphersClient.decrypt(cipher = mockCipher2) } returns cipherView2
-        val result = vaultSdkSource.decryptCipherList(
-            userId = userId,
-            cipherList = listOf(mockCipher1, mockCipher2),
-        )
-        assertEquals(
-            listOf(cipherView1, cipherView2).asSuccess(),
-            result,
-        )
-        coVerify(exactly = 1) {
-            ciphersClient.decrypt(cipher = mockCipher1)
-            ciphersClient.decrypt(cipher = mockCipher2)
-            // It's important that we only fetch the client once
-            sdkClientManager.getOrCreateClient(userId = userId)
-            client.vault()
-            clientVault.ciphers()
-        }
-    }
-
-    @Test
     fun `decryptCollection should call SDK and return correct data wrapped in a Result`() =
         runBlocking {
             val userId = "userId"
@@ -1030,7 +983,7 @@ class VaultSdkSourceTest {
         val totpResponse = TotpResponse("TestCode", 30u)
         coEvery { clientVault.generateTotp(any(), any()) } returns totpResponse
 
-        val time = DateTime.now()
+        val time = FIXED_CLOCK.instant()
         val result = vaultSdkSource.generateTotp(
             userId = userId,
             totp = "Totp",
@@ -1468,4 +1421,8 @@ private val DEFAULT_FIDO_2_AUTH_REQUEST = AuthenticateFido2CredentialRequest(
     ),
     isUserVerificationSupported = true,
     selectedCipherView = createMockCipherView(number = 1),
+)
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse("2023-10-27T12:00:00Z"),
+    ZoneOffset.UTC,
 )

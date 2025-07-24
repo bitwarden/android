@@ -32,6 +32,7 @@ import java.time.ZonedDateTime
 class UserLogoutManagerTest {
     private val authDiskSource: AuthDiskSource = mockk {
         every { storeAccountTokens(userId = any(), accountTokens = null) } just runs
+        every { storePinProtectedUserKey(userId = any(), pinProtectedUserKey = any()) } just runs
         every { userState = any() } just runs
         every { clearData(any()) } just runs
     }
@@ -117,6 +118,7 @@ class UserLogoutManagerTest {
         val userId = USER_ID_1
         val vaultTimeoutInMinutes = 360
         val vaultTimeoutAction = VaultTimeoutAction.LOGOUT
+        val pinProtectedUserKey = "pinProtectedUserKey"
 
         every { authDiskSource.userState } returns MULTI_USER_STATE
         every {
@@ -125,10 +127,13 @@ class UserLogoutManagerTest {
         every {
             settingsDiskSource.getVaultTimeoutAction(userId = userId)
         } returns vaultTimeoutAction
+        every {
+            authDiskSource.getPinProtectedUserKey(userId = userId)
+        } returns pinProtectedUserKey
 
         userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
 
-        verify { authDiskSource.storeAccountTokens(userId = USER_ID_1, accountTokens = null) }
+        verify { authDiskSource.storeAccountTokens(userId = userId, accountTokens = null) }
         assertDataCleared(userId = userId)
 
         verify(exactly = 1) {
@@ -141,6 +146,18 @@ class UserLogoutManagerTest {
                 vaultTimeoutAction = vaultTimeoutAction,
             )
             toastManager.show(messageId = R.string.account_switched_automatically)
+            settingsDiskSource.storeVaultTimeoutInMinutes(
+                userId = userId,
+                vaultTimeoutInMinutes = vaultTimeoutInMinutes,
+            )
+            settingsDiskSource.storeVaultTimeoutAction(
+                userId = userId,
+                vaultTimeoutAction = vaultTimeoutAction,
+            )
+            authDiskSource.storePinProtectedUserKey(
+                userId = userId,
+                pinProtectedUserKey = pinProtectedUserKey,
+            )
         }
     }
 
@@ -149,6 +166,7 @@ class UserLogoutManagerTest {
         val userId = USER_ID_1
         val vaultTimeoutInMinutes = 360
         val vaultTimeoutAction = VaultTimeoutAction.LOGOUT
+        val pinProtectedUserKey = "pinProtectedUserKey"
 
         every { authDiskSource.userState } returns MULTI_USER_STATE
         every {
@@ -157,16 +175,31 @@ class UserLogoutManagerTest {
         every {
             settingsDiskSource.getVaultTimeoutAction(userId = userId)
         } returns vaultTimeoutAction
+        every {
+            authDiskSource.getPinProtectedUserKey(userId = userId)
+        } returns pinProtectedUserKey
 
         userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
 
         verify(exactly = 1) {
-            authDiskSource.storeAccountTokens(userId = USER_ID_1, accountTokens = null)
+            authDiskSource.storeAccountTokens(userId = userId, accountTokens = null)
             authDiskSource.userState = UserStateJson(
                 activeUserId = USER_ID_2,
                 accounts = MULTI_USER_STATE.accounts,
             )
             toastManager.show(messageId = R.string.account_switched_automatically)
+            settingsDiskSource.storeVaultTimeoutInMinutes(
+                userId = userId,
+                vaultTimeoutInMinutes = vaultTimeoutInMinutes,
+            )
+            settingsDiskSource.storeVaultTimeoutAction(
+                userId = userId,
+                vaultTimeoutAction = vaultTimeoutAction,
+            )
+            authDiskSource.storePinProtectedUserKey(
+                userId = userId,
+                pinProtectedUserKey = pinProtectedUserKey,
+            )
         }
     }
 
@@ -176,6 +209,7 @@ class UserLogoutManagerTest {
         val userId = USER_ID_1
         val vaultTimeoutInMinutes = 360
         val vaultTimeoutAction = VaultTimeoutAction.LOGOUT
+        val pinProtectedUserKey = "pinProtectedUserKey"
 
         every { authDiskSource.userState } returns MULTI_USER_STATE
         every {
@@ -184,16 +218,31 @@ class UserLogoutManagerTest {
         every {
             settingsDiskSource.getVaultTimeoutAction(userId = userId)
         } returns vaultTimeoutAction
+        every {
+            authDiskSource.getPinProtectedUserKey(userId = userId)
+        } returns pinProtectedUserKey
 
         userLogoutManager.softLogout(userId = userId, reason = LogoutReason.SecurityStamp)
 
         verify(exactly = 1) {
-            authDiskSource.storeAccountTokens(userId = USER_ID_1, accountTokens = null)
+            authDiskSource.storeAccountTokens(userId = userId, accountTokens = null)
             authDiskSource.userState = UserStateJson(
                 activeUserId = USER_ID_2,
                 accounts = MULTI_USER_STATE.accounts,
             )
             toastManager.show(messageId = R.string.login_expired)
+            settingsDiskSource.storeVaultTimeoutInMinutes(
+                userId = userId,
+                vaultTimeoutInMinutes = vaultTimeoutInMinutes,
+            )
+            settingsDiskSource.storeVaultTimeoutAction(
+                userId = userId,
+                vaultTimeoutAction = vaultTimeoutAction,
+            )
+            authDiskSource.storePinProtectedUserKey(
+                userId = userId,
+                pinProtectedUserKey = pinProtectedUserKey,
+            )
         }
     }
 

@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">برنامه احراز هویت</string>
     <string name="enter_verification_code_app">کد ۶ رقمی تأیید را از برنامه احراز هویت وارد کنید.</string>
     <string name="enter_verification_code_email">کد ۶ رقمی تأیید را که به %1$s ایمیل شده را وارد کنید.</string>
-    <string name="enter_verification_code_new_device">ما این دستگاه را نمی‌شناسیم. کد تأیید 8 رقمی را که به %1$s ایمیل شده است، وارد کنید.</string>
+    <string name="enter_verification_code_new_device">ما این دستگاه را نمی‌شناسیم. کد تأیید 8 رقمی را که به [%1$s] ایمیل شده است، وارد کنید.</string>
     <string name="recovery_code_title">کد بازیابی</string>
     <string name="remember">به خاطر بسپار</string>
     <string name="remember_email">ایمیل را به خاطر بسپار</string>

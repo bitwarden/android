@@ -15,6 +15,7 @@ import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -46,6 +47,7 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
@@ -92,6 +94,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import java.time.Clock
 import java.util.Collections
 import java.util.UUID
@@ -1532,6 +1535,10 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Internal.DeleteCipherReceive -> handleDeleteCipherReceive(action)
             is VaultAddEditAction.Internal.TotpCodeReceive -> handleVaultTotpCodeReceive(action)
             is VaultAddEditAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
+            is VaultAddEditAction.Internal.DetermineContentStateResultReceive -> {
+                handleDetermineContentStateResultReceive(action)
+            }
+
             is VaultAddEditAction.Internal.GeneratorResultReceive -> {
                 handleGeneratorResultReceive(action)
             }
@@ -1712,10 +1719,14 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is DataState.Loaded -> {
-                mutableStateFlow.update { currentState ->
-                    currentState.determineContentState(
-                        vaultData = vaultDataState.data,
-                        userData = action.userData,
+                viewModelScope.launch {
+                    sendAction(
+                        VaultAddEditAction.Internal.DetermineContentStateResultReceive(
+                            vaultAddEditState = state.determineContentState(
+                                vaultData = vaultDataState.data,
+                                userData = action.userData,
+                            ),
+                        ),
                     )
                 }
             }
@@ -1731,26 +1742,34 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is DataState.NoNetwork -> {
-                mutableStateFlow.update { currentState ->
-                    currentState.determineContentState(
-                        vaultData = vaultDataState.data,
-                        userData = action.userData,
+                viewModelScope.launch {
+                    sendAction(
+                        VaultAddEditAction.Internal.DetermineContentStateResultReceive(
+                            state.determineContentState(
+                                vaultData = vaultDataState.data,
+                                userData = action.userData,
+                            ),
+                        ),
                     )
                 }
             }
 
             is DataState.Pending -> {
-                mutableStateFlow.update { currentState ->
-                    currentState.determineContentState(
-                        vaultData = vaultDataState.data,
-                        userData = action.userData,
+                viewModelScope.launch {
+                    sendAction(
+                        VaultAddEditAction.Internal.DetermineContentStateResultReceive(
+                            state.determineContentState(
+                                vaultData = vaultDataState.data,
+                                userData = action.userData,
+                            ),
+                        ),
                     )
                 }
             }
         }
     }
 
-    private fun VaultAddEditState.determineContentState(
+    private suspend fun VaultAddEditState.determineContentState(
         vaultData: VaultData?,
         userData: UserState?,
     ): VaultAddEditState {
@@ -1760,18 +1779,38 @@ class VaultAddEditViewModel @Inject constructor(
             )
         val internalVaultData = vaultData
             ?: VaultData(
-                cipherViewList = emptyList(),
+                decryptCipherListResult = DecryptCipherListResult(
+                    successes = emptyList(),
+                    failures = emptyList(),
+                ),
                 collectionViewList = emptyList(),
                 folderViewList = emptyList(),
                 sendViewList = emptyList(),
-                fido2CredentialAutofillViewList = null,
             )
         val isIndividualVaultDisabled = policyManager
             .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
             .any()
         return copy(
-            viewState = internalVaultData.cipherViewList
+            viewState = internalVaultData.decryptCipherListResult.successes
                 .find { it.id == vaultAddEditType.vaultItemId }
+                ?.let {
+                    val result = vaultRepository.getCipher(
+                        vaultAddEditType.vaultItemId.orEmpty(),
+                    )
+                    when (result) {
+                        GetCipherResult.CipherNotFound -> {
+                            Timber.e("Cipher not found")
+                            null
+                        }
+
+                        is GetCipherResult.Failure -> {
+                            Timber.e(result.error, "Failed to decrypt cipher.")
+                            null
+                        }
+
+                        is GetCipherResult.Success -> result.cipherView
+                    }
+                }
                 .validateCipherOrReturnErrorState(
                     currentAccount = userData?.activeAccount,
                     vaultAddEditType = vaultAddEditType,
@@ -1827,6 +1866,10 @@ class VaultAddEditViewModel @Inject constructor(
                 },
         )
     }
+
+    private fun handleDetermineContentStateResultReceive(
+        action: VaultAddEditAction.Internal.DetermineContentStateResultReceive,
+    ) = mutableStateFlow.update { action.vaultAddEditState }
 
     private fun handleVaultTotpCodeReceive(action: VaultAddEditAction.Internal.TotpCodeReceive) {
         when (val result = action.totpResult) {
@@ -2195,7 +2238,7 @@ data class VaultAddEditState(
                 VaultItemCipherType.CARD -> R.string.new_card.asText()
                 VaultItemCipherType.IDENTITY -> R.string.new_identity.asText()
                 VaultItemCipherType.SECURE_NOTE -> R.string.new_note.asText()
-                VaultItemCipherType.SSH_KEY -> R.string.new_passkey.asText()
+                VaultItemCipherType.SSH_KEY -> R.string.new_ssh_key.asText()
             }
 
             is VaultAddEditType.EditItem -> when (cipherType) {
@@ -2203,7 +2246,7 @@ data class VaultAddEditState(
                 VaultItemCipherType.CARD -> R.string.edit_card.asText()
                 VaultItemCipherType.IDENTITY -> R.string.edit_identity.asText()
                 VaultItemCipherType.SECURE_NOTE -> R.string.edit_note.asText()
-                VaultItemCipherType.SSH_KEY -> R.string.edit_passkey.asText()
+                VaultItemCipherType.SSH_KEY -> R.string.edit_ssh_key.asText()
             }
         }
 
@@ -3415,6 +3458,13 @@ sealed class VaultAddEditAction {
         data class VaultDataReceive(
             val vaultData: DataState<VaultData>,
             val userData: UserState?,
+        ) : Internal()
+
+        /**
+         * Indicates that the vault add edit state has been updated on a background thread.
+         */
+        data class DetermineContentStateResultReceive(
+            val vaultAddEditState: VaultAddEditState,
         ) : Internal()
 
         /**

@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">Autentificētāja lietotne</string>
     <string name="enter_verification_code_app">Jāievada 6 ciparu apliecinājuma kods no autentificētāja lietotnes.</string>
     <string name="enter_verification_code_email">Jāievada 6 ciparu apliecinājuma kods, kas tika nosūtīts uz %1$s.</string>
-    <string name="enter_verification_code_new_device">Mēs neatpazīstam šo ierīci. Jāievada 8 ciparu apliecinājuma kods, kas tika nosūtīts %1$s.</string>
+    <string name="enter_verification_code_new_device">Mēs neatpazīstam šo ierīci. Jāievada 8 ciparu apliecinājuma kods, kas tika nosūtīts [%1$s].</string>
     <string name="recovery_code_title">Atgūšanas kods</string>
     <string name="remember">Atcerēties</string>
     <string name="remember_email">Atcerēties e-pasta adresi</string>

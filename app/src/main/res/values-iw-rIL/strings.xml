@@ -170,7 +170,7 @@
     <string name="authenticator_app_title">יישום מאמת</string>
     <string name="enter_verification_code_app">הזן את קוד האימות בן 6 הספרות מהיישום המאמת שלך.</string>
     <string name="enter_verification_code_email">הזן את קוד האימות בן 6 הספרות שנשלח בדוא\"ל אל %1$s.</string>
-    <string name="enter_verification_code_new_device">אנחנו לא מזהים את המכשיר הזה. הזן את קוד האימות בן 8 הספרות שנשלח בדוא\"ל אל %1$s.</string>
+    <string name="enter_verification_code_new_device">אנחנו לא מזהים את המכשיר הזה. הזן את קוד האימות בן 8 הספרות שנשלח בדוא\"ל אל [%1$s].</string>
     <string name="recovery_code_title">קוד שחזור</string>
     <string name="remember">זכור</string>
     <string name="remember_email">זכור דוא\"ל</string>

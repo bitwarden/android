@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -28,6 +29,7 @@ import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -36,7 +38,9 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
 import kotlinx.collections.immutable.toImmutableList
 
@@ -49,11 +53,15 @@ import kotlinx.collections.immutable.toImmutableList
 fun AppearanceScreen(
     onNavigateBack: () -> Unit,
     viewModel: AppearanceViewModel = hiltViewModel(),
+    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             AppearanceEvent.NavigateBack -> onNavigateBack.invoke()
+            AppearanceEvent.NavigateToWebsiteIconsHelp -> {
+                intentManager.launchUri("https://bitwarden.com/help/website-icons/".toUri())
+            }
         }
     }
 
@@ -114,8 +122,7 @@ fun AppearanceScreen(
             Spacer(modifier = Modifier.height(height = 8.dp))
             if (state.isDynamicColorsSupported) {
                 BitwardenSwitch(
-                    label = stringResource(id = R.string.dynamic_colors),
-                    supportingText = stringResource(id = R.string.dynamic_colors_description),
+                    label = stringResource(id = R.string.use_dynamic_colors),
                     isChecked = state.isDynamicColorsEnabled,
                     onCheckedChange = remember(viewModel) {
                         { viewModel.trySendAction(AppearanceAction.DynamicColorsToggle(it)) }
@@ -135,6 +142,12 @@ fun AppearanceScreen(
                 onCheckedChange = remember(viewModel) {
                     { viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsToggle(it)) }
                 },
+                tooltip = TooltipData(
+                    onClick = remember(viewModel) {
+                        { viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsTooltipClick) }
+                    },
+                    contentDescription = stringResource(id = R.string.show_website_icons_help),
+                ),
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .testTag("ShowWebsiteIconsSwitch")
@@ -156,7 +169,7 @@ private fun AppearanceDialogs(
     when (dialogState) {
         AppearanceState.DialogState.EnableDynamicColors -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = R.string.dynamic_colors),
+                title = stringResource(id = R.string.use_dynamic_colors_question),
                 message = stringResource(
                     id = R.string.dynamic_colors_may_not_adhere_to_accessibility_guidelines,
                 ),

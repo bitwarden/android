@@ -11,6 +11,7 @@ import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -34,10 +35,17 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -155,6 +163,9 @@ class VaultViewModelTest : BaseViewModelTest() {
             every { syncIfNecessary() } just runs
             every { lockVaultForCurrentUser(any()) } just runs
             every { lockVault(any(), any()) } just runs
+            coEvery {
+                getCipher(any())
+            } returns GetCipherResult.Success(createMockCipherView(number = 1))
         }
 
     private val organizationEventManager = mockk<OrganizationEventManager> {
@@ -681,7 +692,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     fun `on VaultFilterTypeSelect should update the selected filter type and re-filter any existing data`() {
         // Update to state with filters and content
         val vaultData = VaultData(
-            cipherViewList = listOf(createMockCipherView(number = 1)),
+            decryptCipherListResult = createMockDecryptCipherListResult(number = 1),
             collectionViewList = listOf(createMockCollectionView(number = 1)),
             folderViewList = listOf(createMockFolderView(number = 1)),
             sendViewList = listOf(createMockSendView(number = 1)),
@@ -757,12 +768,34 @@ class VaultViewModelTest : BaseViewModelTest() {
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Loaded(
                 data = VaultData(
-                    cipherViewList = listOf(
-                        createMockCipherView(number = 1, cipherType = CipherType.LOGIN),
-                        createMockCipherView(number = 2, cipherType = CipherType.CARD),
-                        createMockCipherView(number = 3, cipherType = CipherType.IDENTITY),
-                        createMockCipherView(number = 4, cipherType = CipherType.SECURE_NOTE),
-                        createMockCipherView(number = 5, cipherType = CipherType.SSH_KEY),
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(
+                            createMockCipherListView(
+                                number = 1,
+                                type = CipherListViewType.Login(
+                                    createMockLoginListView(number = 1),
+                                ),
+                            ),
+                            createMockCipherListView(
+                                number = 2,
+                                type = CipherListViewType.Card(
+                                    createMockCardListView(number = 2),
+                                ),
+                            ),
+                            createMockCipherListView(
+                                number = 3,
+                                type = CipherListViewType.Identity,
+                            ),
+                            createMockCipherListView(
+                                number = 4,
+                                type = CipherListViewType.SecureNote,
+                            ),
+                            createMockCipherListView(
+                                number = 5,
+                                type = CipherListViewType.SshKey,
+                            ),
+                        ),
                     ),
                     collectionViewList = listOf(
                         createMockCollectionView(number = 1),
@@ -892,7 +925,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                 mutableVaultDataStateFlow.tryEmit(
                     value = DataState.Loaded(
                         data = VaultData(
-                            cipherViewList = listOf(createMockCipherView(number = 1)),
+                            decryptCipherListResult = createMockDecryptCipherListResult(
+                                number = 1,
+                                successes = listOf(createMockCipherListView(number = 1)),
+                            ),
                             collectionViewList = emptyList(),
                             folderViewList = emptyList(),
                             sendViewList = emptyList(),
@@ -913,7 +949,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Loaded(
                 data = VaultData(
-                    cipherViewList = emptyList(),
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = emptyList(),
+                    ),
                     collectionViewList = emptyList(),
                     folderViewList = emptyList(),
                     sendViewList = emptyList(),
@@ -940,7 +979,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 mutableVaultDataStateFlow.value = DataState.Loaded(
                     data = VaultData(
-                        cipherViewList = emptyList(),
+                        decryptCipherListResult = createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = emptyList(),
+                        ),
                         collectionViewList = emptyList(),
                         folderViewList = emptyList(),
                         sendViewList = emptyList(),
@@ -960,7 +1002,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Pending(
                 data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1)),
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(createMockCipherListView(number = 1)),
+                    ),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     sendViewList = listOf(createMockSendView(number = 1)),
@@ -1014,7 +1059,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Pending(
                 data = VaultData(
-                    cipherViewList = emptyList(),
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = emptyList(),
+                    ),
                     collectionViewList = emptyList(),
                     folderViewList = emptyList(),
                     sendViewList = emptyList(),
@@ -1066,7 +1114,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                 value = DataState.Error(
                     error = IllegalStateException(),
                     data = VaultData(
-                        cipherViewList = listOf(createMockCipherView(number = 1)),
+                        decryptCipherListResult = createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = listOf(createMockCipherListView(number = 1)),
+                        ),
                         collectionViewList = listOf(createMockCollectionView(number = 1)),
                         folderViewList = listOf(createMockFolderView(number = 1)),
                         sendViewList = listOf(createMockSendView(number = 1)),
@@ -1127,7 +1178,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                 value = DataState.Error(
                     error = IllegalStateException(),
                     data = VaultData(
-                        cipherViewList = emptyList(),
+                        decryptCipherListResult = createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = emptyList(),
+                        ),
                         collectionViewList = emptyList(),
                         folderViewList = emptyList(),
                         sendViewList = emptyList(),
@@ -1170,7 +1224,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             mutableVaultDataStateFlow.tryEmit(
                 value = DataState.NoNetwork(
                     data = VaultData(
-                        cipherViewList = listOf(createMockCipherView(number = 1)),
+                        decryptCipherListResult = createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = listOf(createMockCipherListView(number = 1)),
+                        ),
                         collectionViewList = listOf(createMockCollectionView(number = 1)),
                         folderViewList = listOf(createMockFolderView(number = 1)),
                         sendViewList = listOf(createMockSendView(number = 1)),
@@ -1242,7 +1299,10 @@ class VaultViewModelTest : BaseViewModelTest() {
 
         mutableVaultDataStateFlow.value = DataState.Loaded(
             data = VaultData(
-                cipherViewList = emptyList(),
+                decryptCipherListResult = createMockDecryptCipherListResult(
+                    number = 1,
+                    successes = emptyList(),
+                ),
                 collectionViewList = emptyList(),
                 folderViewList = emptyList(),
                 sendViewList = emptyList(),
@@ -1262,9 +1322,15 @@ class VaultViewModelTest : BaseViewModelTest() {
             mutableVaultDataStateFlow.tryEmit(
                 value = DataState.Loaded(
                     data = VaultData(
-                        cipherViewList = listOf(
-                            createMockCipherView(number = 1),
-                            createMockCipherView(number = 1, cipherType = CipherType.SSH_KEY),
+                        decryptCipherListResult = createMockDecryptCipherListResult(
+                            number = 1,
+                            successes = listOf(
+                                createMockCipherListView(number = 1),
+                                createMockCipherListView(
+                                    number = 1,
+                                    type = CipherListViewType.SshKey,
+                                ),
+                            ),
                         ),
                         collectionViewList = listOf(),
                         folderViewList = listOf(),
@@ -1467,7 +1533,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         mutableVaultDataStateFlow.value = DataState.Error(
             error = IllegalStateException(),
             data = VaultData(
-                cipherViewList = emptyList(),
+                decryptCipherListResult = createMockDecryptCipherListResult(
+                    number = 1,
+                    successes = emptyList(),
+                ),
                 collectionViewList = emptyList(),
                 folderViewList = emptyList(),
                 sendViewList = emptyList(),
@@ -1557,12 +1626,12 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `OverflowOptionClick Vault CopyNoteClick should call setText on the ClipboardManager`() =
         runTest {
-            val notes = "notes"
+            val notes = "mockNotes-1"
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyNoteClick(
-                        notes = notes,
+                        cipherId = "mockId-1",
                         requiresPasswordReprompt = false,
                     ),
                 ),
@@ -1575,15 +1644,97 @@ class VaultViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyNoteClick should not call setText on the ClipboardManager when decryption fails`() =
+        runTest {
+            val cipherId = "cipherId"
+            val throwable = Throwable("Decryption failed")
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.Failure(error = throwable)
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = false,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.decryption_error.asText(),
+                        message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                        error = throwable,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyNoteClick should not call setText on the ClipboardManager when cipher is not found`() =
+        runTest {
+            val cipherId = "cipherId"
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.CipherNotFound
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = false,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.generic_error_message.asText(),
+                        error = null,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
     @Test
     fun `OverflowOptionClick Vault CopyNumberClick should call setText on the ClipboardManager`() =
         runTest {
             val number = "12345-4321-9876-6789"
             val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.getCipher("mockId-1")
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.CARD,
+                    card = createMockCardView(number = 1, cardNumber = number),
+                ),
+            )
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyNumberClick(
-                        number = number,
+                        cipherId = "mockId-1",
                         requiresPasswordReprompt = true,
                     ),
                 ),
@@ -1598,15 +1749,87 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `OverflowOptionClick Vault CopyNumberClick should not call setText on the ClipboardManager when decryption fails`() =
+        runTest {
+            val cipherId = "cipherId"
+            val throwable = Throwable("Decryption failed")
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.Failure(error = throwable)
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNumberClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.decryption_error.asText(),
+                        message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                        error = throwable,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyNumberClick should not call setText on the ClipboardManager when cipher is not found`() =
+        runTest {
+            val cipherId = "cipherId"
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.CipherNotFound
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNumberClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.generic_error_message.asText(),
+                        error = null,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `OverflowOptionClick Vault CopyPasswordClick should call setText on the ClipboardManager`() =
         runTest {
-            val password = "passTheWord"
+            val password = "mockPassword-1"
             val cipherId = "cipherId"
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                        password = password,
                         requiresPasswordReprompt = true,
                         cipherId = cipherId,
                     ),
@@ -1621,6 +1844,81 @@ class VaultViewModelTest : BaseViewModelTest() {
                     event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
                 )
             }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyPasswordClick should not call setText on the ClipboardManager when decryption fails`() =
+        runTest {
+            val cipherId = "cipherId"
+            val throwable = Throwable("Decryption failed")
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.Failure(error = throwable)
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                        requiresPasswordReprompt = true,
+                        cipherId = cipherId,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+                organizationEventManager.trackEvent(event = any())
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.decryption_error.asText(),
+                        message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                        error = throwable,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyPasswordClick should not call setText on the ClipboardManager when cipher is not found`() =
+        runTest {
+            val cipherId = "cipherId"
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.CipherNotFound
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                        requiresPasswordReprompt = true,
+                        cipherId = cipherId,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+                organizationEventManager.trackEvent(event = any())
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.generic_error_message.asText(),
+                        error = null,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
         }
 
     @Suppress("MaxLineLength")
@@ -1687,10 +1985,20 @@ class VaultViewModelTest : BaseViewModelTest() {
             val securityCode = "234"
             val cipherId = "cipherId"
             val viewModel = createViewModel()
+
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.Success(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.CARD,
+                    card = createMockCardView(number = 1, code = securityCode),
+                ),
+            )
+
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
-                        securityCode = securityCode,
                         cipherId = cipherId,
                         requiresPasswordReprompt = true,
                     ),
@@ -1705,6 +2013,81 @@ class VaultViewModelTest : BaseViewModelTest() {
                     event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = cipherId),
                 )
             }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopySecurityCodeClick should send DecryptionErrorReceive when decryption fails`() =
+        runTest {
+            val cipherId = "cipherId"
+            val throwable = Throwable("Decryption failed")
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.Failure(error = throwable)
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+                organizationEventManager.trackEvent(event = any())
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.decryption_error.asText(),
+                        message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                        error = throwable,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopySecurityCodeClick should send DecryptionErrorReceive when cipher is not found`() =
+        runTest {
+            val cipherId = "cipherId"
+            coEvery {
+                vaultRepository.getCipher(cipherId = cipherId)
+            } returns GetCipherResult.CipherNotFound
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = true,
+                    ),
+                ),
+            )
+            verify(exactly = 0) {
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
+                organizationEventManager.trackEvent(event = any())
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.generic_error_message.asText(),
+                        error = null,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
         }
 
     @Suppress("MaxLineLength")
@@ -1811,7 +2194,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(
                     VaultAction.OverflowMasterPasswordRepromptSubmit(
                         overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                            password = password,
                             requiresPasswordReprompt = true,
                             cipherId = "cipherId",
                         ),
@@ -1851,7 +2233,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(
                     VaultAction.OverflowMasterPasswordRepromptSubmit(
                         overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                            password = password,
                             requiresPasswordReprompt = true,
                             cipherId = "cipherId",
                         ),
@@ -1877,16 +2258,22 @@ class VaultViewModelTest : BaseViewModelTest() {
         runTest {
             val password = "password"
             val cipherId = "cipherId"
+            val cipherView = createMockCipherView(
+                number = 1,
+                login = createMockLoginView(number = 1, password = password),
+            )
             coEvery {
                 authRepository.validatePassword(password = password)
             } returns ValidatePasswordResult.Success(isValid = true)
+            coEvery {
+                vaultRepository.getCipher(cipherId)
+            } returns GetCipherResult.Success(cipherView)
 
             val viewModel = createViewModel()
 
             viewModel.trySendAction(
                 VaultAction.OverflowMasterPasswordRepromptSubmit(
                     overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                        password = password,
                         requiresPasswordReprompt = true,
                         cipherId = cipherId,
                     ),
@@ -2281,6 +2668,29 @@ class VaultViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
         }
+
+    @Test
+    fun `DecryptionErrorReceived should show decryption error dialog`() = runTest {
+        val viewModel = createViewModel()
+        val throwable = Throwable("Decryption failed")
+        viewModel.trySendAction(
+            VaultAction.Internal.DecryptionErrorReceive(
+                title = R.string.decryption_error.asText(),
+                message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                error = throwable,
+            ),
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.Error(
+                    title = R.string.decryption_error.asText(),
+                    message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                    error = throwable,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(

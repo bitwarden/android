@@ -881,4 +881,5 @@ private val DEFAULT_STATE = AddEditSendState(
     baseWebSendUrl = "https://vault.bitwarden.com/#/send/",
     policyDisablesSend = false,
     sendType = SendItemType.TEXT,
+    isPremium = true,
 )
