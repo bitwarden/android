@@ -9,6 +9,9 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.credentials.provider.AuthenticationAction
+import androidx.credentials.provider.CreateEntry
+import androidx.credentials.provider.CredentialEntry
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import kotlinx.parcelize.Parcelize
 
@@ -115,7 +118,7 @@ interface IntentManager {
     fun createTilePendingIntent(requestCode: Int, tileIntent: Intent): PendingIntent
 
     /**
-     * Creates a pending intent to use when providing [androidx.credentials.provider.CreateEntry]
+     * Creates a pending intent to use when providing [CreateEntry]
      * instances for FIDO 2 credential creation.
      */
     fun createFido2CreationPendingIntent(
@@ -126,7 +129,7 @@ interface IntentManager {
 
     /**
      * Creates a pending intent to use when providing
-     * [androidx.credentials.provider.CredentialEntry] instances for FIDO 2 credential filling.
+     * [CredentialEntry] instances for FIDO 2 credential filling.
      */
     @Suppress("LongParameterList")
     fun createFido2GetCredentialPendingIntent(
@@ -140,11 +143,23 @@ interface IntentManager {
 
     /**
      * Creates a pending intent to use when providing
-     * [androidx.credentials.provider.AuthenticationAction] instances for FIDO 2 credential filling.
+     * [AuthenticationAction] instances for FIDO 2 credential filling.
      */
     fun createFido2UnlockPendingIntent(
         action: String,
         userId: String,
+        requestCode: Int,
+    ): PendingIntent
+
+    /**
+     * Creates a pending intent to use when providing
+     * [CredentialEntry] instances for Password credential filling.
+     */
+    fun createPasswordGetCredentialPendingIntent(
+        action: String,
+        userId: String,
+        cipherId: String?,
+        isUserVerified: Boolean,
         requestCode: Int,
     ): PendingIntent
 

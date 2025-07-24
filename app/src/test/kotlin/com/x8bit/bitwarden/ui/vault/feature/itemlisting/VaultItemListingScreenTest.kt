@@ -32,9 +32,11 @@ import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
@@ -108,6 +110,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     private val credentialProviderCompletionManager: CredentialProviderCompletionManager = mockk {
         every { completeFido2Registration(any()) } just runs
         every { completeFido2Assertion(any()) } just runs
+        every { completePasswordGet(any()) } just runs
         every { completeProviderGetCredentialsRequest(any()) } just runs
     }
     private val biometricsManager: BiometricsManager = mockk()
@@ -1984,6 +1987,18 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2Assertion(result))
         verify {
             credentialProviderCompletionManager.completeFido2Assertion(result)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `GetPasswordCredentialResult event should call CredentialProviderCompletionManager with result`() {
+        val result = GetPasswordCredentialResult.Success(createMockLoginView(1))
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(result),
+        )
+        verify {
+            credentialProviderCompletionManager.completePasswordGet(result)
         }
     }
 

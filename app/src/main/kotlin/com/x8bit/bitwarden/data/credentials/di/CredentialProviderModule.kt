@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepositoryIm
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -75,6 +76,7 @@ object CredentialProviderModule {
         vaultRepository: VaultRepository,
         dispatcherManager: DispatcherManager,
         credentialEntryBuilder: CredentialEntryBuilder,
+        cipherMatchingManager: CipherMatchingManager,
     ): BitwardenCredentialManager =
         BitwardenCredentialManagerImpl(
             vaultSdkSource = vaultSdkSource,
@@ -83,6 +85,7 @@ object CredentialProviderModule {
             vaultRepository = vaultRepository,
             dispatcherManager = dispatcherManager,
             credentialEntryBuilder = credentialEntryBuilder,
+            cipherMatchingManager = cipherMatchingManager,
         )
 
     @Provides

@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.util.getCreateCredentialRequestOrNull
 import com.x8bit.bitwarden.data.credentials.util.getFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.credentials.util.getGetCredentialsRequestOrNull
+import com.x8bit.bitwarden.data.credentials.util.getProviderGetPasswordRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
@@ -302,6 +303,7 @@ class MainViewModel @Inject constructor(
         val createCredentialRequest = intent.getCreateCredentialRequestOrNull()
         val getCredentialsRequest = intent.getGetCredentialsRequestOrNull()
         val fido2AssertCredentialRequest = intent.getFido2AssertionRequestOrNull()
+        val providerGetPasswordRequest = intent.getProviderGetPasswordRequestOrNull()
         when {
             passwordlessRequestData != null -> {
                 authRepository.activeUserId?.let {
@@ -389,6 +391,19 @@ class MainViewModel @Inject constructor(
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.Fido2Assertion(
                         fido2AssertionRequest = fido2AssertCredentialRequest,
+                    )
+            }
+
+            providerGetPasswordRequest != null -> {
+                // Set the user's verification status when a new GetPassword request is
+                // received to force explicit verification if the user's vault is
+                // unlocked when the request is received.
+                bitwardenCredentialManager.isUserVerified =
+                    providerGetPasswordRequest.isUserPreVerified
+
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.ProviderGetPasswordRequest(
+                        passwordGetRequest = providerGetPasswordRequest,
                     )
             }
 
