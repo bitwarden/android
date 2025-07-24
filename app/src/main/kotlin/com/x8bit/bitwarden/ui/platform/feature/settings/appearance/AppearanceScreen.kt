@@ -121,8 +121,7 @@ fun AppearanceScreen(
             Spacer(modifier = Modifier.height(height = 8.dp))
             if (state.isDynamicColorsSupported) {
                 BitwardenSwitch(
-                    label = stringResource(id = R.string.dynamic_colors),
-                    supportingText = stringResource(id = R.string.dynamic_colors_description),
+                    label = stringResource(id = R.string.use_dynamic_colors),
                     isChecked = state.isDynamicColorsEnabled,
                     onCheckedChange = remember(viewModel) {
                         { viewModel.trySendAction(AppearanceAction.DynamicColorsToggle(it)) }
@@ -169,7 +168,7 @@ private fun AppearanceDialogs(
     when (dialogState) {
         AppearanceState.DialogState.EnableDynamicColors -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = R.string.dynamic_colors),
+                title = stringResource(id = R.string.use_dynamic_colors_question),
                 message = stringResource(
                     id = R.string.dynamic_colors_may_not_adhere_to_accessibility_guidelines,
                 ),

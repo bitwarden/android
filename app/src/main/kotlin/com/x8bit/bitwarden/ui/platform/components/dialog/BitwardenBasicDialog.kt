@@ -16,10 +16,8 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.util.ciBuildInfo
 import com.x8bit.bitwarden.data.platform.util.deviceData
 import com.x8bit.bitwarden.data.platform.util.versionData
-import com.x8bit.bitwarden.ui.platform.composition.LocalFeatureFlagsState
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 
 /**
  * Represents a Bitwarden-styled dialog.
@@ -38,7 +36,6 @@ fun BitwardenBasicDialog(
     onDismissRequest: () -> Unit,
     throwable: Throwable? = null,
     intentManager: IntentManager = LocalIntentManager.current,
-    featureFlagsState: FeatureFlagsState = LocalFeatureFlagsState.current,
 ) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -50,7 +47,6 @@ fun BitwardenBasicDialog(
             )
         },
         dismissButton = throwable
-            ?.takeIf { featureFlagsState.isErrorReportingDialogEnabled }
             ?.let { error ->
                 {
                     BitwardenTextButton(

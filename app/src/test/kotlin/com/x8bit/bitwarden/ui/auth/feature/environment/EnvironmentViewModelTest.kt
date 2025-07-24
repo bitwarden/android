@@ -11,8 +11,6 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.manager.FileManager
@@ -28,7 +26,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -37,11 +34,6 @@ import org.junit.jupiter.api.Test
 class EnvironmentViewModelTest : BaseViewModelTest() {
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
-    private val mutableMutualTlsFeatureFlagFlow = MutableStateFlow(true)
-    private val mockFeatureFlagManager = mockk<FeatureFlagManager> {
-        every { getFeatureFlag(FlagKey.MutualTls) } returns true
-        every { getFeatureFlagFlow(FlagKey.MutualTls) } returns mutableMutualTlsFeatureFlagFlow
-    }
     private val mockCertificateManager = mockk<CertificateManager> {
         every { getMutualTlsKeyAliases() } returns emptyList()
     }
@@ -814,7 +806,6 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     ): EnvironmentViewModel =
         EnvironmentViewModel(
             environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = mockFeatureFlagManager,
             certificateManager = mockCertificateManager,
             fileManager = mockFileManager,
             snackbarRelayManager = snackbarRelayManager,
@@ -833,7 +824,6 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
             iconsServerUrl = "",
             keyHost = null,
             dialog = null,
-            showMutualTlsOptions = true,
         )
     }
 }

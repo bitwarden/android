@@ -30,13 +30,11 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.CredentialExchangeProtocolImport,
     FlagKey.CredentialExchangeProtocolExport,
     FlagKey.CipherKeyEncryption,
-    FlagKey.MutualTls,
     FlagKey.SingleTapPasskeyCreation,
     FlagKey.SingleTapPasskeyAuthentication,
     FlagKey.AnonAddySelfHostAlias,
     FlagKey.SimpleLoginSelfHostAlias,
     FlagKey.ChromeAutofill,
-    FlagKey.MobileErrorReporting,
     FlagKey.RestrictCipherItemDeletion,
     FlagKey.UserManagedPrivilegedApps,
     FlagKey.RemoveCardPolicy,
@@ -86,7 +84,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.CredentialExchangeProtocolImport -> stringResource(R.string.cxp_import)
     FlagKey.CredentialExchangeProtocolExport -> stringResource(R.string.cxp_export)
     FlagKey.CipherKeyEncryption -> stringResource(R.string.cipher_key_encryption)
-    FlagKey.MutualTls -> stringResource(R.string.mutual_tls)
     FlagKey.SingleTapPasskeyCreation -> stringResource(R.string.single_tap_passkey_creation)
     FlagKey.SingleTapPasskeyAuthentication -> {
         stringResource(R.string.single_tap_passkey_authentication)
@@ -95,7 +92,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.AnonAddySelfHostAlias -> stringResource(R.string.anon_addy_self_hosted_aliases)
     FlagKey.SimpleLoginSelfHostAlias -> stringResource(R.string.simple_login_self_hosted_aliases)
     FlagKey.ChromeAutofill -> stringResource(R.string.enable_chrome_autofill)
-    FlagKey.MobileErrorReporting -> stringResource(R.string.enable_error_reporting_dialog)
     FlagKey.RestrictCipherItemDeletion -> stringResource(R.string.restrict_item_deletion)
     FlagKey.UserManagedPrivilegedApps -> {
         stringResource(R.string.user_trusted_privileged_app_management)

@@ -437,7 +437,6 @@ class EnvironmentScreenTest : BitwardenComposeTest() {
             iconsServerUrl = "",
             keyHost = null,
             dialog = null,
-            showMutualTlsOptions = true,
         )
     }
 }
