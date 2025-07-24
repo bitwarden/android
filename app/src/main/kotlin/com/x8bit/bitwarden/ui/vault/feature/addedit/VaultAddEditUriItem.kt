@@ -23,15 +23,18 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectDialogContent
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriMatchDisplayType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.displayLabel
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.isAdvancedMatching
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDisplayMatchType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toUriMatchType
@@ -47,6 +50,7 @@ fun VaultAddEditUriItem(
     onUriItemRemoved: (UriItem) -> Unit,
     onUriValueChange: (UriItem) -> Unit,
     cardStyle: CardStyle,
+    defaultUriMatchType: UriMatchType,
     modifier: Modifier = Modifier,
     resources: Resources = LocalContext.current.resources,
     intentManager: IntentManager = LocalIntentManager.current,
@@ -106,8 +110,14 @@ fun VaultAddEditUriItem(
         ) {
             BitwardenMultiSelectDialogContent(
                 options = UriMatchDisplayType.entries.filter { !it.isAdvancedMatching() }
-                    .map { it.text.invoke() }.toImmutableList(),
-                selectedOption = uriItem.match.toDisplayMatchType().text.invoke(),
+                    .map {
+                        it.displayLabel(
+                            defaultUriOption = defaultUriMatchType.displayLabel.invoke(),
+                        ).invoke()
+                    }.toImmutableList(),
+                selectedOption = uriItem.match.toDisplayMatchType().displayLabel(
+                    defaultUriOption = defaultUriMatchType.displayLabel.invoke(),
+                ).invoke(),
                 sectionTitle = stringResource(id = R.string.advanced_options),
                 sectionOptions = UriMatchDisplayType.entries.filter { it.isAdvancedMatching() }
                     .map { it.text.invoke() }.toImmutableList(),
@@ -138,6 +148,7 @@ fun VaultAddEditUriItem(
     if (shouldShowAdvancedMatchDialog && currentOptionToConfirm != null) {
         BuildAdvancedMatchDetectionWarning(
             pendingOption = currentOptionToConfirm,
+            defaultUriMatchType = defaultUriMatchType,
             onDialogConfirm = {
                 onUriValueChange(
                     uriItem.copy(match = currentOptionToConfirm.toUriMatchType()),
@@ -161,6 +172,7 @@ fun VaultAddEditUriItem(
 @Composable
 private fun BuildAdvancedMatchDetectionWarning(
     pendingOption: UriMatchDisplayType,
+    defaultUriMatchType: UriMatchType,
     onDialogConfirm: () -> Unit,
     onDialogDismiss: () -> Unit,
     onMoreAboutMatchDetectionClick: () -> Unit,
@@ -171,7 +183,11 @@ private fun BuildAdvancedMatchDetectionWarning(
         titleAnnotatedString = stringResource(id = R.string.warning).toAnnotatedString(),
         messageAnnotatedString = annotatedStringResource(
             id = R.string.advanced_options_warning,
-            args = arrayOf(pendingOption.text.invoke()),
+            args = arrayOf(
+                pendingOption.displayLabel(
+                    defaultUriOption = defaultUriMatchType.displayLabel.invoke(),
+                ).invoke(),
+            ),
             style = spanStyleOf(
                 color = BitwardenTheme.colorScheme.text.primary,
                 textStyle = BitwardenTheme.typography.bodyMedium,

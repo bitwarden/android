@@ -117,6 +117,7 @@ import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
 import java.util.UUID
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType as UriMatchTypeModel
 
 @Suppress("LargeClass")
 class VaultAddEditViewModelTest : BaseViewModelTest() {
@@ -129,6 +130,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every { initialAutofillDialogShown = any() } just runs
         every { initialAutofillDialogShown } returns true
         every { isUnlockWithPinEnabled } returns false
+        every { defaultUriMatchType } returns UriMatchTypeModel.EXACT
     }
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(createUserState())
     private val authRepository: AuthRepository = mockk {
@@ -244,6 +246,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             shouldShowCloseButton = true,
             shouldExitOnSave = false,
             shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
         )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -330,6 +333,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 dialog = null,
                 bottomSheetState = null,
                 shouldShowCoachMarkTour = false,
+                defaultUriMatchType = UriMatchTypeModel.EXACT,
             ),
             viewModel.stateFlow.value,
         )
@@ -4791,6 +4795,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             shouldShowCoachMarkTour = false,
             shouldClearSpecialCircumstance = shouldClearSpecialCircumstance,
             createCredentialRequest = createCredentialRequest,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
         )
 
     @Suppress("LongParameterList")

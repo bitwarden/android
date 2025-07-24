@@ -84,6 +84,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType as UriMatchTypeModel
 
 @Suppress("LargeClass")
 class VaultAddEditScreenTest : BitwardenComposeTest() {
@@ -1366,7 +1367,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("Default")
+            .onNodeWithText("Default (Exact)")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
@@ -4241,6 +4242,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             bottomSheetState = null,
             vaultAddEditType = VaultAddEditType.AddItem,
             shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
@@ -4254,6 +4256,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             dialog = null,
             bottomSheetState = null,
             shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
@@ -4267,6 +4270,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             dialog = null,
             bottomSheetState = null,
             shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
@@ -4280,6 +4284,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             dialog = null,
             bottomSheetState = null,
             shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddEditState(
@@ -4303,6 +4308,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             vaultAddEditType = VaultAddEditType.AddItem,
             cipherType = VaultItemCipherType.SECURE_NOTE,
             shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
@@ -4316,6 +4322,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             dialog = null,
             bottomSheetState = null,
             shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
         )
 
         private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
@@ -4329,6 +4336,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             dialog = null,
             bottomSheetState = null,
             shouldShowCoachMarkTour = false,
+            defaultUriMatchType = UriMatchTypeModel.EXACT,
         )
 
         private val ALTERED_COLLECTIONS = listOf(
