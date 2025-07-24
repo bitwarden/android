@@ -23,8 +23,8 @@ import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
@@ -71,7 +71,7 @@ fun VaultItemCardContent(
         cardState.cardholderName?.let { cardholderName ->
             item(key = "cardholderName") {
                 BitwardenTextField(
-                    label = stringResource(id = R.string.cardholder_name),
+                    label = stringResource(id = BitwardenString.cardholder_name),
                     value = cardholderName,
                     onValueChange = {},
                     readOnly = true,
@@ -93,7 +93,7 @@ fun VaultItemCardContent(
         cardState.number?.let { numberData ->
             item(key = "cardNumber") {
                 BitwardenPasswordField(
-                    label = stringResource(id = R.string.number),
+                    label = stringResource(id = BitwardenString.number),
                     value = numberData.number,
                     onValueChange = {},
                     showPassword = numberData.isVisible,
@@ -103,7 +103,7 @@ fun VaultItemCardContent(
                     actions = {
                         BitwardenStandardIconButton(
                             vectorIconRes = BitwardenDrawable.ic_copy,
-                            contentDescription = stringResource(id = R.string.copy_number),
+                            contentDescription = stringResource(id = BitwardenString.copy_number),
                             onClick = vaultCardItemTypeHandlers.onCopyNumberClick,
                             modifier = Modifier.testTag(tag = "CardCopyNumberButton"),
                         )
@@ -127,7 +127,7 @@ fun VaultItemCardContent(
         if (cardState.brand != null && cardState.brand != VaultCardBrand.SELECT) {
             item(key = "cardBrand") {
                 BitwardenTextField(
-                    label = stringResource(id = R.string.brand),
+                    label = stringResource(id = BitwardenString.brand),
                     value = cardState.brand.shortName(),
                     onValueChange = {},
                     readOnly = true,
@@ -150,7 +150,7 @@ fun VaultItemCardContent(
         cardState.expiration?.let { expiration ->
             item(key = "expiration") {
                 BitwardenTextField(
-                    label = stringResource(id = R.string.expiration),
+                    label = stringResource(id = BitwardenString.expiration),
                     value = expiration,
                     onValueChange = {},
                     readOnly = true,
@@ -173,7 +173,7 @@ fun VaultItemCardContent(
         cardState.securityCode?.let { securityCodeData ->
             item(key = "securityCode") {
                 BitwardenPasswordField(
-                    label = stringResource(id = R.string.security_code),
+                    label = stringResource(id = BitwardenString.security_code),
                     value = securityCodeData.code,
                     onValueChange = {},
                     showPassword = securityCodeData.isVisible,
@@ -184,7 +184,7 @@ fun VaultItemCardContent(
                         BitwardenStandardIconButton(
                             vectorIconRes = BitwardenDrawable.ic_copy,
                             contentDescription = stringResource(
-                                id = R.string.copy_security_code,
+                                id = BitwardenString.copy_security_code,
                             ),
                             onClick = vaultCardItemTypeHandlers.onCopySecurityCodeClick,
                             modifier = Modifier.testTag(tag = "CardCopySecurityCodeButton"),
@@ -210,7 +210,7 @@ fun VaultItemCardContent(
             item(key = "notes") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.additional_options),
+                    label = stringResource(id = BitwardenString.additional_options),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -219,7 +219,7 @@ fun VaultItemCardContent(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 BitwardenTextField(
-                    label = stringResource(id = R.string.notes),
+                    label = stringResource(id = BitwardenString.notes),
                     value = notes,
                     onValueChange = { },
                     readOnly = true,
@@ -227,7 +227,7 @@ fun VaultItemCardContent(
                     actions = {
                         BitwardenStandardIconButton(
                             vectorIconRes = BitwardenDrawable.ic_copy,
-                            contentDescription = stringResource(id = R.string.copy_notes),
+                            contentDescription = stringResource(id = BitwardenString.copy_notes),
                             onClick = vaultCommonItemTypeHandlers.onCopyNotesClick,
                             modifier = Modifier.testTag(tag = "CipherNotesCopyButton"),
                         )
@@ -246,7 +246,7 @@ fun VaultItemCardContent(
             item(key = "customFieldsHeader") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.custom_fields),
+                    label = stringResource(id = BitwardenString.custom_fields),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -277,7 +277,7 @@ fun VaultItemCardContent(
             item(key = "attachmentsHeader") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.attachments),
+                    label = stringResource(id = BitwardenString.attachments),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -338,10 +338,10 @@ fun VaultItemCardContent(
             item(key = "passwordHistoryCount") {
                 Spacer(modifier = Modifier.height(height = 4.dp))
                 BitwardenHyperTextLink(
-                    annotatedResId = R.string.password_history_count,
+                    annotatedResId = BitwardenString.password_history_count,
                     args = arrayOf(passwordHistoryCount.toString()),
                     annotationKey = "passwordHistory",
-                    accessibilityString = stringResource(id = R.string.password_history),
+                    accessibilityString = stringResource(id = BitwardenString.password_history),
                     onClick = vaultCommonItemTypeHandlers.onPasswordHistoryClick,
                     style = BitwardenTheme.typography.labelMedium,
                     modifier = Modifier

@@ -31,7 +31,7 @@ import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
@@ -83,10 +83,10 @@ fun VaultSettingsScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.vault),
+                title = stringResource(id = BitwardenString.vault),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                navigationIconContentDescription = stringResource(id = R.string.back),
+                navigationIconContentDescription = stringResource(id = BitwardenString.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(VaultSettingsAction.BackClick) }
                 },
@@ -110,9 +110,9 @@ fun VaultSettingsScreen(
                 exit = actionCardExitAnimation(),
             ) {
                 BitwardenActionCard(
-                    cardTitle = stringResource(id = R.string.import_saved_logins),
-                    actionText = stringResource(R.string.get_started),
-                    cardSubtitle = stringResource(R.string.use_a_computer_to_import_logins),
+                    cardTitle = stringResource(id = BitwardenString.import_saved_logins),
+                    actionText = stringResource(BitwardenString.get_started),
+                    cardSubtitle = stringResource(BitwardenString.use_a_computer_to_import_logins),
                     onActionClick = remember(viewModel) {
                         {
                             viewModel.trySendAction(VaultSettingsAction.ImportLoginsCardCtaClick)
@@ -134,7 +134,7 @@ fun VaultSettingsScreen(
                 )
             }
             BitwardenTextRow(
-                text = stringResource(R.string.folders),
+                text = stringResource(BitwardenString.folders),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(VaultSettingsAction.FoldersButtonClick) }
                 },
@@ -147,7 +147,7 @@ fun VaultSettingsScreen(
             )
 
             BitwardenTextRow(
-                text = stringResource(R.string.export_vault),
+                text = stringResource(BitwardenString.export_vault),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(VaultSettingsAction.ExportVaultClick) }
                 },
@@ -161,7 +161,7 @@ fun VaultSettingsScreen(
 
             if (state.isNewImportLoginsFlowEnabled) {
                 BitwardenTextRow(
-                    text = stringResource(R.string.import_items),
+                    text = stringResource(BitwardenString.import_items),
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) }
                     },
@@ -174,14 +174,14 @@ fun VaultSettingsScreen(
                 )
             } else {
                 BitwardenExternalLinkRow(
-                    text = stringResource(R.string.import_items),
+                    text = stringResource(BitwardenString.import_items),
                     onConfirmClick = remember(viewModel) {
                         { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) }
                     },
                     withDivider = false,
-                    dialogTitle = stringResource(id = R.string.continue_to_web_app),
+                    dialogTitle = stringResource(id = BitwardenString.continue_to_web_app),
                     dialogMessage = stringResource(
-                        id = R.string.you_can_import_data_to_your_vault_on_x,
+                        id = BitwardenString.you_can_import_data_to_your_vault_on_x,
                         state.importUrl,
                     ),
                     cardStyle = CardStyle.Bottom,

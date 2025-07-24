@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedlogs.util
 
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.util.fileOf
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsState
@@ -117,21 +117,21 @@ class FlightRecorderDataSetExtensionsTest {
                         id = "52",
                         title = "2025-04-12T08:15:00 – 2025-04-12T09:15:00".asText(),
                         subtextStart = "1.00 KB".asText(),
-                        subtextEnd = R.string.expires_on.asText("5/11/25"),
+                        subtextEnd = BitwardenString.expires_on.asText("5/11/25"),
                         isDeletedEnabled = true,
                     ),
                     RecordedLogsState.DisplayItem(
                         id = "51",
                         title = "2015-10-10T02:55:52 – 2015-10-10T03:55:52".asText(),
                         subtextStart = "1.00 KB".asText(),
-                        subtextEnd = R.string.expires_at.asText("10:15 PM"),
+                        subtextEnd = BitwardenString.expires_at.asText("10:15 PM"),
                         isDeletedEnabled = true,
                     ),
                     RecordedLogsState.DisplayItem(
                         id = "53",
                         title = "2015-10-10T02:55:52 – 2015-10-10T03:55:52".asText(),
                         subtextStart = "1.00 KB".asText(),
-                        subtextEnd = R.string.expires_tomorrow.asText(),
+                        subtextEnd = BitwardenString.expires_tomorrow.asText(),
                         isDeletedEnabled = true,
                     ),
                 ),

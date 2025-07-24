@@ -761,7 +761,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     @Test
     fun `when the active user has an unlocked vault but there is a ProviderGetPasswordRequest special circumstance the nav state should be VaultUnlockedForPasswordGet`() {
         val providerGetPasswordCredentialRequest =
-            createMockProviderGetPasswordCredentialRequest()
+            createMockProviderGetPasswordCredentialRequest(1)
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.ProviderGetPasswordRequest(providerGetPasswordCredentialRequest)
         mutableUserStateFlow.tryEmit(

@@ -14,9 +14,9 @@ import com.bitwarden.network.util.preferredAuthMethod
 import com.bitwarden.network.util.twoFactorDisplayEmail
 import com.bitwarden.network.util.twoFactorDuoAuthUrl
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
@@ -181,8 +181,8 @@ class TwoFactorLoginViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
-                            title = R.string.log_in_denied.asText(),
-                            message = R.string.captcha_failed.asText(),
+                            title = BitwardenString.log_in_denied.asText(),
+                            message = BitwardenString.captcha_failed.asText(),
                         ),
                     )
                 }
@@ -227,8 +227,8 @@ class TwoFactorLoginViewModel @Inject constructor(
                     ?: mutableStateFlow.update {
                         it.copy(
                             dialogState = TwoFactorLoginState.DialogState.Error(
-                                title = R.string.an_error_has_occurred.asText(),
-                                message = R.string.error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance.asText(),
+                                title = BitwardenString.an_error_has_occurred.asText(),
+                                message = BitwardenString.error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance.asText(),
                             ),
                         )
                     }
@@ -248,19 +248,19 @@ class TwoFactorLoginViewModel @Inject constructor(
                                     .baseWebVaultUrlOrDefault,
                                 data = it,
                                 headerText = resourceManager.getString(
-                                    resId = R.string.fido2_title,
+                                    resId = BitwardenString.fido2_title,
                                 ),
                                 buttonText = resourceManager.getString(
-                                    resId = R.string.fido2_authenticate_web_authn,
+                                    resId = BitwardenString.fido2_authenticate_web_authn,
                                 ),
                                 returnButtonText = resourceManager.getString(
-                                    resId = R.string.fido2_return_to_app,
+                                    resId = BitwardenString.fido2_return_to_app,
                                 ),
                             )
                             TwoFactorLoginEvent.NavigateToWebAuth(uri = uri)
                         }
                         ?: TwoFactorLoginEvent.ShowSnackbar(
-                            message = R.string.there_was_an_error_starting_web_authn_two_factor_authentication.asText(),
+                            message = BitwardenString.there_was_an_error_starting_web_authn_two_factor_authentication.asText(),
                         ),
                 )
             }
@@ -315,9 +315,9 @@ class TwoFactorLoginViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = loginResult.errorMessage?.asText()
-                                ?: R.string.invalid_verification_code.asText(),
+                                ?: BitwardenString.invalid_verification_code.asText(),
                             error = loginResult.error,
                         ),
                     )
@@ -328,8 +328,8 @@ class TwoFactorLoginViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server
                                 .asText(),
                         ),
                     )
@@ -340,9 +340,9 @@ class TwoFactorLoginViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = loginResult.errorMessage?.asText()
-                                ?: R.string.invalid_verification_code.asText(),
+                                ?: BitwardenString.invalid_verification_code.asText(),
                         ),
                     )
                 }
@@ -354,8 +354,8 @@ class TwoFactorLoginViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.we_couldnt_verify_the_servers_certificate.asText(),
                         ),
                     )
                 }
@@ -378,8 +378,8 @@ class TwoFactorLoginViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -423,7 +423,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                     it.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
                             message = result.message?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -451,8 +451,8 @@ class TwoFactorLoginViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.verification_email_not_sent.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.verification_email_not_sent.asText(),
                             error = result.error,
                         ),
                     )
@@ -464,7 +464,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                 if (action.isUserInitiated) {
                     sendEvent(
                         TwoFactorLoginEvent.ShowSnackbar(
-                            message = R.string.verification_email_sent.asText(),
+                            message = BitwardenString.verification_email_sent.asText(),
                         ),
                     )
                 }
@@ -510,7 +510,7 @@ class TwoFactorLoginViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = TwoFactorLoginState.DialogState.Loading(
-                    message = R.string.submitting.asText(),
+                    message = BitwardenString.submitting.asText(),
                 ),
             )
         }
@@ -584,7 +584,7 @@ class TwoFactorLoginViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = TwoFactorLoginState.DialogState.Loading(
-                    message = R.string.logging_in.asText(),
+                    message = BitwardenString.logging_in.asText(),
                 ),
             )
         }

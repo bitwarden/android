@@ -55,9 +55,9 @@ import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -129,7 +129,7 @@ fun ViewSendScreen(
                 title = state.screenDisplayName(),
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                    navigationIconContentDescription = stringResource(id = R.string.close),
+                    navigationIconContentDescription = stringResource(id = BitwardenString.close),
                     onNavigationIconClick = remember(viewModel) {
                         { viewModel.trySendAction(ViewSendAction.CloseClick) }
                     },
@@ -148,7 +148,7 @@ fun ViewSendScreen(
                         { viewModel.trySendAction(ViewSendAction.EditClick) }
                     },
                     painter = rememberVectorPainter(id = BitwardenDrawable.ic_pencil),
-                    contentDescription = stringResource(id = R.string.edit_send),
+                    contentDescription = stringResource(id = BitwardenString.edit_send),
                     modifier = Modifier.testTag(tag = "EditItemButton"),
                 )
             }
@@ -252,7 +252,7 @@ private fun ViewStateContent(
                 .standardHorizontalMargin(),
         )
         BitwardenFilledButton(
-            label = stringResource(id = R.string.copy),
+            label = stringResource(id = BitwardenString.copy),
             onClick = onCopyClick,
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_copy_small),
             cardStyle = CardStyle.Middle(hasDivider = false),
@@ -263,7 +263,7 @@ private fun ViewStateContent(
                 .testTag(tag = "ViewSendCopyButton"),
         )
         BitwardenOutlinedButton(
-            label = stringResource(id = R.string.share),
+            label = stringResource(id = BitwardenString.share),
             onClick = onShareClick,
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_share_small),
             cardStyle = CardStyle.Bottom,
@@ -276,7 +276,7 @@ private fun ViewStateContent(
 
         Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
-            label = stringResource(id = R.string.send_details),
+            label = stringResource(id = BitwardenString.send_details),
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin()
@@ -284,7 +284,7 @@ private fun ViewStateContent(
         )
         Spacer(modifier = Modifier.height(height = 8.dp))
         BitwardenTextField(
-            label = stringResource(id = R.string.send_name_required),
+            label = stringResource(id = BitwardenString.send_name_required),
             value = state.sendName,
             onValueChange = {},
             readOnly = true,
@@ -317,7 +317,7 @@ private fun ViewStateContent(
         Spacer(modifier = Modifier.height(height = 8.dp))
 
         BitwardenTextField(
-            label = stringResource(id = R.string.deletion_date),
+            label = stringResource(id = BitwardenString.deletion_date),
             value = state.deletionDate,
             onValueChange = {},
             readOnly = true,
@@ -353,10 +353,10 @@ private fun DeleteButton(
     var shouldShowDeleteConfirmationDialog by rememberSaveable { mutableStateOf(value = false) }
     if (shouldShowDeleteConfirmationDialog) {
         BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.delete),
-            message = stringResource(id = R.string.are_you_sure_delete_send),
-            confirmButtonText = stringResource(id = R.string.yes),
-            dismissButtonText = stringResource(id = R.string.cancel),
+            title = stringResource(id = BitwardenString.delete),
+            message = stringResource(id = BitwardenString.are_you_sure_delete_send),
+            confirmButtonText = stringResource(id = BitwardenString.yes),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
             onConfirmClick = {
                 onDeleteClick()
                 shouldShowDeleteConfirmationDialog = false
@@ -366,7 +366,7 @@ private fun DeleteButton(
         )
     }
     BitwardenOutlinedErrorButton(
-        label = stringResource(id = R.string.delete_send),
+        label = stringResource(id = BitwardenString.delete_send),
         onClick = { shouldShowDeleteConfirmationDialog = true },
         icon = rememberVectorPainter(id = BitwardenDrawable.ic_trash_small),
         modifier = modifier,
@@ -391,7 +391,7 @@ private fun ShareLinkSection(
             ),
     ) {
         Text(
-            text = stringResource(id = R.string.send_link),
+            text = stringResource(id = BitwardenString.send_link),
             style = BitwardenTheme.typography.titleSmall,
             color = BitwardenTheme.colorScheme.text.primary,
             overflow = TextOverflow.Ellipsis,
@@ -451,7 +451,7 @@ private fun TextSendContent(
     modifier: Modifier = Modifier,
 ) {
     BitwardenTextField(
-        label = stringResource(id = R.string.text_to_share),
+        label = stringResource(id = BitwardenString.text_to_share),
         value = textType.textToShare,
         onValueChange = {},
         readOnly = true,
@@ -490,9 +490,9 @@ private fun ColumnScope.AdditionalOptions(
         Column {
             state.maxAccessCount?.let {
                 BitwardenStepper(
-                    label = stringResource(id = R.string.maximum_access_count),
+                    label = stringResource(id = BitwardenString.maximum_access_count),
                     value = it,
-                    supportingText = R.string.current_access_count
+                    supportingText = BitwardenString.current_access_count
                         .asText(state.currentAccessCount)
                         .invoke(),
                     onValueChange = {},
@@ -512,13 +512,13 @@ private fun ColumnScope.AdditionalOptions(
                     Spacer(modifier = Modifier.height(height = 8.dp))
                 }
                 BitwardenTextField(
-                    label = stringResource(id = R.string.private_notes),
+                    label = stringResource(id = BitwardenString.private_notes),
                     readOnly = true,
                     value = it,
                     actions = {
                         BitwardenStandardIconButton(
                             vectorIconRes = BitwardenDrawable.ic_copy,
-                            contentDescription = stringResource(id = R.string.copy_notes),
+                            contentDescription = stringResource(id = BitwardenString.copy_notes),
                             onClick = onCopyNotesClick,
                             modifier = Modifier.testTag(tag = "ViewSendNotesCopyButton"),
                         )

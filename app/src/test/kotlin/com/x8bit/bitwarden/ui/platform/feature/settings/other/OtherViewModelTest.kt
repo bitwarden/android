@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.other
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
@@ -175,7 +175,7 @@ class OtherViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = OtherState.DialogState.Loading(
-                        message = R.string.syncing.asText(),
+                        message = BitwardenString.syncing.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -191,7 +191,7 @@ class OtherViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             mutableVaultLastSyncStateFlow.tryEmit(newSyncTime)
             assertEquals(
-                OtherEvent.ShowSnackbar(R.string.syncing_complete.asText()),
+                OtherEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
                 awaitItem(),
             )
         }
@@ -207,8 +207,8 @@ class OtherViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = OtherState.DialogState.Error(
-                        title = R.string.internet_connection_required_title.asText(),
-                        message = R.string.internet_connection_required_message.asText(),
+                        title = BitwardenString.internet_connection_required_title.asText(),
+                        message = BitwardenString.internet_connection_required_message.asText(),
                     ),
                 ),
                 awaitItem(),

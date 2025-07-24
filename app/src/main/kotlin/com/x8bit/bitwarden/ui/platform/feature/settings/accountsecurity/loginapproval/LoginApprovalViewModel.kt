@@ -9,9 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -71,7 +71,7 @@ class LoginApprovalViewModel @Inject constructor(
                     mutableStateFlow.update {
                         it.copy(
                             dialogState = LoginApprovalState.DialogState.ChangeAccount(
-                                message = R.string
+                                message = BitwardenString
                                     .login_attempt_from_x_do_you_want_to_switch_to_this_account
                                     .asText(
                                         authRepository
@@ -189,15 +189,15 @@ class LoginApprovalViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             is AuthRequestResult.Success -> {
-                sendClosingEvent(messageId = R.string.login_approved)
+                sendClosingEvent(messageId = BitwardenString.login_approved)
             }
 
             is AuthRequestResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginApprovalState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = result.error,
                         ),
                     )
@@ -252,15 +252,15 @@ class LoginApprovalViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             is AuthRequestResult.Success -> {
-                sendClosingEvent(messageId = R.string.log_in_denied)
+                sendClosingEvent(messageId = BitwardenString.log_in_denied)
             }
 
             is AuthRequestResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginApprovalState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = result.error,
                         ),
                     )

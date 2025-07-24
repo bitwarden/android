@@ -9,9 +9,9 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
@@ -259,7 +259,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = AddEditSendState.DialogState.Loading(
-                        message = R.string.saving.asText(),
+                        message = BitwardenString.saving.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -267,7 +267,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = AddEditSendState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
                         message = "Fail".asText(),
                     ),
                 ),
@@ -355,7 +355,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = AddEditSendState.DialogState.Loading(
-                        message = R.string.saving.asText(),
+                        message = BitwardenString.saving.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -363,7 +363,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = AddEditSendState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
                         message = errorMessage.asText(),
                     ),
                 ),
@@ -384,9 +384,9 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = AddEditSendState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required.asText(
-                        R.string.name.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.validation_field_required.asText(
+                        BitwardenString.name.asText(),
                     ),
                 ),
             ),
@@ -418,8 +418,8 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialogState = AddEditSendState.DialogState.Error(
-                    title = R.string.send.asText(),
-                    message = R.string.send_file_premium_required.asText(),
+                    title = BitwardenString.send.asText(),
+                    message = BitwardenString.send_file_premium_required.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -446,8 +446,8 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialogState = AddEditSendState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.you_must_attach_a_file_to_save_this_send.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.you_must_attach_a_file_to_save_this_send.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -475,8 +475,8 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialogState = AddEditSendState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.max_file_size.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.max_file_size.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -511,7 +511,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         verify(exactly = 1) {
             clipboardManager.setText(
                 text = sendUrl,
-                toastDescriptorOverride = R.string.send_link.asText(),
+                toastDescriptorOverride = BitwardenString.send_link.asText(),
             )
         }
     }
@@ -557,7 +557,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialogState = AddEditSendState.DialogState.Loading(
-                            message = R.string.removing_send_password.asText(),
+                            message = BitwardenString.removing_send_password.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -565,8 +565,8 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialogState = AddEditSendState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -606,7 +606,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialogState = AddEditSendState.DialogState.Loading(
-                            message = R.string.removing_send_password.asText(),
+                            message = BitwardenString.removing_send_password.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -614,7 +614,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialogState = AddEditSendState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = errorMessage.asText(),
                         ),
                     ),
@@ -641,7 +641,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(AddEditSendAction.RemovePasswordClick)
                 assertEquals(
                     AddEditSendEvent.ShowSnackbar(
-                        data = BitwardenSnackbarData(message = R.string.password_removed.asText()),
+                        data = BitwardenSnackbarData(message = BitwardenString.password_removed.asText()),
                     ),
                     awaitItem(),
                 )
@@ -678,7 +678,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = AddEditSendState.DialogState.Loading(
-                        message = R.string.deleting.asText(),
+                        message = BitwardenString.deleting.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -686,8 +686,8 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = AddEditSendState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         throwable = error,
                     ),
                 ),
@@ -714,7 +714,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             }
             verify(exactly = 1) {
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(message = R.string.send_deleted.asText()),
+                    data = BitwardenSnackbarData(message = BitwardenString.send_deleted.asText()),
                     relay = SnackbarRelay.SEND_DELETED,
                 )
             }
@@ -979,8 +979,8 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialogState = AddEditSendState.DialogState.Error(
-                    title = R.string.internet_connection_required_title.asText(),
-                    message = R.string.internet_connection_required_message.asText(),
+                    title = BitwardenString.internet_connection_required_title.asText(),
+                    message = BitwardenString.internet_connection_required_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,

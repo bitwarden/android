@@ -8,8 +8,8 @@ import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
@@ -135,7 +135,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     state.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
-                            R.string.logging_in.asText(),
+                            BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -144,8 +144,8 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     state.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.login_sso_error.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.login_sso_error.asText(),
                             error = error,
                         ),
                     ),
@@ -184,7 +184,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     state.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
-                            R.string.logging_in.asText(),
+                            BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -211,9 +211,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = EnterpriseSignOnState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required.asText(
-                            R.string.org_identifier.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.validation_field_required.asText(
+                            BitwardenString.org_identifier.asText(),
                         ),
                     ),
                 ),
@@ -229,8 +229,8 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = EnterpriseSignOnState.DialogState.Error(
-                    title = R.string.internet_connection_required_title.asText(),
-                    message = R.string.internet_connection_required_message.asText(),
+                    title = BitwardenString.internet_connection_required_title.asText(),
+                    message = BitwardenString.internet_connection_required_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -258,8 +258,8 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = EnterpriseSignOnState.DialogState.Error(
-                        title = R.string.internet_connection_required_title.asText(),
-                        message = R.string.internet_connection_required_message.asText(),
+                        title = BitwardenString.internet_connection_required_title.asText(),
+                        message = BitwardenString.internet_connection_required_message.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -284,7 +284,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         )
         assertEquals(
             DEFAULT_STATE.copy(
-                dialogState = EnterpriseSignOnState.DialogState.Loading(R.string.loading.asText()),
+                dialogState = EnterpriseSignOnState.DialogState.Loading(
+                    BitwardenString.loading.asText(),
+                ),
             ),
             viewModel.stateFlow.value,
         )
@@ -306,8 +308,8 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = EnterpriseSignOnState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.login_sso_error.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.login_sso_error.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -324,8 +326,8 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = EnterpriseSignOnState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.login_sso_error.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.login_sso_error.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -369,7 +371,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
-                            R.string.logging_in.asText(),
+                            BitwardenString.logging_in.asText(),
                         ),
                         orgIdentifierInput = orgIdentifier,
                     ),
@@ -379,8 +381,8 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.login_sso_error.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.login_sso_error.asText(),
                             error = error,
                         ),
                         orgIdentifierInput = orgIdentifier,
@@ -437,7 +439,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
-                            R.string.logging_in.asText(),
+                            BitwardenString.logging_in.asText(),
                         ),
                         orgIdentifierInput = orgIdentifier,
                     ),
@@ -447,7 +449,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = "new device verification required".asText(),
                         ),
                         orgIdentifierInput = orgIdentifier,
@@ -511,7 +513,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
-                            R.string.logging_in.asText(),
+                            BitwardenString.logging_in.asText(),
                         ),
                         orgIdentifierInput = orgIdentifier,
                     ),
@@ -521,8 +523,8 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
                                 .asText("vault.bitwarden.com"),
                         ),
                         orgIdentifierInput = orgIdentifier,
@@ -586,7 +588,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
-                            R.string.logging_in.asText(),
+                            BitwardenString.logging_in.asText(),
                         ),
                         orgIdentifierInput = orgIdentifier,
                     ),
@@ -596,8 +598,8 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
                                 .asText("base.bitwarden.com"),
                         ),
                         orgIdentifierInput = orgIdentifier,
@@ -661,7 +663,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
-                            R.string.logging_in.asText(),
+                            BitwardenString.logging_in.asText(),
                         ),
                         orgIdentifierInput = orgIdentifier,
                     ),
@@ -671,8 +673,8 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
                                 .asText("vault.bitwarden.com"),
                         ),
                         orgIdentifierInput = orgIdentifier,
@@ -729,7 +731,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
-                            R.string.logging_in.asText(),
+                            BitwardenString.logging_in.asText(),
                         ),
                         orgIdentifierInput = orgIdentifier,
                     ),
@@ -739,8 +741,8 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.we_couldnt_verify_the_servers_certificate.asText(),
                         ),
                         orgIdentifierInput = orgIdentifier,
                     ),
@@ -789,7 +791,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
-                            R.string.logging_in.asText(),
+                            BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -846,7 +848,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
-                            R.string.logging_in.asText(),
+                            BitwardenString.logging_in.asText(),
                         ),
                     ),
                     stateFlow.awaitItem(),
@@ -900,7 +902,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
-                            R.string.logging_in.asText(),
+                            BitwardenString.logging_in.asText(),
                         ),
                     ),
                     stateFlow.awaitItem(),
@@ -964,7 +966,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
-                            R.string.logging_in.asText(),
+                            BitwardenString.logging_in.asText(),
                         ),
                         orgIdentifierInput = orgIdentifier,
                     ),
@@ -1005,8 +1007,8 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = EnterpriseSignOnState.DialogState.Error(
-                        title = R.string.log_in_denied.asText(),
-                        message = R.string.captcha_failed.asText(),
+                        title = BitwardenString.log_in_denied.asText(),
+                        message = BitwardenString.captcha_failed.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -1044,7 +1046,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 initialState.copy(
                     captchaToken = "token",
                     dialogState = EnterpriseSignOnState.DialogState.Loading(
-                        R.string.logging_in.asText(),
+                        BitwardenString.logging_in.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -1132,9 +1134,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = EnterpriseSignOnState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required.asText(
-                            R.string.org_identifier.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.validation_field_required.asText(
+                            BitwardenString.org_identifier.asText(),
                         ),
                     ),
                     orgIdentifierInput = "",
@@ -1176,7 +1178,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(
                     orgIdentifierInput = "Bitwarden with SSO",
                     dialogState = EnterpriseSignOnState.DialogState.Loading(
-                        message = R.string.logging_in.asText(),
+                        message = BitwardenString.logging_in.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -1215,7 +1217,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(
                     orgIdentifierInput = "Bitwarden with SSO",
                     dialogState = EnterpriseSignOnState.DialogState.Loading(
-                        message = R.string.logging_in.asText(),
+                        message = BitwardenString.logging_in.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -1306,7 +1308,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
-                            R.string.logging_in.asText(),
+                            BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),

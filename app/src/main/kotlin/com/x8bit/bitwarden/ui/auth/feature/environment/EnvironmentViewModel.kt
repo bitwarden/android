@@ -11,13 +11,11 @@ import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidUri
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessaryOrNull
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.manager.FileManager
@@ -28,7 +26,6 @@ import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -46,7 +43,6 @@ class EnvironmentViewModel @Inject constructor(
     private val environmentRepository: EnvironmentRepository,
     private val fileManager: FileManager,
     private val certificateManager: CertificateManager,
-    private val featureFlagManager: FeatureFlagManager,
     private val snackbarRelayManager: SnackbarRelayManager,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EnvironmentState, EnvironmentEvent, EnvironmentAction>(
@@ -70,21 +66,13 @@ class EnvironmentViewModel @Inject constructor(
             keyAlias = keyAlias,
             keyHost = keyHost,
             dialog = null,
-            showMutualTlsOptions = featureFlagManager.getFeatureFlag(FlagKey.MutualTls),
         )
     },
 ) {
 
     init {
         stateFlow
-            .onEach {
-                savedStateHandle[KEY_STATE] = it
-            }
-            .launchIn(viewModelScope)
-
-        featureFlagManager.getFeatureFlagFlow(FlagKey.MutualTls)
-            .map { EnvironmentAction.Internal.MutualTlsFeatureFlagUpdate(it) }
-            .onEach(::handleAction)
+            .onEach { savedStateHandle[KEY_STATE] = it }
             .launchIn(viewModelScope)
     }
 
@@ -151,7 +139,7 @@ class EnvironmentViewModel @Inject constructor(
             }
 
         if (!urlsAreAllNullOrValid) {
-            showErrorDialog(message = R.string.environment_page_urls_error.asText())
+            showErrorDialog(message = BitwardenString.environment_page_urls_error.asText())
             return
         }
 
@@ -173,7 +161,7 @@ class EnvironmentViewModel @Inject constructor(
         )
 
         snackbarRelayManager.sendSnackbarData(
-            data = BitwardenSnackbarData(message = R.string.environment_saved.asText()),
+            data = BitwardenSnackbarData(message = BitwardenString.environment_saved.asText()),
             relay = SnackbarRelay.ENVIRONMENT_SAVED,
         )
         sendEvent(EnvironmentEvent.NavigateBack)
@@ -196,9 +184,9 @@ class EnvironmentViewModel @Inject constructor(
     ) {
         showSnackbar(
             message = if (action.success) {
-                R.string.certificate_installed.asText()
+                BitwardenString.certificate_installed.asText()
             } else {
-                R.string.certificate_installation_failed.asText()
+                BitwardenString.certificate_installation_failed.asText()
             },
         )
     }
@@ -275,10 +263,6 @@ class EnvironmentViewModel @Inject constructor(
             is EnvironmentAction.Internal.ImportKeyResultReceive -> {
                 handleSaveKeyResultReceive(action)
             }
-
-            is EnvironmentAction.Internal.MutualTlsFeatureFlagUpdate -> {
-                handleMutualTlsFeatureFlagUpdate(action)
-            }
         }
     }
 
@@ -287,8 +271,8 @@ class EnvironmentViewModel @Inject constructor(
     ) {
         if (action.password.isBlank()) {
             showErrorDialog(
-                message = R.string.validation_field_required.asText(
-                    R.string.password.asText(),
+                message = BitwardenString.validation_field_required.asText(
+                    BitwardenString.password.asText(),
                 ),
             )
             return
@@ -296,8 +280,8 @@ class EnvironmentViewModel @Inject constructor(
 
         if (action.alias.isBlank()) {
             showErrorDialog(
-                message = R.string.validation_field_required.asText(
-                    R.string.alias.asText(),
+                message = BitwardenString.validation_field_required.asText(
+                    BitwardenString.alias.asText(),
                 ),
             )
             return
@@ -308,9 +292,9 @@ class EnvironmentViewModel @Inject constructor(
                 @Suppress("MaxLineLength")
                 it.copy(
                     dialog = EnvironmentState.DialogState.ConfirmOverwriteAlias(
-                        title = R.string.replace_existing_certificate.asText(),
+                        title = BitwardenString.replace_existing_certificate.asText(),
                         message =
-                            R.string.a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it
+                            BitwardenString.a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it
                                 .asText(action.alias),
                         triggeringAction = action,
                     ),
@@ -344,30 +328,20 @@ class EnvironmentViewModel @Inject constructor(
             }
 
             is ImportPrivateKeyResult.Error.UnsupportedKey -> {
-                showSnackbar(message = R.string.unsupported_certificate_type.asText())
+                showSnackbar(message = BitwardenString.unsupported_certificate_type.asText())
             }
 
             is ImportPrivateKeyResult.Error.KeyStoreOperationFailed -> {
-                showSnackbar(message = R.string.certificate_installation_failed.asText())
+                showSnackbar(message = BitwardenString.certificate_installation_failed.asText())
             }
 
             is ImportPrivateKeyResult.Error.UnrecoverableKey -> {
-                showSnackbar(message = R.string.certificate_password_incorrect.asText())
+                showSnackbar(message = BitwardenString.certificate_password_incorrect.asText())
             }
 
             is ImportPrivateKeyResult.Error.InvalidCertificateChain -> {
-                showSnackbar(message = R.string.invalid_certificate_chain.asText())
+                showSnackbar(message = BitwardenString.invalid_certificate_chain.asText())
             }
-        }
-    }
-
-    private fun handleMutualTlsFeatureFlagUpdate(
-        action: EnvironmentAction.Internal.MutualTlsFeatureFlagUpdate,
-    ) {
-        mutableStateFlow.update {
-            it.copy(
-                showMutualTlsOptions = action.enabled,
-            )
         }
     }
 
@@ -395,7 +369,7 @@ class EnvironmentViewModel @Inject constructor(
             is PrivateKeyAliasSelectionResult.Error -> {
                 sendEvent(
                     EnvironmentEvent.ShowSnackbar(
-                        message = R.string.error_loading_certificate.asText(),
+                        message = BitwardenString.error_loading_certificate.asText(),
                     ),
                 )
             }
@@ -441,7 +415,7 @@ class EnvironmentViewModel @Inject constructor(
                 .fold(
                     onFailure = {
                         EnvironmentAction.Internal.ShowErrorDialog(
-                            message = R.string.unable_to_read_certificate.asText(),
+                            message = BitwardenString.unable_to_read_certificate.asText(),
                             throwable = it,
                         )
                     },
@@ -472,7 +446,6 @@ data class EnvironmentState(
     val iconsServerUrl: String,
     val keyAlias: String,
     val dialog: DialogState?,
-    val showMutualTlsOptions: Boolean,
     // internal
     private val keyHost: MutualTlsKeyHost?,
 ) : Parcelable {
@@ -691,13 +664,6 @@ sealed class EnvironmentAction {
          */
         data class ImportKeyResultReceive(
             val result: ImportPrivateKeyResult,
-        ) : Internal()
-
-        /**
-         * Indicates the mutual TLS feature flag was updated.
-         */
-        data class MutualTlsFeatureFlagUpdate(
-            val enabled: Boolean,
         ) : Internal()
     }
 }

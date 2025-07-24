@@ -28,8 +28,8 @@ import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 
 /**
@@ -49,7 +49,7 @@ fun SendEmpty(
         if (policyDisablesSend) {
             Spacer(modifier = Modifier.height(12.dp))
             BitwardenInfoCalloutCard(
-                text = stringResource(id = R.string.send_disabled_warning),
+                text = stringResource(id = BitwardenString.send_disabled_warning),
                 modifier = Modifier
                     .standardHorizontalMargin()
                     .fillMaxWidth(),
@@ -67,7 +67,7 @@ fun SendEmpty(
         Spacer(Modifier.height(24.dp))
         Text(
             textAlign = TextAlign.Center,
-            text = stringResource(R.string.send_sensitive_information_safely),
+            text = stringResource(BitwardenString.send_sensitive_information_safely),
             style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
@@ -78,7 +78,7 @@ fun SendEmpty(
         Text(
             textAlign = TextAlign.Center,
             text = stringResource(
-                R.string.share_files_and_data_securely_with_anyone_on_any_platform,
+                BitwardenString.share_files_and_data_securely_with_anyone_on_any_platform,
             ),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -91,10 +91,10 @@ fun SendEmpty(
         Spacer(modifier = Modifier.height(24.dp))
 
         // This button is hidden from accessibility to avoid duplicate voice over with the FAB
-        val newSendLabel = stringResource(id = R.string.add_a_send)
+        val newSendLabel = stringResource(id = BitwardenString.add_a_send)
         BitwardenFilledButton(
             onClick = onAddItemClick,
-            label = stringResource(id = R.string.add_a_send),
+            label = stringResource(id = BitwardenString.add_a_send),
             icon = rememberVectorPainter(BitwardenDrawable.ic_plus_small),
             modifier = Modifier
                 .clearAndSetSemantics {

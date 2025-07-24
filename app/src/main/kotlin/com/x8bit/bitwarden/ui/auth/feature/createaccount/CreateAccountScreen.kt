@@ -39,8 +39,8 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthIndicator
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.AcceptPoliciesToggle
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CheckDataBreachesToggle
@@ -120,8 +120,8 @@ fun CreateAccountScreen(
             BitwardenTwoButtonDialog(
                 title = dialog.title(),
                 message = dialog.message(),
-                confirmButtonText = stringResource(id = R.string.yes),
-                dismissButtonText = stringResource(id = R.string.no),
+                confirmButtonText = stringResource(id = BitwardenString.yes),
+                dismissButtonText = stringResource(id = BitwardenString.no),
                 onConfirmClick = remember(viewModel) {
                     { viewModel.trySendAction(ContinueWithBreachedPasswordClick) }
                 },
@@ -135,7 +135,7 @@ fun CreateAccountScreen(
         }
 
         CreateAccountDialog.Loading -> {
-            BitwardenLoadingDialog(text = stringResource(id = R.string.create_account))
+            BitwardenLoadingDialog(text = stringResource(id = BitwardenString.create_account))
         }
 
         null -> Unit
@@ -148,16 +148,16 @@ fun CreateAccountScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.create_account),
+                title = stringResource(id = BitwardenString.create_account),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(CloseClick) }
                 },
                 actions = {
                     BitwardenTextButton(
-                        label = stringResource(id = R.string.submit),
+                        label = stringResource(id = BitwardenString.submit),
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(SubmitClick) }
                         },
@@ -174,7 +174,7 @@ fun CreateAccountScreen(
         ) {
             Spacer(modifier = Modifier.height(height = 12.dp))
             BitwardenTextField(
-                label = stringResource(id = R.string.email_address),
+                label = stringResource(id = BitwardenString.email_address),
                 value = state.emailInput,
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(EmailInputChange(it)) }
@@ -189,7 +189,7 @@ fun CreateAccountScreen(
             Spacer(modifier = Modifier.height(height = 8.dp))
             var showPassword by rememberSaveable { mutableStateOf(false) }
             BitwardenPasswordField(
-                label = stringResource(id = R.string.master_password),
+                label = stringResource(id = BitwardenString.master_password),
                 showPassword = showPassword,
                 showPasswordChange = { showPassword = it },
                 value = state.passwordInput,
@@ -217,7 +217,7 @@ fun CreateAccountScreen(
                     .standardHorizontalMargin(),
             )
             BitwardenPasswordField(
-                label = stringResource(id = R.string.retype_master_password),
+                label = stringResource(id = BitwardenString.retype_master_password),
                 value = state.confirmPasswordInput,
                 showPassword = showPassword,
                 showPasswordChange = { showPassword = it },
@@ -232,12 +232,13 @@ fun CreateAccountScreen(
                     .standardHorizontalMargin(),
             )
             BitwardenTextField(
-                label = stringResource(id = R.string.master_password_hint),
+                label = stringResource(id = BitwardenString.master_password_hint),
                 value = state.passwordHintInput,
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(PasswordHintChange(it)) }
                 },
-                supportingText = stringResource(id = R.string.master_password_hint_description),
+                supportingText = stringResource(
+                    id = BitwardenString.master_password_hint_description),
                 textFieldTestTag = "MasterPasswordHintLabel",
                 cardStyle = CardStyle.Bottom,
                 modifier = Modifier
@@ -246,7 +247,8 @@ fun CreateAccountScreen(
             )
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenSwitch(
-                label = stringResource(id = R.string.check_known_data_breaches_for_this_password),
+                label = stringResource(
+                    id = BitwardenString.check_known_data_breaches_for_this_password),
                 isChecked = state.isCheckDataBreachesToggled,
                 onCheckedChange = remember(viewModel) {
                     { newState ->
@@ -288,8 +290,8 @@ private fun TermsAndPrivacySwitch(
     onPrivacyPolicyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val strTerms = stringResource(id = R.string.terms_of_service)
-    val strPrivacy = stringResource(id = R.string.privacy_policy)
+    val strTerms = stringResource(id = BitwardenString.terms_of_service)
+    val strPrivacy = stringResource(id = BitwardenString.privacy_policy)
     BitwardenSwitch(
         modifier = modifier.semantics(mergeDescendants = true) {
             customActions = listOf(
@@ -310,7 +312,7 @@ private fun TermsAndPrivacySwitch(
             )
         },
         label = annotatedStringResource(
-            id = R.string
+            id = BitwardenString
                 .by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy,
             onAnnotationClick = {
                 when (it) {

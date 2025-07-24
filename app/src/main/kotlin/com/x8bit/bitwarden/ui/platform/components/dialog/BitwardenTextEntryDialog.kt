@@ -20,8 +20,8 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 
 /**
@@ -51,14 +51,14 @@ fun BitwardenTextEntryDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.cancel),
+                label = stringResource(id = BitwardenString.cancel),
                 onClick = onDismissRequest,
                 modifier = Modifier.testTag("DismissAlertButton"),
             )
         },
         confirmButton = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.okay),
+                label = stringResource(id = BitwardenString.okay),
                 onClick = { onConfirmClick(text) },
                 modifier = Modifier.testTag("AcceptAlertButton"),
             )

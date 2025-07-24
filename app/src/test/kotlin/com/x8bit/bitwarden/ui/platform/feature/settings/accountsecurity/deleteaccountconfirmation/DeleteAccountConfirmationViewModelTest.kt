@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deletea
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
@@ -202,7 +202,7 @@ class DeleteAccountConfirmationViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialog = DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = error,
                         ),
                     ),

@@ -11,8 +11,8 @@ import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.network.model.TwoFactorDataModel
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
@@ -231,7 +231,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialogState = TwoFactorLoginState.DialogState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -424,7 +424,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = TwoFactorLoginState.DialogState.Loading(
-                        message = R.string.logging_in.asText(),
+                        message = BitwardenString.logging_in.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -515,8 +515,8 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     state.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -539,12 +539,12 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             val headerText = "header"
             val buttonText = "button"
             val returnButtonText = "return"
-            every { resourceManager.getString(R.string.fido2_title) } returns headerText
+            every { resourceManager.getString(BitwardenString.fido2_title) } returns headerText
             every {
-                resourceManager.getString(R.string.fido2_authenticate_web_authn)
+                resourceManager.getString(BitwardenString.fido2_authenticate_web_authn)
             } returns buttonText
             every {
-                resourceManager.getString(R.string.fido2_return_to_app)
+                resourceManager.getString(BitwardenString.fido2_return_to_app)
             } returns returnButtonText
             every { authRepository.twoFactorResponse } returns response
             every {
@@ -586,7 +586,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
                 assertEquals(
                     TwoFactorLoginEvent.ShowSnackbar(
-                        message = R.string
+                        message = BitwardenString
                             .there_was_an_error_starting_web_authn_two_factor_authentication
                             .asText(),
                     ),
@@ -669,7 +669,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = TwoFactorLoginState.DialogState.Loading(
-                        message = R.string.logging_in.asText(),
+                        message = BitwardenString.logging_in.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -678,8 +678,8 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = TwoFactorLoginState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.invalid_verification_code.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.invalid_verification_code.asText(),
                         error = error,
                     ),
                 ),
@@ -730,7 +730,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = TwoFactorLoginState.DialogState.Loading(
-                            message = R.string.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -739,7 +739,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = "Mock error message".asText(),
                             error = error,
                         ),
@@ -791,7 +791,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = TwoFactorLoginState.DialogState.Loading(
-                            message = R.string.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -800,8 +800,8 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -851,7 +851,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = TwoFactorLoginState.DialogState.Loading(
-                            message = R.string.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -860,8 +860,8 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.we_couldnt_verify_the_servers_certificate.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -911,7 +911,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = TwoFactorLoginState.DialogState.Loading(
-                            message = R.string.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -920,7 +920,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = "new device verification required".asText(),
                         ),
                     ),
@@ -1005,7 +1005,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 TwoFactorLoginEvent.ShowSnackbar(
-                    message = R.string.verification_email_sent.asText(),
+                    message = BitwardenString.verification_email_sent.asText(),
                 ),
                 awaitItem(),
             )
@@ -1038,8 +1038,8 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(
                     authMethod = TwoFactorAuthMethod.EMAIL,
                     dialogState = TwoFactorLoginState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.verification_email_not_sent.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.verification_email_not_sent.asText(),
                         error = error,
                     ),
                 ),
@@ -1052,7 +1052,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(
                     authMethod = TwoFactorAuthMethod.EMAIL,
                     dialogState = TwoFactorLoginState.DialogState.Loading(
-                        message = R.string.submitting.asText(),
+                        message = BitwardenString.submitting.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -1061,8 +1061,8 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(
                     authMethod = TwoFactorAuthMethod.EMAIL,
                     dialogState = TwoFactorLoginState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.verification_email_not_sent.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.verification_email_not_sent.asText(),
                         error = error,
                     ),
                 ),
@@ -1144,7 +1144,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(
                     TwoFactorLoginEvent.ShowSnackbar(
-                        message = R.string.verification_email_sent.asText(),
+                        message = BitwardenString.verification_email_sent.asText(),
                     ),
                     awaitItem(),
                 )
@@ -1183,8 +1183,8 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.verification_email_not_sent.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.verification_email_not_sent.asText(),
                             error = error,
                         ),
                     ),
@@ -1290,7 +1290,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(
                     TwoFactorLoginEvent.ShowSnackbar(
-                        message = R.string.verification_email_sent.asText(),
+                        message = BitwardenString.verification_email_sent.asText(),
                     ),
                     awaitItem(),
                 )

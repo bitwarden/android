@@ -13,9 +13,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
 import io.mockk.just
@@ -138,7 +138,7 @@ class RemovePasswordScreenTest : BitwardenComposeTest() {
             it.copy(
                 dialogState =
                     RemovePasswordState.DialogState.LeaveConfirmationPrompt(
-                        R.string.leave_organization.asText(),
+                        BitwardenString.leave_organization.asText(),
                     ),
             )
         }
@@ -158,7 +158,7 @@ class RemovePasswordScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 dialogState = RemovePasswordState.DialogState.LeaveConfirmationPrompt(
-                    R.string.leave_organization_name.asText(
+                    BitwardenString.leave_organization_name.asText(
                         "orgName",
                     ),
                 ),

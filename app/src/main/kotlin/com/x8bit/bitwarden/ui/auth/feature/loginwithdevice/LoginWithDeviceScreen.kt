@@ -33,8 +33,8 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
@@ -86,7 +86,7 @@ fun LoginWithDeviceScreen(
                 title = state.toolbarTitle(),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(LoginWithDeviceAction.CloseButtonClick) }
                 },
@@ -163,7 +163,7 @@ private fun LoginWithDeviceScreenContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = stringResource(id = R.string.fingerprint_phrase),
+            text = stringResource(id = BitwardenString.fingerprint_phrase),
             textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.titleLarge,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -202,7 +202,7 @@ private fun LoginWithDeviceScreenContent(
                 } else {
                     BitwardenClickableText(
                         modifier = Modifier.testTag("ResendNotificationButton"),
-                        label = stringResource(id = R.string.resend_notification),
+                        label = stringResource(id = BitwardenString.resend_notification),
                         style = BitwardenTheme.typography.labelLarge,
                         innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
                         onClick = onResendNotificationClick,
@@ -225,7 +225,7 @@ private fun LoginWithDeviceScreenContent(
 
         BitwardenClickableText(
             modifier = Modifier.testTag("ViewAllLoginOptionsButton"),
-            label = stringResource(id = R.string.view_all_login_options),
+            label = stringResource(id = BitwardenString.view_all_login_options),
             innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
             style = BitwardenTheme.typography.labelLarge,
             onClick = onViewAllLogInOptionsClick,

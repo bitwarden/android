@@ -24,8 +24,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.color.bitwardenCardColors
 
 /**
@@ -72,7 +72,7 @@ fun BitwardenActionCard(
             onDismissClick?.let {
                 BitwardenStandardIconButton(
                     painter = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                    contentDescription = stringResource(id = R.string.close),
+                    contentDescription = stringResource(id = BitwardenString.close),
                     onClick = it,
                 )
             }

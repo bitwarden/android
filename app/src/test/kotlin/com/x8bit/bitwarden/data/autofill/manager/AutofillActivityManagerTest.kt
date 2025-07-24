@@ -9,9 +9,7 @@ import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofi
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFillData
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -48,11 +46,8 @@ class AutofillActivityManagerTest {
         every { betaChromeAutofillStatus } returns DEFAULT_BROWSER_AUTOFILL_DATA
     }
 
-    private val featureFlagManager = mockk<FeatureFlagManager> {
-        every { getFeatureFlagFlow(FlagKey.ChromeAutofill) } returns MutableStateFlow(true)
-    }
     private val browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager =
-        BrowserThirdPartyAutofillEnabledManagerImpl(featureFlagManager = featureFlagManager)
+        BrowserThirdPartyAutofillEnabledManagerImpl()
 
     // We will construct an instance here just to hook the various dependencies together internally
     @Suppress("unused")

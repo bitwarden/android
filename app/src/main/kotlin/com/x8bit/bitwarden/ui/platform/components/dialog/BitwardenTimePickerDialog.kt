@@ -34,8 +34,8 @@ import androidx.compose.ui.window.DialogProperties
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 
 /**
  * A custom composable representing a dialog that displays the time picker dialog.
@@ -68,21 +68,21 @@ fun BitwardenTimePickerDialog(
         confirmButton = {
             BitwardenTextButton(
                 modifier = Modifier.testTag(tag = "AcceptAlertButton"),
-                label = stringResource(id = R.string.okay),
+                label = stringResource(id = BitwardenString.okay),
                 onClick = { onTimeSelect(timePickerState.hour, timePickerState.minute) },
             )
         },
         dismissButton = {
             BitwardenTextButton(
                 modifier = Modifier.testTag(tag = "DismissAlertButton"),
-                label = stringResource(id = R.string.cancel),
+                label = stringResource(id = BitwardenString.cancel),
                 onClick = onDismissRequest,
             )
         },
         inputToggleButton = {
             BitwardenStandardIconButton(
                 vectorIconRes = BitwardenDrawable.ic_keyboard,
-                contentDescription = stringResource(id = R.string.switch_input_mode),
+                contentDescription = stringResource(id = BitwardenString.switch_input_mode),
                 onClick = { showTimeInput = !showTimeInput },
             )
         },
@@ -159,7 +159,7 @@ private fun TimePickerDialog(
                         .testTag("AlertTitleText")
                         .fillMaxWidth()
                         .padding(bottom = 20.dp),
-                    text = stringResource(id = R.string.select_time),
+                    text = stringResource(id = BitwardenString.select_time),
                     color = BitwardenTheme.colorScheme.text.secondary,
                     style = BitwardenTheme.typography.labelMedium,
                 )

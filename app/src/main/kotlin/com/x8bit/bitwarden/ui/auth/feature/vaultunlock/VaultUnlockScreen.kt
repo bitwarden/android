@@ -42,8 +42,8 @@ import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.inputFieldVisibilityToggleTestTag
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputLabel
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputTestTag
@@ -152,13 +152,13 @@ fun VaultUnlockScreen(
         )
 
         VaultUnlockState.VaultUnlockDialog.Loading -> BitwardenLoadingDialog(
-            text = stringResource(id = R.string.loading),
+            text = stringResource(id = BitwardenString.loading),
         )
 
         VaultUnlockState.VaultUnlockDialog.BiometricsNoLongerSupported -> {
             BitwardenBasicDialog(
-                title = stringResource(id = R.string.biometrics_no_longer_supported_title),
-                message = stringResource(id = R.string.biometrics_no_longer_supported),
+                title = stringResource(id = BitwardenString.biometrics_no_longer_supported_title),
+                message = stringResource(id = BitwardenString.biometrics_no_longer_supported),
                 onDismissRequest = remember {
                     {
                         viewModel.trySendAction(
@@ -215,10 +215,10 @@ fun VaultUnlockScreen(
                         )
                     }
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(R.string.more),
+                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
-                                text = stringResource(id = R.string.log_out),
+                                text = stringResource(id = BitwardenString.log_out),
                                 onClick = { showLogoutConfirmationDialog = true },
                             ),
                         ),
@@ -294,7 +294,7 @@ fun VaultUnlockScreen(
             }
             Text(
                 text = stringResource(
-                    id = R.string.logged_in_as_on,
+                    id = BitwardenString.logged_in_as_on,
                     state.email,
                     state.environmentUrl,
                 ),
@@ -314,7 +314,7 @@ fun VaultUnlockScreen(
             Spacer(modifier = Modifier.height(24.dp))
             if (state.showBiometricLogin && biometricsManager.isBiometricsSupported) {
                 BitwardenOutlinedButton(
-                    label = stringResource(id = R.string.use_biometrics_to_unlock),
+                    label = stringResource(id = BitwardenString.use_biometrics_to_unlock),
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick) }
                     },
@@ -325,7 +325,7 @@ fun VaultUnlockScreen(
                 Spacer(modifier = Modifier.height(12.dp))
             } else if (state.showBiometricInvalidatedMessage) {
                 Text(
-                    text = stringResource(R.string.account_biometric_invalidated),
+                    text = stringResource(BitwardenString.account_biometric_invalidated),
                     textAlign = TextAlign.Start,
                     style = BitwardenTheme.typography.bodyMedium,
                     color = BitwardenTheme.colorScheme.status.error,
@@ -335,7 +335,7 @@ fun VaultUnlockScreen(
             }
             if (!state.hideInput) {
                 BitwardenFilledButton(
-                    label = stringResource(id = R.string.unlock),
+                    label = stringResource(id = BitwardenString.unlock),
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(VaultUnlockAction.UnlockClick) }
                     },

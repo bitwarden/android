@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.vault.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
@@ -31,7 +31,7 @@ fun VaultItemSelectionDialog(
         .entries
         .filterNot { excludedOptions.contains(it) }
     BitwardenSelectionDialog(
-        title = stringResource(R.string.type),
+        title = stringResource(BitwardenString.type),
         onDismissRequest = onDismissRequest,
     ) {
         supportedEntries.forEach {

@@ -5,10 +5,10 @@ import app.cash.turbine.test
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.FolderView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
@@ -126,7 +126,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    FolderAddEditEvent.ShowToast(R.string.folder_deleted.asText()),
+                    FolderAddEditEvent.ShowToast(BitwardenString.folder_deleted.asText()),
                     awaitItem(),
                 )
                 assertEquals(
@@ -143,7 +143,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             val stateWithDialog = FolderAddEditState(
                 folderAddEditType = FolderAddEditType.EditItem((DEFAULT_EDIT_ITEM_ID)),
                 dialog = FolderAddEditState.DialogState.Loading(
-                    R.string.deleting.asText(),
+                    BitwardenString.deleting.asText(),
                 ),
                 viewState = FolderAddEditState.ViewState.Content(
                     folderName = DEFAULT_FOLDER_NAME,
@@ -190,7 +190,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 folderAddEditType = FolderAddEditType.AddItem,
                 dialog = null,
                 viewState = FolderAddEditState.ViewState.Error(
-                    R.string.generic_error_message.asText(),
+                    BitwardenString.generic_error_message.asText(),
                 ),
                 parentFolderName = null,
             )
@@ -215,7 +215,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             val stateWithDialog = FolderAddEditState(
                 folderAddEditType = FolderAddEditType.EditItem((DEFAULT_EDIT_ITEM_ID)),
                 dialog = FolderAddEditState.DialogState.Error(
-                    R.string.generic_error_message.asText(),
+                    BitwardenString.generic_error_message.asText(),
                     throwable = error,
                 ),
                 viewState = FolderAddEditState.ViewState.Content(
@@ -269,8 +269,8 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
 
             val stateWithDialog = stateWithoutName.copy(
                 dialog = FolderAddEditState.DialogState.Error(
-                    R.string.validation_field_required
-                        .asText(R.string.name.asText()),
+                    BitwardenString.validation_field_required
+                        .asText(BitwardenString.name.asText()),
                 ),
             )
 
@@ -294,7 +294,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             val stateWithDialog = FolderAddEditState(
                 folderAddEditType = FolderAddEditType.AddItem,
                 dialog = FolderAddEditState.DialogState.Loading(
-                    R.string.saving.asText(),
+                    BitwardenString.saving.asText(),
                 ),
                 viewState = FolderAddEditState.ViewState.Content(
                     folderName = DEFAULT_FOLDER_NAME,
@@ -428,7 +428,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
         assertEquals(
             state.copy(
                 dialog = FolderAddEditState.DialogState.Error(
-                    R.string.generic_error_message.asText(),
+                    BitwardenString.generic_error_message.asText(),
                     throwable = error,
                 ),
             ),
@@ -442,7 +442,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             val stateWithDialog = FolderAddEditState(
                 folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
                 dialog = FolderAddEditState.DialogState.Loading(
-                    R.string.saving.asText(),
+                    BitwardenString.saving.asText(),
                 ),
                 viewState = FolderAddEditState.ViewState.Content(
                     folderName = DEFAULT_FOLDER_NAME,
@@ -521,7 +521,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
         assertEquals(
             state.copy(
                 dialog = FolderAddEditState.DialogState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     throwable = error,
                 ),
             ),
@@ -584,7 +584,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
                 viewState = FolderAddEditState.ViewState.Error(
-                    R.string.generic_error_message.asText(),
+                    BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -636,7 +636,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
                 viewState = FolderAddEditState.ViewState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -677,11 +677,11 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
                 viewState = FolderAddEditState.ViewState.Error(
-                    R.string.internet_connection_required_title
+                    BitwardenString.internet_connection_required_title
                         .asText()
                         .concat(
                             " ".asText(),
-                            R.string.internet_connection_required_message.asText(),
+                            BitwardenString.internet_connection_required_message.asText(),
                         ),
                 ),
             ),
@@ -735,7 +735,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
                 viewState = FolderAddEditState.ViewState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,

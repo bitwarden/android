@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import io.mockk.every
 import io.mockk.mockk
@@ -136,7 +136,7 @@ class AccountSummaryExtensionsTest {
     @Test
     fun `supportingTextResOrNull returns Locked locked accounts`() {
         assertEquals(
-            R.string.account_locked,
+            BitwardenString.account_locked,
             mockk<AccountSummary> {
                 every { status } returns AccountSummary.Status.LOCKED
             }
@@ -147,7 +147,7 @@ class AccountSummaryExtensionsTest {
     @Test
     fun `supportingTextResOrNull returns Logged Out for logged out accounts`() {
         assertEquals(
-            R.string.account_logged_out,
+            BitwardenString.account_logged_out,
             mockk<AccountSummary> {
                 every { status } returns AccountSummary.Status.LOGGED_OUT
             }
@@ -158,7 +158,7 @@ class AccountSummaryExtensionsTest {
     @Test
     fun `supportingTextResOrNull returns Unlocked for unlocked accounts`() {
         assertEquals(
-            R.string.account_unlocked,
+            BitwardenString.account_unlocked,
             mockk<AccountSummary> {
                 every { status } returns AccountSummary.Status.UNLOCKED
             }

@@ -8,10 +8,10 @@ import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -106,7 +106,11 @@ class ViewSendViewModel @Inject constructor(
 
     private fun handleDeleteClick() {
         mutableStateFlow.update {
-            it.copy(dialogState = ViewSendState.DialogState.Loading(R.string.deleting.asText()))
+            it.copy(
+                dialogState = ViewSendState.DialogState.Loading(
+                    BitwardenString.deleting.asText(),
+                ),
+            )
         }
         viewModelScope.launch {
             val result = vaultRepository.deleteSend(sendId = state.sendId)
@@ -134,8 +138,8 @@ class ViewSendViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = ViewSendState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -145,7 +149,7 @@ class ViewSendViewModel @Inject constructor(
             is DeleteSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(message = R.string.send_deleted.asText()),
+                    data = BitwardenSnackbarData(message = BitwardenString.send_deleted.asText()),
                     relay = SnackbarRelay.SEND_DELETED,
                 )
                 sendEvent(ViewSendEvent.NavigateBack)
@@ -172,7 +176,7 @@ class ViewSendViewModel @Inject constructor(
             .data
             ?.let { updateStateWithSendView(sendView = it) }
             ?: updateStateWithErrorMessage(
-                message = R.string.missing_send_resync_your_vault.asText(),
+                message = BitwardenString.missing_send_resync_your_vault.asText(),
             )
     }
 
@@ -184,7 +188,7 @@ class ViewSendViewModel @Inject constructor(
         dataState
             .data
             ?.let { updateStateWithSendView(sendView = it) }
-            ?: updateStateWithErrorMessage(message = R.string.generic_error_message.asText())
+            ?: updateStateWithErrorMessage(message = BitwardenString.generic_error_message.asText())
     }
 
     private fun sendNoNetworkReceive(dataState: DataState.NoNetwork<SendView?>) {
@@ -192,11 +196,11 @@ class ViewSendViewModel @Inject constructor(
             .data
             ?.let { updateStateWithSendView(sendView = it) }
             ?: updateStateWithErrorMessage(
-                message = R.string.internet_connection_required_title
+                message = BitwardenString.internet_connection_required_title
                     .asText()
                     .concat(
                         " ".asText(),
-                        R.string.internet_connection_required_message.asText(),
+                        BitwardenString.internet_connection_required_message.asText(),
                     ),
             )
     }
@@ -205,7 +209,7 @@ class ViewSendViewModel @Inject constructor(
         dataState
             .data
             ?.let { updateStateWithSendView(sendView = it) }
-            ?: updateStateWithErrorMessage(message = R.string.generic_error_message.asText())
+            ?: updateStateWithErrorMessage(message = BitwardenString.generic_error_message.asText())
     }
 
     private fun updateStateWithSendView(sendView: SendView) {
@@ -246,8 +250,8 @@ data class ViewSendState(
      */
     val screenDisplayName: Text
         get() = when (sendType) {
-            SendItemType.FILE -> R.string.view_file_send.asText()
-            SendItemType.TEXT -> R.string.view_text_send.asText()
+            SendItemType.FILE -> BitwardenString.view_file_send.asText()
+            SendItemType.TEXT -> BitwardenString.view_text_send.asText()
         }
 
     /**

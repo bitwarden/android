@@ -13,8 +13,8 @@ import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
@@ -68,29 +68,29 @@ fun SendListItem(
         onClick = onClick,
         selectionDataList = persistentListOfNotNull(
             SelectionItemData(
-                text = stringResource(id = R.string.copy_link),
+                text = stringResource(id = BitwardenString.copy_link),
                 onClick = onCopyClick,
             ),
             SelectionItemData(
-                text = stringResource(id = R.string.share_link),
+                text = stringResource(id = BitwardenString.share_link),
                 onClick = onShareClick,
             ),
             SelectionItemData(
-                text = stringResource(id = R.string.view),
+                text = stringResource(id = BitwardenString.view),
                 onClick = onViewClick,
             ),
             SelectionItemData(
-                text = stringResource(id = R.string.edit),
+                text = stringResource(id = BitwardenString.edit),
                 onClick = onEditClick,
             ),
             onRemovePasswordClick?.let {
                 SelectionItemData(
-                    text = stringResource(id = R.string.remove_password),
+                    text = stringResource(id = BitwardenString.remove_password),
                     onClick = it,
                 )
             },
             SelectionItemData(
-                text = stringResource(id = R.string.delete),
+                text = stringResource(id = BitwardenString.delete),
                 onClick = { shouldShowDeleteConfirmationDialog = true },
             ),
         )
@@ -103,10 +103,10 @@ fun SendListItem(
     )
     if (shouldShowDeleteConfirmationDialog) {
         BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.delete),
-            message = stringResource(id = R.string.are_you_sure_delete_send),
-            confirmButtonText = stringResource(id = R.string.yes),
-            dismissButtonText = stringResource(id = R.string.cancel),
+            title = stringResource(id = BitwardenString.delete),
+            message = stringResource(id = BitwardenString.are_you_sure_delete_send),
+            confirmButtonText = stringResource(id = BitwardenString.yes),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
             onConfirmClick = {
                 shouldShowDeleteConfirmationDialog = false
                 onDeleteClick()

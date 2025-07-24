@@ -33,8 +33,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -87,10 +87,10 @@ fun LoginApprovalScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.log_in_requested),
+                title = stringResource(id = BitwardenString.log_in_requested),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(LoginApprovalAction.CloseClick) }
                 },
@@ -113,7 +113,7 @@ fun LoginApprovalScreen(
 
             is LoginApprovalState.ViewState.Error -> {
                 BitwardenErrorContent(
-                    message = stringResource(id = R.string.generic_error_message),
+                    message = stringResource(id = BitwardenString.generic_error_message),
                     modifier = Modifier.fillMaxSize(),
                 )
             }
@@ -141,7 +141,7 @@ private fun LoginApprovalContent(
     ) {
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = stringResource(id = R.string.are_you_trying_to_log_in),
+            text = stringResource(id = BitwardenString.are_you_trying_to_log_in),
             style = BitwardenTheme.typography.headlineMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
@@ -151,7 +151,7 @@ private fun LoginApprovalContent(
         Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = stringResource(
-                id = R.string.log_in_attempt_by_x_on_y,
+                id = BitwardenString.log_in_attempt_by_x_on_y,
                 state.email,
                 state.domainUrl,
             ),
@@ -165,7 +165,7 @@ private fun LoginApprovalContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = stringResource(id = R.string.fingerprint_phrase),
+            text = stringResource(id = BitwardenString.fingerprint_phrase),
             style = BitwardenTheme.typography.titleLarge,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
@@ -188,25 +188,25 @@ private fun LoginApprovalContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         LoginApprovalInfoColumn(
-            label = stringResource(id = R.string.device_type),
+            label = stringResource(id = BitwardenString.device_type),
             value = state.deviceType,
             valueTestTag = "DeviceTypeValueLabel",
         )
 
         LoginApprovalInfoColumn(
-            label = stringResource(id = R.string.ip_address),
+            label = stringResource(id = BitwardenString.ip_address),
             value = state.ipAddress,
         )
 
         LoginApprovalInfoColumn(
-            label = stringResource(id = R.string.time),
+            label = stringResource(id = BitwardenString.time),
             value = state.time,
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         BitwardenFilledButton(
-            label = stringResource(id = R.string.confirm_log_in),
+            label = stringResource(id = BitwardenString.confirm_log_in),
             onClick = onConfirmLoginClick,
             modifier = Modifier
                 .fillMaxWidth()
@@ -217,7 +217,7 @@ private fun LoginApprovalContent(
         Spacer(modifier = Modifier.height(8.dp))
 
         BitwardenOutlinedButton(
-            label = stringResource(id = R.string.deny_log_in),
+            label = stringResource(id = BitwardenString.deny_log_in),
             onClick = onDeclineLoginClick,
             modifier = Modifier
                 .fillMaxWidth()
@@ -277,10 +277,10 @@ private fun LoginApprovalDialogs(
 ) {
     when (state) {
         is LoginApprovalState.DialogState.ChangeAccount -> BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.log_in_requested),
+            title = stringResource(id = BitwardenString.log_in_requested),
             message = state.message(),
-            confirmButtonText = stringResource(id = R.string.okay),
-            dismissButtonText = stringResource(id = R.string.cancel),
+            confirmButtonText = stringResource(id = BitwardenString.okay),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
             onConfirmClick = onConfirmChangeAccount,
             onDismissClick = onDismissChangeAccount,
             onDismissRequest = onDismissChangeAccount,

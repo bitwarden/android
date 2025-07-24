@@ -7,6 +7,7 @@ import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.ui.platform.base.util.orZeroWidthSpace
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CardView
@@ -17,7 +18,6 @@ import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
@@ -60,14 +60,14 @@ fun CipherView.toViewState(
                         ?.find { it.id == fieldView.hashCode().toString() },
                 )
             },
-            created = R.string.created.asText(
+            created = BitwardenString.created.asText(
                 creationDate.toFormattedDateTimeStyle(
                     dateStyle = FormatStyle.MEDIUM,
                     timeStyle = FormatStyle.SHORT,
                     clock = clock,
                 ),
             ),
-            lastUpdated = R.string.last_edited.asText(
+            lastUpdated = BitwardenString.last_edited.asText(
                 revisionDate.toFormattedDateTimeStyle(
                     dateStyle = FormatStyle.MEDIUM,
                     timeStyle = FormatStyle.SHORT,
@@ -137,7 +137,7 @@ fun CipherView.toViewState(
                             timeStyle = FormatStyle.SHORT,
                             clock = clock,
                         )
-                        ?.let { R.string.password_last_updated.asText(it) },
+                        ?.let { BitwardenString.password_last_updated.asText(it) },
                     isPremiumUser = isPremiumUser,
                     canViewTotpCode = isPremiumUser || this.organizationUseTotp,
                     totpCodeItemData = totpCodeItemData,
@@ -256,7 +256,7 @@ private fun LoginUriView.toUriData() =
     )
 
 private fun Fido2Credential.getCreationDateText(clock: Clock): Text? =
-    R.string.created_x.asText(
+    BitwardenString.created_x.asText(
         this.creationDate.toFormattedDateTimeStyle(
             dateStyle = FormatStyle.MEDIUM,
             timeStyle = FormatStyle.SHORT,

@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.welcome
 import android.os.Parcelable
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -83,8 +83,8 @@ data class WelcomeState(
         @Parcelize
         data object CardOne : WelcomeCard() {
             override val imageRes: Int get() = BitwardenDrawable.img_vault_items
-            override val titleRes: Int get() = R.string.security_prioritized
-            override val messageRes: Int get() = R.string.welcome_message_1
+            override val titleRes: Int get() = BitwardenString.security_prioritized
+            override val messageRes: Int get() = BitwardenString.welcome_message_1
         }
 
         /**
@@ -93,8 +93,8 @@ data class WelcomeState(
         @Parcelize
         data object CardTwo : WelcomeCard() {
             override val imageRes: Int get() = BitwardenDrawable.welcome_2
-            override val titleRes: Int get() = R.string.quick_and_easy_login
-            override val messageRes: Int get() = R.string.welcome_message_2
+            override val titleRes: Int get() = BitwardenString.quick_and_easy_login
+            override val messageRes: Int get() = BitwardenString.welcome_message_2
         }
 
         /**
@@ -103,8 +103,8 @@ data class WelcomeState(
         @Parcelize
         data object CardThree : WelcomeCard() {
             override val imageRes: Int get() = BitwardenDrawable.welcome_3
-            override val titleRes: Int get() = R.string.level_up_your_logins
-            override val messageRes: Int get() = R.string.welcome_message_3
+            override val titleRes: Int get() = BitwardenString.level_up_your_logins
+            override val messageRes: Int get() = BitwardenString.welcome_message_3
         }
 
         /**
@@ -113,8 +113,8 @@ data class WelcomeState(
         @Parcelize
         data object CardFour : WelcomeCard() {
             override val imageRes: Int get() = BitwardenDrawable.welcome_4
-            override val titleRes: Int get() = R.string.your_data_when_and_where_you_need_it
-            override val messageRes: Int get() = R.string.welcome_message_4
+            override val titleRes: Int get() = BitwardenString.your_data_when_and_where_you_need_it
+            override val messageRes: Int get() = BitwardenString.welcome_message_4
         }
     }
 }

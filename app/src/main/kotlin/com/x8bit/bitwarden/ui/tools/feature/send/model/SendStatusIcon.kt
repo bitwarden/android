@@ -2,9 +2,9 @@ package com.x8bit.bitwarden.ui.tools.feature.send.model
 
 import androidx.annotation.DrawableRes
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 
 /**
  * Represents the types of icons to be displayed with the send.
@@ -16,27 +16,27 @@ enum class SendStatusIcon(
 ) {
     DISABLED(
         iconRes = BitwardenDrawable.ic_send_disabled,
-        contentDescription = R.string.disabled.asText(),
+        contentDescription = BitwardenString.disabled.asText(),
         testTag = "DisabledSendIcon",
     ),
     PASSWORD(
         iconRes = BitwardenDrawable.ic_key,
-        contentDescription = R.string.password.asText(),
+        contentDescription = BitwardenString.password.asText(),
         testTag = "PasswordProtectedSendIcon",
     ),
     EXPIRED(
         iconRes = BitwardenDrawable.ic_send_expired,
-        contentDescription = R.string.expired.asText(),
+        contentDescription = BitwardenString.expired.asText(),
         testTag = "ExpiredSendIcon",
     ),
     MAX_ACCESS_COUNT_REACHED(
         iconRes = BitwardenDrawable.ic_send_max_access_count_reached,
-        contentDescription = R.string.maximum_access_count_reached.asText(),
+        contentDescription = BitwardenString.maximum_access_count_reached.asText(),
         testTag = "MaxAccessSendIcon",
     ),
     PENDING_DELETE(
         iconRes = BitwardenDrawable.ic_send_pending_delete,
-        contentDescription = R.string.pending_delete.asText(),
+        contentDescription = BitwardenString.pending_delete.asText(),
         testTag = "PendingDeletionSendIcon",
     ),
 }

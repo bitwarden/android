@@ -3,9 +3,9 @@ package com.x8bit.bitwarden.ui.platform.manager.review
 import android.app.Activity
 import android.widget.Toast
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.x8bit.bitwarden.BuildConfig
-import com.x8bit.bitwarden.R
 import timber.log.Timber
 
 /**
@@ -30,7 +30,7 @@ class AppReviewManagerImpl(
             Toast
                 .makeText(
                     activity,
-                    activity.getString(R.string.review_flow_launched),
+                    activity.getString(BitwardenString.review_flow_launched),
                     Toast.LENGTH_SHORT,
                 )
                 .show()

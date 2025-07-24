@@ -13,6 +13,7 @@ import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -45,14 +46,12 @@ import com.x8bit.bitwarden.data.credentials.util.getFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.credentials.util.getGetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.credentials.util.getProviderGetPasswordRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -147,13 +146,6 @@ class MainViewModelTest : BaseViewModelTest() {
         every { clearResumeScreen() } just runs
     }
 
-    private val mutableMobileErrorReportingFeatureFlow = MutableStateFlow(false)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(key = FlagKey.MobileErrorReporting) } returns false
-        every {
-            getFeatureFlagFlow(key = FlagKey.MobileErrorReporting)
-        } returns mutableMobileErrorReportingFeatureFlow
-    }
     private val mockBiometricsPromptResult = mockk<BiometricPromptResult>(relaxed = true) {
         every { isSuccessful } returns true
     }
@@ -607,7 +599,10 @@ class MainViewModelTest : BaseViewModelTest() {
 
                 viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
                 assertEquals(
-                    MainEvent.ShowToast(R.string.there_was_an_issue_validating_the_registration_token.asText()),
+                    MainEvent.ShowToast(
+                        BitwardenString.there_was_an_issue_validating_the_registration_token
+                            .asText(),
+                    ),
                     awaitItem(),
                 )
             }
@@ -812,7 +807,7 @@ class MainViewModelTest : BaseViewModelTest() {
     @Test
     fun `on ReceiveFirstIntent with password get request data should set the special circumstance to ProviderGetPasswordRequest`() {
         val viewModel = createViewModel()
-        val mockProviderGetCredentialRequest = createMockProviderGetPasswordCredentialRequest()
+        val mockProviderGetCredentialRequest = createMockProviderGetPasswordCredentialRequest(1)
         val passwordGetCredentialIntent = createMockIntent(
             mockProviderGetPasswordRequest = mockProviderGetCredentialRequest,
         )
@@ -1162,14 +1157,12 @@ class MainViewModelTest : BaseViewModelTest() {
             set(SPECIAL_CIRCUMSTANCE_KEY, initialSpecialCircumstance)
         },
         appResumeManager = appResumeManager,
-        featureFlagManager = featureFlagManager,
     )
 }
 
 private val DEFAULT_STATE: MainState = MainState(
     theme = AppTheme.DEFAULT,
     isScreenCaptureAllowed = true,
-    isErrorReportingDialogEnabled = false,
     isDynamicColorsEnabled = false,
 )
 

@@ -7,7 +7,7 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.bitwarden.annotation.OmitFromCoverage
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import javax.crypto.Cipher
 
 /**
@@ -137,15 +137,15 @@ class BiometricsManagerImpl(
         )
 
         val promptInfoBuilder = BiometricPrompt.PromptInfo.Builder()
-            .setTitle(activity.getString(R.string.bitwarden))
+            .setTitle(activity.getString(BitwardenString.bitwarden))
             .setAllowedAuthenticators(Authenticators.BIOMETRIC_STRONG)
 
         cipher
             ?.let {
                 promptInfoBuilder
-                    .setDescription(activity.getString(R.string.biometrics_direction))
+                    .setDescription(activity.getString(BitwardenString.biometrics_direction))
                     .setAllowedAuthenticators(Authenticators.BIOMETRIC_STRONG)
-                    .setNegativeButtonText(activity.getString(R.string.cancel))
+                    .setNegativeButtonText(activity.getString(BitwardenString.cancel))
                     .setConfirmationRequired(false)
                 biometricPrompt.authenticate(
                     promptInfoBuilder.build(),
@@ -154,7 +154,7 @@ class BiometricsManagerImpl(
             }
             ?: run {
                 promptInfoBuilder
-                    .setDescription(activity.getString(R.string.user_verification_direction))
+                    .setDescription(activity.getString(BitwardenString.user_verification_direction))
                     .setAllowedAuthenticators(
                         Authenticators.BIOMETRIC_STRONG or Authenticators.DEVICE_CREDENTIAL,
                     )

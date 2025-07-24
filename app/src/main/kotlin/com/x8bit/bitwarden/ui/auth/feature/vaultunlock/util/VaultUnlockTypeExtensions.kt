@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util
 
 import androidx.compose.ui.text.input.KeyboardType
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 
 /**
@@ -11,8 +11,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
  */
 val VaultUnlockType.unlockScreenTitle: Text
     get() = when (this) {
-        VaultUnlockType.MASTER_PASSWORD -> R.string.verify_master_password
-        VaultUnlockType.PIN -> R.string.verify_pin
+        VaultUnlockType.MASTER_PASSWORD -> BitwardenString.verify_master_password
+        VaultUnlockType.PIN -> BitwardenString.verify_pin
     }
         .asText()
 
@@ -21,8 +21,8 @@ val VaultUnlockType.unlockScreenTitle: Text
  */
 val VaultUnlockType.unlockScreenMessage: Text
     get() = when (this) {
-        VaultUnlockType.MASTER_PASSWORD -> R.string.vault_locked_master_password
-        VaultUnlockType.PIN -> R.string.vault_locked_pin
+        VaultUnlockType.MASTER_PASSWORD -> BitwardenString.vault_locked_master_password
+        VaultUnlockType.PIN -> BitwardenString.vault_locked_pin
     }
         .asText()
 
@@ -40,8 +40,8 @@ val VaultUnlockType.unlockScreenInputTestTag: String
  */
 val VaultUnlockType.unlockScreenInputLabel: Text
     get() = when (this) {
-        VaultUnlockType.MASTER_PASSWORD -> R.string.master_password
-        VaultUnlockType.PIN -> R.string.pin
+        VaultUnlockType.MASTER_PASSWORD -> BitwardenString.master_password
+        VaultUnlockType.PIN -> BitwardenString.pin
     }
         .asText()
 
@@ -59,8 +59,8 @@ val VaultUnlockType.inputFieldVisibilityToggleTestTag: String
  */
 val VaultUnlockType.unlockScreenErrorMessage: Text
     get() = when (this) {
-        VaultUnlockType.MASTER_PASSWORD -> R.string.invalid_master_password
-        VaultUnlockType.PIN -> R.string.invalid_pin
+        VaultUnlockType.MASTER_PASSWORD -> BitwardenString.invalid_master_password
+        VaultUnlockType.PIN -> BitwardenString.invalid_pin
     }
         .asText()
 
@@ -77,4 +77,4 @@ val VaultUnlockType.unlockScreenKeyboardType: KeyboardType
  * The message to show when user try to unlock vault with empty or blank input.
  */
 val VaultUnlockType.emptyInputDialogMessage: Text
-    get() = R.string.validation_field_required.asText(unlockScreenInputLabel)
+    get() = BitwardenString.validation_field_required.asText(unlockScreenInputLabel)

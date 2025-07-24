@@ -12,8 +12,8 @@ import com.bitwarden.ui.platform.components.button.color.bitwardenStandardIconBu
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 
 /**
  * A placeholder item to be used to represent an account.
@@ -37,7 +37,7 @@ fun BitwardenPlaceholderAccountActionItem(
         )
         Icon(
             painter = rememberVectorPainter(id = BitwardenDrawable.ic_dots),
-            contentDescription = stringResource(id = R.string.account),
+            contentDescription = stringResource(id = BitwardenString.account),
             tint = BitwardenTheme.colorScheme.text.interaction,
         )
     }

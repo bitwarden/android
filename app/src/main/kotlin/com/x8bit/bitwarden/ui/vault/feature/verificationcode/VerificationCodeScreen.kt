@@ -31,7 +31,7 @@ import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionI
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
@@ -108,25 +108,25 @@ fun VerificationCodeScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.verification_codes),
+                title = stringResource(id = BitwardenString.verification_codes),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                navigationIconContentDescription = stringResource(id = R.string.back),
+                navigationIconContentDescription = stringResource(id = BitwardenString.back),
                 onNavigationIconClick = verificationCodeHandler.backClick,
                 actions = {
                     BitwardenSearchActionItem(
-                        contentDescription = stringResource(id = R.string.search_vault),
+                        contentDescription = stringResource(id = BitwardenString.search_vault),
                         onClick = verificationCodeHandler.searchIconClick,
                     )
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(R.string.more),
+                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
-                                text = stringResource(id = R.string.sync),
+                                text = stringResource(id = BitwardenString.sync),
                                 onClick = verificationCodeHandler.syncClick,
                             ),
                             OverflowMenuItemData(
-                                text = stringResource(id = R.string.lock),
+                                text = stringResource(id = BitwardenString.lock),
                                 onClick = verificationCodeHandler.lockClick,
                             ),
                         ),
@@ -212,7 +212,7 @@ private fun VerificationCodeContent(
         item {
             Spacer(modifier = Modifier.height(height = 12.dp))
             BitwardenListHeaderText(
-                label = stringResource(id = R.string.items),
+                label = stringResource(id = BitwardenString.items),
                 supportingLabel = items.size.toString(),
                 modifier = Modifier
                     .fillMaxWidth()

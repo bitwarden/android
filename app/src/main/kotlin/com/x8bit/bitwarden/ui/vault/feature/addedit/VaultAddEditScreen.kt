@@ -50,9 +50,9 @@ import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkContainer
@@ -319,10 +319,10 @@ fun VaultAddEditScreen(
 
     if (pendingDeleteCipher) {
         BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.delete),
-            message = stringResource(id = R.string.do_you_really_want_to_soft_delete_cipher),
-            confirmButtonText = stringResource(id = R.string.okay),
-            dismissButtonText = stringResource(id = R.string.cancel),
+            title = stringResource(id = BitwardenString.delete),
+            message = stringResource(id = BitwardenString.do_you_really_want_to_soft_delete_cipher),
+            confirmButtonText = stringResource(id = BitwardenString.okay),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
             onConfirmClick = {
                 pendingDeleteCipher = false
                 confirmDeleteClickAction()
@@ -353,7 +353,9 @@ fun VaultAddEditScreen(
                     title = state.screenDisplayName(),
                     navigationIcon = NavigationIcon(
                         navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                        navigationIconContentDescription = stringResource(id = R.string.close),
+                        navigationIconContentDescription = stringResource(
+                            id = BitwardenString.close,
+                        ),
                         onNavigationIconClick = remember(viewModel) {
                             { viewModel.trySendAction(VaultAddEditAction.Common.CloseClick) }
                         },
@@ -362,17 +364,17 @@ fun VaultAddEditScreen(
                     scrollBehavior = scrollBehavior,
                     actions = {
                         BitwardenTextButton(
-                            label = stringResource(id = R.string.save),
+                            label = stringResource(id = BitwardenString.save),
                             onClick = remember(viewModel) {
                                 { viewModel.trySendAction(VaultAddEditAction.Common.SaveClick) }
                             },
                             modifier = Modifier.testTag("SaveButton"),
                         )
                         BitwardenOverflowActionItem(
-                            contentDescription = stringResource(R.string.more),
+                            contentDescription = stringResource(BitwardenString.more),
                             menuItemDataList = persistentListOfNotNull(
                                 OverflowMenuItemData(
-                                    text = stringResource(id = R.string.attachments),
+                                    text = stringResource(id = BitwardenString.attachments),
                                     onClick = remember(viewModel) {
                                         {
                                             viewModel.trySendAction(
@@ -383,7 +385,9 @@ fun VaultAddEditScreen(
                                 )
                                     .takeUnless { state.isAddItemMode },
                                 OverflowMenuItemData(
-                                    text = stringResource(id = R.string.move_to_organization),
+                                    text = stringResource(
+                                        id = BitwardenString.move_to_organization,
+                                    ),
                                     onClick = remember(viewModel) {
                                         {
                                             viewModel.trySendAction(
@@ -396,7 +400,7 @@ fun VaultAddEditScreen(
                                         state.isAddItemMode || state.isCipherInCollection
                                     },
                                 OverflowMenuItemData(
-                                    text = stringResource(id = R.string.collections),
+                                    text = stringResource(id = BitwardenString.collections),
                                     onClick = remember(viewModel) {
                                         {
                                             viewModel.trySendAction(
@@ -411,7 +415,7 @@ fun VaultAddEditScreen(
                                             !state.canAssociateToCollections
                                     },
                                 OverflowMenuItemData(
-                                    text = stringResource(id = R.string.delete),
+                                    text = stringResource(id = BitwardenString.delete),
                                     onClick = { pendingDeleteCipher = true },
                                 )
                                     .takeUnless { state.isAddItemMode || !state.canDelete },
@@ -513,15 +517,15 @@ private fun VaultAddEditItemDialogs(
 
         is VaultAddEditState.DialogState.InitialAutofillPrompt -> {
             BitwardenBasicDialog(
-                title = stringResource(id = R.string.bitwarden_autofill_service),
-                message = stringResource(id = R.string.bitwarden_autofill_service_alert2),
+                title = stringResource(id = BitwardenString.bitwarden_autofill_service),
+                message = stringResource(id = BitwardenString.bitwarden_autofill_service_alert2),
                 onDismissRequest = onAutofillDismissRequest,
             )
         }
 
         is VaultAddEditState.DialogState.Fido2Error -> {
             BitwardenBasicDialog(
-                title = stringResource(id = R.string.an_error_has_occurred),
+                title = stringResource(id = BitwardenString.an_error_has_occurred),
                 message = dialogState.message(),
                 onDismissRequest = { onFido2ErrorDismiss(dialogState.message) },
             )
@@ -559,7 +563,7 @@ private fun VaultAddEditItemDialogs(
         is VaultAddEditState.DialogState.Fido2MasterPasswordError -> {
             BitwardenBasicDialog(
                 title = null,
-                message = stringResource(id = R.string.invalid_master_password),
+                message = stringResource(id = BitwardenString.invalid_master_password),
                 onDismissRequest = onRetryFido2PasswordVerification,
             )
         }
@@ -574,7 +578,7 @@ private fun VaultAddEditItemDialogs(
         is VaultAddEditState.DialogState.Fido2PinError -> {
             BitwardenBasicDialog(
                 title = null,
-                message = stringResource(id = R.string.invalid_pin),
+                message = stringResource(id = BitwardenString.invalid_pin),
                 onDismissRequest = onRetryFido2PinVerification,
             )
         }
@@ -591,8 +595,8 @@ private fun VaultAddEditItemDialogs(
             BitwardenBasicDialog(
                 title = null,
                 message = stringResource(
-                    id = R.string.validation_field_required,
-                    stringResource(id = R.string.pin),
+                    id = BitwardenString.validation_field_required,
+                    stringResource(id = BitwardenString.pin),
                 ),
                 onDismissRequest = onRetryPinSetUpFido2Verification,
             )
@@ -641,11 +645,11 @@ private fun FolderSelectionBottomSheet(
         mutableStateOf(state.selectedFolder?.name.orEmpty())
     }
     BitwardenModalBottomSheet(
-        sheetTitle = stringResource(R.string.folders),
+        sheetTitle = stringResource(BitwardenString.folders),
         onDismiss = handlers.onDismissBottomSheet,
         topBarActions = { animatedOnDismiss ->
             BitwardenTextButton(
-                label = stringResource(R.string.save),
+                label = stringResource(BitwardenString.save),
                 onClick = {
                     handlers.onDismissBottomSheet()
                     state
@@ -735,7 +739,7 @@ private fun FolderSelectionBottomSheetContent(
             val cardStyle = if (options.isEmpty()) CardStyle.Full else CardStyle.Bottom
             if (inEditMode) {
                 BitwardenTextField(
-                    label = stringResource(R.string.add_folder),
+                    label = stringResource(BitwardenString.add_folder),
                     value = addFolderText,
                     onValueChange = {
                         addFolderText = it
@@ -756,7 +760,7 @@ private fun FolderSelectionBottomSheetContent(
                 )
             } else {
                 BitwardenClickableText(
-                    label = stringResource(id = R.string.add_folder),
+                    label = stringResource(id = BitwardenString.add_folder),
                     onClick = {
                         onOptionSelected(addFolderText)
                         inEditMode = true
@@ -792,11 +796,11 @@ private fun OwnerSelectionBottomSheet(
         mutableStateOf(state.selectedOwner?.name.orEmpty())
     }
     BitwardenModalBottomSheet(
-        sheetTitle = stringResource(R.string.owner),
+        sheetTitle = stringResource(BitwardenString.owner),
         onDismiss = handlers.onDismissBottomSheet,
         topBarActions = { animatedOnDismiss ->
             BitwardenTextButton(
-                label = stringResource(R.string.save),
+                label = stringResource(BitwardenString.save),
                 onClick = {
                     handlers.onDismissBottomSheet()
                     state

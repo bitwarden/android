@@ -13,8 +13,8 @@ import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 
 /**
@@ -45,8 +45,8 @@ fun BitwardenExternalLinkRow(
     withDivider: Boolean = true,
     dialogTitle: String,
     dialogMessage: String,
-    dialogConfirmButtonText: String = stringResource(id = R.string.continue_text),
-    dialogDismissButtonText: String = stringResource(id = R.string.cancel),
+    dialogConfirmButtonText: String = stringResource(id = BitwardenString.continue_text),
+    dialogDismissButtonText: String = stringResource(id = BitwardenString.cancel),
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
     BitwardenTextRow(

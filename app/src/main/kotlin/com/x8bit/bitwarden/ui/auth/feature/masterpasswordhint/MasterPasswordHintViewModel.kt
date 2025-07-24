@@ -4,9 +4,9 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
@@ -68,8 +68,8 @@ class MasterPasswordHintViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = MasterPasswordHintState.DialogState.Error(
-                        title = R.string.internet_connection_required_title.asText(),
-                        message = R.string.internet_connection_required_message.asText(),
+                        title = BitwardenString.internet_connection_required_title.asText(),
+                        message = BitwardenString.internet_connection_required_message.asText(),
                     ),
                 )
             }
@@ -80,9 +80,9 @@ class MasterPasswordHintViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = MasterPasswordHintState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required
-                            .asText(R.string.email_address.asText()),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.validation_field_required
+                            .asText(BitwardenString.email_address.asText()),
                     ),
                 )
             }
@@ -90,11 +90,11 @@ class MasterPasswordHintViewModel @Inject constructor(
         }
 
         if (!email.contains("@")) {
-            val errorMessage = R.string.invalid_email.asText()
+            val errorMessage = BitwardenString.invalid_email.asText()
             mutableStateFlow.update {
                 it.copy(
                     dialog = MasterPasswordHintState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
                         message = errorMessage,
                     ),
                 )
@@ -105,7 +105,7 @@ class MasterPasswordHintViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialog = MasterPasswordHintState.DialogState.Loading(
-                    R.string.submitting.asText(),
+                    BitwardenString.submitting.asText(),
                 ),
             )
         }
@@ -130,9 +130,9 @@ class MasterPasswordHintViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = MasterPasswordHintState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = result.message?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                             error = result.error,
                         ),
                     )

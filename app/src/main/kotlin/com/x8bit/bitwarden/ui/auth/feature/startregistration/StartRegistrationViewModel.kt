@@ -8,9 +8,9 @@ import com.bitwarden.data.repository.model.Environment.Type
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidEmail
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
@@ -194,9 +194,9 @@ class StartRegistrationViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = StartRegistrationDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required
-                            .asText(R.string.email_address.asText()),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.validation_field_required
+                            .asText(BitwardenString.email_address.asText()),
                     ),
                 )
             }
@@ -206,8 +206,8 @@ class StartRegistrationViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = StartRegistrationDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.invalid_email.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.invalid_email.asText(),
                     ),
                 )
             }
@@ -244,11 +244,11 @@ class StartRegistrationViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = StartRegistrationDialog.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = sendVerificationEmailResult
                                 .errorMessage
                                 ?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                             error = sendVerificationEmailResult.error,
                         ),
                     )

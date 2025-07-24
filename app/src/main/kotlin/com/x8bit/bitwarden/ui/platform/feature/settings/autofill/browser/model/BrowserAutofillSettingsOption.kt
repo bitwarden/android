@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model
 
 import android.os.Parcelable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import kotlinx.parcelize.Parcelize
 
@@ -27,7 +27,7 @@ sealed class BrowserAutofillSettingsOption(val isEnabled: Boolean) : Parcelable 
         override val browserPackage: BrowserPackage
             get() = BrowserPackage.BRAVE_RELEASE
         override val optionText: Text
-            get() = R.string.use_brave_autofill_integration.asText()
+            get() = BitwardenString.use_brave_autofill_integration.asText()
     }
 
     /**
@@ -40,7 +40,7 @@ sealed class BrowserAutofillSettingsOption(val isEnabled: Boolean) : Parcelable 
         override val browserPackage: BrowserPackage
             get() = BrowserPackage.CHROME_STABLE
         override val optionText: Text
-            get() = R.string.use_chrome_autofill_integration.asText()
+            get() = BitwardenString.use_chrome_autofill_integration.asText()
     }
 
     /**
@@ -53,6 +53,6 @@ sealed class BrowserAutofillSettingsOption(val isEnabled: Boolean) : Parcelable 
         override val browserPackage: BrowserPackage
             get() = BrowserPackage.CHROME_BETA
         override val optionText: Text
-            get() = R.string.use_chrome_beta_autofill_integration.asText()
+            get() = BitwardenString.use_chrome_beta_autofill_integration.asText()
     }
 }

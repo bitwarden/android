@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.auth.feature.setpassword
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
@@ -58,9 +58,9 @@ class SetPasswordViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = SetPasswordState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required
-                        .asText(R.string.master_password.asText()),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.validation_field_required
+                        .asText(BitwardenString.master_password.asText()),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -86,8 +86,8 @@ class SetPasswordViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = SetPasswordState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.master_password_length_val_message_x
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.master_password_length_val_message_x
                         .asText(MIN_PASSWORD_LENGTH),
                 ),
                 passwordInput = password,
@@ -112,8 +112,8 @@ class SetPasswordViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = SetPasswordState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.master_password_confirmation_val_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.master_password_confirmation_val_message.asText(),
                 ),
                 passwordInput = password,
             ),
@@ -133,7 +133,7 @@ class SetPasswordViewModelTest : BaseViewModelTest() {
                 state = SetPasswordState(
                     organizationIdentifier = ORGANIZATION_IDENTIFIER,
                     policies = listOf(
-                        R.string.policy_in_effect_uppercase.asText(),
+                        BitwardenString.policy_in_effect_uppercase.asText(),
                     ),
                     dialogState = null,
                     passwordInput = "",
@@ -149,13 +149,14 @@ class SetPasswordViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = SetPasswordState.DialogState.Error(
-                        title = R.string.master_password_policy_validation_title.asText(),
-                        message = R.string.master_password_policy_validation_message.asText(),
+                        title = BitwardenString.master_password_policy_validation_title.asText(),
+                        message =
+                            BitwardenString.master_password_policy_validation_message.asText(),
                     ),
                     passwordInput = password,
                     retypePasswordInput = password,
                     policies = listOf(
-                        R.string.policy_in_effect_uppercase.asText(),
+                        BitwardenString.policy_in_effect_uppercase.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -195,7 +196,7 @@ class SetPasswordViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = SetPasswordState.DialogState.Loading(
-                        message = R.string.updating_password.asText(),
+                        message = BitwardenString.updating_password.asText(),
                     ),
                     passwordInput = password,
                     retypePasswordInput = password,

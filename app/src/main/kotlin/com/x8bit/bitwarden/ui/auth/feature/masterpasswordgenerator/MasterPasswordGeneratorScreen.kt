@@ -34,8 +34,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
@@ -155,19 +155,23 @@ private fun MasterPasswordGeneratorContent(
 
         Spacer(modifier = Modifier.height(12.dp))
         BitwardenFilledButton(
-            label = stringResource(R.string.generate_button_label),
+            label = stringResource(BitwardenString.generate_button_label),
             onClick = onGenerateNewPassword,
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_generate),
             modifier = Modifier.fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            text = stringResource(R.string.write_this_password_down_and_keep_it_somewhere_safe),
+            text = stringResource(
+                BitwardenString.write_this_password_down_and_keep_it_somewhere_safe,
+            ),
             style = BitwardenTheme.typography.bodySmall,
             color = BitwardenTheme.colorScheme.text.primary,
         )
         BitwardenClickableText(
-            label = stringResource(R.string.learn_about_other_ways_to_prevent_account_lockout),
+            label = stringResource(
+                BitwardenString.learn_about_other_ways_to_prevent_account_lockout,
+            ),
             style = BitwardenTheme.typography.labelMedium,
             onClick = onLearnToPreventLockout,
             innerPadding = PaddingValues(horizontal = 0.dp, vertical = 4.dp),
@@ -183,14 +187,14 @@ private fun MasterPasswordGeneratorTopBar(
     onSaveClick: () -> Unit,
 ) {
     BitwardenTopAppBar(
-        title = stringResource(R.string.generate_master_password),
+        title = stringResource(BitwardenString.generate_master_password),
         scrollBehavior = scrollBehavior,
         navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-        navigationIconContentDescription = stringResource(id = R.string.back),
+        navigationIconContentDescription = stringResource(id = BitwardenString.back),
         onNavigationIconClick = onBackClick,
         actions = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.save),
+                label = stringResource(id = BitwardenString.save),
                 onClick = onSaveClick,
             )
         },

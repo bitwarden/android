@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
 
@@ -99,7 +99,7 @@ fun BitwardenSelectionDialog(
                 modifier = Modifier
                     .testTag("DismissAlertButton")
                     .padding(24.dp),
-                label = stringResource(id = R.string.cancel),
+                label = stringResource(id = BitwardenString.cancel),
                 onClick = onDismissRequest,
             )
         }

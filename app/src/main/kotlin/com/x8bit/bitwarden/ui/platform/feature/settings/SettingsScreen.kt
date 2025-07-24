@@ -29,7 +29,7 @@ import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenPushRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 
@@ -67,12 +67,14 @@ fun SettingsScreen(
     BitwardenScaffold(
         topBar = {
             BitwardenMediumTopAppBar(
-                title = stringResource(id = R.string.settings),
+                title = stringResource(id = BitwardenString.settings),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = if (state.shouldShowCloseButton) {
                     NavigationIcon(
                         navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                        navigationIconContentDescription = stringResource(id = R.string.close),
+                        navigationIconContentDescription = stringResource(
+                            id = BitwardenString.close,
+                        ),
                         onNavigationIconClick = remember(viewModel) {
                             { viewModel.trySendAction(SettingsAction.CloseClick) }
                         },

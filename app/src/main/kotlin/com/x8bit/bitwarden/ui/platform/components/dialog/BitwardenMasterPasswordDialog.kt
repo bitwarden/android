@@ -21,8 +21,8 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 
 /**
@@ -42,14 +42,14 @@ fun BitwardenMasterPasswordDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.cancel),
+                label = stringResource(id = BitwardenString.cancel),
                 onClick = onDismissRequest,
                 modifier = Modifier.testTag("DismissAlertButton"),
             )
         },
         confirmButton = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.submit),
+                label = stringResource(id = BitwardenString.submit),
                 isEnabled = masterPassword.isNotEmpty(),
                 onClick = { onConfirmClick(masterPassword) },
                 modifier = Modifier.testTag("AcceptAlertButton"),
@@ -57,7 +57,7 @@ fun BitwardenMasterPasswordDialog(
         },
         title = {
             Text(
-                text = stringResource(id = R.string.password_confirmation),
+                text = stringResource(id = BitwardenString.password_confirmation),
                 style = BitwardenTheme.typography.headlineSmall,
                 modifier = Modifier.testTag("AlertTitleText"),
             )
@@ -65,7 +65,7 @@ fun BitwardenMasterPasswordDialog(
         text = {
             Column {
                 Text(
-                    text = stringResource(id = R.string.password_confirmation_desc),
+                    text = stringResource(id = BitwardenString.password_confirmation_desc),
                     style = BitwardenTheme.typography.bodyMedium,
                     modifier = Modifier.testTag("AlertContentText"),
                 )
@@ -73,7 +73,7 @@ fun BitwardenMasterPasswordDialog(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 BitwardenPasswordField(
-                    label = stringResource(id = R.string.master_password),
+                    label = stringResource(id = BitwardenString.master_password),
                     value = masterPassword,
                     onValueChange = { masterPassword = it },
                     keyboardActions = KeyboardActions(

@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault.util
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import java.util.Locale
 
@@ -61,7 +61,7 @@ val AccountSummary.iconTestTag: String
 val AccountSummary.supportingTextResOrNull: Int?
     get() = when (this.status) {
         AccountSummary.Status.ACTIVE -> null
-        AccountSummary.Status.LOCKED -> R.string.account_locked
-        AccountSummary.Status.LOGGED_OUT -> R.string.account_logged_out
-        AccountSummary.Status.UNLOCKED -> R.string.account_unlocked
+        AccountSummary.Status.LOCKED -> BitwardenString.account_locked
+        AccountSummary.Status.LOGGED_OUT -> BitwardenString.account_logged_out
+        AccountSummary.Status.UNLOCKED -> BitwardenString.account_unlocked
     }

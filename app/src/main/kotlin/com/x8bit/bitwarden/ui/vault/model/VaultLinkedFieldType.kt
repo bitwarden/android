@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.vault.model
 
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 
 /**
  * Represents the types for linked fields.
@@ -14,35 +14,35 @@ enum class VaultLinkedFieldType(
     val id: UInt,
     val label: Text,
 ) {
-    USERNAME(id = 100.toUInt(), label = R.string.username.asText()),
-    PASSWORD(id = 101.toUInt(), label = R.string.password.asText()),
+    USERNAME(id = 100.toUInt(), label = BitwardenString.username.asText()),
+    PASSWORD(id = 101.toUInt(), label = BitwardenString.password.asText()),
 
-    CARDHOLDER_NAME(id = 300.toUInt(), label = R.string.cardholder_name.asText()),
-    EXPIRATION_MONTH(id = 301.toUInt(), label = R.string.expiration_month.asText()),
-    EXPIRATION_YEAR(id = 302.toUInt(), label = R.string.expiration_year.asText()),
-    SECURITY_CODE(id = 303.toUInt(), label = R.string.security_code.asText()),
-    BRAND(id = 304.toUInt(), label = R.string.brand.asText()),
-    NUMBER(id = 305.toUInt(), label = R.string.number.asText()),
+    CARDHOLDER_NAME(id = 300.toUInt(), label = BitwardenString.cardholder_name.asText()),
+    EXPIRATION_MONTH(id = 301.toUInt(), label = BitwardenString.expiration_month.asText()),
+    EXPIRATION_YEAR(id = 302.toUInt(), label = BitwardenString.expiration_year.asText()),
+    SECURITY_CODE(id = 303.toUInt(), label = BitwardenString.security_code.asText()),
+    BRAND(id = 304.toUInt(), label = BitwardenString.brand.asText()),
+    NUMBER(id = 305.toUInt(), label = BitwardenString.number.asText()),
 
-    TITLE(id = 400.toUInt(), label = R.string.title.asText()),
-    MIDDLE_NAME(id = 401.toUInt(), label = R.string.middle_name.asText()),
-    ADDRESS_1(id = 402.toUInt(), label = R.string.address1.asText()),
-    ADDRESS_2(id = 403.toUInt(), label = R.string.address2.asText()),
-    ADDRESS_3(id = 404.toUInt(), label = R.string.address3.asText()),
-    CITY(id = 405.toUInt(), label = R.string.city_town.asText()),
-    STATE(id = 406.toUInt(), label = R.string.state_province.asText()),
-    POSTAL_CODE(id = 407.toUInt(), label = R.string.zip_postal_code.asText()),
-    COUNTRY(id = 408.toUInt(), label = R.string.country.asText()),
-    COMPANY(id = 409.toUInt(), label = R.string.company.asText()),
-    EMAIL(id = 410.toUInt(), label = R.string.email.asText()),
-    PHONE(id = 411.toUInt(), label = R.string.phone.asText()),
-    SSN(id = 412.toUInt(), label = R.string.ssn.asText()),
-    IDENTITY_USERNAME(id = 413.toUInt(), label = R.string.username.asText()),
-    PASSPORT_NUMBER(id = 414.toUInt(), label = R.string.passport_number.asText()),
-    LICENSE_NUMBER(id = 415.toUInt(), label = R.string.license_number.asText()),
-    FIRST_NAME(id = 416.toUInt(), label = R.string.first_name.asText()),
-    LAST_NAME(id = 417.toUInt(), label = R.string.last_name.asText()),
-    FULL_NAME(id = 418.toUInt(), label = R.string.full_name.asText()),
+    TITLE(id = 400.toUInt(), label = BitwardenString.title.asText()),
+    MIDDLE_NAME(id = 401.toUInt(), label = BitwardenString.middle_name.asText()),
+    ADDRESS_1(id = 402.toUInt(), label = BitwardenString.address1.asText()),
+    ADDRESS_2(id = 403.toUInt(), label = BitwardenString.address2.asText()),
+    ADDRESS_3(id = 404.toUInt(), label = BitwardenString.address3.asText()),
+    CITY(id = 405.toUInt(), label = BitwardenString.city_town.asText()),
+    STATE(id = 406.toUInt(), label = BitwardenString.state_province.asText()),
+    POSTAL_CODE(id = 407.toUInt(), label = BitwardenString.zip_postal_code.asText()),
+    COUNTRY(id = 408.toUInt(), label = BitwardenString.country.asText()),
+    COMPANY(id = 409.toUInt(), label = BitwardenString.company.asText()),
+    EMAIL(id = 410.toUInt(), label = BitwardenString.email.asText()),
+    PHONE(id = 411.toUInt(), label = BitwardenString.phone.asText()),
+    SSN(id = 412.toUInt(), label = BitwardenString.ssn.asText()),
+    IDENTITY_USERNAME(id = 413.toUInt(), label = BitwardenString.username.asText()),
+    PASSPORT_NUMBER(id = 414.toUInt(), label = BitwardenString.passport_number.asText()),
+    LICENSE_NUMBER(id = 415.toUInt(), label = BitwardenString.license_number.asText()),
+    FIRST_NAME(id = 416.toUInt(), label = BitwardenString.first_name.asText()),
+    LAST_NAME(id = 417.toUInt(), label = BitwardenString.last_name.asText()),
+    FULL_NAME(id = 418.toUInt(), label = BitwardenString.full_name.asText()),
     ;
 
     @Suppress("UndocumentedPublicClass")

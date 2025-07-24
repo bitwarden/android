@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model
 
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 
 /**
  * Represents the languages supported by the app.
@@ -13,7 +13,7 @@ enum class AppLanguage(
 ) {
     DEFAULT(
         localeName = null,
-        text = R.string.default_system.asText(),
+        text = BitwardenString.default_system.asText(),
     ),
     AFRIKAANS(
         localeName = "af",

@@ -16,8 +16,8 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 
 /**
@@ -37,14 +37,14 @@ fun BitwardenPinDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.cancel),
+                label = stringResource(id = BitwardenString.cancel),
                 onClick = onDismissRequest,
                 modifier = Modifier.testTag("DismissAlertButton"),
             )
         },
         confirmButton = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.submit),
+                label = stringResource(id = BitwardenString.submit),
                 isEnabled = pin.isNotEmpty(),
                 onClick = { onConfirmClick(pin) },
                 modifier = Modifier.testTag("AcceptAlertButton"),
@@ -52,14 +52,14 @@ fun BitwardenPinDialog(
         },
         title = {
             Text(
-                text = stringResource(id = R.string.verify_pin),
+                text = stringResource(id = BitwardenString.verify_pin),
                 style = BitwardenTheme.typography.headlineSmall,
                 modifier = Modifier.testTag("AlertTitleText"),
             )
         },
         text = {
             BitwardenPasswordField(
-                label = stringResource(id = R.string.pin),
+                label = stringResource(id = BitwardenString.pin),
                 value = pin,
                 onValueChange = { pin = it },
                 autoFocus = true,

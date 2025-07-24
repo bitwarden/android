@@ -18,7 +18,7 @@ import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
@@ -44,7 +44,7 @@ fun SendContent(
         if (policyDisablesSend) {
             item {
                 BitwardenInfoCalloutCard(
-                    text = stringResource(id = R.string.send_disabled_warning),
+                    text = stringResource(id = BitwardenString.send_disabled_warning),
                     modifier = Modifier
                         .testTag("SendOptionsPolicyInEffectLabel")
                         .standardHorizontalMargin()
@@ -56,7 +56,7 @@ fun SendContent(
 
         item {
             BitwardenListHeaderText(
-                label = stringResource(id = R.string.types),
+                label = stringResource(id = BitwardenString.types),
                 supportingLabel = SEND_TYPES_COUNT.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -68,7 +68,7 @@ fun SendContent(
 
         item {
             BitwardenGroupItem(
-                label = stringResource(id = R.string.type_text),
+                label = stringResource(id = BitwardenString.type_text),
                 supportingLabel = state.textTypeCount.toString(),
                 startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_file_text),
                 onClick = sendHandlers.onTextTypeClick,
@@ -82,7 +82,7 @@ fun SendContent(
 
         item {
             BitwardenGroupItem(
-                label = stringResource(id = R.string.type_file),
+                label = stringResource(id = BitwardenString.type_file),
                 supportingLabel = state.fileTypeCount.toString(),
                 startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_file),
                 onClick = sendHandlers.onFileTypeClick,
@@ -97,7 +97,7 @@ fun SendContent(
         item {
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenListHeaderText(
-                label = stringResource(id = R.string.all_sends),
+                label = stringResource(id = BitwardenString.all_sends),
                 supportingLabel = state.sendItems.size.toString(),
                 modifier = Modifier
                     .fillMaxWidth()

@@ -15,8 +15,8 @@ import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import java.util.concurrent.TimeUnit
 
@@ -54,10 +54,10 @@ class BitwardenClipboardManagerImpl(
         )
         if (!isBuildVersionAtLeast(version = Build.VERSION_CODES.TIRAMISU)) {
             val descriptor = toastDescriptorOverride
-                ?.let { context.resources.getString(R.string.value_has_been_copied, it) }
+                ?.let { context.resources.getString(BitwardenString.value_has_been_copied, it) }
                 ?: context.resources.getString(
-                    R.string.value_has_been_copied,
-                    context.resources.getString(R.string.value),
+                    BitwardenString.value_has_been_copied,
+                    context.resources.getString(BitwardenString.value),
                 )
             toastManager.show(message = descriptor)
         }

@@ -4,9 +4,9 @@ import com.bitwarden.generators.ForwarderServiceType
 import com.bitwarden.generators.UsernameGeneratorRequest
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessary
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 
 /**
@@ -21,9 +21,11 @@ fun ServiceType.toUsernameGeneratorRequest(
     return when (this) {
         is ServiceType.AddyIo -> {
             val accessToken = this.apiAccessToken.orNullIfBlank()
-                ?: return GeneratorRequestResult.MissingField(R.string.api_access_token.asText())
+                ?: return GeneratorRequestResult.MissingField(
+                    BitwardenString.api_access_token.asText(),
+                )
             val domain = this.domainName.orNullIfBlank()
-                ?: return GeneratorRequestResult.MissingField(R.string.domain_name.asText())
+                ?: return GeneratorRequestResult.MissingField(BitwardenString.domain_name.asText())
             val baseUrl = if (allowAddyIoSelfHostUrl && selfHostServerUrl.isNotBlank()) {
                 selfHostServerUrl.prefixHttpsIfNecessary()
             } else {
@@ -53,7 +55,7 @@ fun ServiceType.toUsernameGeneratorRequest(
                         ),
                     )
                 }
-                ?: GeneratorRequestResult.MissingField(R.string.api_key.asText())
+                ?: GeneratorRequestResult.MissingField(BitwardenString.api_key.asText())
         }
 
         is ServiceType.FirefoxRelay -> {
@@ -68,7 +70,7 @@ fun ServiceType.toUsernameGeneratorRequest(
                         ),
                     )
                 }
-                ?: GeneratorRequestResult.MissingField(R.string.api_access_token.asText())
+                ?: GeneratorRequestResult.MissingField(BitwardenString.api_access_token.asText())
         }
 
         is ServiceType.FastMail -> {
@@ -84,14 +86,14 @@ fun ServiceType.toUsernameGeneratorRequest(
                         ),
                     )
                 }
-                ?: GeneratorRequestResult.MissingField(R.string.api_key.asText())
+                ?: GeneratorRequestResult.MissingField(BitwardenString.api_key.asText())
         }
 
         is ServiceType.ForwardEmail -> {
             val apiKey = this.apiKey.orNullIfBlank()
-                ?: return GeneratorRequestResult.MissingField(R.string.api_key.asText())
+                ?: return GeneratorRequestResult.MissingField(BitwardenString.api_key.asText())
             val domainName = this.domainName.orNullIfBlank()
-                ?: return GeneratorRequestResult.MissingField(R.string.domain_name.asText())
+                ?: return GeneratorRequestResult.MissingField(BitwardenString.domain_name.asText())
             GeneratorRequestResult.Success(
                 UsernameGeneratorRequest.Forwarded(
                     service = ForwarderServiceType.ForwardEmail(apiKey, domainName),
@@ -120,7 +122,7 @@ fun ServiceType.toUsernameGeneratorRequest(
                         ),
                     )
                 }
-                ?: GeneratorRequestResult.MissingField(R.string.api_key.asText())
+                ?: GeneratorRequestResult.MissingField(BitwardenString.api_key.asText())
         }
     }
 }

@@ -5,11 +5,11 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.PasswordHistoryView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
@@ -78,7 +78,7 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             val expectedState = createPasswordHistoryState(
                 viewState = PasswordHistoryState.ViewState.Error(
-                    message = R.string.an_error_has_occurred.asText(),
+                    message = BitwardenString.an_error_has_occurred.asText(),
                 ),
             )
             val actualState = awaitItem()
@@ -129,7 +129,7 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             val expectedState = createPasswordHistoryState(
                 viewState = PasswordHistoryState.ViewState.Error(
-                    message = R.string.an_error_has_occurred.asText(),
+                    message = BitwardenString.an_error_has_occurred.asText(),
                 ),
                 passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = "mockId-1"),
             )
@@ -232,7 +232,7 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
         verify(exactly = 1) {
             clipboardManager.setText(
                 text = generatedPassword.password,
-                toastDescriptorOverride = R.string.password.asText(),
+                toastDescriptorOverride = BitwardenString.password.asText(),
             )
         }
     }

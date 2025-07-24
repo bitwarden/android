@@ -26,8 +26,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.content.model.ContentBlockData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -40,7 +40,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun ImportLoginsInstructionStep(
     stepText: String,
     stepTitle: String,
-    ctaText: String = stringResource(R.string.continue_text),
+    ctaText: String = stringResource(BitwardenString.continue_text),
     instructions: ImmutableList<ContentBlockData>,
     onBackClick: () -> Unit,
     onContinueClick: () -> Unit,
@@ -69,7 +69,7 @@ fun ImportLoginsInstructionStep(
         Spacer(Modifier.height(24.dp))
         Text(
             text = annotatedStringResource(
-                id = R.string.need_help_check_out_import_help,
+                id = BitwardenString.need_help_check_out_import_help,
                 onAnnotationClick = { onHelpClick() },
             ),
             style = BitwardenTheme.typography.bodySmall,
@@ -86,7 +86,7 @@ fun ImportLoginsInstructionStep(
         )
         Spacer(Modifier.height(12.dp))
         BitwardenOutlinedButton(
-            label = stringResource(R.string.back),
+            label = stringResource(BitwardenString.back),
             onClick = onBackClick,
             modifier = Modifier
                 .fillMaxWidth()

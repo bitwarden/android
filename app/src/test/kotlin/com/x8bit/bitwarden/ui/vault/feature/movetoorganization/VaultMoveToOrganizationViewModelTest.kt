@@ -6,11 +6,11 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
@@ -229,7 +229,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     viewState = VaultMoveToOrganizationState.ViewState.Error(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -248,11 +248,11 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     viewState = VaultMoveToOrganizationState.ViewState.Error(
-                        message = R.string.internet_connection_required_title
+                        message = BitwardenString.internet_connection_required_title
                             .asText()
                             .concat(
                                 " ".asText(),
-                                R.string.internet_connection_required_message.asText(),
+                                BitwardenString.internet_connection_required_message.asText(),
                             ),
                     ),
                 ),
@@ -289,7 +289,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = VaultMoveToOrganizationState.DialogState.Loading(
-                        message = R.string.saving.asText(),
+                        message = BitwardenString.saving.asText(),
                     ),
                     viewState = VaultMoveToOrganizationState.ViewState.Content(
                         organizations = createMockOrganizationList(),
@@ -350,7 +350,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = VaultMoveToOrganizationState.DialogState.Loading(
-                        message = R.string.saving.asText(),
+                        message = BitwardenString.saving.asText(),
                     ),
                     viewState = VaultMoveToOrganizationState.ViewState.Content(
                         organizations = createMockOrganizationList(),
@@ -363,7 +363,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialogState = VaultMoveToOrganizationState.DialogState.Error(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         throwable = error,
                     ),
                     viewState = VaultMoveToOrganizationState.ViewState.Content(
@@ -408,7 +408,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         verify {
             snackbarRelayManager.sendSnackbarData(
                 data = BitwardenSnackbarData(
-                    message = R.string.moved_item_to_org.asText(
+                    message = BitwardenString.moved_item_to_org.asText(
                         "mockName-1",
                         "mockOrganizationName-1",
                     ),
@@ -454,7 +454,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
             }
             verify {
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(message = R.string.item_updated.asText()),
+                    data = BitwardenSnackbarData(message = BitwardenString.item_updated.asText()),
                     relay = SnackbarRelay.CIPHER_MOVED_TO_ORGANIZATION,
                 )
             }

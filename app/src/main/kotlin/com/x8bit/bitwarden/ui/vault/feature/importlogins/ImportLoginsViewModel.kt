@@ -2,9 +2,9 @@ package com.x8bit.bitwarden.ui.vault.feature.importlogins
 
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.util.toUriOrNull
@@ -74,8 +74,8 @@ class ImportLoginsViewModel @Inject constructor(
         }
         snackbarRelayManager.sendSnackbarData(
             data = BitwardenSnackbarData(
-                messageHeader = R.string.logins_imported.asText(),
-                message = R.string
+                messageHeader = BitwardenString.logins_imported.asText(),
+                message = BitwardenString
                     .remember_to_delete_your_imported_password_file_from_your_computer
                     .asText(),
             ),
@@ -124,8 +124,8 @@ class ImportLoginsViewModel @Inject constructor(
                     mutableStateFlow.update {
                         it.copy(
                             dialogState = ImportLoginsState.DialogState.Error(
-                                message = R.string.no_logins_were_imported.asText(),
-                                title = R.string.import_error.asText(),
+                                message = BitwardenString.no_logins_were_imported.asText(),
+                                title = BitwardenString.import_error.asText(),
                             ),
                         )
                     }
@@ -232,8 +232,8 @@ data class ImportLoginsState(
          */
         data object ImportLater : DialogState() {
             override val message: Text =
-                R.string.you_can_return_to_complete_this_step_anytime_from_settings.asText()
-            override val title: Text = R.string.import_logins_later_dialog_title.asText()
+                BitwardenString.you_can_return_to_complete_this_step_anytime_from_settings.asText()
+            override val title: Text = BitwardenString.import_logins_later_dialog_title.asText()
         }
 
         /**
@@ -241,15 +241,16 @@ data class ImportLoginsState(
          */
         data object GetStarted : DialogState() {
             override val message: Text =
-                R.string.the_following_instructions_will_guide_you_through_importing_logins.asText()
-            override val title: Text = R.string.do_you_have_a_computer_available.asText()
+                BitwardenString.the_following_instructions_will_guide_you_through_importing_logins
+                    .asText()
+            override val title: Text = BitwardenString.do_you_have_a_computer_available.asText()
         }
 
         /**
          * Show a dialog with an error message.
          */
         data class Error(
-            override val message: Text = R.string.generic_error_message.asText(),
+            override val message: Text = BitwardenString.generic_error_message.asText(),
             override val title: Text? = null,
         ) : DialogState()
 
@@ -257,7 +258,7 @@ data class ImportLoginsState(
          * Represents a dialog indication and ongoing manual sync.
          */
         data object Syncing : DialogState() {
-            override val message: Text = R.string.syncing_logins_loading_message.asText()
+            override val message: Text = BitwardenString.syncing_logins_loading_message.asText()
             override val title: Text? = null
         }
     }

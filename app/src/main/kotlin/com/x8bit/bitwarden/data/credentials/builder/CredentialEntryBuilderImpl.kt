@@ -9,8 +9,9 @@ import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.vault.CipherListView
+import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.credentials.processor.GET_PASSKEY_INTENT
 import com.x8bit.bitwarden.data.credentials.processor.GET_PASSWORD_INTENT
 import com.x8bit.bitwarden.data.credentials.util.setBiometricPromptDataIfSupported
@@ -47,12 +48,12 @@ class CredentialEntryBuilderImpl(
 
     override fun buildPasswordCredentialEntries(
         userId: String,
-        passwordCredentialAutofillViews: List<AutofillCipher.Login>,
+        cipherListViews: List<CipherListView>,
         beginGetPasswordCredentialOptions: List<BeginGetPasswordOption>,
         isUserVerified: Boolean,
     ): List<PasswordCredentialEntry> = beginGetPasswordCredentialOptions
         .flatMap { option ->
-            passwordCredentialAutofillViews
+            cipherListViews
                 .toPasswordCredentialEntryList(
                     userId = userId,
                     option = option,
@@ -70,7 +71,7 @@ class CredentialEntryBuilderImpl(
                 .Builder(
                     context = context,
                     username = fido2AutofillView.userNameForUi
-                        ?: context.getString(R.string.no_username),
+                        ?: context.getString(BitwardenString.no_username),
                     pendingIntent = intentManager
                         .createFido2GetCredentialPendingIntent(
                             action = GET_PASSKEY_INTENT,
@@ -100,7 +101,7 @@ class CredentialEntryBuilderImpl(
                 .build()
         }
 
-    private fun List<AutofillCipher.Login>.toPasswordCredentialEntryList(
+    private fun List<CipherListView>.toPasswordCredentialEntryList(
         userId: String,
         option: BeginGetPasswordOption,
         isUserVerified: Boolean,
@@ -109,12 +110,13 @@ class CredentialEntryBuilderImpl(
             PasswordCredentialEntry
                 .Builder(
                     context = context,
-                    username = cipherView.username,
+                    username = cipherView.login?.username
+                        ?: context.getString(BitwardenString.no_username),
                     pendingIntent = intentManager
                         .createPasswordGetCredentialPendingIntent(
                             action = GET_PASSWORD_INTENT,
                             userId = userId,
-                            cipherId = cipherView.cipherId,
+                            cipherId = cipherView.id,
                             isUserVerified = isUserVerified,
                             requestCode = Random.nextInt(),
                         ),

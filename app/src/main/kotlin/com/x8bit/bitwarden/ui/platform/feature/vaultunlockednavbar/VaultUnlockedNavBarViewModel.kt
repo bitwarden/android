@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -27,8 +27,8 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
     firstTimeActionManager: FirstTimeActionManager,
 ) : BaseViewModel<VaultUnlockedNavBarState, VaultUnlockedNavBarEvent, VaultUnlockedNavBarAction>(
     initialState = VaultUnlockedNavBarState(
-        vaultNavBarLabelRes = R.string.my_vault,
-        vaultNavBarContentDescriptionRes = R.string.my_vault,
+        vaultNavBarLabelRes = BitwardenString.my_vault,
+        vaultNavBarContentDescriptionRes = BitwardenString.my_vault,
         notificationState = VaultUnlockedNavBarNotificationState(
             settingsTabNotificationCount = firstTimeActionManager.allSettingsBadgeCountFlow.value,
         ),
@@ -163,7 +163,7 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
             ?.organizations
             ?.isNotEmpty()
             ?: false
-        val vaultRes = if (hasOrganizations) R.string.vaults else R.string.my_vault
+        val vaultRes = if (hasOrganizations) BitwardenString.vaults else BitwardenString.my_vault
         mutableStateFlow.update {
             it.copy(
                 vaultNavBarLabelRes = vaultRes,

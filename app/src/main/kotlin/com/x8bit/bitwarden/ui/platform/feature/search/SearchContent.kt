@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -47,10 +47,10 @@ fun SearchContent(
     when (val option = showConfirmationDialog) {
         is ListingItemOverflowAction.SendAction.DeleteClick -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = R.string.delete),
-                message = stringResource(id = R.string.are_you_sure_delete_send),
-                confirmButtonText = stringResource(id = R.string.yes),
-                dismissButtonText = stringResource(id = R.string.cancel),
+                title = stringResource(id = BitwardenString.delete),
+                message = stringResource(id = BitwardenString.are_you_sure_delete_send),
+                confirmButtonText = stringResource(id = BitwardenString.yes),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
                 onConfirmClick = {
                     showConfirmationDialog = null
                     searchHandlers.onOverflowItemClick(option)
@@ -211,12 +211,12 @@ private fun AutofillSelectionDialog(
             }
         }
     BitwardenSelectionDialog(
-        title = stringResource(id = R.string.autofill_or_view),
+        title = stringResource(id = BitwardenString.autofill_or_view),
         onDismissRequest = onDismissRequest,
         selectionItems = {
             if (AutofillSelectionOption.AUTOFILL in displayItem.autofillSelectionOptions) {
                 BitwardenBasicDialogRow(
-                    text = stringResource(id = R.string.autofill),
+                    text = stringResource(id = BitwardenString.autofill),
                     onClick = {
                         selectionCallback(
                             displayItem,
@@ -227,7 +227,7 @@ private fun AutofillSelectionDialog(
             }
             if (AutofillSelectionOption.AUTOFILL_AND_SAVE in displayItem.autofillSelectionOptions) {
                 BitwardenBasicDialogRow(
-                    text = stringResource(id = R.string.autofill_and_save),
+                    text = stringResource(id = BitwardenString.autofill_and_save),
                     onClick = {
                         selectionCallback(
                             displayItem,
@@ -238,7 +238,7 @@ private fun AutofillSelectionDialog(
             }
             if (AutofillSelectionOption.VIEW in displayItem.autofillSelectionOptions) {
                 BitwardenBasicDialogRow(
-                    text = stringResource(id = R.string.view),
+                    text = stringResource(id = BitwardenString.view),
                     onClick = {
                         onDismissRequest()
                         onViewItemClick(displayItem.id, displayItem.itemType)

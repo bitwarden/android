@@ -25,7 +25,7 @@ import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
@@ -138,32 +138,32 @@ fun SendScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenMediumTopAppBar(
-                title = stringResource(id = R.string.send),
+                title = stringResource(id = BitwardenString.send),
                 scrollBehavior = scrollBehavior,
                 actions = {
                     BitwardenSearchActionItem(
-                        contentDescription = stringResource(id = R.string.search_sends),
+                        contentDescription = stringResource(id = BitwardenString.search_sends),
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(SendAction.SearchClick) }
                         },
                     )
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(R.string.more),
+                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
-                                text = stringResource(id = R.string.sync),
+                                text = stringResource(id = BitwardenString.sync),
                                 onClick = remember(viewModel) {
                                     { viewModel.trySendAction(SendAction.SyncClick) }
                                 },
                             ),
                             OverflowMenuItemData(
-                                text = stringResource(id = R.string.lock),
+                                text = stringResource(id = BitwardenString.lock),
                                 onClick = remember(viewModel) {
                                     { viewModel.trySendAction(SendAction.LockClick) }
                                 },
                             ),
                             OverflowMenuItemData(
-                                text = stringResource(id = R.string.about_send),
+                                text = stringResource(id = BitwardenString.about_send),
                                 onClick = remember(viewModel) {
                                     { viewModel.trySendAction(SendAction.AboutSendClick) }
                                 },
@@ -184,7 +184,7 @@ fun SendScreen(
                         { viewModel.trySendAction(SendAction.AddSendClick) }
                     },
                     painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
-                    contentDescription = stringResource(id = R.string.add_item),
+                    contentDescription = stringResource(id = BitwardenString.add_item),
                     modifier = Modifier.testTag(tag = "AddItemButton"),
                 )
             }
@@ -242,7 +242,7 @@ private fun SendDialogs(
         )
 
         SendState.DialogState.SelectSendAddType -> BitwardenSelectionDialog(
-            title = stringResource(id = R.string.type),
+            title = stringResource(id = BitwardenString.type),
             onDismissRequest = onDismissRequest,
         ) {
             SendItemType.entries.forEach {

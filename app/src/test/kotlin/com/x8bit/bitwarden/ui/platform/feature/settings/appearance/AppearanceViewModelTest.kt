@@ -137,6 +137,15 @@ class AppearanceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on ShowWebsiteIconsTooltipClick should emit NavigateToWebsiteIconsHelp`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsTooltipClick)
+            assertEquals(AppearanceEvent.NavigateToWebsiteIconsHelp, awaitItem())
+        }
+    }
+
+    @Test
     fun `on ThemeChange should update state and set theme in SettingsRepository`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {

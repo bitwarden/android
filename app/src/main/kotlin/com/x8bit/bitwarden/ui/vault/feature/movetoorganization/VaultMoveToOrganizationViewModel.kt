@@ -6,12 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -127,7 +127,7 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                     mutableStateFlow.update {
                         it.copy(
                             dialogState = VaultMoveToOrganizationState.DialogState.Error(
-                                message = R.string.select_one_collection.asText(),
+                                message = BitwardenString.select_one_collection.asText(),
                             ),
                         )
                     }
@@ -161,7 +161,7 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = VaultMoveToOrganizationState.DialogState.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -187,13 +187,13 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                 it.copy(
                     viewState = data.toViewState(),
                     dialogState = VaultMoveToOrganizationState.DialogState.Error(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                 )
             } else {
                 it.copy(
                     viewState = VaultMoveToOrganizationState.ViewState.Error(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                     dialogState = null,
                 )
@@ -230,22 +230,22 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                 it.copy(
                     viewState = data.toViewState(),
                     dialogState = VaultMoveToOrganizationState.DialogState.Error(
-                        message = R.string.internet_connection_required_title
+                        message = BitwardenString.internet_connection_required_title
                             .asText()
                             .concat(
                                 " ".asText(),
-                                R.string.internet_connection_required_message.asText(),
+                                BitwardenString.internet_connection_required_message.asText(),
                             ),
                     ),
                 )
             } else {
                 it.copy(
                     viewState = VaultMoveToOrganizationState.ViewState.Error(
-                        message = R.string.internet_connection_required_title
+                        message = BitwardenString.internet_connection_required_title
                             .asText()
                             .concat(
                                 " ".asText(),
-                                R.string.internet_connection_required_message.asText(),
+                                BitwardenString.internet_connection_required_message.asText(),
                             ),
                     ),
                     dialogState = null,
@@ -296,7 +296,7 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = VaultMoveToOrganizationState.DialogState.Loading(
-                    message = R.string.saving.asText(),
+                    message = BitwardenString.saving.asText(),
                 ),
             )
         }
@@ -309,7 +309,7 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                             cipherView = cipherView,
                             collectionIds = collectionIds,
                         ),
-                        message = R.string.item_updated.asText(),
+                        message = BitwardenString.item_updated.asText(),
                     )
                 } else {
                     VaultMoveToOrganizationAction.Internal.ShareCipherResultReceive(
@@ -319,7 +319,7 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                             cipherView = cipherView,
                             collectionIds = collectionIds,
                         ),
-                        message = R.string.moved_item_to_org.asText(
+                        message = BitwardenString.moved_item_to_org.asText(
                             requireNotNull(contentState.cipherToMove).name,
                             contentState.selectedOrganization.name,
                         ),
@@ -347,16 +347,16 @@ data class VaultMoveToOrganizationState(
 
     val appBarText: Text
         get() = if (onlyShowCollections) {
-            R.string.collections.asText()
+            BitwardenString.collections.asText()
         } else {
-            R.string.move_to_organization.asText()
+            BitwardenString.move_to_organization.asText()
         }
 
     val appBarButtonText: Text
         get() = if (onlyShowCollections) {
-            R.string.save.asText()
+            BitwardenString.save.asText()
         } else {
-            R.string.move.asText()
+            BitwardenString.move.asText()
         }
 
     /**

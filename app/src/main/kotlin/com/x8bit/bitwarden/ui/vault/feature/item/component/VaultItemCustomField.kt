@@ -9,8 +9,8 @@ import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
@@ -58,7 +58,7 @@ fun CustomField(
                     actions = {
                         BitwardenStandardIconButton(
                             vectorIconRes = BitwardenDrawable.ic_copy,
-                            contentDescription = stringResource(id = R.string.copy),
+                            contentDescription = stringResource(id = BitwardenString.copy),
                             onClick = { onCopyCustomHiddenField(customField.value) },
                             modifier = Modifier.testTag("CustomFieldCopyValueButton"),
                         )
@@ -87,7 +87,7 @@ fun CustomField(
                 value = customField.vaultLinkedFieldType.label.invoke(),
                 leadingIconData = IconData.Local(
                     iconRes = BitwardenDrawable.ic_linked,
-                    contentDescription = R.string.field_type_linked.asText(),
+                    contentDescription = BitwardenString.field_type_linked.asText(),
                 ),
                 onValueChange = { },
                 readOnly = true,
@@ -110,7 +110,7 @@ fun CustomField(
                     if (customField.isCopyable) {
                         BitwardenStandardIconButton(
                             vectorIconRes = BitwardenDrawable.ic_copy,
-                            contentDescription = stringResource(id = R.string.copy),
+                            contentDescription = stringResource(id = BitwardenString.copy),
                             onClick = { onCopyCustomTextField(customField.value) },
                             modifier = Modifier.testTag("CustomFieldCopyValueButton"),
                         )

@@ -4,8 +4,8 @@ import android.net.Uri
 import app.cash.turbine.test
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -388,8 +388,8 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     ImportLoginsState(
                         dialogState = ImportLoginsState.DialogState.Error(
-                            message = R.string.no_logins_were_imported.asText(),
-                            title = R.string.import_error.asText(),
+                            message = BitwardenString.no_logins_were_imported.asText(),
+                            title = BitwardenString.import_error.asText(),
                         ),
                         viewState = ImportLoginsState.ViewState.InitialContent,
                         showBottomSheet = false,
@@ -483,8 +483,8 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 assertEquals(ImportLoginsEvent.NavigateBack, eventFlow.awaitItem())
             }
             val expectedSnackbarData = BitwardenSnackbarData(
-                messageHeader = R.string.logins_imported.asText(),
-                message = R.string.remember_to_delete_your_imported_password_file_from_your_computer
+                messageHeader = BitwardenString.logins_imported.asText(),
+                message = BitwardenString.remember_to_delete_your_imported_password_file_from_your_computer
                     .asText(),
             )
             verify {

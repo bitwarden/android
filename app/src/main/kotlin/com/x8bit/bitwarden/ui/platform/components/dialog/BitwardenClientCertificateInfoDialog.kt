@@ -22,8 +22,8 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 
@@ -47,14 +47,14 @@ fun BitwardenClientCertificateDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.cancel),
+                label = stringResource(id = BitwardenString.cancel),
                 onClick = onDismissRequest,
                 modifier = Modifier.testTag("DismissAlertButton"),
             )
         },
         confirmButton = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.submit),
+                label = stringResource(id = BitwardenString.submit),
                 isEnabled = password.isNotEmpty(),
                 onClick = { onConfirmClick(alias, password) },
                 modifier = Modifier.testTag("AcceptAlertButton"),
@@ -62,7 +62,7 @@ fun BitwardenClientCertificateDialog(
         },
         title = {
             Text(
-                text = stringResource(R.string.import_client_certificate),
+                text = stringResource(BitwardenString.import_client_certificate),
                 style = BitwardenTheme.typography.headlineSmall,
                 modifier = Modifier.testTag("AlertTitleText"),
             )
@@ -70,7 +70,9 @@ fun BitwardenClientCertificateDialog(
         text = {
             Column {
                 Text(
-                    text = stringResource(R.string.enter_the_client_certificate_password_and_alias),
+                    text = stringResource(
+                        BitwardenString.enter_the_client_certificate_password_and_alias,
+                    ),
                     style = BitwardenTheme.typography.bodyMedium,
                     modifier = Modifier.testTag("AlertContentText"),
                 )
@@ -78,7 +80,7 @@ fun BitwardenClientCertificateDialog(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 BitwardenTextField(
-                    label = stringResource(R.string.alias),
+                    label = stringResource(BitwardenString.alias),
                     value = alias,
                     onValueChange = { alias = it },
                     autoFocus = true,
@@ -88,7 +90,7 @@ fun BitwardenClientCertificateDialog(
                 )
 
                 BitwardenPasswordField(
-                    label = stringResource(R.string.password),
+                    label = stringResource(BitwardenString.password),
                     value = password,
                     onValueChange = { password = it },
                     cardStyle = CardStyle.Bottom,

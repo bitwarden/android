@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.util.baseIdentityUrl
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
@@ -163,7 +163,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
             is LoginResult.Error -> {
                 showError(
                     message = loginResult.errorMessage?.asText()
-                        ?: R.string.login_sso_error.asText(),
+                        ?: BitwardenString.login_sso_error.asText(),
                     error = loginResult.error,
                 )
             }
@@ -171,7 +171,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
             is LoginResult.UnofficialServerError -> {
                 @Suppress("MaxLineLength")
                 showError(
-                    message = R.string
+                    message = BitwardenString
                         .this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server
                         .asText(),
                 )
@@ -200,20 +200,22 @@ class EnterpriseSignOnViewModel @Inject constructor(
                         .baseWebVaultUrlOrDefault
 
                 showError(
-                    message = R.string
+                    message = BitwardenString
                         .this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
                         .asText(vaultUrl.toUriOrNull()?.host ?: vaultUrl),
                 )
             }
 
             LoginResult.CertificateError -> {
-                showError(message = R.string.we_couldnt_verify_the_servers_certificate.asText())
+                showError(
+                    message = BitwardenString.we_couldnt_verify_the_servers_certificate.asText(),
+                )
             }
 
             is LoginResult.NewDeviceVerification -> {
                 showError(
                     message = loginResult.errorMessage?.asText()
-                        ?: R.string.login_sso_error.asText(),
+                        ?: BitwardenString.login_sso_error.asText(),
                 )
             }
 
@@ -236,7 +238,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
         action: EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure,
     ) {
         showError(
-            message = action.message?.asText() ?: R.string.login_sso_error.asText(),
+            message = action.message?.asText() ?: BitwardenString.login_sso_error.asText(),
             error = action.error,
         )
     }
@@ -310,8 +312,8 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
-                            title = R.string.log_in_denied.asText(),
-                            message = R.string.captcha_failed.asText(),
+                            title = BitwardenString.log_in_denied.asText(),
+                            message = BitwardenString.captcha_failed.asText(),
                         ),
                     )
                 }
@@ -331,8 +333,8 @@ class EnterpriseSignOnViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialogState = EnterpriseSignOnState.DialogState.Error(
-                        title = R.string.internet_connection_required_title.asText(),
-                        message = R.string.internet_connection_required_message.asText(),
+                        title = BitwardenString.internet_connection_required_title.asText(),
+                        message = BitwardenString.internet_connection_required_message.asText(),
                     ),
                 )
             }
@@ -342,8 +344,8 @@ class EnterpriseSignOnViewModel @Inject constructor(
         val organizationIdentifier = state.orgIdentifierInput
         if (organizationIdentifier.isBlank()) {
             showError(
-                message = R.string.validation_field_required.asText(
-                    R.string.org_identifier.asText(),
+                message = BitwardenString.validation_field_required.asText(
+                    BitwardenString.org_identifier.asText(),
                 ),
             )
             return
@@ -406,7 +408,9 @@ class EnterpriseSignOnViewModel @Inject constructor(
     private fun checkOrganizationDomainSsoDetails() {
         mutableStateFlow.update {
             it.copy(
-                dialogState = EnterpriseSignOnState.DialogState.Loading(R.string.loading.asText()),
+                dialogState = EnterpriseSignOnState.DialogState.Loading(
+                    BitwardenString.loading.asText(),
+                ),
             )
         }
         viewModelScope.launch {
@@ -451,8 +455,8 @@ class EnterpriseSignOnViewModel @Inject constructor(
     }
 
     private fun showError(
-        title: Text = R.string.an_error_has_occurred.asText(),
-        message: Text = R.string.login_sso_error.asText(),
+        title: Text = BitwardenString.an_error_has_occurred.asText(),
+        message: Text = BitwardenString.login_sso_error.asText(),
         error: Throwable? = null,
     ) {
         mutableStateFlow.update {
@@ -470,7 +474,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = EnterpriseSignOnState.DialogState.Loading(
-                    R.string.logging_in.asText(),
+                    BitwardenString.logging_in.asText(),
                 ),
             )
         }

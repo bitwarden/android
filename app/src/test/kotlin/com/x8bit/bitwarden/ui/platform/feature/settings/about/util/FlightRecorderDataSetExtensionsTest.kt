@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.about.util
 
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -46,7 +46,7 @@ class FlightRecorderDataSetExtensionsTest {
             ),
         )
         val result = dataset.getStopsLoggingStringForActiveLog(clock = FIXED_CLOCK)
-        assertEquals(R.string.stops_logging_on.asText("1/21/70", "4:27 AM"), result)
+        assertEquals(BitwardenString.stops_logging_on.asText("1/21/70", "4:27 AM"), result)
     }
 }
 

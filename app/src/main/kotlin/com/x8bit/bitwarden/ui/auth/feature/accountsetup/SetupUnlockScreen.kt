@@ -43,9 +43,9 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.rememberWindowSize
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.handlers.SetupUnlockHandler
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
@@ -107,9 +107,9 @@ fun SetupUnlockScreen(
             BitwardenTopAppBar(
                 title = stringResource(
                     id = if (state.isInitialSetup) {
-                        R.string.account_setup
+                        BitwardenString.account_setup
                     } else {
-                        R.string.set_up_unlock
+                        BitwardenString.set_up_unlock
                     },
                 ),
                 scrollBehavior = scrollBehavior,
@@ -118,7 +118,9 @@ fun SetupUnlockScreen(
                 } else {
                     NavigationIcon(
                         navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                        navigationIconContentDescription = stringResource(id = R.string.close),
+                        navigationIconContentDescription = stringResource(
+                            id = BitwardenString.close,
+                        ),
                         onNavigationIconClick = remember(viewModel) {
                             {
                                 viewModel.trySendAction(SetupUnlockAction.CloseClick)
@@ -185,7 +187,7 @@ private fun SetupUnlockScreenContent(
 
         Spacer(modifier = Modifier.height(height = 24.dp))
         BitwardenFilledButton(
-            label = stringResource(id = R.string.continue_text),
+            label = stringResource(id = BitwardenString.continue_text),
             onClick = handler.onContinueClick,
             isEnabled = state.isContinueButtonEnabled,
             modifier = Modifier
@@ -218,12 +220,12 @@ private fun SetUpLaterButton(
     if (displayConfirmation) {
         @Suppress("MaxLineLength")
         BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.set_up_unlock_later),
+            title = stringResource(id = BitwardenString.set_up_unlock_later),
             message = stringResource(
-                id = R.string.you_can_return_to_complete_this_step_anytime_from_account_security_in_settings,
+                id = BitwardenString.you_can_return_to_complete_this_step_anytime_from_account_security_in_settings,
             ),
-            confirmButtonText = stringResource(id = R.string.confirm),
-            dismissButtonText = stringResource(id = R.string.cancel),
+            confirmButtonText = stringResource(id = BitwardenString.confirm),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
             onConfirmClick = {
                 onConfirmClick()
                 displayConfirmation = false
@@ -234,7 +236,7 @@ private fun SetUpLaterButton(
     }
 
     BitwardenTextButton(
-        label = stringResource(id = R.string.set_up_later),
+        label = stringResource(id = BitwardenString.set_up_later),
         onClick = { displayConfirmation = true },
         modifier = modifier.testTag(tag = "SetUpLaterButton"),
     )
@@ -254,7 +256,7 @@ private fun ColumnScope.SetupUnlockHeaderCompact() {
 
     Spacer(modifier = Modifier.height(height = 24.dp))
     Text(
-        text = stringResource(id = R.string.set_up_unlock),
+        text = stringResource(id = BitwardenString.set_up_unlock),
         style = BitwardenTheme.typography.titleMedium,
         color = BitwardenTheme.colorScheme.text.primary,
         textAlign = TextAlign.Center,
@@ -267,7 +269,7 @@ private fun ColumnScope.SetupUnlockHeaderCompact() {
     @Suppress("MaxLineLength")
     Text(
         text = stringResource(
-            id = R.string.set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins,
+            id = BitwardenString.set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins,
         ),
         style = BitwardenTheme.typography.bodyMedium,
         color = BitwardenTheme.colorScheme.text.primary,
@@ -300,7 +302,7 @@ private fun SetupUnlockHeaderMedium(
             modifier = Modifier.align(alignment = Alignment.CenterVertically),
         ) {
             Text(
-                text = stringResource(id = R.string.set_up_unlock),
+                text = stringResource(id = BitwardenString.set_up_unlock),
                 style = BitwardenTheme.typography.titleMedium,
                 color = BitwardenTheme.colorScheme.text.primary,
                 textAlign = TextAlign.Center,
@@ -311,7 +313,7 @@ private fun SetupUnlockHeaderMedium(
             @Suppress("MaxLineLength")
             Text(
                 text = stringResource(
-                    id = R.string.set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins,
+                    id = BitwardenString.set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins,
                 ),
                 style = BitwardenTheme.typography.bodyMedium,
                 color = BitwardenTheme.colorScheme.text.primary,

@@ -11,7 +11,7 @@ import androidx.compose.ui.res.stringResource
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
@@ -37,13 +37,13 @@ fun VaultAddEditUriItem(
     var shouldShowMatchDialog by rememberSaveable { mutableStateOf(false) }
 
     BitwardenTextField(
-        label = stringResource(id = R.string.website_uri),
+        label = stringResource(id = BitwardenString.website_uri),
         value = uriItem.uri.orEmpty(),
         onValueChange = { onUriValueChange(uriItem.copy(uri = it)) },
         actions = {
             BitwardenStandardIconButton(
                 vectorIconRes = BitwardenDrawable.ic_cog,
-                contentDescription = stringResource(id = R.string.options),
+                contentDescription = stringResource(id = BitwardenString.options),
                 onClick = { shouldShowOptionsDialog = true },
                 modifier = Modifier.testTag(tag = "LoginUriOptionsButton"),
             )
@@ -55,18 +55,18 @@ fun VaultAddEditUriItem(
 
     if (shouldShowOptionsDialog) {
         BitwardenSelectionDialog(
-            title = stringResource(id = R.string.options),
+            title = stringResource(id = BitwardenString.options),
             onDismissRequest = { shouldShowOptionsDialog = false },
         ) {
             BitwardenBasicDialogRow(
-                text = stringResource(id = R.string.match_detection),
+                text = stringResource(id = BitwardenString.match_detection),
                 onClick = {
                     shouldShowOptionsDialog = false
                     shouldShowMatchDialog = true
                 },
             )
             BitwardenBasicDialogRow(
-                text = stringResource(id = R.string.remove),
+                text = stringResource(id = BitwardenString.remove),
                 onClick = {
                     shouldShowOptionsDialog = false
                     onUriItemRemoved(uriItem)
@@ -79,7 +79,7 @@ fun VaultAddEditUriItem(
         val selectedString = uriItem.match.toDisplayMatchType().text.invoke()
 
         BitwardenSelectionDialog(
-            title = stringResource(id = R.string.uri_match_detection),
+            title = stringResource(id = BitwardenString.uri_match_detection),
             onDismissRequest = { shouldShowMatchDialog = false },
         ) {
             UriMatchDisplayType

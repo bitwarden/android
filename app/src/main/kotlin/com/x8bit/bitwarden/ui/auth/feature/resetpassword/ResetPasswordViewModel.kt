@@ -5,9 +5,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -173,9 +173,9 @@ class ResetPasswordViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialogState = ResetPasswordState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required
-                            .asText(R.string.master_password.asText()),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.validation_field_required
+                            .asText(BitwardenString.master_password.asText()),
                     ),
                 )
             }
@@ -198,8 +198,8 @@ class ResetPasswordViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = ResetPasswordState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.master_password_length_val_message_x
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.master_password_length_val_message_x
                                 .asText(MIN_PASSWORD_LENGTH),
                         ),
                     )
@@ -291,8 +291,8 @@ class ResetPasswordViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = ResetPasswordState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = result.error,
                         ),
                     )
@@ -317,8 +317,8 @@ class ResetPasswordViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = ResetPasswordState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = result.error,
                         ),
                     )
@@ -331,8 +331,8 @@ class ResetPasswordViewModel @Inject constructor(
                     mutableStateFlow.update {
                         it.copy(
                             dialogState = ResetPasswordState.DialogState.Error(
-                                title = R.string.an_error_has_occurred.asText(),
-                                message = R.string.invalid_master_password.asText(),
+                                title = BitwardenString.an_error_has_occurred.asText(),
+                                message = BitwardenString.invalid_master_password.asText(),
                             ),
                         )
                     }
@@ -355,8 +355,9 @@ class ResetPasswordViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialogState = ResetPasswordState.DialogState.Error(
-                        title = R.string.master_password_policy_validation_title.asText(),
-                        message = R.string.master_password_policy_validation_message.asText(),
+                        title = BitwardenString.master_password_policy_validation_title.asText(),
+                        message = BitwardenString.master_password_policy_validation_message
+                            .asText(),
                     ),
                 )
             }
@@ -384,8 +385,8 @@ class ResetPasswordViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = ResetPasswordState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.master_password_confirmation_val_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.master_password_confirmation_val_message.asText(),
                 ),
             )
         }
@@ -400,7 +401,7 @@ class ResetPasswordViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = ResetPasswordState.DialogState.Loading(
-                    message = R.string.updating_password.asText(),
+                    message = BitwardenString.updating_password.asText(),
                 ),
             )
         }

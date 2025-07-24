@@ -22,8 +22,6 @@
     <string name="reset_coach_mark_tour_status">Reset all coach mark tours</string>
     <string name="anon_addy_self_hosted_aliases">AnonAddy self-hosted aliases</string>
     <string name="simple_login_self_hosted_aliases">SimpleLogin self-hosted aliases</string>
-    <string name="enable_chrome_autofill">Enable chrome autofill</string>
-    <string name="enable_error_reporting_dialog">Enable error reporting dialog</string>
     <string name="restrict_item_deletion">Restrict item deletion</string>
     <string name="generate_crash">Generate crash</string>
     <string name="generate_error_report">Generate error report</string>

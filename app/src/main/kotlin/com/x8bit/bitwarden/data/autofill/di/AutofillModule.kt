@@ -24,7 +24,6 @@ import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessor
 import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessorImpl
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProviderImpl
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -59,12 +58,8 @@ object AutofillModule {
 
     @Singleton
     @Provides
-    fun providesBrowserAutofillEnabledManager(
-        featureFlagManager: FeatureFlagManager,
-    ): BrowserThirdPartyAutofillEnabledManager =
-        BrowserThirdPartyAutofillEnabledManagerImpl(
-            featureFlagManager = featureFlagManager,
-        )
+    fun providesBrowserAutofillEnabledManager(): BrowserThirdPartyAutofillEnabledManager =
+        BrowserThirdPartyAutofillEnabledManagerImpl()
 
     @Singleton
     @Provides

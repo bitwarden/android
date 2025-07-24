@@ -11,10 +11,10 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -203,9 +203,9 @@ class AddEditSendViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = AddEditSendState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = result.message?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -232,11 +232,11 @@ class AddEditSendViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = AddEditSendState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = result
                                 .errorMessage
                                 ?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -252,7 +252,7 @@ class AddEditSendViewModel @Inject constructor(
                     ),
                 )
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(message = R.string.send_updated.asText()),
+                    data = BitwardenSnackbarData(message = BitwardenString.send_updated.asText()),
                     relay = SnackbarRelay.SEND_UPDATED,
                 )
             }
@@ -267,8 +267,8 @@ class AddEditSendViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = AddEditSendState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -279,7 +279,7 @@ class AddEditSendViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 navigateBack(isDeleted = true)
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(message = R.string.send_deleted.asText()),
+                    data = BitwardenSnackbarData(message = BitwardenString.send_deleted.asText()),
                     relay = SnackbarRelay.SEND_DELETED,
                 )
             }
@@ -294,11 +294,11 @@ class AddEditSendViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = AddEditSendState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = result
                                 .errorMessage
                                 ?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                             result.error,
                         ),
                     )
@@ -310,7 +310,9 @@ class AddEditSendViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(
                     AddEditSendEvent.ShowSnackbar(
-                        data = BitwardenSnackbarData(message = R.string.password_removed.asText()),
+                        data = BitwardenSnackbarData(
+                            message = BitwardenString.password_removed.asText(),
+                        ),
                     ),
                 )
             }
@@ -324,7 +326,7 @@ class AddEditSendViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = AddEditSendState.ViewState.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -344,7 +346,7 @@ class AddEditSendViewModel @Inject constructor(
                                 isHideEmailAddressEnabled = isHideEmailAddressEnabled,
                             )
                             ?: AddEditSendState.ViewState.Error(
-                                message = R.string.generic_error_message.asText(),
+                                message = BitwardenString.generic_error_message.asText(),
                             ),
                     )
                 }
@@ -360,11 +362,11 @@ class AddEditSendViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = AddEditSendState.ViewState.Error(
-                            message = R.string.internet_connection_required_title
+                            message = BitwardenString.internet_connection_required_title
                                 .asText()
                                 .concat(
                                     " ".asText(),
-                                    R.string.internet_connection_required_message.asText(),
+                                    BitwardenString.internet_connection_required_message.asText(),
                                 ),
                         ),
                     )
@@ -385,7 +387,7 @@ class AddEditSendViewModel @Inject constructor(
                                 isHideEmailAddressEnabled = isHideEmailAddressEnabled,
                             )
                             ?: AddEditSendState.ViewState.Error(
-                                message = R.string.generic_error_message.asText(),
+                                message = BitwardenString.generic_error_message.asText(),
                             ),
                     )
                 }
@@ -398,7 +400,7 @@ class AddEditSendViewModel @Inject constructor(
             it.common.sendUrl?.let { sendUrl ->
                 clipboardManager.setText(
                     text = sendUrl,
-                    toastDescriptorOverride = R.string.send_link.asText(),
+                    toastDescriptorOverride = BitwardenString.send_link.asText(),
                 )
             }
         }
@@ -408,7 +410,9 @@ class AddEditSendViewModel @Inject constructor(
         onEdit { editItem ->
             mutableStateFlow.update {
                 it.copy(
-                    dialogState = AddEditSendState.DialogState.Loading(R.string.deleting.asText()),
+                    dialogState = AddEditSendState.DialogState.Loading(
+                        BitwardenString.deleting.asText(),
+                    ),
                 )
             }
             viewModelScope.launch {
@@ -433,7 +437,7 @@ class AddEditSendViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialogState = AddEditSendState.DialogState.Loading(
-                        message = R.string.removing_send_password.asText(),
+                        message = BitwardenString.removing_send_password.asText(),
                     ),
                 )
             }
@@ -491,9 +495,9 @@ class AddEditSendViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = AddEditSendState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.validation_field_required.asText(
-                                R.string.name.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.validation_field_required.asText(
+                                BitwardenString.name.asText(),
                             ),
                         ),
                     )
@@ -508,8 +512,8 @@ class AddEditSendViewModel @Inject constructor(
                         mutableStateFlow.update {
                             it.copy(
                                 dialogState = AddEditSendState.DialogState.Error(
-                                    title = R.string.send.asText(),
-                                    message = R.string.send_file_premium_required.asText(),
+                                    title = BitwardenString.send.asText(),
+                                    message = BitwardenString.send_file_premium_required.asText(),
                                 ),
                             )
                         }
@@ -519,8 +523,9 @@ class AddEditSendViewModel @Inject constructor(
                         mutableStateFlow.update {
                             it.copy(
                                 dialogState = AddEditSendState.DialogState.Error(
-                                    title = R.string.an_error_has_occurred.asText(),
-                                    message = R.string.you_must_attach_a_file_to_save_this_send
+                                    title = BitwardenString.an_error_has_occurred.asText(),
+                                    message = BitwardenString
+                                        .you_must_attach_a_file_to_save_this_send
                                         .asText(),
                                 ),
                             )
@@ -532,8 +537,8 @@ class AddEditSendViewModel @Inject constructor(
                         mutableStateFlow.update {
                             it.copy(
                                 dialogState = AddEditSendState.DialogState.Error(
-                                    title = R.string.an_error_has_occurred.asText(),
-                                    message = R.string.max_file_size.asText(),
+                                    title = BitwardenString.an_error_has_occurred.asText(),
+                                    message = BitwardenString.max_file_size.asText(),
                                 ),
                             )
                         }
@@ -544,8 +549,8 @@ class AddEditSendViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = AddEditSendState.DialogState.Error(
-                            title = R.string.internet_connection_required_title.asText(),
-                            message = R.string.internet_connection_required_message.asText(),
+                            title = BitwardenString.internet_connection_required_title.asText(),
+                            message = BitwardenString.internet_connection_required_message.asText(),
                         ),
                     )
                 }
@@ -554,7 +559,7 @@ class AddEditSendViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialogState = AddEditSendState.DialogState.Loading(
-                        message = R.string.saving.asText(),
+                        message = BitwardenString.saving.asText(),
                     ),
                 )
             }
@@ -711,13 +716,13 @@ data class AddEditSendState(
     val screenDisplayName: Text
         get() = when (addEditSendType) {
             AddEditSendType.AddItem -> when (sendType) {
-                SendItemType.FILE -> R.string.add_file_send.asText()
-                SendItemType.TEXT -> R.string.add_text_send.asText()
+                SendItemType.FILE -> BitwardenString.add_file_send.asText()
+                SendItemType.TEXT -> BitwardenString.add_text_send.asText()
             }
 
             is AddEditSendType.EditItem -> when (sendType) {
-                SendItemType.FILE -> R.string.edit_file_send.asText()
-                SendItemType.TEXT -> R.string.edit_text_send.asText()
+                SendItemType.FILE -> BitwardenString.edit_file_send.asText()
+                SendItemType.TEXT -> BitwardenString.edit_text_send.asText()
             }
         }
 

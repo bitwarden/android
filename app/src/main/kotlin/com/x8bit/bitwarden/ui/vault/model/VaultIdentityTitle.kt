@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.vault.model
 
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.SELECT_TEXT
 
 /**
@@ -10,9 +10,9 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.util.SELECT_TEXT
  */
 enum class VaultIdentityTitle(val value: Text) {
     SELECT(value = SELECT_TEXT),
-    MR(value = R.string.mr.asText()),
-    MRS(value = R.string.mrs.asText()),
-    MS(value = R.string.ms.asText()),
-    MX(value = R.string.mx.asText()),
-    DR(value = R.string.dr.asText()),
+    MR(value = BitwardenString.mr.asText()),
+    MRS(value = BitwardenString.mrs.asText()),
+    MS(value = BitwardenString.ms.asText()),
+    MX(value = BitwardenString.mx.asText()),
+    DR(value = BitwardenString.dr.asText()),
 }

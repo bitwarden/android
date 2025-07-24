@@ -12,11 +12,11 @@ import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -368,7 +368,9 @@ class VaultItemViewModel @Inject constructor(
         action: VaultItemAction.Common.AttachmentDownloadClick,
     ) {
         onContent { content ->
-            updateDialogState(VaultItemState.DialogState.Loading(R.string.downloading.asText()))
+            updateDialogState(
+                VaultItemState.DialogState.Loading(BitwardenString.downloading.asText()),
+            )
 
             viewModelScope.launch {
                 val result = vaultRepository
@@ -415,7 +417,7 @@ class VaultItemViewModel @Inject constructor(
 
         updateDialogState(
             VaultItemState.DialogState.Generic(
-                R.string.unable_to_save_attachment.asText(),
+                BitwardenString.unable_to_save_attachment.asText(),
             ),
         )
     }
@@ -430,7 +432,7 @@ class VaultItemViewModel @Inject constructor(
                 updateDialogState(
                     @Suppress("MaxLineLength")
                     VaultItemState.DialogState.Fido2CredentialCannotBeCopiedConfirmationPrompt(
-                        message = R.string.the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item.asText(),
+                        message = BitwardenString.the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item.asText(),
                     ),
                 )
                 return@onContent
@@ -475,9 +477,9 @@ class VaultItemViewModel @Inject constructor(
             updateDialogState(
                 VaultItemState.DialogState.Loading(
                     if (state.isCipherDeleted) {
-                        R.string.deleting.asText()
+                        BitwardenString.deleting.asText()
                     } else {
-                        R.string.soft_deleting.asText()
+                        BitwardenString.soft_deleting.asText()
                     },
                 ),
             )
@@ -505,7 +507,7 @@ class VaultItemViewModel @Inject constructor(
     private fun handleConfirmRestoreClick() {
         updateDialogState(
             VaultItemState.DialogState.Loading(
-                R.string.restoring.asText(),
+                BitwardenString.restoring.asText(),
             ),
         )
         onContent { content ->
@@ -532,7 +534,7 @@ class VaultItemViewModel @Inject constructor(
             val notes = content.common.notes.orEmpty()
             clipboardManager.setText(
                 text = notes,
-                toastDescriptorOverride = R.string.notes.asText(),
+                toastDescriptorOverride = BitwardenString.notes.asText(),
             )
         }
     }
@@ -588,7 +590,7 @@ class VaultItemViewModel @Inject constructor(
     private fun handleCheckForBreachClick() {
         onLoginContent { _, login ->
             val password = requireNotNull(login.passwordData?.password)
-            updateDialogState(VaultItemState.DialogState.Loading(R.string.loading.asText()))
+            updateDialogState(VaultItemState.DialogState.Loading(BitwardenString.loading.asText()))
             viewModelScope.launch {
                 val result = authRepository.getPasswordBreachCount(password = password)
                 sendAction(VaultItemAction.Internal.PasswordBreachReceive(result))
@@ -600,7 +602,7 @@ class VaultItemViewModel @Inject constructor(
         onLoginContent { content, login ->
             clipboardManager.setText(
                 text = requireNotNull(login.passwordData).password,
-                toastDescriptorOverride = R.string.password.asText(),
+                toastDescriptorOverride = BitwardenString.password.asText(),
             )
             organizationEventManager.trackEvent(
                 event = OrganizationEvent.CipherClientCopiedPassword(cipherId = state.vaultItemId),
@@ -613,7 +615,7 @@ class VaultItemViewModel @Inject constructor(
             val code = login.totpCodeItemData?.verificationCode ?: return@onLoginContent
             clipboardManager.setText(
                 text = code,
-                toastDescriptorOverride = R.string.totp.asText(),
+                toastDescriptorOverride = BitwardenString.totp.asText(),
             )
         }
     }
@@ -621,7 +623,7 @@ class VaultItemViewModel @Inject constructor(
     private fun handleCopyUriClick(action: VaultItemAction.ItemType.Login.CopyUriClick) {
         clipboardManager.setText(
             text = action.uri,
-            toastDescriptorOverride = R.string.uri.asText(),
+            toastDescriptorOverride = BitwardenString.uri.asText(),
         )
     }
 
@@ -630,7 +632,7 @@ class VaultItemViewModel @Inject constructor(
             val username = requireNotNull(login.username)
             clipboardManager.setText(
                 text = username,
-                toastDescriptorOverride = R.string.username.asText(),
+                toastDescriptorOverride = BitwardenString.username.asText(),
             )
         }
     }
@@ -717,7 +719,7 @@ class VaultItemViewModel @Inject constructor(
         onCardContent { content, card ->
             clipboardManager.setText(
                 text = requireNotNull(card.number).number,
-                toastDescriptorOverride = R.string.number.asText(),
+                toastDescriptorOverride = BitwardenString.number.asText(),
             )
         }
     }
@@ -726,7 +728,7 @@ class VaultItemViewModel @Inject constructor(
         onCardContent { content, card ->
             clipboardManager.setText(
                 text = requireNotNull(card.securityCode).code,
-                toastDescriptorOverride = R.string.security_code.asText(),
+                toastDescriptorOverride = BitwardenString.security_code.asText(),
             )
         }
     }
@@ -778,7 +780,7 @@ class VaultItemViewModel @Inject constructor(
         onSshKeyContent { _, sshKey ->
             clipboardManager.setText(
                 text = sshKey.publicKey,
-                toastDescriptorOverride = R.string.public_key.asText(),
+                toastDescriptorOverride = BitwardenString.public_key.asText(),
             )
         }
     }
@@ -801,7 +803,7 @@ class VaultItemViewModel @Inject constructor(
         onSshKeyContent { content, sshKey ->
             clipboardManager.setText(
                 text = sshKey.privateKey,
-                toastDescriptorOverride = R.string.private_key.asText(),
+                toastDescriptorOverride = BitwardenString.private_key.asText(),
             )
         }
     }
@@ -810,7 +812,7 @@ class VaultItemViewModel @Inject constructor(
         onSshKeyContent { _, sshKey ->
             clipboardManager.setText(
                 text = sshKey.fingerprint,
-                toastDescriptorOverride = R.string.fingerprint.asText(),
+                toastDescriptorOverride = BitwardenString.fingerprint.asText(),
             )
         }
     }
@@ -850,7 +852,7 @@ class VaultItemViewModel @Inject constructor(
             val identityName = identity.identityName.orEmpty()
             clipboardManager.setText(
                 text = identityName,
-                toastDescriptorOverride = R.string.identity_name.asText(),
+                toastDescriptorOverride = BitwardenString.identity_name.asText(),
             )
         }
     }
@@ -860,7 +862,7 @@ class VaultItemViewModel @Inject constructor(
             val username = identity.username.orEmpty()
             clipboardManager.setText(
                 text = username,
-                toastDescriptorOverride = R.string.username.asText(),
+                toastDescriptorOverride = BitwardenString.username.asText(),
             )
         }
     }
@@ -870,7 +872,7 @@ class VaultItemViewModel @Inject constructor(
             val company = identity.company.orEmpty()
             clipboardManager.setText(
                 text = company,
-                toastDescriptorOverride = R.string.company.asText(),
+                toastDescriptorOverride = BitwardenString.company.asText(),
             )
         }
     }
@@ -880,7 +882,7 @@ class VaultItemViewModel @Inject constructor(
             val ssn = identity.ssn.orEmpty()
             clipboardManager.setText(
                 text = ssn,
-                toastDescriptorOverride = R.string.ssn.asText(),
+                toastDescriptorOverride = BitwardenString.ssn.asText(),
             )
         }
     }
@@ -890,7 +892,7 @@ class VaultItemViewModel @Inject constructor(
             val passportNumber = identity.passportNumber.orEmpty()
             clipboardManager.setText(
                 text = passportNumber,
-                toastDescriptorOverride = R.string.passport_number.asText(),
+                toastDescriptorOverride = BitwardenString.passport_number.asText(),
             )
         }
     }
@@ -900,7 +902,7 @@ class VaultItemViewModel @Inject constructor(
             val licenseNumber = identity.licenseNumber.orEmpty()
             clipboardManager.setText(
                 text = licenseNumber,
-                toastDescriptorOverride = R.string.license_number.asText(),
+                toastDescriptorOverride = BitwardenString.license_number.asText(),
             )
         }
     }
@@ -910,7 +912,7 @@ class VaultItemViewModel @Inject constructor(
             val email = identity.email.orEmpty()
             clipboardManager.setText(
                 text = email,
-                toastDescriptorOverride = R.string.email.asText(),
+                toastDescriptorOverride = BitwardenString.email.asText(),
             )
         }
     }
@@ -920,7 +922,7 @@ class VaultItemViewModel @Inject constructor(
             val phone = identity.phone.orEmpty()
             clipboardManager.setText(
                 text = phone,
-                toastDescriptorOverride = R.string.phone.asText(),
+                toastDescriptorOverride = BitwardenString.phone.asText(),
             )
         }
     }
@@ -930,7 +932,7 @@ class VaultItemViewModel @Inject constructor(
             val address = identity.address.orEmpty()
             clipboardManager.setText(
                 text = address,
-                toastDescriptorOverride = R.string.address.asText(),
+                toastDescriptorOverride = BitwardenString.address.asText(),
             )
         }
     }
@@ -975,7 +977,7 @@ class VaultItemViewModel @Inject constructor(
         val dialogState = when (val result = action.result) {
             is BreachCountResult.Error -> {
                 VaultItemState.DialogState.Generic(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     error = result.error,
                 )
             }
@@ -983,9 +985,9 @@ class VaultItemViewModel @Inject constructor(
             is BreachCountResult.Success -> {
                 VaultItemState.DialogState.Generic(
                     message = if (result.breachCount > 0) {
-                        R.string.password_exposed.asText(result.breachCount)
+                        BitwardenString.password_exposed.asText(result.breachCount)
                     } else {
-                        R.string.password_safe.asText()
+                        BitwardenString.password_safe.asText()
                     },
                 )
             }
@@ -1005,7 +1007,7 @@ class VaultItemViewModel @Inject constructor(
                     it.copy(
                         viewState = vaultDataState.toViewStateOrError(
                             account = userState.activeAccount,
-                            errorText = R.string.generic_error_message.asText(),
+                            errorText = BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -1016,7 +1018,7 @@ class VaultItemViewModel @Inject constructor(
                     it.copy(
                         viewState = vaultDataState.toViewStateOrError(
                             account = userState.activeAccount,
-                            errorText = R.string.generic_error_message.asText(),
+                            errorText = BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -1033,11 +1035,11 @@ class VaultItemViewModel @Inject constructor(
                     it.copy(
                         viewState = vaultDataState.toViewStateOrError(
                             account = userState.activeAccount,
-                            errorText = R.string.internet_connection_required_title
+                            errorText = BitwardenString.internet_connection_required_title
                                 .asText()
                                 .concat(
                                     " ".asText(),
-                                    R.string.internet_connection_required_message.asText(),
+                                    BitwardenString.internet_connection_required_message.asText(),
                                 ),
                         ),
                     )
@@ -1049,7 +1051,7 @@ class VaultItemViewModel @Inject constructor(
                     it.copy(
                         viewState = vaultDataState.toViewStateOrError(
                             account = userState.activeAccount,
-                            errorText = R.string.generic_error_message.asText(),
+                            errorText = BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -1082,7 +1084,7 @@ class VaultItemViewModel @Inject constructor(
             is DeleteCipherResult.Error -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         error = result.error,
                     ),
                 )
@@ -1093,9 +1095,9 @@ class VaultItemViewModel @Inject constructor(
                 snackbarRelayManager.sendSnackbarData(
                     data = BitwardenSnackbarData(
                         message = if (state.isCipherDeleted) {
-                            R.string.item_deleted.asText()
+                            BitwardenString.item_deleted.asText()
                         } else {
-                            R.string.item_soft_deleted.asText()
+                            BitwardenString.item_soft_deleted.asText()
                         },
                     ),
                     relay = SnackbarRelay.CIPHER_DELETED,
@@ -1110,7 +1112,7 @@ class VaultItemViewModel @Inject constructor(
             is RestoreCipherResult.Error -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         error = result.error,
                     ),
                 )
@@ -1119,7 +1121,7 @@ class VaultItemViewModel @Inject constructor(
             RestoreCipherResult.Success -> {
                 dismissDialog()
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(message = R.string.item_restored.asText()),
+                    data = BitwardenSnackbarData(message = BitwardenString.item_restored.asText()),
                     relay = SnackbarRelay.CIPHER_RESTORED,
                 )
                 sendEvent(VaultItemEvent.NavigateBack)
@@ -1134,7 +1136,7 @@ class VaultItemViewModel @Inject constructor(
             is DownloadAttachmentResult.Failure -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
-                        message = R.string.unable_to_download_file.asText(),
+                        message = BitwardenString.unable_to_download_file.asText(),
                         error = result.error,
                     ),
                 )
@@ -1159,11 +1161,11 @@ class VaultItemViewModel @Inject constructor(
         }
 
         if (action.isSaved) {
-            sendEvent(VaultItemEvent.ShowSnackbar(R.string.save_attachment_success.asText()))
+            sendEvent(VaultItemEvent.ShowSnackbar(BitwardenString.save_attachment_success.asText()))
         } else {
             updateDialogState(
                 VaultItemState.DialogState.Generic(
-                    R.string.unable_to_save_attachment.asText(),
+                    BitwardenString.unable_to_save_attachment.asText(),
                 ),
             )
         }
@@ -1276,11 +1278,11 @@ data class VaultItemState(
      */
     val title: Text
         get() = when (cipherType) {
-            VaultItemCipherType.LOGIN -> R.string.view_login.asText()
-            VaultItemCipherType.CARD -> R.string.view_card.asText()
-            VaultItemCipherType.IDENTITY -> R.string.view_identity.asText()
-            VaultItemCipherType.SECURE_NOTE -> R.string.view_note.asText()
-            VaultItemCipherType.SSH_KEY -> R.string.view_passkey.asText()
+            VaultItemCipherType.LOGIN -> BitwardenString.view_login.asText()
+            VaultItemCipherType.CARD -> BitwardenString.view_card.asText()
+            VaultItemCipherType.IDENTITY -> BitwardenString.view_identity.asText()
+            VaultItemCipherType.SECURE_NOTE -> BitwardenString.view_note.asText()
+            VaultItemCipherType.SSH_KEY -> BitwardenString.view_ssh_key.asText()
         }
 
     /**
@@ -1341,9 +1343,9 @@ data class VaultItemState(
      */
     val deletionConfirmationText: Text
         get() = if (isCipherDeleted) {
-            R.string.do_you_really_want_to_permanently_delete_cipher
+            BitwardenString.do_you_really_want_to_permanently_delete_cipher
         } else {
-            R.string.do_you_really_want_to_soft_delete_cipher
+            BitwardenString.do_you_really_want_to_soft_delete_cipher
         }
             .asText()
 

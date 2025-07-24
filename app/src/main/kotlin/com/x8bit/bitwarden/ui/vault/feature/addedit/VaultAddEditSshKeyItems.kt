@@ -12,8 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
@@ -28,7 +28,7 @@ fun LazyListScope.vaultAddEditSshKeyItems(
     item {
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
-            label = stringResource(id = R.string.public_key),
+            label = stringResource(id = BitwardenString.public_key),
             value = sshKeyState.publicKey,
             readOnly = true,
             onValueChange = { },
@@ -42,7 +42,7 @@ fun LazyListScope.vaultAddEditSshKeyItems(
 
     item {
         BitwardenPasswordField(
-            label = stringResource(id = R.string.private_key),
+            label = stringResource(id = BitwardenString.private_key),
             value = sshKeyState.privateKey,
             readOnly = true,
             onValueChange = { /* no-op */ },
@@ -59,7 +59,7 @@ fun LazyListScope.vaultAddEditSshKeyItems(
 
     item {
         BitwardenTextField(
-            label = stringResource(id = R.string.fingerprint),
+            label = stringResource(id = BitwardenString.fingerprint),
             value = sshKeyState.fingerprint,
             readOnly = true,
             onValueChange = { /* no-op */ },

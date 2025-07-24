@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestType
 import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
@@ -111,8 +111,8 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     fun `DismissDialog should clear the dialog state`() {
         val initialState = DEFAULT_STATE.copy(
             dialogState = LoginWithDeviceState.DialogState.Error(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.generic_error_message.asText(),
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.generic_error_message.asText(),
             ),
         )
         val viewModel = createViewModel(initialState)
@@ -201,7 +201,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                         ),
                         loginData = DEFAULT_LOGIN_DATA,
                         dialogState = LoginWithDeviceState.DialogState.Loading(
-                            message = R.string.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -220,7 +220,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
             verify(exactly = 1) {
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(message = R.string.login_approved.asText()),
+                    data = BitwardenSnackbarData(message = BitwardenString.login_approved.asText()),
                     relay = SnackbarRelay.LOGIN_SUCCESS,
                 )
             }
@@ -271,7 +271,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                             fingerprintPhrase = "",
                         ),
                         dialogState = LoginWithDeviceState.DialogState.Loading(
-                            message = R.string.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                         loginData = DEFAULT_LOGIN_DATA,
                     ),
@@ -291,7 +291,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
             verify(exactly = 1) {
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(message = R.string.login_approved.asText()),
+                    data = BitwardenSnackbarData(message = BitwardenString.login_approved.asText()),
                     relay = SnackbarRelay.LOGIN_SUCCESS,
                 )
             }
@@ -379,7 +379,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                             ),
                             loginData = DEFAULT_LOGIN_DATA,
                             dialogState = LoginWithDeviceState.DialogState.Loading(
-                                message = R.string.logging_in.asText(),
+                                message = BitwardenString.logging_in.asText(),
                             ),
                         ),
                         awaitItem(),
@@ -390,8 +390,8 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                                 fingerprintPhrase = "",
                             ),
                             dialogState = LoginWithDeviceState.DialogState.Error(
-                                title = R.string.an_error_has_occurred.asText(),
-                                message = R.string.generic_error_message.asText(),
+                                title = BitwardenString.an_error_has_occurred.asText(),
+                                message = BitwardenString.generic_error_message.asText(),
                                 error = error,
                             ),
                             loginData = DEFAULT_LOGIN_DATA,
@@ -447,7 +447,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                             ),
                             loginData = DEFAULT_LOGIN_DATA,
                             dialogState = LoginWithDeviceState.DialogState.Loading(
-                                message = R.string.logging_in.asText(),
+                                message = BitwardenString.logging_in.asText(),
                             ),
                         ),
                         awaitItem(),
@@ -458,8 +458,8 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                                 fingerprintPhrase = "",
                             ),
                             dialogState = LoginWithDeviceState.DialogState.Error(
-                                title = R.string.an_error_has_occurred.asText(),
-                                message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server.asText(),
+                                title = BitwardenString.an_error_has_occurred.asText(),
+                                message = BitwardenString.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server.asText(),
                             ),
                             loginData = DEFAULT_LOGIN_DATA,
                         ),
@@ -514,7 +514,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                             ),
                             loginData = DEFAULT_LOGIN_DATA,
                             dialogState = LoginWithDeviceState.DialogState.Loading(
-                                message = R.string.logging_in.asText(),
+                                message = BitwardenString.logging_in.asText(),
                             ),
                         ),
                         awaitItem(),
@@ -525,8 +525,8 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                                 fingerprintPhrase = "",
                             ),
                             dialogState = LoginWithDeviceState.DialogState.Error(
-                                title = R.string.an_error_has_occurred.asText(),
-                                message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                                title = BitwardenString.an_error_has_occurred.asText(),
+                                message = BitwardenString.we_couldnt_verify_the_servers_certificate.asText(),
                             ),
                             loginData = DEFAULT_LOGIN_DATA,
                         ),
@@ -581,7 +581,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                             ),
                             loginData = DEFAULT_LOGIN_DATA,
                             dialogState = LoginWithDeviceState.DialogState.Loading(
-                                message = R.string.logging_in.asText(),
+                                message = BitwardenString.logging_in.asText(),
                             ),
                         ),
                         awaitItem(),
@@ -592,7 +592,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                                 fingerprintPhrase = "",
                             ),
                             dialogState = LoginWithDeviceState.DialogState.Error(
-                                title = R.string.an_error_has_occurred.asText(),
+                                title = BitwardenString.an_error_has_occurred.asText(),
                                 message = "new device verification required".asText(),
                             ),
                             loginData = DEFAULT_LOGIN_DATA,
@@ -622,8 +622,8 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = LoginWithDeviceState.DialogState.Error(
-                    title = R.string.log_in_denied.asText(),
-                    message = R.string.captcha_failed.asText(),
+                    title = BitwardenString.log_in_denied.asText(),
+                    message = BitwardenString.captcha_failed.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -653,7 +653,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 initialState.copy(
                     loginData = DEFAULT_LOGIN_DATA.copy(captchaToken = captchaToken),
                     dialogState = LoginWithDeviceState.DialogState.Loading(
-                        message = R.string.logging_in.asText(),
+                        message = BitwardenString.logging_in.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -688,8 +688,8 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     isResendNotificationLoading = false,
                 ),
                 dialogState = LoginWithDeviceState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     error = error,
                 ),
             ),
@@ -740,7 +740,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 ),
                 dialogState = LoginWithDeviceState.DialogState.Error(
                     title = null,
-                    message = R.string.login_request_has_already_expired.asText(),
+                    message = BitwardenString.login_request_has_already_expired.asText(),
                 ),
             ),
             viewModel.stateFlow.value,

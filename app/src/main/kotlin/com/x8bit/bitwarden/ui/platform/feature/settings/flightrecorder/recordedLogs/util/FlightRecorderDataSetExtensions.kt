@@ -3,9 +3,9 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recorded
 import com.bitwarden.core.data.util.toFormattedDateStyle
 import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.core.data.util.toFormattedTimeStyle
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.util.fileOf
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsState
@@ -67,24 +67,24 @@ private fun FlightRecorderDataSet.FlightRecorderData.expiresIn(clock: Clock): Te
         null
     } else if (now.isAfter(expirationTime)) {
         // We have passed expiration. This should never happen since the data should be deleted.
-        R.string.expired.asText()
+        BitwardenString.expired.asText()
     } else if (now.isAfter(expirationTime.minus(1, ChronoUnit.DAYS))) {
         // We are within 24 hours of expiration, so show the specific time.
         val expirationTime = expirationTime.toFormattedTimeStyle(
             timeStyle = FormatStyle.SHORT,
             clock = clock,
         )
-        R.string.expires_at.asText(expirationTime)
+        BitwardenString.expires_at.asText(expirationTime)
     } else if (dayBeforeExpiration.dayOfYear == now.atZone(clock.zone).dayOfYear) {
         // We expire tomorrow based on the day of year.
-        R.string.expires_tomorrow.asText()
+        BitwardenString.expires_tomorrow.asText()
     } else {
         // Let them know the date it expires.
         val expirationDate = expirationTime.toFormattedDateStyle(
             dateStyle = FormatStyle.SHORT,
             clock = clock,
         )
-        R.string.expires_on.asText(expirationDate)
+        BitwardenString.expires_on.asText(expirationDate)
     }
 }
 

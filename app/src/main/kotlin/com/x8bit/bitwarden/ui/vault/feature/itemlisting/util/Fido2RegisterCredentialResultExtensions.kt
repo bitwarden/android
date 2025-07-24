@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import androidx.annotation.StringRes
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 
 /**
@@ -12,14 +12,14 @@ val Fido2RegisterCredentialResult.Error.messageResourceId: Int
     @StringRes
     get() = when (this) {
         Fido2RegisterCredentialResult.Error.InternalError -> {
-            R.string.passkey_registration_failed_due_to_an_internal_error
+            BitwardenString.passkey_registration_failed_due_to_an_internal_error
         }
 
         Fido2RegisterCredentialResult.Error.InvalidAppSignature -> {
-            R.string.passkey_operation_failed_because_app_signature_is_invalid
+            BitwardenString.passkey_operation_failed_because_app_signature_is_invalid
         }
 
         Fido2RegisterCredentialResult.Error.MissingHostUrl -> {
-            R.string.passkey_operation_failed_because_host_url_is_not_present_in_request
+            BitwardenString.passkey_operation_failed_because_host_url_is_not_present_in_request
         }
     }

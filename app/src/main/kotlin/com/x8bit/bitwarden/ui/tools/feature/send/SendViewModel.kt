@@ -11,9 +11,9 @@ import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -151,8 +151,8 @@ class SendViewModel @Inject constructor(
             it.copy(
                 isRefreshing = false,
                 dialogState = SendState.DialogState.Error(
-                    R.string.internet_connection_required_title.asText(),
-                    R.string.internet_connection_required_message.asText(),
+                    BitwardenString.internet_connection_required_title.asText(),
+                    BitwardenString.internet_connection_required_message.asText(),
                 ),
             )
         }
@@ -182,8 +182,8 @@ class SendViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = SendState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -192,7 +192,7 @@ class SendViewModel @Inject constructor(
 
             DeleteSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(SendEvent.ShowSnackbar(R.string.send_deleted.asText()))
+                sendEvent(SendEvent.ShowSnackbar(BitwardenString.send_deleted.asText()))
             }
         }
     }
@@ -205,11 +205,11 @@ class SendViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = SendState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = result
                                 .errorMessage
                                 ?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -217,7 +217,11 @@ class SendViewModel @Inject constructor(
 
             is RemovePasswordSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(SendEvent.ShowSnackbar(message = R.string.password_removed.asText()))
+                sendEvent(
+                    SendEvent.ShowSnackbar(
+                        message = BitwardenString.password_removed.asText(),
+                    ),
+                )
             }
         }
     }
@@ -229,7 +233,7 @@ class SendViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = SendState.ViewState.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                         dialogState = null,
                         isRefreshing = false,
@@ -303,7 +307,7 @@ class SendViewModel @Inject constructor(
                     it.copy(
                         dialogState = SendState.DialogState.Error(
                             title = null,
-                            message = R.string.send_disabled_warning.asText(),
+                            message = BitwardenString.send_disabled_warning.asText(),
                         ),
                     )
                 }
@@ -313,8 +317,8 @@ class SendViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = SendState.DialogState.Error(
-                            title = R.string.send.asText(),
-                            message = R.string.send_file_premium_required.asText(),
+                            title = BitwardenString.send.asText(),
+                            message = BitwardenString.send_file_premium_required.asText(),
                         ),
                     )
                 }
@@ -343,7 +347,7 @@ class SendViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialogState = SendState.DialogState.Loading(
-                        message = R.string.syncing.asText(),
+                        message = BitwardenString.syncing.asText(),
                     ),
                 )
             }
@@ -352,8 +356,8 @@ class SendViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialogState = SendState.DialogState.Error(
-                        R.string.internet_connection_required_title.asText(),
-                        R.string.internet_connection_required_message.asText(),
+                        BitwardenString.internet_connection_required_title.asText(),
+                        BitwardenString.internet_connection_required_message.asText(),
                     ),
                 )
             }
@@ -363,7 +367,7 @@ class SendViewModel @Inject constructor(
     private fun handleCopyClick(action: SendAction.CopyClick) {
         clipboardManager.setText(
             text = action.sendItem.shareUrl,
-            toastDescriptorOverride = R.string.send_link.asText(),
+            toastDescriptorOverride = BitwardenString.send_link.asText(),
         )
     }
 
@@ -417,7 +421,7 @@ class SendViewModel @Inject constructor(
 
     private fun handleDeleteSendClick(action: SendAction.DeleteSendClick) {
         mutableStateFlow.update {
-            it.copy(dialogState = SendState.DialogState.Loading(R.string.deleting.asText()))
+            it.copy(dialogState = SendState.DialogState.Loading(BitwardenString.deleting.asText()))
         }
         viewModelScope.launch {
             val result = vaultRepo.deleteSend(action.sendItem.id)
@@ -429,7 +433,7 @@ class SendViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = SendState.DialogState.Loading(
-                    message = R.string.removing_send_password.asText(),
+                    message = BitwardenString.removing_send_password.asText(),
                 ),
             )
         }

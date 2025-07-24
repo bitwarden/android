@@ -22,8 +22,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 
 /**
  * Reusable header element that is clickable for expanding or collapsing content.
@@ -32,12 +32,13 @@ import com.x8bit.bitwarden.R
  * @param expandedText Text to display when the content is expanded.
  * @param showExpansionIndicator Whether to show an indicator to expand or collapse the content.
  */
+@Suppress("LongMethod")
 @Composable
 fun BitwardenExpandingHeader(
     isExpanded: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    collapsedText: String = stringResource(id = R.string.additional_options),
+    collapsedText: String = stringResource(id = BitwardenString.additional_options),
     expandedText: String = collapsedText,
     showExpansionIndicator: Boolean = true,
     shape: Shape = BitwardenTheme.shapes.content,
@@ -48,7 +49,11 @@ fun BitwardenExpandingHeader(
             .clip(shape = shape)
             .clickable(
                 onClickLabel = stringResource(
-                    id = if (isExpanded) R.string.options_expanded else R.string.options_collapsed,
+                    id = if (isExpanded) {
+                        BitwardenString.options_expanded
+                    } else {
+                        BitwardenString.options_collapsed
+                    },
                 ),
                 onClick = onClick,
             )

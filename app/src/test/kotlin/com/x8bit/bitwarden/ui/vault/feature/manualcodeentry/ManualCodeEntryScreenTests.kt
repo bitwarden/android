@@ -16,10 +16,10 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ApplicationProvider
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.performCustomAccessibilityAction
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
@@ -140,8 +140,8 @@ class ManualCodeEntryScreenTests : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 dialog = ManualCodeEntryState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.authenticator_key_read_error.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.authenticator_key_read_error.asText(),
                 ),
             )
         }
@@ -169,8 +169,8 @@ class ManualCodeEntryScreenTests : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 dialog = ManualCodeEntryState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.authenticator_key_read_error.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.authenticator_key_read_error.asText(),
                 ),
             )
         }

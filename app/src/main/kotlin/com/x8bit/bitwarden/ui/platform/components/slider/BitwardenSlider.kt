@@ -40,8 +40,8 @@ import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.base.util.toDp
 import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.slider.color.bitwardenSliderColors
 
 /**
@@ -85,7 +85,7 @@ fun BitwardenSlider(
             onValueChange = { },
             label = {
                 Text(
-                    text = stringResource(id = R.string.length),
+                    text = stringResource(id = BitwardenString.length),
                     style = BitwardenTheme.typography.bodySmall,
                     modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
                         if (labelTextWidth == Dp.Unspecified) {

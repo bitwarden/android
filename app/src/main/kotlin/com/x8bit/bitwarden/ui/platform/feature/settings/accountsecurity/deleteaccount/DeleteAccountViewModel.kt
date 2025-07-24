@@ -4,9 +4,9 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
@@ -97,7 +97,7 @@ class DeleteAccountViewModel @Inject constructor(
                 sendAction(
                     DeleteAccountAction.Internal.UpdateDialogState(
                         DeleteAccountState.DeleteAccountDialog.Error(
-                            message = R.string.invalid_master_password.asText(),
+                            message = BitwardenString.invalid_master_password.asText(),
                         ),
                     ),
                 )
@@ -139,7 +139,7 @@ class DeleteAccountViewModel @Inject constructor(
                 updateDialogState(
                     DeleteAccountState.DeleteAccountDialog.Error(
                         message = result.message?.asText()
-                            ?: R.string.generic_error_message.asText(),
+                            ?: BitwardenString.generic_error_message.asText(),
                         error = result.error,
                     ),
                 )

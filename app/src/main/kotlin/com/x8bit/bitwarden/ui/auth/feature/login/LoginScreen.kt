@@ -40,6 +40,7 @@ import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
@@ -119,7 +120,7 @@ fun LoginScreen(
                 title = stringResource(id = R.string.app_name),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(LoginAction.CloseButtonClick) }
                 },
@@ -130,10 +131,10 @@ fun LoginScreen(
                         )
                     }
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(R.string.more),
+                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
-                                text = stringResource(id = R.string.get_password_hint),
+                                text = stringResource(id = BitwardenString.get_password_hint),
                                 onClick = remember(viewModel) {
                                     { viewModel.trySendAction(LoginAction.MasterPasswordHintClick) }
                                 },
@@ -235,12 +236,12 @@ private fun LoginScreenContent(
             autoFocus = true,
             value = state.passwordInput,
             onValueChange = onPasswordInputChanged,
-            label = stringResource(id = R.string.master_password),
+            label = stringResource(id = BitwardenString.master_password),
             showPasswordTestTag = "PasswordVisibilityToggle",
             supportingContentPadding = PaddingValues(),
             supportingContent = {
                 BitwardenClickableText(
-                    label = stringResource(id = R.string.get_master_passwordword_hint),
+                    label = stringResource(id = BitwardenString.get_master_passwordword_hint),
                     onClick = onMasterPasswordClick,
                     style = BitwardenTheme.typography.labelMedium,
                     innerPadding = PaddingValues(all = 16.dp),
@@ -260,7 +261,7 @@ private fun LoginScreenContent(
         Spacer(modifier = Modifier.height(height = 24.dp))
 
         BitwardenFilledButton(
-            label = stringResource(id = R.string.log_in_with_master_password),
+            label = stringResource(id = BitwardenString.log_in_with_master_password),
             onClick = onLoginButtonClick,
             isEnabled = state.isLoginButtonEnabled,
             modifier = Modifier
@@ -273,7 +274,7 @@ private fun LoginScreenContent(
 
         if (state.shouldShowLoginWithDevice) {
             BitwardenOutlinedButton(
-                label = stringResource(id = R.string.log_in_with_device),
+                label = stringResource(id = BitwardenString.log_in_with_device),
                 icon = rememberVectorPainter(id = BitwardenDrawable.ic_mobile_small),
                 onClick = onLoginWithDeviceClick,
                 modifier = Modifier
@@ -286,7 +287,7 @@ private fun LoginScreenContent(
         }
 
         BitwardenOutlinedButton(
-            label = stringResource(id = R.string.log_in_sso),
+            label = stringResource(id = BitwardenString.log_in_sso),
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_enterprise_small),
             onClick = onSingleSignOnClick,
             modifier = Modifier
@@ -299,7 +300,7 @@ private fun LoginScreenContent(
 
         Text(
             text = stringResource(
-                id = R.string.logging_in_as_x_on_y,
+                id = BitwardenString.logging_in_as_x_on_y,
                 state.emailAddress,
                 state.environmentLabel,
             ),
@@ -313,7 +314,7 @@ private fun LoginScreenContent(
         )
 
         BitwardenClickableText(
-            label = stringResource(id = R.string.not_you),
+            label = stringResource(id = BitwardenString.not_you),
             onClick = onNotYouButtonClick,
             style = BitwardenTheme.typography.labelMedium,
             innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),

@@ -50,8 +50,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.content.model.ContentBlockData
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
@@ -99,7 +99,7 @@ fun ImportLoginsScreen(
 
     BitwardenModalBottomSheet(
         showBottomSheet = state.showBottomSheet,
-        sheetTitle = stringResource(R.string.bitwarden_tools),
+        sheetTitle = stringResource(BitwardenString.bitwarden_tools),
         onDismiss = handler.onSuccessfulSyncAcknowledged,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         modifier = Modifier.statusBarsPadding(),
@@ -117,11 +117,11 @@ fun ImportLoginsScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(R.string.import_logins),
+                title = stringResource(BitwardenString.import_logins),
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(BitwardenDrawable.ic_close),
                     onNavigationIconClick = handler.onCloseClick,
-                    navigationIconContentDescription = stringResource(R.string.close),
+                    navigationIconContentDescription = stringResource(BitwardenString.close),
                 ),
                 scrollBehavior = scrollBehavior,
             )
@@ -174,8 +174,8 @@ private fun ImportLoginsDialogContent(
     state: ImportLoginsState,
     handler: ImportLoginHandler,
 ) {
-    val confirmButtonText = stringResource(R.string.confirm)
-    val dismissButtonText = stringResource(R.string.cancel)
+    val confirmButtonText = stringResource(BitwardenString.confirm)
+    val dismissButtonText = stringResource(BitwardenString.cancel)
     when (val dialogState = state.dialogState) {
         ImportLoginsState.DialogState.GetStarted -> {
             BitwardenTwoButtonDialog(
@@ -206,8 +206,8 @@ private fun ImportLoginsDialogContent(
                 title = dialogState.title?.invoke(),
                 message = dialogState.message(),
                 onDismissRequest = handler.onDismissDialog,
-                confirmButtonText = stringResource(R.string.try_again),
-                dismissButtonText = stringResource(R.string.import_logins_later),
+                confirmButtonText = stringResource(BitwardenString.try_again),
+                dismissButtonText = stringResource(BitwardenString.import_logins_later),
                 onConfirmClick = handler.onRetrySync,
                 onDismissClick = handler.onFailedSyncAcknowledged,
             )
@@ -243,7 +243,7 @@ private fun InitialImportLoginsContent(
         )
         Spacer(Modifier.height(24.dp))
         Text(
-            text = stringResource(R.string.give_your_vault_a_head_start),
+            text = stringResource(BitwardenString.give_your_vault_a_head_start),
             style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
@@ -252,7 +252,8 @@ private fun InitialImportLoginsContent(
         Spacer(Modifier.height(12.dp))
         Text(
             text = stringResource(
-                R.string.from_your_computer_follow_these_instructions_to_export_saved_passwords,
+                BitwardenString
+                    .from_your_computer_follow_these_instructions_to_export_saved_passwords,
             ),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -261,7 +262,7 @@ private fun InitialImportLoginsContent(
         )
         Spacer(Modifier.height(24.dp))
         BitwardenFilledButton(
-            label = stringResource(R.string.get_started),
+            label = stringResource(BitwardenString.get_started),
             onClick = onGetStartedClick,
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -269,7 +270,7 @@ private fun InitialImportLoginsContent(
         )
         Spacer(Modifier.height(12.dp))
         BitwardenOutlinedButton(
-            label = stringResource(R.string.import_logins_later),
+            label = stringResource(BitwardenString.import_logins_later),
             onClick = onImportLaterClick,
             modifier = Modifier
                 .standardHorizontalMargin()
@@ -288,17 +289,17 @@ private fun ImportLoginsStepOneContent(
     modifier: Modifier = Modifier,
 ) {
     val instruction1 = annotatedStringResource(
-        id = R.string.on_your_computer_log_in_to_your_current_browser_or_password_manager,
+        id = BitwardenString.on_your_computer_log_in_to_your_current_browser_or_password_manager,
     )
     val instruction2 = annotatedStringResource(
-        id = R.string.export_your_passwords_this_option_is_usually_found_in_your_settings,
+        id = BitwardenString.export_your_passwords_this_option_is_usually_found_in_your_settings,
     )
     val instruction3 = annotatedStringResource(
-        id = R.string.save_the_exported_file_somewhere_on_your_computer_you_can_find_easily,
+        id = BitwardenString.save_the_exported_file_somewhere_on_your_computer_you_can_find_easily,
     )
     ImportLoginsInstructionStep(
-        stepText = stringResource(R.string.step_1_of_3),
-        stepTitle = stringResource(R.string.export_your_saved_logins),
+        stepText = stringResource(BitwardenString.step_1_of_3),
+        stepTitle = stringResource(BitwardenString.export_your_saved_logins),
         instructions = persistentListOf(
             ContentBlockData(
                 iconVectorResource = BitwardenDrawable.ic_number1,
@@ -313,7 +314,7 @@ private fun ImportLoginsStepOneContent(
             ContentBlockData(
                 iconVectorResource = BitwardenDrawable.ic_number3,
                 headerText = instruction3,
-                subtitleText = stringResource(R.string.delete_this_file_after_import_is_complete)
+                subtitleText = stringResource(BitwardenString.delete_this_file_after_import_is_complete)
                     .toAnnotatedString(),
             ),
         ),
@@ -333,18 +334,18 @@ private fun ImportLoginsStepTwoContent(
     modifier: Modifier = Modifier,
 ) {
     val instruction1 = annotatedStringResource(
-        id = R.string.on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com,
+        id = BitwardenString.on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com,
         args = arrayOf(vaultUrl),
     )
-    val instruction2Text = stringResource(R.string.log_in_to_the_bitwarden_web_app)
+    val instruction2Text = stringResource(BitwardenString.log_in_to_the_bitwarden_web_app)
     val instruction2 = buildAnnotatedString {
         withStyle(bitwardenBoldSpanStyle) {
             append(instruction2Text)
         }
     }
     ImportLoginsInstructionStep(
-        stepText = stringResource(R.string.step_2_of_3),
-        stepTitle = stringResource(R.string.log_in_to_bitwarden),
+        stepText = stringResource(BitwardenString.step_2_of_3),
+        stepTitle = stringResource(BitwardenString.log_in_to_bitwarden),
         instructions = persistentListOf(
             ContentBlockData(
                 iconVectorResource = BitwardenDrawable.ic_number1,
@@ -373,20 +374,20 @@ private fun ImportLoginsStepThreeContent(
     modifier: Modifier = Modifier,
 ) {
     val instruction1 = annotatedStringResource(
-        id = R.string.in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data,
+        id = BitwardenString.in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data,
     )
     val instruction2 = annotatedStringResource(
-        id = R.string.fill_out_the_form_and_import_your_saved_password_file,
+        id = BitwardenString.fill_out_the_form_and_import_your_saved_password_file,
     )
     val instruction3 = annotatedStringResource(
-        id = R.string.select_import_data_in_the_web_app_then_done_to_finish_syncing,
+        id = BitwardenString.select_import_data_in_the_web_app_then_done_to_finish_syncing,
     )
     val instruction4 = annotatedStringResource(
-        id = R.string.for_your_security_be_sure_to_delete_your_saved_password_file,
+        id = BitwardenString.for_your_security_be_sure_to_delete_your_saved_password_file,
     )
     ImportLoginsInstructionStep(
-        stepText = stringResource(R.string.step_3_of_3),
-        stepTitle = stringResource(R.string.import_logins_to_bitwarden),
+        stepText = stringResource(BitwardenString.step_3_of_3),
+        stepTitle = stringResource(BitwardenString.import_logins_to_bitwarden),
         instructions = persistentListOf(
             ContentBlockData(
                 iconVectorResource = BitwardenDrawable.ic_number1,
@@ -410,7 +411,7 @@ private fun ImportLoginsStepThreeContent(
             ),
         ),
         onBackClick = onBackClick,
-        ctaText = stringResource(R.string.done_text),
+        ctaText = stringResource(BitwardenString.done_text),
         onContinueClick = onContinueClick,
         onHelpClick = onHelpClick,
         modifier = modifier,
@@ -440,7 +441,7 @@ private fun ImportLoginsSuccessBottomSheetContent(
         )
         Spacer(Modifier.height(24.dp))
         Text(
-            text = stringResource(R.string.import_successful),
+            text = stringResource(BitwardenString.import_successful),
             style = BitwardenTheme.typography.titleMedium,
             textAlign = TextAlign.Center,
             modifier = Modifier.standardHorizontalMargin(),
@@ -448,7 +449,7 @@ private fun ImportLoginsSuccessBottomSheetContent(
         Spacer(Modifier.height(12.dp))
         Text(
             text = stringResource(
-                R.string.manage_your_logins_from_anywhere_with_bitwarden_tools,
+                BitwardenString.manage_your_logins_from_anywhere_with_bitwarden_tools,
             ),
             style = BitwardenTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
@@ -458,22 +459,25 @@ private fun ImportLoginsSuccessBottomSheetContent(
         BitwardenContentCard(
             contentItems = persistentListOf(
                 ContentBlockData(
-                    headerText = stringResource(R.string.download_the_browser_extension),
+                    headerText = stringResource(BitwardenString.download_the_browser_extension),
                     subtitleText = stringResource(
-                        R.string.go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser,
+                        BitwardenString
+                            .go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser,
                     ),
                     iconVectorResource = BitwardenDrawable.ic_puzzle,
                 ),
                 ContentBlockData(
-                    headerText = stringResource(R.string.use_the_web_app),
+                    headerText = stringResource(BitwardenString.use_the_web_app),
                     subtitleText = stringResource(
-                        R.string.log_in_at_bitwarden_com_to_easily_manage_your_account,
+                        BitwardenString.log_in_at_bitwarden_com_to_easily_manage_your_account,
                     ),
                     iconVectorResource = BitwardenDrawable.ic_desktop,
                 ),
                 ContentBlockData(
-                    headerText = stringResource(R.string.autofill_passwords),
-                    subtitleText = stringResource(R.string.set_up_autofill_on_all_your_devices),
+                    headerText = stringResource(BitwardenString.autofill_passwords),
+                    subtitleText = stringResource(
+                        BitwardenString.set_up_autofill_on_all_your_devices,
+                    ),
                     iconVectorResource = BitwardenDrawable.ic_shield,
                 ),
             ),
@@ -482,7 +486,7 @@ private fun ImportLoginsSuccessBottomSheetContent(
         )
         Spacer(Modifier.height(24.dp))
         BitwardenFilledButton(
-            label = stringResource(R.string.got_it),
+            label = stringResource(BitwardenString.got_it),
             onClick = onCompleteImportLogins,
             modifier = Modifier
                 .standardHorizontalMargin()

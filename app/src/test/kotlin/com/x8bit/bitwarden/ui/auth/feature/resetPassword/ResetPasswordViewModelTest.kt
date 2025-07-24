@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.auth.feature.resetPassword
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -71,9 +71,9 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ResetPasswordState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required
-                        .asText(R.string.master_password.asText()),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.validation_field_required
+                        .asText(BitwardenString.master_password.asText()),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -104,8 +104,8 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ResetPasswordState.DialogState.Error(
-                    title = R.string.master_password_policy_validation_title.asText(),
-                    message = R.string.master_password_policy_validation_message.asText(),
+                    title = BitwardenString.master_password_policy_validation_title.asText(),
+                    message = BitwardenString.master_password_policy_validation_message.asText(),
                 ),
                 passwordInput = password,
                 passwordStrengthState = PasswordStrengthState.WEAK_1,
@@ -132,8 +132,8 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 resetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
                 dialogState = ResetPasswordState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.master_password_length_val_message_x
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.master_password_length_val_message_x
                         .asText(MIN_PASSWORD_LENGTH),
                 ),
                 passwordInput = password,
@@ -161,8 +161,8 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ResetPasswordState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.master_password_confirmation_val_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.master_password_confirmation_val_message.asText(),
                 ),
                 passwordInput = password,
                 passwordStrengthState = PasswordStrengthState.WEAK_1,
@@ -196,8 +196,8 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ResetPasswordState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     error = error,
                 ),
                 currentPasswordInput = currentPassword,
@@ -233,8 +233,8 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ResetPasswordState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.invalid_master_password.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.invalid_master_password.asText(),
                 ),
                 currentPasswordInput = currentPassword,
                 passwordInput = password,
@@ -284,7 +284,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = ResetPasswordState.DialogState.Loading(
-                        message = R.string.updating_password.asText(),
+                        message = BitwardenString.updating_password.asText(),
                     ),
                     currentPasswordInput = currentPassword,
                     passwordInput = password,

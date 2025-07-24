@@ -4,11 +4,11 @@ import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.FolderView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderDisplayItem
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -61,7 +61,7 @@ class FoldersViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = FoldersState.ViewState.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -95,11 +95,11 @@ class FoldersViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = FoldersState.ViewState.Error(
-                            message = R.string.internet_connection_required_title
+                            message = BitwardenString.internet_connection_required_title
                                 .asText()
                                 .concat(
                                     " ".asText(),
-                                    R.string.internet_connection_required_message.asText(),
+                                    BitwardenString.internet_connection_required_message.asText(),
                                 ),
                         ),
                     )

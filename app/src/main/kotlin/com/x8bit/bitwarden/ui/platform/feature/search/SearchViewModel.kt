@@ -12,18 +12,19 @@ import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginUriView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -36,6 +37,7 @@ import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrN
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -75,6 +77,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import java.time.Clock
 import javax.inject.Inject
 
@@ -238,37 +241,41 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun handleAutofillItemClick(action: SearchAction.AutofillItemClick) {
-        val cipherView = getCipherViewOrNull(cipherId = action.itemId) ?: return
-        useCipherForAutofill(cipherView = cipherView)
+        useCipherForAutofill(cipherId = action.itemId)
     }
 
     private fun handleAutofillAndSaveItemClick(action: SearchAction.AutofillAndSaveItemClick) {
-        val cipherView = getCipherViewOrNull(cipherId = action.itemId) ?: return
-        val uris = cipherView.login?.uris.orEmpty()
+        val cipherListView = getCipherListViewOrNull(cipherId = action.itemId) ?: return
+        val uris = cipherListView.login?.uris.orEmpty()
 
         mutableStateFlow.update {
             it.copy(
                 dialogState = SearchState.DialogState.Loading(
-                    message = R.string.loading.asText(),
+                    message = BitwardenString.loading.asText(),
                 ),
             )
         }
 
         viewModelScope.launch {
-            val result = vaultRepo.updateCipher(
-                cipherId = action.itemId,
-                cipherView = cipherView.copy(
-                    login = cipherView
-                        .login
-                        ?.copy(
-                            uris = uris + LoginUriView(
-                                uri = state.autofillSelectionData?.uri,
-                                match = null,
-                                uriChecksum = null,
-                            ),
+            val result = decryptCipherViewOrNull(cipherId = action.itemId)
+                ?.let { cipherView ->
+                    vaultRepo.updateCipher(
+                        cipherId = action.itemId,
+                        cipherView = cipherView.copy(
+                            login = cipherView
+                                .login
+                                ?.copy(
+                                    uris = uris + LoginUriView(
+                                        uri = state.autofillSelectionData?.uri,
+                                        match = null,
+                                        uriChecksum = null,
+                                    ),
+                                ),
                         ),
-                ),
-            )
+                    )
+                }
+                ?: UpdateCipherResult.Error(error = null, errorMessage = null)
+
             sendAction(
                 SearchAction.Internal.UpdateCipherResultReceive(
                     cipherId = action.itemId,
@@ -369,13 +376,15 @@ class SearchViewModel @Inject constructor(
     private fun handleCopyUrlClick(action: ListingItemOverflowAction.SendAction.CopyUrlClick) {
         clipboardManager.setText(
             text = action.sendUrl,
-            toastDescriptorOverride = R.string.link.asText(),
+            toastDescriptorOverride = BitwardenString.link.asText(),
         )
     }
 
     private fun handleDeleteClick(action: ListingItemOverflowAction.SendAction.DeleteClick) {
         mutableStateFlow.update {
-            it.copy(dialogState = SearchState.DialogState.Loading(R.string.deleting.asText()))
+            it.copy(
+                dialogState = SearchState.DialogState.Loading(BitwardenString.deleting.asText()),
+            )
         }
         viewModelScope.launch {
             val result = vaultRepo.deleteSend(action.sendId)
@@ -416,7 +425,7 @@ class SearchViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = SearchState.DialogState.Loading(
-                    message = R.string.removing_send_password.asText(),
+                    message = BitwardenString.removing_send_password.asText(),
                 ),
             )
         }
@@ -431,43 +440,67 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun handleCopyNoteClick(action: ListingItemOverflowAction.VaultAction.CopyNoteClick) {
-        clipboardManager.setText(
-            text = action.notes,
-            toastDescriptorOverride = R.string.notes.asText(),
-        )
+        viewModelScope.launch {
+            decryptCipherViewOrNull(action.cipherId)
+                ?.let {
+                    clipboardManager.setText(
+                        text = it.notes.orEmpty(),
+                        toastDescriptorOverride = BitwardenString.notes.asText(),
+                    )
+                }
+        }
     }
 
     private fun handleCopyNumberClick(
         action: ListingItemOverflowAction.VaultAction.CopyNumberClick,
     ) {
-        clipboardManager.setText(
-            text = action.number,
-            toastDescriptorOverride = R.string.number.asText(),
-        )
+        viewModelScope.launch {
+            decryptCipherViewOrNull(action.cipherId)
+                ?.let {
+                    clipboardManager.setText(
+                        text = it.card?.number.orEmpty(),
+                        toastDescriptorOverride = BitwardenString.number.asText(),
+                    )
+                }
+        }
     }
 
     private fun handleCopyPasswordClick(
         action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
     ) {
-        clipboardManager.setText(
-            text = action.password,
-            toastDescriptorOverride = R.string.password.asText(),
-        )
-        organizationEventManager.trackEvent(
-            event = OrganizationEvent.CipherClientCopiedPassword(cipherId = action.cipherId),
-        )
+        viewModelScope.launch {
+            decryptCipherViewOrNull(action.cipherId)
+                ?.let { cipherView ->
+                    clipboardManager.setText(
+                        text = cipherView.login?.password.orEmpty(),
+                        toastDescriptorOverride = BitwardenString.password.asText(),
+                    )
+                    organizationEventManager.trackEvent(
+                        event = OrganizationEvent.CipherClientCopiedPassword(
+                            cipherId = action.cipherId,
+                        ),
+                    )
+                }
+        }
     }
 
     private fun handleCopySecurityCodeClick(
         action: ListingItemOverflowAction.VaultAction.CopySecurityCodeClick,
     ) {
-        clipboardManager.setText(
-            text = action.securityCode,
-            toastDescriptorOverride = R.string.security_code.asText(),
-        )
-        organizationEventManager.trackEvent(
-            event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = action.cipherId),
-        )
+        viewModelScope.launch {
+            decryptCipherViewOrNull(action.cipherId)
+                ?.let { cipherView ->
+                    clipboardManager.setText(
+                        text = cipherView.card?.code.orEmpty(),
+                        toastDescriptorOverride = BitwardenString.security_code.asText(),
+                    )
+                    organizationEventManager.trackEvent(
+                        event = OrganizationEvent.CipherClientCopiedCardCode(
+                            cipherId = action.cipherId,
+                        ),
+                    )
+                }
+        }
     }
 
     private fun handleCopyUsernameClick(
@@ -475,7 +508,7 @@ class SearchViewModel @Inject constructor(
     ) {
         clipboardManager.setText(
             text = action.username,
-            toastDescriptorOverride = R.string.username.asText(),
+            toastDescriptorOverride = BitwardenString.username.asText(),
         )
     }
 
@@ -536,6 +569,24 @@ class SearchViewModel @Inject constructor(
             is SearchAction.Internal.RestrictItemTypesPolicyUpdateReceive -> {
                 handleRestrictItemTypesPolicyUpdateReceive(action)
             }
+
+            is SearchAction.Internal.DecryptCipherErrorReceive -> {
+                handleDecryptCipherErrorReceive(action)
+            }
+        }
+    }
+
+    private fun handleDecryptCipherErrorReceive(
+        action: SearchAction.Internal.DecryptCipherErrorReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = SearchState.DialogState.Error(
+                    title = BitwardenString.decryption_error.asText(),
+                    message = BitwardenString.failed_to_decrypt_cipher_contact_support.asText(),
+                    throwable = action.error,
+                ),
+            )
         }
     }
 
@@ -554,8 +605,8 @@ class SearchViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = SearchState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -564,7 +615,7 @@ class SearchViewModel @Inject constructor(
 
             DeleteSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(SearchEvent.ShowSnackbar(R.string.send_deleted.asText()))
+                sendEvent(SearchEvent.ShowSnackbar(BitwardenString.send_deleted.asText()))
             }
         }
     }
@@ -577,7 +628,7 @@ class SearchViewModel @Inject constructor(
             is GenerateTotpResult.Success -> {
                 clipboardManager.setText(
                     text = result.code,
-                    toastDescriptorOverride = R.string.totp.asText(),
+                    toastDescriptorOverride = BitwardenString.totp.asText(),
                 )
             }
         }
@@ -591,11 +642,11 @@ class SearchViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = SearchState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = result
                                 .errorMessage
                                 ?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -603,7 +654,7 @@ class SearchViewModel @Inject constructor(
 
             is RemovePasswordSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(SearchEvent.ShowSnackbar(R.string.password_removed.asText()))
+                sendEvent(SearchEvent.ShowSnackbar(BitwardenString.password_removed.asText()))
             }
         }
     }
@@ -624,7 +675,7 @@ class SearchViewModel @Inject constructor(
                         dialogState = SearchState.DialogState.Error(
                             title = null,
                             message = result.errorMessage?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -633,8 +684,7 @@ class SearchViewModel @Inject constructor(
 
             UpdateCipherResult.Success -> {
                 // Complete the autofill selection flow
-                val cipherView = getCipherViewOrNull(cipherId = action.cipherId) ?: return
-                useCipherForAutofill(cipherView = cipherView)
+                useCipherForAutofill(cipherId = action.cipherId)
             }
         }
     }
@@ -648,7 +698,7 @@ class SearchViewModel @Inject constructor(
                     it.copy(
                         dialogState = SearchState.DialogState.Error(
                             title = null,
-                            message = R.string.generic_error_message.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -661,7 +711,7 @@ class SearchViewModel @Inject constructor(
                         it.copy(
                             dialogState = SearchState.DialogState.Error(
                                 title = null,
-                                message = R.string.invalid_master_password.asText(),
+                                message = BitwardenString.invalid_master_password.asText(),
                             ),
                         )
                     }
@@ -748,7 +798,7 @@ class SearchViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = SearchState.ViewState.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                         dialogState = null,
                     )
@@ -772,11 +822,11 @@ class SearchViewModel @Inject constructor(
                 mutableStateFlow.update { currentState ->
                     currentState.copy(
                         viewState = SearchState.ViewState.Error(
-                            message = R.string.internet_connection_required_title
+                            message = BitwardenString.internet_connection_required_title
                                 .asText()
                                 .concat(
                                     " ".asText(),
-                                    R.string.internet_connection_required_message.asText(),
+                                    BitwardenString.internet_connection_required_message.asText(),
                                 ),
                         ),
                         dialogState = null,
@@ -785,17 +835,21 @@ class SearchViewModel @Inject constructor(
             }
     }
 
-    private fun useCipherForAutofill(cipherView: CipherView) {
-        when (state.autofillSelectionData?.framework) {
-            AutofillSelectionData.Framework.ACCESSIBILITY -> {
-                accessibilitySelectionManager.emitAccessibilitySelection(cipherView = cipherView)
-            }
+    private fun useCipherForAutofill(cipherId: String) {
+        viewModelScope.launch {
+            decryptCipherViewOrNull(cipherId)?.let {
+                when (state.autofillSelectionData?.framework) {
+                    AutofillSelectionData.Framework.ACCESSIBILITY -> {
+                        accessibilitySelectionManager.emitAccessibilitySelection(cipherView = it)
+                    }
 
-            AutofillSelectionData.Framework.AUTOFILL -> {
-                autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
-            }
+                    AutofillSelectionData.Framework.AUTOFILL -> {
+                        autofillSelectionManager.emitAutofillSelection(cipherView = it)
+                    }
 
-            null -> Unit
+                    null -> Unit
+                }
+            }
         }
     }
 
@@ -821,7 +875,8 @@ class SearchViewModel @Inject constructor(
                 viewState = when (val searchType = currentState.searchType) {
                     is SearchTypeData.Vault -> {
                         vaultData
-                            .cipherViewList
+                            .decryptCipherListResult
+                            .successes
                             .filterAndOrganize(searchType, state.searchTerm)
                             .applyRestrictItemTypesPolicy(
                                 restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
@@ -858,13 +913,32 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private fun getCipherViewOrNull(cipherId: String) =
+    private fun getCipherListViewOrNull(cipherId: String) =
         vaultRepo
             .vaultDataStateFlow
             .value
             .data
-            ?.cipherViewList
-            ?.firstOrNull { it.id == cipherId }
+            ?.decryptCipherListResult
+            ?.successes
+            .orEmpty()
+            .firstOrNull { it.id == cipherId }
+
+    private suspend fun decryptCipherViewOrNull(cipherId: String): CipherView? =
+        when (val result = vaultRepo.getCipher(cipherId = cipherId)) {
+            GetCipherResult.CipherNotFound -> {
+                Timber.e("Cipher not found.")
+                sendAction(SearchAction.Internal.DecryptCipherErrorReceive(error = null))
+                null
+            }
+
+            is GetCipherResult.Failure -> {
+                Timber.e(result.error, "Failed to decrypt cipher.")
+                sendAction(SearchAction.Internal.DecryptCipherErrorReceive(error = result.error))
+                null
+            }
+
+            is GetCipherResult.Success -> result.cipherView
+        }
 }
 
 /**
@@ -1026,21 +1100,21 @@ sealed class SearchTypeData : Parcelable {
          * Indicates that we should be searching all sends.
          */
         data object All : Sends() {
-            override val title: Text get() = R.string.search_sends.asText()
+            override val title: Text get() = BitwardenString.search_sends.asText()
         }
 
         /**
          * Indicates that we should be searching only text sends.
          */
         data object Texts : Sends() {
-            override val title: Text get() = R.string.search_text_sends.asText()
+            override val title: Text get() = BitwardenString.search_text_sends.asText()
         }
 
         /**
          * Indicates that we should be searching only file sends.
          */
         data object Files : Sends() {
-            override val title: Text get() = R.string.search_file_sends.asText()
+            override val title: Text get() = BitwardenString.search_file_sends.asText()
         }
     }
 
@@ -1054,7 +1128,7 @@ sealed class SearchTypeData : Parcelable {
          * Indicates that we should be searching all vault items.
          */
         data object All : Vault() {
-            override val title: Text get() = R.string.search_vault.asText()
+            override val title: Text get() = BitwardenString.search_vault.asText()
         }
 
         /**
@@ -1062,9 +1136,9 @@ sealed class SearchTypeData : Parcelable {
          */
         data object Logins : Vault() {
             override val title: Text
-                get() = R.string.search.asText()
+                get() = BitwardenString.search.asText()
                     .concat(" ".asText())
-                    .concat(R.string.logins.asText())
+                    .concat(BitwardenString.logins.asText())
         }
 
         /**
@@ -1072,9 +1146,9 @@ sealed class SearchTypeData : Parcelable {
          */
         data object Cards : Vault() {
             override val title: Text
-                get() = R.string.search.asText()
+                get() = BitwardenString.search.asText()
                     .concat(" ".asText())
-                    .concat(R.string.cards.asText())
+                    .concat(BitwardenString.cards.asText())
         }
 
         /**
@@ -1082,9 +1156,9 @@ sealed class SearchTypeData : Parcelable {
          */
         data object Identities : Vault() {
             override val title: Text
-                get() = R.string.search.asText()
+                get() = BitwardenString.search.asText()
                     .concat(" ".asText())
-                    .concat(R.string.identities.asText())
+                    .concat(BitwardenString.identities.asText())
         }
 
         /**
@@ -1092,9 +1166,9 @@ sealed class SearchTypeData : Parcelable {
          */
         data object SecureNotes : Vault() {
             override val title: Text
-                get() = R.string.search.asText()
+                get() = BitwardenString.search.asText()
                     .concat(" ".asText())
-                    .concat(R.string.secure_notes.asText())
+                    .concat(BitwardenString.secure_notes.asText())
         }
 
         /**
@@ -1102,9 +1176,9 @@ sealed class SearchTypeData : Parcelable {
          */
         data object SshKeys : Vault() {
             override val title: Text
-                get() = R.string.search.asText()
+                get() = BitwardenString.search.asText()
                     .concat(" ".asText())
-                    .concat(R.string.ssh_keys.asText())
+                    .concat(BitwardenString.ssh_keys.asText())
         }
 
         /**
@@ -1115,7 +1189,7 @@ sealed class SearchTypeData : Parcelable {
             val collectionName: String = "",
         ) : Vault() {
             override val title: Text
-                get() = R.string.search.asText()
+                get() = BitwardenString.search.asText()
                     .concat(" ".asText())
                     .concat(collectionName.asText())
         }
@@ -1125,9 +1199,9 @@ sealed class SearchTypeData : Parcelable {
          */
         data object NoFolder : Vault() {
             override val title: Text
-                get() = R.string.search.asText()
+                get() = BitwardenString.search.asText()
                     .concat(" ".asText())
-                    .concat(R.string.folder_none.asText())
+                    .concat(BitwardenString.folder_none.asText())
         }
 
         /**
@@ -1138,7 +1212,7 @@ sealed class SearchTypeData : Parcelable {
             val folderName: String = "",
         ) : Vault() {
             override val title: Text
-                get() = R.string.search.asText()
+                get() = BitwardenString.search.asText()
                     .concat(" ".asText())
                     .concat(folderName.asText())
         }
@@ -1148,9 +1222,9 @@ sealed class SearchTypeData : Parcelable {
          */
         data object Trash : Vault() {
             override val title: Text
-                get() = R.string.search.asText()
+                get() = BitwardenString.search.asText()
                     .concat(" ".asText())
-                    .concat(R.string.trash.asText())
+                    .concat(BitwardenString.trash.asText())
         }
 
         /**
@@ -1158,9 +1232,9 @@ sealed class SearchTypeData : Parcelable {
          */
         data object VerificationCodes : Vault() {
             override val title: Text
-                get() = R.string.search.asText()
+                get() = BitwardenString.search.asText()
                     .concat(" ".asText())
-                    .concat(R.string.verification_codes.asText())
+                    .concat(BitwardenString.verification_codes.asText())
         }
     }
 }
@@ -1298,6 +1372,13 @@ sealed class SearchAction {
          */
         data class VaultDataReceive(
             val vaultData: DataState<VaultData>,
+        ) : Internal()
+
+        /**
+         * Indicates an error occurred while decrypting a cipher.
+         */
+        data class DecryptCipherErrorReceive(
+            val error: Throwable?,
         ) : Internal()
     }
 }

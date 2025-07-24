@@ -7,10 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherType
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
@@ -132,10 +132,10 @@ class ExportVaultViewModel @Inject constructor(
         }
         val message = when (val result = action.result) {
             is RequestOtpResult.Error -> {
-                result.message?.asText() ?: R.string.generic_error_message.asText()
+                result.message?.asText() ?: BitwardenString.generic_error_message.asText()
             }
 
-            RequestOtpResult.Success -> R.string.code_sent.asText()
+            RequestOtpResult.Success -> BitwardenString.code_sent.asText()
         }
         sendEvent(ExportVaultEvent.ShowSnackbar(message = message))
     }
@@ -154,8 +154,8 @@ class ExportVaultViewModel @Inject constructor(
         // Display an error alert if the user hasn't entered a password.
         if (state.passwordInput.isBlank()) {
             updateStateWithError(
-                message = R.string.validation_field_required.asText(
-                    R.string.master_password.asText(),
+                message = BitwardenString.validation_field_required.asText(
+                    BitwardenString.master_password.asText(),
                 ),
             )
             return
@@ -163,23 +163,23 @@ class ExportVaultViewModel @Inject constructor(
             when {
                 state.filePasswordInput.isBlank() -> {
                     updateStateWithError(
-                        message = R.string.validation_field_required
-                            .asText(R.string.file_password.asText()),
+                        message = BitwardenString.validation_field_required
+                            .asText(BitwardenString.file_password.asText()),
                     )
                     return
                 }
 
                 state.confirmFilePasswordInput.isBlank() -> {
                     updateStateWithError(
-                        message = R.string.validation_field_required
-                            .asText(R.string.confirm_file_password.asText()),
+                        message = BitwardenString.validation_field_required
+                            .asText(BitwardenString.confirm_file_password.asText()),
                     )
                     return
                 }
 
                 state.filePasswordInput != state.confirmFilePasswordInput -> {
                     updateStateWithError(
-                        message = R.string.master_password_confirmation_val_message.asText(),
+                        message = BitwardenString.master_password_confirmation_val_message.asText(),
                     )
                     return
                 }
@@ -239,7 +239,7 @@ class ExportVaultViewModel @Inject constructor(
     private fun handleExportLocationReceive(action: ExportVaultAction.ExportLocationReceive) {
         val exportData = state.exportData
         if (exportData == null) {
-            updateStateWithError(R.string.export_vault_failure.asText())
+            updateStateWithError(BitwardenString.export_vault_failure.asText())
             return
         }
 
@@ -290,7 +290,7 @@ class ExportVaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = ExportVaultState.DialogState.Loading(
-                    message = R.string.sending.asText(),
+                    message = BitwardenString.sending.asText(),
                 ),
             )
         }
@@ -312,7 +312,7 @@ class ExportVaultViewModel @Inject constructor(
         when (val result = action.result) {
             is ValidatePasswordResult.Error -> {
                 updateStateWithError(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     error = result.error,
                 )
             }
@@ -320,7 +320,7 @@ class ExportVaultViewModel @Inject constructor(
             is ValidatePasswordResult.Success -> {
                 // Display an error dialog if the password is invalid.
                 if (!action.result.isValid) {
-                    updateStateWithError(R.string.invalid_master_password.asText())
+                    updateStateWithError(BitwardenString.invalid_master_password.asText())
                     return
                 }
 
@@ -338,7 +338,7 @@ class ExportVaultViewModel @Inject constructor(
         when (val result = action.result) {
             is ExportVaultDataResult.Error -> {
                 updateStateWithError(
-                    message = R.string.export_vault_failure.asText(),
+                    message = BitwardenString.export_vault_failure.asText(),
                     error = result.error,
                 )
             }
@@ -398,11 +398,11 @@ class ExportVaultViewModel @Inject constructor(
         action: ExportVaultAction.Internal.SaveExportDataToUriResultReceive,
     ) {
         if (!action.result) {
-            updateStateWithError(R.string.export_vault_failure.asText())
+            updateStateWithError(BitwardenString.export_vault_failure.asText())
             return
         }
 
-        sendEvent(ExportVaultEvent.ShowSnackbar(R.string.export_vault_success.asText()))
+        sendEvent(ExportVaultEvent.ShowSnackbar(BitwardenString.export_vault_success.asText()))
     }
 
     private fun handleReceiveVerifyOneTimePasscodeResult(
@@ -413,7 +413,7 @@ class ExportVaultViewModel @Inject constructor(
 
             is VerifyOtpResult.NotVerified -> {
                 updateStateWithError(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     error = result.error,
                 )
             }
@@ -452,7 +452,7 @@ class ExportVaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
                     message = message,
                     error = error,
                 ),
@@ -513,7 +513,7 @@ data class ExportVaultState(
          */
         @Parcelize
         data class Loading(
-            val message: Text = R.string.loading.asText(),
+            val message: Text = BitwardenString.loading.asText(),
         ) : DialogState()
     }
 }

@@ -29,9 +29,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 
 /**
  * Draws a password indicator that displays password strength based on the given [state].
@@ -75,11 +75,11 @@ fun PasswordStrengthIndicator(
     )
     val label = when (state) {
         PasswordStrengthState.NONE -> "".asText()
-        PasswordStrengthState.WEAK_1 -> R.string.weak.asText()
-        PasswordStrengthState.WEAK_2 -> R.string.weak.asText()
-        PasswordStrengthState.WEAK_3 -> R.string.weak.asText()
-        PasswordStrengthState.GOOD -> R.string.good.asText()
-        PasswordStrengthState.STRONG -> R.string.strong.asText()
+        PasswordStrengthState.WEAK_1 -> BitwardenString.weak.asText()
+        PasswordStrengthState.WEAK_2 -> BitwardenString.weak.asText()
+        PasswordStrengthState.WEAK_3 -> BitwardenString.weak.asText()
+        PasswordStrengthState.GOOD -> BitwardenString.good.asText()
+        PasswordStrengthState.STRONG -> BitwardenString.strong.asText()
     }
     Column(
         modifier = modifier,
@@ -154,7 +154,7 @@ private fun MinimumCharacterCount(
         }
         Spacer(modifier = Modifier.width(2.dp))
         Text(
-            text = stringResource(R.string.minimum_characters, minimumCharacterCount),
+            text = stringResource(BitwardenString.minimum_characters, minimumCharacterCount),
             color = BitwardenTheme.colorScheme.text.secondary,
             style = BitwardenTheme.typography.labelSmall,
         )

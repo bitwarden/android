@@ -2,8 +2,8 @@ package com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util
 
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -57,7 +57,7 @@ class VaultMoveToOrganizationExtensionsTest {
         val result = triple.toViewState()
 
         assertEquals(
-            VaultMoveToOrganizationState.ViewState.Error(R.string.generic_error_message.asText()),
+            VaultMoveToOrganizationState.ViewState.Error(BitwardenString.generic_error_message.asText()),
             result,
         )
     }

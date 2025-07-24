@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
@@ -315,12 +315,12 @@ enum class AutofillStyle(val label: Text) {
     /**
      * Displays the autofill data in the keyboard.
      */
-    INLINE(label = R.string.autofill_suggestions_inline.asText()),
+    INLINE(label = BitwardenString.autofill_suggestions_inline.asText()),
 
     /**
      * Displays the autofill data as a popup attached to the field you are filling.
      */
-    POPUP(label = R.string.autofill_suggestions_popup.asText()),
+    POPUP(label = BitwardenString.autofill_suggestions_popup.asText()),
 }
 
 @Suppress("MaxLineLength")

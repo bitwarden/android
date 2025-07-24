@@ -30,8 +30,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.vault.feature.attachments.handlers.AttachmentsHandlers
@@ -51,7 +51,7 @@ fun AttachmentsContent(
             item {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = stringResource(id = R.string.no_attachments),
+                    text = stringResource(id = BitwardenString.no_attachments),
                     style = BitwardenTheme.typography.bodyMedium,
                     color = BitwardenTheme.colorScheme.text.primary,
                     textAlign = TextAlign.Center,
@@ -82,7 +82,7 @@ fun AttachmentsContent(
         item {
             Spacer(modifier = Modifier.height(height = 16.dp))
             BitwardenListHeaderText(
-                label = stringResource(id = R.string.add_new_attachment),
+                label = stringResource(id = BitwardenString.add_new_attachment),
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
@@ -96,7 +96,7 @@ fun AttachmentsContent(
                 text = viewState
                     .newAttachment
                     ?.displayName
-                    ?: stringResource(id = R.string.no_file_chosen),
+                    ?: stringResource(id = BitwardenString.no_file_chosen),
                 color = BitwardenTheme.colorScheme.text.secondary,
                 style = BitwardenTheme.typography.bodySmall,
                 textAlign = TextAlign.Center,
@@ -110,7 +110,7 @@ fun AttachmentsContent(
         item {
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenOutlinedButton(
-                label = stringResource(id = R.string.choose_file),
+                label = stringResource(id = BitwardenString.choose_file),
                 onClick = attachmentsHandlers.onChooseFileClick,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -119,7 +119,7 @@ fun AttachmentsContent(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = stringResource(id = R.string.max_file_size),
+                text = stringResource(id = BitwardenString.max_file_size),
                 color = BitwardenTheme.colorScheme.text.secondary,
                 style = BitwardenTheme.typography.bodySmall,
                 modifier = Modifier
@@ -146,10 +146,10 @@ private fun AttachmentListEntry(
     var shouldShowDeleteDialog by rememberSaveable { mutableStateOf(false) }
     if (shouldShowDeleteDialog) {
         BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.delete),
-            message = stringResource(id = R.string.do_you_really_want_to_delete),
-            confirmButtonText = stringResource(id = R.string.delete),
-            dismissButtonText = stringResource(id = R.string.cancel),
+            title = stringResource(id = BitwardenString.delete),
+            message = stringResource(id = BitwardenString.do_you_really_want_to_delete),
+            confirmButtonText = stringResource(id = BitwardenString.delete),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
             onConfirmClick = {
                 shouldShowDeleteDialog = false
                 onDeleteClick(attachmentItem.id)
@@ -191,7 +191,7 @@ private fun AttachmentListEntry(
 
         BitwardenStandardIconButton(
             vectorIconRes = BitwardenDrawable.ic_trash,
-            contentDescription = stringResource(id = R.string.delete),
+            contentDescription = stringResource(id = BitwardenString.delete),
             onClick = { shouldShowDeleteDialog = true },
             modifier = Modifier
                 .testTag("AttachmentDeleteButton"),

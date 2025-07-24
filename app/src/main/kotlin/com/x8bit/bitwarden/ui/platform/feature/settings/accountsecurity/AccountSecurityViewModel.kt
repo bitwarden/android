@@ -8,9 +8,9 @@ import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
@@ -242,8 +242,8 @@ class AccountSecurityViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = AccountSecurityDialog.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -327,7 +327,7 @@ class AccountSecurityViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(
-                dialog = AccountSecurityDialog.Loading(R.string.saving.asText()),
+                dialog = AccountSecurityDialog.Loading(BitwardenString.saving.asText()),
                 isUnlockWithBiometricsEnabled = true,
             )
         }

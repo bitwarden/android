@@ -14,6 +14,7 @@ import androidx.autofill.inline.UiVersions
 import androidx.autofill.inline.v1.InlineSuggestionUi
 import androidx.compose.ui.graphics.toArgb
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
@@ -62,9 +63,9 @@ fun InlinePresentationSpec.createVaultItemInlinePresentationOrNull(
         autofillCipher = null,
         title = autofillAppInfo.context.getString(R.string.app_name),
         subtitle = if (isLocked) {
-            autofillAppInfo.context.getString(R.string.vault_is_locked)
+            autofillAppInfo.context.getString(BitwardenString.vault_is_locked)
         } else {
-            autofillAppInfo.context.getString(R.string.my_vault)
+            autofillAppInfo.context.getString(BitwardenString.my_vault)
         },
         iconRes = BitwardenDrawable.icon,
         shouldTintIcon = false,

@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import io.mockk.every
@@ -49,8 +49,8 @@ class ManualCodeEntryViewModelTests : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialog = ManualCodeEntryState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.authenticator_key_read_error.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.authenticator_key_read_error.asText(),
                 ),
             ),
             viewModel.stateFlow.value,

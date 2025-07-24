@@ -9,6 +9,4 @@ import kotlinx.parcelize.Parcelize
  */
 @Immutable
 @Parcelize
-data class FeatureFlagsState(
-    val isErrorReportingDialogEnabled: Boolean,
-) : Parcelable
+data object FeatureFlagsState : Parcelable

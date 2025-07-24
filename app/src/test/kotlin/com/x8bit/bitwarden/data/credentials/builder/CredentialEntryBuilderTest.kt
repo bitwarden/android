@@ -10,13 +10,15 @@ import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.fido.Fido2CredentialAutofillView
-import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
+import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherListViewType
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.util.mockBuilder
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPasswordCredentialAutofillCipherLogin
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.mockk
@@ -267,16 +269,25 @@ class CredentialEntryBuilderTest {
     fun `buildPasswordCredentialEntries should return Success with empty list when options list is empty`() =
         runTest {
             val options = emptyList<BeginGetPasswordOption>()
-            val passwordCredentialAutofillViews: List<AutofillCipher.Login> = listOf(
-                createMockPasswordCredentialAutofillCipherLogin(),
+            val cipherListViews = listOf(
+                createMockCipherListView(
+                    number = 1,
+                    type = CipherListViewType.Login(
+                        createMockLoginListView(
+                            number = 1,
+                            hasFido2 = true,
+                            uris = emptyList(),
+                        ),
+                    ),
+                ),
             )
 
             val result = credentialEntryBuilder
                 .buildPasswordCredentialEntries(
                     userId = "userId",
-                    isUserVerified = false,
-                    passwordCredentialAutofillViews = passwordCredentialAutofillViews,
+                    cipherListViews = cipherListViews,
                     beginGetPasswordCredentialOptions = options,
+                    isUserVerified = false,
                 )
             assertTrue(result.isEmpty())
         }
@@ -286,13 +297,13 @@ class CredentialEntryBuilderTest {
     fun `buildPasswordCredentialEntries should return Success with empty list when passwordAutofillViews is empty`() =
         runTest {
             val options = listOf(mockBeginGetPasswordOption)
-            val passwordCredentialAutofillViews = emptyList<AutofillCipher.Login>()
+            val cipherListViews = emptyList<CipherListView>()
             val result = credentialEntryBuilder
                 .buildPasswordCredentialEntries(
                     userId = "userId",
-                    isUserVerified = false,
-                    passwordCredentialAutofillViews = passwordCredentialAutofillViews,
+                    cipherListViews = cipherListViews,
                     beginGetPasswordCredentialOptions = options,
+                    isUserVerified = false,
                 )
             assertTrue(result.isEmpty())
         }
@@ -302,8 +313,17 @@ class CredentialEntryBuilderTest {
     fun `buildPasswordCredentialEntries should return Success with list of PasswordCredentialEntry`() =
         runTest {
             val options = listOf(mockBeginGetPasswordOption)
-            val passwordAutofillViews: List<AutofillCipher.Login> = listOf(
-                createMockPasswordCredentialAutofillCipherLogin(),
+            val cipherListViews = listOf(
+                createMockCipherListView(
+                    number = 1,
+                    type = CipherListViewType.Login(
+                        createMockLoginListView(
+                            number = 1,
+                            hasFido2 = true,
+                            uris = emptyList(),
+                        ),
+                    ),
+                ),
             )
             every {
                 mockBiometricsEncryptionManager.getOrCreateCipher("userId")
@@ -312,9 +332,9 @@ class CredentialEntryBuilderTest {
             val result = credentialEntryBuilder
                 .buildPasswordCredentialEntries(
                     userId = "userId",
-                    isUserVerified = false,
-                    passwordCredentialAutofillViews = passwordAutofillViews,
+                    cipherListViews = cipherListViews,
                     beginGetPasswordCredentialOptions = options,
+                    isUserVerified = false,
                 )
 
             assertTrue(result.isNotEmpty())
@@ -323,7 +343,7 @@ class CredentialEntryBuilderTest {
                 mockIntentManager.createPasswordGetCredentialPendingIntent(
                     action = "com.x8bit.bitwarden.credentials.ACTION_GET_PASSWORD",
                     userId = "userId",
-                    cipherId = "mockCipherId",
+                    cipherId = "mockId-1",
                     requestCode = any(),
                     isUserVerified = false,
                 )
@@ -336,8 +356,17 @@ class CredentialEntryBuilderTest {
     fun `buildPasswordCredentialEntries should set biometric prompt data correctly`() = runTest {
         mockkStatic(::isBuildVersionAtLeast)
         val options = listOf(mockBeginGetPasswordOption)
-        val passwordAutofillViews: List<AutofillCipher.Login> = listOf(
-            createMockPasswordCredentialAutofillCipherLogin(),
+        val cipherListViews = listOf(
+            createMockCipherListView(
+                number = 1,
+                type = CipherListViewType.Login(
+                    createMockLoginListView(
+                        number = 1,
+                        hasFido2 = true,
+                        uris = emptyList(),
+                    ),
+                ),
+            ),
         )
 
         every {
@@ -350,9 +379,9 @@ class CredentialEntryBuilderTest {
         credentialEntryBuilder
             .buildPasswordCredentialEntries(
                 userId = "userId",
-                isUserVerified = false,
-                passwordCredentialAutofillViews = passwordAutofillViews,
+                cipherListViews = cipherListViews,
                 beginGetPasswordCredentialOptions = options,
+                isUserVerified = false,
             )
         verify(exactly = 1) {
             anyConstructed<PasswordCredentialEntry.Builder>().setBiometricPromptData(any())

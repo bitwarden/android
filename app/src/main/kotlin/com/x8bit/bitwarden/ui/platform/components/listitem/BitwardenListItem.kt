@@ -29,8 +29,8 @@ import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import kotlinx.collections.immutable.ImmutableList
@@ -143,7 +143,7 @@ fun BitwardenListItem(
         if (selectionDataList.isNotEmpty()) {
             BitwardenStandardIconButton(
                 vectorIconRes = BitwardenDrawable.ic_ellipsis_horizontal,
-                contentDescription = stringResource(id = R.string.options),
+                contentDescription = stringResource(id = BitwardenString.options),
                 onClick = { shouldShowDialog = true },
                 modifier = Modifier.nullableTestTag(tag = optionsTestTag),
             )

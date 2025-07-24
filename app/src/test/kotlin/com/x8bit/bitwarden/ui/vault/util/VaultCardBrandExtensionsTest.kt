@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.util
 
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.SELECT_TEXT
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -22,7 +22,7 @@ class VaultCardBrandExtensionsTest {
             VaultCardBrand.MAESTRO to "Maestro".asText(),
             VaultCardBrand.UNIONPAY to "UnionPay".asText(),
             VaultCardBrand.RUPAY to "RuPay".asText(),
-            VaultCardBrand.OTHER to R.string.other.asText(),
+            VaultCardBrand.OTHER to BitwardenString.other.asText(),
         )
             .forEach { (type, label) ->
                 assertEquals(
@@ -45,7 +45,7 @@ class VaultCardBrandExtensionsTest {
             VaultCardBrand.MAESTRO to "Maestro".asText(),
             VaultCardBrand.UNIONPAY to "UnionPay".asText(),
             VaultCardBrand.RUPAY to "RuPay".asText(),
-            VaultCardBrand.OTHER to R.string.other.asText(),
+            VaultCardBrand.OTHER to BitwardenString.other.asText(),
         )
             .forEach { (type, label) ->
                 assertEquals(

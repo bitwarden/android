@@ -29,8 +29,8 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 
 /**
@@ -55,7 +55,7 @@ fun SetupCompleteScreen(
         topBar = {
             BitwardenTopAppBar(
                 scrollBehavior = scrollBehavior,
-                title = stringResource(R.string.account_setup),
+                title = stringResource(BitwardenString.account_setup),
                 navigationIcon = null,
             )
         },
@@ -89,7 +89,7 @@ private fun SetupCompleteContent(
         )
         Spacer(Modifier.height(24.dp))
         Text(
-            text = stringResource(R.string.youre_all_set),
+            text = stringResource(BitwardenString.youre_all_set),
             style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
@@ -99,7 +99,7 @@ private fun SetupCompleteContent(
         )
         Spacer(Modifier.height(8.dp))
         Text(
-            text = stringResource(R.string.what_bitwarden_has_to_offer),
+            text = stringResource(BitwardenString.what_bitwarden_has_to_offer),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
@@ -109,7 +109,7 @@ private fun SetupCompleteContent(
         )
         Spacer(Modifier.height(24.dp))
         BitwardenFilledButton(
-            label = stringResource(R.string.continue_text),
+            label = stringResource(BitwardenString.continue_text),
             onClick = onContinue,
             modifier = Modifier
                 .fillMaxWidth()

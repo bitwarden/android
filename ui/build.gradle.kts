@@ -32,6 +32,12 @@ android {
         sourceCompatibility(libs.versions.jvmTarget.get())
         targetCompatibility(libs.versions.jvmTarget.get())
     }
+    lint {
+        disable += listOf(
+            "MissingTranslation",
+            "ExtraTranslation",
+        )
+    }
     testOptions {
         // Required for Robolectric
         unitTests.isIncludeAndroidResources = true
