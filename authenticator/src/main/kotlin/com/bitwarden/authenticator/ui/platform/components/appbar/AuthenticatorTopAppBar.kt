@@ -19,11 +19,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * Represents a Bitwarden styled [TopAppBar] that assumes the following components:
@@ -128,7 +128,7 @@ private fun AuthenticatorTopAppBar_preview() {
                 ),
             navigationIcon = NavigationIcon(
                 navigationIcon = painterResource(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = { },
             ),
         )
