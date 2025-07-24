@@ -978,8 +978,15 @@ class VaultItemListingViewModel @Inject constructor(
                             cipherId = action.id,
                             cipherView = cipherView,
                         )
-                    }
-                    ?: run {
+                    } ?: createCredentialRequest
+                    .providerRequest
+                    .getCreatePasswordCredentialRequestOrNull()
+                    ?.let {
+                        handleItemClickForCreatePasswordCredentialRequest(
+                            cipherId = action.id,
+                            cipherView = cipherView,
+                        )
+                    } ?: run {
                         sendAction(
                             VaultItemListingsAction.Internal.CredentialOperationFailureReceive(
                                 title = BitwardenString.an_error_has_occurred.asText(),
@@ -1123,6 +1130,29 @@ class VaultItemListingViewModel @Inject constructor(
                     ),
                 )
             }
+        }
+    }
+
+    private fun registerCredentialToCipher(
+        cipherView: CipherView,
+        providerRequest: ProviderCreateCredentialRequest,
+    ) {
+        when (providerRequest.callingRequest) {
+            is CreatePublicKeyCredentialRequest -> registerFido2CredentialToCipher(
+                cipherView,
+                providerRequest,
+            )
+
+            is CreatePasswordRequest -> registerPasswordCredentialToCipher(
+                cipherView,
+                providerRequest,
+            )
+
+            else ->
+                showCredentialManagerErrorDialog(
+                    BitwardenString.credential_operation_failed_because_the_request_is_invalid
+                        .asText(),
+                )
         }
     }
 
@@ -1979,7 +2009,7 @@ class VaultItemListingViewModel @Inject constructor(
         state.createCredentialRequest
             ?.providerRequest
             ?.let { request ->
-                registerFido2CredentialToCipher(
+                registerCredentialToCipher(
                     cipherView = cipherView,
                     providerRequest = request,
                 )
