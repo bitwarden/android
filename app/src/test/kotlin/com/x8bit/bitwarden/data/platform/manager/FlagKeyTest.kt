@@ -42,10 +42,6 @@ class FlagKeyTest {
             "anon-addy-self-host-alias",
         )
         assertEquals(
-            FlagKey.ChromeAutofill.keyName,
-            "android-chrome-autofill",
-        )
-        assertEquals(
             FlagKey.RestrictCipherItemDeletion.keyName,
             "pm-15493-restrict-item-deletion-to-can-manage-permission",
         )
@@ -72,7 +68,6 @@ class FlagKeyTest {
                 FlagKey.AnonAddySelfHostAlias,
                 FlagKey.SimpleLoginSelfHostAlias,
                 FlagKey.CipherKeyEncryption,
-                FlagKey.ChromeAutofill,
                 FlagKey.RestrictCipherItemDeletion,
                 FlagKey.UserManagedPrivilegedApps,
                 FlagKey.RemoveCardPolicy,

@@ -29,7 +29,6 @@ sealed class FlagKey<out T : Any> {
                 SingleTapPasskeyAuthentication,
                 AnonAddySelfHostAlias,
                 SimpleLoginSelfHostAlias,
-                ChromeAutofill,
                 RestrictCipherItemDeletion,
                 UserManagedPrivilegedApps,
                 RemoveCardPolicy,
@@ -109,15 +108,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object SimpleLoginSelfHostAlias : FlagKey<Boolean>() {
         override val keyName: String = "simple-login-self-host-alias"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key to enable the checking for Chrome's third party
-     * autofill.
-     */
-    data object ChromeAutofill : FlagKey<Boolean>() {
-        override val keyName: String = "android-chrome-autofill"
         override val defaultValue: Boolean = false
     }
 
