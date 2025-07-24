@@ -22,12 +22,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * The verification code item displayed to the user.
@@ -117,7 +117,7 @@ fun VaultVerificationCodeItem(
         ) {
             Icon(
                 painter = painterResource(id = BitwardenDrawable.ic_copy),
-                contentDescription = stringResource(id = R.string.copy),
+                contentDescription = stringResource(id = BitwardenString.copy),
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(24.dp),
             )

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="bitwarden_authenticator">Bitwarden Authenticator</string>
     <string name="csv_extension" translatable="false">.csv</string>
     <string name="duo_title" translatable="false">Duo</string>
     <string name="duo_org_title" translatable="false">Duo (%1$s)</string>
     <string name="json_extension" translatable="false">.json</string>
     <string name="json_extension_formatted" translatable="false">.json (%1$s)</string>
 
-    <!-- Debug Menu -->
+    <!-- region Debug Menu -->
     <string name="email_verification">Email Verification</string>
     <string name="import_logins_flow">Import Logins Flow</string>
     <string name="feature_flags">Feature Flags:</string>
@@ -25,5 +26,11 @@
     <string name="error_reports">Error reports</string>
     <string name="user_trusted_privileged_app_management">User-trusted privileged app management</string>
     <string name="remove_card_policy">Remove Card Policy</string>
-    <!-- /Debug Menu -->
+    <string name="bitwarden_authentication_enabled">Bitwarden authentication enabled</string>
+    <string name="import_format_label_bitwarden_json">Bitwarden (.json)</string>
+    <string name="import_format_label_2fas_json">2FAS (no password)</string>
+    <string name="import_format_label_lastpass_json">LastPass (.json)</string>
+    <string name="import_format_label_aegis_json">Aegis (.json)</string>
+
+    <!-- endregion Debug Menu -->
 </resources>

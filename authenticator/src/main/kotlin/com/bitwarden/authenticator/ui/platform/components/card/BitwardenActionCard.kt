@@ -24,9 +24,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bitwarden.authenticator.R
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * A reusable card for displaying actions to the user.
@@ -121,7 +121,7 @@ private fun ActionCardWithTrailingPreview() {
             ) {
                 Icon(
                     painter = painterResource(id = BitwardenDrawable.ic_close),
-                    contentDescription = stringResource(id = R.string.close),
+                    contentDescription = stringResource(id = BitwardenString.close),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier
                         .size(24.dp),

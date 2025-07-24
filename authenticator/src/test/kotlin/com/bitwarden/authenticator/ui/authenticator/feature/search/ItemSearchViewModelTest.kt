@@ -1,7 +1,6 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.search
 
 import androidx.lifecycle.SavedStateHandle
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.manager.util.createMockSharedAuthenticatorItemSource
 import com.bitwarden.authenticator.data.authenticator.manager.util.createMockVerificationCodeItem
@@ -14,6 +13,7 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import io.mockk.every
 import io.mockk.mockk
@@ -125,7 +125,7 @@ private val SHARED_DISPLAY_ITEMS = SharedCodesDisplayState.Codes(
     sections = listOf(
         SharedCodesDisplayState.SharedCodesAccountSection(
             id = "mockUserId-2",
-            label = R.string.shared_accounts_header.asText(
+            label = BitwardenString.shared_accounts_header.asText(
                 "mockEmail-2",
                 "mockkEnvironmentLabel-2",
                 1,

@@ -1,10 +1,10 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.util
 
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 
 /**
@@ -34,7 +34,7 @@ fun SharedVerificationCodesState.Success.toSharedCodesDisplayState(
         .map {
             SharedCodesDisplayState.SharedCodesAccountSection(
                 id = it.key.userId,
-                label = R.string.shared_accounts_header.asText(
+                label = BitwardenString.shared_accounts_header.asText(
                     it.key.email,
                     it.key.environmentLabel,
                     it.value.size,

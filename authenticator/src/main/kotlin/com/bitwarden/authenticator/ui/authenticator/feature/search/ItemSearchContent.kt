@@ -14,11 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.search.handlers.SearchHandlers
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
+import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * The content state for the item search screen.
@@ -104,7 +104,7 @@ private fun LazyListScope.sharedCodes(
         SharedCodesDisplayState.Error -> {
             item {
                 Text(
-                    text = stringResource(R.string.shared_codes_error),
+                    text = stringResource(BitwardenString.shared_codes_error),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(horizontal = 16.dp),

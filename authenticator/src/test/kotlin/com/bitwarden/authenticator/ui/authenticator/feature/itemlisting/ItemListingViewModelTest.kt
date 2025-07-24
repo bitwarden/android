@@ -1,7 +1,6 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
 import app.cash.turbine.test
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
@@ -19,6 +18,7 @@ import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import io.mockk.every
 import io.mockk.just
@@ -406,8 +406,8 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     fun `on CopyToBitwardenClick should show error dialog when startAddTotpLoginItemFlow returns false`() {
         val expectedState = DEFAULT_STATE.copy(
             dialog = ItemListingState.DialogState.Error(
-                title = R.string.something_went_wrong.asText(),
-                message = R.string.please_try_again.asText(),
+                title = BitwardenString.something_went_wrong.asText(),
+                message = BitwardenString.please_try_again.asText(),
             ),
         )
         val expectedUriString = "expectedUriString"
@@ -486,7 +486,9 @@ class ItemListingViewModelTest : BaseViewModelTest() {
 
         val expectedState = DEFAULT_STATE.copy(
             dialog = ItemListingState.DialogState.DeleteConfirmationPrompt(
-                message = R.string.do_you_really_want_to_permanently_delete_cipher.asText(),
+                message = BitwardenString
+                    .do_you_really_want_to_permanently_delete_this_cannot_be_undone
+                    .asText(),
                 itemId = LOCAL_CODE.id,
             ),
         )

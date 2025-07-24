@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
 import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledTonalButton
@@ -40,6 +39,7 @@ import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -88,11 +88,11 @@ fun ImportingScreen(
             BitwardenTwoButtonDialog(
                 title = dialog.title?.invoke(),
                 message = dialog.message.invoke(),
-                confirmButtonText = stringResource(id = R.string.get_help),
+                confirmButtonText = stringResource(id = BitwardenString.get_help),
                 onConfirmClick = {
                     intentManager.launchUri("https://bitwarden.com/help".toUri())
                 },
-                dismissButtonText = stringResource(id = R.string.cancel),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
                 onDismissClick = {
                     viewModel.trySendAction(ImportAction.DialogDismiss)
                 },
@@ -120,10 +120,10 @@ fun ImportingScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             AuthenticatorTopAppBar(
-                title = stringResource(id = R.string.import_vault),
+                title = stringResource(id = BitwardenString.import_vault),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = painterResource(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = remember(viewModel) {
                     {
                         viewModel.trySendAction(ImportAction.CloseButtonClick)
@@ -164,7 +164,7 @@ private fun ImportScreenContent(
     ) {
         val resources = LocalContext.current.resources
         BitwardenMultiSelectButton(
-            label = stringResource(id = R.string.file_format),
+            label = stringResource(id = BitwardenString.file_format),
             options = ImportFileFormat.entries.map { it.displayLabel() }.toImmutableList(),
             selectedOption = state.importFileFormat.displayLabel(),
             onOptionSelected = { selectedOptionLabel ->
@@ -182,7 +182,7 @@ private fun ImportScreenContent(
         Spacer(modifier = Modifier.height(8.dp))
 
         AuthenticatorFilledTonalButton(
-            label = stringResource(id = R.string.import_vault),
+            label = stringResource(id = BitwardenString.import_vault),
             onClick = onImportClick,
             modifier = Modifier
                 .semantics { testTag = "ImportVaultButton" }

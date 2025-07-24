@@ -7,9 +7,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import kotlinx.parcelize.Parcelize
@@ -32,7 +32,7 @@ fun BitwardenBasicDialog(
             onDismissRequest = onDismissRequest,
             confirmButton = {
                 AuthenticatorTextButton(
-                    label = stringResource(id = R.string.okay),
+                    label = stringResource(id = BitwardenString.okay),
                     onClick = onDismissRequest,
                 )
             },
