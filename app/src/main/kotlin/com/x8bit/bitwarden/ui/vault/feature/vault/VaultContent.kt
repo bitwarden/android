@@ -21,7 +21,7 @@ import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
@@ -77,7 +77,7 @@ fun VaultContent(
         if (state.totpItemsCount > 0) {
             item {
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.totp),
+                    label = stringResource(id = BitwardenString.totp),
                     supportingLabel = TOTP_TYPES_COUNT.toString(),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -90,7 +90,7 @@ fun VaultContent(
             item {
                 BitwardenGroupItem(
                     startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_clock),
-                    label = stringResource(id = R.string.verification_codes),
+                    label = stringResource(id = BitwardenString.verification_codes),
                     supportingLabel = state.totpItemsCount.toString(),
                     onClick = vaultHandlers.verificationCodesClick,
                     showDivider = false,
@@ -107,7 +107,7 @@ fun VaultContent(
         if (state.favoriteItems.isNotEmpty()) {
             item {
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.favorites),
+                    label = stringResource(id = BitwardenString.favorites),
                     supportingLabel = state.favoriteItems.count().toString(),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -157,7 +157,7 @@ fun VaultContent(
 
         item {
             BitwardenListHeaderText(
-                label = stringResource(id = R.string.types),
+                label = stringResource(id = BitwardenString.types),
                 supportingLabel = state.itemTypesCount.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -171,7 +171,7 @@ fun VaultContent(
             BitwardenGroupItem(
                 startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_globe),
                 startIconTestTag = "LoginCipherIcon",
-                label = stringResource(id = R.string.type_login),
+                label = stringResource(id = BitwardenString.type_login),
                 supportingLabel = state.loginItemsCount.toString(),
                 onClick = vaultHandlers.loginGroupClick,
                 showDivider = false,
@@ -188,7 +188,7 @@ fun VaultContent(
                 BitwardenGroupItem(
                     startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_payment_card),
                     startIconTestTag = "CardCipherIcon",
-                    label = stringResource(id = R.string.type_card),
+                    label = stringResource(id = BitwardenString.type_card),
                     supportingLabel = state.cardItemsCount.toString(),
                     onClick = vaultHandlers.cardGroupClick,
                     showDivider = false,
@@ -205,7 +205,7 @@ fun VaultContent(
             BitwardenGroupItem(
                 startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_id_card),
                 startIconTestTag = "IdentityCipherIcon",
-                label = stringResource(id = R.string.type_identity),
+                label = stringResource(id = BitwardenString.type_identity),
                 supportingLabel = state.identityItemsCount.toString(),
                 onClick = vaultHandlers.identityGroupClick,
                 showDivider = false,
@@ -221,7 +221,7 @@ fun VaultContent(
             BitwardenGroupItem(
                 startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_note),
                 startIconTestTag = "SecureNoteCipherIcon",
-                label = stringResource(id = R.string.type_secure_note),
+                label = stringResource(id = BitwardenString.type_secure_note),
                 supportingLabel = state.secureNoteItemsCount.toString(),
                 onClick = vaultHandlers.secureNoteGroupClick,
                 showDivider = false,
@@ -237,7 +237,7 @@ fun VaultContent(
             BitwardenGroupItem(
                 startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_ssh_key),
                 startIconTestTag = "SshKeyCipherIcon",
-                label = stringResource(id = R.string.type_ssh_key),
+                label = stringResource(id = BitwardenString.type_ssh_key),
                 supportingLabel = state.sshKeyItemsCount.toString(),
                 onClick = vaultHandlers.sshKeyGroupClick,
                 showDivider = false,
@@ -256,7 +256,7 @@ fun VaultContent(
         if (state.folderItems.isNotEmpty()) {
             item {
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.folders),
+                    label = stringResource(id = BitwardenString.folders),
                     supportingLabel = state.folderItems.count().toString(),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -290,7 +290,7 @@ fun VaultContent(
         if (state.noFolderItems.isNotEmpty()) {
             item {
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.folder_none),
+                    label = stringResource(id = BitwardenString.folder_none),
                     supportingLabel = state.noFolderItems.count().toString(),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -340,7 +340,7 @@ fun VaultContent(
         if (state.collectionItems.isNotEmpty()) {
             item {
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.collections),
+                    label = stringResource(id = BitwardenString.collections),
                     supportingLabel = state.collectionItems.count().toString(),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -373,7 +373,7 @@ fun VaultContent(
 
         item {
             BitwardenListHeaderText(
-                label = stringResource(id = R.string.trash),
+                label = stringResource(id = BitwardenString.trash),
                 supportingLabel = TRASH_TYPES_COUNT.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -386,7 +386,7 @@ fun VaultContent(
         item {
             BitwardenGroupItem(
                 startIcon = rememberVectorPainter(id = BitwardenDrawable.ic_trash),
-                label = stringResource(id = R.string.trash),
+                label = stringResource(id = BitwardenString.trash),
                 supportingLabel = state.trashItemsCount.toString(),
                 onClick = vaultHandlers.trashClick,
                 showDivider = false,

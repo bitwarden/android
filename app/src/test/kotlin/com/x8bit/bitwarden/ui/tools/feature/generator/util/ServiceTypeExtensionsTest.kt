@@ -2,8 +2,8 @@ package com.x8bit.bitwarden.ui.tools.feature.generator.util
 
 import com.bitwarden.generators.ForwarderServiceType
 import com.bitwarden.generators.UsernameGeneratorRequest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -23,7 +23,7 @@ internal class ServiceTypeExtensionsTest {
         )
 
         assertEquals(
-            GeneratorRequestResult.MissingField(R.string.api_access_token.asText()),
+            GeneratorRequestResult.MissingField(BitwardenString.api_access_token.asText()),
             request,
         )
     }
@@ -41,7 +41,7 @@ internal class ServiceTypeExtensionsTest {
         )
 
         assertEquals(
-            GeneratorRequestResult.MissingField(R.string.domain_name.asText()),
+            GeneratorRequestResult.MissingField(BitwardenString.domain_name.asText()),
             request,
         )
     }
@@ -132,7 +132,7 @@ internal class ServiceTypeExtensionsTest {
         )
 
         assertEquals(
-            GeneratorRequestResult.MissingField(R.string.api_key.asText()),
+            GeneratorRequestResult.MissingField(BitwardenString.api_key.asText()),
             request,
         )
     }
@@ -168,7 +168,7 @@ internal class ServiceTypeExtensionsTest {
         )
 
         assertEquals(
-            GeneratorRequestResult.MissingField(R.string.api_access_token.asText()),
+            GeneratorRequestResult.MissingField(BitwardenString.api_access_token.asText()),
             request,
         )
     }
@@ -204,7 +204,7 @@ internal class ServiceTypeExtensionsTest {
         )
 
         assertEquals(
-            GeneratorRequestResult.MissingField(R.string.api_key.asText()),
+            GeneratorRequestResult.MissingField(BitwardenString.api_key.asText()),
             request,
         )
     }
@@ -245,7 +245,7 @@ internal class ServiceTypeExtensionsTest {
         )
 
         assertEquals(
-            GeneratorRequestResult.MissingField(R.string.api_key.asText()),
+            GeneratorRequestResult.MissingField(BitwardenString.api_key.asText()),
             request,
         )
     }
@@ -263,7 +263,7 @@ internal class ServiceTypeExtensionsTest {
         )
 
         assertEquals(
-            GeneratorRequestResult.MissingField(R.string.domain_name.asText()),
+            GeneratorRequestResult.MissingField(BitwardenString.domain_name.asText()),
             request,
         )
     }
@@ -305,7 +305,7 @@ internal class ServiceTypeExtensionsTest {
         )
 
         assertEquals(
-            GeneratorRequestResult.MissingField(R.string.api_key.asText()),
+            GeneratorRequestResult.MissingField(BitwardenString.api_key.asText()),
             request,
         )
     }

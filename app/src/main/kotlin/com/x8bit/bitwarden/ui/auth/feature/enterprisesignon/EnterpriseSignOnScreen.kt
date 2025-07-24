@@ -31,6 +31,7 @@ import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -100,13 +101,13 @@ fun EnterpriseSignOnScreen(
                 title = stringResource(id = R.string.app_name),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(EnterpriseSignOnAction.CloseButtonClick) }
                 },
                 actions = {
                     BitwardenTextButton(
-                        label = stringResource(id = R.string.log_in_verb),
+                        label = stringResource(id = BitwardenString.log_in_verb),
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(EnterpriseSignOnAction.LogInClick) }
                         },
@@ -140,7 +141,7 @@ private fun EnterpriseSignOnScreenContent(
     ) {
         Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
-            text = stringResource(id = R.string.log_in_sso_summary),
+            text = stringResource(id = BitwardenString.log_in_sso_summary),
             textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -157,7 +158,7 @@ private fun EnterpriseSignOnScreenContent(
                 .fillMaxWidth(),
             value = state.orgIdentifierInput,
             onValueChange = onOrgIdentifierInputChange,
-            label = stringResource(id = R.string.org_identifier),
+            label = stringResource(id = BitwardenString.org_identifier),
             textFieldTestTag = "OrgSSOIdentifierEntry",
             cardStyle = CardStyle.Full,
         )
@@ -190,13 +191,13 @@ private fun EnterpriseSignOnDialogs(
 
         is EnterpriseSignOnState.DialogState.KeyConnectorDomain -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(R.string.confirm_key_connector_domain),
+                title = stringResource(BitwardenString.confirm_key_connector_domain),
                 message = stringResource(
-                    R.string.please_confirm_domain_with_admin,
+                    BitwardenString.please_confirm_domain_with_admin,
                     dialogState.keyConnectorDomain,
                 ),
-                confirmButtonText = stringResource(R.string.confirm),
-                dismissButtonText = stringResource(R.string.cancel),
+                confirmButtonText = stringResource(BitwardenString.confirm),
+                dismissButtonText = stringResource(BitwardenString.cancel),
                 onConfirmClick = onConfirmKeyConnectorDomain,
                 onDismissRequest = onDismissKeyConnectorDomain,
                 onDismissClick = onDismissKeyConnectorDomain,

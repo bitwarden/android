@@ -11,8 +11,8 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.util.ciBuildInfo
 import com.x8bit.bitwarden.data.platform.util.deviceData
 import com.x8bit.bitwarden.data.platform.util.versionData
@@ -41,7 +41,7 @@ fun BitwardenBasicDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.okay),
+                label = stringResource(id = BitwardenString.okay),
                 onClick = onDismissRequest,
                 modifier = Modifier.testTag(tag = "AcceptAlertButton"),
             )
@@ -50,7 +50,7 @@ fun BitwardenBasicDialog(
             ?.let { error ->
                 {
                     BitwardenTextButton(
-                        label = stringResource(id = R.string.share_error_details),
+                        label = stringResource(id = BitwardenString.share_error_details),
                         onClick = {
                             intentManager.shareText(
                                 text = StringBuilder()

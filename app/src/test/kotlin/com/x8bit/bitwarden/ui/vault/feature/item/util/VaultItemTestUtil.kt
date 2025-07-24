@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.item.util
 import androidx.annotation.DrawableRes
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.CipherRepromptType
@@ -15,7 +16,6 @@ import com.bitwarden.vault.LoginUriView
 import com.bitwarden.vault.LoginView
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SshKeyView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipherPermissions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
@@ -170,8 +170,8 @@ fun createCommonContent(
     if (isEmpty) {
         VaultItemState.ViewState.Content.Common(
             name = "mockName",
-            created = R.string.created.asText("Jan 1, 1970, 12:16 AM"),
-            lastUpdated = R.string.last_edited.asText("Jan 1, 1970, 12:16 AM"),
+            created = BitwardenString.created.asText("Jan 1, 1970, 12:16 AM"),
+            lastUpdated = BitwardenString.last_edited.asText("Jan 1, 1970, 12:16 AM"),
             notes = null,
             customFields = emptyList(),
             requiresCloneConfirmation = false,
@@ -188,8 +188,8 @@ fun createCommonContent(
     } else {
         VaultItemState.ViewState.Content.Common(
             name = "mockName",
-            created = R.string.created.asText("Jan 1, 1970, 12:16 AM"),
-            lastUpdated = R.string.last_edited.asText("Jan 1, 1970, 12:16 AM"),
+            created = BitwardenString.created.asText("Jan 1, 1970, 12:16 AM"),
+            lastUpdated = BitwardenString.last_edited.asText("Jan 1, 1970, 12:16 AM"),
             notes = "Lots of notes",
             customFields = listOf(
                 FieldView(
@@ -270,7 +270,7 @@ fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemT
                 ),
             )
         },
-        passwordRevisionDate = R.string.password_last_updated
+        passwordRevisionDate = BitwardenString.password_last_updated
             .asText("Jan 1, 1970, 12:16 AM")
             .takeUnless { isEmpty },
         isPremiumUser = true,
@@ -280,7 +280,7 @@ fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemT
             verificationCode = "123456",
         )
             .takeUnless { isEmpty },
-        fido2CredentialCreationDateText = R.string.created_x
+        fido2CredentialCreationDateText = BitwardenString.created_x
             .asText("Oct 27, 2023, 12:00 PM")
             .takeUnless { isEmpty },
         canViewTotpCode = true,

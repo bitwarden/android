@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.autofill.manager
 
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -136,7 +136,7 @@ class AutofillTotpManagerTest {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = TOTP_RESULT_VALUE,
-                    toastDescriptorOverride = R.string.verification_code_totp.asText(),
+                    toastDescriptorOverride = BitwardenString.verification_code_totp.asText(),
                 )
                 settingsRepository.isAutoCopyTotpDisabled
             }

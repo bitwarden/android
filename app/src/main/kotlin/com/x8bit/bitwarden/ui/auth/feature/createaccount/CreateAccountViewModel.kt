@@ -6,10 +6,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidEmail
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
@@ -142,8 +142,8 @@ class CreateAccountViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = CreateAccountDialog.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.captcha_failed.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.captcha_failed.asText(),
                         ),
                     )
                 }
@@ -177,9 +177,9 @@ class CreateAccountViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = CreateAccountDialog.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = registerAccountResult.errorMessage?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                             error = registerAccountResult.error,
                         ),
                     )
@@ -200,8 +200,8 @@ class CreateAccountViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = CreateAccountDialog.HaveIBeenPwned(
-                            title = R.string.exposed_master_password.asText(),
-                            message = R.string.password_found_in_a_data_breach_alert_description.asText(),
+                            title = BitwardenString.exposed_master_password.asText(),
+                            message = BitwardenString.password_found_in_a_data_breach_alert_description.asText(),
                         ),
                     )
                 }
@@ -211,8 +211,8 @@ class CreateAccountViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = CreateAccountDialog.HaveIBeenPwned(
-                            title = R.string.weak_and_exposed_master_password.asText(),
-                            message = R.string.weak_password_identified_and_found_in_a_data_breach_alert_description.asText(),
+                            title = BitwardenString.weak_and_exposed_master_password.asText(),
+                            message = BitwardenString.weak_password_identified_and_found_in_a_data_breach_alert_description.asText(),
                         ),
                     )
                 }
@@ -222,8 +222,8 @@ class CreateAccountViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = CreateAccountDialog.HaveIBeenPwned(
-                            title = R.string.weak_master_password.asText(),
-                            message = R.string.weak_password_identified_use_a_strong_password_to_protect_your_account.asText(),
+                            title = BitwardenString.weak_master_password.asText(),
+                            message = BitwardenString.weak_password_identified_use_a_strong_password_to_protect_your_account.asText(),
                         ),
                     )
                 }
@@ -295,9 +295,9 @@ class CreateAccountViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = CreateAccountDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required
-                            .asText(R.string.email_address.asText()),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.validation_field_required
+                            .asText(BitwardenString.email_address.asText()),
                     ),
                 )
             }
@@ -307,8 +307,8 @@ class CreateAccountViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = CreateAccountDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.invalid_email.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.invalid_email.asText(),
                     ),
                 )
             }
@@ -318,8 +318,8 @@ class CreateAccountViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = CreateAccountDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.master_password_length_val_message_x
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.master_password_length_val_message_x
                             .asText(MIN_PASSWORD_LENGTH),
                     ),
                 )
@@ -330,8 +330,8 @@ class CreateAccountViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = CreateAccountDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.master_password_confirmation_val_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.master_password_confirmation_val_message.asText(),
                     ),
                 )
             }
@@ -341,8 +341,8 @@ class CreateAccountViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = CreateAccountDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.accept_policies_error.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.accept_policies_error.asText(),
                     ),
                 )
             }
@@ -412,10 +412,10 @@ data class CreateAccountState(
         // Important: Your master password cannot be recovered if you forget it! 12
         // characters minimum
         @Suppress("MaxLineLength")
-        get() = R.string.important.asText()
+        get() = BitwardenString.important.asText()
             .concat(
                 ": ".asText(),
-                R.string.your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum
+                BitwardenString.your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum
                     .asText(MIN_PASSWORD_LENGTH),
             )
 

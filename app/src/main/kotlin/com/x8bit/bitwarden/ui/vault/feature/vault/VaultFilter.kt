@@ -28,8 +28,8 @@ import com.bitwarden.ui.platform.base.util.scrolledContainerBackground
 import com.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -63,7 +63,7 @@ fun VaultFilter(
 
     if (shouldShowSelectionDialog) {
         BitwardenSelectionDialog(
-            title = stringResource(id = R.string.filter_by_vault),
+            title = stringResource(id = BitwardenString.filter_by_vault),
             onDismissRequest = { shouldShowSelectionDialog = false },
         ) {
             vaultFilterTypes.forEach { filterType ->
@@ -91,7 +91,7 @@ fun VaultFilter(
     ) {
         Text(
             text = stringResource(
-                id = R.string.vault_filter_description,
+                id = BitwardenString.vault_filter_description,
                 selectedVaultFilterType.name(),
             ),
             style = BitwardenTheme.typography.bodyLarge,
@@ -105,7 +105,7 @@ fun VaultFilter(
 
         BitwardenStandardIconButton(
             vectorIconRes = BitwardenDrawable.ic_ellipsis_horizontal,
-            contentDescription = stringResource(id = R.string.filter_by_vault),
+            contentDescription = stringResource(id = BitwardenString.filter_by_vault),
             onClick = { shouldShowSelectionDialog = true },
             modifier = Modifier.testTag(tag = "OpenOrgFilter"),
         )

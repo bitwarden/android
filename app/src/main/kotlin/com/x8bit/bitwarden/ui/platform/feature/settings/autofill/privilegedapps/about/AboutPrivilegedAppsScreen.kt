@@ -24,8 +24,8 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.content.model.ContentBlockData
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenContentCard
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import kotlinx.collections.immutable.persistentListOf
@@ -42,10 +42,10 @@ fun AboutPrivilegedAppsScreen(
     BitwardenScaffold(
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(R.string.about_privileged_applications),
+                title = stringResource(BitwardenString.about_privileged_applications),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.back),
+                navigationIconContentDescription = stringResource(id = BitwardenString.back),
                 onNavigationIconClick = remember { onNavigateBack },
             )
         },
@@ -69,7 +69,7 @@ private fun AboutPrivilegedAppsContent(
     ) {
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            text = stringResource(R.string.privileged_apps_description),
+            text = stringResource(BitwardenString.privileged_apps_description),
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -78,16 +78,16 @@ private fun AboutPrivilegedAppsContent(
         BitwardenContentCard(
             contentItems = persistentListOf(
                 ContentBlockData(
-                    headerText = stringResource(R.string.trusted_by_you),
-                    subtitleText = stringResource(R.string.trusted_by_you_learn_more),
+                    headerText = stringResource(BitwardenString.trusted_by_you),
+                    subtitleText = stringResource(BitwardenString.trusted_by_you_learn_more),
                 ),
                 ContentBlockData(
-                    headerText = stringResource(R.string.trusted_by_the_community),
-                    subtitleText = stringResource(R.string.trusted_by_community_learn_more),
+                    headerText = stringResource(BitwardenString.trusted_by_the_community),
+                    subtitleText = stringResource(BitwardenString.trusted_by_community_learn_more),
                 ),
                 ContentBlockData(
-                    headerText = stringResource(R.string.trusted_by_google),
-                    subtitleText = stringResource(R.string.trusted_by_google_learn_more),
+                    headerText = stringResource(BitwardenString.trusted_by_google),
+                    subtitleText = stringResource(BitwardenString.trusted_by_google_learn_more),
                 ),
             ),
         )

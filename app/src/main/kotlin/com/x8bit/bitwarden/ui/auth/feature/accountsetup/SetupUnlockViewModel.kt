@@ -4,9 +4,9 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
@@ -112,8 +112,8 @@ class SetupUnlockViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = SetupUnlockState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -141,7 +141,7 @@ class SetupUnlockViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(
-                dialogState = SetupUnlockState.DialogState.Loading(R.string.saving.asText()),
+                dialogState = SetupUnlockState.DialogState.Loading(BitwardenString.saving.asText()),
                 isUnlockWithBiometricsEnabled = true,
             )
         }

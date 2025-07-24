@@ -10,8 +10,8 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -422,7 +422,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()),
+                    GeneratorEvent.ShowSnackbar(BitwardenString.an_error_has_occurred.asText()),
                     awaitItem(),
                 )
             }
@@ -484,7 +484,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()),
+                    GeneratorEvent.ShowSnackbar(BitwardenString.an_error_has_occurred.asText()),
                     awaitItem(),
                 )
             }
@@ -549,8 +549,8 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(GeneratorAction.RegenerateClick)
                 assertEquals(
                     GeneratorEvent.ShowSnackbar(
-                        message = R.string.validation_field_required.asText(
-                            R.string.domain_name.asText(),
+                        message = BitwardenString.validation_field_required.asText(
+                            BitwardenString.domain_name.asText(),
                         ),
                     ),
                     awaitItem(),

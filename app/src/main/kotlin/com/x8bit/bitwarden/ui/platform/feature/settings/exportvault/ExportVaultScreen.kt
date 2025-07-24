@@ -36,8 +36,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthIndicator
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -95,16 +95,16 @@ fun ExportVaultScreen(
     }
     if (shouldShowConfirmationDialog) {
         BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.export_vault_confirmation_title),
+            title = stringResource(id = BitwardenString.export_vault_confirmation_title),
             message = if (state.exportFormat == ExportVaultFormat.JSON_ENCRYPTED) {
-                stringResource(id = R.string.export_vault_file_pw_protect_info)
+                stringResource(id = BitwardenString.export_vault_file_pw_protect_info)
             } else {
                 stringResource(
-                    id = R.string.export_vault_warning,
+                    id = BitwardenString.export_vault_warning,
                 )
             },
-            confirmButtonText = stringResource(id = R.string.export_vault),
-            dismissButtonText = stringResource(id = R.string.cancel),
+            confirmButtonText = stringResource(id = BitwardenString.export_vault),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
             onConfirmClick = {
                 shouldShowConfirmationDialog = false
                 confirmExportVaultClicked()
@@ -140,10 +140,10 @@ fun ExportVaultScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.export_vault),
+                title = stringResource(id = BitwardenString.export_vault),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(ExportVaultAction.CloseButtonClick) }
                 },
@@ -196,7 +196,9 @@ private fun ExportVaultScreenContent(
         Spacer(modifier = Modifier.height(height = 12.dp))
         if (state.policyPreventsExport) {
             BitwardenInfoCalloutCard(
-                text = stringResource(id = R.string.disable_personal_vault_export_policy_in_effect),
+                text = stringResource(
+                    id = BitwardenString.disable_personal_vault_export_policy_in_effect,
+                ),
                 modifier = Modifier
                     .testTag("DisablePrivateVaultPolicyLabel")
                     .standardHorizontalMargin()
@@ -208,7 +210,7 @@ private fun ExportVaultScreenContent(
 
         val resources = LocalContext.current.resources
         BitwardenMultiSelectButton(
-            label = stringResource(id = R.string.file_format),
+            label = stringResource(id = BitwardenString.file_format),
             options = ExportVaultFormat.entries.map { it.displayLabel() }.toImmutableList(),
             selectedOption = state.exportFormat.displayLabel(),
             onOptionSelected = { selectedOptionLabel ->
@@ -229,7 +231,7 @@ private fun ExportVaultScreenContent(
             Spacer(modifier = Modifier.height(8.dp))
             var showPassword by rememberSaveable { mutableStateOf(false) }
             BitwardenPasswordField(
-                label = stringResource(id = R.string.file_password),
+                label = stringResource(id = BitwardenString.file_password),
                 value = state.filePasswordInput,
                 onValueChange = onFilePasswordInputChanged,
                 showPassword = showPassword,
@@ -241,7 +243,7 @@ private fun ExportVaultScreenContent(
                         modifier = Modifier.fillMaxWidth(),
                     )
                     Text(
-                        text = stringResource(id = R.string.password_used_to_export),
+                        text = stringResource(id = BitwardenString.password_used_to_export),
                         style = BitwardenTheme.typography.bodySmall,
                         color = BitwardenTheme.colorScheme.text.secondary,
                         modifier = Modifier.fillMaxWidth(),
@@ -257,7 +259,7 @@ private fun ExportVaultScreenContent(
             Spacer(modifier = Modifier.height(8.dp))
 
             BitwardenPasswordField(
-                label = stringResource(id = R.string.confirm_file_password),
+                label = stringResource(id = BitwardenString.confirm_file_password),
                 value = state.confirmFilePasswordInput,
                 onValueChange = onConfirmFilePasswordInputChanged,
                 showPassword = showPassword,
@@ -274,7 +276,7 @@ private fun ExportVaultScreenContent(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = stringResource(id = R.string.send_verification_code_to_email),
+                text = stringResource(id = BitwardenString.send_verification_code_to_email),
                 textAlign = TextAlign.Start,
                 style = BitwardenTheme.typography.bodyMedium,
                 color = BitwardenTheme.colorScheme.text.primary,
@@ -286,7 +288,7 @@ private fun ExportVaultScreenContent(
             Spacer(modifier = Modifier.height(8.dp))
 
             BitwardenOutlinedButton(
-                label = stringResource(R.string.send_code),
+                label = stringResource(BitwardenString.send_code),
                 onClick = onSendCodeClicked,
                 isEnabled = !state.policyPreventsExport,
                 modifier = Modifier
@@ -298,10 +300,10 @@ private fun ExportVaultScreenContent(
             Spacer(modifier = Modifier.height(16.dp))
 
             BitwardenPasswordField(
-                label = stringResource(id = R.string.verification_code),
+                label = stringResource(id = BitwardenString.verification_code),
                 value = state.passwordInput,
                 readOnly = state.policyPreventsExport,
-                supportingText = stringResource(id = R.string.confirm_your_identity),
+                supportingText = stringResource(id = BitwardenString.confirm_your_identity),
                 onValueChange = onPasswordInputChanged,
                 keyboardType = KeyboardType.Number,
                 cardStyle = CardStyle.Full,
@@ -312,9 +314,9 @@ private fun ExportVaultScreenContent(
         } else {
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenPasswordField(
-                label = stringResource(id = R.string.master_password),
+                label = stringResource(id = BitwardenString.master_password),
                 supportingText = stringResource(
-                    id = R.string.export_vault_master_password_description,
+                    id = BitwardenString.export_vault_master_password_description,
                 ),
                 value = state.passwordInput,
                 readOnly = state.policyPreventsExport,
@@ -329,7 +331,7 @@ private fun ExportVaultScreenContent(
 
         Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenOutlinedButton(
-            label = stringResource(id = R.string.export_vault),
+            label = stringResource(id = BitwardenString.export_vault),
             onClick = onExportVaultClick,
             isEnabled = !state.policyPreventsExport,
             modifier = Modifier

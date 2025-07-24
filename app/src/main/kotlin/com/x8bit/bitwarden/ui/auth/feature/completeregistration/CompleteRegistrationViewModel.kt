@@ -5,9 +5,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidEmail
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -145,7 +145,7 @@ class CompleteRegistrationViewModel @Inject constructor(
         viewModelScope.launch {
             sendEvent(
                 CompleteRegistrationEvent.ShowToast(
-                    message = R.string.email_verified.asText(),
+                    message = BitwardenString.email_verified.asText(),
                 ),
             )
         }
@@ -188,9 +188,9 @@ class CompleteRegistrationViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = CompleteRegistrationDialog.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = registerAccountResult.errorMessage?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                             error = registerAccountResult.error,
                         ),
                     )
@@ -217,8 +217,8 @@ class CompleteRegistrationViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = CompleteRegistrationDialog.HaveIBeenPwned(
-                            title = R.string.exposed_master_password.asText(),
-                            message = R.string.password_found_in_a_data_breach_alert_description.asText(),
+                            title = BitwardenString.exposed_master_password.asText(),
+                            message = BitwardenString.password_found_in_a_data_breach_alert_description.asText(),
                         ),
                     )
                 }
@@ -228,8 +228,8 @@ class CompleteRegistrationViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = CompleteRegistrationDialog.HaveIBeenPwned(
-                            title = R.string.weak_and_exposed_master_password.asText(),
-                            message = R.string.weak_password_identified_and_found_in_a_data_breach_alert_description.asText(),
+                            title = BitwardenString.weak_and_exposed_master_password.asText(),
+                            message = BitwardenString.weak_password_identified_and_found_in_a_data_breach_alert_description.asText(),
                         ),
                     )
                 }
@@ -239,8 +239,8 @@ class CompleteRegistrationViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = CompleteRegistrationDialog.HaveIBeenPwned(
-                            title = R.string.weak_master_password.asText(),
-                            message = R.string.weak_password_identified_use_a_strong_password_to_protect_your_account.asText(),
+                            title = BitwardenString.weak_master_password.asText(),
+                            message = BitwardenString.weak_password_identified_use_a_strong_password_to_protect_your_account.asText(),
                         ),
                     )
                 }
@@ -252,7 +252,7 @@ class CompleteRegistrationViewModel @Inject constructor(
         clearDialogState()
         sendEvent(
             CompleteRegistrationEvent.ShowToast(
-                message = R.string.account_created_success.asText(),
+                message = BitwardenString.account_created_success.asText(),
             ),
         )
 
@@ -307,9 +307,9 @@ class CompleteRegistrationViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = CompleteRegistrationDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required
-                            .asText(R.string.email_address.asText()),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.validation_field_required
+                            .asText(BitwardenString.email_address.asText()),
                     ),
                 )
             }
@@ -319,8 +319,8 @@ class CompleteRegistrationViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = CompleteRegistrationDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.invalid_email.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.invalid_email.asText(),
                     ),
                 )
             }
@@ -330,8 +330,8 @@ class CompleteRegistrationViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = CompleteRegistrationDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.master_password_length_val_message_x
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.master_password_length_val_message_x
                             .asText(MIN_PASSWORD_LENGTH),
                     ),
                 )
@@ -342,8 +342,8 @@ class CompleteRegistrationViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = CompleteRegistrationDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.master_password_confirmation_val_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.master_password_confirmation_val_message.asText(),
                     ),
                 )
             }

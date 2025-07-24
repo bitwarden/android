@@ -30,6 +30,7 @@ import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -37,7 +38,6 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
@@ -366,7 +366,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     initialState.copy(
                         createCredentialRequest = createCredentialRequest,
                         dialogState = VaultItemListingState.DialogState.Loading(
-                            message = R.string.loading.asText(),
+                            message = BitwardenString.loading.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -579,7 +579,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialogState = VaultItemListingState.DialogState.Loading(
-                    message = R.string.syncing.asText(),
+                    message = BitwardenString.syncing.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -599,8 +599,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialogState = VaultItemListingState.DialogState.Error(
-                    R.string.internet_connection_required_title.asText(),
-                    R.string.internet_connection_required_message.asText(),
+                    BitwardenString.internet_connection_required_title.asText(),
+                    BitwardenString.internet_connection_required_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -749,8 +749,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString
                     .credential_operation_failed_because_the_selected_item_does_not_exist
                     .asText(),
             ),
@@ -862,7 +862,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultItemListingState.DialogState.Loading(R.string.saving.asText()),
+                    VaultItemListingState.DialogState.Loading(BitwardenString.saving.asText()),
                     viewModel.stateFlow.value.dialogState,
                 )
                 assertEquals(
@@ -1093,7 +1093,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 initialState.copy(
                     dialogState = VaultItemListingState.DialogState.Error(
                         title = null,
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         throwable = error,
                     ),
                 ),
@@ -1156,7 +1156,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 initialState.copy(
                     dialogState = VaultItemListingState.DialogState.Error(
                         title = null,
-                        message = R.string.invalid_master_password.asText(),
+                        message = BitwardenString.invalid_master_password.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -1524,8 +1524,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 createVaultItemListingState(
                     itemListingType = VaultItemListingState.ItemListingType.Send.SendFile,
                     dialogState = VaultItemListingState.DialogState.Error(
-                        title = R.string.send.asText(),
-                        message = R.string.send_file_premium_required.asText(),
+                        title = BitwardenString.send.asText(),
+                        message = BitwardenString.send_file_premium_required.asText(),
                     ),
                     isPremium = false,
                 ),
@@ -1666,7 +1666,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = sendUrl,
-                    toastDescriptorOverride = R.string.send_link.asText(),
+                    toastDescriptorOverride = BitwardenString.send_link.asText(),
                 )
             }
         }
@@ -1691,7 +1691,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialogState = VaultItemListingState.DialogState.Loading(
-                            message = R.string.deleting.asText(),
+                            message = BitwardenString.deleting.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -1699,8 +1699,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialogState = VaultItemListingState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = error,
                         ),
                     ),
@@ -1723,7 +1723,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 assertEquals(
-                    VaultItemListingEvent.ShowSnackbar(R.string.send_deleted.asText()),
+                    VaultItemListingEvent.ShowSnackbar(BitwardenString.send_deleted.asText()),
                     awaitItem(),
                 )
             }
@@ -1764,7 +1764,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialogState = VaultItemListingState.DialogState.Loading(
-                            message = R.string.removing_send_password.asText(),
+                            message = BitwardenString.removing_send_password.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -1772,8 +1772,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialogState = VaultItemListingState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = error,
                         ),
                     ),
@@ -1799,7 +1799,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 assertEquals(
-                    VaultItemListingEvent.ShowSnackbar(R.string.password_removed.asText()),
+                    VaultItemListingEvent.ShowSnackbar(BitwardenString.password_removed.asText()),
                     awaitItem(),
                 )
             }
@@ -1829,7 +1829,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = notes,
-                    toastDescriptorOverride = R.string.notes.asText(),
+                    toastDescriptorOverride = BitwardenString.notes.asText(),
                 )
             }
         }
@@ -1862,7 +1862,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = number,
-                    toastDescriptorOverride = R.string.number.asText(),
+                    toastDescriptorOverride = BitwardenString.number.asText(),
                 )
             }
         }
@@ -1893,7 +1893,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = password,
-                    toastDescriptorOverride = R.string.password.asText(),
+                    toastDescriptorOverride = BitwardenString.password.asText(),
                 )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
@@ -1931,7 +1931,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = securityCode,
-                    toastDescriptorOverride = R.string.security_code.asText(),
+                    toastDescriptorOverride = BitwardenString.security_code.asText(),
                 )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = cipherId),
@@ -1963,7 +1963,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = code,
-                    toastDescriptorOverride = R.string.totp.asText(),
+                    toastDescriptorOverride = BitwardenString.totp.asText(),
                 )
             }
         }
@@ -2012,7 +2012,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = username,
-                    toastDescriptorOverride = R.string.username.asText(),
+                    toastDescriptorOverride = BitwardenString.username.asText(),
                 )
             }
         }
@@ -2374,9 +2374,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 createVaultItemListingState(
                     viewState = VaultItemListingState.ViewState.NoItems(
                         header = null,
-                        message = R.string.no_logins.asText(),
+                        message = BitwardenString.no_logins.asText(),
                         shouldShowAddButton = true,
-                        buttonText = R.string.new_login.asText(),
+                        buttonText = BitwardenString.new_login.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -2411,9 +2411,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     itemListingType = VaultItemListingState.ItemListingType.Vault.Card,
                     viewState = VaultItemListingState.ViewState.NoItems(
                         header = null,
-                        message = R.string.no_cards.asText(),
+                        message = BitwardenString.no_cards.asText(),
                         shouldShowAddButton = true,
-                        buttonText = R.string.new_card.asText(),
+                        buttonText = BitwardenString.new_card.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -2448,9 +2448,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     itemListingType = VaultItemListingState.ItemListingType.Vault.Identity,
                     viewState = VaultItemListingState.ViewState.NoItems(
                         header = null,
-                        message = R.string.no_identities.asText(),
+                        message = BitwardenString.no_identities.asText(),
                         shouldShowAddButton = true,
-                        buttonText = R.string.new_identity.asText(),
+                        buttonText = BitwardenString.new_identity.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -2485,9 +2485,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     itemListingType = VaultItemListingState.ItemListingType.Vault.SecureNote,
                     viewState = VaultItemListingState.ViewState.NoItems(
                         header = null,
-                        message = R.string.no_notes.asText(),
+                        message = BitwardenString.no_notes.asText(),
                         shouldShowAddButton = true,
-                        buttonText = R.string.new_note.asText(),
+                        buttonText = BitwardenString.new_note.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -2522,9 +2522,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     itemListingType = VaultItemListingState.ItemListingType.Send.SendFile,
                     viewState = VaultItemListingState.ViewState.NoItems(
                         header = null,
-                        message = R.string.no_file_sends.asText(),
+                        message = BitwardenString.no_file_sends.asText(),
                         shouldShowAddButton = true,
-                        buttonText = R.string.new_file_send.asText(),
+                        buttonText = BitwardenString.new_file_send.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -2559,9 +2559,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     itemListingType = VaultItemListingState.ItemListingType.Send.SendText,
                     viewState = VaultItemListingState.ViewState.NoItems(
                         header = null,
-                        message = R.string.no_text_sends.asText(),
+                        message = BitwardenString.no_text_sends.asText(),
                         shouldShowAddButton = true,
-                        buttonText = R.string.new_text_send.asText(),
+                        buttonText = BitwardenString.new_text_send.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -2590,9 +2590,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 createVaultItemListingState(
                     viewState = VaultItemListingState.ViewState.NoItems(
                         header = null,
-                        message = R.string.no_logins.asText(),
+                        message = BitwardenString.no_logins.asText(),
                         shouldShowAddButton = true,
-                        buttonText = R.string.new_login.asText(),
+                        buttonText = BitwardenString.new_login.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -2671,9 +2671,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
                     header = null,
-                    message = R.string.no_logins.asText(),
+                    message = BitwardenString.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = R.string.new_login.asText(),
+                    buttonText = BitwardenString.new_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -2703,9 +2703,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
                     header = null,
-                    message = R.string.no_logins.asText(),
+                    message = BitwardenString.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = R.string.new_login.asText(),
+                    buttonText = BitwardenString.new_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -2725,7 +2725,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -2796,9 +2796,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
                     header = null,
-                    message = R.string.no_logins.asText(),
+                    message = BitwardenString.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = R.string.new_login.asText(),
+                    buttonText = BitwardenString.new_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -2828,9 +2828,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
                     header = null,
-                    message = R.string.no_logins.asText(),
+                    message = BitwardenString.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = R.string.new_login.asText(),
+                    buttonText = BitwardenString.new_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -2848,11 +2848,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Error(
-                    message = R.string.internet_connection_required_title
+                    message = BitwardenString.internet_connection_required_title
                         .asText()
                         .concat(
                             " ".asText(),
-                            R.string.internet_connection_required_message.asText(),
+                            BitwardenString.internet_connection_required_message.asText(),
                         ),
                 ),
             ),
@@ -2922,9 +2922,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
                     header = null,
-                    message = R.string.no_logins.asText(),
+                    message = BitwardenString.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = R.string.new_login.asText(),
+                    buttonText = BitwardenString.new_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -2953,9 +2953,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
                     header = null,
-                    message = R.string.no_logins.asText(),
+                    message = BitwardenString.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = R.string.new_login.asText(),
+                    buttonText = BitwardenString.new_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -3028,8 +3028,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             initialState.copy(
                 isRefreshing = false,
                 dialogState = VaultItemListingState.DialogState.Error(
-                    R.string.internet_connection_required_title.asText(),
-                    R.string.internet_connection_required_message.asText(),
+                    BitwardenString.internet_connection_required_title.asText(),
+                    BitwardenString.internet_connection_required_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -3094,8 +3094,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                R.string.an_error_has_occurred.asText(),
-                R.string.generic_error_message.asText(),
+                BitwardenString.an_error_has_occurred.asText(),
+                BitwardenString.generic_error_message.asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
@@ -3120,7 +3120,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.TrustPrivilegedAddPrompt(
-                    message = R.string.passkey_operation_failed_because_browser_x_is_not_trusted
+                    message = BitwardenString.passkey_operation_failed_because_browser_x_is_not_trusted
                         .asText("mockPackageName"),
                     selectedCipherId = null,
                 ),
@@ -3150,8 +3150,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_browser_is_not_privileged
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.passkey_operation_failed_because_browser_is_not_privileged
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
@@ -3177,8 +3177,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    R.string.an_error_has_occurred.asText(),
-                    R.string.passkey_operation_failed_because_browser_signature_does_not_match.asText(),
+                    BitwardenString.an_error_has_occurred.asText(),
+                    BitwardenString.passkey_operation_failed_because_browser_signature_does_not_match.asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -3203,8 +3203,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    R.string.an_error_has_occurred.asText(),
-                    R.string.passkeys_not_supported_for_this_app.asText(),
+                    BitwardenString.an_error_has_occurred.asText(),
+                    BitwardenString.passkeys_not_supported_for_this_app.asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -3229,8 +3229,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    R.string.an_error_has_occurred.asText(),
-                    R.string.passkey_operation_failed_because_of_missing_asset_links.asText(),
+                    BitwardenString.an_error_has_occurred.asText(),
+                    BitwardenString.passkey_operation_failed_because_of_missing_asset_links.asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -3253,14 +3253,14 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     VaultItemListingEvent.CompleteFido2Registration(
                         RegisterFido2CredentialResult.Error(
-                            R.string.passkey_registration_failed_due_to_an_internal_error.asText(),
+                            BitwardenString.passkey_registration_failed_due_to_an_internal_error.asText(),
                         ),
                     ),
                     awaitItem(),
                 )
             }
             verify {
-                toastManager.show(messageId = R.string.an_error_has_occurred)
+                toastManager.show(messageId = BitwardenString.an_error_has_occurred)
             }
         }
 
@@ -3290,7 +3290,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 )
             }
             verify {
-                toastManager.show(messageId = R.string.item_updated)
+                toastManager.show(messageId = BitwardenString.item_updated)
             }
         }
 
@@ -3361,7 +3361,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             assertEquals(
                 VaultItemListingState.DialogState.Error(
-                    title = R.string.an_error_has_occurred.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
                     message = "".asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
@@ -3499,8 +3499,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -3546,9 +3546,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
                     message =
-                        R.string.passkey_operation_failed_because_app_could_not_be_verified
+                        BitwardenString.passkey_operation_failed_because_app_could_not_be_verified
                             .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
@@ -3586,8 +3586,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -3636,7 +3636,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultItemListingState.DialogState.Loading(R.string.loading.asText()),
+                    VaultItemListingState.DialogState.Loading(BitwardenString.loading.asText()),
                     viewModel.stateFlow.value.dialogState,
                 )
                 verify { bitwardenCredentialManager.isUserVerified }
@@ -3698,7 +3698,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             mutableVaultDataStateFlow.value = dataState
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultItemListingState.DialogState.Loading(R.string.loading.asText()),
+                    VaultItemListingState.DialogState.Loading(BitwardenString.loading.asText()),
                     viewModel.stateFlow.value.dialogState,
                 )
                 verify { bitwardenCredentialManager.isUserVerified }
@@ -3825,10 +3825,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.test {
                 assertEquals(
                     VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message =
-                            R.string.passkey_operation_failed_because_relying_party_cannot_be_identified
-                                .asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString
+                            .passkey_operation_failed_because_relying_party_cannot_be_identified
+                            .asText(),
                     ),
                     awaitItem().dialogState,
                 )
@@ -3874,8 +3874,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.test {
                 assertEquals(
                     VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                     awaitItem().dialogState,
                 )
@@ -3995,8 +3995,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString
+                    .passkey_operation_failed_because_user_could_not_be_verified
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4152,8 +4153,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         verify { bitwardenCredentialManager.isUserVerified = false }
         assertEquals(
             VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.credential_operation_failed_because_user_is_locked_out.asText(),
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString
+                    .credential_operation_failed_because_user_is_locked_out
+                    .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
@@ -4213,8 +4216,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         verify { bitwardenCredentialManager.isUserVerified = false }
         assertEquals(
             VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.credential_operation_failed_because_user_could_not_be_verified
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString
+                    .credential_operation_failed_because_user_could_not_be_verified
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4246,8 +4250,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_the_request_is_invalid
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString
+                        .passkey_operation_failed_because_the_request_is_invalid
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
@@ -4286,8 +4291,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_the_request_is_invalid
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString
+                        .passkey_operation_failed_because_the_request_is_invalid
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
@@ -4314,8 +4320,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString
+                    .passkey_operation_failed_because_user_could_not_be_verified
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4431,8 +4438,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         verify { bitwardenCredentialManager.isUserVerified = false }
         assertEquals(
             VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.credential_operation_failed_because_user_could_not_be_verified
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString
+                    .credential_operation_failed_because_user_could_not_be_verified
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4455,8 +4463,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         verify { bitwardenCredentialManager.isUserVerified = false }
         assertEquals(
             VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.credential_operation_failed_because_user_could_not_be_verified
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString
+                    .credential_operation_failed_because_user_could_not_be_verified
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4567,8 +4576,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.credential_operation_failed_because_user_could_not_be_verified
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString
+                    .credential_operation_failed_because_user_could_not_be_verified
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4598,7 +4608,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.UserVerificationMasterPasswordError(
                 title = null,
-                message = R.string.invalid_master_password.asText(),
+                message = BitwardenString.invalid_master_password.asText(),
                 selectedCipherId = selectedCipherId,
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4628,8 +4638,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString
                     .credential_operation_failed_because_user_verification_attempts_exceeded
                     .asText(),
             ),
@@ -4662,8 +4672,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.credential_operation_failed_because_the_selected_item_does_not_exist
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString
+                    .credential_operation_failed_because_the_selected_item_does_not_exist
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4746,8 +4757,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.credential_operation_failed_because_user_could_not_be_verified
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString
+                    .credential_operation_failed_because_user_could_not_be_verified
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4777,7 +4789,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.UserVerificationPinError(
                 title = null,
-                message = R.string.invalid_pin.asText(),
+                message = BitwardenString.invalid_pin.asText(),
                 selectedCipherId = selectedCipherId,
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4807,8 +4819,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString
                     .credential_operation_failed_because_user_verification_attempts_exceeded
                     .asText(),
             ),
@@ -4841,8 +4853,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.credential_operation_failed_because_the_selected_item_does_not_exist
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString
+                    .credential_operation_failed_because_the_selected_item_does_not_exist
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4921,7 +4934,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.UserVerificationPinSetUpError(
                 title = null,
-                message = R.string.validation_field_required.asText(R.string.pin.asText()),
+                message = BitwardenString.validation_field_required
+                    .asText(BitwardenString.pin.asText()),
                 selectedCipherId = selectedCipherId,
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4997,9 +5011,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                title = R.string.an_error_has_occurred.asText(),
+                title = BitwardenString.an_error_has_occurred.asText(),
                 message =
-                    R.string.credential_operation_failed_because_user_verification_was_cancelled
+                    BitwardenString
+                    .credential_operation_failed_because_user_verification_was_cancelled
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -5075,8 +5090,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    R.string.an_error_has_occurred.asText(),
-                    R.string.credential_operation_failed_because_the_selected_item_does_not_exist
+                    BitwardenString.an_error_has_occurred.asText(),
+                    BitwardenString
+                        .credential_operation_failed_because_the_selected_item_does_not_exist
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
@@ -5150,8 +5166,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString
                         .credential_operation_failed_because_the_selected_item_does_not_exist
                         .asText(),
                 ),
@@ -5202,8 +5218,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString
                         .credential_operation_failed_because_the_selected_item_does_not_exist
                         .asText(),
                 ),
@@ -5365,8 +5381,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 initialState.copy(
                     isRefreshing = false,
                     dialogState = VaultItemListingState.DialogState.Error(
-                        R.string.internet_connection_required_title.asText(),
-                        R.string.internet_connection_required_message.asText(),
+                        BitwardenString.internet_connection_required_title.asText(),
+                        BitwardenString.internet_connection_required_message.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -5429,8 +5445,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_the_request_is_invalid
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString
+                        .passkey_operation_failed_because_the_request_is_invalid
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
@@ -5509,8 +5526,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_the_request_is_invalid
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString
+                        .passkey_operation_failed_because_the_request_is_invalid
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
@@ -5548,8 +5566,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_the_request_is_invalid
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString
+                        .passkey_operation_failed_because_the_request_is_invalid
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
@@ -5696,8 +5715,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_the_request_is_invalid
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString
+                        .passkey_operation_failed_because_the_request_is_invalid
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
@@ -5772,8 +5792,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString
                         .credential_operation_failed_because_the_selected_item_does_not_exist
                         .asText(),
                 ),

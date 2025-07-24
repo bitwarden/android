@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.manager.DispatcherManager
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.model.LogoutEvent
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
@@ -48,7 +48,7 @@ class UserLogoutManagerImpl(
         Timber.d("logout reason=$reason")
         val isExpired = reason == LogoutReason.SecurityStamp
         if (isExpired) {
-            showToast(message = R.string.login_expired)
+            showToast(message = BitwardenString.login_expired)
         }
 
         val ableToSwitchToNewAccount = switchUserIfAvailable(
@@ -70,7 +70,7 @@ class UserLogoutManagerImpl(
         Timber.d("softLogout reason=$reason")
         val isExpired = reason == LogoutReason.SecurityStamp
         if (isExpired) {
-            showToast(message = R.string.login_expired)
+            showToast(message = BitwardenString.login_expired)
         }
         authDiskSource.storeAccountTokens(
             userId = userId,
@@ -140,7 +140,7 @@ class UserLogoutManagerImpl(
         // Check if there is a new active user
         return if (updatedAccounts.isNotEmpty()) {
             if (currentUserId == currentUserState.activeUserId && !isExpired) {
-                showToast(message = R.string.account_switched_automatically)
+                showToast(message = BitwardenString.account_switched_automatically)
             }
 
             // If we logged out a non-active user, we want to leave the active user unchanged.

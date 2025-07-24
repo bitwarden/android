@@ -5,9 +5,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
@@ -36,10 +36,10 @@ class RemovePasswordViewModel @Inject constructor(
 
         RemovePasswordState(
             input = "",
-            description = R.string.password_no_longer_required_confirm_domain.asText(),
-            labelOrg = R.string.key_connector_organization.asText(),
+            description = BitwardenString.password_no_longer_required_confirm_domain.asText(),
+            labelOrg = BitwardenString.key_connector_organization.asText(),
             orgName = org?.name?.asText(),
-            labelDomain = R.string.key_connector_domain.asText(),
+            labelDomain = BitwardenString.key_connector_domain.asText(),
             domainName = org?.keyConnectorUrl?.asText(),
             dialogState = null,
             organizationId = org?.id.orNullIfBlank(),
@@ -71,7 +71,7 @@ class RemovePasswordViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = RemovePasswordState.DialogState.LeaveConfirmationPrompt(
-                    message = R.string.leave_organization_name.asText(state.orgName ?: ""),
+                    message = BitwardenString.leave_organization_name.asText(state.orgName ?: ""),
                 ),
             )
         }
@@ -82,9 +82,9 @@ class RemovePasswordViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialogState = RemovePasswordState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required
-                            .asText(R.string.master_password.asText()),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.validation_field_required
+                            .asText(BitwardenString.master_password.asText()),
                     ),
                 )
             }
@@ -93,7 +93,7 @@ class RemovePasswordViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = RemovePasswordState.DialogState.Loading(
-                    title = R.string.deleting.asText(),
+                    title = BitwardenString.deleting.asText(),
                 ),
             )
         }
@@ -119,8 +119,8 @@ class RemovePasswordViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = RemovePasswordState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = result.error,
                         ),
                     )
@@ -131,8 +131,8 @@ class RemovePasswordViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = RemovePasswordState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.invalid_master_password.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.invalid_master_password.asText(),
                         ),
                     )
                 }
@@ -149,7 +149,7 @@ class RemovePasswordViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = RemovePasswordState.DialogState.Loading(
-                    title = R.string.loading.asText(),
+                    title = BitwardenString.loading.asText(),
                 ),
             )
         }
@@ -173,8 +173,8 @@ class RemovePasswordViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = RemovePasswordState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = result.error,
                         ),
                     )

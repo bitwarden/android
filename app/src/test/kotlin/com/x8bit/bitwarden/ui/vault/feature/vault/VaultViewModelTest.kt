@@ -9,11 +9,11 @@ import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherType
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
@@ -299,7 +299,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             DEFAULT_STATE.copy(
-                appBarTitle = R.string.vaults.asText(),
+                appBarTitle = BitwardenString.vaults.asText(),
                 avatarColorString = "#00aaaa",
                 initials = "OU",
                 accountSummaries = listOf(
@@ -387,7 +387,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             DEFAULT_STATE.copy(
-                appBarTitle = R.string.vaults.asText(),
+                appBarTitle = BitwardenString.vaults.asText(),
                 avatarColorString = "#00aaaa",
                 initials = "OU",
                 accountSummaries = listOf(
@@ -658,8 +658,8 @@ class VaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialog = VaultState.DialogState.Error(
-                    R.string.internet_connection_required_title.asText(),
-                    R.string.internet_connection_required_message.asText(),
+                    BitwardenString.internet_connection_required_title.asText(),
+                    BitwardenString.internet_connection_required_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -733,7 +733,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             ),
         )
             .copy(
-                appBarTitle = R.string.vaults.asText(),
+                appBarTitle = BitwardenString.vaults.asText(),
                 vaultFilterData = VAULT_FILTER_DATA,
             )
         assertEquals(
@@ -854,7 +854,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         ),
                         VaultState.ViewState.FolderItem(
                             id = null,
-                            name = R.string.folder_none.asText(),
+                            name = BitwardenString.folder_none.asText(),
                             itemCount = 0,
                         ),
                     ),
@@ -938,7 +938,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
                 assertEquals(expectedState, viewModel.stateFlow.value)
                 assertEquals(
-                    VaultEvent.ShowSnackbar(R.string.syncing_complete.asText()),
+                    VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
                     awaitItem(),
                 )
             }
@@ -991,7 +991,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
                 assertEquals(expectedState, viewModel.stateFlow.value)
                 assertEquals(
-                    VaultEvent.ShowSnackbar(R.string.syncing_complete.asText()),
+                    VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
                     awaitItem(),
                 )
             }
@@ -1031,7 +1031,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         ),
                         VaultState.ViewState.FolderItem(
                             id = null,
-                            name = R.string.folder_none.asText(),
+                            name = BitwardenString.folder_none.asText(),
                             itemCount = 0,
                         ),
                     ),
@@ -1099,7 +1099,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             createMockVaultState(
                 viewState = VaultState.ViewState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1143,7 +1143,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                             ),
                             VaultState.ViewState.FolderItem(
                                 id = null,
-                                name = R.string.folder_none.asText(),
+                                name = BitwardenString.folder_none.asText(),
                                 itemCount = 0,
                             ),
                         ),
@@ -1162,8 +1162,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                         showCardGroup = true,
                     ),
                     dialog = VaultState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -1193,8 +1193,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                 createMockVaultState(
                     viewState = VaultState.ViewState.NoItems,
                     dialog = VaultState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -1253,7 +1253,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                             ),
                             VaultState.ViewState.FolderItem(
                                 id = null,
-                                name = R.string.folder_none.asText(),
+                                name = BitwardenString.folder_none.asText(),
                                 itemCount = 0,
                             ),
                         ),
@@ -1546,8 +1546,8 @@ class VaultViewModelTest : BaseViewModelTest() {
         val initialState = DEFAULT_STATE.copy(
             viewState = VaultState.ViewState.NoItems,
             dialog = VaultState.DialogState.Error(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.generic_error_message.asText(),
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.generic_error_message.asText(),
             ),
         )
         assertEquals(
@@ -1588,8 +1588,8 @@ class VaultViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 isRefreshing = false,
                 dialog = VaultState.DialogState.Error(
-                    R.string.internet_connection_required_title.asText(),
-                    R.string.internet_connection_required_message.asText(),
+                    BitwardenString.internet_connection_required_title.asText(),
+                    BitwardenString.internet_connection_required_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1639,7 +1639,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = notes,
-                    toastDescriptorOverride = R.string.notes.asText(),
+                    toastDescriptorOverride = BitwardenString.notes.asText(),
                 )
             }
         }
@@ -1672,8 +1672,8 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialog = VaultState.DialogState.Error(
-                        title = R.string.decryption_error.asText(),
-                        message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                        title = BitwardenString.decryption_error.asText(),
+                        message = BitwardenString.failed_to_decrypt_cipher_contact_support.asText(),
                         error = throwable,
                     ),
                 ),
@@ -1708,8 +1708,8 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialog = VaultState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         error = null,
                     ),
                 ),
@@ -1742,7 +1742,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = number,
-                    toastDescriptorOverride = R.string.number.asText(),
+                    toastDescriptorOverride = BitwardenString.number.asText(),
                 )
             }
         }
@@ -1775,8 +1775,8 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialog = VaultState.DialogState.Error(
-                        title = R.string.decryption_error.asText(),
-                        message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                        title = BitwardenString.decryption_error.asText(),
+                        message = BitwardenString.failed_to_decrypt_cipher_contact_support.asText(),
                         error = throwable,
                     ),
                 ),
@@ -1811,8 +1811,8 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialog = VaultState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         error = null,
                     ),
                 ),
@@ -1838,7 +1838,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = password,
-                    toastDescriptorOverride = R.string.password.asText(),
+                    toastDescriptorOverride = BitwardenString.password.asText(),
                 )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
@@ -1875,8 +1875,8 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialog = VaultState.DialogState.Error(
-                        title = R.string.decryption_error.asText(),
-                        message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                        title = BitwardenString.decryption_error.asText(),
+                        message = BitwardenString.failed_to_decrypt_cipher_contact_support.asText(),
                         error = throwable,
                     ),
                 ),
@@ -1912,8 +1912,8 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialog = VaultState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         error = null,
                     ),
                 ),
@@ -1945,7 +1945,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = code,
-                    toastDescriptorOverride = R.string.totp.asText(),
+                    toastDescriptorOverride = BitwardenString.totp.asText(),
                 )
             }
         }
@@ -2007,7 +2007,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = securityCode,
-                    toastDescriptorOverride = R.string.security_code.asText(),
+                    toastDescriptorOverride = BitwardenString.security_code.asText(),
                 )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = cipherId),
@@ -2044,8 +2044,8 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialog = VaultState.DialogState.Error(
-                        title = R.string.decryption_error.asText(),
-                        message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                        title = BitwardenString.decryption_error.asText(),
+                        message = BitwardenString.failed_to_decrypt_cipher_contact_support.asText(),
                         error = throwable,
                     ),
                 ),
@@ -2081,8 +2081,8 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialog = VaultState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         error = null,
                     ),
                 ),
@@ -2106,7 +2106,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = username,
-                    toastDescriptorOverride = R.string.username.asText(),
+                    toastDescriptorOverride = BitwardenString.username.asText(),
                 )
             }
         }
@@ -2204,8 +2204,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialog = VaultState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = error,
                         ),
                     ),
@@ -2243,8 +2243,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialog = VaultState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.invalid_master_password.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.invalid_master_password.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -2284,7 +2284,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = password,
-                    toastDescriptorOverride = R.string.password.asText(),
+                    toastDescriptorOverride = BitwardenString.password.asText(),
                 )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
@@ -2324,8 +2324,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialog = VaultState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = error,
                         ),
                     ),
@@ -2365,8 +2365,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialog = VaultState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.invalid_master_password.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.invalid_master_password.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -2661,8 +2661,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(
                     isRefreshing = false,
                     dialog = VaultState.DialogState.Error(
-                        R.string.internet_connection_required_title.asText(),
-                        R.string.internet_connection_required_message.asText(),
+                        BitwardenString.internet_connection_required_title.asText(),
+                        BitwardenString.internet_connection_required_message.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -2675,16 +2675,16 @@ class VaultViewModelTest : BaseViewModelTest() {
         val throwable = Throwable("Decryption failed")
         viewModel.trySendAction(
             VaultAction.Internal.DecryptionErrorReceive(
-                title = R.string.decryption_error.asText(),
-                message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                title = BitwardenString.decryption_error.asText(),
+                message = BitwardenString.failed_to_decrypt_cipher_contact_support.asText(),
                 error = throwable,
             ),
         )
         assertEquals(
             DEFAULT_STATE.copy(
                 dialog = VaultState.DialogState.Error(
-                    title = R.string.decryption_error.asText(),
-                    message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                    title = BitwardenString.decryption_error.asText(),
+                    message = BitwardenString.failed_to_decrypt_cipher_contact_support.asText(),
                     error = throwable,
                 ),
             ),
@@ -2780,7 +2780,7 @@ private fun createMockVaultState(
     dialog: VaultState.DialogState? = null,
 ): VaultState =
     VaultState(
-        appBarTitle = R.string.my_vault.asText(),
+        appBarTitle = BitwardenString.my_vault.asText(),
         avatarColorString = "#aa00aa",
         initials = "AU",
         accountSummaries = listOf(

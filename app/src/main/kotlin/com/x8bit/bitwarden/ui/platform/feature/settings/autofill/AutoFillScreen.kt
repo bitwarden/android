@@ -37,7 +37,7 @@ import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
@@ -115,7 +115,7 @@ fun AutoFillScreen(
     if (shouldShowAutofillFallbackDialog) {
         BitwardenBasicDialog(
             title = null,
-            message = stringResource(id = R.string.bitwarden_autofill_go_to_settings),
+            message = stringResource(id = BitwardenString.bitwarden_autofill_go_to_settings),
             onDismissRequest = { shouldShowAutofillFallbackDialog = false },
         )
     }
@@ -128,10 +128,10 @@ fun AutoFillScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.autofill),
+                title = stringResource(id = BitwardenString.autofill),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                navigationIconContentDescription = stringResource(id = R.string.back),
+                navigationIconContentDescription = stringResource(id = BitwardenString.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(AutoFillAction.BackClick) }
                 },
@@ -163,8 +163,8 @@ private fun AutoFillScreenContent(
             exit = actionCardExitAnimation(),
         ) {
             BitwardenActionCard(
-                cardTitle = stringResource(R.string.turn_on_autofill),
-                actionText = stringResource(R.string.get_started),
+                cardTitle = stringResource(BitwardenString.turn_on_autofill),
+                actionText = stringResource(BitwardenString.get_started),
                 onActionClick = autoFillHandlers.onAutofillActionCardClick,
                 onDismissClick = autoFillHandlers.onAutofillActionCardDismissClick,
                 leadingContent = { NotificationBadge(notificationCount = 1) },
@@ -174,7 +174,7 @@ private fun AutoFillScreenContent(
             )
         }
         BitwardenListHeaderText(
-            label = stringResource(id = R.string.autofill),
+            label = stringResource(id = BitwardenString.autofill),
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin()
@@ -182,8 +182,10 @@ private fun AutoFillScreenContent(
         )
         Spacer(modifier = Modifier.height(height = 8.dp))
         BitwardenSwitch(
-            label = stringResource(id = R.string.autofill_services),
-            supportingText = stringResource(id = R.string.autofill_services_explanation_long),
+            label = stringResource(id = BitwardenString.autofill_services),
+            supportingText = stringResource(
+                id = BitwardenString.autofill_services_explanation_long,
+            ),
             isChecked = state.isAutoFillServicesEnabled,
             onCheckedChange = autoFillHandlers.onAutofillServicesClick,
             cardStyle = CardStyle.Full,
@@ -220,14 +222,14 @@ private fun AutoFillScreenContent(
 
         if (state.showPasskeyManagementRow) {
             BitwardenExternalLinkRow(
-                text = stringResource(id = R.string.passkey_management),
+                text = stringResource(id = BitwardenString.passkey_management),
                 description = stringResource(
-                    id = R.string.passkey_management_explanation_long,
+                    id = BitwardenString.passkey_management_explanation_long,
                 ),
                 onConfirmClick = autoFillHandlers.onPasskeyManagementClick,
-                dialogTitle = stringResource(id = R.string.continue_to_device_settings),
+                dialogTitle = stringResource(id = BitwardenString.continue_to_device_settings),
                 dialogMessage = stringResource(
-                    id = R.string.set_bitwarden_as_passkey_manager_description,
+                    id = BitwardenString.set_bitwarden_as_passkey_manager_description,
                 ),
                 withDivider = false,
                 cardStyle = if (state.isUserManagedPrivilegedAppsEnabled) {
@@ -241,11 +243,11 @@ private fun AutoFillScreenContent(
             )
             if (state.isUserManagedPrivilegedAppsEnabled) {
                 BitwardenTextRow(
-                    text = stringResource(R.string.privileged_apps),
+                    text = stringResource(BitwardenString.privileged_apps),
                     onClick = autoFillHandlers.onPrivilegedAppsClick,
                     tooltip = TooltipData(
                         contentDescription =
-                            stringResource(R.string.learn_more_about_privileged_apps),
+                            stringResource(BitwardenString.learn_more_about_privileged_apps),
                         onClick = autoFillHandlers.onPrivilegedAppsHelpLinkClick,
                     ),
                     cardStyle = CardStyle.Bottom,
@@ -265,7 +267,7 @@ private fun AutoFillScreenContent(
         )
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenListHeaderText(
-            label = stringResource(id = R.string.additional_options),
+            label = stringResource(id = BitwardenString.additional_options),
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin()
@@ -273,8 +275,10 @@ private fun AutoFillScreenContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenSwitch(
-            label = stringResource(id = R.string.copy_totp_automatically),
-            supportingText = stringResource(id = R.string.copy_totp_automatically_description),
+            label = stringResource(id = BitwardenString.copy_totp_automatically),
+            supportingText = stringResource(
+                id = BitwardenString.copy_totp_automatically_description,
+            ),
             isChecked = state.isCopyTotpAutomaticallyEnabled,
             onCheckedChange = autoFillHandlers.onCopyTotpAutomaticallyClick,
             cardStyle = CardStyle.Full,
@@ -285,8 +289,8 @@ private fun AutoFillScreenContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenSwitch(
-            label = stringResource(id = R.string.ask_to_add_login),
-            supportingText = stringResource(id = R.string.ask_to_add_login_description),
+            label = stringResource(id = BitwardenString.ask_to_add_login),
+            supportingText = stringResource(id = BitwardenString.ask_to_add_login_description),
             isChecked = state.isAskToAddLoginEnabled,
             onCheckedChange = autoFillHandlers.onAskToAddLoginClick,
             cardStyle = CardStyle.Full,
@@ -306,9 +310,9 @@ private fun AutoFillScreenContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextRow(
-            text = stringResource(id = R.string.block_auto_fill),
+            text = stringResource(id = BitwardenString.block_auto_fill),
             description = stringResource(
-                id = R.string.auto_fill_will_not_be_offered_for_these_ur_is,
+                id = BitwardenString.auto_fill_will_not_be_offered_for_these_ur_is,
             ),
             onClick = autoFillHandlers.onBlockAutoFillClick,
             cardStyle = CardStyle.Full,
@@ -329,8 +333,8 @@ private fun FillStyleSelector(
     resources: Resources = LocalContext.current.resources,
 ) {
     BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.display_autofill_suggestions),
-        supportingText = stringResource(id = R.string.use_inline_autofill_explanation_long),
+        label = stringResource(id = BitwardenString.display_autofill_suggestions),
+        supportingText = stringResource(id = BitwardenString.use_inline_autofill_explanation_long),
         options = AutofillStyle.entries.map { it.label() }.toImmutableList(),
         selectedOption = selectedStyle.label(),
         onOptionSelected = {
@@ -349,8 +353,8 @@ private fun AccessibilityAutofillSwitch(
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(value = false) }
     BitwardenSwitch(
-        label = stringResource(id = R.string.accessibility),
-        supportingText = stringResource(id = R.string.accessibility_description5),
+        label = stringResource(id = BitwardenString.accessibility),
+        supportingText = stringResource(id = BitwardenString.accessibility_description5),
         isChecked = isAccessibilityAutoFillEnabled,
         onCheckedChange = {
             if (isAccessibilityAutoFillEnabled) {
@@ -365,10 +369,10 @@ private fun AccessibilityAutofillSwitch(
 
     if (shouldShowDialog) {
         BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.accessibility_service_disclosure),
-            message = stringResource(id = R.string.accessibility_disclosure_text),
-            confirmButtonText = stringResource(id = R.string.accept),
-            dismissButtonText = stringResource(id = R.string.decline),
+            title = stringResource(id = BitwardenString.accessibility_service_disclosure),
+            message = stringResource(id = BitwardenString.accessibility_disclosure_text),
+            confirmButtonText = stringResource(id = BitwardenString.accept),
+            dismissButtonText = stringResource(id = BitwardenString.decline),
             onConfirmClick = {
                 onCheckedChange()
                 shouldShowDialog = false
@@ -387,7 +391,7 @@ private fun DefaultUriMatchTypeRow(
     resources: Resources = LocalContext.current.resources,
 ) {
     BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.default_uri_match_detection),
+        label = stringResource(id = BitwardenString.default_uri_match_detection),
         options = UriMatchType.entries.map { it.displayLabel() }.toImmutableList(),
         selectedOption = selectedUriMatchType.displayLabel(),
         onOptionSelected = { selectedOption ->
@@ -397,7 +401,9 @@ private fun DefaultUriMatchTypeRow(
                     .first { it.displayLabel.toString(resources) == selectedOption },
             )
         },
-        supportingText = stringResource(id = R.string.default_uri_match_detection_description),
+        supportingText = stringResource(
+            id = BitwardenString.default_uri_match_detection_description,
+        ),
         cardStyle = CardStyle.Full,
         modifier = modifier,
     )

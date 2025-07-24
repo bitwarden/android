@@ -27,9 +27,9 @@ import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
@@ -450,22 +450,22 @@ private fun VaultItemListingDialogs(
 
         is VaultItemListingState.DialogState.TrustPrivilegedAddPrompt -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(R.string.unrecognized_browser),
+                title = stringResource(BitwardenString.unrecognized_browser),
                 message = dialogState.message.invoke(),
-                confirmButtonText = stringResource(R.string.trust),
-                dismissButtonText = stringResource(R.string.cancel),
+                confirmButtonText = stringResource(BitwardenString.trust),
+                dismissButtonText = stringResource(BitwardenString.cancel),
                 onConfirmClick = {
                     onTrustPrivilegedAppClick(dialogState.selectedCipherId)
                 },
                 onDismissClick = {
                     onDismissCredentialManagerErrorDialog(
-                        R.string.passkey_operation_failed_because_the_browser_is_not_trusted
+                        BitwardenString.passkey_operation_failed_because_the_browser_is_not_trusted
                             .asText(),
                     )
                 },
                 onDismissRequest = {
                     onDismissCredentialManagerErrorDialog(
-                        R.string.passkey_operation_failed_because_the_browser_is_not_trusted
+                        BitwardenString.passkey_operation_failed_because_the_browser_is_not_trusted
                             .asText(),
                     )
                 },
@@ -497,7 +497,7 @@ private fun VaultItemListingScaffold(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                    navigationIconContentDescription = stringResource(id = R.string.back),
+                    navigationIconContentDescription = stringResource(id = BitwardenString.back),
                     onNavigationIconClick = vaultItemListingHandlers.backClick,
                 )
                     .takeIf { state.shouldShowNavigationIcon },
@@ -510,19 +510,19 @@ private fun VaultItemListingScaffold(
                         )
                     }
                     BitwardenSearchActionItem(
-                        contentDescription = stringResource(id = R.string.search_vault),
+                        contentDescription = stringResource(id = BitwardenString.search_vault),
                         onClick = vaultItemListingHandlers.searchIconClick,
                     )
                     if (state.shouldShowOverflowMenu) {
                         BitwardenOverflowActionItem(
-                            contentDescription = stringResource(R.string.more),
+                            contentDescription = stringResource(BitwardenString.more),
                             menuItemDataList = persistentListOf(
                                 OverflowMenuItemData(
-                                    text = stringResource(id = R.string.sync),
+                                    text = stringResource(id = BitwardenString.sync),
                                     onClick = vaultItemListingHandlers.syncClick,
                                 ),
                                 OverflowMenuItemData(
-                                    text = stringResource(id = R.string.lock),
+                                    text = stringResource(id = BitwardenString.lock),
                                     onClick = vaultItemListingHandlers.lockClick,
                                 ),
                             ),
@@ -536,7 +536,7 @@ private fun VaultItemListingScaffold(
                 BitwardenFloatingActionButton(
                     onClick = vaultItemListingHandlers.addVaultItemClick,
                     painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
-                    contentDescription = stringResource(id = R.string.add_item),
+                    contentDescription = stringResource(id = BitwardenString.add_item),
                     modifier = Modifier.testTag(tag = "AddItemButton"),
                 )
             }

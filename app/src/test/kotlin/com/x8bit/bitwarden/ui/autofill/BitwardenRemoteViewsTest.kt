@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
@@ -24,8 +25,8 @@ import org.junit.jupiter.api.Test
 class BitwardenRemoteViewsTest {
     private val testContext: Context = mockk {
         every { this@mockk.getString(R.string.app_name) } returns APP_NAME
-        every { this@mockk.getString(R.string.go_to_my_vault) } returns GO_TO_MY_VAULT
-        every { this@mockk.getString(R.string.vault_is_locked) } returns VAULT_IS_LOCKED
+        every { this@mockk.getString(BitwardenString.go_to_my_vault) } returns GO_TO_MY_VAULT
+        every { this@mockk.getString(BitwardenString.vault_is_locked) } returns VAULT_IS_LOCKED
     }
     private val autofillAppInfo: AutofillAppInfo = mockk {
         every { this@mockk.context } returns testContext
@@ -56,13 +57,13 @@ class BitwardenRemoteViewsTest {
         // Setup
         every { testContext.isSystemDarkMode } returns false
         every {
-            ContextCompat.getString(testContext, R.string.autofill_suggestion)
+            ContextCompat.getString(testContext, BitwardenString.autofill_suggestion)
         } returns "Autofill suggestion"
         every {
-            ContextCompat.getString(testContext, R.string.type_card)
+            ContextCompat.getString(testContext, BitwardenString.type_card)
         } returns "Card"
         every {
-            ContextCompat.getString(testContext, R.string.type_login)
+            ContextCompat.getString(testContext, BitwardenString.type_login)
         } returns "Login"
         prepareRemoteViews(
             name = NAME,
@@ -129,13 +130,13 @@ class BitwardenRemoteViewsTest {
         // Setup
         every { testContext.isSystemDarkMode } returns true
         every {
-            ContextCompat.getString(testContext, R.string.autofill_suggestion)
+            ContextCompat.getString(testContext, BitwardenString.autofill_suggestion)
         } returns "Autofill suggestion"
         every {
-            ContextCompat.getString(testContext, R.string.type_card)
+            ContextCompat.getString(testContext, BitwardenString.type_card)
         } returns "Card"
         every {
-            ContextCompat.getString(testContext, R.string.type_login)
+            ContextCompat.getString(testContext, BitwardenString.type_login)
         } returns "Login"
         prepareRemoteViews(
             name = NAME,

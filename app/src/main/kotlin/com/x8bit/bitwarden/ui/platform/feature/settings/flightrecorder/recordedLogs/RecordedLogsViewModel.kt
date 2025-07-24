@@ -5,9 +5,9 @@ import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.manager.FileManager
@@ -74,7 +74,7 @@ class RecordedLogsViewModel @Inject constructor(
 
     private fun handleDeleteAllClick() {
         settingsRepository.deleteAllLogs()
-        sendEvent(RecordedLogsEvent.ShowSnackbar(text = R.string.all_logs_deleted.asText()))
+        sendEvent(RecordedLogsEvent.ShowSnackbar(text = BitwardenString.all_logs_deleted.asText()))
     }
 
     private fun handleDeleteClick(action: RecordedLogsAction.DeleteClick) {
@@ -84,7 +84,11 @@ class RecordedLogsViewModel @Inject constructor(
             .find { it.id == action.item.id }
             ?.let {
                 settingsRepository.deleteLog(data = it)
-                sendEvent(RecordedLogsEvent.ShowSnackbar(text = R.string.log_deleted.asText()))
+                sendEvent(
+                    RecordedLogsEvent.ShowSnackbar(
+                        text = BitwardenString.log_deleted.asText(),
+                    ),
+                )
             }
     }
 
@@ -143,8 +147,9 @@ class RecordedLogsViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = RecordedLogsState.DialogState.Error(
-                            title = R.string.unable_to_share.asText(),
-                            message = R.string.please_try_again_or_select_a_different_log.asText(),
+                            title = BitwardenString.unable_to_share.asText(),
+                            message = BitwardenString.please_try_again_or_select_a_different_log
+                                .asText(),
                             error = result.error,
                         ),
                     )
@@ -155,8 +160,8 @@ class RecordedLogsViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = RecordedLogsState.DialogState.Error(
-                            title = R.string.unable_to_share.asText(),
-                            message = R.string
+                            title = BitwardenString.unable_to_share.asText(),
+                            message = BitwardenString
                                 .the_log_file_you_are_trying_to_share_has_been_removed
                                 .asText(),
                             error = null,

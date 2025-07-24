@@ -44,8 +44,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 
 /**
@@ -89,10 +89,10 @@ fun BlockAutoFillScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.block_auto_fill),
+                title = stringResource(id = BitwardenString.block_auto_fill),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                navigationIconContentDescription = stringResource(id = R.string.back),
+                navigationIconContentDescription = stringResource(id = BitwardenString.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(BlockAutoFillAction.BackClick) }
                 },
@@ -109,7 +109,7 @@ fun BlockAutoFillScreen(
                         { viewModel.trySendAction(BlockAutoFillAction.AddUriClick) }
                     },
                     painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
-                    contentDescription = stringResource(id = R.string.add_item),
+                    contentDescription = stringResource(id = BitwardenString.add_item),
                     modifier = Modifier.testTag(tag = "AddItemButton"),
                 )
             }
@@ -130,7 +130,8 @@ fun BlockAutoFillScreen(
                         ) {
                             Text(
                                 text = stringResource(
-                                    id = R.string.auto_fill_will_not_be_offered_for_these_ur_is,
+                                    id = BitwardenString
+                                        .auto_fill_will_not_be_offered_for_these_ur_is,
                                 ),
                                 color = BitwardenTheme.colorScheme.text.primary,
                                 style = BitwardenTheme.typography.bodyMedium,
@@ -235,7 +236,9 @@ private fun BlockAutoFillNoItems(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            text = stringResource(id = R.string.auto_fill_will_not_be_offered_for_these_ur_is),
+            text = stringResource(
+                id = BitwardenString.auto_fill_will_not_be_offered_for_these_ur_is,
+            ),
             style = BitwardenTheme.typography.bodyMedium,
         )
 
@@ -245,7 +248,7 @@ private fun BlockAutoFillNoItems(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            label = stringResource(id = R.string.new_blocked_uri),
+            label = stringResource(id = BitwardenString.new_blocked_uri),
             onClick = addItemClickAction,
         )
     }

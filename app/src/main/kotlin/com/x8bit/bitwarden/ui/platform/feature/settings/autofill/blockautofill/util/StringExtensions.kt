@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.util
 
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 
 /**
  * Validates the URI based on specific criteria.
@@ -23,17 +23,17 @@ fun String.validateUri(existingUris: List<String>): Text? {
         !startsWith("http://") &&
         !startsWith("androidapp://")
     ) {
-        return R.string.invalid_format_use_https_http_or_android_app.asText()
+        return BitwardenString.invalid_format_use_https_http_or_android_app.asText()
     }
 
     // Check for specific invalid patterns.
     if (!isValidPattern()) {
-        return R.string.invalid_uri.asText()
+        return BitwardenString.invalid_uri.asText()
     }
 
     // Check for duplicates.
     if (this in existingUris) {
-        return R.string.the_urix_is_already_blocked.asText(this)
+        return BitwardenString.the_urix_is_already_blocked.asText(this)
     }
 
     // Return null to indicate no errors.

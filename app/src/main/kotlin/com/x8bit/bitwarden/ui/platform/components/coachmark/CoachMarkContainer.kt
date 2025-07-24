@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import kotlinx.coroutines.launch
@@ -203,7 +203,7 @@ private fun BitwardenCoachMarkContainer_preview() {
                     ) {
                         BitwardenStandardIconButton(
                             painter = rememberVectorPainter(BitwardenDrawable.ic_puzzle),
-                            contentDescription = stringResource(R.string.close),
+                            contentDescription = stringResource(BitwardenString.close),
                             onClick = {},
                         )
                     }

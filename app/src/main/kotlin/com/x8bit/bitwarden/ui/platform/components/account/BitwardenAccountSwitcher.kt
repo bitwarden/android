@@ -56,8 +56,8 @@ import com.bitwarden.ui.platform.base.util.toUnscaledTextUnit
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLogoutConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenRemovalConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
@@ -384,7 +384,7 @@ private fun LockOrLogoutDialog(
         selectionItems = {
             if (accountSummary.isVaultUnlocked) {
                 BitwardenBasicDialogRow(
-                    text = stringResource(id = R.string.lock),
+                    text = stringResource(id = BitwardenString.lock),
                     onClick = {
                         onLockAccountClick(accountSummary)
                     },
@@ -392,14 +392,14 @@ private fun LockOrLogoutDialog(
             }
             if (accountSummary.isLoggedIn) {
                 BitwardenBasicDialogRow(
-                    text = stringResource(id = R.string.log_out),
+                    text = stringResource(id = BitwardenString.log_out),
                     onClick = {
                         onLogoutAccountClick(accountSummary)
                     },
                 )
             } else {
                 BitwardenBasicDialogRow(
-                    text = stringResource(id = R.string.remove_account),
+                    text = stringResource(id = BitwardenString.remove_account),
                     onClick = {
                         onRemoveAccountClick(accountSummary)
                     },
@@ -440,7 +440,7 @@ private fun AddAccountItem(
         Spacer(modifier = Modifier.width(16.dp))
 
         Text(
-            text = stringResource(id = R.string.add_account),
+            text = stringResource(id = BitwardenString.add_account),
             style = BitwardenTheme.typography.labelMedium,
             color = BitwardenTheme.colorScheme.text.interaction,
         )

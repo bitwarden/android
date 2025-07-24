@@ -16,10 +16,10 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.isProgressBar
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsEvent
@@ -124,7 +124,7 @@ class RecordedLogsScreenTest : BitwardenComposeTest() {
                             id = "52",
                             title = "2025-04-12T03:15:00 – 2025-04-12T04:15:00".asText(),
                             subtextStart = "1.00 KB".asText(),
-                            subtextEnd = R.string.expires_on.asText("4/12/25"),
+                            subtextEnd = BitwardenString.expires_on.asText("4/12/25"),
                             isDeletedEnabled = true,
                         ),
                     ),
