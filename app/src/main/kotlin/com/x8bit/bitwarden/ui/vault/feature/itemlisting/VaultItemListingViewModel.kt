@@ -1002,21 +1002,20 @@ class VaultItemListingViewModel @Inject constructor(
                     .providerRequest
                     .getCreatePasskeyCredentialRequestOrNull()
                     ?.let { createPasskeyCredentialRequest ->
-                handleItemClickForCreatePublicKeyCredentialRequest(
-                    cipherId = action.id,
-                    cipherView = cipherView,
-                )
-            } ?: createCredentialRequest
-            .providerRequest
-            .getCreatePasswordCredentialRequestOrNull()
-            ?.let {
-                handleItemClickForCreatePasswordCredentialRequest(
-                    cipherId = action.id,
-                    cipherView = cipherView,
-                )
-            }
-        ?: run {
-            sendAction(
+                        handleItemClickForCreatePublicKeyCredentialRequest(
+                            cipherId = action.id,
+                            cipherView = cipherView,
+                        )
+                    } ?: createCredentialRequest
+                    .providerRequest
+                    .getCreatePasswordCredentialRequestOrNull()
+                    ?.let {
+                        handleItemClickForCreatePasswordCredentialRequest(
+                            cipherId = action.id,
+                            cipherView = cipherView,
+                        )
+                    } ?: run {
+                        sendAction(
                             VaultItemListingsAction.Internal.CredentialOperationFailureReceive(
                                 title = BitwardenString.an_error_has_occurred.asText(),
                 message = BitwardenString
@@ -1179,7 +1178,7 @@ class VaultItemListingViewModel @Inject constructor(
 
             else ->
                 showCredentialManagerErrorDialog(
-                    R.string.credential_operation_failed_because_the_request_is_invalid
+                    BitwardenString.credential_operation_failed_because_the_request_is_invalid
                         .asText(),
                 )
         }
