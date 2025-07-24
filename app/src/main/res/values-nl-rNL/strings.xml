@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s is gekopieerd.</string>
     <string name="verify_master_password">Hoofdwachtwoord invoeren</string>
     <string name="verify_pin">PIN-code invoeren</string>
-    <string name="version">Versie</string>
     <string name="view">Weergeven</string>
     <string name="yes">Ja</string>
     <string name="account">Account</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Kaart bewerken</string>
     <string name="edit_identity">Identiteit bewerken</string>
     <string name="edit_note">Notitie bewerken</string>
-    <string name="edit_passkey">Passkey bewerken</string>
+    <string name="edit_ssh_key">SSH-sleutel bewerken</string>
     <string name="enter_email_for_hint">Voer het e-mailadres van je account in om je hoofdwachwoordhint te ontvangen.</string>
     <string name="favorite">Favoriet</string>
     <string name="unfavorite">Verwijderen uit favorieten</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 minuut</string>
     <string name="four_hours">4 uur</string>
     <string name="immediately">Onmiddellijk</string>
-    <string name="vault_timeout_log_out_confirmation">Uitloggen ontneemt je de toegang tot je kluis en vereist online authenticatie na een periode van time-out. Weet je zeker dat je deze instelling wilt gebruiken?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Sessie timeout instellen op \"Uitloggen\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">Na de time-out word je uitgelogd. Je moet verbinding hebben met het internet om opnieuw in te loggen en toegang te krijgen tot je kluis. Je opgeslageen instellingen en pincode op dit apparaat worden niet gewijzigd.</string>
     <string name="logging_in">Inloggen...</string>
     <string name="login_to_bitwarden">Login op Bitwarden</string>
     <string name="master_password_confirmation_val_message">De wachtwoorden komen niet overeen.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Nieuwe identiteit</string>
     <string name="no_notes">Er zijn geen notities in je kluis.</string>
     <string name="new_note">Nieuwe notitie</string>
-    <string name="new_passkey">Nieuwe passkey</string>
     <string name="new_item">Nieuw item</string>
     <string name="new_ssh_key">Nieuwe SSH-sleutel</string>
     <string name="no_text_sends">Er zijn geen Sends (tekst) in je kluis.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Kaart bekijken</string>
     <string name="view_identity">Identiteit bekijken</string>
     <string name="view_note">Notitie bekijken</string>
-    <string name="view_passkey">Passkey bekijken</string>
+    <string name="view_ssh_key">SSH-sleutel bekijken</string>
     <string name="web_vault">Bitwarden Webkluis</string>
     <string name="items">Items</string>
     <string name="items_for_uri">Items voor %1$s</string>
@@ -265,6 +264,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="address">Adres</string>
     <string name="expiration">Vervaldatum</string>
     <string name="show_website_icons">Websitepictogrammen weergeven</string>
+    <string name="show_website_icons_help">Toon website-pictogrammen help</string>
     <string name="show_website_icons_description">Een herkenbare afbeelding naast iedere login weergeven.</string>
     <string name="icons_url">Pictogrammenserver-URL</string>
     <string name="vault_is_locked">Kluis is vergrendeld</string>
@@ -701,6 +701,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="launch_web_authn">WebAuthn starten</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Er is een fout opgetreden bij het starten van WebAuthn Twee factor authenticatie</string>
     <string name="self_hosted_server_url">URL zelfgehoste server</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey-bewerking mislukt omdat de gebruiker niet geverifieerd kon worden.</string>
     <string name="user_verification_direction">Gebruikersverificatie</string>
     <string name="create_account_on">Account maken bij</string>
@@ -865,7 +866,6 @@ Wilt u naar dit account wisselen?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Je hoeft alleen de Authenticator sleutel in te stellen voor logins die tweestapsverificatie vereisen met een code. De sleutel genereert continu zescijferige codes die je kunt gebruiken om in te loggen.</string>
     <string name="coachmark_3_of_3">3 VAN 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Je moet een webadres toevoegen om auto-invullen te gebruiken om toegang te krijgen tot dit account.</string>
-    <string name="mutual_tls">Mutual TLS</string>
     <string name="single_tap_passkey_creation">Passkey aanmaken met één tik</string>
     <string name="single_tap_passkey_authentication">Passkey login met één tik</string>
     <string name="learn_about_new_logins">Meer informatie over nieuwe logins</string>
@@ -909,6 +909,12 @@ Wilt u naar dit account wisselen?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey-bewerking mislukt omdat het aantal gebruikersverificatiepogingen is overschreden.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey-bewerking mislukt omdat er geen item geselecteerd is.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey-bewerking mislukt omdat het verzoek niet ondersteund is.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">URL zelfgehoste server</string>
     <string name="use_brave_autofill_integration">Brave-integratie voor automatisch invullen gebruiken</string>
     <string name="use_chrome_autofill_integration">Gebruik de Chrome-integratie voor automatisch invullen</string>
@@ -967,8 +973,8 @@ Wilt u naar dit account wisselen?</string>
     <string name="view_text_send">Send (tekst) bekijken</string>
     <string name="delete_send">Send verwijderen</string>
     <string name="missing_send_resync_your_vault">Ontbrekende Sync hersynchroniseer je kluis</string>
-    <string name="dynamic_colors">Dynamische kleuren</string>
-    <string name="dynamic_colors_description">Dynamische kleuren toepassen op basis van je achtergrond</string>
+    <string name="use_dynamic_colors">Dynamische kleuren gebruiken</string>
+    <string name="use_dynamic_colors_question">Dynamische kleuren gebruiken?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamische kleuren gebruiken de systeemkleuren en voldoen mogelijk niet aan alle toegankelijkheidsrichtlijnen.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey-bewerking mislukt omdat browser (%1$s) niet vertrouwd is. Selecteer \"Vertrouwen\" voor het toevoegen van %1$s aan de lijst met vertrouwde applicaties of \"Annuleren\"\ om de bewerking af te breken.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey-bewerking mislukt omdat de browser niet is vertrouwd.</string>
@@ -989,4 +995,6 @@ Wilt u naar dit account wisselen?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Weet je zeker dat je wilt stoppen met %s vertrouwen?</string>
     <string name="installed_apps">Geïnstalleerde apps</string>
     <string name="delete_x">%s verwijderen</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Codering decoderen mislukt. Neem contact op met support.</string>
+    <string name="decryption_error">Ontsleutelingsfout</string>
 </resources>

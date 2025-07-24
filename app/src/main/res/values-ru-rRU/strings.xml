@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">Скопировано: %1$s.</string>
     <string name="verify_master_password">Проверка мастер-пароля</string>
     <string name="verify_pin">Проверка PIN</string>
-    <string name="version">Версия</string>
     <string name="view">Просмотр</string>
     <string name="yes">Да</string>
     <string name="account">Аккаунт</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Редактировать карту</string>
     <string name="edit_identity">Редактировать личную информацию</string>
     <string name="edit_note">Редактировать заметку</string>
-    <string name="edit_passkey">Редактировать passkey</string>
+    <string name="edit_ssh_key">Редактировать ключ SSH</string>
     <string name="enter_email_for_hint">Введите email аккаунта для получения подсказки к мастер-паролю.</string>
     <string name="favorite">Избранный</string>
     <string name="unfavorite">Удалить из избранного</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 минута</string>
     <string name="four_hours">4 часа</string>
     <string name="immediately">Немедленно</string>
-    <string name="vault_timeout_log_out_confirmation">По истечении тайм-аута будет выполнен выход, что приведет к отмене всех прав доступа к вашему хранилищу и потребует онлайн-аутентификации. Вы уверены, что хотите использовать этот параметр?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Установить тайм-аут сессии для \"Выход\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">По истечении тайм-аута ваша сессия будет завершена. Для повторной авторизации и получения доступа к хранилищу, вам потребуется подключение к интернету. Ваши настройки и PIN-код, сохраненные на этом устройстве, не изменятся.</string>
     <string name="logging_in">Вход...</string>
     <string name="login_to_bitwarden">Войти в Bitwarden</string>
     <string name="master_password_confirmation_val_message">Неверное подтверждение пароля.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Новая личная информация</string>
     <string name="no_notes">В вашем хранилище нет заметок.</string>
     <string name="new_note">Новая заметка</string>
-    <string name="new_passkey">Новый passkey</string>
     <string name="new_item">Новый элемент</string>
     <string name="new_ssh_key">Новый ключ SSH</string>
     <string name="no_text_sends">В вашем хранилище нет текстовых Send.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Просмотр карты</string>
     <string name="view_identity">Просмотр личной информации</string>
     <string name="view_note">Просмотр заметки</string>
-    <string name="view_passkey">Просмотр passkey</string>
+    <string name="view_ssh_key">Просмотр ключа SSH</string>
     <string name="web_vault">Веб-хранилище Bitwarden</string>
     <string name="items">Элементы</string>
     <string name="items_for_uri">Элементы для %1$s</string>
@@ -265,6 +264,7 @@
     <string name="address">Адрес</string>
     <string name="expiration">Срок действия</string>
     <string name="show_website_icons">Показать значки сайтов</string>
+    <string name="show_website_icons_help">Show website icons help</string>
     <string name="show_website_icons_description">Отображать узнаваемое изображение рядом с каждым логином</string>
     <string name="icons_url">URL сервера значков</string>
     <string name="vault_is_locked">Хранилище заблокировано</string>
@@ -703,6 +703,7 @@
     <string name="launch_web_authn">Запустить WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Возникла ошибка при запуске двухэтапной аутентификации WebAuthn</string>
     <string name="self_hosted_server_url">URL собственного сервера</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Операция с учетными данными не удалась, поскольку не удалось верифицировать пользователя.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Операция с Passkey не удалась, поскольку не удалось верифицировать пользователя.</string>
     <string name="user_verification_direction">Верификация пользователя</string>
     <string name="create_account_on">Создать аккаунт на</string>
@@ -867,7 +868,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">Вам нужно настроить ключ аутентификатора только для логинов, которые требуют двухфакторной аутентификации с помощью кода. Ключ будет постоянно генерировать шестизначные коды, которые можно использовать для авторизации.</string>
     <string name="coachmark_3_of_3">3 ИЗ 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Вы должны добавить веб-адрес, чтобы использовать автозаполнение для доступа к этому аккаунту.</string>
-    <string name="mutual_tls">Взаимный TLS</string>
     <string name="single_tap_passkey_creation">Создание passkey одним касанием</string>
     <string name="single_tap_passkey_authentication">Авторизация с passkey одним касанием</string>
     <string name="learn_about_new_logins">Узнайте о новых логинах</string>
@@ -911,6 +911,12 @@
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Операция с Passkey не удалась, поскольку превышено количество попыток верификации пользователя.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Операция с Passkey не удалась, поскольку не был выбран ни один элемент.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Операция с Passkey не удалась, поскольку запрос не поддерживается.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Операция с паролем не удалась, поскольку выбранный элемент не существует.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Операция с паролем не удалась, поскольку не был выбран ни один элемент.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Операция с учетными данными не удалась, поскольку превышено количество попыток верификации пользователя.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Операция с учетными данными не удалась, поскольку пользователь заблокирован.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Операция с учетными данными не удалась, поскольку выбранный элемент не существует.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Операция с учетными данными не удалась, поскольку верификация пользователя была отменена.</string>
     <string name="self_host_server_url">URL собственного сервера</string>
     <string name="use_brave_autofill_integration">Использовать интеграцию автозаполнения в Brave</string>
     <string name="use_chrome_autofill_integration">Использовать интеграцию автозаполнения в Chrome</string>
@@ -969,8 +975,8 @@
     <string name="view_text_send">Просмотр тестовой Send</string>
     <string name="delete_send">Удалить Send</string>
     <string name="missing_send_resync_your_vault">Пропущенная Send повторно синхронизирует ваше хранилище</string>
-    <string name="dynamic_colors">Динамические цвета</string>
-    <string name="dynamic_colors_description">Применить динамические цвета на основе ваших обоев</string>
+    <string name="use_dynamic_colors">Использовать динамические цвета</string>
+    <string name="use_dynamic_colors_question">Использовать динамические цвета?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Динамические цвета используют системные цвета и могут не соответствовать всем рекомендациям по доступности.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Операция с Passkey не удалась, поскольку браузер (%1$s) недоверенный. Выберите \'Доверять\' для добавления %1$s в список доверенных приложений или \'Отмена\'\ для прерывания операции.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Операция с Passkey не удалась, поскольку браузер недоверенный.</string>
@@ -988,7 +994,9 @@
     <string name="unrecognized_browser">Неизвестный браузер</string>
     <string name="learn_more_about_using_passkeys_with_bitwarden">Узнайте больше об использовании passkey в Bitwarden.</string>
     <string name="all_trusted_apps">Все доверенные приложения</string>
-    <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
+    <string name="are_you_sure_you_want_to_stop_trusting_x">Вы уверены, что хотите перестать доверять %s?</string>
     <string name="installed_apps">Установленные приложения</string>
     <string name="delete_x">Удалить %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Не удалось расшифровать шифр. Свяжитесь с поддержкой.</string>
+    <string name="decryption_error">Ошибка расшифровки</string>
 </resources>

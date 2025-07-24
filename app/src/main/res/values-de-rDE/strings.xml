@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s kopiert</string>
     <string name="verify_master_password">Master-Passwort verifizieren</string>
     <string name="verify_pin">PIN überprüfen</string>
-    <string name="version">Version</string>
     <string name="view">Ansicht</string>
     <string name="yes">Ja</string>
     <string name="account">Benutzerkonto</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Karte bearbeiten</string>
     <string name="edit_identity">Identität bearbeiten</string>
     <string name="edit_note">Notiz bearbeiten</string>
-    <string name="edit_passkey">Passkey bearbeiten</string>
+    <string name="edit_ssh_key">Edit SSH key</string>
     <string name="enter_email_for_hint">Gebe die E-Mail Adresse deines Kontos ein, um den Hinweis für dein Master-Passwort zu erhalten.</string>
     <string name="favorite">Favorit</string>
     <string name="unfavorite">Aus Favoriten entfernen</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 Minute</string>
     <string name="four_hours">4 Stunden</string>
     <string name="immediately">Sofort</string>
-    <string name="vault_timeout_log_out_confirmation">Nach dem Ausloggen verlierest du jeglichen Zugriff auf deinen Tresor und es ist nach Ablauf der Timeout-Zeit eine Online-Authentifizierung erforderlich. Bist du sicher, dass du diese Einstellung nutzen möchten?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
     <string name="logging_in">Anmeldung läuft...</string>
     <string name="login_to_bitwarden">Bei Bitwarden anmelden</string>
     <string name="master_password_confirmation_val_message">Passwortbestätigung ist nicht korrekt.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Neue Identität</string>
     <string name="no_notes">Du hast keine Notizen in deinem Tresor.</string>
     <string name="new_note">Neue Notiz</string>
-    <string name="new_passkey">Neuer Passkey</string>
     <string name="new_item">Neuer Eintrag</string>
     <string name="new_ssh_key">Neuer SSH-Schlüssel</string>
     <string name="no_text_sends">Du hast keine Text-Sends in deinem Tresor.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Karte anzeigen</string>
     <string name="view_identity">Identität anzeigen</string>
     <string name="view_note">Notiz anzeigen</string>
-    <string name="view_passkey">Passkey anzeigen</string>
+    <string name="view_ssh_key">View SSH key</string>
     <string name="web_vault">Bitwarden Web-Tresor</string>
     <string name="items">Einträge</string>
     <string name="items_for_uri">Zugangsdaten für %1$s</string>
@@ -265,6 +264,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="address">Adresse</string>
     <string name="expiration">Gültig bis</string>
     <string name="show_website_icons">Website-Symbole anzeigen</string>
+    <string name="show_website_icons_help">Show website icons help</string>
     <string name="show_website_icons_description">Ein wiedererkennbares Bild neben jeden Zugangsdaten anzeigen.</string>
     <string name="icons_url">URL des Icons-Servers</string>
     <string name="vault_is_locked">Tresor ist gesperrt</string>
@@ -426,8 +426,8 @@ Das Scannen erfolgt automatisch.</string>
     <string name="passkey_management">Passkey-Verwaltung</string>
     <string name="autofill_services">Auto-Ausfüllen-Dienste</string>
     <string name="display_autofill_suggestions">Vorschläge zum Auto-Ausfüllen anzeigen</string>
-    <string name="autofill_suggestions_inline">Inline (angezeigt in der Tastatur)</string>
-    <string name="autofill_suggestions_popup">Pop-up (angezeigt über dem Eingabefeld)</string>
+    <string name="autofill_suggestions_inline">Inline (wird in der Tastatur angezeigt)</string>
+    <string name="autofill_suggestions_popup">Pop-up (wird über dem Eingabefeld angezeigt)</string>
     <string name="accessibility">Bedienungshilfen verwenden</string>
     <string name="accessibility_description5">Benötigt für die Verwendung der Auto-Ausfüllen-Schnellaktionskachel.</string>
     <string name="personal_ownership_policy_in_effect">Eine Organisationsrichtlinie beeinflusst deine Eigentümer-Optionen.</string>
@@ -700,6 +700,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="launch_web_authn">WebAuthn starten</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Es gab einen Fehler beim Starten der WebAuthn Zwei-Faktor-Authentifizierung</string>
     <string name="self_hosted_server_url">Selbst gehostete Server-URL</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Der Passkey-Vorgang ist fehlgeschlagen, da der Benutzer nicht verifiziert werden konnte.</string>
     <string name="user_verification_direction">Benutzer-Verifizierung</string>
     <string name="create_account_on">Konto erstellt am</string>
@@ -864,7 +865,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Du musst den Authentifizierungsschlüssel nur für Zugangsdaten einrichten, die eine zwei-Faktor-Authentifizierung mit einem Code erfordern. Der Schlüssel generiert kontinuierlich sechsstellige Codes, mit denen du dich anmelden kannst.</string>
     <string name="coachmark_3_of_3">3 von 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Du musst eine Website-Adresse hinzufügen, um automatisches Ausfüllen für den Zugriff auf dieses Konto benutzen zu können.</string>
-    <string name="mutual_tls">Mutual TLS</string>
     <string name="single_tap_passkey_creation">Passkey-Erstellung mit einem Tap</string>
     <string name="single_tap_passkey_authentication">Passkey-Anmeldung mit einen Tap</string>
     <string name="learn_about_new_logins">Erfahre mehr über neue Zugangsdaten</string>
@@ -908,6 +908,12 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Der Passkey-Vorgang ist fehlgeschlagen, da die Anzahl der Benutzer-Verifizierungsversuche überschritten wurde.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Der Passkey-Vorgang ist fehlgeschlagen, da kein Eintrag ausgewählt wurde.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Der Passkey-Vorgang ist fehlgeschlagen, weil die Anfrage nicht unterstützt wird.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">Selbst gehostete Server-URL</string>
     <string name="use_brave_autofill_integration">Brave Auto-Ausfüllen-Integration verwenden</string>
     <string name="use_chrome_autofill_integration">Chrome Auto-Ausfüllen-Integration verwenden</string>
@@ -966,8 +972,8 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="view_text_send">Text-Send anzeigen</string>
     <string name="delete_send">Send löschen</string>
     <string name="missing_send_resync_your_vault">Fehlendes Send. Synchronisiere deinen Tresor erneut</string>
-    <string name="dynamic_colors">Dynamische Farben</string>
-    <string name="dynamic_colors_description">Dynamische Farben auf Basis deines Hintergrunds anwenden</string>
+    <string name="use_dynamic_colors">Dynamische Farben verwenden</string>
+    <string name="use_dynamic_colors_question">Dynamische Farben verwenden?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamische Farben verwenden die Systemfarben und erfüllen möglicherweise nicht alle Richtlinien zur Barrierefreiheit.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Der Passkey-Vorgang ist fehlgeschlagen, da der Browser (%1$s) nicht vertrauenswürdig ist. Wähle \"Vertrauen\" aus, um %1$s der Liste vertrauenswürdiger Anwendungen hinzuzufügen oder \"Abbrechen\"\ um den Vorgang abzubrechen.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Der Passkey-Vorgang ist fehlgeschlagen, da der Browser nicht vertrauenswürdig ist.</string>
@@ -988,4 +994,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Bist du sicher, dass du aufhören willst, %s zu vertrauen?</string>
     <string name="installed_apps">Installierte Apps</string>
     <string name="delete_x">%s löschen</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
+    <string name="decryption_error">Entschlüsselungsfehler</string>
 </resources>

@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">Đã sao chép %1$s</string>
     <string name="verify_master_password">Nhập lại mật khẩu chính</string>
     <string name="verify_pin">Xác thực mã PIN</string>
-    <string name="version">Phiên bản</string>
     <string name="view">Xem</string>
     <string name="yes">Có</string>
     <string name="account">Tài khoản</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Sửa thông tin thẻ</string>
     <string name="edit_identity">Sửa danh tính</string>
     <string name="edit_note">Sửa ghi chú</string>
-    <string name="edit_passkey">Sửa mã khóa</string>
+    <string name="edit_ssh_key">Sửa khóa SSH</string>
     <string name="enter_email_for_hint">Nhập địa chỉ email tài khoản của bạn để nhận gợi ý mật khẩu chính.</string>
     <string name="favorite">Yêu thích</string>
     <string name="unfavorite">Bỏ thích</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 phút</string>
     <string name="four_hours">4 giờ</string>
     <string name="immediately">Tức thì</string>
-    <string name="vault_timeout_log_out_confirmation">Đăng xuất sẽ xóa toàn bộ quyền truy cập vào kho của bạn và yêu cầu xác minh lại sau khi đóng kho. Bạn có chắc chắn muốn sử dụng cài đặt này không?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Đặt thời gian đếm ngược \"Đăng xuất\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">Sau thời gian này, bạn sẽ bị đăng xuất. Bạn cần kết nối với internet để đăng nhập lại và truy cập vào kho. Các cài đặt và mã PIN đã lưu trên thiết bị này sẽ không thay đổi.</string>
     <string name="logging_in">Đang đăng nhập...</string>
     <string name="login_to_bitwarden">Đăng nhập Bitwarden</string>
     <string name="master_password_confirmation_val_message">Mật khẩu nhập lại không trùng khớp.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Danh tính mới</string>
     <string name="no_notes">Không có ghi chú nào trong kho của bạn.</string>
     <string name="new_note">Ghi chú mới</string>
-    <string name="new_passkey">Mã khoá mới</string>
     <string name="new_item">Mục mới</string>
     <string name="new_ssh_key">Khóa SSH mới</string>
     <string name="no_text_sends">Không có Send văn bản nào trong kho của bạn.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Xem thẻ</string>
     <string name="view_identity">Xem danh tính</string>
     <string name="view_note">Xem ghi chú</string>
-    <string name="view_passkey">Xem mã khóa</string>
+    <string name="view_ssh_key">Xem khóa SSH</string>
     <string name="web_vault">Kho lưu trữ web Bitwarden</string>
     <string name="items">Mục</string>
     <string name="items_for_uri">Mục cho %1$s</string>
@@ -265,6 +264,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="address">Địa chỉ</string>
     <string name="expiration">Hết hạn</string>
     <string name="show_website_icons">Hiện biểu tượng trang web</string>
+    <string name="show_website_icons_help">Hiện biểu tượng trang web trợ giúp</string>
     <string name="show_website_icons_description">Hiện logo trang web bên cạnh mỗi đăng nhập.</string>
     <string name="icons_url">URL máy chủ biểu tượng</string>
     <string name="vault_is_locked">Kho đã khóa</string>
@@ -296,7 +296,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="autofill_and_save">Tự động điền và lưu</string>
     <string name="organization">Tổ chức</string>
     <string name="try_again">Thử lại</string>
-    <string name="created">Tạo bởi: %1$s</string>
+    <string name="created">Tạo lúc: %1$s</string>
     <string name="password_last_updated">Mật khẩu được cập nhật lần cuối: %1$s</string>
     <string name="last_edited">Lần sửa đổi cuối cùng: %1$s</string>
     <string name="invalid_email">Địa chỉ email không hợp lệ.</string>
@@ -405,10 +405,10 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="account_biometric_invalidated">Chức năng mở khóa bằng sinh trắc học cho tài khoản này đã bị vô hiệu hóa cho đến khi xác minh mật khẩu chính.</string>
     <string name="enable_sync_on_refresh">Đồng bộ khi làm mới</string>
     <string name="enable_sync_on_refresh_description">Đồng bộ kho bằng cách vuốt xuống.</string>
-    <string name="log_in_sso">Đăng nhập một lần cho doanh nghiệp</string>
+    <string name="log_in_sso">Đăng nhập một lần (SSO) cho doanh nghiệp</string>
     <string name="log_in_sso_summary">Đăng nhập nhanh chóng thông qua cổng đăng nhập một lần của tổ chức của bạn. Vui lòng nhập mã định danh của tổ chức để bắt đầu.</string>
     <string name="org_identifier">Mã định danh tổ chức</string>
-    <string name="login_sso_error">Hiện tại không thể đăng nhập bằng Đăng nhập một lần</string>
+    <string name="login_sso_error">Hiện tại không thể đăng nhập bằng SSO</string>
     <string name="set_master_password">Đặt mật khẩu chính</string>
     <string name="master_password_policy_in_effect">Các chính sách của tổ chức yêu cầu mật khẩu chính của bạn phải đáp ứng các yêu cầu sau:</string>
     <string name="policy_in_effect_min_complexity">Độ mạnh tối thiểu %1$s</string>
@@ -677,7 +677,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="privacy_policy_description_long">Đọc chính sách bảo mật trên bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Khám phá thêm các tính năng tài khoản Bitwarden của bạn trên bản web.</string>
     <string name="learn_about_organizations_description_long">Bitwarden cho phép bạn chia sẻ các mục trong kho lưu trữ với người khác bằng cách tạo một tổ chức. Tìm hiểu thêm trên bitwarden.com.</string>
-    <string name="created_x">Tạo bởi %1$s</string>
+    <string name="created_x">Tạo lúc %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Tổ chức của bạn yêu cầu bạn thiết lập mật khẩu chính.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Thiết lập phương thức mở khóa để thay đổi hành động khi đóng kho.</string>
     <string name="save_passkey_as_new_login">Lưu mã khoá như đăng nhập mới</string>
@@ -701,6 +701,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="launch_web_authn">Khởi chạy WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Xảy ra lỗi khi khởi động xác thực hai bước với WebAuthn</string>
     <string name="self_hosted_server_url">URL máy chủ tự lưu trữ</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Vận hành mã khóa thất bại vì không thể xác minh người dùng.</string>
     <string name="user_verification_direction">Xác minh người dùng</string>
     <string name="create_account_on">Tạo tài khoản trên</string>
@@ -865,7 +866,6 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Bạn chỉ cần thiết lập Khóa xác thực cho những tài khoản cần xác minh 2 bước bằng mã. Khóa này sẽ liên tục tạo ra các mã sáu chữ số để bạn dùng khi đăng nhập.</string>
     <string name="coachmark_3_of_3">3 TRONG 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Bạn phải thêm địa chỉ web để sử dụng tính năng tự động điền khi truy cập tài khoản này.</string>
-    <string name="mutual_tls">TLS hai chiều</string>
     <string name="single_tap_passkey_creation">Tạo mã khóa bằng một lần chạm</string>
     <string name="single_tap_passkey_authentication">Đăng nhập bằng mã khóa chỉ với một lần chạm</string>
     <string name="learn_about_new_logins">Tìm hiểu về cách đăng nhập mới</string>
@@ -909,6 +909,12 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Vận hành mã khóa không thành công vì vượt quá số lần xác minh người dùng.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Vận hành mã khóa không thành công vì không có mục nào được chọn.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Vận hành mã khóa không thành công vì yêu cầu không được hỗ trợ.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">URL máy chủ tự lưu trữ</string>
     <string name="use_brave_autofill_integration">Tích hợp với tính năng tự động điền của Brave</string>
     <string name="use_chrome_autofill_integration">Tích hợp với tính năng tự động điền của Chrome</string>
@@ -969,9 +975,9 @@ các vấn đề.</string>
     <string name="view_text_send">Xem văn bản Send</string>
     <string name="delete_send">Xóa Send</string>
     <string name="missing_send_resync_your_vault">Thiếu Send, đồng bộ lại kho của bạn</string>
-    <string name="dynamic_colors">Màu sắc tự động điều chỉnh</string>
-    <string name="dynamic_colors_description">Dựa theo hình nền của bạn</string>
-    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Màu sắc động sử dụng các màu hệ thống và có thể khó nhìn.</string>
+    <string name="use_dynamic_colors">Dùng màu tương thích</string>
+    <string name="use_dynamic_colors_question">Dùng màu giống hệ thống?</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Tùy chọn này tự động áp dụng các màu hệ thống cho Bitwarden dựa trên màu sắc hình nền hiện tại của bạn. Các màu sắc này có thể khiến nội dung khó đọc hơn.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Vận hành mã khóa thất bại vì trình duyệt (%1$s) không được nhận diện. Chọn \"Tin tưởng\" để thêm %1$s vào danh sách các ứng dụng được tin cậy cục bộ.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Vận hành mã khóa thất bại vì trình duyệt không được tin tưởng.</string>
     <string name="trust">Tin tưởng</string>
@@ -991,4 +997,6 @@ các vấn đề.</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Bạn có chắc chắn muốn ngừng tin tưởng %s không?</string>
     <string name="installed_apps">Ứng dụng đã cài đặt</string>
     <string name="delete_x">Xóa %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Không giải mã được. Liên hệ bộ phận hỗ trợ.</string>
+    <string name="decryption_error">Lỗi giải mã</string>
 </resources>

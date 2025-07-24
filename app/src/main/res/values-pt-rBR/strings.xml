@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s foi copiado</string>
     <string name="verify_master_password">Verificar a senha mestra</string>
     <string name="verify_pin">Verificar PIN</string>
-    <string name="version">Versão</string>
     <string name="view">Visualizar</string>
     <string name="yes">Sim</string>
     <string name="account">Conta</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Editar cartão</string>
     <string name="edit_identity">Editar identidade</string>
     <string name="edit_note">Editar nota</string>
-    <string name="edit_passkey">Editar senha</string>
+    <string name="edit_ssh_key">Edit SSH key</string>
     <string name="enter_email_for_hint">Digite o endereço de e-mail da sua conta para receber a dica da sua senha mestra.</string>
     <string name="favorite">Favorito</string>
     <string name="unfavorite">Desfavoritar</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 minuto</string>
     <string name="four_hours">4 horas</string>
     <string name="immediately">Imediatamente</string>
-    <string name="vault_timeout_log_out_confirmation">Sair irá remover todo o acesso ao seu cofre e requer autenticação online após o período de tempo limite. Tem certeza de que deseja usar esta configuração?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
     <string name="logging_in">Iniciando Sessão...</string>
     <string name="login_to_bitwarden">Iniciar sessão no Bitwarden</string>
     <string name="master_password_confirmation_val_message">A confirmação de senha não está correta.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Nova identidade</string>
     <string name="no_notes">Não há notas no seu cofre.</string>
     <string name="new_note">Nova nota</string>
-    <string name="new_passkey">Nova senha</string>
     <string name="new_item">Novo item</string>
     <string name="new_ssh_key">Nova chave SSH</string>
     <string name="no_text_sends">Não há textos enviados no seu cofre.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Ver cartão</string>
     <string name="view_identity">Ver identidade</string>
     <string name="view_note">Ver nota</string>
-    <string name="view_passkey">Ver senha</string>
+    <string name="view_ssh_key">View SSH key</string>
     <string name="web_vault">Cofre Web bitwarden</string>
     <string name="items">Itens</string>
     <string name="items_for_uri">Itens para %1$s</string>
@@ -265,6 +264,7 @@ A leitura será feita automaticamente.</string>
     <string name="address">Endereço</string>
     <string name="expiration">Vencimento</string>
     <string name="show_website_icons">Mostrar ícones dos sites</string>
+    <string name="show_website_icons_help">Show website icons help</string>
     <string name="show_website_icons_description">Mostre uma imagem reconhecível ao lado de cada login.</string>
     <string name="icons_url">URL do Servidor de Ícones</string>
     <string name="vault_is_locked">O cofre está trancado</string>
@@ -701,6 +701,7 @@ Você deseja mudar para esta conta?</string>
     <string name="launch_web_authn">Iniciar WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Houve um erro ao iniciar a autenticação de dois fatores WebAuthn</string>
     <string name="self_hosted_server_url">URL do servidor auto-hospedado</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">A operação da senha falhou porque o usuário não pôde ser verificado.</string>
     <string name="user_verification_direction">Verificação de usuário</string>
     <string name="create_account_on">Criar conta em</string>
@@ -865,7 +866,6 @@ Você deseja mudar para esta conta?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Você só precisará configurar a Chave de Autenticação para logins que exigem autenticação de dois fatores com um código. A chave irá gerar continuamente códigos de seis dígitos que você pode usar para entrar.</string>
     <string name="coachmark_3_of_3">3 de 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Você deve adicionar um endereço web para usar o preenchimento automático para acessar esta conta.</string>
-    <string name="mutual_tls">TLS mútuo</string>
     <string name="single_tap_passkey_creation">Criação de senha com um toque</string>
     <string name="single_tap_passkey_authentication">Entrada de senha com um toque</string>
     <string name="learn_about_new_logins">Aprenda sobre novos logins</string>
@@ -909,6 +909,12 @@ Você deseja mudar para esta conta?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">A operação da chave de acesso falhou porque as tentativas de verificação do utilizador foram excedidas.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">A operação da chave de acesso falhou porque não foi selecionado nenhum item.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A operação com a chave de acesso falhou porque a solicitação não é compatível.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">URL do servidor auto-hospedado</string>
     <string name="use_brave_autofill_integration">Usar a integração do autopreenchimento do Brave</string>
     <string name="use_chrome_autofill_integration">Usar integração com o preenchimento automático do Chrome</string>
@@ -967,8 +973,8 @@ Você deseja mudar para esta conta?</string>
     <string name="view_text_send">Ver Envio de texto</string>
     <string name="delete_send">Excluir Envio</string>
     <string name="missing_send_resync_your_vault">Envio ausente, sincronize seu cofre</string>
-    <string name="dynamic_colors">Cores dinâmicas</string>
-    <string name="dynamic_colors_description">Aplicar cores dinâmicas com base no seu papel de parede</string>
+    <string name="use_dynamic_colors">Use dynamic colors</string>
+    <string name="use_dynamic_colors_question">Use dynamic colors?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">As cores dinâmicas usam as cores do sistema e podem não atender todas as diretrizes de acessibilidade.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Operação de senha falhou porque o navegador (%1$s) não é confiável. Selecione \"Confiar\" para adicionar %1$s à lista de aplicativos confiáveis ou \"Cancelar\"\ para abortar a operação.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">A operação de senha falhou porque o navegador não é confiável.</string>
@@ -989,4 +995,6 @@ Você deseja mudar para esta conta?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Tem certeza de que deseja parar de confiar em %s?</string>
     <string name="installed_apps">Apps instalados</string>
     <string name="delete_x">Excluir %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
+    <string name="decryption_error">Decryption error</string>
 </resources>

@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s wedi\'i gopïo</string>
     <string name="verify_master_password">Gwirio\'r prif gyfrinair</string>
     <string name="verify_pin">Verify PIN</string>
-    <string name="version">Fersiwn</string>
     <string name="view">Gweld</string>
     <string name="yes">Ydw</string>
     <string name="account">Cyfrif</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Edit card</string>
     <string name="edit_identity">Edit identity</string>
     <string name="edit_note">Edit note</string>
-    <string name="edit_passkey">Edit passkey</string>
+    <string name="edit_ssh_key">Edit SSH key</string>
     <string name="enter_email_for_hint">Enter your account email address to receive your master password hint.</string>
     <string name="favorite">Ffefryn</string>
     <string name="unfavorite">Unfavorite</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">ar ôl munud</string>
     <string name="four_hours">ar ôl 4 awr</string>
     <string name="immediately">ar unwaith</string>
-    <string name="vault_timeout_log_out_confirmation">Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
     <string name="logging_in">Wrthi\'n mewngofnodi...</string>
     <string name="login_to_bitwarden">Log in to Bitwarden</string>
     <string name="master_password_confirmation_val_message">Password confirmation is not correct.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">New identity</string>
     <string name="no_notes">There are no notes in your vault.</string>
     <string name="new_note">New note</string>
-    <string name="new_passkey">New passkey</string>
     <string name="new_item">New item</string>
     <string name="new_ssh_key">New SSH key</string>
     <string name="no_text_sends">There are no text Sends in your vault.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">View card</string>
     <string name="view_identity">View identity</string>
     <string name="view_note">View note</string>
-    <string name="view_passkey">View passkey</string>
+    <string name="view_ssh_key">View SSH key</string>
     <string name="web_vault">Cell we Bitwarden</string>
     <string name="items">Eitemau</string>
     <string name="items_for_uri">Eitemau ar gyfer %1$s</string>
@@ -265,6 +264,7 @@ Scanning will happen automatically.</string>
     <string name="address">Cyfeiriad</string>
     <string name="expiration">Dod i ben</string>
     <string name="show_website_icons">Dangos eiconau gwefannau</string>
+    <string name="show_website_icons_help">Show website icons help</string>
     <string name="show_website_icons_description">Dangos delwedd adnabyddadwy wrth ymyl pob eitem.</string>
     <string name="icons_url">Icons server URL</string>
     <string name="vault_is_locked">Vault is locked</string>
@@ -342,7 +342,7 @@ Scanning will happen automatically.</string>
     <string name="pin">PIN</string>
     <string name="unlock">Datgloi</string>
     <string name="thirty_minutes">ar ôl hanner awr</string>
-    <string name="set_pin_description">Your PIN must be at least 4 characters. Your PIN settings will be reset if you ever fully log out of the application.</string>
+    <string name="set_pin_description">Your PIN must be at least 4 characters. Your PIN settings will be reset if you manually log out of the Bitwarden app.</string>
     <string name="logged_in_as_on">Rydych wedi mewngofnodi fel %1$s ar %2$s.</string>
     <string name="vault_locked_master_password">Mae eich cell dan glo. Gwiriwch eich prif gyfrinair i barhau.</string>
     <string name="vault_locked_pin">Mae eich cell dan glo. Gwiriwch eich cod PIN i barhau.</string>
@@ -701,6 +701,7 @@ Do you want to switch to this account?</string>
     <string name="launch_web_authn">Launch WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">There was an error starting WebAuthn two factor authentication</string>
     <string name="self_hosted_server_url">Self-hosted server URL</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
     <string name="user_verification_direction">User verification</string>
     <string name="create_account_on">Create account on</string>
@@ -865,7 +866,6 @@ Do you want to switch to this account?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="mutual_tls">Mutual TLS</string>
     <string name="single_tap_passkey_creation">Single tap passkey creation</string>
     <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
@@ -909,6 +909,12 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">Self-host server URL</string>
     <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
@@ -967,9 +973,9 @@ Do you want to switch to this account?</string>
     <string name="view_text_send">View text Send</string>
     <string name="delete_send">Delete Send</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
-    <string name="dynamic_colors">Dynamic colors</string>
-    <string name="dynamic_colors_description">Apply dynamic colors based on your wallpaper</string>
-    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamic colors uses the system colors and may not meet all accessibility guidelines.</string>
+    <string name="use_dynamic_colors">Use dynamic colors</string>
+    <string name="use_dynamic_colors_question">Use dynamic colors?</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">This color scheme automatically applies system colors to Bitwarden based on your current wallpaper. These colors may not meet all accessibility guidelines.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
     <string name="trust">Trust</string>
@@ -989,4 +995,6 @@ Do you want to switch to this account?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
     <string name="installed_apps">Installed apps</string>
     <string name="delete_x">Delete %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
+    <string name="decryption_error">Decryption error</string>
 </resources>
