@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
@@ -40,6 +41,7 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -83,10 +85,10 @@ fun OtherScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = BitwardenString.other),
+                title = stringResource(id = R.string.other),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                navigationIconContentDescription = stringResource(id = BitwardenString.back),
+                navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(OtherAction.BackClick) }
                 },
@@ -131,10 +133,8 @@ private fun OtherContent(
         Spacer(modifier = Modifier.height(height = 12.dp))
         if (!state.isPreAuth) {
             BitwardenSwitch(
-                label = stringResource(id = BitwardenString.enable_sync_on_refresh),
-                supportingText = stringResource(
-                    id = BitwardenString.enable_sync_on_refresh_description,
-                ),
+                label = stringResource(id = R.string.enable_sync_on_refresh),
+                supportingText = stringResource(id = R.string.enable_sync_on_refresh_description),
                 isChecked = state.allowSyncOnRefresh,
                 onCheckedChange = onEnableSyncCheckChange,
                 cardStyle = CardStyle.Full,
@@ -148,7 +148,7 @@ private fun OtherContent(
 
             BitwardenOutlinedButton(
                 onClick = onSyncClick,
-                label = stringResource(id = BitwardenString.sync_now),
+                label = stringResource(id = R.string.sync_now),
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag(tag = "SyncNowButton")
@@ -167,7 +167,7 @@ private fun OtherContent(
                 horizontalArrangement = Arrangement.Start,
             ) {
                 Text(
-                    text = stringResource(id = BitwardenString.last_sync),
+                    text = stringResource(id = R.string.last_sync),
                     style = BitwardenTheme.typography.bodySmall,
                     color = BitwardenTheme.colorScheme.text.secondary,
                     modifier = Modifier.padding(end = 2.dp),
@@ -216,7 +216,7 @@ private fun ScreenCaptureRow(
     var shouldShowScreenCaptureConfirmDialog by remember { mutableStateOf(false) }
 
     BitwardenSwitch(
-        label = stringResource(id = BitwardenString.allow_screen_capture),
+        label = stringResource(id = R.string.allow_screen_capture),
         isChecked = currentValue,
         onCheckedChange = {
             if (currentValue) {
@@ -231,12 +231,10 @@ private fun ScreenCaptureRow(
 
     if (shouldShowScreenCaptureConfirmDialog) {
         BitwardenTwoButtonDialog(
-            title = stringResource(BitwardenString.allow_screen_capture),
-            message = stringResource(
-                BitwardenString.are_you_sure_you_want_to_enable_screen_capture,
-            ),
-            confirmButtonText = stringResource(BitwardenString.yes),
-            dismissButtonText = stringResource(id = BitwardenString.cancel),
+            title = stringResource(R.string.allow_screen_capture),
+            message = stringResource(R.string.are_you_sure_you_want_to_enable_screen_capture),
+            confirmButtonText = stringResource(R.string.yes),
+            dismissButtonText = stringResource(id = R.string.cancel),
             onConfirmClick = {
                 onValueChange(true)
                 shouldShowScreenCaptureConfirmDialog = false
@@ -256,7 +254,7 @@ private fun ClearClipboardFrequencyRow(
 ) {
     BitwardenMultiSelectButton(
         label = stringResource(id = BitwardenString.clear_clipboard),
-        supportingText = stringResource(id = BitwardenString.clear_clipboard_description),
+        supportingText = annotatedStringResource(id = BitwardenString.clear_clipboard_description),
         options = ClearClipboardFrequency.entries.map { it.displayLabel() }.toImmutableList(),
         selectedOption = currentSelection.displayLabel(),
         onOptionSelected = { selectedFrequency ->
