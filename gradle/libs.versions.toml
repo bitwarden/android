@@ -1,6 +1,9 @@
 # Please keep each version / library / plugin alphabetized within its own section and subsubsection.
 [versions]
 
+# App version
+appVersionName = "2025.7.0"
+
 # SDK Versions
 compileSdk = "36"
 targetSdk = "36"
