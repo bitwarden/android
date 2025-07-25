@@ -29,8 +29,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.CredentialExchangeProtocolImport,
     FlagKey.CredentialExchangeProtocolExport,
     FlagKey.CipherKeyEncryption,
-    FlagKey.SingleTapPasskeyCreation,
-    FlagKey.SingleTapPasskeyAuthentication,
     FlagKey.RestrictCipherItemDeletion,
     FlagKey.UserManagedPrivilegedApps,
     FlagKey.RemoveCardPolicy,
@@ -79,11 +77,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.CredentialExchangeProtocolImport -> stringResource(BitwardenString.cxp_import)
     FlagKey.CredentialExchangeProtocolExport -> stringResource(BitwardenString.cxp_export)
     FlagKey.CipherKeyEncryption -> stringResource(BitwardenString.cipher_key_encryption)
-    FlagKey.SingleTapPasskeyCreation -> stringResource(BitwardenString.single_tap_passkey_creation)
-    FlagKey.SingleTapPasskeyAuthentication -> {
-        stringResource(BitwardenString.single_tap_passkey_authentication)
-    }
-
     FlagKey.RestrictCipherItemDeletion -> stringResource(BitwardenString.restrict_item_deletion)
     FlagKey.UserManagedPrivilegedApps -> {
         stringResource(BitwardenString.user_trusted_privileged_app_management)
