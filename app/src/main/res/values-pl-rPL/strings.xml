@@ -362,11 +362,11 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="copy_notes">Kopiuj notatkę</string>
     <string name="exit">Wyjdź</string>
     <string name="exit_confirmation">Czy na pewno chcesz wyjść z Bitwarden?</string>
-    <string name="require_master_password_on_app_restart">Wymagać hasła głównego przy ponownym uruchomieniu aplikacji?</string>
+    <string name="require_master_password_on_app_restart">Wymagać hasła głównego po ponownym uruchomieniu aplikacji?</string>
     <string name="pin_require_master_password_restart">Czy chcesz wymagać odblokowywania hasłem głównym po ponownym uruchomieniu aplikacji?</string>
     <string name="ask_to_add_login">Proponuj zapisywanie danych logowania</string>
     <string name="ask_to_add_login_description">Proponuj zapisywanie danych logowania, jeśli nie ma ich w sejfie.</string>
-    <string name="on_restart">Po restarcie aplikacji</string>
+    <string name="on_restart">Po uruchomieniu aplikacji</string>
     <string name="capitalize">Wielkie litery</string>
     <string name="include_number">Cyfry</string>
     <string name="download">Pobierz</string>

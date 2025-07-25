@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="about">O aplikaci</string>
     <string name="add_folder">Přidat složku</string>
     <string name="add_item">Přidat položku</string>
@@ -531,7 +531,7 @@ Načtení proběhne automaticky.</string>
     <string name="verification_codes">Ověřovací kódy</string>
     <string name="premium_subscription_required">Je vyžadováno předplatné Premium</string>
     <string name="cannot_add_authenticator_key_scan_qr_code">Nelze přidat ověřovací klíč? <annotation link="scanQrCode">Naskenovat QR kód</annotation></string>
-    <string name="scan_qr_code">Naskenovat QR kód</string>
+    <string name="scan_qr_code"><annotation link="scanQrCode">Scan QR code</annotation></string>
     <string name="cannot_scan_qr_code_enter_key_manually">Nelze naskenovat QR kód? <annotation link="enterKeyManually">Zadejte klíč ručně</annotation></string>
     <string name="authenticator_key_scanner">Autentizační klíč</string>
     <string name="authenticator_key_help">Nápověda pro ověřovací klíč</string>
@@ -994,4 +994,88 @@ při opakování problémů.</string>
     <string name="delete_x">Smazat %s</string>
     <string name="failed_to_decrypt_cipher_contact_support">Dešifrování šifry se nezdařilo. Kontaktujte podporu.</string>
     <string name="decryption_error">Chyba dešifrování</string>
+    <string name="add_item_rotation">Add Item Rotation</string>
+    <string name="scan_a_qr_code">Scan a QR code</string>
+    <string name="cannot_add_authenticator_key">Nelze přidat ověřovací klíč?</string>
+    <string name="enable_camera_permission_to_use_the_scanner">Enable camera permission to use the scanner</string>
+    <string name="empty_item_list">Empty Item Listing</string>
+    <string name="you_dont_have_items_to_display">You don\'t have any items to display.</string>
+    <string name="empty_item_list_instruction">Add a new code to secure your accounts.</string>
+    <string name="add_code">Add code</string>
+    <string name="verification_code_added">Verification code added</string>
+    <string name="refresh_period">Refresh period</string>
+    <string name="algorithm">Algorithm</string>
+    <string name="advanced">Advanced</string>
+    <string name="collapse_advanced_options">Collapse advanced options</string>
+    <string name="number_of_digits">Number of digits</string>
+    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d seconds</string>
+    <string name="item_saved">Item saved</string>
+    <string name="information">Information</string>
+    <string name="otp_type">OTP type</string>
+    <string name="search_codes">Search codes</string>
+    <string name="secure_your_accounts_with_bitwarden_authenticator">Secure your accounts with Bitwarden Authenticator</string>
+    <string name="get_verification_codes_for_all_your_accounts">Get verification codes for all your accounts that support 2-step verification.</string>
+    <string name="use_your_device_camera_to_scan_codes">Use your device camera to scan codes</string>
+    <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Scan the QR code in your 2-step verification settings for any account.</string>
+    <string name="sign_in_using_unique_codes">Sign in using unique codes</string>
+    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">When using 2-step verification, you\'ll enter your username and password and a code generated in this app.</string>
+    <string name="skip">Skip</string>
+    <string name="help">Help</string>
+    <string name="launch_tutorial">Launch tutorial</string>
+    <string name="delete_item">Delete item</string>
+    <string name="do_you_really_want_to_permanently_delete_this_cannot_be_undone">Do you really want to permanently delete? This cannot be undone.</string>
+    <string name="data">Data</string>
+    <string name="export">Export</string>
+    <string name="export_confirmation_title">Confirm export</string>
+    <string name="export_success">Data exported successfully</string>
+    <string name="security">Zabezpečení</string>
+    <string name="too_many_failed_biometric_attempts">Too many failed biometrics attempts.</string>
+    <string name="version">Verze</string>
+    <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">Learn more about how to use Bitwarden Authenticator on the Help Center.</string>
+    <string name="key">Key</string>
+    <string name="create_verification_code">Create Verification code</string>
+    <string name="key_is_required">Key is required.</string>
+    <string name="name_is_required">Name is required.</string>
+    <string name="import_vault_failure">There was a problem importing your vault.</string>
+    <string name="import_vault">Import</string>
+    <string name="import_success">Vault import successful</string>
+    <string name="key_is_invalid">Key is invalid.</string>
+    <string name="backup">Backup</string>
+    <string name="data_backup_title">Data backup</string>
+    <string name="data_backup_message">Bitwarden Authenticator data is backed up and can be restored with your regularly scheduled device backups.</string>
+    <string name="import_2fas_password_protected_not_supported">Importing from 2FAS password protected files is not supported. Try again with an exported file that is not password protected.</string>
+    <string name="import_bitwarden_unsupported_format">Importing Bitwarden CSV files is not supported. Try again with an exported JSON file.</string>
+    <string name="download_bitwarden_card_title">Download the Bitwarden app</string>
+    <string name="download_bitwarden_card_message">Store all of your logins and sync verification codes directly with the Authenticator app.</string>
+    <string name="download_now">Download now</string>
+    <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
+    <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
+    <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
+    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
+    <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
+    <string name="sync_with_bitwarden_action_card_message">In order to view all of your verification codes, you’ll need to allow for syncing on all of your accounts.</string>
+    <string name="take_me_to_app_settings">Take me to the app settings</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="please_try_again">Please try again</string>
+    <string name="copy_to_bitwarden_vault">Copy to Bitwarden vault</string>
+    <string name="default_save_option">Default save option</string>
+    <string name="save_to_bitwarden">Save to Bitwarden</string>
+    <string name="save_here">Save here</string>
+    <string name="none">None</string>
+    <string name="default_save_options_subtitle">Select where you would like to save new verification codes.</string>
+    <string name="verification_code_created">Verification code created</string>
+    <string name="choose_save_location_message">Save this authenticator key here, or add it to a login in your Bitwarden app.</string>
+    <string name="save_option_as_default">Save option as default</string>
+    <string name="account_synced_from_bitwarden_app">Account synced from Bitwarden app</string>
+    <string name="local_codes">Local codes (%1$d)</string>
+    <string name="required_information_missing">Required Information Missing</string>
+    <string name="required_information_missing_message">"Required info is missing (e.g., ‘services’ or ‘secret’). Check your file and try again. Visit bitwarden.com/help for support"</string>
+    <string name="file_could_not_be_processed">"File Could Not Be Processed"</string>
+    <string name="file_could_not_be_processed_message">"File could not be processed. Ensure it’s valid JSON and try again. Need help? Visit bitwarden.com/help"</string>
+    <string name="get_help">Get Help</string>
+    <string name="expand_advanced_options">Expand advanced options</string>
+    <string name="local_items_are_expanded_click_to_collapse">Local items are expanded, click to collapse.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
+    <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
+    <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
 </resources>

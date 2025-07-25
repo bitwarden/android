@@ -700,7 +700,7 @@ Pretende mudar para esta conta?</string>
     <string name="launch_web_authn">Iniciar o WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Ocorreu um erro ao iniciar a autenticação de dois fatores WebAuthn</string>
     <string name="self_hosted_server_url">URL do servidor auto-hospedado</string>
-    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">A operação da credencial falhou porque o utilizador não pôde ser verificado.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">A operação da chave de acesso falhou porque o utilizador não pôde ser verificado.</string>
     <string name="user_verification_direction">Verificação do utilizador</string>
     <string name="create_account_on">Criar conta em</string>
@@ -909,12 +909,12 @@ Pretende mudar para esta conta?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">A operação da chave de acesso falhou porque as tentativas de verificação do utilizador foram excedidas.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">A operação da chave de acesso falhou porque não foi selecionado nenhum item.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A operação da chave de acesso falhou porque o pedido não é suportado.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
-    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
-    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
-    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
-    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">A operação da palavra-passe falhou porque o item selecionado não existe.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">A operação da palavra-passe falhou porque não foi selecionado nenhum item.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">A operação da credencial falhou porque as tentativas de verificação do utilizador foram excedidas.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">A operação da credencial falhou porque o utilizador está bloqueado.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">A operação da credencial falhou porque o item selecionado não existe.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">A operação da credencial falhou porque a verificação do utilizador foi cancelada.</string>
     <string name="self_host_server_url">URL do servidor auto-hospedado</string>
     <string name="use_brave_autofill_integration">Utilizar a integração do preenchimento automático do Brave</string>
     <string name="use_chrome_autofill_integration">Utilizar a integração do preenchimento automático do Chrome</string>
@@ -975,7 +975,7 @@ Pretende mudar para esta conta?</string>
     <string name="missing_send_resync_your_vault">Send em falta, sincronize novamente o seu cofre</string>
     <string name="use_dynamic_colors">Utilizar cores dinâmicas</string>
     <string name="use_dynamic_colors_question">Utilizar cores dinâmicas?</string>
-    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">As cores dinâmicas utilizam as cores do sistema e podem não cumprir todas as diretrizes de acessibilidade.</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Este esquema de cores aplica automaticamente as cores do sistema ao Bitwarden com base no seu papel de parede atual. Essas cores podem não atender a todas as diretrizes de acessibilidade.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">A operação de chave de acesso falhou porque o navegador (%1$s) não foi reconhecido. Selecione \"Confiar\" para adicionar %1$s à lista de aplicações localmente fiáveis.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">A operação da chave de acesso falhou porque o navegador não é de confiança.</string>
     <string name="trust">Confiar</string>

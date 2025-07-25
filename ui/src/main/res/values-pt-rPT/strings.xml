@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="about">Acerca de</string>
     <string name="add_folder">Adicionar pasta</string>
     <string name="add_item">Adicionar item</string>
@@ -531,7 +531,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="verification_codes">Códigos de verificação</string>
     <string name="premium_subscription_required">É necessária uma subscrição Premium</string>
     <string name="cannot_add_authenticator_key_scan_qr_code">Não é possível adicionar uma chave de autenticação? <annotation link="scanQrCode">Ler código QR</annotation></string>
-    <string name="scan_qr_code">Ler código QR</string>
+    <string name="scan_qr_code"><annotation link="scanQrCode">Scan QR code</annotation></string>
     <string name="cannot_scan_qr_code_enter_key_manually">Não consegue ler o código QR? <annotation link="enterKeyManually">Introduzir chave manualmente</annotation></string>
     <string name="authenticator_key_scanner">Chave de autenticação</string>
     <string name="authenticator_key_help">Ajuda com a chave de autenticação</string>
@@ -700,7 +700,7 @@ Pretende mudar para esta conta?</string>
     <string name="launch_web_authn">Iniciar o WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Ocorreu um erro ao iniciar a autenticação de dois fatores WebAuthn</string>
     <string name="self_hosted_server_url">URL do servidor auto-hospedado</string>
-    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">A operação da credencial falhou porque o utilizador não pôde ser verificado.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">A operação da chave de acesso falhou porque o utilizador não pôde ser verificado.</string>
     <string name="user_verification_direction">Verificação do utilizador</string>
     <string name="create_account_on">Criar conta em</string>
@@ -905,12 +905,12 @@ Pretende mudar para esta conta?</string>
     <string name="passkey_operation_failed_because_the_request_is_invalid">A operação da chave de acesso falhou porque o pedido é inválido.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">A operação da chave de acesso falhou porque não foi selecionado nenhum item.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A operação da chave de acesso falhou porque o pedido não é suportado.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
-    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
-    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
-    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
-    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">A operação da palavra-passe falhou porque o item selecionado não existe.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">A operação da palavra-passe falhou porque não foi selecionado nenhum item.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">A operação da credencial falhou porque as tentativas de verificação do utilizador foram excedidas.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">A operação da credencial falhou porque o utilizador está bloqueado.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">A operação da credencial falhou porque o item selecionado não existe.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">A operação da credencial falhou porque a verificação do utilizador foi cancelada.</string>
     <string name="self_host_server_url">URL do servidor auto-hospedado</string>
     <string name="use_brave_autofill_integration">Utilizar a integração do preenchimento automático do Brave</string>
     <string name="use_chrome_autofill_integration">Utilizar a integração do preenchimento automático do Chrome</string>
@@ -971,7 +971,7 @@ Pretende mudar para esta conta?</string>
     <string name="missing_send_resync_your_vault">Send em falta, sincronize novamente o seu cofre</string>
     <string name="use_dynamic_colors">Utilizar cores dinâmicas</string>
     <string name="use_dynamic_colors_question">Utilizar cores dinâmicas?</string>
-    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">As cores dinâmicas utilizam as cores do sistema e podem não cumprir todas as diretrizes de acessibilidade.</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Este esquema de cores aplica automaticamente as cores do sistema ao Bitwarden com base no seu papel de parede atual. Essas cores podem não atender a todas as diretrizes de acessibilidade.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">A operação de chave de acesso falhou porque o navegador (%1$s) não foi reconhecido. Selecione \"Confiar\" para adicionar %1$s à lista de aplicações localmente fiáveis.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">A operação da chave de acesso falhou porque o navegador não é de confiança.</string>
     <string name="trust">Confiar</string>
@@ -993,4 +993,88 @@ Pretende mudar para esta conta?</string>
     <string name="delete_x">Eliminar %s</string>
     <string name="failed_to_decrypt_cipher_contact_support">Falha ao decifrar a cifra. Contacte o suporte.</string>
     <string name="decryption_error">Erro de desencriptação</string>
+    <string name="add_item_rotation">Add Item Rotation</string>
+    <string name="scan_a_qr_code">Scan a QR code</string>
+    <string name="cannot_add_authenticator_key">Não é possível adicionar uma chave de autenticação?</string>
+    <string name="enable_camera_permission_to_use_the_scanner">Enable camera permission to use the scanner</string>
+    <string name="empty_item_list">Empty Item Listing</string>
+    <string name="you_dont_have_items_to_display">You don\'t have any items to display.</string>
+    <string name="empty_item_list_instruction">Add a new code to secure your accounts.</string>
+    <string name="add_code">Add code</string>
+    <string name="verification_code_added">Verification code added</string>
+    <string name="refresh_period">Refresh period</string>
+    <string name="algorithm">Algorithm</string>
+    <string name="advanced">Advanced</string>
+    <string name="collapse_advanced_options">Collapse advanced options</string>
+    <string name="number_of_digits">Number of digits</string>
+    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d seconds</string>
+    <string name="item_saved">Item saved</string>
+    <string name="information">Information</string>
+    <string name="otp_type">OTP type</string>
+    <string name="search_codes">Search codes</string>
+    <string name="secure_your_accounts_with_bitwarden_authenticator">Secure your accounts with Bitwarden Authenticator</string>
+    <string name="get_verification_codes_for_all_your_accounts">Get verification codes for all your accounts that support 2-step verification.</string>
+    <string name="use_your_device_camera_to_scan_codes">Use your device camera to scan codes</string>
+    <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Scan the QR code in your 2-step verification settings for any account.</string>
+    <string name="sign_in_using_unique_codes">Sign in using unique codes</string>
+    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">When using 2-step verification, you\'ll enter your username and password and a code generated in this app.</string>
+    <string name="skip">Skip</string>
+    <string name="help">Help</string>
+    <string name="launch_tutorial">Launch tutorial</string>
+    <string name="delete_item">Delete item</string>
+    <string name="do_you_really_want_to_permanently_delete_this_cannot_be_undone">Do you really want to permanently delete? This cannot be undone.</string>
+    <string name="data">Data</string>
+    <string name="export">Export</string>
+    <string name="export_confirmation_title">Confirm export</string>
+    <string name="export_success">Data exported successfully</string>
+    <string name="security">Segurança</string>
+    <string name="too_many_failed_biometric_attempts">Too many failed biometrics attempts.</string>
+    <string name="version">Versão</string>
+    <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">Learn more about how to use Bitwarden Authenticator on the Help Center.</string>
+    <string name="key">Key</string>
+    <string name="create_verification_code">Create Verification code</string>
+    <string name="key_is_required">Key is required.</string>
+    <string name="name_is_required">Name is required.</string>
+    <string name="import_vault_failure">There was a problem importing your vault.</string>
+    <string name="import_vault">Import</string>
+    <string name="import_success">Vault import successful</string>
+    <string name="key_is_invalid">Key is invalid.</string>
+    <string name="backup">Backup</string>
+    <string name="data_backup_title">Data backup</string>
+    <string name="data_backup_message">Bitwarden Authenticator data is backed up and can be restored with your regularly scheduled device backups.</string>
+    <string name="import_2fas_password_protected_not_supported">Importing from 2FAS password protected files is not supported. Try again with an exported file that is not password protected.</string>
+    <string name="import_bitwarden_unsupported_format">Importing Bitwarden CSV files is not supported. Try again with an exported JSON file.</string>
+    <string name="download_bitwarden_card_title">Download the Bitwarden app</string>
+    <string name="download_bitwarden_card_message">Store all of your logins and sync verification codes directly with the Authenticator app.</string>
+    <string name="download_now">Download now</string>
+    <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
+    <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
+    <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
+    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
+    <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
+    <string name="sync_with_bitwarden_action_card_message">In order to view all of your verification codes, you’ll need to allow for syncing on all of your accounts.</string>
+    <string name="take_me_to_app_settings">Take me to the app settings</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="please_try_again">Please try again</string>
+    <string name="copy_to_bitwarden_vault">Copy to Bitwarden vault</string>
+    <string name="default_save_option">Default save option</string>
+    <string name="save_to_bitwarden">Save to Bitwarden</string>
+    <string name="save_here">Save here</string>
+    <string name="none">None</string>
+    <string name="default_save_options_subtitle">Select where you would like to save new verification codes.</string>
+    <string name="verification_code_created">Verification code created</string>
+    <string name="choose_save_location_message">Save this authenticator key here, or add it to a login in your Bitwarden app.</string>
+    <string name="save_option_as_default">Save option as default</string>
+    <string name="account_synced_from_bitwarden_app">Account synced from Bitwarden app</string>
+    <string name="local_codes">Local codes (%1$d)</string>
+    <string name="required_information_missing">Required Information Missing</string>
+    <string name="required_information_missing_message">"Required info is missing (e.g., ‘services’ or ‘secret’). Check your file and try again. Visit bitwarden.com/help for support"</string>
+    <string name="file_could_not_be_processed">"File Could Not Be Processed"</string>
+    <string name="file_could_not_be_processed_message">"File could not be processed. Ensure it’s valid JSON and try again. Need help? Visit bitwarden.com/help"</string>
+    <string name="get_help">Get Help</string>
+    <string name="expand_advanced_options">Expand advanced options</string>
+    <string name="local_items_are_expanded_click_to_collapse">Local items are expanded, click to collapse.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
+    <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
+    <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
 </resources>
