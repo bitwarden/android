@@ -997,7 +997,4 @@ Do you want to switch to this account?</string>
     <string name="delete_x">Delete %s</string>
     <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
     <string name="decryption_error">Decryption error</string>
-    <string name="advanced_options">Advanced options</string>
-    <string name="advanced_options_warning">“<annotation arg="0">%1$s</annotation>” is an advanced option with increased risk of exposing credentials.</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
 </resources>

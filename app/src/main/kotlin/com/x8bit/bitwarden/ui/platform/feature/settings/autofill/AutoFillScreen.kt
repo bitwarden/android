@@ -46,9 +46,9 @@ import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -345,9 +345,9 @@ private fun FillStyleSelector(
     resources: Resources = LocalContext.current.resources,
 ) {
     BitwardenMultiSelectButton(
-        label = stringResource(id = BitwardenString.display_autofill_suggestions),
+        label = stringResource(id = R.string.display_autofill_suggestions),
         supportingText = annotatedStringResource(
-            id = BitwardenString.use_inline_autofill_explanation_long,
+            id = R.string.use_inline_autofill_explanation_long,
         ),
         options = AutofillStyle.entries.map { it.label() }.toImmutableList(),
         selectedOption = selectedStyle.label(),
@@ -367,8 +367,8 @@ private fun AccessibilityAutofillSwitch(
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(value = false) }
     BitwardenSwitch(
-        label = stringResource(id = BitwardenString.accessibility),
-        supportingText = stringResource(id = BitwardenString.accessibility_description5),
+        label = stringResource(id = R.string.accessibility),
+        supportingText = stringResource(id = R.string.accessibility_description5),
         isChecked = isAccessibilityAutoFillEnabled,
         onCheckedChange = {
             if (isAccessibilityAutoFillEnabled) {
@@ -414,7 +414,11 @@ private fun DefaultUriMatchTypeRow(
             val newSelectedType =
                 UriMatchType
                     .entries
-                    .first { it.displayLabel.toString(resources) == selectedOption }
+                    .first {
+                        it
+                            .displayLabel
+                            .toString(resources) == selectedOption
+                    }
 
             if (newSelectedType.isAdvancedMatching()) {
                 optionPendingConfirmation = newSelectedType
@@ -454,22 +458,22 @@ private fun BuildAdvancedMatchDetectionWarning(
     onMoreAboutMatchDetectionClick: () -> Unit,
     resources: Resources = LocalContext.current.resources,
 ) {
-    val moreAboutMatchDetectionStr = stringResource(R.string.more_about_match_detection)
+    val moreAboutMatchDetectionStr = stringResource(BitwardenString.more_about_match_detection)
 
     BitwardenTwoButtonDialog(
         titleAnnotatedString = stringResource(id = R.string.warning).toAnnotatedString(),
         messageAnnotatedString = annotatedStringResource(
-            id = R.string.advanced_options_warning,
+            id = BitwardenString.advanced_options_warning,
             args = arrayOf(pendingOption.displayLabel.toString(resources)),
             style = spanStyleOf(
                 color = BitwardenTheme.colorScheme.text.primary,
                 textStyle = BitwardenTheme.typography.bodyMedium,
             ),
-        ).plus(
-            AnnotatedString("\n")
-                .plus(
+        )
+            .plus(
+                AnnotatedString("\n").plus(
                     annotatedStringResource(
-                        id = R.string.more_about_match_detection,
+                        id = BitwardenString.more_about_match_detection,
                         onAnnotationClick = { annotationValue ->
                             when (annotationValue) {
                                 "moreAboutMatchDetection" -> onMoreAboutMatchDetectionClick()
@@ -477,24 +481,23 @@ private fun BuildAdvancedMatchDetectionWarning(
                         },
                     ),
                 ),
-        ),
+            ),
         confirmButtonText = stringResource(id = R.string.continue_text),
         dismissButtonText = stringResource(id = R.string.cancel),
         onConfirmClick = onDialogConfirm,
         onDismissClick = onDialogDismiss,
         onDismissRequest = onDialogDismiss,
-        messageModifier = Modifier
-            .semantics {
-                customActions = listOf(
-                    CustomAccessibilityAction(
-                        label = moreAboutMatchDetectionStr,
-                        action = {
-                            onMoreAboutMatchDetectionClick()
-                            true
-                        },
-                    ),
-                )
-            },
+        messageModifier = Modifier.semantics {
+            customActions = listOf(
+                CustomAccessibilityAction(
+                    label = moreAboutMatchDetectionStr,
+                    action = {
+                        onMoreAboutMatchDetectionClick()
+                        true
+                    },
+                ),
+            )
+        },
     )
 }
 
@@ -514,8 +517,12 @@ private fun UriMatchSelectionButton(
                 AnnotatedString("\n")
                     .plus(
                         annotatedStringResource(
-                            id = R.string.advanced_options_warning,
-                            args = arrayOf(selectedUriMatchType.displayLabel.toString(resources)),
+                            id = BitwardenString.advanced_options_warning,
+                            args = arrayOf(
+                                selectedUriMatchType
+                                    .displayLabel
+                                    .toString(resources),
+                            ),
                             style = spanStyleOf(
                                 textStyle = BitwardenTheme.typography.bodySmall,
                                 color = BitwardenTheme.colorScheme.text.secondary,
@@ -526,13 +533,17 @@ private fun UriMatchSelectionButton(
     }
 
     BitwardenMultiSelectButton(
-        label = stringResource(id = BitwardenString.default_uri_match_detection),
-        options = UriMatchType.entries.filter { !it.isAdvancedMatching() }
-            .map { it.displayLabel() }.toImmutableList(),
+        label = stringResource(id = R.string.default_uri_match_detection),
+        options = UriMatchType.entries
+            .filter { !it.isAdvancedMatching() }
+            .map { it.displayLabel() }
+            .toImmutableList(),
         selectedOption = selectedUriMatchType.displayLabel(),
-        sectionTitle = stringResource(id = R.string.advanced_options),
-        sectionOptions = UriMatchType.entries.filter { it.isAdvancedMatching() }
-            .map { it.displayLabel() }.toImmutableList(),
+        sectionTitle = stringResource(id = BitwardenString.advanced_options),
+        sectionOptions = UriMatchType.entries
+            .filter { it.isAdvancedMatching() }
+            .map { it.displayLabel() }
+            .toImmutableList(),
         sectionTestTag = "AdvancedOptionsSection",
         onOptionSelected = onOptionSelected,
         supportingText = supportingAnnotatedString,

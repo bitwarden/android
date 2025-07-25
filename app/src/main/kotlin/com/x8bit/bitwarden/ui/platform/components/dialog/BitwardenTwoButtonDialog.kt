@@ -26,6 +26,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -60,8 +61,8 @@ fun BitwardenTwoButtonDialog(
     dismissTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
 ) {
     BitwardenTwoButtonDialog(
-        titleAnnotatedString = title?.let { AnnotatedString(title) },
-        messageAnnotatedString = AnnotatedString(message),
+        titleAnnotatedString = title?.toAnnotatedString(),
+        messageAnnotatedString = message.toAnnotatedString(),
         confirmButtonText = confirmButtonText,
         dismissButtonText = dismissButtonText,
         onConfirmClick = onConfirmClick,

@@ -21,10 +21,10 @@ import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
-import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
@@ -110,18 +110,36 @@ fun VaultAddEditUriItem(
             onDismissRequest = { shouldShowMatchDialog = false },
         ) {
             BitwardenMultiSelectDialogContent(
-                options = UriMatchDisplayType.entries.filter { !it.isAdvancedMatching() }
+                options = UriMatchDisplayType
+                    .entries
+                    .filter { !it.isAdvancedMatching() }
                     .map {
-                        it.displayLabel(
-                            defaultUriOption = defaultUriMatchType.displayLabel.invoke(),
-                        ).invoke()
-                    }.toImmutableList(),
-                selectedOption = uriItem.match.toDisplayMatchType().displayLabel(
-                    defaultUriOption = defaultUriMatchType.displayLabel.invoke(),
-                ).invoke(),
-                sectionTitle = stringResource(id = R.string.advanced_options),
-                sectionOptions = UriMatchDisplayType.entries.filter { it.isAdvancedMatching() }
-                    .map { it.text.invoke() }.toImmutableList(),
+                        it
+                            .displayLabel(
+                                defaultUriOption = defaultUriMatchType
+                                    .displayLabel
+                                    .invoke(),
+                            )
+                            .invoke()
+                    }
+                    .toImmutableList(),
+                selectedOption = uriItem
+                    .match
+                    .toDisplayMatchType()
+                    .displayLabel(
+                        defaultUriOption = defaultUriMatchType
+                            .displayLabel
+                            .invoke(),
+                    )
+                    .invoke(),
+                sectionTitle = stringResource(id = BitwardenString.advanced_options),
+                sectionOptions = UriMatchDisplayType
+                    .entries
+                    .filter { it.isAdvancedMatching() }
+                    .map {
+                        it.text.invoke()
+                    }
+                    .toImmutableList(),
                 sectionTestTag = "AdvancedOptionsSection",
                 onOptionSelected = { selectedOption ->
                     shouldShowMatchDialog = false
@@ -129,7 +147,9 @@ fun VaultAddEditUriItem(
                     val newSelectedType =
                         UriMatchDisplayType
                             .entries
-                            .first { it.text.invoke(resources) == selectedOption }
+                            .first {
+                                it.text.invoke(resources) == selectedOption
+                            }
 
                     if (newSelectedType.isAdvancedMatching()) {
                         optionPendingConfirmation = newSelectedType
@@ -178,34 +198,40 @@ private fun BuildAdvancedMatchDetectionWarning(
     onDialogDismiss: () -> Unit,
     onMoreAboutMatchDetectionClick: () -> Unit,
 ) {
-    val moreAboutMatchDetectionStr = stringResource(R.string.more_about_match_detection)
+    val moreAboutMatchDetectionStr = stringResource(BitwardenString.more_about_match_detection)
 
     BitwardenTwoButtonDialog(
-        titleAnnotatedString = stringResource(id = R.string.warning).toAnnotatedString(),
+        titleAnnotatedString = stringResource(id = BitwardenString.warning)
+            .toAnnotatedString(),
         messageAnnotatedString = annotatedStringResource(
-            id = R.string.advanced_options_warning,
+            id = BitwardenString.advanced_options_warning,
             args = arrayOf(
-                pendingOption.displayLabel(
-                    defaultUriOption = defaultUriMatchType.displayLabel.invoke(),
-                ).invoke(),
+                pendingOption
+                    .displayLabel(
+                        defaultUriOption = defaultUriMatchType
+                            .displayLabel
+                            .invoke(),
+                    )
+                    .invoke(),
             ),
             style = spanStyleOf(
                 color = BitwardenTheme.colorScheme.text.primary,
                 textStyle = BitwardenTheme.typography.bodyMedium,
             ),
-        ).plus(
-            AnnotatedString("\n")
-                .plus(
-                    annotatedStringResource(
-                        id = R.string.more_about_match_detection,
-                        onAnnotationClick = { annotationValue ->
-                            when (annotationValue) {
-                                "moreAboutMatchDetection" -> onMoreAboutMatchDetectionClick()
-                            }
-                        },
+        )
+            .plus(
+                AnnotatedString("\n")
+                    .plus(
+                        annotatedStringResource(
+                            id = BitwardenString.more_about_match_detection,
+                            onAnnotationClick = { annotationValue ->
+                                when (annotationValue) {
+                                    "moreAboutMatchDetection" -> onMoreAboutMatchDetectionClick()
+                                }
+                            },
+                        ),
                     ),
-                ),
-        ),
+            ),
         confirmButtonText = stringResource(id = R.string.continue_text),
         dismissButtonText = stringResource(id = R.string.cancel),
         onConfirmClick = onDialogConfirm,

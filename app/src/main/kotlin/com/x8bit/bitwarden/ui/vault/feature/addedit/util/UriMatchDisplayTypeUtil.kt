@@ -39,7 +39,10 @@ fun UriMatchDisplayType.toUriMatchType(): UriMatchType? =
  */
 fun UriMatchDisplayType.isAdvancedMatching(): Boolean =
     when (this) {
-        UriMatchDisplayType.REGULAR_EXPRESSION, UriMatchDisplayType.STARTS_WITH -> true
+        UriMatchDisplayType.REGULAR_EXPRESSION,
+        UriMatchDisplayType.STARTS_WITH,
+            -> true
+
         else -> false
     }
 
