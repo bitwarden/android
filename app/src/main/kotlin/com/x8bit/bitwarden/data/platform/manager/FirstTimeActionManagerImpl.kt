@@ -7,7 +7,6 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -31,7 +30,6 @@ class FirstTimeActionManagerImpl @Inject constructor(
     private val authDiskSource: AuthDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
     private val vaultDiskSource: VaultDiskSource,
-    private val featureFlagManager: FeatureFlagManager,
     private val autofillEnabledManager: AutofillEnabledManager,
 ) : FirstTimeActionManager {
 
@@ -101,16 +99,9 @@ class FirstTimeActionManagerImpl @Inject constructor(
             .activeUserIdChangesFlow
             .filterNotNull()
             .flatMapLatest {
-                combine(
-                    getShowImportLoginsSettingBadgeFlowInternal(userId = it),
-                    featureFlagManager.getFeatureFlagFlow(FlagKey.ImportLoginsFlow),
-                ) { showImportLogins, importLoginsEnabled ->
-                    val shouldShowImportLoginsSettings = showImportLogins && importLoginsEnabled
-                    listOf(shouldShowImportLoginsSettings)
-                }
-                    .map { list ->
-                        list.count { showImportLogins -> showImportLogins }
-                    }
+                getShowImportLoginsSettingBadgeFlowInternal(userId = it)
+                    .map { showImportLogins -> listOf(showImportLogins) }
+                    .map { list -> list.count { showImportLogins -> showImportLogins } }
             }
             .stateIn(
                 scope = unconfinedScope,

@@ -73,7 +73,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -172,13 +171,9 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { trackEvent(event = any()) } just runs
     }
 
-    private val mutableImportLoginsFeatureFlow = MutableStateFlow(true)
     private val mutableRemoveCardPolicyFeatureFlow = MutableStateFlow(false)
     private val mutableSshKeyVaultItemsEnabledFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
-        every {
-            getFeatureFlagFlow(FlagKey.ImportLoginsFlow)
-        } returns mutableImportLoginsFeatureFlow
         every {
             getFeatureFlagFlow(FlagKey.RemoveCardPolicy)
         } returns mutableRemoveCardPolicyFeatureFlow
@@ -2432,30 +2427,6 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
         }
     }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `when feature flag ImportLoginsFlow is disabled, should show action card should always be false`() =
-        runTest {
-            mutableImportLoginsFeatureFlow.update { false }
-            val viewModel = createViewModel()
-            viewModel.stateFlow.test {
-                assertEquals(
-                    DEFAULT_STATE.copy(showImportActionCard = false),
-                    awaitItem(),
-                )
-                mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-                    accounts = DEFAULT_USER_STATE.accounts.map {
-                        it.copy(
-                            firstTimeState = DEFAULT_FIRST_TIME_STATE.copy(
-                                showImportLoginsCard = true,
-                            ),
-                        )
-                    },
-                )
-                expectNoEvents()
-            }
-        }
 
     @Suppress("MaxLineLength")
     @Test

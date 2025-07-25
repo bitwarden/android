@@ -26,7 +26,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     }
 
     FlagKey.EmailVerification,
-    FlagKey.ImportLoginsFlow,
     FlagKey.CredentialExchangeProtocolImport,
     FlagKey.CredentialExchangeProtocolExport,
     FlagKey.CipherKeyEncryption,
@@ -77,7 +76,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
         -> this.keyName
 
     FlagKey.EmailVerification -> stringResource(BitwardenString.email_verification)
-    FlagKey.ImportLoginsFlow -> stringResource(BitwardenString.import_logins_flow)
     FlagKey.CredentialExchangeProtocolImport -> stringResource(BitwardenString.cxp_import)
     FlagKey.CredentialExchangeProtocolExport -> stringResource(BitwardenString.cxp_export)
     FlagKey.CipherKeyEncryption -> stringResource(BitwardenString.cipher_key_encryption)
