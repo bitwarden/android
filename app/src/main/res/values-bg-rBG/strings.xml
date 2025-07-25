@@ -701,7 +701,7 @@
     <string name="launch_web_authn">Стартиране на WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Имаше грешка при стартирането на двустепенното удостоверяване чрез WebAuthn</string>
     <string name="self_hosted_server_url">Адрес на собствения сървър</string>
-    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Операцията с удостоверителните данни беше неуспешна, тъй като потребителят не може да бъде потвърден.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Операцията със секретния ключ беше неуспешна, тъй като потребителят не може да бъде потвърден.</string>
     <string name="user_verification_direction">Потвърждение на потребителя</string>
     <string name="create_account_on">Създаване на регистрация в</string>
@@ -909,12 +909,12 @@
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Операцията със секретния ключ беше неуспешна, тъй като е превишен броят на опитите за потвърждение на потребителя.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Операцията със секретния ключ беше неуспешна, тъй като няма избран елемент.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Операцията със секретния ключ беше неуспешна, тъй като заявката не се поддържа.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
-    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
-    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
-    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
-    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Операцията с паролата беше неуспешна, тъй като избраният елемент не съществува.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Операцията с паролата беше неуспешна, тъй като няма избран елемент.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Операцията с удостоверителните данни беше неуспешна, тъй като е превишен броят на опитите за потвърждение на потребителя.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Операцията с удостоверителните данни беше неуспешна, тъй като потребителят е заключен извън системата.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Операцията с удостоверителните данни беше неуспешна, тъй като избраният елемент не съществува.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Операцията с удостоверителните данни беше неуспешна, тъй като потвърждението беше отказано.</string>
     <string name="self_host_server_url">Адрес на собствения сървър</string>
     <string name="use_brave_autofill_integration">Използване на интеграцията с автоматичното попълване на Brave</string>
     <string name="use_chrome_autofill_integration">Използване на интеграцията с автоматичното попълване на Chrome</string>

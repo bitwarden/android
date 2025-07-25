@@ -531,7 +531,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="verification_codes">Verificatiecodes</string>
     <string name="premium_subscription_required">Premium-abonnement vereist</string>
     <string name="cannot_add_authenticator_key_scan_qr_code">Kun je de authenticatiesleutel niet toevoegen? <annotation link="scanQrCode">QR-code scannen</annotation></string>
-    <string name="scan_qr_code"><annotation link="scanQrCode">Scan QR code</annotation></string>
+    <string name="scan_qr_code">QR-code scannen</string>
     <string name="cannot_scan_qr_code_enter_key_manually">Kan je de QR-code niet scannen? <annotation link="enterKeyManually">Sleutel handmatig ingeven</annotation></string>
     <string name="authenticator_key_scanner">Authenticatiesleutel</string>
     <string name="authenticator_key_help">Authenticatiesleutel-hulp</string>
@@ -672,7 +672,6 @@ Wilt u naar dit account wisselen?</string>
     <string name="continue_to_device_settings">Doorgaan naar apparaatinstellingen?</string>
     <string name="two_step_login_description_long">Maak je account veiliger met het instellen van tweestapsaanmelding in de Bitwarden-webapp.</string>
     <string name="change_master_password_description_long">Je kunt je hoofdwachtwoord wijzigen in de Bitwarden-webapp.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">Je kunt gegevens importeren in je kluis op %1$s.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Leer meer over het gebruik van Bitwarden in het Helpcentrum.</string>
     <string name="privacy_policy_description_long">Bekijk ons privacybeleid op bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Ontdek meer functies van je Bitwarden-account in de webapp.</string>
@@ -1052,7 +1051,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="shared_codes_error">Kan geen codes synchroniseren vanuit de Bitwarden app. Zorg ervoor dat beide apps up-to-date zijn. Je hebt nog steeds toegang tot je bestaande codes in de Bitwarden app.</string>
     <string name="shared_accounts_header">%1$s %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Synchroniseren met de Bitwarden app</string>
-    <string name="sync_with_bitwarden_action_card_message">Om al je verificatiecodes te kunnen bekijken, moet je het synchroniseren van al je accounts toestaan.</string>
+    <string name="sync_with_bitwarden_action_card_message">Authenticator app synchronisatie toestaan in instellingen om hier al je verificatiecodes te bekijken.</string>
     <string name="take_me_to_app_settings">Breng me naar de app-instellingen</string>
     <string name="something_went_wrong">Er ging iets mis</string>
     <string name="please_try_again">Probeer opnieuw</string>
