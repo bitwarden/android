@@ -3,7 +3,7 @@ package com.bitwarden.authenticator.data.platform.repository
 import com.bitwarden.authenticator.BuildConfig
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.bitwarden.authenticator.data.platform.manager.getFlagValueOrDefault
-import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.ServerConfigRepository
 import kotlinx.coroutines.flow.Flow
@@ -36,7 +36,7 @@ class DebugMenuRepositoryImpl(
 
     override fun resetFeatureFlagOverrides() {
         val currentServerConfig = serverConfigRepository.serverConfigStateFlow.value
-        FlagKey.activeFlags.forEach { flagKey ->
+        FlagKey.activeAuthenticatorFlags.forEach { flagKey ->
             updateFeatureFlag(
                 flagKey,
                 currentServerConfig.getFlagValueOrDefault(flagKey),

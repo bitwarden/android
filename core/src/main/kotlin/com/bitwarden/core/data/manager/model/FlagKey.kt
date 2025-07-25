@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.manager.model
+package com.bitwarden.core.data.manager.model
 
 /**
  * Class to hold feature flag keys.
@@ -17,9 +17,18 @@ sealed class FlagKey<out T : Any> {
     @Suppress("UndocumentedPublicClass")
     companion object {
         /**
-         * List of all flag keys to consider
+         * List of all active Authenticator flag keys.
          */
-        val activeFlags: List<FlagKey<*>> by lazy {
+        val activeAuthenticatorFlags: List<FlagKey<*>> by lazy {
+            listOf(
+                BitwardenAuthenticationEnabled,
+            )
+        }
+
+        /**
+         * List of all active Password Manager flag keys.
+         */
+        val activePasswordManagerFlags: List<FlagKey<*>> by lazy {
             listOf(
                 EmailVerification,
                 CredentialExchangeProtocolImport,
@@ -87,6 +96,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object RemoveCardPolicy : FlagKey<Boolean>() {
         override val keyName: String = "pm-16442-remove-card-item-type-policy"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     *  Indicates the state of Bitwarden authentication.
+     */
+    data object BitwardenAuthenticationEnabled : FlagKey<Boolean>() {
+        override val keyName: String = "bitwarden-authentication-enabled"
         override val defaultValue: Boolean = false
     }
 
