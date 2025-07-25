@@ -16,8 +16,6 @@ import com.x8bit.bitwarden.data.credentials.processor.GET_PASSKEY_INTENT
 import com.x8bit.bitwarden.data.credentials.processor.GET_PASSWORD_INTENT
 import com.x8bit.bitwarden.data.credentials.util.setBiometricPromptDataIfSupported
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlin.random.Random
 
@@ -27,7 +25,6 @@ import kotlin.random.Random
 class CredentialEntryBuilderImpl(
     private val context: Context,
     private val intentManager: IntentManager,
-    private val featureFlagManager: FeatureFlagManager,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
 ) : CredentialEntryBuilder {
 
@@ -91,10 +88,7 @@ class CredentialEntryBuilderImpl(
                 .also { builder ->
                     if (!isUserVerified) {
                         builder.setBiometricPromptDataIfSupported(
-                            cipher = biometricsEncryptionManager
-                                .getOrCreateCipher(userId),
-                            isSingleTapAuthEnabled = featureFlagManager
-                                .getFeatureFlag(FlagKey.SingleTapPasskeyAuthentication),
+                            cipher = biometricsEncryptionManager.getOrCreateCipher(userId),
                         )
                     }
                 }

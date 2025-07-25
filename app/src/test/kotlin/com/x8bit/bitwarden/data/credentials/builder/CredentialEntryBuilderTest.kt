@@ -13,8 +13,6 @@ import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.util.mockBuilder
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
@@ -59,14 +57,12 @@ class CredentialEntryBuilderTest {
             )
         } returns mockGetPasswordCredentialIntent
     }
-    private val mockFeatureFlagManager = mockk<FeatureFlagManager>()
     private val mockBiometricsEncryptionManager = mockk<BiometricsEncryptionManager>()
     private val mockBeginGetPublicKeyOption = mockk<BeginGetPublicKeyCredentialOption>()
     private val mockBeginGetPasswordOption = mockk<BeginGetPasswordOption>()
     private val credentialEntryBuilder = CredentialEntryBuilderImpl(
         context = mockContext,
         intentManager = mockIntentManager,
-        featureFlagManager = mockFeatureFlagManager,
         biometricsEncryptionManager = mockBiometricsEncryptionManager,
     )
     private val mockPublicKeyCredentialEntry = mockk<PublicKeyCredentialEntry>(relaxed = true)
@@ -145,9 +141,6 @@ class CredentialEntryBuilderTest {
             )
 
             every {
-                mockFeatureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyAuthentication)
-            } returns false
-            every {
                 mockBiometricsEncryptionManager.getOrCreateCipher("userId")
             } returns null
 
@@ -183,11 +176,8 @@ class CredentialEntryBuilderTest {
             createMockFido2CredentialAutofillView(number = 1),
         )
 
-        // Verify biometric prompt data is not set when flag is false, buildVersion is at least 35,
+        // Verify biometric prompt data is not set when buildVersion is at least 35
         // and cipher is null.
-        every {
-            mockFeatureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyAuthentication)
-        } returns false
         every {
             mockBiometricsEncryptionManager.getOrCreateCipher("userId")
         } returns null
@@ -204,11 +194,7 @@ class CredentialEntryBuilderTest {
             anyConstructed<PublicKeyCredentialEntry.Builder>().setBiometricPromptData(any())
         }
 
-        // Verify biometric prompt data is not set when flag is true, buildVersion is below 35, and
-        // cipher is null.
-        every {
-            mockFeatureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyAuthentication)
-        } returns true
+        // Verify biometric prompt data is not set when buildVersion is below 35 and cipher is null.
         credentialEntryBuilder
             .buildPublicKeyCredentialEntries(
                 userId = "userId",
@@ -221,7 +207,7 @@ class CredentialEntryBuilderTest {
             anyConstructed<PublicKeyCredentialEntry.Builder>().setBiometricPromptData(any())
         }
 
-        // Verify biometric prompt data is not set when flag is true, buildVersion is at least 35,
+        // Verify biometric prompt data is not set when buildVersion is at least 35
         // and cipher is null
         every { isBuildVersionAtLeast(any()) } returns true
         credentialEntryBuilder
@@ -250,7 +236,7 @@ class CredentialEntryBuilderTest {
             anyConstructed<PublicKeyCredentialEntry.Builder>().setBiometricPromptData(any())
         }
 
-        // Verify biometric prompt data is set when flag is true, buildVersion is >= 35, cipher is
+        // Verify biometric prompt data is set when buildVersion is >= 35, cipher is
         // not null, and user is not verified
         credentialEntryBuilder
             .buildPublicKeyCredentialEntries(

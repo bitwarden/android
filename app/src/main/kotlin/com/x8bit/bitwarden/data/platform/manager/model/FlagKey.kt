@@ -24,8 +24,6 @@ sealed class FlagKey<out T : Any> {
                 EmailVerification,
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
-                SingleTapPasskeyCreation,
-                SingleTapPasskeyAuthentication,
                 RestrictCipherItemDeletion,
                 UserManagedPrivilegedApps,
                 RemoveCardPolicy,
@@ -64,22 +62,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object CipherKeyEncryption : FlagKey<Boolean>() {
         override val keyName: String = "cipher-key-encryption"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key to enable single tap passkey creation.
-     */
-    data object SingleTapPasskeyCreation : FlagKey<Boolean>() {
-        override val keyName: String = "single-tap-passkey-creation"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key to enable single tap passkey authentication.
-     */
-    data object SingleTapPasskeyAuthentication : FlagKey<Boolean>() {
-        override val keyName: String = "single-tap-passkey-authentication"
         override val defaultValue: Boolean = false
     }
 

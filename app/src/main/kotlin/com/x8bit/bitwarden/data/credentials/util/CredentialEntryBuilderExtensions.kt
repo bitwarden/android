@@ -14,12 +14,8 @@ import javax.crypto.Cipher
  */
 fun PublicKeyCredentialEntry.Builder.setBiometricPromptDataIfSupported(
     cipher: Cipher?,
-    isSingleTapAuthEnabled: Boolean,
 ): PublicKeyCredentialEntry.Builder =
-    if (isBuildVersionAtLeast(Build.VERSION_CODES.VANILLA_ICE_CREAM) &&
-        cipher != null &&
-        isSingleTapAuthEnabled
-    ) {
+    if (isBuildVersionAtLeast(Build.VERSION_CODES.VANILLA_ICE_CREAM) && cipher != null) {
         setBiometricPromptData(
             biometricPromptData = buildPromptDataWithCipher(cipher),
         )

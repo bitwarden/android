@@ -33,8 +33,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -60,7 +58,6 @@ class CredentialProviderProcessorImpl(
     private val intentManager: IntentManager,
     private val clock: Clock,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
-    private val featureFlagManager: FeatureFlagManager,
     dispatcherManager: DispatcherManager,
 ) : CredentialProviderProcessor {
 
@@ -186,9 +183,9 @@ class CredentialProviderProcessorImpl(
             .Builder(
                 accountName = accountName,
                 pendingIntent = intentManager.createFido2CreationPendingIntent(
-                    CREATE_PASSKEY_INTENT,
-                    userId,
-                    requestCode.getAndIncrement(),
+                    action = CREATE_PASSKEY_INTENT,
+                    userId = userId,
+                    requestCode = requestCode.getAndIncrement(),
                 ),
             )
             .setDescription(
@@ -202,9 +199,7 @@ class CredentialProviderProcessorImpl(
             .setLastUsedTime(if (isActive) clock.instant() else null)
             .setAutoSelectAllowed(true)
 
-        if (isVaultUnlocked &&
-            featureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyCreation)
-        ) {
+        if (isVaultUnlocked) {
             biometricsEncryptionManager
                 .getOrCreateCipher(userId)
                 ?.let { entryBuilder.setBiometricPromptDataIfSupported(cipher = it) }

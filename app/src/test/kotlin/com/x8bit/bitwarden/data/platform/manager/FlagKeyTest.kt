@@ -26,14 +26,6 @@ class FlagKeyTest {
             "cipher-key-encryption",
         )
         assertEquals(
-            FlagKey.SingleTapPasskeyCreation.keyName,
-            "single-tap-passkey-creation",
-        )
-        assertEquals(
-            FlagKey.SingleTapPasskeyAuthentication.keyName,
-            "single-tap-passkey-authentication",
-        )
-        assertEquals(
             FlagKey.RestrictCipherItemDeletion.keyName,
             "pm-15493-restrict-item-deletion-to-can-manage-permission",
         )
@@ -54,8 +46,6 @@ class FlagKeyTest {
                 FlagKey.EmailVerification,
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
-                FlagKey.SingleTapPasskeyCreation,
-                FlagKey.SingleTapPasskeyAuthentication,
                 FlagKey.CipherKeyEncryption,
                 FlagKey.RestrictCipherItemDeletion,
                 FlagKey.UserManagedPrivilegedApps,
