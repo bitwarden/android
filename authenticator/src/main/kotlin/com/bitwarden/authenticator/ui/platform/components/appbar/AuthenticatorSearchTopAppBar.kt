@@ -24,10 +24,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.ImeAction
-import com.bitwarden.authenticator.R
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * Represents a Bitwarden styled [TopAppBar] that assumes the following components:
@@ -88,7 +88,7 @@ fun AuthenticatorSearchTopAppBar(
                     ) {
                         Icon(
                             painter = painterResource(id = BitwardenDrawable.ic_close),
-                            contentDescription = stringResource(id = R.string.clear),
+                            contentDescription = stringResource(id = BitwardenString.clear),
                         )
                     }
                 },

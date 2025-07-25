@@ -17,6 +17,7 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherListView
@@ -24,7 +25,6 @@ import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.UriMatchType
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
@@ -158,7 +158,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         DataState.Loading,
     )
     private val resourceManager: ResourceManager = mockk {
-        every { getString(R.string.folder_none) } returns "No Folder"
+        every { getString(BitwardenString.folder_none) } returns "No Folder"
     }
     private val clipboardManager: BitwardenClipboardManager = mockk {
         every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
@@ -623,7 +623,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultAddEditEvent.ShowToast(R.string.item_soft_deleted.asText()),
+                    VaultAddEditEvent.ShowToast(BitwardenString.item_soft_deleted.asText()),
                     awaitItem(),
                 )
                 assertEquals(
@@ -666,7 +666,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 createVaultAddItemState(
                     vaultAddEditType = vaultAddEditType,
                     dialogState = VaultAddEditState.DialogState.Generic(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         error = error,
                     ),
                     commonContentViewState = createCommonContentViewState(
@@ -708,7 +708,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         runTest {
             val stateWithDialog = createVaultAddItemState(
                 dialogState = VaultAddEditState.DialogState.Loading(
-                    R.string.saving.asText(),
+                    BitwardenString.saving.asText(),
                 ),
                 commonContentViewState = createCommonContentViewState(
                     name = "mockName-1",
@@ -742,7 +742,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 assertEquals(
                     VaultAddEditEvent.ShowToast(
-                        R.string.new_item_created.asText(),
+                        BitwardenString.new_item_created.asText(),
                     ),
                     eventFlow.awaitItem(),
                 )
@@ -771,7 +771,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 )
             val stateWithDialog = createVaultAddItemState(
                 dialogState = VaultAddEditState.DialogState.Loading(
-                    R.string.saving.asText(),
+                    BitwardenString.saving.asText(),
                 ),
                 commonContentViewState = createCommonContentViewState(
                     name = "mockName-1",
@@ -832,7 +832,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.AddTotpLoginItem(data = totpData)
             val stateWithDialog = createVaultAddItemState(
-                dialogState = VaultAddEditState.DialogState.Loading(R.string.saving.asText()),
+                dialogState = VaultAddEditState.DialogState.Loading(BitwardenString.saving.asText()),
                 commonContentViewState = createCommonContentViewState(name = "issuer"),
                 totpData = totpData,
                 shouldExitOnSave = true,
@@ -884,7 +884,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     shouldFinishWhenComplete = true,
                 )
             val stateWithDialog = createVaultAddItemState(
-                dialogState = VaultAddEditState.DialogState.Loading(R.string.saving.asText()),
+                dialogState = VaultAddEditState.DialogState.Loading(BitwardenString.saving.asText()),
                 commonContentViewState = createCommonContentViewState(name = "issuer"),
                 shouldExitOnSave = false,
                 shouldClearSpecialCircumstance = false,
@@ -913,7 +913,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithDialog, stateTurbine.awaitItem())
                 assertEquals(stateWithName, stateTurbine.awaitItem())
                 assertEquals(
-                    VaultAddEditEvent.ShowToast(R.string.new_item_created.asText()),
+                    VaultAddEditEvent.ShowToast(BitwardenString.new_item_created.asText()),
                     eventTurbine.awaitItem(),
                 )
                 assertEquals(VaultAddEditEvent.NavigateBack, eventTurbine.awaitItem())
@@ -939,7 +939,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 )
             val stateWithSavingDialog = createVaultAddItemState(
                 dialogState = VaultAddEditState.DialogState.Loading(
-                    R.string.saving.asText(),
+                    BitwardenString.saving.asText(),
                 ),
                 commonContentViewState = createCommonContentViewState(
                     name = "mockName-1",
@@ -1019,7 +1019,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 )
             val stateWithSavingDialog = createVaultAddItemState(
                 dialogState = VaultAddEditState.DialogState.Loading(
-                    R.string.saving.asText(),
+                    BitwardenString.saving.asText(),
                 ),
                 commonContentViewState = createCommonContentViewState(
                     name = "mockName-1",
@@ -1077,7 +1077,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithName, stateFlow.awaitItem())
                 assertEquals(stateWithSavingDialog, stateFlow.awaitItem())
                 assertEquals(
-                    VaultAddEditEvent.ShowToast(R.string.item_updated.asText()),
+                    VaultAddEditEvent.ShowToast(BitwardenString.item_updated.asText()),
                     eventFlow.awaitItem(),
                 )
                 assertEquals(stateWithName, stateFlow.awaitItem())
@@ -1219,7 +1219,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultAddEditState.DialogState.Fido2Error(
-                    message = R.string.passkey_operation_failed_because_the_request_is_unsupported
+                    message = BitwardenString.passkey_operation_failed_because_the_request_is_unsupported
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialog,
@@ -1345,7 +1345,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
                 assertEquals(
                     VaultAddEditEvent.ShowToast(
-                        R.string.new_item_created.asText(),
+                        BitwardenString.new_item_created.asText(),
                     ),
                     awaitItem(),
                 )
@@ -1915,7 +1915,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
             assertEquals(
                 VaultAddEditEvent.ShowToast(
-                    R.string.item_updated.asText(),
+                    BitwardenString.item_updated.asText(),
                 ),
                 awaitItem(),
             )
@@ -1950,8 +1950,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             assertEquals(
                 stateWithName.copy(
                     dialog = VaultAddEditState.DialogState.Generic(
-                        title = R.string.internet_connection_required_title.asText(),
-                        message = R.string.internet_connection_required_message.asText(),
+                        title = BitwardenString.internet_connection_required_title.asText(),
+                        message = BitwardenString.internet_connection_required_message.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -1987,7 +1987,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             assertEquals(
                 stateWithName.copy(
                     dialog = VaultAddEditState.DialogState.Generic(
-                        title = R.string.an_error_has_occurred.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
                         message = "Network error message".asText(),
                     ),
                 ),
@@ -2005,8 +2005,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             assertEquals(
                 stateWithName.copy(
                     dialog = VaultAddEditState.DialogState.Generic(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -2022,7 +2022,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val stateWithDialog = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
                 dialogState = VaultAddEditState.DialogState.Loading(
-                    R.string.saving.asText(),
+                    BitwardenString.saving.asText(),
                 ),
                 commonContentViewState = createCommonContentViewState(
                     name = "mockName-1",
@@ -2156,8 +2156,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             assertEquals(
                 stateWithName.copy(
                     dialog = VaultAddEditState.DialogState.Generic(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         error = error,
                     ),
                 ),
@@ -2223,7 +2223,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             assertEquals(
                 stateWithName.copy(
                     dialog = VaultAddEditState.DialogState.Generic(
-                        title = R.string.an_error_has_occurred.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
                         message = errorMessage.asText(),
                     ),
                 ),
@@ -2251,7 +2251,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     originalCipher = cipherView,
                 ),
                 typeContentViewState = createLoginTypeContentViewState(
-                    fido2CredentialCreationDateTime = R.string.created_x.asText(
+                    fido2CredentialCreationDateTime = BitwardenString.created_x.asText(
                         "May 08, 2024, 4:30 PM",
                     ),
                 ),
@@ -2454,8 +2454,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         val stateWithNoNameAndDialog = createVaultAddItemState(
             commonContentViewState = createCommonContentViewState(name = ""),
             dialogState = VaultAddEditState.DialogState.Generic(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.validation_field_required.asText(R.string.name.asText()),
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.validation_field_required
+                    .asText(BitwardenString.name.asText()),
             ),
         )
 
@@ -2481,8 +2482,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         )
         val errorState = createVaultAddItemState(
             dialogState = VaultAddEditState.DialogState.Generic(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.validation_field_required.asText(R.string.name.asText()),
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.validation_field_required
+                    .asText(BitwardenString.name.asText()),
             ),
         )
 
@@ -2508,7 +2510,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         runTest {
             val errorState = createVaultAddItemState(
                 dialogState = VaultAddEditState.DialogState.Fido2Error(
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    message = BitwardenString.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
             )
             val viewModel = createAddVaultItemViewModel(
@@ -2520,7 +2522,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
             viewModel.trySendAction(
                 VaultAddEditAction.Common.Fido2ErrorDialogDismissed(
-                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    BitwardenString.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
             )
             viewModel.eventFlow.test {
@@ -2528,7 +2530,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     VaultAddEditEvent.CompleteFido2Registration(
                         result = RegisterFido2CredentialResult.Error(
-                            R.string.passkey_operation_failed_because_user_could_not_be_verified
+                            BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
                                 .asText(),
                         ),
                     ),
@@ -2663,7 +2665,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     loginState.copy(
                         dialog = VaultAddEditState.DialogState.Loading(
-                            label = R.string.loading.asText(),
+                            label = BitwardenString.loading.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -2672,7 +2674,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     loginState.copy(
                         dialog = VaultAddEditState.DialogState.Generic(
-                            message = R.string.password_exposed.asText(breachCount),
+                            message = BitwardenString.password_exposed.asText(breachCount),
                         ),
                     ),
                     awaitItem(),
@@ -2747,7 +2749,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(
                     text = testKey,
-                    toastDescriptorOverride = R.string.authenticator_key.asText(),
+                    toastDescriptorOverride = BitwardenString.authenticator_key.asText(),
                 )
             }
         }
@@ -2822,7 +2824,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 )
 
                 assertEquals(
-                    VaultAddEditEvent.ShowToast(R.string.authenticator_key_added.asText()),
+                    VaultAddEditEvent.ShowToast(BitwardenString.authenticator_key_added.asText()),
                     awaitItem(),
                 )
 
@@ -2932,7 +2934,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 savedStateHandle = createSavedStateHandleWithState(
                     state = createVaultAddItemState(
                         typeContentViewState = createLoginTypeContentViewState(
-                            fido2CredentialCreationDateTime = R.string.created_x.asText(
+                            fido2CredentialCreationDateTime = BitwardenString.created_x.asText(
                                 "May 08, 2024, 4:30 PM",
                             ),
                         ),
@@ -3681,7 +3683,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(folderName))
                 assertEquals(
                     vaultAddItemInitialState.copy(
-                        dialog = VaultAddEditState.DialogState.Loading(R.string.saving.asText()),
+                        dialog = VaultAddEditState.DialogState.Loading(
+                            BitwardenString.saving.asText(),
+                        ),
                     ),
                     awaitItem(),
                 )
@@ -4264,7 +4268,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             verify { bitwardenCredentialManager.isUserVerified = false }
             assertEquals(
                 VaultAddEditState.DialogState.Fido2Error(
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    message = BitwardenString.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
                 viewModel.stateFlow.value.dialog,
             )
@@ -4296,7 +4300,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             verify { bitwardenCredentialManager.isUserVerified = false }
             assertEquals(
                 VaultAddEditState.DialogState.Fido2Error(
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    message = BitwardenString.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
                 viewModel.stateFlow.value.dialog,
             )
@@ -4310,7 +4314,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             verify { bitwardenCredentialManager.isUserVerified = false }
             assertEquals(
                 VaultAddEditState.DialogState.Fido2Error(
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    message = BitwardenString.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
                 viewModel.stateFlow.value.dialog,
             )
@@ -4419,7 +4423,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultAddEditState.DialogState.Fido2Error(
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    message = BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialog,
@@ -4469,7 +4473,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultAddEditState.DialogState.Fido2Error(
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    message = BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialog,
@@ -4524,7 +4528,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultAddEditState.DialogState.Fido2Error(
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    message = BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialog,
@@ -4574,7 +4578,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultAddEditState.DialogState.Fido2Error(
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    message = BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialog,
@@ -4661,7 +4665,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultAddEditState.DialogState.Fido2Error(
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    message = BitwardenString
+                        .passkey_operation_failed_because_user_could_not_be_verified
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialog,
@@ -4683,7 +4688,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultAddEditState.DialogState.Fido2Error(
-                    message = R.string.passkey_operation_failed_because_the_request_is_unsupported
+                    message = BitwardenString.passkey_operation_failed_because_the_request_is_unsupported
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialog,
@@ -4750,14 +4755,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 viewModel.eventFlow.test {
                     assertEquals(
-                        VaultAddEditEvent.ShowToast(R.string.an_error_has_occurred.asText()),
+                        VaultAddEditEvent.ShowToast(BitwardenString.an_error_has_occurred.asText()),
                         awaitItem(),
                     )
 
                     assertEquals(
                         VaultAddEditEvent.CompleteFido2Registration(
                             RegisterFido2CredentialResult.Error(
-                                R.string.passkey_registration_failed_due_to_an_internal_error
+                                BitwardenString.passkey_registration_failed_due_to_an_internal_error
                                     .asText(),
                             ),
                         ),
@@ -4797,7 +4802,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 viewModel.eventFlow.test {
                     assertEquals(
-                        VaultAddEditEvent.ShowToast(R.string.item_updated.asText()),
+                        VaultAddEditEvent.ShowToast(BitwardenString.item_updated.asText()),
                         awaitItem(),
                     )
 

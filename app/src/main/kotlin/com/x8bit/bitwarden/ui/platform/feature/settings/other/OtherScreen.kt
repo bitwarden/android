@@ -39,6 +39,7 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
@@ -252,8 +253,8 @@ private fun ClearClipboardFrequencyRow(
     resources: Resources = LocalContext.current.resources,
 ) {
     BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.clear_clipboard),
-        supportingText = annotatedStringResource(id = R.string.clear_clipboard_description),
+        label = stringResource(id = BitwardenString.clear_clipboard),
+        supportingText = annotatedStringResource(id = BitwardenString.clear_clipboard_description),
         options = ClearClipboardFrequency.entries.map { it.displayLabel() }.toImmutableList(),
         selectedOption = currentSelection.displayLabel(),
         onOptionSelected = { selectedFrequency ->

@@ -43,6 +43,7 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -162,7 +163,7 @@ fun AccountSecurityScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.account_security),
+                title = stringResource(id = BitwardenString.account_security),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),

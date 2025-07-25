@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s har kopierats</string>
     <string name="verify_master_password">Bekräfta huvudlösenord</string>
     <string name="verify_pin">Bekräfta PIN-kod</string>
-    <string name="version">Version</string>
     <string name="view">Visa</string>
     <string name="yes">Ja</string>
     <string name="account">Konto</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Redigera kort</string>
     <string name="edit_identity">Redigera identitet</string>
     <string name="edit_note">Redigera anteckning</string>
-    <string name="edit_passkey">Redigera inloggningsnyckel</string>
+    <string name="edit_ssh_key">Redigera SSH-nyckel</string>
     <string name="enter_email_for_hint">Ange ditt kontos e-postadress för att hämta din huvudlösenordsledtråd.</string>
     <string name="favorite">Favorit</string>
     <string name="unfavorite">Avmarkera som favorit</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 minut</string>
     <string name="four_hours">4 timmar</string>
     <string name="immediately">Omedelbart</string>
-    <string name="vault_timeout_log_out_confirmation">Genom att logga ut upphör all åtkomst till valvet och onlineautentisering krävs efter att tidsgränsen överskridits. Är du säker på att du vill använda denna inställning?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Ställ in sessionstidsgräns för \"Logga ut\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">Efter tidsgränsperioden kommer du att loggas ut. Du måste vara ansluten till internet för att logga in och komma åt ditt valv igen. Dina inställningar och PIN-kod som sparats på denna enhet kommer inte att ändras.</string>
     <string name="logging_in">Loggar in...</string>
     <string name="login_to_bitwarden">Logga in på Bitwarden</string>
     <string name="master_password_confirmation_val_message">Bekräftelsen för huvudlösenordet stämde ej.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Ny identitet</string>
     <string name="no_notes">Det finns inga anteckningar i ditt valv.</string>
     <string name="new_note">Ny anteckning</string>
-    <string name="new_passkey">Ny huvudnyckel</string>
     <string name="new_item">Nytt objekt</string>
     <string name="new_ssh_key">Ny SSH-nyckel</string>
     <string name="no_text_sends">Det finns inga textmeddelanden i ditt valv.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Visa kort</string>
     <string name="view_identity">Visa identitet</string>
     <string name="view_note">Visa anteckning</string>
-    <string name="view_passkey">Visa nyckeln</string>
+    <string name="view_ssh_key">Visa SSH-nyckel</string>
     <string name="web_vault">Bitwarden webbvalv</string>
     <string name="items">Objekt</string>
     <string name="items_for_uri">Objekt för %1$s</string>
@@ -265,6 +264,7 @@ Skanningen sker automatiskt.</string>
     <string name="address">Adress</string>
     <string name="expiration">Utgång</string>
     <string name="show_website_icons">Visa webbplatsikoner</string>
+    <string name="show_website_icons_help">Visa hjälp för webbplatsikoner</string>
     <string name="show_website_icons_description">Visa en identifierbar bild bredvid varje inloggning</string>
     <string name="icons_url">Ikonserver-URL</string>
     <string name="vault_is_locked">Valvet är låst</string>
@@ -701,6 +701,7 @@ Vill du byta till detta konto?</string>
     <string name="launch_web_authn">Starta WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Det uppstod ett fel vid start av WebAuthns tvåfaktorsautentisering</string>
     <string name="self_hosted_server_url">URL för server med egen hosting</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey-operationen misslyckades eftersom användaren inte kunde verifieras.</string>
     <string name="user_verification_direction">Användarverifiering</string>
     <string name="create_account_on">Skapa konto på</string>
@@ -865,7 +866,6 @@ Vill du byta till detta konto?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Du behöver bara ställa in Authenticator Key för inloggningar som kräver tvåfaktorsautentisering med en kod. Nyckeln kommer kontinuerligt att generera sexsiffriga koder som du kan använda för att logga in.</string>
     <string name="coachmark_3_of_3">3 AV 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Du måste lägga till en webbadress för att använda autofyll för att komma åt det här kontot.</string>
-    <string name="mutual_tls">Ömsesidig TLS</string>
     <string name="single_tap_passkey_creation">Skapa passerkort med en enda knapptryckning</string>
     <string name="single_tap_passkey_authentication">Inloggning med en knapptryckning och nyckel</string>
     <string name="learn_about_new_logins">Lär dig mer om nya inloggningar</string>
@@ -909,6 +909,12 @@ Vill du byta till detta konto?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey-operationen misslyckades eftersom antalet försök att verifiera användaren överskreds.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey-operationen misslyckades eftersom inget objekt valdes.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey-operationen misslyckades eftersom begäran inte stöds.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">URL för server med egen värd</string>
     <string name="use_brave_autofill_integration">Använd Brave autofyll-integration</string>
     <string name="use_chrome_autofill_integration">Använd Chrome autofyll-integration</string>
@@ -967,8 +973,8 @@ Vill du byta till detta konto?</string>
     <string name="view_text_send">Visa text Skicka</string>
     <string name="delete_send">Radera Skicka</string>
     <string name="missing_send_resync_your_vault">Saknas Skicka synkronisera ditt valv igen</string>
-    <string name="dynamic_colors">Dynamiska färger</string>
-    <string name="dynamic_colors_description">Applicera dynamiska färger baserat på din tapet</string>
+    <string name="use_dynamic_colors">Använd dynamiska färger</string>
+    <string name="use_dynamic_colors_question">Använd dynamiska färger?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamiska färger använder systemfärgerna och uppfyller kanske inte alla riktlinjer för tillgänglighet.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey-operationen misslyckades eftersom webbläsaren (%1$s) inte känns igen. Välj \"Trust\" för att lägga till %1$s i listan över lokalt betrodda program.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey-operationen misslyckades eftersom webbläsaren inte är pålitlig.</string>
@@ -989,4 +995,6 @@ Vill du byta till detta konto?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Är du säker på att du inte längre vill lita på %s?</string>
     <string name="installed_apps">Installerade appar</string>
     <string name="delete_x">Radera %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Misslyckades med att dekryptera chiffer. Kontakta supporten.</string>
+    <string name="decryption_error">Dekrypteringsfel</string>
 </resources>

@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s copié</string>
     <string name="verify_master_password">Vérifier le mot de passe principal</string>
     <string name="verify_pin">S\'authentifier avec un code PIN</string>
-    <string name="version">Version</string>
     <string name="view">Voir</string>
     <string name="yes">Oui</string>
     <string name="account">Compte</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Modifier la carte</string>
     <string name="edit_identity">Modifier l’identité</string>
     <string name="edit_note">Modifier la note</string>
-    <string name="edit_passkey">Modifier la clé d\'accès</string>
+    <string name="edit_ssh_key">Edit SSH key</string>
     <string name="enter_email_for_hint">Saisissez l\'adresse électronique de votre compte pour recevoir l\'indice de votre mot de passe principal.</string>
     <string name="favorite">Favori</string>
     <string name="unfavorite">Retirer des favoris</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 minute</string>
     <string name="four_hours">4 heures</string>
     <string name="immediately">Immédiatement</string>
-    <string name="vault_timeout_log_out_confirmation">La déconnexion supprimera tout accès à votre coffre et nécessitera une authentification en ligne après la période d\'expiration. Êtes-vous sûr de vouloir utiliser ce paramètre ?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
     <string name="logging_in">Identification...</string>
     <string name="login_to_bitwarden">Se connecter à Bitwarden</string>
     <string name="master_password_confirmation_val_message">La confirmation du mot de passe est erronée.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Nouvelle identité</string>
     <string name="no_notes">Il n\'y a aucune note dans votre coffre.</string>
     <string name="new_note">Nouvelle note</string>
-    <string name="new_passkey">Nouvelle clé d\'accès</string>
     <string name="new_item">Nouvel élément</string>
     <string name="new_ssh_key">Nouvelle clé SSH</string>
     <string name="no_text_sends">Il n\'y a aucun texte Send dans votre coffre.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Voir la carte</string>
     <string name="view_identity">Voir l\'identité</string>
     <string name="view_note">Voir la note</string>
-    <string name="view_passkey">Afficher la clé d\'accès</string>
+    <string name="view_ssh_key">View SSH key</string>
     <string name="web_vault">Coffre web Bitwarden</string>
     <string name="items">Éléments</string>
     <string name="items_for_uri">Éléments pour %1$s</string>
@@ -265,6 +264,7 @@ La numérisation se fera automatiquement.</string>
     <string name="address">Adresse</string>
     <string name="expiration">Expiration</string>
     <string name="show_website_icons">Afficher les icônes des sites web</string>
+    <string name="show_website_icons_help">Show website icons help</string>
     <string name="show_website_icons_description">Affichez une image reconnaissable à côté de chaque identifiant.</string>
     <string name="icons_url">Icônes URL du serveur</string>
     <string name="vault_is_locked">Le coffre est verrouillé</string>
@@ -701,6 +701,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="launch_web_authn">Lancer WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">There was an error starting WebAuthn two factor authentication</string>
     <string name="self_hosted_server_url">URL du serveur auto-hébergé</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
     <string name="user_verification_direction">Vérification de l’utilisateur</string>
     <string name="create_account_on">Création du compte sur</string>
@@ -865,7 +866,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Vous n\'aurez besoin de configurer une clé d\'authentification que pour les connexions qui nécessitent une authentification à deux facteurs avec un code. La clé générera continuellement des codes à six chiffres que vous pourrez utiliser pour vous connecter.</string>
     <string name="coachmark_3_of_3">3 SUR 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Vous devez ajouter une adresse Web afin d\'utiliser la saisie automatique pour accéder à ce compte.</string>
-    <string name="mutual_tls">Mutual TLS</string>
     <string name="single_tap_passkey_creation">Single tap passkey creation</string>
     <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">En savoir plus sur la création d\'identifiants</string>
@@ -909,6 +909,12 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">URL du serveur autohébergé</string>
     <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Utiliser l\'intégration de la saisie automatique de Chrome</string>
@@ -967,9 +973,9 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="view_text_send">View text Send</string>
     <string name="delete_send">Delete Send</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
-    <string name="dynamic_colors">Dynamic colors</string>
-    <string name="dynamic_colors_description">Apply dynamic colors based on your wallpaper</string>
-    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamic colors uses the system colors and may not meet all accessibility guidelines.</string>
+    <string name="use_dynamic_colors">Use dynamic colors</string>
+    <string name="use_dynamic_colors_question">Use dynamic colors?</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">This color scheme automatically applies system colors to Bitwarden based on your current wallpaper. These colors may not meet all accessibility guidelines.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
     <string name="trust">Trust</string>
@@ -989,4 +995,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
     <string name="installed_apps">Installed apps</string>
     <string name="delete_x">Delete %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
+    <string name="decryption_error">Decryption error</string>
 </resources>

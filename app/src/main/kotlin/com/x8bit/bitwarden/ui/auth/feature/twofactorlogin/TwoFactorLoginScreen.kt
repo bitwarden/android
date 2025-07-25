@@ -48,9 +48,9 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.description
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.title
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -129,7 +129,7 @@ fun TwoFactorLoginScreen(
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val title = if (state.isNewDeviceVerification) {
-        R.string.verify_your_identity.asText()
+        BitwardenString.verify_your_identity.asText()
     } else {
         state.authMethod.title
     }
@@ -142,14 +142,14 @@ fun TwoFactorLoginScreen(
                 title = title(),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(TwoFactorLoginAction.CloseButtonClick) }
                 },
                 actions = {
                     if (!state.isNewDeviceVerification) {
                         BitwardenOverflowActionItem(
-                            contentDescription = stringResource(R.string.more),
+                            contentDescription = stringResource(BitwardenString.more),
                             menuItemDataList = state.availableAuthMethods
                                 .map {
                                     OverflowMenuItemData(
@@ -202,7 +202,7 @@ private fun TwoFactorLoginDialogs(
             title = dialogState
                 .title
                 ?.invoke()
-                ?: stringResource(R.string.an_error_has_occurred),
+                ?: stringResource(BitwardenString.an_error_has_occurred),
             message = dialogState.message(),
             throwable = dialogState.error,
             onDismissRequest = onDismissRequest,
@@ -247,7 +247,7 @@ private fun TwoFactorLoginScreenContent(
         Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
             text = if (state.isNewDeviceVerification) {
-                stringResource(R.string.enter_verification_code_new_device)
+                stringResource(BitwardenString.enter_verification_code_new_device)
             } else {
                 state.authMethod.description(
                     state.displayEmail,
@@ -284,7 +284,7 @@ private fun TwoFactorLoginScreenContent(
             BitwardenPasswordField(
                 value = state.codeInput,
                 onValueChange = onCodeInputChange,
-                label = stringResource(id = R.string.verification_code),
+                label = stringResource(id = BitwardenString.verification_code),
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done,
                 autoFocus = true,
@@ -302,7 +302,7 @@ private fun TwoFactorLoginScreenContent(
 
         if (!state.isNewDeviceVerification) {
             BitwardenSwitch(
-                label = stringResource(id = R.string.remember),
+                label = stringResource(id = BitwardenString.remember),
                 isChecked = state.isRememberEnabled,
                 onCheckedChange = onRememberMeToggle,
                 cardStyle = CardStyle.Full,
@@ -327,7 +327,7 @@ private fun TwoFactorLoginScreenContent(
             Spacer(modifier = Modifier.height(12.dp))
 
             BitwardenOutlinedButton(
-                label = stringResource(id = R.string.send_verification_code_again),
+                label = stringResource(id = BitwardenString.send_verification_code_again),
                 onClick = onResendEmailButtonClick,
                 modifier = Modifier
                     .standardHorizontalMargin()

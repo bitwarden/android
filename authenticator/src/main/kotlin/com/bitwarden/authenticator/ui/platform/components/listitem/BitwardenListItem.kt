@@ -31,7 +31,6 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.bitwarden.authenticator.ui.platform.components.model.IconResource
@@ -39,6 +38,7 @@ import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -137,7 +137,7 @@ fun BitwardenListItem(
             ) {
                 Icon(
                     painter = painterResource(id = BitwardenDrawable.ic_more_horizontal),
-                    contentDescription = stringResource(id = R.string.options),
+                    contentDescription = stringResource(id = BitwardenString.options),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(24.dp),
                 )

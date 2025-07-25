@@ -19,9 +19,9 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.requestFocus
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
@@ -129,16 +129,20 @@ class VaultUnlockScreenTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on Fido2GetCredentialsError should call completeFido2GetCredentialRequest on fido2CompletionManager`() {
+    fun `on GetCredentialsError should call completeProviderGetCredentialsRequest on CredentialProviderCompletionManager`() {
         mutableEventFlow.tryEmit(
-            VaultUnlockEvent.Fido2GetCredentialsError(
-                R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+            VaultUnlockEvent.GetCredentialsError(
+                BitwardenString
+                    .credential_operation_failed_because_user_could_not_be_verified
+                    .asText(),
             ),
         )
         verify(exactly = 1) {
             credentialProviderCompletionManager.completeProviderGetCredentialsRequest(
                 result = GetCredentialsResult.Error(
-                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    BitwardenString
+                        .credential_operation_failed_because_user_could_not_be_verified
+                        .asText(),
                 ),
             )
         }
@@ -146,7 +150,7 @@ class VaultUnlockScreenTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on Fido2AssertCredentialError should call completeFido2AssertCredential on fido2CompletionManager`() {
+    fun `on Fido2AssertCredentialError should call completeProviderGetCredentialsRequest on CredentialProviderCompletionManager`() {
         mutableEventFlow.tryEmit(VaultUnlockEvent.Fido2CredentialAssertionError("".asText()))
         verify(exactly = 1) {
             credentialProviderCompletionManager.completeFido2Assertion(

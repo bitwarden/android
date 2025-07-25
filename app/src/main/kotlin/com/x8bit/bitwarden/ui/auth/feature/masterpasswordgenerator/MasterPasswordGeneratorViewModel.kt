@@ -6,9 +6,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.generators.PassphraseGeneratorRequest
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
@@ -94,7 +94,7 @@ class MasterPasswordGeneratorViewModel @Inject constructor(
             is GeneratedPassphraseResult.InvalidRequest -> {
                 sendEvent(
                     MasterPasswordGeneratorEvent.ShowSnackbar(
-                        R.string.an_error_has_occurred.asText(),
+                        BitwardenString.an_error_has_occurred.asText(),
                     ),
                 )
             }

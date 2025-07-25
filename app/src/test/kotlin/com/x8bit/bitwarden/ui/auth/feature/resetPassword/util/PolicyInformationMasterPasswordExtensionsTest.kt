@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.auth.feature.resetPassword.util
 
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.createMockMasterPasswordPolicy
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.util.toDisplayLabels
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -16,7 +16,7 @@ class PolicyInformationMasterPasswordExtensionsTest {
             createMockMasterPasswordPolicy(minLength = 2),
         )
         assertEquals(
-            listOf(R.string.policy_in_effect_min_length.asText(10)),
+            listOf(BitwardenString.policy_in_effect_min_length.asText(10)),
             policyList.toDisplayLabels(),
         )
     }
@@ -29,7 +29,7 @@ class PolicyInformationMasterPasswordExtensionsTest {
             createMockMasterPasswordPolicy(minComplexity = 2),
         )
         assertEquals(
-            listOf(R.string.policy_in_effect_min_complexity.asText(2)),
+            listOf(BitwardenString.policy_in_effect_min_complexity.asText(2)),
             policyList.toDisplayLabels(),
         )
     }
@@ -44,10 +44,10 @@ class PolicyInformationMasterPasswordExtensionsTest {
         )
         assertEquals(
             listOf(
-                R.string.policy_in_effect_uppercase.asText(),
-                R.string.policy_in_effect_lowercase.asText(),
-                R.string.policy_in_effect_numbers.asText(),
-                R.string.policy_in_effect_special.asText(),
+                BitwardenString.policy_in_effect_uppercase.asText(),
+                BitwardenString.policy_in_effect_lowercase.asText(),
+                BitwardenString.policy_in_effect_numbers.asText(),
+                BitwardenString.policy_in_effect_special.asText(),
             ),
             policyList.toDisplayLabels(),
         )

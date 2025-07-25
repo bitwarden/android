@@ -5,9 +5,9 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
@@ -154,8 +154,8 @@ class LoginWithDeviceViewModel @Inject constructor(
                             isResendNotificationLoading = false,
                         ),
                         dialogState = LoginWithDeviceState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = result.error,
                         ),
                     )
@@ -175,7 +175,7 @@ class LoginWithDeviceViewModel @Inject constructor(
                         ),
                         dialogState = LoginWithDeviceState.DialogState.Error(
                             title = null,
-                            message = R.string.login_request_has_already_expired.asText(),
+                            message = BitwardenString.login_request_has_already_expired.asText(),
                         ),
                     )
                 }
@@ -191,8 +191,8 @@ class LoginWithDeviceViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginWithDeviceState.DialogState.Error(
-                            title = R.string.log_in_denied.asText(),
-                            message = R.string.captcha_failed.asText(),
+                            title = BitwardenString.log_in_denied.asText(),
+                            message = BitwardenString.captcha_failed.asText(),
                         ),
                     )
                 }
@@ -234,11 +234,11 @@ class LoginWithDeviceViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginWithDeviceState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = loginResult
                                 .errorMessage
                                 ?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                             error = loginResult.error,
                         ),
                     )
@@ -249,8 +249,8 @@ class LoginWithDeviceViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginWithDeviceState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server
                                 .asText(),
                         ),
                     )
@@ -259,7 +259,7 @@ class LoginWithDeviceViewModel @Inject constructor(
 
             is LoginResult.Success -> {
                 snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(message = R.string.login_approved.asText()),
+                    data = BitwardenSnackbarData(message = BitwardenString.login_approved.asText()),
                     relay = SnackbarRelay.LOGIN_SUCCESS,
                 )
                 mutableStateFlow.update { it.copy(dialogState = null) }
@@ -269,8 +269,8 @@ class LoginWithDeviceViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginWithDeviceState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.we_couldnt_verify_the_servers_certificate.asText(),
                         ),
                     )
                 }
@@ -280,11 +280,11 @@ class LoginWithDeviceViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginWithDeviceState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = loginResult
                                 .errorMessage
                                 ?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -301,7 +301,7 @@ class LoginWithDeviceViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = LoginWithDeviceState.DialogState.Loading(
-                    message = R.string.logging_in.asText(),
+                    message = BitwardenString.logging_in.asText(),
                 ),
             )
         }
@@ -381,9 +381,9 @@ data class LoginWithDeviceState(
         get() = when (loginWithDeviceType) {
             LoginWithDeviceType.OTHER_DEVICE,
             LoginWithDeviceType.SSO_OTHER_DEVICE,
-                -> R.string.log_in_with_device.asText()
+                -> BitwardenString.log_in_with_device.asText()
 
-            LoginWithDeviceType.SSO_ADMIN_APPROVAL -> R.string.log_in_initiated.asText()
+            LoginWithDeviceType.SSO_ADMIN_APPROVAL -> BitwardenString.log_in_initiated.asText()
         }
 
     /**
@@ -418,10 +418,10 @@ data class LoginWithDeviceState(
                 get() = when (loginWithDeviceType) {
                     LoginWithDeviceType.OTHER_DEVICE,
                     LoginWithDeviceType.SSO_OTHER_DEVICE,
-                        -> R.string.log_in_initiated.asText()
+                        -> BitwardenString.log_in_initiated.asText()
 
                     LoginWithDeviceType.SSO_ADMIN_APPROVAL,
-                        -> R.string.admin_approval_requested.asText()
+                        -> BitwardenString.admin_approval_requested.asText()
                 }
 
             /**
@@ -431,10 +431,10 @@ data class LoginWithDeviceState(
                 get() = when (loginWithDeviceType) {
                     LoginWithDeviceType.OTHER_DEVICE,
                     LoginWithDeviceType.SSO_OTHER_DEVICE,
-                        -> R.string.a_notification_has_been_sent_to_your_device.asText()
+                        -> BitwardenString.a_notification_has_been_sent_to_your_device.asText()
 
                     LoginWithDeviceType.SSO_ADMIN_APPROVAL,
-                        -> R.string.your_request_has_been_sent_to_your_admin.asText()
+                        -> BitwardenString.your_request_has_been_sent_to_your_admin.asText()
                 }
 
             /**
@@ -445,10 +445,10 @@ data class LoginWithDeviceState(
                 get() = when (loginWithDeviceType) {
                     LoginWithDeviceType.OTHER_DEVICE,
                     LoginWithDeviceType.SSO_OTHER_DEVICE,
-                        -> R.string.please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device.asText()
+                        -> BitwardenString.please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device.asText()
 
                     LoginWithDeviceType.SSO_ADMIN_APPROVAL,
-                        -> R.string.you_will_be_notified_once_approved.asText()
+                        -> BitwardenString.you_will_be_notified_once_approved.asText()
                 }
 
             /**
@@ -459,9 +459,9 @@ data class LoginWithDeviceState(
                 get() = when (loginWithDeviceType) {
                     LoginWithDeviceType.OTHER_DEVICE,
                     LoginWithDeviceType.SSO_OTHER_DEVICE,
-                        -> R.string.log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option.asText()
+                        -> BitwardenString.log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option.asText()
 
-                    LoginWithDeviceType.SSO_ADMIN_APPROVAL -> R.string.trouble_logging_in.asText()
+                    LoginWithDeviceType.SSO_ADMIN_APPROVAL -> BitwardenString.trouble_logging_in.asText()
                 }
 
             /**

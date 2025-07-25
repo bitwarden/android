@@ -45,9 +45,10 @@ import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -344,9 +345,9 @@ private fun FillStyleSelector(
     resources: Resources = LocalContext.current.resources,
 ) {
     BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.display_autofill_suggestions),
+        label = stringResource(id = BitwardenString.display_autofill_suggestions),
         supportingText = annotatedStringResource(
-            id = R.string.use_inline_autofill_explanation_long,
+            id = BitwardenString.use_inline_autofill_explanation_long,
         ),
         options = AutofillStyle.entries.map { it.label() }.toImmutableList(),
         selectedOption = selectedStyle.label(),
@@ -366,8 +367,8 @@ private fun AccessibilityAutofillSwitch(
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(value = false) }
     BitwardenSwitch(
-        label = stringResource(id = R.string.accessibility),
-        supportingText = stringResource(id = R.string.accessibility_description5),
+        label = stringResource(id = BitwardenString.accessibility),
+        supportingText = stringResource(id = BitwardenString.accessibility_description5),
         isChecked = isAccessibilityAutoFillEnabled,
         onCheckedChange = {
             if (isAccessibilityAutoFillEnabled) {
@@ -525,7 +526,7 @@ private fun UriMatchSelectionButton(
     }
 
     BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.default_uri_match_detection),
+        label = stringResource(id = BitwardenString.default_uri_match_detection),
         options = UriMatchType.entries.filter { !it.isAdvancedMatching() }
             .map { it.displayLabel() }.toImmutableList(),
         selectedOption = selectedUriMatchType.displayLabel(),

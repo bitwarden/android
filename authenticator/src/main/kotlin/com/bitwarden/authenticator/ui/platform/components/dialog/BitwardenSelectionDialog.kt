@@ -22,9 +22,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
 import com.bitwarden.authenticator.ui.platform.components.util.maxDialogHeight
+import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * Displays a dialog with a title and "Cancel" button.
@@ -43,7 +43,7 @@ import com.bitwarden.authenticator.ui.platform.components.util.maxDialogHeight
 fun BitwardenSelectionDialog(
     title: String,
     subtitle: String? = null,
-    dismissLabel: String = stringResource(R.string.cancel),
+    dismissLabel: String = stringResource(BitwardenString.cancel),
     onDismissRequest: () -> Unit,
     onDismissActionClick: () -> Unit = onDismissRequest,
     selectionItems: @Composable ColumnScope.() -> Unit = {},

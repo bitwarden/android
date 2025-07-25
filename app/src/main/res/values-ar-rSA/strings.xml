@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s تم نسخه</string>
     <string name="verify_master_password">التحقق من كلمة المرور الرئيسية</string>
     <string name="verify_pin">التحقق من رقم التعريف الشخصي</string>
-    <string name="version">إصدار</string>
     <string name="view">انظر</string>
     <string name="yes">نعم</string>
     <string name="account">حساب</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">تحرير البطاقة</string>
     <string name="edit_identity">تعديل الهوية</string>
     <string name="edit_note">تعديل الملاحظة</string>
-    <string name="edit_passkey">تعديل مفتاح المرور</string>
+    <string name="edit_ssh_key">Edit SSH key</string>
     <string name="enter_email_for_hint">أدخل عنوان البريد الإلكتروني لحسابك لتلقي دليل كلمة المرور الرئيسية.</string>
     <string name="favorite">المفضلة</string>
     <string name="unfavorite">إزالة من المفضلة</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 دقيقة</string>
     <string name="four_hours">4 ساعات</string>
     <string name="immediately">فورًا</string>
-    <string name="vault_timeout_log_out_confirmation">سيؤدي تسجيل الخروج إلى إزالة جميع الوصول إلى الخزنة الخاصة بك ويتطلب المصادقة عبر الإنترنت بعد انتهاء المهلة. هل أنت متأكد من أنك تريد استخدام هذا الإعداد؟</string>
+    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
     <string name="logging_in">جارِ تسجيل الدخول...</string>
     <string name="login_to_bitwarden">تسجيل الدخول إلى بت واردن</string>
     <string name="master_password_confirmation_val_message">تأكيد كلمة المرور غير صحيح.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">هوية جديدة</string>
     <string name="no_notes">لا توجد ملاحظات في خزانك.</string>
     <string name="new_note">ملاحظة جديدة</string>
-    <string name="new_passkey">مفتاح مرور جديد</string>
     <string name="new_item">عنصر جديد</string>
     <string name="new_ssh_key">مفتاح SSH جديد</string>
     <string name="no_text_sends">لا يوجد نص مرسل في خزانك.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">عرض البطاقة</string>
     <string name="view_identity">عرض الهوية</string>
     <string name="view_note">عرض الملاحظة</string>
-    <string name="view_passkey">عرض مفتاح المرور</string>
+    <string name="view_ssh_key">View SSH key</string>
     <string name="web_vault">خزنة الويب بت واردن</string>
     <string name="items">العناصر</string>
     <string name="items_for_uri">عناصر لـ %1$s</string>
@@ -265,6 +264,7 @@
     <string name="address">العنوان</string>
     <string name="expiration">تاريخ الانتهاء</string>
     <string name="show_website_icons">إظهار أيقونات الموقع</string>
+    <string name="show_website_icons_help">Show website icons help</string>
     <string name="show_website_icons_description">إظهار صورة قابلة للتعرف بجانب كل تسجيل دخول.</string>
     <string name="icons_url">رابط ملقم الأيقونات</string>
     <string name="vault_is_locked">الخزنة مقفلة</string>
@@ -701,6 +701,7 @@
     <string name="launch_web_authn">تشغيل WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">حدث خطأ أثناء بدء المصادقة على عاملين WebAuthn</string>
     <string name="self_hosted_server_url">رابط الخادم المستضيف ذاتياً</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">فشلت عملية مفتاح المرور لأنه تعذر التحقق من المستخدم.</string>
     <string name="user_verification_direction">التحقق من المستخدم</string>
     <string name="create_account_on">إنشاء حساب في</string>
@@ -865,7 +866,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">سوف تحتاج فقط إلى إعداد مفتاح المصادقة لتسجيل الدخول التي تتطلب المصادقة ذات عاملين بواسطة الكود. سيولد المفتاح باستمرار رموز من ستة أرقام يمكنك استخدامها لتسجيل الدخول.</string>
     <string name="coachmark_3_of_3">3 من 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">يجب عليك إضافة عنوان ويب لاستخدام التعبئة التلقائية للوصول إلى هذا الحساب.</string>
-    <string name="mutual_tls">TLS تبادل</string>
     <string name="single_tap_passkey_creation">إنشاء مفتاح مرور لمرة واحدة</string>
     <string name="single_tap_passkey_authentication">تسجيل الدخول بالضغط الواحد على مفتاح المرور</string>
     <string name="learn_about_new_logins">تعرف على تسجيلات الدخول الجديدة</string>
@@ -909,6 +909,12 @@
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">فشلت عملية المرور بسبب تجاوز محاولات التحقق من المستخدم.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">فشلت عملية المرور لأنه لم يتم تحديد أي عنصر.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">فشلت عملية المرور لأن الطلب غير مدعوم.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">رابط خادم الاستضافة الذاتية</string>
     <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">استخدام ملء كروم التلقائي</string>
@@ -967,8 +973,8 @@
     <string name="view_text_send">عرض إرسال النص</string>
     <string name="delete_send">حذف الإرسال</string>
     <string name="missing_send_resync_your_vault">مفقود أرسل إعادة مزامنة المخزن الخاص بك</string>
-    <string name="dynamic_colors">الألوان الديناميكية</string>
-    <string name="dynamic_colors_description">تطبيق الألوان الديناميكية استناداً إلى الخلفية الخاصة بك</string>
+    <string name="use_dynamic_colors">Use dynamic colors</string>
+    <string name="use_dynamic_colors_question">Use dynamic colors?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">الألوان الديناميكية تستخدم ألوان النظام وقد لا تفي بجميع المبادئ التوجيهية المتعلقة بإمكانية الوصول.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
@@ -989,4 +995,6 @@
     <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
     <string name="installed_apps">Installed apps</string>
     <string name="delete_x">Delete %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
+    <string name="decryption_error">Decryption error</string>
 </resources>

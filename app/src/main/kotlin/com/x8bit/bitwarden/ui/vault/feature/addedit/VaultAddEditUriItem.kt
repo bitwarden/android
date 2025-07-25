@@ -24,6 +24,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
@@ -105,7 +106,7 @@ fun VaultAddEditUriItem(
 
     if (shouldShowMatchDialog) {
         BitwardenSelectionDialog(
-            title = stringResource(id = R.string.uri_match_detection),
+            title = stringResource(id = BitwardenString.uri_match_detection),
             onDismissRequest = { shouldShowMatchDialog = false },
         ) {
             BitwardenMultiSelectDialogContent(

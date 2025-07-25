@@ -48,8 +48,8 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ErrorDialogDismiss
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToPrivacyPolicy
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToTerms
@@ -121,10 +121,10 @@ fun StartRegistrationScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.create_account),
+                title = stringResource(id = BitwardenString.create_account),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = handler.onCloseClick,
             )
         },
@@ -159,7 +159,7 @@ private fun StartRegistrationDialogs(
         }
 
         StartRegistrationDialog.Loading -> {
-            BitwardenLoadingDialog(text = stringResource(id = R.string.create_account))
+            BitwardenLoadingDialog(text = stringResource(id = BitwardenString.create_account))
         }
 
         null -> Unit
@@ -199,7 +199,7 @@ private fun StartRegistrationContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         BitwardenTextField(
-            label = stringResource(id = R.string.email_address_required),
+            label = stringResource(id = BitwardenString.email_address_required),
             value = emailInput,
             onValueChange = handler.onEmailInputChange,
             keyboardType = KeyboardType.Email,
@@ -207,8 +207,8 @@ private fun StartRegistrationContent(
             supportingContentPadding = PaddingValues(),
             supportingContent = {
                 EnvironmentSelector(
-                    labelText = stringResource(id = R.string.create_account_on_with_colon),
-                    dialogTitle = stringResource(id = R.string.create_account_on),
+                    labelText = stringResource(id = BitwardenString.create_account_on_with_colon),
+                    dialogTitle = stringResource(id = BitwardenString.create_account_on),
                     selectedOption = selectedEnvironmentType,
                     onOptionSelected = handler.onEnvironmentTypeSelect,
                     onHelpClick = handler.onServerGeologyHelpClick,
@@ -226,7 +226,7 @@ private fun StartRegistrationContent(
         Spacer(modifier = Modifier.height(8.dp))
 
         BitwardenTextField(
-            label = stringResource(id = R.string.name),
+            label = stringResource(id = BitwardenString.name),
             value = nameInput,
             onValueChange = handler.onNameInputChange,
             textFieldTestTag = "NameEntry",
@@ -251,7 +251,7 @@ private fun StartRegistrationContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         BitwardenFilledButton(
-            label = stringResource(id = R.string.continue_text),
+            label = stringResource(id = BitwardenString.continue_text),
             onClick = handler.onContinueClick,
             isEnabled = isContinueButtonEnabled,
             modifier = Modifier
@@ -279,8 +279,8 @@ private fun TermsAndPrivacyText(
     onPrivacyPolicyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val strTerms = stringResource(id = R.string.terms_of_service)
-    val strPrivacy = stringResource(id = R.string.privacy_policy)
+    val strTerms = stringResource(id = BitwardenString.terms_of_service)
+    val strPrivacy = stringResource(id = BitwardenString.privacy_policy)
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
@@ -309,7 +309,8 @@ private fun TermsAndPrivacyText(
     ) {
         Text(
             text = annotatedStringResource(
-                id = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy,
+                id = BitwardenString
+                    .by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy,
                 onAnnotationClick = {
                     when (it) {
                         "termsOfService" -> onTermsClick()
@@ -331,7 +332,7 @@ private fun ReceiveMarketingEmailsSwitch(
     onUnsubscribeClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val unsubscribeString = stringResource(id = R.string.unsubscribe)
+    val unsubscribeString = stringResource(id = BitwardenString.unsubscribe)
     @Suppress("MaxLineLength")
     BitwardenSwitch(
         modifier = modifier
@@ -348,7 +349,7 @@ private fun ReceiveMarketingEmailsSwitch(
             }
             .testTag(tag = "ReceiveMarketingEmailsToggle"),
         label = annotatedStringResource(
-            id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time,
+            id = BitwardenString.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time,
             onAnnotationClick = { onUnsubscribeClick() },
         ),
         isChecked = isChecked,

@@ -56,11 +56,11 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.theme.LocalBitwardenColorScheme
 import com.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
 import com.bitwarden.ui.platform.util.rememberWindowSize
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util.QrCodeAnalyzer
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util.QrCodeAnalyzerImpl
@@ -105,9 +105,9 @@ fun QrCodeScanScreen(
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 BitwardenTopAppBar(
-                    title = stringResource(id = R.string.scan_qr_code),
+                    title = stringResource(id = BitwardenString.scan_qr_code),
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                    navigationIconContentDescription = stringResource(id = R.string.close),
+                    navigationIconContentDescription = stringResource(id = BitwardenString.close),
                     onNavigationIconClick = remember(viewModel) {
                         { viewModel.trySendAction(QrCodeScanAction.CloseClick) }
                     },
@@ -165,7 +165,7 @@ private fun QrCodeContentCompact(
                 .verticalScroll(rememberScrollState()),
         ) {
             Text(
-                text = stringResource(id = R.string.point_your_camera_at_the_qr_code),
+                text = stringResource(id = BitwardenString.point_your_camera_at_the_qr_code),
                 textAlign = TextAlign.Center,
                 color = Color.White,
                 style = BitwardenTheme.typography.bodyMedium,
@@ -206,7 +206,7 @@ private fun QrCodeContentMedium(
                 .verticalScroll(rememberScrollState()),
         ) {
             Text(
-                text = stringResource(id = R.string.point_your_camera_at_the_qr_code),
+                text = stringResource(id = BitwardenString.point_your_camera_at_the_qr_code),
                 textAlign = TextAlign.Center,
                 color = Color.White,
                 style = BitwardenTheme.typography.bodySmall,
@@ -402,10 +402,10 @@ private fun EnterKeyManuallyText(
     onEnterKeyManuallyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val enterKeyManuallyString = stringResource(R.string.enter_key_manually)
+    val enterKeyManuallyString = stringResource(BitwardenString.enter_key_manually)
     Text(
         text = annotatedStringResource(
-            id = R.string.cannot_scan_qr_code_enter_key_manually,
+            id = BitwardenString.cannot_scan_qr_code_enter_key_manually,
             onAnnotationClick = {
                 when (it) {
                     "enterKeyManually" -> onEnterKeyManuallyClick()

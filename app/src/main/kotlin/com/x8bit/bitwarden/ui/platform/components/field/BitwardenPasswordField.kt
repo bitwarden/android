@@ -54,8 +54,8 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenCutCopyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
@@ -215,7 +215,11 @@ fun BitwardenPasswordField(
                                     BitwardenDrawable.ic_eye
                                 },
                                 contentDescription = stringResource(
-                                    id = if (showPassword) R.string.hide else R.string.show,
+                                    id = if (showPassword) {
+                                        BitwardenString.hide
+                                    } else {
+                                        BitwardenString.show
+                                    },
                                 ),
                                 onClick = { showPasswordChange.invoke(!showPassword) },
                             )

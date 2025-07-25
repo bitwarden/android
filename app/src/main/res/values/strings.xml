@@ -701,6 +701,7 @@ Do you want to switch to this account?</string>
     <string name="launch_web_authn">Launch WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">There was an error starting WebAuthn two factor authentication</string>
     <string name="self_hosted_server_url">Self-hosted server URL</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
     <string name="user_verification_direction">User verification</string>
     <string name="create_account_on">Create account on</string>
@@ -865,7 +866,6 @@ Do you want to switch to this account?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="mutual_tls">Mutual TLS</string>
     <string name="single_tap_passkey_creation">Single tap passkey creation</string>
     <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
@@ -909,6 +909,12 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">Self-host server URL</string>
     <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>

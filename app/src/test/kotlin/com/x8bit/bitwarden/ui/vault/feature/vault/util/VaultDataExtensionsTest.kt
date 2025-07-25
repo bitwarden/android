@@ -5,6 +5,7 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
@@ -13,7 +14,6 @@ import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.LoginUriView
 import com.bitwarden.vault.UriMatchType
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -100,7 +100,7 @@ class VaultDataExtensionsTest {
                     ),
                     VaultState.ViewState.FolderItem(
                         id = null,
-                        name = R.string.folder_none.asText(),
+                        name = BitwardenString.folder_none.asText(),
                         itemCount = 0,
                     ),
                 ),
@@ -222,7 +222,7 @@ class VaultDataExtensionsTest {
                     ),
                     VaultState.ViewState.FolderItem(
                         id = null,
-                        name = R.string.folder_none.asText(),
+                        name = BitwardenString.folder_none.asText(),
                         itemCount = 0,
                     ),
                 ),
@@ -779,7 +779,7 @@ class VaultDataExtensionsTest {
                 folderItems = listOf(
                     VaultState.ViewState.FolderItem(
                         id = null,
-                        name = R.string.folder_none.asText(),
+                        name = BitwardenString.folder_none.asText(),
                         itemCount = 100,
                     ),
                 ),
@@ -931,7 +931,7 @@ class VaultDataExtensionsTest {
                     ),
                     VaultState.ViewState.FolderItem(
                         id = null,
-                        name = R.string.folder_none.asText(),
+                        name = BitwardenString.folder_none.asText(),
                         itemCount = 0,
                     ),
                 ),
@@ -1196,12 +1196,12 @@ private fun createMockSshKeyVaultItem(number: Int): VaultState.ViewState.VaultIt
         extraIconList = persistentListOf(
             IconData.Local(
                 iconRes = BitwardenDrawable.ic_collections,
-                contentDescription = R.string.collections.asText(),
+                contentDescription = BitwardenString.collections.asText(),
                 testTag = "CipherInCollectionIcon",
             ),
             IconData.Local(
                 iconRes = BitwardenDrawable.ic_paperclip,
-                contentDescription = R.string.attachments.asText(),
+                contentDescription = BitwardenString.attachments.asText(),
                 testTag = "CipherWithAttachmentsIcon",
             ),
         ),

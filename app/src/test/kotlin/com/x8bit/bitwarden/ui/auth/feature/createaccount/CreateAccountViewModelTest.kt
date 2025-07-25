@@ -4,8 +4,8 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_0
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_1
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_2
@@ -100,8 +100,8 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         val expectedState = DEFAULT_STATE.copy(
             emailInput = input,
             dialog = CreateAccountDialog.Error(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.invalid_email.asText(),
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.invalid_email.asText(),
             ),
         )
         viewModel.trySendAction(CreateAccountAction.SubmitClick)
@@ -121,9 +121,9 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         val expectedState = DEFAULT_STATE.copy(
             emailInput = input,
             dialog = CreateAccountDialog.Error(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.validation_field_required
-                    .asText(R.string.email_address.asText()),
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.validation_field_required
+                    .asText(BitwardenString.email_address.asText()),
             ),
         )
         viewModel.trySendAction(CreateAccountAction.SubmitClick)
@@ -148,8 +148,8 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             emailInput = EMAIL,
             passwordInput = input,
             dialog = CreateAccountDialog.Error(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.master_password_length_val_message_x.asText(12),
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.master_password_length_val_message_x.asText(12),
             ),
         )
         viewModel.trySendAction(CreateAccountAction.SubmitClick)
@@ -174,8 +174,8 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             emailInput = "test@test.com",
             passwordInput = input,
             dialog = CreateAccountDialog.Error(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.master_password_confirmation_val_message.asText(),
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.master_password_confirmation_val_message.asText(),
             ),
         )
         viewModel.trySendAction(CreateAccountAction.SubmitClick)
@@ -202,8 +202,8 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             passwordInput = password,
             confirmPasswordInput = password,
             dialog = CreateAccountDialog.Error(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.accept_policies_error.asText(),
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.accept_policies_error.asText(),
             ),
         )
         viewModel.trySendAction(CreateAccountAction.SubmitClick)
@@ -280,7 +280,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VALID_INPUT_STATE.copy(
                     dialog = CreateAccountDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
                         message = "mock_error".asText(),
                         error = error,
                     ),
@@ -414,8 +414,9 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialog = createHaveIBeenPwned(
-                            title = R.string.exposed_master_password.asText(),
-                            message = R.string.password_found_in_a_data_breach_alert_description
+                            title = BitwardenString.exposed_master_password.asText(),
+                            message = BitwardenString
+                                .password_found_in_a_data_breach_alert_description
                                 .asText(),
                         ),
                     ),
@@ -484,8 +485,8 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialog = createHaveIBeenPwned(
-                            title = R.string.weak_master_password.asText(),
-                            message = R.string.weak_password_identified_use_a_strong_password_to_protect_your_account.asText(),
+                            title = BitwardenString.weak_master_password.asText(),
+                            message = BitwardenString.weak_password_identified_use_a_strong_password_to_protect_your_account.asText(),
                         ),
                     ),
                     awaitItem(),

@@ -4,10 +4,10 @@ import app.cash.turbine.test
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.FolderView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderDisplayItem
 import io.mockk.every
@@ -74,7 +74,7 @@ class FoldersViewModelTest : BaseViewModelTest() {
         assertEquals(
             createFolderState(
                 viewState = FoldersState.ViewState.Error(
-                    R.string.generic_error_message.asText(),
+                    BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -127,11 +127,11 @@ class FoldersViewModelTest : BaseViewModelTest() {
         assertEquals(
             createFolderState(
                 viewState = FoldersState.ViewState.Error(
-                    R.string.internet_connection_required_title
+                    BitwardenString.internet_connection_required_title
                         .asText()
                         .concat(
                             " ".asText(),
-                            R.string.internet_connection_required_message.asText(),
+                            BitwardenString.internet_connection_required_message.asText(),
                         ),
                 ),
             ),

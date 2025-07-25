@@ -25,13 +25,8 @@ sealed class FlagKey<out T : Any> {
                 ImportLoginsFlow,
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
-                MutualTls,
                 SingleTapPasskeyCreation,
                 SingleTapPasskeyAuthentication,
-                AnonAddySelfHostAlias,
-                SimpleLoginSelfHostAlias,
-                ChromeAutofill,
-                MobileErrorReporting,
                 RestrictCipherItemDeletion,
                 UserManagedPrivilegedApps,
                 RemoveCardPolicy,
@@ -44,14 +39,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object EmailVerification : FlagKey<Boolean>() {
         override val keyName: String = "email-verification"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the key for syncing with the Bitwarden Authenticator app.
-     */
-    data object MobileErrorReporting : FlagKey<Boolean>() {
-        override val keyName: String = "mobile-error-reporting"
         override val defaultValue: Boolean = false
     }
 
@@ -90,14 +77,6 @@ sealed class FlagKey<out T : Any> {
     }
 
     /**
-     * Data object holding the feature flag key for the Mutual TLS feature.
-     */
-    data object MutualTls : FlagKey<Boolean>() {
-        override val keyName: String = "mutual-tls"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
      * Data object holding the feature flag key to enable single tap passkey creation.
      */
     data object SingleTapPasskeyCreation : FlagKey<Boolean>() {
@@ -110,32 +89,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object SingleTapPasskeyAuthentication : FlagKey<Boolean>() {
         override val keyName: String = "single-tap-passkey-authentication"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key to enable AnonAddy (addy.io) self host alias
-     * generation.
-     */
-    data object AnonAddySelfHostAlias : FlagKey<Boolean>() {
-        override val keyName: String = "anon-addy-self-host-alias"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key to enable SimpleLogin self-host alias generation.
-     */
-    data object SimpleLoginSelfHostAlias : FlagKey<Boolean>() {
-        override val keyName: String = "simple-login-self-host-alias"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key to enable the checking for Chrome's third party
-     * autofill.
-     */
-    data object ChromeAutofill : FlagKey<Boolean>() {
-        override val keyName: String = "android-chrome-autofill"
         override val defaultValue: Boolean = false
     }
 

@@ -19,8 +19,8 @@ import com.bitwarden.ui.platform.base.util.toUnscaledTextUnit
 import com.bitwarden.ui.platform.components.button.color.bitwardenStandardIconButtonColors
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 
 /**
  * Displays an icon representing a Bitwarden account with the user's initials superimposed.
@@ -37,7 +37,7 @@ fun BitwardenAccountActionItem(
     onClick: () -> Unit,
 ) {
     val iconPainter = rememberVectorPainter(id = BitwardenDrawable.ic_account_initials_container)
-    val contentDescription = stringResource(id = R.string.account)
+    val contentDescription = stringResource(id = BitwardenString.account)
 
     IconButton(
         onClick = onClick,

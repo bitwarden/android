@@ -11,6 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -48,7 +49,7 @@ fun AddEditSendDeletionDateChooser(
                 ZonedDateTime.now(clock).plus(selectedOption.offsetMillis, ChronoUnit.MILLIS),
             )
         },
-        supportingText = annotatedStringResource(id = R.string.deletion_date_info),
+        supportingText = annotatedStringResource(id = BitwardenString.deletion_date_info),
         insets = PaddingValues(top = 6.dp, bottom = 4.dp),
         cardStyle = CardStyle.Full,
         modifier = modifier,

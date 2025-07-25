@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s másolásra került.</string>
     <string name="verify_master_password">Mesterjelszó megerősítése</string>
     <string name="verify_pin">PIN megerősítése</string>
-    <string name="version">Verzió</string>
     <string name="view">Megtekintés</string>
     <string name="yes">Igen</string>
     <string name="account">Fiók</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Kártya szerkesztése</string>
     <string name="edit_identity">Személyazonossság szerkesztése</string>
     <string name="edit_note">Jegyzet szerkesztése</string>
-    <string name="edit_passkey">Hozzáférési kulcs szerkesztése</string>
+    <string name="edit_ssh_key">Edit SSH key</string>
     <string name="enter_email_for_hint">Írd be a fiókod e-mail címét, hogy megkapd a mesterjelszó emlékeztetőt.</string>
     <string name="favorite">Kedvenc</string>
     <string name="unfavorite">Nem kedvenc</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 perc</string>
     <string name="four_hours">4 óra</string>
     <string name="immediately">Azonnal</string>
-    <string name="vault_timeout_log_out_confirmation">Kijelentkezve az összes széf elérés eltávolításra kerül és webes hitelesítésre van szükség az időkifutás után. Biztosan szeretnénk használni ezt a beállítást?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
     <string name="logging_in">Bejelentkezés...</string>
     <string name="login_to_bitwarden">Bejelentkezés a Bitwardenbe</string>
     <string name="master_password_confirmation_val_message">A megadott két jelszó nem egyezik.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Új személyazonosság</string>
     <string name="no_notes">Nincsenek jegyzetek a széfben.</string>
     <string name="new_note">Új jegyzet</string>
-    <string name="new_passkey">Új hozzáférési kulcs</string>
     <string name="new_item">Új elem</string>
     <string name="new_ssh_key">Új SSH kulcs</string>
     <string name="no_text_sends">Nincsenek szöveges Send elemek a széfben.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Kártya megtekintése</string>
     <string name="view_identity">Személyazonosság megtekintése</string>
     <string name="view_note">Jegyzet megtekintése</string>
-    <string name="view_passkey">Hozzáférési kulcs megtekintése</string>
+    <string name="view_ssh_key">View SSH key</string>
     <string name="web_vault">Bitwarden webes széf</string>
     <string name="items">Elemek</string>
     <string name="items_for_uri">%1$s elemei</string>
@@ -264,6 +263,7 @@
     <string name="address">Postai cím</string>
     <string name="expiration">Lejárat</string>
     <string name="show_website_icons">Webhely ikonok megjelenítése</string>
+    <string name="show_website_icons_help">Show website icons help</string>
     <string name="show_website_icons_description">Felismerhető kép megjelenítése minden bejelentkezés mellett.</string>
     <string name="icons_url">Ikonszerver webcím</string>
     <string name="vault_is_locked">A széf zárolva van.</string>
@@ -700,6 +700,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="launch_web_authn">WebAuthn indítása</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Hiba történt a WebAuthn kétfaktoros hitelesítés indításakor.</string>
     <string name="self_hosted_server_url">Saját üzemeltetésű szerver webcím</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">A belépőkulcs művelet nem sikerült, mert az alkalmazás nem lett ellenőrizve.</string>
     <string name="user_verification_direction">Felhasználó ellenőrzés</string>
     <string name="create_account_on">Fiók létrehozása:</string>
@@ -864,7 +865,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Csak azokhoz a bejelentkezésekhez kell beállítani a Hitelesítő kulcsot, amelyek kétlépcsős hitelesítést igényelnek kóddal. A kulcs folyamatosan hatjegyű kódokat generál, amelyek segítségével bejelentkezhetümk.</string>
     <string name="coachmark_3_of_3">3/3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Meg kell adnia egy webcímet, hogy az automatikus kitöltést használjunk a fiók eléréséhez.</string>
-    <string name="mutual_tls">Kölcsönös TLS</string>
     <string name="single_tap_passkey_creation">Jelszó létrehozása egyetlen érintéssel</string>
     <string name="single_tap_passkey_authentication">Belépőkulcs létrhozása egyetlen érintéssel</string>
     <string name="learn_about_new_logins">További információ az új bejelentkezésekről</string>
@@ -908,6 +908,12 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">A belépőkulcs művelet meghiúsult, mert a felhasználó ellenőrzések száma átlépésre került.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">A belépőkulcs művelet meghiúsult, mert nincs kiválasztott elem.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A belépőkulcs művelet meghiúsult, mert a kérés nem támogatott.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">Saját üzemeltetésű szerver webcím</string>
     <string name="use_brave_autofill_integration">Brave automatikus kitöltés integráció használata</string>
     <string name="use_chrome_autofill_integration">Chrome automatikus kitöltés integráció használata</string>
@@ -966,8 +972,8 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="view_text_send">Szöveges Send elem megtekintése</string>
     <string name="delete_send">Send törlése</string>
     <string name="missing_send_resync_your_vault">Hiányzó Send elem, szinkronizáljuk újra a széfet</string>
-    <string name="dynamic_colors">Dinamikus színek</string>
-    <string name="dynamic_colors_description">Dinamikus színek alkalmazása a háttérkép alapján</string>
+    <string name="use_dynamic_colors">Use dynamic colors</string>
+    <string name="use_dynamic_colors_question">Use dynamic colors?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">A dinamikus színek a rendszer színeit használják és előfordulhat, hogy nem felelnek meg minden akadálymentesítési irányelvnek.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">A Belépőkulcs művelet nem sikerült, mert a böngésző (%1$s) nem megbízható. Válasszuk a \"Megbítható\" lehetőséget %1$s a hozzáadáshoz a megbízható alkalmazások listájánál vagy a \"Mégsem\" lehetőséget a művelet megszakításához.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">A Belépőkulcs művelet nem sikerült, mert a böngésző nem megbítható.</string>
@@ -988,4 +994,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Boztos leállításra kerüljön %s megbízhatósága?</string>
     <string name="installed_apps">Telepített alkalmazások</string>
     <string name="delete_x">%s törlése</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
+    <string name="decryption_error">Decryption error</string>
 </resources>

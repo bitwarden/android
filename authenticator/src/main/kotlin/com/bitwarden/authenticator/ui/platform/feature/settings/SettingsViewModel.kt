@@ -6,7 +6,6 @@ import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.BuildConfig
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.util.isSyncWithBitwardenEnabled
@@ -19,6 +18,7 @@ import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -135,7 +135,7 @@ class SettingsViewModel @Inject constructor(
         if (action.enabled) {
             mutableStateFlow.update {
                 it.copy(
-                    dialog = SettingsState.Dialog.Loading(R.string.saving.asText()),
+                    dialog = SettingsState.Dialog.Loading(BitwardenString.saving.asText()),
                     isUnlockWithBiometricsEnabled = true,
                 )
             }
@@ -336,7 +336,7 @@ class SettingsViewModel @Inject constructor(
                 isUnlockWithBiometricsEnabled = unlockWithBiometricsEnabled,
                 isSubmitCrashLogsEnabled = isSubmitCrashLogsEnabled,
                 dialog = null,
-                version = R.string.version
+                version = BitwardenString.version
                     .asText()
                     .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
                 copyrightInfo = copyrightInfo,

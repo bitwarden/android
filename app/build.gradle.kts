@@ -56,7 +56,7 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
-        versionName = "2025.4.0"
+        versionName = "2025.7.0"
 
         setProperty("archivesBaseName", "com.x8bit.bitwarden")
 

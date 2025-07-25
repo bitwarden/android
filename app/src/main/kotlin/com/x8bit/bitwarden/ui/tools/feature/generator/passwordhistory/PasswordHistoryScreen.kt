@@ -33,8 +33,8 @@ import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActio
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularProgressIndicator
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import kotlinx.collections.immutable.persistentListOf
@@ -63,20 +63,20 @@ fun PasswordHistoryScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.password_history),
+                title = stringResource(id = BitwardenString.password_history),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                navigationIconContentDescription = stringResource(id = R.string.back),
+                navigationIconContentDescription = stringResource(id = BitwardenString.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(PasswordHistoryAction.CloseClick) }
                 },
                 actions = {
                     if (state.menuEnabled) {
                         BitwardenOverflowActionItem(
-                            contentDescription = stringResource(R.string.more),
+                            contentDescription = stringResource(BitwardenString.more),
                             menuItemDataList = persistentListOf(
                                 OverflowMenuItemData(
-                                    text = stringResource(id = R.string.clear),
+                                    text = stringResource(id = BitwardenString.clear),
                                     onClick = remember(viewModel) {
                                         {
                                             viewModel.trySendAction(
@@ -195,7 +195,7 @@ private fun PasswordHistoryEmpty(modifier: Modifier = Modifier) {
     ) {
         Text(
             modifier = Modifier.testTag("NoPasswordsDisplayedLabel"),
-            text = stringResource(id = R.string.no_passwords_to_list),
+            text = stringResource(id = BitwardenString.no_passwords_to_list),
             style = BitwardenTheme.typography.bodyMedium,
         )
         Spacer(modifier = Modifier.navigationBarsPadding())

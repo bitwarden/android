@@ -11,7 +11,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.bitwarden.authenticator.BuildConfig
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.base.AuthenticatorComposeTest
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
@@ -19,6 +18,7 @@ import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsMana
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import io.mockk.every
@@ -197,7 +197,7 @@ private val DEFAULT_STATE = SettingsState(
     showDefaultSaveOptionRow = true,
     defaultSaveOption = DEFAULT_SAVE_OPTION,
     dialog = null,
-    version = R.string.version.asText()
+    version = BitwardenString.version.asText()
         .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
     copyrightInfo = "© Bitwarden Inc. 2015-2024".asText(),
 )

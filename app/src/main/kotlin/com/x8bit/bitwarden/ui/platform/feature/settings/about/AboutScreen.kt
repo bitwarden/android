@@ -39,10 +39,10 @@ import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenPushRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
@@ -96,10 +96,10 @@ fun AboutScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.about),
+                title = stringResource(id = BitwardenString.about),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                navigationIconContentDescription = stringResource(id = R.string.back),
+                navigationIconContentDescription = stringResource(id = BitwardenString.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(AboutAction.BackClick) }
                 },
@@ -173,11 +173,11 @@ private fun AboutScreenContent(
             onViewRecordedLogsClick = onViewRecordedLogsClick,
         )
         BitwardenExternalLinkRow(
-            text = stringResource(id = R.string.bitwarden_help_center),
+            text = stringResource(id = BitwardenString.bitwarden_help_center),
             onConfirmClick = onHelpCenterClick,
-            dialogTitle = stringResource(id = R.string.continue_to_help_center),
+            dialogTitle = stringResource(id = BitwardenString.continue_to_help_center),
             dialogMessage = stringResource(
-                id = R.string.learn_more_about_how_to_use_bitwarden_on_the_help_center,
+                id = BitwardenString.learn_more_about_how_to_use_bitwarden_on_the_help_center,
             ),
             withDivider = false,
             cardStyle = CardStyle.Top(),
@@ -187,11 +187,11 @@ private fun AboutScreenContent(
                 .testTag(tag = "BitwardenHelpCenterRow"),
         )
         BitwardenExternalLinkRow(
-            text = stringResource(id = R.string.privacy_policy),
+            text = stringResource(id = BitwardenString.privacy_policy),
             onConfirmClick = onPrivacyPolicyClick,
-            dialogTitle = stringResource(id = R.string.continue_to_privacy_policy),
+            dialogTitle = stringResource(id = BitwardenString.continue_to_privacy_policy),
             dialogMessage = stringResource(
-                id = R.string.privacy_policy_description_long,
+                id = BitwardenString.privacy_policy_description_long,
             ),
             withDivider = false,
             cardStyle = CardStyle.Middle(),
@@ -201,11 +201,11 @@ private fun AboutScreenContent(
                 .testTag(tag = "PrivacyPolicyRow"),
         )
         BitwardenExternalLinkRow(
-            text = stringResource(id = R.string.web_vault),
+            text = stringResource(id = BitwardenString.web_vault),
             onConfirmClick = onWebVaultClick,
-            dialogTitle = stringResource(id = R.string.continue_to_web_app),
+            dialogTitle = stringResource(id = BitwardenString.continue_to_web_app),
             dialogMessage = stringResource(
-                id = R.string.explore_more_features_of_your_bitwarden_account_on_the_web_app,
+                id = BitwardenString.explore_more_features_of_your_bitwarden_account_on_the_web_app,
             ),
             withDivider = false,
             cardStyle = CardStyle.Middle(),
@@ -215,11 +215,11 @@ private fun AboutScreenContent(
                 .testTag(tag = "BitwardenWebVaultRow"),
         )
         BitwardenExternalLinkRow(
-            text = stringResource(id = R.string.learn_org),
+            text = stringResource(id = BitwardenString.learn_org),
             onConfirmClick = onLearnAboutOrgsClick,
-            dialogTitle = stringResource(id = R.string.continue_to_x, "bitwarden.com"),
+            dialogTitle = stringResource(id = BitwardenString.continue_to_x, "bitwarden.com"),
             dialogMessage = stringResource(
-                id = R.string.learn_about_organizations_description_long,
+                id = BitwardenString.learn_about_organizations_description_long,
             ),
             withDivider = false,
             cardStyle = CardStyle.Middle(),
@@ -263,8 +263,8 @@ private fun ColumnScope.CrashLogsCard(
 ) {
     if (!isVisible) return
     BitwardenSwitch(
-        label = stringResource(id = R.string.submit_crash_logs),
-        contentDescription = stringResource(id = R.string.submit_crash_logs),
+        label = stringResource(id = BitwardenString.submit_crash_logs),
+        contentDescription = stringResource(id = BitwardenString.submit_crash_logs),
         isChecked = isEnabled,
         onCheckedChange = onSubmitCrashLogsCheckedChange,
         cardStyle = CardStyle.Full,
@@ -285,11 +285,11 @@ private fun ColumnScope.FlightRecorderCard(
     onViewRecordedLogsClick: () -> Unit,
 ) {
     BitwardenSwitch(
-        label = stringResource(id = R.string.flight_recorder),
+        label = stringResource(id = BitwardenString.flight_recorder),
         isChecked = isFlightRecorderEnabled,
         onCheckedChange = onFlightRecorderCheckedChange,
         tooltip = TooltipData(
-            contentDescription = stringResource(id = R.string.flight_recorder_help),
+            contentDescription = stringResource(id = BitwardenString.flight_recorder_help),
             onClick = onFlightRecorderTooltipClick,
         ),
         subtext = logExpiration?.invoke(),
@@ -300,7 +300,7 @@ private fun ColumnScope.FlightRecorderCard(
             .standardHorizontalMargin(),
     )
     BitwardenPushRow(
-        text = stringResource(id = R.string.view_recorded_logs),
+        text = stringResource(id = BitwardenString.view_recorded_logs),
         onClick = onViewRecordedLogsClick,
         cardStyle = CardStyle.Bottom,
         modifier = Modifier

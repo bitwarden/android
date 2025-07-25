@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s kopirano</string>
     <string name="verify_master_password">Potvrdi glavnu lozinku</string>
     <string name="verify_pin">Potvrdi PIN</string>
-    <string name="version">Verzija</string>
     <string name="view">Prikaz</string>
     <string name="yes">Da</string>
     <string name="account">Račun</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Uredi karticu</string>
     <string name="edit_identity">Uredi identitet</string>
     <string name="edit_note">Uredi bilješku</string>
-    <string name="edit_passkey">Uredi pristupni ključ</string>
+    <string name="edit_ssh_key">Uredi SSH ključ</string>
     <string name="enter_email_for_hint">Unesi adresu e-pošte svog računa za primitak podsjetnika glavne lozinke.</string>
     <string name="favorite">Favorit</string>
     <string name="unfavorite">Ukloni iz favorita</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 minuta</string>
     <string name="four_hours">4 sata</string>
     <string name="immediately">Odmah</string>
-    <string name="vault_timeout_log_out_confirmation">Odjava će ukloniti pristup tvojem trezoru i zahtijeva mrežnu potvrdu identiteta nakon isteka vremenske neaktivnosti. Sigurno želiš koristiti ovu postavku?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Postavi istek sesije na „Odjava”</string>
+    <string name="vault_timeout_log_out_confirmation_message">Nakon isteka trezora biti će napravljena odjava. Za prijavu i ponovni pristup svom trezoru moraš biti spojen na internet. Tvoje postavke i PIN, spremljeni na ovom uređaju neće se promijeniti.</string>
     <string name="logging_in">Prijava...</string>
     <string name="login_to_bitwarden">Prijavi se u Bitwarden</string>
     <string name="master_password_confirmation_val_message">Potvrda lozinke nije točna.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Novi identitet</string>
     <string name="no_notes">U tvom trezoru nema bilješki.</string>
     <string name="new_note">Nova bilješka</string>
-    <string name="new_passkey">Novi pristupni ključ</string>
     <string name="new_item">Nova stavka</string>
     <string name="new_ssh_key">Novi SSH ključ</string>
     <string name="no_text_sends">U tvom trezoru nema tekst Sendova.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Prikaži karticu</string>
     <string name="view_identity">Prikaži identitet</string>
     <string name="view_note">Prikaži bilješku</string>
-    <string name="view_passkey">Prikaži pristupni ključ</string>
+    <string name="view_ssh_key">Prikaži SSH ključ</string>
     <string name="web_vault">Bitwarden web trezor</string>
     <string name="items">Stavke</string>
     <string name="items_for_uri">Stavke za %1$s</string>
@@ -264,6 +263,7 @@
     <string name="address">Adresa</string>
     <string name="expiration">Istek</string>
     <string name="show_website_icons">Prikaži ikone mrežnih mjesta</string>
+    <string name="show_website_icons_help">Pomoć za prikaz ikona mrežnih mjesta</string>
     <string name="show_website_icons_description">Prikaži prepoznatljivu sliku pored svake prijave.</string>
     <string name="icons_url">URL poslužitelja ikona</string>
     <string name="vault_is_locked">Trezor je zaključan</string>
@@ -699,6 +699,7 @@
     <string name="launch_web_authn">Pokreni WebAuth</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Došlo je do greške kod pokretanja WebAuthn dvostruke autentifikacije</string>
     <string name="self_hosted_server_url">URL vlastitog poslužitelja</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Operacija pristupnog ključa nije uspjela jer nije bilo moguće provjeriti korisnika.</string>
     <string name="user_verification_direction">Provjera korisnika</string>
     <string name="create_account_on">Stvaranje računa na</string>
@@ -864,7 +865,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">Ključ autentifikatora trebaš postaviti samo za prijave koje zahtijevaju dvostruku autentifikaciju pomoću kôda. Ključ će kontinuirano generirati šesteroznamenkaste kodove koje možeš koristiti za prijavu.</string>
     <string name="coachmark_3_of_3">3 od 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Moraš dodati web adresu za auto-ispunu za pristup ovom računu.</string>
-    <string name="mutual_tls">Mutual TLS</string>
     <string name="single_tap_passkey_creation">Stvaranje pristupnog ključa jednim dodirom</string>
     <string name="single_tap_passkey_authentication">Prijava jednim dodirom pristupnim ključem</string>
     <string name="learn_about_new_logins">Više o novom načinu prijave</string>
@@ -908,6 +908,12 @@
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Operacija pristupnog ključa nije uspjela jer je prekoračen broj pokušaja potvrde korisnika.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operacija pristupnog ključa nije uspjela jer nije odabrana niti jedna stavka.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operacija s pristupnim ključem nije uspjela jer zahtjev nije podržan.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">URL vlastitog poslužitelja</string>
     <string name="use_brave_autofill_integration">Koristi auto-ispunu s Brave integracijom</string>
     <string name="use_chrome_autofill_integration">Koristi Chrome integraciju auto-ispune</string>
@@ -967,8 +973,8 @@ bilo kakav problem.</string>
     <string name="view_text_send">Pogledaj tekstualni Send</string>
     <string name="delete_send">Izbirši Send</string>
     <string name="missing_send_resync_your_vault">Nedostaje Send, ponovno sinkroniziraj trezor</string>
-    <string name="dynamic_colors">Dinamičke boje</string>
-    <string name="dynamic_colors_description">Primijeni dinamičke boje na osnovi tvoje pozadine</string>
+    <string name="use_dynamic_colors">Dinamičke boje</string>
+    <string name="use_dynamic_colors_question">Koristi dinamičke boje?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dinamičke boje koriste sistemske boje i možda nisu u skladu sa smjernicama pristupačnosti.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Operacija s pristupnim ključem nije uspjela jer preglednik (%1$s) nije prepoznat. Odaberi „Vjeruj” za dodavanje %1$s na popis lokalno pouzdanih aplikacija.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Operacija s pristupnim ključem nije uspjela jer preglenik nije pouzdan.</string>
@@ -989,4 +995,6 @@ bilo kakav problem.</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Sigurno želiš prestati vjerojavti %s?</string>
     <string name="installed_apps">Instalirane aplikacje</string>
     <string name="delete_x">Izbriši %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Dešifriranje šifre nije uspjelo. Obrati se podršci.</string>
+    <string name="decryption_error">Pogreška pri dešifriranju</string>
 </resources>

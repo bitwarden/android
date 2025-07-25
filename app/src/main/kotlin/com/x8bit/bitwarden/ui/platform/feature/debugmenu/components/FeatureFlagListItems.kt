@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 
 /**
@@ -30,13 +30,8 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.CredentialExchangeProtocolImport,
     FlagKey.CredentialExchangeProtocolExport,
     FlagKey.CipherKeyEncryption,
-    FlagKey.MutualTls,
     FlagKey.SingleTapPasskeyCreation,
     FlagKey.SingleTapPasskeyAuthentication,
-    FlagKey.AnonAddySelfHostAlias,
-    FlagKey.SimpleLoginSelfHostAlias,
-    FlagKey.ChromeAutofill,
-    FlagKey.MobileErrorReporting,
     FlagKey.RestrictCipherItemDeletion,
     FlagKey.UserManagedPrivilegedApps,
     FlagKey.RemoveCardPolicy,
@@ -81,25 +76,20 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.DummyString,
         -> this.keyName
 
-    FlagKey.EmailVerification -> stringResource(R.string.email_verification)
-    FlagKey.ImportLoginsFlow -> stringResource(R.string.import_logins_flow)
-    FlagKey.CredentialExchangeProtocolImport -> stringResource(R.string.cxp_import)
-    FlagKey.CredentialExchangeProtocolExport -> stringResource(R.string.cxp_export)
-    FlagKey.CipherKeyEncryption -> stringResource(R.string.cipher_key_encryption)
-    FlagKey.MutualTls -> stringResource(R.string.mutual_tls)
-    FlagKey.SingleTapPasskeyCreation -> stringResource(R.string.single_tap_passkey_creation)
+    FlagKey.EmailVerification -> stringResource(BitwardenString.email_verification)
+    FlagKey.ImportLoginsFlow -> stringResource(BitwardenString.import_logins_flow)
+    FlagKey.CredentialExchangeProtocolImport -> stringResource(BitwardenString.cxp_import)
+    FlagKey.CredentialExchangeProtocolExport -> stringResource(BitwardenString.cxp_export)
+    FlagKey.CipherKeyEncryption -> stringResource(BitwardenString.cipher_key_encryption)
+    FlagKey.SingleTapPasskeyCreation -> stringResource(BitwardenString.single_tap_passkey_creation)
     FlagKey.SingleTapPasskeyAuthentication -> {
-        stringResource(R.string.single_tap_passkey_authentication)
+        stringResource(BitwardenString.single_tap_passkey_authentication)
     }
 
-    FlagKey.AnonAddySelfHostAlias -> stringResource(R.string.anon_addy_self_hosted_aliases)
-    FlagKey.SimpleLoginSelfHostAlias -> stringResource(R.string.simple_login_self_hosted_aliases)
-    FlagKey.ChromeAutofill -> stringResource(R.string.enable_chrome_autofill)
-    FlagKey.MobileErrorReporting -> stringResource(R.string.enable_error_reporting_dialog)
-    FlagKey.RestrictCipherItemDeletion -> stringResource(R.string.restrict_item_deletion)
+    FlagKey.RestrictCipherItemDeletion -> stringResource(BitwardenString.restrict_item_deletion)
     FlagKey.UserManagedPrivilegedApps -> {
-        stringResource(R.string.user_trusted_privileged_app_management)
+        stringResource(BitwardenString.user_trusted_privileged_app_management)
     }
 
-    FlagKey.RemoveCardPolicy -> stringResource(R.string.remove_card_policy)
+    FlagKey.RemoveCardPolicy -> stringResource(BitwardenString.remove_card_policy)
 }

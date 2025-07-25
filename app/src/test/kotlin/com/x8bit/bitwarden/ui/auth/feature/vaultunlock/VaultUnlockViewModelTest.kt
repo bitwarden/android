@@ -6,8 +6,8 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
@@ -612,8 +612,10 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(VaultUnlockAction.DismissDialog)
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultUnlockEvent.Fido2GetCredentialsError(
-                        R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    VaultUnlockEvent.GetCredentialsError(
+                        BitwardenString
+                            .credential_operation_failed_because_user_could_not_be_verified
+                            .asText(),
                     ),
                     awaitItem(),
                 )
@@ -634,7 +636,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 assertEquals(
                     VaultUnlockEvent.Fido2CredentialAssertionError(
-                        R.string.passkey_operation_failed_because_user_could_not_be_verified
+                        BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
                             .asText(),
                     ),
                     awaitItem(),
@@ -775,8 +777,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                    R.string.an_error_has_occurred.asText(),
-                    R.string.validation_field_required.asText(
+                    BitwardenString.an_error_has_occurred.asText(),
+                    BitwardenString.validation_field_required.asText(
                         initialState.vaultUnlockType.unlockScreenInputLabel,
                     ),
                 ),
@@ -801,8 +803,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                    R.string.an_error_has_occurred.asText(),
-                    R.string.invalid_master_password.asText(),
+                    BitwardenString.an_error_has_occurred.asText(),
+                    BitwardenString.invalid_master_password.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -829,8 +831,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                    R.string.an_error_has_occurred.asText(),
-                    R.string.generic_error_message.asText(),
+                    BitwardenString.an_error_has_occurred.asText(),
+                    BitwardenString.generic_error_message.asText(),
                     throwable = error,
                 ),
             ),
@@ -858,8 +860,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                    R.string.an_error_has_occurred.asText(),
-                    R.string.generic_error_message.asText(),
+                    BitwardenString.an_error_has_occurred.asText(),
+                    BitwardenString.generic_error_message.asText(),
                     throwable = error,
                 ),
             ),
@@ -943,8 +945,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                    R.string.an_error_has_occurred.asText(),
-                    R.string.validation_field_required.asText(
+                    BitwardenString.an_error_has_occurred.asText(),
+                    BitwardenString.validation_field_required.asText(
                         initialState.vaultUnlockType.unlockScreenInputLabel,
                     ),
                 ),
@@ -969,8 +971,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.invalid_pin.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.invalid_pin.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -997,8 +999,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     throwable = error,
                 ),
             ),
@@ -1026,8 +1028,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     throwable = error,
                 ),
             ),
@@ -1128,8 +1130,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     throwable = error,
                 ),
             ),
@@ -1158,8 +1160,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     throwable = error,
                 ),
             ),
@@ -1189,8 +1191,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             initialState.copy(
                 isBiometricsValid = false,
                 dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                    title = R.string.biometrics_failed.asText(),
-                    message = R.string.biometrics_decoding_failure.asText(),
+                    title = BitwardenString.biometrics_failed.asText(),
+                    message = BitwardenString.biometrics_decoding_failure.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1219,8 +1221,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     throwable = error,
                 ),
             ),

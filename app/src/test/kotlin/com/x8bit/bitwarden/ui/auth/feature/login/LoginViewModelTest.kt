@@ -7,8 +7,8 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
@@ -275,7 +275,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = LoginState.DialogState.Loading(
-                        message = R.string.logging_in.asText(),
+                        message = BitwardenString.logging_in.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -283,7 +283,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = LoginState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
                         message = "mock_error".asText(),
                         error = error,
                     ),
@@ -314,7 +314,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = LoginState.DialogState.Loading(
-                            message = R.string.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -322,8 +322,8 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = LoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -360,7 +360,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                     defaultSelfHostedState.copy(
                         environmentLabel = "",
                         dialogState = LoginState.DialogState.Loading(
-                            message = R.string.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -369,8 +369,8 @@ class LoginViewModelTest : BaseViewModelTest() {
                     defaultSelfHostedState.copy(
                         environmentLabel = "",
                         dialogState = LoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
                                 .asText("vault.bitwarden.com"),
                         ),
                     ),
@@ -407,7 +407,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     defaultSelfHostedState.copy(
                         dialogState = LoginState.DialogState.Loading(
-                            message = R.string.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -415,8 +415,8 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     defaultSelfHostedState.copy(
                         dialogState = LoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
                                 .asText("base.bitwarden.com"),
                         ),
                     ),
@@ -453,7 +453,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     defaultSelfHostedState.copy(
                         dialogState = LoginState.DialogState.Loading(
-                            message = R.string.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -461,8 +461,8 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     defaultSelfHostedState.copy(
                         dialogState = LoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
                                 .asText("vault.bitwarden.com"),
                         ),
                     ),
@@ -492,7 +492,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = LoginState.DialogState.Loading(
-                            message = R.string.logging_in.asText(),
+                            message = BitwardenString.logging_in.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -500,8 +500,8 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = LoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.we_couldnt_verify_the_servers_certificate.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -528,7 +528,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = LoginState.DialogState.Loading(
-                        message = R.string.logging_in.asText(),
+                        message = BitwardenString.logging_in.asText(),
                     ),
                 ),
                 awaitItem(),

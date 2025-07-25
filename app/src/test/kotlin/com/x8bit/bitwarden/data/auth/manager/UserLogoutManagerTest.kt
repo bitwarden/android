@@ -4,7 +4,7 @@ import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.ui.platform.base.MainDispatcherExtension
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -95,7 +95,7 @@ class UserLogoutManagerTest {
 
         verify {
             authDiskSource.userState = SINGLE_USER_STATE_2
-            toastManager.show(messageId = R.string.account_switched_automatically)
+            toastManager.show(messageId = BitwardenString.account_switched_automatically)
         }
         assertDataCleared(userId = userId)
     }
@@ -145,7 +145,7 @@ class UserLogoutManagerTest {
                 userId = userId,
                 vaultTimeoutAction = vaultTimeoutAction,
             )
-            toastManager.show(messageId = R.string.account_switched_automatically)
+            toastManager.show(messageId = BitwardenString.account_switched_automatically)
             settingsDiskSource.storeVaultTimeoutInMinutes(
                 userId = userId,
                 vaultTimeoutInMinutes = vaultTimeoutInMinutes,
@@ -187,7 +187,7 @@ class UserLogoutManagerTest {
                 activeUserId = USER_ID_2,
                 accounts = MULTI_USER_STATE.accounts,
             )
-            toastManager.show(messageId = R.string.account_switched_automatically)
+            toastManager.show(messageId = BitwardenString.account_switched_automatically)
             settingsDiskSource.storeVaultTimeoutInMinutes(
                 userId = userId,
                 vaultTimeoutInMinutes = vaultTimeoutInMinutes,
@@ -230,7 +230,7 @@ class UserLogoutManagerTest {
                 activeUserId = USER_ID_2,
                 accounts = MULTI_USER_STATE.accounts,
             )
-            toastManager.show(messageId = R.string.login_expired)
+            toastManager.show(messageId = BitwardenString.login_expired)
             settingsDiskSource.storeVaultTimeoutInMinutes(
                 userId = userId,
                 vaultTimeoutInMinutes = vaultTimeoutInMinutes,

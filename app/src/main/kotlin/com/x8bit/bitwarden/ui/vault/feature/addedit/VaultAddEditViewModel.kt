@@ -12,12 +12,12 @@ import com.bitwarden.core.data.repository.util.takeUntilLoaded
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.FolderView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -402,7 +402,8 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleSaveClick() = onContent { content ->
         if (content.common.name.isBlank()) {
             showGenericErrorDialog(
-                message = R.string.validation_field_required.asText(R.string.name.asText()),
+                message = BitwardenString.validation_field_required
+                    .asText(BitwardenString.name.asText()),
             )
             return@onContent
         } else if (
@@ -410,7 +411,7 @@ class VaultAddEditViewModel @Inject constructor(
             content.common.selectedOwner?.collections?.all { !it.isSelected } == true
         ) {
             showGenericErrorDialog(
-                message = R.string.select_one_collection.asText(),
+                message = BitwardenString.select_one_collection.asText(),
             )
             return@onContent
         } else if (
@@ -418,8 +419,8 @@ class VaultAddEditViewModel @Inject constructor(
         ) {
             showDialog(
                 dialogState = VaultAddEditState.DialogState.Generic(
-                    title = R.string.internet_connection_required_title.asText(),
-                    message = R.string.internet_connection_required_message.asText(),
+                    title = BitwardenString.internet_connection_required_title.asText(),
+                    message = BitwardenString.internet_connection_required_message.asText(),
                 ),
             )
             return@onContent
@@ -428,7 +429,7 @@ class VaultAddEditViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialog = VaultAddEditState.DialogState.Loading(
-                    R.string.saving.asText(),
+                    BitwardenString.saving.asText(),
                 ),
             )
         }
@@ -519,7 +520,7 @@ class VaultAddEditViewModel @Inject constructor(
             val userId = authRepository.activeUserId
                 ?: run {
                     showFido2ErrorDialog(
-                        R.string.passkey_operation_failed_because_user_could_not_be_verified
+                        BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
                             .asText(),
                     )
                     return@launch
@@ -539,7 +540,7 @@ class VaultAddEditViewModel @Inject constructor(
 
     private fun handleUnsupportedProviderCreateCredentialRequest() {
         showFido2ErrorDialog(
-            R.string.passkey_operation_failed_because_the_request_is_unsupported.asText(),
+            BitwardenString.passkey_operation_failed_because_the_request_is_unsupported.asText(),
         )
     }
 
@@ -559,7 +560,7 @@ class VaultAddEditViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialog = VaultAddEditState.DialogState.Loading(
-                    R.string.soft_deleting.asText(),
+                    BitwardenString.soft_deleting.asText(),
                 ),
             )
         }
@@ -621,14 +622,14 @@ class VaultAddEditViewModel @Inject constructor(
                 }
             }
             ?: showFido2ErrorDialog(
-                R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
+                BitwardenString.passkey_operation_failed_because_the_request_is_invalid.asText(),
             )
     }
 
     private fun handleUserVerificationLockOut() {
         bitwardenCredentialManager.isUserVerified = false
         showFido2ErrorDialog(
-            R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+            BitwardenString.passkey_operation_failed_because_user_could_not_be_verified.asText(),
         )
     }
 
@@ -649,13 +650,14 @@ class VaultAddEditViewModel @Inject constructor(
                 }
             }
             ?: showFido2ErrorDialog(
-                R.string.passkey_operation_failed_because_the_request_is_unsupported.asText(),
+                BitwardenString.passkey_operation_failed_because_the_request_is_unsupported
+                    .asText(),
             )
 
     private fun handleUserVerificationFail() {
         bitwardenCredentialManager.isUserVerified = false
         showFido2ErrorDialog(
-            R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+            BitwardenString.passkey_operation_failed_because_user_could_not_be_verified.asText(),
         )
     }
 
@@ -690,7 +692,8 @@ class VaultAddEditViewModel @Inject constructor(
             ?.activeAccount
             ?: run {
                 showFido2ErrorDialog(
-                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
+                        .asText(),
                 )
                 return
             }
@@ -777,7 +780,7 @@ class VaultAddEditViewModel @Inject constructor(
 
     private fun handleDismissFido2VerificationDialogClick() {
         showFido2ErrorDialog(
-            R.string.passkey_operation_failed_because_user_could_not_be_verified
+            BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
                 .asText(),
         )
     }
@@ -809,7 +812,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleAddNewFolder(action: VaultAddEditAction.Common.AddNewFolder) {
         mutableStateFlow.update {
             it.copy(
-                dialog = VaultAddEditState.DialogState.Loading(R.string.saving.asText()),
+                dialog = VaultAddEditState.DialogState.Loading(BitwardenString.saving.asText()),
             )
         }
         viewModelScope.launch {
@@ -1137,7 +1140,11 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleLoginPasswordCheckerClick() {
         onLoginType { loginType ->
             mutableStateFlow.update {
-                it.copy(dialog = VaultAddEditState.DialogState.Loading(R.string.loading.asText()))
+                it.copy(
+                    dialog = VaultAddEditState.DialogState.Loading(
+                        BitwardenString.loading.asText(),
+                    ),
+                )
             }
 
             viewModelScope.launch {
@@ -1166,7 +1173,7 @@ class VaultAddEditViewModel @Inject constructor(
     ) {
         clipboardManager.setText(
             text = action.totpKey,
-            toastDescriptorOverride = R.string.authenticator_key.asText(),
+            toastDescriptorOverride = BitwardenString.authenticator_key.asText(),
         )
     }
 
@@ -1180,7 +1187,7 @@ class VaultAddEditViewModel @Inject constructor(
         updateLoginContent { loginType ->
             loginType.copy(fido2CredentialCreationDateTime = null)
         }
-        sendEvent(event = VaultAddEditEvent.ShowToast(R.string.passkey_removed.asText()))
+        sendEvent(event = VaultAddEditEvent.ShowToast(BitwardenString.passkey_removed.asText()))
     }
 
     private fun handlePasswordVisibilityChange(
@@ -1627,11 +1634,11 @@ class VaultAddEditViewModel @Inject constructor(
             is CreateCipherResult.Error -> {
                 showDialog(
                     dialogState = VaultAddEditState.DialogState.Generic(
-                        title = R.string.an_error_has_occurred.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
                         message = result
                             .errorMessage
                             ?.asText()
-                            ?: R.string.generic_error_message.asText(),
+                            ?: BitwardenString.generic_error_message.asText(),
                         error = result.error,
                     ),
                 )
@@ -1645,7 +1652,9 @@ class VaultAddEditViewModel @Inject constructor(
                     sendEvent(event = VaultAddEditEvent.ExitApp)
                 } else {
                     sendEvent(
-                        event = VaultAddEditEvent.ShowToast(R.string.new_item_created.asText()),
+                        event = VaultAddEditEvent.ShowToast(
+                            BitwardenString.new_item_created.asText(),
+                        ),
                     )
                     sendEvent(event = VaultAddEditEvent.NavigateBack)
                 }
@@ -1661,11 +1670,11 @@ class VaultAddEditViewModel @Inject constructor(
             is UpdateCipherResult.Error -> {
                 showDialog(
                     dialogState = VaultAddEditState.DialogState.Generic(
-                        title = R.string.an_error_has_occurred.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
                         message = result
                             .errorMessage
                             ?.asText()
-                            ?: R.string.generic_error_message.asText(),
+                            ?: BitwardenString.generic_error_message.asText(),
                         error = result.error,
                     ),
                 )
@@ -1676,7 +1685,11 @@ class VaultAddEditViewModel @Inject constructor(
                 if (state.shouldExitOnSave) {
                     sendEvent(event = VaultAddEditEvent.ExitApp)
                 } else {
-                    sendEvent(event = VaultAddEditEvent.ShowToast(R.string.item_updated.asText()))
+                    sendEvent(
+                        event = VaultAddEditEvent.ShowToast(
+                            BitwardenString.item_updated.asText(),
+                        ),
+                    )
                     sendEvent(event = VaultAddEditEvent.NavigateBack)
                 }
             }
@@ -1688,7 +1701,7 @@ class VaultAddEditViewModel @Inject constructor(
             is DeleteCipherResult.Error -> {
                 showDialog(
                     dialogState = VaultAddEditState.DialogState.Generic(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         error = result.error,
                     ),
                 )
@@ -1698,7 +1711,7 @@ class VaultAddEditViewModel @Inject constructor(
                 clearDialogState()
                 sendEvent(
                     VaultAddEditEvent.ShowToast(
-                        message = R.string.item_soft_deleted.asText(),
+                        message = BitwardenString.item_soft_deleted.asText(),
                     ),
                 )
                 sendEvent(VaultAddEditEvent.NavigateBack)
@@ -1712,7 +1725,7 @@ class VaultAddEditViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = VaultAddEditState.ViewState.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -1876,7 +1889,7 @@ class VaultAddEditViewModel @Inject constructor(
             is TotpCodeResult.Success -> {
                 sendEvent(
                     event = VaultAddEditEvent.ShowToast(
-                        message = R.string.authenticator_key_added.asText(),
+                        message = BitwardenString.authenticator_key_added.asText(),
                     ),
                 )
 
@@ -1888,8 +1901,8 @@ class VaultAddEditViewModel @Inject constructor(
             is TotpCodeResult.CodeScanningError -> {
                 showDialog(
                     dialogState = VaultAddEditState.DialogState.Generic(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.authenticator_key_read_error.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.authenticator_key_read_error.asText(),
                         error = result.error,
                     ),
                 )
@@ -1926,7 +1939,7 @@ class VaultAddEditViewModel @Inject constructor(
             dialogState = when (val result = action.result) {
                 is BreachCountResult.Error -> {
                     VaultAddEditState.DialogState.Generic(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         error = result.error,
                     )
                 }
@@ -1934,9 +1947,9 @@ class VaultAddEditViewModel @Inject constructor(
                 is BreachCountResult.Success -> {
                     VaultAddEditState.DialogState.Generic(
                         message = if (result.breachCount > 0) {
-                            R.string.password_exposed.asText(result.breachCount)
+                            BitwardenString.password_exposed.asText(result.breachCount)
                         } else {
-                            R.string.password_safe.asText()
+                            BitwardenString.password_safe.asText()
                         },
                     )
                 }
@@ -1950,7 +1963,11 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
         when (action.result) {
             is Fido2RegisterCredentialResult.Error -> {
-                sendEvent(VaultAddEditEvent.ShowToast(R.string.an_error_has_occurred.asText()))
+                sendEvent(
+                    VaultAddEditEvent.ShowToast(
+                        BitwardenString.an_error_has_occurred.asText(),
+                    ),
+                )
                 sendEvent(
                     VaultAddEditEvent.CompleteFido2Registration(
                         RegisterFido2CredentialResult.Error(
@@ -1961,7 +1978,7 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is Fido2RegisterCredentialResult.Success -> {
-                sendEvent(VaultAddEditEvent.ShowToast(R.string.item_updated.asText()))
+                sendEvent(VaultAddEditEvent.ShowToast(BitwardenString.item_updated.asText()))
                 sendEvent(
                     VaultAddEditEvent.CompleteFido2Registration(
                         RegisterFido2CredentialResult.Success(action.result.responseJson),
@@ -1979,7 +1996,7 @@ class VaultAddEditViewModel @Inject constructor(
         when (action.result) {
             is ValidatePasswordResult.Error -> {
                 showFido2ErrorDialog(
-                    R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
                         .asText(),
                 )
             }
@@ -2004,7 +2021,8 @@ class VaultAddEditViewModel @Inject constructor(
         when (action.result) {
             is ValidatePinResult.Error -> {
                 showFido2ErrorDialog(
-                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
+                        .asText(),
                 )
             }
 
@@ -2028,7 +2046,8 @@ class VaultAddEditViewModel @Inject constructor(
             }
         } else {
             showFido2ErrorDialog(
-                R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
+                    .asText(),
             )
         }
     }
@@ -2060,11 +2079,11 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun showGenericErrorDialog(
-        message: Text = R.string.generic_error_message.asText(),
+        message: Text = BitwardenString.generic_error_message.asText(),
     ) {
         showDialog(
             dialogState = VaultAddEditState.DialogState.Generic(
-                title = R.string.an_error_has_occurred.asText(),
+                title = BitwardenString.an_error_has_occurred.asText(),
                 message = message,
             ),
         )
@@ -2234,19 +2253,19 @@ data class VaultAddEditState(
             is VaultAddEditType.AddItem,
             is VaultAddEditType.CloneItem,
                 -> when (cipherType) {
-                VaultItemCipherType.LOGIN -> R.string.new_login.asText()
-                VaultItemCipherType.CARD -> R.string.new_card.asText()
-                VaultItemCipherType.IDENTITY -> R.string.new_identity.asText()
-                VaultItemCipherType.SECURE_NOTE -> R.string.new_note.asText()
-                VaultItemCipherType.SSH_KEY -> R.string.new_ssh_key.asText()
+                VaultItemCipherType.LOGIN -> BitwardenString.new_login.asText()
+                VaultItemCipherType.CARD -> BitwardenString.new_card.asText()
+                VaultItemCipherType.IDENTITY -> BitwardenString.new_identity.asText()
+                VaultItemCipherType.SECURE_NOTE -> BitwardenString.new_note.asText()
+                VaultItemCipherType.SSH_KEY -> BitwardenString.new_ssh_key.asText()
             }
 
             is VaultAddEditType.EditItem -> when (cipherType) {
-                VaultItemCipherType.LOGIN -> R.string.edit_login.asText()
-                VaultItemCipherType.CARD -> R.string.edit_card.asText()
-                VaultItemCipherType.IDENTITY -> R.string.edit_identity.asText()
-                VaultItemCipherType.SECURE_NOTE -> R.string.edit_note.asText()
-                VaultItemCipherType.SSH_KEY -> R.string.edit_ssh_key.asText()
+                VaultItemCipherType.LOGIN -> BitwardenString.edit_login.asText()
+                VaultItemCipherType.CARD -> BitwardenString.edit_card.asText()
+                VaultItemCipherType.IDENTITY -> BitwardenString.edit_identity.asText()
+                VaultItemCipherType.SECURE_NOTE -> BitwardenString.edit_note.asText()
+                VaultItemCipherType.SSH_KEY -> BitwardenString.edit_ssh_key.asText()
             }
         }
 
@@ -2297,11 +2316,11 @@ data class VaultAddEditState(
      * @property labelRes The resource ID of the string that represents the label of each type.
      */
     enum class ItemTypeOption(val labelRes: Int) {
-        LOGIN(R.string.type_login),
-        CARD(R.string.type_card),
-        IDENTITY(R.string.type_identity),
-        SECURE_NOTES(R.string.type_secure_note),
-        SSH_KEYS(R.string.type_ssh_key),
+        LOGIN(BitwardenString.type_login),
+        CARD(BitwardenString.type_card),
+        IDENTITY(BitwardenString.type_identity),
+        SECURE_NOTES(BitwardenString.type_secure_note),
+        SSH_KEYS(BitwardenString.type_ssh_key),
     }
 
     /**

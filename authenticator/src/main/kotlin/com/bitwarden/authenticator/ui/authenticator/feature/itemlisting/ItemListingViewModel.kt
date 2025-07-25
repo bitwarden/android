@@ -3,7 +3,6 @@ package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
@@ -28,6 +27,7 @@ import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -189,8 +189,8 @@ class ItemListingViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = ItemListingState.DialogState.Error(
-                            title = R.string.something_went_wrong.asText(),
-                            message = R.string.please_try_again.asText(),
+                            title = BitwardenString.something_went_wrong.asText(),
+                            message = BitwardenString.please_try_again.asText(),
                         ),
                     )
                 }
@@ -202,7 +202,9 @@ class ItemListingViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialog = ItemListingState.DialogState.DeleteConfirmationPrompt(
-                    message = R.string.do_you_really_want_to_permanently_delete_cipher.asText(),
+                    message = BitwardenString
+                        .do_you_really_want_to_permanently_delete_this_cannot_be_undone
+                        .asText(),
                     itemId = itemId,
                 ),
             )
@@ -273,8 +275,8 @@ class ItemListingViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = ItemListingState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -286,7 +288,7 @@ class ItemListingViewModel @Inject constructor(
                 }
                 sendEvent(
                     ItemListingEvent.ShowToast(
-                        message = R.string.item_deleted.asText(),
+                        message = BitwardenString.item_deleted.asText(),
                     ),
                 )
             }
@@ -303,8 +305,8 @@ class ItemListingViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = ItemListingState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.authenticator_key_read_error.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.authenticator_key_read_error.asText(),
                         ),
                     )
                 }
@@ -313,7 +315,7 @@ class ItemListingViewModel @Inject constructor(
             CreateItemResult.Success -> {
                 sendEvent(
                     event = ItemListingEvent.ShowToast(
-                        message = R.string.verification_code_added.asText(),
+                        message = BitwardenString.verification_code_added.asText(),
                     ),
                 )
             }

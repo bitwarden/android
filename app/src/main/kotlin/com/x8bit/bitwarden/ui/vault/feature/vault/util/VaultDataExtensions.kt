@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault.util
 import android.net.Uri
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
@@ -11,7 +12,6 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.LoginUriView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.util.card
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -121,7 +121,7 @@ fun VaultData.toViewState(
                         folderItems.plus(
                             VaultState.ViewState.FolderItem(
                                 id = null,
-                                name = R.string.folder_none.asText(),
+                                name = BitwardenString.folder_none.asText(),
                                 itemCount = noFolderItems.size,
                             ),
                         )

@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
@@ -131,7 +131,7 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = TrustedDeviceState.DialogState.Loading(
-                            message = R.string.loading.asText(),
+                            message = BitwardenString.loading.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -139,8 +139,8 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = TrustedDeviceState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = error,
                         ),
                     ),
@@ -168,7 +168,7 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = TrustedDeviceState.DialogState.Loading(
-                            message = R.string.loading.asText(),
+                            message = BitwardenString.loading.asText(),
                         ),
                     ),
                     awaitItem(),

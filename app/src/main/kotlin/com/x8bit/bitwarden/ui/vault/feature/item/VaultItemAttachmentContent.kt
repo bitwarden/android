@@ -22,8 +22,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 
 /**
@@ -71,7 +71,7 @@ fun AttachmentItemContent(
 
         BitwardenStandardIconButton(
             vectorIconRes = BitwardenDrawable.ic_download,
-            contentDescription = stringResource(id = R.string.download),
+            contentDescription = stringResource(id = BitwardenString.download),
             onClick = {
                 if (!attachmentItem.isDownloadAllowed) {
                     shouldShowPremiumWarningDialog = true
@@ -95,13 +95,13 @@ fun AttachmentItemContent(
             onDismissRequest = { shouldShowPremiumWarningDialog = false },
             confirmButton = {
                 BitwardenTextButton(
-                    label = stringResource(R.string.okay),
+                    label = stringResource(BitwardenString.okay),
                     onClick = { shouldShowPremiumWarningDialog = false },
                 )
             },
             text = {
                 Text(
-                    text = stringResource(R.string.premium_required),
+                    text = stringResource(BitwardenString.premium_required),
                     style = BitwardenTheme.typography.bodyMedium,
                 )
             },
@@ -115,9 +115,12 @@ fun AttachmentItemContent(
     if (shouldShowSizeWarningDialog) {
         BitwardenTwoButtonDialog(
             title = null,
-            message = stringResource(R.string.attachment_large_warning, attachmentItem.displaySize),
-            confirmButtonText = stringResource(R.string.yes),
-            dismissButtonText = stringResource(R.string.no),
+            message = stringResource(
+                BitwardenString.attachment_large_warning,
+                attachmentItem.displaySize,
+            ),
+            confirmButtonText = stringResource(BitwardenString.yes),
+            dismissButtonText = stringResource(BitwardenString.no),
             onConfirmClick = {
                 shouldShowSizeWarningDialog = false
                 onAttachmentDownloadClick(attachmentItem)

@@ -5,8 +5,8 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_0
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_1
@@ -167,7 +167,9 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                     stateFlow.awaitItem(),
                 )
                 assertEquals(
-                    CompleteRegistrationEvent.ShowToast(R.string.account_created_success.asText()),
+                    CompleteRegistrationEvent.ShowToast(
+                        BitwardenString.account_created_success.asText(),
+                    ),
                     eventFlow.awaitItem(),
                 )
                 // Make sure loading dialog is hidden:
@@ -200,7 +202,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VALID_INPUT_STATE.copy(
                     dialog = CompleteRegistrationDialog.Error(
-                        title = R.string.an_error_has_occurred.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
                         message = "mock_error".asText(),
                         error = error,
                     ),
@@ -317,8 +319,9 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialog = createHaveIBeenPwned(
-                            title = R.string.exposed_master_password.asText(),
-                            message = R.string.password_found_in_a_data_breach_alert_description
+                            title = BitwardenString.exposed_master_password.asText(),
+                            message = BitwardenString
+                                .password_found_in_a_data_breach_alert_description
                                 .asText(),
                         ),
                     ),
@@ -388,8 +391,8 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialog = createHaveIBeenPwned(
-                            title = R.string.weak_master_password.asText(),
-                            message = R.string.weak_password_identified_use_a_strong_password_to_protect_your_account.asText(),
+                            title = BitwardenString.weak_master_password.asText(),
+                            message = BitwardenString.weak_password_identified_use_a_strong_password_to_protect_your_account.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -419,7 +422,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         )
         viewModel.eventFlow.test {
             assertEquals(
-                CompleteRegistrationEvent.ShowToast(R.string.email_verified.asText()),
+                CompleteRegistrationEvent.ShowToast(BitwardenString.email_verified.asText()),
                 awaitItem(),
             )
         }
@@ -600,8 +603,8 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             val expectedState = DEFAULT_STATE.copy(
                 passwordInput = input,
                 dialog = CompleteRegistrationDialog.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.master_password_length_val_message_x.asText(12),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.master_password_length_val_message_x.asText(12),
                 ),
             )
             viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
@@ -622,8 +625,8 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 userEmail = EMAIL,
                 passwordInput = PASSWORD,
                 dialog = CompleteRegistrationDialog.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.master_password_confirmation_val_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.master_password_confirmation_val_message.asText(),
                 ),
             )
             viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
@@ -645,9 +648,9 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             userEmail = "",
             passwordInput = PASSWORD,
             dialog = CompleteRegistrationDialog.Error(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.validation_field_required.asText(
-                    R.string.email_address.asText(),
+                title = BitwardenString.an_error_has_occurred.asText(),
+                message = BitwardenString.validation_field_required.asText(
+                    BitwardenString.email_address.asText(),
                 ),
             ),
         )

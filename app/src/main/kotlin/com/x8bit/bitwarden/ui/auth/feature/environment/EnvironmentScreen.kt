@@ -34,8 +34,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.BuildConfig
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenClientCertificateDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -99,7 +99,7 @@ fun EnvironmentScreen(
     when (val dialog = state.dialog) {
         is EnvironmentState.DialogState.Error -> {
             BitwardenBasicDialog(
-                title = stringResource(id = R.string.an_error_has_occurred),
+                title = stringResource(id = BitwardenString.an_error_has_occurred),
                 message = dialog.message(),
                 onDismissRequest = remember(viewModel) {
                     { viewModel.trySendAction(EnvironmentAction.DialogDismiss) }
@@ -134,15 +134,15 @@ fun EnvironmentScreen(
         is EnvironmentState.DialogState.SystemCertificateWarningDialog -> {
             @Suppress("MaxLineLength")
             BitwardenTwoButtonDialog(
-                title = stringResource(R.string.warning),
+                title = stringResource(BitwardenString.warning),
                 message = stringResource(
-                    R.string.system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden,
+                    BitwardenString.system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden,
                 ),
-                confirmButtonText = stringResource(R.string.continue_text),
+                confirmButtonText = stringResource(BitwardenString.continue_text),
                 onConfirmClick = remember(viewModel) {
                     { viewModel.trySendAction(EnvironmentAction.ConfirmChooseSystemCertificateClick) }
                 },
-                dismissButtonText = stringResource(R.string.cancel),
+                dismissButtonText = stringResource(BitwardenString.cancel),
                 onDismissClick = remember(viewModel) {
                     { viewModel.trySendAction(EnvironmentAction.DialogDismiss) }
                 },
@@ -156,8 +156,8 @@ fun EnvironmentScreen(
             BitwardenTwoButtonDialog(
                 title = dialog.title(),
                 message = dialog.message(),
-                confirmButtonText = stringResource(R.string.replace_certificate),
-                dismissButtonText = stringResource(R.string.cancel),
+                confirmButtonText = stringResource(BitwardenString.replace_certificate),
+                dismissButtonText = stringResource(BitwardenString.cancel),
                 onConfirmClick = remember(viewModel) {
                     {
                         viewModel.trySendAction(
@@ -185,16 +185,16 @@ fun EnvironmentScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.settings),
+                title = stringResource(id = BitwardenString.settings),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(EnvironmentAction.CloseClick) }
                 },
                 actions = {
                     BitwardenTextButton(
-                        label = stringResource(id = R.string.save),
+                        label = stringResource(id = BitwardenString.save),
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(EnvironmentAction.SaveClick) }
                         },
@@ -214,7 +214,7 @@ fun EnvironmentScreen(
         ) {
             Spacer(modifier = Modifier.height(height = 12.dp))
             BitwardenListHeaderText(
-                label = stringResource(id = R.string.self_hosted_environment),
+                label = stringResource(id = BitwardenString.self_hosted_environment),
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
@@ -224,10 +224,12 @@ fun EnvironmentScreen(
             Spacer(modifier = Modifier.height(height = 8.dp))
 
             BitwardenTextField(
-                label = stringResource(id = R.string.server_url),
+                label = stringResource(id = BitwardenString.server_url),
                 value = state.serverUrl,
                 placeholder = "ex. https://bitwarden.company.com",
-                supportingText = stringResource(id = R.string.self_hosted_environment_footer),
+                supportingText = stringResource(
+                    id = BitwardenString.self_hosted_environment_footer,
+                ),
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(EnvironmentAction.ServerUrlChange(it)) }
                 },
@@ -251,7 +253,7 @@ fun EnvironmentScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             BitwardenListHeaderText(
-                label = stringResource(id = R.string.custom_environment),
+                label = stringResource(id = BitwardenString.custom_environment),
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
@@ -261,7 +263,7 @@ fun EnvironmentScreen(
             Spacer(modifier = Modifier.height(height = 8.dp))
 
             BitwardenTextField(
-                label = stringResource(id = R.string.web_vault_url),
+                label = stringResource(id = BitwardenString.web_vault_url),
                 value = state.webVaultServerUrl,
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(EnvironmentAction.WebVaultServerUrlChange(it)) }
@@ -277,7 +279,7 @@ fun EnvironmentScreen(
             Spacer(modifier = Modifier.height(height = 8.dp))
 
             BitwardenTextField(
-                label = stringResource(id = R.string.api_url),
+                label = stringResource(id = BitwardenString.api_url),
                 value = state.apiServerUrl,
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(EnvironmentAction.ApiServerUrlChange(it)) }
@@ -293,7 +295,7 @@ fun EnvironmentScreen(
             Spacer(modifier = Modifier.height(height = 8.dp))
 
             BitwardenTextField(
-                label = stringResource(id = R.string.identity_url),
+                label = stringResource(id = BitwardenString.identity_url),
                 value = state.identityServerUrl,
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(EnvironmentAction.IdentityServerUrlChange(it)) }
@@ -309,12 +311,12 @@ fun EnvironmentScreen(
             Spacer(modifier = Modifier.height(height = 8.dp))
 
             BitwardenTextField(
-                label = stringResource(id = R.string.icons_url),
+                label = stringResource(id = BitwardenString.icons_url),
                 value = state.iconsServerUrl,
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(EnvironmentAction.IconsServerUrlChange(it)) }
                 },
-                supportingText = stringResource(id = R.string.custom_environment_footer),
+                supportingText = stringResource(id = BitwardenString.custom_environment_footer),
                 keyboardType = KeyboardType.Uri,
                 textFieldTestTag = "IconsUrlEntry",
                 cardStyle = CardStyle.Full,
@@ -323,59 +325,57 @@ fun EnvironmentScreen(
                     .standardHorizontalMargin(),
             )
 
-            if (state.showMutualTlsOptions) {
-                Spacer(modifier = Modifier.height(height = 16.dp))
+            Spacer(modifier = Modifier.height(height = 16.dp))
 
-                BitwardenListHeaderText(
-                    label = stringResource(id = R.string.client_certificate_mtls),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
-                )
-                Spacer(modifier = Modifier.height(height = 8.dp))
+            BitwardenListHeaderText(
+                label = stringResource(id = BitwardenString.client_certificate_mtls),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
-                BitwardenTextField(
-                    label = stringResource(id = R.string.certificate_alias),
-                    value = state.keyAlias,
-                    supportingText = stringResource(
-                        id = R.string.certificate_used_for_client_authentication,
-                    ),
-                    onValueChange = {},
-                    readOnly = true,
-                    cardStyle = CardStyle.Full,
-                    textFieldTestTag = "KeyAliasEntry",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .focusProperties { canFocus = false }
-                        .standardHorizontalMargin(),
-                )
-                Spacer(modifier = Modifier.height(height = 16.dp))
+            BitwardenTextField(
+                label = stringResource(id = BitwardenString.certificate_alias),
+                value = state.keyAlias,
+                supportingText = stringResource(
+                    id = BitwardenString.certificate_used_for_client_authentication,
+                ),
+                onValueChange = {},
+                readOnly = true,
+                cardStyle = CardStyle.Full,
+                textFieldTestTag = "KeyAliasEntry",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusProperties { canFocus = false }
+                    .standardHorizontalMargin(),
+            )
+            Spacer(modifier = Modifier.height(height = 16.dp))
 
-                BitwardenFilledButton(
-                    label = stringResource(id = R.string.import_certificate),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(EnvironmentAction.ImportCertificateClick) }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .testTag("ImportCertificateButton"),
-                )
+            BitwardenFilledButton(
+                label = stringResource(id = BitwardenString.import_certificate),
+                onClick = remember(viewModel) {
+                    { viewModel.trySendAction(EnvironmentAction.ImportCertificateClick) }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .testTag("ImportCertificateButton"),
+            )
 
-                Spacer(modifier = Modifier.height(height = 12.dp))
+            Spacer(modifier = Modifier.height(height = 12.dp))
 
-                BitwardenOutlinedButton(
-                    label = stringResource(id = R.string.choose_system_certificate),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(EnvironmentAction.ChooseSystemCertificateClick) }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .testTag("ChooseSystemCertificateButton"),
-                )
-            }
+            BitwardenOutlinedButton(
+                label = stringResource(id = BitwardenString.choose_system_certificate),
+                onClick = remember(viewModel) {
+                    { viewModel.trySendAction(EnvironmentAction.ChooseSystemCertificateClick) }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .testTag("ChooseSystemCertificateButton"),
+            )
             Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }

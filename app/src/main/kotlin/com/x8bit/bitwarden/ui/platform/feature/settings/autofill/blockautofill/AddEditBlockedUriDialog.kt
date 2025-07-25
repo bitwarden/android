@@ -25,8 +25,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
 
@@ -66,7 +66,7 @@ fun AddEditBlockedUriDialog(
                 modifier = Modifier
                     .padding(top = 24.dp, start = 24.dp, end = 24.dp)
                     .fillMaxWidth(),
-                text = stringResource(id = R.string.new_uri),
+                text = stringResource(id = BitwardenString.new_uri),
                 color = BitwardenTheme.colorScheme.text.primary,
                 style = BitwardenTheme.typography.headlineSmall,
             )
@@ -82,10 +82,10 @@ fun AddEditBlockedUriDialog(
                     .verticalScroll(scrollState),
             ) {
                 BitwardenTextField(
-                    label = stringResource(id = R.string.enter_uri),
+                    label = stringResource(id = BitwardenString.enter_uri),
                     isError = errorMessage != null,
                     supportingText = errorMessage ?: stringResource(
-                        id = R.string.format_x_separate_multiple_ur_is_with_a_comma,
+                        id = BitwardenString.format_x_separate_multiple_ur_is_with_a_comma,
                         "http://domain.com",
                     ),
                     value = uri,
@@ -106,18 +106,18 @@ fun AddEditBlockedUriDialog(
             ) {
                 if (isEdit && onDeleteClick != null) {
                     BitwardenTextButton(
-                        label = stringResource(id = R.string.remove),
+                        label = stringResource(id = BitwardenString.remove),
                         onClick = onDeleteClick,
                     )
                 }
 
                 BitwardenTextButton(
-                    label = stringResource(id = R.string.cancel),
+                    label = stringResource(id = BitwardenString.cancel),
                     onClick = onCancelClick,
                 )
 
                 BitwardenFilledButton(
-                    label = stringResource(id = R.string.save),
+                    label = stringResource(id = BitwardenString.save),
                     onClick = { onSaveClick(uri) },
                 )
             }

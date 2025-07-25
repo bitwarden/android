@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s کپی شد.</string>
     <string name="verify_master_password">تأیید کلمه عبور اصلی</string>
     <string name="verify_pin">تأیید کد پین</string>
-    <string name="version">نسخه</string>
     <string name="view">مشاهده</string>
     <string name="yes">بله</string>
     <string name="account">حساب کاربری</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">ویرایش کارت</string>
     <string name="edit_identity">ویرایش هویت</string>
     <string name="edit_note">ویرایش یادداشت</string>
-    <string name="edit_passkey">ویرایش کلید عبور</string>
+    <string name="edit_ssh_key">Edit SSH key</string>
     <string name="enter_email_for_hint">برای دریافت یادآور کلمه عبور اصلی خود نشانی ایمیل‌تان را وارد کنید.</string>
     <string name="favorite">مورد علاقه</string>
     <string name="unfavorite">حذف از مورد علاقه</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">۱ دقیقه</string>
     <string name="four_hours">۴ ساعت</string>
     <string name="immediately">بلافاصله</string>
-    <string name="vault_timeout_log_out_confirmation">خروج از سیستم، تمام دسترسی‌ها به گاو‌صندوق شما را از بین می‌برد و نیاز به احراز هویت آنلاین پس از مدت زمان توقف دارد. آیا مطمئن هستید که می‌خواهید از این تنظیمات استفاده کنید؟</string>
+    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
     <string name="logging_in">در حال ورود...</string>
     <string name="login_to_bitwarden">وارد Bitwarden شوید</string>
     <string name="master_password_confirmation_val_message">تأیید کلمه عبور صحیح نیست.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">هویت جدید</string>
     <string name="no_notes">هیج یادداشتی در گاوصندوق‌تان موجود نیست.</string>
     <string name="new_note">یادداشت جدید</string>
-    <string name="new_passkey">کلید عبور جدید</string>
     <string name="new_item">مورد جدید</string>
     <string name="new_ssh_key">کلید SSH جدید</string>
     <string name="no_text_sends">هیچ ارسال متنی در گاوصندوق‌تان موجود نیست.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">مشاهده کارت</string>
     <string name="view_identity">مشاهده هویت</string>
     <string name="view_note">مشاهده یادداشت</string>
-    <string name="view_passkey">مشاهده کلید عبور</string>
+    <string name="view_ssh_key">View SSH key</string>
     <string name="web_vault">گاوصندوق وب Bitwarden</string>
     <string name="items">موارد</string>
     <string name="items_for_uri">موارد برای %1$s</string>
@@ -265,6 +264,7 @@
     <string name="address">نشانی</string>
     <string name="expiration">انقضاء</string>
     <string name="show_website_icons">نمایش نمادهای وب‌سایت</string>
+    <string name="show_website_icons_help">Show website icons help</string>
     <string name="show_website_icons_description">نمایش تصویری قابل تشخیص در کنار هر ورود</string>
     <string name="icons_url">نشانی اینترنتی سرور نمادها</string>
     <string name="vault_is_locked">گاوصندوق قفل شد</string>
@@ -701,6 +701,7 @@
     <string name="launch_web_authn">WebAuthn را راه‌اندازی کنید</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">در شروع احراز هویت دو عاملی WebAuthn خطا رخ داد</string>
     <string name="self_hosted_server_url">نشانی اینترنتی سرور خود میزبان</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">عملیات کلید عبور ناموفق بود زیرا کاربر تأیید نشد.</string>
     <string name="user_verification_direction">تأیید کردن کاربر</string>
     <string name="create_account_on">حساب کاربری ایجاد کنید در</string>
@@ -865,7 +866,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">تنها برای ورودهایی که به احراز هویت دو مرحله‌ای با کد نیاز دارند، باید کلید احراز هویت را تنظیم کنید. این کلید به طور مداوم کدهای شش رقمی تولید می‌کند که می‌توانید برای ورود از آن‌ها استفاده کنید.</string>
     <string name="coachmark_3_of_3">۳ از ۳</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">برای استفاده از قابلیت پر کردن خودکار جهت دسترسی به این حساب کاربری، باید یک نشانی وب اضافه کنید.</string>
-    <string name="mutual_tls">تأیید هویت دوطرفه</string>
     <string name="single_tap_passkey_creation">ایجاد کلید عبور با یک ضربه</string>
     <string name="single_tap_passkey_authentication">ورود با کلید عبور تنها با یک ضربه</string>
     <string name="learn_about_new_logins">درباره ورودهای جدید بیشتر بدانید</string>
@@ -909,6 +909,12 @@
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">عملیات کلید عبور ناموفق بود زیرا تعداد تلاش‌های تأیید هویت کاربر بیش از حد مجاز شده است.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">عملیات کلید عبور ناموفق بود زیرا هیچ موردی انتخاب نشده است.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">عملیات کلید عبور ناموفق بود زیرا درخواست پشتیبانی نمی‌شود.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">نشانی اینترنتی سرور خود میزبان</string>
     <string name="use_brave_autofill_integration">استفاده از قابلیت پر کردن خودکار Brave</string>
     <string name="use_chrome_autofill_integration">استفاده از قابلیت پر کردن خودکار کروم</string>
@@ -967,8 +973,8 @@
     <string name="view_text_send">مشاهده متن ارسال</string>
     <string name="delete_send">حذف ارسال</string>
     <string name="missing_send_resync_your_vault">گزینه ارسال برای همگام‌سازی مجدد گاوصندوق شما مفقود است</string>
-    <string name="dynamic_colors">رنگ‌های پویا</string>
-    <string name="dynamic_colors_description">رنگ‌های پویا را بر اساس کاغذ دیواری خود اعمال کنید</string>
+    <string name="use_dynamic_colors">Use dynamic colors</string>
+    <string name="use_dynamic_colors_question">Use dynamic colors?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">رنگ‌های پویا از رنگ‌های سیستم استفاده می‌کنند و ممکن است تمام دستورالعمل‌های دسترسی را رعایت نکنند.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">عملیات کلید عبور ناموفق بود زیرا مرورگر (%1$s) مورد اعتماد نیست. گزینه \"اعتماد\" را انتخاب کنید تا %1$s به فهرست برنامه‌های مورد اعتماد افزوده شود یا \"لغو\" را برای توقف عملیات انتخاب کنید.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">عملیات کلید عبور ناموفق بود زیرا مرورگر مورد اعتماد نیست.</string>
@@ -989,4 +995,6 @@
     <string name="are_you_sure_you_want_to_stop_trusting_x">آیا مطمئن هستید که می‌خواهید دیگر به %s اعتماد نکنید؟</string>
     <string name="installed_apps">برنامه‌های نصب شده</string>
     <string name="delete_x">حذف %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
+    <string name="decryption_error">Decryption error</string>
 </resources>

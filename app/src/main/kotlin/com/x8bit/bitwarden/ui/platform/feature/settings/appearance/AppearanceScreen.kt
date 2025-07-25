@@ -34,7 +34,7 @@ import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -82,10 +82,10 @@ fun AppearanceScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.appearance),
+                title = stringResource(id = BitwardenString.appearance),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                navigationIconContentDescription = stringResource(id = R.string.back),
+                navigationIconContentDescription = stringResource(id = BitwardenString.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(AppearanceAction.BackClick) }
                 },
@@ -122,7 +122,7 @@ fun AppearanceScreen(
             Spacer(modifier = Modifier.height(height = 8.dp))
             if (state.isDynamicColorsSupported) {
                 BitwardenSwitch(
-                    label = stringResource(id = R.string.use_dynamic_colors),
+                    label = stringResource(id = BitwardenString.use_dynamic_colors),
                     isChecked = state.isDynamicColorsEnabled,
                     onCheckedChange = remember(viewModel) {
                         { viewModel.trySendAction(AppearanceAction.DynamicColorsToggle(it)) }
@@ -136,8 +136,10 @@ fun AppearanceScreen(
                 Spacer(modifier = Modifier.height(height = 8.dp))
             }
             BitwardenSwitch(
-                label = stringResource(id = R.string.show_website_icons),
-                supportingText = stringResource(id = R.string.show_website_icons_description),
+                label = stringResource(id = BitwardenString.show_website_icons),
+                supportingText = stringResource(
+                    id = BitwardenString.show_website_icons_description,
+                ),
                 isChecked = state.showWebsiteIcons,
                 onCheckedChange = remember(viewModel) {
                     { viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsToggle(it)) }
@@ -146,7 +148,9 @@ fun AppearanceScreen(
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsTooltipClick) }
                     },
-                    contentDescription = stringResource(id = R.string.show_website_icons_help),
+                    contentDescription = stringResource(
+                        id = BitwardenString.show_website_icons_help,
+                    ),
                 ),
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
@@ -169,12 +173,12 @@ private fun AppearanceDialogs(
     when (dialogState) {
         AppearanceState.DialogState.EnableDynamicColors -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = R.string.use_dynamic_colors_question),
+                title = stringResource(id = BitwardenString.use_dynamic_colors_question),
                 message = stringResource(
-                    id = R.string.dynamic_colors_may_not_adhere_to_accessibility_guidelines,
+                    id = BitwardenString.dynamic_colors_may_not_adhere_to_accessibility_guidelines,
                 ),
-                confirmButtonText = stringResource(R.string.okay),
-                dismissButtonText = stringResource(R.string.cancel),
+                confirmButtonText = stringResource(BitwardenString.okay),
+                dismissButtonText = stringResource(BitwardenString.cancel),
                 onConfirmClick = onConfirmEnableDynamicColorsClick,
                 onDismissClick = onDismissDialog,
                 onDismissRequest = onDismissDialog,
@@ -193,7 +197,7 @@ private fun LanguageSelectionRow(
     resources: Resources = LocalContext.current.resources,
 ) {
     BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.language),
+        label = stringResource(id = BitwardenString.language),
         options = AppLanguage.entries.map { it.text() }.toImmutableList(),
         selectedOption = currentSelection.text(),
         onOptionSelected = { selectedLanguage ->
@@ -214,7 +218,7 @@ private fun ThemeSelectionRow(
     resources: Resources = LocalContext.current.resources,
 ) {
     BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.theme),
+        label = stringResource(id = BitwardenString.theme),
         options = AppTheme.entries.map { it.displayLabel() }.toImmutableList(),
         selectedOption = currentSelection.displayLabel(),
         onOptionSelected = { selectedTheme ->
@@ -222,7 +226,7 @@ private fun ThemeSelectionRow(
                 AppTheme.entries.first { selectedTheme == it.displayLabel.toString(resources) },
             )
         },
-        supportingText = annotatedStringResource(id = R.string.theme_description),
+        supportingText = annotatedStringResource(id = BitwardenString.theme_description),
         cardStyle = CardStyle.Full,
         modifier = modifier,
     )

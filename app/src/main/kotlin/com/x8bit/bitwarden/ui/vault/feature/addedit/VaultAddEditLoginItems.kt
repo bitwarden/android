@@ -25,6 +25,7 @@ import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -210,13 +211,13 @@ private fun UsernameRow(
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
 
     BitwardenTextField(
-        label = stringResource(id = R.string.username),
+        label = stringResource(id = BitwardenString.username),
         value = username,
         onValueChange = loginItemTypeHandlers.onUsernameTextChange,
         actions = {
             BitwardenStandardIconButton(
                 vectorIconRes = BitwardenDrawable.ic_generate,
-                contentDescription = stringResource(id = R.string.generate_username),
+                contentDescription = stringResource(id = BitwardenString.generate_username),
                 onClick = {
                     if (username.isEmpty()) {
                         loginItemTypeHandlers.onOpenUsernameGeneratorClick()
