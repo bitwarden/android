@@ -2,8 +2,8 @@ package com.bitwarden.authenticator.ui.platform.feature.debugmenu
 
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
-import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepository
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -30,7 +30,7 @@ class DebugMenuViewModel @Inject constructor(
 
     init {
         combine(
-            flows = FlagKey.activeFlags.map { flagKey ->
+            flows = FlagKey.activeAuthenticatorFlags.map { flagKey ->
                 featureFlagManager.getFeatureFlagFlow(flagKey).map { flagKey to it }
             },
         ) { DebugMenuAction.Internal.UpdateFeatureFlagMap(it.toMap()) }

@@ -1,8 +1,8 @@
 package com.bitwarden.authenticator.data.platform.manager
 
 import app.cash.turbine.test
-import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepository
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import io.mockk.coEvery
 import io.mockk.coVerify
