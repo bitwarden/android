@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import androidx.core.content.edit
 import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.bitwarden.core.data.manager.model.FlagKey
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull

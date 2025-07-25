@@ -5,7 +5,7 @@ import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.ConfigResponseJson.EnvironmentJson
 import com.bitwarden.network.model.ConfigResponseJson.ServerJson
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.FakeServerConfigRepository
 import com.x8bit.bitwarden.data.platform.util.isServerVersionAtLeast
 import kotlinx.coroutines.test.runTest

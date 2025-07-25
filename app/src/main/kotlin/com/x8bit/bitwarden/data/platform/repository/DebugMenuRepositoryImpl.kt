@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.repository
 
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.x8bit.bitwarden.BuildConfig
@@ -8,7 +9,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.getFlagValueOrDefault
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onSubscription
 
@@ -41,7 +41,7 @@ class DebugMenuRepositoryImpl(
 
     override fun resetFeatureFlagOverrides() {
         val currentServerConfig = serverConfigRepository.serverConfigStateFlow.value
-        FlagKey.activeFlags.forEach { flagKey ->
+        FlagKey.activePasswordManagerFlags.forEach { flagKey ->
             updateFeatureFlag(
                 flagKey,
                 currentServerConfig.getFlagValueOrDefault(flagKey),

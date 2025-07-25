@@ -1,6 +1,6 @@
 package com.bitwarden.authenticator.data.platform.datasource.disk
 
-import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
+import com.bitwarden.core.data.manager.model.FlagKey
 
 /**
  * Disk data source for saved feature flag overrides.

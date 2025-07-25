@@ -1,6 +1,5 @@
-package com.x8bit.bitwarden.data.platform.manager
+package com.bitwarden.core.data.manager.model
 
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -37,6 +36,10 @@ class FlagKeyTest {
             FlagKey.RemoveCardPolicy.keyName,
             "pm-16442-remove-card-item-type-policy",
         )
+        assertEquals(
+            FlagKey.BitwardenAuthenticationEnabled.keyName,
+            "bitwarden-authentication-enabled",
+        )
     }
 
     @Test
@@ -50,6 +53,7 @@ class FlagKeyTest {
                 FlagKey.RestrictCipherItemDeletion,
                 FlagKey.UserManagedPrivilegedApps,
                 FlagKey.RemoveCardPolicy,
+                FlagKey.BitwardenAuthenticationEnabled,
             ).all {
                 !it.defaultValue
             },
