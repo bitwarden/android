@@ -909,8 +909,8 @@
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">由于用户验证尝试超时，通行密钥操作失败。</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">由于没有选择任何项目，通行密钥操作失败。</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">由于请求不受支持，通行密钥操作失败。</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">由于所选项目不存在，密码操作失败。</string>
+    <string name="password_operation_failed_because_no_item_was_selected">由于没有选中项目，密码操作失败。</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>

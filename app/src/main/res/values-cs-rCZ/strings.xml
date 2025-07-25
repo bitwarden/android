@@ -976,7 +976,7 @@ při opakování problémů.</string>
     <string name="missing_send_resync_your_vault">Chybějící Send - znovu synchronizujte trezor</string>
     <string name="use_dynamic_colors">Použít dynamické barvy</string>
     <string name="use_dynamic_colors_question">Použít dynamické barvy?</string>
-    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamické barvy používají barvy systému a nemusí splňovat všechny pokyny pro přístupnost.</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Toto barevné schéma automaticky použije systémové barvy na Bitwarden na základě Vaší aktuální tapety. Tyto barvy nemusí splňovat všechny pokyny pro přístupnost.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Operace přístupového klíče se nezdařila, protože prohlížeč (%1$s) není důvěryhodný. Vyberte \"Důvěřovat\" pro přidání %1$s do seznamu důvěryhodných aplikací nebo \"Zrušit\" pro zrušení operace.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Operace přístupového klíče se nezdařila, protože prohlížeč není důvěryhodný.</string>
     <string name="trust">Důvěřovat</string>

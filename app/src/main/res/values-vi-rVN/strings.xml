@@ -605,7 +605,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="decline_all_requests">Từ chối tất cả yêu cầu</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Bạn có chắc muốn từ chối tất cả các yêu cầu đăng nhập đang chờ?</string>
     <string name="no_pending_requests">Không có yêu cầu đang chờ phê duyệt</string>
-    <string name="enable_camer_permission_to_use_the_scanner">Cấp quyền máy ảnh để sử dụng trình quét</string>
+    <string name="enable_camer_permission_to_use_the_scanner">Cấp quyền truy cập máy ảnh để quét</string>
     <string name="language">Ngôn ngữ</string>
     <string name="language_change_x_description">Ngôn ngữ đã được đổi thành %1$s. Khởi động lại ứng dụng để áp dụng</string>
     <string name="default_system">Giống như hệ thống</string>
@@ -701,7 +701,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="launch_web_authn">Khởi chạy WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Xảy ra lỗi khi khởi động xác thực hai bước với WebAuthn</string>
     <string name="self_hosted_server_url">URL máy chủ tự lưu trữ</string>
-    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Xác thực thất bại vì không thể xác minh người dùng.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Vận hành mã khóa thất bại vì không thể xác minh người dùng.</string>
     <string name="user_verification_direction">Xác minh người dùng</string>
     <string name="create_account_on">Tạo tài khoản trên</string>
@@ -909,12 +909,12 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Vận hành mã khóa không thành công vì vượt quá số lần xác minh người dùng.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Vận hành mã khóa không thành công vì không có mục nào được chọn.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Vận hành mã khóa không thành công vì yêu cầu không được hỗ trợ.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
-    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
-    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
-    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
-    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Thay đổi mật khẩu thất bại vì mục đã chọn không tồn tại.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Nhập mật khẩu thất bại vì không có mục nào được chọn.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Xác thực thông tin đăng nhập thất bại vì số lần xác thực người dùng đã vượt quá giới hạn cho phép.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Xác thực thất bại vì tài khoản người dùng bị khóa.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Xác thực thất bại vì mục đã chọn không tồn tại.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Xác thực thông tin đăng nhập thất bại vì quá trình xác minh người dùng đã bị hủy bỏ.</string>
     <string name="self_host_server_url">URL máy chủ tự lưu trữ</string>
     <string name="use_brave_autofill_integration">Tích hợp với tính năng tự động điền của Brave</string>
     <string name="use_chrome_autofill_integration">Tích hợp với tính năng tự động điền của Chrome</string>

@@ -672,7 +672,6 @@ Do you want to switch to this account?</string>
     <string name="continue_to_device_settings">Continue to device Settings?</string>
     <string name="two_step_login_description_long">Make your account more secure by setting up two-step login in the Bitwarden web app.</string>
     <string name="change_master_password_description_long">You can change your master password on the Bitwarden web app.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">You can import data to your vault on %1$s.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Learn more about how to use Bitwarden on the Help center.</string>
     <string name="privacy_policy_description_long">Check out our privacy policy on bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Explore more features of your Bitwarden account on the web app.</string>
@@ -996,7 +995,7 @@ Do you want to switch to this account?</string>
     <string name="add_item_rotation">Add Item Rotation</string>
     <string name="scan_a_qr_code">Scan a QR code</string>
     <string name="cannot_add_authenticator_key">Cannot add authenticator key?</string>
-    <string name="enable_camera_permission_to_use_the_scanner">Enable camera permission to use the scanner</string>
+    <string name="enable_camera_permission_to_use_the_scanner">Za uporabo skenerja dovolite uporabo kamere</string>
     <string name="empty_item_list">Empty Item Listing</string>
     <string name="you_dont_have_items_to_display">You don\'t have any items to display.</string>
     <string name="empty_item_list_instruction">Add a new code to secure your accounts.</string>
@@ -1008,7 +1007,7 @@ Do you want to switch to this account?</string>
     <string name="collapse_advanced_options">Collapse advanced options</string>
     <string name="number_of_digits">Number of digits</string>
     <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d seconds</string>
-    <string name="item_saved">Item saved</string>
+    <string name="item_saved">Element urejen</string>
     <string name="information">Information</string>
     <string name="otp_type">OTP type</string>
     <string name="search_codes">Search codes</string>
@@ -1019,22 +1018,22 @@ Do you want to switch to this account?</string>
     <string name="sign_in_using_unique_codes">Sign in using unique codes</string>
     <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">When using 2-step verification, you\'ll enter your username and password and a code generated in this app.</string>
     <string name="skip">Skip</string>
-    <string name="help">Help</string>
+    <string name="help">Pomoč</string>
     <string name="launch_tutorial">Launch tutorial</string>
-    <string name="delete_item">Delete item</string>
-    <string name="do_you_really_want_to_permanently_delete_this_cannot_be_undone">Do you really want to permanently delete? This cannot be undone.</string>
-    <string name="data">Data</string>
-    <string name="export">Export</string>
+    <string name="delete_item">Element odstranjen</string>
+    <string name="do_you_really_want_to_permanently_delete_this_cannot_be_undone">Ste prepričani, da želite trajno izbrisati? Tega ni mogoče povrniti.</string>
+    <string name="data">Podatki</string>
+    <string name="export">Izvozi</string>
     <string name="export_confirmation_title">Confirm export</string>
     <string name="export_success">Data exported successfully</string>
     <string name="security">Varnost</string>
     <string name="too_many_failed_biometric_attempts">Too many failed biometrics attempts.</string>
     <string name="version">Različica</string>
     <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">Learn more about how to use Bitwarden Authenticator on the Help Center.</string>
-    <string name="key">Key</string>
+    <string name="key">Ključ</string>
     <string name="create_verification_code">Create Verification code</string>
     <string name="key_is_required">Key is required.</string>
-    <string name="name_is_required">Name is required.</string>
+    <string name="name_is_required">Ime je obvezen podatek.</string>
     <string name="import_vault_failure">There was a problem importing your vault.</string>
     <string name="import_vault">Import</string>
     <string name="import_success">Vault import successful</string>
