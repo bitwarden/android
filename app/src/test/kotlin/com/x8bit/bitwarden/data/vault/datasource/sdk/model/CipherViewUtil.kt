@@ -51,6 +51,7 @@ fun createMockCipherView(
     password: String = "mockPassword-$number",
     clock: Clock = FIXED_CLOCK,
     fido2Credentials: List<Fido2Credential>? = null,
+    password: String = "mockPassword-$number",
     sshKey: SshKeyView? = createMockSshKeyView(number = number),
     login: LoginView? = createMockLoginView(
         number = number,
@@ -58,6 +59,7 @@ fun createMockCipherView(
         totp = totp,
         clock = clock,
         fido2Credentials = fido2Credentials,
+        password = password,
     ),
     card: CardView? = createMockCardView(number = number).takeIf { cipherType == CipherType.CARD },
     attachments: List<AttachmentView> = listOf(createMockAttachmentView(number = number)),

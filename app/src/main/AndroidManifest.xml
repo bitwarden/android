@@ -86,6 +86,7 @@
             <intent-filter>
                 <action android:name="com.x8bit.bitwarden.credentials.ACTION_CREATE_PASSKEY" />
                 <action android:name="com.x8bit.bitwarden.credentials.ACTION_GET_PASSKEY" />
+                <action android:name="com.x8bit.bitwarden.credentials.ACTION_CREATE_PASSWORD" />
                 <action android:name="com.x8bit.bitwarden.credentials.ACTION_GET_PASSWORD" />
                 <action android:name="com.x8bit.bitwarden.credentials.ACTION_UNLOCK_ACCOUNT" />
 

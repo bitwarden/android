@@ -271,6 +271,56 @@ class SpecialCircumstanceExtensionsTest {
             }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toPasswordGetRequestOrNull should return a non-null value for PasswordGetCredentials`() {
+        val passwordGetCredentialsRequest = createMockProviderGetPasswordCredentialRequest()
+        assertEquals(
+            passwordGetCredentialsRequest,
+            SpecialCircumstance
+                .ProviderGetPasswordRequest(
+                    passwordGetRequest = passwordGetCredentialsRequest,
+                )
+                .toPasswordGetRequestOrNull(),
+        )
+    }
+
+    @Test
+    fun `toPasswordGetRequestOrNull should return a null value for other types`() {
+        listOf(
+            SpecialCircumstance.AutofillSelection(
+                autofillSelectionData = mockk(),
+                shouldFinishWhenComplete = true,
+            ),
+            SpecialCircumstance.AutofillSave(
+                autofillSaveItem = mockk(),
+            ),
+            SpecialCircumstance.ShareNewSend(
+                data = mockk(),
+                shouldFinishWhenComplete = true,
+            ),
+            mockk<SpecialCircumstance.AddTotpLoginItem>(),
+            SpecialCircumstance.PasswordlessRequest(
+                passwordlessRequestData = mockk(),
+                shouldFinishWhenComplete = true,
+            ),
+            SpecialCircumstance.ProviderCreateCredential(
+                createCredentialRequest = mockk(),
+            ),
+            SpecialCircumstance.ProviderGetCredentials(
+                getCredentialsRequest = mockk(),
+            ),
+            SpecialCircumstance.Fido2Assertion(
+                fido2AssertionRequest = mockk(),
+            ),
+            SpecialCircumstance.GeneratorShortcut,
+            SpecialCircumstance.VaultShortcut,
+        )
+            .forEach { specialCircumstance ->
+                assertNull(specialCircumstance.toPasswordGetRequestOrNull())
+            }
+    }
+
     @Test
     fun `toPasswordGetRequestOrNull should return a non-null value for PasswordGetCredentials`() {
         val passwordGetCredentialsRequest = createMockProviderGetPasswordCredentialRequest(1)

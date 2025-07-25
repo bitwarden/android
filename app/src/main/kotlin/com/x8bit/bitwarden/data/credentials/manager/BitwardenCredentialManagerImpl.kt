@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.credentials.manager
 
+import androidx.credentials.CreatePasswordRequest
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.exceptions.GetCredentialUnknownException
@@ -22,6 +23,7 @@ import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessaryOrNull
 import com.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
+import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithCopyablePassword
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.autofill.util.login
@@ -31,6 +33,7 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
+import com.x8bit.bitwarden.data.credentials.model.PasswordRegisterResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.getAppOrigin
@@ -43,6 +46,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidAttestationRe
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKeyCredential
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.withContext
@@ -56,6 +60,7 @@ import timber.log.Timber
 class BitwardenCredentialManagerImpl(
     private val vaultSdkSource: VaultSdkSource,
     private val fido2CredentialStore: Fido2CredentialStore,
+    private val autofillCipherProvider: AutofillCipherProvider,
     private val credentialEntryBuilder: CredentialEntryBuilder,
     private val json: Json,
     private val vaultRepository: VaultRepository,
@@ -90,6 +95,19 @@ class BitwardenCredentialManagerImpl(
                 createPublicKeyCredentialRequest = createPublicKeyCredentialRequest,
                 selectedCipherView = selectedCipherView,
             )
+        }
+    }
+
+    /**
+     * Register a new Password credential to a users vault.
+     */
+    override suspend fun registerPasswordCredential(
+        createPasswordRequest: CreatePasswordRequest,
+        selectedCipherView: CipherView,
+    ): PasswordRegisterResult {
+        return when (vaultRepository.createCipher(cipherView = selectedCipherView)) {
+            is CreateCipherResult.Error -> PasswordRegisterResult.Error.InternalError
+            CreateCipherResult.Success -> PasswordRegisterResult.Success
         }
     }
 

@@ -63,6 +63,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasswordConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
@@ -175,6 +176,12 @@ fun VaultAddEditScreen(
                 )
             }
 
+            is VaultAddEditEvent.CompletePasswordRegistration -> {
+                credentialProviderCompletionManager.completePasswordRegistration(
+                    result = event.result,
+                )
+            }
+
             is VaultAddEditEvent.Fido2UserVerification -> {
                 biometricsManager.promptUserVerification(
                     onSuccess = userVerificationHandlers.onUserVerificationSuccess,
@@ -238,10 +245,24 @@ fun VaultAddEditScreen(
                 )
             }
         },
+        onPasswordErrorDismiss = remember(viewModel) {
+            { errorMessage ->
+                viewModel.trySendAction(
+                    VaultAddEditAction.Common.PasswordErrorDialogDismissed(message = errorMessage),
+                )
+            }
+        },
         onConfirmOverwriteExistingPasskey = remember(viewModel) {
             {
                 viewModel.trySendAction(
                     action = VaultAddEditAction.Common.ConfirmOverwriteExistingPasskeyClick,
+                )
+            }
+        },
+        onConfirmOverwriteExistingPassword = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    action = VaultAddEditAction.Common.ConfirmOverwriteExistingPasswordClick,
                 )
             }
         },
@@ -469,7 +490,9 @@ private fun VaultAddEditItemDialogs(
     onDismissRequest: () -> Unit,
     onAutofillDismissRequest: () -> Unit,
     onFido2ErrorDismiss: (Text) -> Unit,
+    onPasswordErrorDismiss: (Text) -> Unit,
     onConfirmOverwriteExistingPasskey: () -> Unit,
+    onConfirmOverwriteExistingPassword: () -> Unit,
     onSubmitMasterPasswordFido2Verification: (password: String) -> Unit,
     onRetryFido2PasswordVerification: () -> Unit,
     onSubmitPinFido2Verification: (pin: String) -> Unit,
@@ -508,9 +531,24 @@ private fun VaultAddEditItemDialogs(
             )
         }
 
+        is VaultAddEditState.DialogState.PasswordError -> {
+            BitwardenBasicDialog(
+                title = stringResource(id = BitwardenString.an_error_has_occurred),
+                message = dialogState.message(),
+                onDismissRequest = { onPasswordErrorDismiss(dialogState.message) },
+            )
+        }
+
         is VaultAddEditState.DialogState.OverwritePasskeyConfirmationPrompt -> {
             BitwardenOverwritePasskeyConfirmationDialog(
                 onConfirmClick = onConfirmOverwriteExistingPasskey,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VaultAddEditState.DialogState.OverwritePasswordConfirmationPrompt -> {
+            BitwardenOverwritePasswordConfirmationDialog(
+                onConfirmClick = onConfirmOverwriteExistingPassword,
                 onDismissRequest = onDismissRequest,
             )
         }
