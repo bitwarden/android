@@ -701,7 +701,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="launch_web_authn">WebAuthn starten</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Er is een fout opgetreden bij het starten van WebAuthn Twee factor authenticatie</string>
     <string name="self_hosted_server_url">URL zelfgehoste server</string>
-    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential-bewerking mislukt omdat de gebruiker niet geverifieerd kon worden.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey-bewerking mislukt omdat de gebruiker niet geverifieerd kon worden.</string>
     <string name="user_verification_direction">Gebruikersverificatie</string>
     <string name="create_account_on">Account maken bij</string>
@@ -909,12 +909,12 @@ Wilt u naar dit account wisselen?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey-bewerking mislukt omdat het aantal gebruikersverificatiepogingen is overschreden.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey-bewerking mislukt omdat er geen item geselecteerd is.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey-bewerking mislukt omdat het verzoek niet ondersteund is.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
-    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
-    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
-    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
-    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Wachtwoord-bewerking mislukt omdat het geselecteerde item niet bestaat.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Wachtwoord-bewerking mislukt omdat er geen item geselecteerd is.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential-bewerking mislukt omdat het aantal gebruikersverificatiepogingen is overschreden.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential-bewerking mislukt omdat de gebruiker is buitengesloten.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential-bewerking mislukt omdat het geselecteerde item niet bestaat.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential-bewerking mislukt omdat de gebruikersverificatie is geannuleerd.</string>
     <string name="self_host_server_url">URL zelfgehoste server</string>
     <string name="use_brave_autofill_integration">Brave-integratie voor automatisch invullen gebruiken</string>
     <string name="use_chrome_autofill_integration">Gebruik de Chrome-integratie voor automatisch invullen</string>
