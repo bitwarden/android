@@ -672,7 +672,6 @@ Skift til denne konto?</string>
     <string name="continue_to_device_settings">Fortsæt til Enhedsindstillinger?</string>
     <string name="two_step_login_description_long">Øg kontosikkerheden ved at oprette totrinsindlogning i Bitwarden web-appen.</string>
     <string name="change_master_password_description_long">Hovedadgangskoden kan ændres fra Bitwarden web-appen.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">Data kan importere til boksen på %1$s.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Læs mere i Hjælpecenter om, hvordan Bitwarden benyttes.</string>
     <string name="privacy_policy_description_long">Tjek vores Fortrolighedspolitik på bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Tjek flere funktioner ud i Bitwarden-kontoen på web-appen.</string>

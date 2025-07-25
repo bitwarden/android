@@ -671,7 +671,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="continue_to_device_settings">Továbblépés az eszköz beállításokhoz?</string>
     <string name="two_step_login_description_long">Tegyük biztonságosabbá a fiókot a kétlépcsős bejelentkezés beállításával a Bitwarden webalkalmazásban.</string>
     <string name="change_master_password_description_long">A mesterjelszó a Bitwarden webalkalmazásban módosítható.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">Adatokat importálhatunk a széfbe itt: %1$s.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">További információ a Bitwarden használatáról a Súgó Központban.</string>
     <string name="privacy_policy_description_long">Az adatvédelmi szabályzat megtekintése a bitwarden.com webhelyen.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Fedezzük fel a Bitwarden-fiók további funkcióit a webalkalmazásban.</string>

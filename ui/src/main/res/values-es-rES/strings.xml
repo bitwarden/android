@@ -673,7 +673,6 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="continue_to_device_settings">¿Continuar a los ajustes del dispositivo?</string>
     <string name="two_step_login_description_long">Haz tu cuenta más segura al configurar el inicio de sesión en dos pasos en la aplicación web de Bitwarden.</string>
     <string name="change_master_password_description_long">Puedes cambiar tu contraseña maestra en la aplicación web de Bitwarden.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">Puedes importar datos a tu caja fuerte en %1$s.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Más información sobre cómo usar Bitwarden en el centro de Ayuda.</string>
     <string name="privacy_policy_description_long">Revise nuestra política de privacidad en bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Explora más características de tu cuenta de Bitwarden en la aplicación web.</string>

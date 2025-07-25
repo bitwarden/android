@@ -994,6 +994,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Czy na pewno chcesz przestać ufać aplikacji %s?</string>
     <string name="installed_apps">Zainstalowane aplikacje</string>
     <string name="delete_x">Usuń %s</string>
-    <string name="failed_to_decrypt_cipher_contact_support">Nie udało się odszyfrować szyfru. Skontaktuj się z pomocą techniczną.</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Odszyfrowanie szyfru nie powiodło się. Skontaktuj się z pomocą techniczną.</string>
     <string name="decryption_error">Błąd odszyfrowywania</string>
 </resources>

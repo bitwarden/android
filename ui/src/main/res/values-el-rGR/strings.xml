@@ -672,7 +672,6 @@
     <string name="continue_to_device_settings">Συνέχεια στις Ρυθμίσεις της συσκευής;</string>
     <string name="two_step_login_description_long">Κάντε τον λογαριασμό σας πιο ασφαλή με τη ρύθμιση δύο βημάτων σύνδεσης στην εφαρμογή διαδικτύου Bitwarden.</string>
     <string name="change_master_password_description_long">Μπορείτε να αλλάξετε τον κύριο κωδικό πρόσβασης στην εφαρμογή διαδικτύου Bitwarden.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">Μπορείτε να εισαγάγετε δεδομένα στο vault σας στο %1$s.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Μάθετε περισσότερα για το πώς να χρησιμοποιήσετε το Bitwarden στο κέντρο βοήθειας.</string>
     <string name="privacy_policy_description_long">Δείτε την πολιτική απορρήτου μας στο bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Εξερευνήστε περισσότερες δυνατότητες του Bitwarden λογαριασμού σας, στην εφαρμογή διαδικτύου.</string>

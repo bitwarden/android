@@ -672,7 +672,6 @@ Queres comprobalo dende esa conta?</string>
     <string name="continue_to_device_settings">Ir ós axustes do dispositivo?</string>
     <string name="two_step_login_description_long">Fai a túa conta máis segura activando a verificación en 2 pasos na aplicación web.</string>
     <string name="change_master_password_description_long">Podes cambiar o teu contrasinal mestre na aplicación web de Bitwarden.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">Podes importar datos á túa caixa forte en %1$s.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Aprende máis de como usar Bitwarden no Centro de Axuda.</string>
     <string name="privacy_policy_description_long">Revisa a nosa Política de Privacidade en bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Descobre máis funcionalidades da túa conta de Bitwarden na aplicación web.</string>

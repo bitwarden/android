@@ -672,7 +672,6 @@
     <string name="continue_to_device_settings">هل تريد المتابعة إلى إعدادات الجهاز؟</string>
     <string name="two_step_login_description_long">اجعل حسابك أكثر أمنا من خلال إعداد تسجيل الدخول بخطوتين في تطبيق بت واردن على شبكة الإنترنت.</string>
     <string name="change_master_password_description_long">يمكنك تغيير كلمة المرور الرئيسية الخاصة بك على تطبيق ويب بت واردن.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">يمكنك استيراد البيانات إلى خزانتك على %1$s.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">تعرف على المزيد حول كيفية استخدام بت واردن في مركز المساعدة.</string>
     <string name="privacy_policy_description_long">اطلع على سياستنا للخصوصية على bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">استكشف المزيد من الميزات لحساب بت واردن الخاص بك على تطبيق الويب.</string>

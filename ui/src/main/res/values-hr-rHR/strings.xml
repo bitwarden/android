@@ -670,7 +670,6 @@
     <string name="continue_to_device_settings">Nastavi na postavke uređaja?</string>
     <string name="two_step_login_description_long">Učini svoj račun sigurnijim uključivanjem prijave dvofaktorskom autentifikacijom u Bitwarden web aplikaciji.</string>
     <string name="change_master_password_description_long">Svoju lozinku možeš promijeniti u Bitwarden web aplikaciji.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">Svoje podatke možeš uvesti u trezor na %1$s.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Za pomoć oko korištenja Bitwardena posjeti centar za pomoć.</string>
     <string name="privacy_policy_description_long">Pogledaj našu politiku privatnosti na bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Pronađi viđe značajki svojeg Bitwarden računa u web aplikaciji.</string>

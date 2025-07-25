@@ -672,7 +672,6 @@ Soovid selle konto peale lülituda?</string>
     <string name="continue_to_device_settings">Kas soovid avada Seaded?</string>
     <string name="two_step_login_description_long">Muuda oma konto turvalisemaks seadistades brauseris kahe-astmeline sisselogimine.</string>
     <string name="change_master_password_description_long">Ülemparooli saab muuta veebibrauseris.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">Sa saad importida oma andmed hoidlasse aadressil %1$s.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Uuri teisigi Bitwardeni kasutusvõimalusi Abikeskuses.</string>
     <string name="privacy_policy_description_long">Vaadake meie privaatsuspoliitikat veebilehel bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Uuri ka teisi Bitwardeni konto funktsioone veebibrauseris.</string>

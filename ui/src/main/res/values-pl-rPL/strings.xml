@@ -671,7 +671,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="continue_to_device_settings">Przejść do ustawień urządzenia?</string>
     <string name="two_step_login_description_long">Zwiększ bezpieczeństwo konta, konfigurując logowanie dwustopniowe w aplikacji internetowej Bitwarden.</string>
     <string name="change_master_password_description_long">Możesz zmienić hasło główne w aplikacji internetowej Bitwarden.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">Zaimportuj dane do sejfu na stronie %1$s.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Dowiedz się więcej o tym, jak korzystać z centrum pomocy Bitwarden.</string>
     <string name="privacy_policy_description_long">Sprawdź naszą politykę prywatności na bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Odkryj więcej funkcji konta Bitwarden w aplikacji internetowej.</string>
@@ -990,9 +989,9 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Czy na pewno chcesz przestać ufać aplikacji %s?</string>
     <string name="installed_apps">Zainstalowane aplikacje</string>
     <string name="delete_x">Usuń %s</string>
-    <string name="failed_to_decrypt_cipher_contact_support">Nie udało się odszyfrować szyfru. Skontaktuj się z pomocą techniczną.</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Odszyfrowanie szyfru nie powiodło się. Skontaktuj się z pomocą techniczną.</string>
     <string name="decryption_error">Błąd odszyfrowywania</string>
-    <string name="add_item_rotation">Add Item Rotation</string>
+    <string name="add_item_rotation">Dodaj rotację elementu</string>
     <string name="scan_a_qr_code">Zeskanuj kod QR</string>
     <string name="cannot_add_authenticator_key">Nie możesz dodać klucza uwierzytelniającego?</string>
     <string name="enable_camera_permission_to_use_the_scanner">Włącz uprawnienia aparatu do korzystania ze skanera</string>
@@ -1022,7 +1021,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="launch_tutorial">Uruchom samouczek</string>
     <string name="delete_item">Usuń element</string>
     <string name="do_you_really_want_to_permanently_delete_this_cannot_be_undone">Czy na pewno chcesz usunąć trwale? Operacji nie można cofnąć.</string>
-    <string name="data">Data</string>
+    <string name="data">Dane</string>
     <string name="export">Eksportuj</string>
     <string name="export_confirmation_title">Potwierdź eksport</string>
     <string name="export_success">Dane zostały wyeksportowane</string>
@@ -1040,7 +1039,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="key_is_invalid">Klucz jest nieprawidłowy.</string>
     <string name="backup">Kopia zapasowa</string>
     <string name="data_backup_title">Kopia zapasowa danych</string>
-    <string name="data_backup_message">Bitwarden Authenticator data is backed up and can be restored with your regularly scheduled device backups.</string>
+    <string name="data_backup_message">Kopia zapasowa danych Bitwarden Authenticator jest wykonywana i może być przywrócona z regularnymi kopiami zapasowymi urządzenia.</string>
     <string name="import_2fas_password_protected_not_supported">Importowanie plików 2FAS chronionych hasłem nie jest obsługiwane. Wyeksportuj plik, który nie jest chroniony hasłem.</string>
     <string name="import_bitwarden_unsupported_format">Importowanie plików Bitwarden CSV nie jest obsługiwane. Wyeksportuj plik JSON.</string>
     <string name="download_bitwarden_card_title">Pobierz aplikację Bitwarden</string>
@@ -1067,7 +1066,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="account_synced_from_bitwarden_app">Konto zostało zsynchronizowane z aplikacji Bitwarden</string>
     <string name="local_codes">Kody lokalne (%1$d)</string>
     <string name="required_information_missing">Brak wymaganych informacji</string>
-    <string name="required_information_missing_message">"Required info is missing (e.g., ‘services’ or ‘secret’). Check your file and try again. Visit bitwarden.com/help for support"</string>
+    <string name="required_information_missing_message">"Brak wymaganych informacji (np. usług lub sekretów). Sprawdź plik i spróbuj ponownie. Odwiedź bitwarden.com/help, aby uzyskać wsparcie"</string>
     <string name="file_could_not_be_processed">"Plik nie może zostać przetworzony"</string>
     <string name="file_could_not_be_processed_message">"Plik nie może być przetworzony. Upewnij się, że plik JSON jest prawidłowy i spróbuj ponownie. Potrzebujesz pomocy? Odwiedź bitwarden.com/help"</string>
     <string name="get_help">Uzyskaj pomoc</string>

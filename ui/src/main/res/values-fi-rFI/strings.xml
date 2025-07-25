@@ -672,7 +672,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="continue_to_device_settings">Avataanko laitteen asetukset?</string>
     <string name="two_step_login_description_long">Paranna tilisi suojausta määrittämällä kaksivaiheinen kirjautuminen Bitwardenin verkkosovelluksessa.</string>
     <string name="change_master_password_description_long">Voit vaihtaa pääsalasanasi Bitwardenin verkkosovelluksessa.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">Voit tuoda tietoja holviisi osoitteessa %1$s.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Tutustu Bitwardeniin ja opettele käyttämään sitä Tukikeskuksessa.</string>
     <string name="privacy_policy_description_long">Tutustu tietosuojakäytäntöömme osoitteessa bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Tutustu Bitwarden-tilisi muihin omimaisuuksiin verkkosovelluksessa.</string>

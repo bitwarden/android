@@ -671,7 +671,6 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="continue_to_device_settings">Cihaz Ayarlarına davam edilsin?</string>
     <string name="two_step_login_description_long">Bitwarden veb tətbiqində iki addımlı girişi quraraq hesabınızı daha güvənli edin.</string>
     <string name="change_master_password_description_long">Ana parolunuzu Bitwarden veb tətbiqində dəyişdirə bilərsiniz.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">Datanı %1$s üzərindən seyfinizə köçürə bilərsiniz.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Kömək mərkəzində Bitwarden-in necə istifadə ediləcəyi ilə bağlı ətraflı öyrənin.</string>
     <string name="privacy_policy_description_long">bitwarden.com saytında gizlilik siyasətimizi nəzərdən keçirin.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Veb tətbiqində Bitwarden hesabınızın daha çox özəlliyini kəşf edin.</string>

@@ -672,7 +672,6 @@ Vill du byta till detta konto?</string>
     <string name="continue_to_device_settings">Fortsätt till enhetsinställningar?</string>
     <string name="two_step_login_description_long">Gör ditt konto säkrare genom att konfigurera tvåstegsverifiering i Bitwardens webbapp.</string>
     <string name="change_master_password_description_long">Du kan ändra ditt huvudlösenord i Bitwardens webbapp.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">Du kan importera data till ditt valv på %1$s.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Läs mer om hur du använder Bitwarden i hjälpcentret.</string>
     <string name="privacy_policy_description_long">Kolla in vår integritetspolicy på bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Utforska fler funktioner i ditt Bitwarden-konto i webbappen.</string>

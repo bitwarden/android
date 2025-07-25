@@ -672,7 +672,6 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="continue_to_device_settings">Pāriet uz ierīces iestatījumiem?</string>
     <string name="two_step_login_description_long">Savu kontu var padarīt drošāku ar divpakāpju pieteikšanās uzstādīšanu Bitwarden tīmekļa lietotnē.</string>
     <string name="change_master_password_description_long">Savu galveno paroli var mainīt Bitwarden tīmekļa lietotnē.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">Ievietot datus savā glabātavā var %1$s.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Vairāk par to, kā izmantot Bitwarden, var uzzināt palīdzības centrā.</string>
     <string name="privacy_policy_description_long">Mūsu privātuma nosacījumi ir pārskatāmi bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Vairāk sava Bitwarden konta iespēju var izpētīt tīmekļa vietnē.</string>
@@ -994,23 +993,23 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="failed_to_decrypt_cipher_contact_support">Neizdevās atšifrēt šifru. Jāsazinās ar atbalstu.</string>
     <string name="decryption_error">Atšifrēšanas kļūda</string>
     <string name="add_item_rotation">Add Item Rotation</string>
-    <string name="scan_a_qr_code">Scan a QR code</string>
+    <string name="scan_a_qr_code">Nolasīt kvadrātkodu</string>
     <string name="cannot_add_authenticator_key">Nevar pievienot autentificētāja atslēgu?</string>
-    <string name="enable_camera_permission_to_use_the_scanner">Enable camera permission to use the scanner</string>
-    <string name="empty_item_list">Empty Item Listing</string>
-    <string name="you_dont_have_items_to_display">You don\'t have any items to display.</string>
-    <string name="empty_item_list_instruction">Add a new code to secure your accounts.</string>
-    <string name="add_code">Add code</string>
-    <string name="verification_code_added">Verification code added</string>
-    <string name="refresh_period">Refresh period</string>
-    <string name="algorithm">Algorithm</string>
-    <string name="advanced">Advanced</string>
-    <string name="collapse_advanced_options">Collapse advanced options</string>
-    <string name="number_of_digits">Number of digits</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d seconds</string>
-    <string name="item_saved">Item saved</string>
-    <string name="information">Information</string>
-    <string name="otp_type">OTP type</string>
+    <string name="enable_camera_permission_to_use_the_scanner">Jāiespējo kameras atļauja, lai izmantotu nolasītāju</string>
+    <string name="empty_item_list">Tukšo vienumu saraksts</string>
+    <string name="you_dont_have_items_to_display">Nav neviena vienuma, ko attēlot.</string>
+    <string name="empty_item_list_instruction">Pievieno jaunu kodu, lai aizsargātu savus kontus!</string>
+    <string name="add_code">Pievienot kodu</string>
+    <string name="verification_code_added">Apliecināšanas kods pievienots</string>
+    <string name="refresh_period">Atsvaidzināšanas laika posms</string>
+    <string name="algorithm">Algoritms</string>
+    <string name="advanced">Papildu</string>
+    <string name="collapse_advanced_options">Sakļaut papildu iespējas</string>
+    <string name="number_of_digits">Ciparu skaits</string>
+    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d sekundes</string>
+    <string name="item_saved">Vienums saglabāts</string>
+    <string name="information">Informācija</string>
+    <string name="otp_type">OTP veids</string>
     <string name="search_codes">Search codes</string>
     <string name="secure_your_accounts_with_bitwarden_authenticator">Secure your accounts with Bitwarden Authenticator</string>
     <string name="get_verification_codes_for_all_your_accounts">Get verification codes for all your accounts that support 2-step verification.</string>

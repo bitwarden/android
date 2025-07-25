@@ -672,7 +672,6 @@ Você deseja mudar para esta conta?</string>
     <string name="continue_to_device_settings">Continuar para as Configurações do dispositivo?</string>
     <string name="two_step_login_description_long">Torne sua conta mais segura configurando o login em duas etapas no aplicativo web do Bitwarden.</string>
     <string name="change_master_password_description_long">Você pode alterar a sua senha mestra no aplicativo web Bitwarden.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">Você pode importar dados para o seu cofre no %1$s.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Saiba mais sobre como usar o Bitwarden no centro de ajuda.</string>
     <string name="privacy_policy_description_long">Confira a nossa política de privacidade em bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Explore mais recursos da sua conta no Bitwarden no aplicativo web.</string>

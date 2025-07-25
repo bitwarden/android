@@ -672,7 +672,6 @@
     <string name="continue_to_device_settings">به تنظیمات دستگاه ادامه دهید؟</string>
     <string name="two_step_login_description_long">با راه‌اندازی ورود دو مرحله‌ای در برنامه وب Bitwarden، حساب کاربری خود را ایمن‌تر کنید.</string>
     <string name="change_master_password_description_long">می‌توانید کلمه عبور اصلی خود را در برنامه وب Bitwarden تغییر دهید.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">می‌توانید داده‌ها را در %1$s به گاوصندوق خود درون ریزی کنید.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">درباره نحوه استفاده از Bitwarden در مرکز راهنمایی بیشتر بیاموزید.</string>
     <string name="privacy_policy_description_long">سیاست حفظ حریم خصوصی ما را در bitwarden.com بررسی کنید.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">ویژگی‌های بیشتر حساب کاربری Bitwarden خود را در برنامه وب کاوش کنید.</string>
