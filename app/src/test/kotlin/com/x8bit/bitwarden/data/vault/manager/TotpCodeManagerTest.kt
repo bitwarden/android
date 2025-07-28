@@ -143,10 +143,10 @@ class TotpCodeManagerTest {
         runTest {
             val totpResponse = TotpResponse("123456", 30u)
             coEvery {
-                vaultSdkSource.generateTotp(
+                vaultSdkSource.generateTotpForCipherListView(
                     userId = any(),
-                    totp = any(),
                     time = any(),
+                    cipherListView = any(),
                 )
             } returns totpResponse.asSuccess()
 
