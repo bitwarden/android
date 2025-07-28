@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
@@ -144,7 +144,7 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialog = DeleteAccountState.DeleteAccountDialog.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     error = error,
                 ),
             ),
@@ -172,7 +172,7 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialog = DeleteAccountState.DeleteAccountDialog.Error(
-                        message = R.string.invalid_master_password.asText(),
+                        message = BitwardenString.invalid_master_password.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,

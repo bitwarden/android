@@ -12,12 +12,12 @@ import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.hexToColor
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
@@ -164,14 +164,7 @@ class VaultViewModel @Inject constructor(
 
         authRepository
             .userStateFlow
-            .combine(
-                featureFlagManager.getFeatureFlagFlow(FlagKey.ImportLoginsFlow),
-            ) { userState, importLoginsEnabled ->
-                VaultAction.Internal.UserStateUpdateReceive(
-                    userState = userState,
-                    importLoginsFlowEnabled = importLoginsEnabled,
-                )
-            }
+            .map { VaultAction.Internal.UserStateUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -431,8 +424,8 @@ class VaultViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = VaultState.DialogState.Error(
-                        R.string.internet_connection_required_title.asText(),
-                        R.string.internet_connection_required_message.asText(),
+                        BitwardenString.internet_connection_required_title.asText(),
+                        BitwardenString.internet_connection_required_message.asText(),
                     ),
                 )
             }
@@ -582,7 +575,7 @@ class VaultViewModel @Inject constructor(
             getCipherForCopyOrNull(action.cipherId)?.let {
                 clipboardManager.setText(
                     text = it.notes.orEmpty(),
-                    toastDescriptorOverride = R.string.notes.asText(),
+                    toastDescriptorOverride = BitwardenString.notes.asText(),
                 )
             }
         }
@@ -595,7 +588,7 @@ class VaultViewModel @Inject constructor(
             getCipherForCopyOrNull(cipherId = action.cipherId)?.let {
                 clipboardManager.setText(
                     text = it.card?.number.orEmpty(),
-                    toastDescriptorOverride = R.string.number.asText(),
+                    toastDescriptorOverride = BitwardenString.number.asText(),
                 )
             }
         }
@@ -608,7 +601,7 @@ class VaultViewModel @Inject constructor(
             getCipherForCopyOrNull(cipherId = action.cipherId)?.let {
                 clipboardManager.setText(
                     text = it.login?.password.orEmpty(),
-                    toastDescriptorOverride = R.string.password.asText(),
+                    toastDescriptorOverride = BitwardenString.password.asText(),
                 )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedPassword(
@@ -626,7 +619,7 @@ class VaultViewModel @Inject constructor(
             getCipherForCopyOrNull(cipherId = action.cipherId)?.let {
                 clipboardManager.setText(
                     text = it.card?.code.orEmpty(),
-                    toastDescriptorOverride = R.string.security_code.asText(),
+                    toastDescriptorOverride = BitwardenString.security_code.asText(),
                 )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedCardCode(
@@ -651,7 +644,7 @@ class VaultViewModel @Inject constructor(
     ) {
         clipboardManager.setText(
             text = action.username,
-            toastDescriptorOverride = R.string.username.asText(),
+            toastDescriptorOverride = BitwardenString.username.asText(),
         )
     }
 
@@ -748,8 +741,8 @@ class VaultViewModel @Inject constructor(
             it.copy(
                 isRefreshing = false,
                 dialog = VaultState.DialogState.Error(
-                    R.string.internet_connection_required_title.asText(),
-                    R.string.internet_connection_required_message.asText(),
+                    BitwardenString.internet_connection_required_title.asText(),
+                    BitwardenString.internet_connection_required_message.asText(),
                 ),
             )
         }
@@ -775,7 +768,7 @@ class VaultViewModel @Inject constructor(
             is GenerateTotpResult.Success -> {
                 clipboardManager.setText(
                     text = result.code,
-                    toastDescriptorOverride = R.string.totp.asText(),
+                    toastDescriptorOverride = BitwardenString.totp.asText(),
                 )
             }
         }
@@ -805,8 +798,6 @@ class VaultViewModel @Inject constructor(
                 .any(),
         )
         val appBarTitle = vaultFilterData.toAppBarTitle()
-        val shouldShowImportActionCard = action.importLoginsFlowEnabled &&
-            firstTimeState.showImportLoginsCard
 
         mutableStateFlow.update {
             val accountSummaries = userState.toAccountSummaries()
@@ -818,7 +809,7 @@ class VaultViewModel @Inject constructor(
                 accountSummaries = accountSummaries,
                 vaultFilterData = vaultFilterData,
                 isPremium = userState.activeAccount.isPremium,
-                showImportActionCard = shouldShowImportActionCard,
+                showImportActionCard = firstTimeState.showImportLoginsCard,
             )
         }
     }
@@ -857,8 +848,8 @@ class VaultViewModel @Inject constructor(
             isIconLoadingDisabled = state.isIconLoadingDisabled,
             isPremium = state.isPremium,
             hasMasterPassword = state.hasMasterPassword,
-            errorTitle = R.string.an_error_has_occurred.asText(),
-            errorMessage = R.string.generic_error_message.asText(),
+            errorTitle = BitwardenString.an_error_has_occurred.asText(),
+            errorMessage = BitwardenString.generic_error_message.asText(),
             isRefreshing = false,
             restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
         )
@@ -866,7 +857,7 @@ class VaultViewModel @Inject constructor(
 
     private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
         if (state.dialog == VaultState.DialogState.Syncing) {
-            sendEvent(VaultEvent.ShowSnackbar(message = R.string.syncing_complete.asText()))
+            sendEvent(VaultEvent.ShowSnackbar(message = BitwardenString.syncing_complete.asText()))
         }
         updateVaultState(vaultData.data)
     }
@@ -935,8 +926,8 @@ class VaultViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = result.error,
                         ),
                     )
@@ -948,8 +939,8 @@ class VaultViewModel @Inject constructor(
                     mutableStateFlow.update {
                         it.copy(
                             dialog = VaultState.DialogState.Error(
-                                title = R.string.an_error_has_occurred.asText(),
-                                message = R.string.invalid_master_password.asText(),
+                                title = BitwardenString.an_error_has_occurred.asText(),
+                                message = BitwardenString.invalid_master_password.asText(),
                             ),
                         )
                     }
@@ -969,8 +960,8 @@ class VaultViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             error = result.error,
                         ),
                     )
@@ -984,8 +975,8 @@ class VaultViewModel @Inject constructor(
                     mutableStateFlow.update {
                         it.copy(
                             dialog = VaultState.DialogState.Error(
-                                title = R.string.an_error_has_occurred.asText(),
-                                message = R.string.invalid_master_password.asText(),
+                                title = BitwardenString.an_error_has_occurred.asText(),
+                                message = BitwardenString.invalid_master_password.asText(),
                             ),
                         )
                     }
@@ -1000,8 +991,8 @@ class VaultViewModel @Inject constructor(
                 Timber.e("Cipher not found while copying number")
                 sendAction(
                     VaultAction.Internal.DecryptionErrorReceive(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                         error = null,
                     ),
                 )
@@ -1012,8 +1003,8 @@ class VaultViewModel @Inject constructor(
                 Timber.e(result.error, "Failed to decrypt cipher while copying number.")
                 sendAction(
                     VaultAction.Internal.DecryptionErrorReceive(
-                        title = R.string.decryption_error.asText(),
-                        message = R.string.failed_to_decrypt_cipher_contact_support.asText(),
+                        title = BitwardenString.decryption_error.asText(),
+                        message = BitwardenString.failed_to_decrypt_cipher_contact_support.asText(),
                         error = result.error,
                     ),
                 )
@@ -1704,7 +1695,6 @@ sealed class VaultAction {
          */
         data class UserStateUpdateReceive(
             val userState: UserState?,
-            val importLoginsFlowEnabled: Boolean,
         ) : Internal()
 
         /**

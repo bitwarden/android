@@ -145,16 +145,8 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
 
 private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf(
     FlagKey.EmailVerification to true,
-    FlagKey.ImportLoginsFlow to true,
     FlagKey.CredentialExchangeProtocolImport to true,
     FlagKey.CredentialExchangeProtocolExport to true,
-    FlagKey.MutualTls to true,
-    FlagKey.SingleTapPasskeyCreation to true,
-    FlagKey.SingleTapPasskeyAuthentication to true,
-    FlagKey.AnonAddySelfHostAlias to true,
-    FlagKey.SimpleLoginSelfHostAlias to true,
-    FlagKey.ChromeAutofill to true,
-    FlagKey.MobileErrorReporting to true,
     FlagKey.RestrictCipherItemDeletion to true,
     FlagKey.UserManagedPrivilegedApps to true,
     FlagKey.RemoveCardPolicy to true,
@@ -162,16 +154,8 @@ private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf
 
 private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf(
     FlagKey.EmailVerification to false,
-    FlagKey.ImportLoginsFlow to false,
     FlagKey.CredentialExchangeProtocolImport to false,
     FlagKey.CredentialExchangeProtocolExport to false,
-    FlagKey.MutualTls to false,
-    FlagKey.SingleTapPasskeyCreation to false,
-    FlagKey.SingleTapPasskeyAuthentication to false,
-    FlagKey.AnonAddySelfHostAlias to false,
-    FlagKey.SimpleLoginSelfHostAlias to false,
-    FlagKey.ChromeAutofill to false,
-    FlagKey.MobileErrorReporting to false,
     FlagKey.RestrictCipherItemDeletion to false,
     FlagKey.UserManagedPrivilegedApps to false,
     FlagKey.RemoveCardPolicy to false,

@@ -8,9 +8,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
@@ -52,7 +52,7 @@ class LoginViewModel @Inject constructor(
                 isLoginButtonEnabled = false,
                 passwordInput = "",
                 environmentLabel = environmentRepository.environment.label,
-                dialogState = LoginState.DialogState.Loading(R.string.loading.asText()),
+                dialogState = LoginState.DialogState.Loading(BitwardenString.loading.asText()),
                 captchaToken = args.captchaToken,
                 accountSummaries = authRepository
                     .userStateFlow
@@ -178,8 +178,8 @@ class LoginViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString
                                 .this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
                                 .asText(vaultUrl.toUriOrNull()?.host ?: vaultUrl),
                         ),
@@ -204,9 +204,9 @@ class LoginViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
                             message = loginResult.errorMessage?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                                ?: BitwardenString.generic_error_message.asText(),
                             error = loginResult.error,
                         ),
                     )
@@ -217,8 +217,8 @@ class LoginViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server.asText(),
                         ),
                     )
                 }
@@ -232,8 +232,8 @@ class LoginViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.we_couldnt_verify_the_servers_certificate.asText(),
                         ),
                     )
                 }
@@ -262,8 +262,8 @@ class LoginViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = LoginState.DialogState.Error(
-                            title = R.string.log_in_denied.asText(),
-                            message = R.string.captcha_failed.asText(),
+                            title = BitwardenString.log_in_denied.asText(),
+                            message = BitwardenString.captcha_failed.asText(),
                         ),
                     )
                 }
@@ -294,7 +294,7 @@ class LoginViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = LoginState.DialogState.Loading(
-                    message = R.string.logging_in.asText(),
+                    message = BitwardenString.logging_in.asText(),
                 ),
             )
         }

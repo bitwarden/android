@@ -10,12 +10,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * Represents a row of text that can be clicked on and contains an external link.
@@ -41,8 +41,8 @@ fun BitwardenExternalLinkRow(
     withDivider: Boolean = true,
     dialogTitle: String,
     dialogMessage: String,
-    dialogConfirmButtonText: String = stringResource(id = R.string.continue_text),
-    dialogDismissButtonText: String = stringResource(id = R.string.cancel),
+    dialogConfirmButtonText: String = stringResource(id = BitwardenString.continue_text),
+    dialogDismissButtonText: String = stringResource(id = BitwardenString.cancel),
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
     BitwardenTextRow(

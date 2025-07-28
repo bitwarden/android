@@ -1,9 +1,9 @@
 package com.bitwarden.ui.platform.util
 
-import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.Base64
+import androidx.core.os.ParcelCompat
 import com.bitwarden.annotation.OmitFromCoverage
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
@@ -105,7 +105,7 @@ open class ParcelableRouteSerializer<T : Parcelable>(
                 }
             }
             encodedString
-                ?.toParcelable<T>()
+                ?.toParcelable()
                 ?: throw IllegalStateException("Invalid decoding for ${kClass.qualifiedName}.")
         }
 
@@ -137,15 +137,11 @@ open class ParcelableRouteSerializer<T : Parcelable>(
         }
         val value = try {
             @Suppress("UNCHECKED_CAST")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                parcel.readParcelable(
-                    ParcelableRouteSerializer::class.java.classLoader,
-                    kClass.java,
-                )
-            } else {
-                @Suppress("DEPRECATION")
-                parcel.readParcelable(ParcelableRouteSerializer::class.java.classLoader)
-            } as T?
+            ParcelCompat.readParcelable(
+                parcel,
+                ParcelableRouteSerializer::class.java.classLoader,
+                kClass.java,
+            ) as T?
         } catch (_: IllegalArgumentException) {
             null
         } catch (_: IllegalStateException) {

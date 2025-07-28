@@ -3,7 +3,6 @@ package com.bitwarden.authenticator.ui.authenticator.feature.search
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
@@ -15,6 +14,7 @@ import com.bitwarden.authenticator.ui.authenticator.feature.util.toSharedCodesDi
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.removeDiacritics
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -70,7 +70,7 @@ class ItemSearchViewModel @Inject constructor(
                 clipboardManager.setText(action.authCode)
                 sendEvent(
                     event = ItemSearchEvent.ShowToast(
-                        message = R.string.value_has_been_copied.asText(action.authCode),
+                        message = BitwardenString.value_has_been_copied.asText(action.authCode),
                     ),
                 )
             }
@@ -178,7 +178,7 @@ class ItemSearchViewModel @Inject constructor(
         return when {
             filteredLocalCodes.isEmpty() && sharedItemsState.isEmpty() -> {
                 ItemSearchState.ViewState.Empty(
-                    message = R.string.there_are_no_items_that_match_the_search.asText(),
+                    message = BitwardenString.there_are_no_items_that_match_the_search.asText(),
                 )
             }
 
@@ -224,7 +224,7 @@ data class ItemSearchState(
             /**
              * The header to display for the local codes.
              */
-            val localListHeader: Text get() = R.string.local_codes.asText(itemList.size)
+            val localListHeader: Text get() = BitwardenString.local_codes.asText(itemList.size)
 
             /**
              * Whether or not there should be a "Local codes" header shown above local codes.

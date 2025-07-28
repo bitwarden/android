@@ -6,6 +6,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.color.BitwardenColorScheme
 import com.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
 import com.bitwarden.ui.platform.theme.color.lightBitwardenColorScheme
@@ -46,9 +47,9 @@ fun buildVaultItemAutofillRemoteViews(
         name = autofillAppInfo.context.getString(R.string.app_name),
         subtitle = autofillAppInfo.context.run {
             if (isLocked) {
-                getString(R.string.vault_is_locked)
+                getString(BitwardenString.vault_is_locked)
             } else {
-                getString(R.string.go_to_my_vault)
+                getString(BitwardenString.go_to_my_vault)
             }
         },
         iconRes = BitwardenDrawable.icon,

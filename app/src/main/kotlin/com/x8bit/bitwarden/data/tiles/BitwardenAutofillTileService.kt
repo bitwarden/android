@@ -10,8 +10,8 @@ import android.service.quicksettings.TileService
 import androidx.annotation.Keep
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.AccessibilityActivity
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManager
 import com.x8bit.bitwarden.data.autofill.accessibility.model.AccessibilityAction
 import com.x8bit.bitwarden.data.autofill.accessibility.util.isAccessibilityServiceEnabled
@@ -62,8 +62,8 @@ class BitwardenAutofillTileService : TileService() {
 
     private fun getAccessibilityServiceRequiredDialog(): Dialog =
         AlertDialog.Builder(this)
-            .setMessage(R.string.autofill_tile_accessibility_required)
+            .setMessage(BitwardenString.autofill_tile_accessibility_required)
             .setCancelable(true)
-            .setPositiveButton(R.string.okay) { dialog, _ -> dialog.cancel() }
+            .setPositiveButton(BitwardenString.okay) { dialog, _ -> dialog.cancel() }
             .create()
 }

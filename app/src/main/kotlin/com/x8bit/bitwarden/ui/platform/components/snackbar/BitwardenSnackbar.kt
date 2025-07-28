@@ -29,9 +29,9 @@ import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.button.color.bitwardenOutlinedButtonColors
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 
 /**
  * Custom snackbar for Bitwarden.
@@ -108,7 +108,7 @@ fun BitwardenSnackbar(
                 BitwardenStandardIconButton(
                     onClick = onDismiss,
                     vectorIconRes = BitwardenDrawable.ic_close,
-                    contentDescription = stringResource(R.string.close),
+                    contentDescription = stringResource(BitwardenString.close),
                     contentColor = BitwardenTheme.colorScheme.icon.reversed,
                     modifier = Modifier.offset(x = 12.dp, y = (-12).dp),
                 )

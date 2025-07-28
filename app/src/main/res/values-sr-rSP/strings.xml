@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s је копиран/а.</string>
     <string name="verify_master_password">Верификуј Главну Лозинку</string>
     <string name="verify_pin">Верификуј ПИН</string>
-    <string name="version">Верзија</string>
     <string name="view">Приказ</string>
     <string name="yes">Да</string>
     <string name="account">Налог</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Уредити картицу</string>
     <string name="edit_identity">Уредити идентитет</string>
     <string name="edit_note">Уредити белешку</string>
-    <string name="edit_passkey">Уредити приступни кључ</string>
+    <string name="edit_ssh_key">Edit SSH key</string>
     <string name="enter_email_for_hint">Унеси своју адресу Е-поште да би добио савет за твоју Главну Лозинку.</string>
     <string name="favorite">Омиљено</string>
     <string name="unfavorite">Скини омиљено</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 минут</string>
     <string name="four_hours">4 сата</string>
     <string name="immediately">Одмах</string>
-    <string name="vault_timeout_log_out_confirmation">Одјава ће уклонити сваки приступ вашем сефу и захтева мрежну потврду идентитета након истека тајмаута. Да ли сте сигурни да желите да користите ову поставку?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
     <string name="logging_in">Пријављивање...</string>
     <string name="login_to_bitwarden">Пријави се на Bitwarden</string>
     <string name="master_password_confirmation_val_message">Потврђена лозинка није тачна.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Нови идентитет</string>
     <string name="no_notes">У вашем сефу нема белешке.</string>
     <string name="new_note">Нова белешка</string>
-    <string name="new_passkey">Нов приступни кључ</string>
     <string name="new_item">Нова ставка</string>
     <string name="new_ssh_key">Нов SSH кљич</string>
     <string name="no_text_sends">У вашем сефу нема текст Send.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Преглед картице</string>
     <string name="view_identity">Преглед идентитета</string>
     <string name="view_note">Преглед белешке</string>
-    <string name="view_passkey">Преглед приступног кључа</string>
+    <string name="view_ssh_key">View SSH key</string>
     <string name="web_vault">Bitwarden Мрежни Сеф</string>
     <string name="items">Ставке</string>
     <string name="items_for_uri">Ставке за %1$s</string>
@@ -265,6 +264,7 @@
     <string name="address">Адреса</string>
     <string name="expiration">Истек</string>
     <string name="show_website_icons">Прикажи иконе сајтова</string>
+    <string name="show_website_icons_help">Show website icons help</string>
     <string name="show_website_icons_description">Прикажи препознатљиву слику поред сваке ставке за пријаву.</string>
     <string name="icons_url">УРЛ сервера иконице</string>
     <string name="vault_is_locked">Сеф је закључан</string>
@@ -701,6 +701,7 @@
     <string name="launch_web_authn">Покренути WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Дошло је до грешке при покретању WebAuthn двофакторске аутентификације</string>
     <string name="self_hosted_server_url">УРЛ сервера који се самостално хостује</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Операција лозинке није успела јер корисник није могао да се верификује.</string>
     <string name="user_verification_direction">Верификација корисника</string>
     <string name="create_account_on">Направи налог на</string>
@@ -865,7 +866,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">Морате подесити само кључ аутентификатора за пријављивања која захтевају двофакторску аутентификацију са кодом. Кључ ће непрестано генерисати шестоцифрене кодове које можете користити за пријављивање.</string>
     <string name="coachmark_3_of_3">3 од 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Морате додати веб адресу да би сте користили аутоматско попуњавање за приступ овом налогу.</string>
-    <string name="mutual_tls">Обострани TLS</string>
     <string name="single_tap_passkey_creation">Прављење фразе једним додиром</string>
     <string name="single_tap_passkey_authentication">Пријављивање фразом једним додиром</string>
     <string name="learn_about_new_logins">Сазнајте више о новим пријављивањима</string>
@@ -909,6 +909,12 @@
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">Self-host server URL</string>
     <string name="use_brave_autofill_integration">Користи Brave-ову интеграцију за аутоматско попуњавање</string>
     <string name="use_chrome_autofill_integration">Користи Chrome-ову интеграцију за аутоматско попуњавање</string>
@@ -967,8 +973,8 @@
     <string name="view_text_send">Преглед текст Send</string>
     <string name="delete_send">Избриши „Send“</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
-    <string name="dynamic_colors">Динамичке боје</string>
-    <string name="dynamic_colors_description">Примените динамичке боје на основу позадине</string>
+    <string name="use_dynamic_colors">Use dynamic colors</string>
+    <string name="use_dynamic_colors_question">Use dynamic colors?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Динамичне боје користе боје система и не могу да испуне све смернице за приступачност.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Операција кључа за приступ није успела јер прегледач (%1$s) није поверен. Изаберите \"Повери\" да бисте додали %1$s на листу поузданих апликација или \"Откажи\"\ да бисте прекинули рад.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Операција кључа за приступ није успела јер прегледач није поуздан.</string>
@@ -989,4 +995,6 @@
     <string name="are_you_sure_you_want_to_stop_trusting_x">Јесте ли сигурни да желите престати да верујете %s?</string>
     <string name="installed_apps">Инсталиранe апликацијe</string>
     <string name="delete_x">Обрисати %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
+    <string name="decryption_error">Decryption error</string>
 </resources>

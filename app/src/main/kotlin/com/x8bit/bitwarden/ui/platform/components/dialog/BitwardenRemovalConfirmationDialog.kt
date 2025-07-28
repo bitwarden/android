@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.platform.components.dialog
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 
 /**
@@ -20,11 +20,11 @@ fun BitwardenRemovalConfirmationDialog(
     accountSummary: AccountSummary? = null,
 ) {
     BitwardenTwoButtonDialog(
-        title = stringResource(id = R.string.remove_account),
+        title = stringResource(id = BitwardenString.remove_account),
         message = removalConfirmationMessage(accountSummary = accountSummary),
-        confirmButtonText = stringResource(id = R.string.yes),
+        confirmButtonText = stringResource(id = BitwardenString.yes),
         onConfirmClick = onConfirmClick,
-        dismissButtonText = stringResource(id = R.string.cancel),
+        dismissButtonText = stringResource(id = BitwardenString.cancel),
         onDismissClick = onDismissRequest,
         onDismissRequest = onDismissRequest,
     )
@@ -32,7 +32,7 @@ fun BitwardenRemovalConfirmationDialog(
 
 @Composable
 private fun removalConfirmationMessage(accountSummary: AccountSummary?): String {
-    val baseConfirmationMessage = stringResource(id = R.string.remove_account_confirmation)
+    val baseConfirmationMessage = stringResource(id = BitwardenString.remove_account_confirmation)
     return accountSummary
         ?.let { "$baseConfirmationMessage\n\n${it.email}\n${it.environmentLabel}" }
         ?: baseConfirmationMessage

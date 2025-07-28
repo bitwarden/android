@@ -18,7 +18,7 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -75,7 +75,7 @@ private fun VaultMoveToOrganizationScaffold(
     when (val dialog = state.dialogState) {
         is VaultMoveToOrganizationState.DialogState.Error -> {
             BitwardenBasicDialog(
-                title = stringResource(id = R.string.an_error_has_occurred),
+                title = stringResource(id = BitwardenString.an_error_has_occurred),
                 message = dialog.message(),
                 onDismissRequest = dismissClick,
                 throwable = dialog.throwable,
@@ -97,7 +97,7 @@ private fun VaultMoveToOrganizationScaffold(
                 title = state.appBarText(),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = closeClick,
                 actions = {
                     BitwardenTextButton(

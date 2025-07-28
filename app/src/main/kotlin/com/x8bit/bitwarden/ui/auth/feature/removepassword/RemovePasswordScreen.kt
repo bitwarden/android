@@ -28,9 +28,9 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -65,7 +65,7 @@ fun RemovePasswordScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.remove_master_password),
+                title = stringResource(id = BitwardenString.remove_master_password),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = null,
             )
@@ -149,7 +149,7 @@ private fun RemovePasswordScreenContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         BitwardenPasswordField(
-            label = stringResource(id = R.string.master_password),
+            label = stringResource(id = BitwardenString.master_password),
             value = state.input,
             onValueChange = onInputChanged,
             showPasswordTestTag = "PasswordVisibilityToggle",
@@ -163,7 +163,7 @@ private fun RemovePasswordScreenContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         BitwardenFilledButton(
-            label = stringResource(id = R.string.continue_text),
+            label = stringResource(id = BitwardenString.continue_text),
             onClick = onContinueClick,
             isEnabled = state.input.isNotEmpty(),
             modifier = Modifier
@@ -175,7 +175,7 @@ private fun RemovePasswordScreenContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         BitwardenOutlinedButton(
-            label = stringResource(id = R.string.leave_organization),
+            label = stringResource(id = BitwardenString.leave_organization),
             onClick = onLeaveOrganizationClick,
             modifier = Modifier
                 .testTag("LeaveOrganizationButton")
@@ -209,10 +209,10 @@ private fun RemovePasswordDialogs(
 
         is RemovePasswordState.DialogState.LeaveConfirmationPrompt -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = R.string.leave_organization),
+                title = stringResource(id = BitwardenString.leave_organization),
                 message = dialogState.message.invoke(),
-                confirmButtonText = stringResource(id = R.string.confirm),
-                dismissButtonText = stringResource(id = R.string.cancel),
+                confirmButtonText = stringResource(id = BitwardenString.confirm),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
                 onConfirmClick = onConfirmLeaveClick,
                 onDismissClick = onDismissRequest,
                 onDismissRequest = onDismissRequest,

@@ -38,8 +38,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.checkemail.handlers.rememberCheckEmailHandler
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -77,10 +77,10 @@ fun CheckEmailScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.create_account),
+                title = stringResource(id = BitwardenString.create_account),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
-                navigationIconContentDescription = stringResource(id = R.string.back),
+                navigationIconContentDescription = stringResource(id = BitwardenString.back),
                 onNavigationIconClick = handler.onBackClick,
             )
         },
@@ -126,7 +126,7 @@ private fun CheckEmailContent(
         )
         Spacer(modifier = Modifier.height(32.dp))
         Text(
-            text = stringResource(id = R.string.check_your_email),
+            text = stringResource(id = BitwardenString.check_your_email),
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -139,7 +139,7 @@ private fun CheckEmailContent(
 
         Text(
             text = annotatedStringResource(
-                id = R.string.we_sent_an_email_to,
+                id = BitwardenString.we_sent_an_email_to,
                 args = arrayOf(email),
                 emphasisHighlightStyle = SpanStyle(
                     color = BitwardenTheme.colorScheme.text.primary,
@@ -158,7 +158,7 @@ private fun CheckEmailContent(
         @Suppress("MaxLineLength")
         Text(
             text = stringResource(
-                R.string.select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account,
+                BitwardenString.select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account,
             ),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -170,7 +170,7 @@ private fun CheckEmailContent(
         )
         Spacer(modifier = Modifier.height(32.dp))
         BitwardenFilledButton(
-            label = stringResource(id = R.string.open_email_app),
+            label = stringResource(id = BitwardenString.open_email_app),
             onClick = onOpenEmailAppClick,
             modifier = Modifier
                 .testTag("OpenEmailApp")
@@ -179,7 +179,7 @@ private fun CheckEmailContent(
         )
         Spacer(modifier = Modifier.height(12.dp))
         BitwardenOutlinedButton(
-            label = stringResource(R.string.change_email_address),
+            label = stringResource(BitwardenString.change_email_address),
             onClick = onChangeEmailClick,
             modifier = Modifier
                 .fillMaxWidth()

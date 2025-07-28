@@ -27,14 +27,12 @@ import androidx.credentials.provider.CreateEntry
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.manager.DispatcherManager
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -44,6 +42,7 @@ import javax.crypto.Cipher
 
 private const val CREATE_PASSKEY_INTENT = "com.x8bit.bitwarden.credentials.ACTION_CREATE_PASSKEY"
 const val GET_PASSKEY_INTENT = "com.x8bit.bitwarden.credentials.ACTION_GET_PASSKEY"
+const val GET_PASSWORD_INTENT = "com.x8bit.bitwarden.credentials.ACTION_GET_PASSWORD"
 const val UNLOCK_ACCOUNT_INTENT = "com.x8bit.bitwarden.credentials.ACTION_UNLOCK_ACCOUNT"
 
 /**
@@ -59,7 +58,6 @@ class CredentialProviderProcessorImpl(
     private val intentManager: IntentManager,
     private val clock: Clock,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
-    private val featureFlagManager: FeatureFlagManager,
     dispatcherManager: DispatcherManager,
 ) : CredentialProviderProcessor {
 
@@ -105,7 +103,7 @@ class CredentialProviderProcessorImpl(
         // Return an unlock action if the current account is locked.
         if (!userState.activeAccount.isVaultUnlocked) {
             val authenticationAction = AuthenticationAction(
-                title = context.getString(R.string.unlock),
+                title = context.getString(BitwardenString.unlock),
                 pendingIntent = intentManager.createFido2UnlockPendingIntent(
                     action = UNLOCK_ACCOUNT_INTENT,
                     userId = userState.activeUserId,
@@ -185,14 +183,14 @@ class CredentialProviderProcessorImpl(
             .Builder(
                 accountName = accountName,
                 pendingIntent = intentManager.createFido2CreationPendingIntent(
-                    CREATE_PASSKEY_INTENT,
-                    userId,
-                    requestCode.getAndIncrement(),
+                    action = CREATE_PASSKEY_INTENT,
+                    userId = userId,
+                    requestCode = requestCode.getAndIncrement(),
                 ),
             )
             .setDescription(
                 context.getString(
-                    R.string.your_passkey_will_be_saved_to_your_bitwarden_vault_for_x,
+                    BitwardenString.your_passkey_will_be_saved_to_your_bitwarden_vault_for_x,
                     accountName,
                 ),
             )
@@ -201,9 +199,7 @@ class CredentialProviderProcessorImpl(
             .setLastUsedTime(if (isActive) clock.instant() else null)
             .setAutoSelectAllowed(true)
 
-        if (isVaultUnlocked &&
-            featureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyCreation)
-        ) {
+        if (isVaultUnlocked) {
             biometricsEncryptionManager
                 .getOrCreateCipher(userId)
                 ?.let { entryBuilder.setBiometricPromptDataIfSupported(cipher = it) }

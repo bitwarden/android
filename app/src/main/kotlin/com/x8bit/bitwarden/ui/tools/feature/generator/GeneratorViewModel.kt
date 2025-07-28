@@ -11,18 +11,16 @@ import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.generators.UsernameGeneratorRequest
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePoliciesFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -83,7 +81,6 @@ class GeneratorViewModel @Inject constructor(
     private val policyManager: PolicyManager,
     private val reviewPromptManager: ReviewPromptManager,
     private val firstTimeActionManager: FirstTimeActionManager,
-    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val generatorMode = savedStateHandle.toGeneratorArgs().type
@@ -113,11 +110,6 @@ class GeneratorViewModel @Inject constructor(
                 .any(),
             website = (generatorMode as? GeneratorMode.Modal.Username)?.website,
             shouldShowCoachMarkTour = false,
-            shouldShowAnonAddySelfHostServerUrlField = featureFlagManager.getFeatureFlag(
-                FlagKey.AnonAddySelfHostAlias,
-            ),
-            shouldShowSimpleLoginSelfHostServerField =
-                featureFlagManager.getFeatureFlag(FlagKey.SimpleLoginSelfHostAlias),
         )
     },
 ) {
@@ -140,26 +132,6 @@ class GeneratorViewModel @Inject constructor(
             .map { shouldShowCoachMarkTour ->
                 GeneratorAction.Internal.ShouldShowGeneratorCoachMarkValueChangeReceive(
                     shouldShowCoachMarkTour = shouldShowCoachMarkTour,
-                )
-            }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.AnonAddySelfHostAlias)
-            .map { shouldShowAnonAddySelfHostServerUrlField ->
-                GeneratorAction.Internal.ShouldShowAnonAddySelfHostValueChangeReceive(
-                    shouldShowAnonAddySelfHostServerUrlField =
-                        shouldShowAnonAddySelfHostServerUrlField,
-                )
-            }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
-        featureFlagManager.getFeatureFlagFlow(FlagKey.SimpleLoginSelfHostAlias)
-            .map { shouldShowSimpleLoginSelfHostServerField ->
-                GeneratorAction.Internal.ShouldShowSimpleLoginSelfHostValueChangeReceive(
-                    shouldShowSelfHostServerField = shouldShowSimpleLoginSelfHostServerField,
                 )
             }
             .onEach(::sendAction)
@@ -300,14 +272,6 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.Internal.ShouldShowGeneratorCoachMarkValueChangeReceive -> {
                 handleShouldShowCoachMarkValueChange(action)
-            }
-
-            is GeneratorAction.Internal.ShouldShowAnonAddySelfHostValueChangeReceive -> {
-                handleShouldShowAnonAddySelfHostValueChange(action)
-            }
-
-            is GeneratorAction.Internal.ShouldShowSimpleLoginSelfHostValueChangeReceive -> {
-                handleShouldShowSimpleLoginSelfHostValueChange(action)
             }
         }
     }
@@ -741,7 +705,11 @@ class GeneratorViewModel @Inject constructor(
             }
 
             is GeneratedPasswordResult.InvalidRequest -> {
-                sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
+                sendEvent(
+                    GeneratorEvent.ShowSnackbar(
+                        BitwardenString.an_error_has_occurred.asText(),
+                    ),
+                )
             }
         }
     }
@@ -757,7 +725,11 @@ class GeneratorViewModel @Inject constructor(
             }
 
             is GeneratedPassphraseResult.InvalidRequest -> {
-                sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
+                sendEvent(
+                    GeneratorEvent.ShowSnackbar(
+                        BitwardenString.an_error_has_occurred.asText(),
+                    ),
+                )
             }
         }
     }
@@ -773,7 +745,11 @@ class GeneratorViewModel @Inject constructor(
             }
 
             is GeneratedPlusAddressedUsernameResult.InvalidRequest -> {
-                sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
+                sendEvent(
+                    GeneratorEvent.ShowSnackbar(
+                        BitwardenString.an_error_has_occurred.asText(),
+                    ),
+                )
             }
         }
     }
@@ -789,7 +765,11 @@ class GeneratorViewModel @Inject constructor(
             }
 
             is GeneratedCatchAllUsernameResult.InvalidRequest -> {
-                sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
+                sendEvent(
+                    GeneratorEvent.ShowSnackbar(
+                        BitwardenString.an_error_has_occurred.asText(),
+                    ),
+                )
             }
         }
     }
@@ -805,7 +785,8 @@ class GeneratorViewModel @Inject constructor(
             }
 
             is GeneratedRandomWordUsernameResult.InvalidRequest -> {
-                sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
+                sendEvent(GeneratorEvent.ShowSnackbar(
+                    BitwardenString.an_error_has_occurred.asText()))
             }
         }
     }
@@ -824,7 +805,7 @@ class GeneratorViewModel @Inject constructor(
                 sendEvent(
                     GeneratorEvent.ShowSnackbar(
                         message = result.message?.asText()
-                            ?: R.string.an_error_has_occurred.asText(),
+                            ?: BitwardenString.an_error_has_occurred.asText(),
                     ),
                 )
             }
@@ -836,14 +817,6 @@ class GeneratorViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(shouldShowCoachMarkTour = action.shouldShowCoachMarkTour)
-        }
-    }
-
-    private fun handleShouldShowSimpleLoginSelfHostValueChange(
-        action: GeneratorAction.Internal.ShouldShowSimpleLoginSelfHostValueChangeReceive,
-    ) {
-        mutableStateFlow.update {
-            it.copy(shouldShowSimpleLoginSelfHostServerField = action.shouldShowSelfHostServerField)
         }
     }
 
@@ -1258,17 +1231,6 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
-    private fun handleShouldShowAnonAddySelfHostValueChange(
-        action: GeneratorAction.Internal.ShouldShowAnonAddySelfHostValueChangeReceive,
-    ) {
-        mutableStateFlow.update {
-            it.copy(
-                shouldShowAnonAddySelfHostServerUrlField =
-                    action.shouldShowAnonAddySelfHostServerUrlField,
-            )
-        }
-    }
-
     private fun handleAddyIoSelfHostServerUrlChange(
         action: GeneratorAction
         .MainType
@@ -1597,11 +1559,7 @@ class GeneratorViewModel @Inject constructor(
     ) {
         val request = alias
             .selectedServiceType
-            ?.toUsernameGeneratorRequest(
-                website = state.website,
-                allowAddyIoSelfHostUrl = state.shouldShowAnonAddySelfHostServerUrlField,
-                allowSimpleLoginSelfHostUrl = state.shouldShowSimpleLoginSelfHostServerField,
-            )
+            ?.toUsernameGeneratorRequest(website = state.website)
             ?: run {
                 mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }
                 return
@@ -1612,7 +1570,8 @@ class GeneratorViewModel @Inject constructor(
                 if (allowErrorsWhenMissingValues) {
                     sendEvent(
                         event = GeneratorEvent.ShowSnackbar(
-                            message = R.string.validation_field_required.asText(request.fieldName),
+                            message = BitwardenString.validation_field_required
+                                .asText(request.fieldName),
                         ),
                     )
                 }
@@ -1648,8 +1607,8 @@ class GeneratorViewModel @Inject constructor(
             if (allowErrorsWhenMissingValues) {
                 sendEvent(
                     event = GeneratorEvent.ShowSnackbar(
-                        message = R.string.validation_field_required.asText(
-                            R.string.domain_name.asText(),
+                        message = BitwardenString.validation_field_required.asText(
+                            BitwardenString.domain_name.asText(),
                         ),
                     ),
                 )
@@ -1933,8 +1892,6 @@ data class GeneratorState(
     val website: String? = null,
     var passcodePolicyOverride: PasscodePolicyOverride? = null,
     private val shouldShowCoachMarkTour: Boolean,
-    val shouldShowAnonAddySelfHostServerUrlField: Boolean,
-    val shouldShowSimpleLoginSelfHostServerField: Boolean,
 ) : Parcelable {
 
     /**
@@ -1970,9 +1927,9 @@ data class GeneratorState(
         val labelRes: Int,
         val testTag: String,
     ) {
-        PASSWORD(labelRes = R.string.password, testTag = "password_option"),
-        PASSPHRASE(labelRes = R.string.passphrase, testTag = "passphrase_option"),
-        USERNAME(labelRes = R.string.username, testTag = "username_option"),
+        PASSWORD(labelRes = BitwardenString.password, testTag = "password_option"),
+        PASSPHRASE(labelRes = BitwardenString.passphrase, testTag = "passphrase_option"),
+        USERNAME(labelRes = BitwardenString.username, testTag = "username_option"),
     }
 
     /**
@@ -2125,10 +2082,10 @@ data class GeneratorState(
              * @property labelRes The ID of the string that represents the label for each type.
              */
             enum class UsernameTypeOption(val labelRes: Int) {
-                PLUS_ADDRESSED_EMAIL(R.string.plus_addressed_email),
-                CATCH_ALL_EMAIL(R.string.catch_all_email),
-                FORWARDED_EMAIL_ALIAS(R.string.forwarded_email_alias),
-                RANDOM_WORD(R.string.random_word),
+                PLUS_ADDRESSED_EMAIL(BitwardenString.plus_addressed_email),
+                CATCH_ALL_EMAIL(BitwardenString.catch_all_email),
+                FORWARDED_EMAIL_ALIAS(BitwardenString.forwarded_email_alias),
+                RANDOM_WORD(BitwardenString.random_word),
             }
 
             /**
@@ -2163,7 +2120,7 @@ data class GeneratorState(
                         get() = UsernameTypeOption.PLUS_ADDRESSED_EMAIL.labelRes
 
                     override val supportingStringResId: Int
-                        get() = R.string.plus_addressed_email_description
+                        get() = BitwardenString.plus_addressed_email_description
                 }
 
                 /**
@@ -2180,7 +2137,7 @@ data class GeneratorState(
                         get() = UsernameTypeOption.CATCH_ALL_EMAIL.labelRes
 
                     override val supportingStringResId: Int
-                        get() = R.string.catch_all_email_description
+                        get() = BitwardenString.catch_all_email_description
                 }
 
                 /**
@@ -2217,7 +2174,7 @@ data class GeneratorState(
                         get() = UsernameTypeOption.FORWARDED_EMAIL_ALIAS.labelRes
 
                     override val supportingStringResId: Int
-                        get() = R.string.forwarded_email_description
+                        get() = BitwardenString.forwarded_email_description
 
                     /**
                      * Enum representing the types of services,
@@ -2227,12 +2184,12 @@ data class GeneratorState(
                      * the label for each type.
                      */
                     enum class ServiceTypeOption(val labelRes: Int) {
-                        ADDY_IO(R.string.addy_io),
-                        DUCK_DUCK_GO(R.string.duck_duck_go),
-                        FAST_MAIL(R.string.fastmail),
-                        FIREFOX_RELAY(R.string.firefox_relay),
-                        FORWARD_EMAIL(R.string.forward_email),
-                        SIMPLE_LOGIN(R.string.simple_login),
+                        ADDY_IO(BitwardenString.addy_io),
+                        DUCK_DUCK_GO(BitwardenString.duck_duck_go),
+                        FAST_MAIL(BitwardenString.fastmail),
+                        FIREFOX_RELAY(BitwardenString.firefox_relay),
+                        FORWARD_EMAIL(BitwardenString.forward_email),
+                        SIMPLE_LOGIN(BitwardenString.simple_login),
                     }
 
                     /**
@@ -2804,20 +2761,6 @@ sealed class GeneratorAction {
          */
         data class ShouldShowGeneratorCoachMarkValueChangeReceive(
             val shouldShowCoachMarkTour: Boolean,
-        ) : Internal()
-
-        /**
-         * The value for the shouldShowAnonAddySelfHostServerUrlField feature flag has changed.
-         */
-        data class ShouldShowAnonAddySelfHostValueChangeReceive(
-            val shouldShowAnonAddySelfHostServerUrlField: Boolean,
-        ) : Internal()
-
-        /**
-         * The value for the shouldShowSimpleLoginSelfHostServerField has changed.
-         */
-        data class ShouldShowSimpleLoginSelfHostValueChangeReceive(
-            val shouldShowSelfHostServerField: Boolean,
         ) : Internal()
     }
 }

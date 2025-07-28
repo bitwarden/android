@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps
 
 import android.os.Parcelable
 import androidx.annotation.StringRes
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -38,16 +38,16 @@ data class PrivilegedAppListItem(
         /**
          * The app is trusted by Google.
          */
-        GOOGLE(description = R.string.trusted_by_google),
+        GOOGLE(description = BitwardenString.trusted_by_google),
 
         /**
          * The app is trusted by the Bitwarden community.
          */
-        COMMUNITY(description = R.string.trusted_by_the_community),
+        COMMUNITY(description = BitwardenString.trusted_by_the_community),
 
         /**
          * The app is trusted by the user.
          */
-        USER(description = R.string.trusted_by_you),
+        USER(description = BitwardenString.trusted_by_you),
     }
 }

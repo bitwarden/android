@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s 已复制</string>
     <string name="verify_master_password">验证主密码</string>
     <string name="verify_pin">验证 PIN 码</string>
-    <string name="version">版本</string>
     <string name="view">查看</string>
     <string name="yes">是</string>
     <string name="account">账户</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">编辑支付卡</string>
     <string name="edit_identity">编辑身份</string>
     <string name="edit_note">编辑笔记</string>
-    <string name="edit_passkey">编辑通行密钥</string>
+    <string name="edit_ssh_key">编辑 SSH 密钥</string>
     <string name="enter_email_for_hint">请输入您的账户电子邮箱地址来接收主密码提示。</string>
     <string name="favorite">收藏</string>
     <string name="unfavorite">取消收藏</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 分钟</string>
     <string name="four_hours">4 小时</string>
     <string name="immediately">立即</string>
-    <string name="vault_timeout_log_out_confirmation">超时后注销账户将解除对密码库的所有访问权限，并需要进行在线身份验证。确定使用此设置吗？</string>
+    <string name="vault_timeout_log_out_confirmation_title">将会话超时设置为「注销」吗？</string>
+    <string name="vault_timeout_log_out_confirmation_message">超时后您将被注销。您需要连接到互联网才能再次登录并访问您的密码库。您在此设备上保存的设置和 PIN 不会更改。</string>
     <string name="logging_in">正在登录...</string>
     <string name="login_to_bitwarden">登录到 Bitwarden</string>
     <string name="master_password_confirmation_val_message">两次填写的密码不一致。</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">新增身份</string>
     <string name="no_notes">您的密码库中没有笔记。</string>
     <string name="new_note">新增笔记</string>
-    <string name="new_passkey">新增通行密钥</string>
     <string name="new_item">新增项目</string>
     <string name="new_ssh_key">新增 SSH 密钥</string>
     <string name="no_text_sends">您的密码库中没有文本 Send。</string>
@@ -154,7 +153,7 @@
     <string name="view_card">查看支付卡</string>
     <string name="view_identity">查看身份</string>
     <string name="view_note">查看笔记</string>
-    <string name="view_passkey">查看通行密钥</string>
+    <string name="view_ssh_key">查看 SSH 密钥</string>
     <string name="web_vault">Bitwarden 网页版密码库</string>
     <string name="items">项目</string>
     <string name="items_for_uri">适用于 %1$s 的项目</string>
@@ -265,6 +264,7 @@
     <string name="address">地址</string>
     <string name="expiration">有效期</string>
     <string name="show_website_icons">显示网站图标</string>
+    <string name="show_website_icons_help">显示网站图标帮助</string>
     <string name="show_website_icons_description">在每个登录项目旁边显示一个可识别的图像</string>
     <string name="icons_url">图标服务器 URL</string>
     <string name="vault_is_locked">密码库已锁定</string>
@@ -342,7 +342,7 @@
     <string name="pin">PIN 码</string>
     <string name="unlock">解锁​​​​</string>
     <string name="thirty_minutes">30 分钟</string>
-    <string name="set_pin_description">您的 PIN 码必须至少包含 4 个字符。您的 PIN 设置将在您完全注销应用程序时被重置。</string>
+    <string name="set_pin_description">您的 PIN 码必须至少包含 4 个字符。您的 PIN 设置将在您手动注销 Bitwarden App 后被重置。</string>
     <string name="logged_in_as_on">已在 %2$s 上以 %1$s 身份登录。</string>
     <string name="vault_locked_master_password">您的密码库已锁定，请验证您的主密码以继续。</string>
     <string name="vault_locked_pin">您的密码库已锁定。请验证您的 PIN 码以继续。</string>
@@ -701,6 +701,7 @@
     <string name="launch_web_authn">启动 WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">启动 WebAuthn 双重身份验证时出错</string>
     <string name="self_hosted_server_url">自托管服务器 URL</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">由于无法验证用户，通行密钥操作失败。</string>
     <string name="user_verification_direction">用户验证</string>
     <string name="create_account_on">创建账户至</string>
@@ -865,7 +866,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">您只需为要求使用代码进行双重身份验证的登录设置验证器密钥。该密钥将持续不断地生成可用于登录的六位数代码。</string>
     <string name="coachmark_3_of_3">3 / 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">您必须添加一个网址才能使用自动填充来访问这个账户。</string>
-    <string name="mutual_tls">双向 TLS</string>
     <string name="single_tap_passkey_creation">单击创建通行密钥</string>
     <string name="single_tap_passkey_authentication">单击使用通行密钥登录</string>
     <string name="learn_about_new_logins">了解新版登录</string>
@@ -909,6 +909,12 @@
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">由于用户验证尝试超时，通行密钥操作失败。</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">由于没有选择任何项目，通行密钥操作失败。</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">由于请求不受支持，通行密钥操作失败。</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">由于所选项目不存在，密码操作失败。</string>
+    <string name="password_operation_failed_because_no_item_was_selected">由于没有选中项目，密码操作失败。</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">自托管服务器 URL</string>
     <string name="use_brave_autofill_integration">使用 Brave 自动填充集成</string>
     <string name="use_chrome_autofill_integration">使用 Chrome 自动填充集成</string>
@@ -968,9 +974,9 @@
     <string name="view_text_send">查看文本 Send</string>
     <string name="delete_send">删除 Send</string>
     <string name="missing_send_resync_your_vault">丢失 Send，请重新同步您的密码库</string>
-    <string name="dynamic_colors">动态颜色</string>
-    <string name="dynamic_colors_description">基于您的壁纸应用动态颜色</string>
-    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">动态颜色使用系统颜色，可能无法满足所有无障碍指南要求。</string>
+    <string name="use_dynamic_colors">使用动态颜色</string>
+    <string name="use_dynamic_colors_question">使用动态颜色吗？</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">此配色方案基于您当前的壁纸自动将系统颜色应用于 Bitwarden。这些颜色可能无法满足所有无障碍指南要求。</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">由于浏览器 (%1$s) 无法识别，通行密钥操作失败。选择「信任」将 %1$s 添加到本地受信任的应用程序列表。</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">由于浏览器未被信任，通行密钥操作失败。</string>
     <string name="trust">信任</string>
@@ -990,4 +996,6 @@
     <string name="are_you_sure_you_want_to_stop_trusting_x">确定要停止信任 %s 吗？</string>
     <string name="installed_apps">已安装的 App</string>
     <string name="delete_x">删除 %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">解密密码失败。请联系支持。</string>
+    <string name="decryption_error">解密错误</string>
 </resources>

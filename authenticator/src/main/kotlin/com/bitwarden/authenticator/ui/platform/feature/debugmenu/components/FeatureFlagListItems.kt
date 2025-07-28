@@ -3,9 +3,9 @@ package com.bitwarden.authenticator.ui.platform.feature.debugmenu.components
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenWideSwitch
+import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * Creates a list item for a [FlagKey].
@@ -61,5 +61,5 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
         -> this.keyName
 
     FlagKey.BitwardenAuthenticationEnabled ->
-        stringResource(R.string.bitwarden_authentication_enabled)
+        stringResource(BitwardenString.bitwarden_authentication_enabled)
 }

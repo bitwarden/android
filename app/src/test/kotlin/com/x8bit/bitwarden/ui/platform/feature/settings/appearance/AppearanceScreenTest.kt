@@ -207,21 +207,21 @@ class AppearanceScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `dynamic colors should be displayed based on state`() {
-        composeTestRule.onNodeWithText("Dynamic colors")
+    fun `use dynamic colors should be displayed based on state`() {
+        composeTestRule.onNodeWithText("Use dynamic colors")
             .performScrollTo()
             .assertIsDisplayed()
 
         mutableStateFlow.update {
             it.copy(isDynamicColorsSupported = false)
         }
-        composeTestRule.onNodeWithText("Dynamic colors")
+        composeTestRule.onNodeWithText("Use dynamic colors")
             .assertIsNotDisplayed()
     }
 
     @Test
     fun `on DynamicColorsToggle should send DynamicColorsToggle`() {
-        composeTestRule.onNodeWithText("Dynamic colors")
+        composeTestRule.onNodeWithText("Use dynamic colors")
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(AppearanceAction.DynamicColorsToggle(true)) }

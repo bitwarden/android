@@ -7,11 +7,11 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherRepromptType
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
@@ -120,7 +120,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         verify(exactly = 1) {
             clipboardManager.setText(
                 text = authCode,
-                toastDescriptorOverride = R.string.verification_code_totp.asText(),
+                toastDescriptorOverride = BitwardenString.verification_code_totp.asText(),
             )
         }
     }
@@ -153,7 +153,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
             initialState.copy(
                 dialogState = VerificationCodeState.DialogState.Error(
                     title = null,
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                     throwable = throwable,
                 ),
             ),
@@ -182,7 +182,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
             initialState.copy(
                 dialogState = VerificationCodeState.DialogState.Error(
                     title = null,
-                    message = R.string.invalid_master_password.asText(),
+                    message = BitwardenString.invalid_master_password.asText(),
                 ),
             ),
         )
@@ -251,7 +251,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         assertEquals(
             initialState.copy(
                 dialogState = VerificationCodeState.DialogState.Loading(
-                    message = R.string.syncing.asText(),
+                    message = BitwardenString.syncing.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -365,7 +365,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVerificationCodeState(
                 viewState = VerificationCodeState.ViewState.Error(
-                    message = R.string.generic_error_message.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -398,11 +398,11 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVerificationCodeState(
                 viewState = VerificationCodeState.ViewState.Error(
-                    message = R.string.internet_connection_required_title
+                    message = BitwardenString.internet_connection_required_title
                         .asText()
                         .concat(
                             " ".asText(),
-                            R.string.internet_connection_required_message.asText(),
+                            BitwardenString.internet_connection_required_message.asText(),
                         ),
                 ),
             ),

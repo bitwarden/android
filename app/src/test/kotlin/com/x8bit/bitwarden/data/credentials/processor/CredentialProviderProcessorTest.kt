@@ -32,9 +32,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.coEvery
 import io.mockk.every
@@ -74,10 +72,6 @@ class CredentialProviderProcessorTest {
     private val intentManager: IntentManager = mockk()
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
     private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk()
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.SingleTapPasskeyCreation) } returns false
-        every { getFeatureFlag(FlagKey.SingleTapPasskeyAuthentication) } returns false
-    }
     private val cancellationSignal: CancellationSignal = mockk()
 
     private val clock = FIXED_CLOCK
@@ -85,14 +79,13 @@ class CredentialProviderProcessorTest {
     @BeforeEach
     fun setUp() {
         credentialProviderProcessor = CredentialProviderProcessorImpl(
-            context,
-            authRepository,
-            bitwardenCredentialManager,
-            intentManager,
-            clock,
-            biometricsEncryptionManager,
-            featureFlagManager,
-            dispatcherManager,
+            context = context,
+            authRepository = authRepository,
+            bitwardenCredentialManager = bitwardenCredentialManager,
+            intentManager = intentManager,
+            clock = clock,
+            biometricsEncryptionManager = biometricsEncryptionManager,
+            dispatcherManager = dispatcherManager,
         )
 
         mockkStatic(::isBuildVersionAtLeast)
@@ -144,9 +137,9 @@ class CredentialProviderProcessorTest {
         every { callback.onError(capture(captureSlot)) } just runs
 
         credentialProviderProcessor.processCreateCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
         )
 
         verify(exactly = 1) { callback.onError(any()) }
@@ -173,9 +166,9 @@ class CredentialProviderProcessorTest {
         every { callback.onError(capture(captureSlot)) } just runs
 
         credentialProviderProcessor.processCreateCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
         )
 
         verify(exactly = 1) { callback.onError(any()) }
@@ -201,9 +194,9 @@ class CredentialProviderProcessorTest {
         every { callback.onError(capture(captureSlot)) } just runs
 
         credentialProviderProcessor.processCreateCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
         )
 
         verify(exactly = 1) { callback.onError(any()) }
@@ -228,11 +221,14 @@ class CredentialProviderProcessorTest {
         every { context.getString(any(), any()) } returns "mockDescription"
         every {
             intentManager.createFido2CreationPendingIntent(
-                any(),
-                any(),
-                any(),
+                action = any(),
+                userId = any(),
+                requestCode = any(),
             )
         } returns mockIntent
+        every {
+            biometricsEncryptionManager.getOrCreateCipher(userId = any())
+        } returns mockk<Cipher>()
         every { cancellationSignal.setOnCancelListener(any()) } just runs
         every { request.candidateQueryData } returns candidateQueryData
         every {
@@ -241,9 +237,9 @@ class CredentialProviderProcessorTest {
         every { callback.onResult(capture(captureSlot)) } just runs
 
         credentialProviderProcessor.processCreateCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
         )
 
         verify(exactly = 1) { callback.onResult(any()) }
@@ -275,21 +271,20 @@ class CredentialProviderProcessorTest {
         every { callback.onResult(capture(captureSlot)) } just runs
         every {
             intentManager.createFido2CreationPendingIntent(
-                any(),
-                any(),
-                any(),
+                action = any(),
+                userId = any(),
+                requestCode = any(),
             )
         } returns mockIntent
         every {
             biometricsEncryptionManager.getOrCreateCipher(any())
         } returns mockk<Cipher>()
-        every { featureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyCreation) } returns true
         every { isBuildVersionAtLeast(Build.VERSION_CODES.VANILLA_ICE_CREAM) } returns true
 
         credentialProviderProcessor.processCreateCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
         )
 
         verify(exactly = 1) { callback.onResult(any()) }
@@ -324,24 +319,13 @@ class CredentialProviderProcessorTest {
         // Verify entries have no biometric prompt data when cipher is null
         every { biometricsEncryptionManager.getOrCreateCipher(any()) } returns null
         credentialProviderProcessor.processCreateCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
         )
         assertTrue(
             captureSlot.captured.createEntries.all { it.biometricPromptData == null },
         ) { "Expected all entries to have null biometric prompt data." }
-
-        // Disable single tap feature flag to verify all entries do not have biometric prompt data
-        every { featureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyCreation) } returns false
-        credentialProviderProcessor.processCreateCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
-        )
-        assertTrue(
-            captureSlot.captured.createEntries.all { it.biometricPromptData == null },
-        ) { "Expected all entries to not have biometric prompt data." }
     }
 
     @Test
@@ -362,9 +346,9 @@ class CredentialProviderProcessorTest {
         every { callback.onError(capture(captureSlot)) } just runs
 
         credentialProviderProcessor.processGetCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
         )
 
         verify(exactly = 1) { callback.onError(any()) }
@@ -412,9 +396,9 @@ class CredentialProviderProcessorTest {
         )
 
         credentialProviderProcessor.processGetCredentialRequest(
-            request,
-            cancellationSignal,
-            callback,
+            request = request,
+            cancellationSignal = cancellationSignal,
+            callback = callback,
         )
 
         verify(exactly = 0) { callback.onError(any()) }
@@ -461,9 +445,9 @@ class CredentialProviderProcessorTest {
             } returns Result.failure(Exception("Error decrypting credentials."))
 
             credentialProviderProcessor.processGetCredentialRequest(
-                request,
-                cancellationSignal,
-                callback,
+                request = request,
+                cancellationSignal = cancellationSignal,
+                callback = callback,
             )
 
             verify(exactly = 1) { callback.onError(any()) }
@@ -503,9 +487,9 @@ class CredentialProviderProcessorTest {
             every { callback.onResult(capture(captureSlot)) } just runs
 
             credentialProviderProcessor.processGetCredentialRequest(
-                request,
-                cancellationSignal,
-                callback,
+                request = request,
+                cancellationSignal = cancellationSignal,
+                callback = callback,
             )
 
             assertEquals(1, captureSlot.captured.credentialEntries.size)

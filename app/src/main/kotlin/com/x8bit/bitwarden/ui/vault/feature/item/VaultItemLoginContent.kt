@@ -26,8 +26,8 @@ import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
@@ -77,7 +77,7 @@ fun VaultItemLoginContent(
             item(key = "loginCredentialsHeader") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.login_credentials),
+                    label = stringResource(id = BitwardenString.login_credentials),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -158,7 +158,7 @@ fun VaultItemLoginContent(
             item(key = "urisHeader") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.autofill_options),
+                    label = stringResource(id = BitwardenString.autofill_options),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -189,7 +189,7 @@ fun VaultItemLoginContent(
             item(key = "notes") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.additional_options),
+                    label = stringResource(id = BitwardenString.additional_options),
                     modifier = Modifier
                         .standardHorizontalMargin()
                         .padding(horizontal = 16.dp)
@@ -212,7 +212,7 @@ fun VaultItemLoginContent(
             item(key = "customFieldsHeader") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.custom_fields),
+                    label = stringResource(id = BitwardenString.custom_fields),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -243,7 +243,7 @@ fun VaultItemLoginContent(
             item(key = "attachmentsHeader") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.attachments),
+                    label = stringResource(id = BitwardenString.attachments),
                     modifier = Modifier
                         .standardHorizontalMargin()
                         .padding(horizontal = 16.dp)
@@ -318,10 +318,10 @@ fun VaultItemLoginContent(
             item(key = "passwordHistoryCount") {
                 Spacer(modifier = Modifier.height(height = 4.dp))
                 BitwardenHyperTextLink(
-                    annotatedResId = R.string.password_history_count,
+                    annotatedResId = BitwardenString.password_history_count,
                     args = arrayOf(passwordHistoryCount.toString()),
                     annotationKey = "passwordHistory",
-                    accessibilityString = stringResource(id = R.string.password_history),
+                    accessibilityString = stringResource(id = BitwardenString.password_history),
                     onClick = vaultCommonItemTypeHandlers.onPasswordHistoryClick,
                     style = BitwardenTheme.typography.labelMedium,
                     modifier = Modifier
@@ -346,7 +346,7 @@ private fun Fido2CredentialField(
     modifier: Modifier = Modifier,
 ) {
     BitwardenTextField(
-        label = stringResource(id = R.string.passkey),
+        label = stringResource(id = BitwardenString.passkey),
         value = creationDate,
         onValueChange = { },
         readOnly = true,
@@ -363,7 +363,7 @@ private fun NotesField(
     modifier: Modifier = Modifier,
 ) {
     BitwardenTextField(
-        label = stringResource(id = R.string.notes),
+        label = stringResource(id = BitwardenString.notes),
         value = notes,
         onValueChange = { },
         readOnly = true,
@@ -371,7 +371,7 @@ private fun NotesField(
         actions = {
             BitwardenStandardIconButton(
                 vectorIconRes = BitwardenDrawable.ic_copy,
-                contentDescription = stringResource(id = R.string.copy_notes),
+                contentDescription = stringResource(id = BitwardenString.copy_notes),
                 onClick = onCopyAction,
                 modifier = Modifier.testTag(tag = "CipherNotesCopyButton"),
             )
@@ -393,7 +393,7 @@ private fun PasswordField(
 ) {
     if (passwordData.canViewPassword) {
         BitwardenPasswordField(
-            label = stringResource(id = R.string.password),
+            label = stringResource(id = BitwardenString.password),
             value = passwordData.password,
             showPasswordChange = { onShowPasswordClick(it) },
             showPassword = passwordData.isVisible,
@@ -403,7 +403,7 @@ private fun PasswordField(
             actions = {
                 BitwardenStandardIconButton(
                     vectorIconRes = BitwardenDrawable.ic_copy,
-                    contentDescription = stringResource(id = R.string.copy_password),
+                    contentDescription = stringResource(id = BitwardenString.copy_password),
                     onClick = onCopyPasswordClick,
                     modifier = Modifier.testTag(tag = "LoginCopyPasswordButton"),
                 )
@@ -411,7 +411,7 @@ private fun PasswordField(
             supportingContentPadding = PaddingValues(),
             supportingContent = {
                 BitwardenClickableText(
-                    label = stringResource(id = R.string.check_password_for_data_breaches),
+                    label = stringResource(id = BitwardenString.check_password_for_data_breaches),
                     style = BitwardenTheme.typography.labelMedium,
                     onClick = onCheckForBreachClick,
                     innerPadding = PaddingValues(all = 16.dp),
@@ -428,7 +428,7 @@ private fun PasswordField(
         )
     } else {
         BitwardenHiddenPasswordField(
-            label = stringResource(id = R.string.password),
+            label = stringResource(id = BitwardenString.password),
             value = passwordData.password,
             passwordFieldTestTag = "LoginPasswordEntry",
             cardStyle = cardStyle,
@@ -447,7 +447,7 @@ private fun TotpField(
 ) {
     if (enabled) {
         BitwardenTextField(
-            label = stringResource(id = R.string.authenticator_key),
+            label = stringResource(id = BitwardenString.authenticator_key),
             value = totpCodeItemData.verificationCode
                 .chunked(AUTH_CODE_SPACING_INTERVAL)
                 .joinToString(" "),
@@ -457,7 +457,7 @@ private fun TotpField(
             singleLine = true,
             tooltip = TooltipData(
                 onClick = onAuthenticatorHelpToolTipClick,
-                contentDescription = stringResource(id = R.string.authenticator_key_help),
+                contentDescription = stringResource(id = BitwardenString.authenticator_key_help),
             ),
             actions = {
                 BitwardenCircularCountdownIndicator(
@@ -466,7 +466,7 @@ private fun TotpField(
                 )
                 BitwardenStandardIconButton(
                     vectorIconRes = BitwardenDrawable.ic_copy,
-                    contentDescription = stringResource(id = R.string.copy_totp),
+                    contentDescription = stringResource(id = BitwardenString.copy_totp),
                     onClick = onCopyTotpClick,
                     modifier = Modifier.testTag(tag = "LoginCopyTotpButton"),
                 )
@@ -477,13 +477,13 @@ private fun TotpField(
         )
     } else {
         BitwardenTextField(
-            label = stringResource(id = R.string.authenticator_key),
+            label = stringResource(id = BitwardenString.authenticator_key),
             value = "",
             tooltip = TooltipData(
                 onClick = onAuthenticatorHelpToolTipClick,
-                contentDescription = stringResource(id = R.string.authenticator_key_help),
+                contentDescription = stringResource(id = BitwardenString.authenticator_key_help),
             ),
-            supportingText = stringResource(id = R.string.premium_subscription_required),
+            supportingText = stringResource(id = BitwardenString.premium_subscription_required),
             enabled = false,
             singleLine = false,
             onValueChange = { },
@@ -503,7 +503,7 @@ private fun UriField(
     modifier: Modifier = Modifier,
 ) {
     BitwardenTextField(
-        label = stringResource(id = R.string.website_uri),
+        label = stringResource(id = BitwardenString.website_uri),
         value = uriData.uri,
         onValueChange = { },
         readOnly = true,
@@ -512,7 +512,7 @@ private fun UriField(
             if (uriData.isLaunchable) {
                 BitwardenStandardIconButton(
                     vectorIconRes = BitwardenDrawable.ic_external_link,
-                    contentDescription = stringResource(id = R.string.launch),
+                    contentDescription = stringResource(id = BitwardenString.launch),
                     onClick = { onLaunchUriClick(uriData.uri) },
                     modifier = Modifier.testTag(tag = "LoginLaunchUriButton"),
                 )
@@ -520,7 +520,7 @@ private fun UriField(
             if (uriData.isCopyable) {
                 BitwardenStandardIconButton(
                     vectorIconRes = BitwardenDrawable.ic_copy,
-                    contentDescription = stringResource(id = R.string.copy),
+                    contentDescription = stringResource(id = BitwardenString.copy),
                     onClick = { onCopyUriClick(uriData.uri) },
                     modifier = Modifier.testTag(tag = "LoginCopyUriButton"),
                 )
@@ -540,7 +540,7 @@ private fun UsernameField(
     modifier: Modifier = Modifier,
 ) {
     BitwardenTextField(
-        label = stringResource(id = R.string.username),
+        label = stringResource(id = BitwardenString.username),
         value = username,
         onValueChange = { },
         readOnly = true,
@@ -548,7 +548,7 @@ private fun UsernameField(
         actions = {
             BitwardenStandardIconButton(
                 vectorIconRes = BitwardenDrawable.ic_copy,
-                contentDescription = stringResource(id = R.string.copy_username),
+                contentDescription = stringResource(id = BitwardenString.copy_username),
                 onClick = onCopyUsernameClick,
                 modifier = Modifier.testTag(tag = "LoginCopyUsernameButton"),
             )

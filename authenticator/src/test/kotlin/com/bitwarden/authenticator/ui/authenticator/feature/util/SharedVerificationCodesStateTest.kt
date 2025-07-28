@@ -1,11 +1,11 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.util
 
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -62,7 +62,7 @@ class SharedVerificationCodesStateTest {
             sections = listOf(
                 SharedCodesDisplayState.SharedCodesAccountSection(
                     id = "user1",
-                    label = R.string.shared_accounts_header.asText(
+                    label = BitwardenString.shared_accounts_header.asText(
                         "John@test.com",
                         "bitwarden.com",
                         1,
@@ -85,7 +85,7 @@ class SharedVerificationCodesStateTest {
                 ),
                 SharedCodesDisplayState.SharedCodesAccountSection(
                     id = "user1",
-                    label = R.string.shared_accounts_header.asText(
+                    label = BitwardenString.shared_accounts_header.asText(
                         "Jane@test.com",
                         "bitwarden.eu",
                         1,
@@ -154,7 +154,7 @@ class SharedVerificationCodesStateTest {
             sections = listOf(
                 SharedCodesDisplayState.SharedCodesAccountSection(
                     id = "user1",
-                    label = R.string.shared_accounts_header.asText(
+                    label = BitwardenString.shared_accounts_header.asText(
                         "John@test.com",
                         "bitwarden.com",
                         1,
@@ -177,7 +177,7 @@ class SharedVerificationCodesStateTest {
                 ),
                 SharedCodesDisplayState.SharedCodesAccountSection(
                     id = "user1",
-                    label = R.string.shared_accounts_header.asText(
+                    label = BitwardenString.shared_accounts_header.asText(
                         "Jane@test.com",
                         "bitwarden.eu",
                         1,

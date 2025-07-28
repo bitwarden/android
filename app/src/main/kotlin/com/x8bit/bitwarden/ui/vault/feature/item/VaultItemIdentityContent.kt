@@ -25,8 +25,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
@@ -71,9 +71,9 @@ fun VaultItemIdentityContent(
         identityState.identityName?.let { identityName ->
             item(key = "identityName") {
                 IdentityCopyField(
-                    label = stringResource(id = R.string.identity_name),
+                    label = stringResource(id = BitwardenString.identity_name),
                     value = identityName,
-                    copyContentDescription = stringResource(id = R.string.copy_identity_name),
+                    copyContentDescription = stringResource(id = BitwardenString.copy_identity_name),
                     textFieldTestTag = "IdentityNameEntry",
                     copyActionTestTag = "IdentityCopyNameButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyIdentityNameClick,
@@ -93,9 +93,9 @@ fun VaultItemIdentityContent(
         identityState.username?.let { username ->
             item(key = "username") {
                 IdentityCopyField(
-                    label = stringResource(id = R.string.username),
+                    label = stringResource(id = BitwardenString.username),
                     value = username,
-                    copyContentDescription = stringResource(id = R.string.copy_username),
+                    copyContentDescription = stringResource(id = BitwardenString.copy_username),
                     textFieldTestTag = "IdentityUsernameEntry",
                     copyActionTestTag = "IdentityCopyUsernameButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyUsernameClick,
@@ -115,9 +115,9 @@ fun VaultItemIdentityContent(
         identityState.company?.let { company ->
             item(key = "company") {
                 IdentityCopyField(
-                    label = stringResource(id = R.string.company),
+                    label = stringResource(id = BitwardenString.company),
                     value = company,
-                    copyContentDescription = stringResource(id = R.string.copy_company),
+                    copyContentDescription = stringResource(id = BitwardenString.copy_company),
                     textFieldTestTag = "IdentityCompanyEntry",
                     copyActionTestTag = "IdentityCopyCompanyButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyCompanyClick,
@@ -137,9 +137,9 @@ fun VaultItemIdentityContent(
         identityState.ssn?.let { ssn ->
             item(key = "ssn") {
                 IdentityCopyField(
-                    label = stringResource(id = R.string.ssn),
+                    label = stringResource(id = BitwardenString.ssn),
                     value = ssn,
-                    copyContentDescription = stringResource(id = R.string.copy_ssn),
+                    copyContentDescription = stringResource(id = BitwardenString.copy_ssn),
                     textFieldTestTag = "IdentitySsnEntry",
                     copyActionTestTag = "IdentityCopySsnButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopySsnClick,
@@ -159,9 +159,9 @@ fun VaultItemIdentityContent(
         identityState.passportNumber?.let { passportNumber ->
             item(key = "passportNumber") {
                 IdentityCopyField(
-                    label = stringResource(id = R.string.passport_number),
+                    label = stringResource(id = BitwardenString.passport_number),
                     value = passportNumber,
-                    copyContentDescription = stringResource(id = R.string.copy_passport_number),
+                    copyContentDescription = stringResource(id = BitwardenString.copy_passport_number),
                     textFieldTestTag = "IdentityPassportNumberEntry",
                     copyActionTestTag = "IdentityCopyPassportNumberButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyPassportNumberClick,
@@ -181,9 +181,9 @@ fun VaultItemIdentityContent(
         identityState.licenseNumber?.let { licenseNumber ->
             item(key = "licenseNumber") {
                 IdentityCopyField(
-                    label = stringResource(id = R.string.license_number),
+                    label = stringResource(id = BitwardenString.license_number),
                     value = licenseNumber,
-                    copyContentDescription = stringResource(id = R.string.copy_license_number),
+                    copyContentDescription = stringResource(id = BitwardenString.copy_license_number),
                     textFieldTestTag = "IdentityLicenseNumberEntry",
                     copyActionTestTag = "IdentityCopyLicenseNumberButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyLicenseNumberClick,
@@ -203,9 +203,9 @@ fun VaultItemIdentityContent(
         identityState.email?.let { email ->
             item(key = "email") {
                 IdentityCopyField(
-                    label = stringResource(id = R.string.email),
+                    label = stringResource(id = BitwardenString.email),
                     value = email,
-                    copyContentDescription = stringResource(id = R.string.copy_email),
+                    copyContentDescription = stringResource(id = BitwardenString.copy_email),
                     textFieldTestTag = "IdentityEmailEntry",
                     copyActionTestTag = "IdentityCopyEmailButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyEmailClick,
@@ -225,9 +225,9 @@ fun VaultItemIdentityContent(
         identityState.phone?.let { phone ->
             item(key = "phone") {
                 IdentityCopyField(
-                    label = stringResource(id = R.string.phone),
+                    label = stringResource(id = BitwardenString.phone),
                     value = phone,
-                    copyContentDescription = stringResource(id = R.string.copy_phone),
+                    copyContentDescription = stringResource(id = BitwardenString.copy_phone),
                     textFieldTestTag = "IdentityPhoneEntry",
                     copyActionTestTag = "IdentityCopyPhoneButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyPhoneClick,
@@ -247,9 +247,9 @@ fun VaultItemIdentityContent(
         identityState.address?.let { address ->
             item(key = "address") {
                 IdentityCopyField(
-                    label = stringResource(id = R.string.address),
+                    label = stringResource(id = BitwardenString.address),
                     value = address,
-                    copyContentDescription = stringResource(id = R.string.copy_address),
+                    copyContentDescription = stringResource(id = BitwardenString.copy_address),
                     textFieldTestTag = "IdentityAddressEntry",
                     copyActionTestTag = "IdentityCopyAddressButton",
                     onCopyClick = vaultIdentityItemTypeHandlers.onCopyAddressClick,
@@ -270,7 +270,7 @@ fun VaultItemIdentityContent(
             item(key = "notes") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.additional_options),
+                    label = stringResource(id = BitwardenString.additional_options),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -279,9 +279,9 @@ fun VaultItemIdentityContent(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 IdentityCopyField(
-                    label = stringResource(id = R.string.notes),
+                    label = stringResource(id = BitwardenString.notes),
                     value = notes,
-                    copyContentDescription = stringResource(id = R.string.copy_notes),
+                    copyContentDescription = stringResource(id = BitwardenString.copy_notes),
                     textFieldTestTag = "CipherNotesLabel",
                     copyActionTestTag = "CipherNotesCopyButton",
                     onCopyClick = vaultCommonItemTypeHandlers.onCopyNotesClick,
@@ -298,7 +298,7 @@ fun VaultItemIdentityContent(
             item(key = "customFieldsHeader") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.custom_fields),
+                    label = stringResource(id = BitwardenString.custom_fields),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -329,7 +329,7 @@ fun VaultItemIdentityContent(
             item(key = "attachmentsHeader") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.attachments),
+                    label = stringResource(id = BitwardenString.attachments),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -390,10 +390,10 @@ fun VaultItemIdentityContent(
             item(key = "passwordHistoryCount") {
                 Spacer(modifier = Modifier.height(height = 4.dp))
                 BitwardenHyperTextLink(
-                    annotatedResId = R.string.password_history_count,
+                    annotatedResId = BitwardenString.password_history_count,
                     args = arrayOf(passwordHistoryCount.toString()),
                     annotationKey = "passwordHistory",
-                    accessibilityString = stringResource(id = R.string.password_history),
+                    accessibilityString = stringResource(id = BitwardenString.password_history),
                     onClick = vaultCommonItemTypeHandlers.onPasswordHistoryClick,
                     style = BitwardenTheme.typography.labelMedium,
                     modifier = Modifier

@@ -3,10 +3,10 @@ package com.bitwarden.authenticator.ui.auth.unlock
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -73,7 +73,7 @@ class UnlockViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialog = UnlockState.Dialog.Error(
-                    message = R.string.too_many_failed_biometric_attempts.asText(),
+                    message = BitwardenString.too_many_failed_biometric_attempts.asText(),
                 ),
             )
         }

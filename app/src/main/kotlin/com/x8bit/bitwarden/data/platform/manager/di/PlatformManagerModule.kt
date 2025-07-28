@@ -353,14 +353,12 @@ object PlatformManagerModule {
         settingsDiskSource: SettingsDiskSource,
         vaultDiskSource: VaultDiskSource,
         dispatcherManager: DispatcherManager,
-        featureFlagManager: FeatureFlagManager,
         autofillEnabledManager: AutofillEnabledManager,
     ): FirstTimeActionManager = FirstTimeActionManagerImpl(
         authDiskSource = authDiskSource,
         settingsDiskSource = settingsDiskSource,
         vaultDiskSource = vaultDiskSource,
         dispatcherManager = dispatcherManager,
-        featureFlagManager = featureFlagManager,
         autofillEnabledManager = autofillEnabledManager,
     )
 

@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.util
 
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 
 /**
@@ -10,7 +10,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
  */
 val VaultTimeoutAction.displayLabel: Text
     get() = when (this) {
-        VaultTimeoutAction.LOCK -> R.string.lock
-        VaultTimeoutAction.LOGOUT -> R.string.log_out
+        VaultTimeoutAction.LOCK -> BitwardenString.lock
+        VaultTimeoutAction.LOGOUT -> BitwardenString.log_out
     }
         .asText()

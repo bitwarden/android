@@ -2,7 +2,6 @@ package com.bitwarden.authenticator.ui.authenticator.feature.manualcodeentry
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
@@ -12,6 +11,7 @@ import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -191,7 +191,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
             }
             viewModel.eventFlow.test {
                 assertEquals(
-                    ManualCodeEntryEvent.ShowToast(R.string.verification_code_added.asText()),
+                    ManualCodeEntryEvent.ShowToast(BitwardenString.verification_code_added.asText()),
                     awaitItem(),
                 )
                 assertEquals(
@@ -243,8 +243,8 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
                 code = "ABCD",
                 issuer = "mockIssuer",
                 dialog = ManualCodeEntryState.DialogState.Error(
-                    title = R.string.something_went_wrong.asText(),
-                    message = R.string.please_try_again.asText(),
+                    title = BitwardenString.something_went_wrong.asText(),
+                    message = BitwardenString.please_try_again.asText(),
                 ),
             )
             assertEquals(expectedState, viewModel.stateFlow.value)
@@ -302,7 +302,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             ManualCodeEntryState.DialogState.Error(
-                message = R.string.key_is_required.asText(),
+                message = BitwardenString.key_is_required.asText(),
             ),
             viewModel.stateFlow.value.dialog,
         )
@@ -320,7 +320,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             ManualCodeEntryState.DialogState.Error(
-                message = R.string.key_is_invalid.asText(),
+                message = BitwardenString.key_is_invalid.asText(),
             ),
             viewModel.stateFlow.value.dialog,
         )
@@ -339,7 +339,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
 
         assertEquals(
             ManualCodeEntryState.DialogState.Error(
-                message = R.string.name_is_required.asText(),
+                message = BitwardenString.name_is_required.asText(),
             ),
             viewModel.stateFlow.value.dialog,
         )
@@ -415,7 +415,7 @@ class ManualCodeEntryViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(
             initialState = DEFAULT_STATE.copy(
                 dialog = ManualCodeEntryState.DialogState.Error(
-                    message = R.string.key_is_required.asText(),
+                    message = BitwardenString.key_is_required.asText(),
                 ),
             ),
         )

@@ -51,7 +51,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.util.QrCodeAnalyzer
 import com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.util.QrCodeAnalyzerImpl
 import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
@@ -65,6 +64,7 @@ import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.spanStyleOf
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import java.util.concurrent.Executors
 import kotlin.coroutines.resume
@@ -118,9 +118,9 @@ fun QrCodeScanScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             AuthenticatorTopAppBar(
-                title = stringResource(id = R.string.scan_qr_code),
+                title = stringResource(id = BitwardenString.scan_qr_code),
                 navigationIcon = painterResource(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(QrCodeScanAction.CloseClick) }
                 },
@@ -168,8 +168,8 @@ private fun QrCodeScanDialogs(
         QrCodeScanState.DialogState.SaveToBitwardenError -> {
             BitwardenBasicDialog(
                 visibilityState = BasicDialogState.Shown(
-                    title = R.string.something_went_wrong.asText(),
-                    message = R.string.please_try_again.asText(),
+                    title = BitwardenString.something_went_wrong.asText(),
+                    message = BitwardenString.please_try_again.asText(),
                 ),
                 onDismissRequest = onDismissRequest,
             )
@@ -204,7 +204,7 @@ private fun PortraitQRCodeContent(
                 .verticalScroll(rememberScrollState()),
         ) {
             Text(
-                text = stringResource(id = R.string.point_your_camera_at_the_qr_code),
+                text = stringResource(id = BitwardenString.point_your_camera_at_the_qr_code),
                 textAlign = TextAlign.Center,
                 color = Color.White,
                 style = MaterialTheme.typography.bodyMedium,
@@ -245,7 +245,7 @@ private fun LandscapeQRCodeContent(
                 .verticalScroll(rememberScrollState()),
         ) {
             Text(
-                text = stringResource(id = R.string.point_your_camera_at_the_qr_code),
+                text = stringResource(id = BitwardenString.point_your_camera_at_the_qr_code),
                 textAlign = TextAlign.Center,
                 color = Color.White,
                 style = MaterialTheme.typography.bodySmall,
@@ -438,10 +438,10 @@ private fun BottomClickableText(
     onEnterCodeManuallyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val enterKeyText = stringResource(id = R.string.enter_key_manually)
+    val enterKeyText = stringResource(id = BitwardenString.enter_key_manually)
     Text(
         text = annotatedStringResource(
-            id = R.string.cannot_scan_qr_code_enter_key_manually,
+            id = BitwardenString.cannot_scan_qr_code_enter_key_manually,
             linkHighlightStyle = spanStyleOf(
                 color = LocalNonMaterialColors.current.qrCodeClickableText,
                 textStyle = MaterialTheme.typography.bodyMedium,

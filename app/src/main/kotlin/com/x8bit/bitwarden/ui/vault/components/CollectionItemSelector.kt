@@ -16,10 +16,10 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.model.CardStyle
-import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 
 /**
@@ -33,7 +33,7 @@ fun LazyListScope.collectionItemsSelector(
     if (isCollectionsTitleVisible) {
         item {
             BitwardenListHeaderText(
-                label = stringResource(id = R.string.collections),
+                label = stringResource(id = BitwardenString.collections),
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
@@ -76,7 +76,7 @@ fun LazyListScope.collectionItemsSelector(
                     .standardHorizontalMargin(),
             ) {
                 Text(
-                    text = stringResource(id = R.string.no_collections_to_list),
+                    text = stringResource(id = BitwardenString.no_collections_to_list),
                     style = BitwardenTheme.typography.bodyMedium,
                     color = BitwardenTheme.colorScheme.text.primary,
                 )

@@ -5,7 +5,6 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher.Companion.expectValue
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
@@ -1165,43 +1164,6 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in Username_ForwardedEmailAlias_AddyIo state, self host server url field should show based on state`() {
-        updateState(
-            DEFAULT_STATE.copy(
-                shouldShowAnonAddySelfHostServerUrlField = true,
-                selectedType = GeneratorState.MainType.Username(
-                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                        selectedServiceType = GeneratorState
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .ServiceType
-                            .AddyIo(),
-                    ),
-                ),
-            ),
-        )
-
-        composeTestRule
-            .onNodeWithText("Self-host server URL")
-            .performScrollTo()
-            .assertIsDisplayed()
-
-        // Simulate Disabling the feature flag
-        updateState(
-            DEFAULT_STATE.copy(
-                shouldShowAnonAddySelfHostServerUrlField = false,
-            ),
-        )
-
-        composeTestRule
-            .onNodeWithText("Self-host server URL")
-            .assertIsNotDisplayed()
-    }
-
     //endregion Addy.Io Service Type Tests
 
     //region DuckDuckGo Service Type Tests
@@ -1401,54 +1363,6 @@ class GeneratorScreenTest : BitwardenComposeTest() {
                     .SelfHostServerUrlChange(url = newSelfHostServerUrl),
             )
         }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in Username_ForwardedEmailAlias_SimpleLogin state, should display self host server url field based on state`() {
-        updateState(
-            DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Username(
-                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                        selectedServiceType = GeneratorState
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .ServiceType
-                            .SimpleLogin(),
-                    ),
-                ),
-                shouldShowSimpleLoginSelfHostServerField = true,
-            ),
-        )
-
-        composeTestRule
-            .onNodeWithText("Self-host server URL")
-            .performScrollTo()
-            .assertIsDisplayed()
-
-        // Simulate disabling the feature flag.
-        updateState(
-            DEFAULT_STATE.copy(
-                selectedType = GeneratorState.MainType.Username(
-                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                        selectedServiceType = GeneratorState
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .ForwardedEmailAlias
-                            .ServiceType
-                            .SimpleLogin(),
-                    ),
-                ),
-                shouldShowSimpleLoginSelfHostServerField = false,
-            ),
-        )
-
-        composeTestRule
-            .onNodeWithText("Self-host server URL")
-            .assertDoesNotExist()
     }
 
     //endregion SimpleLogin Service Type Tests
@@ -1938,6 +1852,4 @@ private val DEFAULT_STATE = GeneratorState(
     selectedType = GeneratorState.MainType.Password(),
     currentEmailAddress = "currentEmail",
     shouldShowCoachMarkTour = false,
-    shouldShowAnonAddySelfHostServerUrlField = true,
-    shouldShowSimpleLoginSelfHostServerField = true,
 )
