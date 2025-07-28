@@ -802,15 +802,24 @@ class VaultRepositoryImpl(
     }
 
     override suspend fun generateTotp(
-        totpCode: String,
+        cipherId: String,
         time: DateTime,
     ): GenerateTotpResult {
         val userId = activeUserId
             ?: return GenerateTotpResult.Error(error = NoActiveUserException())
-        return vaultSdkSource.generateTotp(
+        val cipherListView = decryptCipherListResultStateFlow
+            .value
+            .data
+            ?.successes
+            ?.find { it.id == cipherId }
+            ?: return GenerateTotpResult.Error(
+                error = IllegalArgumentException(cipherId),
+            )
+
+        return vaultSdkSource.generateTotpForCipherListView(
             time = time,
             userId = userId,
-            totp = totpCode,
+            cipherListView = cipherListView,
         )
             .fold(
                 onSuccess = {

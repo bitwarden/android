@@ -45,7 +45,7 @@ class CipherListViewExtensionsTest {
                     cipherId = id,
                 ),
                 ListingItemOverflowAction.VaultAction.CopyTotpClick(
-                    totpCode = totpCode,
+                    cipherId = id,
                     requiresPasswordReprompt = false,
                 ),
                 ListingItemOverflowAction.VaultAction.ViewClick(

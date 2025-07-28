@@ -24,11 +24,12 @@ class AutofillTotpManagerImpl(
         if (settingsRepository.isAutoCopyTotpDisabled) return
         val isPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true
         if (!isPremium && !cipherView.organizationUseTotp) return
-        val totpCode = cipherView.login?.totp ?: return
+        cipherView.login?.totp ?: return
+        val cipherId = cipherView.id ?: return
 
         val totpResult = vaultRepository.generateTotp(
             time = clock.instant(),
-            totpCode = totpCode,
+            cipherId = cipherId,
         )
 
         if (totpResult is GenerateTotpResult.Success) {

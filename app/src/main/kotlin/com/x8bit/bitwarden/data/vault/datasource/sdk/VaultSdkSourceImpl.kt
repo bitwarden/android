@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
-import com.bitwarden.core.DateTime
 import com.bitwarden.core.DeriveKeyConnectorRequest
 import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.InitOrgCryptoRequest
@@ -415,19 +414,6 @@ class VaultSdkSourceImpl(
             .vault()
             .passwordHistory()
             .decryptList(list = passwordHistoryList)
-    }
-
-    override suspend fun generateTotp(
-        userId: String,
-        totp: String,
-        time: DateTime,
-    ): Result<TotpResponse> = runCatchingWithLogs {
-        getClient(userId = userId)
-            .vault()
-            .generateTotp(
-                key = totp,
-                time = time,
-            )
     }
 
     override suspend fun generateTotpForCipherListView(

@@ -136,7 +136,7 @@ sealed class ListingItemOverflowAction : Parcelable {
          */
         @Parcelize
         data class CopyTotpClick(
-            val totpCode: String,
+            val cipherId: String,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
             override val title: Text get() = BitwardenString.copy_totp.asText()

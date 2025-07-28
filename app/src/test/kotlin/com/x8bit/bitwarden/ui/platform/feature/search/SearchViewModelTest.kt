@@ -1007,7 +1007,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyTotpClick(
-                        totpCode = totpCode,
+                        cipherId = totpCode,
                         requiresPasswordReprompt = false,
                     ),
                 ),
@@ -1035,7 +1035,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyTotpClick(
-                        totpCode = totpCode,
+                        cipherId = totpCode,
                         requiresPasswordReprompt = false,
                     ),
                 ),
