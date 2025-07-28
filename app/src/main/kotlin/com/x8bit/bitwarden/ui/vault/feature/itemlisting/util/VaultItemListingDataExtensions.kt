@@ -10,12 +10,16 @@ import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
+import com.bitwarden.vault.CardListView
+import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
+import com.bitwarden.vault.LoginListView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
@@ -99,7 +103,7 @@ fun SendView.determineListingPredicate(
     }
 
 /**
- * Transforms a list of [CipherView] into [VaultItemListingState.ViewState].
+ * Transforms a list of [CipherListView] into [VaultItemListingState.ViewState].
  */
 @Suppress("CyclomaticComplexMethod", "LongMethod", "LongParameterList")
 fun VaultData.toViewState(
@@ -122,6 +126,17 @@ fun VaultData.toViewState(
         .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds)
         .toFilteredList(vaultFilterType)
 
+    val filteredFailuresCipherViewList = decryptCipherListResult
+        .failures
+        .map { cipher ->
+            cipher.toFailureCipherListView()
+        }
+        .filter { cipherListView ->
+            cipherListView.determineListingPredicate(itemListingType)
+        }
+        .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds)
+        .toFilteredList(vaultFilterType)
+
     val folderList =
         (itemListingType as? VaultItemListingState.ItemListingType.Vault.Folder)
             ?.folderId
@@ -137,14 +152,18 @@ fun VaultData.toViewState(
         collectionList.isNotEmpty()
     ) {
         VaultItemListingState.ViewState.Content(
-            displayItemList = filteredCipherViewList.toDisplayItemList(
-                baseIconUrl = baseIconUrl,
-                hasMasterPassword = hasMasterPassword,
-                isIconLoadingDisabled = isIconLoadingDisabled,
-                isAutofill = autofillSelectionData != null,
-                isFido2Creation = createCredentialRequestData != null,
-                isPremiumUser = isPremiumUser,
-            ),
+            displayItemList = filteredFailuresCipherViewList
+                .toDisplayItemListDecryptionError()
+                .plus(
+                    filteredCipherViewList.toDisplayItemList(
+                        baseIconUrl = baseIconUrl,
+                        hasMasterPassword = hasMasterPassword,
+                        isIconLoadingDisabled = isIconLoadingDisabled,
+                        isAutofill = autofillSelectionData != null,
+                        isFido2Creation = createCredentialRequestData != null,
+                        isPremiumUser = isPremiumUser,
+                    ),
+                ),
             displayFolderList = folderList.map { folderView ->
                 VaultItemListingState.FolderDisplayItem(
                     id = requireNotNull(folderView.id),
@@ -379,7 +398,9 @@ private fun CipherListView.toDisplayItem(
         id = id.orEmpty(),
         title = name,
         titleTestTag = "CipherNameLabel",
-        secondSubtitle = this.toSecondSubtitle(login?.fido2Credentials?.firstOrNull()?.rpId),
+        secondSubtitle = this.toSecondSubtitle(
+            fido2CredentialRpId = login?.fido2Credentials?.firstOrNull()?.rpId,
+        ),
         secondSubtitleTestTag = "PasskeySite",
         subtitle = this.subtitle,
         subtitleTestTag = this.toSubtitleTestTag(
@@ -403,9 +424,39 @@ private fun CipherListView.toDisplayItem(
         isCredentialCreation = isFido2Creation,
         shouldShowMasterPasswordReprompt = (reprompt == CipherRepromptType.PASSWORD) &&
             hasMasterPassword,
-        itemType = VaultItemListingState.DisplayItem.ItemType.Vault(
-            type = this.type.toSdkCipherType(),
-        ),
+        itemType = VaultItemListingState
+            .DisplayItem
+            .ItemType
+            .Vault(
+                type = this.type.toSdkCipherType(),
+            ),
+    )
+
+@Suppress("LongParameterList", "MaxLineLength")
+private fun List<CipherListView>.toDisplayItemListDecryptionError(): List<VaultItemListingState.DisplayItem> =
+    this.map {
+        it.toDisplayItemDecryptionError()
+    }
+
+@Suppress("LongParameterList")
+private fun CipherListView.toDisplayItemDecryptionError(): VaultItemListingState.DisplayItem =
+    VaultItemListingState.DisplayItem(
+        id = id.orEmpty(),
+        title = name,
+        titleTestTag = "CipherNameLabel",
+        secondSubtitle = null,
+        secondSubtitleTestTag = "",
+        subtitle = null,
+        subtitleTestTag = "",
+        iconData = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
+        iconTestTag = this.toIconTestTag(),
+        extraIconList = this.toLabelIcons(),
+        overflowOptions = emptyList(),
+        optionsTestTag = "CipherOptionsButton",
+        isAutofill = false,
+        isCredentialCreation = false,
+        shouldShowMasterPasswordReprompt = false,
+        itemType = VaultItemListingState.DisplayItem.ItemType.DecryptionError,
     )
 
 private fun CipherListView.toSecondSubtitle(fido2CredentialRpId: String?): String? =
@@ -492,3 +543,54 @@ private val CipherListViewType.iconRes: Int
         CipherListViewType.Identity -> BitwardenDrawable.ic_id_card
         CipherListViewType.SshKey -> BitwardenDrawable.ic_ssh_key
     }
+
+/**
+ * Converts a Bitwarden SDK [Cipher] object to a corresponding
+ * [CipherListView] object with modified field to represent a decryption error instance.
+ * This allows reuse of existing logic for filtering and grouping ciphers to construct
+ * the sections in the vault list.
+ */
+fun Cipher.toFailureCipherListView(): CipherListView =
+    CipherListView(
+        id = id,
+        organizationId = organizationId,
+        folderId = folderId,
+        collectionIds = collectionIds,
+        key = key,
+        name = name,
+        subtitle = "",
+        type = when (type) {
+            CipherType.LOGIN -> CipherListViewType.Login(
+                v1 = LoginListView(
+                    fido2Credentials = null,
+                    hasFido2 = false,
+                    username = null,
+                    totp = null,
+                    uris = null,
+                ),
+            )
+
+            CipherType.SECURE_NOTE -> CipherListViewType.SecureNote
+            CipherType.CARD -> CipherListViewType.Card(
+                CardListView(
+                    brand = null,
+                ),
+            )
+
+            CipherType.IDENTITY -> CipherListViewType.Identity
+            CipherType.SSH_KEY -> CipherListViewType.SshKey
+        },
+        favorite = favorite,
+        reprompt = reprompt,
+        organizationUseTotp = organizationUseTotp,
+        edit = edit,
+        permissions = permissions,
+        viewPassword = viewPassword,
+        attachments = 0.toUInt(),
+        hasOldAttachments = attachments?.any { it.key == null } ?: false,
+        localData = null,
+        creationDate = creationDate,
+        deletedDate = deletedDate,
+        revisionDate = revisionDate,
+        copyableFields = emptyList(),
+    )
