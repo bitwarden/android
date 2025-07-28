@@ -181,6 +181,7 @@ class VaultItemListingViewModel @Inject constructor(
             getCredentialsRequest = providerGetCredentialsRequest,
             isPremium = userState.activeAccount.isPremium,
             isRefreshing = false,
+            cipherDecryptionFailureIds = persistentListOf(),
         )
     },
 ) {
@@ -343,6 +344,10 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             is VaultItemListingsAction.Internal -> handleInternalAction(action)
+
+            is VaultItemListingsAction.ShareCipherDecryptionErrorClick -> {
+                handleShareCipherDecryptionErrorClick(cipherId = action.selectedCipherId)
+            }
         }
     }
 
@@ -620,6 +625,14 @@ class VaultItemListingViewModel @Inject constructor(
         action: ListingItemOverflowAction.SendAction.ShareUrlClick,
     ) {
         sendEvent(VaultItemListingEvent.ShowShareSheet(action.sendUrl))
+    }
+
+    private fun handleShareCipherDecryptionErrorClick(cipherId: String?) {
+        sendEvent(
+            event = VaultItemListingEvent.ShowShareSheet(
+                content = cipherId.orEmpty(),
+            ),
+        )
     }
 
     private fun handleRemoveSendPasswordClick(
@@ -914,8 +927,27 @@ class VaultItemListingViewModel @Inject constructor(
                     sendType = itemType.type.toSendItemType(),
                 )
             }
+
+            VaultItemListingState.DisplayItem.ItemType.DecryptionError -> {
+                showCipherDecryptionErrorItemClick(itemId = action.id)
+                return
+            }
         }
+
         sendEvent(event)
+    }
+
+    private fun showCipherDecryptionErrorItemClick(itemId: String?) {
+        mutableStateFlow.update {
+            @Suppress("MaxLineLength")
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.CipherDecryptionError(
+                    title = R.string.decryption_error.asText(),
+                    message = R.string.bitwarden_could_not_decrypt_this_vault_item_description_long.asText(),
+                    selectedCipherId = itemId,
+                ),
+            )
+        }
     }
 
     private fun handleItemClickForProviderCreateCredentialRequest(
@@ -2267,6 +2299,13 @@ class VaultItemListingViewModel @Inject constructor(
                     }
                 },
                 dialogState = currentState.dialogState.takeUnless { clearDialogState },
+                cipherDecryptionFailureIds = vaultData
+                    .decryptCipherListResult
+                    .failures
+                    .mapNotNull {
+                        it.id
+                    }
+                    .toImmutableList(),
             )
         }
     }
@@ -2434,6 +2473,7 @@ data class VaultItemListingState(
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
     val isRefreshing: Boolean,
+    val cipherDecryptionFailureIds: ImmutableList<String>,
 ) {
     /**
      * Whether or not the add FAB should be shown.
@@ -2516,6 +2556,16 @@ data class VaultItemListingState(
             val title: Text?,
             val message: Text,
             val throwable: Throwable? = null,
+        ) : DialogState()
+
+        /**
+         * Represents a dialog indicating that a cipher decryption error occurred.
+         */
+        @Parcelize
+        data class CipherDecryptionError(
+            val title: Text,
+            val message: Text,
+            val selectedCipherId: String?,
         ) : DialogState()
 
         /**
@@ -2729,6 +2779,11 @@ data class VaultItemListingState(
              * Indicates the item type is a vault item.
              */
             data class Vault(val type: CipherType) : ItemType()
+
+            /**
+             * Indicates the item type is a decryption error.
+             */
+            object DecryptionError : ItemType()
         }
     }
 
@@ -3142,6 +3197,13 @@ sealed class VaultItemListingsAction {
      * Click the lock button.
      */
     data object LockClick : VaultItemListingsAction()
+
+    /**
+     * Click to share cipher decryption error details.
+     */
+    data class ShareCipherDecryptionErrorClick(
+        val selectedCipherId: String?,
+    ) : VaultItemListingsAction()
 
     /**
      * Click the refresh button.

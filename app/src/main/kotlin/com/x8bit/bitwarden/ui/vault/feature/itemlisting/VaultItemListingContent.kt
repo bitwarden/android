@@ -200,10 +200,15 @@ fun VaultItemListingContent(
                 Spacer(modifier = Modifier.height(height = 8.dp))
             }
             itemsIndexed(state.displayItemList) { index, it ->
+                @Suppress("MaxLineLength")
                 BitwardenListItem(
                     startIcon = it.iconData,
                     startIconTestTag = it.iconTestTag,
-                    label = it.title,
+                    label = if (it.itemType == VaultItemListingState.DisplayItem.ItemType.DecryptionError) {
+                        stringResource(id = R.string.error_cannot_decrypt)
+                    } else {
+                        it.title
+                    },
                     labelTestTag = it.titleTestTag,
                     secondSupportingLabel = it.secondSubtitle,
                     secondSupportingLabelTestTag = it.secondSubtitleTestTag,
