@@ -414,7 +414,7 @@ class SearchViewModel @Inject constructor(
         action: ListingItemOverflowAction.VaultAction.CopyTotpClick,
     ) {
         viewModelScope.launch {
-            val result = vaultRepo.generateTotp(action.totpCode, clock.instant())
+            val result = vaultRepo.generateTotp(action.cipherId, clock.instant())
             sendAction(SearchAction.Internal.GenerateTotpResultReceive(result))
         }
     }
