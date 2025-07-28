@@ -2,8 +2,8 @@ package com.bitwarden.authenticator.ui.platform.feature.debugmenu
 
 import app.cash.turbine.test
 import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
-import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepository
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.coEvery
 import io.mockk.coVerify

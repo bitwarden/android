@@ -3,10 +3,10 @@ package com.x8bit.bitwarden.ui.platform.feature.debugmenu.components
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 
 /**
  * Creates a list item for a [FlagKey].
@@ -25,6 +25,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
         Unit
     }
 
+    FlagKey.BitwardenAuthenticationEnabled,
     FlagKey.EmailVerification,
     FlagKey.CredentialExchangeProtocolImport,
     FlagKey.CredentialExchangeProtocolExport,
@@ -83,4 +84,7 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     }
 
     FlagKey.RemoveCardPolicy -> stringResource(BitwardenString.remove_card_policy)
+    FlagKey.BitwardenAuthenticationEnabled -> {
+        stringResource(BitwardenString.bitwarden_authentication_enabled)
+    }
 }
