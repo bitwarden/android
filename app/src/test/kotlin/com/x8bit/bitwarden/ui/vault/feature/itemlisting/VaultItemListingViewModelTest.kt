@@ -1954,7 +1954,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyTotpClick(
-                        totpCode = totpCode,
+                        cipherId = totpCode,
                         requiresPasswordReprompt = false,
                     ),
                 ),
@@ -1982,7 +1982,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyTotpClick(
-                        totpCode = totpCode,
+                        cipherId = totpCode,
                         requiresPasswordReprompt = false,
                     ),
                 ),

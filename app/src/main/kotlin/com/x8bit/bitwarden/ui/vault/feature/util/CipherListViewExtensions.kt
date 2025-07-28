@@ -39,7 +39,7 @@ fun CipherListView.toOverflowActions(
                 this.login?.totp
                     ?.let {
                         ListingItemOverflowAction.VaultAction.CopyTotpClick(
-                            totpCode = it,
+                            cipherId = cipherId,
                             requiresPasswordReprompt = hasMasterPassword,
                         )
                     }

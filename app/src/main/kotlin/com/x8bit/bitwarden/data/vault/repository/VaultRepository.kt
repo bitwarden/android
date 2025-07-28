@@ -225,7 +225,7 @@ interface VaultRepository : CipherManager, VaultLockManager {
     /**
      * Attempt to get the verification code and the period.
      */
-    suspend fun generateTotp(totpCode: String, time: DateTime): GenerateTotpResult
+    suspend fun generateTotp(cipherId: String, time: DateTime): GenerateTotpResult
 
     /**
      * Attempt to delete a send.
