@@ -263,7 +263,7 @@ private fun FeatureFlagContent_preview() {
     BitwardenTheme {
         FeatureFlagContent(
             featureFlagMap = persistentMapOf(
-                FlagKey.EmailVerification to true,
+                FlagKey.DummyBoolean to true,
             ),
             onValueChange = { _, _ -> },
             onResetValues = { },

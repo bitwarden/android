@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.ConfigResponseJson.EnvironmentJson
 import com.bitwarden.network.model.ConfigResponseJson.ServerJson
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.FakeServerConfigRepository
 import com.x8bit.bitwarden.data.platform.util.isServerVersionAtLeast
 import kotlinx.coroutines.test.runTest
@@ -130,7 +130,7 @@ class FeatureFlagManagerTest {
         )
 
         val flagValue = manager.getFeatureFlag(
-            key = FlagKey.EmailVerification,
+            key = FlagKey.DummyBoolean,
             forceRefresh = false,
         )
         assertFalse(flagValue)
@@ -226,7 +226,7 @@ class FeatureFlagManagerTest {
         fakeServerConfigRepository.serverConfigValue = null
 
         val flagValue = manager.getFeatureFlag(
-            key = FlagKey.EmailVerification,
+            key = FlagKey.DummyBoolean,
             forceRefresh = false,
         )
 

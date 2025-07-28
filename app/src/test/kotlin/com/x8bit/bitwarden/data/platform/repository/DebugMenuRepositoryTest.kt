@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.repository
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -8,7 +9,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.bitwarden.core.data.manager.model.FlagKey
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -99,8 +99,8 @@ class DebugMenuRepositoryTest {
             debugMenuRepository.resetFeatureFlagOverrides()
             verify(exactly = 1) {
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
-                    FlagKey.EmailVerification,
-                    FlagKey.EmailVerification.defaultValue,
+                    FlagKey.CredentialExchangeProtocolImport,
+                    FlagKey.CredentialExchangeProtocolImport.defaultValue,
                 )
             }
             debugMenuRepository.featureFlagOverridesUpdatedFlow.test {

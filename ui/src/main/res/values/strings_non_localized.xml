@@ -8,7 +8,6 @@
     <string name="json_extension_formatted" translatable="false">.json (%1$s)</string>
 
     <!-- region Debug Menu -->
-    <string name="email_verification">Email Verification</string>
     <string name="feature_flags">Feature Flags:</string>
     <string name="debug_menu">Debug Menu</string>
     <string name="reset_values">Reset values</string>

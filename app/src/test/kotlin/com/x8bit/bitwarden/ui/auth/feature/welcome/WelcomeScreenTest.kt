@@ -17,7 +17,6 @@ import org.robolectric.annotation.Config
 
 class WelcomeScreenTest : BitwardenComposeTest() {
     private var onNavigateToStartRegistrationCalled = false
-    private var onNavigateToCreateAccountCalled = false
     private var onNavigateToLoginCalled = false
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<WelcomeEvent>()
@@ -30,7 +29,6 @@ class WelcomeScreenTest : BitwardenComposeTest() {
     fun setUp() {
         setContent {
             WelcomeScreen(
-                onNavigateToCreateAccount = { onNavigateToCreateAccountCalled = true },
                 onNavigateToLogin = { onNavigateToLoginCalled = true },
                 onNavigateToStartRegistration = { onNavigateToStartRegistrationCalled = true },
                 viewModel = viewModel,
@@ -83,12 +81,6 @@ class WelcomeScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Level up your logins")
             .assertExists()
             .assertIsDisplayed()
-    }
-
-    @Test
-    fun `NavigateToCreateAccount event should call onNavigateToCreateAccount`() {
-        mutableEventFlow.tryEmit(WelcomeEvent.NavigateToCreateAccount)
-        assertTrue(onNavigateToCreateAccountCalled)
     }
 
     @Test

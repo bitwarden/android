@@ -30,7 +30,6 @@ sealed class FlagKey<out T : Any> {
          */
         val activePasswordManagerFlags: List<FlagKey<*>> by lazy {
             listOf(
-                EmailVerification,
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
                 RestrictCipherItemDeletion,
@@ -38,14 +37,6 @@ sealed class FlagKey<out T : Any> {
                 RemoveCardPolicy,
             )
         }
-    }
-
-    /**
-     * Data object holding the key for Email Verification feature.
-     */
-    data object EmailVerification : FlagKey<Boolean>() {
-        override val keyName: String = "email-verification"
-        override val defaultValue: Boolean = false
     }
 
     /**

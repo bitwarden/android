@@ -5,8 +5,8 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.manager.model.FlagKey
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
 import io.mockk.mockk
@@ -85,13 +85,13 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
         mutableStateFlow.tryEmit(
             DebugMenuState(
                 featureFlags = persistentMapOf(
-                    FlagKey.EmailVerification to true,
+                    FlagKey.CredentialExchangeProtocolImport to true,
                 ),
             ),
         )
 
         composeTestRule
-            .onNodeWithText("Email Verification", ignoreCase = true)
+            .onNodeWithText("CXP Import", ignoreCase = true)
             .assertExists()
     }
 
@@ -100,18 +100,18 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
         mutableStateFlow.tryEmit(
             DebugMenuState(
                 featureFlags = persistentMapOf(
-                    FlagKey.EmailVerification to true,
+                    FlagKey.CredentialExchangeProtocolImport to true,
                 ),
             ),
         )
         composeTestRule
-            .onNodeWithText("Email Verification", ignoreCase = true)
+            .onNodeWithText("CXP Import", ignoreCase = true)
             .performClick()
 
         verify(exactly = 1) {
             viewModel.trySendAction(
                 DebugMenuAction.UpdateFeatureFlag(
-                    FlagKey.EmailVerification,
+                    FlagKey.CredentialExchangeProtocolImport,
                     false,
                 ),
             )
