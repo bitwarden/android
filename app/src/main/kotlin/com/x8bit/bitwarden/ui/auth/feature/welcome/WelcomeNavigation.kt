@@ -23,13 +23,11 @@ fun NavController.navigateToWelcome(navOptions: NavOptions? = null) {
  * Add the Welcome screen to the nav graph.
  */
 fun NavGraphBuilder.welcomeDestination(
-    onNavigateToCreateAccount: () -> Unit,
     onNavigateToLogin: () -> Unit,
     onNavigateToStartRegistration: () -> Unit,
 ) {
     composableWithStayTransitions<WelcomeRoute> {
         WelcomeScreen(
-            onNavigateToCreateAccount = onNavigateToCreateAccount,
             onNavigateToLogin = onNavigateToLogin,
             onNavigateToStartRegistration = onNavigateToStartRegistration,
         )

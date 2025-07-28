@@ -9,10 +9,6 @@ class FlagKeyTest {
     @Test
     fun `Feature flags have the correct key name set`() {
         assertEquals(
-            FlagKey.EmailVerification.keyName,
-            "email-verification",
-        )
-        assertEquals(
             FlagKey.CredentialExchangeProtocolImport.keyName,
             "cxp-import-mobile",
         )
@@ -46,7 +42,6 @@ class FlagKeyTest {
     fun `All feature flags have the correct default value set`() {
         assertTrue(
             listOf(
-                FlagKey.EmailVerification,
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
                 FlagKey.CipherKeyEncryption,

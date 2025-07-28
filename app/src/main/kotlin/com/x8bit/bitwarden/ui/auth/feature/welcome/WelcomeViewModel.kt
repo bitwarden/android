@@ -1,11 +1,9 @@
 package com.x8bit.bitwarden.ui.auth.feature.welcome
 
 import android.os.Parcelable
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
@@ -15,9 +13,7 @@ import javax.inject.Inject
  * Manages application state for the welcome screen.
  */
 @HiltViewModel
-class WelcomeViewModel @Inject constructor(
-    private val featureFlagManager: FeatureFlagManager,
-) :
+class WelcomeViewModel @Inject constructor() :
     BaseViewModel<WelcomeState, WelcomeEvent, WelcomeAction>(
         initialState = WelcomeState(
             index = 0,
@@ -48,12 +44,7 @@ class WelcomeViewModel @Inject constructor(
     }
 
     private fun handleCreateAccountClick() {
-        val event = if (featureFlagManager.getFeatureFlag(FlagKey.EmailVerification)) {
-            WelcomeEvent.NavigateToStartRegistration
-        } else {
-            WelcomeEvent.NavigateToCreateAccount
-        }
-        sendEvent(event)
+        sendEvent(WelcomeEvent.NavigateToStartRegistration)
     }
 
     private fun handleLoginClick() {
@@ -129,11 +120,6 @@ sealed class WelcomeEvent {
     data class UpdatePager(
         val index: Int,
     ) : WelcomeEvent()
-
-    /**
-     * Navigates to the create account screen.
-     */
-    data object NavigateToCreateAccount : WelcomeEvent()
 
     /**
      * Navigates to the login screen.
