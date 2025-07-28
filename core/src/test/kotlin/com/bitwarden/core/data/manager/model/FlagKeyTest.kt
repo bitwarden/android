@@ -25,10 +25,6 @@ class FlagKeyTest {
             "cipher-key-encryption",
         )
         assertEquals(
-            FlagKey.RestrictCipherItemDeletion.keyName,
-            "pm-15493-restrict-item-deletion-to-can-manage-permission",
-        )
-        assertEquals(
             FlagKey.UserManagedPrivilegedApps.keyName,
             "pm-18970-user-managed-privileged-apps",
         )
@@ -50,7 +46,6 @@ class FlagKeyTest {
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
                 FlagKey.CipherKeyEncryption,
-                FlagKey.RestrictCipherItemDeletion,
                 FlagKey.UserManagedPrivilegedApps,
                 FlagKey.RemoveCardPolicy,
                 FlagKey.BitwardenAuthenticationEnabled,

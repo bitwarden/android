@@ -7,7 +7,6 @@ import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.DateTime
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
 import com.bitwarden.network.model.PolicyTypeJson
@@ -30,7 +29,6 @@ import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.credentials.util.getCreatePasskeyCredentialRequestOrNull
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -128,7 +126,6 @@ class VaultAddEditViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
     private val networkConnectionManager: NetworkConnectionManager,
     private val firstTimeActionManager: FirstTimeActionManager,
-    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -1784,10 +1781,6 @@ class VaultAddEditViewModel @Inject constructor(
         vaultData: VaultData?,
         userData: UserState?,
     ): VaultAddEditState {
-        val restrictCipherItemDeletionEnabled = featureFlagManager
-            .getFeatureFlag(
-                FlagKey.RestrictCipherItemDeletion,
-            )
         val internalVaultData = vaultData
             ?: VaultData(
                 decryptCipherListResult = DecryptCipherListResult(
@@ -1826,9 +1819,7 @@ class VaultAddEditViewModel @Inject constructor(
                     currentAccount = userData?.activeAccount,
                     vaultAddEditType = vaultAddEditType,
                 ) { currentAccount, cipherView ->
-                    val canDelete = if (restrictCipherItemDeletionEnabled &&
-                        cipherView?.permissions?.delete != null
-                    ) {
+                    val canDelete = if (cipherView?.permissions?.delete != null) {
                         cipherView.permissions?.delete == true
                     } else {
                         val needsManagePermission = cipherView
