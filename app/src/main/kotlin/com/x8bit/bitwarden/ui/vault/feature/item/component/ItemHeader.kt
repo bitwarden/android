@@ -39,8 +39,8 @@ import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
@@ -116,7 +116,11 @@ fun LazyListScope.itemHeader(
                             },
                         ),
                         contentDescription = stringResource(
-                            id = if (isFavorite) R.string.favorite else R.string.unfavorite,
+                            id = if (isFavorite) {
+                                BitwardenString.favorite
+                            } else {
+                                BitwardenString.unfavorite
+                            },
                         ),
                         modifier = Modifier.padding(all = 12.dp),
                     )
@@ -134,7 +138,7 @@ fun LazyListScope.itemHeader(
         item(key = "noFolder") {
             ItemLocationListItem(
                 vectorPainter = rememberVectorPainter(BitwardenDrawable.ic_folder),
-                text = stringResource(R.string.no_folder),
+                text = stringResource(BitwardenString.no_folder),
                 iconTestTag = "NoFolderIcon",
                 modifier = Modifier
                     .standardHorizontalMargin()
@@ -234,7 +238,7 @@ fun LazyListScope.itemHeader(
                     vectorPainter = rememberVectorPainter(it.icon),
                     iconTestTag = "ItemLocationIcon",
                     text = if (collectionLocations.size > 1 && !isExpanded) {
-                        stringResource(R.string.x_ellipses, it.name)
+                        stringResource(BitwardenString.x_ellipses, it.name)
                     } else {
                         it.name
                     },
@@ -280,8 +284,8 @@ fun LazyListScope.itemHeader(
     if (collectionLocations.size > 1) {
         item(key = "expandableLocationsExpansionIndicator") {
             BitwardenExpandingHeader(
-                collapsedText = stringResource(R.string.show_more),
-                expandedText = stringResource(R.string.show_less),
+                collapsedText = stringResource(BitwardenString.show_more),
+                expandedText = stringResource(BitwardenString.show_less),
                 isExpanded = isExpanded,
                 onClick = onExpandClick,
                 showExpansionIndicator = false,

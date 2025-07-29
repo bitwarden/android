@@ -4,15 +4,19 @@ import android.app.PendingIntent
 import android.content.Context
 import android.graphics.drawable.Icon
 import androidx.core.graphics.drawable.IconCompat
+import androidx.credentials.provider.BeginGetPasswordOption
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
+import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherListViewType
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.util.mockBuilder
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.mockk
@@ -31,6 +35,7 @@ class CredentialEntryBuilderTest {
 
     private val mockContext = mockk<Context>()
     private val mockGetPublicKeyCredentialIntent = mockk<PendingIntent>(relaxed = true)
+    private val mockGetPasswordCredentialIntent = mockk<PendingIntent>(relaxed = true)
     private val mockIntentManager = mockk<IntentManager> {
         every {
             createFido2GetCredentialPendingIntent(
@@ -42,31 +47,45 @@ class CredentialEntryBuilderTest {
                 isUserVerified = any(),
             )
         } returns mockGetPublicKeyCredentialIntent
+        every {
+            createPasswordGetCredentialPendingIntent(
+                action = any(),
+                userId = any(),
+                cipherId = any(),
+                requestCode = any(),
+                isUserVerified = any(),
+            )
+        } returns mockGetPasswordCredentialIntent
     }
-    private val mockFeatureFlagManager = mockk<FeatureFlagManager>()
     private val mockBiometricsEncryptionManager = mockk<BiometricsEncryptionManager>()
     private val mockBeginGetPublicKeyOption = mockk<BeginGetPublicKeyCredentialOption>()
+    private val mockBeginGetPasswordOption = mockk<BeginGetPasswordOption>()
     private val credentialEntryBuilder = CredentialEntryBuilderImpl(
         context = mockContext,
         intentManager = mockIntentManager,
-        featureFlagManager = mockFeatureFlagManager,
         biometricsEncryptionManager = mockBiometricsEncryptionManager,
     )
     private val mockPublicKeyCredentialEntry = mockk<PublicKeyCredentialEntry>(relaxed = true)
+    private val mockPasswordCredentialEntry = mockk<PasswordCredentialEntry>(relaxed = true)
     private val mockIcon = mockk<Icon>()
 
     @BeforeEach
     @Test
     fun setUp() {
         mockkConstructor(PublicKeyCredentialEntry.Builder::class)
+        mockkConstructor(PasswordCredentialEntry.Builder::class)
         mockkStatic(IconCompat::class)
         mockBuilder<PublicKeyCredentialEntry.Builder> { it.setIcon(any()) }
+        mockBuilder<PasswordCredentialEntry.Builder> { it.setIcon(any()) }
         every { IconCompat.createWithResource(any(), any()) } returns mockk {
             every { toIcon(mockContext) } returns mockIcon
         }
         every {
             anyConstructed<PublicKeyCredentialEntry.Builder>().build()
         } returns mockPublicKeyCredentialEntry
+        every {
+            anyConstructed<PasswordCredentialEntry.Builder>().build()
+        } returns mockPasswordCredentialEntry
     }
 
     @AfterEach
@@ -122,9 +141,6 @@ class CredentialEntryBuilderTest {
             )
 
             every {
-                mockFeatureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyAuthentication)
-            } returns false
-            every {
                 mockBiometricsEncryptionManager.getOrCreateCipher("userId")
             } returns null
 
@@ -160,11 +176,8 @@ class CredentialEntryBuilderTest {
             createMockFido2CredentialAutofillView(number = 1),
         )
 
-        // Verify biometric prompt data is not set when flag is false, buildVersion is at least 35,
+        // Verify biometric prompt data is not set when buildVersion is at least 35
         // and cipher is null.
-        every {
-            mockFeatureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyAuthentication)
-        } returns false
         every {
             mockBiometricsEncryptionManager.getOrCreateCipher("userId")
         } returns null
@@ -181,11 +194,7 @@ class CredentialEntryBuilderTest {
             anyConstructed<PublicKeyCredentialEntry.Builder>().setBiometricPromptData(any())
         }
 
-        // Verify biometric prompt data is not set when flag is true, buildVersion is below 35, and
-        // cipher is null.
-        every {
-            mockFeatureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyAuthentication)
-        } returns true
+        // Verify biometric prompt data is not set when buildVersion is below 35 and cipher is null.
         credentialEntryBuilder
             .buildPublicKeyCredentialEntries(
                 userId = "userId",
@@ -198,7 +207,7 @@ class CredentialEntryBuilderTest {
             anyConstructed<PublicKeyCredentialEntry.Builder>().setBiometricPromptData(any())
         }
 
-        // Verify biometric prompt data is not set when flag is true, buildVersion is at least 35,
+        // Verify biometric prompt data is not set when buildVersion is at least 35
         // and cipher is null
         every { isBuildVersionAtLeast(any()) } returns true
         credentialEntryBuilder
@@ -227,7 +236,7 @@ class CredentialEntryBuilderTest {
             anyConstructed<PublicKeyCredentialEntry.Builder>().setBiometricPromptData(any())
         }
 
-        // Verify biometric prompt data is set when flag is true, buildVersion is >= 35, cipher is
+        // Verify biometric prompt data is set when buildVersion is >= 35, cipher is
         // not null, and user is not verified
         credentialEntryBuilder
             .buildPublicKeyCredentialEntries(
@@ -238,6 +247,130 @@ class CredentialEntryBuilderTest {
             )
         verify(exactly = 1) {
             anyConstructed<PublicKeyCredentialEntry.Builder>().setBiometricPromptData(any())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `buildPasswordCredentialEntries should return Success with empty list when options list is empty`() =
+        runTest {
+            val options = emptyList<BeginGetPasswordOption>()
+            val cipherListViews = listOf(
+                createMockCipherListView(
+                    number = 1,
+                    type = CipherListViewType.Login(
+                        createMockLoginListView(
+                            number = 1,
+                            hasFido2 = true,
+                            uris = emptyList(),
+                        ),
+                    ),
+                ),
+            )
+
+            val result = credentialEntryBuilder
+                .buildPasswordCredentialEntries(
+                    userId = "userId",
+                    cipherListViews = cipherListViews,
+                    beginGetPasswordCredentialOptions = options,
+                    isUserVerified = false,
+                )
+            assertTrue(result.isEmpty())
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `buildPasswordCredentialEntries should return Success with empty list when passwordAutofillViews is empty`() =
+        runTest {
+            val options = listOf(mockBeginGetPasswordOption)
+            val cipherListViews = emptyList<CipherListView>()
+            val result = credentialEntryBuilder
+                .buildPasswordCredentialEntries(
+                    userId = "userId",
+                    cipherListViews = cipherListViews,
+                    beginGetPasswordCredentialOptions = options,
+                    isUserVerified = false,
+                )
+            assertTrue(result.isEmpty())
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `buildPasswordCredentialEntries should return Success with list of PasswordCredentialEntry`() =
+        runTest {
+            val options = listOf(mockBeginGetPasswordOption)
+            val cipherListViews = listOf(
+                createMockCipherListView(
+                    number = 1,
+                    type = CipherListViewType.Login(
+                        createMockLoginListView(
+                            number = 1,
+                            hasFido2 = true,
+                            uris = emptyList(),
+                        ),
+                    ),
+                ),
+            )
+            every {
+                mockBiometricsEncryptionManager.getOrCreateCipher("userId")
+            } returns null
+
+            val result = credentialEntryBuilder
+                .buildPasswordCredentialEntries(
+                    userId = "userId",
+                    cipherListViews = cipherListViews,
+                    beginGetPasswordCredentialOptions = options,
+                    isUserVerified = false,
+                )
+
+            assertTrue(result.isNotEmpty())
+
+            verify {
+                mockIntentManager.createPasswordGetCredentialPendingIntent(
+                    action = "com.x8bit.bitwarden.credentials.ACTION_GET_PASSWORD",
+                    userId = "userId",
+                    cipherId = "mockId-1",
+                    requestCode = any(),
+                    isUserVerified = false,
+                )
+
+                anyConstructed<PasswordCredentialEntry.Builder>().setIcon(mockIcon)
+            }
+        }
+
+    @Test
+    fun `buildPasswordCredentialEntries should set biometric prompt data correctly`() = runTest {
+        mockkStatic(::isBuildVersionAtLeast)
+        val options = listOf(mockBeginGetPasswordOption)
+        val cipherListViews = listOf(
+            createMockCipherListView(
+                number = 1,
+                type = CipherListViewType.Login(
+                    createMockLoginListView(
+                        number = 1,
+                        hasFido2 = true,
+                        uris = emptyList(),
+                    ),
+                ),
+            ),
+        )
+
+        every {
+            mockBiometricsEncryptionManager.getOrCreateCipher(any())
+        } returns mockk(relaxed = true)
+        every { isBuildVersionAtLeast(any()) } returns true
+
+        // Verify biometric prompt data is set when buildVersion is >= 35, cipher is
+        // not null, and user is not verified
+        credentialEntryBuilder
+            .buildPasswordCredentialEntries(
+                userId = "userId",
+                cipherListViews = cipherListViews,
+                beginGetPasswordCredentialOptions = options,
+                isUserVerified = false,
+            )
+        verify(exactly = 1) {
+            anyConstructed<PasswordCredentialEntry.Builder>().setBiometricPromptData(any())
         }
     }
 }

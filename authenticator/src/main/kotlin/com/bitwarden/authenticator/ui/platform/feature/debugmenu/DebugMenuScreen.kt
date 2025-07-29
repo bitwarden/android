@@ -21,20 +21,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledButton
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.components.ListItemContent
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * Top level screen for the debug menu.
@@ -60,11 +60,11 @@ fun DebugMenuScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             AuthenticatorTopAppBar(
-                title = stringResource(R.string.debug_menu),
+                title = stringResource(BitwardenString.debug_menu),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(BitwardenDrawable.ic_back),
-                    navigationIconContentDescription = stringResource(id = R.string.back),
+                    navigationIconContentDescription = stringResource(id = BitwardenString.back),
                     onNavigationIconClick = remember(viewModel) {
                         {
                             viewModel.trySendAction(DebugMenuAction.NavigateBack)
@@ -109,7 +109,7 @@ private fun FeatureFlagContent(
     ) {
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenListHeaderText(
-            label = stringResource(R.string.feature_flags),
+            label = stringResource(BitwardenString.feature_flags),
             modifier = Modifier.standardHorizontalMargin(),
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -130,7 +130,7 @@ private fun FeatureFlagContent(
         }
         Spacer(modifier = Modifier.height(12.dp))
         AuthenticatorFilledButton(
-            label = stringResource(R.string.reset_values),
+            label = stringResource(BitwardenString.reset_values),
             onClick = onResetValues,
             modifier = Modifier
                 .standardHorizontalMargin()

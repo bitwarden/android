@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s kopyalandı</string>
     <string name="verify_master_password">Ana parolu doğrula</string>
     <string name="verify_pin">PIN-i doğrula</string>
-    <string name="version">Versiya</string>
     <string name="view">Bax</string>
     <string name="yes">Bəli</string>
     <string name="account">Hesab</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Karta düzəliş et</string>
     <string name="edit_identity">Kimliyə düzəliş et</string>
     <string name="edit_note">Nota düzəliş et</string>
-    <string name="edit_passkey">Keçid açarına düzəliş et</string>
+    <string name="edit_ssh_key">Edit SSH key</string>
     <string name="enter_email_for_hint">Ana parol məsləhətini alacağınız hesabınızın e-poçt ünvanını daxil edin.</string>
     <string name="favorite">Sevimli</string>
     <string name="unfavorite">Sevimlilərdən sil</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 dəqiqə</string>
     <string name="four_hours">4 saat</string>
     <string name="immediately">Dərhal</string>
-    <string name="vault_timeout_log_out_confirmation">Çıxış etdikdə, seyfinizə bütün müraciətiniz dayanacaq və vaxt bitməsindən sonra onlayn kimlik doğrulaması tələb olunacaq. Bu ayarı istifadə etmək istədiyinizə əminsiniz?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
     <string name="logging_in">Giriş edilir...</string>
     <string name="login_to_bitwarden">Bitwarden-ə giriş edin</string>
     <string name="master_password_confirmation_val_message">Parol təsdiqləmə doğru deyil.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Yeni kimlik</string>
     <string name="no_notes">Seyfinizdə heç bir not yoxdur.</string>
     <string name="new_note">Yeni not</string>
-    <string name="new_passkey">Yeni keçid açarı</string>
     <string name="new_item">Yeni element</string>
     <string name="new_ssh_key">Yeni SSH açarı</string>
     <string name="no_text_sends">Seyfinizdə heç bir mətn Send-i yoxdur.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Karta bax</string>
     <string name="view_identity">Kimliyə bax</string>
     <string name="view_note">Nota bax</string>
-    <string name="view_passkey">Keçid açarına bax</string>
+    <string name="view_ssh_key">View SSH key</string>
     <string name="web_vault">Bitwarden veb seyfi</string>
     <string name="items">Elementlər</string>
     <string name="items_for_uri">%1$s üçün elementlər</string>
@@ -265,6 +264,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="address">Ünvan</string>
     <string name="expiration">Bitmə vaxtı</string>
     <string name="show_website_icons">Veb sayt ikonlarını göstər</string>
+    <string name="show_website_icons_help">Show website icons help</string>
     <string name="show_website_icons_description">Hər girişin yanında tanına bilən təsvir göstər.</string>
     <string name="icons_url">İkon server URL-si</string>
     <string name="vault_is_locked">Seyf kilidlənib</string>
@@ -700,6 +700,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="launch_web_authn">WebAuthn-u başlat</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">WebAuthn iki faktorlu kimlik doğrulama başladılarkən bir xəta baş verdi</string>
     <string name="self_hosted_server_url">Self-hosted server URL-si</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">İstifadəçi doğrulana bilmədiyi üçün keçid açarı əəməliyyatı uğursuz oldu.</string>
     <string name="user_verification_direction">İstifadəçi doğrulama</string>
     <string name="create_account_on">Hesab yarat</string>
@@ -864,7 +865,6 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Yalnız iki faktorlu kimlik doğrulamanı kod ilə tələb edən girişlər üçün Kimlik doğrulayıcı Açarı qurmağınız lazımdır. Açar, giriş edə bilməyiniz üçün altı rəqəmli kodları davamlı yaradacaq.</string>
     <string name="coachmark_3_of_3">3/3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Avto-doldurmanı istifadə edərək bu hesaba müraciət etmək üçün bir veb ünvan əlavə etməlisiniz.</string>
-    <string name="mutual_tls">Ortaq TLS</string>
     <string name="single_tap_passkey_creation">Tək toxunuşla keçid açarı yaratma</string>
     <string name="single_tap_passkey_authentication">Tək toxunuşla keçid açarı ilə daxil olma</string>
     <string name="learn_about_new_logins">Yeni girişləri öyrənin</string>
@@ -908,6 +908,12 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">İstifadəçi doğrulama cəhdlərini aşdığı üçün keçid açarı əməliyyatı uğursuz oldu.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Heç bir element seçilmədiyi üçün keçid açarı əməliyyatı uğursuz oldu.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Sorğu dəstəklənmədiyi üçün keçid açarı əməliyyatı uğursuz oldu.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">Self-host server URL-si</string>
     <string name="use_brave_autofill_integration">Brave avto-doldurma inteqrasiyasını istifadə et</string>
     <string name="use_chrome_autofill_integration">Chrome avto-doldurma inteqrasiyasını istifadə et</string>
@@ -968,8 +974,8 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="view_text_send">Send mətninə bax</string>
     <string name="delete_send">\"Send\"i sil</string>
     <string name="missing_send_resync_your_vault">Send əskikdir, seyfinizi təkrar sinxronlaşdırın</string>
-    <string name="dynamic_colors">Dinamik rənglər</string>
-    <string name="dynamic_colors_description">Divar kağızınıza görə dinamik rənglər tətbiq edin</string>
+    <string name="use_dynamic_colors">Use dynamic colors</string>
+    <string name="use_dynamic_colors_question">Use dynamic colors?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dinamik rənglər, sistem rənglərini istifadə edir və bütün əlçatımlılıq göstərişlərinə cavab verməyə bilər.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Keçid açarı əməliyyatı uğursuz oldu, çünki brauzer (%1$s) güvənli deyil. %1$s tətbiqini güvənli tətbiqlər siyahısına əlavə etmək üçün \"Güvən\"i, əməliyyatı ləğv etmək üçün \"İmtina\"nı seçin.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Keçid açarı əməliyyatı uğursuz oldu, çünki brauzer güvənli deyil.</string>
@@ -990,4 +996,6 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">%s - güvənməyi dayandırmaq istədiyinizə əminsiniz?</string>
     <string name="installed_apps">Quraşdırılmış tətbiqlər</string>
     <string name="delete_x">%s - sil</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
+    <string name="decryption_error">Decryption error</string>
 </resources>

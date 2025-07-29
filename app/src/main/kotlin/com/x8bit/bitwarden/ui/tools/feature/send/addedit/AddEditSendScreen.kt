@@ -24,7 +24,7 @@ import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -106,7 +106,7 @@ fun AddEditSendScreen(
                 title = state.screenDisplayName(),
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                    navigationIconContentDescription = stringResource(id = R.string.close),
+                    navigationIconContentDescription = stringResource(id = BitwardenString.close),
                     onNavigationIconClick = remember(viewModel) {
                         { viewModel.trySendAction(AddEditSendAction.CloseClick) }
                     },
@@ -116,7 +116,7 @@ fun AddEditSendScreen(
                 scrollBehavior = scrollBehavior,
                 actions = {
                     BitwardenTextButton(
-                        label = stringResource(id = R.string.save),
+                        label = stringResource(id = BitwardenString.save),
                         isEnabled = !state.policyDisablesSend,
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(AddEditSendAction.SaveClick) }
@@ -125,10 +125,10 @@ fun AddEditSendScreen(
                     )
                     if (!state.isAddMode) {
                         BitwardenOverflowActionItem(
-                            contentDescription = stringResource(R.string.more),
+                            contentDescription = stringResource(BitwardenString.more),
                             menuItemDataList = persistentListOfNotNull(
                                 OverflowMenuItemData(
-                                    text = stringResource(id = R.string.remove_password),
+                                    text = stringResource(id = BitwardenString.remove_password),
                                     onClick = remember(viewModel) {
                                         {
                                             viewModel.trySendAction(
@@ -139,14 +139,14 @@ fun AddEditSendScreen(
                                 )
                                     .takeIf { state.hasPassword && !state.policyDisablesSend },
                                 OverflowMenuItemData(
-                                    text = stringResource(id = R.string.copy_link),
+                                    text = stringResource(id = BitwardenString.copy_link),
                                     onClick = remember(viewModel) {
                                         { viewModel.trySendAction(AddEditSendAction.CopyLinkClick) }
                                     },
                                 )
                                     .takeIf { !state.policyDisablesSend },
                                 OverflowMenuItemData(
-                                    text = stringResource(id = R.string.share_link),
+                                    text = stringResource(id = BitwardenString.share_link),
                                     onClick = remember(viewModel) {
                                         {
                                             viewModel.trySendAction(

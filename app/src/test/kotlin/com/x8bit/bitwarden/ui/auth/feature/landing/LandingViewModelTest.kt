@@ -5,16 +5,14 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
@@ -48,9 +46,6 @@ class LandingViewModelTest : BaseViewModelTest() {
         every {
             getSnackbarDataFlow(SnackbarRelay.ENVIRONMENT_SAVED)
         } returns mutableSnackbarSharedFlow
-    }
-    private val featureFlagManager: FeatureFlagManager = mockk(relaxed = true) {
-        every { getFeatureFlag(FlagKey.EmailVerification) } returns false
     }
 
     @Test
@@ -213,7 +208,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 initialState.copy(
                     dialog = LandingState.DialogState.Error(
-                        message = R.string.invalid_email.asText(),
+                        message = BitwardenString.invalid_email.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -405,30 +400,16 @@ class LandingViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `CreateAccountClick should emit NavigateToCreateAccount`() = runTest {
+    fun `CreateAccountClick should emit NavigateToStartRegistration`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(LandingAction.CreateAccountClick)
             assertEquals(
-                LandingEvent.NavigateToCreateAccount,
+                LandingEvent.NavigateToStartRegistration,
                 awaitItem(),
             )
         }
     }
-
-    @Test
-    fun `When feature is enabled CreateAccountClick should emit NavigateToStartRegistration`() =
-        runTest {
-            every { featureFlagManager.getFeatureFlag(FlagKey.EmailVerification) } returns true
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(LandingAction.CreateAccountClick)
-                assertEquals(
-                    LandingEvent.NavigateToStartRegistration,
-                    awaitItem(),
-                )
-            }
-        }
 
     @Test
     fun `DialogDismiss should clear the active dialog`() {
@@ -623,7 +604,6 @@ class LandingViewModelTest : BaseViewModelTest() {
         },
         vaultRepository = vaultRepository,
         environmentRepository = fakeEnvironmentRepository,
-        featureFlagManager = featureFlagManager,
         snackbarRelayManager = snackbarRelayManager,
         savedStateHandle = savedStateHandle,
     )

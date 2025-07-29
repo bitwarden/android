@@ -6,11 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.PasswordHistoryView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -91,7 +91,7 @@ class PasswordHistoryViewModel @Inject constructor(
             is LocalDataState.Loading -> PasswordHistoryState.ViewState.Loading
 
             is LocalDataState.Error -> {
-                PasswordHistoryState.ViewState.Error(R.string.an_error_has_occurred.asText())
+                PasswordHistoryState.ViewState.Error(BitwardenString.an_error_has_occurred.asText())
             }
 
             is LocalDataState.Loaded -> state.data.toViewState()
@@ -105,13 +105,13 @@ class PasswordHistoryViewModel @Inject constructor(
     private fun handleCipherDataReceive(action: PasswordHistoryAction.Internal.CipherDataReceive) {
         val newState: PasswordHistoryState.ViewState = when (action.state) {
             is DataState.Error -> {
-                PasswordHistoryState.ViewState.Error(R.string.an_error_has_occurred.asText())
+                PasswordHistoryState.ViewState.Error(BitwardenString.an_error_has_occurred.asText())
             }
 
             is DataState.Loaded -> action.state.data?.passwordHistory.toViewState()
             is DataState.Loading -> PasswordHistoryState.ViewState.Loading
             is DataState.NoNetwork -> {
-                PasswordHistoryState.ViewState.Error(R.string.an_error_has_occurred.asText())
+                PasswordHistoryState.ViewState.Error(BitwardenString.an_error_has_occurred.asText())
             }
 
             is DataState.Pending -> action.state.data?.passwordHistory.toViewState()
@@ -134,7 +134,7 @@ class PasswordHistoryViewModel @Inject constructor(
     private fun handleCopyClick(password: GeneratedPassword) {
         clipboardManager.setText(
             text = password.password,
-            toastDescriptorOverride = R.string.password.asText(),
+            toastDescriptorOverride = BitwardenString.password.asText(),
         )
     }
 

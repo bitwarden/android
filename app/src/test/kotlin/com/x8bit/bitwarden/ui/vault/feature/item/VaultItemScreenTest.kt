@@ -28,6 +28,7 @@ import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.assertScrollableNodeDoesNotExist
@@ -35,7 +36,6 @@ import com.bitwarden.ui.util.isProgressBar
 import com.bitwarden.ui.util.onFirstNodeWithTextAfterScroll
 import com.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.bitwarden.ui.util.onNodeWithTextAfterScroll
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
@@ -222,7 +222,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText("Loading").assertDoesNotExist()
 
         mutableStateFlow.update {
-            it.copy(dialog = VaultItemState.DialogState.Loading(R.string.loading.asText()))
+            it.copy(dialog = VaultItemState.DialogState.Loading(BitwardenString.loading.asText()))
         }
 
         composeTestRule
@@ -511,7 +511,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
                 mutableStateFlow.update { currentState ->
                     updateCommonContent(currentState) {
-                        copy(lastUpdated = R.string.created.asText("Feb 21, 1970, 1:30 AM"))
+                        copy(lastUpdated = BitwardenString.created.asText("Feb 21, 1970, 1:30 AM"))
                     }
                 }
 
@@ -533,7 +533,10 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
                 mutableStateFlow.update { currentState ->
                     updateCommonContent(currentState) {
-                        copy(lastUpdated = R.string.last_edited.asText("Dec 31, 1969, 06:20 PM"))
+                        copy(
+                            lastUpdated = BitwardenString.last_edited
+                                .asText("Dec 31, 1969, 06:20 PM"),
+                        )
                     }
                 }
 
@@ -3158,8 +3161,8 @@ private val DEFAULT_STATE: VaultItemState = VaultItemState(
 private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
     VaultItemState.ViewState.Content.Common(
         name = "cipher",
-        created = R.string.created.asText(""),
-        lastUpdated = R.string.last_edited.asText("Dec 31, 1969, 06:16 PM"),
+        created = BitwardenString.created.asText(""),
+        lastUpdated = BitwardenString.last_edited.asText("Dec 31, 1969, 06:16 PM"),
         notes = "Lots of notes",
         customFields = listOf(
             VaultItemState.ViewState.Content.Common.Custom.TextField(
@@ -3202,7 +3205,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
         relatedLocations = persistentListOf(),
     )
 
-private val DEFAULT_PASSKEY = R.string.created_x.asText("Mar 13, 2024, 3:56 PM")
+private val DEFAULT_PASSKEY = BitwardenString.created_x.asText("Mar 13, 2024, 3:56 PM")
 
 private val DEFAULT_LOGIN: VaultItemState.ViewState.Content.ItemType.Login =
     VaultItemState.ViewState.Content.ItemType.Login(
@@ -3219,7 +3222,7 @@ private val DEFAULT_LOGIN: VaultItemState.ViewState.Content.ItemType.Login =
                 isLaunchable = true,
             ),
         ),
-        passwordRevisionDate = R.string.password_last_updated.asText("Apr 14, 1983 3:56 PM"),
+        passwordRevisionDate = BitwardenString.password_last_updated.asText("Apr 14, 1983 3:56 PM"),
         isPremiumUser = true,
         totpCodeItemData = TotpCodeItemData(
             periodSeconds = 30,
@@ -3271,8 +3274,8 @@ private val DEFAULT_SSH_KEY: VaultItemState.ViewState.Content.ItemType.SshKey =
 private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
     VaultItemState.ViewState.Content.Common(
         name = "cipher",
-        created = R.string.created.asText("Dec 1, 1969, 05:20 PM"),
-        lastUpdated = R.string.last_edited.asText("Dec 31, 1969, 06:16 PM"),
+        created = BitwardenString.created.asText("Dec 1, 1969, 05:20 PM"),
+        lastUpdated = BitwardenString.last_edited.asText("Dec 31, 1969, 06:16 PM"),
         notes = null,
         customFields = emptyList(),
         requiresCloneConfirmation = false,

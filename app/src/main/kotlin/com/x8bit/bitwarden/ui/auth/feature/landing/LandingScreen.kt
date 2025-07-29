@@ -45,8 +45,8 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenPlaceholderAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -65,7 +65,6 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 @Suppress("LongMethod")
 fun LandingScreen(
-    onNavigateToCreateAccount: () -> Unit,
     onNavigateToLogin: (emailAddress: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
     onNavigateToStartRegistration: () -> Unit,
@@ -76,7 +75,6 @@ fun LandingScreen(
     val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            LandingEvent.NavigateToCreateAccount -> onNavigateToCreateAccount()
             is LandingEvent.NavigateToLogin -> onNavigateToLogin(event.emailAddress)
             LandingEvent.NavigateToEnvironment -> onNavigateToEnvironment()
             LandingEvent.NavigateToStartRegistration -> onNavigateToStartRegistration()
@@ -88,12 +86,12 @@ fun LandingScreen(
     when (val dialog = state.dialog) {
         is LandingState.DialogState.AccountAlreadyAdded -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = R.string.account_already_added),
+                title = stringResource(id = BitwardenString.account_already_added),
                 message = stringResource(
-                    id = R.string.switch_to_already_added_account_confirmation,
+                    id = BitwardenString.switch_to_already_added_account_confirmation,
                 ),
-                confirmButtonText = stringResource(id = R.string.yes),
-                dismissButtonText = stringResource(id = R.string.cancel),
+                confirmButtonText = stringResource(id = BitwardenString.yes),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
                 onConfirmClick = remember(viewModel) {
                     {
                         viewModel.trySendAction(
@@ -114,7 +112,7 @@ fun LandingScreen(
 
         is LandingState.DialogState.Error -> {
             BitwardenBasicDialog(
-                title = stringResource(id = R.string.an_error_has_occurred),
+                title = stringResource(id = BitwardenString.an_error_has_occurred),
                 message = dialog.message(),
                 onDismissRequest = remember(viewModel) {
                     { viewModel.trySendAction(LandingAction.DialogDismiss) }
@@ -234,7 +232,7 @@ private fun LandingScreenContent(
         Spacer(modifier = Modifier.height(height = 12.dp))
 
         Text(
-            text = stringResource(id = R.string.login_to_bitwarden),
+            text = stringResource(id = BitwardenString.login_to_bitwarden),
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.headlineSmall,
             color = BitwardenTheme.colorScheme.text.primary,
@@ -251,15 +249,15 @@ private fun LandingScreenContent(
                 .fillMaxWidth(),
             value = state.emailInput,
             onValueChange = onEmailInputChange,
-            label = stringResource(id = R.string.email_address),
+            label = stringResource(id = BitwardenString.email_address),
             keyboardType = KeyboardType.Email,
             textFieldTestTag = "EmailAddressEntry",
             cardStyle = CardStyle.Full,
             supportingContentPadding = PaddingValues(),
             supportingContent = {
                 EnvironmentSelector(
-                    labelText = stringResource(id = R.string.logging_in_on_with_colon),
-                    dialogTitle = stringResource(id = R.string.logging_in_on),
+                    labelText = stringResource(id = BitwardenString.logging_in_on_with_colon),
+                    dialogTitle = stringResource(id = BitwardenString.logging_in_on),
                     selectedOption = state.selectedEnvironmentType,
                     onOptionSelected = onEnvironmentTypeSelect,
                     isHelpEnabled = false,
@@ -274,7 +272,7 @@ private fun LandingScreenContent(
         Spacer(modifier = Modifier.height(height = 8.dp))
 
         BitwardenSwitch(
-            label = stringResource(id = R.string.remember_email),
+            label = stringResource(id = BitwardenString.remember_email),
             isChecked = state.isRememberEmailEnabled,
             onCheckedChange = onRememberMeToggle,
             cardStyle = CardStyle.Full,
@@ -287,7 +285,7 @@ private fun LandingScreenContent(
         Spacer(modifier = Modifier.height(height = 24.dp))
 
         BitwardenFilledButton(
-            label = stringResource(id = R.string.continue_text),
+            label = stringResource(id = BitwardenString.continue_text),
             onClick = onContinueClick,
             isEnabled = state.isContinueButtonEnabled,
             modifier = Modifier
@@ -307,13 +305,13 @@ private fun LandingScreenContent(
                 .wrapContentHeight(),
         ) {
             Text(
-                text = stringResource(id = R.string.new_to_bitwarden),
+                text = stringResource(id = BitwardenString.new_to_bitwarden),
                 style = BitwardenTheme.typography.bodyMedium,
                 color = BitwardenTheme.colorScheme.text.secondary,
             )
 
             BitwardenTextButton(
-                label = stringResource(id = R.string.create_an_account),
+                label = stringResource(id = BitwardenString.create_an_account),
                 onClick = onCreateAccountClick,
                 modifier = Modifier
                     .testTag("CreateAccountLabel"),
@@ -321,7 +319,7 @@ private fun LandingScreenContent(
         }
         Spacer(modifier = Modifier.height(height = 8.dp))
         BitwardenTextButton(
-            label = stringResource(id = R.string.app_settings),
+            label = stringResource(id = BitwardenString.app_settings),
             onClick = onAppSettingsClick,
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_cog),
             modifier = Modifier

@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s беше копирано.</string>
     <string name="verify_master_password">Потвърждаване на главната парола</string>
     <string name="verify_pin">Потвърждаване на ПИН</string>
-    <string name="version">Версия</string>
     <string name="view">Преглед</string>
     <string name="yes">Да</string>
     <string name="account">Регистрация</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Редактиране на картата</string>
     <string name="edit_identity">Редактиране на самоличността</string>
     <string name="edit_note">Редактиране на бележката</string>
-    <string name="edit_passkey">Редактиране на секретния ключ</string>
+    <string name="edit_ssh_key">Редактиране на SSH ключа</string>
     <string name="enter_email_for_hint">Въведете адреса си на е-поща, за да получите писмо с подсказка за главната парола.</string>
     <string name="favorite">Любими</string>
     <string name="unfavorite">Премахване от любимите</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 минута</string>
     <string name="four_hours">4 часа</string>
     <string name="immediately">Незабавно</string>
-    <string name="vault_timeout_log_out_confirmation">Излизането от трезора изцяло спира достъпа до него след изтичане на времето. Ще ви се наложи отново да се идентифицирате, за да го достъпите. Сигурни ли сте, че искате това действие?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Задаване на изтичането на сесията да предизвиква „Отписване“?</string>
+    <string name="vault_timeout_log_out_confirmation_message">След изтичането на времето, ще бъдете отписан(а). Ще трябва да имате връзка с Интернет, за да се впишете и получите достъп до трезора си отново. Вашите настройки и ПИН, запазени на това устройство, няма да бъдат променени.</string>
     <string name="logging_in">Вписване…</string>
     <string name="login_to_bitwarden">Впишете се в Битуорден</string>
     <string name="master_password_confirmation_val_message">Потвърждението не съвпада с паролата.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Нова самоличност</string>
     <string name="no_notes">Няма бележки в трезора.</string>
     <string name="new_note">Нова бележка</string>
-    <string name="new_passkey">Нов секретен ключ</string>
     <string name="new_item">Нов елемент</string>
     <string name="new_ssh_key">Нов SSH ключ</string>
     <string name="no_text_sends">Няма текстови Изпращания в трезора.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Преглед на картата</string>
     <string name="view_identity">Преглед на самоличността</string>
     <string name="view_note">Преглед на бележката</string>
-    <string name="view_passkey">Преглед на секретния ключ</string>
+    <string name="view_ssh_key">Преглед на SSH ключа</string>
     <string name="web_vault">Трезор по уеб</string>
     <string name="items">Елементи</string>
     <string name="items_for_uri">Елементи за %1$s</string>
@@ -265,6 +264,7 @@
     <string name="address">Адрес</string>
     <string name="expiration">Изтичане</string>
     <string name="show_website_icons">Показване на иконките на уеб сайтовете</string>
+    <string name="show_website_icons_help">Показване на помощ за иконките на уеб сайтовете</string>
     <string name="show_website_icons_description">Показване на разпознаваемо изображение до всеки запис.</string>
     <string name="icons_url">Адрес на сървъра с иконки</string>
     <string name="vault_is_locked">Трезорът е заключен</string>
@@ -701,6 +701,7 @@
     <string name="launch_web_authn">Стартиране на WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Имаше грешка при стартирането на двустепенното удостоверяване чрез WebAuthn</string>
     <string name="self_hosted_server_url">Адрес на собствения сървър</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Операцията с удостоверителните данни беше неуспешна, тъй като потребителят не може да бъде потвърден.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Операцията със секретния ключ беше неуспешна, тъй като потребителят не може да бъде потвърден.</string>
     <string name="user_verification_direction">Потвърждение на потребителя</string>
     <string name="create_account_on">Създаване на регистрация в</string>
@@ -865,7 +866,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">Ще трябва да настроите удостоверителен ключ само за само за елементите, които изискват двустепенно удостоверяване с код. Ключът непрекъснато ще генерира шест-цифрени кодове, чрез които можете да се впишете.</string>
     <string name="coachmark_3_of_3">3 от 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Трябва да добавите уеб адрес, за да може да използвате автоматичното попълване за вписване в този акаунт.</string>
-    <string name="mutual_tls">Общ TLS</string>
     <string name="single_tap_passkey_creation">Създаване на секретен ключ с едно докосване</string>
     <string name="single_tap_passkey_authentication">Вписване чрез секретен ключ с едно докосване</string>
     <string name="learn_about_new_logins">Научете за новите данни за вписване</string>
@@ -909,6 +909,12 @@
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Операцията със секретния ключ беше неуспешна, тъй като е превишен броят на опитите за потвърждение на потребителя.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Операцията със секретния ключ беше неуспешна, тъй като няма избран елемент.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Операцията със секретния ключ беше неуспешна, тъй като заявката не се поддържа.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Операцията с паролата беше неуспешна, тъй като избраният елемент не съществува.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Операцията с паролата беше неуспешна, тъй като няма избран елемент.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Операцията с удостоверителните данни беше неуспешна, тъй като е превишен броят на опитите за потвърждение на потребителя.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Операцията с удостоверителните данни беше неуспешна, тъй като потребителят е заключен извън системата.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Операцията с удостоверителните данни беше неуспешна, тъй като избраният елемент не съществува.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Операцията с удостоверителните данни беше неуспешна, тъй като потвърждението беше отказано.</string>
     <string name="self_host_server_url">Адрес на собствения сървър</string>
     <string name="use_brave_autofill_integration">Използване на интеграцията с автоматичното попълване на Brave</string>
     <string name="use_chrome_autofill_integration">Използване на интеграцията с автоматичното попълване на Chrome</string>
@@ -969,8 +975,8 @@
     <string name="view_text_send">Преглед на текстовото Изпращане</string>
     <string name="delete_send">Изтриване на изпращането</string>
     <string name="missing_send_resync_your_vault">Изпращането липсва, сихронизирайте трезора си</string>
-    <string name="dynamic_colors">Динамични цветове</string>
-    <string name="dynamic_colors_description">Прилагане на динамични цветове според фона</string>
+    <string name="use_dynamic_colors">Използване на динамични цветове</string>
+    <string name="use_dynamic_colors_question">Използване на динамични цветове?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Динамичните цветове използват системните цветове и може да не отговарят на всички норми за улеснено ползване.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Операцията със секретен ключ не беше успешна, тъй като браузърът (%1$s) не е доверен. Изберете „Даване на доверие“, за да добавите %1$s към списъка с доверени приложения или „Отказ“, за да прекратите операцията.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Операцията със секретен ключ не беше успешна, тъй като браузърът не е доверен.</string>
@@ -991,4 +997,6 @@
     <string name="are_you_sure_you_want_to_stop_trusting_x">Наистина ли искате да премахнете доверието от %s?</string>
     <string name="installed_apps">Инсталирани приложения</string>
     <string name="delete_x">Изтриване на %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Шифърът на може да бъде дешифриран. Свържете се с поддръжката.</string>
+    <string name="decryption_error">Грешка при дешифриране</string>
 </resources>

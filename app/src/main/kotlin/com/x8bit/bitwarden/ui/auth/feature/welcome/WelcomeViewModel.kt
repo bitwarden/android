@@ -3,9 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.welcome
 import android.os.Parcelable
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.bitwarden.ui.platform.resource.BitwardenString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
@@ -15,9 +13,7 @@ import javax.inject.Inject
  * Manages application state for the welcome screen.
  */
 @HiltViewModel
-class WelcomeViewModel @Inject constructor(
-    private val featureFlagManager: FeatureFlagManager,
-) :
+class WelcomeViewModel @Inject constructor() :
     BaseViewModel<WelcomeState, WelcomeEvent, WelcomeAction>(
         initialState = WelcomeState(
             index = 0,
@@ -48,12 +44,7 @@ class WelcomeViewModel @Inject constructor(
     }
 
     private fun handleCreateAccountClick() {
-        val event = if (featureFlagManager.getFeatureFlag(FlagKey.EmailVerification)) {
-            WelcomeEvent.NavigateToStartRegistration
-        } else {
-            WelcomeEvent.NavigateToCreateAccount
-        }
-        sendEvent(event)
+        sendEvent(WelcomeEvent.NavigateToStartRegistration)
     }
 
     private fun handleLoginClick() {
@@ -83,8 +74,8 @@ data class WelcomeState(
         @Parcelize
         data object CardOne : WelcomeCard() {
             override val imageRes: Int get() = BitwardenDrawable.img_vault_items
-            override val titleRes: Int get() = R.string.security_prioritized
-            override val messageRes: Int get() = R.string.welcome_message_1
+            override val titleRes: Int get() = BitwardenString.security_prioritized
+            override val messageRes: Int get() = BitwardenString.welcome_message_1
         }
 
         /**
@@ -93,8 +84,8 @@ data class WelcomeState(
         @Parcelize
         data object CardTwo : WelcomeCard() {
             override val imageRes: Int get() = BitwardenDrawable.welcome_2
-            override val titleRes: Int get() = R.string.quick_and_easy_login
-            override val messageRes: Int get() = R.string.welcome_message_2
+            override val titleRes: Int get() = BitwardenString.quick_and_easy_login
+            override val messageRes: Int get() = BitwardenString.welcome_message_2
         }
 
         /**
@@ -103,8 +94,8 @@ data class WelcomeState(
         @Parcelize
         data object CardThree : WelcomeCard() {
             override val imageRes: Int get() = BitwardenDrawable.welcome_3
-            override val titleRes: Int get() = R.string.level_up_your_logins
-            override val messageRes: Int get() = R.string.welcome_message_3
+            override val titleRes: Int get() = BitwardenString.level_up_your_logins
+            override val messageRes: Int get() = BitwardenString.welcome_message_3
         }
 
         /**
@@ -113,8 +104,8 @@ data class WelcomeState(
         @Parcelize
         data object CardFour : WelcomeCard() {
             override val imageRes: Int get() = BitwardenDrawable.welcome_4
-            override val titleRes: Int get() = R.string.your_data_when_and_where_you_need_it
-            override val messageRes: Int get() = R.string.welcome_message_4
+            override val titleRes: Int get() = BitwardenString.your_data_when_and_where_you_need_it
+            override val messageRes: Int get() = BitwardenString.welcome_message_4
         }
     }
 }
@@ -129,11 +120,6 @@ sealed class WelcomeEvent {
     data class UpdatePager(
         val index: Int,
     ) : WelcomeEvent()
-
-    /**
-     * Navigates to the create account screen.
-     */
-    data object NavigateToCreateAccount : WelcomeEvent()
 
     /**
      * Navigates to the login screen.

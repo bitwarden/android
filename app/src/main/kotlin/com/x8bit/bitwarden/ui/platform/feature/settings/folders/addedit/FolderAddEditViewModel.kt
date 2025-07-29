@@ -6,11 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.FolderView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
@@ -91,8 +91,8 @@ class FolderAddEditViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = FolderAddEditState.DialogState.Error(
-                        message = R.string.validation_field_required
-                            .asText(R.string.name.asText()),
+                        message = BitwardenString.validation_field_required
+                            .asText(BitwardenString.name.asText()),
                     ),
                 )
             }
@@ -102,7 +102,7 @@ class FolderAddEditViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialog = FolderAddEditState.DialogState.Loading(
-                    R.string.saving.asText(),
+                    BitwardenString.saving.asText(),
                 ),
             )
         }
@@ -147,7 +147,7 @@ class FolderAddEditViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialog = FolderAddEditState.DialogState.Loading(
-                    R.string.deleting.asText(),
+                    BitwardenString.deleting.asText(),
                 ),
             )
         }
@@ -180,7 +180,7 @@ class FolderAddEditViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = FolderAddEditState.ViewState.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -197,7 +197,7 @@ class FolderAddEditViewModel @Inject constructor(
                                 )
                             }
                             ?: FolderAddEditState.ViewState.Error(
-                                message = R.string.generic_error_message.asText(),
+                                message = BitwardenString.generic_error_message.asText(),
                             ),
                     )
                 }
@@ -213,11 +213,11 @@ class FolderAddEditViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = FolderAddEditState.ViewState.Error(
-                            message = R.string.internet_connection_required_title
+                            message = BitwardenString.internet_connection_required_title
                                 .asText()
                                 .concat(
                                     " ".asText(),
-                                    R.string.internet_connection_required_message.asText(),
+                                    BitwardenString.internet_connection_required_message.asText(),
                                 ),
                         ),
                     )
@@ -235,7 +235,7 @@ class FolderAddEditViewModel @Inject constructor(
                                 )
                             }
                             ?: FolderAddEditState.ViewState.Error(
-                                message = R.string.generic_error_message.asText(),
+                                message = BitwardenString.generic_error_message.asText(),
                             ),
                     )
                 }
@@ -255,7 +255,7 @@ class FolderAddEditViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = FolderAddEditState.DialogState.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -263,7 +263,7 @@ class FolderAddEditViewModel @Inject constructor(
             }
 
             is UpdateFolderResult.Success -> {
-                sendEvent(FolderAddEditEvent.ShowToast(R.string.folder_updated.asText()))
+                sendEvent(FolderAddEditEvent.ShowToast(BitwardenString.folder_updated.asText()))
                 sendEvent(FolderAddEditEvent.NavigateBack)
             }
         }
@@ -281,7 +281,7 @@ class FolderAddEditViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = FolderAddEditState.DialogState.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -289,7 +289,7 @@ class FolderAddEditViewModel @Inject constructor(
             }
 
             is CreateFolderResult.Success -> {
-                sendEvent(FolderAddEditEvent.ShowToast(R.string.folder_created.asText()))
+                sendEvent(FolderAddEditEvent.ShowToast(BitwardenString.folder_created.asText()))
                 sendEvent(FolderAddEditEvent.NavigateBack)
             }
         }
@@ -303,7 +303,7 @@ class FolderAddEditViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = FolderAddEditState.DialogState.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -312,7 +312,7 @@ class FolderAddEditViewModel @Inject constructor(
 
             DeleteFolderResult.Success -> {
                 mutableStateFlow.update { it.copy(dialog = null) }
-                sendEvent(FolderAddEditEvent.ShowToast(R.string.folder_deleted.asText()))
+                sendEvent(FolderAddEditEvent.ShowToast(BitwardenString.folder_deleted.asText()))
                 sendEvent(event = FolderAddEditEvent.NavigateBack)
             }
         }
@@ -351,8 +351,8 @@ data class FolderAddEditState(
      */
     val screenDisplayName: Text
         get() = when (folderAddEditType) {
-            FolderAddEditType.AddItem -> R.string.add_folder.asText()
-            is FolderAddEditType.EditItem -> R.string.edit_folder.asText()
+            FolderAddEditType.AddItem -> BitwardenString.add_folder.asText()
+            is FolderAddEditType.EditItem -> BitwardenString.edit_folder.asText()
         }
 
     /**

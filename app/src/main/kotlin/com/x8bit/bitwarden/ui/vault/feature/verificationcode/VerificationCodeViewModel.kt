@@ -8,10 +8,10 @@ import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
@@ -120,7 +120,7 @@ class VerificationCodeViewModel @Inject constructor(
     private fun handleCopyClick(action: VerificationCodeAction.CopyClick) {
         clipboardManager.setText(
             text = action.text,
-            toastDescriptorOverride = R.string.verification_code_totp.asText(),
+            toastDescriptorOverride = BitwardenString.verification_code_totp.asText(),
         )
     }
 
@@ -171,7 +171,7 @@ class VerificationCodeViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = VerificationCodeState.DialogState.Loading(
-                    message = R.string.syncing.asText(),
+                    message = BitwardenString.syncing.asText(),
                 ),
             )
         }
@@ -207,7 +207,7 @@ class VerificationCodeViewModel @Inject constructor(
                     it.copy(
                         dialogState = VerificationCodeState.DialogState.Error(
                             title = null,
-                            message = R.string.generic_error_message.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                             throwable = result.error,
                         ),
                     )
@@ -222,7 +222,7 @@ class VerificationCodeViewModel @Inject constructor(
                         it.copy(
                             dialogState = VerificationCodeState.DialogState.Error(
                                 title = null,
-                                message = R.string.invalid_master_password.asText(),
+                                message = BitwardenString.invalid_master_password.asText(),
                             ),
                         )
                     }
@@ -288,11 +288,11 @@ class VerificationCodeViewModel @Inject constructor(
             mutableStateFlow.update { currentState ->
                 currentState.copy(
                     viewState = VerificationCodeState.ViewState.Error(
-                        message = R.string.internet_connection_required_title
+                        message = BitwardenString.internet_connection_required_title
                             .asText()
                             .concat(
                                 " ".asText(),
-                                R.string.internet_connection_required_message.asText(),
+                                BitwardenString.internet_connection_required_message.asText(),
                             ),
                     ),
                     dialogState = null,
@@ -328,7 +328,7 @@ class VerificationCodeViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     viewState = VerificationCodeState.ViewState.Error(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                     dialogState = null,
                 )

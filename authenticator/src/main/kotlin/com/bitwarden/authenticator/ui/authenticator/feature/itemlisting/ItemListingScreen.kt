@@ -56,7 +56,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.ItemListingExpandableFabAction
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
@@ -88,6 +87,7 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import kotlinx.coroutines.launch
@@ -315,7 +315,7 @@ private fun ItemListingDialogs(
         ItemListingState.DialogState.Loading -> {
             BitwardenLoadingDialog(
                 visibilityState = LoadingDialogState.Shown(
-                    text = R.string.syncing.asText(),
+                    text = BitwardenString.syncing.asText(),
                 ),
             )
         }
@@ -332,10 +332,10 @@ private fun ItemListingDialogs(
 
         is ItemListingState.DialogState.DeleteConfirmationPrompt -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = R.string.delete),
+                title = stringResource(id = BitwardenString.delete),
                 message = dialog.message(),
-                confirmButtonText = stringResource(id = R.string.okay),
-                dismissButtonText = stringResource(id = R.string.cancel),
+                confirmButtonText = stringResource(id = BitwardenString.okay),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
                 onConfirmClick = {
                     onConfirmDeleteClick(dialog.itemId)
                 },
@@ -373,11 +373,11 @@ private fun ItemListingContent(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             AuthenticatorMediumTopAppBar(
-                title = stringResource(id = R.string.verification_codes),
+                title = stringResource(id = BitwardenString.verification_codes),
                 scrollBehavior = scrollBehavior,
                 actions = {
                     AuthenticatorSearchActionItem(
-                        contentDescription = stringResource(id = R.string.search_codes),
+                        contentDescription = stringResource(id = BitwardenString.search_codes),
                         onClick = onNavigateToSearch,
                     )
                 },
@@ -388,22 +388,26 @@ private fun ItemListingContent(
                 modifier = Modifier
                     .semantics { testTag = "AddItemButton" }
                     .padding(bottom = 16.dp),
-                label = R.string.add_item.asText(),
+                label = BitwardenString.add_item.asText(),
                 items = listOf(
                     ItemListingExpandableFabAction.ScanQrCode(
-                        label = R.string.scan_a_qr_code.asText(),
+                        label = BitwardenString.scan_a_qr_code.asText(),
                         icon = IconResource(
                             iconPainter = painterResource(id = BitwardenDrawable.ic_camera),
-                            contentDescription = stringResource(id = R.string.scan_a_qr_code),
+                            contentDescription = stringResource(
+                                id = BitwardenString.scan_a_qr_code,
+                            ),
                             testTag = "ScanQRCodeButton",
                         ),
                         onScanQrCodeClick = onScanQrCodeClick,
                     ),
                     ItemListingExpandableFabAction.EnterSetupKey(
-                        label = R.string.enter_key_manually.asText(),
+                        label = BitwardenString.enter_key_manually.asText(),
                         icon = IconResource(
                             iconPainter = painterResource(id = BitwardenDrawable.ic_keyboard),
-                            contentDescription = stringResource(id = R.string.enter_key_manually),
+                            contentDescription = stringResource(
+                                id = BitwardenString.enter_key_manually,
+                            ),
                             testTag = "EnterSetupKeyButton",
                         ),
                         onEnterSetupKeyClick = onEnterSetupKeyClick,
@@ -412,7 +416,7 @@ private fun ItemListingContent(
                 expandableFabIcon = ExpandableFabIcon(
                     iconData = IconResource(
                         iconPainter = painterResource(id = BitwardenDrawable.ic_plus),
-                        contentDescription = stringResource(id = R.string.add_item),
+                        contentDescription = stringResource(id = BitwardenString.add_item),
                         testTag = "AddItemButton",
                     ),
                     iconRotation = 45f,
@@ -444,7 +448,7 @@ private fun ItemListingContent(
             if (state.favoriteItems.isNotEmpty()) {
                 item(key = "favorites_header") {
                     BitwardenListHeaderTextWithSupportLabel(
-                        label = stringResource(id = R.string.favorites),
+                        label = stringResource(id = BitwardenString.favorites),
                         supportingLabel = state.favoriteItems.count().toString(),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -494,13 +498,20 @@ private fun ItemListingContent(
             if (state.shouldShowLocalHeader) {
                 item(key = "local_items_header") {
                     AuthenticatorExpandingHeader(
-                        label = stringResource(id = R.string.local_codes, state.itemList.size),
+                        label = stringResource(
+                            id = BitwardenString.local_codes,
+                            state.itemList.size,
+                        ),
                         isExpanded = isLocalHeaderExpanded,
                         onClick = { isLocalHeaderExpanded = !isLocalHeaderExpanded },
                         onClickLabel = if (isLocalHeaderExpanded) {
-                            stringResource(R.string.local_items_are_expanded_click_to_collapse)
+                            stringResource(
+                                BitwardenString.local_items_are_expanded_click_to_collapse,
+                            )
                         } else {
-                            stringResource(R.string.local_items_are_collapsed_click_to_expand)
+                            stringResource(
+                                BitwardenString.local_items_are_collapsed_click_to_expand,
+                            )
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -546,9 +557,11 @@ private fun ItemListingContent(
                                     onSectionExpandedClick(section)
                                 },
                                 onClickLabel = if (section.isExpanded) {
-                                    stringResource(R.string.items_expanded_click_to_collapse)
+                                    stringResource(BitwardenString.items_expanded_click_to_collapse)
                                 } else {
-                                    stringResource(R.string.items_are_collapsed_click_to_expand)
+                                    stringResource(
+                                        BitwardenString.items_are_collapsed_click_to_expand,
+                                    )
                                 },
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -586,7 +599,7 @@ private fun ItemListingContent(
                 SharedCodesDisplayState.Error -> {
                     item(key = "shared_codes_error") {
                         Text(
-                            text = stringResource(R.string.shared_codes_error),
+                            text = stringResource(BitwardenString.shared_codes_error),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier
@@ -634,7 +647,7 @@ fun EmptyItemListingContent(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             AuthenticatorTopAppBar(
-                title = stringResource(id = R.string.verification_codes),
+                title = stringResource(id = BitwardenString.verification_codes),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = null,
                 actions = { },
@@ -645,22 +658,26 @@ fun EmptyItemListingContent(
                 modifier = Modifier
                     .semantics { testTag = "AddItemButton" }
                     .padding(bottom = 16.dp),
-                label = R.string.add_item.asText(),
+                label = BitwardenString.add_item.asText(),
                 items = listOf(
                     ItemListingExpandableFabAction.ScanQrCode(
-                        label = R.string.scan_a_qr_code.asText(),
+                        label = BitwardenString.scan_a_qr_code.asText(),
                         icon = IconResource(
                             iconPainter = painterResource(id = BitwardenDrawable.ic_camera),
-                            contentDescription = stringResource(id = R.string.scan_a_qr_code),
+                            contentDescription = stringResource(
+                                id = BitwardenString.scan_a_qr_code,
+                            ),
                             testTag = "ScanQRCodeButton",
                         ),
                         onScanQrCodeClick = onScanQrCodeClick,
                     ),
                     ItemListingExpandableFabAction.EnterSetupKey(
-                        label = R.string.enter_key_manually.asText(),
+                        label = BitwardenString.enter_key_manually.asText(),
                         icon = IconResource(
                             iconPainter = painterResource(id = BitwardenDrawable.ic_keyboard),
-                            contentDescription = stringResource(id = R.string.enter_key_manually),
+                            contentDescription = stringResource(
+                                id = BitwardenString.enter_key_manually,
+                            ),
                             testTag = "EnterSetupKeyButton",
                         ),
                         onEnterSetupKeyClick = onEnterSetupKeyClick,
@@ -669,7 +686,7 @@ fun EmptyItemListingContent(
                 expandableFabIcon = ExpandableFabIcon(
                     iconData = IconResource(
                         iconPainter = painterResource(id = BitwardenDrawable.ic_plus),
-                        contentDescription = stringResource(id = R.string.add_item),
+                        contentDescription = stringResource(id = BitwardenString.add_item),
                         testTag = "AddItemButton",
                     ),
                     iconRotation = 45f,
@@ -723,21 +740,21 @@ fun EmptyItemListingContent(
                         },
                     ),
                     contentDescription = stringResource(
-                        id = R.string.empty_item_list,
+                        id = BitwardenString.empty_item_list,
                     ),
                     contentScale = ContentScale.Fit,
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = stringResource(id = R.string.you_dont_have_items_to_display),
+                    text = stringResource(id = BitwardenString.you_dont_have_items_to_display),
                     style = Typography.titleMedium,
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     textAlign = TextAlign.Center,
-                    text = stringResource(id = R.string.empty_item_list_instruction),
+                    text = stringResource(id = BitwardenString.empty_item_list_instruction),
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -745,7 +762,7 @@ fun EmptyItemListingContent(
                     modifier = Modifier
                         .semantics { testTag = "AddCodeButton" }
                         .fillMaxWidth(),
-                    label = stringResource(R.string.add_code),
+                    label = stringResource(BitwardenString.add_code),
                     onClick = onAddCodeClick,
                 )
             }
@@ -761,9 +778,9 @@ private fun DownloadBitwardenActionCard(
 ) = BitwardenActionCard(
     modifier = modifier,
     actionIcon = rememberVectorPainter(BitwardenDrawable.ic_shield),
-    actionText = stringResource(R.string.download_bitwarden_card_message),
-    callToActionText = stringResource(R.string.download_now),
-    titleText = stringResource(R.string.download_bitwarden_card_title),
+    actionText = stringResource(BitwardenString.download_bitwarden_card_message),
+    callToActionText = stringResource(BitwardenString.download_now),
+    titleText = stringResource(BitwardenString.download_bitwarden_card_title),
     onCardClicked = onDownloadBitwardenClick,
     trailingContent = {
         IconButton(
@@ -771,7 +788,7 @@ private fun DownloadBitwardenActionCard(
         ) {
             Icon(
                 painter = painterResource(id = BitwardenDrawable.ic_close),
-                contentDescription = stringResource(id = R.string.close),
+                contentDescription = stringResource(id = BitwardenString.close),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
                     .size(24.dp),
@@ -812,7 +829,7 @@ private fun SyncWithBitwardenActionCard(
                 )
                 Spacer(Modifier.width(width = 16.dp))
                 Text(
-                    text = stringResource(id = R.string.sync_with_the_bitwarden_app),
+                    text = stringResource(id = BitwardenString.sync_with_the_bitwarden_app),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
@@ -822,7 +839,7 @@ private fun SyncWithBitwardenActionCard(
             IconButton(onClick = onDismissClick) {
                 Icon(
                     painter = painterResource(id = BitwardenDrawable.ic_close),
-                    contentDescription = stringResource(id = R.string.close),
+                    contentDescription = stringResource(id = BitwardenString.close),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(size = 24.dp),
                 )
@@ -830,7 +847,7 @@ private fun SyncWithBitwardenActionCard(
             Spacer(Modifier.width(width = 4.dp))
         }
         Text(
-            text = stringResource(id = R.string.sync_with_bitwarden_action_card_message),
+            text = stringResource(id = BitwardenString.sync_with_bitwarden_action_card_message),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
@@ -840,14 +857,14 @@ private fun SyncWithBitwardenActionCard(
         )
         Spacer(Modifier.height(height = 16.dp))
         AuthenticatorFilledButton(
-            label = stringResource(id = R.string.take_me_to_app_settings),
+            label = stringResource(id = BitwardenString.take_me_to_app_settings),
             onClick = onAppSettingsClick,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
         AuthenticatorTextButton(
-            label = stringResource(id = R.string.learn_more),
+            label = stringResource(id = BitwardenString.learn_more),
             onClick = onLearnMoreClick,
             modifier = Modifier
                 .padding(horizontal = 16.dp)

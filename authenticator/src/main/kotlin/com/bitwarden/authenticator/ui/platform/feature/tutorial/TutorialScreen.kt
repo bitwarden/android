@@ -41,7 +41,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledTonalButton
 import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
@@ -49,6 +48,7 @@ import com.bitwarden.authenticator.ui.platform.util.isPortrait
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenString
 import kotlinx.coroutines.launch
 
 /**
@@ -165,7 +165,7 @@ private fun TutorialScreenContent(
 
         AuthenticatorTextButton(
             isEnabled = !state.isLastPage,
-            label = stringResource(id = R.string.skip),
+            label = stringResource(id = BitwardenString.skip),
             onClick = skipClick,
             modifier = Modifier
                 .standardHorizontalMargin()

@@ -34,8 +34,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
 
@@ -88,7 +88,7 @@ fun PinInputDialog(
                     .testTag(tag = "AlertTitleText")
                     .padding(horizontal = 24.dp)
                     .fillMaxWidth(),
-                text = stringResource(id = R.string.enter_pin),
+                text = stringResource(id = BitwardenString.enter_pin),
                 color = BitwardenTheme.colorScheme.text.primary,
                 style = BitwardenTheme.typography.headlineSmall,
             )
@@ -106,13 +106,13 @@ fun PinInputDialog(
                     modifier = Modifier
                         .testTag(tag = "AlertContentText")
                         .fillMaxWidth(),
-                    text = stringResource(id = R.string.set_pin_description),
+                    text = stringResource(id = BitwardenString.set_pin_description),
                     color = BitwardenTheme.colorScheme.text.primary,
                     style = BitwardenTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenTextField(
-                    label = stringResource(id = R.string.pin),
+                    label = stringResource(id = BitwardenString.pin),
                     value = pin,
                     autoFocus = true,
                     onValueChange = { newValue ->
@@ -142,13 +142,13 @@ fun PinInputDialog(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 BitwardenTextButton(
-                    label = stringResource(id = R.string.cancel),
+                    label = stringResource(id = BitwardenString.cancel),
                     onClick = onCancelClick,
                     modifier = Modifier.testTag(tag = "DismissAlertButton"),
                 )
 
                 BitwardenFilledButton(
-                    label = stringResource(id = R.string.submit),
+                    label = stringResource(id = BitwardenString.submit),
                     isEnabled = isDoneEnabled(),
                     onClick = { onSubmitClick(pin) },
                     modifier = Modifier.testTag(tag = "AcceptAlertButton"),

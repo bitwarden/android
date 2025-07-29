@@ -27,7 +27,7 @@ import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
@@ -53,8 +53,8 @@ fun MasterPasswordHintScreen(
     when (val dialogState = state.dialog) {
         is MasterPasswordHintState.DialogState.PasswordHintSent -> {
             BitwardenBasicDialog(
-                title = stringResource(id = R.string.password_hint),
-                message = stringResource(id = R.string.password_hint_alert),
+                title = stringResource(id = BitwardenString.password_hint),
+                message = stringResource(id = BitwardenString.password_hint_alert),
                 onDismissRequest = remember(viewModel) {
                     { viewModel.trySendAction(MasterPasswordHintAction.DismissDialog) }
                 },
@@ -70,7 +70,7 @@ fun MasterPasswordHintScreen(
                 title = dialogState
                     .title
                     ?.invoke()
-                    ?: stringResource(id = R.string.an_error_has_occurred),
+                    ?: stringResource(id = BitwardenString.an_error_has_occurred),
                 message = dialogState.message(),
                 throwable = dialogState.error,
                 onDismissRequest = remember(viewModel) {
@@ -89,16 +89,16 @@ fun MasterPasswordHintScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.password_hint),
+                title = stringResource(id = BitwardenString.password_hint),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(MasterPasswordHintAction.CloseClick) }
                 },
                 actions = {
                     BitwardenTextButton(
-                        label = stringResource(id = R.string.submit),
+                        label = stringResource(id = BitwardenString.submit),
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(MasterPasswordHintAction.SubmitClick) }
                         },
@@ -120,10 +120,10 @@ fun MasterPasswordHintScreen(
                 onValueChange = remember(viewModel) {
                     { viewModel.trySendAction(MasterPasswordHintAction.EmailInputChange(it)) }
                 },
-                label = stringResource(id = R.string.email_address),
+                label = stringResource(id = BitwardenString.email_address),
                 keyboardType = KeyboardType.Email,
                 textFieldTestTag = "MasterPasswordHintEmailField",
-                supportingText = stringResource(id = R.string.enter_email_for_hint),
+                supportingText = stringResource(id = BitwardenString.enter_email_for_hint),
                 cardStyle = CardStyle.Full,
             )
             Spacer(modifier = Modifier.height(height = 16.dp))

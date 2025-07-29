@@ -24,8 +24,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
@@ -66,7 +66,7 @@ fun VaultItemSshKeyContent(
         item(key = "publicKey") {
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextField(
-                label = stringResource(id = R.string.public_key),
+                label = stringResource(id = BitwardenString.public_key),
                 value = sshKeyItemState.publicKey,
                 onValueChange = { },
                 singleLine = false,
@@ -74,7 +74,7 @@ fun VaultItemSshKeyContent(
                 actions = {
                     BitwardenStandardIconButton(
                         vectorIconRes = BitwardenDrawable.ic_copy,
-                        contentDescription = stringResource(id = R.string.copy_public_key),
+                        contentDescription = stringResource(id = BitwardenString.copy_public_key),
                         onClick = vaultSshKeyItemTypeHandlers.onCopyPublicKeyClick,
                         modifier = Modifier.testTag(tag = "SshKeyCopyPublicKeyButton"),
                     )
@@ -90,7 +90,7 @@ fun VaultItemSshKeyContent(
 
         item(key = "privateKey") {
             BitwardenPasswordField(
-                label = stringResource(id = R.string.private_key),
+                label = stringResource(id = BitwardenString.private_key),
                 value = sshKeyItemState.privateKey,
                 onValueChange = { },
                 singleLine = false,
@@ -98,7 +98,7 @@ fun VaultItemSshKeyContent(
                 actions = {
                     BitwardenStandardIconButton(
                         vectorIconRes = BitwardenDrawable.ic_copy,
-                        contentDescription = stringResource(id = R.string.copy_private_key),
+                        contentDescription = stringResource(id = BitwardenString.copy_private_key),
                         onClick = vaultSshKeyItemTypeHandlers.onCopyPrivateKeyClick,
                         modifier = Modifier.testTag(tag = "SshKeyCopyPrivateKeyButton"),
                     )
@@ -117,7 +117,7 @@ fun VaultItemSshKeyContent(
 
         item(key = "fingerprint") {
             BitwardenTextField(
-                label = stringResource(id = R.string.fingerprint),
+                label = stringResource(id = BitwardenString.fingerprint),
                 value = sshKeyItemState.fingerprint,
                 onValueChange = { },
                 singleLine = false,
@@ -125,7 +125,7 @@ fun VaultItemSshKeyContent(
                 actions = {
                     BitwardenStandardIconButton(
                         vectorIconRes = BitwardenDrawable.ic_copy,
-                        contentDescription = stringResource(id = R.string.copy_fingerprint),
+                        contentDescription = stringResource(id = BitwardenString.copy_fingerprint),
                         onClick = vaultSshKeyItemTypeHandlers.onCopyFingerprintClick,
                         modifier = Modifier.testTag(tag = "SshKeyCopyFingerprintButton"),
                     )
@@ -143,7 +143,7 @@ fun VaultItemSshKeyContent(
             item(key = "notes") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.additional_options),
+                    label = stringResource(id = BitwardenString.additional_options),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -152,7 +152,7 @@ fun VaultItemSshKeyContent(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 BitwardenTextField(
-                    label = stringResource(id = R.string.notes),
+                    label = stringResource(id = BitwardenString.notes),
                     value = notes,
                     onValueChange = { },
                     readOnly = true,
@@ -160,7 +160,7 @@ fun VaultItemSshKeyContent(
                     actions = {
                         BitwardenStandardIconButton(
                             vectorIconRes = BitwardenDrawable.ic_copy,
-                            contentDescription = stringResource(id = R.string.copy_notes),
+                            contentDescription = stringResource(id = BitwardenString.copy_notes),
                             onClick = vaultCommonItemTypeHandlers.onCopyNotesClick,
                             modifier = Modifier.testTag(tag = "CipherNotesCopyButton"),
                         )
@@ -179,7 +179,7 @@ fun VaultItemSshKeyContent(
             item(key = "customFieldsHeader") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.custom_fields),
+                    label = stringResource(id = BitwardenString.custom_fields),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -210,7 +210,7 @@ fun VaultItemSshKeyContent(
             item(key = "attachmentsHeader") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.attachments),
+                    label = stringResource(id = BitwardenString.attachments),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -270,10 +270,10 @@ fun VaultItemSshKeyContent(
             item(key = "passwordHistoryCount") {
                 Spacer(modifier = Modifier.height(height = 4.dp))
                 BitwardenHyperTextLink(
-                    annotatedResId = R.string.password_history_count,
+                    annotatedResId = BitwardenString.password_history_count,
                     args = arrayOf(passwordHistoryCount.toString()),
                     annotationKey = "passwordHistory",
-                    accessibilityString = stringResource(id = R.string.password_history),
+                    accessibilityString = stringResource(id = BitwardenString.password_history),
                     onClick = vaultCommonItemTypeHandlers.onPasswordHistoryClick,
                     style = BitwardenTheme.typography.labelMedium,
                     modifier = Modifier

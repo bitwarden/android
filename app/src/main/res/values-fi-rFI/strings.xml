@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s kopioitiin</string>
     <string name="verify_master_password">Vahvista pääsalasana</string>
     <string name="verify_pin">Vahvista PIN-koodi</string>
-    <string name="version">Versio</string>
     <string name="view">Näytä</string>
     <string name="yes">Kyllä</string>
     <string name="account">Käyttäjätili</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Muokkaa korttia</string>
     <string name="edit_identity">Muokkaa henkilöllisyyttä</string>
     <string name="edit_note">Muokkaa muistiota</string>
-    <string name="edit_passkey">Muokkaa pääsyavainta</string>
+    <string name="edit_ssh_key">Edit SSH key</string>
     <string name="enter_email_for_hint">Syötä tilisi sähköpostiosoite saadaksesi pääsalasanan vihjeen.</string>
     <string name="favorite">Suosikki</string>
     <string name="unfavorite">Poista suosikeista</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 minuutti</string>
     <string name="four_hours">4 tuntia</string>
     <string name="immediately">Välittömästi</string>
-    <string name="vault_timeout_log_out_confirmation">Uloskirjautuminen estää pääsyn holviisi ja vaatii ajan umpeuduttua tunnistautumisen Internet-yhteyden välityksellä. Haluatko varmasti käyttää asetusta?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
     <string name="logging_in">Kirjaudutaan sisään…</string>
     <string name="login_to_bitwarden">Kirjaudu Bitwardeniin</string>
     <string name="master_password_confirmation_val_message">Salasanan vahvistus ei täsmää.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Uusi henkilöllisyys</string>
     <string name="no_notes">Holvissasi ei ole muistioita.</string>
     <string name="new_note">Uusi muistio</string>
-    <string name="new_passkey">Uusi pääsyavain</string>
     <string name="new_item">Uusi kohde</string>
     <string name="new_ssh_key">Uusi SSH-avain</string>
     <string name="no_text_sends">Holvissasi ei ole teksti-Sendejä.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Näytä kortti</string>
     <string name="view_identity">Näytä henkilöllisyys</string>
     <string name="view_note">Näytä muistio</string>
-    <string name="view_passkey">Näytä pääsyavain</string>
+    <string name="view_ssh_key">View SSH key</string>
     <string name="web_vault">Bitwarden Verkkoholvi</string>
     <string name="items">Kohteet</string>
     <string name="items_for_uri">Kohteet palvelulle %1$s</string>
@@ -265,6 +264,7 @@ Koodi skannataan automaattisesti.</string>
     <string name="address">Osoite</string>
     <string name="expiration">Voimassaolo päättyy</string>
     <string name="show_website_icons">Näytä sivustokuvakkeet</string>
+    <string name="show_website_icons_help">Show website icons help</string>
     <string name="show_website_icons_description">Näytä tunnistettava kuva jokaiselle kirjautumistiedolle.</string>
     <string name="icons_url">Kuvakepalvelimen URL</string>
     <string name="vault_is_locked">Holvi on lukittu</string>
@@ -701,6 +701,7 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="launch_web_authn">Avaa WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Virhe aloitettaessa kaksivaiheista WebAuthn-tunnistautumista</string>
     <string name="self_hosted_server_url">Itse ylläpidetyn palvelimen URL</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Pääsyavaintoiminto epäonnistui, koska sovellusta ei voitu varmentaa.</string>
     <string name="user_verification_direction">Käyttäjän vahvistus</string>
     <string name="create_account_on">Luo tili palvelimelle</string>
@@ -865,7 +866,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3/3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="mutual_tls">Mutual TLS</string>
     <string name="single_tap_passkey_creation">Yhden napautuksen pääsyavaimen luonti</string>
     <string name="single_tap_passkey_authentication">Yhden napautuksen kirjautuminen</string>
     <string name="learn_about_new_logins">Lisätietoja uusista kirjautumistiedoista</string>
@@ -909,6 +909,12 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">Self-host server URL</string>
     <string name="use_brave_autofill_integration">Use Brave autofill integration</string>
     <string name="use_chrome_autofill_integration">Käytä Chromen automaattitäytön integrointia</string>
@@ -967,9 +973,9 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="view_text_send">Näytä teksti-Send</string>
     <string name="delete_send">Poista Send</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
-    <string name="dynamic_colors">Dynaamiset värit</string>
-    <string name="dynamic_colors_description">Apply dynamic colors based on your wallpaper</string>
-    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamic colors uses the system colors and may not meet all accessibility guidelines.</string>
+    <string name="use_dynamic_colors">Use dynamic colors</string>
+    <string name="use_dynamic_colors_question">Use dynamic colors?</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">This color scheme automatically applies system colors to Bitwarden based on your current wallpaper. These colors may not meet all accessibility guidelines.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
     <string name="trust">Trust</string>
@@ -989,4 +995,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
     <string name="installed_apps">Installed apps</string>
     <string name="delete_x">Delete %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
+    <string name="decryption_error">Decryption error</string>
 </resources>

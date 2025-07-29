@@ -11,6 +11,7 @@ import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
@@ -18,7 +19,6 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CopyableCipherFields
 import com.bitwarden.vault.FolderView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.platform.util.subtitle
@@ -721,9 +721,9 @@ class VaultItemListingDataExtensionsTest {
         // Trash
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
-                message = R.string.no_items_trash.asText(),
+                message = BitwardenString.no_items_trash.asText(),
                 shouldShowAddButton = false,
-                buttonText = R.string.new_item.asText(),
+                buttonText = BitwardenString.new_item.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Trash,
@@ -742,9 +742,9 @@ class VaultItemListingDataExtensionsTest {
         // Folders
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
-                message = R.string.no_items_folder.asText(),
+                message = BitwardenString.no_items_folder.asText(),
                 shouldShowAddButton = true,
-                buttonText = R.string.new_item.asText(),
+                buttonText = BitwardenString.new_item.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
@@ -765,9 +765,9 @@ class VaultItemListingDataExtensionsTest {
         // SSH keys
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
-                message = R.string.no_ssh_keys.asText(),
+                message = BitwardenString.no_ssh_keys.asText(),
                 shouldShowAddButton = false,
-                buttonText = R.string.new_ssh_key.asText(),
+                buttonText = BitwardenString.new_ssh_key.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.SshKey,
@@ -787,9 +787,9 @@ class VaultItemListingDataExtensionsTest {
         // Login Type
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
-                message = R.string.no_logins.asText(),
+                message = BitwardenString.no_logins.asText(),
                 shouldShowAddButton = true,
-                buttonText = R.string.new_login.asText(),
+                buttonText = BitwardenString.new_login.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
@@ -808,9 +808,9 @@ class VaultItemListingDataExtensionsTest {
         // Card type
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
-                message = R.string.no_cards.asText(),
+                message = BitwardenString.no_cards.asText(),
                 shouldShowAddButton = true,
-                buttonText = R.string.new_card.asText(),
+                buttonText = BitwardenString.new_card.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Card,
@@ -829,9 +829,9 @@ class VaultItemListingDataExtensionsTest {
         // Secure note type
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
-                message = R.string.no_notes.asText(),
+                message = BitwardenString.no_notes.asText(),
                 shouldShowAddButton = true,
-                buttonText = R.string.new_note.asText(),
+                buttonText = BitwardenString.new_note.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.SecureNote,
@@ -850,9 +850,9 @@ class VaultItemListingDataExtensionsTest {
         // Identity type
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
-                message = R.string.no_identities.asText(),
+                message = BitwardenString.no_identities.asText(),
                 shouldShowAddButton = true,
-                buttonText = R.string.new_identity.asText(),
+                buttonText = BitwardenString.new_identity.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Identity,
@@ -871,9 +871,9 @@ class VaultItemListingDataExtensionsTest {
         // Autofill
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
-                message = R.string.no_items_for_uri.asText("www.test.com"),
+                message = BitwardenString.no_items_for_uri.asText("www.test.com"),
                 shouldShowAddButton = true,
-                buttonText = R.string.new_login.asText(),
+                buttonText = BitwardenString.new_login.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
@@ -896,9 +896,9 @@ class VaultItemListingDataExtensionsTest {
         // Autofill passkey
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
-                message = R.string.no_items_for_uri.asText("www.test.com"),
+                message = BitwardenString.no_items_for_uri.asText("www.test.com"),
                 shouldShowAddButton = true,
-                buttonText = R.string.save_passkey_as_new_login.asText(),
+                buttonText = BitwardenString.save_passkey_as_new_login.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
@@ -921,10 +921,10 @@ class VaultItemListingDataExtensionsTest {
         // Totp
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
-                header = R.string.no_items_for_vault.asText("issuer"),
-                message = R.string.search_for_a_login_or_add_a_new_login.asText(),
+                header = BitwardenString.no_items_for_vault.asText("issuer"),
+                message = BitwardenString.search_for_a_login_or_add_a_new_login.asText(),
                 shouldShowAddButton = false,
-                buttonText = R.string.new_item.asText(),
+                buttonText = BitwardenString.new_item.asText(),
                 vectorRes = BitwardenDrawable.img_folder_question,
             ),
             vaultData.toViewState(
@@ -990,9 +990,9 @@ class VaultItemListingDataExtensionsTest {
 
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
-                message = R.string.no_file_sends.asText(),
+                message = BitwardenString.no_file_sends.asText(),
                 shouldShowAddButton = true,
-                buttonText = R.string.new_file_send.asText(),
+                buttonText = BitwardenString.new_file_send.asText(),
             ),
             result,
         )
@@ -1008,9 +1008,9 @@ class VaultItemListingDataExtensionsTest {
 
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
-                message = R.string.no_text_sends.asText(),
+                message = BitwardenString.no_text_sends.asText(),
                 shouldShowAddButton = true,
-                buttonText = R.string.new_text_send.asText(),
+                buttonText = BitwardenString.new_text_send.asText(),
             ),
             result,
         )
@@ -1375,9 +1375,9 @@ class VaultItemListingDataExtensionsTest {
         // Card type
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
-                message = R.string.no_cards.asText(),
+                message = BitwardenString.no_cards.asText(),
                 shouldShowAddButton = false,
-                buttonText = R.string.new_card.asText(),
+                buttonText = BitwardenString.new_card.asText(),
             ),
             actual,
         )

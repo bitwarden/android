@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">Skopiowano %1$s</string>
     <string name="verify_master_password">Zweryfikuj hasło główne</string>
     <string name="verify_pin">Zweryfikuj kod PIN</string>
-    <string name="version">Wersja</string>
     <string name="view">Pokaż</string>
     <string name="yes">Tak</string>
     <string name="account">Konto</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Edytuj kartę</string>
     <string name="edit_identity">Edytuj tożsamość</string>
     <string name="edit_note">Edytuj notatkę</string>
-    <string name="edit_passkey">Edytuj klucz dostępu</string>
+    <string name="edit_ssh_key">Edytuj klucz SSH</string>
     <string name="enter_email_for_hint">Wpisz adres e-mail powiązany z kontem, aby otrzymać podpowiedź do hasła głównego.</string>
     <string name="favorite">Dodaj do ulubionych</string>
     <string name="unfavorite">Usuń z ulubionych</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 minuta</string>
     <string name="four_hours">4 godziny</string>
     <string name="immediately">Natychmiast</string>
-    <string name="vault_timeout_log_out_confirmation">Po wylogowaniu się z sejfu musisz ponownie zalogować się, aby uzyskać do niego dostęp. Czy na pewno chcesz użyć tego ustawienia?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Ustawić sposób blokady na „Wyloguj się”?</string>
+    <string name="vault_timeout_log_out_confirmation_message">Po upływie limitu czasu zostaniesz wylogowany. Aby zalogować się i ponownie uzyskać dostęp do swojego sejfu, będziesz musiał mieć połączenie z internetem. Twoje ustawienia i kod PIN zapisane na tym urządzeniu nie ulegną zmianie.</string>
     <string name="logging_in">Logowanie...</string>
     <string name="login_to_bitwarden">Zaloguj się do Bitwarden</string>
     <string name="master_password_confirmation_val_message">Potwierdzenie hasła nie pasuje.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Nowa tożsamość</string>
     <string name="no_notes">Brak notatek w sejfie.</string>
     <string name="new_note">Nowa notatka</string>
-    <string name="new_passkey">Nowy klucz dostępu</string>
     <string name="new_item">Nowy element</string>
     <string name="new_ssh_key">Nowy klucz SSH</string>
     <string name="no_text_sends">Brak wysyłek tekstowych w sejfie.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Pokaż kartę</string>
     <string name="view_identity">Pokaż tożsamość</string>
     <string name="view_note">Pokaż notatkę</string>
-    <string name="view_passkey">Pokaż klucz dostępu</string>
+    <string name="view_ssh_key">Pokaż klucz SSH</string>
     <string name="web_vault">Sejf internetowy Bitwarden</string>
     <string name="items">Elementy</string>
     <string name="items_for_uri">Elementy dla %1$s</string>
@@ -265,6 +264,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="address">Adres</string>
     <string name="expiration">Data wygaśnięcia</string>
     <string name="show_website_icons">Pokaż ikony stron internetowych</string>
+    <string name="show_website_icons_help">Pokaż pomoc dotyczącą ikony stron internetowych</string>
     <string name="show_website_icons_description">Pokaż rozpoznawalną ikonę obok danych logowania</string>
     <string name="icons_url">Adres URL serwera ikon</string>
     <string name="vault_is_locked">Sejf jest zablokowany</string>
@@ -362,11 +362,11 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="copy_notes">Kopiuj notatkę</string>
     <string name="exit">Wyjdź</string>
     <string name="exit_confirmation">Czy na pewno chcesz wyjść z Bitwarden?</string>
-    <string name="require_master_password_on_app_restart">Wymagać hasła głównego przy ponownym uruchomieniu aplikacji?</string>
+    <string name="require_master_password_on_app_restart">Wymagać hasła głównego po ponownym uruchomieniu aplikacji?</string>
     <string name="pin_require_master_password_restart">Czy chcesz wymagać odblokowywania hasłem głównym po ponownym uruchomieniu aplikacji?</string>
     <string name="ask_to_add_login">Proponuj zapisywanie danych logowania</string>
     <string name="ask_to_add_login_description">Proponuj zapisywanie danych logowania, jeśli nie ma ich w sejfie.</string>
-    <string name="on_restart">Po restarcie aplikacji</string>
+    <string name="on_restart">Po uruchomieniu aplikacji</string>
     <string name="capitalize">Wielkie litery</string>
     <string name="include_number">Cyfry</string>
     <string name="download">Pobierz</string>
@@ -381,7 +381,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="send_verification_code_to_email">Wyślij kod weryfikacyjny na adres e-mail</string>
     <string name="code_sent">Kod został wysłany!</string>
     <string name="confirm_your_identity">Potwierdź tożsamość, aby kontynuować.</string>
-    <string name="export_vault_warning">Plik zawiera dane sejfu w niezaszyfrowanym formacie. Nie powinieneś go przechowywać, ani przesyłać poprzez niezabezpieczone kanały (takie jak poczta e-mail). Skasuj go natychmiast po użyciu.</string>
+    <string name="export_vault_warning">Plik zawiera dane sejfu w niezaszyfrowanym formacie. Nie należy go przechowywać ani przesyłać poprzez niezabezpieczone kanały (takie jak poczta e-mail). Usuń go natychmiast po użyciu.</string>
     <string name="export_vault_file_pw_protect_info">Plik zostanie zaszyfrowany hasłem.</string>
     <string name="export_vault_confirmation_title">Potwierdź eksportowanie sejfu</string>
     <string name="warning">Ostrzeżenie</string>
@@ -700,6 +700,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="launch_web_authn">Uruchom WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Wystąpił błąd podczas uruchamiania logowania dwustopniowego WebAuthn</string>
     <string name="self_hosted_server_url">Adres URL hostowanego serwera</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Operacja danych logowania nie powiodła się, ponieważ użytkownik nie mógł zostać zweryfikowany.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Operacja klucza dostępu nie powiodła się, ponieważ użytkownik nie mógł zostać zweryfikowany.</string>
     <string name="user_verification_direction">Weryfikacja użytkownika</string>
     <string name="create_account_on">Utwórz konto na</string>
@@ -738,7 +739,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Podpowiedź zostanie wysłana na adres e-mail na żądanie.</string>
     <string name="write_your_password_down">Zapisz hasło</string>
     <string name="keep_it_secret_keep_it_safe">Przechowuj hasło w bezpiecznym i tajnym miejscu.</string>
-    <string name="prevent_account_lockout">Zapobiegaj zablokowaniu konta</string>
+    <string name="prevent_account_lockout">Zapobiegaj blokowaniu konta</string>
     <string name="generate_master_password">Wygeneruj hasło główne</string>
     <string name="generate_button_label">Generuj</string>
     <string name="write_this_password_down_and_keep_it_somewhere_safe">Zapisz to hasło i przechowuj je w bezpiecznym miejscu.</string>
@@ -755,8 +756,8 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Wybierz unikalne i mocne hasło, aby Twoje dane były bezpieczne.</string>
     <string name="minimum_characters">%1$s znaków</string>
     <string name="expired_link">Link wygasł</string>
-    <string name="please_restart_registration_or_try_logging_in">Zacznij rejestrację od początku lub spróbuj się zalogować. Możesz mieć już konto.</string>
-    <string name="restart_registration">Zacznij rejestrację od początku</string>
+    <string name="please_restart_registration_or_try_logging_in">Rozpocznij rejestrację od początku lub spróbuj się zalogować. Możesz mieć już konto.</string>
+    <string name="restart_registration">Rozpocznij rejestrację od początku</string>
     <string name="authenticator_sync">Synchronizacja uwierzytelniania</string>
     <string name="allow_bitwarden_authenticator_syncing">Włącz synchronizację uwierzytelniania</string>
     <string name="there_was_an_issue_validating_the_registration_token">Wystąpił błąd podczas sprawdzania poprawności tokenu rejestracyjnego.</string>
@@ -864,7 +865,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Musisz skonfigurować klucz uwierzytelniający tylko dla danych logowania, które wymagają logowania dwustopniowego za pomocą kodu. Klucz będzie generował 6-cyfrowe kody do logowania.</string>
     <string name="coachmark_3_of_3">3 z 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Musisz dodać adres internetowy, aby korzystać z autouzupełniania.</string>
-    <string name="mutual_tls">Wzajemny TLS</string>
     <string name="single_tap_passkey_creation">Tworzenie klucza dostępu jednym dotknięciem</string>
     <string name="single_tap_passkey_authentication">Logowanie kluczem dostępu jednym dotknięciem</string>
     <string name="learn_about_new_logins">Dowiedz się więcej o nowych danych logowania</string>
@@ -908,6 +908,12 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Operacja klucza dostępu nie powiodła się, ponieważ przekroczono liczbę prób weryfikacji użytkownika.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operacja klucza dostępu nie powiodła się, ponieważ nie wybrano żadnego elementu.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operacja klucza dostępu nie powiodła się, ponieważ żądanie nie jest obsługiwane.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operacja hasła nie powiodła się, ponieważ element nie istnieje.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Operacja hasła nie powiodła się, ponieważ nie wybrano elementu.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operacja danych logowania nie powiodła się, ponieważ przekroczono liczbę prób weryfikacji użytkownika.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Operacja danych logowania nie powiodła się, ponieważ użytkownik jest zablokowany.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Operacja danych logowania nie powiodła się, ponieważ element nie istnieje.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Operacja danych logowania nie powiodła się, ponieważ weryfikacja użytkownika została anulowana.</string>
     <string name="self_host_server_url">URL samodzielnie hostowanego serwera</string>
     <string name="use_brave_autofill_integration">Użyj autouzupełniania Brave</string>
     <string name="use_chrome_autofill_integration">Użyj autouzupełniania Chrome</string>
@@ -966,8 +972,8 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="view_text_send">Pokaż tekst wysyłki</string>
     <string name="delete_send">Usuń wysyłkę</string>
     <string name="missing_send_resync_your_vault">Brak wysyłek. Zsynchronizuj sejf</string>
-    <string name="dynamic_colors">Dynamiczne kolory</string>
-    <string name="dynamic_colors_description">Zastosuj dynamiczne kolory na podstawie swojej tapety</string>
+    <string name="use_dynamic_colors">Użyj dynamicznych kolorów</string>
+    <string name="use_dynamic_colors_question">Użyć dynamicznych kolorów?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamiczne kolory wykorzystują kolory systemowe i mogą nie spełniać wszystkich wytycznych dotyczących ułatwień dostępu.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Operacja klucza dostępu nie powiodła się, ponieważ przeglądarka %1$s nie jest zaufana. Wybierz \"Zaufaj\" aby dodać %1$s do listy zaufanych aplikacji.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Operacja klucza dostępu nie powiodła się, ponieważ przeglądarka nie jest zaufana.</string>
@@ -988,4 +994,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Czy na pewno chcesz przestać ufać aplikacji %s?</string>
     <string name="installed_apps">Zainstalowane aplikacje</string>
     <string name="delete_x">Usuń %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Odszyfrowanie szyfru nie powiodło się. Skontaktuj się z pomocą techniczną.</string>
+    <string name="decryption_error">Błąd odszyfrowywania</string>
 </resources>

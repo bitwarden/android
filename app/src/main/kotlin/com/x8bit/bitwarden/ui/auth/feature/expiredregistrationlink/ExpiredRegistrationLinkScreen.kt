@@ -28,8 +28,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 
 /**
@@ -63,11 +63,11 @@ fun ExpiredRegistrationLinkScreen(
     BitwardenScaffold(
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.create_account),
+                title = stringResource(id = BitwardenString.create_account),
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
                 navigationIcon = NavigationIcon(
                     navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
-                    navigationIconContentDescription = stringResource(id = R.string.close),
+                    navigationIconContentDescription = stringResource(id = BitwardenString.close),
                     onNavigationIconClick = sendCloseClicked,
                 ),
             )
@@ -104,7 +104,7 @@ private fun ExpiredRegistrationLinkContent(
     ) {
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = stringResource(R.string.expired_link),
+            text = stringResource(BitwardenString.expired_link),
             style = BitwardenTheme.typography.titleMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
@@ -114,7 +114,7 @@ private fun ExpiredRegistrationLinkContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = stringResource(R.string.please_restart_registration_or_try_logging_in),
+            text = stringResource(BitwardenString.please_restart_registration_or_try_logging_in),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
@@ -124,7 +124,7 @@ private fun ExpiredRegistrationLinkContent(
         )
         Spacer(modifier = Modifier.height(24.dp))
         BitwardenFilledButton(
-            label = stringResource(R.string.restart_registration),
+            label = stringResource(BitwardenString.restart_registration),
             onClick = onNavigateToStartRegistration,
             modifier = Modifier
                 .fillMaxWidth()
@@ -132,7 +132,7 @@ private fun ExpiredRegistrationLinkContent(
         )
         Spacer(modifier = Modifier.height(12.dp))
         BitwardenOutlinedButton(
-            label = stringResource(id = R.string.log_in_verb),
+            label = stringResource(id = BitwardenString.log_in_verb),
             onClick = onNavigateToLogin,
             modifier = Modifier
                 .fillMaxWidth()

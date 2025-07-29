@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s ir starpliktuvē</string>
     <string name="verify_master_password">Apstiprināt galveno paroli</string>
     <string name="verify_pin">Apstiprināt PIN</string>
-    <string name="version">Laidiens</string>
     <string name="view">Skatīt</string>
     <string name="yes">Jā</string>
     <string name="account">Konts</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Labot karti</string>
     <string name="edit_identity">Labot identitāti</string>
     <string name="edit_note">Labot piezīmi</string>
-    <string name="edit_passkey">Labot piekļuves atslēgu</string>
+    <string name="edit_ssh_key">Labot SSH atslēgu</string>
     <string name="enter_email_for_hint">Norādīt konta e-pasta adresi, lai saņemtu galvenās paroles norādi.</string>
     <string name="favorite">Izlasē</string>
     <string name="unfavorite">Izņemt no izlases</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 minūte</string>
     <string name="four_hours">4 stundas</string>
     <string name="immediately">Nekavējoties</string>
-    <string name="vault_timeout_log_out_confirmation">Atteikšanās noņems piekļuvi glabātavai un pieprasīs tiešsaistes pieteikšanos pēc noildzes laika. Vai tiešām izmantot šo iestatījumu?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Iestatīt sesijas noildzi līdz \"Atteikšanās\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">Pēc noildzes laika posma notiks atteikšanās. Būs nepieciešams interneta savienojums, lai pieteiktos un atkal piekļūtu savai glabātavai. Ierīcē saglabātie iestatījumi un PIN nemainīsies.</string>
     <string name="logging_in">Notiek pieteikšanās...</string>
     <string name="login_to_bitwarden">Pieteikties Bitwarden</string>
     <string name="master_password_confirmation_val_message">Paroles apstiprinājums nav pareizs.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Jauna identitāte</string>
     <string name="no_notes">Glabātavā nav piezīmju.</string>
     <string name="new_note">Jauna piezīme</string>
-    <string name="new_passkey">Jauna piekļuves atslēga</string>
     <string name="new_item">Jauns vienums</string>
     <string name="new_ssh_key">Jauna SSH atslēga</string>
     <string name="no_text_sends">Glabātavā nav teksta Send vienumu.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Apskatīt karti</string>
     <string name="view_identity">Apskatīt identitāti</string>
     <string name="view_note">Apskatīt pezīmi</string>
-    <string name="view_passkey">Apskatīt piekļuves atslēgu</string>
+    <string name="view_ssh_key">Apskatīt SSH atslēgu</string>
     <string name="web_vault">Bitwarden tīmekļa glabātava</string>
     <string name="items">Vienumi</string>
     <string name="items_for_uri">%1$s vienumi</string>
@@ -265,6 +264,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="address">Adrese</string>
     <string name="expiration">Derīgums</string>
     <string name="show_website_icons">Rādīt tīmekļvietņu ikonas</string>
+    <string name="show_website_icons_help">Rādīt palīdzību par tīmekļvietņu ikonām</string>
     <string name="show_website_icons_description">Attēlot atpazīstamu attēlu pie katra pieteikšanās vienuma.</string>
     <string name="icons_url">Ikonu servera URL</string>
     <string name="vault_is_locked">Glabātava ir aizslēgta</string>
@@ -701,6 +701,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="launch_web_authn">Palaist WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Atgadījās kļūda WebAuth divpakāpju autentifikācijas uzsākšanā</string>
     <string name="self_hosted_server_url">Pašmitināta servera URL</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Darbība ar piekļuves atslēgu neizdevās, jo lietotāju nevarēja apliecināt.</string>
     <string name="user_verification_direction">Lietotāja apliecināšana</string>
     <string name="create_account_on">Izveidot kontu</string>
@@ -865,7 +866,6 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Būs nepieciešams tikai uzstādīt autentificētāja atslēgu pieteikšanās vienumiem, kuriem ir nepieciešama divpakāpju pieteikšanāš ar kodu. Atslēga nepārtraukti izveidots sešciparu kodus, kurus izmantot, lai pieteiktos.</string>
     <string name="coachmark_3_of_3">3. no 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Jāpievieno tīmekļa adrese, lai izmantotu automātisko aizpildi, lai piekļūtu šim kontam.</string>
-    <string name="mutual_tls">Savstarpējs TLS</string>
     <string name="single_tap_passkey_creation">Piekļuves atslēgas izveidošana ar vienu piesitienu</string>
     <string name="single_tap_passkey_authentication">Pieteikšanās ar piekļuves atslēgu ar vienu piesitienu</string>
     <string name="learn_about_new_logins">Uzzināt par jauniem pieteikšanās vienumiem</string>
@@ -909,6 +909,12 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Darbība ar piekļuves atslēgu neizdevās, jo tika pārsniegts lietotāja apliecināšanas mēģinājumu skaits.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Darbība ar piekļuves atslēgu neizdevās, jo netika atlasīts neviens vienums.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Darbība ar piekļuves atslēgu neizdevās, jo pieprasījums netiek atbalstīts.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
     <string name="self_host_server_url">Pašmitināta servera URL</string>
     <string name="use_brave_autofill_integration">Izmantot Brave automātiskās aizpildes iekļaušanu</string>
     <string name="use_chrome_autofill_integration">Izmantot Chrome automātiskās aizpildes iekļaušanu</string>
@@ -967,8 +973,8 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="view_text_send">Apskatīt teksta Send</string>
     <string name="delete_send">Izdzēst Send</string>
     <string name="missing_send_resync_your_vault">Trūkst Send, atkārtoti jāsinhronizē sava glabātava</string>
-    <string name="dynamic_colors">Pielāgojošas krāsas</string>
-    <string name="dynamic_colors_description">Pielietot krāsas, kas pielāgojas ekrāntapetei</string>
+    <string name="use_dynamic_colors">Izmantot pielāgojošas krāsas</string>
+    <string name="use_dynamic_colors_question">Izmantot pielāgojošas krāsas?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Pielāgojošās krāsas izmanto sistēmas krāsas un var neatbilst piekļūstamības vadlīnijām.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Darbība ar piekļuves atslēgu neizdevās, jo pārlūks (%1$s) nav uzticams. Jāatlasa \"Uzticēties\", lai pievienotu %1$s uzticamo lietotņu sarakstam vai \"Atcelt\", lai pārtrauktu darbību.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Darbība ar piekļuves atslēgu neizdevās, jo pārlūks nav uzticams.</string>
@@ -989,4 +995,6 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Vai tiešām pārtraukt uzticēties %s?</string>
     <string name="installed_apps">Uzstādītās lietotnes</string>
     <string name="delete_x">Izdzēst %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Neizdevās atšifrēt šifru. Jāsazinās ar atbalstu.</string>
+    <string name="decryption_error">Atšifrēšanas kļūda</string>
 </resources>

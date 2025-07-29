@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s: zkopírováno</string>
     <string name="verify_master_password">Ověřit hlavní heslo</string>
     <string name="verify_pin">Ověřit PIN</string>
-    <string name="version">Verze</string>
     <string name="view">Zobrazit</string>
     <string name="yes">Ano</string>
     <string name="account">Účet</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Upravit kartu</string>
     <string name="edit_identity">Upravit identitu</string>
     <string name="edit_note">Upravit poznámku</string>
-    <string name="edit_passkey">Upravit přístupový klíč</string>
+    <string name="edit_ssh_key">Upravit SSH klíč</string>
     <string name="enter_email_for_hint">Zadejte e-mailovou adresu pro zaslání nápovědy k hlavnímu heslu.</string>
     <string name="favorite">Oblíbené</string>
     <string name="unfavorite">Odebrat z oblíbených</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 minuta</string>
     <string name="four_hours">4 hodiny</string>
     <string name="immediately">Okamžitě</string>
-    <string name="vault_timeout_log_out_confirmation">Po vypršení časového limitu dojde k odhlášení. Přístup k trezoru bude odebrán a pro opětovné přihlášení bude vyžadováno online ověření. Opravdu chcete použít toto nastavení?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Nastavit časový limit relace na \"Odhlásit\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">Po uplynutí časového období budete odhlášeni. Pro přihlášení do Vašeho trezoru budete muset být připojeni k internetu. Vaše nastavení a PIN uložený na tomto zařízení se nezmění.</string>
     <string name="logging_in">Přihlašování...</string>
     <string name="login_to_bitwarden">Přihlásit se do Bitwardenu</string>
     <string name="master_password_confirmation_val_message">Potvrzení hesla se neshoduje.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Nová identita</string>
     <string name="no_notes">Žádné poznámky ve Vašem trezoru.</string>
     <string name="new_note">Nová poznámka</string>
-    <string name="new_passkey">Nové přístupový klíč</string>
     <string name="new_item">Nová položka</string>
     <string name="new_ssh_key">Nový SSH klíč</string>
     <string name="no_text_sends">Žádné textové Sends ve Vašem trezoru.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Zobrazit kartu</string>
     <string name="view_identity">Zobrazit identitu</string>
     <string name="view_note">Zobrazit poznámku</string>
-    <string name="view_passkey">Zobrazit přístupový klíč</string>
+    <string name="view_ssh_key">Zobrazit SSH klíč</string>
     <string name="web_vault">Webový trezor Bitwardenu</string>
     <string name="items">Položky</string>
     <string name="items_for_uri">Položky pro %1$s</string>
@@ -265,6 +264,7 @@ Načtení proběhne automaticky.</string>
     <string name="address">Adresa</string>
     <string name="expiration">Expirace</string>
     <string name="show_website_icons">Zobrazit ikony webových stránek</string>
+    <string name="show_website_icons_help">Zobrazit nápovědu ikon webových stránek</string>
     <string name="show_website_icons_description">Zobrazí rozeznatelný obrázek vedle každého přihlášení</string>
     <string name="icons_url">URL serveru ikon</string>
     <string name="vault_is_locked">Trezor je uzamčený</string>
@@ -342,7 +342,7 @@ Načtení proběhne automaticky.</string>
     <string name="pin">PIN</string>
     <string name="unlock">Odemknout</string>
     <string name="thirty_minutes">30 minut</string>
-    <string name="set_pin_description">Váš PIN musí mít nejméně 4 znaky. Pokud se z aplikace odhlásíte, nastavení PINu bude resetováno.</string>
+    <string name="set_pin_description">Váš PIN musí mít nejméně 4 znaky. Pokud se z aplikace ručně odhlásíte, nastavení PINu bude resetováno.</string>
     <string name="logged_in_as_on">Přihlášen jako %1$s na %2$s.</string>
     <string name="vault_locked_master_password">Váš trezor je uzamčen. Pro pokračování musíte zadat hlavní heslo.</string>
     <string name="vault_locked_pin">Váš trezor je uzamčen. Pro pokračování musíte zadat PIN.</string>
@@ -700,6 +700,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="launch_web_authn">Otevřít WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Při spouštění dvoufaktorového ověření WebAuthn došlo k chybě</string>
     <string name="self_hosted_server_url">Adresa URL serveru vlastního hostování</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Operace s přihlašovacími údaji selhala, protože nebylo možné ověřit uživatele.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Operace přístupového klíče se nezdařila, protože uživatele nelze ověřit.</string>
     <string name="user_verification_direction">Ověření uživatele</string>
     <string name="create_account_on">Vytvořit účet na</string>
@@ -864,7 +865,6 @@ Chcete se přepnout na tento účet?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Budete jen muset nastavit Authenticator pro přihlášení, která vyžadují dvoufaktorové ověření s kódem. Klíč průběžně generuje šestimístné kódy, které můžete použít pro přihlášení.</string>
     <string name="coachmark_3_of_3">3 Z 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Pro přístup k tomuto účtu musíte přidat webovou adresu pro automatické vyplnění.</string>
-    <string name="mutual_tls">Vzájemné TLS</string>
     <string name="single_tap_passkey_creation">Vytvoření přístupového hesla jedním klepnutím</string>
     <string name="single_tap_passkey_authentication">Přihlášení přístupovým heslem jedním klepnutím</string>
     <string name="learn_about_new_logins">Více o nových přihlášeních</string>
@@ -908,6 +908,12 @@ Chcete se přepnout na tento účet?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Operace přístupového klíče se nezdařila, protože byly vyčerpány všechny pokusy o ověření uživatele.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operace přístupového klíče se nezdařila, protože nebyla vybrána žádná položka.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operace přístupového klíče se nezdařila, protože je požadavek nepodporovaný.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operace hesla se nezdařila, protože vybraná položka neexistuje.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Operace hesla se nezdařila, protože nebyla vybrána žádná položka.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operace s přihlašovacími údaji se nezdařila, protože byly vyčerpány všechny pokusy o ověření uživatele.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Operace s přihlašovacími údaji se nezdařila, protože byl uživatel uzamčen.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Operace s přihlašovacími údaji se nezdařila, protože vybraná položka neexistuje.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Operace s přihlašovacími údaji se nezdařila, protože ověření uživatele bylo zrušeno.</string>
     <string name="self_host_server_url">Adresa URL serveru vlastního hostování</string>
     <string name="use_brave_autofill_integration">Použít integraci automatického vyplňování Brave</string>
     <string name="use_chrome_autofill_integration">Použít integraci automatického vyplňování Chrome</string>
@@ -968,9 +974,9 @@ při opakování problémů.</string>
     <string name="view_text_send">Zobrazit text ze Send</string>
     <string name="delete_send">Smazat Send</string>
     <string name="missing_send_resync_your_vault">Chybějící Send - znovu synchronizujte trezor</string>
-    <string name="dynamic_colors">Dynamické barvy</string>
-    <string name="dynamic_colors_description">Použít dynamické barvy na základě Vaší tapety</string>
-    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamické barvy používají barvy systému a nemusí splňovat všechny pokyny pro přístupnost.</string>
+    <string name="use_dynamic_colors">Použít dynamické barvy</string>
+    <string name="use_dynamic_colors_question">Použít dynamické barvy?</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Toto barevné schéma automaticky použije systémové barvy na Bitwarden na základě Vaší aktuální tapety. Tyto barvy nemusí splňovat všechny pokyny pro přístupnost.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Operace přístupového klíče se nezdařila, protože prohlížeč (%1$s) není důvěryhodný. Vyberte \"Důvěřovat\" pro přidání %1$s do seznamu důvěryhodných aplikací nebo \"Zrušit\" pro zrušení operace.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Operace přístupového klíče se nezdařila, protože prohlížeč není důvěryhodný.</string>
     <string name="trust">Důvěřovat</string>
@@ -990,4 +996,6 @@ při opakování problémů.</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Jste si jisti, že chcete přestat důvěřovat %s?</string>
     <string name="installed_apps">Nainstalované aplikace</string>
     <string name="delete_x">Smazat %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Dešifrování šifry se nezdařilo. Kontaktujte podporu.</string>
+    <string name="decryption_error">Chyba dešifrování</string>
 </resources>

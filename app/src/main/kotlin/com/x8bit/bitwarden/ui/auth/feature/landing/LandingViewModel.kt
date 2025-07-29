@@ -7,14 +7,12 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidEmail
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
@@ -41,7 +39,6 @@ class LandingViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
     private val environmentRepository: EnvironmentRepository,
-    private val featureFlagManager: FeatureFlagManager,
     snackbarRelayManager: SnackbarRelayManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LandingState, LandingEvent, LandingAction>(
@@ -187,7 +184,7 @@ class LandingViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = LandingState.DialogState.Error(
-                        message = R.string.invalid_email.asText(),
+                        message = BitwardenString.invalid_email.asText(),
                     ),
                 )
             }
@@ -215,13 +212,7 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun handleCreateAccountClicked() {
-        val navigationEvent =
-            if (featureFlagManager.getFeatureFlag(key = FlagKey.EmailVerification)) {
-                LandingEvent.NavigateToStartRegistration
-            } else {
-                LandingEvent.NavigateToCreateAccount
-            }
-        sendEvent(navigationEvent)
+        sendEvent(LandingEvent.NavigateToStartRegistration)
     }
 
     private fun handleDialogDismiss() {
@@ -326,11 +317,6 @@ data class LandingState(
  * Models events for the landing screen.
  */
 sealed class LandingEvent {
-    /**
-     * Navigates to the Create Account screen.
-     */
-    data object NavigateToCreateAccount : LandingEvent()
-
     /**
      * Navigates to the Start Registration screen.
      */

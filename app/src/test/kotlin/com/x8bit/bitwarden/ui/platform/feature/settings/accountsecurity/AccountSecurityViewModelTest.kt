@@ -11,8 +11,8 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson.Policy
 import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
@@ -516,8 +516,8 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialog = AccountSecurityDialog.Error(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -594,7 +594,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(
                     DEFAULT_STATE.copy(
-                        dialog = AccountSecurityDialog.Loading(R.string.saving.asText()),
+                        dialog = AccountSecurityDialog.Loading(BitwardenString.saving.asText()),
                         isUnlockWithBiometricsEnabled = true,
                     ),
                     awaitItem(),
@@ -628,7 +628,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(
                     DEFAULT_STATE.copy(
-                        dialog = AccountSecurityDialog.Loading(R.string.saving.asText()),
+                        dialog = AccountSecurityDialog.Loading(BitwardenString.saving.asText()),
                         isUnlockWithBiometricsEnabled = true,
                     ),
                     awaitItem(),

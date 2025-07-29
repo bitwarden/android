@@ -13,6 +13,7 @@ import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -35,21 +36,22 @@ import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
+import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockCreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.createMockGetCredentialsRequest
+import com.x8bit.bitwarden.data.credentials.model.createMockProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.credentials.util.getCreateCredentialRequestOrNull
 import com.x8bit.bitwarden.data.credentials.util.getFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.credentials.util.getGetCredentialsRequestOrNull
+import com.x8bit.bitwarden.data.credentials.util.getProviderGetPasswordRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -144,13 +146,6 @@ class MainViewModelTest : BaseViewModelTest() {
         every { clearResumeScreen() } just runs
     }
 
-    private val mutableMobileErrorReportingFeatureFlow = MutableStateFlow(false)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(key = FlagKey.MobileErrorReporting) } returns false
-        every {
-            getFeatureFlagFlow(key = FlagKey.MobileErrorReporting)
-        } returns mutableMobileErrorReportingFeatureFlow
-    }
     private val mockBiometricsPromptResult = mockk<BiometricPromptResult>(relaxed = true) {
         every { isSuccessful } returns true
     }
@@ -175,6 +170,7 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getAutofillSelectionDataOrNull,
             Intent::getCompleteRegistrationDataIntentOrNull,
             Intent::getFido2AssertionRequestOrNull,
+            Intent::getProviderGetPasswordRequestOrNull,
             Intent::getCreateCredentialRequestOrNull,
             Intent::getGetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
@@ -205,6 +201,7 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getAutofillSelectionDataOrNull,
             Intent::getCompleteRegistrationDataIntentOrNull,
             Intent::getFido2AssertionRequestOrNull,
+            Intent::getProviderGetPasswordRequestOrNull,
             Intent::getCreateCredentialRequestOrNull,
             Intent::getGetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
@@ -602,7 +599,10 @@ class MainViewModelTest : BaseViewModelTest() {
 
                 viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
                 assertEquals(
-                    MainEvent.ShowToast(R.string.there_was_an_issue_validating_the_registration_token.asText()),
+                    MainEvent.ShowToast(
+                        BitwardenString.there_was_an_issue_validating_the_registration_token
+                            .asText(),
+                    ),
                     awaitItem(),
                 )
             }
@@ -805,7 +805,28 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveFirstIntent with fido2 get credentials request data should set the special circumstance to Fido2GetCredentials`() {
+    fun `on ReceiveFirstIntent with password get request data should set the special circumstance to ProviderGetPasswordRequest`() {
+        val viewModel = createViewModel()
+        val mockProviderGetCredentialRequest = createMockProviderGetPasswordCredentialRequest(1)
+        val passwordGetCredentialIntent = createMockIntent(
+            mockProviderGetPasswordRequest = mockProviderGetCredentialRequest,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(
+                intent = passwordGetCredentialIntent,
+            ),
+        )
+
+        assertEquals(
+            SpecialCircumstance.ProviderGetPasswordRequest(mockProviderGetCredentialRequest),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveFirstIntent with get credentials request data should set the special circumstance to ProviderGetCredentials`() {
         val viewModel = createViewModel()
         val mockGetCredentialsRequest = createMockGetCredentialsRequest(number = 1)
         val mockIntent = createMockIntent(
@@ -1136,14 +1157,12 @@ class MainViewModelTest : BaseViewModelTest() {
             set(SPECIAL_CIRCUMSTANCE_KEY, initialSpecialCircumstance)
         },
         appResumeManager = appResumeManager,
-        featureFlagManager = featureFlagManager,
     )
 }
 
 private val DEFAULT_STATE: MainState = MainState(
     theme = AppTheme.DEFAULT,
     isScreenCaptureAllowed = true,
-    isErrorReportingDialogEnabled = false,
     isDynamicColorsEnabled = false,
 )
 
@@ -1191,6 +1210,7 @@ private fun createMockIntent(
     mockAutofillSelectionData: AutofillSelectionData? = null,
     mockCompleteRegistrationData: CompleteRegistrationData? = null,
     mockFido2CredentialAssertionRequest: Fido2CredentialAssertionRequest? = null,
+    mockProviderGetPasswordRequest: ProviderGetPasswordCredentialRequest? = null,
     mockCreateCredentialRequest: CreateCredentialRequest? = null,
     mockGetCredentialsRequest: GetCredentialsRequest? = null,
     mockIsMyVaultShortcut: Boolean = false,
@@ -1204,6 +1224,7 @@ private fun createMockIntent(
     every { getAutofillSelectionDataOrNull() } returns mockAutofillSelectionData
     every { getCompleteRegistrationDataIntentOrNull() } returns mockCompleteRegistrationData
     every { getFido2AssertionRequestOrNull() } returns mockFido2CredentialAssertionRequest
+    every { getProviderGetPasswordRequestOrNull() } returns mockProviderGetPasswordRequest
     every { getCreateCredentialRequestOrNull() } returns mockCreateCredentialRequest
     every { getGetCredentialsRequestOrNull() } returns mockGetCredentialsRequest
     every { isMyVaultShortcut } returns mockIsMyVaultShortcut

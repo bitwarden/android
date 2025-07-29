@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.authenticator.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * The default implementation of the [IntentManager] for simplifying the handling of Android
@@ -56,7 +56,7 @@ class IntentManagerImpl(
             Intent(Intent.ACTION_OPEN_DOCUMENT)
                 .addCategory(Intent.CATEGORY_OPENABLE)
                 .setType(mimeType),
-            ContextCompat.getString(context, R.string.file_source),
+            ContextCompat.getString(context, BitwardenString.file_source),
         )
 
         return chooserIntent

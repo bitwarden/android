@@ -28,9 +28,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * Represents a Bitwarden-styled password field that hoists show/hide password state to the caller.
@@ -110,7 +110,8 @@ fun BitwardenPasswordField(
                 }
 
                 @StringRes
-                val contentDescriptionRes = if (showPassword) R.string.hide else R.string.show
+                val contentDescriptionRes =
+                    if (showPassword) BitwardenString.hide else BitwardenString.show
                 Icon(
                     modifier = Modifier.semantics { showPasswordTestTag?.let { testTag = it } },
                     painter = painterResource(id = painterRes),

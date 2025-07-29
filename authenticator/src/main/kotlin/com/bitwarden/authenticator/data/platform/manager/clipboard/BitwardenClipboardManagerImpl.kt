@@ -7,9 +7,9 @@ import android.os.Build
 import androidx.compose.ui.text.AnnotatedString
 import androidx.core.content.getSystemService
 import androidx.core.os.persistableBundleOf
-import com.bitwarden.authenticator.R
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 
 /**
@@ -38,7 +38,7 @@ class BitwardenClipboardManagerImpl(
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
             toastManager.show(
                 message = context.resources.getString(
-                    R.string.value_has_been_copied,
+                    BitwardenString.value_has_been_copied,
                     toastDescriptorOverride ?: text,
                 ),
             )

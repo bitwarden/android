@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk.di
 
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.sdk.Fido2CredentialStore
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
@@ -50,8 +51,12 @@ object VaultSdkModule {
     @Provides
     @Singleton
     fun providesFido2CredentialStore(
+        authRepository: AuthRepository,
+        vaultSdkSource: VaultSdkSource,
         vaultRepository: VaultRepository,
     ): Fido2CredentialStore = Fido2CredentialStoreImpl(
+        authRepository = authRepository,
+        vaultSdkSource = vaultSdkSource,
         vaultRepository = vaultRepository,
     )
 }

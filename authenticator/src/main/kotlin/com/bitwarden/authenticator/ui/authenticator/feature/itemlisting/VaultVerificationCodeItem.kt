@@ -32,13 +32,13 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * The verification code item displayed to the user.
@@ -158,7 +158,7 @@ fun VaultVerificationCodeItem(
         ) {
             DropdownMenuItem(
                 text = {
-                    Text(text = stringResource(id = R.string.copy))
+                    Text(text = stringResource(id = BitwardenString.copy))
                 },
                 onClick = {
                     shouldShowDropdownMenu = false
@@ -167,14 +167,14 @@ fun VaultVerificationCodeItem(
                 leadingIcon = {
                     Icon(
                         painter = painterResource(id = BitwardenDrawable.ic_copy),
-                        contentDescription = stringResource(id = R.string.copy),
+                        contentDescription = stringResource(id = BitwardenString.copy),
                     )
                 },
             )
             HorizontalDivider()
             DropdownMenuItem(
                 text = {
-                    Text(text = stringResource(id = R.string.edit_item))
+                    Text(text = stringResource(id = BitwardenString.edit))
                 },
                 onClick = {
                     shouldShowDropdownMenu = false
@@ -183,7 +183,7 @@ fun VaultVerificationCodeItem(
                 leadingIcon = {
                     Icon(
                         painter = painterResource(id = BitwardenDrawable.ic_edit_item),
-                        contentDescription = stringResource(R.string.edit_item),
+                        contentDescription = stringResource(BitwardenString.edit),
                     )
                 },
             )
@@ -191,7 +191,7 @@ fun VaultVerificationCodeItem(
                 HorizontalDivider()
                 DropdownMenuItem(
                     text = {
-                        Text(text = stringResource(id = R.string.copy_to_bitwarden_vault))
+                        Text(text = stringResource(id = BitwardenString.copy_to_bitwarden_vault))
                     },
                     onClick = {
                         shouldShowDropdownMenu = false
@@ -201,7 +201,7 @@ fun VaultVerificationCodeItem(
                         Icon(
                             painter = painterResource(id = BitwardenDrawable.ic_arrow_right),
                             contentDescription = stringResource(
-                                id = R.string.copy_to_bitwarden_vault,
+                                id = BitwardenString.copy_to_bitwarden_vault,
                             ),
                         )
                     },
@@ -210,7 +210,7 @@ fun VaultVerificationCodeItem(
             HorizontalDivider()
             DropdownMenuItem(
                 text = {
-                    Text(text = stringResource(id = R.string.delete_item))
+                    Text(text = stringResource(id = BitwardenString.delete_item))
                 },
                 onClick = {
                     shouldShowDropdownMenu = false
@@ -219,7 +219,7 @@ fun VaultVerificationCodeItem(
                 leadingIcon = {
                     Icon(
                         painter = painterResource(id = BitwardenDrawable.ic_delete_item),
-                        contentDescription = stringResource(id = R.string.delete_item),
+                        contentDescription = stringResource(id = BitwardenString.delete_item),
                     )
                 },
             )

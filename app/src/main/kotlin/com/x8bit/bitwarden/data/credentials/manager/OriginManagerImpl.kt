@@ -1,13 +1,13 @@
 package com.x8bit.bitwarden.data.credentials.manager
 
 import androidx.credentials.provider.CallingAppInfo
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.network.service.DigitalAssetLinkService
 import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessary
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString
 import com.x8bit.bitwarden.data.platform.util.validatePrivilegedApp
 import timber.log.Timber

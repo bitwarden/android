@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util
 
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.VaultMoveToOrganizationState
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
@@ -25,7 +25,9 @@ fun Triple<CipherView?, List<CollectionView>, UserState?>.toViewState():
 
     return when {
         (currentCipher == null) -> {
-            VaultMoveToOrganizationState.ViewState.Error(R.string.generic_error_message.asText())
+            VaultMoveToOrganizationState.ViewState.Error(
+                BitwardenString.generic_error_message.asText(),
+            )
         }
 
         (userOrganizations?.isNotEmpty() == true) -> {

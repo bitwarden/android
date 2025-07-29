@@ -2,7 +2,6 @@ package com.bitwarden.authenticator.ui.authenticator.feature.edititem
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
@@ -11,6 +10,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.CreateIte
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.model.EditItemData
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import io.mockk.coEvery
@@ -227,8 +227,9 @@ class EditItemViewModelTest : BaseViewModelTest() {
         assertEquals(
             state.copy(
                 dialog = EditItemState.DialogState.Generic(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required.asText(R.string.name.asText()),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.validation_field_required
+                        .asText(BitwardenString.name.asText()),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -250,8 +251,9 @@ class EditItemViewModelTest : BaseViewModelTest() {
         assertEquals(
             state.copy(
                 dialog = EditItemState.DialogState.Generic(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required.asText(R.string.key.asText()),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.validation_field_required
+                        .asText(BitwardenString.key.asText()),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -273,8 +275,8 @@ class EditItemViewModelTest : BaseViewModelTest() {
         assertEquals(
             state.copy(
                 dialog = EditItemState.DialogState.Generic(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.key_is_invalid.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.key_is_invalid.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -298,7 +300,7 @@ class EditItemViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     state.copy(
                         dialog = EditItemState.DialogState.Loading(
-                            message = R.string.saving.asText(),
+                            message = BitwardenString.saving.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -306,8 +308,8 @@ class EditItemViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     state.copy(
                         dialog = EditItemState.DialogState.Generic(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -346,13 +348,13 @@ class EditItemViewModelTest : BaseViewModelTest() {
             assertEquals(
                 state.copy(
                     dialog = EditItemState.DialogState.Loading(
-                        message = R.string.saving.asText(),
+                        message = BitwardenString.saving.asText(),
                     ),
                 ),
                 stateFlow.awaitItem(),
             )
             assertEquals(
-                EditItemEvent.ShowToast(R.string.item_saved.asText()),
+                EditItemEvent.ShowToast(BitwardenString.item_saved.asText()),
                 eventFlow.awaitItem(),
             )
             assertEquals(EditItemEvent.NavigateBack, eventFlow.awaitItem())
@@ -397,7 +399,7 @@ class EditItemViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     viewState = EditItemState.ViewState.Error(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                 ),
                 awaitItem(),
@@ -422,9 +424,9 @@ class EditItemViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     viewState = EditItemState.ViewState.Error(
-                        message = R.string.internet_connection_required_title
+                        message = BitwardenString.internet_connection_required_title
                             .asText()
-                            .concat(R.string.internet_connection_required_message.asText()),
+                            .concat(BitwardenString.internet_connection_required_message.asText()),
                     ),
                 ),
                 awaitItem(),
@@ -435,7 +437,7 @@ class EditItemViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     viewState = EditItemState.ViewState.Error(
-                        message = R.string.generic_error_message.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                 ),
                 awaitItem(),

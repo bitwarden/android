@@ -38,7 +38,7 @@ import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
@@ -216,10 +216,10 @@ private fun VaultScreenScaffold(
     // Static dialogs
     if (shouldShowExitConfirmationDialog) {
         BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.exit),
-            message = stringResource(id = R.string.exit_confirmation),
-            confirmButtonText = stringResource(id = R.string.yes),
-            dismissButtonText = stringResource(id = R.string.cancel),
+            title = stringResource(id = BitwardenString.exit),
+            message = stringResource(id = BitwardenString.exit_confirmation),
+            confirmButtonText = stringResource(id = BitwardenString.yes),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
             onConfirmClick = {
                 shouldShowExitConfirmationDialog = false
                 vaultHandlers.exitConfirmationAction()
@@ -247,22 +247,22 @@ private fun VaultScreenScaffold(
                         },
                     )
                     BitwardenSearchActionItem(
-                        contentDescription = stringResource(id = R.string.search_vault),
+                        contentDescription = stringResource(id = BitwardenString.search_vault),
                         onClick = vaultHandlers.searchIconClickAction,
                     )
                     BitwardenOverflowActionItem(
-                        contentDescription = stringResource(R.string.more),
+                        contentDescription = stringResource(BitwardenString.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
-                                text = stringResource(id = R.string.sync),
+                                text = stringResource(id = BitwardenString.sync),
                                 onClick = vaultHandlers.syncAction,
                             ),
                             OverflowMenuItemData(
-                                text = stringResource(id = R.string.lock),
+                                text = stringResource(id = BitwardenString.lock),
                                 onClick = vaultHandlers.lockAction,
                             ),
                             OverflowMenuItemData(
-                                text = stringResource(id = R.string.exit),
+                                text = stringResource(id = BitwardenString.exit),
                                 onClick = { shouldShowExitConfirmationDialog = true },
                             ),
                         ),
@@ -316,7 +316,7 @@ private fun VaultScreenScaffold(
                 BitwardenFloatingActionButton(
                     onClick = vaultHandlers.selectAddItemTypeClickAction,
                     painter = rememberVectorPainter(id = BitwardenDrawable.ic_plus_large),
-                    contentDescription = stringResource(id = R.string.add_item),
+                    contentDescription = stringResource(id = BitwardenString.add_item),
                     modifier = Modifier.testTag(tag = "AddItemButton"),
                 )
             }
@@ -358,11 +358,11 @@ private fun VaultScreenScaffold(
                         label = "VaultNoItemsActionCard",
                     ) {
                         BitwardenActionCard(
-                            cardTitle = stringResource(R.string.import_saved_logins),
+                            cardTitle = stringResource(BitwardenString.import_saved_logins),
                             cardSubtitle = stringResource(
-                                R.string.use_a_computer_to_import_logins,
+                                BitwardenString.use_a_computer_to_import_logins,
                             ),
-                            actionText = stringResource(R.string.get_started),
+                            actionText = stringResource(BitwardenString.get_started),
                             onActionClick = vaultHandlers.importActionCardClick,
                             onDismissClick = vaultHandlers.dismissImportActionCard,
                             modifier = Modifier
@@ -373,11 +373,13 @@ private fun VaultScreenScaffold(
                     }
                     VaultNoItems(
                         vectorRes = BitwardenDrawable.img_vault_items,
-                        headerText = stringResource(id = R.string.save_and_protect_your_data),
-                        message = stringResource(
-                            R.string.the_vault_protects_more_than_just_passwords,
+                        headerText = stringResource(
+                            id = BitwardenString.save_and_protect_your_data,
                         ),
-                        buttonText = stringResource(R.string.new_login),
+                        message = stringResource(
+                            BitwardenString.the_vault_protects_more_than_just_passwords,
+                        ),
+                        buttonText = stringResource(BitwardenString.new_login),
                         policyDisablesSend = false,
                         addItemClickAction = {
                             vaultHandlers.addItemClickAction(CreateVaultItemType.LOGIN)
@@ -403,7 +405,7 @@ private fun VaultDialogs(
 ) {
     when (dialogState) {
         is VaultState.DialogState.Syncing -> BitwardenLoadingDialog(
-            text = stringResource(id = R.string.syncing),
+            text = stringResource(id = BitwardenString.syncing),
         )
 
         is VaultState.DialogState.Error -> BitwardenBasicDialog(

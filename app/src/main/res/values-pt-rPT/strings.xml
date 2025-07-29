@@ -68,7 +68,6 @@
     <string name="value_has_been_copied">%1$s copiado(a)</string>
     <string name="verify_master_password">Verificar a palavra-passe mestra</string>
     <string name="verify_pin">Verificar PIN</string>
-    <string name="version">Versão</string>
     <string name="view">Ver</string>
     <string name="yes">Sim</string>
     <string name="account">Conta</string>
@@ -86,7 +85,7 @@
     <string name="edit_card">Editar cartão</string>
     <string name="edit_identity">Editar identidade</string>
     <string name="edit_note">Editar nota</string>
-    <string name="edit_passkey">Editar chave de acesso</string>
+    <string name="edit_ssh_key">Editar chave SSH</string>
     <string name="enter_email_for_hint">Introduza o endereço de e-mail da sua conta para receber a dica da sua palavra-passe mestra.</string>
     <string name="favorite">Adicionar aos favoritos</string>
     <string name="unfavorite">Remover dos favoritos</string>
@@ -102,7 +101,8 @@
     <string name="one_minute">1 minuto</string>
     <string name="four_hours">4 horas</string>
     <string name="immediately">Imediatamente</string>
-    <string name="vault_timeout_log_out_confirmation">Ao terminar sessão removerá todo o acesso ao seu cofre e requer autenticação online após o período de tempo limite. Tem a certeza de que pretende utilizar esta definição?</string>
+    <string name="vault_timeout_log_out_confirmation_title">Definir o tempo limite da sessão para \"Terminar sessão\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">Após o período de tempo limite, a sessão será terminada. Terá de estar ligado à Internet para iniciar sessão e aceder novamente ao seu cofre. As suas definições e PIN guardados neste dispositivo não serão alterados.</string>
     <string name="logging_in">A iniciar sessão...</string>
     <string name="login_to_bitwarden">Iniciar sessão no Bitwarden</string>
     <string name="master_password_confirmation_val_message">A confirmação da palavra-passe não está correta.</string>
@@ -121,7 +121,6 @@
     <string name="new_identity">Nova identidade</string>
     <string name="no_notes">Não existem notas no seu cofre.</string>
     <string name="new_note">Nova nota</string>
-    <string name="new_passkey">Nova chave de acesso</string>
     <string name="new_item">Novo item</string>
     <string name="new_ssh_key">Nova chave SSH</string>
     <string name="no_text_sends">Não existem Sends de texto no seu cofre.</string>
@@ -154,7 +153,7 @@
     <string name="view_card">Ver cartão</string>
     <string name="view_identity">Ver identidade</string>
     <string name="view_note">Ver nota</string>
-    <string name="view_passkey">Ver chave de acesso</string>
+    <string name="view_ssh_key">Ver chave SSH</string>
     <string name="web_vault">Cofre Web Bitwarden</string>
     <string name="items">Itens</string>
     <string name="items_for_uri">Itens para %1$s</string>
@@ -170,7 +169,7 @@
     <string name="authenticator_app_title">Aplicação de autenticação</string>
     <string name="enter_verification_code_app">Introduza o código de verificação de 6 dígitos da sua aplicação de autenticação.</string>
     <string name="enter_verification_code_email">Introduza o código de verificação de 6 dígitos que foi enviado por e-mail para %1$s.</string>
-    <string name="enter_verification_code_new_device">Não reconhecemos este dispositivo. Introduza o código de verificação de 8 dígitos que foi enviado por e-mail para [%1$s].</string>
+    <string name="enter_verification_code_new_device">Não reconhecemos este dispositivo. Introduza o código enviado para o seu e-mail para verificar a sua identidade.</string>
     <string name="recovery_code_title">Código de recuperação</string>
     <string name="remember">Memorizar</string>
     <string name="remember_email">Memorizar e-mail</string>
@@ -265,6 +264,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="address">Endereço</string>
     <string name="expiration">Prazo de validade</string>
     <string name="show_website_icons">Mostrar ícones do site</string>
+    <string name="show_website_icons_help">Ajuda para mostrar ícones do site</string>
     <string name="show_website_icons_description">Mostrar uma imagem reconhecível junto a cada credencial.</string>
     <string name="icons_url">URL do servidor de ícones</string>
     <string name="vault_is_locked">O cofre está bloqueado</string>
@@ -342,7 +342,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="pin">PIN</string>
     <string name="unlock">Desbloquear</string>
     <string name="thirty_minutes">30 minutos</string>
-    <string name="set_pin_description">O seu PIN tem de ter, pelo menos, 4 caracteres. As suas definições de PIN serão repostas se alguma vez terminar completamente a sessão na aplicação.</string>
+    <string name="set_pin_description">O seu PIN deve ter pelo menos 4 caracteres. As suas definições de PIN serão repostas se terminar manualmente a sessão na app Bitwarden.</string>
     <string name="logged_in_as_on">Sessão iniciada como %1$s em %2$s.</string>
     <string name="vault_locked_master_password">O seu cofre está bloqueado. Verifique a sua palavra-passe mestra para continuar.</string>
     <string name="vault_locked_pin">O seu cofre está bloqueado. Verifique o seu código PIN para continuar.</string>
@@ -700,6 +700,7 @@ Pretende mudar para esta conta?</string>
     <string name="launch_web_authn">Iniciar o WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Ocorreu um erro ao iniciar a autenticação de dois fatores WebAuthn</string>
     <string name="self_hosted_server_url">URL do servidor auto-hospedado</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">A operação da credencial falhou porque o utilizador não pôde ser verificado.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">A operação da chave de acesso falhou porque o utilizador não pôde ser verificado.</string>
     <string name="user_verification_direction">Verificação do utilizador</string>
     <string name="create_account_on">Criar conta em</string>
@@ -865,7 +866,6 @@ Pretende mudar para esta conta?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Só precisa de configurar a chave do autenticador para os inícios de sessão que requerem verificação de dois passos com um código. A chave gerará continuamente códigos de seis dígitos que pode utilizar para iniciar sessão.</string>
     <string name="coachmark_3_of_3">3 de 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">É necessário adicionar um endereço Web para utilizar o preenchimento automático para aceder a esta conta.</string>
-    <string name="mutual_tls">TLS mútuo</string>
     <string name="single_tap_passkey_creation">Criação de chaves de acesso com um único toque</string>
     <string name="single_tap_passkey_authentication">Início de sessão com chave de acesso de toque único</string>
     <string name="learn_about_new_logins">Saiba mais sobre as novas credenciais</string>
@@ -909,6 +909,12 @@ Pretende mudar para esta conta?</string>
     <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">A operação da chave de acesso falhou porque as tentativas de verificação do utilizador foram excedidas.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">A operação da chave de acesso falhou porque não foi selecionado nenhum item.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A operação da chave de acesso falhou porque o pedido não é suportado.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">A operação da palavra-passe falhou porque o item selecionado não existe.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">A operação da palavra-passe falhou porque não foi selecionado nenhum item.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">A operação da credencial falhou porque as tentativas de verificação do utilizador foram excedidas.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">A operação da credencial falhou porque o utilizador está bloqueado.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">A operação da credencial falhou porque o item selecionado não existe.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">A operação da credencial falhou porque a verificação do utilizador foi cancelada.</string>
     <string name="self_host_server_url">URL do servidor auto-hospedado</string>
     <string name="use_brave_autofill_integration">Utilizar a integração do preenchimento automático do Brave</string>
     <string name="use_chrome_autofill_integration">Utilizar a integração do preenchimento automático do Chrome</string>
@@ -967,19 +973,19 @@ Pretende mudar para esta conta?</string>
     <string name="view_text_send">Ver Send de texto</string>
     <string name="delete_send">Eliminar Send</string>
     <string name="missing_send_resync_your_vault">Send em falta, sincronize novamente o seu cofre</string>
-    <string name="dynamic_colors">Cores dinâmicas</string>
-    <string name="dynamic_colors_description">Aplique cores dinâmicas com base no seu papel de parede</string>
-    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">As cores dinâmicas utilizam as cores do sistema e podem não cumprir todas as diretrizes de acessibilidade.</string>
+    <string name="use_dynamic_colors">Utilizar cores dinâmicas</string>
+    <string name="use_dynamic_colors_question">Utilizar cores dinâmicas?</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Este esquema de cores aplica automaticamente as cores do sistema ao Bitwarden com base no seu papel de parede atual. Essas cores podem não atender a todas as diretrizes de acessibilidade.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">A operação de chave de acesso falhou porque o navegador (%1$s) não foi reconhecido. Selecione \"Confiar\" para adicionar %1$s à lista de aplicações localmente fiáveis.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">A operação da chave de acesso falhou porque o navegador não é de confiança.</string>
     <string name="trust">Confiar</string>
-    <string name="trusted_by_you_learn_more">Estas são aplicações ou navegadores em que o Bitwarden não confia por defeito, mas que são confiadas por SI para realizar operações de chave de acesso.</string>
+    <string name="trusted_by_you_learn_more">Estas são aplicações ou navegadores em que o Bitwarden não confia por defeito, mas que são confiadas por si para realizar operações de chave de acesso.</string>
     <string name="trusted_by_community_learn_more">Estas aplicações não estão incluídas na Play Store da Google, mas o Bitwarden confia na realização de operações de chave de acesso depois de os membros da comunidade as utilizarem e as reportarem como seguras.</string>
     <string name="trusted_by_google_learn_more">Estas são aplicações que a Google considera seguras e estão disponíveis na Play Store da Google.</string>
     <string name="trusted_by_you">Confiadas por si</string>
     <string name="trusted_by_the_community">Confiadas pela comunidade</string>
     <string name="trusted_by_google">Confiadas pela Google</string>
-    <string name="privileged_apps_description">Para proteger os utilizadores de tentativas de phishing, por predefinição, o Bitwarden apenas realiza operações de chave de acesso através de navegadores Web da confiança da Google ou da comunidade Bitwarden.</string>
+    <string name="privileged_apps_description">Para proteger os utilizadores de tentativas de phishing, por predefinição, o Bitwarden só realiza operações de chave-mestra através de aplicações ou navegadores web da confiança da Google ou da comunidade Bitwarden.</string>
     <string name="about_privileged_applications">Sobre aplicações privilegiadas</string>
     <string name="learn_more_about_privileged_apps">Saiba mais sobre as aplicações privilegiadas</string>
     <string name="privileged_apps">Apps privilegiadas</string>
@@ -989,4 +995,6 @@ Pretende mudar para esta conta?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Tem a certeza de que quer deixar de confiar em %s?</string>
     <string name="installed_apps">Apps instaladas</string>
     <string name="delete_x">Eliminar %s</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Falha ao decifrar a cifra. Contacte o suporte.</string>
+    <string name="decryption_error">Erro de desencriptação</string>
 </resources>

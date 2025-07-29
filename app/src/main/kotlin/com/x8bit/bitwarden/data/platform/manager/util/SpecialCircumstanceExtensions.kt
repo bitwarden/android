@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
+import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.vault.model.TotpData
 
@@ -41,6 +42,15 @@ fun SpecialCircumstance.toCreateCredentialRequestOrNull(): CreateCredentialReque
 fun SpecialCircumstance.toFido2AssertionRequestOrNull(): Fido2CredentialAssertionRequest? =
     when (this) {
         is SpecialCircumstance.Fido2Assertion -> this.fido2AssertionRequest
+        else -> null
+    }
+
+/**
+ * Returns [ProviderGetPasswordCredentialRequest] when contained in the given [SpecialCircumstance].
+ */
+fun SpecialCircumstance.toPasswordGetRequestOrNull(): ProviderGetPasswordCredentialRequest? =
+    when (this) {
+        is SpecialCircumstance.ProviderGetPasswordRequest -> this.passwordGetRequest
         else -> null
     }
 
