@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
  * @param modifier A [Modifier] for the composable.
  */
 @Composable
-fun BitwardenCircularCountdownIndicator(
+fun AuthenticatorCircularCountdownIndicator(
     modifier: Modifier = Modifier,
     timeLeftSeconds: Int,
     periodSeconds: Int,
