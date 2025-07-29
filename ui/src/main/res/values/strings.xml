@@ -1073,7 +1073,7 @@ Do you want to switch to this account?</string>
     <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
     <string name="copy_error_report">Copy error report</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
-    <plurals name="bitwarden_could_not_decrypt_vault_item_copy_and_share_this_error_report_with_customer_success">
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
         <item quantity="one">Bitwarden could not decrypt 1 vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
         <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
     </plurals>
