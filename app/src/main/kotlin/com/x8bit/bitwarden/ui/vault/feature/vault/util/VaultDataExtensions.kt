@@ -45,8 +45,7 @@ fun VaultData.toViewState(
     vaultFilterType: VaultFilterType,
     restrictItemTypesPolicyOrgIds: List<String>?,
 ): VaultState.ViewState {
-
-    val filteredCipherViewListWithDeletedItems =
+    val filteredAllCipherViewListWithDeletedItems =
         decryptCipherListResult
             .successes
             .plus(
@@ -59,8 +58,23 @@ fun VaultData.toViewState(
             .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds ?: emptyList())
             .toFilteredList(vaultFilterType)
 
-    val filteredCipherViewList = filteredCipherViewListWithDeletedItems
+    val filteredCipherViewList = filteredAllCipherViewListWithDeletedItems
         .filter { it.deletedDate == null }
+
+    val filteredSuccessCipherViewList = decryptCipherListResult
+        .successes
+        .filter { it.deletedDate == null }
+        .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds ?: emptyList())
+        .toFilteredList(vaultFilterType)
+
+    val filteredFailureCipherViewList = decryptCipherListResult
+        .failures
+        .filter { it.deletedDate == null }
+        .map { cipher ->
+            cipher.toFailureCipherListView()
+        }
+        .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds ?: emptyList())
+        .toFilteredList(vaultFilterType)
 
     val filteredFolderViewList = folderViewList
         .toFilteredList(
@@ -73,17 +87,37 @@ fun VaultData.toViewState(
         .toFilteredList(vaultFilterType)
         .getFilteredCollections()
 
-    val noFolderItems = filteredCipherViewList
-        .filter { it.folderId.isNullOrBlank() }
-
-    val itemTypesCount: Int = CipherType.entries.size
-
-    return if (filteredCipherViewListWithDeletedItems.isEmpty()) {
+    return if (filteredAllCipherViewListWithDeletedItems.isEmpty()) {
         VaultState.ViewState.NoItems
     } else {
-        val totpItems = filteredCipherViewList.filter { it.login?.totp != null }
+        val itemTypesCount: Int = CipherType.entries.size
+        val noFolderItems = filteredSuccessCipherViewList
+            .filter { it.folderId.isNullOrBlank() }
+            .mapNotNull {
+                it.toVaultItemOrNull(
+                    hasMasterPassword = hasMasterPassword,
+                    isIconLoadingDisabled = isIconLoadingDisabled,
+                    baseIconUrl = baseIconUrl,
+                    isPremiumUser = isPremium,
+                    hasDecryptionError = false,
+                )
+            }
+            .plus(
+                elements = filteredFailureCipherViewList
+                    .filter { it.folderId.isNullOrBlank() }
+                    .mapNotNull {
+                        it.toVaultItemOrNull(
+                            hasMasterPassword = hasMasterPassword,
+                            isIconLoadingDisabled = isIconLoadingDisabled,
+                            baseIconUrl = baseIconUrl,
+                            isPremiumUser = isPremium,
+                            hasDecryptionError = true,
+                        )
+                    },
+            )
         val shouldShowUnGroupedItems = filteredCollectionViewList.isEmpty() &&
             noFolderItems.size < NO_FOLDER_ITEM_THRESHOLD
+        val totpItems = filteredCipherViewList.filter { it.login?.totp != null }
         val cardCount = filteredCipherViewList.count { it.type is CipherListViewType.Card }
         VaultState.ViewState.Content(
             itemTypesCount = itemTypesCount,
@@ -100,7 +134,7 @@ fun VaultData.toViewState(
                 .count { it.type is CipherListViewType.SecureNote },
             sshKeyItemsCount = filteredCipherViewList
                 .count { it.type is CipherListViewType.SshKey },
-            favoriteItems = filteredCipherViewList
+            favoriteItems = filteredSuccessCipherViewList
                 .filter { it.favorite }
                 .mapNotNull {
                     it.toVaultItemOrNull(
@@ -108,8 +142,22 @@ fun VaultData.toViewState(
                         isIconLoadingDisabled = isIconLoadingDisabled,
                         baseIconUrl = baseIconUrl,
                         isPremiumUser = isPremium,
+                        hasDecryptionError = false,
                     )
-                },
+                }
+                .plus(
+                    elements = filteredFailureCipherViewList
+                        .filter { it.favorite }
+                        .mapNotNull {
+                            it.toVaultItemOrNull(
+                                hasMasterPassword = hasMasterPassword,
+                                isIconLoadingDisabled = isIconLoadingDisabled,
+                                baseIconUrl = baseIconUrl,
+                                isPremiumUser = isPremium,
+                                hasDecryptionError = true,
+                            )
+                        },
+                ),
             folderItems = filteredFolderViewList
                 .map { folderView ->
                     VaultState.ViewState.FolderItem(
@@ -136,14 +184,6 @@ fun VaultData.toViewState(
                     }
                 },
             noFolderItems = noFolderItems
-                .mapNotNull {
-                    it.toVaultItemOrNull(
-                        hasMasterPassword = hasMasterPassword,
-                        isIconLoadingDisabled = isIconLoadingDisabled,
-                        baseIconUrl = baseIconUrl,
-                        isPremiumUser = isPremium,
-                    )
-                }
                 .takeIf { shouldShowUnGroupedItems }
                 .orEmpty(),
             collectionItems = filteredCollectionViewList
@@ -159,7 +199,7 @@ fun VaultData.toViewState(
                             },
                     )
                 },
-            trashItemsCount = filteredCipherViewListWithDeletedItems.count {
+            trashItemsCount = filteredAllCipherViewListWithDeletedItems.count {
                 it.deletedDate != null
             },
             showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds == null,
@@ -222,6 +262,7 @@ private fun CipherListView.toVaultItemOrNull(
     isIconLoadingDisabled: Boolean,
     baseIconUrl: String,
     isPremiumUser: Boolean,
+    hasDecryptionError: Boolean,
 ): VaultState.ViewState.VaultItem? {
     val id = this.id ?: return null
     return when (type) {
@@ -241,6 +282,7 @@ private fun CipherListView.toVaultItemOrNull(
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
                 reprompt == CipherRepromptType.PASSWORD,
+            hasDecryptionError = hasDecryptionError,
         )
 
         CipherListViewType.SecureNote -> VaultState.ViewState.VaultItem.SecureNote(
@@ -253,6 +295,7 @@ private fun CipherListView.toVaultItemOrNull(
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
                 reprompt == CipherRepromptType.PASSWORD,
+            hasDecryptionError = hasDecryptionError,
         )
 
         is CipherListViewType.Card -> VaultState.ViewState.VaultItem.Card(
@@ -267,6 +310,7 @@ private fun CipherListView.toVaultItemOrNull(
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
                 reprompt == CipherRepromptType.PASSWORD,
+            hasDecryptionError = hasDecryptionError,
         )
 
         CipherListViewType.Identity -> VaultState.ViewState.VaultItem.Identity(
@@ -280,6 +324,7 @@ private fun CipherListView.toVaultItemOrNull(
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
                 reprompt == CipherRepromptType.PASSWORD,
+            hasDecryptionError = hasDecryptionError,
         )
 
         CipherListViewType.SshKey -> VaultState.ViewState.VaultItem.SshKey(
@@ -292,6 +337,7 @@ private fun CipherListView.toVaultItemOrNull(
             ),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
                 reprompt == CipherRepromptType.PASSWORD,
+            hasDecryptionError = hasDecryptionError,
         )
     }
 }
