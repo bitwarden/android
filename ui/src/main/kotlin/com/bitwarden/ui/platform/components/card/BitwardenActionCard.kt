@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.card
+package com.bitwarden.ui.platform.components.card
 
 import android.content.res.Configuration
 import androidx.compose.animation.fadeOut
