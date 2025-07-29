@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.card.color
+package com.bitwarden.ui.platform.components.card.color
 
 import androidx.compose.material3.CardColors
 import androidx.compose.runtime.Composable
