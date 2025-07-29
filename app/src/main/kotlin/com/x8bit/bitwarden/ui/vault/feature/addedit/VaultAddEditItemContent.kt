@@ -21,7 +21,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextSelectionButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.bitwarden.ui.platform.resource.BitwardenString
+import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
@@ -43,6 +44,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyT
 fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
     state: VaultAddEditState.ViewState.Content,
     isAddItemMode: Boolean,
+    defaultUriMatchType: UriMatchType,
     commonTypeHandlers: VaultAddEditCommonHandlers,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
     identityItemTypeHandlers: VaultAddEditIdentityTypeHandlers,
@@ -80,7 +82,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         if (state.isIndividualVaultDisabled && isAddItemMode) {
             item {
                 BitwardenInfoCalloutCard(
-                    text = stringResource(BitwardenString.personal_ownership_policy_in_effect),
+                    text = stringResource(R.string.personal_ownership_policy_in_effect),
                     modifier = Modifier
                         .standardHorizontalMargin()
                         .testTag("PersonalOwnershipPolicyLabel")
@@ -93,11 +95,11 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         if (shouldShowLearnAboutLoginsCard) {
             item {
                 BitwardenActionCard(
-                    cardTitle = stringResource(BitwardenString.learn_about_new_logins),
+                    cardTitle = stringResource(R.string.learn_about_new_logins),
                     cardSubtitle = stringResource(
-                        BitwardenString.we_ll_walk_you_through_the_key_features_to_add_a_new_login,
+                        R.string.we_ll_walk_you_through_the_key_features_to_add_a_new_login,
                     ),
-                    actionText = stringResource(BitwardenString.get_started),
+                    actionText = stringResource(R.string.get_started),
                     onActionClick = loginItemTypeHandlers.onStartLoginCoachMarkTour,
                     onDismissClick = loginItemTypeHandlers.onDismissLearnAboutLoginsCard,
                     modifier = Modifier
@@ -110,7 +112,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         if (isAddItemMode) {
             item {
                 BitwardenListHeaderText(
-                    label = stringResource(id = BitwardenString.item_details),
+                    label = stringResource(id = R.string.item_details),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -122,7 +124,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         item {
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenTextField(
-                label = stringResource(id = BitwardenString.item_name_required),
+                label = stringResource(id = R.string.item_name_required),
                 value = state.common.name,
                 onValueChange = commonTypeHandlers.onNameTextChange,
                 actions = {
@@ -133,9 +135,9 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                             BitwardenDrawable.ic_favorite_empty
                         },
                         contentDescription = if (state.common.favorite) {
-                            stringResource(id = BitwardenString.favorite)
+                            stringResource(id = R.string.favorite)
                         } else {
-                            stringResource(id = BitwardenString.unfavorite)
+                            stringResource(id = R.string.unfavorite)
                         },
                         onClick = { commonTypeHandlers.onToggleFavorite(!state.common.favorite) },
                         modifier = Modifier.testTag(tag = "ItemFavoriteToggle"),
@@ -152,7 +154,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         item {
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenTextSelectionButton(
-                label = stringResource(id = BitwardenString.folder),
+                label = stringResource(id = R.string.folder),
                 selectedOption = state.common.selectedFolder?.name,
                 onClick = commonTypeHandlers.onSelectOrAddFolderForItem,
                 cardStyle = if (isAddItemMode && state.common.hasOrganizations) {
@@ -171,7 +173,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
             val collections = state.common.selectedOwner?.collections.orEmpty()
             item {
                 BitwardenTextSelectionButton(
-                    label = stringResource(id = BitwardenString.owner),
+                    label = stringResource(id = R.string.owner),
                     selectedOption = state.common.selectedOwner?.name,
                     onClick = commonTypeHandlers.onPresentOwnerOptions,
                     cardStyle = if (collections.isNotEmpty()) {
@@ -212,6 +214,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                     onNextCoachMark = onNextCoachMark,
                     onCoachMarkTourComplete = onCoachMarkTourComplete,
                     onCoachMarkDismissed = onCoachMarkDismissed,
+                    defaultUriMatchType = defaultUriMatchType,
                 )
             }
 

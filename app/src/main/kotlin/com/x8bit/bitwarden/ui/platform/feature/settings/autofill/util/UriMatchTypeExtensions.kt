@@ -31,3 +31,15 @@ fun UriMatchType.toSdkUriMatchType(): com.bitwarden.vault.UriMatchType =
         UriMatchType.REGULAR_EXPRESSION -> com.bitwarden.vault.UriMatchType.REGULAR_EXPRESSION
         UriMatchType.STARTS_WITH -> com.bitwarden.vault.UriMatchType.STARTS_WITH
     }
+
+/**
+ * Checks if the [UriMatchType] is considered an advanced matching strategy.
+ */
+fun UriMatchType.isAdvancedMatching(): Boolean =
+    when (this) {
+        UriMatchType.REGULAR_EXPRESSION,
+        UriMatchType.STARTS_WITH,
+            -> true
+
+        else -> false
+    }

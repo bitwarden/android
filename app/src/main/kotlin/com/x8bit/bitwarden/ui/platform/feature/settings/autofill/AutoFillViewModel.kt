@@ -131,6 +131,11 @@ class AutoFillViewModel @Inject constructor(
         is AutoFillAction.BrowserAutofillSelected -> handleBrowserAutofillSelected(action)
         AutoFillAction.AboutPrivilegedAppsClick -> handleAboutPrivilegedAppsClick()
         AutoFillAction.PrivilegedAppsClick -> handlePrivilegedAppsClick()
+        AutoFillAction.MoreAboutMatchDetectionClick -> handleMoreAboutMatchDetectionClick()
+    }
+
+    private fun handleMoreAboutMatchDetectionClick() {
+        sendEvent(AutoFillEvent.NavigateToMatchDetectionInfo)
     }
 
     private fun handlePrivilegedAppsClick() {
@@ -390,6 +395,11 @@ sealed class AutoFillEvent {
      * Navigate to the privileged apps list screen.
      */
     data object NavigateToPrivilegedAppsListScreen : AutoFillEvent()
+
+    /**
+     * Navigate to the about privileged apps screen.
+     */
+    data object NavigateToMatchDetectionInfo : AutoFillEvent()
 }
 
 /**
@@ -475,6 +485,11 @@ sealed class AutoFillAction {
      * User has clicked the privileged apps row.
      */
     data object PrivilegedAppsClick : AutoFillAction()
+
+    /**
+     * User has clicked the match detection more info help link.
+     */
+    data object MoreAboutMatchDetectionClick : AutoFillAction()
 
     /**
      * Internal actions.

@@ -1,6 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.UriMatchType
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriMatchDisplayType
 
 /**
@@ -30,3 +33,26 @@ fun UriMatchDisplayType.toUriMatchType(): UriMatchType? =
         UriMatchDisplayType.EXACT -> UriMatchType.EXACT
         UriMatchDisplayType.NEVER -> UriMatchType.NEVER
     }
+
+/**
+ * Checks if the [UriMatchDisplayType] is considered an advanced matching strategy.
+ */
+fun UriMatchDisplayType.isAdvancedMatching(): Boolean =
+    when (this) {
+        UriMatchDisplayType.REGULAR_EXPRESSION,
+        UriMatchDisplayType.STARTS_WITH,
+            -> true
+
+        else -> false
+    }
+
+/**
+ * Returns a human-readable display label for the given [UriMatchType].
+ */
+fun UriMatchDisplayType.displayLabel(defaultUriOption: String): Text {
+    return if (this == UriMatchDisplayType.DEFAULT) {
+        R.string.default_text.asText(defaultUriOption)
+    } else {
+        this.text
+    }
+}
