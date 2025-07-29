@@ -13,18 +13,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.bitwarden.ui.util.Text
+import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 
 /**
  * Represents a Bitwarden-styled dialog.
  *
  * @param title The optional title to be displayed by the dialog.
  * @param message The message to be displayed under the [title] by the dialog.
- * @param errorReport An optional [Throwable] that can be shared from this dialog.
+ * @param throwable An optional [Throwable] that can be shared from this dialog.
  * @param onDismissRequest A lambda that is invoked when the user has requested to dismiss the
  * dialog, whether by tapping "OK", tapping outside the dialog, or pressing the back button.
- * @param onShareErrorClick A lambda that is invoked when the user has requested to share the
- * error details. This is only invoked if [errorReport] is not null.
  */
 @Suppress("LongMethod")
 @Composable
@@ -32,8 +31,8 @@ fun BitwardenBasicDialog(
     title: String?,
     message: String,
     onDismissRequest: () -> Unit,
-    errorReport: Text? = null,
-    onShareErrorClick: (Text) -> Unit = {},
+    throwable: Throwable? = null,
+    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -44,13 +43,13 @@ fun BitwardenBasicDialog(
                 modifier = Modifier.testTag(tag = "AcceptAlertButton"),
             )
         },
-        dismissButton = errorReport
-            ?.let { text ->
+        dismissButton = throwable
+            ?.let { error ->
                 {
                     BitwardenTextButton(
                         label = stringResource(id = BitwardenString.share_error_details),
                         onClick = {
-                            onShareErrorClick(text)
+                            intentManager.shareErrorReport(error)
                             onDismissRequest()
                         },
                         modifier = Modifier.testTag(tag = "ShareErrorDetailsAlertButton"),

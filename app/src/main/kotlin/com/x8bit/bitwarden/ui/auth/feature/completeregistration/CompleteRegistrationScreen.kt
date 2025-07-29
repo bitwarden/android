@@ -106,7 +106,7 @@ fun CompleteRegistrationScreen(
             BitwardenBasicDialog(
                 title = dialog.title?.invoke(),
                 message = dialog.message(),
-                errorReport = dialog.error,
+                throwable = dialog.error,
                 onDismissRequest = handler.onDismissErrorDialog,
             )
         }

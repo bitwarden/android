@@ -3,11 +3,9 @@ package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.manager.BitwardenBuildConfigManager
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidEmail
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.bitwarden.ui.platform.util.toShareableText
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -54,7 +52,6 @@ class CompleteRegistrationViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
-    private val buildConfigManager: BitwardenBuildConfigManager,
 ) : BaseViewModel<CompleteRegistrationState, CompleteRegistrationEvent, CompleteRegistrationAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val args = savedStateHandle.toCompleteRegistrationArgs()
@@ -194,9 +191,7 @@ class CompleteRegistrationViewModel @Inject constructor(
                             title = BitwardenString.an_error_has_occurred.asText(),
                             message = registerAccountResult.errorMessage?.asText()
                                 ?: BitwardenString.generic_error_message.asText(),
-                            error = registerAccountResult.error?.toShareableText(
-                                buildConfigManager = buildConfigManager,
-                            ),
+                            error = registerAccountResult.error,
                         ),
                     )
                 }
@@ -500,7 +495,7 @@ sealed class CompleteRegistrationDialog : Parcelable {
     data class Error(
         val title: Text?,
         val message: Text,
-        val error: Text? = null,
+        val error: Throwable? = null,
     ) : CompleteRegistrationDialog()
 }
 

@@ -12,6 +12,17 @@ import android.os.Build
 interface BitwardenBuildConfigManager {
 
     /**
+     * The ID of the running application.
+     */
+    val applicationId: String
+
+    /**
+     * The authority for the FileProvider used in the application.
+     */
+    val fileProviderAuthority: String
+        get() = "$applicationId.fileprovider"
+
+    /**
      * A boolean property that indicates whether the current build flavor is "fdroid".
      */
     val isFdroid: Boolean
