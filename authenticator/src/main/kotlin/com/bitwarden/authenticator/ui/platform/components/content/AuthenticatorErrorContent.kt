@@ -25,7 +25,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
  * Note that when [onTryAgainClick] is absent, there will be no "Try again" button displayed.
  */
 @Composable
-fun BitwardenErrorContent(
+fun AuthenticatorErrorContent(
     message: String,
     modifier: Modifier = Modifier,
     onTryAgainClick: (() -> Unit)? = null,

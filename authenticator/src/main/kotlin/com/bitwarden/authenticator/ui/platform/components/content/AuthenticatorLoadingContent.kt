@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
  * A Bitwarden-themed, re-usable loading state.
  */
 @Composable
-fun BitwardenLoadingContent(
+fun AuthenticatorLoadingContent(
     modifier: Modifier = Modifier,
 ) {
     Column(
