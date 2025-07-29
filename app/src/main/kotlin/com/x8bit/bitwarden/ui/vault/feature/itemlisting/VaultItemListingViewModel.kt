@@ -187,7 +187,6 @@ class VaultItemListingViewModel @Inject constructor(
             getCredentialsRequest = providerGetCredentialsRequest,
             isPremium = userState.activeAccount.isPremium,
             isRefreshing = false,
-            cipherDecryptionFailureIds = persistentListOf(),
         )
     },
 ) {
@@ -2452,13 +2451,6 @@ class VaultItemListingViewModel @Inject constructor(
                     }
                 },
                 dialogState = currentState.dialogState.takeUnless { clearDialogState },
-                cipherDecryptionFailureIds = vaultData
-                    .decryptCipherListResult
-                    .failures
-                    .mapNotNull {
-                        it.id
-                    }
-                    .toImmutableList(),
             )
         }
     }
@@ -2629,7 +2621,6 @@ data class VaultItemListingState(
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
     val isRefreshing: Boolean,
-    val cipherDecryptionFailureIds: ImmutableList<String>,
 ) {
     /**
      * Whether or not the add FAB should be shown.
