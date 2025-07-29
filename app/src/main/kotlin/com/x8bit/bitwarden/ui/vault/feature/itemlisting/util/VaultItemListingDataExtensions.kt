@@ -436,13 +436,12 @@ private fun CipherListView.toDisplayItem(
             ),
     )
 
-@Suppress("LongParameterList", "MaxLineLength")
+@Suppress("MaxLineLength")
 private fun List<CipherListView>.toDisplayItemListDecryptionError(): List<VaultItemListingState.DisplayItem> =
     this.map {
         it.toDisplayItemDecryptionError()
     }
 
-@Suppress("LongParameterList")
 private fun CipherListView.toDisplayItemDecryptionError(): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),

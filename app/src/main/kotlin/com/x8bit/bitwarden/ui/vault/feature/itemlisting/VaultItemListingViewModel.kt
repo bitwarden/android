@@ -958,11 +958,11 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun showCipherDecryptionErrorItemClick(itemId: String?) {
         mutableStateFlow.update {
-            @Suppress("MaxLineLength")
             it.copy(
                 dialogState = VaultItemListingState.DialogState.CipherDecryptionError(
                     title = BitwardenString.decryption_error.asText(),
-                    message = BitwardenString.bitwarden_could_not_decrypt_this_vault_item_description_long.asText(),
+                    message = BitwardenString
+                        .bitwarden_could_not_decrypt_this_vault_item_description_long.asText(),
                     selectedCipherId = itemId,
                 ),
             )
