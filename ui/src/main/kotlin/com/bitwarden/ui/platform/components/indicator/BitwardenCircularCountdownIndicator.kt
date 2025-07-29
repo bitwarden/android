@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.indicator
+package com.bitwarden.ui.platform.components.indicator
 
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState

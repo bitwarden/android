@@ -33,7 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
-import com.bitwarden.authenticator.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
+import com.bitwarden.authenticator.ui.platform.components.indicator.AuthenticatorCircularCountdownIndicator
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
@@ -137,7 +137,7 @@ fun VaultVerificationCodeItem(
                 }
             }
 
-            BitwardenCircularCountdownIndicator(
+            AuthenticatorCircularCountdownIndicator(
                 modifier = Modifier.semantics { testTag = "CircularCountDown" },
                 timeLeftSeconds = timeLeftSeconds,
                 periodSeconds = periodSeconds,

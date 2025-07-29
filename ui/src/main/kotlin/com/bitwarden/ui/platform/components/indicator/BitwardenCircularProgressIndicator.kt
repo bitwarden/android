@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.indicator
+package com.bitwarden.ui.platform.components.indicator
 
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
