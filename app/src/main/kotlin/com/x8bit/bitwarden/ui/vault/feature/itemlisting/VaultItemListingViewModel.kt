@@ -962,8 +962,8 @@ class VaultItemListingViewModel @Inject constructor(
             @Suppress("MaxLineLength")
             it.copy(
                 dialogState = VaultItemListingState.DialogState.CipherDecryptionError(
-                    title = R.string.decryption_error.asText(),
-                    message = R.string.bitwarden_could_not_decrypt_this_vault_item_description_long.asText(),
+                    title = BitwardenString.decryption_error.asText(),
+                    message = BitwardenString.bitwarden_could_not_decrypt_this_vault_item_description_long.asText(),
                     selectedCipherId = itemId,
                 ),
             )

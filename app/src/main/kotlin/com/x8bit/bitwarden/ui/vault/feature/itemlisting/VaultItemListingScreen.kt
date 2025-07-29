@@ -375,8 +375,8 @@ private fun VaultItemListingDialogs(
             BitwardenTwoButtonDialog(
                 title = dialogState.title(),
                 message = dialogState.message(),
-                confirmButtonText = stringResource(R.string.copy_error_report),
-                dismissButtonText = stringResource(R.string.close),
+                confirmButtonText = stringResource(BitwardenString.copy_error_report),
+                dismissButtonText = stringResource(BitwardenString.close),
                 onConfirmClick = {
                     onShareCipherDecryptionErrorClick(dialogState.selectedCipherId)
                 },

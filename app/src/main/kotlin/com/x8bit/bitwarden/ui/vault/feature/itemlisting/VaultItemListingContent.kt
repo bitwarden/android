@@ -207,7 +207,7 @@ fun VaultItemListingContent(
                     startIcon = it.iconData,
                     startIconTestTag = it.iconTestTag,
                     label = if (it.itemType == VaultItemListingState.DisplayItem.ItemType.DecryptionError) {
-                        stringResource(id = R.string.error_cannot_decrypt)
+                        stringResource(id = BitwardenString.error_cannot_decrypt)
                     } else {
                         it.title
                     },
