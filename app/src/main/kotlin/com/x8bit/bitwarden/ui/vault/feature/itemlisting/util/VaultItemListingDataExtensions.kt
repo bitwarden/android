@@ -137,6 +137,9 @@ fun VaultData.toViewState(
         .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds)
         .toFilteredList(vaultFilterType)
 
+    val allFilteredCipherViewList = filteredFailuresCipherViewList
+        .plus(filteredCipherViewList)
+
     val folderList =
         (itemListingType as? VaultItemListingState.ItemListingType.Vault.Folder)
             ?.folderId
@@ -148,7 +151,7 @@ fun VaultData.toViewState(
             ?.let { collectionViewList.getCollections(it.collectionId) }
             .orEmpty()
 
-    return if (folderList.isNotEmpty() || filteredCipherViewList.isNotEmpty() ||
+    return if (folderList.isNotEmpty() || allFilteredCipherViewList.isNotEmpty() ||
         collectionList.isNotEmpty()
     ) {
         VaultItemListingState.ViewState.Content(
@@ -168,8 +171,7 @@ fun VaultData.toViewState(
                 VaultItemListingState.FolderDisplayItem(
                     id = requireNotNull(folderView.id),
                     name = folderView.name,
-                    count = this.decryptCipherListResult
-                        .successes
+                    count = allFilteredCipherViewList
                         .count {
                             it.deletedDate == null &&
                                 !it.id.isNullOrBlank() &&
@@ -181,8 +183,7 @@ fun VaultData.toViewState(
                 VaultItemListingState.CollectionDisplayItem(
                     id = requireNotNull(collectionView.id),
                     name = collectionView.name,
-                    count = this.decryptCipherListResult
-                        .successes
+                    count = allFilteredCipherViewList
                         .count {
                             !it.id.isNullOrBlank() &&
                                 it.deletedDate == null &&
