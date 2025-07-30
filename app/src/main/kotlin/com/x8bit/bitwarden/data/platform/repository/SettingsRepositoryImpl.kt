@@ -35,6 +35,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.security.GeneralSecurityException
 import java.time.Instant
 import javax.crypto.Cipher
 
@@ -501,9 +503,14 @@ class SettingsRepositoryImpl(
             .onSuccess { biometricsKey ->
                 authDiskSource.storeUserBiometricUnlockKey(
                     userId = userId,
-                    biometricsKey = cipher
-                        .doFinal(biometricsKey.encodeToByteArray())
-                        .toString(Charsets.ISO_8859_1),
+                    biometricsKey = try {
+                        cipher
+                            .doFinal(biometricsKey.encodeToByteArray())
+                            .toString(Charsets.ISO_8859_1)
+                    } catch (e: GeneralSecurityException) {
+                        Timber.w(e, "setupBiometricsKey failed encrypt the biometric key")
+                        return BiometricsKeyResult.Error(error = e)
+                    },
                 )
                 authDiskSource.storeUserBiometricInitVector(userId = userId, iv = cipher.iv)
             }
