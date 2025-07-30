@@ -372,7 +372,6 @@ Scanning will happen automatically.</string>
     <string name="download">Download</string>
     <string name="login_expired">Your login session has expired.</string>
     <string name="biometrics_direction">Biometric verification</string>
-    <string name="biometrics">Biometrics</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Use biometrics to unlock</string>
