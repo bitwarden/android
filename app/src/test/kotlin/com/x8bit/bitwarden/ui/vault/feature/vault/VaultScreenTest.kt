@@ -861,6 +861,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = username.asText(),
             overflowOptions = emptyList(),
             shouldShowMasterPasswordReprompt = false,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -897,6 +898,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = userName.asText(),
             overflowOptions = emptyList(),
             shouldShowMasterPasswordReprompt = true,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -955,6 +957,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = userName.asText(),
             overflowOptions = emptyList(),
             shouldShowMasterPasswordReprompt = true,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -1020,6 +1023,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                 ),
             ),
             shouldShowMasterPasswordReprompt = true,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -1090,6 +1094,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = userName.asText(),
             overflowOptions = persistentListOf(overflowAction),
             shouldShowMasterPasswordReprompt = true,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -1240,6 +1245,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = userName.asText(),
             overflowOptions = emptyList(),
             shouldShowMasterPasswordReprompt = false,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -1276,6 +1282,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = userName.asText(),
             overflowOptions = persistentListOf(overflowAction),
             shouldShowMasterPasswordReprompt = true,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -1346,6 +1353,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = userName.asText(),
             overflowOptions = persistentListOf(overflowAction),
             shouldShowMasterPasswordReprompt = true,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -1410,6 +1418,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = userName.asText(),
             overflowOptions = emptyList(),
             shouldShowMasterPasswordReprompt = true,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -1468,6 +1477,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = userName.asText(),
             overflowOptions = emptyList(),
             shouldShowMasterPasswordReprompt = true,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -1851,6 +1861,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                             name = "mockSshKey".asText(),
                             overflowOptions = emptyList(),
                             shouldShowMasterPasswordReprompt = false,
+                            hasDecryptionError = false,
                         ),
                     ),
                 ),
@@ -2072,6 +2083,8 @@ private val DEFAULT_STATE: VaultState = VaultState(
     showImportActionCard = false,
     flightRecorderSnackBar = null,
     restrictItemTypesPolicyOrgIds = null,
+    cipherDecryptionFailureIds = persistentListOf(),
+    hasShownDecryptionFailureAlert = false,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(

@@ -892,6 +892,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Suppress("MaxLineLength")
     @Test
     fun `vaultDataStateFlow Loaded with items when manually syncing with the sync button should update state to Content, show a success Snackbar, and dismiss pull to refresh`() =
@@ -930,7 +931,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         ),
                     ),
                 )
-
+                advanceTimeBy(1500) // Allow time for state to update
                 assertEquals(expectedState, viewModel.stateFlow.value)
                 assertEquals(
                     VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
@@ -961,6 +962,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Suppress("MaxLineLength")
     @Test
     fun `vaultDataStateFlow Loaded with empty items when manually syncing with the sync button should update state to NoItems, show a success Snackbar, and dismiss pull to refresh`() =
@@ -983,7 +985,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         sendViewList = emptyList(),
                     ),
                 )
-
+                advanceTimeBy(1500) // Allow time for state to update
                 assertEquals(expectedState, viewModel.stateFlow.value)
                 assertEquals(
                     VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
@@ -1503,6 +1505,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         val item = mockk<VaultState.ViewState.VaultItem> {
             every { id } returns itemId
             every { type } returns VaultItemCipherType.LOGIN
+            every { hasDecryptionError } returns false
         }
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAction.VaultItemClick(item))
@@ -2311,6 +2314,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                             shouldShowMasterPasswordReprompt = true,
                             username = null,
                             overflowOptions = persistentListOf(),
+                            hasDecryptionError = false,
                         ),
                         password = password,
                     ),
@@ -2352,6 +2356,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                             name = "name".asText(),
                             shouldShowMasterPasswordReprompt = true,
                             overflowOptions = persistentListOf(),
+                            hasDecryptionError = false,
                         ),
                         password = password,
                     ),
@@ -2380,6 +2385,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 shouldShowMasterPasswordReprompt = true,
                 fullName = null,
                 overflowOptions = persistentListOf(),
+                hasDecryptionError = false,
             )
             coEvery {
                 authRepository.validatePassword(password = password)
@@ -2788,4 +2794,6 @@ private fun createMockVaultState(
         isRefreshing = false,
         flightRecorderSnackBar = null,
         restrictItemTypesPolicyOrgIds = null,
+        cipherDecryptionFailureIds = persistentListOf(),
+        hasShownDecryptionFailureAlert = false,
     )

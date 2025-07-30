@@ -848,6 +848,7 @@ class VaultDataExtensionsTest {
                         ),
                         shouldShowMasterPasswordReprompt = false,
                         username = "mockUsername-1".asText(),
+                        hasDecryptionError = false,
                     ),
                 ),
                 trashItemsCount = 0,
@@ -1206,4 +1207,5 @@ private fun createMockSshKeyVaultItem(number: Int): VaultState.ViewState.VaultIt
             ),
         ),
         shouldShowMasterPasswordReprompt = false,
+        hasDecryptionError = false,
     )
