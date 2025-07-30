@@ -190,8 +190,8 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
  * Models state for the [VaultUnlockedNavBarViewModel].
  */
 data class VaultUnlockedNavBarState(
-    @StringRes val vaultNavBarLabelRes: Int,
-    @StringRes val vaultNavBarContentDescriptionRes: Int,
+    @field:StringRes val vaultNavBarLabelRes: Int,
+    @field:StringRes val vaultNavBarContentDescriptionRes: Int,
     val notificationState: VaultUnlockedNavBarNotificationState,
 )
 

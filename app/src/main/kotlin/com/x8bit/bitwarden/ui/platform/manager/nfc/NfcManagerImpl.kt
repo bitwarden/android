@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.nfc.NfcAdapter
 import android.os.Build
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.x8bit.bitwarden.AuthCallbackActivity
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import kotlin.random.Random
@@ -26,9 +27,12 @@ class NfcManagerImpl(
     override fun start() {
         if (!supportsNfc) return
         val options = ActivityOptions.makeBasic()
-        // When targeting API 35, we need to explicitly allow background activities to start on
-        // devices using API 34 and higher.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        if (isBuildVersionAtLeast(version = Build.VERSION_CODES.BAKLAVA)) {
+            options.setPendingIntentCreatorBackgroundActivityStartMode(
+                ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOW_IF_VISIBLE,
+            )
+        } else if (isBuildVersionAtLeast(version = Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
+            @Suppress("DEPRECATION")
             options.setPendingIntentCreatorBackgroundActivityStartMode(
                 ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED,
             )
