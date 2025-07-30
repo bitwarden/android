@@ -125,7 +125,7 @@ private fun CipherListView.filterBySearchType(
         }
 
         is SearchTypeData.Vault.SshKeys -> type is CipherListViewType.SshKey && deletedDate == null
-        is SearchTypeData.Vault.VerificationCodes -> organizationUseTotp && deletedDate == null
+        is SearchTypeData.Vault.VerificationCodes -> login?.totp != null && deletedDate == null
         is SearchTypeData.Vault.Trash -> deletedDate != null
     }
 
