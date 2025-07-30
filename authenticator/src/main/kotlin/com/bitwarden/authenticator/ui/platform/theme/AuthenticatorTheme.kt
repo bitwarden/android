@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.bitwarden.authenticator.R
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.util.isDarkMode
 
 /**
  * The overall application theme. This can be configured to support a [theme] and [dynamicColor].
@@ -26,12 +27,7 @@ fun AuthenticatorTheme(
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit,
 ) {
-    val darkTheme = when (theme) {
-        AppTheme.DEFAULT -> isSystemInDarkTheme()
-        AppTheme.DARK -> true
-        AppTheme.LIGHT -> false
-    }
-
+    val darkTheme = theme.isDarkMode(isSystemDarkMode = isSystemInDarkTheme())
     // Get the current scheme
     val context = LocalContext.current
     val colorScheme = when {
