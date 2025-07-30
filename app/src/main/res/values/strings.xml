@@ -146,7 +146,7 @@
     <string name="syncing">Syncing...</string>
     <string name="syncing_complete">Syncing complete</string>
     <string name="two_step_login">Two-step login</string>
-    <string name="unlock_with_biometrics">Unlock with biometrics</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Unlock with PIN code</string>
     <string name="verification_code">Verification code</string>
     <string name="view_login">View login</string>
