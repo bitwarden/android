@@ -32,7 +32,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
  * A reusable card for displaying actions to the user.
  */
 @Composable
-fun BitwardenActionCard(
+fun AuthenticatorActionCard(
     actionIcon: VectorPainter,
     titleText: String,
     actionText: String,
@@ -97,7 +97,7 @@ fun BitwardenActionCard(
 @Preview
 @Composable
 private fun ActionCardPreview() {
-    BitwardenActionCard(
+    AuthenticatorActionCard(
         actionIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
         actionText = "This is an action.",
         callToActionText = "Take action",
@@ -109,7 +109,7 @@ private fun ActionCardPreview() {
 @Preview
 @Composable
 private fun ActionCardWithTrailingPreview() {
-    BitwardenActionCard(
+    AuthenticatorActionCard(
         actionIcon = rememberVectorPainter(id = BitwardenDrawable.ic_shield),
         actionText = "An action with trailing content",
         titleText = "This is a title",

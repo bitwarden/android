@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.card
+package com.bitwarden.ui.platform.components.card
 
 import android.content.res.Configuration
 import androidx.compose.animation.fadeOut
@@ -22,11 +22,11 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.card.color.bitwardenCardColors
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.card.color.bitwardenCardColors
 
 /**
  * A design component action card, which contains a title, action button, and a dismiss button
