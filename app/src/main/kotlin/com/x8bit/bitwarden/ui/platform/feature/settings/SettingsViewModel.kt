@@ -232,7 +232,7 @@ sealed class SettingsAction {
  */
 enum class Settings(
     val text: Text,
-    @DrawableRes val vectorIconRes: Int,
+    @field:DrawableRes val vectorIconRes: Int,
     val testTag: String,
 ) {
     ACCOUNT_SECURITY(
