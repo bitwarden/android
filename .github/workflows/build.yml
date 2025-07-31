@@ -142,7 +142,7 @@ jobs:
         uses: bitwarden/gh-actions/get-keyvault-secrets@main
         with:
           keyvault: gh-android
-          secrets: "UPLOAD-KEYSTORE-PASSWORD,UPLOAD-BETA-KEYSTORE-PASSWORD,UPLOAD-BETA-KEY-PASSWORD,PLAY-KEYSTORE-PASSWORD,PLAY-BETA-KEYSTORE-PASSWORD,PLAY-BETA-KEY-PASSWORD"
+          secrets: "UPLOAD-KEYSTORE-PASSWORD,UPLOAD-BETA-KEYSTORE-PASSWORD,UPLOAD-BETA-KEY-PASSWORD,PLAY-KEYSTORE-PASSWORD,PLAY-BETA-KEYSTORE-PASSWORD,PLAY-BETA-KEY-PASSWORD,BWS-ACCESS-TOKEN"
 
       - name: Retrieve secrets
         env:
@@ -260,6 +260,48 @@ jobs:
           keyAlias:bitwarden \
           keyPassword:${{ env.PLAY-KEYSTORE-PASSWORD }}
 
+      - name: Retrieve test data
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
+        uses: bitwarden/sm-action@14f92f1d294ae3c2b6a3845d389cd2c318b0dfd8 # v2.2.0
+        with:
+          access_token: ${{ steps.get-kv-secrets.outputs.BWS-ACCESS-TOKEN }}
+          secrets: |
+            63e93f73-5118-4a62-9db8-b3160176aa8a > TEST_ACCOUNT_CREDS
+
+      - name: Configure .json test data file
+        run: printf %s '${{ env.TEST_ACCOUNT_CREDS }}' > app/src/androidTest/assets/TestData.json
+
+      - name: Build test APK (espresso)
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
+        env:
+          _TEST_APK_PATH: app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-standard-release-androidTest.apk
+          _TEST_APK_SIGNED_PATH: app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-test.apk
+        run: |
+          ./gradlew :app:assembleStandardReleaseAndroidTest
+          # bundle exec fastlane assembleTestApk \
+          #   storeFile:app_play-keystore.jks \
+          #   storePassword:${{ env.PLAY-KEYSTORE-PASSWORD }} \
+          #   keyAlias:bitwarden \
+          #   keyPassword:${{ env.PLAY-KEYSTORE-PASSWORD }}
+          # mv $_TEST_APK_PATH $_TEST_APK_SIGNED_PATH
+
+      # TODO: test if bundle exec fastlane assembleTestApk works and replace this step
+      - name: Sign and rename test APK
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
+        env:
+          _TEST_APK_PATH: app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-standard-release-androidTest.apk
+          _TEST_APK_SIGNED_PATH: app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-test.apk
+          _PLAY_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-KEYSTORE-PASSWORD }}
+          _PLAY_KEYSTORE_ALIAS: ${{ steps.get-kv-secrets.outputs.PLAY-KEYSTORE-ALIAS }}
+        run: |
+          $ANDROID_SDK_ROOT/build-tools/34.0.0/apksigner sign \
+            --ks keystores/app_play-keystore.jks \
+            --ks-key-alias bitwarden \
+            --ks-pass pass:$_PLAY_KEYSTORE_PASSWORD \
+            --key-pass pass:$_PLAY_KEYSTORE_PASSWORD \
+            $_TEST_APK_PATH
+          mv $_TEST_APK_PATH $_TEST_APK_SIGNED_PATH
+
       - name: Generate beta Play Store APK
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
         env:
@@ -299,6 +341,14 @@ jobs:
         with:
           name: com.x8bit.bitwarden.apk
           path: app/build/outputs/apk/standard/release/com.x8bit.bitwarden.apk
+          if-no-files-found: error
+
+      - name: Upload test .apk artifact
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: com.x8bit.bitwarden-test.apk
+          path: app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-test.apk
           if-no-files-found: error
 
       - name: Upload beta .apk artifact
@@ -420,6 +470,14 @@ jobs:
         run: |
           bundle exec fastlane publishProdToPlayStore
           bundle exec fastlane publishBetaToPlayStore
+
+  test-device:
+    name: Test device
+    needs: publish_playstore
+    uses: bitwarden/android/.github/workflows/test-device.yml@QA-1126b/adding-native-sanity-test #TODO replace branch with main before merging
+    with:
+      apk_filename: com.x8bit.bitwarden.apk
+      test_apk_filename: com.x8bit.bitwarden-test.apk
 
   publish_fdroid:
     name: Publish F-Droid artifacts
@@ -602,144 +660,3 @@ jobs:
           bundle exec fastlane distributeReleaseFDroidToFirebase \
           actionUrl:${{ env.GITHUB_ACTION_RUN_URL }} \
           service_credentials_file:${{ env.APP_FDROID_FIREBASE_CREDS_PATH }}
-
-  test_on_device:
-    name: Running sanity check on a real device
-    needs: publish_playstore
-    runs-on: ubuntu-24.04
-    if: github.ref == 'refs/heads/main'
-    env:
-      _JAVA_VERSION: 17
-      _GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    steps:
-      - name: Check out repo
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-
-      - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4.3.1
-
-      - name: Cache Gradle files
-        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-v2-
-
-      - name: Cache build output
-        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
-        with:
-          path: ${{ github.workspace }}/build-cache
-          key: ${{ runner.os }}-build-cache-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-
-
-      - name: Configure JDK
-        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
-        with:
-          distribution: "temurin"
-          java-version: ${{ env._JAVA_VERSION }}
-
-      - name: Configure Ruby
-        uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
-        with:
-          bundler-cache: true
-
-      - name: Install Fastlane
-        run: |
-          gem install bundler:2.2.27
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
-
-      - name: Install saucectl
-        run: |
-          npm i -g saucectl
-
-      - name: Retrieve secrets
-        env:
-          ACCOUNT_NAME: bitwardenci
-          CONTAINER_NAME: mobile
-        run: |
-          mkdir -p ${{ github.workspace }}/secrets
-          mkdir -p ${{ github.workspace }}/app/src/standardRelease
-
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-          --name app_play-keystore.jks --file ${{ github.workspace }}/keystores/app_play-keystore.jks --output none
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-          --name google-services.json --file ${{ github.workspace }}/app/src/standardRelease/google-services.json --output none
-
-      - name: Log in to Azure
-        uses: bitwarden/gh-actions/azure-login@main
-        with:
-          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
-          client_id: ${{ secrets.AZURE_CLIENT_ID }}
-
-      - name: Get E2E test secrets from Azure
-        uses: bitwarden/gh-actions/get-keyvault-secrets@main
-        with:
-          keyvault: gh-android
-          secrets: "BWS-ACCESS-TOKEN, SAUCE-LABS-USERNAME, SAUCE-LABS-ACCESS-KEY"
-        id: get-e2e-secrets
-
-      - name: Log out from Azure
-        uses: bitwarden/gh-actions/azure-logout@main
-
-      - name: Retrieve test data
-        uses: bitwarden/sm-action@14f92f1d294ae3c2b6a3845d389cd2c318b0dfd8 # v2.2.0
-        with:
-          access_token: ${{ steps.get-e2e-secrets.outputs.BWS-ACCESS-TOKEN }}
-          secrets: |
-            63e93f73-5118-4a62-9db8-b3160176aa8a > TEST_ACCOUNT_CREDS
-
-      - name: Configure .json test data file
-        run: printf %s '${{ env.TEST_ACCOUNT_CREDS }}' > app/src/androidTest/assets/TestData.json
-
-      - name: Build test APK (espresso)
-        run: |
-          ./gradlew :app:assembleStandardReleaseAndroidTest
-
-      - name: Download release APK artifact
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
-        with:
-          name: com.x8bit.bitwarden.apk
-          path: app/build/outputs/apk/standard/release/
-
-      - name: Signing test APK
-        run: |
-          $ANDROID_SDK_ROOT/build-tools/34.0.0/apksigner sign \
-            --ks keystores/app_play-keystore.jks \
-            --ks-key-alias bitwarden \
-            --ks-pass pass:${{ secrets.PLAY_KEYSTORE_PASSWORD }} \
-            --key-pass pass:${{ secrets.PLAY_KEYSTORE_PASSWORD }} \
-            app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-standard-release-androidTest.apk
-
-      - name: Upload APK to SauceLabs storage
-        run: |
-          saucectl storage upload app/build/outputs/apk/standard/release/com.x8bit.bitwarden.apk
-        env:
-          SAUCE_USERNAME: ${{ steps.get-e2e-secrets.outputs.SAUCE-LABS-USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ steps.get-e2e-secrets.outputs.SAUCE-LABS-ACCESS-KEY }}
-
-      - name: Upload test APK to SauceLabs storage
-        run: |
-          saucectl storage upload app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-standard-release-androidTest.apk
-        env:
-          SAUCE_USERNAME: ${{ steps.get-e2e-secrets.outputs.SAUCE-LABS-USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ steps.get-e2e-secrets.outputs.SAUCE-LABS-ACCESS-KEY }}
-
-      - name: Run tests on SauceLabs
-        run: saucectl run --config .sauce/config.yml
-        env:
-          SAUCE_USERNAME: ${{ steps.get-e2e-secrets.outputs.SAUCE-LABS-USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ steps.get-e2e-secrets.outputs.SAUCE-LABS-ACCESS-KEY }}
-
-      - name: Upload SauceLabs test report
-        if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: saucectl-report
-          path: saucectl-report.xml
