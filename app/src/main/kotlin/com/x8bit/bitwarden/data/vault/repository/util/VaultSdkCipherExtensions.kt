@@ -698,7 +698,7 @@ fun Cipher.toFailureCipherListView(): CipherListView =
         permissions = permissions,
         viewPassword = viewPassword,
         attachments = 0.toUInt(),
-        hasOldAttachments = attachments?.any { it.key == null } ?: false,
+        hasOldAttachments = false,
         localData = null,
         creationDate = creationDate,
         deletedDate = deletedDate,
