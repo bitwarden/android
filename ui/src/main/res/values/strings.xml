@@ -1078,6 +1078,12 @@ Do you want to switch to this account?</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
     <string name="advanced_options">Advanced options</string>
-    <string name="advanced_options_warning">“<annotation arg="0">%1$s</annotation>” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="selected_matching_option_is_an_advanced_option">“%1$s” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="selected_matching_option_is_an_advanced_option_if_used_incorrectly">“%1$s” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="warning_bold"><annotation emphasis="bold">Warning: </annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+
 </resources>

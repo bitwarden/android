@@ -450,20 +450,6 @@ class AutoFillViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `when MoreAboutMatchDetectionClick action is handled the correct NavigateToMatchDetectionInfo event is sent`() =
-        runTest {
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(AutoFillAction.MoreAboutMatchDetectionClick)
-                assertEquals(
-                    AutoFillEvent.NavigateToMatchDetectionInfo,
-                    awaitItem(),
-                )
-            }
-        }
-
     private fun createViewModel(
         state: AutoFillState? = DEFAULT_STATE,
     ): AutoFillViewModel = AutoFillViewModel(

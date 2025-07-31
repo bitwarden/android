@@ -12,9 +12,9 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.assertNoDialogExists
-import com.bitwarden.ui.util.performCustomAccessibilityAction
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
@@ -53,6 +53,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         every { startCredentialManagerSettings(any()) } just runs
         every { startSystemAccessibilitySettingsActivity() } just runs
         every { startBrowserAutofillSettingsActivity(any()) } returns true
+        every { launchUri(any()) } just runs
     }
 
     @Before
@@ -456,7 +457,10 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `on default URI match type dialog cancel click should close the dialog`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .onNodeWithContentDescription(
+                label = "Default URI match detection.",
+                substring = true,
+            )
             .performScrollTo()
             .performClick()
 
@@ -488,8 +492,9 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             .assertExists()
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on default URI match Advanced type click should display warning dialog`() {
+    fun `on default URI match Advanced type click should display warning dialog when Regular Expression`() {
         composeTestRule
             .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
             .performScrollTo()
@@ -501,7 +506,32 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText(text = "Warning")
+            .onAllNodesWithText(
+                "“Regular expression” is an advanced option with " +
+                    "increased risk of exposing credentials if used incorrectly.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on default URI match Advanced type click should display warning dialog when Starts With`() {
+        composeTestRule
+            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Starts with")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(
+                "“Starts with” is an advanced option with " +
+                    "increased risk of exposing credentials.",
+            )
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertExists()
     }
@@ -546,7 +576,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Continue")
+            .onAllNodesWithText("Yes")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -561,7 +591,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on Advanced matching warning dialog click on more about match detection should send MoreAboutMatchDetectionClick event`() {
+    fun `on Advanced matching warning dialog confirm should show more info match detection dialog`() {
         composeTestRule
             .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
             .performScrollTo()
@@ -573,19 +603,40 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText(text = "Warning")
+            .onAllNodesWithText("Yes")
             .filterToOne(hasAnyAncestor(isDialog()))
-            .assertExists()
+            .performClick()
 
         composeTestRule
-            .onAllNodesWithText(text = "“Regular expression” is an advanced option with increased risk of exposing credentials.\nMore about match detection")
+            .onAllNodesWithText("Keep your credentials secure")
             .filterToOne(hasAnyAncestor(isDialog()))
-            .performCustomAccessibilityAction("More about match detection")
+            .assertExists()
+    }
+
+    @Test
+    fun `on match detection dialog learn more button click should launch uri`() {
+        composeTestRule
+            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Regular expression")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Learn more")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
 
         verify(exactly = 1) {
-            viewModel.trySendAction(
-                AutoFillAction.MoreAboutMatchDetectionClick,
-            )
+            intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
         }
     }
 
