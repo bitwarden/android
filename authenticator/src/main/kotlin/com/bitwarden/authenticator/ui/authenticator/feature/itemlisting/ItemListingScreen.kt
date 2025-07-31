@@ -66,7 +66,7 @@ import com.bitwarden.authenticator.ui.platform.components.appbar.action.Authenti
 import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledButton
 import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledTonalButton
 import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
-import com.bitwarden.authenticator.ui.platform.components.card.BitwardenActionCard
+import com.bitwarden.authenticator.ui.platform.components.card.AuthenticatorActionCard
 import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
@@ -775,7 +775,7 @@ private fun DownloadBitwardenActionCard(
     modifier: Modifier = Modifier,
     onDismissClick: () -> Unit,
     onDownloadBitwardenClick: () -> Unit,
-) = BitwardenActionCard(
+) = AuthenticatorActionCard(
     modifier = modifier,
     actionIcon = rememberVectorPainter(BitwardenDrawable.ic_shield),
     actionText = stringResource(BitwardenString.download_bitwarden_card_message),

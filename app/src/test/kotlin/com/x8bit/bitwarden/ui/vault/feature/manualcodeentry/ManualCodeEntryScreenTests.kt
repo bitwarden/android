@@ -103,7 +103,7 @@ class ManualCodeEntryScreenTests : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText(text = "Cannot add authenticator key? Scan QR Code")
-            .performCustomAccessibilityAction(label = "Scan QR Code")
+            .performCustomAccessibilityAction(label = "Scan QR code")
 
         verify {
             viewModel.trySendAction(ManualCodeEntryAction.ScanQrCodeTextClick)
@@ -116,7 +116,7 @@ class ManualCodeEntryScreenTests : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText(text = "Cannot add authenticator key? Scan QR Code")
-            .performCustomAccessibilityAction(label = "Scan QR Code")
+            .performCustomAccessibilityAction(label = "Scan QR code")
 
         composeTestRule
             .onAllNodesWithText("Enable camera permission to use the scanner")
@@ -192,7 +192,7 @@ class ManualCodeEntryScreenTests : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText(text = "Cannot add authenticator key? Scan QR Code")
-            .performCustomAccessibilityAction(label = "Scan QR Code")
+            .performCustomAccessibilityAction(label = "Scan QR code")
 
         composeTestRule
             .onAllNodesWithText("Enable camera permission to use the scanner")

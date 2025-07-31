@@ -32,7 +32,6 @@ sealed class FlagKey<out T : Any> {
             listOf(
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
-                RestrictCipherItemDeletion,
                 UserManagedPrivilegedApps,
                 RemoveCardPolicy,
             )
@@ -62,14 +61,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object CipherKeyEncryption : FlagKey<Boolean>() {
         override val keyName: String = "cipher-key-encryption"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key to enable the restriction of cipher item deletion
-     */
-    data object RestrictCipherItemDeletion : FlagKey<Boolean>() {
-        override val keyName: String = "pm-15493-restrict-item-deletion-to-can-manage-permission"
         override val defaultValue: Boolean = false
     }
 

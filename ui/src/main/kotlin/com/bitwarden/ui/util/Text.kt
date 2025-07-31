@@ -38,7 +38,7 @@ interface Text : Parcelable {
  * Implementation of [Text] backed by a string resource.
  */
 @Parcelize
-private data class ResText(@StringRes private val id: Int) : Text {
+private data class ResText(@field:StringRes private val id: Int) : Text {
     override fun invoke(res: Resources): CharSequence = res.getText(id)
 }
 
@@ -57,8 +57,7 @@ private data class TextConcatenation(private val args: List<Text>) : Text {
  */
 @Parcelize
 private data class ResArgsText(
-    @StringRes
-    private val id: Int,
+    @field:StringRes private val id: Int,
     private val args: @RawValue List<Any>,
 ) : Text {
     override fun invoke(res: Resources): String =
@@ -73,8 +72,7 @@ private data class ResArgsText(
 @Parcelize
 @Suppress("UnusedPrivateClass")
 private data class PluralsText(
-    @PluralsRes
-    private val id: Int,
+    @field:PluralsRes private val id: Int,
     private val quantity: Int,
     private val args: @RawValue List<Any>,
 ) : Text {

@@ -146,7 +146,6 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
 private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf(
     FlagKey.CredentialExchangeProtocolImport to true,
     FlagKey.CredentialExchangeProtocolExport to true,
-    FlagKey.RestrictCipherItemDeletion to true,
     FlagKey.UserManagedPrivilegedApps to true,
     FlagKey.RemoveCardPolicy to true,
 )
@@ -154,7 +153,6 @@ private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf
 private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf(
     FlagKey.CredentialExchangeProtocolImport to false,
     FlagKey.CredentialExchangeProtocolExport to false,
-    FlagKey.RestrictCipherItemDeletion to false,
     FlagKey.UserManagedPrivilegedApps to false,
     FlagKey.RemoveCardPolicy to false,
 )

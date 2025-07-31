@@ -23,11 +23,9 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -118,9 +116,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     private val mockSettingsRepository = mockk<SettingsRepository> {
         every { isIconLoadingDisabled } returns false
         every { isIconLoadingDisabledFlow } returns mutableIsIconLoadingDisabledFlow
-    }
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(key = FlagKey.RestrictCipherItemDeletion) } returns false
     }
     private val mutableSnackbarDataFlow: MutableSharedFlow<BitwardenSnackbarData> =
         bufferedMutableSharedFlow()
@@ -2154,9 +2149,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         fun `on VaultDataReceive with Loaded and nonnull false permission data should update the ViewState with cipher permissions`() {
             val viewState = mockk<VaultItemState.ViewState>()
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.RestrictCipherItemDeletion)
-            } returns true
             every { mockCipherView.organizationId } returns "mockOrganizationId"
             every { mockCipherView.collectionIds } returns listOf("mockId-1")
             every { mockCipherView.folderId } returns "mockId-1"
@@ -2219,9 +2211,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         fun `on VaultDataReceive with Loaded and nonnull true permission data should update the ViewState with cipher permissions`() {
             val viewState = mockk<VaultItemState.ViewState>()
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.RestrictCipherItemDeletion)
-            } returns true
             every { mockCipherView.organizationId } returns "mockOrganizationId"
             every { mockCipherView.deletedDate } returns Instant.MIN
             every { mockCipherView.collectionIds } returns listOf("mockId-1")
@@ -2466,7 +2455,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         organizationEventManager = eventManager,
         environmentRepository = environmentRepository,
         settingsRepository = settingsRepository,
-        featureFlagManager = featureFlagManager,
         snackbarRelayManager = snackbarRelayManager,
     )
 
