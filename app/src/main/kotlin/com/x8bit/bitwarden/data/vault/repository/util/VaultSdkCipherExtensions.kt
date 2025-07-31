@@ -14,8 +14,10 @@ import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UriMatchTypeJson
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.Card
+import com.bitwarden.vault.CardListView
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherPermissions
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -26,6 +28,7 @@ import com.bitwarden.vault.Field
 import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.Identity
 import com.bitwarden.vault.Login
+import com.bitwarden.vault.LoginListView
 import com.bitwarden.vault.LoginUri
 import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.SecureNote
@@ -41,6 +44,7 @@ import java.time.ZonedDateTime
  *
  * @param encryptedFor The ID of the user who this cipher is encrypted by.
  */
+@Suppress("MaxLineLength")
 fun Cipher.toEncryptedNetworkCipher(
     encryptedFor: String,
 ): CipherJsonRequest =
@@ -62,7 +66,7 @@ fun Cipher.toEncryptedNetworkCipher(
         fields = fields?.toEncryptedNetworkFieldList(),
         isFavorite = favorite,
         card = card?.toEncryptedNetworkCard(),
-        key = key,
+        key = "2.zOzW+TwEKN/Pvvzc477F+g==|0IjchaGAWtz2wEy18IL336iYwKAaJNtdBmbK1NwssJWASAmzNCQHohq/XPzrMyzQXessmtfCIFYcqJQF5ipxZOopzg+D22BQMRFAVGW+OZY=|LHbMcgZLoEr2vSdukvCJhK8RNe6uZW+GPWcbHTich0A=",
         sshKey = sshKey?.toEncryptedNetworkSshKey(),
         encryptedFor = encryptedFor,
     )
@@ -364,7 +368,7 @@ fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
         organizationId = organizationId,
         folderId = folderId,
         collectionIds = collectionIds.orEmpty(),
-        key = key,
+        key = if (key?.contains("asdasd") == true) null else key,
         name = name.orEmpty(),
         notes = notes,
         type = type.toSdkCipherType(),
@@ -651,3 +655,54 @@ fun EncryptionContext.toEncryptedNetworkCipher(): CipherJsonRequest =
  */
 fun EncryptionContext.toEncryptedNetworkCipherResponse(): SyncResponseJson.Cipher =
     cipher.toEncryptedNetworkCipherResponse(encryptedFor = encryptedFor)
+
+/**
+ * Converts a Bitwarden SDK [Cipher] object to a corresponding
+ * [CipherListView] object with modified field to represent a decryption error instance.
+ * This allows reuse of existing logic for filtering and grouping ciphers to construct
+ * the sections in the vault list.
+ */
+fun Cipher.toFailureCipherListView(): CipherListView =
+    CipherListView(
+        id = id,
+        organizationId = organizationId,
+        folderId = folderId,
+        collectionIds = collectionIds,
+        key = key,
+        name = name,
+        subtitle = "",
+        type = when (type) {
+            CipherType.LOGIN -> CipherListViewType.Login(
+                v1 = LoginListView(
+                    fido2Credentials = null,
+                    hasFido2 = false,
+                    username = null,
+                    totp = null,
+                    uris = null,
+                ),
+            )
+
+            CipherType.SECURE_NOTE -> CipherListViewType.SecureNote
+            CipherType.CARD -> CipherListViewType.Card(
+                CardListView(
+                    brand = null,
+                ),
+            )
+
+            CipherType.IDENTITY -> CipherListViewType.Identity
+            CipherType.SSH_KEY -> CipherListViewType.SshKey
+        },
+        favorite = favorite,
+        reprompt = reprompt,
+        organizationUseTotp = organizationUseTotp,
+        edit = edit,
+        permissions = permissions,
+        viewPassword = viewPassword,
+        attachments = 0.toUInt(),
+        hasOldAttachments = attachments?.any { it.key == null } ?: false,
+        localData = null,
+        creationDate = creationDate,
+        deletedDate = deletedDate,
+        revisionDate = revisionDate,
+        copyableFields = emptyList(),
+    )

@@ -15,7 +15,7 @@ import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.data.autofill.util.card
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toFailureCipherListView
+import com.x8bit.bitwarden.data.vault.repository.util.toFailureCipherListView
 import com.x8bit.bitwarden.ui.vault.feature.util.getFilteredCollections
 import com.x8bit.bitwarden.ui.vault.feature.util.getFilteredFolders
 import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
