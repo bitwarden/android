@@ -44,7 +44,6 @@ import java.time.ZonedDateTime
  *
  * @param encryptedFor The ID of the user who this cipher is encrypted by.
  */
-@Suppress("MaxLineLength")
 fun Cipher.toEncryptedNetworkCipher(
     encryptedFor: String,
 ): CipherJsonRequest =
@@ -66,7 +65,7 @@ fun Cipher.toEncryptedNetworkCipher(
         fields = fields?.toEncryptedNetworkFieldList(),
         isFavorite = favorite,
         card = card?.toEncryptedNetworkCard(),
-        key = "2.zOzW+TwEKN/Pvvzc477F+g==|0IjchaGAWtz2wEy18IL336iYwKAaJNtdBmbK1NwssJWASAmzNCQHohq/XPzrMyzQXessmtfCIFYcqJQF5ipxZOopzg+D22BQMRFAVGW+OZY=|LHbMcgZLoEr2vSdukvCJhK8RNe6uZW+GPWcbHTich0A=",
+        key = key,
         sshKey = sshKey?.toEncryptedNetworkSshKey(),
         encryptedFor = encryptedFor,
     )
@@ -368,7 +367,7 @@ fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
         organizationId = organizationId,
         folderId = folderId,
         collectionIds = collectionIds.orEmpty(),
-        key = if (key?.contains("asdasd") == true) null else key,
+        key = key,
         name = name.orEmpty(),
         notes = notes,
         type = type.toSdkCipherType(),
