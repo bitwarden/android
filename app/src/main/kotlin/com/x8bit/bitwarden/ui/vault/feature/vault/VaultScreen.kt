@@ -444,11 +444,11 @@ private fun VaultDialogs(
         }
 
         is VaultState.DialogState.VaultLoadCipherDecryptionError -> {
-            @Suppress("MaxLineLength")
             BitwardenTwoButtonDialog(
                 title = dialogState.title(),
                 message = pluralStringResource(
-                    id = BitwardenPlurals.bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long,
+                    id = BitwardenPlurals
+                        .bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long,
                     count = dialogState.cipherCount,
                     dialogState.cipherCount,
                 ),
