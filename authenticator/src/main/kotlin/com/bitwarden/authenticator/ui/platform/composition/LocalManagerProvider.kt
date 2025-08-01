@@ -18,6 +18,7 @@ import com.bitwarden.authenticator.ui.platform.manager.exit.ExitManagerImpl
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManagerImpl
 import com.bitwarden.core.data.manager.BuildInfoManager
+import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import java.time.Clock
 
@@ -42,13 +43,6 @@ fun LocalManagerProvider(
         LocalBiometricsManager provides biometricsManager,
         content = content,
     )
-}
-
-/**
- * Provides access to the intent manager throughout the app.
- */
-val LocalIntentManager: ProvidableCompositionLocal<IntentManager> = compositionLocalOf {
-    error("CompositionLocal LocalIntentManager not present")
 }
 
 /**

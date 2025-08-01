@@ -2,7 +2,9 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pending
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
@@ -25,7 +27,7 @@ import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 class PendingRequestsViewModelTest : BaseViewModelTest() {
 
@@ -49,7 +51,9 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
             getSnackbarDataFlow(relay = any(), relays = anyVararg())
         } returns mutableSnackbarDataFlow
     }
-
+    private val buildInfoManager: BuildInfoManager = mockk {
+        every { isFdroid } returns false
+    }
     @Test
     fun `init should call getAuthRequestsWithUpdates`() {
         createViewModel(state = null)
@@ -74,9 +78,6 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
     @Suppress("LongMethod")
     @Test
     fun `getPendingResults success with content should update state with some requests filtered`() {
-        val dateTimeFormatter = DateTimeFormatter
-            .ofPattern("M/d/yy, hh:mm a")
-            .withZone(fixedClock.zone)
         val nowZonedDateTime = ZonedDateTime.now(fixedClock)
         val requestList = listOf(
             AuthRequest(
@@ -139,7 +140,11 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
                     PendingRequestsState.ViewState.Content.PendingLoginRequest(
                         fingerprintPhrase = "pantry-overdue-survive-sleep-jab",
                         platform = "Android",
-                        timestamp = nowZonedDateTime.format(dateTimeFormatter),
+                        timestamp = nowZonedDateTime.toFormattedDateTimeStyle(
+                            dateStyle = FormatStyle.SHORT,
+                            timeStyle = FormatStyle.SHORT,
+                            clock = fixedClock,
+                        ),
                     ),
                 ),
             ),
@@ -368,12 +373,20 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
                     PendingRequestsState.ViewState.Content.PendingLoginRequest(
                         fingerprintPhrase = "pantry-overdue-survive-sleep-jab",
                         platform = "Android",
-                        timestamp = "10/27/23, 12:00 PM",
+                        timestamp = nowZonedDateTime.toFormattedDateTimeStyle(
+                            dateStyle = FormatStyle.SHORT,
+                            timeStyle = FormatStyle.SHORT,
+                            clock = fixedClock,
+                        ),
                     ),
                     PendingRequestsState.ViewState.Content.PendingLoginRequest(
                         fingerprintPhrase = "erupt-anew-matchbook-disk-student",
                         platform = "iOS",
-                        timestamp = "10/27/23, 11:55 AM",
+                        timestamp = fiveMinZonedDateTime.toFormattedDateTimeStyle(
+                            dateStyle = FormatStyle.SHORT,
+                            timeStyle = FormatStyle.SHORT,
+                            clock = fixedClock,
+                        ),
                     ),
                 ),
             ),
@@ -393,6 +406,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         authRepository = authRepository,
         settingsRepository = settingsRepository,
         snackbarRelayManager = snackbarRelayManager,
+        buildInfoManager = buildInfoManager,
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
     )
 }
