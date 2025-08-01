@@ -248,6 +248,27 @@ The following is a list of additional third-party dependencies used as part of t
     - Purpose: A small testing library for kotlinx.coroutine's Flow.
     - License: Apache 2.0
 
+- **AndroidX Espresso Core**
+    - https://developer.android.com/jetpack/androidx/releases/espresso
+    - Purpose: UI testing framework for Android.
+    - License: Apache 2.0
+
+- **AndroidX JUnit KTX**
+    - https://developer.android.com/jetpack/androidx/releases/junit
+    - Purpose: Kotlin extensions for JUnit-based Android tests.
+    - License: Apache 2.0
+
+- **AndroidX UIAutomator**
+    - https://developer.android.com/training/testing/other-components/ui-automator
+    - Purpose: UI testing across multiple apps.
+    - License: Apache 2.0
+
+- **AndroidX Compose UI Test JUnit4 (Android)**
+    - https://developer.android.com/jetpack/androidx/releases/compose-ui
+    - Purpose: Compose UI testing for Android using JUnit4.
+    - License: Apache 2.0
+
+
 ### CI/CD Dependencies
 
 The following is a list of additional third-party dependencies used as part of the CI/CD workflows. These are not present in the final packaged application.

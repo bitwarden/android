@@ -324,7 +324,8 @@ private fun LandingScreenContent(
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_cog),
             modifier = Modifier
                 .standardHorizontalMargin()
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .testTag("AppSettingsButton"),
         )
 
         Spacer(modifier = Modifier.height(height = 12.dp))
