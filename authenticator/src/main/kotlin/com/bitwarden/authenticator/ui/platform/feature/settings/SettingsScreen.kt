@@ -444,10 +444,7 @@ private fun UnlockWithBiometricsRow(
     var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
     BitwardenWideSwitch(
         modifier = modifier,
-        label = stringResource(
-            id = BitwardenString.unlock_with,
-            stringResource(id = BitwardenString.biometrics),
-        ),
+        label = stringResource(BitwardenString.unlock_with_biometrics),
         isChecked = isChecked || showBiometricsPrompt,
         onCheckedChange = { toggled ->
             if (toggled) {
