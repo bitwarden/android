@@ -126,14 +126,14 @@ platform :android do
   fastlane_require "time"
   lane :setBuildVersionInfo do |options|
 
-    # Read-in app build config file.
-    buildConfigPath = "../app/build.gradle.kts"
-    buildConfigFile = File.open(buildConfigPath)
-    buildConfigText = buildConfigFile.read
-    buildConfigFile.close
+    # Read-in app toml file.
+    tomlLibraryPath = "../gradle/libs.versions.toml"
+    tomlLibraryFile = File.open(tomlLibraryPath)
+    tomlLibraryText = tomlLibraryFile.read
+    tomlLibraryFile.close
 
-    currentVersionCode = buildConfigText.match(/versionCode = (\d+)/).captures[0]
-    currentVersionName = buildConfigText.match(/versionName = "(.+)"/).captures[0]
+    currentVersionCode = tomlLibraryText.match(/appVersionCode = "(\d+)"/).captures[0]
+    currentVersionName = tomlLibraryText.match(/appVersionName = "(.+)"/).captures[0]
 
     if options[:versionName].nil? or options[:versionName].to_s.empty?
         puts "Fetching latest tags from origin..."
@@ -164,12 +164,12 @@ platform :android do
 
     # Replace version information.
     puts "Setting version code to #{options[:versionCode]}."
-    buildConfigText.gsub!("versionCode = #{currentVersionCode}", "versionCode = #{options[:versionCode]}")
+    tomlLibraryText.gsub!("appVersionCode = \"#{currentVersionCode}\"", "appVersionCode = \"#{options[:versionCode]}\"")
     puts "Setting version name to #{nextVersionName}."
-    buildConfigText.gsub!("versionName = \"#{currentVersionName}\"", "versionName = \"#{nextVersionName}\"")
+    tomlLibraryText.gsub!("appVersionName = \"#{currentVersionName}\"", "appVersionName = \"#{nextVersionName}\"")
 
     # Save changes
-    File.open(buildConfigPath, "w") { |buildConfigFile| buildConfigFile << buildConfigText }
+    File.open(tomlLibraryPath, "w") { |tomlLibraryFile| tomlLibraryFile << tomlLibraryText }
   end
 
   desc "Generate artifacts for the given [build] signed with the provided [keystore] and credentials."
@@ -300,57 +300,6 @@ platform :android do
 
     UI.message("version_name: #{latest_version_name}")
     UI.message("version_number: #{latest_version_number}")
-  end
-
-  # Authenticator
-  desc "Apply build version information"
-  fastlane_require "time"
-  lane :setAuthenticatorBuildVersionInfo do |options|
-
-    # Read-in app build config file.
-    buildConfigPath = "../authenticator/build.gradle.kts"
-    buildConfigFile = File.open(buildConfigPath)
-    buildConfigText = buildConfigFile.read
-    buildConfigFile.close
-
-    currentVersionCode = buildConfigText.match(/versionCode = (\d+)/).captures[0]
-    currentVersionName = buildConfigText.match(/versionName = "(.+)"/).captures[0]
-
-    if options[:versionName].nil? or options[:versionName].to_s.empty?
-        puts "Fetching latest tags from origin..."
-        `git fetch --prune --no-recurse-submodules --filter=tree:0 --depth=1 --tags origin`
-        puts "Getting latest version name from previous git tag..."
-        latestTag = `git describe --tags $(git rev-list --tags --max-count=1)`.chomp()
-        puts "Using tag #{latestTag} to calculate version name..."
-        latestTag.slice!(0)
-        puts "Current version name resolved to #{latestTag}."
-
-        versionParts = latestTag.split(".")
-        currentMajor = versionParts[0]
-        currentMinor = versionParts[1]
-        currentRevision = versionParts[2]
-
-        currentDate = Time.new
-        major = currentDate.year.to_s
-        minor = currentDate.strftime "%-m"
-
-        revision = 0
-        if currentMajor == major and currentMinor == minor
-            revision = currentRevision.to_i + 1
-        end
-        nextVersionName = "#{major}.#{minor}.#{revision}"
-    else
-        nextVersionName = options[:versionName].to_s
-    end
-
-    # Replace version information.
-    puts "Setting version code to #{options[:versionCode]}."
-    buildConfigText.gsub!("versionCode = #{currentVersionCode}", "versionCode = #{options[:versionCode]}")
-    puts "Setting version name to #{nextVersionName}."
-    buildConfigText.gsub!("versionName = \"#{currentVersionName}\"", "versionName = \"#{nextVersionName}\"")
-
-    # Save changes
-    File.open(buildConfigPath, "w") { |buildConfigFile| buildConfigFile << buildConfigText }
   end
 
   desc "Assemble debug variants"

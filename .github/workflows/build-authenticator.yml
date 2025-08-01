@@ -219,12 +219,12 @@ jobs:
         run: |
           DEFAULT_VERSION_CODE=$GITHUB_RUN_NUMBER
           VERSION_CODE="${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }}"
-          bundle exec fastlane setAuthenticatorBuildVersionInfo \
+          bundle exec fastlane setBuildVersionInfo \
           versionCode:$VERSION_CODE \
           versionName:${{ inputs.version-name || '' }}
 
-          regex='versionName = "([^"]+)"'
-          if [[ "$(cat authenticator/build.gradle.kts)" =~ $regex ]]; then
+          regex='appVersionName = "([^"]+)"'
+          if [[ "$(cat gradle/libs.versions.toml)" =~ $regex ]]; then
             VERSION_NAME="${BASH_REMATCH[1]}"
           fi
           echo "Version Name: ${VERSION_NAME}" >> $GITHUB_STEP_SUMMARY
