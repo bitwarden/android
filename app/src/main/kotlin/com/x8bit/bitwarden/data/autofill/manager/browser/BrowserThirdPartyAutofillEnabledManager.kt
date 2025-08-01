@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.manager.browser
 
-import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
+import com.bitwarden.ui.autofill.model.BrowserThirdPartyAutofillStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 

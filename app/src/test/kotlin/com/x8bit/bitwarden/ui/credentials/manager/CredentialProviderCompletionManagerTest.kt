@@ -10,6 +10,7 @@ import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.PublicKeyCredentialEntry
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.credentials.processor.GET_PASSKEY_INTENT
 import com.x8bit.bitwarden.data.credentials.processor.GET_PASSWORD_INTENT
@@ -20,7 +21,6 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialRes
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.Called
 import io.mockk.MockKVerificationScope
 import io.mockk.Ordering

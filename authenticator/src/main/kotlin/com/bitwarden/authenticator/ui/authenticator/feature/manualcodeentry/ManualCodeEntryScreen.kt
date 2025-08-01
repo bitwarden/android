@@ -48,12 +48,12 @@ import com.bitwarden.authenticator.ui.platform.components.field.BitwardenTextFie
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.composition.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.composition.LocalPermissionsManager
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.spanStyleOf
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 

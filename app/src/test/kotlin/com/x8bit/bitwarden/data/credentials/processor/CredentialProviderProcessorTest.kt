@@ -26,6 +26,7 @@ import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -33,7 +34,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just

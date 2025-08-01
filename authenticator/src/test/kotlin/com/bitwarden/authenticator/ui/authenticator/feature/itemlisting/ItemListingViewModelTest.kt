@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class ItemListingViewModelTest : BaseViewModelTest() {
@@ -258,7 +259,7 @@ class ItemListingViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(ItemListingAction.SyncWithBitwardenClick)
-            assertEquals(ItemListingEvent.NavigateToBitwardenSettings, awaitItem())
+            assertTrue(awaitItem() is ItemListingEvent.NavigateToBitwardenSettings)
         }
     }
 

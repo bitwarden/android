@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers
 
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendAction
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendViewModel
 import java.time.ZonedDateTime

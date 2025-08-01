@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 
 import android.net.Uri
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals

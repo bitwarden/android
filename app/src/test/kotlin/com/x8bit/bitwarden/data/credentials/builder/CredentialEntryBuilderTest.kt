@@ -10,6 +10,7 @@ import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
@@ -17,7 +18,6 @@ import com.x8bit.bitwarden.data.util.mockBuilder
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor

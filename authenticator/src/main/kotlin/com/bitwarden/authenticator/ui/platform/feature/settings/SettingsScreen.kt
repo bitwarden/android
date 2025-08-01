@@ -59,7 +59,6 @@ import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManage
 import com.bitwarden.authenticator.ui.platform.composition.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -68,6 +67,7 @@ import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.base.util.spanStyleOf
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text

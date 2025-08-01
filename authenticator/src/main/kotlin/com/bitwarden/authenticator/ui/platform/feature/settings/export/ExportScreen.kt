@@ -39,9 +39,9 @@ import com.bitwarden.authenticator.ui.platform.components.dropdown.BitwardenMult
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.composition.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import kotlinx.collections.immutable.toImmutableList

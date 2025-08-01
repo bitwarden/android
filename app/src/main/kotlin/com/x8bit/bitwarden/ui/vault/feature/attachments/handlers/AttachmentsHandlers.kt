@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.attachments.handlers
 
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.attachments.AttachmentsAction
 import com.x8bit.bitwarden.ui.vault.feature.attachments.AttachmentsViewModel
 
