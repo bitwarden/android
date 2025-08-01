@@ -10,7 +10,7 @@ import com.bitwarden.ui.util.asText
  * Represents the icons displayed after the cipher name.
  */
 enum class VaultTrailingIcon(
-    @DrawableRes val iconRes: Int,
+    @field:DrawableRes val iconRes: Int,
     val contentDescription: Text,
     val testTag: String,
 ) {

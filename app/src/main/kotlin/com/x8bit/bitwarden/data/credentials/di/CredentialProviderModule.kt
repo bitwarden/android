@@ -53,18 +53,16 @@ object CredentialProviderModule {
         dispatcherManager: DispatcherManager,
         intentManager: IntentManager,
         biometricsEncryptionManager: BiometricsEncryptionManager,
-        featureFlagManager: FeatureFlagManager,
         clock: Clock,
     ): CredentialProviderProcessor =
         CredentialProviderProcessorImpl(
-            context,
-            authRepository,
-            bitwardenCredentialManager,
-            intentManager,
-            clock,
-            biometricsEncryptionManager,
-            featureFlagManager,
-            dispatcherManager,
+            context = context,
+            authRepository = authRepository,
+            bitwardenCredentialManager = bitwardenCredentialManager,
+            intentManager = intentManager,
+            clock = clock,
+            biometricsEncryptionManager = biometricsEncryptionManager,
+            dispatcherManager = dispatcherManager,
         )
 
     @Provides
@@ -108,12 +106,10 @@ object CredentialProviderModule {
     fun provideCredentialEntryBuilder(
         @ApplicationContext context: Context,
         intentManager: IntentManager,
-        featureFlagManager: FeatureFlagManager,
         biometricsEncryptionManager: BiometricsEncryptionManager,
     ): CredentialEntryBuilder = CredentialEntryBuilderImpl(
         context = context,
         intentManager = intentManager,
-        featureFlagManager = featureFlagManager,
         biometricsEncryptionManager = biometricsEncryptionManager,
     )
 

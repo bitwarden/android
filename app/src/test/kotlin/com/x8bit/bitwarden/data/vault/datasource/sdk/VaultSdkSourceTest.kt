@@ -69,9 +69,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.security.MessageDigest
-import java.time.Clock
-import java.time.Instant
-import java.time.ZoneOffset
 
 @Suppress("LargeClass")
 class VaultSdkSourceTest {
@@ -978,30 +975,6 @@ class VaultSdkSourceTest {
         }
 
     @Test
-    fun `generateTotp should call SDK and return a Result with correct data`() = runTest {
-        val userId = "userId"
-        val totpResponse = TotpResponse("TestCode", 30u)
-        coEvery { clientVault.generateTotp(any(), any()) } returns totpResponse
-
-        val time = FIXED_CLOCK.instant()
-        val result = vaultSdkSource.generateTotp(
-            userId = userId,
-            totp = "Totp",
-            time = time,
-        )
-
-        assertEquals(totpResponse.asSuccess(), result)
-        coVerify {
-            clientVault.generateTotp(
-                key = "Totp",
-                time = time,
-            )
-        }
-
-        coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
-    }
-
-    @Test
     fun `generateTotpForCipherListView should call SDK and return a Result with correct data`() =
         runTest {
             val userId = "userId"
@@ -1421,8 +1394,4 @@ private val DEFAULT_FIDO_2_AUTH_REQUEST = AuthenticateFido2CredentialRequest(
     ),
     isUserVerificationSupported = true,
     selectedCipherView = createMockCipherView(number = 1),
-)
-private val FIXED_CLOCK: Clock = Clock.fixed(
-    Instant.parse("2023-10-27T12:00:00Z"),
-    ZoneOffset.UTC,
 )

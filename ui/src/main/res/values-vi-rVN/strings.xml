@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="about">Thông tin</string>
     <string name="add_folder">Thêm thư mục</string>
     <string name="add_item">Thêm mục</string>
@@ -531,7 +531,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="verification_codes">Mã xác minh</string>
     <string name="premium_subscription_required">Yêu cầu đăng ký gói Cao cấp</string>
     <string name="cannot_add_authenticator_key_scan_qr_code">Không thể thêm khóa xác thực? <annotation link="scanQrCode">Quét mã QR</annotation></string>
-    <string name="scan_qr_code">Quét mã QR</string>
+    <string name="scan_qr_code"><annotation link="scanQrCode">Quét mã QR</annotation></string>
     <string name="cannot_scan_qr_code_enter_key_manually">Không thể quét mã QR? <annotation link="enterKeyManually">Nhập khóa thủ công</annotation></string>
     <string name="authenticator_key_scanner">Khóa xác thực</string>
     <string name="authenticator_key_help">Trợ giúp về khóa xác thực</string>
@@ -605,7 +605,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="decline_all_requests">Từ chối tất cả yêu cầu</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Bạn có chắc muốn từ chối tất cả các yêu cầu đăng nhập đang chờ?</string>
     <string name="no_pending_requests">Không có yêu cầu đang chờ phê duyệt</string>
-    <string name="enable_camer_permission_to_use_the_scanner">Cấp quyền máy ảnh để sử dụng trình quét</string>
+    <string name="enable_camer_permission_to_use_the_scanner">Cấp quyền truy cập máy ảnh để quét</string>
     <string name="language">Ngôn ngữ</string>
     <string name="language_change_x_description">Ngôn ngữ đã được đổi thành %1$s. Khởi động lại ứng dụng để áp dụng</string>
     <string name="default_system">Giống như hệ thống</string>
@@ -672,7 +672,6 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="continue_to_device_settings">Tiếp tục tới Cài đặt thiết bị?</string>
     <string name="two_step_login_description_long">Tăng cường bảo mật tài khoản của bạn bằng cách thiết lập đăng nhập hai bước trên trang web Bitwarden.</string>
     <string name="change_master_password_description_long">Bạn có thể thay đổi mật khẩu chính của mình trên trang web Bitwarden.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">Bạn có thể nhập dữ liệu vào kho lưu trữ trên %1$s.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Tìm hiểu thêm về cách sử dụng Bitwarden trong Trung tâm trợ giúp.</string>
     <string name="privacy_policy_description_long">Đọc chính sách bảo mật trên bitwarden.com.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Khám phá thêm các tính năng tài khoản Bitwarden của bạn trên bản web.</string>
@@ -701,7 +700,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="launch_web_authn">Khởi chạy WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Xảy ra lỗi khi khởi động xác thực hai bước với WebAuthn</string>
     <string name="self_hosted_server_url">URL máy chủ tự lưu trữ</string>
-    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Xác thực thất bại vì không thể xác minh người dùng.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Vận hành mã khóa thất bại vì không thể xác minh người dùng.</string>
     <string name="user_verification_direction">Xác minh người dùng</string>
     <string name="create_account_on">Tạo tài khoản trên</string>
@@ -905,12 +904,12 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="passkey_operation_failed_because_the_request_is_invalid">Vận hành mã khóa không thành công vì yêu cầu không hợp lệ.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Vận hành mã khóa không thành công vì không có mục nào được chọn.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Vận hành mã khóa không thành công vì yêu cầu không được hỗ trợ.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
-    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
-    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
-    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
-    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Thay đổi mật khẩu thất bại vì mục đã chọn không tồn tại.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Nhập mật khẩu thất bại vì không có mục nào được chọn.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Xác thực thông tin đăng nhập thất bại vì số lần xác thực người dùng đã vượt quá giới hạn cho phép.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Xác thực thất bại vì tài khoản người dùng bị khóa.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Xác thực thất bại vì mục đã chọn không tồn tại.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Xác thực thông tin đăng nhập thất bại vì quá trình xác minh người dùng đã bị hủy bỏ.</string>
     <string name="self_host_server_url">URL máy chủ tự lưu trữ</string>
     <string name="use_brave_autofill_integration">Tích hợp với tính năng tự động điền của Brave</string>
     <string name="use_chrome_autofill_integration">Tích hợp với tính năng tự động điền của Chrome</string>
@@ -995,4 +994,88 @@ các vấn đề.</string>
     <string name="delete_x">Xóa %s</string>
     <string name="failed_to_decrypt_cipher_contact_support">Không giải mã được. Liên hệ bộ phận hỗ trợ.</string>
     <string name="decryption_error">Lỗi giải mã</string>
+    <string name="add_item_rotation">Thêm chu kỳ làm mới mục</string>
+    <string name="scan_a_qr_code">Quét mã QR</string>
+    <string name="cannot_add_authenticator_key">Không thể thêm khóa xác thực?</string>
+    <string name="enable_camera_permission_to_use_the_scanner">Cấp quyền truy cập máy ảnh để quét</string>
+    <string name="empty_item_list">Danh sách mục trống</string>
+    <string name="you_dont_have_items_to_display">Bạn không có mục nào để hiển thị.</string>
+    <string name="empty_item_list_instruction">Thêm mã mới để bảo mật tài khoản của bạn.</string>
+    <string name="add_code">Thêm mã</string>
+    <string name="verification_code_added">Đã thêm mã xác minh</string>
+    <string name="refresh_period">Chu kỳ làm mới</string>
+    <string name="algorithm">Thuật toán</string>
+    <string name="advanced">Nâng cao</string>
+    <string name="collapse_advanced_options">Thu gọn các tuỳ chọn nâng cao</string>
+    <string name="number_of_digits">Số lượng chữ số</string>
+    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d giây</string>
+    <string name="item_saved">Đã lưu mục</string>
+    <string name="information">Thông tin</string>
+    <string name="otp_type">Loại OTP</string>
+    <string name="search_codes">Tìm kiếm mã</string>
+    <string name="secure_your_accounts_with_bitwarden_authenticator">Bảo mật tài khoản của bạn với Bitwarden Authenticator</string>
+    <string name="get_verification_codes_for_all_your_accounts">Nhận mã xác minh cho tất cả các tài khoản của bạn hỗ trợ xác minh 2 bước.</string>
+    <string name="use_your_device_camera_to_scan_codes">Sử dụng camera của thiết bị để quét mã</string>
+    <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Quét mã QR trong các cài đặt xác minh hai bước của bạn cho bất kỳ tài khoản nào.</string>
+    <string name="sign_in_using_unique_codes">Đăng nhập bằng mã duy nhất</string>
+    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">Khi sử dụng xác minh 2 bước, bạn sẽ nhập tên người dùng và mật khẩu của mình cũng như mã được tạo trong ứng dụng này.</string>
+    <string name="skip">Bỏ qua</string>
+    <string name="help">Trợ giúp</string>
+    <string name="launch_tutorial">Bắt đầu hướng dẫn</string>
+    <string name="delete_item">Xóa mục</string>
+    <string name="do_you_really_want_to_permanently_delete_this_cannot_be_undone">Bạn có chắc chắn muốn xóa vĩnh viễn không? Thao tác này không thể hoàn tác.</string>
+    <string name="data">Dữ liệu</string>
+    <string name="export">Xuất</string>
+    <string name="export_confirmation_title">Xác nhận xuất</string>
+    <string name="export_success">Đã xuất dữ liệu thành công</string>
+    <string name="security">Bảo mật</string>
+    <string name="too_many_failed_biometric_attempts">Xác thực sinh trắc thất bại quá nhiều lần.</string>
+    <string name="version">Phiên bản</string>
+    <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">Tìm hiểu thêm về cách sử dụng Bitwarden trong Trung tâm trợ giúp.</string>
+    <string name="key">Khóa</string>
+    <string name="create_verification_code">Tạo mã xác minh</string>
+    <string name="key_is_required">Khoá là bắt buộc.</string>
+    <string name="name_is_required">Tên là bắt buộc.</string>
+    <string name="import_vault_failure">Xảy ra lỗi khi nhập kho của bạn.</string>
+    <string name="import_vault">Nhập</string>
+    <string name="import_success">Nhập kho hoàn tất</string>
+    <string name="key_is_invalid">Khoá không hợp lệ.</string>
+    <string name="backup">Sao lưu</string>
+    <string name="data_backup_title">Sao lưu dữ liệu</string>
+    <string name="data_backup_message">Dữ liệu của Bitwarden Authenticator đã được sao lưu và có thể được khôi phục bằng bản sao lưu thiết bị định kỳ của bạn.</string>
+    <string name="import_2fas_password_protected_not_supported">Ứng dụng không hỗ trợ nhập từ các tập tin được bảo mật bằng mật khẩu 2FAS. Vui lòng thử lại với một tập tin xuất khẩu không được bảo mật bằng mật khẩu.</string>
+    <string name="import_bitwarden_unsupported_format">Nhập tập tin CSV Bitwarden không được hỗ trợ. Vui lòng thử lại với tập tin JSON đã xuất.</string>
+    <string name="download_bitwarden_card_title">Tải xuống ứng dụng Bitwarden</string>
+    <string name="download_bitwarden_card_message">Lưu trữ tất cả thông tin đăng nhập của bạn và đồng bộ mã xác minh trực tiếp với ứng dụng Authenticator.</string>
+    <string name="download_now">Tải về ngay</string>
+    <string name="sync_with_bitwarden_app">Đồng bộ hóa với ứng dụng Bitwarden</string>
+    <string name="learn_more_link"><annotation link="learnMore">Tìm hiểu thêm</annotation></string>
+    <string name="shared_codes_error">Không thể đồng bộ mã từ ứng dụng Bitwarden. Hãy đảm bảo cả hai ứng dụng đều được cập nhật phiên bản mới nhất. Bạn vẫn có thể truy cập các mã hiện có trong ứng dụng Bitwarden.</string>
+    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
+    <string name="sync_with_the_bitwarden_app">Đồng bộ hóa với ứng dụng Bitwarden</string>
+    <string name="sync_with_bitwarden_action_card_message">Để xem tất cả mã xác minh của bạn, bạn cần cho phép đồng bộ hóa trên tất cả tài khoản của mình.</string>
+    <string name="take_me_to_app_settings">Đưa tôi đến cài đặt ứng dụng</string>
+    <string name="something_went_wrong">Đã xảy ra lỗi</string>
+    <string name="please_try_again">Vui lòng thử lại</string>
+    <string name="copy_to_bitwarden_vault">Sao chép vào kho lưu trữ Bitwarden</string>
+    <string name="default_save_option">Tùy chọn lưu mặc định</string>
+    <string name="save_to_bitwarden">Lưu vào Bitwarden</string>
+    <string name="save_here">Lưu tại đây</string>
+    <string name="none">Không có</string>
+    <string name="default_save_options_subtitle">Chọn vị trí bạn muốn lưu các mã xác minh mới.</string>
+    <string name="verification_code_created">Mã xác minh đã được tạo</string>
+    <string name="choose_save_location_message">Lưu khóa xác thực này tại đây hoặc thêm nó vào tài khoản đăng nhập trong ứng dụng Bitwarden của bạn.</string>
+    <string name="save_option_as_default">Lưu tùy chọn làm mặc định</string>
+    <string name="account_synced_from_bitwarden_app">Tài khoản đã đồng bộ từ ứng dụng Bitwarden</string>
+    <string name="local_codes">Mã địa phương (%1$d)</string>
+    <string name="required_information_missing">Thông tin bắt buộc còn thiếu</string>
+    <string name="required_information_missing_message">"Thông tin bắt buộc còn thiếu (ví dụ: ‘dịch vụ’ hoặc ‘bí mật’). Vui lòng kiểm tra lại tệp của bạn và thử lại. Truy cập bitwarden.com/help để được hỗ trợ"</string>
+    <string name="file_could_not_be_processed">"Tệp không thể được xử lý"</string>
+    <string name="file_could_not_be_processed_message">"Tệp không thể được xử lý. Hãy đảm bảo tệp JSON hợp lệ và thử lại. Cần trợ giúp? Truy cập bitwarden.com/help"</string>
+    <string name="get_help">Nhận trợ giúp</string>
+    <string name="expand_advanced_options">Mở rộng các tùy chọn nâng cao</string>
+    <string name="local_items_are_expanded_click_to_collapse">Các mục địa phương được mở rộng, nhấp để thu gọn.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Các mục địa phương đã được thu gọn, nhấp để mở rộng.</string>
+    <string name="items_expanded_click_to_collapse">Các mục được mở rộng, nhấp để thu gọn.</string>
+    <string name="items_are_collapsed_click_to_expand">Các mục đã được thu gọn, nhấp để mở rộng.</string>
 </resources>

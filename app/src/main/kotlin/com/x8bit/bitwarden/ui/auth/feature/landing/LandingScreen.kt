@@ -65,7 +65,6 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 @Suppress("LongMethod")
 fun LandingScreen(
-    onNavigateToCreateAccount: () -> Unit,
     onNavigateToLogin: (emailAddress: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
     onNavigateToStartRegistration: () -> Unit,
@@ -76,7 +75,6 @@ fun LandingScreen(
     val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            LandingEvent.NavigateToCreateAccount -> onNavigateToCreateAccount()
             is LandingEvent.NavigateToLogin -> onNavigateToLogin(event.emailAddress)
             LandingEvent.NavigateToEnvironment -> onNavigateToEnvironment()
             LandingEvent.NavigateToStartRegistration -> onNavigateToStartRegistration()

@@ -3,10 +3,10 @@ package com.x8bit.bitwarden.ui.platform.feature.debugmenu.components
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 
 /**
  * Creates a list item for a [FlagKey].
@@ -25,14 +25,10 @@ fun <T : Any> FlagKey<T>.ListItemContent(
         Unit
     }
 
-    FlagKey.EmailVerification,
-    FlagKey.ImportLoginsFlow,
+    FlagKey.BitwardenAuthenticationEnabled,
     FlagKey.CredentialExchangeProtocolImport,
     FlagKey.CredentialExchangeProtocolExport,
     FlagKey.CipherKeyEncryption,
-    FlagKey.SingleTapPasskeyCreation,
-    FlagKey.SingleTapPasskeyAuthentication,
-    FlagKey.RestrictCipherItemDeletion,
     FlagKey.UserManagedPrivilegedApps,
     FlagKey.RemoveCardPolicy,
         -> {
@@ -76,20 +72,15 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.DummyString,
         -> this.keyName
 
-    FlagKey.EmailVerification -> stringResource(BitwardenString.email_verification)
-    FlagKey.ImportLoginsFlow -> stringResource(BitwardenString.import_logins_flow)
     FlagKey.CredentialExchangeProtocolImport -> stringResource(BitwardenString.cxp_import)
     FlagKey.CredentialExchangeProtocolExport -> stringResource(BitwardenString.cxp_export)
     FlagKey.CipherKeyEncryption -> stringResource(BitwardenString.cipher_key_encryption)
-    FlagKey.SingleTapPasskeyCreation -> stringResource(BitwardenString.single_tap_passkey_creation)
-    FlagKey.SingleTapPasskeyAuthentication -> {
-        stringResource(BitwardenString.single_tap_passkey_authentication)
-    }
-
-    FlagKey.RestrictCipherItemDeletion -> stringResource(BitwardenString.restrict_item_deletion)
     FlagKey.UserManagedPrivilegedApps -> {
         stringResource(BitwardenString.user_trusted_privileged_app_management)
     }
 
     FlagKey.RemoveCardPolicy -> stringResource(BitwardenString.remove_card_policy)
+    FlagKey.BitwardenAuthenticationEnabled -> {
+        stringResource(BitwardenString.bitwarden_authentication_enabled)
+    }
 }

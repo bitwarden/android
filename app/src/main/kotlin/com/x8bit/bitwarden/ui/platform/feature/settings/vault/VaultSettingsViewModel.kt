@@ -1,13 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.data.repository.util.toBaseWebVaultImportUrl
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -24,31 +20,17 @@ import javax.inject.Inject
 @Suppress("TooManyFunctions")
 @HiltViewModel
 class VaultSettingsViewModel @Inject constructor(
-    environmentRepository: EnvironmentRepository,
-    featureFlagManager: FeatureFlagManager,
     snackbarRelayManager: SnackbarRelayManager,
     private val firstTimeActionManager: FirstTimeActionManager,
 ) : BaseViewModel<VaultSettingsState, VaultSettingsEvent, VaultSettingsAction>(
     initialState = run {
         val firstTimeState = firstTimeActionManager.currentOrDefaultUserFirstTimeState
         VaultSettingsState(
-            importUrl = environmentRepository
-                .environment
-                .environmentUrlData
-                .toBaseWebVaultImportUrl,
-            isNewImportLoginsFlowEnabled = featureFlagManager
-                .getFeatureFlag(FlagKey.ImportLoginsFlow),
             showImportActionCard = firstTimeState.showImportLoginsCardInSettings,
         )
     },
 ) {
     init {
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.ImportLoginsFlow)
-            .map { VaultSettingsAction.Internal.ImportLoginsFeatureFlagChanged(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
         firstTimeActionManager
             .firstTimeStateFlow
             .map {
@@ -78,10 +60,6 @@ class VaultSettingsViewModel @Inject constructor(
 
     private fun handleInternalAction(action: VaultSettingsAction.Internal) {
         when (action) {
-            is VaultSettingsAction.Internal.ImportLoginsFeatureFlagChanged -> {
-                handleImportLoginsFeatureFlagChanged(action)
-            }
-
             is VaultSettingsAction.Internal.UserFirstTimeStateChanged -> {
                 handleUserFirstTimeStateChanged(action)
             }
@@ -99,12 +77,12 @@ class VaultSettingsViewModel @Inject constructor(
     }
 
     private fun handleImportLoginsCardDismissClicked() {
-        if (!state.shouldShowImportCard) return
+        if (!state.showImportActionCard) return
         firstTimeActionManager.storeShowImportLoginsSettingsBadge(showBadge = false)
     }
 
     private fun handleImportLoginsCardClicked() {
-        sendEvent(VaultSettingsEvent.NavigateToImportVault(state.importUrl))
+        sendEvent(VaultSettingsEvent.NavigateToImportVault)
     }
 
     private fun handleUserFirstTimeStateChanged(
@@ -112,14 +90,6 @@ class VaultSettingsViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(showImportActionCard = action.showImportLoginsCard)
-        }
-    }
-
-    private fun handleImportLoginsFeatureFlagChanged(
-        action: VaultSettingsAction.Internal.ImportLoginsFeatureFlagChanged,
-    ) {
-        mutableStateFlow.update {
-            it.copy(isNewImportLoginsFlowEnabled = action.isEnabled)
         }
     }
 
@@ -136,9 +106,7 @@ class VaultSettingsViewModel @Inject constructor(
     }
 
     private fun handleImportItemsClicked() {
-        sendEvent(
-            VaultSettingsEvent.NavigateToImportVault(state.importUrl),
-        )
+        sendEvent(VaultSettingsEvent.NavigateToImportVault)
     }
 }
 
@@ -146,16 +114,8 @@ class VaultSettingsViewModel @Inject constructor(
  * Models the state for the VaultSettingScreen.
  */
 data class VaultSettingsState(
-    val importUrl: String,
-    val isNewImportLoginsFlowEnabled: Boolean,
-    private val showImportActionCard: Boolean,
-) {
-    /**
-     * Should only show the import action card if the import logins feature flag is enabled.
-     */
-    val shouldShowImportCard: Boolean
-        get() = showImportActionCard && isNewImportLoginsFlowEnabled
-}
+    val showImportActionCard: Boolean,
+)
 
 /**
  * Models events for the vault screen.
@@ -169,7 +129,7 @@ sealed class VaultSettingsEvent {
     /**
      * Navigate to the import vault URL.
      */
-    data class NavigateToImportVault(val url: String) : VaultSettingsEvent()
+    data object NavigateToImportVault : VaultSettingsEvent()
 
     /**
      * Navigate to the Export Vault screen.
@@ -225,14 +185,6 @@ sealed class VaultSettingsAction {
      * Internal actions not performed by user interation
      */
     sealed class Internal : VaultSettingsAction() {
-
-        /**
-         * Indicates that the import logins feature flag has changed.
-         */
-        data class ImportLoginsFeatureFlagChanged(
-            val isEnabled: Boolean,
-        ) : Internal()
-
         /**
          * Indicates user first time state has changed.
          */

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.repository.util.baseIconUrl
@@ -31,7 +32,6 @@ import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
@@ -164,14 +164,7 @@ class VaultViewModel @Inject constructor(
 
         authRepository
             .userStateFlow
-            .combine(
-                featureFlagManager.getFeatureFlagFlow(FlagKey.ImportLoginsFlow),
-            ) { userState, importLoginsEnabled ->
-                VaultAction.Internal.UserStateUpdateReceive(
-                    userState = userState,
-                    importLoginsFlowEnabled = importLoginsEnabled,
-                )
-            }
+            .map { VaultAction.Internal.UserStateUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -641,7 +634,7 @@ class VaultViewModel @Inject constructor(
         action: ListingItemOverflowAction.VaultAction.CopyTotpClick,
     ) {
         viewModelScope.launch {
-            val result = vaultRepository.generateTotp(action.totpCode, clock.instant())
+            val result = vaultRepository.generateTotp(action.cipherId, clock.instant())
             sendAction(VaultAction.Internal.GenerateTotpResultReceive(result))
         }
     }
@@ -805,8 +798,6 @@ class VaultViewModel @Inject constructor(
                 .any(),
         )
         val appBarTitle = vaultFilterData.toAppBarTitle()
-        val shouldShowImportActionCard = action.importLoginsFlowEnabled &&
-            firstTimeState.showImportLoginsCard
 
         mutableStateFlow.update {
             val accountSummaries = userState.toAccountSummaries()
@@ -818,7 +809,7 @@ class VaultViewModel @Inject constructor(
                 accountSummaries = accountSummaries,
                 vaultFilterData = vaultFilterData,
                 isPremium = userState.activeAccount.isPremium,
-                showImportActionCard = shouldShowImportActionCard,
+                showImportActionCard = firstTimeState.showImportLoginsCard,
             )
         }
     }
@@ -1704,7 +1695,6 @@ sealed class VaultAction {
          */
         data class UserStateUpdateReceive(
             val userState: UserState?,
-            val importLoginsFlowEnabled: Boolean,
         ) : Internal()
 
         /**

@@ -522,7 +522,7 @@ data class SendState(
                 /**
                  * Indicates the type of send this, a text or file.
                  */
-                enum class Type(@DrawableRes val iconRes: Int) {
+                enum class Type(@field:DrawableRes val iconRes: Int) {
                     FILE(iconRes = BitwardenDrawable.ic_file),
                     TEXT(iconRes = BitwardenDrawable.ic_file_text),
                 }

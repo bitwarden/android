@@ -11,8 +11,6 @@ import com.x8bit.bitwarden.ui.auth.feature.checkemail.navigateToCheckEmail
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.completeRegistrationDestination
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.navigateToCompleteRegistration
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.popUpToCompleteRegistration
-import com.x8bit.bitwarden.ui.auth.feature.createaccount.createAccountDestination
-import com.x8bit.bitwarden.ui.auth.feature.createaccount.navigateToCreateAccount
 import com.x8bit.bitwarden.ui.auth.feature.enterprisesignon.enterpriseSignOnDestination
 import com.x8bit.bitwarden.ui.auth.feature.enterprisesignon.navigateToEnterpriseSignOn
 import com.x8bit.bitwarden.ui.auth.feature.environment.environmentDestination
@@ -61,18 +59,6 @@ fun NavGraphBuilder.authGraph(
     navigation<AuthGraphRoute>(
         startDestination = LandingRoute,
     ) {
-        createAccountDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToLogin = { emailAddress, captchaToken ->
-                navController.navigateToLogin(
-                    emailAddress = emailAddress,
-                    captchaToken = captchaToken,
-                    navOptions = navOptions {
-                        popUpTo(route = LandingRoute)
-                    },
-                )
-            },
-        )
         startRegistrationDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToCompleteRegistration = { emailAddress, verificationToken ->
@@ -121,7 +107,6 @@ fun NavGraphBuilder.authGraph(
         )
         setPasswordDestination()
         landingDestination(
-            onNavigateToCreateAccount = { navController.navigateToCreateAccount() },
             onNavigateToLogin = { emailAddress ->
                 navController.navigateToLogin(
                     emailAddress = emailAddress,
@@ -135,7 +120,6 @@ fun NavGraphBuilder.authGraph(
             onNavigateToPreAuthSettings = { navController.navigateToPreAuthSettings() },
         )
         welcomeDestination(
-            onNavigateToCreateAccount = { navController.navigateToCreateAccount() },
             onNavigateToLogin = { navController.navigateToLanding() },
             onNavigateToStartRegistration = { navController.navigateToStartRegistration() },
         )

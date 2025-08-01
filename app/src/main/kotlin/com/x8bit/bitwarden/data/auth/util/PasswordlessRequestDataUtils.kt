@@ -2,9 +2,9 @@ package com.x8bit.bitwarden.data.auth.util
 
 import android.content.Context
 import android.content.Intent
+import com.bitwarden.ui.platform.util.getSafeParcelableExtra
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
-import com.bitwarden.ui.platform.util.getSafeParcelableExtra
 
 private const val NOTIFICATION_DATA: String = "notificationData"
 

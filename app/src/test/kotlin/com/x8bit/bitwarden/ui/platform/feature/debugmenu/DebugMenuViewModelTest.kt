@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.ui.platform.feature.debugmenu
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.util.assertCoroutineThrows
 import io.mockk.coEvery
@@ -101,10 +101,10 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
     fun `handleUpdateFeatureFlag should update the feature flag via the repository`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(
-            DebugMenuAction.UpdateFeatureFlag(FlagKey.EmailVerification, false),
+            DebugMenuAction.UpdateFeatureFlag(FlagKey.CipherKeyEncryption, false),
         )
         verify(exactly = 1) {
-            mockDebugMenuRepository.updateFeatureFlag(FlagKey.EmailVerification, false)
+            mockDebugMenuRepository.updateFeatureFlag(FlagKey.CipherKeyEncryption, false)
         }
     }
 
@@ -144,25 +144,15 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
 }
 
 private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf(
-    FlagKey.EmailVerification to true,
-    FlagKey.ImportLoginsFlow to true,
     FlagKey.CredentialExchangeProtocolImport to true,
     FlagKey.CredentialExchangeProtocolExport to true,
-    FlagKey.SingleTapPasskeyCreation to true,
-    FlagKey.SingleTapPasskeyAuthentication to true,
-    FlagKey.RestrictCipherItemDeletion to true,
     FlagKey.UserManagedPrivilegedApps to true,
     FlagKey.RemoveCardPolicy to true,
 )
 
 private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf(
-    FlagKey.EmailVerification to false,
-    FlagKey.ImportLoginsFlow to false,
     FlagKey.CredentialExchangeProtocolImport to false,
     FlagKey.CredentialExchangeProtocolExport to false,
-    FlagKey.SingleTapPasskeyCreation to false,
-    FlagKey.SingleTapPasskeyAuthentication to false,
-    FlagKey.RestrictCipherItemDeletion to false,
     FlagKey.UserManagedPrivilegedApps to false,
     FlagKey.RemoveCardPolicy to false,
 )

@@ -28,7 +28,7 @@ sealed class IconData : Parcelable {
      */
     @Parcelize
     data class Local(
-        @DrawableRes val iconRes: Int,
+        @field:DrawableRes val iconRes: Int,
         override val contentDescription: Text? = null,
         override val testTag: String? = null,
     ) : IconData()
@@ -42,7 +42,7 @@ sealed class IconData : Parcelable {
     @Parcelize
     data class Network(
         val uri: String,
-        @DrawableRes val fallbackIconRes: Int,
+        @field:DrawableRes val fallbackIconRes: Int,
         override val contentDescription: Text? = null,
         override val testTag: String? = null,
     ) : IconData()
