@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.manager.intent
+package com.bitwarden.ui.platform.manager
 
 import android.app.PendingIntent
 import android.content.Context
@@ -9,11 +9,9 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.credentials.provider.AuthenticationAction
-import androidx.credentials.provider.CreateEntry
-import androidx.credentials.provider.CredentialEntry
-import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
+import com.bitwarden.ui.autofill.model.BrowserPackage
 import kotlinx.parcelize.Parcelize
+import java.time.Clock
 
 /**
  * A manager class for simplifying the handling of Android Intents within a given context.
@@ -22,12 +20,12 @@ import kotlinx.parcelize.Parcelize
 @Immutable
 interface IntentManager {
     /**
-     * Start an activity using the provided [Intent].
+     * Start an activity using the provided [android.content.Intent].
      */
     fun startActivity(intent: Intent)
 
     /**
-     * Start a Custom Tabs Activity using the provided [Uri].
+     * Start a Custom Tabs Activity using the provided [android.net.Uri].
      */
     fun startCustomTabsActivity(uri: Uri)
 
@@ -64,7 +62,7 @@ interface IntentManager {
 
     /**
      * Start an activity using the provided [Intent] and provides a callback, via [onResult], for
-     * retrieving the [ActivityResult].
+     * retrieving the [androidx.activity.result.ActivityResult].
      */
     @Composable
     fun getActivityResultLauncher(
@@ -80,6 +78,11 @@ interface IntentManager {
      * Launches the share sheet with the given [text].
      */
     fun shareText(text: String)
+
+    /**
+     * Launches the share sheet with an error report based on the provided [throwable].
+     */
+    fun shareErrorReport(throwable: Throwable)
 
     /**
      * Processes the [activityResult] and attempts to get the relevant file data from it.
@@ -99,7 +102,10 @@ interface IntentManager {
     /**
      * Creates an intent for choosing a file saved to disk.
      */
-    fun createFileChooserIntent(withCameraIntents: Boolean): Intent
+    fun createFileChooserIntent(
+        withCameraIntents: Boolean,
+        mimeType: String = "*/*",
+    ): Intent
 
     /**
      * Creates an intent to use when selecting to save an item with [fileName] to disk.
@@ -109,7 +115,7 @@ interface IntentManager {
     /**
      * Creates an intent using [data] when selecting a quick settings tile.
      */
-    fun createTileIntent(data: String): Intent
+    fun createTileIntent(componentClass: Class<*>, data: String): Intent
 
     /**
      * Creates a pending intent using [requestCode] and [tileIntent] when selecting a quick
@@ -118,8 +124,7 @@ interface IntentManager {
     fun createTilePendingIntent(requestCode: Int, tileIntent: Intent): PendingIntent
 
     /**
-     * Creates a pending intent to use when providing [CreateEntry]
-     * instances for FIDO 2 credential creation.
+     * Creates a pending intent to use when providing options for FIDO 2 credential creation.
      */
     fun createFido2CreationPendingIntent(
         action: String,
@@ -128,8 +133,7 @@ interface IntentManager {
     ): PendingIntent
 
     /**
-     * Creates a pending intent to use when providing
-     * [CredentialEntry] instances for FIDO 2 credential filling.
+     * Creates a pending intent to use when providing options for FIDO 2 credential filling.
      */
     @Suppress("LongParameterList")
     fun createFido2GetCredentialPendingIntent(
@@ -142,8 +146,7 @@ interface IntentManager {
     ): PendingIntent
 
     /**
-     * Creates a pending intent to use when providing
-     * [AuthenticationAction] instances for FIDO 2 credential filling.
+     * Creates a pending intent to use when providing unlock options for FIDO 2 credential filling.
      */
     fun createFido2UnlockPendingIntent(
         action: String,
@@ -152,8 +155,7 @@ interface IntentManager {
     ): PendingIntent
 
     /**
-     * Creates a pending intent to use when providing
-     * [CredentialEntry] instances for Password credential filling.
+     * Creates a pending intent to use when providing options for Password credential filling.
      */
     fun createPasswordGetCredentialPendingIntent(
         action: String,
@@ -198,5 +200,21 @@ interface IntentManager {
         data class FileSend(
             val fileData: FileData,
         ) : ShareData()
+    }
+
+    @Suppress("UndocumentedPublicClass")
+    companion object {
+        /**
+         * Creates a new [IntentManager] instance.
+         */
+        fun create(
+            context: Context,
+            clock: Clock,
+            buildInfoManager: BuildInfoManager,
+        ): IntentManager = IntentManagerImpl(
+            context = context,
+            clock = clock,
+            buildInfoManager = buildInfoManager,
+        )
     }
 }

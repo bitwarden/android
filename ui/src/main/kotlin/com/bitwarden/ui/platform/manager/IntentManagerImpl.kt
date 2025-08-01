@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.manager.intent
+package com.bitwarden.ui.platform.manager
 
 import android.app.Activity
 import android.app.PendingIntent
@@ -26,20 +26,13 @@ import androidx.credentials.CredentialManager
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.core.util.toPendingIntentMutabilityFlag
+import com.bitwarden.ui.autofill.model.BrowserPackage
+import com.bitwarden.ui.platform.manager.util.deviceData
+import com.bitwarden.ui.platform.manager.util.fileProviderAuthority
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.x8bit.bitwarden.BuildConfig
-import com.x8bit.bitwarden.MainActivity
-import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
-import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import java.io.File
 import java.time.Clock
-
-/**
- * The authority used for pulling in photos from the camera.
- *
- * Note: This must match the file provider authority in the manifest.
- */
-private const val FILE_PROVIDER_AUTHORITY: String = "${BuildConfig.APPLICATION_ID}.fileprovider"
 
 /**
  * Temporary file name for a camera image.
@@ -84,9 +77,10 @@ const val EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK: String = "uv_performed_during_un
  */
 @Suppress("TooManyFunctions")
 @OmitFromCoverage
-class IntentManagerImpl(
+internal class IntentManagerImpl(
     private val context: Context,
     private val clock: Clock,
+    private val buildInfoManager: BuildInfoManager,
 ) : IntentManager {
     override fun startActivity(intent: Intent) {
         try {
@@ -184,7 +178,7 @@ class IntentManagerImpl(
     override fun shareFile(title: String?, fileUri: Uri) {
         val providedFile = FileProvider.getUriForFile(
             context,
-            FILE_PROVIDER_AUTHORITY,
+            buildInfoManager.fileProviderAuthority,
             File(fileUri.toString()),
         )
         val sendIntent: Intent = Intent(Intent.ACTION_SEND).apply {
@@ -201,6 +195,21 @@ class IntentManagerImpl(
             type = "text/plain"
         }
         startActivity(Intent.createChooser(sendIntent, null))
+    }
+
+    override fun shareErrorReport(throwable: Throwable) {
+        shareText(
+            StringBuilder()
+                .append("Stacktrace:\n")
+                .append("$throwable\n")
+                .apply { throwable.stackTrace.forEach { append("\t$it\n") } }
+                .append("\n")
+                .append("Version: ${buildInfoManager.versionData}\n")
+                .append("Device: ${buildInfoManager.deviceData}\n")
+                .apply { buildInfoManager.ciBuildInfo?.let { append("CI: $it\n") } }
+                .append("\n")
+                .toString(),
+        )
     }
 
     override fun getFileDataFromActivityResult(
@@ -221,7 +230,7 @@ class IntentManagerImpl(
             val uriString = uri.toString()
             context
                 .packageManager
-                .getPackageInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_PROVIDERS)
+                .getPackageInfo(buildInfoManager.applicationId, PackageManager.GET_PROVIDERS)
                 .providers
                 ?.any { uriString.contains(other = it.authority) } == true
         }
@@ -246,11 +255,11 @@ class IntentManagerImpl(
         }
     }
 
-    override fun createFileChooserIntent(withCameraIntents: Boolean): Intent {
+    override fun createFileChooserIntent(withCameraIntents: Boolean, mimeType: String): Intent {
         val chooserIntent = Intent.createChooser(
             Intent(Intent.ACTION_OPEN_DOCUMENT)
                 .addCategory(Intent.CATEGORY_OPENABLE)
-                .setType("*/*"),
+                .setType(mimeType),
             ContextCompat.getString(context, BitwardenString.file_source),
         )
 
@@ -263,7 +272,7 @@ class IntentManagerImpl(
             }
             val outputFileUri = FileProvider.getUriForFile(
                 context,
-                FILE_PROVIDER_AUTHORITY,
+                buildInfoManager.fileProviderAuthority,
                 file,
             )
 
@@ -289,10 +298,10 @@ class IntentManagerImpl(
             putExtra(Intent.EXTRA_TITLE, fileName)
         }
 
-    override fun createTileIntent(data: String): Intent {
+    override fun createTileIntent(componentClass: Class<*>, data: String): Intent {
         return Intent(
             context,
-            MainActivity::class.java,
+            componentClass,
         )
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .setData(data.toUri())
@@ -404,7 +413,11 @@ class IntentManagerImpl(
     private fun getCameraFileData(): IntentManager.FileData {
         val tmpDir = File(context.filesDir, TEMP_CAMERA_IMAGE_DIR)
         val file = File(tmpDir, TEMP_CAMERA_IMAGE_NAME)
-        val uri = FileProvider.getUriForFile(context, FILE_PROVIDER_AUTHORITY, file)
+        val uri = FileProvider.getUriForFile(
+            context,
+            buildInfoManager.fileProviderAuthority,
+            file,
+        )
         val fileName = "photo_${clock.instant().toFormattedPattern(pattern = "yyyyMMddHHmmss")}.jpg"
         return IntentManager.FileData(
             fileName = fileName,

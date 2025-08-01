@@ -6,7 +6,8 @@ import android.service.quicksettings.TileService
 import androidx.annotation.Keep
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.util.isBuildVersionAtLeast
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.x8bit.bitwarden.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -29,7 +30,10 @@ class BitwardenVaultTileService : TileService() {
     }
 
     private fun launchVault() {
-        val intent = intentManager.createTileIntent("bitwarden://my_vault")
+        val intent = intentManager.createTileIntent(
+            componentClass = MainActivity::class.java,
+            data = "bitwarden://my_vault",
+        )
         if (!isBuildVersionAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
             @Suppress("DEPRECATION")
             @SuppressLint("StartActivityAndCollapseDeprecated")
