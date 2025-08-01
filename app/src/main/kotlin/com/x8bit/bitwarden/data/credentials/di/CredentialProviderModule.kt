@@ -12,6 +12,8 @@ import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilderImpl
 import com.x8bit.bitwarden.data.credentials.datasource.disk.PrivilegedAppDiskSource
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManagerImpl
+import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
+import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManagerImpl
 import com.x8bit.bitwarden.data.credentials.manager.OriginManager
 import com.x8bit.bitwarden.data.credentials.manager.OriginManagerImpl
 import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
@@ -26,7 +28,6 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,7 +52,7 @@ object CredentialProviderModule {
         authRepository: AuthRepository,
         bitwardenCredentialManager: BitwardenCredentialManager,
         dispatcherManager: DispatcherManager,
-        intentManager: IntentManager,
+        pendingIntentManager: CredentialManagerPendingIntentManager,
         biometricsEncryptionManager: BiometricsEncryptionManager,
         clock: Clock,
     ): CredentialProviderProcessor =
@@ -59,7 +60,7 @@ object CredentialProviderModule {
             context = context,
             authRepository = authRepository,
             bitwardenCredentialManager = bitwardenCredentialManager,
-            intentManager = intentManager,
+            pendingIntentManager = pendingIntentManager,
             clock = clock,
             biometricsEncryptionManager = biometricsEncryptionManager,
             dispatcherManager = dispatcherManager,
@@ -105,11 +106,11 @@ object CredentialProviderModule {
     @Singleton
     fun provideCredentialEntryBuilder(
         @ApplicationContext context: Context,
-        intentManager: IntentManager,
+        pendingIntentManager: CredentialManagerPendingIntentManager,
         biometricsEncryptionManager: BiometricsEncryptionManager,
     ): CredentialEntryBuilder = CredentialEntryBuilderImpl(
         context = context,
-        intentManager = intentManager,
+        pendingIntentManager = pendingIntentManager,
         biometricsEncryptionManager = biometricsEncryptionManager,
     )
 
@@ -132,4 +133,13 @@ object CredentialProviderModule {
     fun provideRelyingPartyParser(
         json: Json,
     ): RelyingPartyParser = RelyingPartyParserImpl(json)
+
+    @Provides
+    @Singleton
+    fun provideCredentialManagerPendingIntentManager(
+        @ApplicationContext context: Context,
+    ): CredentialManagerPendingIntentManager =
+        CredentialManagerPendingIntentManagerImpl(
+            context = context,
+        )
 }

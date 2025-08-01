@@ -31,9 +31,9 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
+import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
@@ -69,7 +69,7 @@ class CredentialProviderProcessorTest {
     private val bitwardenCredentialManager: BitwardenCredentialManager = mockk {
         coEvery { getCredentialEntries(any()) } returns credentialEntries.asSuccess()
     }
-    private val intentManager: IntentManager = mockk()
+    private val pendingIntentManager: CredentialManagerPendingIntentManager = mockk()
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
     private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk()
     private val cancellationSignal: CancellationSignal = mockk()
@@ -82,7 +82,7 @@ class CredentialProviderProcessorTest {
             context = context,
             authRepository = authRepository,
             bitwardenCredentialManager = bitwardenCredentialManager,
-            intentManager = intentManager,
+            pendingIntentManager = pendingIntentManager,
             clock = clock,
             biometricsEncryptionManager = biometricsEncryptionManager,
             dispatcherManager = dispatcherManager,
@@ -220,10 +220,8 @@ class CredentialProviderProcessorTest {
         every { context.packageName } returns "com.x8bit.bitwarden"
         every { context.getString(any(), any()) } returns "mockDescription"
         every {
-            intentManager.createFido2CreationPendingIntent(
-                action = any(),
+            pendingIntentManager.createFido2CreationPendingIntent(
                 userId = any(),
-                requestCode = any(),
             )
         } returns mockIntent
         every {
@@ -270,10 +268,8 @@ class CredentialProviderProcessorTest {
         } returns "{\"mockJsonRequest\":1}"
         every { callback.onResult(capture(captureSlot)) } just runs
         every {
-            intentManager.createFido2CreationPendingIntent(
-                action = any(),
+            pendingIntentManager.createFido2CreationPendingIntent(
                 userId = any(),
-                requestCode = any(),
             )
         } returns mockIntent
         every {
@@ -383,10 +379,8 @@ class CredentialProviderProcessorTest {
         every { callback.onResult(capture(captureSlot)) } just runs
         every { context.getString(any()) } returns "mockTitle"
         every {
-            intentManager.createFido2UnlockPendingIntent(
-                action = "com.x8bit.bitwarden.credentials.ACTION_UNLOCK_ACCOUNT",
+            pendingIntentManager.createFido2UnlockPendingIntent(
                 userId = "mockUserId-1",
-                requestCode = any(),
             )
         } returns mockIntent
 
@@ -404,10 +398,8 @@ class CredentialProviderProcessorTest {
         verify(exactly = 0) { callback.onError(any()) }
         verify(exactly = 1) {
             callback.onResult(any())
-            intentManager.createFido2UnlockPendingIntent(
-                action = "com.x8bit.bitwarden.credentials.ACTION_UNLOCK_ACCOUNT",
+            pendingIntentManager.createFido2UnlockPendingIntent(
                 userId = "mockUserId-1",
-                requestCode = any(),
             )
         }
 
