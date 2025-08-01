@@ -420,7 +420,6 @@ Het scannen gebeurt automatisch.</string>
     <string name="master_password_policy_validation_title">Ongeldig wachtwoord</string>
     <string name="master_password_policy_validation_message">Het wachtwoord voldoet niet aan de organisatievereisten. Controleer het beleid en probeer het opnieuw.</string>
     <string name="loading">Laden</string>
-    <string name="accept_policies_error">Algemene voorwaarden en privacybeleid zijn nog niet erkend.</string>
     <string name="terms_of_service">Algemene voorwaarden</string>
     <string name="privacy_policy">Privacybeleid</string>
     <string name="passkey_management">Passkey-beheer</string>
@@ -609,8 +608,6 @@ Wilt u naar dit account wisselen?</string>
     <string name="language">Taal</string>
     <string name="language_change_x_description">De taal is veranderd in %1$s. Herstart de app om de verandering te zien</string>
     <string name="default_system">Standaard (Systeem)</string>
-    <string name="important">Belangrijk</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Je hoofdwachtwoord kan niet worden hersteld als je het vergeet! Minimaal %1$s tekens.</string>
     <string name="weak_master_password">Zwak hoofdwachtwoord</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Zwakke wachtwoord geïdentificeerd. Gebruik een sterk wachtwoord om uw account te beschermen. Weet u zeker dat u een zwak wachtwoord wilt gebruiken?</string>
     <string name="weak">Zwak</string>
@@ -707,7 +704,6 @@ Wilt u naar dit account wisselen?</string>
     <string name="create_account_on_with_colon">Account maken bij:</string>
     <string name="we_sent_an_email_to">We hebben een e-mail gestuurd naar %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Door verder te gaan, gaat je akkoord met de Algemene voorwaarden en het Privacybeleid</string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Het het inschakelen ga je akkoord met de <annotation link="termsOfService">Algemene voorwaarden</annotation> en het <annotation link="privacyPolicy">Privacybeleid</annotation></string>
     <string name="unsubscribe">Afmelden</string>
     <string name="check_your_email">Check je e-mail</string>
     <string name="open_email_app">E-mail-app openen</string>
@@ -865,8 +861,6 @@ Wilt u naar dit account wisselen?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Je hoeft alleen de Authenticator sleutel in te stellen voor logins die tweestapsverificatie vereisen met een code. De sleutel genereert continu zescijferige codes die je kunt gebruiken om in te loggen.</string>
     <string name="coachmark_3_of_3">3 VAN 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Je moet een webadres toevoegen om auto-invullen te gebruiken om toegang te krijgen tot dit account.</string>
-    <string name="single_tap_passkey_creation">Passkey aanmaken met één tik</string>
-    <string name="single_tap_passkey_authentication">Passkey login met één tik</string>
     <string name="learn_about_new_logins">Meer informatie over nieuwe logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We doorlopen de belangrijkste functies voor het toevoegen van een nieuwe login.</string>
     <string name="explore_the_generator">Ontdek de generator</string>

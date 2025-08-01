@@ -420,7 +420,6 @@ L\'escaneig es farà automàticament.</string>
     <string name="master_password_policy_validation_title">Contrasenya no vàlida</string>
     <string name="master_password_policy_validation_message">La contrasenya no compleix els requisits de l\'organització. Comproveu la informació de la política i torneu-ho a provar.</string>
     <string name="loading">S\'està carregant</string>
-    <string name="accept_policies_error">No s’han reconegut les condicions del servei i la declaració de privadesa.</string>
     <string name="terms_of_service">Condicions del servei</string>
     <string name="privacy_policy">Declaració de privadesa</string>
     <string name="passkey_management">Gestió de claus de pas</string>
@@ -609,8 +608,6 @@ Voleu canviar a aquest compte?</string>
     <string name="language">Idioma</string>
     <string name="language_change_x_description">L\'idioma s\'ha canviat a %1$s. Reinicieu l\'aplicació per veure el canvi</string>
     <string name="default_system">Per defecte (Sistema)</string>
-    <string name="important">Important</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">La vostra contrasenya mestra no es pot recuperar si l\'oblideu! %1$s caràcters com a mínim.</string>
     <string name="weak_master_password">Contrasenya mestra poc segura</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">S\'ha identificat una contrasenya feble. Utilitzeu una contrasenya segura per protegir el vostre compte. Esteu segur que voleu utilitzar una contrasenya feble?</string>
     <string name="weak">Poc segura</string>
@@ -707,7 +704,6 @@ Voleu canviar a aquest compte?</string>
     <string name="create_account_on_with_colon">Crea compte en:</string>
     <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Anul·la subscripció</string>
     <string name="check_your_email">Comprova el correu</string>
     <string name="open_email_app">Obri l\'aplicació de correu</string>
@@ -865,8 +861,6 @@ Voleu canviar a aquest compte?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>

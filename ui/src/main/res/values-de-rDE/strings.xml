@@ -420,7 +420,6 @@ Das Scannen erfolgt automatisch.</string>
     <string name="master_password_policy_validation_title">Ungültiges Passwort</string>
     <string name="master_password_policy_validation_message">Passwort entspricht nicht den Anforderungen der Organisation. Bitte überprüfe die Richtlinien-Informationen und versuche es erneut.</string>
     <string name="loading">Wird geladen</string>
-    <string name="accept_policies_error">Die Nutzungsbedingungen und Datenschutzerklärung wurden nicht akzeptiert.</string>
     <string name="terms_of_service">Nutzungsbedingungen</string>
     <string name="privacy_policy">Datenschutzbestimmungen</string>
     <string name="passkey_management">Passkey-Verwaltung</string>
@@ -608,8 +607,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="language">Sprache</string>
     <string name="language_change_x_description">Die Sprache wurde auf %1$s geändert. Bitte starte die App neu, um die Änderung zu sehen</string>
     <string name="default_system">Standard (System)</string>
-    <string name="important">Wichtig</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Dein Master-Passwort kann nicht wiederhergestellt werden, wenn du es vergisst! Mindestens %1$s Zeichen.</string>
     <string name="weak_master_password">Schwaches Master-Passwort</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Schwaches Passwort erkannt. Verwende ein starkes Passwort, um dein Konto zu schützen. Bist du sicher, dass du ein schwaches Passwort verwenden möchtest?</string>
     <string name="weak">Schwach</string>
@@ -706,7 +703,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="create_account_on_with_colon">Konto erstellt am:</string>
     <string name="we_sent_an_email_to">Wir haben eine E-Mail an %1$s gesendet.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Wenn du fortfährst, stimmst du den Nutzungsbedingungen und der Datenschutzvereinbarung zu</string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Durch Aktivieren dieses Schalters stimmst du den <annotation link="termsOfService">Nutzungsbedingungen</annotation> und <annotation link="privacyPolicy">Datenschutzbestimmungen</annotation> zu</string>
     <string name="unsubscribe">Deabonnieren</string>
     <string name="check_your_email">Überprüfe deine E-Mails</string>
     <string name="open_email_app">E-Mail-App öffnen</string>
@@ -864,8 +860,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Du musst den Authentifizierungsschlüssel nur für Zugangsdaten einrichten, die eine zwei-Faktor-Authentifizierung mit einem Code erfordern. Der Schlüssel generiert kontinuierlich sechsstellige Codes, mit denen du dich anmelden kannst.</string>
     <string name="coachmark_3_of_3">3 von 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Du musst eine Website-Adresse hinzufügen, um automatisches Ausfüllen für den Zugriff auf dieses Konto benutzen zu können.</string>
-    <string name="single_tap_passkey_creation">Passkey-Erstellung mit einem Tap</string>
-    <string name="single_tap_passkey_authentication">Passkey-Anmeldung mit einen Tap</string>
     <string name="learn_about_new_logins">Erfahre mehr über neue Zugangsdaten</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Wir führen dich durch die wichtigsten Funktionen zum Hinzufügen neuer Zugangsdaten.</string>
     <string name="explore_the_generator">Erkunde den Generator</string>

@@ -85,7 +85,7 @@
     <string name="edit_card">Редагувати картку</string>
     <string name="edit_identity">Редагувати посвідчення</string>
     <string name="edit_note">Редагувати нотатку</string>
-    <string name="edit_ssh_key">Edit SSH key</string>
+    <string name="edit_ssh_key">Редагувати ключ SSH</string>
     <string name="enter_email_for_hint">Введіть свою адресу е-пошти, щоб отримати підказку для головного пароля.</string>
     <string name="favorite">Обране</string>
     <string name="unfavorite">Вилучити з обраного</string>
@@ -101,8 +101,8 @@
     <string name="one_minute">1 хвилина</string>
     <string name="four_hours">4 години</string>
     <string name="immediately">Негайно</string>
-    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
-    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
+    <string name="vault_timeout_log_out_confirmation_title">Встановити час очікування сеансу на \"Вийти\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">Після часу очікування сеансу ви вийдете з системи. Для повторного входу й відновлення доступу до сховища потрібне інтернет-з\'єднання. Збережені налаштування та PIN-код на цьому пристрої не зміняться.</string>
     <string name="logging_in">Вхід...</string>
     <string name="login_to_bitwarden">Увійти в Bitwarden</string>
     <string name="master_password_confirmation_val_message">Підтвердження пароля неправильне.</string>
@@ -153,7 +153,7 @@
     <string name="view_card">Переглянути картку</string>
     <string name="view_identity">Переглянути посвідчення</string>
     <string name="view_note">Переглянути нотатку</string>
-    <string name="view_ssh_key">View SSH key</string>
+    <string name="view_ssh_key">Переглянути ключ SSH</string>
     <string name="web_vault">Вебсховище Bitwarden</string>
     <string name="items">Записи</string>
     <string name="items_for_uri">Записи для %1$s</string>
@@ -420,7 +420,6 @@
     <string name="master_password_policy_validation_title">Неправильний пароль</string>
     <string name="master_password_policy_validation_message">Пароль не відповідає вимогам організації. Перевірте інформацію про політику і спробуйте знову.</string>
     <string name="loading">Завантаження</string>
-    <string name="accept_policies_error">Умови користування та політика приватності не погоджені.</string>
     <string name="terms_of_service">Умови користування</string>
     <string name="privacy_policy">Політика приватності</string>
     <string name="passkey_management">Керування ключами доступу</string>
@@ -609,8 +608,6 @@
     <string name="language">Мова</string>
     <string name="language_change_x_description">Мову змінено на %1$s. Для застосування змін перезапустіть програму</string>
     <string name="default_system">Типова (Система)</string>
-    <string name="important">Важливо</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Головний пароль неможливо відновити, якщо ви його втратите! Мінімум %1$s символів.</string>
     <string name="weak_master_password">Слабкий головний пароль</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Виявлено слабкий пароль. Використовуйте надійний пароль для захисту свого облікового запису. Ви дійсно хочете використати слабкий пароль?</string>
     <string name="weak">Слабкий</string>
@@ -707,7 +704,6 @@
     <string name="create_account_on_with_colon">Створити обліковий запис на:</string>
     <string name="we_sent_an_email_to">Ми надіслали електронний лист на <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Продовжуючи, ви погоджуєтеся з <annotation link="termsOfService">Умовами користування</annotation> і <annotation link="privacyPolicy">Політикою приватності</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Активуючи цей перемикач, ви погоджуєтеся з <annotation link="termsOfService">Умовами користування</annotation> і <annotation link="privacyPolicy">Політикою приватності</annotation></string>
     <string name="unsubscribe">Відписатися</string>
     <string name="check_your_email">Перевірте свою електронну пошту</string>
     <string name="open_email_app">Відкрийте програму електронної пошти</string>
@@ -865,8 +861,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">Вам потрібно налаштувати ключ автентифікації лише для входів, які потребують двоетапної перевірки за допомогою коду. Ключ буде постійно генерувати шестизначні коди, які ви можете використовувати, щоб увійти.</string>
     <string name="coachmark_3_of_3">3 з 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Необхідно додати вебадресу, щоб використовувати автозаповнення для цього облікового запису.</string>
-    <string name="single_tap_passkey_creation">Створення ключа доступу одним дотиком</string>
-    <string name="single_tap_passkey_authentication">Вхід з ключем доступу одним дотиком</string>
     <string name="learn_about_new_logins">Докладніше про нові записи</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Ми ознайомимо вас з основними можливостями додавання нового запису.</string>
     <string name="explore_the_generator">Ознайомитися з генератором</string>
