@@ -8,8 +8,8 @@ import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
 import com.bitwarden.annotation.OmitFromCoverage
-import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.bitwarden.ui.autofill.model.BrowserPackage
+import com.bitwarden.ui.platform.manager.IntentManager
 
 /**
  * Starts the system autofill settings activity.

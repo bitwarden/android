@@ -23,9 +23,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialo
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectDialogContent
 import com.x8bit.bitwarden.ui.platform.components.dropdown.model.MultiSelectOption
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriMatchDisplayType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.displayLabel
@@ -48,7 +46,6 @@ fun VaultAddEditUriItem(
     onLearnMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
     resources: Resources = LocalContext.current.resources,
-    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     var shouldShowOptionsDialog by rememberSaveable { mutableStateOf(false) }
     var shouldShowMatchDialog by rememberSaveable { mutableStateOf(false) }

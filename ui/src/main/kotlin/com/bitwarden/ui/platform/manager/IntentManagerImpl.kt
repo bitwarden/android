@@ -25,7 +25,6 @@ import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.core.util.isBuildVersionAtLeast
-import com.bitwarden.ui.autofill.model.BrowserPackage
 import com.bitwarden.ui.platform.manager.util.deviceData
 import com.bitwarden.ui.platform.manager.util.fileProviderAuthority
 import com.bitwarden.ui.platform.model.FileData

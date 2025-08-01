@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.autofill.manager.browser
 
 import app.cash.turbine.test
-import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFillData
-import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
+import com.bitwarden.ui.autofill.model.BrowserThirdPartyAutoFillData
+import com.bitwarden.ui.autofill.model.BrowserThirdPartyAutofillStatus
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

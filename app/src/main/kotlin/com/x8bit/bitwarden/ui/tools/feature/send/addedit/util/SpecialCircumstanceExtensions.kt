@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
 
 /**
