@@ -28,6 +28,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionV
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
@@ -472,6 +473,7 @@ class VaultItemListingDataExtensionsTest {
             decryptCipherListResult = createMockDecryptCipherListResult(
                 number = 1,
                 successes = cipherViewList,
+                failures = listOf(createMockSdkCipher(number = 5)),
             ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
