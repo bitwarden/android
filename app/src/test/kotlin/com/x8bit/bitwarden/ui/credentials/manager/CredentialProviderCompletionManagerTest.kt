@@ -11,8 +11,7 @@ import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.data.credentials.processor.GET_PASSKEY_INTENT
-import com.x8bit.bitwarden.data.credentials.processor.GET_PASSWORD_INTENT
+import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPasswordCredentialAutofillCipherLogin
@@ -20,7 +19,6 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialRes
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.Called
 import io.mockk.MockKVerificationScope
 import io.mockk.Ordering
@@ -107,7 +105,7 @@ class CredentialProviderCompletionManagerTest {
     @Nested
     inner class DefaultImplementation {
 
-        private val mockIntentManager = mockk<IntentManager>()
+        private val mockPendingIntentManager = mockk<CredentialManagerPendingIntentManager>()
 
         @BeforeEach
         fun setUp() {
@@ -274,13 +272,11 @@ class CredentialProviderCompletionManagerTest {
             val mockFido2AutofillView = createMockFido2CredentialAutofillView(number = 1)
 
             every {
-                mockIntentManager.createFido2GetCredentialPendingIntent(
-                    action = GET_PASSKEY_INTENT,
+                mockPendingIntentManager.createFido2GetCredentialPendingIntent(
                     userId = "mockUserId",
                     credentialId = mockFido2AutofillView.credentialId.toString(),
                     cipherId = mockFido2AutofillView.cipherId,
                     isUserVerified = false,
-                    requestCode = any(),
                 )
             } returns mockk()
             every { mockActivity.getString(any()) } returns "No username"
@@ -320,12 +316,10 @@ class CredentialProviderCompletionManagerTest {
             val mockPasswordAutofillView = createMockPasswordCredentialAutofillCipherLogin()
 
             every {
-                mockIntentManager.createPasswordGetCredentialPendingIntent(
-                    action = GET_PASSWORD_INTENT,
+                mockPendingIntentManager.createPasswordGetCredentialPendingIntent(
                     userId = "mockUserId",
                     cipherId = mockPasswordAutofillView.cipherId,
                     isUserVerified = false,
-                    requestCode = any(),
                 )
             } returns mockk()
             every { mockActivity.getString(any()) } returns "No username"

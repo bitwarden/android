@@ -31,19 +31,13 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
+import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.Clock
-import java.util.concurrent.atomic.AtomicInteger
 import javax.crypto.Cipher
-
-private const val CREATE_PASSKEY_INTENT = "com.x8bit.bitwarden.credentials.ACTION_CREATE_PASSKEY"
-const val GET_PASSKEY_INTENT = "com.x8bit.bitwarden.credentials.ACTION_GET_PASSKEY"
-const val GET_PASSWORD_INTENT = "com.x8bit.bitwarden.credentials.ACTION_GET_PASSWORD"
-const val UNLOCK_ACCOUNT_INTENT = "com.x8bit.bitwarden.credentials.ACTION_UNLOCK_ACCOUNT"
 
 /**
  * The default implementation of [CredentialProviderProcessor]. Its purpose is to handle
@@ -55,13 +49,12 @@ class CredentialProviderProcessorImpl(
     private val context: Context,
     private val authRepository: AuthRepository,
     private val bitwardenCredentialManager: BitwardenCredentialManager,
-    private val intentManager: IntentManager,
+    private val pendingIntentManager: CredentialManagerPendingIntentManager,
     private val clock: Clock,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
     dispatcherManager: DispatcherManager,
 ) : CredentialProviderProcessor {
 
-    private val requestCode = AtomicInteger()
     private val ioScope = CoroutineScope(dispatcherManager.io)
 
     override fun processCreateCredentialRequest(
@@ -104,10 +97,8 @@ class CredentialProviderProcessorImpl(
         if (!userState.activeAccount.isVaultUnlocked) {
             val authenticationAction = AuthenticationAction(
                 title = context.getString(BitwardenString.unlock),
-                pendingIntent = intentManager.createFido2UnlockPendingIntent(
-                    action = UNLOCK_ACCOUNT_INTENT,
+                pendingIntent = pendingIntentManager.createFido2UnlockPendingIntent(
                     userId = userState.activeUserId,
-                    requestCode = requestCode.getAndIncrement(),
                 ),
             )
 
@@ -182,10 +173,8 @@ class CredentialProviderProcessorImpl(
         val entryBuilder = CreateEntry
             .Builder(
                 accountName = accountName,
-                pendingIntent = intentManager.createFido2CreationPendingIntent(
-                    action = CREATE_PASSKEY_INTENT,
+                pendingIntent = pendingIntentManager.createFido2CreationPendingIntent(
                     userId = userId,
-                    requestCode = requestCode.getAndIncrement(),
                 ),
             )
             .setDescription(

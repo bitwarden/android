@@ -12,19 +12,16 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.vault.CipherListView
 import com.x8bit.bitwarden.data.autofill.util.login
-import com.x8bit.bitwarden.data.credentials.processor.GET_PASSKEY_INTENT
-import com.x8bit.bitwarden.data.credentials.processor.GET_PASSWORD_INTENT
+import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
 import com.x8bit.bitwarden.data.credentials.util.setBiometricPromptDataIfSupported
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import kotlin.random.Random
 
 /**
  * Primary implementation of [CredentialEntryBuilder].
  */
 class CredentialEntryBuilderImpl(
     private val context: Context,
-    private val intentManager: IntentManager,
+    private val pendingIntentManager: CredentialManagerPendingIntentManager,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
 ) : CredentialEntryBuilder {
 
@@ -69,15 +66,12 @@ class CredentialEntryBuilderImpl(
                     context = context,
                     username = fido2AutofillView.userNameForUi
                         ?: context.getString(BitwardenString.no_username),
-                    pendingIntent = intentManager
-                        .createFido2GetCredentialPendingIntent(
-                            action = GET_PASSKEY_INTENT,
-                            userId = userId,
-                            credentialId = fido2AutofillView.credentialId.toString(),
-                            cipherId = fido2AutofillView.cipherId,
-                            isUserVerified = isUserVerified,
-                            requestCode = Random.nextInt(),
-                        ),
+                    pendingIntent = pendingIntentManager.createFido2GetCredentialPendingIntent(
+                        userId = userId,
+                        credentialId = fido2AutofillView.credentialId.toString(),
+                        cipherId = fido2AutofillView.cipherId,
+                        isUserVerified = isUserVerified,
+                    ),
                     beginGetPublicKeyCredentialOption = option,
                 )
                 .setIcon(
@@ -106,14 +100,11 @@ class CredentialEntryBuilderImpl(
                     context = context,
                     username = cipherView.login?.username
                         ?: context.getString(BitwardenString.no_username),
-                    pendingIntent = intentManager
-                        .createPasswordGetCredentialPendingIntent(
-                            action = GET_PASSWORD_INTENT,
-                            userId = userId,
-                            cipherId = cipherView.id,
-                            isUserVerified = isUserVerified,
-                            requestCode = Random.nextInt(),
-                        ),
+                    pendingIntent = pendingIntentManager.createPasswordGetCredentialPendingIntent(
+                        userId = userId,
+                        cipherId = cipherView.id,
+                        isUserVerified = isUserVerified,
+                    ),
                     beginGetPasswordOption = option,
                 )
                 .setDisplayName(cipherView.name)
