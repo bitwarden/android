@@ -1,7 +1,5 @@
 package com.bitwarden.authenticator.data.authenticator.datasource.disk.entity
 
-import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm.entries
-
 /**
  * Enum class representing SHA algorithms an authenticator item may be hashed with.
  */

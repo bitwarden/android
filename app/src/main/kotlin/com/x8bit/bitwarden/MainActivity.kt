@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.core.app.ActivityCompat
 import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -42,6 +43,8 @@ import com.x8bit.bitwarden.ui.platform.util.appLanguage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+
+private const val ANDROID_15_BUG_MAX_REVISION: Int = 241007
 
 /**
  * Primary entry point for the application.
@@ -221,7 +224,35 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleRecreate() {
-        recreate()
+        val isOldAndroidBuildRevision = {
+            // This fetches the date portion of the ID in order to determine the revision of
+            // Android 15 being used and whether we want to use the `recreate` API or not.
+            // If we fail to parse a date, we assume it is not an old revision.
+            "\\.([^.]+)\\."
+                .toRegex()
+                .find(Build.ID)
+                ?.groups
+                ?.get(1)
+                ?.value
+                ?.toIntOrNull()
+                ?.let { it <= ANDROID_15_BUG_MAX_REVISION } == true
+        }
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.VANILLA_ICE_CREAM &&
+            isOldAndroidBuildRevision()
+        ) {
+            // This is done to avoid a bug in specific older revisions of Android 15. The bug has
+            // been fixed but certain phones that are no longer supported will never get the fix.
+            // The OS bug is tracked here: https://issuetracker.google.com/issues/370180732
+            startActivity(
+                Intent
+                    .makeMainActivity(componentName)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION),
+            )
+            finish()
+            overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, 0, 0)
+        } else {
+            ActivityCompat.recreate(this)
+        }
     }
 
     private fun updateScreenCapture(isScreenCaptureAllowed: Boolean) {

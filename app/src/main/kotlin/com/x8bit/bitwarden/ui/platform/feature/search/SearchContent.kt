@@ -206,7 +206,10 @@ private fun AutofillSelectionDialog(
                         onAutofillAndSaveItemClick(data.cipherId)
                     }
 
-                    else -> Unit
+                    is MasterPasswordRepromptData.OverflowItem -> Unit
+                    is MasterPasswordRepromptData.ViewItem -> {
+                        onViewItemClick(data.cipherId, data.itemType)
+                    }
                 }
             }
         }
@@ -240,8 +243,13 @@ private fun AutofillSelectionDialog(
                 BitwardenBasicDialogRow(
                     text = stringResource(id = BitwardenString.view),
                     onClick = {
-                        onDismissRequest()
-                        onViewItemClick(displayItem.id, displayItem.itemType)
+                        selectionCallback(
+                            displayItem,
+                            MasterPasswordRepromptData.ViewItem(
+                                cipherId = displayItem.id,
+                                itemType = displayItem.itemType,
+                            ),
+                        )
                     },
                 )
             }
