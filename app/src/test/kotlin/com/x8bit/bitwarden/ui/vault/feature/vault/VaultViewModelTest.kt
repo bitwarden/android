@@ -44,6 +44,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCiph
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -497,6 +498,51 @@ class VaultViewModelTest : BaseViewModelTest() {
 
         verify(exactly = 1) {
             settingsRepository.dismissFlightRecorderBanner()
+        }
+    }
+
+    @Test
+    fun `on ShareCipherDecryptionErrorClick should send ShowShareSheet`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                action = VaultAction.ShareCipherDecryptionErrorClick(selectedCipherId = "1"),
+            )
+            assertEquals(VaultEvent.ShowShareSheet("1"), awaitItem())
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `on ShareAllCipherDecryptionErrorsClick should send ShowShareSheet`() = runTest {
+        val viewModel = createViewModel()
+        val vaultData = VaultData(
+            decryptCipherListResult = createMockDecryptCipherListResult(number = 1)
+                .copy(
+                    failures = listOf(
+                        createMockSdkCipher(number = 1),
+                        createMockSdkCipher(number = 2),
+                    ),
+                ),
+            collectionViewList = listOf(createMockCollectionView(number = 1)),
+            folderViewList = listOf(createMockFolderView(number = 1)),
+            sendViewList = listOf(createMockSendView(number = 1)),
+        )
+        viewModel.eventFlow.test {
+            mutableVaultDataStateFlow.tryEmit(
+                value = DataState.Loaded(
+                    data = vaultData,
+                ),
+            )
+            advanceTimeBy(1500)
+            viewModel.trySendAction(
+                action = VaultAction.ShareAllCipherDecryptionErrorsClick,
+            )
+            assertEquals(
+                VaultEvent.ShowShareSheet("mockId-1\nmockId-2"),
+                awaitItem(),
+            )
         }
     }
 
@@ -1515,6 +1561,152 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Test
+    fun `VaultItemClick should show alert if hasDecryptionError is true`() = runTest {
+        val viewModel = createViewModel()
+        val itemId = "54321"
+        val item = mockk<VaultState.ViewState.VaultItem> {
+            every { id } returns itemId
+            every { type } returns VaultItemCipherType.LOGIN
+            every { hasDecryptionError } returns true
+        }
+
+        viewModel.trySendAction(VaultAction.VaultItemClick(item))
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.CipherDecryptionError(
+                    title = BitwardenString.decryption_error.asText(),
+                    message = BitwardenString
+                        .bitwarden_could_not_decrypt_this_vault_item_description_long.asText(),
+                    selectedCipherId = itemId,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with decryption failures should show VaultLoadCipherDecryptionError dialog when hasShownDecryptionFailureAlert is false`() =
+        runTest {
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = emptyList(),
+                        failures = listOf(
+                            createMockSdkCipher(number = 1).copy(
+                                deletedDate = null,
+                            ),
+                            createMockSdkCipher(number = 2).copy(
+                                deletedDate = null,
+                            ),
+                        ),
+                    ),
+                    collectionViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createViewModel()
+
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.Content(
+                        loginItemsCount = 2,
+                        cardItemsCount = 0,
+                        identityItemsCount = 0,
+                        secureNoteItemsCount = 0,
+                        favoriteItems = listOf(),
+                        folderItems = listOf(),
+                        collectionItems = listOf(),
+                        noFolderItems = listOf(),
+                        trashItemsCount = 0,
+                        totpItemsCount = 0,
+                        itemTypesCount = 5,
+                        sshKeyItemsCount = 0,
+                        showCardGroup = true,
+                    ),
+                    dialog = VaultState.DialogState.VaultLoadCipherDecryptionError(
+                        title = BitwardenString.decryption_error.asText(),
+                        cipherCount = 2,
+                    ),
+                ).copy(
+                    hasShownDecryptionFailureAlert = true,
+                    cipherDecryptionFailureIds = persistentListOf(
+                        "mockId-1",
+                        "mockId-2",
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with decryption failures should not show dialog when hasShownDecryptionFailureAlert is true`() =
+        runTest {
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(number = 1)
+                        .copy(
+                            failures = listOf(
+                                createMockSdkCipher(number = 1).copy(
+                                    deletedDate = null,
+                                ),
+                                createMockSdkCipher(number = 2).copy(
+                                    deletedDate = null,
+                                ),
+                            ),
+                        ),
+                    collectionViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            mutableVaultDataStateFlow.value = dataState
+            val viewModel = createViewModel()
+
+            // Clear the dialog by dismissing it
+            viewModel.trySendAction(VaultAction.DialogDismiss)
+
+            // Emit new data with failures - should not show dialog again
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+
+            // Advance time to allow state updates
+            advanceTimeBy(1500)
+
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.Content(
+                        loginItemsCount = 3,
+                        cardItemsCount = 0,
+                        identityItemsCount = 0,
+                        secureNoteItemsCount = 0,
+                        favoriteItems = listOf(),
+                        folderItems = listOf(),
+                        collectionItems = listOf(),
+                        noFolderItems = listOf(),
+                        trashItemsCount = 0,
+                        totpItemsCount = 1,
+                        itemTypesCount = 5,
+                        sshKeyItemsCount = 0,
+                        showCardGroup = true,
+                    ),
+                    dialog = null,
+                ).copy(
+                    hasShownDecryptionFailureAlert = true,
+                    cipherDecryptionFailureIds = persistentListOf(
+                        "mockId-1",
+                        "mockId-2",
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `TryAgainClick should sync the vault data`() {
