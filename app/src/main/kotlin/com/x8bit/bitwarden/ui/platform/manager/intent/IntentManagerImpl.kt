@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.manager.intent
 
 import android.app.Activity
-import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
@@ -29,7 +28,6 @@ import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
-import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import java.io.File
 import java.time.Clock
 
@@ -49,33 +47,6 @@ private const val TEMP_CAMERA_IMAGE_NAME: String = "temp_camera_image.jpg"
  * This directory must also be declared in file_paths.xml
  */
 private const val TEMP_CAMERA_IMAGE_DIR: String = "camera_temp"
-
-/**
- * Key for the user id included in Credential provider "create entries".
- *
- * @see IntentManager.createFido2CreationPendingIntent
- */
-const val EXTRA_KEY_USER_ID: String = "user_id"
-
-/**
- * Key for the credential id included in FIDO 2 provider "get entries".
- *
- * @see IntentManager.createFido2GetCredentialPendingIntent
- */
-const val EXTRA_KEY_CREDENTIAL_ID: String = "credential_id"
-
-/**
- * Key for the cipher id included in FIDO 2 provider "get entries".
- *
- * @see IntentManager.createFido2GetCredentialPendingIntent
- */
-const val EXTRA_KEY_CIPHER_ID: String = "cipher_id"
-
-/**
- * Key for the user verification performed during vault unlock while
- * processing a Credential request.
- */
-const val EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK: String = "uv_performed_during_unlock"
 
 /**
  * The default implementation of the [IntentManager] for simplifying the handling of Android
@@ -287,84 +258,6 @@ class IntentManagerImpl(
             addCategory(Intent.CATEGORY_OPENABLE)
             putExtra(Intent.EXTRA_TITLE, fileName)
         }
-
-    override fun createFido2CreationPendingIntent(
-        action: String,
-        userId: String,
-        requestCode: Int,
-    ): PendingIntent {
-        val intent = Intent(action)
-            .setPackage(context.packageName)
-            .putExtra(EXTRA_KEY_USER_ID, userId)
-
-        return PendingIntent.getActivity(
-            /* context = */ context,
-            /* requestCode = */ requestCode,
-            /* intent = */ intent,
-            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
-        )
-    }
-
-    override fun createFido2GetCredentialPendingIntent(
-        action: String,
-        userId: String,
-        credentialId: String,
-        cipherId: String,
-        isUserVerified: Boolean,
-        requestCode: Int,
-    ): PendingIntent {
-        val intent = Intent(action)
-            .setPackage(context.packageName)
-            .putExtra(EXTRA_KEY_USER_ID, userId)
-            .putExtra(EXTRA_KEY_CREDENTIAL_ID, credentialId)
-            .putExtra(EXTRA_KEY_CIPHER_ID, cipherId)
-            .putExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, isUserVerified)
-
-        return PendingIntent.getActivity(
-            /* context = */ context,
-            /* requestCode = */ requestCode,
-            /* intent = */ intent,
-            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
-        )
-    }
-
-    override fun createFido2UnlockPendingIntent(
-        action: String,
-        userId: String,
-        requestCode: Int,
-    ): PendingIntent {
-        val intent = Intent(action)
-            .setPackage(context.packageName)
-            .putExtra(EXTRA_KEY_USER_ID, userId)
-
-        return PendingIntent.getActivity(
-            /* context = */ context,
-            /* requestCode = */ requestCode,
-            /* intent = */ intent,
-            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
-        )
-    }
-
-    override fun createPasswordGetCredentialPendingIntent(
-        action: String,
-        userId: String,
-        cipherId: String?,
-        isUserVerified: Boolean,
-        requestCode: Int,
-    ): PendingIntent {
-        val intent = Intent(action)
-            .setPackage(context.packageName)
-            .putExtra(EXTRA_KEY_USER_ID, userId)
-            .putExtra(EXTRA_KEY_CIPHER_ID, cipherId)
-            .putExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, isUserVerified)
-
-        return PendingIntent.getActivity(
-            /* context = */ context,
-            /* requestCode = */ requestCode,
-            /* intent = */ intent,
-            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
-        )
-    }
 
     override fun startDefaultEmailApplication() {
         val intent = Intent(Intent.ACTION_MAIN)
