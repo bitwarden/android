@@ -4,6 +4,8 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.ui.autofill.model.BrowserPackage
+import com.bitwarden.ui.autofill.model.BrowserThirdPartyAutoFillData
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFillData
 
