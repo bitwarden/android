@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.autofill.model.browser
+package com.bitwarden.ui.autofill.model
 
 private const val BRAVE_CHANNEL_PACKAGE = "com.brave.browser"
 private const val CHROME_BETA_CHANNEL_PACKAGE = "com.chrome.beta"

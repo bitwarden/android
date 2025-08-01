@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.handlers
 
-import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
+import com.bitwarden.ui.autofill.model.BrowserPackage
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.AutoFillAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.AutoFillViewModel

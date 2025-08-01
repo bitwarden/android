@@ -9,8 +9,8 @@ import android.nfc.NfcAdapter
 import android.os.Build
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.core.util.toPendingIntentMutabilityFlag
 import com.x8bit.bitwarden.AuthCallbackActivity
-import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import kotlin.random.Random
 
 /**
