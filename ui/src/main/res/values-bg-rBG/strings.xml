@@ -420,7 +420,6 @@
     <string name="master_password_policy_validation_title">Грешна парола</string>
     <string name="master_password_policy_validation_message">Паролата не покрива изискванията на организацията. Проверете политиките и пробвайте отново.</string>
     <string name="loading">Зареждане</string>
-    <string name="accept_policies_error">Условията за използване и политиката за поверителност не бяха приети.</string>
     <string name="terms_of_service">Общи условия</string>
     <string name="privacy_policy">Политика за поверителност</string>
     <string name="passkey_management">Управление на секретни ключове</string>
@@ -609,8 +608,6 @@
     <string name="language">Език</string>
     <string name="language_change_x_description">Езикът беше променен на %1$s. Рестартирайте приложението, за да влезе промяната в сила</string>
     <string name="default_system">По подразбиране (от системата)</string>
-    <string name="important">Важно</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Главната парола не може да бъде възстановена, ако я забравите! Дължината трябва да е поне %1$s знака.</string>
     <string name="weak_master_password">Слаба главна парола</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Разпозната е слаба парола. Използвайте силна парола, за да защитете данните си. Наистина ли искате да използвате слаба парола?</string>
     <string name="weak">Слаба</string>
@@ -707,7 +704,6 @@
     <string name="create_account_on_with_colon">Създаване на регистрация в:</string>
     <string name="we_sent_an_email_to">Изпратихме е-писмо до %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ако продължите, Вие се съгласявате с Условията за ползване и Политиката за поверителност</string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Активирайки това, Вие се съгласявате с <annotation link="termsOfService">Условията за ползване</annotation> и <annotation link="privacyPolicy">Политиката за поверителност</annotation></string>
     <string name="unsubscribe">Отписване</string>
     <string name="check_your_email">Проверете е-пощата си</string>
     <string name="open_email_app">Отваряне на приложението за е-поща</string>
@@ -865,8 +861,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">Ще трябва да настроите удостоверителен ключ само за само за елементите, които изискват двустепенно удостоверяване с код. Ключът непрекъснато ще генерира шест-цифрени кодове, чрез които можете да се впишете.</string>
     <string name="coachmark_3_of_3">3 от 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Трябва да добавите уеб адрес, за да може да използвате автоматичното попълване за вписване в този акаунт.</string>
-    <string name="single_tap_passkey_creation">Създаване на секретен ключ с едно докосване</string>
-    <string name="single_tap_passkey_authentication">Вписване чрез секретен ключ с едно докосване</string>
     <string name="learn_about_new_logins">Научете за новите данни за вписване</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Ще Ви покажем най-важните моменти при добавянето на нови данни за вписване.</string>
     <string name="explore_the_generator">Разгледайте генератора</string>

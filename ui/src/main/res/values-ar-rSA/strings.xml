@@ -420,7 +420,6 @@
     <string name="master_password_policy_validation_title">كلمة المرور غير صالحة</string>
     <string name="master_password_policy_validation_message">كلمة المرور لا تفي بمتطلبات المؤسسة. الرجاء التحقق من معلومات السياسة وحاول مرة أخرى.</string>
     <string name="loading">جار التحميل</string>
-    <string name="accept_policies_error">لم يتم الاعتراف بشروط الخدمة وسياسة الخصوصية.</string>
     <string name="terms_of_service">اتفاقية خدمة المستخدم</string>
     <string name="privacy_policy">سياسة الخصوصيّة</string>
     <string name="passkey_management">إدارة مفتاح المرور</string>
@@ -609,8 +608,6 @@
     <string name="language">اللّغة</string>
     <string name="language_change_x_description">تم تغيير اللغة إلى %1$s. الرجاء إعادة تشغيل التطبيق لرؤية التغيير</string>
     <string name="default_system">الافتراضي (النظام)</string>
-    <string name="important">مهم</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">لا يمكن استعادة كلمة المرور الرئيسية الخاصة بك إذا نسيت ذلك! %1$s أحرف الحد الأدنى.</string>
     <string name="weak_master_password">كلمة المرور الرئيسية الضعيفة</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">تم تحديد كلمة المرور ضعيفة. استخدم كلمة مرور قوية لحماية حسابك. هل أنت متأكد من أنك تريد استخدام كلمة مرور ضعيفة؟</string>
     <string name="weak">ضعيفة</string>
@@ -707,7 +704,6 @@
     <string name="create_account_on_with_colon">إنشاء حساب على:</string>
     <string name="we_sent_an_email_to">أرسلنا رسالة بريد إلكتروني إلى %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">من خلال المتابعة، أنت توافق على شروط الخدمة وسياسة الخصوصية</string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">بتفعيل هذا المفتاح، فإنك توافق على <annotation link="termsOfService">شروط الخدمة</annotation> و <annotation link="privacyPolicy">سياسة الخصوصية</annotation></string>
     <string name="unsubscribe">إلغاء الاشتراك</string>
     <string name="check_your_email">تحقق من بريدك الإلكتروني</string>
     <string name="open_email_app">افتح تطبيق البريد الإلكتروني</string>
@@ -865,8 +861,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">سوف تحتاج فقط إلى إعداد مفتاح المصادقة لتسجيل الدخول التي تتطلب المصادقة ذات عاملين بواسطة الكود. سيولد المفتاح باستمرار رموز من ستة أرقام يمكنك استخدامها لتسجيل الدخول.</string>
     <string name="coachmark_3_of_3">3 من 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">يجب عليك إضافة عنوان ويب لاستخدام التعبئة التلقائية للوصول إلى هذا الحساب.</string>
-    <string name="single_tap_passkey_creation">إنشاء مفتاح مرور لمرة واحدة</string>
-    <string name="single_tap_passkey_authentication">تسجيل الدخول بالضغط الواحد على مفتاح المرور</string>
     <string name="learn_about_new_logins">تعرف على تسجيلات الدخول الجديدة</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">سنمشي معك من خلال الميزات الرئيسية لإضافة تسجيل دخول جديد.</string>
     <string name="explore_the_generator">استكشف المولد</string>

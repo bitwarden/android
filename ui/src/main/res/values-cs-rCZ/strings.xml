@@ -420,7 +420,6 @@ Načtení proběhne automaticky.</string>
     <string name="master_password_policy_validation_title">Neplatné heslo</string>
     <string name="master_password_policy_validation_message">Heslo nesplňuje požadavky organizace. Zkontrolujte požadavky a zkuste to znovu.</string>
     <string name="loading">Načítání</string>
-    <string name="accept_policies_error">Podmínky použití a Zásady ochrany osobních údajů nebyly odsouhlaseny.</string>
     <string name="terms_of_service">Podmínky použití</string>
     <string name="privacy_policy">Zásady ochrany osobních údajů</string>
     <string name="passkey_management">Správa přístupových klíčů</string>
@@ -608,8 +607,6 @@ Chcete se přepnout na tento účet?</string>
     <string name="language">Jazyk</string>
     <string name="language_change_x_description">Jazyk byl změněn na %1$s. Pro zobrazení změn restartujte aplikaci.</string>
     <string name="default_system">Výchozí (Systémový)</string>
-    <string name="important">Důležité</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Pokud zapomenete Vaše hlavní heslo, nebude možné jej obnovit! Heslo musí mít alespoň %1$s znaků.</string>
     <string name="weak_master_password">Slabé hlavní heslo</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Slabé heslo bylo nalezeno mezi odhalenými hesly. K zabezpečení Vašeho účtu používejte silné a jedinečné heslo. Opravdu chcete používat toto heslo?</string>
     <string name="weak">Slabé</string>
@@ -706,7 +703,6 @@ Chcete se přepnout na tento účet?</string>
     <string name="create_account_on_with_colon">Vytvořit účet na:</string>
     <string name="we_sent_an_email_to">Poslali jsme e-mail na <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Pokračováním souhlasíte s <annotation link="termsOfService">Podmínkami služby</annotation> a <annotation link="privacyPolicy">Zásadami ochrany osobních údajů</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Zapnutím tohoto spínače souhlasíte s <annotation link="termsOfService">Podmínkami služby</annotation> a <annotation link="privacyPolicy">Zásadami ochrany osobních údajů</annotation></string>
     <string name="unsubscribe">Odhlásit odběr</string>
     <string name="check_your_email">Zkontrolujte Váš e-mail</string>
     <string name="open_email_app">Otevřít e-mailovou aplikaci</string>
@@ -864,8 +860,6 @@ Chcete se přepnout na tento účet?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Budete jen muset nastavit Authenticator pro přihlášení, která vyžadují dvoufaktorové ověření s kódem. Klíč průběžně generuje šestimístné kódy, které můžete použít pro přihlášení.</string>
     <string name="coachmark_3_of_3">3 Z 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Pro přístup k tomuto účtu musíte přidat webovou adresu pro automatické vyplnění.</string>
-    <string name="single_tap_passkey_creation">Vytvoření přístupového hesla jedním klepnutím</string>
-    <string name="single_tap_passkey_authentication">Přihlášení přístupovým heslem jedním klepnutím</string>
     <string name="learn_about_new_logins">Více o nových přihlášeních</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Provedeme Vás klíčovými funkcemi pro přidání nového přihlášení.</string>
     <string name="explore_the_generator">Prozkoumat generátor</string>

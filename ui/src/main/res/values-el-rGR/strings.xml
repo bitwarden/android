@@ -420,7 +420,6 @@
     <string name="master_password_policy_validation_title">Λανθασμένος Κωδικός</string>
     <string name="master_password_policy_validation_message">Ο κωδικός πρόσβασης δεν πληροί τις απαιτήσεις του οργανισμού. Ελέγξτε τις πληροφορίες πολιτικής και δοκιμάστε ξανά.</string>
     <string name="loading">Φόρτωση</string>
-    <string name="accept_policies_error">Οι Όροι Παροχής Υπηρεσιών και η Πολιτική Απορρήτου δεν έχουν αναγνωριστεί.</string>
     <string name="terms_of_service">Όροι Χρήσης</string>
     <string name="privacy_policy">Πολιτική Απορρήτου</string>
     <string name="passkey_management">Διαχείριση κλειδιού πρόσβασης</string>
@@ -609,8 +608,6 @@
     <string name="language">Γλώσσα</string>
     <string name="language_change_x_description">Η γλώσσα έχει αλλάξει σε %1$s. Παρακαλούμε επανεκκινήστε την εφαρμογή για να δείτε την αλλαγή</string>
     <string name="default_system">Προεπιλογή (σύστημα)</string>
-    <string name="important">Σημαντικό</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Ο κύριος κωδικός δεν μπορεί να ανακτηθεί αν τον ξεχάσετε! Απαιτούνται τουλάχιστον %1$s χαρακτήρες.</string>
     <string name="weak_master_password">Αδύναμος Κύριος Κωδικός</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Αδύναμος κωδικός. Χρησιμοποιήστε έναν ισχυρό κωδικό για την προστασία του λογαριασμού σας. Είστε βέβαιοι ότι θέλετε να χρησιμοποιήσετε έναν αδύναμο κωδικό πρόσβασης;</string>
     <string name="weak">Αδύναμος</string>
@@ -707,7 +704,6 @@
     <string name="create_account_on_with_colon">Create account on:</string>
     <string name="we_sent_an_email_to">Στείλαμε ένα email στο %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Συνεχίζοντας, συμφωνείτε με τους Όρους Παροχής Υπηρεσιών και την Πολιτική Απορρήτου</string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Ακύρωση συνδρομής</string>
     <string name="check_your_email">Ελέγξτε το ηλ. ταχυδρομείο σας</string>
     <string name="open_email_app">Άνοιγμα εφαρμογής ηλ. ταχυδρομείου</string>
@@ -865,8 +861,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">Θα χρειαστεί μόνο να ρυθμίσετε το Κλειδί Ταυτοποίησης για συνδέσεις που απαιτούν έλεγχο ταυτότητας δύο παραγόντων με κωδικό. Το κλειδί θα παράγει συνεχώς εξαψήφιους κώδικες που μπορείτε να χρησιμοποιήσετε για να συνδεθείτε.</string>
     <string name="coachmark_3_of_3">3 από 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Πρέπει να προσθέσετε μια διεύθυνση ιστού για να χρησιμοποιήσετε την αυτόματη συμπλήρωση για να αποκτήσετε πρόσβαση σε αυτόν το λογαριασμό.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
