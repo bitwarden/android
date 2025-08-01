@@ -48,7 +48,6 @@ import com.bitwarden.ui.util.onAllNodesWithContentDescriptionAfterScroll
 import com.bitwarden.ui.util.onAllNodesWithTextAfterScroll
 import com.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.bitwarden.ui.util.onNodeWithTextAfterScroll
-import com.bitwarden.ui.util.performCustomAccessibilityAction
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -1480,18 +1479,38 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule.assertNoDialogExists()
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on match detection when an Advanced option is selected should display warning dialog`() {
-        mutableStateFlow.update { currentState ->
-            updateLoginType(currentState) {
-                copy(
-                    uriList = listOf(
-                        UriItem(id = "TestId", uri = null, match = null, checksum = null),
-                    ),
-                )
-            }
-        }
+    fun `on match detection when an Advanced option is selected should display warning dialog when Regular Expression`() {
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "Options"))
+            .performClick()
 
+        composeTestRule
+            .onNodeWithText("Match detection")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Regular expression")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(
+                "“Regular expression” is an advanced option with " +
+                    "increased risk of exposing credentials if used incorrectly.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on match detection when an Advanced option is selected should display warning dialog when Starts With`() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
@@ -1509,7 +1528,10 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText(text = "Warning")
+            .onAllNodesWithText(
+                "“Starts with” is an advanced option with " +
+                    "increased risk of exposing credentials.",
+            )
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertExists()
     }
@@ -1534,7 +1556,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Cancel")
+            .onAllNodesWithText("Close")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -1553,7 +1575,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on Advanced matching warning dialog confirm should call UriValueChange`() {
+    fun `on Advanced matching warning dialog confirm should display learn more dialog`() {
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) {
                 copy(
@@ -1581,27 +1603,29 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Continue")
+            .onAllNodesWithText("Yes")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
-        verify(exactly = 1) {
-            viewModel.trySendAction(
-                VaultAddEditAction.ItemType.LoginType.UriValueChange(
-                    UriItem(
-                        id = "TestId",
-                        uri = null,
-                        match = UriMatchType.STARTS_WITH,
-                        checksum = null,
-                    ),
-                ),
-            )
-        }
+        composeTestRule
+            .onAllNodesWithText("Keep your credentials secure")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `on Advanced matching warning dialog click on more about match detection should call launchUri`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) {
+                copy(
+                    uriList = listOf(
+                        UriItem(id = "TestId", uri = null, match = null, checksum = null),
+                    ),
+                )
+            }
+        }
+
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Website (URI)")
             .onChildren()
@@ -1619,14 +1643,14 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText(text = "Warning")
+            .onAllNodesWithText("Yes")
             .filterToOne(hasAnyAncestor(isDialog()))
-            .assertExists()
+            .performClick()
 
         composeTestRule
-            .onAllNodesWithText(text = "“Starts with” is an advanced option with increased risk of exposing credentials.\nMore about match detection")
+            .onAllNodesWithText("Learn more")
             .filterToOne(hasAnyAncestor(isDialog()))
-            .performCustomAccessibilityAction("More about match detection")
+            .performClick()
 
         verify(exactly = 1) {
             intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())

@@ -10,19 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.CustomAccessibilityAction
-import androidx.compose.ui.semantics.customActions
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.AnnotatedString
 import androidx.core.net.toUri
-import com.bitwarden.ui.platform.base.util.annotatedStringResource
-import com.bitwarden.ui.platform.base.util.spanStyleOf
-import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
@@ -64,6 +56,7 @@ fun VaultAddEditUriItem(
             null,
         )
     }
+    var shouldShowLearnMoreMatchDetectionDialog by rememberSaveable { mutableStateOf(false) }
 
     BitwardenTextField(
         label = stringResource(id = R.string.website_uri),
@@ -166,6 +159,7 @@ fun VaultAddEditUriItem(
     }
 
     val currentOptionToConfirm = optionPendingConfirmation
+
     if (shouldShowAdvancedMatchDialog && currentOptionToConfirm != null) {
         BuildAdvancedMatchDetectionWarning(
             pendingOption = currentOptionToConfirm,
@@ -176,15 +170,24 @@ fun VaultAddEditUriItem(
                 )
                 shouldShowAdvancedMatchDialog = false
                 optionPendingConfirmation = null
+                shouldShowLearnMoreMatchDetectionDialog = true
             },
             onDialogDismiss = {
                 shouldShowAdvancedMatchDialog = false
                 optionPendingConfirmation = null
             },
-            onMoreAboutMatchDetectionClick = {
-                intentManager.launchUri(
-                    uri = "https://bitwarden.com/help/uri-match-detection/".toUri(),
-                )
+        )
+    }
+
+    if (shouldShowLearnMoreMatchDetectionDialog) {
+        BuildLearnMoreAboutMatchDetectionDialog(
+            uriMatchDisplayType = uriItem.match.toDisplayMatchType(),
+            onDialogConfirm = {
+                intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
+                shouldShowLearnMoreMatchDetectionDialog = false
+            },
+            onDialogDismiss = {
+                shouldShowLearnMoreMatchDetectionDialog = false
             },
         )
     }
@@ -196,58 +199,59 @@ private fun BuildAdvancedMatchDetectionWarning(
     defaultUriMatchType: UriMatchType,
     onDialogConfirm: () -> Unit,
     onDialogDismiss: () -> Unit,
-    onMoreAboutMatchDetectionClick: () -> Unit,
 ) {
-    val moreAboutMatchDetectionStr = stringResource(BitwardenString.more_about_match_detection)
+
+    val descriptionStringResId = when (pendingOption) {
+        UriMatchDisplayType.STARTS_WITH ->
+            BitwardenString.selected_matching_option_is_an_advanced_option
+
+        UriMatchDisplayType.REGULAR_EXPRESSION ->
+            BitwardenString.selected_matching_option_is_an_advanced_option_if_used_incorrectly
+
+        else -> {
+            return
+        }
+    }
+
+    val nameOfSelectedMatchDisplayType = pendingOption
+        .displayLabel(
+            defaultUriOption = defaultUriMatchType
+                .displayLabel(),
+        ).invoke()
 
     BitwardenTwoButtonDialog(
-        titleAnnotatedString = stringResource(id = BitwardenString.warning)
-            .toAnnotatedString(),
-        messageAnnotatedString = annotatedStringResource(
-            id = BitwardenString.advanced_options_warning,
-            args = arrayOf(
-                pendingOption
-                    .displayLabel(
-                        defaultUriOption = defaultUriMatchType
-                            .displayLabel
-                            .invoke(),
-                    )
-                    .invoke(),
-            ),
-            style = spanStyleOf(
-                color = BitwardenTheme.colorScheme.text.primary,
-                textStyle = BitwardenTheme.typography.bodyMedium,
-            ),
-        )
-            .plus(
-                AnnotatedString("\n")
-                    .plus(
-                        annotatedStringResource(
-                            id = BitwardenString.more_about_match_detection,
-                            onAnnotationClick = { annotationValue ->
-                                when (annotationValue) {
-                                    "moreAboutMatchDetection" -> onMoreAboutMatchDetectionClick()
-                                }
-                            },
-                        ),
-                    ),
-            ),
-        confirmButtonText = stringResource(id = R.string.continue_text),
-        dismissButtonText = stringResource(id = R.string.cancel),
+        title = stringResource(
+            id = BitwardenString.are_you_sure_you_want_to_use,
+            formatArgs = arrayOf(nameOfSelectedMatchDisplayType),
+        ),
+        message = stringResource(
+            id = descriptionStringResId,
+            formatArgs = arrayOf(nameOfSelectedMatchDisplayType),
+        ),
+        confirmButtonText = stringResource(id = R.string.yes),
+        dismissButtonText = stringResource(id = R.string.close),
         onConfirmClick = onDialogConfirm,
         onDismissClick = onDialogDismiss,
         onDismissRequest = onDialogDismiss,
-        messageModifier = Modifier
-            .semantics {
-                customActions = listOf(
-                    CustomAccessibilityAction(
-                        label = moreAboutMatchDetectionStr,
-                        action = {
-                            onMoreAboutMatchDetectionClick()
-                            true
-                        },
-                    ),
-                )
-            },
+    )
+}
+
+@Composable
+private fun BuildLearnMoreAboutMatchDetectionDialog(
+    uriMatchDisplayType: UriMatchDisplayType,
+    onDialogConfirm: () -> Unit,
+    onDialogDismiss: () -> Unit,
+) {
+    BitwardenTwoButtonDialog(
+        title = stringResource(id = BitwardenString.keep_your_credential_secure),
+        message = stringResource(
+            id = BitwardenString.learn_more_about_how_to_keep_credentirals_secure,
+            formatArgs = arrayOf(uriMatchDisplayType.text()),
+        ),
+        confirmButtonText = stringResource(id = BitwardenString.learn_more),
+        dismissButtonText = stringResource(id = BitwardenString.cancel),
+        onConfirmClick = onDialogConfirm,
+        onDismissClick = onDialogDismiss,
+        onDismissRequest = onDialogDismiss,
     )
 }
