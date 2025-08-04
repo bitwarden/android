@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.UriMatchType
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriMatchDisplayType
 
 /**
@@ -51,7 +51,7 @@ fun UriMatchDisplayType.isAdvancedMatching(): Boolean =
  */
 fun UriMatchDisplayType.displayLabel(defaultUriOption: String): Text {
     return if (this == UriMatchDisplayType.DEFAULT) {
-        R.string.default_text.asText(defaultUriOption)
+        BitwardenString.default_text.asText(defaultUriOption)
     } else {
         this.text
     }

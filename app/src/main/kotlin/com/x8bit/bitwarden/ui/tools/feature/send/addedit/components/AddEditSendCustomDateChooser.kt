@@ -16,7 +16,6 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.composition.LocalClock
 import kotlinx.collections.immutable.persistentMapOf
@@ -63,7 +62,7 @@ fun AddEditSendCustomDateChooser(
         mutableStateOf(value = originalSelectionOption)
     }
     BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.deletion_date),
+        label = stringResource(id = BitwardenString.deletion_date),
         isEnabled = isEnabled,
         options = options.values.toImmutableList(),
         selectedOption = currentSelectionOption.getText(clock = clock).invoke(),
@@ -109,36 +108,36 @@ private sealed class CustomDeletionOption : Parcelable {
     @Parcelize
     data object OneHour : CustomDeletionOption() {
         override val offsetMillis: Long get() = 1.hours.inWholeMilliseconds
-        override fun getText(clock: Clock): Text = R.string.one_hour.asText()
+        override fun getText(clock: Clock): Text = BitwardenString.one_hour.asText()
     }
 
     @Parcelize
     data object OneDay : CustomDeletionOption() {
         override val offsetMillis: Long get() = 1.days.inWholeMilliseconds
-        override fun getText(clock: Clock): Text = R.string.one_day.asText()
+        override fun getText(clock: Clock): Text = BitwardenString.one_day.asText()
     }
 
     @Parcelize
     data object TwoDays : CustomDeletionOption() {
         override val offsetMillis: Long get() = 2.days.inWholeMilliseconds
-        override fun getText(clock: Clock): Text = R.string.two_days.asText()
+        override fun getText(clock: Clock): Text = BitwardenString.two_days.asText()
     }
 
     @Parcelize
     data object ThreeDays : CustomDeletionOption() {
         override val offsetMillis: Long get() = 3.days.inWholeMilliseconds
-        override fun getText(clock: Clock): Text = R.string.three_days.asText()
+        override fun getText(clock: Clock): Text = BitwardenString.three_days.asText()
     }
 
     @Parcelize
     data object SevenDays : CustomDeletionOption() {
         override val offsetMillis: Long get() = 7.days.inWholeMilliseconds
-        override fun getText(clock: Clock): Text = R.string.seven_days.asText()
+        override fun getText(clock: Clock): Text = BitwardenString.seven_days.asText()
     }
 
     @Parcelize
     data object ThirtyDays : CustomDeletionOption() {
         override val offsetMillis: Long get() = 30.days.inWholeMilliseconds
-        override fun getText(clock: Clock): Text = R.string.thirty_days.asText()
+        override fun getText(clock: Clock): Text = BitwardenString.thirty_days.asText()
     }
 }

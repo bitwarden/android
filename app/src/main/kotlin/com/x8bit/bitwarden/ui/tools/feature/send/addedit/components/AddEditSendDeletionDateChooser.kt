@@ -14,7 +14,6 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.composition.LocalClock
 import kotlinx.collections.immutable.toImmutableList
@@ -39,7 +38,7 @@ fun AddEditSendDeletionDateChooser(
         mutableStateOf(value = DeletionOption.SEVEN_DAYS)
     }
     BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.deletion_date),
+        label = stringResource(id = BitwardenString.deletion_date),
         isEnabled = isEnabled,
         options = options.values.toImmutableList(),
         selectedOption = selectedOption.text(),
@@ -61,27 +60,27 @@ private enum class DeletionOption(
     val offsetMillis: Long,
 ) {
     ONE_HOUR(
-        text = R.string.one_hour.asText(),
+        text = BitwardenString.one_hour.asText(),
         offsetMillis = 1.hours.inWholeMilliseconds,
     ),
     ONE_DAY(
-        text = R.string.one_day.asText(),
+        text = BitwardenString.one_day.asText(),
         offsetMillis = 1.days.inWholeMilliseconds,
     ),
     TWO_DAYS(
-        text = R.string.two_days.asText(),
+        text = BitwardenString.two_days.asText(),
         offsetMillis = 2.days.inWholeMilliseconds,
     ),
     THREE_DAYS(
-        text = R.string.three_days.asText(),
+        text = BitwardenString.three_days.asText(),
         offsetMillis = 3.days.inWholeMilliseconds,
     ),
     SEVEN_DAYS(
-        text = R.string.seven_days.asText(),
+        text = BitwardenString.seven_days.asText(),
         offsetMillis = 7.days.inWholeMilliseconds,
     ),
     THIRTY_DAYS(
-        text = R.string.thirty_days.asText(),
+        text = BitwardenString.thirty_days.asText(),
         offsetMillis = 30.days.inWholeMilliseconds,
     ),
 }

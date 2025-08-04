@@ -29,7 +29,6 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkActionText
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
@@ -61,7 +60,7 @@ fun LazyListScope.vaultAddEditLoginItems(
     item {
         Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
-            label = stringResource(id = R.string.login_credentials),
+            label = stringResource(id = BitwardenString.login_credentials),
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin()
@@ -113,18 +112,18 @@ fun LazyListScope.vaultAddEditLoginItems(
 
     coachMarkHighlightItem(
         key = AddEditItemCoachMark.TOTP,
-        title = R.string.coachmark_2_of_3.asText(),
-        description = R.string.you_ll_only_need_to_set_up_authenticator_key.asText(),
+        title = BitwardenString.coachmark_2_of_3.asText(),
+        description = BitwardenString.you_ll_only_need_to_set_up_authenticator_key.asText(),
         onDismiss = onCoachMarkDismissed,
         leftAction = {
             CoachMarkActionText(
-                actionLabel = stringResource(R.string.back),
+                actionLabel = stringResource(BitwardenString.back),
                 onActionClick = onPreviousCoachMark,
             )
         },
         rightAction = {
             CoachMarkActionText(
-                actionLabel = stringResource(R.string.next),
+                actionLabel = stringResource(BitwardenString.next),
                 onActionClick = onNextCoachMark,
             )
         },
@@ -144,7 +143,7 @@ fun LazyListScope.vaultAddEditLoginItems(
     item {
         Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
-            label = stringResource(id = R.string.autofill_options),
+            label = stringResource(id = BitwardenString.autofill_options),
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin()
@@ -155,26 +154,27 @@ fun LazyListScope.vaultAddEditLoginItems(
 
     coachMarkHighlightItems(
         key = AddEditItemCoachMark.URI,
-        title = R.string.coachmark_3_of_3.asText(),
-        description = R.string.you_must_add_a_web_address_to_use_autofill_to_access_this_account
+        title = BitwardenString.coachmark_3_of_3.asText(),
+        description = BitwardenString
+            .you_must_add_a_web_address_to_use_autofill_to_access_this_account
             .asText(),
         leftAction = {
             CoachMarkActionText(
-                actionLabel = stringResource(R.string.back),
+                actionLabel = stringResource(BitwardenString.back),
                 onActionClick = onPreviousCoachMark,
             )
         },
         onDismiss = onCoachMarkDismissed,
         rightAction = {
             CoachMarkActionText(
-                actionLabel = stringResource(R.string.done_text),
+                actionLabel = stringResource(BitwardenString.done_text),
                 onActionClick = onCoachMarkTourComplete,
             )
         },
         trailingContentIsBottomCard = true,
         trailingStaticContent = {
             BitwardenClickableText(
-                label = stringResource(id = R.string.add_website),
+                label = stringResource(id = BitwardenString.add_website),
                 onClick = loginItemTypeHandlers.onAddNewUriClick,
                 leadingIcon = painterResource(id = BitwardenDrawable.ic_plus_small),
                 style = BitwardenTheme.typography.labelMedium,
@@ -235,12 +235,12 @@ private fun UsernameRow(
 
     if (shouldShowDialog) {
         BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.username),
+            title = stringResource(id = BitwardenString.username),
             message = stringResource(
-                id = R.string.are_you_sure_you_want_to_overwrite_the_current_username,
+                id = BitwardenString.are_you_sure_you_want_to_overwrite_the_current_username,
             ),
-            confirmButtonText = stringResource(id = R.string.yes),
-            dismissButtonText = stringResource(id = R.string.no),
+            confirmButtonText = stringResource(id = BitwardenString.yes),
+            dismissButtonText = stringResource(id = BitwardenString.no),
             onConfirmClick = {
                 shouldShowDialog = false
                 loginItemTypeHandlers.onOpenUsernameGeneratorClick()
@@ -270,7 +270,7 @@ private fun CoachMarkScope<AddEditItemCoachMark>.PasswordRow(
     if (canViewPassword) {
         var shouldShowPassword by remember { mutableStateOf(false) }
         BitwardenPasswordField(
-            label = stringResource(id = R.string.password),
+            label = stringResource(id = BitwardenString.password),
             value = password,
             onValueChange = loginItemTypeHandlers.onPasswordTextChange,
             showPassword = shouldShowPassword,
@@ -283,7 +283,7 @@ private fun CoachMarkScope<AddEditItemCoachMark>.PasswordRow(
             supportingContentPadding = PaddingValues(),
             supportingContent = {
                 BitwardenClickableText(
-                    label = stringResource(id = R.string.check_password_for_data_breaches),
+                    label = stringResource(id = BitwardenString.check_password_for_data_breaches),
                     style = BitwardenTheme.typography.labelMedium,
                     onClick = loginItemTypeHandlers.onPasswordCheckerClick,
                     innerPadding = PaddingValues(all = 16.dp),
@@ -298,23 +298,23 @@ private fun CoachMarkScope<AddEditItemCoachMark>.PasswordRow(
         ) {
             CoachMarkHighlight(
                 key = AddEditItemCoachMark.GENERATE_PASSWORD,
-                title = stringResource(R.string.coachmark_1_of_3),
+                title = stringResource(BitwardenString.coachmark_1_of_3),
                 description = stringResource(
-                    R.string.use_this_button_to_generate_a_new_unique_password,
+                    BitwardenString.use_this_button_to_generate_a_new_unique_password,
                 ),
                 shape = CoachMarkHighlightShape.Oval,
                 onDismiss = onCoachMarkDismissed,
                 leftAction = null,
                 rightAction = {
                     CoachMarkActionText(
-                        actionLabel = stringResource(R.string.next),
+                        actionLabel = stringResource(BitwardenString.next),
                         onActionClick = onGenerateCoachMarkActionClick,
                     )
                 },
             ) {
                 BitwardenStandardIconButton(
                     vectorIconRes = BitwardenDrawable.ic_generate,
-                    contentDescription = stringResource(id = R.string.generate_password),
+                    contentDescription = stringResource(id = BitwardenString.generate_password),
                     onClick = {
                         if (password.isEmpty()) {
                             loginItemTypeHandlers.onOpenPasswordGeneratorClick()
@@ -328,10 +328,10 @@ private fun CoachMarkScope<AddEditItemCoachMark>.PasswordRow(
 
             if (shouldShowDialog) {
                 BitwardenTwoButtonDialog(
-                    title = stringResource(id = R.string.password),
-                    message = stringResource(id = R.string.password_override_alert),
-                    confirmButtonText = stringResource(id = R.string.yes),
-                    dismissButtonText = stringResource(id = R.string.no),
+                    title = stringResource(id = BitwardenString.password),
+                    message = stringResource(id = BitwardenString.password_override_alert),
+                    confirmButtonText = stringResource(id = BitwardenString.yes),
+                    dismissButtonText = stringResource(id = BitwardenString.no),
                     onConfirmClick = {
                         shouldShowDialog = false
                         loginItemTypeHandlers.onOpenPasswordGeneratorClick()
@@ -347,7 +347,7 @@ private fun CoachMarkScope<AddEditItemCoachMark>.PasswordRow(
         }
     } else {
         BitwardenHiddenPasswordField(
-            label = stringResource(id = R.string.password),
+            label = stringResource(id = BitwardenString.password),
             value = password,
             passwordFieldTestTag = "LoginPasswordEntry",
             cardStyle = CardStyle.Bottom,
@@ -366,7 +366,7 @@ private fun TotpRow(
     modifier: Modifier = Modifier,
 ) {
     BitwardenPasswordField(
-        label = stringResource(id = R.string.authenticator_key),
+        label = stringResource(id = BitwardenString.authenticator_key),
         value = totpKey.orEmpty(),
         onValueChange = {},
         readOnly = true,
@@ -375,24 +375,24 @@ private fun TotpRow(
             totpKey?.let {
                 BitwardenStandardIconButton(
                     vectorIconRes = BitwardenDrawable.ic_clear,
-                    contentDescription = stringResource(id = R.string.delete),
+                    contentDescription = stringResource(id = BitwardenString.delete),
                     onClick = loginItemTypeHandlers.onClearTotpKeyClick,
                 )
                 BitwardenStandardIconButton(
                     vectorIconRes = BitwardenDrawable.ic_copy,
-                    contentDescription = stringResource(id = R.string.copy_totp),
+                    contentDescription = stringResource(id = BitwardenString.copy_totp),
                     onClick = { loginItemTypeHandlers.onCopyTotpKeyClick(totpKey) },
                 )
             }
         },
         tooltip = TooltipData(
             onClick = loginItemTypeHandlers.onAuthenticatorHelpToolTipClick,
-            contentDescription = stringResource(id = R.string.authenticator_key_help),
+            contentDescription = stringResource(id = BitwardenString.authenticator_key_help),
         ),
         supportingContentPadding = PaddingValues(),
         supportingContent = {
             BitwardenClickableText(
-                label = stringResource(id = R.string.set_up_authenticator_key),
+                label = stringResource(id = BitwardenString.set_up_authenticator_key),
                 onClick = onTotpSetupClick,
                 leadingIcon = painterResource(id = BitwardenDrawable.ic_camera_small),
                 style = BitwardenTheme.typography.labelMedium,
@@ -420,7 +420,7 @@ private fun PasskeyField(
     modifier: Modifier = Modifier,
 ) {
     BitwardenTextField(
-        label = stringResource(id = R.string.passkey),
+        label = stringResource(id = BitwardenString.passkey),
         value = creationDateTime.invoke(),
         onValueChange = { },
         readOnly = true,
@@ -429,7 +429,7 @@ private fun PasskeyField(
             if (canRemovePasskey) {
                 BitwardenStandardIconButton(
                     vectorIconRes = BitwardenDrawable.ic_minus,
-                    contentDescription = stringResource(id = R.string.remove_passkey),
+                    contentDescription = stringResource(id = BitwardenString.remove_passkey),
                     onClick = loginItemTypeHandlers.onClearFido2CredentialClick,
                     modifier = Modifier.testTag(tag = "RemovePasskeyButton"),
                 )
