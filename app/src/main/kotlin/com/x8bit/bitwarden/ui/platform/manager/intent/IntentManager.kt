@@ -107,17 +107,6 @@ interface IntentManager {
     fun createDocumentIntent(fileName: String): Intent
 
     /**
-     * Creates an intent using [data] when selecting a quick settings tile.
-     */
-    fun createTileIntent(data: String): Intent
-
-    /**
-     * Creates a pending intent using [requestCode] and [tileIntent] when selecting a quick
-     * settings tile on API 34+.
-     */
-    fun createTilePendingIntent(requestCode: Int, tileIntent: Intent): PendingIntent
-
-    /**
      * Creates a pending intent to use when providing [CreateEntry]
      * instances for FIDO 2 credential creation.
      */

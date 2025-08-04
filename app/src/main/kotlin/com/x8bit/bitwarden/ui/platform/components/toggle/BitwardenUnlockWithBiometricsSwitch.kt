@@ -39,10 +39,7 @@ fun BitwardenUnlockWithBiometricsSwitch(
     }
     BitwardenSwitch(
         modifier = modifier,
-        label = stringResource(
-            id = BitwardenString.unlock_with,
-            stringResource(id = BitwardenString.biometrics),
-        ),
+        label = stringResource(BitwardenString.unlock_with_biometrics),
         isChecked = isChecked,
         onCheckedChange = { toggled ->
             if (toggled) {

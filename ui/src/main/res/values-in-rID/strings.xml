@@ -420,7 +420,6 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="master_password_policy_validation_title">kata sandi salah</string>
     <string name="master_password_policy_validation_message">Kata sandi tidak memenuhi persyaratan organisasi. Harap periksa informasi kebijakan dan coba lagi.</string>
     <string name="loading">Memuat</string>
-    <string name="accept_policies_error">Persyaratan Layanan dan Kebijakan Privasi belum diakui.</string>
     <string name="terms_of_service">Persyaratan Layanan</string>
     <string name="privacy_policy">Kebijakan pribadi</string>
     <string name="passkey_management">Passkey management</string>
@@ -609,8 +608,6 @@ Do you want to switch to this account?</string>
     <string name="language">Bahasa</string>
     <string name="language_change_x_description">Bahasa telah diubah ke %1$s. Silakan mulai ulang aplikasi untuk melihat perubahan</string>
     <string name="default_system">Default (System)</string>
-    <string name="important">Important</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Sandi utama Anda tidak akan bisa dipulihkan jika Anda lupa! Setidaknya %1$s karakter.</string>
     <string name="weak_master_password">Sandi Utama Lemah</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Sandi lemah ditemukan. Gunakan sandi yang kuat untuk melindungi akun Anda. Apakah Anda yakin ingin menggunakan sandi yang lemah?</string>
     <string name="weak">Lemah</string>
@@ -707,7 +704,6 @@ Do you want to switch to this account?</string>
     <string name="create_account_on_with_colon">Create account on:</string>
     <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Unsubscribe</string>
     <string name="check_your_email">Check your email</string>
     <string name="open_email_app">Open email app</string>
@@ -865,8 +861,6 @@ Do you want to switch to this account?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>

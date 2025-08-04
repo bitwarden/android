@@ -420,7 +420,6 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="master_password_policy_validation_title">Yararsız parol</string>
     <string name="master_password_policy_validation_message">Parol, şirkət tələblərini qarşılamır. Lütfən siyasət məlumatlarını yoxlayıb yenidən sınayın.</string>
     <string name="loading">Yüklənir</string>
-    <string name="accept_policies_error">Xidmət Şərtləri və Gizlilik Siyasəti qəbul edilməyib.</string>
     <string name="terms_of_service">Xidmət Şərtləri</string>
     <string name="privacy_policy">Gizlilik Siyasəti</string>
     <string name="passkey_management">Keçid açarını idarəetmə</string>
@@ -608,8 +607,6 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="language">Dil</string>
     <string name="language_change_x_description">Dil, %1$s olaraq dəyişdirildi. Dəyişiklikləri görmək üçün lütfən tətbiqi yenidən başladın</string>
     <string name="default_system">İlkin (Sistem)</string>
-    <string name="important">Vacib</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Ana parolunuzu unutsanız bərpa edə bilməzsiniz! Ən az %1$s simvol.</string>
     <string name="weak_master_password">Zəif ana parol</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Zəif parol aşkarlandı. Hesabınızı qorumaq üçün güclü bir parol istifadə edin. Zəif bir parol istifadə etmək istədiyinizə əminsiniz?</string>
     <string name="weak">Zəif</string>
@@ -706,7 +703,6 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="create_account_on_with_colon">Hesab yarat:</string>
     <string name="we_sent_an_email_to">%1$s ünvanına bir e-poçt göndərdik.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Davam edərək, Xidmət Şərtləri və Gizlilik Siyasəti ilə razılaşırsınız</string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Bu açarı aktivləşdirərək, <annotation link="termsOfService">Xidmət Şərtləri</annotation> və <annotation link="privacyPolicy">Gizlilik Siyasəti</annotation> ilə razılaşırsınız</string>
     <string name="unsubscribe">Abunəlikdən çıx</string>
     <string name="check_your_email">E-poçtunuzu yoxlayın</string>
     <string name="open_email_app">E-poçt tətbiqini aç</string>
@@ -864,8 +860,6 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Yalnız iki faktorlu kimlik doğrulamanı kod ilə tələb edən girişlər üçün Kimlik doğrulayıcı Açarı qurmağınız lazımdır. Açar, giriş edə bilməyiniz üçün altı rəqəmli kodları davamlı yaradacaq.</string>
     <string name="coachmark_3_of_3">3/3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Avto-doldurmanı istifadə edərək bu hesaba müraciət etmək üçün bir veb ünvan əlavə etməlisiniz.</string>
-    <string name="single_tap_passkey_creation">Tək toxunuşla keçid açarı yaratma</string>
-    <string name="single_tap_passkey_authentication">Tək toxunuşla keçid açarı ilə daxil olma</string>
     <string name="learn_about_new_logins">Yeni girişləri öyrənin</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Yeni bir giriş əlavə etmək üçün mühüm özəllikləri sizə izah edəcəyik.</string>
     <string name="explore_the_generator">Yaradıcını kəşf et</string>

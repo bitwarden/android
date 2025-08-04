@@ -420,7 +420,6 @@ Skanning vil ske automatisk.</string>
     <string name="master_password_policy_validation_title">Ugyldig adgangskode</string>
     <string name="master_password_policy_validation_message">Adgangskoden opfylder ikke organisationskravene. Tjek politikinformationen og forsøg igen.</string>
     <string name="loading">Indlæser</string>
-    <string name="accept_policies_error">Servicevilkår og fortrolighedspolitik er ikke blevet bekræftet.</string>
     <string name="terms_of_service">Tjenestevilkår</string>
     <string name="privacy_policy">Fortrolighedspolitik</string>
     <string name="passkey_management">Adgangsnøglehåndtering</string>
@@ -609,8 +608,6 @@ Skift til denne konto?</string>
     <string name="language">Sprog</string>
     <string name="language_change_x_description">Sprog skiftet til %1$s. Genstart appen for at se ændringen</string>
     <string name="default_system">Standard (system)</string>
-    <string name="important">Vigtigt</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Hovedadgangskoden kan ikke gendannes, hvis den glemmes! %1$s tegn minimum.</string>
     <string name="weak_master_password">Svag hovedadgangskode</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Svag adgangskode identificeret. Brug en stærk adgangskode til beskyttelse af kontoen. Sikker på, at en svag adgangskode skal bruges?</string>
     <string name="weak">Svag</string>
@@ -707,7 +704,6 @@ Skift til denne konto?</string>
     <string name="create_account_on_with_colon">Opret konto på:</string>
     <string name="we_sent_an_email_to">Vi har sendt en e-mail til %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ved at fortsætte, accepterer du Vilkår for Tjeneste og Fortrolighedspolitik</string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Afmeld</string>
     <string name="check_your_email">Tjek indbakken</string>
     <string name="open_email_app">Åbn e-mail app</string>
@@ -865,8 +861,6 @@ Skift til denne konto?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Enkelt-tryk adgangsnøgleoprettelse</string>
-    <string name="single_tap_passkey_authentication">Enkelt-tryk adgangsnøgleindlogning</string>
     <string name="learn_about_new_logins">Læs om nye logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Vi vil gennemgå de vigtigste funktioner for at tilføje et nyt login.</string>
     <string name="explore_the_generator">Tjek generatoren ud</string>
