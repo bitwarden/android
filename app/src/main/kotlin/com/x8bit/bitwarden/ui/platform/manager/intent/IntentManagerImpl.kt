@@ -26,6 +26,8 @@ import androidx.credentials.CredentialManager
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.ui.platform.model.FileData
+import com.bitwarden.ui.platform.model.ShareData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
@@ -204,7 +206,7 @@ class IntentManagerImpl(
 
     override fun getFileDataFromActivityResult(
         activityResult: ActivityResult,
-    ): IntentManager.FileData? {
+    ): FileData? {
         if (activityResult.resultCode != Activity.RESULT_OK) return null
         val uri = activityResult.data?.data
         return if (uri != null) getLocalFileData(uri) else getCameraFileData()
@@ -212,7 +214,7 @@ class IntentManagerImpl(
 
     override fun getFileDataFromIntent(
         intent: Intent,
-    ): IntentManager.FileData? = intent
+    ): FileData? = intent
         .clipData
         ?.getItemAt(0)
         ?.uri
@@ -226,19 +228,19 @@ class IntentManagerImpl(
         }
         ?.let { getLocalFileData(it) }
 
-    override fun getShareDataFromIntent(intent: Intent): IntentManager.ShareData? {
+    override fun getShareDataFromIntent(intent: Intent): ShareData? {
         if (intent.action != Intent.ACTION_SEND) return null
         return if (intent.type?.contains("text/") == true) {
             val subject = intent.getStringExtra(Intent.EXTRA_SUBJECT)
             val title = intent.getStringExtra(Intent.EXTRA_TEXT) ?: return null
-            IntentManager.ShareData.TextSend(
+            ShareData.TextSend(
                 subject = subject,
                 text = title,
             )
         } else {
             getFileDataFromIntent(intent = intent)
                 ?.let {
-                    IntentManager.ShareData.FileSend(
+                    ShareData.FileSend(
                         fileData = it,
                     )
                 }
@@ -382,19 +384,19 @@ class IntentManagerImpl(
         return Intent(Intent.ACTION_VIEW, playStoreUri)
     }
 
-    private fun getCameraFileData(): IntentManager.FileData {
+    private fun getCameraFileData(): FileData {
         val tmpDir = File(context.filesDir, TEMP_CAMERA_IMAGE_DIR)
         val file = File(tmpDir, TEMP_CAMERA_IMAGE_NAME)
         val uri = FileProvider.getUriForFile(context, FILE_PROVIDER_AUTHORITY, file)
         val fileName = "photo_${clock.instant().toFormattedPattern(pattern = "yyyyMMddHHmmss")}.jpg"
-        return IntentManager.FileData(
+        return FileData(
             fileName = fileName,
             uri = uri,
             sizeBytes = file.length(),
         )
     }
 
-    private fun getLocalFileData(uri: Uri): IntentManager.FileData? =
+    private fun getLocalFileData(uri: Uri): FileData? =
         context
             .contentResolver
             .query(
@@ -413,12 +415,13 @@ class IntentManagerImpl(
                     .getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME)
                     .takeIf { it >= 0 }
                     ?.let { cursor.getString(it) }
+                    ?: return@use null
                 val fileSize = cursor
                     .getColumnIndex(MediaStore.MediaColumns.SIZE)
                     .takeIf { it >= 0 }
                     ?.let { cursor.getLong(it) }
-                if (fileName == null || fileSize == null) return@use null
-                IntentManager.FileData(
+                    ?: return@use null
+                FileData(
                     fileName = fileName,
                     uri = uri,
                     sizeBytes = fileSize,

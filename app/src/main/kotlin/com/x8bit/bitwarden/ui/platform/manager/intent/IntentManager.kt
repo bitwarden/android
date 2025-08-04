@@ -4,7 +4,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Parcelable
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.Composable
@@ -12,8 +11,9 @@ import androidx.compose.runtime.Immutable
 import androidx.credentials.provider.AuthenticationAction
 import androidx.credentials.provider.CreateEntry
 import androidx.credentials.provider.CredentialEntry
+import com.bitwarden.ui.platform.model.FileData
+import com.bitwarden.ui.platform.model.ShareData
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
-import kotlinx.parcelize.Parcelize
 
 /**
  * A manager class for simplifying the handling of Android Intents within a given context.
@@ -156,36 +156,4 @@ interface IntentManager {
      * Open the default email app on device.
      */
     fun startDefaultEmailApplication()
-
-    /**
-     * Represents file information.
-     */
-    @Parcelize
-    data class FileData(
-        val fileName: String,
-        val uri: Uri,
-        val sizeBytes: Long,
-    ) : Parcelable
-
-    /**
-     * Represents data for a share request coming from outside the app.
-     */
-    sealed class ShareData : Parcelable {
-        /**
-         * The data required to create a new Text Send.
-         */
-        @Parcelize
-        data class TextSend(
-            val subject: String?,
-            val text: String,
-        ) : ShareData()
-
-        /**
-         * The data required to create a new File Send.
-         */
-        @Parcelize
-        data class FileSend(
-            val fileData: FileData,
-        ) : ShareData()
-    }
 }

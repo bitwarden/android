@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 
+import com.bitwarden.ui.platform.model.ShareData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
 
 /**
@@ -12,7 +12,7 @@ fun SpecialCircumstance?.toSendType(): AddEditSendState.ViewState.Content.SendTy
     when (this) {
         is SpecialCircumstance.ShareNewSend -> {
             when (data) {
-                is IntentManager.ShareData.FileSend -> {
+                is ShareData.FileSend -> {
                     AddEditSendState.ViewState.Content.SendType.File(
                         uri = data.fileData.uri,
                         name = data.fileData.fileName,
@@ -21,7 +21,7 @@ fun SpecialCircumstance?.toSendType(): AddEditSendState.ViewState.Content.SendTy
                     )
                 }
 
-                is IntentManager.ShareData.TextSend -> {
+                is ShareData.TextSend -> {
                     AddEditSendState.ViewState.Content.SendType.Text(
                         input = data.text,
                         isHideByDefaultChecked = false,
@@ -40,8 +40,8 @@ fun SpecialCircumstance?.toSendName(): String? =
     when (this) {
         is SpecialCircumstance.ShareNewSend -> {
             when (data) {
-                is IntentManager.ShareData.FileSend -> data.fileData.fileName
-                is IntentManager.ShareData.TextSend -> data.subject
+                is ShareData.FileSend -> data.fileData.fileName
+                is ShareData.TextSend -> data.subject
             }
         }
 

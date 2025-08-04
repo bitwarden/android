@@ -1,8 +1,9 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 
 import android.net.Uri
+import com.bitwarden.ui.platform.model.FileData
+import com.bitwarden.ui.platform.model.ShareData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -21,7 +22,7 @@ class SpecialCircumstanceExtensionsTest {
             isHideByDefaultChecked = false,
         )
         val specialCircumstance = SpecialCircumstance.ShareNewSend(
-            data = IntentManager.ShareData.TextSend(
+            data = ShareData.TextSend(
                 subject = "",
                 text = text,
             ),
@@ -45,8 +46,8 @@ class SpecialCircumstanceExtensionsTest {
             displaySize = null,
         )
         val specialCircumstance = SpecialCircumstance.ShareNewSend(
-            data = IntentManager.ShareData.FileSend(
-                fileData = IntentManager.FileData(
+            data = ShareData.FileSend(
+                fileData = FileData(
                     fileName = fileName,
                     uri = uri,
                     sizeBytes = sizeBytes,
@@ -70,7 +71,7 @@ class SpecialCircumstanceExtensionsTest {
     fun `toSendName with TextSend should return subject`() {
         val subject = "Subject"
         val specialCircumstance = SpecialCircumstance.ShareNewSend(
-            data = IntentManager.ShareData.TextSend(
+            data = ShareData.TextSend(
                 subject = subject,
                 text = "",
             ),
@@ -86,8 +87,8 @@ class SpecialCircumstanceExtensionsTest {
     fun `toSendName with FileSend should return file name`() {
         val fileName = "File Name"
         val specialCircumstance = SpecialCircumstance.ShareNewSend(
-            data = IntentManager.ShareData.FileSend(
-                fileData = IntentManager.FileData(
+            data = ShareData.FileSend(
+                fileData = FileData(
                     fileName = fileName,
                     uri = mockk(),
                     sizeBytes = 0L,

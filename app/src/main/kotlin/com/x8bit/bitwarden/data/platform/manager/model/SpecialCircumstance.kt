@@ -2,13 +2,13 @@ package com.x8bit.bitwarden.data.platform.manager.model
 
 import android.os.Parcelable
 import androidx.credentials.CredentialManager
+import com.bitwarden.ui.platform.model.ShareData
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.model.TotpData
 import kotlinx.parcelize.Parcelize
 
@@ -30,7 +30,7 @@ sealed class SpecialCircumstance : Parcelable {
      */
     @Parcelize
     data class ShareNewSend(
-        val data: IntentManager.ShareData,
+        val data: ShareData,
         val shouldFinishWhenComplete: Boolean,
     ) : SpecialCircumstance()
 

@@ -13,6 +13,7 @@ import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.model.ShareData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
@@ -449,7 +450,7 @@ class MainViewModelTest : BaseViewModelTest() {
     fun `on ReceiveFirstIntent with share data should set the special circumstance to ShareNewSend`() {
         val viewModel = createViewModel()
         val mockIntent = createMockIntent()
-        val shareData = mockk<IntentManager.ShareData>()
+        val shareData = mockk<ShareData>()
         every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
 
         viewModel.trySendAction(
@@ -850,7 +851,7 @@ class MainViewModelTest : BaseViewModelTest() {
     fun `on ReceiveNewIntent with share data should set the special circumstance to ShareNewSend`() {
         val viewModel = createViewModel()
         val mockIntent = createMockIntent()
-        val shareData = mockk<IntentManager.ShareData>()
+        val shareData = mockk<ShareData>()
         every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
 
         viewModel.trySendAction(

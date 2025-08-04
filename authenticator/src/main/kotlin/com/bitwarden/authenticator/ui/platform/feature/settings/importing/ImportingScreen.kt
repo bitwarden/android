@@ -38,6 +38,7 @@ import com.bitwarden.authenticator.ui.platform.composition.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import kotlinx.collections.immutable.toImmutableList
@@ -54,7 +55,7 @@ fun ImportingScreen(
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val importLocationReceive: (IntentManager.FileData) -> Unit = remember {
+    val importLocationReceive: (FileData) -> Unit = remember {
         {
             viewModel.trySendAction(ImportAction.ImportLocationReceive(it))
         }
