@@ -109,6 +109,7 @@ import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockDisplayItemForCipher
+import com.x8bit.bitwarden.ui.vault.feature.vault.VaultAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
@@ -1034,6 +1035,44 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     id = "mock",
                     sendType = SendItemType.FILE,
                 ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `ItemClick should show alert if ItemType is DecryptionError`() = runTest {
+        val viewModel = createVaultItemListingViewModel()
+        val itemId = "54321"
+        val itemType = VaultItemListingState.DisplayItem.ItemType.DecryptionError
+
+        viewModel.trySendAction(VaultItemListingsAction.ItemClick(itemId, itemType))
+
+        assertEquals(
+            createVaultItemListingState().copy(
+                dialogState = VaultItemListingState.DialogState.CipherDecryptionError(
+                    title = BitwardenString.decryption_error.asText(),
+                    message = BitwardenString
+                        .bitwarden_could_not_decrypt_this_vault_item_description_long.asText(),
+                    selectedCipherId = itemId,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `on ShareCipherDecryptionErrorClick should send ShowShareSheet`() = runTest {
+        val viewModel = createVaultItemListingViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                action = VaultItemListingsAction.ShareCipherDecryptionErrorClick(
+                    selectedCipherId = "1",
+                ),
+            )
+            assertEquals(
+                VaultItemListingEvent.ShowShareSheet("1"),
                 awaitItem(),
             )
         }
@@ -5014,8 +5053,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 title = BitwardenString.an_error_has_occurred.asText(),
                 message =
                     BitwardenString
-                    .credential_operation_failed_because_user_verification_was_cancelled
-                    .asText(),
+                        .credential_operation_failed_because_user_verification_was_cancelled
+                        .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )

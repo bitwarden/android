@@ -65,6 +65,7 @@ import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
+import com.x8bit.bitwarden.ui.vault.feature.vault.VaultAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
@@ -2345,6 +2346,96 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
                     message = BitwardenString.passkey_operation_failed_because_the_browser_is_not_trusted
                         .asText(),
                 ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `cipher decryption error dialog should be shown or hidden according to the state`() {
+        val errorTitle = "Decryption error"
+        val errorMessage =
+            "Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss."
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithText(errorTitle)
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(errorMessage)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.CipherDecryptionError(
+                    title = errorTitle.asText(),
+                    message = errorMessage.asText(),
+                    selectedCipherId = "1",
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(errorTitle)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(errorMessage)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `share and copy button click on the CipherDecryptionError screen should send ShareCipherDecryptionErrorClick`() {
+        val errorTitle = "Decryption error"
+        val errorMessage =
+            "Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss."
+        val shareAndCopyText = "Copy error report"
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.CipherDecryptionError(
+                    title = errorTitle.asText(),
+                    message = errorMessage.asText(),
+                    selectedCipherId = "1",
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(shareAndCopyText)
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.ShareCipherDecryptionErrorClick("1"),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `close button click on the CipherDecryptionError screen should send DialogDismiss`() {
+        val errorTitle = "Decryption error"
+        val errorMessage =
+            "Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss."
+        val closeText = "Close"
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.CipherDecryptionError(
+                    title = errorTitle.asText(),
+                    message = errorMessage.asText(),
+                    selectedCipherId = "1",
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(closeText)
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissDialogClick,
             )
         }
     }
