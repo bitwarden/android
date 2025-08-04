@@ -478,6 +478,11 @@ jobs:
     with:
       apk_filename: com.x8bit.bitwarden.apk
       test_apk_filename: com.x8bit.bitwarden-test.apk
+    permissions:
+      actions: read
+      checks: write
+      contents: read
+      id-token: write
 
   publish_fdroid:
     name: Publish F-Droid artifacts
