@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.attachments.handlers
 
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.bitwarden.ui.platform.model.FileData
 import com.x8bit.bitwarden.ui.vault.feature.attachments.AttachmentsAction
 import com.x8bit.bitwarden.ui.vault.feature.attachments.AttachmentsViewModel
 
@@ -11,7 +11,7 @@ data class AttachmentsHandlers(
     val onBackClick: () -> Unit,
     val onSaveClick: () -> Unit,
     val onChooseFileClick: () -> Unit,
-    val onFileChoose: (IntentManager.FileData) -> Unit,
+    val onFileChoose: (FileData) -> Unit,
     val onDeleteClick: (attachmentId: String) -> Unit,
     val onDismissRequest: () -> Unit,
 ) {

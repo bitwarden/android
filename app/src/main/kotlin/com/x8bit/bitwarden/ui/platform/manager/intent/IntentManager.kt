@@ -8,6 +8,7 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import com.bitwarden.ui.platform.model.FileData
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import kotlinx.parcelize.Parcelize
 
@@ -83,11 +84,6 @@ interface IntentManager {
     fun getFileDataFromActivityResult(activityResult: ActivityResult): FileData?
 
     /**
-     * Processes the [intent] and attempts to get the relevant file data from it.
-     */
-    fun getFileDataFromIntent(intent: Intent): FileData?
-
-    /**
      * Processes the [intent] and attempts to derive [ShareData] information from it.
      */
     fun getShareDataFromIntent(intent: Intent): ShareData?
@@ -106,16 +102,6 @@ interface IntentManager {
      * Open the default email app on device.
      */
     fun startDefaultEmailApplication()
-
-    /**
-     * Represents file information.
-     */
-    @Parcelize
-    data class FileData(
-        val fileName: String,
-        val uri: Uri,
-        val sizeBytes: Long,
-    ) : Parcelable
 
     /**
      * Represents data for a share request coming from outside the app.
