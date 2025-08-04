@@ -473,7 +473,24 @@ class VaultItemListingDataExtensionsTest {
             decryptCipherListResult = createMockDecryptCipherListResult(
                 number = 1,
                 successes = cipherViewList,
-                failures = listOf(createMockSdkCipher(number = 5)),
+                failures = listOf(
+                    createMockSdkCipher(number = 5).copy(
+                        deletedDate = null,
+                        folderId = "mockId-1",
+                        favorite = true,
+                    ),
+                    createMockSdkCipher(number = 6).copy(
+                        deletedDate = null,
+                        folderId = null,
+                    ),
+                    createMockSdkCipher(number = 7).copy(
+                        deletedDate = null,
+                        folderId = "mockId-1",
+                    ),
+                    createMockSdkCipher(number = 8).copy(
+                        folderId = "mockId-1",
+                    ),
+                ),
             ),
             collectionViewList = listOf(),
             folderViewList = listOf(),
@@ -495,6 +512,8 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ViewState.Content(
                 displayCollectionList = emptyList(),
                 displayItemList = listOf(
+                    createMockDisplayItemForDecryptionError(number = 5),
+                    createMockDisplayItemForDecryptionError(number = 7),
                     createMockDisplayItemForCipher(
                         number = 1,
                         cipherType = CipherType.LOGIN,

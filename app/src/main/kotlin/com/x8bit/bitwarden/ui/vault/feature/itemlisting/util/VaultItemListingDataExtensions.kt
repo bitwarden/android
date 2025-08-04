@@ -445,7 +445,7 @@ private fun CipherListView.toDisplayItemDecryptionError(): VaultItemListingState
         title = name,
         titleTestTag = "CipherNameLabel",
         secondSubtitle = null,
-        secondSubtitleTestTag = "",
+        secondSubtitleTestTag = null,
         subtitle = null,
         subtitleTestTag = "",
         iconData = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
