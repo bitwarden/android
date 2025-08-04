@@ -911,7 +911,7 @@ class AuthRepositoryTest {
 
         val result = repository.refreshAccessTokenSynchronously(USER_ID_1)
 
-        assertEquals(REFRESH_TOKEN_RESPONSE_JSON.asSuccess(), result)
+        assertEquals(REFRESH_TOKEN_RESPONSE_JSON.accessToken.asSuccess(), result)
         fakeAuthDiskSource.assertAccountTokens(
             userId = USER_ID_1,
             accountTokens = updatedAccountTokens,
@@ -6959,7 +6959,7 @@ class AuthRepositoryTest {
             accessCode = "accessCode",
             fingerprint = "fingerprint",
         )
-        private val REFRESH_TOKEN_RESPONSE_JSON = RefreshTokenResponseJson(
+        private val REFRESH_TOKEN_RESPONSE_JSON = RefreshTokenResponseJson.Success(
             accessToken = ACCESS_TOKEN_2,
             expiresIn = 3600,
             refreshToken = REFRESH_TOKEN_2,

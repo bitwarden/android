@@ -4,24 +4,40 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Models the response body from the refresh token request.
- *
- * @property accessToken The new access token.
- * @property expiresIn When the new [accessToken] expires.
- * @property refreshToken The new refresh token.
- * @property tokenType The type of token the new [accessToken] is.
+ * Represents the JSON response from refreshing the access token.
  */
-@Serializable
-data class RefreshTokenResponseJson(
-    @SerialName("access_token")
-    val accessToken: String,
+sealed class RefreshTokenResponseJson {
+    /**
+     * Models a successful response body from the refresh token request.
+     *
+     * @property accessToken The new access token.
+     * @property expiresIn When the new [accessToken] expires.
+     * @property refreshToken The new refresh token.
+     * @property tokenType The type of token the new [accessToken] is.
+     */
+    @Serializable
+    data class Success(
+        @SerialName("access_token")
+        val accessToken: String,
 
-    @SerialName("expires_in")
-    val expiresIn: Int,
+        @SerialName("expires_in")
+        val expiresIn: Int,
 
-    @SerialName("refresh_token")
-    val refreshToken: String,
+        @SerialName("refresh_token")
+        val refreshToken: String,
 
-    @SerialName("token_type")
-    val tokenType: String,
-)
+        @SerialName("token_type")
+        val tokenType: String,
+    ) : RefreshTokenResponseJson()
+
+    /**
+     * Models a failure response body from the refresh token request.
+     */
+    @Serializable
+    data class Error(
+        @SerialName("error")
+        val error: String,
+    ) : RefreshTokenResponseJson() {
+        val isInvalidGrant: Boolean get() = error == "invalid_grant"
+    }
+}
