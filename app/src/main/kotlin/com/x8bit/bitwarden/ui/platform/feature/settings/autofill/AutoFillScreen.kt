@@ -466,15 +466,7 @@ private fun BuildAdvancedMatchDetectionWarning(
     onDialogConfirm: () -> Unit,
     onDialogDismiss: () -> Unit,
 ) {
-    val descriptionStringResId = when (pendingOption) {
-        UriMatchType.STARTS_WITH -> BitwardenString.selected_matching_option_is_an_advanced_option
-        UriMatchType.REGULAR_EXPRESSION ->
-            BitwardenString.selected_matching_option_is_an_advanced_option_if_used_incorrectly
-
-        else -> {
-            return
-        }
-    }
+    val descriptionStringResId = getAdvancedMatchingWarningResId(pendingOption)
 
     BitwardenTwoButtonDialog(
         title = stringResource(
@@ -508,6 +500,7 @@ private fun UriMatchSelectionButton(
         )
 
     if (selectedUriMatchType.isAdvancedMatching()) {
+        val descriptionStringResId = getAdvancedMatchingWarningResId(selectedUriMatchType)
         supportingAnnotatedString = supportingAnnotatedString
             .plus(
                 AnnotatedString("\n")
@@ -522,7 +515,7 @@ private fun UriMatchSelectionButton(
                     )
                     .plus(
                         annotatedStringResource(
-                            id = BitwardenString.selected_matching_option_is_an_advanced_option,
+                            id = descriptionStringResId,
                             args = arrayOf(
                                 selectedUriMatchType
                                     .displayLabel
@@ -575,4 +568,15 @@ private fun BuildLearnMoreAboutMatchDetectionDialog(
         onDismissClick = onDialogDismiss,
         onDismissRequest = onDialogDismiss,
     )
+}
+
+private fun getAdvancedMatchingWarningResId(matchType: UriMatchType): Int {
+    return when (matchType) {
+        UriMatchType.STARTS_WITH -> BitwardenString.selected_matching_option_is_an_advanced_option
+        UriMatchType.REGULAR_EXPRESSION ->
+            BitwardenString.selected_matching_option_is_an_advanced_option_if_used_incorrectly
+
+        // Not expected
+        else -> BitwardenString.selected_matching_option_is_an_advanced_option
+    }
 }
