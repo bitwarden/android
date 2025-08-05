@@ -2,6 +2,7 @@ package com.bitwarden.ui.platform.components.button
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -24,7 +25,6 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.role
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -52,7 +52,7 @@ fun BitwardenTextSelectionButton(
     cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    supportingText: AnnotatedString? = null,
+    supportingText: String? = null,
     tooltip: TooltipData? = null,
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
@@ -60,14 +60,60 @@ fun BitwardenTextSelectionButton(
     actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
     actions: @Composable RowScope.() -> Unit = {},
 ) {
+
+    BitwardenTextSelectionButton(
+        label = label,
+        selectedOption = selectedOption,
+        onClick = onClick,
+        cardStyle = cardStyle,
+        modifier = modifier,
+        enabled = enabled,
+        tooltip = tooltip,
+        insets = insets,
+        textFieldTestTag = textFieldTestTag,
+        semanticRole = semanticRole,
+        actionsPadding = actionsPadding,
+        actions = actions,
+        supportingContent = supportingText?.let {
+            {
+                Text(
+                    text = it,
+                    style = BitwardenTheme.typography.bodySmall,
+                    color = BitwardenTheme.colorScheme.text.secondary,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        },
+    )
+}
+
+/**
+ * A button which uses a read-only text field for layout and style purposes,
+ * receiving the supportingContent
+ */
+@Suppress("LongMethod")
+@Composable
+fun BitwardenTextSelectionButton(
+    label: String,
+    selectedOption: String?,
+    onClick: () -> Unit,
+    cardStyle: CardStyle?,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    tooltip: TooltipData? = null,
+    insets: PaddingValues = PaddingValues(),
+    textFieldTestTag: String? = null,
+    semanticRole: Role = Role.Button,
+    actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
+    supportingContent: @Composable (ColumnScope.() -> Unit)?,
+    actions: @Composable RowScope.() -> Unit = {},
+) {
     Column(
         modifier = modifier
             .defaultMinSize(minHeight = 60.dp)
             .clearAndSetSemantics {
                 role = semanticRole
-                contentDescription = supportingText
-                    ?.let { "$selectedOption. $label. $it" }
-                    ?: "$selectedOption. $label"
+                contentDescription = "$selectedOption. $label"
                 customActions = persistentListOfNotNull(
                     tooltip?.let {
                         CustomAccessibilityAction(
@@ -133,7 +179,7 @@ fun BitwardenTextSelectionButton(
                 .nullableTestTag(tag = textFieldTestTag)
                 .fillMaxWidth(),
         )
-        supportingText
+        supportingContent
             ?.let { content ->
                 Spacer(modifier = Modifier.height(height = 6.dp))
                 BitwardenHorizontalDivider(
@@ -146,14 +192,7 @@ fun BitwardenTextSelectionButton(
                     modifier = Modifier
                         .defaultMinSize(minHeight = 48.dp)
                         .padding(vertical = 12.dp, horizontal = 16.dp),
-                    content = {
-                        Text(
-                            text = content,
-                            style = BitwardenTheme.typography.bodySmall,
-                            color = BitwardenTheme.colorScheme.text.secondary,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                    },
+                    content = content,
                 )
             }
             ?: Spacer(modifier = Modifier.height(height = cardStyle?.let { 6.dp } ?: 0.dp))

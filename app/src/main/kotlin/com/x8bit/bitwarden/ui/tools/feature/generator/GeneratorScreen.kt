@@ -39,7 +39,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
-import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
@@ -1169,7 +1168,7 @@ private fun UsernameOptionsItem(
             onSubStateOptionClicked(selectedOptionId)
         },
         supportingText = currentSubState.selectedType.supportingStringResId?.let {
-            annotatedStringResource(id = it)
+            stringResource(id = it)
         },
         tooltip = TooltipData(
             onClick = usernameTypeHandlers.onUsernameTooltipClicked,

@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
-import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
@@ -257,7 +256,7 @@ private fun ClearClipboardFrequencyRow(
 ) {
     BitwardenMultiSelectButton(
         label = stringResource(id = BitwardenString.clear_clipboard),
-        supportingText = annotatedStringResource(id = BitwardenString.clear_clipboard_description),
+        supportingText = stringResource(id = BitwardenString.clear_clipboard_description),
         options = ClearClipboardFrequency.entries.map { it.displayLabel() }.toImmutableList(),
         selectedOption = currentSelection.displayLabel(),
         onOptionSelected = { selectedFrequency ->

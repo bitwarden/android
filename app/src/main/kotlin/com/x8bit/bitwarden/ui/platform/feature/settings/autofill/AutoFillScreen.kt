@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -342,7 +343,7 @@ private fun FillStyleSelector(
 ) {
     BitwardenMultiSelectButton(
         label = stringResource(id = BitwardenString.display_autofill_suggestions),
-        supportingText = annotatedStringResource(
+        supportingText = stringResource(
             id = BitwardenString.use_inline_autofill_explanation_long,
         ),
         options = AutofillStyle.entries.map { it.label() }.toImmutableList(),
@@ -492,44 +493,7 @@ private fun UriMatchSelectionButton(
     selectedUriMatchType: UriMatchType,
     onOptionSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
-    resources: Resources = LocalContext.current.resources,
 ) {
-    var supportingAnnotatedString =
-        annotatedStringResource(
-            id = BitwardenString.default_uri_match_detection_description,
-        )
-
-    if (selectedUriMatchType.isAdvancedMatching()) {
-        val descriptionStringResId = getAdvancedMatchingWarningResId(selectedUriMatchType)
-        supportingAnnotatedString = supportingAnnotatedString
-            .plus(
-                AnnotatedString("\n")
-                    .plus(
-                        annotatedStringResource(
-                            id = BitwardenString.warning_bold,
-                            emphasisHighlightStyle = spanStyleOf(
-                                textStyle = BitwardenTheme.typography.bodyMediumEmphasis,
-                                color = BitwardenTheme.colorScheme.text.secondary,
-                            ),
-                        ),
-                    )
-                    .plus(
-                        annotatedStringResource(
-                            id = descriptionStringResId,
-                            args = arrayOf(
-                                selectedUriMatchType
-                                    .displayLabel
-                                    .toString(resources),
-                            ),
-                            style = spanStyleOf(
-                                textStyle = BitwardenTheme.typography.bodySmall,
-                                color = BitwardenTheme.colorScheme.text.secondary,
-                            ),
-                        ),
-                    ),
-            )
-    }
-
     BitwardenMultiSelectButton(
         label = stringResource(id = BitwardenString.default_uri_match_detection),
         options = UriMatchType.entries
@@ -544,8 +508,15 @@ private fun UriMatchSelectionButton(
             .toImmutableList(),
         sectionTestTag = "AdvancedOptionsSection",
         onOptionSelected = onOptionSelected,
-        supportingText = supportingAnnotatedString,
         cardStyle = CardStyle.Full,
+        supportingContent = {
+            Text(
+                text = buildSupportingAnnotatedTextForMatchDetection(selectedUriMatchType),
+                style = BitwardenTheme.typography.bodySmall,
+                color = BitwardenTheme.colorScheme.text.secondary,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        },
         modifier = modifier,
     )
 }
@@ -579,4 +550,47 @@ private fun getAdvancedMatchingWarningResId(matchType: UriMatchType): Int {
         // Not expected
         else -> BitwardenString.selected_matching_option_is_an_advanced_option
     }
+}
+
+@Composable
+private fun buildSupportingAnnotatedTextForMatchDetection(
+    uriMatchType: UriMatchType,
+    resources: Resources = LocalContext.current.resources,
+): AnnotatedString {
+    var supportingAnnotatedString =
+        annotatedStringResource(
+            id = BitwardenString.default_uri_match_detection_description,
+        )
+
+    if (uriMatchType.isAdvancedMatching()) {
+        val descriptionStringResId = getAdvancedMatchingWarningResId(uriMatchType)
+        supportingAnnotatedString = supportingAnnotatedString
+            .plus(
+                AnnotatedString("\n")
+                    .plus(
+                        annotatedStringResource(
+                            id = BitwardenString.warning_bold,
+                            emphasisHighlightStyle = spanStyleOf(
+                                textStyle = BitwardenTheme.typography.bodyMediumEmphasis,
+                                color = BitwardenTheme.colorScheme.text.secondary,
+                            ),
+                        ),
+                    )
+                    .plus(
+                        annotatedStringResource(
+                            id = descriptionStringResId,
+                            args = arrayOf(
+                                uriMatchType
+                                    .displayLabel
+                                    .toString(resources),
+                            ),
+                            style = spanStyleOf(
+                                textStyle = BitwardenTheme.typography.bodySmall,
+                                color = BitwardenTheme.colorScheme.text.secondary,
+                            ),
+                        ),
+                    ),
+            )
+    }
+    return supportingAnnotatedString
 }

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.components.dropdown
 
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +14,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.nullableTestTag
@@ -63,7 +63,84 @@ fun BitwardenMultiSelectButton(
     cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
-    supportingText: AnnotatedString? = null,
+    supportingText: String? = null,
+    tooltip: TooltipData? = null,
+    insets: PaddingValues = PaddingValues(),
+    textFieldTestTag: String? = null,
+    actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
+    sectionTitle: String? = null,
+    sectionOptions: ImmutableList<String>? = null,
+    sectionTestTag: String? = null,
+    actions: @Composable RowScope.() -> Unit = {},
+) {
+    BitwardenMultiSelectButton(
+        label = label,
+        options = options,
+        selectedOption = selectedOption,
+        onOptionSelected = onOptionSelected,
+        cardStyle = cardStyle,
+        modifier = modifier,
+        isEnabled = isEnabled,
+        supportingContent = supportingText?.let {
+            {
+                Text(
+                    text = it,
+                    style = BitwardenTheme.typography.bodySmall,
+                    color = BitwardenTheme.colorScheme.text.secondary,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        },
+        tooltip = tooltip,
+        insets = insets,
+        textFieldTestTag = textFieldTestTag,
+        actionsPadding = actionsPadding,
+        sectionTitle = sectionTitle,
+        sectionOptions = sectionOptions,
+        sectionTestTag = sectionTestTag,
+        actions = actions,
+    )
+}
+
+/**
+ * A custom composable representing a multi-select button.
+ *
+ * This composable displays an [OutlinedTextField] with a dropdown icon as a trailing icon.
+ * When the field is clicked, a dropdown menu appears with a list of options to select from.
+ *
+ * @param label The descriptive text label for the [OutlinedTextField].
+ * @param options A list of strings representing the available options in the dialog.
+ * @param selectedOption The currently selected option that is displayed in the [OutlinedTextField]
+ * (or `null` if no option is selected).
+ * @param onOptionSelected A lambda that is invoked when an option
+ * is selected from the dropdown menu.
+ * @param isEnabled Whether or not the button is enabled.
+ * @param cardStyle Indicates the type of card style to be applied.
+ * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
+ * @param supportingContent An optional supporting content composable that will appear below the
+ * text input.
+ * @param supportingContentPadding The padding to be placed on the [supportingContent].
+ * @param tooltip A nullable [TooltipData], representing the tooltip icon.
+ * @param insets Inner padding to be applied withing the card.
+ * @param textFieldTestTag The optional test tag associated with the inner text field.
+ * @param actionsPadding Padding to be applied to the [actions] block.
+ * @param sectionTitle An optional title for a secondary section of options in the selection dialog.
+ * @param sectionOptions An optional list of strings representing options in a section.
+ * @param sectionTestTag An optional test tag to be applied to the [sectionTitle] Text composable
+ * @param actions A lambda containing the set of actions (usually icons or similar) to display
+ * in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
+ * defining the layout of the actions.
+ */
+@Composable
+fun BitwardenMultiSelectButton(
+    label: String,
+    options: ImmutableList<String>,
+    selectedOption: String?,
+    onOptionSelected: (String) -> Unit,
+    cardStyle: CardStyle?,
+    modifier: Modifier = Modifier,
+    isEnabled: Boolean = true,
+    supportingContent: @Composable (ColumnScope.() -> Unit)?,
     tooltip: TooltipData? = null,
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
@@ -83,7 +160,7 @@ fun BitwardenMultiSelectButton(
         },
         cardStyle = cardStyle,
         enabled = isEnabled,
-        supportingText = supportingText,
+        supportingContent = supportingContent,
         tooltip = tooltip,
         insets = insets,
         textFieldTestTag = textFieldTestTag,

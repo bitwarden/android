@@ -34,7 +34,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.ui.platform.base.util.EventsEffect
-import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
@@ -653,7 +652,7 @@ private fun SessionTimeoutActionRow(
                 onVaultTimeoutActionSelect(selectedAction)
             }
         },
-        supportingText = annotatedStringResource(
+        supportingText = stringResource(
             id = BitwardenString.set_up_an_unlock_option_to_change_your_vault_timeout_action,
         )
             .takeUnless { isEnabled },

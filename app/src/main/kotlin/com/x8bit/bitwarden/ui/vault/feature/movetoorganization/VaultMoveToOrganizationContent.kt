@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -53,7 +52,7 @@ fun VaultMoveToOrganizationContent(
                                 .first { it.name == selectedString },
                         )
                     },
-                    supportingText = annotatedStringResource(id = BitwardenString.move_to_org_desc),
+                    supportingText = stringResource(id = BitwardenString.move_to_org_desc),
                     cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .testTag("OrganizationListDropdown")
