@@ -39,11 +39,12 @@ internal class RefreshAuthenticator : Authenticator {
                     ?.fold(
                         onFailure = { null },
                         onSuccess = { newAccessToken ->
-                            response.request
+                            response
+                                .request
                                 .newBuilder()
                                 .header(
                                     name = HEADER_KEY_AUTHORIZATION,
-                                    value = HEADER_VALUE_BEARER_PREFIX + newAccessToken.accessToken,
+                                    value = "$HEADER_VALUE_BEARER_PREFIX$newAccessToken",
                                 )
                                 .build()
                         },

@@ -65,7 +65,7 @@ internal interface UnauthenticatedIdentityApi {
         @Field(value = "client_id") clientId: String,
         @Field(value = "refresh_token") refreshToken: String,
         @Field(value = "grant_type") grantType: String,
-    ): Call<RefreshTokenResponseJson>
+    ): Call<RefreshTokenResponseJson.Success>
 
     @POST("/accounts/prelogin")
     suspend fun preLogin(@Body body: PreLoginRequestJson): NetworkResult<PreLoginResponseJson>

@@ -130,6 +130,15 @@ internal class IdentityServiceImpl(
         )
         .executeForNetworkResult()
         .toResult()
+        .recoverCatching { throwable ->
+            throwable
+                .toBitwardenError()
+                .parseErrorBodyOrNull<RefreshTokenResponseJson.Error>(
+                    code = NetworkErrorCode.BAD_REQUEST,
+                    json = json,
+                )
+                ?: throw throwable
+        }
 
     override suspend fun registerFinish(
         body: RegisterFinishRequestJson,
