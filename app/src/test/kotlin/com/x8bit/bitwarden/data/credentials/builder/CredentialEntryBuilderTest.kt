@@ -12,12 +12,12 @@ import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
+import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.util.mockBuilder
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
@@ -36,23 +36,19 @@ class CredentialEntryBuilderTest {
     private val mockContext = mockk<Context>()
     private val mockGetPublicKeyCredentialIntent = mockk<PendingIntent>(relaxed = true)
     private val mockGetPasswordCredentialIntent = mockk<PendingIntent>(relaxed = true)
-    private val mockIntentManager = mockk<IntentManager> {
+    private val mockPendingIntentManager = mockk<CredentialManagerPendingIntentManager> {
         every {
             createFido2GetCredentialPendingIntent(
-                action = any(),
                 userId = any(),
                 cipherId = any(),
                 credentialId = any(),
-                requestCode = any(),
                 isUserVerified = any(),
             )
         } returns mockGetPublicKeyCredentialIntent
         every {
             createPasswordGetCredentialPendingIntent(
-                action = any(),
                 userId = any(),
                 cipherId = any(),
-                requestCode = any(),
                 isUserVerified = any(),
             )
         } returns mockGetPasswordCredentialIntent
@@ -62,7 +58,7 @@ class CredentialEntryBuilderTest {
     private val mockBeginGetPasswordOption = mockk<BeginGetPasswordOption>()
     private val credentialEntryBuilder = CredentialEntryBuilderImpl(
         context = mockContext,
-        intentManager = mockIntentManager,
+        pendingIntentManager = mockPendingIntentManager,
         biometricsEncryptionManager = mockBiometricsEncryptionManager,
     )
     private val mockPublicKeyCredentialEntry = mockk<PublicKeyCredentialEntry>(relaxed = true)
@@ -155,12 +151,10 @@ class CredentialEntryBuilderTest {
             assertTrue(result.isNotEmpty())
 
             verify {
-                mockIntentManager.createFido2GetCredentialPendingIntent(
-                    action = "com.x8bit.bitwarden.credentials.ACTION_GET_PASSKEY",
+                mockPendingIntentManager.createFido2GetCredentialPendingIntent(
                     userId = "userId",
                     cipherId = "mockCipherId-1",
                     credentialId = fido2AutofillViews.first().credentialId.toString(),
-                    requestCode = any(),
                     isUserVerified = false,
                 )
 
@@ -326,11 +320,9 @@ class CredentialEntryBuilderTest {
             assertTrue(result.isNotEmpty())
 
             verify {
-                mockIntentManager.createPasswordGetCredentialPendingIntent(
-                    action = "com.x8bit.bitwarden.credentials.ACTION_GET_PASSWORD",
+                mockPendingIntentManager.createPasswordGetCredentialPendingIntent(
                     userId = "userId",
                     cipherId = "mockId-1",
-                    requestCode = any(),
                     isUserVerified = false,
                 )
 

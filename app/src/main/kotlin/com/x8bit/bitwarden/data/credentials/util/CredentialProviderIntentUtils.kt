@@ -8,14 +8,14 @@ import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.x8bit.bitwarden.data.credentials.manager.EXTRA_KEY_CIPHER_ID
+import com.x8bit.bitwarden.data.credentials.manager.EXTRA_KEY_CREDENTIAL_ID
+import com.x8bit.bitwarden.data.credentials.manager.EXTRA_KEY_USER_ID
+import com.x8bit.bitwarden.data.credentials.manager.EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
-import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
-import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CREDENTIAL_ID
-import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_USER_ID
-import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK
 
 /**
  * Checks if this [Intent] contains a [CreateCredentialRequest] related to an ongoing
