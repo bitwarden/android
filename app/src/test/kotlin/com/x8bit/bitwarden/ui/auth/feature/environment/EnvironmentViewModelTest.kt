@@ -7,6 +7,7 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
@@ -15,7 +16,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -423,7 +423,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     fun `ImportCertificateFilePickerResultReceive should show SetCertificateData dialog`() =
         runTest {
             val viewModel = createViewModel()
-            val mockFileData = mockk<IntentManager.FileData>()
+            val mockFileData = mockk<FileData>()
             viewModel.trySendAction(
                 EnvironmentAction.ImportCertificateFilePickerResultReceive(
                     certificateFileData = mockFileData,
@@ -587,7 +587,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel()
             val mockUri = mockk<Uri>()
-            val mockFileData = IntentManager.FileData(
+            val mockFileData = FileData(
                 fileName = "mockFileName",
                 uri = mockUri,
                 sizeBytes = 0,
@@ -708,7 +708,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel()
             val mockUri = mockk<Uri>()
-            val mockFileData = IntentManager.FileData(
+            val mockFileData = FileData(
                 fileName = "mockFileName",
                 uri = mockUri,
                 sizeBytes = 0,
@@ -740,7 +740,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     fun `ConfirmOverwriteCertificateClick should clear dialog and import certificate`() = runTest {
         val viewModel = createViewModel()
         val mockUri = mockk<Uri>()
-        val mockFileData = IntentManager.FileData(
+        val mockFileData = FileData(
             fileName = "mockFileName",
             uri = mockUri,
             sizeBytes = 0,
