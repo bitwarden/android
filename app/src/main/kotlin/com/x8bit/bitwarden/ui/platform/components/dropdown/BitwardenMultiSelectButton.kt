@@ -68,9 +68,7 @@ fun BitwardenMultiSelectButton(
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
     actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
-    sectionTitle: String? = null,
-    sectionOptions: ImmutableList<String>? = null,
-    sectionTestTag: String? = null,
+    sectionOptions: ImmutableList<MultiSelectOption>? = null,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     BitwardenMultiSelectButton(
@@ -95,9 +93,7 @@ fun BitwardenMultiSelectButton(
         insets = insets,
         textFieldTestTag = textFieldTestTag,
         actionsPadding = actionsPadding,
-        sectionTitle = sectionTitle,
         sectionOptions = sectionOptions,
-        sectionTestTag = sectionTestTag,
         actions = actions,
     )
 }
@@ -145,9 +141,7 @@ fun BitwardenMultiSelectButton(
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
     actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
-    sectionTitle: String? = null,
-    sectionOptions: ImmutableList<String>? = null,
-    sectionTestTag: String? = null,
+    sectionOptions: ImmutableList<MultiSelectOption>? = null,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
@@ -178,9 +172,7 @@ fun BitwardenMultiSelectButton(
             BitwardenMultiSelectDialogContent(
                 options = options,
                 selectedOption = selectedOption,
-                sectionTitle = sectionTitle,
                 sectionOptions = sectionOptions,
-                sectionTestTag = sectionTestTag,
                 onOptionSelected = { selectedItem ->
                     shouldShowDialog = false
                     onOptionSelected(selectedItem)
@@ -200,18 +192,14 @@ fun BitwardenMultiSelectButton(
  * (or `null` if no option is selected).
  * @param onOptionSelected A lambda that is invoked when an option
  * is selected from the dropdown menu.
- * @param sectionTitle An optional title for a secondary section of options in the selection dialog.
- * @param sectionOptions An optional list of strings representing options in a section.
- * @param sectionTestTag An optional test tag to be applied to the [sectionTitle] Text composable
+ * @param sectionOptions An optional list of [MultiSelectOption] representing options in a section.
  */
 @Composable
 fun BitwardenMultiSelectDialogContent(
     options: ImmutableList<String>,
     selectedOption: String?,
     onOptionSelected: (String) -> Unit,
-    sectionTitle: String? = null,
-    sectionOptions: ImmutableList<String>? = null,
-    sectionTestTag: String? = null,
+    sectionOptions: ImmutableList<MultiSelectOption>?,
 ) {
     options.forEach { optionString ->
         BitwardenSelectionRow(
@@ -223,24 +211,29 @@ fun BitwardenMultiSelectDialogContent(
         )
     }
 
-    if (sectionTitle != null && sectionOptions != null) {
-        Text(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-                .nullableTestTag(sectionTestTag),
-            text = sectionTitle,
-            color = BitwardenTheme.colorScheme.text.secondary,
-            style = BitwardenTheme.typography.titleSmall,
-        )
-        sectionOptions.forEach { optionString ->
-            BitwardenSelectionRow(
-                text = optionString.asText(),
-                isSelected = optionString == selectedOption,
-                onClick = {
-                    onOptionSelected(optionString)
-                },
-            )
+    sectionOptions?.forEach { option ->
+        when (option) {
+            is MultiSelectOption.Header -> {
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
+                        .nullableTestTag(option.testTag),
+                    text = option.title,
+                    color = BitwardenTheme.colorScheme.text.secondary,
+                    style = BitwardenTheme.typography.titleSmall,
+                )
+            }
+
+            is MultiSelectOption.Row -> {
+                BitwardenSelectionRow(
+                    text = option.title.asText(),
+                    isSelected = option.title == selectedOption,
+                    onClick = {
+                        onOptionSelected(option.title)
+                    },
+                )
+            }
         }
     }
 }
@@ -257,4 +250,36 @@ private fun BitwardenMultiSelectButton_preview() {
             cardStyle = CardStyle.Full,
         )
     }
+}
+
+/**
+ * Represents an option in a multi-select list, which can either be a header or a selectable row.
+ *
+ * This sealed class is used to define the structure of items within an optional section
+ * of a [BitwardenMultiSelectDialogContent].
+ */
+sealed class MultiSelectOption {
+    /**
+     * Represents a header item in a multi-select list.
+     *
+     * Headers are used to visually group related options within the list.
+     * They are not selectable.
+     *
+     * @param title The text to display for the header.
+     * @param testTag An optional test tag for UI testing purposes.
+     */
+    data class Header(
+        val title: String,
+        val testTag: String? = null,
+    ) : MultiSelectOption()
+
+    /**
+     * Represents a row item in a multi-select list.
+     * Should be preceded by a [Header] item.
+     *
+     * @param title The text to display for the header.
+     */
+    data class Row(
+        val title: String,
+    ) : MultiSelectOption()
 }

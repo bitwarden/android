@@ -20,9 +20,11 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialo
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectDialogContent
+import com.x8bit.bitwarden.ui.platform.components.dropdown.MultiSelectOption
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.isAdvancedMatching
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriMatchDisplayType
@@ -30,6 +32,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.util.displayLabel
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.isAdvancedMatching
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDisplayMatchType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toUriMatchType
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -124,15 +127,7 @@ fun VaultAddEditUriItem(
                             .invoke(),
                     )
                     .invoke(),
-                sectionTitle = stringResource(id = BitwardenString.advanced_options),
-                sectionOptions = UriMatchDisplayType
-                    .entries
-                    .filter { it.isAdvancedMatching() }
-                    .map {
-                        it.text.invoke()
-                    }
-                    .toImmutableList(),
-                sectionTestTag = "AdvancedOptionsSection",
+                sectionOptions = buildSubSectionsList(),
                 onOptionSelected = { selectedOption ->
                     shouldShowMatchDialog = false
 
@@ -253,4 +248,22 @@ private fun BuildLearnMoreAboutMatchDetectionDialog(
         onDismissClick = onDialogDismiss,
         onDismissRequest = onDialogDismiss,
     )
+}
+
+@Composable
+private fun buildSubSectionsList(): ImmutableList<MultiSelectOption>? {
+    return buildList {
+        val advancedOptions = UriMatchType.entries.filter { it.isAdvancedMatching() }
+        if (advancedOptions.isNotEmpty()) {
+            add(
+                MultiSelectOption.Header(
+                    title = stringResource(id = BitwardenString.advanced_options),
+                    testTag = "AdvancedOptionsSection",
+                ),
+            )
+            advancedOptions.forEach { uriMatchType ->
+                add(MultiSelectOption.Row(title = uriMatchType.displayLabel()))
+            }
+        }
+    }.toImmutableList()
 }

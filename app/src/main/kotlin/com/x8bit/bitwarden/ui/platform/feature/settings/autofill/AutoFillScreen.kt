@@ -50,6 +50,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.x8bit.bitwarden.ui.platform.components.dropdown.MultiSelectOption
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
@@ -494,6 +495,21 @@ private fun UriMatchSelectionButton(
     onOptionSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val sectionOptions = buildList {
+        val advancedOptions = UriMatchType.entries.filter { it.isAdvancedMatching() }
+        if (advancedOptions.isNotEmpty()) {
+            add(
+                MultiSelectOption.Header(
+                    title = stringResource(id = BitwardenString.advanced_options),
+                    testTag = "AdvancedOptionsSection",
+                ),
+            )
+            advancedOptions.forEach { uriMatchType ->
+                add(MultiSelectOption.Row(title = uriMatchType.displayLabel()))
+            }
+        }
+    }.toImmutableList()
+
     BitwardenMultiSelectButton(
         label = stringResource(id = BitwardenString.default_uri_match_detection),
         options = UriMatchType.entries
@@ -501,22 +517,10 @@ private fun UriMatchSelectionButton(
             .map { it.displayLabel() }
             .toImmutableList(),
         selectedOption = selectedUriMatchType.displayLabel(),
-        sectionTitle = stringResource(id = BitwardenString.advanced_options),
-        sectionOptions = UriMatchType.entries
-            .filter { it.isAdvancedMatching() }
-            .map { it.displayLabel() }
-            .toImmutableList(),
-        sectionTestTag = "AdvancedOptionsSection",
+        sectionOptions = sectionOptions,
         onOptionSelected = onOptionSelected,
         cardStyle = CardStyle.Full,
-        supportingContent = {
-            Text(
-                text = buildSupportingAnnotatedTextForMatchDetection(selectedUriMatchType),
-                style = BitwardenTheme.typography.bodySmall,
-                color = BitwardenTheme.colorScheme.text.secondary,
-                modifier = Modifier.fillMaxWidth(),
-            )
-        },
+        supportingContent = { buildSupportingAnnotatedTextForMatchDetection(selectedUriMatchType) },
         modifier = modifier,
     )
 }
@@ -556,7 +560,7 @@ private fun getAdvancedMatchingWarningResId(matchType: UriMatchType): Int {
 private fun buildSupportingAnnotatedTextForMatchDetection(
     uriMatchType: UriMatchType,
     resources: Resources = LocalContext.current.resources,
-): AnnotatedString {
+) {
     var supportingAnnotatedString =
         annotatedStringResource(
             id = BitwardenString.default_uri_match_detection_description,
@@ -592,5 +596,11 @@ private fun buildSupportingAnnotatedTextForMatchDetection(
                     ),
             )
     }
-    return supportingAnnotatedString
+
+    Text(
+        text = supportingAnnotatedString,
+        style = BitwardenTheme.typography.bodySmall,
+        color = BitwardenTheme.colorScheme.text.secondary,
+        modifier = Modifier.fillMaxWidth(),
+    )
 }
