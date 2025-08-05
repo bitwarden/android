@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
  *
  * @property accessToken The user's primary access token.
  * @property refreshToken The user's refresh token.
+ * @property expiresAtSec The time at which the token expires in epoch seconds.
  */
 @Serializable
 data class AccountTokensJson(
@@ -16,6 +17,9 @@ data class AccountTokensJson(
 
     @SerialName("refreshToken")
     val refreshToken: String?,
+
+    @SerialName("expiresAtSec")
+    val expiresAtSec: Long = Long.MAX_VALUE,
 ) {
     /**
      * Returns `true` if the user is logged in, `false otherwise.
