@@ -32,6 +32,8 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
+import com.bitwarden.ui.platform.components.card.BitwardenActionCard
+import com.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -39,8 +41,6 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
-import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
-import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton

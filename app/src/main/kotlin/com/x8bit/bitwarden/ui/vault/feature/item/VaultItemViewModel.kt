@@ -20,10 +20,8 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -75,7 +73,6 @@ class VaultItemViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
-    private val featureFlagManager: FeatureFlagManager,
     private val snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
     // We load the state from the savedStateHandle for testing purposes.
@@ -112,10 +109,6 @@ class VaultItemViewModel @Inject constructor(
             vaultRepository.collectionsStateFlow,
             vaultRepository.foldersStateFlow,
         ) { cipherViewState, userState, authCodeState, collectionsState, folderState ->
-            val restrictCipherItemDeletionEnabled = featureFlagManager
-                .getFeatureFlag(
-                    FlagKey.RestrictCipherItemDeletion,
-                )
             val totpCodeData = authCodeState.data?.let {
                 TotpCodeItemData(
                     periodSeconds = it.periodSeconds,
@@ -136,9 +129,7 @@ class VaultItemViewModel @Inject constructor(
                 }
                     .mapNullable {
                         val cipherView = cipherViewState.data
-                        val canDelete = if (restrictCipherItemDeletionEnabled &&
-                            cipherView?.permissions?.delete != null
-                        ) {
+                        val canDelete = if (cipherView?.permissions?.delete != null) {
                             cipherView.permissions?.delete == true
                         } else {
                             val needsManagePermission = cipherView
@@ -156,9 +147,7 @@ class VaultItemViewModel @Inject constructor(
                             )
                         }
 
-                        val canRestore = if (restrictCipherItemDeletionEnabled &&
-                            cipherView?.permissions?.restore != null
-                        ) {
+                        val canRestore = if (cipherView?.permissions?.restore != null) {
                             cipherView.permissions?.restore == true &&
                                 cipherView.deletedDate != null
                         } else {

@@ -36,7 +36,7 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -1007,7 +1007,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyTotpClick(
-                        totpCode = totpCode,
+                        cipherId = totpCode,
                         requiresPasswordReprompt = false,
                     ),
                 ),
@@ -1035,7 +1035,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyTotpClick(
-                        totpCode = totpCode,
+                        cipherId = totpCode,
                         requiresPasswordReprompt = false,
                     ),
                 ),

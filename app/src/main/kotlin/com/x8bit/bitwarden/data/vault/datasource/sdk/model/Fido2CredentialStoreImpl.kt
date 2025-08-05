@@ -5,8 +5,11 @@ import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.EncryptionContext
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.autofill.util.login
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
@@ -17,6 +20,8 @@ import timber.log.Timber
  */
 @OmitFromCoverage
 class Fido2CredentialStoreImpl(
+    private val authRepository: AuthRepository,
+    private val vaultSdkSource: VaultSdkSource,
     private val vaultRepository: VaultRepository,
 ) : Fido2CredentialStore {
 
@@ -79,18 +84,17 @@ class Fido2CredentialStoreImpl(
      * Save the provided [cred] to the users vault.
      */
     override suspend fun saveCredential(cred: EncryptionContext) {
-        vaultRepository.getCipher(cred.cipher.id.orEmpty())
-            .toCipherViewOrNull()
-            ?.let { cipherView ->
-                cipherView.id
-                    ?.let { cipherId ->
-                        vaultRepository.updateCipher(
-                            cipherId = cipherId,
-                            cipherView = cipherView,
-                        )
-                    }
-                    ?: vaultRepository.createCipher(cipherView = cipherView)
+        vaultSdkSource
+            .decryptCipher(
+                userId = authRepository.activeUserId ?: throw NoActiveUserException(),
+                cipher = cred.cipher,
+            )
+            .map { decryptedCipherView ->
+                decryptedCipherView.id
+                    ?.let { vaultRepository.updateCipher(it, decryptedCipherView) }
+                    ?: vaultRepository.createCipher(decryptedCipherView)
             }
+            .onFailure { throw it }
         }
 
     /**

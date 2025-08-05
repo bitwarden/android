@@ -10,7 +10,7 @@ import com.bitwarden.ui.util.asText
  * Represents the types of icons to be displayed with the send.
  */
 enum class SendStatusIcon(
-    @DrawableRes val iconRes: Int,
+    @field:DrawableRes val iconRes: Int,
     val contentDescription: Text,
     val testTag: String,
 ) {

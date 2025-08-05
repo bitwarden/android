@@ -8,7 +8,6 @@
     <string name="json_extension_formatted" translatable="false">.json (%1$s)</string>
 
     <!-- region Debug Menu -->
-    <string name="email_verification">Email Verification</string>
     <string name="feature_flags">Feature Flags:</string>
     <string name="debug_menu">Debug Menu</string>
     <string name="reset_values">Reset values</string>
@@ -19,7 +18,6 @@
     <string name="restart_onboarding_carousel_details">This will force the change to app state which will cause the first time carousel to show. The carousel will continue to show for any \"new\" account until a login is completed. May need to exit debug menu manually.</string>
     <string name="cipher_key_encryption">Cipher Key Encryption</string>
     <string name="reset_coach_mark_tour_status">Reset all coach mark tours</string>
-    <string name="restrict_item_deletion">Restrict item deletion</string>
     <string name="generate_crash">Generate crash</string>
     <string name="generate_error_report">Generate error report</string>
     <string name="error_reports">Error reports</string>

@@ -7,7 +7,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
  * Enumerated values to represent a create vault item option.
  */
 enum class CreateVaultItemType(
-    @StringRes val selectionText: Int,
+    @field:StringRes val selectionText: Int,
 ) {
     /**
      * A login cipher.

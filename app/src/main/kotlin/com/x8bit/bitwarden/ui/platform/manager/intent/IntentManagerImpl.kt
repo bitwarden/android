@@ -28,7 +28,6 @@ import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.BuildConfig
-import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import java.io.File
@@ -288,24 +287,6 @@ class IntentManagerImpl(
             addCategory(Intent.CATEGORY_OPENABLE)
             putExtra(Intent.EXTRA_TITLE, fileName)
         }
-
-    override fun createTileIntent(data: String): Intent {
-        return Intent(
-            context,
-            MainActivity::class.java,
-        )
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            .setData(data.toUri())
-    }
-
-    override fun createTilePendingIntent(requestCode: Int, tileIntent: Intent): PendingIntent {
-        return PendingIntent.getActivity(
-            context,
-            requestCode,
-            tileIntent,
-            PendingIntent.FLAG_IMMUTABLE,
-        )
-    }
 
     override fun createFido2CreationPendingIntent(
         action: String,

@@ -1,7 +1,5 @@
 package com.bitwarden.authenticator.data.authenticator.datasource.disk.entity
 
-import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType.entries
-
 /**
  * Enum representing the supported "type" options for authenticator items.
  */

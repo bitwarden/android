@@ -1,32 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Bitwarden Dev</string>
-    <string name="csv_extension" translatable="false">.csv</string>
-    <string name="duo_title" translatable="false">Duo</string>
-    <string name="duo_org_title" translatable="false">Duo (%1$s)</string>
-    <string name="json_extension" translatable="false">.json</string>
-    <string name="json_extension_formatted" translatable="false">.json (%1$s)</string>
-
-    <!-- Debug Menu -->
-    <string name="email_verification">Email Verification</string>
-    <string name="import_logins_flow">Import Logins Flow</string>
-    <string name="feature_flags">Feature Flags:</string>
-    <string name="debug_menu">Debug Menu</string>
-    <string name="reset_values">Reset values</string>
-    <string name="onboarding_override">Onboarding Status Override</string>
-    <string name="restart_onboarding_cta">Restart Onboarding</string>
-    <string name="restart_onboarding_details">This will reset the onboarding status for the current user, if available. After clicking the button you will immediately be redirected to the onboarding flow. Onboarding flag must be enabled.</string>
-    <string name="restart_onboarding_carousel">Show Onboarding Carousel</string>
-    <string name="restart_onboarding_carousel_details">This will force the change to app state which will cause the first time carousel to show. The carousel will continue to show for any \"new\" account until a login is completed. May need to exit debug menu manually.</string>
-    <string name="cipher_key_encryption">Cipher Key Encryption</string>
-    <string name="reset_coach_mark_tour_status">Reset all coach mark tours</string>
-    <string name="anon_addy_self_hosted_aliases">AnonAddy self-hosted aliases</string>
-    <string name="simple_login_self_hosted_aliases">SimpleLogin self-hosted aliases</string>
-    <string name="restrict_item_deletion">Restrict item deletion</string>
-    <string name="generate_crash">Generate crash</string>
-    <string name="generate_error_report">Generate error report</string>
-    <string name="error_reports">Error reports</string>
-    <string name="user_trusted_privileged_app_management">User-trusted privileged app management</string>
-    <string name="remove_card_policy">Remove Card Policy</string>
-    <!-- /Debug Menu -->
 </resources>

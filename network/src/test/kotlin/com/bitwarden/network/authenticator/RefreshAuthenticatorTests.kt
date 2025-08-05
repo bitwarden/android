@@ -3,7 +3,6 @@ package com.bitwarden.network.authenticator
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.model.JwtTokenDataJson
-import com.bitwarden.network.model.RefreshTokenResponseJson
 import com.bitwarden.network.provider.RefreshTokenProvider
 import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import io.mockk.every
@@ -72,20 +71,13 @@ class RefreshAuthenticatorTests {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `RefreshAuthenticator returns updated request when refresh is success`() {
         val newAccessToken = "newAccessToken"
-        val refreshResponse = RefreshTokenResponseJson(
-            accessToken = newAccessToken,
-            expiresIn = 3600,
-            refreshToken = "refreshToken",
-            tokenType = "Bearer",
-        )
         every { parseJwtTokenDataOrNull(JWT_ACCESS_TOKEN) } returns JTW_TOKEN
         every {
             refreshTokenProvider.refreshAccessTokenSynchronously(USER_ID)
-        } returns refreshResponse.asSuccess()
+        } returns newAccessToken.asSuccess()
 
         val authenticatedRequest = authenticator.authenticate(null, RESPONSE_401)
 

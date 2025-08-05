@@ -92,7 +92,7 @@
     <string name="fingerprint">Vân tay</string>
     <string name="generate_password">Tạo mật khẩu</string>
     <string name="get_password_hint">Nhận gợi ý mật khẩu chính</string>
-    <string name="import_items">Nhập mục</string>
+    <string name="import_items">Nhập vào kho</string>
     <string name="last_sync">Đồng bộ lúc:</string>
     <string name="length">Độ dài</string>
     <string name="lock">Khóa</string>
@@ -154,7 +154,7 @@
     <string name="view_identity">Xem danh tính</string>
     <string name="view_note">Xem ghi chú</string>
     <string name="view_ssh_key">Xem khóa SSH</string>
-    <string name="web_vault">Kho lưu trữ web Bitwarden</string>
+    <string name="web_vault">Kho lưu trữ Bitwarden trực tuyến</string>
     <string name="items">Mục</string>
     <string name="items_for_uri">Mục cho %1$s</string>
     <string name="no_items_for_uri">Không có mục nào trong kho lưu trữ khớp với %1$s.</string>
@@ -234,7 +234,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="company">Công ty</string>
     <string name="country">Quốc gia</string>
     <string name="december">Tháng 12</string>
-    <string name="dr">Tiến sĩ</string>
+    <string name="dr">Tiến sĩ/Bác sĩ</string>
     <string name="expiration_month">Tháng hết hạn</string>
     <string name="expiration_year">Năm hết hạn</string>
     <string name="february">Tháng 2</string>
@@ -250,7 +250,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="middle_name">Tên đệm</string>
     <string name="mr">Ông</string>
     <string name="mrs">Bà</string>
-    <string name="ms">Chị</string>
+    <string name="ms">Cô</string>
     <string name="mx">Mx</string>
     <string name="november">Tháng 11</string>
     <string name="october">Tháng 10</string>
@@ -258,7 +258,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="phone">Số điện thoại</string>
     <string name="september">Tháng 9</string>
     <string name="ssn">Số bảo hiểm xã hội</string>
-    <string name="state_province">Tỉnh/Thành Phố</string>
+    <string name="state_province">Tỉnh / Thành Phố</string>
     <string name="title">Danh xưng</string>
     <string name="zip_postal_code">Mã bưu chính</string>
     <string name="address">Địa chỉ</string>
@@ -278,7 +278,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="bitwarden_autofill_go_to_settings">Chúng tôi không thể mở cài đặt tự động điền cho bạn. Bạn có thể đi đến cài đặt tự động điền theo cách thủ công bằng cách vào Cài đặt &gt; Hệ thống &gt; Ngôn ngữ và nhập liệu &gt; Nâng cao &gt; Dịch vụ tự động điền.</string>
     <string name="custom_field_name">Tên trường tùy chỉnh</string>
     <string name="field_type_boolean">Đúng/Sai</string>
-    <string name="field_type_hidden">Ẩn</string>
+    <string name="field_type_hidden">Bí ẩn</string>
     <string name="field_type_linked">Đã liên kết</string>
     <string name="field_type_text">Văn bản</string>
     <string name="select_type_field">Bạn muốn thêm loại trường tùy chỉnh nào?</string>
@@ -356,7 +356,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="clear_clipboard">Xóa bảng nhớ tạm</string>
     <string name="clear_clipboard_description">Tự động xóa mọi thứ đã sao chép khỏi bảng nhớ tạm.</string>
     <string name="default_uri_match_detection">Cách nhận diện đường dẫn (URI)</string>
-    <string name="default_uri_match_detection_description">Chọn cách thức mặc định hệ thống so khớp đường dẫn (URI) để xử lý đăng nhập khi thực hiện các thao tác như tự động điền.</string>
+    <string name="default_uri_match_detection_description">Chọn cách hệ thống so khớp đường dẫn để xử lý đăng nhập khi thực hiện các thao tác như tự động điền.</string>
     <string name="theme">Chủ đề</string>
     <string name="theme_description">Thay đổi màu sắc chủ đề của ứng dụng</string>
     <string name="copy_notes">Sao chép ghi chú</string>
@@ -364,8 +364,8 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="exit_confirmation">Bạn có chắc chắn muốn thoát Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Yêu cầu nhập mật khẩu chính khi khởi động lại ứng dụng?</string>
     <string name="pin_require_master_password_restart">Bạn có chắc chắn muốn nhập mật khẩu chính để mở khóa mỗi khi mở lại ứng dụng không?</string>
-    <string name="ask_to_add_login">Yêu cầu thêm thông tin đăng nhập</string>
-    <string name="ask_to_add_login_description">Nếu không tìm thấy mục nào trong kho của bạn, hãy yêu cầu thêm mục đó.</string>
+    <string name="ask_to_add_login">Gợi ý thêm mục đăng nhập</string>
+    <string name="ask_to_add_login_description">Gợi ý thêm mục nếu không tìm thấy mục nào trong kho trùng khớp.</string>
     <string name="on_restart">Khi khởi động lại ứng dụng</string>
     <string name="capitalize">Viết hoa</string>
     <string name="include_number">Bao gồm cả số</string>
@@ -420,16 +420,15 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="master_password_policy_validation_title">Mật khẩu không đúng</string>
     <string name="master_password_policy_validation_message">Mật khẩu không đáp ứng yêu cầu của tổ chức. Vui lòng kiểm tra chính sách mật khẩu và thử lại.</string>
     <string name="loading">Đang tải</string>
-    <string name="accept_policies_error">Bạn chưa đồng ý với Điều khoản Dịch vụ và Chính sách Bảo mật.</string>
     <string name="terms_of_service">Điều khoản Dịch vụ</string>
     <string name="privacy_policy">Chính sách Bảo mật</string>
     <string name="passkey_management">Quản lý mã khoá</string>
     <string name="autofill_services">Dịch vụ tự động điền</string>
     <string name="display_autofill_suggestions">Hiển thị đề xuất tự động điền</string>
-    <string name="autofill_suggestions_inline">Hiển thị trực tiếp (hiển thị trên bàn phím)</string>
-    <string name="autofill_suggestions_popup">Cửa sổ popup (hiển thị trên trường nhập liệu)</string>
+    <string name="autofill_suggestions_inline">Hiển thị trực tiếp (hiện trên bàn phím)</string>
+    <string name="autofill_suggestions_popup">Cửa sổ popup (hiện ở chỗ nhập liệu)</string>
     <string name="accessibility">Sử dụng trợ năng</string>
-    <string name="accessibility_description5">Cần kích hoạt ô Tự động điền trong bảng Cài đặt nhanh.</string>
+    <string name="accessibility_description5">Tự động điền khi dùng lối tắt Tự động điền trong bảng Cài đặt nhanh.</string>
     <string name="personal_ownership_policy_in_effect">Chính sách của tổ chức đang ảnh hưởng đến các tùy chọn quyền sở hữu của bạn.</string>
     <string name="send">Send</string>
     <string name="send_details">Chi tiết Send</string>
@@ -453,7 +452,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="maximum_access_count_reached">Đã vượt số lần truy cập tối đa</string>
     <string name="current_access_count">Số lần truy cập hiện tại: %s</string>
     <string name="new_password">Mật khẩu mới</string>
-    <string name="password_info">Yêu cầu nhập mật khẩu này để truy cập mục Gửi.</string>
+    <string name="password_info">Yêu cầu nhập mật khẩu này để xem Send.</string>
     <string name="remove_password">Xóa mật khẩu</string>
     <string name="removing_send_password">Đang xóa mật khẩu</string>
     <string name="password_removed">Đã xóa mật khẩu</string>
@@ -609,8 +608,6 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="language">Ngôn ngữ</string>
     <string name="language_change_x_description">Ngôn ngữ đã được đổi thành %1$s. Khởi động lại ứng dụng để áp dụng</string>
     <string name="default_system">Giống như hệ thống</string>
-    <string name="important">Quan trọng</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Không thể lấy lại mật khẩu chính nếu bạn quên nó! Tối thiểu %1$s ký tự.</string>
     <string name="weak_master_password">Mật khẩu chính Yếu</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Mật khẩu này khá yếu. Hãy sử dụng mật khẩu mạnh để bảo vệ tài khoản của bạn. Bạn có chắc chắn muốn sử dụng mật khẩu yếu này không?</string>
     <string name="weak">Yếu</string>
@@ -707,7 +704,6 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="create_account_on_with_colon">Tạo tài khoản trên:</string>
     <string name="we_sent_an_email_to">Chúng tôi đã gửi một email tới <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Bằng cách tiếp tục, bạn đồng ý với <annotation link="termsOfService">Điều khoản Dịch vụ</annotation> và <annotation link="privacyPolicy">Chính sách Bảo mật</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Bằng cách kích hoạt công tắc này, bạn đồng ý với <annotation link="termsOfService">Điều khoản Dịch vụ</annotation> và <annotation link="privacyPolicy">Chính sách Bảo mật</annotation></string>
     <string name="unsubscribe">Hủy đăng ký</string>
     <string name="check_your_email">Kiểm tra email của bạn</string>
     <string name="open_email_app">Mở ứng dụng email</string>
@@ -729,7 +725,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="set_up_unlock">Thiết lập mở khóa</string>
     <string name="set_up_later">Thiết lập sau</string>
     <string name="set_up_unlock_later">Thiết lập mở khóa sau?</string>
-    <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">Bạn có thể hoàn tất bước này sau ở phần Bảo mật tài khoản trong Cài đặt.</string>
+    <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">Bạn có thể hoàn tất bước này sau trong mục Bảo mật tài khoản của phần Cài đặt.</string>
     <string name="confirm">Xác nhận</string>
     <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Thiết lập sinh trắc học hoặc mã PIN để mở kho nhanh chóng và Tự động điền thông tin đăng nhập của bạn.</string>
     <string name="never_lose_access_to_your_vault">Không lo mất quyền truy cập kho</string>
@@ -765,7 +761,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="use_autofill_to_log_into_your_accounts">Dùng tính năng tự động điền để đăng nhập vào tài khoản của bạn chỉ bằng một lần chạm.</string>
     <string name="turn_on_later">Bật sau</string>
     <string name="turn_on_autofill_later">Bật tự động điền sau?</string>
-    <string name="return_to_complete_this_step_anytime_in_settings">Bạn có thể hoàn tất bước này sau trong Phần Cài đặt.</string>
+    <string name="return_to_complete_this_step_anytime_in_settings">Bạn có thể hoàn tất bước này sau trong phần Cài đặt.</string>
     <string name="what_bitwarden_has_to_offer">Bạn có thể khám phá tất cả các tính năng mà Bitwarden cung cấp và bắt đầu quản lý mật khẩu của mình một cách an toàn.</string>
     <string name="youre_all_set">Bạn đã hoàn tất!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Lỗi kết nối với dịch vụ Duo. Sử dụng phương thức đăng nhập hai bước khác hoặc liên hệ với Duo để được hỗ trợ.</string>
@@ -779,14 +775,14 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="send_sensitive_information_safely">Gửi thông tin nhạy cảm một cách an toàn</string>
     <string name="import_saved_logins">Nhập các thông tin đăng nhập đã lưu</string>
     <string name="use_a_computer_to_import_logins">Sử dụng máy tính để nhập thông tin đăng nhập từ trình quản lý mật khẩu hiện có</string>
-    <string name="you_can_return_to_complete_this_step_anytime_from_settings">Bạn có thể hoàn tất bước này sau trong mục Cài đặt kho.</string>
+    <string name="you_can_return_to_complete_this_step_anytime_from_settings">Bạn có thể hoàn tất bước này sau trong phần Cài đặt kho lưu trữ.</string>
     <string name="import_logins_later">Nhập thông tin đăng nhập sau</string>
     <string name="import_logins_later_dialog_title">Nhập thông tin đăng nhập sau?</string>
     <string name="do_you_have_a_computer_available">Bạn có máy tính?</string>
     <string name="the_following_instructions_will_guide_you_through_importing_logins">Các hướng dẫn sau đây sẽ chỉ bạn cách nhập thông tin đăng nhập từ máy tính để bàn hoặc laptop của bạn</string>
     <string name="import_logins">Nhập thông tin đăng nhập</string>
     <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">Trên máy tính của bạn, hãy làm theo các bước sau để xuất các mật khẩu đã lưu từ trình duyệt hoặc trình quản lý mật khẩu khác. Sau đó, nhập chúng vào Bitwarden một cách an toàn.</string>
-    <string name="give_your_vault_a_head_start">Khởi động nhanh kho lưu trữ của bạn</string>
+    <string name="give_your_vault_a_head_start">Nhanh chóng tạo kho lưu trữ của bạn</string>
     <string name="class_3_biometrics_description">Mở khóa bằng sinh trắc học yêu cầu xác thực sinh trắc học mạnh mẽ và có thể không tương thích với tất cả các tùy chọn sinh trắc học trên thiết bị này.</string>
     <string name="class_2_biometrics_description">Mở khóa bằng sinh trắc học yêu cầu xác thực sinh trắc học mạnh mẽ và không tương thích với các tùy chọn sinh trắc học có sẵn trên thiết bị này.</string>
     <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">Trên máy tính của bạn, <annotation emphasis="bold">đăng nhập vào trình duyệt hiện tại hoặc trình quản lý mật khẩu của bạn.</annotation></string>
@@ -795,13 +791,13 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="step_1_of_3">Bước 1 trong 3</string>
     <string name="export_your_saved_logins">Xuất các thông tin đăng nhập đã lưu</string>
     <string name="delete_this_file_after_import_is_complete">Bạn sẽ xóa tệp này sau khi quá trình nhập dữ liệu hoàn tất.</string>
-    <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Trên máy tính của bạn, mở một tab trình duyệt mới và <annotation emphasis="bold">truy cập vào <annotation arg="0">%1$s</annotation></annotation></string>
+    <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Trên máy tính của bạn, mở một tab trình duyệt mới và <annotation emphasis="bold">truy cập <annotation arg="0">%1$s</annotation></annotation></string>
     <string name="log_in_to_the_bitwarden_web_app">Đăng nhập Bitwarden bản web.</string>
     <string name="step_2_of_3">Bước 2 trong 3</string>
     <string name="log_in_to_bitwarden">Đăng nhập Bitwarden</string>
     <string name="step_3_of_3">Bước 3 trong 3</string>
     <string name="import_logins_to_bitwarden">Nhập thông tin đăng nhập vào Bitwarden</string>
-    <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">Trong giao diện điều hướng của Bitwarden, <annotation emphasis="bold">tìm tùy chọn Công cụ </annotation> và <annotation emphasis="bold">chọn Nhập dữ liệu.</annotation></string>
+    <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">Trong giao diện điều hướng của Bitwarden, tìm tùy chọn <annotation emphasis="bold">Công cụ</annotation> và chọn <annotation emphasis="bold">Nhập dữ liệu.</annotation></string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Điền vào biểu mẫu và <annotation emphasis="bold">nhập tệp mật khẩu đã lưu của bạn.</annotation></string>
     <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Để đảm bảo an toàn cho bạn, hãy chắc chắn rằng bạn đã <annotation emphasis="bold">xóa tệp mật khẩu đã lưu của mình.</annotation></string>
     <string name="need_help_check_out_import_help">Cần trợ giúp? Hãy xem <annotation link="importHelp">hướng dẫn nhập dữ liệu</annotation>.</string>
@@ -865,8 +861,6 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Bạn chỉ cần thiết lập Khóa xác thực cho những tài khoản cần xác minh 2 bước bằng mã. Khóa này sẽ liên tục tạo ra các mã sáu chữ số để bạn dùng khi đăng nhập.</string>
     <string name="coachmark_3_of_3">3 TRONG 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Bạn phải thêm địa chỉ web để sử dụng tính năng tự động điền khi truy cập tài khoản này.</string>
-    <string name="single_tap_passkey_creation">Tạo mã khóa bằng một lần chạm</string>
-    <string name="single_tap_passkey_authentication">Đăng nhập bằng mã khóa chỉ với một lần chạm</string>
     <string name="learn_about_new_logins">Tìm hiểu về cách đăng nhập mới</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Chúng tôi sẽ hướng dẫn bạn các tính năng chính để thêm một thông tin đăng nhập mới.</string>
     <string name="explore_the_generator">Khám phá trình tạo</string>

@@ -54,7 +54,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4.3.1
+        uses: gradle/actions/wrapper-validation@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4.4.1
 
       - name: Cache Gradle files
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
@@ -82,7 +82,7 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
+        uses: ruby/setup-ruby@bb6434c747fa7022e12fa1cae2a0951fcffcff26 # v1.253.0
         with:
           bundler-cache: true
 
@@ -120,7 +120,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
+        uses: ruby/setup-ruby@bb6434c747fa7022e12fa1cae2a0951fcffcff26 # v1.253.0
         with:
           bundler-cache: true
 
@@ -183,7 +183,7 @@ jobs:
         uses: bitwarden/gh-actions/azure-logout@main
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4.3.1
+        uses: gradle/actions/wrapper-validation@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4.4.1
 
       - name: Cache Gradle files
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
@@ -431,7 +431,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
+        uses: ruby/setup-ruby@bb6434c747fa7022e12fa1cae2a0951fcffcff26 # v1.253.0
         with:
           bundler-cache: true
 
@@ -480,7 +480,7 @@ jobs:
         uses: bitwarden/gh-actions/azure-logout@main
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4.3.1
+        uses: gradle/actions/wrapper-validation@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4.4.1
 
       - name: Cache Gradle files
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
@@ -525,8 +525,8 @@ jobs:
           versionCode:$VERSION_CODE \
           versionName:${{ inputs.version-name || '' }}
 
-          regex='versionName = "([^"]+)"'
-          if [[ "$(cat app/build.gradle.kts)" =~ $regex ]]; then
+          regex='appVersionName = "([^"]+)"'
+          if [[ "$(cat gradle/libs.versions.toml)" =~ $regex ]]; then
             VERSION_NAME="${BASH_REMATCH[1]}"
           fi
           echo "Version Name: ${VERSION_NAME}" >> $GITHUB_STEP_SUMMARY

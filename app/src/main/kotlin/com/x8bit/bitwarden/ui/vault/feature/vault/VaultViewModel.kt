@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.repository.util.baseIconUrl
@@ -31,7 +32,6 @@ import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
@@ -634,7 +634,7 @@ class VaultViewModel @Inject constructor(
         action: ListingItemOverflowAction.VaultAction.CopyTotpClick,
     ) {
         viewModelScope.launch {
-            val result = vaultRepository.generateTotp(action.totpCode, clock.instant())
+            val result = vaultRepository.generateTotp(action.cipherId, clock.instant())
             sendAction(VaultAction.Internal.GenerateTotpResultReceive(result))
         }
     }

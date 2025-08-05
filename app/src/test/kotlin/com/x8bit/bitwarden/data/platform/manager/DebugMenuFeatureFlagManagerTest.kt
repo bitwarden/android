@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.platform.manager
 
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import io.mockk.coEvery
 import io.mockk.coVerify

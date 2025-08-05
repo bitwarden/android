@@ -128,7 +128,7 @@ class AutofillTotpManagerTest {
             }
             every { loginView.totp } returns TOTP_CODE
             coEvery {
-                vaultRepository.generateTotp(time = FIXED_CLOCK.instant(), totpCode = TOTP_CODE)
+                vaultRepository.generateTotp(time = FIXED_CLOCK.instant(), cipherId = "cipherId")
             } returns generateTotpResult
 
             autofillTotpManager.tryCopyTotpToClipboard(cipherView = cipherView)
@@ -141,7 +141,7 @@ class AutofillTotpManagerTest {
                 settingsRepository.isAutoCopyTotpDisabled
             }
             coVerify(exactly = 1) {
-                vaultRepository.generateTotp(time = FIXED_CLOCK.instant(), totpCode = TOTP_CODE)
+                vaultRepository.generateTotp(time = FIXED_CLOCK.instant(), cipherId = "cipherId")
             }
         }
 }

@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.ui.platform.feature.debugmenu
 
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableMap
@@ -37,7 +37,7 @@ class DebugMenuViewModel @Inject constructor(
 
     init {
         combine(
-            flows = FlagKey.activeFlags.map { flagKey ->
+            flows = FlagKey.activePasswordManagerFlags.map { flagKey ->
                 featureFlagManager.getFeatureFlagFlow(flagKey).map { flagKey to it }
             },
         ) { DebugMenuAction.Internal.UpdateFeatureFlagMap(it.toMap()) }

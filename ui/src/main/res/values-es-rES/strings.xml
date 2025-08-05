@@ -420,7 +420,6 @@ El escaneo se realizará automáticamente.</string>
     <string name="master_password_policy_validation_title">Contraseña no válida</string>
     <string name="master_password_policy_validation_message">La contraseña no cumple con los requisitos de la organización. Por favor, compruebe la información de la política e inténtelo de nuevo.</string>
     <string name="loading">Cargando</string>
-    <string name="accept_policies_error">Todavía no has aceptado los términos del servicio y la política de privacidad.</string>
     <string name="terms_of_service">Términos y condiciones del servicio</string>
     <string name="privacy_policy">Política de privacidad</string>
     <string name="passkey_management">Gestión de claves de acceso</string>
@@ -609,8 +608,6 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="language">Idioma</string>
     <string name="language_change_x_description">El idioma se ha cambiado a %1$s. Por favor, reinicia la aplicación para aplicar los cambios</string>
     <string name="default_system">Por defecto (Sistema)</string>
-    <string name="important">Importante</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Tu contraseña maestra no se puede recuperar si la olvidas! %1$s caracteres como mínimo.</string>
     <string name="weak_master_password">Contraseña maestra débil</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Contraseña débil identificada. Utilice una contraseña fuerte para proteger su cuenta. ¿Está seguro de que desea utilizar una contraseña débil?</string>
     <string name="weak">Débil</string>
@@ -708,7 +705,6 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="create_account_on_with_colon">Crea una cuenta en:</string>
     <string name="we_sent_an_email_to">Hemos enviado un correo electrónico a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Al continuar, aceptas los <annotation link="termsOfService">Términos de Servicio</annotation> y la <annotation link="privacyPolicy">Política de Privacidad</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Al activar este interruptor, aceptas los <annotation link="termsOfService">Términos de Servicio</annotation> y la <annotation link="privacyPolicy">Política de Privacidad</annotation></string>
     <string name="unsubscribe">Unsubscribe</string>
     <string name="check_your_email">Comprueba tu correo electrónico</string>
     <string name="open_email_app">Abrir aplicación de correo electrónico</string>
@@ -866,8 +862,6 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 DE 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>

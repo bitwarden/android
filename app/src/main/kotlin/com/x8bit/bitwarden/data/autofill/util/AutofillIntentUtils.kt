@@ -12,13 +12,13 @@ import android.service.autofill.Dataset
 import android.view.autofill.AutofillManager
 import androidx.core.os.bundleOf
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.ui.platform.util.getSafeParcelableExtra
 import com.x8bit.bitwarden.AutofillTotpCopyActivity
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.model.AutofillTotpCopyData
-import com.bitwarden.ui.platform.util.getSafeParcelableExtra
 import kotlin.random.Random
 
 private const val AUTOFILL_SAVE_ITEM_DATA_KEY = "autofill-save-item-data"

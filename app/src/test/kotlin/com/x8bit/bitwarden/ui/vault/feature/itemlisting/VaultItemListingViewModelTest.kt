@@ -73,7 +73,7 @@ import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingMa
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
@@ -1954,7 +1954,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyTotpClick(
-                        totpCode = totpCode,
+                        cipherId = totpCode,
                         requiresPasswordReprompt = false,
                     ),
                 ),
@@ -1982,7 +1982,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyTotpClick(
-                        totpCode = totpCode,
+                        cipherId = totpCode,
                         requiresPasswordReprompt = false,
                     ),
                 ),

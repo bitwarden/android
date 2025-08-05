@@ -30,6 +30,12 @@ sealed class LogoutReason {
     }
 
     /**
+     * Indicates that the logout is happening because the there was an "invalid_grant" response
+     * from the network.
+     */
+    data object InvalidGrant : LogoutReason()
+
+    /**
      * Indicates that the logout is happening because of an invalid state.
      */
     data class InvalidState(
@@ -57,11 +63,6 @@ sealed class LogoutReason {
      * Indicates that the logout is happening because of a timeout action.
      */
     data object Timeout : LogoutReason()
-
-    /**
-     * Indicates that the logout is happening because the access token could not be refreshed.
-     */
-    data object TokenRefreshFail : LogoutReason()
 
     /**
      * Indicates that the logout is happening because the user tried to unlock the vault
