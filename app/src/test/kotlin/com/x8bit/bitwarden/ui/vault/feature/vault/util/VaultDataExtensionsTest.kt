@@ -1145,6 +1145,7 @@ class VaultDataExtensionsTest {
                         number = 1,
                         type = CipherListViewType.SshKey,
                         folderId = null,
+                        favorite = true,
                     ),
                     createMockCipherListView(
                         number = 2,
@@ -1179,7 +1180,7 @@ class VaultDataExtensionsTest {
                 identityItemsCount = 0,
                 secureNoteItemsCount = 0,
                 sshKeyItemsCount = 3,
-                favoriteItems = listOf(),
+                favoriteItems = listOf(createMockSshKeyVaultItem(number = 1)),
                 collectionItems = listOf(),
                 folderItems = listOf(),
                 noFolderItems = listOf(
