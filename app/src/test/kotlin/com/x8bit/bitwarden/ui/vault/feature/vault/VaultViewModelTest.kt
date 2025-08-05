@@ -443,6 +443,192 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if user is admin`() =
+        runTest {
+            mutableRemoveCardPolicyFeatureFlow.value = true
+            mutableUserStateFlow.value =
+                DEFAULT_USER_STATE.copy(
+                    accounts = listOf(
+                        UserState.Account(
+                            userId = "activeUserId",
+                            name = "Other User",
+                            email = "active@bitwarden.com",
+                            avatarColorHex = "#00aaaa",
+                            environment = Environment.Us,
+                            isPremium = true,
+                            isLoggedIn = true,
+                            isVaultUnlocked = true,
+                            needsPasswordReset = false,
+                            isBiometricsEnabled = false,
+                            needsMasterPassword = false,
+                            organizations = listOf(
+                                Organization(
+                                    id = "organizationId",
+                                    name = "Test Organization",
+                                    shouldManageResetPassword = false,
+                                    shouldUseKeyConnector = false,
+                                    role = OrganizationType.ADMIN,
+                                    keyConnectorUrl = null,
+                                    userIsClaimedByOrganization = false,
+                                ),
+                            ),
+                            trustedDevice = null,
+                            hasMasterPassword = true,
+                            isUsingKeyConnector = false,
+                            onboardingStatus = OnboardingStatus.COMPLETE,
+                            firstTimeState = DEFAULT_FIRST_TIME_STATE,
+                        ),
+                    ),
+                )
+
+            val viewModel = createViewModel()
+            val expectedState = DEFAULT_STATE.copy(
+                appBarTitle = BitwardenString.vaults.asText(),
+                avatarColorString = "#00aaaa",
+                initials = "OU",
+                accountSummaries = listOf(
+                    AccountSummary(
+                        userId = "activeUserId",
+                        name = "Other User",
+                        email = "active@bitwarden.com",
+                        avatarColorHex = "#00aaaa",
+                        environmentLabel = "bitwarden.com",
+                        isActive = true,
+                        isLoggedIn = true,
+                        isVaultUnlocked = true,
+                    ),
+                ),
+                vaultFilterData = VaultFilterData(
+                    selectedVaultFilterType = VaultFilterType.AllVaults,
+                    vaultFilterTypes = listOf(
+                        VaultFilterType.AllVaults,
+                        VaultFilterType.MyVault,
+                        VaultFilterType.OrganizationVault(
+                            organizationId = "organizationId",
+                            organizationName = "Test Organization",
+                        ),
+                    ),
+                ),
+            )
+
+            assertEquals(
+                expectedState,
+                viewModel.stateFlow.value,
+            )
+
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+
+            assertEquals(
+                expectedState.copy(restrictItemTypesPolicyOrgIds = listOf("Test Organization")),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if user is owner`() =
+        runTest {
+            mutableRemoveCardPolicyFeatureFlow.value = true
+            mutableUserStateFlow.value =
+                DEFAULT_USER_STATE.copy(
+                    accounts = listOf(
+                        UserState.Account(
+                            userId = "activeUserId",
+                            name = "Other User",
+                            email = "active@bitwarden.com",
+                            avatarColorHex = "#00aaaa",
+                            environment = Environment.Us,
+                            isPremium = true,
+                            isLoggedIn = true,
+                            isVaultUnlocked = true,
+                            needsPasswordReset = false,
+                            isBiometricsEnabled = false,
+                            needsMasterPassword = false,
+                            organizations = listOf(
+                                Organization(
+                                    id = "organizationId",
+                                    name = "Test Organization",
+                                    shouldManageResetPassword = false,
+                                    shouldUseKeyConnector = false,
+                                    role = OrganizationType.OWNER,
+                                    keyConnectorUrl = null,
+                                    userIsClaimedByOrganization = false,
+                                ),
+                            ),
+                            trustedDevice = null,
+                            hasMasterPassword = true,
+                            isUsingKeyConnector = false,
+                            onboardingStatus = OnboardingStatus.COMPLETE,
+                            firstTimeState = DEFAULT_FIRST_TIME_STATE,
+                        ),
+                    ),
+                )
+
+            val viewModel = createViewModel()
+            val expectedState = DEFAULT_STATE.copy(
+                appBarTitle = BitwardenString.vaults.asText(),
+                avatarColorString = "#00aaaa",
+                initials = "OU",
+                accountSummaries = listOf(
+                    AccountSummary(
+                        userId = "activeUserId",
+                        name = "Other User",
+                        email = "active@bitwarden.com",
+                        avatarColorHex = "#00aaaa",
+                        environmentLabel = "bitwarden.com",
+                        isActive = true,
+                        isLoggedIn = true,
+                        isVaultUnlocked = true,
+                    ),
+                ),
+                vaultFilterData = VaultFilterData(
+                    selectedVaultFilterType = VaultFilterType.AllVaults,
+                    vaultFilterTypes = listOf(
+                        VaultFilterType.AllVaults,
+                        VaultFilterType.MyVault,
+                        VaultFilterType.OrganizationVault(
+                            organizationId = "organizationId",
+                            organizationName = "Test Organization",
+                        ),
+                    ),
+                ),
+            )
+
+            assertEquals(
+                expectedState,
+                viewModel.stateFlow.value,
+            )
+
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+
+            assertEquals(
+                expectedState.copy(restrictItemTypesPolicyOrgIds = listOf("Test Organization")),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is disabled`() =
         runTest {
             val viewModel = createViewModel()
