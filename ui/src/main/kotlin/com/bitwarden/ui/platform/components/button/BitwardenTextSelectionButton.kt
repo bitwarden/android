@@ -68,6 +68,7 @@ fun BitwardenTextSelectionButton(
         cardStyle = cardStyle,
         modifier = modifier,
         enabled = enabled,
+        supportingText = supportingText,
         tooltip = tooltip,
         insets = insets,
         textFieldTestTag = textFieldTestTag,
@@ -100,6 +101,7 @@ fun BitwardenTextSelectionButton(
     cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    supportingText: String? = null,
     tooltip: TooltipData? = null,
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
@@ -108,12 +110,15 @@ fun BitwardenTextSelectionButton(
     supportingContent: @Composable (ColumnScope.() -> Unit)?,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
+
     Column(
         modifier = modifier
             .defaultMinSize(minHeight = 60.dp)
             .clearAndSetSemantics {
                 role = semanticRole
-                contentDescription = "$selectedOption. $label"
+                contentDescription = supportingText
+                    ?.let { "$selectedOption. $label. $it" }
+                    ?: "$selectedOption. $label"
                 customActions = persistentListOfNotNull(
                     tooltip?.let {
                         CustomAccessibilityAction(

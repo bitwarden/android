@@ -79,6 +79,7 @@ fun BitwardenMultiSelectButton(
         cardStyle = cardStyle,
         modifier = modifier,
         isEnabled = isEnabled,
+        supportingText = supportingText,
         supportingContent = supportingText?.let {
             {
                 Text(
@@ -115,14 +116,11 @@ fun BitwardenMultiSelectButton(
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  * @param supportingContent An optional supporting content composable that will appear below the
  * text input.
- * @param supportingContentPadding The padding to be placed on the [supportingContent].
  * @param tooltip A nullable [TooltipData], representing the tooltip icon.
  * @param insets Inner padding to be applied withing the card.
  * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param actionsPadding Padding to be applied to the [actions] block.
- * @param sectionTitle An optional title for a secondary section of options in the selection dialog.
- * @param sectionOptions An optional list of strings representing options in a section.
- * @param sectionTestTag An optional test tag to be applied to the [sectionTitle] Text composable
+ * @param sectionOptions An optional list of [MultiSelectOption] representing options in a section.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
  * defining the layout of the actions.
@@ -136,6 +134,7 @@ fun BitwardenMultiSelectButton(
     cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
+    supportingText: String? = null,
     supportingContent: @Composable (ColumnScope.() -> Unit)?,
     tooltip: TooltipData? = null,
     insets: PaddingValues = PaddingValues(),
@@ -154,6 +153,7 @@ fun BitwardenMultiSelectButton(
         },
         cardStyle = cardStyle,
         enabled = isEnabled,
+        supportingText = supportingText,
         supportingContent = supportingContent,
         tooltip = tooltip,
         insets = insets,

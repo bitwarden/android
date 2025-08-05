@@ -421,7 +421,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     fun `on default URI match type click should display dialog`() {
         composeTestRule.assertNoDialogExists()
         composeTestRule
-            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .onNodeWithContentDescription(label = "Default URI match detection", substring = true)
             .performScrollTo()
             .assert(!hasAnyAncestor(isDialog()))
             .performClick()
@@ -435,7 +435,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `on default URI match type dialog item click should send DefaultUriMatchTypeSelect and close the dialog`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .onNodeWithContentDescription(label = "Default URI match detection", substring = true)
             .performScrollTo()
             .performClick()
 
@@ -458,7 +458,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     fun `on default URI match type dialog cancel click should close the dialog`() {
         composeTestRule
             .onNodeWithContentDescription(
-                label = "Default URI match detection.",
+                label = "Default URI match detection",
                 substring = true,
             )
             .performScrollTo()
@@ -496,7 +496,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `on default URI match Advanced type click should display warning dialog when Regular Expression`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .onNodeWithContentDescription(label = "Default URI match detection", substring = true)
             .performScrollTo()
             .performClick()
 
@@ -518,7 +518,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `on default URI match Advanced type click should display warning dialog when Starts With`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .onNodeWithContentDescription(label = "Default URI match detection", substring = true)
             .performScrollTo()
             .performClick()
 
@@ -540,7 +540,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `on Advanced matching warning dialog cancel should not change the default URI match type`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .onNodeWithContentDescription(label = "Default URI match detection", substring = true)
             .performScrollTo()
             .performClick()
 
@@ -566,7 +566,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `on Advanced matching warning dialog confirm should update the default URI match type`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .onNodeWithContentDescription(label = "Default URI match detection", substring = true)
             .performScrollTo()
             .performClick()
 
@@ -593,7 +593,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `on Advanced matching warning dialog confirm should show more info match detection dialog`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .onNodeWithContentDescription(label = "Default URI match detection", substring = true)
             .performScrollTo()
             .performClick()
 
@@ -616,7 +616,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `on match detection dialog learn more button click should launch uri`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .onNodeWithContentDescription(label = "Default URI match detection", substring = true)
             .performScrollTo()
             .performClick()
 
