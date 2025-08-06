@@ -380,3 +380,33 @@ fun createMockDisplayItemForSend(
             )
         }
     }
+
+/**
+ * Create a mock [VaultItemListingState.DisplayItem] for a decryption error.
+ */
+fun createMockDisplayItemForDecryptionError(
+    number: Int,
+): VaultItemListingState.DisplayItem = VaultItemListingState.DisplayItem(
+    id = "mockId-$number",
+    title = "mockName-$number",
+    titleTestTag = "CipherNameLabel",
+    secondSubtitle = null,
+    secondSubtitleTestTag = null,
+    subtitle = null,
+    subtitleTestTag = "",
+    iconData = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
+    iconTestTag = "LoginCipherIcon",
+    extraIconList = persistentListOf(
+        IconData.Local(
+            iconRes = BitwardenDrawable.ic_collections,
+            contentDescription = BitwardenString.collections.asText(),
+            testTag = "CipherInCollectionIcon",
+        ),
+    ),
+    overflowOptions = emptyList(),
+    optionsTestTag = "CipherOptionsButton",
+    isAutofill = false,
+    isCredentialCreation = false,
+    shouldShowMasterPasswordReprompt = false,
+    itemType = VaultItemListingState.DisplayItem.ItemType.DecryptionError,
+)
