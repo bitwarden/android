@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Base64
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
@@ -44,7 +45,6 @@ import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
