@@ -60,6 +60,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        // Set the base archive name for publishing purposes. This is used to derive the APK and AAB
+        // artifact names when uploading to Firebase and Play Store.
+        base.archivesName = "com.x8bit.bitwarden"
+
         buildConfigField(
             type = "String",
             name = "CI_INFO",
