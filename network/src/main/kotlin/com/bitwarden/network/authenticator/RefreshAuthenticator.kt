@@ -8,6 +8,7 @@ import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
+import timber.log.Timber
 
 /**
  * An authenticator used to refresh the access token when a 401 is returned from an API. Upon
@@ -21,6 +22,10 @@ internal class RefreshAuthenticator : Authenticator {
         route: Route?,
         response: Response,
     ): Request? {
+        if (response.shouldSkipAuthentication()) {
+            // If the same request keeps failing, let's just let the 401 pass through.
+            return null
+        }
         val accessToken = requireNotNull(
             response
                 .request
@@ -34,6 +39,7 @@ internal class RefreshAuthenticator : Authenticator {
             }
 
             else -> {
+                Timber.d("Attempting to refresh token due to unauthorized")
                 refreshTokenProvider
                     ?.refreshAccessTokenSynchronously(userId = userId)
                     ?.fold(
@@ -52,4 +58,6 @@ internal class RefreshAuthenticator : Authenticator {
             }
         }
     }
+
+    private fun Response.shouldSkipAuthentication(): Boolean = this.priorResponse != null
 }
