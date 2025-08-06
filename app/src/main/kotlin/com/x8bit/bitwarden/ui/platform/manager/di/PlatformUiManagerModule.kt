@@ -1,7 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.manager.di
 
 import android.content.Context
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.data.manager.DispatcherManager
+import com.x8bit.bitwarden.ui.platform.manager.BitwardenBuildInfoManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
@@ -21,7 +23,11 @@ import javax.inject.Singleton
  */
 @Module
 @InstallIn(SingletonComponent::class)
-class PlatformUiManagerModule {
+object PlatformUiManagerModule {
+
+    @Provides
+    @Singleton
+    fun provideBuildInfoManager(): BuildInfoManager = BitwardenBuildInfoManagerImpl()
 
     @Provides
     @Singleton
