@@ -154,6 +154,9 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import javax.net.ssl.SSLHandshakeException
 
@@ -259,7 +262,8 @@ class AuthRepositoryTest {
         every { setUserData(userId = any(), environmentType = any()) } just runs
     }
 
-    private val repository = AuthRepositoryImpl(
+    private val repository: AuthRepository = AuthRepositoryImpl(
+        clock = FIXED_CLOCK,
         accountsService = accountsService,
         devicesService = devicesService,
         identityService = identityService,
@@ -899,6 +903,7 @@ class AuthRepositoryTest {
         val updatedAccountTokens = AccountTokensJson(
             accessToken = ACCESS_TOKEN_2,
             refreshToken = REFRESH_TOKEN_2,
+            expiresAtSec = FIXED_CLOCK.instant().epochSecond + ACCESS_TOKEN_2_EXPIRES_IN,
         )
         fakeAuthDiskSource.storeAccountTokens(
             userId = USER_ID_1,
@@ -6908,6 +6913,10 @@ class AuthRepositoryTest {
         }
 
     companion object {
+        private val FIXED_CLOCK: Clock = Clock.fixed(
+            Instant.parse("2023-10-27T12:00:00Z"),
+            ZoneOffset.UTC,
+        )
         private const val UNIQUE_APP_ID = "testUniqueAppId"
         private const val NAME = "Example Name"
         private const val EMAIL = "test@bitwarden.com"
@@ -6919,6 +6928,7 @@ class AuthRepositoryTest {
         private const val ACCESS_TOKEN_2 = "accessToken2"
         private const val REFRESH_TOKEN = "refreshToken"
         private const val REFRESH_TOKEN_2 = "refreshToken2"
+        private const val ACCESS_TOKEN_2_EXPIRES_IN = 3600
         private const val CAPTCHA_KEY = "captcha"
         private const val TWO_FACTOR_CODE = "123456"
         private val TWO_FACTOR_METHOD = TwoFactorAuthMethod.EMAIL
@@ -6961,7 +6971,7 @@ class AuthRepositoryTest {
         )
         private val REFRESH_TOKEN_RESPONSE_JSON = RefreshTokenResponseJson.Success(
             accessToken = ACCESS_TOKEN_2,
-            expiresIn = 3600,
+            expiresIn = ACCESS_TOKEN_2_EXPIRES_IN,
             refreshToken = REFRESH_TOKEN_2,
             tokenType = "Bearer",
         )

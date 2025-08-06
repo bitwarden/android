@@ -53,6 +53,10 @@ internal class BitwardenServiceClientImpl(
 ) : BitwardenServiceClient {
 
     private val refreshAuthenticator: RefreshAuthenticator = RefreshAuthenticator()
+    private val authTokenInterceptor: AuthTokenInterceptor = AuthTokenInterceptor(
+        clock = bitwardenServiceClientConfig.clock,
+        authTokenProvider = bitwardenServiceClientConfig.authTokenProvider,
+    )
     private val clientJson = Json {
 
         // If there are keys returned by the server not modeled by a serializable class,
@@ -71,9 +75,7 @@ internal class BitwardenServiceClientImpl(
     }
     private val retrofits: Retrofits by lazy {
         RetrofitsImpl(
-            authTokenInterceptor = AuthTokenInterceptor(
-                authTokenProvider = bitwardenServiceClientConfig.authTokenProvider,
-            ),
+            authTokenInterceptor = authTokenInterceptor,
             baseUrlInterceptors = BaseUrlInterceptors(
                 baseUrlsProvider = bitwardenServiceClientConfig.baseUrlsProvider,
             ),
@@ -205,5 +207,6 @@ internal class BitwardenServiceClientImpl(
 
     override fun setRefreshTokenProvider(refreshTokenProvider: RefreshTokenProvider?) {
         refreshAuthenticator.refreshTokenProvider = refreshTokenProvider
+        authTokenInterceptor.refreshTokenProvider = refreshTokenProvider
     }
 }
