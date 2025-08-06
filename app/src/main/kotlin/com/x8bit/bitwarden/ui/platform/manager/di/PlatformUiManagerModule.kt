@@ -34,10 +34,12 @@ object PlatformUiManagerModule {
     fun provideIntentManager(
         @ApplicationContext context: Context,
         clock: Clock,
+        buildInfoManager: BuildInfoManager,
     ): IntentManager =
         IntentManagerImpl(
             context = context,
             clock = clock,
+            buildInfoManager = buildInfoManager,
         )
 
     @Provides

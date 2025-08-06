@@ -79,6 +79,11 @@ interface IntentManager {
     fun shareText(text: String)
 
     /**
+     * Launches the share sheet with an error report based on the provided [throwable].
+     */
+    fun shareErrorReport(throwable: Throwable)
+
+    /**
      * Processes the [activityResult] and attempts to get the relevant file data from it.
      */
     fun getFileDataFromActivityResult(activityResult: ActivityResult): FileData?
