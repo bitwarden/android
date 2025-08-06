@@ -7,5 +7,7 @@ internal enum class NetworkErrorCode(
     val code: Int,
 ) {
     BAD_REQUEST(code = 400),
+    UNAUTHORIZED(code = 401),
+    FORBIDDEN(code = 403),
     TOO_MANY_REQUESTS(code = 429),
 }

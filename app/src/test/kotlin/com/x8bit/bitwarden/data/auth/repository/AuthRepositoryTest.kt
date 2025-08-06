@@ -882,21 +882,88 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `refreshAccessTokenSynchronously returns failure and logs out on failure`() = runTest {
-        fakeAuthDiskSource.storeAccountTokens(
-            userId = USER_ID_1,
-            accountTokens = ACCOUNT_TOKENS_1,
-        )
-        coEvery {
-            identityService.refreshTokenSynchronously(REFRESH_TOKEN)
-        } returns Throwable("Fail").asFailure()
+    fun `refreshAccessTokenSynchronously returns failure if refreshTokenSynchronously fails`() =
+        runTest {
+            fakeAuthDiskSource.storeAccountTokens(
+                userId = USER_ID_1,
+                accountTokens = ACCOUNT_TOKENS_1,
+            )
+            coEvery {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            } returns Throwable("Fail").asFailure()
 
-        assertTrue(repository.refreshAccessTokenSynchronously(USER_ID_1).isFailure)
+            assertTrue(repository.refreshAccessTokenSynchronously(USER_ID_1).isFailure)
 
-        coVerify(exactly = 1) {
-            identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            coVerify(exactly = 1) {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            }
         }
-    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `refreshAccessTokenSynchronously returns logs out and returns failure if refreshTokenSynchronously returns invalid_grant`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeAccountTokens(
+                userId = USER_ID_1,
+                accountTokens = ACCOUNT_TOKENS_1,
+            )
+            coEvery {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            } returns RefreshTokenResponseJson.Error(error = "invalid_grant").asSuccess()
+
+            assertTrue(repository.refreshAccessTokenSynchronously(USER_ID_1).isFailure)
+
+            coVerify(exactly = 1) {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+                userLogoutManager.logout(userId = USER_ID_1, reason = LogoutReason.InvalidGrant)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `refreshAccessTokenSynchronously returns logs out and returns failure if refreshTokenSynchronously returns Forbidden`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeAccountTokens(
+                userId = USER_ID_1,
+                accountTokens = ACCOUNT_TOKENS_1,
+            )
+            coEvery {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            } returns RefreshTokenResponseJson.Forbidden(error = Throwable("Fail!")).asSuccess()
+
+            assertTrue(repository.refreshAccessTokenSynchronously(USER_ID_1).isFailure)
+
+            coVerify(exactly = 1) {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+                userLogoutManager.logout(userId = USER_ID_1, reason = LogoutReason.RefreshForbidden)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `refreshAccessTokenSynchronously returns logs out and returns failure if refreshTokenSynchronously returns Unauthorized`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeAccountTokens(
+                userId = USER_ID_1,
+                accountTokens = ACCOUNT_TOKENS_1,
+            )
+            coEvery {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            } returns RefreshTokenResponseJson.Unauthorized(error = Throwable("Fail!")).asSuccess()
+
+            assertTrue(repository.refreshAccessTokenSynchronously(USER_ID_1).isFailure)
+
+            coVerify(exactly = 1) {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+                userLogoutManager.logout(
+                    userId = USER_ID_1,
+                    reason = LogoutReason.RefreshUnauthorized,
+                )
+            }
+        }
 
     @Test
     fun `refreshAccessTokenSynchronously returns success and sets account tokens`() = runTest {

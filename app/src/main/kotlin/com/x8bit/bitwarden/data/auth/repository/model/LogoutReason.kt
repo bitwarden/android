@@ -36,6 +36,18 @@ sealed class LogoutReason {
     data object InvalidGrant : LogoutReason()
 
     /**
+     * Indicates that the logout is happening because the there was a "Forbidden" response from
+     * token refresh API.
+     */
+    data object RefreshForbidden : LogoutReason()
+
+    /**
+     * Indicates that the logout is happening because the there was a "Unauthorized" response from
+     * token refresh API.
+     */
+    data object RefreshUnauthorized : LogoutReason()
+
+    /**
      * Indicates that the logout is happening because of an invalid state.
      */
     data class InvalidState(
