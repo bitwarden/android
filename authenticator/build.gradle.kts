@@ -2,6 +2,8 @@ import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import com.google.protobuf.gradle.proto
 import dagger.hilt.android.plugin.util.capitalize
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -16,6 +18,16 @@ plugins {
     alias(libs.plugins.google.protobuf)
     alias(libs.plugins.google.services)
     alias(libs.plugins.sonarqube)
+}
+
+/**
+ * Loads CI-specific build properties that are not checked into source control.
+ */
+val ciProperties = Properties().apply {
+    val ciPropsFile = File(rootDir, "ci.properties")
+    if (ciPropsFile.exists()) {
+        FileInputStream(ciPropsFile).use { load(it) }
+    }
 }
 
 android {
@@ -34,6 +46,17 @@ android {
         versionName = libs.versions.appVersionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            type = "String",
+            name = "CI_INFO",
+            value = "${ciProperties.getOrDefault("ci.info", "\"\uD83D\uDCBB local\"")}",
+        )
+        buildConfigField(
+            type = "String",
+            name = "SDK_VERSION",
+            value = "\"${libs.versions.bitwardenSdk.get()}\"",
+        )
     }
 
     androidResources {
