@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.vault.repository.util
 
+import com.bitwarden.collections.Collection
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
 import com.bitwarden.network.model.SyncResponseJson
-import com.bitwarden.vault.Collection
-import com.bitwarden.vault.CollectionView
 
 /**
  * Converts a [SyncResponseJson.Collection] object to a corresponding Bitwarden SDK [Collection]

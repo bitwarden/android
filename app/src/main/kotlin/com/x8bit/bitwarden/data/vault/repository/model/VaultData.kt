@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository.model
 
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.send.SendView
-import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.FolderView
 

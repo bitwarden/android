@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import android.net.Uri
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -9,7 +10,6 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
-import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.data.autofill.util.card
