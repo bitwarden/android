@@ -13,6 +13,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.auth.feature.environment.EnvironmentState.DialogState
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
@@ -366,7 +367,7 @@ class EnvironmentScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `ConfirmOverwriteCertificate dialog Replace certificate click should send ConfirmOverwriteCertificate action`() {
-        val mockFileData = mockk<IntentManager.FileData>()
+        val mockFileData = mockk<FileData>()
         mutableStateFlow.update {
             it.copy(
                 dialog = DialogState.ConfirmOverwriteAlias(

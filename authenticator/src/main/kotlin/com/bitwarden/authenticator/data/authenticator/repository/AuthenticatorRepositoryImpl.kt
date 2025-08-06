@@ -21,13 +21,13 @@ import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDat
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.repository.util.map
 import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.ui.platform.model.FileData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -248,7 +248,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
 
     override suspend fun importVaultData(
         format: ImportFileFormat,
-        fileData: IntentManager.FileData,
+        fileData: FileData,
     ): ImportDataResult = fileManager.uriToByteArray(fileData.uri)
         .map {
             importManager

@@ -34,8 +34,6 @@ android {
         versionName = libs.versions.appVersionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        setProperty("archivesBaseName", "com.bitwarden.authenticator")
     }
 
     androidResources {
