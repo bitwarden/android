@@ -413,6 +413,9 @@ platform :android do
       skip_upload_aab: true,
     }
 
+
+    puts "packageName: #{release_options[:packageName]}"
+
     if options[:releaseNotes].nil? or options[:releaseNotes].to_s.empty?
       release_options[:skip_upload_metadata] = true
     else
