@@ -56,7 +56,6 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.data.platform.util.isFdroid
 import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
@@ -109,7 +108,6 @@ fun PendingRequestsScreen(
     }
 
     val hideBottomSheet = state.hideBottomSheet ||
-        isFdroid ||
         !isBuildVersionAtLeast(Build.VERSION_CODES.TIRAMISU) ||
         permissionsManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS) ||
         permissionsManager.shouldShowRequestPermissionRationale(

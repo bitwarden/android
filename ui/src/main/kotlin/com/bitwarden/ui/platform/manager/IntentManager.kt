@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.manager.intent
+package com.bitwarden.ui.platform.manager
 
 import android.content.Context
 import android.content.Intent
@@ -8,9 +8,11 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import com.bitwarden.core.data.manager.BuildInfoManager
+import com.bitwarden.ui.autofill.model.BrowserPackage
 import com.bitwarden.ui.platform.model.FileData
-import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import kotlinx.parcelize.Parcelize
+import java.time.Clock
 
 /**
  * A manager class for simplifying the handling of Android Intents within a given context.
@@ -96,7 +98,10 @@ interface IntentManager {
     /**
      * Creates an intent for choosing a file saved to disk.
      */
-    fun createFileChooserIntent(withCameraIntents: Boolean): Intent
+    fun createFileChooserIntent(
+        withCameraIntents: Boolean,
+        mimeType: String = "*/*",
+    ): Intent
 
     /**
      * Creates an intent to use when selecting to save an item with [fileName] to disk.
@@ -128,5 +133,21 @@ interface IntentManager {
         data class FileSend(
             val fileData: FileData,
         ) : ShareData()
+    }
+
+    @Suppress("UndocumentedPublicClass")
+    companion object {
+        /**
+         * Creates a new [IntentManager] instance.
+         */
+        fun create(
+            context: Context,
+            clock: Clock,
+            buildInfoManager: BuildInfoManager,
+        ): IntentManager = IntentManagerImpl(
+            context = context,
+            clock = clock,
+            buildInfoManager = buildInfoManager,
+        )
     }
 }

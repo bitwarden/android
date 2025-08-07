@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pending
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.core.util.isOverFiveMinutesOld
 import com.bitwarden.ui.platform.base.BackgroundEvent
@@ -38,6 +39,7 @@ class PendingRequestsViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     snackbarRelayManager: SnackbarRelayManager,
     settingsRepository: SettingsRepository,
+    buildInfoManager: BuildInfoManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<PendingRequestsState, PendingRequestsEvent, PendingRequestsAction>(
     initialState = savedStateHandle[KEY_STATE] ?: PendingRequestsState(
@@ -45,7 +47,7 @@ class PendingRequestsViewModel @Inject constructor(
         viewState = PendingRequestsState.ViewState.Loading,
         isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
         isRefreshing = false,
-        hideBottomSheet = false,
+        hideBottomSheet = buildInfoManager.isFdroid,
     ),
 ) {
     private var authJob: Job = Job().apply { complete() }

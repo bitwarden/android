@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
@@ -36,6 +37,16 @@ import java.time.ZoneOffset
 
 class AboutViewModelTest : BaseViewModelTest() {
 
+    private val buildInfoManager = mockk<BuildInfoManager> {
+        every { applicationId } returns "com.x8bit.bitwarden"
+        every { isFdroid } returns false
+        every { isDevBuild } returns false
+        every { versionData } returns "1.0.0 (100)"
+        every { sdkData } returns "1.0.0-20250708.105256-238"
+        every { ciBuildInfo } returns "CI Build Info"
+        every { buildFlavorName } returns ""
+        every { buildTypeName } returns "prod"
+    }
     private val environmentRepository = FakeEnvironmentRepository()
     private val clipboardManager: BitwardenClipboardManager = mockk()
     private val logsManager: LogsManager = mockk {
@@ -233,6 +244,7 @@ class AboutViewModelTest : BaseViewModelTest() {
         logsManager = logsManager,
         settingsRepository = settingsRepository,
         serverConfigRepository = serverConfigRepository,
+        buildInfoManager = buildInfoManager,
     )
 }
 

@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.manager.intent
+package com.bitwarden.ui.platform.manager
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
@@ -26,11 +26,11 @@ import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.ui.autofill.model.BrowserPackage
 import com.bitwarden.ui.platform.manager.util.deviceData
 import com.bitwarden.ui.platform.manager.util.fileProviderAuthority
 import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import java.io.File
 import java.time.Clock
 
@@ -50,7 +50,7 @@ private const val TEMP_CAMERA_IMAGE_DIR: String = "camera_temp"
  */
 @Suppress("TooManyFunctions")
 @OmitFromCoverage
-class IntentManagerImpl(
+internal class IntentManagerImpl(
     private val context: Context,
     private val clock: Clock,
     private val buildInfoManager: BuildInfoManager,
@@ -228,11 +228,11 @@ class IntentManagerImpl(
         }
     }
 
-    override fun createFileChooserIntent(withCameraIntents: Boolean): Intent {
+    override fun createFileChooserIntent(withCameraIntents: Boolean, mimeType: String): Intent {
         val chooserIntent = Intent.createChooser(
             Intent(Intent.ACTION_OPEN_DOCUMENT)
                 .addCategory(Intent.CATEGORY_OPENABLE)
-                .setType("*/*"),
+                .setType(mimeType),
             ContextCompat.getString(context, BitwardenString.file_source),
         )
 
