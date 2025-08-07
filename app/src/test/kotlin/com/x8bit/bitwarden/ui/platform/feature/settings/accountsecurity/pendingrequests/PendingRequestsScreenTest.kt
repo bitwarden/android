@@ -16,7 +16,6 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
-import com.x8bit.bitwarden.data.platform.util.isFdroid
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
@@ -54,9 +53,7 @@ class PendingRequestsScreenTest : BitwardenComposeTest() {
 
     @Before
     fun setUp() {
-        mockkStatic(::isFdroid)
         mockkStatic(::isBuildVersionAtLeast)
-        every { isFdroid } returns false
         every { isBuildVersionAtLeast(any()) } returns true
         setContent(
             permissionsManager = permissionsManager,
@@ -71,7 +68,6 @@ class PendingRequestsScreenTest : BitwardenComposeTest() {
 
     @After
     fun tearDown() {
-        unmockkStatic(::isFdroid)
         unmockkStatic(::isBuildVersionAtLeast)
     }
 
@@ -114,7 +110,7 @@ class PendingRequestsScreenTest : BitwardenComposeTest() {
                     ),
                 ),
             ),
-            hideBottomSheet = true,
+            internalHideBottomSheet = true,
         )
         composeTestRule.onNodeWithText("Decline all requests").performClick()
         composeTestRule
@@ -146,7 +142,7 @@ class PendingRequestsScreenTest : BitwardenComposeTest() {
                     ),
                 ),
             ),
-            hideBottomSheet = true,
+            internalHideBottomSheet = true,
         )
         composeTestRule.onNodeWithText("Decline all requests").performClick()
         composeTestRule
@@ -191,5 +187,6 @@ private val DEFAULT_STATE: PendingRequestsState = PendingRequestsState(
     viewState = PendingRequestsState.ViewState.Loading,
     isPullToRefreshSettingEnabled = false,
     isRefreshing = false,
-    hideBottomSheet = false,
+    internalHideBottomSheet = false,
+    isFdroid = false,
 )
