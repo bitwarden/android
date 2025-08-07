@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pending
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,7 +39,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
 import com.bitwarden.ui.platform.base.util.cardStyle
@@ -56,7 +54,6 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.data.platform.util.isFdroid
 import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
@@ -109,8 +106,6 @@ fun PendingRequestsScreen(
     }
 
     val hideBottomSheet = state.hideBottomSheet ||
-        isFdroid ||
-        !isBuildVersionAtLeast(Build.VERSION_CODES.TIRAMISU) ||
         permissionsManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS) ||
         permissionsManager.shouldShowRequestPermissionRationale(
             permission = Manifest.permission.POST_NOTIFICATIONS,

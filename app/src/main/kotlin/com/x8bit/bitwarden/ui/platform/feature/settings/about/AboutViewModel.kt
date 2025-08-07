@@ -3,9 +3,11 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.about
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.manager.util.deviceData
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -14,11 +16,6 @@ import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.util.ciBuildInfo
-import com.x8bit.bitwarden.data.platform.util.deviceData
-import com.x8bit.bitwarden.data.platform.util.isFdroid
-import com.x8bit.bitwarden.data.platform.util.sdkData
-import com.x8bit.bitwarden.data.platform.util.versionData
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.util.getStopsLoggingStringForActiveLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -44,13 +41,14 @@ class AboutViewModel @Inject constructor(
     private val logsManager: LogsManager,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
+    buildInfoManager: BuildInfoManager,
     serverConfigRepository: ServerConfigRepository,
 ) : BaseViewModel<AboutState, AboutEvent, AboutAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val serverData = serverConfigRepository.serverConfigStateFlow.value?.serverData
         AboutState(
-            version = "Version: $versionData".asText(),
-            sdkVersion = "\uD83E\uDD80 SDK: $sdkData".asText(),
+            version = "Version: ${buildInfoManager.versionData}".asText(),
+            sdkVersion = "\uD83E\uDD80 SDK: ${buildInfoManager.sdkData}".asText(),
             serverData = StringBuilder()
                 .append("\uD83C\uDF29 Server:")
                 .apply {
@@ -60,10 +58,10 @@ class AboutViewModel @Inject constructor(
                 }
                 .toString()
                 .asText(),
-            deviceData = deviceData.asText(),
-            ciData = ciBuildInfo?.let { "\n$it" }.orEmpty().asText(),
+            deviceData = buildInfoManager.deviceData.asText(),
+            ciData = buildInfoManager.ciBuildInfo?.let { "\n$it" }.orEmpty().asText(),
             isSubmitCrashLogsEnabled = logsManager.isEnabled,
-            shouldShowCrashLogsButton = !isFdroid,
+            shouldShowCrashLogsButton = !buildInfoManager.isFdroid,
             isFlightRecorderEnabled = settingsRepository
                 .flightRecorderData
                 .hasActiveFlightRecorderData,

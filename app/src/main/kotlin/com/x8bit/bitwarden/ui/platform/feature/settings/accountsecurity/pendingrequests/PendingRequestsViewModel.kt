@@ -1,9 +1,13 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingrequests
 
+import android.os.Build
 import android.os.Parcelable
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
+import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.core.util.isOverFiveMinutesOld
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
@@ -38,6 +42,7 @@ class PendingRequestsViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     snackbarRelayManager: SnackbarRelayManager,
     settingsRepository: SettingsRepository,
+    buildInfoManager: BuildInfoManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<PendingRequestsState, PendingRequestsEvent, PendingRequestsAction>(
     initialState = savedStateHandle[KEY_STATE] ?: PendingRequestsState(
@@ -45,7 +50,8 @@ class PendingRequestsViewModel @Inject constructor(
         viewState = PendingRequestsState.ViewState.Loading,
         isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
         isRefreshing = false,
-        hideBottomSheet = false,
+        internalHideBottomSheet = false,
+        isFdroid = buildInfoManager.isFdroid,
     ),
 ) {
     private var authJob: Job = Job().apply { complete() }
@@ -103,7 +109,7 @@ class PendingRequestsViewModel @Inject constructor(
     }
 
     private fun handleHideBottomSheet() {
-        mutableStateFlow.update { it.copy(hideBottomSheet = true) }
+        mutableStateFlow.update { it.copy(internalHideBottomSheet = true) }
     }
 
     private fun handleOnLifecycleResumed() {
@@ -221,8 +227,19 @@ data class PendingRequestsState(
     val viewState: ViewState,
     private val isPullToRefreshSettingEnabled: Boolean,
     val isRefreshing: Boolean,
-    val hideBottomSheet: Boolean,
+    private val internalHideBottomSheet: Boolean,
+    private val isFdroid: Boolean,
 ) : Parcelable {
+
+    /**
+     * Indicates that the bottom sheet should be hidden.
+     */
+    @get:ChecksSdkIntAtLeast(parameter = Build.VERSION_CODES.TIRAMISU)
+    val hideBottomSheet: Boolean
+        get() = internalHideBottomSheet &&
+            !isFdroid &&
+            isBuildVersionAtLeast(Build.VERSION_CODES.TIRAMISU)
+
     /**
      * Indicates that the pull-to-refresh should be enabled in the UI.
      */
