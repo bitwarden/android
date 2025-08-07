@@ -30,7 +30,7 @@ internal class RetrofitsImpl(
     authTokenInterceptor: AuthTokenInterceptor,
     baseUrlInterceptors: BaseUrlInterceptors,
     headersInterceptor: HeadersInterceptor,
-    refreshAuthenticator: RefreshAuthenticator?,
+    refreshAuthenticator: RefreshAuthenticator,
     json: Json,
     private val certificateProvider: CertificateProvider,
     private val logHttpBody: Boolean = false,
@@ -106,9 +106,7 @@ internal class RetrofitsImpl(
         baseOkHttpClient
             .newBuilder()
             .addInterceptor(authTokenInterceptor)
-            .also { builder ->
-                refreshAuthenticator?.let { builder.authenticator(it) }
-            }
+            .authenticator(refreshAuthenticator)
             .build()
     }
 
