@@ -228,11 +228,11 @@ class IntentManagerImpl(
         }
     }
 
-    override fun createFileChooserIntent(withCameraIntents: Boolean): Intent {
+    override fun createFileChooserIntent(withCameraIntents: Boolean, mimeType: String): Intent {
         val chooserIntent = Intent.createChooser(
             Intent(Intent.ACTION_OPEN_DOCUMENT)
                 .addCategory(Intent.CATEGORY_OPENABLE)
-                .setType("*/*"),
+                .setType(mimeType),
             ContextCompat.getString(context, BitwardenString.file_source),
         )
 
