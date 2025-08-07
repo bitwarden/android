@@ -390,6 +390,8 @@ platform :android do
     else
       locales = pw_manager_locales
     end
+
+    puts "Updating release notes for locales: #{locales.join(', ')}"
     locales.each do |locale|
       dir = "metadata/android/#{locale}/changelogs"
       FileUtils.mkdir_p(dir)
