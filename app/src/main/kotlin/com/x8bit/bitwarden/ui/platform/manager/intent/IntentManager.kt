@@ -95,8 +95,12 @@ interface IntentManager {
 
     /**
      * Creates an intent for choosing a file saved to disk.
+     *
+     * @param withCameraIntents Whether to include camera intents in the chooser.
+     * @param mimeType The MIME type of the files to be selected. Defaults to wildcard to allow all
+     * types.
      */
-    fun createFileChooserIntent(withCameraIntents: Boolean): Intent
+    fun createFileChooserIntent(withCameraIntents: Boolean, mimeType: String = "*/*"): Intent
 
     /**
      * Creates an intent to use when selecting to save an item with [fileName] to disk.
