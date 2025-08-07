@@ -26,6 +26,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
@@ -2476,19 +2477,35 @@ class VaultItemListingViewModel @Inject constructor(
      * Takes the given vault data and filters it for autofill if necessary.
      */
     private suspend fun DataState<VaultData>.filterForAutofillIfNecessary(): DataState<VaultData> {
-        val matchUri = state
-            .autofillSelectionData
-            ?.uri
-            ?: return this
-        return this.map { vaultData ->
-            vaultData.copy(
-                decryptCipherListResult = vaultData.decryptCipherListResult.copy(
-                    successes = cipherMatchingManager.filterCiphersForMatches(
-                        cipherListViews = vaultData.decryptCipherListResult.successes,
-                        matchUri = matchUri,
-                    ),
-                ),
-            )
+        val autofillSelectionData = state.autofillSelectionData ?: return this
+        return when (autofillSelectionData.type) {
+            AutofillSelectionData.Type.CARD -> {
+                this.map { vaultData ->
+                    vaultData.copy(
+                        decryptCipherListResult = vaultData.decryptCipherListResult.copy(
+                            successes = vaultData.decryptCipherListResult.successes
+                                .filter { it.type is CipherListViewType.Card },
+                        ),
+                    )
+                }
+            }
+
+            AutofillSelectionData.Type.LOGIN -> {
+                val matchUri = state
+                    .autofillSelectionData
+                    ?.uri
+                    ?: return this
+                this.map { vaultData ->
+                    vaultData.copy(
+                        decryptCipherListResult = vaultData.decryptCipherListResult.copy(
+                            successes = cipherMatchingManager.filterCiphersForMatches(
+                                cipherListViews = vaultData.decryptCipherListResult.successes,
+                                matchUri = matchUri,
+                            ),
+                        ),
+                    )
+                }
+            }
         }
     }
 
@@ -2626,9 +2643,21 @@ data class VaultItemListingState(
      */
     val appBarTitle: Text
         get() = autofillSelectionData
-            ?.uri
-            ?.toHostOrPathOrNull()
-            ?.let { BitwardenString.items_for_uri.asText(it) }
+            ?.let { data ->
+                data.uri
+                    ?.toHostOrPathOrNull()
+                    ?.let {
+                        when (data.type) {
+                            AutofillSelectionData.Type.CARD -> {
+                                BitwardenString.select_a_card_for_x.asText(it)
+                            }
+
+                            AutofillSelectionData.Type.LOGIN -> {
+                                BitwardenString.items_for_uri.asText(it)
+                            }
+                        }
+                    }
+            }
             ?: createCredentialRequest
                 ?.relyingPartyIdOrNull
                 ?.let { BitwardenString.items_for_uri.asText(it) }
