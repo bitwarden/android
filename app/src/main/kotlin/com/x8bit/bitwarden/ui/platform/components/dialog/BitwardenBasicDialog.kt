@@ -13,9 +13,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.data.platform.util.ciBuildInfo
-import com.x8bit.bitwarden.data.platform.util.deviceData
-import com.x8bit.bitwarden.data.platform.util.versionData
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 
@@ -52,18 +49,7 @@ fun BitwardenBasicDialog(
                     BitwardenTextButton(
                         label = stringResource(id = BitwardenString.share_error_details),
                         onClick = {
-                            intentManager.shareText(
-                                text = StringBuilder()
-                                    .append("Stacktrace:\n")
-                                    .append("$error\n")
-                                    .apply { error.stackTrace.forEach { append("\t$it\n") } }
-                                    .append("\n")
-                                    .append("Version: $versionData\n")
-                                    .append("Device: $deviceData\n")
-                                    .apply { ciBuildInfo?.let { append("CI: $it\n") } }
-                                    .append("\n")
-                                    .toString(),
-                            )
+                            intentManager.shareErrorReport(throwable = error)
                             onDismissRequest()
                         },
                         modifier = Modifier.testTag(tag = "ShareErrorDetailsAlertButton"),
