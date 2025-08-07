@@ -393,9 +393,7 @@ platform :android do
       UI.important "Unexpected package name: #{options[:packageName]}, using default locales"
       locales = pw_manager_locales
     end
-    puts "packageName: #{options[:packageName]}"
 
-    puts "Updating release notes for locales: #{locales.join(', ')}"
     locales.each do |locale|
       dir = "metadata/android/#{locale}/changelogs"
       FileUtils.mkdir_p(dir)
@@ -415,9 +413,6 @@ platform :android do
       skip_upload_apk: true,
       skip_upload_aab: true,
     }
-
-
-    puts "packageName: #{release_options[:packageName]}"
 
     if options[:releaseNotes].nil? or options[:releaseNotes].to_s.empty?
       release_options[:skip_upload_metadata] = true
