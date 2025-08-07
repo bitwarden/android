@@ -1,7 +1,6 @@
 package com.bitwarden.network.retrofit
 
-import com.bitwarden.network.authenticator.RefreshAuthenticator
-import com.bitwarden.network.interceptor.AuthTokenInterceptor
+import com.bitwarden.network.interceptor.AuthTokenManager
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.model.NetworkResult
@@ -32,7 +31,8 @@ import retrofit2.create
 import retrofit2.http.GET
 
 class RetrofitsTest {
-    private val authTokenInterceptor = mockk<AuthTokenInterceptor> {
+    private val authTokenManager = mockk<AuthTokenManager> {
+        mockAuthenticate { isRefreshAuthenticatorCalled = true }
         mockIntercept { isAuthInterceptorCalled = true }
     }
     private val baseUrlInterceptors = mockk<BaseUrlInterceptors> {
@@ -49,9 +49,6 @@ class RetrofitsTest {
     private val headersInterceptors = mockk<HeadersInterceptor> {
         mockIntercept { isHeadersInterceptorCalled = true }
     }
-    private val refreshAuthenticator = mockk<RefreshAuthenticator> {
-        mockAuthenticate { isRefreshAuthenticatorCalled = true }
-    }
     private val json = Json
     private val server = MockWebServer()
     private val certificateProvider = mockk<CertificateProvider> {
@@ -61,10 +58,9 @@ class RetrofitsTest {
     }
 
     private val retrofits = RetrofitsImpl(
-        authTokenInterceptor = authTokenInterceptor,
+        authTokenManager = authTokenManager,
         baseUrlInterceptors = baseUrlInterceptors,
         headersInterceptor = headersInterceptors,
-        refreshAuthenticator = refreshAuthenticator,
         certificateProvider = certificateProvider,
         json = json,
     )
@@ -281,10 +277,9 @@ class RetrofitsTest {
                 anyConstructed<OkHttpClient.Builder>().sslSocketFactory(any(), any())
             } returns mockk(relaxed = true)
             val retrofits = RetrofitsImpl(
-                authTokenInterceptor = authTokenInterceptor,
+                authTokenManager = authTokenManager,
                 baseUrlInterceptors = baseUrlInterceptors,
                 headersInterceptor = headersInterceptors,
-                refreshAuthenticator = refreshAuthenticator,
                 certificateProvider = certificateProvider,
                 json = json,
             )
