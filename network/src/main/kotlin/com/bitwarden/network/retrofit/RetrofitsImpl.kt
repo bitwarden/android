@@ -1,8 +1,7 @@
 package com.bitwarden.network.retrofit
 
-import com.bitwarden.network.authenticator.RefreshAuthenticator
 import com.bitwarden.network.core.NetworkResultCallAdapterFactory
-import com.bitwarden.network.interceptor.AuthTokenInterceptor
+import com.bitwarden.network.interceptor.AuthTokenManager
 import com.bitwarden.network.interceptor.BaseUrlInterceptor
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.HeadersInterceptor
@@ -27,10 +26,9 @@ import javax.net.ssl.X509TrustManager
  */
 @Suppress("LongParameterList")
 internal class RetrofitsImpl(
-    authTokenInterceptor: AuthTokenInterceptor,
+    authTokenManager: AuthTokenManager,
     baseUrlInterceptors: BaseUrlInterceptors,
     headersInterceptor: HeadersInterceptor,
-    refreshAuthenticator: RefreshAuthenticator?,
     json: Json,
     private val certificateProvider: CertificateProvider,
     private val logHttpBody: Boolean = false,
@@ -105,10 +103,8 @@ internal class RetrofitsImpl(
     private val authenticatedOkHttpClient: OkHttpClient by lazy {
         baseOkHttpClient
             .newBuilder()
-            .addInterceptor(authTokenInterceptor)
-            .also { builder ->
-                refreshAuthenticator?.let { builder.authenticator(it) }
-            }
+            .addInterceptor(authTokenManager)
+            .authenticator(authTokenManager)
             .build()
     }
 
