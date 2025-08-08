@@ -1,0 +1,20 @@
+name: 'Log Inputs to Job Summary'
+description: 'Log workflow inputs to the GitHub Actions job summary'
+
+inputs:
+  inputs:
+    description: 'Workflow inputs as JSON'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Log inputs to job summary
+      shell: bash
+      run: |
+        echo "<details><summary>Job Inputs</summary>" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo '```json' >> $GITHUB_STEP_SUMMARY
+        echo '${{ inputs.inputs }}' >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        echo "</details>" >> $GITHUB_STEP_SUMMARY
