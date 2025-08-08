@@ -176,12 +176,18 @@ jobs:
           _TAG_NAME: ${{ steps.get_release_info.outputs.tag_name }}
           _LAST_RELEASE_TAG: ${{ steps.get_release_info.outputs.last_release_tag }}
         run: |
+          is_latest_release=false
+          if [[ "$_APP_NAME" == "Password Manager" ]]; then
+            is_latest_release=true
+          fi
+
           echo "⌛️ Creating release for $_APP_NAME $_VERSION_NAME ($_VERSION_NUMBER) on $_TARGET_COMMIT"
           release_url=$(gh release create "$_TAG_NAME" \
             --title "$_APP_NAME $_VERSION_NAME ($_VERSION_NUMBER)" \
             --target "$_TARGET_COMMIT" \
             --generate-notes \
             --notes-start-tag "$_LAST_RELEASE_TAG" \
+            --latest=$is_latest_release \
             --draft \
             $ARTIFACTS_PATH/*/*)
 
