@@ -44,12 +44,15 @@ import com.x8bit.bitwarden.ui.platform.util.isPasswordGeneratorShortcut
 import com.x8bit.bitwarden.ui.vault.model.TotpData
 import com.x8bit.bitwarden.ui.vault.util.getTotpDataOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -58,11 +61,12 @@ import java.time.Clock
 import javax.inject.Inject
 
 private const val SPECIAL_CIRCUMSTANCE_KEY = "special-circumstance"
-private const val ANIMATION_REFRESH_DELAY = 500L
+private const val ANIMATION_DEBOUNCE_DELAY_MS = 500L
 
 /**
  * A view model that helps launch actions for the [MainActivity].
  */
+@OptIn(FlowPreview::class)
 @Suppress("LongParameterList", "TooManyFunctions")
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -135,36 +139,23 @@ class MainViewModel @Inject constructor(
             .onEach(::trySendAction)
             .launchIn(viewModelScope)
 
-        authRepository
-            .userStateFlow
-            .drop(count = 1)
-            // Trigger an action whenever the current user changes or we go into/out of a pending
-            // account state (which acts like switching to a temporary user).
-            .map { it?.activeUserId to it?.hasPendingAccountAddition }
-            .distinctUntilChanged()
-            .onEach {
-                // Switching between account states often involves some kind of animation (ex:
-                // account switcher) that we might want to give time to finish before triggering
-                // a refresh.
-                delay(ANIMATION_REFRESH_DELAY)
-                trySendAction(MainAction.Internal.CurrentUserStateChange)
-            }
-            .launchIn(viewModelScope)
-
-        vaultRepository
-            .vaultStateEventFlow
-            .onEach {
-                when (it) {
-                    is VaultStateEvent.Locked -> {
-                        // Similar to account switching, triggering this action too soon can
-                        // interfere with animations or navigation logic, so we will delay slightly.
-                        delay(ANIMATION_REFRESH_DELAY)
-                        trySendAction(MainAction.Internal.VaultUnlockStateChange)
-                    }
-
-                    is VaultStateEvent.Unlocked -> Unit
-                }
-            }
+        merge(
+            authRepository
+                .userStateFlow
+                .drop(count = 1)
+                // Trigger an action whenever the current user changes or we go into/out of a
+                // pending account state (which acts like switching to a temporary user).
+                .map { it?.activeUserId to it?.hasPendingAccountAddition }
+                .distinctUntilChanged(),
+            vaultRepository
+                .vaultStateEventFlow
+                .filter { it is VaultStateEvent.Locked },
+        )
+            // This debounce ensure we do not emit multiple times rapidly and also acts as a short
+            // delay to give animations time to finish (ex: account switcher).
+            .debounce(timeoutMillis = ANIMATION_DEBOUNCE_DELAY_MS)
+            .map { MainAction.Internal.CurrentUserOrVaultStateChange }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
 
         // On app launch, mark all active users as having previously logged in.
@@ -202,10 +193,12 @@ class MainViewModel @Inject constructor(
                 handleAutofillSelectionReceive(action)
             }
 
-            is MainAction.Internal.CurrentUserStateChange -> handleCurrentUserStateChange()
+            is MainAction.Internal.CurrentUserOrVaultStateChange -> {
+                handleCurrentUserOrVaultStateChange()
+            }
+
             is MainAction.Internal.ScreenCaptureUpdate -> handleScreenCaptureUpdate(action)
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
-            is MainAction.Internal.VaultUnlockStateChange -> handleVaultUnlockStateChange()
             is MainAction.Internal.DynamicColorsUpdate -> handleDynamicColorsUpdate(action)
         }
     }
@@ -239,8 +232,9 @@ class MainViewModel @Inject constructor(
         sendEvent(MainEvent.CompleteAutofill(cipherView = action.cipherView))
     }
 
-    private fun handleCurrentUserStateChange() {
-        recreateUiAndGarbageCollect()
+    private fun handleCurrentUserOrVaultStateChange() {
+        sendEvent(MainEvent.Recreate)
+        garbageCollectionManager.tryCollect()
     }
 
     private fun handleScreenCaptureUpdate(action: MainAction.Internal.ScreenCaptureUpdate) {
@@ -250,10 +244,6 @@ class MainViewModel @Inject constructor(
     private fun handleAppThemeUpdated(action: MainAction.Internal.ThemeUpdate) {
         mutableStateFlow.update { it.copy(theme = action.theme) }
         sendEvent(MainEvent.UpdateAppTheme(osTheme = action.theme.osValue))
-    }
-
-    private fun handleVaultUnlockStateChange() {
-        recreateUiAndGarbageCollect()
     }
 
     private fun handleDynamicColorsUpdate(action: MainAction.Internal.DynamicColorsUpdate) {
@@ -431,11 +421,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun recreateUiAndGarbageCollect() {
-        sendEvent(MainEvent.Recreate)
-        garbageCollectionManager.tryCollect()
-    }
-
     private fun handleCompleteRegistrationData(data: CompleteRegistrationData) {
         viewModelScope.launch {
             // Attempt to load the environment for the user if they have a pre-auth environment
@@ -547,9 +532,9 @@ sealed class MainAction {
         ) : Internal()
 
         /**
-         * Indicates a relevant change in the current user state.
+         * Indicates a relevant change in the current user state or vault locked state.
          */
-        data object CurrentUserStateChange : Internal()
+        data object CurrentUserOrVaultStateChange : Internal()
 
         /**
          * Indicates that the screen capture state has changed.
@@ -564,11 +549,6 @@ sealed class MainAction {
         data class ThemeUpdate(
             val theme: AppTheme,
         ) : Internal()
-
-        /**
-         * Indicates a relevant change in the current vault lock state.
-         */
-        data object VaultUnlockStateChange : Internal()
 
         /**
          * Indicates that the dynamic colors state has changed.

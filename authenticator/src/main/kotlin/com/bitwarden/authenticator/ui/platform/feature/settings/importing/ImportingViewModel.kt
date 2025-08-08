@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -202,7 +202,7 @@ sealed class ImportAction {
     /**
      * Indicates the user selected a file to import.
      */
-    data class ImportLocationReceive(val fileUri: IntentManager.FileData) : ImportAction()
+    data class ImportLocationReceive(val fileUri: FileData) : ImportAction()
 
     /**
      * Models actions the [ImportingScreen] itself may send.

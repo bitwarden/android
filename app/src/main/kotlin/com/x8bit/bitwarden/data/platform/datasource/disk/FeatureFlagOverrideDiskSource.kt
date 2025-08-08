@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.bitwarden.core.data.manager.model.FlagKey
 
 /**
  * Disk data source for saved feature flag overrides.

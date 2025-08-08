@@ -312,12 +312,18 @@ class IdentityServiceTest : BaseServiceTest() {
             assertEquals(PREVALIDATE_SSO_ERROR_BODY.asSuccess(), result)
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `refreshTokenSynchronously when response is success should return RefreshTokenResponseJson`() {
-        server.enqueue(MockResponse().setResponseCode(200).setBody(REFRESH_TOKEN_JSON))
+    fun `refreshTokenSynchronously when response is success should return Success`() {
+        server.enqueue(MockResponse().setResponseCode(200).setBody(REFRESH_TOKEN_SUCCESS_JSON))
         val result = identityService.refreshTokenSynchronously(refreshToken = REFRESH_TOKEN)
-        assertEquals(REFRESH_TOKEN_BODY.asSuccess(), result)
+        assertEquals(REFRESH_TOKEN_SUCCESS_BODY.asSuccess(), result)
+    }
+
+    @Test
+    fun `refreshTokenSynchronously when response is error should return Error`() {
+        server.enqueue(MockResponse().setResponseCode(400).setBody(REFRESH_TOKEN_ERROR_JSON))
+        val result = identityService.refreshTokenSynchronously(refreshToken = REFRESH_TOKEN)
+        assertEquals(REFRESH_TOKEN_ERROR_BODY.asSuccess(), result)
     }
 
     @Test
@@ -325,6 +331,20 @@ class IdentityServiceTest : BaseServiceTest() {
         server.enqueue(MockResponse().setResponseCode(400))
         val result = identityService.refreshTokenSynchronously(refreshToken = REFRESH_TOKEN)
         assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun `refreshTokenSynchronously when response is a 403 error should return an Forbidden`() {
+        server.enqueue(MockResponse().setResponseCode(403))
+        val result = identityService.refreshTokenSynchronously(refreshToken = REFRESH_TOKEN)
+        assertTrue(result.getOrThrow() is RefreshTokenResponseJson.Forbidden)
+    }
+
+    @Test
+    fun `refreshTokenSynchronously when response is a 401 error should return an Unauthorized`() {
+        server.enqueue(MockResponse().setResponseCode(401))
+        val result = identityService.refreshTokenSynchronously(refreshToken = REFRESH_TOKEN)
+        assertTrue(result.getOrThrow() is RefreshTokenResponseJson.Unauthorized)
     }
 
     @Test
@@ -520,7 +540,17 @@ private val PREVALIDATE_SSO_ERROR_BODY = PrevalidateSsoResponseJson.Error(
     message = "Organization not found from identifier.",
 )
 
-private const val REFRESH_TOKEN_JSON = """
+private const val REFRESH_TOKEN_ERROR_JSON = """
+{
+  "error": "invalid_grant"
+}
+"""
+
+private val REFRESH_TOKEN_ERROR_BODY = RefreshTokenResponseJson.Error(
+    error = "invalid_grant",
+)
+
+private const val REFRESH_TOKEN_SUCCESS_JSON = """
 {
   "access_token": "accessToken",
   "expires_in": 3600,
@@ -529,7 +559,7 @@ private const val REFRESH_TOKEN_JSON = """
 }
 """
 
-private val REFRESH_TOKEN_BODY = RefreshTokenResponseJson(
+private val REFRESH_TOKEN_SUCCESS_BODY = RefreshTokenResponseJson.Success(
     accessToken = "accessToken",
     expiresIn = 3600,
     refreshToken = "refreshToken",

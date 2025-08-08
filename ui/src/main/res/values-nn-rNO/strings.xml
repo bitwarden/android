@@ -146,7 +146,7 @@
     <string name="syncing">Synkroniserer...</string>
     <string name="syncing_complete">Synkronisering fullført.</string>
     <string name="two_step_login">Tostegsinnskriving</string>
-    <string name="unlock_with">Lås opp med %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Lås opp med PIN-kode</string>
     <string name="verification_code">Stadfestingskode</string>
     <string name="view_login">View login</string>
@@ -372,7 +372,6 @@ Skanning skjer automatisk.</string>
     <string name="download">Lasta ned</string>
     <string name="login_expired">Innskrivingsøkta di er gått ut.</string>
     <string name="biometrics_direction">Biometrisk stadfesting</string>
-    <string name="biometrics">Biometri</string>
     <string name="biometrics_failed">Biometri feila</string>
     <string name="biometrics_decoding_failure">Logg inn med hovudpassordet ditt eller PIN-koden din og reaktiver biometrisk innlogging i Innstillingar.</string>
     <string name="use_biometrics_to_unlock">Bruka biometri for å låsa opp</string>
@@ -420,7 +419,6 @@ Skanning skjer automatisk.</string>
     <string name="master_password_policy_validation_title">Invalid password</string>
     <string name="master_password_policy_validation_message">Passordet møter ikkje samskipnadskrava. Ver venleg og les retningslinene og freista om att.</string>
     <string name="loading">Lastar</string>
-    <string name="accept_policies_error">Terms of Service and Privacy Policy have not been acknowledged.</string>
     <string name="terms_of_service">Terms of Service</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="passkey_management">Passkey management</string>
@@ -609,8 +607,6 @@ Do you want to switch to this account?</string>
     <string name="language">Language</string>
     <string name="language_change_x_description">The language has been changed to %1$s. Please restart the app to see the change</string>
     <string name="default_system">Default (System)</string>
-    <string name="important">Important</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Your master password cannot be recovered if you forget it! %1$s characters minimum.</string>
     <string name="weak_master_password">Weak Master Password</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Weak password identified. Use a strong password to protect your account. Are you sure you want to use a weak password?</string>
     <string name="weak">Weak</string>
@@ -707,7 +703,6 @@ Do you want to switch to this account?</string>
     <string name="create_account_on_with_colon">Create account on:</string>
     <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ved å halde fram godtar du vilkåra for bruk og personvernerklæringa</string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Avslutt abonnementet</string>
     <string name="check_your_email">Sjekk e-posten din</string>
     <string name="open_email_app">Opne e-postapp</string>
@@ -865,8 +860,6 @@ Do you want to switch to this account?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
@@ -1076,4 +1069,5 @@ Do you want to switch to this account?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.manager.intent
 
 import android.app.Activity
-import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
@@ -24,22 +23,16 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.credentials.CredentialManager
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.ui.platform.manager.util.deviceData
+import com.bitwarden.ui.platform.manager.util.fileProviderAuthority
+import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.x8bit.bitwarden.BuildConfig
-import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
-import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import java.io.File
 import java.time.Clock
-
-/**
- * The authority used for pulling in photos from the camera.
- *
- * Note: This must match the file provider authority in the manifest.
- */
-private const val FILE_PROVIDER_AUTHORITY: String = "${BuildConfig.APPLICATION_ID}.fileprovider"
 
 /**
  * Temporary file name for a camera image.
@@ -52,33 +45,6 @@ private const val TEMP_CAMERA_IMAGE_NAME: String = "temp_camera_image.jpg"
 private const val TEMP_CAMERA_IMAGE_DIR: String = "camera_temp"
 
 /**
- * Key for the user id included in Credential provider "create entries".
- *
- * @see IntentManager.createFido2CreationPendingIntent
- */
-const val EXTRA_KEY_USER_ID: String = "user_id"
-
-/**
- * Key for the credential id included in FIDO 2 provider "get entries".
- *
- * @see IntentManager.createFido2GetCredentialPendingIntent
- */
-const val EXTRA_KEY_CREDENTIAL_ID: String = "credential_id"
-
-/**
- * Key for the cipher id included in FIDO 2 provider "get entries".
- *
- * @see IntentManager.createFido2GetCredentialPendingIntent
- */
-const val EXTRA_KEY_CIPHER_ID: String = "cipher_id"
-
-/**
- * Key for the user verification performed during vault unlock while
- * processing a Credential request.
- */
-const val EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK: String = "uv_performed_during_unlock"
-
-/**
  * The default implementation of the [IntentManager] for simplifying the handling of Android
  * Intents within a given context.
  */
@@ -87,6 +53,7 @@ const val EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK: String = "uv_performed_during_un
 class IntentManagerImpl(
     private val context: Context,
     private val clock: Clock,
+    private val buildInfoManager: BuildInfoManager,
 ) : IntentManager {
     override fun startActivity(intent: Intent) {
         try {
@@ -184,7 +151,7 @@ class IntentManagerImpl(
     override fun shareFile(title: String?, fileUri: Uri) {
         val providedFile = FileProvider.getUriForFile(
             context,
-            FILE_PROVIDER_AUTHORITY,
+            buildInfoManager.fileProviderAuthority,
             File(fileUri.toString()),
         )
         val sendIntent: Intent = Intent(Intent.ACTION_SEND).apply {
@@ -203,17 +170,32 @@ class IntentManagerImpl(
         startActivity(Intent.createChooser(sendIntent, null))
     }
 
+    override fun shareErrorReport(throwable: Throwable) {
+        shareText(
+            StringBuilder()
+                .append("Stacktrace:\n")
+                .append("$throwable\n")
+                .apply { throwable.stackTrace.forEach { append("\t$it\n") } }
+                .append("\n")
+                .append("Version: ${buildInfoManager.versionData}\n")
+                .append("Device: ${buildInfoManager.deviceData}\n")
+                .apply { buildInfoManager.ciBuildInfo?.let { append("CI: $it\n") } }
+                .append("\n")
+                .toString(),
+        )
+    }
+
     override fun getFileDataFromActivityResult(
         activityResult: ActivityResult,
-    ): IntentManager.FileData? {
+    ): FileData? {
         if (activityResult.resultCode != Activity.RESULT_OK) return null
         val uri = activityResult.data?.data
         return if (uri != null) getLocalFileData(uri) else getCameraFileData()
     }
 
-    override fun getFileDataFromIntent(
+    private fun getFileDataFromIntent(
         intent: Intent,
-    ): IntentManager.FileData? = intent
+    ): FileData? = intent
         .clipData
         ?.getItemAt(0)
         ?.uri
@@ -221,7 +203,7 @@ class IntentManagerImpl(
             val uriString = uri.toString()
             context
                 .packageManager
-                .getPackageInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_PROVIDERS)
+                .getPackageInfo(buildInfoManager.applicationId, PackageManager.GET_PROVIDERS)
                 .providers
                 ?.any { uriString.contains(other = it.authority) } == true
         }
@@ -246,11 +228,11 @@ class IntentManagerImpl(
         }
     }
 
-    override fun createFileChooserIntent(withCameraIntents: Boolean): Intent {
+    override fun createFileChooserIntent(withCameraIntents: Boolean, mimeType: String): Intent {
         val chooserIntent = Intent.createChooser(
             Intent(Intent.ACTION_OPEN_DOCUMENT)
                 .addCategory(Intent.CATEGORY_OPENABLE)
-                .setType("*/*"),
+                .setType(mimeType),
             ContextCompat.getString(context, BitwardenString.file_source),
         )
 
@@ -263,7 +245,7 @@ class IntentManagerImpl(
             }
             val outputFileUri = FileProvider.getUriForFile(
                 context,
-                FILE_PROVIDER_AUTHORITY,
+                buildInfoManager.fileProviderAuthority,
                 file,
             )
 
@@ -289,102 +271,6 @@ class IntentManagerImpl(
             putExtra(Intent.EXTRA_TITLE, fileName)
         }
 
-    override fun createTileIntent(data: String): Intent {
-        return Intent(
-            context,
-            MainActivity::class.java,
-        )
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            .setData(data.toUri())
-    }
-
-    override fun createTilePendingIntent(requestCode: Int, tileIntent: Intent): PendingIntent {
-        return PendingIntent.getActivity(
-            context,
-            requestCode,
-            tileIntent,
-            PendingIntent.FLAG_IMMUTABLE,
-        )
-    }
-
-    override fun createFido2CreationPendingIntent(
-        action: String,
-        userId: String,
-        requestCode: Int,
-    ): PendingIntent {
-        val intent = Intent(action)
-            .setPackage(context.packageName)
-            .putExtra(EXTRA_KEY_USER_ID, userId)
-
-        return PendingIntent.getActivity(
-            /* context = */ context,
-            /* requestCode = */ requestCode,
-            /* intent = */ intent,
-            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
-        )
-    }
-
-    override fun createFido2GetCredentialPendingIntent(
-        action: String,
-        userId: String,
-        credentialId: String,
-        cipherId: String,
-        isUserVerified: Boolean,
-        requestCode: Int,
-    ): PendingIntent {
-        val intent = Intent(action)
-            .setPackage(context.packageName)
-            .putExtra(EXTRA_KEY_USER_ID, userId)
-            .putExtra(EXTRA_KEY_CREDENTIAL_ID, credentialId)
-            .putExtra(EXTRA_KEY_CIPHER_ID, cipherId)
-            .putExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, isUserVerified)
-
-        return PendingIntent.getActivity(
-            /* context = */ context,
-            /* requestCode = */ requestCode,
-            /* intent = */ intent,
-            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
-        )
-    }
-
-    override fun createFido2UnlockPendingIntent(
-        action: String,
-        userId: String,
-        requestCode: Int,
-    ): PendingIntent {
-        val intent = Intent(action)
-            .setPackage(context.packageName)
-            .putExtra(EXTRA_KEY_USER_ID, userId)
-
-        return PendingIntent.getActivity(
-            /* context = */ context,
-            /* requestCode = */ requestCode,
-            /* intent = */ intent,
-            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
-        )
-    }
-
-    override fun createPasswordGetCredentialPendingIntent(
-        action: String,
-        userId: String,
-        cipherId: String?,
-        isUserVerified: Boolean,
-        requestCode: Int,
-    ): PendingIntent {
-        val intent = Intent(action)
-            .setPackage(context.packageName)
-            .putExtra(EXTRA_KEY_USER_ID, userId)
-            .putExtra(EXTRA_KEY_CIPHER_ID, cipherId)
-            .putExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, isUserVerified)
-
-        return PendingIntent.getActivity(
-            /* context = */ context,
-            /* requestCode = */ requestCode,
-            /* intent = */ intent,
-            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
-        )
-    }
-
     override fun startDefaultEmailApplication() {
         val intent = Intent(Intent.ACTION_MAIN)
         intent.addCategory(Intent.CATEGORY_APP_EMAIL)
@@ -401,19 +287,23 @@ class IntentManagerImpl(
         return Intent(Intent.ACTION_VIEW, playStoreUri)
     }
 
-    private fun getCameraFileData(): IntentManager.FileData {
+    private fun getCameraFileData(): FileData {
         val tmpDir = File(context.filesDir, TEMP_CAMERA_IMAGE_DIR)
         val file = File(tmpDir, TEMP_CAMERA_IMAGE_NAME)
-        val uri = FileProvider.getUriForFile(context, FILE_PROVIDER_AUTHORITY, file)
+        val uri = FileProvider.getUriForFile(
+            context,
+            buildInfoManager.fileProviderAuthority,
+            file,
+        )
         val fileName = "photo_${clock.instant().toFormattedPattern(pattern = "yyyyMMddHHmmss")}.jpg"
-        return IntentManager.FileData(
+        return FileData(
             fileName = fileName,
             uri = uri,
             sizeBytes = file.length(),
         )
     }
 
-    private fun getLocalFileData(uri: Uri): IntentManager.FileData? =
+    private fun getLocalFileData(uri: Uri): FileData? =
         context
             .contentResolver
             .query(
@@ -432,12 +322,13 @@ class IntentManagerImpl(
                     .getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME)
                     .takeIf { it >= 0 }
                     ?.let { cursor.getString(it) }
+                    ?: return@use null
                 val fileSize = cursor
                     .getColumnIndex(MediaStore.MediaColumns.SIZE)
                     .takeIf { it >= 0 }
                     ?.let { cursor.getLong(it) }
-                if (fileName == null || fileSize == null) return@use null
-                IntentManager.FileData(
+                    ?: return@use null
+                FileData(
                     fileName = fileName,
                     uri = uri,
                     sizeBytes = fileSize,

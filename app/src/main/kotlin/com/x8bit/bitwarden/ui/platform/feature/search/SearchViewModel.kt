@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
@@ -30,7 +31,6 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
@@ -414,7 +414,7 @@ class SearchViewModel @Inject constructor(
         action: ListingItemOverflowAction.VaultAction.CopyTotpClick,
     ) {
         viewModelScope.launch {
-            val result = vaultRepo.generateTotp(action.totpCode, clock.instant())
+            val result = vaultRepo.generateTotp(action.cipherId, clock.instant())
             sendAction(SearchAction.Internal.GenerateTotpResultReceive(result))
         }
     }

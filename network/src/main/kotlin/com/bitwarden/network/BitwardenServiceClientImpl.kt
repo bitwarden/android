@@ -2,8 +2,7 @@ package com.bitwarden.network
 
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.serializer.ZonedDateTimeSerializer
-import com.bitwarden.network.authenticator.RefreshAuthenticator
-import com.bitwarden.network.interceptor.AuthTokenInterceptor
+import com.bitwarden.network.interceptor.AuthTokenManager
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.model.BitwardenServiceClientConfig
@@ -52,7 +51,10 @@ internal class BitwardenServiceClientImpl(
     private val bitwardenServiceClientConfig: BitwardenServiceClientConfig,
 ) : BitwardenServiceClient {
 
-    private val refreshAuthenticator: RefreshAuthenticator = RefreshAuthenticator()
+    private val authTokenManager: AuthTokenManager = AuthTokenManager(
+        clock = bitwardenServiceClientConfig.clock,
+        authTokenProvider = bitwardenServiceClientConfig.authTokenProvider,
+    )
     private val clientJson = Json {
 
         // If there are keys returned by the server not modeled by a serializable class,
@@ -71,9 +73,7 @@ internal class BitwardenServiceClientImpl(
     }
     private val retrofits: Retrofits by lazy {
         RetrofitsImpl(
-            authTokenInterceptor = AuthTokenInterceptor(
-                authTokenProvider = bitwardenServiceClientConfig.authTokenProvider,
-            ),
+            authTokenManager = authTokenManager,
             baseUrlInterceptors = BaseUrlInterceptors(
                 baseUrlsProvider = bitwardenServiceClientConfig.baseUrlsProvider,
             ),
@@ -82,7 +82,6 @@ internal class BitwardenServiceClientImpl(
                 clientName = bitwardenServiceClientConfig.clientData.clientName,
                 clientVersion = bitwardenServiceClientConfig.clientData.clientVersion,
             ),
-            refreshAuthenticator = refreshAuthenticator,
             logHttpBody = bitwardenServiceClientConfig.enableHttpBodyLogging,
             certificateProvider = bitwardenServiceClientConfig.certificateProvider,
             json = clientJson,
@@ -204,6 +203,6 @@ internal class BitwardenServiceClientImpl(
     }
 
     override fun setRefreshTokenProvider(refreshTokenProvider: RefreshTokenProvider?) {
-        refreshAuthenticator.refreshTokenProvider = refreshTokenProvider
+        authTokenManager.refreshTokenProvider = refreshTokenProvider
     }
 }

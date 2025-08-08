@@ -154,6 +154,9 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import javax.net.ssl.SSLHandshakeException
 
@@ -259,7 +262,8 @@ class AuthRepositoryTest {
         every { setUserData(userId = any(), environmentType = any()) } just runs
     }
 
-    private val repository = AuthRepositoryImpl(
+    private val repository: AuthRepository = AuthRepositoryImpl(
+        clock = FIXED_CLOCK,
         accountsService = accountsService,
         devicesService = devicesService,
         identityService = identityService,
@@ -878,27 +882,95 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `refreshAccessTokenSynchronously returns failure and logs out on failure`() = runTest {
-        fakeAuthDiskSource.storeAccountTokens(
-            userId = USER_ID_1,
-            accountTokens = ACCOUNT_TOKENS_1,
-        )
-        coEvery {
-            identityService.refreshTokenSynchronously(REFRESH_TOKEN)
-        } returns Throwable("Fail").asFailure()
+    fun `refreshAccessTokenSynchronously returns failure if refreshTokenSynchronously fails`() =
+        runTest {
+            fakeAuthDiskSource.storeAccountTokens(
+                userId = USER_ID_1,
+                accountTokens = ACCOUNT_TOKENS_1,
+            )
+            coEvery {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            } returns Throwable("Fail").asFailure()
 
-        assertTrue(repository.refreshAccessTokenSynchronously(USER_ID_1).isFailure)
+            assertTrue(repository.refreshAccessTokenSynchronously(USER_ID_1).isFailure)
 
-        coVerify(exactly = 1) {
-            identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            coVerify(exactly = 1) {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            }
         }
-    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `refreshAccessTokenSynchronously returns logs out and returns failure if refreshTokenSynchronously returns invalid_grant`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeAccountTokens(
+                userId = USER_ID_1,
+                accountTokens = ACCOUNT_TOKENS_1,
+            )
+            coEvery {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            } returns RefreshTokenResponseJson.Error(error = "invalid_grant").asSuccess()
+
+            assertTrue(repository.refreshAccessTokenSynchronously(USER_ID_1).isFailure)
+
+            coVerify(exactly = 1) {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+                userLogoutManager.logout(userId = USER_ID_1, reason = LogoutReason.InvalidGrant)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `refreshAccessTokenSynchronously returns logs out and returns failure if refreshTokenSynchronously returns Forbidden`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeAccountTokens(
+                userId = USER_ID_1,
+                accountTokens = ACCOUNT_TOKENS_1,
+            )
+            coEvery {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            } returns RefreshTokenResponseJson.Forbidden(error = Throwable("Fail!")).asSuccess()
+
+            assertTrue(repository.refreshAccessTokenSynchronously(USER_ID_1).isFailure)
+
+            coVerify(exactly = 1) {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+                userLogoutManager.logout(userId = USER_ID_1, reason = LogoutReason.RefreshForbidden)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `refreshAccessTokenSynchronously returns logs out and returns failure if refreshTokenSynchronously returns Unauthorized`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeAccountTokens(
+                userId = USER_ID_1,
+                accountTokens = ACCOUNT_TOKENS_1,
+            )
+            coEvery {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            } returns RefreshTokenResponseJson.Unauthorized(error = Throwable("Fail!")).asSuccess()
+
+            assertTrue(repository.refreshAccessTokenSynchronously(USER_ID_1).isFailure)
+
+            coVerify(exactly = 1) {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+                userLogoutManager.logout(
+                    userId = USER_ID_1,
+                    reason = LogoutReason.RefreshUnauthorized,
+                )
+            }
+        }
 
     @Test
     fun `refreshAccessTokenSynchronously returns success and sets account tokens`() = runTest {
         val updatedAccountTokens = AccountTokensJson(
             accessToken = ACCESS_TOKEN_2,
             refreshToken = REFRESH_TOKEN_2,
+            expiresAtSec = FIXED_CLOCK.instant().epochSecond + ACCESS_TOKEN_2_EXPIRES_IN,
         )
         fakeAuthDiskSource.storeAccountTokens(
             userId = USER_ID_1,
@@ -911,7 +983,7 @@ class AuthRepositoryTest {
 
         val result = repository.refreshAccessTokenSynchronously(USER_ID_1)
 
-        assertEquals(REFRESH_TOKEN_RESPONSE_JSON.asSuccess(), result)
+        assertEquals(REFRESH_TOKEN_RESPONSE_JSON.accessToken.asSuccess(), result)
         fakeAuthDiskSource.assertAccountTokens(
             userId = USER_ID_1,
             accountTokens = updatedAccountTokens,
@@ -6908,6 +6980,10 @@ class AuthRepositoryTest {
         }
 
     companion object {
+        private val FIXED_CLOCK: Clock = Clock.fixed(
+            Instant.parse("2023-10-27T12:00:00Z"),
+            ZoneOffset.UTC,
+        )
         private const val UNIQUE_APP_ID = "testUniqueAppId"
         private const val NAME = "Example Name"
         private const val EMAIL = "test@bitwarden.com"
@@ -6919,6 +6995,7 @@ class AuthRepositoryTest {
         private const val ACCESS_TOKEN_2 = "accessToken2"
         private const val REFRESH_TOKEN = "refreshToken"
         private const val REFRESH_TOKEN_2 = "refreshToken2"
+        private const val ACCESS_TOKEN_2_EXPIRES_IN = 3600
         private const val CAPTCHA_KEY = "captcha"
         private const val TWO_FACTOR_CODE = "123456"
         private val TWO_FACTOR_METHOD = TwoFactorAuthMethod.EMAIL
@@ -6959,9 +7036,9 @@ class AuthRepositoryTest {
             accessCode = "accessCode",
             fingerprint = "fingerprint",
         )
-        private val REFRESH_TOKEN_RESPONSE_JSON = RefreshTokenResponseJson(
+        private val REFRESH_TOKEN_RESPONSE_JSON = RefreshTokenResponseJson.Success(
             accessToken = ACCESS_TOKEN_2,
-            expiresIn = 3600,
+            expiresIn = ACCESS_TOKEN_2_EXPIRES_IN,
             refreshToken = REFRESH_TOKEN_2,
             tokenType = "Bearer",
         )

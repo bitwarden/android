@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         // This min value is selected to accommodate known consumers
-        minSdk = 28
+        minSdk = libs.versions.minSdkBwa.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")

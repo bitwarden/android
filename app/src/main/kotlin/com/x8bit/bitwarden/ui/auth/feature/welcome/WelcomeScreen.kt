@@ -63,7 +63,6 @@ private val HORIZONTAL_MARGIN_MEDIUM: Dp = 128.dp
  */
 @Composable
 fun WelcomeScreen(
-    onNavigateToCreateAccount: () -> Unit,
     onNavigateToLogin: () -> Unit,
     onNavigateToStartRegistration: () -> Unit,
     viewModel: WelcomeViewModel = hiltViewModel(),
@@ -78,7 +77,6 @@ fun WelcomeScreen(
                 scope.launch { pagerState.animateScrollToPage(event.index) }
             }
 
-            WelcomeEvent.NavigateToCreateAccount -> onNavigateToCreateAccount()
             WelcomeEvent.NavigateToLogin -> onNavigateToLogin()
             WelcomeEvent.NavigateToStartRegistration -> onNavigateToStartRegistration()
         }

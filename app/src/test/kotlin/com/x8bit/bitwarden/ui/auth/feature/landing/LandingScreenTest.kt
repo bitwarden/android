@@ -47,7 +47,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 
 class LandingScreenTest : BitwardenComposeTest() {
     private var capturedEmail: String? = null
-    private var onNavigateToCreateAccountCalled = false
     private var onNavigateToLoginCalled = false
     private var onNavigateToEnvironmentCalled = false
     private var onNavigateToStartRegistrationCalled = false
@@ -64,7 +63,6 @@ class LandingScreenTest : BitwardenComposeTest() {
     fun setUp() {
         setContent {
             LandingScreen(
-                onNavigateToCreateAccount = { onNavigateToCreateAccountCalled = true },
                 onNavigateToLogin = { capturedEmail ->
                     this.capturedEmail = capturedEmail
                     onNavigateToLoginCalled = true
@@ -314,12 +312,6 @@ class LandingScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(LandingAction.EmailInputChanged(input))
         }
-    }
-
-    @Test
-    fun `NavigateToCreateAccount event should call onNavigateToCreateAccount`() {
-        mutableEventFlow.tryEmit(LandingEvent.NavigateToCreateAccount)
-        assertTrue(onNavigateToCreateAccountCalled)
     }
 
     @Test

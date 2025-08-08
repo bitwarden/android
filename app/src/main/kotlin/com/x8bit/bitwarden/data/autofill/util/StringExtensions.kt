@@ -16,3 +16,13 @@ fun String.containsAnyTerms(
             ignoreCase = ignoreCase,
         )
     }
+
+/**
+ * Check whether this string matches any of these [expressions].
+ */
+fun String.matchesAnyExpressions(
+    expressions: List<Regex>,
+): Boolean =
+    expressions.any {
+        this.matches(regex = it)
+    }

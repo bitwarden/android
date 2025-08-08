@@ -1,9 +1,9 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model
 
 import androidx.compose.material3.ExtendedFloatingActionButton
-import com.bitwarden.ui.util.Text
 import com.bitwarden.authenticator.ui.platform.components.fab.ExpandableFabOption
 import com.bitwarden.authenticator.ui.platform.components.model.IconResource
+import com.bitwarden.ui.util.Text
 
 /**
  * Models [ExpandableFabOption]s that can be triggered by the [ExtendedFloatingActionButton].

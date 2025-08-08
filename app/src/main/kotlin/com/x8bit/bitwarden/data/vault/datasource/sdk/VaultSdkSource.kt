@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
-import com.bitwarden.core.DateTime
+import com.bitwarden.collections.Collection
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
@@ -21,8 +22,6 @@ import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.Collection
-import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.EncryptionContext
 import com.bitwarden.vault.Folder
@@ -372,15 +371,6 @@ interface VaultSdkSource {
         userId: String,
         passwordHistoryList: List<PasswordHistory>,
     ): Result<List<PasswordHistoryView>>
-
-    /**
-     * Generate a verification code and the period using the totp code.
-     */
-    suspend fun generateTotp(
-        userId: String,
-        totp: String,
-        time: DateTime,
-    ): Result<TotpResponse>
 
     /**
      * Generate a verification code for the given [cipherListView] and [time].

@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Base64
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
@@ -44,7 +45,6 @@ import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
@@ -2740,7 +2740,7 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.userState = null
 
             val result = vaultRepository.generateTotp(
-                totpCode = "totpCode",
+                cipherId = "totpCode",
                 time = DateTime.now(),
             )
 
@@ -2753,13 +2753,16 @@ class VaultRepositoryTest {
     @Test
     fun `generateTotp should return a success result on getting a code`() = runTest {
         val totpResponse = TotpResponse("Testcode", 30u)
+        val userId = "mockId-1"
         coEvery {
-            vaultSdkSource.generateTotp(any(), any(), any())
+            vaultSdkSource.generateTotpForCipherListView(any(), any(), any())
         } returns totpResponse.asSuccess()
         fakeAuthDiskSource.userState = MOCK_USER_STATE
+        setVaultToUnlocked(userId = userId)
+        setupDataStateFlow(userId = userId)
 
         val result = vaultRepository.generateTotp(
-            totpCode = "testCode",
+            cipherId = "mockId-1",
             time = DateTime.now(),
         )
 

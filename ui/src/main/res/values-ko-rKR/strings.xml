@@ -146,7 +146,7 @@
     <string name="syncing">동기화 중...</string>
     <string name="syncing_complete">동기화를 완료했습니다.</string>
     <string name="two_step_login">2단계 인증</string>
-    <string name="unlock_with">%1$s을 사용하여 잠금 해제</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">PIN 코드를 사용하여 잠금 해제</string>
     <string name="verification_code">인증 코드</string>
     <string name="view_login">View login</string>
@@ -372,7 +372,6 @@
     <string name="download">다운로드</string>
     <string name="login_expired">로그인 세션이 만료되었습니다.</string>
     <string name="biometrics_direction">인증하기 위해 생체 인식을 사용하세요.</string>
-    <string name="biometrics">생체 인식</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">잠금 해제에 생체 인식 사용</string>
@@ -420,7 +419,6 @@
     <string name="master_password_policy_validation_title">유효하지 않은 비밀번호</string>
     <string name="master_password_policy_validation_message">비밀번호가 조직 요구 사항을 충족하지 않습니다. 정책 정보를 확인해보고 다시 시도해보세요.</string>
     <string name="loading">불러오는 중</string>
-    <string name="accept_policies_error">서비스 약관 및 개인 정보 보호 정책을 확인하지 않았습니다.</string>
     <string name="terms_of_service">서비스 약관</string>
     <string name="privacy_policy">개인 정보 보호 정책</string>
     <string name="passkey_management">Passkey management</string>
@@ -609,8 +607,6 @@
     <string name="language">언어</string>
     <string name="language_change_x_description">언어가 %1$s로 변경되었습니다. 적용된 모습을 보려면 앱을 다시 시작하세요.</string>
     <string name="default_system">기본 (시스템)</string>
-    <string name="important">중요</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">마스터 비밀번호를 잊어버리면 복구할 수 없습니다! 최소 길이는 %1$s자입니다.</string>
     <string name="weak_master_password">취약한 마스터 비밀번호</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">취약한 비밀번호가 감지되었습니다. 계정을 보호하려면 강력한 비밀번호를 사용하세요. 취약한 비밀번호를 정말로 사용하시겠습니까?</string>
     <string name="weak">약함</string>
@@ -707,7 +703,6 @@
     <string name="create_account_on_with_colon">Create account on:</string>
     <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Unsubscribe</string>
     <string name="check_your_email">Check your email</string>
     <string name="open_email_app">Open email app</string>
@@ -865,8 +860,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
@@ -1076,4 +1069,5 @@
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

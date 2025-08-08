@@ -146,7 +146,7 @@
     <string name="syncing">ஒத்திசைக்கிறது...</string>
     <string name="syncing_complete">ஒத்திசைவு நிறைவு</string>
     <string name="two_step_login">இரு-படி உள்நுழைவு</string>
-    <string name="unlock_with">%1$s மூலம் பூட்டவிழ்</string>
+    <string name="unlock_with_biometrics">உயிரியளவுகள் மூலம் பூட்டவிழ்</string>
     <string name="unlock_with_pin">கடவெண் குறி மூலம் பூட்டவிழ்</string>
     <string name="verification_code">சரிபார்ப்புக் குறியீடு</string>
     <string name="view_login">View login</string>
@@ -372,7 +372,6 @@
     <string name="download">பதிவிறக்கு</string>
     <string name="login_expired">உம் உள்நுழைவு அமர்வு காலாவதியானது.</string>
     <string name="biometrics_direction">உயிரியளவுச் சரிபார்ப்பு</string>
-    <string name="biometrics">உயிரியளவுகள்</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">உயிரியளவுகளால் பூட்டவிழ்</string>
@@ -420,7 +419,6 @@
     <string name="master_password_policy_validation_title">செல்லாத கடவுச்சொல்</string>
     <string name="master_password_policy_validation_message">கடவுச்சொல் நிறுவன தேவைகளை சந்திக்கவில்லை. கொள்கை தகவலை சரிபார்த்து மீண்டும் முயலவும்.</string>
     <string name="loading">ஏற்றுகிறது</string>
-    <string name="accept_policies_error">சேவை விதிமுறைகளும் தனியுரிமைக் கொள்கையும்  ஒப்புக்கொள்ளப்படவில்லை.</string>
     <string name="terms_of_service">சேவை விதிமுறைகள்</string>
     <string name="privacy_policy">தனியுரிமை கொள்கை</string>
     <string name="passkey_management">கடவுவிசை நிர்வகிப்பு</string>
@@ -609,8 +607,6 @@
     <string name="language">மொழி</string>
     <string name="language_change_x_description">மொழி %1$s-க்கு மாற்றப்பட்டது. மாற்றத்தைக் காண செயலியை மறுதுவக்கு</string>
     <string name="default_system">இயல்புநிலை (முறைமை)</string>
-    <string name="important">முக்கியம்</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">மறந்துபோனால் பிரதான கடவுச்சொல்லை மீட்டெடுக்க முடியாது! குறைந்தபட்சம் %1$s வரியுருக்கள்.</string>
     <string name="weak_master_password">வலுவற்ற பிரதான கடவுச்சொல்</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Weak password identified. Use a strong password to protect your account. Are you sure you want to use a weak password?</string>
     <string name="weak">வலுவற்ற</string>
@@ -707,7 +703,6 @@
     <string name="create_account_on_with_colon">Create account on:</string>
     <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Unsubscribe</string>
     <string name="check_your_email">Check your email</string>
     <string name="open_email_app">Open email app</string>
@@ -776,7 +771,7 @@
     <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
     <string name="new_login">New login</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">கோப்புகள் மற்றும் தரவை யாருடனும், எத்தளத்திலும் பாதுகாப்பாகப் பகிர்க. வெளிப்படுதலைக் கட்டுப்படுத்தி உமது தகவல் இருமுனை மறையாக்கம் செய்யப்பட்டிருக்கும்.</string>
-    <string name="send_sensitive_information_safely">பாதுகாப்பாக மறைமுகத் தகவலை அனுப்புக</string>
+    <string name="send_sensitive_information_safely">மறைமுகத் தகவலை அனுப்புக, பாதுகாப்பாக</string>
     <string name="import_saved_logins">Import saved logins</string>
     <string name="use_a_computer_to_import_logins">Use a computer to import logins from an existing password manager</string>
     <string name="you_can_return_to_complete_this_step_anytime_from_settings">You can return to complete this step anytime in Vault Settings.</string>
@@ -787,8 +782,8 @@
     <string name="import_logins">Import Logins</string>
     <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">From your computer, follow these instructions to export saved passwords from your browser or other password manager. Then, safely import them to Bitwarden.</string>
     <string name="give_your_vault_a_head_start">Give your vault a head start</string>
-    <string name="class_3_biometrics_description">Unlock with biometrics requires strong biometric authentication and may not be compatible with all biometric options on this device.</string>
-    <string name="class_2_biometrics_description">Unlock with biometrics requires strong biometric authentication and is not compatible with the biometrics options available on this device.</string>
+    <string name="class_3_biometrics_description">உயிரியளவுகளுடன் பூட்டவிழ்ப்பதற்கு வலிய உயிரியளவு அங்கீகரிப்பு தேவை மற்றும் இது சாதனத்திலுள்ள எல்லா உயிரியளவு தெரிவுகளுடனும் ஒத்துப்போகாமல் இருக்கலாம்.</string>
+    <string name="class_2_biometrics_description">உயிரியளவுகளுடன் பூட்டவிழ்ப்பதற்கு வலிய உயிரியளவு அங்கீகரிப்பு தேவை மற்றும் இது சாதனத்திலுள்ள உயிரியளவு தெரிவுகளுடன் ஒத்துப்போகாமல் இருக்கலாம்.</string>
     <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">On your computer, <annotation emphasis="bold">log in to your current browser or password manager.</annotation></string>
     <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Export your passwords.</annotation> This option is usually found in your settings.</string>
     <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Select Import data</annotation> in the web app, then Done below to finish syncing.</string>
@@ -865,8 +860,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
@@ -1076,4 +1069,5 @@
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

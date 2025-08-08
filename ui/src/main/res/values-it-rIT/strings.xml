@@ -85,7 +85,7 @@
     <string name="edit_card">Modifica la carta</string>
     <string name="edit_identity">Modifica l\'identità</string>
     <string name="edit_note">Modifica la nota</string>
-    <string name="edit_ssh_key">Edit SSH key</string>
+    <string name="edit_ssh_key">Modifica la chiave SSH</string>
     <string name="enter_email_for_hint">Inserisci l\'indirizzo email dell\'account per ricevere il suggerimento per la password principale</string>
     <string name="favorite">Segna come importante</string>
     <string name="unfavorite">Segna come non importante</string>
@@ -101,8 +101,8 @@
     <string name="one_minute">1 minuto</string>
     <string name="four_hours">4 ore</string>
     <string name="immediately">Immediata</string>
-    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
-    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
+    <string name="vault_timeout_log_out_confirmation_title">Vuoi impostare un timeout per la disconnessione?</string>
+    <string name="vault_timeout_log_out_confirmation_message">Dopo il periodo di timeout, sarai disconnesso. Dovrai avere una connessione attiva per rifare il login e accedere nuovamente alla tua cassaforte. Le impostazioni e il PIN salvati su questo dispositivo non cambieranno.</string>
     <string name="logging_in">Accesso in corso</string>
     <string name="login_to_bitwarden">Accedi a Bitwarden</string>
     <string name="master_password_confirmation_val_message">Password principale non corrispondente</string>
@@ -146,14 +146,14 @@
     <string name="syncing">Sincronizzazione in corso</string>
     <string name="syncing_complete">Sincronizzazione completata</string>
     <string name="two_step_login">Configurazione 2FA (autenticazione a due fattori)</string>
-    <string name="unlock_with">Sblocco con %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Sblocco con Codice PIN</string>
     <string name="verification_code">Codice di verifica</string>
     <string name="view_login">Visualizza il login</string>
     <string name="view_card">Visualizza la carta</string>
     <string name="view_identity">Visualizza l\'identità</string>
     <string name="view_note">Visualizza la nota</string>
-    <string name="view_ssh_key">View SSH key</string>
+    <string name="view_ssh_key">Visualizza chiave SSH</string>
     <string name="web_vault">Cassaforte web di Bitwarden</string>
     <string name="items">Elementi</string>
     <string name="items_for_uri">Elementi per %1$s</string>
@@ -187,8 +187,7 @@
     <string name="verification_code_totp">Codice 2FA (TOTP)</string>
     <string name="authenticator_key_added">Chiave 2FA aggiunta</string>
     <string name="authenticator_key_read_error">Lettura della chiave 2FA non riuscita</string>
-    <string name="point_your_camera_at_the_qr_code">Posiziona il codice QR all\'interno del quadrato. 
-La scansione è automatica.</string>
+    <string name="point_your_camera_at_the_qr_code">Centra il QR code: la scansione è automatica.</string>
     <string name="copy_totp">Copia il codice 2FA</string>
     <string name="copy_totp_automatically_description">Copia automaticamente il codice 2FA negli appunti quando riempi automaticamente un login</string>
     <string name="copy_totp_automatically">Copia automatica del codice 2FA</string>
@@ -264,7 +263,7 @@ La scansione è automatica.</string>
     <string name="address">Indirizzo</string>
     <string name="expiration">Scadenza</string>
     <string name="show_website_icons">Visualizza le icone dei siti web</string>
-    <string name="show_website_icons_help">Show website icons help</string>
+    <string name="show_website_icons_help">Mostra l\'aiuto per le icone dei siti Web</string>
     <string name="show_website_icons_description">Visualizza un piccolo logo riconoscibile accanto a ogni login</string>
     <string name="icons_url">URL del server di icone</string>
     <string name="vault_is_locked">La cassaforte è bloccata</string>
@@ -372,10 +371,9 @@ La scansione è automatica.</string>
     <string name="download">Scarica</string>
     <string name="login_expired">Sessione scaduta</string>
     <string name="biometrics_direction">Autenticazione biometrica</string>
-    <string name="biometrics">Biometria</string>
     <string name="biometrics_failed">Autenticazione biometrica fallita</string>
     <string name="biometrics_decoding_failure">Effettua l\'accesso con la password principale o il codice PIN. Puoi riabilitare l\'autenticazione biometrica nelle impostazioni.</string>
-    <string name="use_biometrics_to_unlock">Sblocca con la biometria</string>
+    <string name="use_biometrics_to_unlock">Sblocca con dati biometrici</string>
     <string name="file_format">Formato del file</string>
     <string name="export_vault_master_password_description">Inserisci la password principale dell\'account Bitwarden</string>
     <string name="send_verification_code_to_email">Invia un codice di verifica all\'indirizzo email</string>
@@ -420,7 +418,6 @@ La scansione è automatica.</string>
     <string name="master_password_policy_validation_title">Password non valida</string>
     <string name="master_password_policy_validation_message">La password non soddisfa i requisiti dell\'organizzazione. Controlla i requisiti e prova con un\'altra password.</string>
     <string name="loading">Caricamento in corso</string>
-    <string name="accept_policies_error">Accetta i Termini di Servizio e l\'Informativa sulla Privacy</string>
     <string name="terms_of_service">Termini di Servizio</string>
     <string name="privacy_policy">Informativa sulla Privacy</string>
     <string name="passkey_management">Gestione delle passkey</string>
@@ -531,9 +528,9 @@ Tutte le sessioni attive verranno terminate entro un\'ora.</string>
     <string name="totp">Codice 2FA (TOTP)</string>
     <string name="verification_codes">Codici di verifica</string>
     <string name="premium_subscription_required">Passa a un abbonamento Premium</string>
-    <string name="cannot_add_authenticator_key_scan_qr_code">Non puoi inserire manualmente la chiave 2FA? <annotation link="scanQrCode">Scansiona il codice QR</annotation></string>
+    <string name="cannot_add_authenticator_key_scan_qr_code">Non puoi inserire manualmente la chiave 2FA? <annotation link="scanQrCode">Scansiona il QR code</annotation></string>
     <string name="scan_qr_code">Scansiona codice QR</string>
-    <string name="cannot_scan_qr_code_enter_key_manually">Non puoi scansionare il codice QR? <annotation link="enterKeyManually">Inserisci manualmente la chiave</annotation></string>
+    <string name="cannot_scan_qr_code_enter_key_manually">Non puoi scansionare il QR code? <annotation link="enterKeyManually">Inserisci manualmente la chiave</annotation></string>
     <string name="authenticator_key_scanner">Chiave 2FA</string>
     <string name="authenticator_key_help">Guida per la chiave 2FA</string>
     <string name="enter_key_manually">Inserisci manualmente la chiave</string>
@@ -605,12 +602,10 @@ Vuoi passare a questo account?</string>
     <string name="decline_all_requests">Rifiuta tutte le richieste</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Vuoi davvero rifiutare tutte le richieste di accesso in sospeso?</string>
     <string name="no_pending_requests">Nessuna richiesta in sospeso</string>
-    <string name="enable_camer_permission_to_use_the_scanner">Consenti a Bitwarden l\'accesso alla fotocamera per scansionare il codice QR</string>
+    <string name="enable_camer_permission_to_use_the_scanner">Consenti a Bitwarden l\'accesso alla fotocamera per scansionare i QR code</string>
     <string name="language">Lingua</string>
     <string name="language_change_x_description">La lingua è stata cambiata a %1$s. Riavvia l\'app per vedere la modifica.</string>
     <string name="default_system">Predefinito (Sistema)</string>
-    <string name="important">Importante</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Inserisci un password lunga almeno %1$s caratteri. Questa non può essere recuperata nel caso in cui la dimenticassi.</string>
     <string name="weak_master_password">Password debole</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Hai scelto una password debole. È altamente consigliato impostare una password forte e unica per proteggere l\'account. Vuoi davvero usare questa password?</string>
     <string name="weak">Debole</string>
@@ -700,14 +695,13 @@ Vuoi passare a questo account?</string>
     <string name="launch_web_authn">Avvia WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Si è verificato un errore nell\'accesso in due passaggi WebAuthn</string>
     <string name="self_hosted_server_url">URL del server self-hosted</string>
-    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Verifica delle credenziali non riuscita; l\'utente non può essere verificato.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Verifica dell\'utente non riuscita. Azione annullata.</string>
     <string name="user_verification_direction">Verifica dell\'utente</string>
     <string name="create_account_on">Crea account su</string>
     <string name="create_account_on_with_colon">Crea account su:</string>
     <string name="we_sent_an_email_to">Abbiamo inviato una email a %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Continuando, accetti i Termini di servizio e l\'Informativa sulla privacy.</string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Attivando questo switch, accetti i <annotation link="termsOfService">Termini di Servizio</annotation> e <annotation link="privacyPolicy">Politica di riservatezza</annotation></string>
     <string name="unsubscribe">Annulla iscrizione</string>
     <string name="check_your_email">Controlla la casella di posta</string>
     <string name="open_email_app">Apri l\'app email</string>
@@ -865,8 +859,6 @@ Vuoi passare a questo account?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Dovrai impostare la chiave di autenticazione per i login che richiedono l\'accesso in due passaggi con un codice. La chiave genera continuamente codici a sei cifre che puoi usare per accedere.</string>
     <string name="coachmark_3_of_3">3 di 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Devi aggiungere un indirizzo web per usare l\'auto-riempimento per accedere a questo account.</string>
-    <string name="single_tap_passkey_creation">Creazione chiavi d\'accesso a tocco singolo</string>
-    <string name="single_tap_passkey_authentication">Accesso con chiavi d\'accesso a singolo tocco</string>
     <string name="learn_about_new_logins">Scopri sui nuovi accessi</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Ti guideremo attraverso le funzioni chiave per aggiungere un nuovo accesso.</string>
     <string name="explore_the_generator">Esplora il generatore</string>
@@ -904,12 +896,12 @@ Vuoi passare a questo account?</string>
     <string name="passkey_operation_failed_because_the_request_is_invalid">Operazione parola d\'accesso non riuscita perché la richiesta non è valida.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operazione chiave d\'accesso non riuscita perché nessun elemento è stato selezionato.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operazione passkey non riuscita perché la richiesta non è supportata.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
-    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
-    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
-    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
-    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operazione password non riuscita: l\'elemento selezionato non esiste.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Operazione password non riuscita: non è stato selezionato un elemento.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operazione sulle credenziali non riuscita: il limite dei tentativi di verifica è stato superato.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Operazione sulle credenziali non riuscita: l\'utente è bloccato.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Operazione sulle credenziali non riuscita: l\'elemento selezionato non esiste.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Operazione sulle credenziali non riuscita: la verifica è stata annullata.</string>
     <string name="self_host_server_url">URL server autogestito</string>
     <string name="use_brave_autofill_integration">Usa l\'integrazione di riempimento automatico di Brave</string>
     <string name="use_chrome_autofill_integration">Usa l\'integrazione di riempimento automatico Chrome</string>
@@ -968,8 +960,8 @@ Vuoi passare a questo account?</string>
     <string name="view_text_send">Visualizza il testo Send</string>
     <string name="delete_send">Elimina Send</string>
     <string name="missing_send_resync_your_vault">File Send mancante: ri-sincronizza la cassaforte</string>
-    <string name="use_dynamic_colors">Use dynamic colors</string>
-    <string name="use_dynamic_colors_question">Use dynamic colors?</string>
+    <string name="use_dynamic_colors">Usa colori dinamici</string>
+    <string name="use_dynamic_colors_question">Vuoi applicare i colori dinamici di Android?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">I colori dinamici utilizzano i colori di sistema e potrebbero non soddisfare tutte le linee guida di accessibilità.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Operazione passkey fallita perché il browser (%1$s) non è riconosciuto. Seleziona \'Riconosci come affidabile\' per aggiungere %1$s all\'elenco delle applicazioni affidabili localmente.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey non utilizzabile: il browser non è nell\'elenco delle applicazioni affidabili.</string>
@@ -990,8 +982,8 @@ Vuoi passare a questo account?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Sei sicuro di voler segnare %s come non affidabile?</string>
     <string name="installed_apps">App installate</string>
     <string name="delete_x">Elimina %s</string>
-    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
-    <string name="decryption_error">Decryption error</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Decrittazione non riuscita. Contatta il supporto.</string>
+    <string name="decryption_error">Errore di decrittazione</string>
     <string name="add_item_rotation">Aggiungi Rotazione Elemento</string>
     <string name="scan_a_qr_code">Scansiona un codice QR</string>
     <string name="cannot_add_authenticator_key">Non riesci a inserire la chiave di autenticazione?</string>
@@ -1047,7 +1039,7 @@ Vuoi passare a questo account?</string>
     <string name="download_bitwarden_card_message">Memorizza tutti i login e sincronizza i codici di verifica direttamente con l\'app Authenticator.</string>
     <string name="download_now">Scarica adesso</string>
     <string name="sync_with_bitwarden_app">Sincronizza con l\'app Bitwarden</string>
-    <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
+    <string name="learn_more_link"><annotation link="learnMore">Scopri di più</annotation></string>
     <string name="shared_codes_error">Impossibile sincronizzare i codici dall\'app Bitwarden. Assicurati che entrambe le app siano aggiornate. Puoi comunque accedere ai tuoi codici esistenti nell\'app Bitwarden.</string>
     <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sincronizza con l\'app Bitwarden</string>
@@ -1055,7 +1047,7 @@ Vuoi passare a questo account?</string>
     <string name="take_me_to_app_settings">Portami alle impostazioni dell\'app</string>
     <string name="something_went_wrong">Qualcosa è andato storto</string>
     <string name="please_try_again">Per favore riprova</string>
-    <string name="copy_to_bitwarden_vault">Copy to Bitwarden vault</string>
+    <string name="copy_to_bitwarden_vault">Copia nella cassaforte di Bitwarden</string>
     <string name="default_save_option">Opzione di salvataggio predefinita</string>
     <string name="save_to_bitwarden">Salva su Bitwarden</string>
     <string name="save_here">Salva qui</string>
@@ -1065,15 +1057,16 @@ Vuoi passare a questo account?</string>
     <string name="choose_save_location_message">Salva qui questa chiave di autenticazione, o aggiungila ad un login su Bitwarden.</string>
     <string name="save_option_as_default">Salva in modo predefinito</string>
     <string name="account_synced_from_bitwarden_app">Account sincronizzato dall\'app Bitwarden</string>
-    <string name="local_codes">Local codes (%1$d)</string>
+    <string name="local_codes">Codici sul dispositivo (%1$d)</string>
     <string name="required_information_missing">Informazioni Richieste Mancanti</string>
     <string name="required_information_missing_message">"Mancano informazioni richieste (ad es. ‘servizi’ o ‘segreto’). Controlla il tuo file e riprova. Visita bitwarden.com/help per assistenza"</string>
     <string name="file_could_not_be_processed">"Il file non può essere elaborato"</string>
     <string name="file_could_not_be_processed_message">"Il file non può essere elaborato. Assicurati che sia compatibile con JSON e riprova. Hai bisogno di aiuto? Visita bitwarden.com/help"</string>
     <string name="get_help">Ottieni aiuto</string>
-    <string name="expand_advanced_options">Expand advanced options</string>
-    <string name="local_items_are_expanded_click_to_collapse">Local items are expanded, click to collapse.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
-    <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
-    <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="expand_advanced_options">Espandi le opzioni avanzate</string>
+    <string name="local_items_are_expanded_click_to_collapse">Elementi locali visibili; tocca per comprimere la lista.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Elementi locali nascosti; tocca per espandere la lista.</string>
+    <string name="items_expanded_click_to_collapse">Elementi visibili; tocca per nascondere.</string>
+    <string name="items_are_collapsed_click_to_expand">Elementi nascosti; tocca per mostrarli.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

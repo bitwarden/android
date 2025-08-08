@@ -146,7 +146,7 @@
     <string name="syncing">در حال همگام‌سازی...</string>
     <string name="syncing_complete">همگام‌سازی کامل شد.</string>
     <string name="two_step_login">ورود دو مرحله‌ای</string>
-    <string name="unlock_with">باز کردن با %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">باز کردن با کد پین</string>
     <string name="verification_code">کد تأیید</string>
     <string name="view_login">مشاهده ورود</string>
@@ -372,7 +372,6 @@
     <string name="download">بارگیری</string>
     <string name="login_expired">نشست ورود شما منقضی شده است.</string>
     <string name="biometrics_direction">تأیید بیومتریک</string>
-    <string name="biometrics">بیومتریک</string>
     <string name="biometrics_failed">زیست‌سنجی ناموفق بود</string>
     <string name="biometrics_decoding_failure">با کلمه عبور اصلی یا کد پین خود وارد شوید سپس ورود بیومتریک را مجدداً در تنظیمات فعال کنید.</string>
     <string name="use_biometrics_to_unlock">برای قفل گشایی از بیومتریک استفاده کن</string>
@@ -420,7 +419,6 @@
     <string name="master_password_policy_validation_title">کلمه عبور نامعتبر</string>
     <string name="master_password_policy_validation_message">کلمه عبور از شرایط سازمان پیروی نمی‌کند. لطفاً اطلاعات سیاست را بررسی کرده و دوباره امتحان کنید.</string>
     <string name="loading">در حال بارگذاری</string>
-    <string name="accept_policies_error">شرایط خدمات و سیاست حفظ حریم خصوصی تأیید نشده است.</string>
     <string name="terms_of_service">شرایط استفاده از خدمات</string>
     <string name="privacy_policy">سیاست حفظ حریم خصوصی</string>
     <string name="passkey_management">مدیریت کلید عبور</string>
@@ -609,8 +607,6 @@
     <string name="language">زبان</string>
     <string name="language_change_x_description">زبان به %1$s تغییر کرده است. لطفاً برنامه را مجدداً راه‌اندازی کنید تا تغییرات را مشاهده کنید</string>
     <string name="default_system">پیش‌فرض (سیستم)</string>
-    <string name="important">مهم</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">کلمه عبور اصلی شما در صورت فراموشی قابل بازیابی نیست! حداقل %1$s کاراکتر.</string>
     <string name="weak_master_password">کلمه عبور اصلی ضعیف</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">کلمه عبور ضعیف شناسایی شد. از یک کلمه عبور قوی برای محافظت از حساب کاربری خود استفاده کنید. آیا مطمئنید که می‌خواهید از یک کلمه عبور ضعیف استفاده کنید؟</string>
     <string name="weak">ضعیف</string>
@@ -707,7 +703,6 @@
     <string name="create_account_on_with_colon">حساب کاربری ایجاد کنید در:</string>
     <string name="we_sent_an_email_to">ما یک ایمیل ارسال کردیم به <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">با ادامه، شما با <annotation link="termsOfService">شرایط خدمات</annotation> و <annotation link="privacyPolicy">سیاست حفظ حریم خصوصی</annotation> موافقت می‌کنید</string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">با فعال کردن این سوئیچ، شما با <annotation link="termsOfService">شرایط خدمات</annotation> و <annotation link="privacyPolicy">سیاست حفظ حریم خصوصی</annotation> موافقت می‌کنید</string>
     <string name="unsubscribe">لغو اشتراک</string>
     <string name="check_your_email">ایمیل خود را چک کنید</string>
     <string name="open_email_app">برنامه‌ی ایمیل را باز کنید</string>
@@ -865,8 +860,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">تنها برای ورودهایی که به احراز هویت دو مرحله‌ای با کد نیاز دارند، باید کلید احراز هویت را تنظیم کنید. این کلید به طور مداوم کدهای شش رقمی تولید می‌کند که می‌توانید برای ورود از آن‌ها استفاده کنید.</string>
     <string name="coachmark_3_of_3">۳ از ۳</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">برای استفاده از قابلیت پر کردن خودکار جهت دسترسی به این حساب کاربری، باید یک نشانی وب اضافه کنید.</string>
-    <string name="single_tap_passkey_creation">ایجاد کلید عبور با یک ضربه</string>
-    <string name="single_tap_passkey_authentication">ورود با کلید عبور تنها با یک ضربه</string>
     <string name="learn_about_new_logins">درباره ورودهای جدید بیشتر بدانید</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">ما شما را با ویژگی‌های کلیدی برای افزودن یک ورود جدید راهنمایی می‌کنیم.</string>
     <string name="explore_the_generator">تولید کننده را بررسی کنید</string>
@@ -1076,4 +1069,5 @@
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

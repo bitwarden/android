@@ -146,7 +146,7 @@
     <string name="syncing">Sünkroniseerimine...</string>
     <string name="syncing_complete">Sünkroniseerimine on lõpetatud.</string>
     <string name="two_step_login">Kaheastmeline kinnitamine</string>
-    <string name="unlock_with">Lukusta lahti %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Lukusta lahti PIN koodiga</string>
     <string name="verification_code">Kinnituskood</string>
     <string name="view_login">View login</string>
@@ -372,7 +372,6 @@ Skaneerimine toimub automaatselt.</string>
     <string name="download">Laadi alla</string>
     <string name="login_expired">Sessioon on aegunud.</string>
     <string name="biometrics_direction">Kinnita biomeetriaga.</string>
-    <string name="biometrics">biomeetriaga</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Lukusta lahti biomeetriaga</string>
@@ -420,7 +419,6 @@ Skaneerimine toimub automaatselt.</string>
     <string name="master_password_policy_validation_title">Parool on vale</string>
     <string name="master_password_policy_validation_message">Parool ei vasta organisatsiooni nõuetele. Vaata see üle ning proovi uuesti.</string>
     <string name="loading">Laadimine</string>
-    <string name="accept_policies_error">Kasutustingimuste ja Privaatsuspoliitikaga pole nõustutud.</string>
     <string name="terms_of_service">Kasutustingimused</string>
     <string name="privacy_policy">Privaatsuspoliitika</string>
     <string name="passkey_management">Pääsuvõtme haldamine</string>
@@ -609,8 +607,6 @@ Soovid selle konto peale lülituda?</string>
     <string name="language">Keel</string>
     <string name="language_change_x_description">Rakenduse keel muudeti %1$s-ks. Muudatuste rakendamiseks taaskäivita Bitwarden</string>
     <string name="default_system">Vaikeväärtus (süsteem)</string>
-    <string name="important">Tähtis</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Ülemparooli ei saa kuidagi taastada! Nõutud on vähemalt %1$s tähemärki.</string>
     <string name="weak_master_password">Nõrk ülemparool</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Tuvastati nõrk ülemparool. Kasuta konto paremaks turvamiseks tugevamat parooli. Oled kindel, et soovid nõrga parooliga jätkata?</string>
     <string name="weak">Nõrk</string>
@@ -707,7 +703,6 @@ Soovid selle konto peale lülituda?</string>
     <string name="create_account_on_with_colon">Create account on:</string>
     <string name="we_sent_an_email_to">Saatsime emaili aadressile %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Jätkates kinnitad, et nõustud teenusetingimuste ja privaatsuspoliitikaga</string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Lõpeta tellimus</string>
     <string name="check_your_email">Kontrolli oma postkasti</string>
     <string name="open_email_app">Ava emaili rakendus</string>
@@ -865,8 +860,6 @@ Soovid selle konto peale lülituda?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
@@ -1076,4 +1069,5 @@ Soovid selle konto peale lülituda?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

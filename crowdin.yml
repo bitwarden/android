@@ -1,0 +1,9 @@
+project_id_env: _CROWDIN_PROJECT_ID
+api_token_env: CROWDIN_API_TOKEN
+preserve_hierarchy: true
+files:
+  - source: "/ui/src/main/res/values/strings.xml"
+    translation: "/ui/src/main/res/values-%android_code%/%original_file_name%"
+    dest: "/android-ui/%original_file_name%"
+    update_option: update_as_unapproved
+    type: android

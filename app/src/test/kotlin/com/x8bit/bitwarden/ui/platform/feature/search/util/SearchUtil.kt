@@ -52,7 +52,7 @@ fun createMockDisplayItemForCipher(
                         cipherId = "mockId-$number",
                     ),
                     ListingItemOverflowAction.VaultAction.CopyTotpClick(
-                        totpCode = "mockTotp-$number",
+                        cipherId = "mockId-$number",
                         requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.ViewClick(

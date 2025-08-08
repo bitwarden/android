@@ -2,6 +2,8 @@ import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import com.google.protobuf.gradle.proto
 import dagger.hilt.android.plugin.util.capitalize
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -18,6 +20,16 @@ plugins {
     alias(libs.plugins.sonarqube)
 }
 
+/**
+ * Loads CI-specific build properties that are not checked into source control.
+ */
+val ciProperties = Properties().apply {
+    val ciPropsFile = File(rootDir, "ci.properties")
+    if (ciPropsFile.exists()) {
+        FileInputStream(ciPropsFile).use { load(it) }
+    }
+}
+
 android {
     namespace = "com.bitwarden.authenticator"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -30,12 +42,25 @@ android {
         applicationId = "com.bitwarden.authenticator"
         minSdk = libs.versions.minSdkBwa.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "2025.7.0"
+        versionCode = libs.versions.appVersionCode.get().toInt()
+        versionName = libs.versions.appVersionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        setProperty("archivesBaseName", "com.bitwarden.authenticator")
+        // Set the base archive name for publishing purposes. This is used to derive the APK and AAB
+        // artifact names when uploading to Firebase and Play Store.
+        base.archivesName = "com.bitwarden.authenticator"
+
+        buildConfigField(
+            type = "String",
+            name = "CI_INFO",
+            value = "${ciProperties.getOrDefault("ci.info", "\"\uD83D\uDCBB local\"")}",
+        )
+        buildConfigField(
+            type = "String",
+            name = "SDK_VERSION",
+            value = "\"${libs.versions.bitwardenSdk.get()}\"",
+        )
     }
 
     androidResources {

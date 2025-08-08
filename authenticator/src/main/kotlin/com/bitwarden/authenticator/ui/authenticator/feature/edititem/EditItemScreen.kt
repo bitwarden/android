@@ -47,8 +47,8 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.Aut
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.model.EditItemData
 import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
-import com.bitwarden.authenticator.ui.platform.components.content.BitwardenErrorContent
-import com.bitwarden.authenticator.ui.platform.components.content.BitwardenLoadingContent
+import com.bitwarden.authenticator.ui.platform.components.content.AuthenticatorErrorContent
+import com.bitwarden.authenticator.ui.platform.components.content.AuthenticatorLoadingContent
 import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
@@ -208,14 +208,14 @@ fun EditItemScreen(
             }
 
             is EditItemState.ViewState.Error -> {
-                BitwardenErrorContent(
+                AuthenticatorErrorContent(
                     message = viewState.message(),
                     modifier = Modifier.padding(innerPadding),
                 )
             }
 
             EditItemState.ViewState.Loading -> {
-                BitwardenLoadingContent(
+                AuthenticatorLoadingContent(
                     modifier = Modifier.padding(innerPadding),
                 )
             }

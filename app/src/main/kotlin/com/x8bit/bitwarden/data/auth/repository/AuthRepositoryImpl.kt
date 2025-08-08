@@ -146,6 +146,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -154,6 +155,7 @@ import javax.inject.Singleton
 @Suppress("LargeClass", "LongParameterList", "TooManyFunctions")
 @Singleton
 class AuthRepositoryImpl(
+    private val clock: Clock,
     private val accountsService: AccountsService,
     private val devicesService: DevicesService,
     private val haveIBeenPwnedService: HaveIBeenPwnedService,
@@ -404,10 +406,7 @@ class AuthRepositoryImpl(
             .onEach {
                 val userId = activeUserId ?: return@onEach
                 // TODO: [PM-20593] Investigate why tokens are explicitly refreshed.
-                refreshAccessTokenSynchronouslyInternal(
-                    userId = userId,
-                    logOutOnFailure = false,
-                )
+                refreshAccessTokenSynchronously(userId = userId)
                 vaultRepository.sync(forced = true)
             }
             // This requires the ioScope to ensure that refreshAccessTokenSynchronously
@@ -760,11 +759,59 @@ class AuthRepositoryImpl(
         orgIdentifier = organizationIdentifier,
     )
 
-    override fun refreshAccessTokenSynchronously(userId: String): Result<RefreshTokenResponseJson> =
-        refreshAccessTokenSynchronouslyInternal(
-            userId = userId,
-            logOutOnFailure = true,
-        )
+    override fun refreshAccessTokenSynchronously(
+        userId: String,
+    ): Result<String> {
+        val refreshToken = authDiskSource
+            .getAccountTokens(userId = userId)
+            ?.refreshToken
+            ?: return IllegalStateException("Must be logged in.").asFailure()
+        return identityService
+            .refreshTokenSynchronously(refreshToken)
+            .flatMap { refreshTokenResponse ->
+                // Check to make sure the user is still logged in after making the request
+                authDiskSource
+                    .userState
+                    ?.accounts
+                    ?.get(userId)
+                    ?.let { refreshTokenResponse.asSuccess() }
+                    ?: IllegalStateException("Must be logged in.").asFailure()
+            }
+            .flatMap { refreshTokenResponse ->
+                when (refreshTokenResponse) {
+                    is RefreshTokenResponseJson.Error -> {
+                        if (refreshTokenResponse.isInvalidGrant) {
+                            logout(userId = userId, reason = LogoutReason.InvalidGrant)
+                        }
+                        IllegalStateException(refreshTokenResponse.error).asFailure()
+                    }
+
+                    is RefreshTokenResponseJson.Forbidden -> {
+                        logout(userId = userId, reason = LogoutReason.RefreshForbidden)
+                        refreshTokenResponse.error.asFailure()
+                    }
+
+                    is RefreshTokenResponseJson.Unauthorized -> {
+                        logout(userId = userId, reason = LogoutReason.RefreshUnauthorized)
+                        refreshTokenResponse.error.asFailure()
+                    }
+
+                    is RefreshTokenResponseJson.Success -> {
+                        // Store the new token information
+                        authDiskSource.storeAccountTokens(
+                            userId = userId,
+                            accountTokens = AccountTokensJson(
+                                accessToken = refreshTokenResponse.accessToken,
+                                refreshToken = refreshTokenResponse.refreshToken,
+                                expiresAtSec = clock.instant().epochSecond +
+                                    refreshTokenResponse.expiresIn,
+                            ),
+                        )
+                        refreshTokenResponse.accessToken.asSuccess()
+                    }
+                }
+            }
+    }
 
     override fun logout(reason: LogoutReason) {
         activeUserId?.let { userId -> logout(userId = userId, reason = reason) }
@@ -1422,42 +1469,6 @@ class AuthRepositoryImpl(
             onFailure = { LeaveOrganizationResult.Error(error = it) },
         )
 
-    private fun refreshAccessTokenSynchronouslyInternal(
-        userId: String,
-        logOutOnFailure: Boolean,
-    ): Result<RefreshTokenResponseJson> {
-        val refreshToken = authDiskSource
-            .getAccountTokens(userId = userId)
-            ?.refreshToken
-            ?: return IllegalStateException("Must be logged in.").asFailure()
-        return identityService
-            .refreshTokenSynchronously(refreshToken)
-            .flatMap { refreshTokenResponse ->
-                // Check to make sure the user is still logged in after making the request
-                authDiskSource
-                    .userState
-                    ?.accounts
-                    ?.get(userId)
-                    ?.let { refreshTokenResponse.asSuccess() }
-                    ?: IllegalStateException("Must be logged in.").asFailure()
-            }
-            .onFailure {
-                if (logOutOnFailure) {
-                    logout(userId = userId, reason = LogoutReason.TokenRefreshFail)
-                }
-            }
-            .onSuccess { refreshTokenResponse ->
-                // Update the existing UserState with updated token information
-                authDiskSource.storeAccountTokens(
-                    userId = userId,
-                    accountTokens = AccountTokensJson(
-                        accessToken = refreshTokenResponse.accessToken,
-                        refreshToken = refreshTokenResponse.refreshToken,
-                    ),
-                )
-            }
-    }
-
     @Suppress("CyclomaticComplexMethod")
     private suspend fun validatePasswordAgainstPolicy(
         password: String,
@@ -1780,6 +1791,7 @@ class AuthRepositoryImpl(
             accountTokens = AccountTokensJson(
                 accessToken = loginResponse.accessToken,
                 refreshToken = loginResponse.refreshToken,
+                expiresAtSec = clock.instant().epochSecond + loginResponse.expiresInSeconds,
             ),
         )
         settingsRepository.hasUserLoggedInOrCreatedAccount = true

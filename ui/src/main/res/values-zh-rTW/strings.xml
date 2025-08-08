@@ -146,7 +146,7 @@
     <string name="syncing">正在同步...</string>
     <string name="syncing_complete">同步完成</string>
     <string name="two_step_login">兩步驟登入</string>
-    <string name="unlock_with">使用 %1$s 解鎖</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">使用 PIN 碼解鎖</string>
     <string name="verification_code">驗證碼</string>
     <string name="view_login">View login</string>
@@ -372,7 +372,6 @@
     <string name="download">下載</string>
     <string name="login_expired">您的登入階段已逾期。</string>
     <string name="biometrics_direction">生物特徵辨識驗證</string>
-    <string name="biometrics">生物特徵辨識</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">使用生物特徵辨識解鎖</string>
@@ -420,7 +419,6 @@
     <string name="master_password_policy_validation_title">密碼的無效</string>
     <string name="master_password_policy_validation_message">輸入的密碼不符合組織要求，請確認原則資訊後再試一次。</string>
     <string name="loading">正在載入</string>
-    <string name="accept_policies_error">尚未接受服務條款與隱私權政策。</string>
     <string name="terms_of_service">服務條款</string>
     <string name="privacy_policy">隱私權政策</string>
     <string name="passkey_management">密碼金鑰管理</string>
@@ -609,8 +607,6 @@
     <string name="language">語言</string>
     <string name="language_change_x_description">語言已被變更為 %1$s。請重啓應用程式以查看變更</string>
     <string name="default_system">預設（系統）</string>
-    <string name="important">重要</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">若忘記此密碼，任何儲存在 Bitwarden 內的資料將會丟失！請輸入最少 %1$s 個字。</string>
     <string name="weak_master_password">主密碼強度太弱</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">偵測到您的密碼強度不夠。我們建議您使用強密碼保護您的帳號。您確定要使用弱密碼嗎？</string>
     <string name="weak">脆弱</string>
@@ -707,7 +703,6 @@
     <string name="create_account_on_with_colon">Create account on:</string>
     <string name="we_sent_an_email_to">我們向 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 傳送了一封電子郵件。</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">若繼續，表示您同意 <annotation link="termsOfService">服務條款</annotation> 及 <annotation link="privacyPolicy">隱私權政策</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">取消訂閱</string>
     <string name="check_your_email">檢查您的電子郵件</string>
     <string name="open_email_app">開啟電子郵件 App</string>
@@ -865,8 +860,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
@@ -1076,4 +1069,5 @@
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

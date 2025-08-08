@@ -146,7 +146,7 @@
     <string name="syncing">A sincronizar...</string>
     <string name="syncing_complete">Sincronização concluída</string>
     <string name="two_step_login">Verificação de dois passos</string>
-    <string name="unlock_with">Desbloquear com %1$s</string>
+    <string name="unlock_with_biometrics">Desbloquear com biometria</string>
     <string name="unlock_with_pin">Desbloquear com código PIN</string>
     <string name="verification_code">Código de verificação</string>
     <string name="view_login">Ver credencial</string>
@@ -372,7 +372,6 @@ A leitura será efetuada automaticamente.</string>
     <string name="download">Transferir</string>
     <string name="login_expired">A sua sessão expirou.</string>
     <string name="biometrics_direction">Verificação biométrica</string>
-    <string name="biometrics">Biometria</string>
     <string name="biometrics_failed">Falha na biometria</string>
     <string name="biometrics_decoding_failure">Inicie sessão com a sua palavra-passe mestra ou PIN e volte a ativar o início de sessão biométrico nas Definições.</string>
     <string name="use_biometrics_to_unlock">Utilizar a biometria para desbloquear</string>
@@ -420,7 +419,6 @@ A leitura será efetuada automaticamente.</string>
     <string name="master_password_policy_validation_title">Palavra-passe inválida</string>
     <string name="master_password_policy_validation_message">A palavra-passe não corresponde aos requisitos da organização. Verifique as informações da política e tente novamente.</string>
     <string name="loading">A carregar</string>
-    <string name="accept_policies_error">Os Termos de utilização e a Política de privacidade não foram aceites.</string>
     <string name="terms_of_service">Termos de utilização</string>
     <string name="privacy_policy">Política de privacidade</string>
     <string name="passkey_management">Gestão de chaves de acesso</string>
@@ -608,8 +606,6 @@ Pretende mudar para esta conta?</string>
     <string name="language">Idioma</string>
     <string name="language_change_x_description">O idioma foi alterado para %1$s. Por favor, reinicie a app para ver as alterações</string>
     <string name="default_system">Predefinido (Sistema)</string>
-    <string name="important">Importante</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">A sua palavra-passe mestra não pode ser recuperada se a esquecer! %1$s carateres no mínimo.</string>
     <string name="weak_master_password">Palavra-passe mestra fraca</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Foi identificada uma palavra-passe fraca. Utilize uma palavra-passe forte para proteger a sua conta. Tem a certeza de que pretende utilizar uma palavra-passe fraca?</string>
     <string name="weak">Fraca</string>
@@ -706,7 +702,6 @@ Pretende mudar para esta conta?</string>
     <string name="create_account_on_with_colon">Criar conta em:</string>
     <string name="we_sent_an_email_to">Enviámos um e-mail para <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ao continuar, concorda com os <annotation link="termsOfService">Termos de utilização</annotation> e <annotation link="privacyPolicy">Política de privacidade</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Ao ativar este interruptor, concorda com os <annotation link="termsOfService">Termos de utilização</annotation> e <annotation link="privacyPolicy">Política de privacidade</annotation></string>
     <string name="unsubscribe">Anular subscrição</string>
     <string name="check_your_email">Verifique o seu e-mail</string>
     <string name="open_email_app">Abrir a app de e-mail</string>
@@ -865,8 +860,6 @@ Pretende mudar para esta conta?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Só precisa de configurar a chave do autenticador para os inícios de sessão que requerem verificação de dois passos com um código. A chave gerará continuamente códigos de seis dígitos que pode utilizar para iniciar sessão.</string>
     <string name="coachmark_3_of_3">3 de 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">É necessário adicionar um endereço Web para utilizar o preenchimento automático para aceder a esta conta.</string>
-    <string name="single_tap_passkey_creation">Criação de chaves de acesso com um único toque</string>
-    <string name="single_tap_passkey_authentication">Início de sessão com chave de acesso de toque único</string>
     <string name="learn_about_new_logins">Saiba mais sobre as novas credenciais</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Iremos explicar-lhe as principais características para adicionar uma nova credencial.</string>
     <string name="explore_the_generator">Explore o gerador</string>
@@ -1076,4 +1069,5 @@ Pretende mudar para esta conta?</string>
     <string name="local_items_are_collapsed_click_to_expand">Os itens locais estão recolhidos, clique para expandir.</string>
     <string name="items_expanded_click_to_collapse">Os itens estão expandidos, clique para recolher.</string>
     <string name="items_are_collapsed_click_to_expand">Os itens estão recolhidos, clique para expandir.</string>
+    <string name="select_a_card_for_x">Selecione um cartão para %s</string>
 </resources>

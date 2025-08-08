@@ -146,7 +146,7 @@
     <string name="syncing">Sinkronizacija...</string>
     <string name="syncing_complete">Sinkronizacija dovršena.</string>
     <string name="two_step_login">Prijava dvostrukom autentifikacijom</string>
-    <string name="unlock_with">Otključaj s %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Otključaj PIN-om</string>
     <string name="verification_code">Kôd za provjeru</string>
     <string name="view_login">Prikaži prijavu</string>
@@ -371,7 +371,6 @@
     <string name="download">Preuzmi</string>
     <string name="login_expired">Sesija je istekla.</string>
     <string name="biometrics_direction">Biometrijska autentifikacija</string>
-    <string name="biometrics">biometrijom</string>
     <string name="biometrics_failed">Biometrija neuspješna</string>
     <string name="biometrics_decoding_failure">Prijavi se svojom Glavnom lozinkom ili PIN-om i isključi, pa ponovno uključi biometrijsku prijavu u Postavkama.</string>
     <string name="use_biometrics_to_unlock">Koristi biometriju za otključavanje</string>
@@ -419,7 +418,6 @@
     <string name="master_password_policy_validation_title">Neispravna lozinka</string>
     <string name="master_password_policy_validation_message">Lozinka ne zadovoljava organizacijska pravila. Provjeri informacije o pravilima organizacije i pojušaj ponovno.</string>
     <string name="loading">Učitavanje</string>
-    <string name="accept_policies_error">Uvjeti korištenja i Pravila privatnosti nisu prihvaćeni.</string>
     <string name="terms_of_service">Uvjeti korištenja</string>
     <string name="privacy_policy">Pravila privatnosti</string>
     <string name="passkey_management">Upravljanje pristupnim ključevima</string>
@@ -607,8 +605,6 @@
     <string name="language">Jezik</string>
     <string name="language_change_x_description">Jezik je promijenjen u %1$s. Ponovno pokreni aplikaciju za primjenu.</string>
     <string name="default_system">Zadano (sustav)</string>
-    <string name="important">Važno</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Glavnu lozinku nije moguće vratiti ako ju zaboraviš! Najmanje %1$s znakova.</string>
     <string name="weak_master_password">Slaba glavna lozinka</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Prepoznata je slaba lozinka. Za zaštitu računa, preporučuje se da koristiš jake lozinke. Želiš li svejedno koristiti slabu lozinku?</string>
     <string name="weak">Slaba</string>
@@ -698,14 +694,13 @@
     <string name="launch_web_authn">Pokreni WebAuth</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Došlo je do greške kod pokretanja WebAuthn dvostruke autentifikacije</string>
     <string name="self_hosted_server_url">URL vlastitog poslužitelja</string>
-    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Operacija vjerodajnice nije uspjela jer nije bilo moguće provjeriti korisnika.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Operacija pristupnog ključa nije uspjela jer nije bilo moguće provjeriti korisnika.</string>
     <string name="user_verification_direction">Provjera korisnika</string>
     <string name="create_account_on">Stvaranje računa na</string>
     <string name="create_account_on_with_colon">Stvaranje računa na:</string>
     <string name="we_sent_an_email_to">e-pošta poslana na <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Nastavkom, slažeš se s <annotation link="termsOfService">Uvjetima usluge</annotation> i <annotation link="privacyPolicy">Politikom privatnosti</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Aktiviranjem ovog prekidača pristaješ na <annotation link="termsOfService">Uvjete korištenja</annotation> i <annotation link="privacyPolicy">Politiku privatnosti</annotation></string>
     <string name="unsubscribe">Poništi pretplatu</string>
     <string name="check_your_email">Provjeri svoju e-poštu</string>
     <string name="open_email_app">Otvori aplikaciju za e-poštu</string>
@@ -864,8 +859,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">Ključ autentifikatora trebaš postaviti samo za prijave koje zahtijevaju dvostruku autentifikaciju pomoću kôda. Ključ će kontinuirano generirati šesteroznamenkaste kodove koje možeš koristiti za prijavu.</string>
     <string name="coachmark_3_of_3">3 od 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Moraš dodati web adresu za auto-ispunu za pristup ovom računu.</string>
-    <string name="single_tap_passkey_creation">Stvaranje pristupnog ključa jednim dodirom</string>
-    <string name="single_tap_passkey_authentication">Prijava jednim dodirom pristupnim ključem</string>
     <string name="learn_about_new_logins">Više o novom načinu prijave</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Provest ćemo te kroz ključne značajke za dodavanje nove prijave.</string>
     <string name="explore_the_generator">Istraži generator</string>
@@ -903,12 +896,12 @@
     <string name="passkey_operation_failed_because_the_request_is_invalid">Operacija pristupnog ključa nije uspjela jer je zahtjev nevažeći.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Operacija pristupnog ključa nije uspjela jer nije odabrana niti jedna stavka.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Operacija s pristupnim ključem nije uspjela jer zahtjev nije podržan.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
-    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
-    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
-    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
-    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Operacija lozinke nije uspjela jer odabrana stavka ne postoji.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Operacija lozinke nije uspjela jer nije odabrana niti jedna stavka.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Operacije vjerodajnice nije uspjela jer je premašen broj provjere korisnika.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Operacija vjerodajnice nije uspjela jer je korisnik zaključan.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Operacija vjerodajnice nije uspjela jer ne postoji odabrana stavka.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Operacija vjerodajnice nije uspjela jer je potvrda korisnika otkazana.</string>
     <string name="self_host_server_url">URL vlastitog poslužitelja</string>
     <string name="use_brave_autofill_integration">Koristi auto-ispunu s Brave integracijom</string>
     <string name="use_chrome_autofill_integration">Koristi Chrome integraciju auto-ispune</string>
@@ -1076,4 +1069,5 @@ bilo kakav problem.</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokalne stavke su sažete. Klikni za proširivanje.</string>
     <string name="items_expanded_click_to_collapse">Stavke su proširene. Klikni za sažimanje.</string>
     <string name="items_are_collapsed_click_to_expand">Stavke su sažete. Klikni za proširivanje.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository
 
 import android.net.Uri
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
@@ -34,7 +35,6 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -121,6 +121,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import timber.log.Timber
 import java.security.GeneralSecurityException
 import java.time.Clock
 import java.time.temporal.ChronoUnit
@@ -572,6 +573,7 @@ class VaultRepositoryImpl(
                         .doFinal(biometricsKey.toByteArray(Charsets.ISO_8859_1))
                         .decodeToString()
                 } catch (e: GeneralSecurityException) {
+                    Timber.w(e, "unlockVaultWithBiometrics failed when decrypting biometrics key")
                     return VaultUnlockResult.BiometricDecodingError(error = e)
                 }
             }
@@ -585,6 +587,7 @@ class VaultRepositoryImpl(
                     .doFinal(biometricsKey.encodeToByteArray())
                     .toString(Charsets.ISO_8859_1)
             } catch (e: GeneralSecurityException) {
+                Timber.w(e, "unlockVaultWithBiometrics failed to migrate the user to IV encryption")
                 return VaultUnlockResult.BiometricDecodingError(error = e)
             }
         } else {
@@ -802,15 +805,24 @@ class VaultRepositoryImpl(
     }
 
     override suspend fun generateTotp(
-        totpCode: String,
+        cipherId: String,
         time: DateTime,
     ): GenerateTotpResult {
         val userId = activeUserId
             ?: return GenerateTotpResult.Error(error = NoActiveUserException())
-        return vaultSdkSource.generateTotp(
+        val cipherListView = decryptCipherListResultStateFlow
+            .value
+            .data
+            ?.successes
+            ?.find { it.id == cipherId }
+            ?: return GenerateTotpResult.Error(
+                error = IllegalArgumentException(cipherId),
+            )
+
+        return vaultSdkSource.generateTotpForCipherListView(
             time = time,
             userId = userId,
-            totp = totpCode,
+            cipherListView = cipherListView,
         )
             .fold(
                 onSuccess = {

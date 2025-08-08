@@ -146,7 +146,7 @@
     <string name="syncing">同期中...</string>
     <string name="syncing_complete">同期が完了しました。</string>
     <string name="two_step_login">2段階認証</string>
-    <string name="unlock_with">%1$sでロック解除</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">PIN コードでロック解除</string>
     <string name="verification_code">認証コード</string>
     <string name="view_login">ログイン情報を表示</string>
@@ -372,7 +372,6 @@
     <string name="download">ダウンロード</string>
     <string name="login_expired">ログインセッションの有効期限が切れています。</string>
     <string name="biometrics_direction">生体認証で認証します。</string>
-    <string name="biometrics">生体認証</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">生体認証でロック解除</string>
@@ -420,7 +419,6 @@
     <string name="master_password_policy_validation_title">無効なパスワード</string>
     <string name="master_password_policy_validation_message">パスワードが組織の要件を満たしていません。ポリシー情報を確認して、もう一度やり直してください。</string>
     <string name="loading">読み込み中</string>
-    <string name="accept_policies_error">利用規約とプライバシーポリシーが確認されていません。</string>
     <string name="terms_of_service">利用規約</string>
     <string name="privacy_policy">プライバシーポリシー</string>
     <string name="passkey_management">パスキー管理</string>
@@ -609,8 +607,6 @@
     <string name="language">言語 (Language)</string>
     <string name="language_change_x_description">言語を %1$s に変更しました。変更を反映するにはアプリを再起動してください。</string>
     <string name="default_system">デフォルト (システム)</string>
-    <string name="important">重要</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">マスターパスワードを忘れた場合は復元できません。最小文字数は %1$s です。</string>
     <string name="weak_master_password">脆弱なマスターパスワード</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">入力されたパスワードは脆弱です。アカウントを守るためより強力なパスワードを使用してください。本当にこの脆弱なパスワードを使用しますか？</string>
     <string name="weak">脆弱</string>
@@ -707,7 +703,6 @@
     <string name="create_account_on_with_colon">Create account on:</string>
     <string name="we_sent_an_email_to">%1$s にメールを送信しました。</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">続行すると弊社サービスの利用規約及びプライバシーポリシーに同意されたとみなされます</string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">配信停止</string>
     <string name="check_your_email">メールをご確認ください</string>
     <string name="open_email_app">メールアプリを開く</string>
@@ -865,8 +860,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
@@ -1076,4 +1069,5 @@
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

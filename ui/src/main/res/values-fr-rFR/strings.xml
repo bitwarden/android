@@ -146,7 +146,7 @@
     <string name="syncing">Synchronisation...</string>
     <string name="syncing_complete">Synchronisation achevée</string>
     <string name="two_step_login">Authentification à deux facteurs</string>
-    <string name="unlock_with">Déverrouiller avec %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Déverrouiller avec un code PIN</string>
     <string name="verification_code">Code de vérification</string>
     <string name="view_login">Voir les identifiants</string>
@@ -372,7 +372,6 @@ La numérisation se fera automatiquement.</string>
     <string name="download">Télécharger</string>
     <string name="login_expired">Votre session a expiré.</string>
     <string name="biometrics_direction">Vérification biométrique</string>
-    <string name="biometrics">Biométrie</string>
     <string name="biometrics_failed">Échec de la biométrie</string>
     <string name="biometrics_decoding_failure">Connectez-vous avec votre mot de passe principal ou votre code PIN, puis réactivez la connexion biométrique dans Paramètres.</string>
     <string name="use_biometrics_to_unlock">Utiliser la biométrie pour déverrouiller</string>
@@ -420,7 +419,6 @@ La numérisation se fera automatiquement.</string>
     <string name="master_password_policy_validation_title">Mot de passe invalide</string>
     <string name="master_password_policy_validation_message">Le mot de passe ne répond pas aux exigences de l\'organisation. Veuillez vérifier les restrictions et réessayer.</string>
     <string name="loading">Chargement</string>
-    <string name="accept_policies_error">Les conditions d\'utilisation et la politique de confidentialité n\'ont pas été acceptées.</string>
     <string name="terms_of_service">Conditions d\'utilisation</string>
     <string name="privacy_policy">Politique de confidentialité</string>
     <string name="passkey_management">Gestion des clés d\'accès</string>
@@ -609,8 +607,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="language">Langue</string>
     <string name="language_change_x_description">La langue a été changée en %1$s. Veuillez redémarrer l\'application pour voir le changement</string>
     <string name="default_system">Par défaut (système)</string>
-    <string name="important">Important</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Votre mot de passe principal ne peut pas être récupéré si vous l\'oubliez ! %1$s caractères minimum.</string>
     <string name="weak_master_password">Mot de passe principal faible</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Mot de passe faible identifié. Utilisez un mot de passe fort pour protéger votre compte. Êtes-vous sûr de vouloir utiliser un mot de passe faible?</string>
     <string name="weak">Faible</string>
@@ -707,7 +703,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="create_account_on_with_colon">Créer le compte sur :</string>
     <string name="we_sent_an_email_to">Nous avons envoyé un email à <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">En continuant, vous acceptez les <annotation link="termsOfService">conditions générales d\'utilisation</annotation> et la <annotation link="privacyPolicy">politique de confidentialité</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Se désabonner</string>
     <string name="check_your_email">Vérifiez votre courriel</string>
     <string name="open_email_app">Ouvrir mon application d\'e-mail</string>
@@ -865,8 +860,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Vous n\'aurez besoin de configurer une clé d\'authentification que pour les connexions qui nécessitent une authentification à deux facteurs avec un code. La clé générera continuellement des codes à six chiffres que vous pourrez utiliser pour vous connecter.</string>
     <string name="coachmark_3_of_3">3 SUR 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Vous devez ajouter une adresse Web afin d\'utiliser la saisie automatique pour accéder à ce compte.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">En savoir plus sur la création d\'identifiants</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Nous vous guiderons à travers les fonctionnalités clés pour ajouter de nouveaux identifiants de connexion.</string>
     <string name="explore_the_generator">Découvrir le générateur</string>
@@ -890,7 +883,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="certificate_alias">Certificate alias</string>
     <string name="import_certificate">Import certificate</string>
     <string name="choose_system_certificate">Choose system certificate</string>
-    <string name="certificate_installed">Certificate installed</string>
+    <string name="certificate_installed">Certificat installé</string>
     <string name="certificate_installation_failed">Certificate installation failed</string>
     <string name="unsupported_certificate_type">Unsupported certificate type</string>
     <string name="certificate_password_incorrect">Certificate password incorrect</string>
@@ -1076,4 +1069,5 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="local_items_are_collapsed_click_to_expand">Les éléments locaux sont réduits, cliquez pour développer.</string>
     <string name="items_expanded_click_to_collapse">Les éléments sont développés, cliquez pour réduire.</string>
     <string name="items_are_collapsed_click_to_expand">Les éléments sont réduits, cliquez pour les développer.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

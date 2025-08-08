@@ -3,6 +3,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.send.SendType
@@ -16,7 +17,6 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.autofill.util.login
@@ -125,7 +125,7 @@ private fun CipherListView.filterBySearchType(
         }
 
         is SearchTypeData.Vault.SshKeys -> type is CipherListViewType.SshKey && deletedDate == null
-        is SearchTypeData.Vault.VerificationCodes -> organizationUseTotp && deletedDate == null
+        is SearchTypeData.Vault.VerificationCodes -> login?.totp != null && deletedDate == null
         is SearchTypeData.Vault.Trash -> deletedDate != null
     }
 

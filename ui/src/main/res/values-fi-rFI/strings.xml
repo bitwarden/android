@@ -146,7 +146,7 @@
     <string name="syncing">Synkronoidaan...</string>
     <string name="syncing_complete">Synkronointi suoritettiin</string>
     <string name="two_step_login">Kaksivaiheinen kirjautuminen</string>
-    <string name="unlock_with">Avaus %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Avaus PIN-koodilla</string>
     <string name="verification_code">Todennuskoodi</string>
     <string name="view_login">Näytä kirjautumistieto</string>
@@ -372,7 +372,6 @@ Koodi skannataan automaattisesti.</string>
     <string name="download">Lataa</string>
     <string name="login_expired">Kirjautumisistuntosi on erääntynyt.</string>
     <string name="biometrics_direction">Biometrinen todennus</string>
-    <string name="biometrics">biometrialla</string>
     <string name="biometrics_failed">Biometria epäonnistui</string>
     <string name="biometrics_decoding_failure">Kirjaudu pääsalasanalla tai PIN-koodilla ja palauta biometrinen kirjautuminen käyttöön asetuksista.</string>
     <string name="use_biometrics_to_unlock">Avaa biometrialla</string>
@@ -420,7 +419,6 @@ Koodi skannataan automaattisesti.</string>
     <string name="master_password_policy_validation_title">Virheellinen salasana</string>
     <string name="master_password_policy_validation_message">Salasana ei vastaa organisaation vaatimuksia. Tarkasta organisaatiosi ohjeistus ja yritä uudelleen.</string>
     <string name="loading">Ladataan</string>
-    <string name="accept_policies_error">Palveluehtoja ja tietosuojakäytäntöä ei ole vahvistettu.</string>
     <string name="terms_of_service">Palveluehdot</string>
     <string name="privacy_policy">Tietosuojakäytäntö</string>
     <string name="passkey_management">Pääsyavainhallinta</string>
@@ -609,8 +607,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="language">Kieli</string>
     <string name="language_change_x_description">Kieleksi vaihdettiin %1$s. Käynnistä sovellus uudelleen nähdäksesi muutoksen.</string>
     <string name="default_system">Oletus (järjestelmä)</string>
-    <string name="important">Tärkeää</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Pääsalasanaasi ei ole mahdollista palauttaa, jos unohdat sen! Vähintään %1$s merkkiä.</string>
     <string name="weak_master_password">Heikko pääsalasana</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Havaittiin heikko salasana. Suojaa tilisi vahvalla salasanalla. Haluatko varmasti käyttää heikkoa salasanaa?</string>
     <string name="weak">Heikko</string>
@@ -707,7 +703,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="create_account_on_with_colon">Luo tili palvelimelle:</string>
     <string name="we_sent_an_email_to">Lähetimme viestin osoitteeseen %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Jatkamalla hyväksyt Käyttöehdot ja Tietosuojakäytännön</string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Lopeta tilaus</string>
     <string name="check_your_email">Tarkasta sähköpostisi</string>
     <string name="open_email_app">Avaa sähköpostisovellus</string>
@@ -865,8 +860,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3/3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Yhden napautuksen pääsyavaimen luonti</string>
-    <string name="single_tap_passkey_authentication">Yhden napautuksen kirjautuminen</string>
     <string name="learn_about_new_logins">Lisätietoja uusista kirjautumistiedoista</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Tutustu generaattoriin</string>
@@ -1076,4 +1069,5 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="local_items_are_collapsed_click_to_expand">Paikalliset kohteet on pienennetty. Paina laajentaaksesi.</string>
     <string name="items_expanded_click_to_collapse">Kohteet on laajennettu. Paina pienentääksesi.</string>
     <string name="items_are_collapsed_click_to_expand">Kohteet ovat tiivistetty. Paina laajentaaksesi.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

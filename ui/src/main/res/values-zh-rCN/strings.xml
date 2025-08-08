@@ -146,7 +146,7 @@
     <string name="syncing">正在同步...</string>
     <string name="syncing_complete">同步完成</string>
     <string name="two_step_login">两步登录</string>
-    <string name="unlock_with">使用 %1$s 解锁</string>
+    <string name="unlock_with_biometrics">使用生物识别解锁</string>
     <string name="unlock_with_pin">使用 PIN 码解锁</string>
     <string name="verification_code">验证码</string>
     <string name="view_login">查看登录</string>
@@ -372,7 +372,6 @@
     <string name="download">下载</string>
     <string name="login_expired">您的登录会话已过期。</string>
     <string name="biometrics_direction">生物识别验证</string>
-    <string name="biometrics">生物识别</string>
     <string name="biometrics_failed">生物识别失败</string>
     <string name="biometrics_decoding_failure">使用您的主密码或 PIN 码登录后在「设置」中重新启用生物识别登录。</string>
     <string name="use_biometrics_to_unlock">使用生物识别解锁</string>
@@ -420,7 +419,6 @@
     <string name="master_password_policy_validation_title">无效的密码</string>
     <string name="master_password_policy_validation_message">密码不符合组织要求。请检查策略信息然后重试。</string>
     <string name="loading">加载中</string>
-    <string name="accept_policies_error">尚未同意服务条款和隐私政策。</string>
     <string name="terms_of_service">服务条款</string>
     <string name="privacy_policy">隐私政策</string>
     <string name="passkey_management">通行密钥管理</string>
@@ -609,8 +607,6 @@
     <string name="language">语言</string>
     <string name="language_change_x_description">语言已更改为 %1$s。请重新启动 App 以查看更改</string>
     <string name="default_system">默认（系统）</string>
-    <string name="important">重要：</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">主密码忘记后，将无法恢复！至少 %1$s 个字符。</string>
     <string name="weak_master_password">脆弱的主密码</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">识别到弱密码。请使用一个强密码以保护您的账户。确定要使用弱密码吗？</string>
     <string name="weak">弱</string>
@@ -700,14 +696,13 @@
     <string name="launch_web_authn">启动 WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">启动 WebAuthn 双重身份验证时出错</string>
     <string name="self_hosted_server_url">自托管服务器 URL</string>
-    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">由于用户无法验证，凭据操作失败。</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">由于无法验证用户，通行密钥操作失败。</string>
     <string name="user_verification_direction">用户验证</string>
     <string name="create_account_on">创建账户至</string>
     <string name="create_account_on_with_colon">创建账户至：</string>
     <string name="we_sent_an_email_to">我们向 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 发送了一封电子邮件。</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">若继续，表示您同意 <annotation link="termsOfService">服务条款</annotation> 和 <annotation link="privacyPolicy">隐私政策</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">激活此开关，表示您同意 <annotation link="termsOfService">服务条款</annotation> 和 <annotation link="privacyPolicy">隐私政策</annotation></string>
     <string name="unsubscribe">取消订阅</string>
     <string name="check_your_email">检查您的电子邮箱</string>
     <string name="open_email_app">打开电子邮箱 App</string>
@@ -865,8 +860,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">您只需为要求使用代码进行双重身份验证的登录设置验证器密钥。该密钥将持续不断地生成可用于登录的六位数代码。</string>
     <string name="coachmark_3_of_3">3 / 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">您必须添加一个网址才能使用自动填充来访问这个账户。</string>
-    <string name="single_tap_passkey_creation">单击创建通行密钥</string>
-    <string name="single_tap_passkey_authentication">单击使用通行密钥登录</string>
     <string name="learn_about_new_logins">了解新版登录</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">我们将通过主要功能引导您添加一个新的登录。</string>
     <string name="explore_the_generator">探索生成器</string>
@@ -906,10 +899,10 @@
     <string name="passkey_operation_failed_because_the_request_is_unsupported">由于请求不受支持，通行密钥操作失败。</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">由于所选项目不存在，密码操作失败。</string>
     <string name="password_operation_failed_because_no_item_was_selected">由于没有选中项目，密码操作失败。</string>
-    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
-    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
-    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
-    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">由于用户验证尝试超时，凭据操作失败。</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">由于用户被锁定，凭据操作失败。</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">由于所选项目不存在，凭据操作失败。</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">由于用户验证被取消，凭据操作失败。</string>
     <string name="self_host_server_url">自托管服务器 URL</string>
     <string name="use_brave_autofill_integration">使用 Brave 自动填充集成</string>
     <string name="use_chrome_autofill_integration">使用 Chrome 自动填充集成</string>
@@ -996,28 +989,28 @@
     <string name="add_item_rotation">添加轮换项目</string>
     <string name="scan_a_qr_code">扫描二维码</string>
     <string name="cannot_add_authenticator_key">无法添加验证器密钥吗？</string>
-    <string name="enable_camera_permission_to_use_the_scanner">启用相机权限以扫描二维码</string>
-    <string name="empty_item_list">空列表</string>
+    <string name="enable_camera_permission_to_use_the_scanner">启用相机权限以使用扫描器</string>
+    <string name="empty_item_list">空项目列表</string>
     <string name="you_dont_have_items_to_display">您没有任何可显示的项目。</string>
-    <string name="empty_item_list_instruction">添加一个新代码来保护您的帐户</string>
+    <string name="empty_item_list_instruction">添加一个新的代码以保护您的账户。</string>
     <string name="add_code">添加代码</string>
     <string name="verification_code_added">验证码已添加</string>
     <string name="refresh_period">刷新周期</string>
     <string name="algorithm">算法</string>
-    <string name="advanced">高级选项</string>
+    <string name="advanced">高级</string>
     <string name="collapse_advanced_options">折叠高级选项</string>
     <string name="number_of_digits">位数</string>
     <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d 秒</string>
     <string name="item_saved">项目已保存</string>
     <string name="information">信息</string>
     <string name="otp_type">OTP 类型</string>
-    <string name="search_codes">搜索动态密码</string>
+    <string name="search_codes">搜索代码</string>
     <string name="secure_your_accounts_with_bitwarden_authenticator">使用 Bitwarden 身份验证器保护您的帐户</string>
-    <string name="get_verification_codes_for_all_your_accounts">为您所有支持两步验证的帐户获取验证码。</string>
-    <string name="use_your_device_camera_to_scan_codes">使用系统相机扫描代码</string>
+    <string name="get_verification_codes_for_all_your_accounts">为您所有支持两步验证的账户获取验证码。</string>
+    <string name="use_your_device_camera_to_scan_codes">使用您的设备相机扫描代码</string>
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">扫描任何帐户的两步验证设置中的二维码。</string>
     <string name="sign_in_using_unique_codes">使用唯一的代码登录</string>
-    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">当使用两步验证时，您将输入您的用户名和密码以及在此应用中生成的代码。</string>
+    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">当使用两步验证时，您需要输入您的用户名和密码以及在此 App 中生成的代码。</string>
     <string name="skip">跳过</string>
     <string name="help">帮助</string>
     <string name="launch_tutorial">打开教程</string>
@@ -1030,11 +1023,11 @@
     <string name="security">安全</string>
     <string name="too_many_failed_biometric_attempts">生物识别尝试次数过多。</string>
     <string name="version">版本</string>
-    <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">在帮助中心了解更多如何使用 Bitwarden Authenticator 的信息。</string>
+    <string name="learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center">在帮助中心了解更多有关如何使用 Bitwarden Authenticator 的信息。</string>
     <string name="key">密钥</string>
     <string name="create_verification_code">创建验证码</string>
-    <string name="key_is_required">密钥不能为空。</string>
-    <string name="name_is_required">账户名不能为空。</string>
+    <string name="key_is_required">必须填写密钥。</string>
+    <string name="name_is_required">必须填写名称。</string>
     <string name="import_vault_failure">导入密码库时出现问题。</string>
     <string name="import_vault">导入</string>
     <string name="import_success">密码库导入成功</string>
@@ -1048,7 +1041,7 @@
     <string name="download_bitwarden_card_message">保存您所有的登录信息并直接与身份验证器 App 同步验证码。</string>
     <string name="download_now">现在就下载</string>
     <string name="sync_with_bitwarden_app">与 Bitwarden App 同步</string>
-    <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
+    <string name="learn_more_link"><annotation link="learnMore">了解更多</annotation></string>
     <string name="shared_codes_error">无法从 Bitwarden App 同步代码，请确保这两个应用程序都是最新的。您仍然可以在 Bitwarden App 中访问您现有的代码。</string>
     <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">与 Bitwarden App 同步</string>
@@ -1056,7 +1049,7 @@
     <string name="take_me_to_app_settings">跳转到应用设置</string>
     <string name="something_went_wrong">出错了</string>
     <string name="please_try_again">请重试</string>
-    <string name="copy_to_bitwarden_vault">Copy to Bitwarden vault</string>
+    <string name="copy_to_bitwarden_vault">复制到 Bitwarden 密码库</string>
     <string name="default_save_option">默认保存选项</string>
     <string name="save_to_bitwarden">保存到 Bitwarden</string>
     <string name="save_here">另存至此</string>
@@ -1072,9 +1065,10 @@
     <string name="file_could_not_be_processed">"无法处理文件"</string>
     <string name="file_could_not_be_processed_message">"无法处理文件。请确保它是有效的 JSON 文件后重试。需要帮助吗？请访问 bitwarden.com/help"</string>
     <string name="get_help">获取帮助</string>
-    <string name="expand_advanced_options">Expand advanced options</string>
-    <string name="local_items_are_expanded_click_to_collapse">Local items are expanded, click to collapse.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
-    <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
-    <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="expand_advanced_options">展开高级选项</string>
+    <string name="local_items_are_expanded_click_to_collapse">本地项目被展开，点击以折叠。</string>
+    <string name="local_items_are_collapsed_click_to_expand">本地项目被折叠，点击以展开。</string>
+    <string name="items_expanded_click_to_collapse">项目被展开，点击以折叠。</string>
+    <string name="items_are_collapsed_click_to_expand">项目被折叠，点击以展开。</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

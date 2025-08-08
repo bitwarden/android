@@ -146,7 +146,7 @@
     <string name="syncing">Nagsi-sync...</string>
     <string name="syncing_complete">Tapos na ang pagsi-sync</string>
     <string name="two_step_login">Dalawang-hakbang na pag-log in</string>
-    <string name="unlock_with">Buksan gamit ang %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Buksan gamit ang PIN code</string>
     <string name="verification_code">Code pamberipika</string>
     <string name="view_login">View login</string>
@@ -372,7 +372,6 @@ Awtomatikong itong magsa-scan.</string>
     <string name="download">I-download</string>
     <string name="login_expired">Nag-expire na ang login session mo.</string>
     <string name="biometrics_direction">Beripikasyong biometriko</string>
-    <string name="biometrics">Biometriko</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Gumamit ng biometriko pang-unlock</string>
@@ -420,7 +419,6 @@ Awtomatikong itong magsa-scan.</string>
     <string name="master_password_policy_validation_title">\'Di-wastong password</string>
     <string name="master_password_policy_validation_message">Hindi nakapasa sa mga requirement ng organisasyon ang password. Sumangguni sa impormasyon tungkol sa mga patakaran at subukan ulit.</string>
     <string name="loading">Naglo-load</string>
-    <string name="accept_policies_error">Hindi pa natatanggap ang Mga Tuntunin ng Serbisyo at Patakaran sa Privacy.</string>
     <string name="terms_of_service">Mga Tuntunin ng Serbisyo</string>
     <string name="privacy_policy">Patakaran sa Privacy</string>
     <string name="passkey_management">Passkey management</string>
@@ -609,8 +607,6 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="language">Wika</string>
     <string name="language_change_x_description">Ginawang %1$s ang wika. I-restart ang app para mailapat ang pagbabago</string>
     <string name="default_system">Default (Sistema)</string>
-    <string name="important">Mahalaga</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Hindi na mare-recover ang master password kapag nakalimutan mo ito! Hindi ito dapat bumaba sa %1$s karakter.</string>
     <string name="weak_master_password">Mahinang Master Password</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Mahina ang password. Gumamit ng malakas na password para maprotektahan ang account mo. Sigurado ka bang gusto mong gumamit ng mahinang password?</string>
     <string name="weak">Mahina</string>
@@ -707,7 +703,6 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="create_account_on_with_colon">Create account on:</string>
     <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Unsubscribe</string>
     <string name="check_your_email">Check your email</string>
     <string name="open_email_app">Open email app</string>
@@ -865,8 +860,6 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
@@ -1076,4 +1069,5 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

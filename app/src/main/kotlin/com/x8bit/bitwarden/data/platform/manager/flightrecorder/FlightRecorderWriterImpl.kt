@@ -73,6 +73,8 @@ class FlightRecorderWriterImpl(
                     bw.newLine()
                     bw.append("Device: ${Build.BRAND} ${Build.MODEL}")
                     bw.newLine()
+                    bw.append("Fingerprint: ${Build.FINGERPRINT}")
+                    bw.newLine()
                 }
             }
             logFile
