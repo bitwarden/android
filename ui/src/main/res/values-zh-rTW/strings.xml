@@ -146,7 +146,7 @@
     <string name="syncing">正在同步...</string>
     <string name="syncing_complete">同步完成</string>
     <string name="two_step_login">兩步驟登入</string>
-    <string name="unlock_with">使用 %1$s 解鎖</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">使用 PIN 碼解鎖</string>
     <string name="verification_code">驗證碼</string>
     <string name="view_login">View login</string>
@@ -372,7 +372,6 @@
     <string name="download">下載</string>
     <string name="login_expired">您的登入階段已逾期。</string>
     <string name="biometrics_direction">生物特徵辨識驗證</string>
-    <string name="biometrics">生物特徵辨識</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">使用生物特徵辨識解鎖</string>
@@ -1070,4 +1069,5 @@
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

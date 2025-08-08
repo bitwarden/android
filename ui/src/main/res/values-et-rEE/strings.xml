@@ -146,7 +146,7 @@
     <string name="syncing">Sünkroniseerimine...</string>
     <string name="syncing_complete">Sünkroniseerimine on lõpetatud.</string>
     <string name="two_step_login">Kaheastmeline kinnitamine</string>
-    <string name="unlock_with">Lukusta lahti %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Lukusta lahti PIN koodiga</string>
     <string name="verification_code">Kinnituskood</string>
     <string name="view_login">View login</string>
@@ -372,7 +372,6 @@ Skaneerimine toimub automaatselt.</string>
     <string name="download">Laadi alla</string>
     <string name="login_expired">Sessioon on aegunud.</string>
     <string name="biometrics_direction">Kinnita biomeetriaga.</string>
-    <string name="biometrics">biomeetriaga</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Lukusta lahti biomeetriaga</string>
@@ -1070,4 +1069,5 @@ Soovid selle konto peale lülituda?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

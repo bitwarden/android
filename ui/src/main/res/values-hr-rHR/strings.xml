@@ -146,7 +146,7 @@
     <string name="syncing">Sinkronizacija...</string>
     <string name="syncing_complete">Sinkronizacija dovršena.</string>
     <string name="two_step_login">Prijava dvostrukom autentifikacijom</string>
-    <string name="unlock_with">Otključaj s %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Otključaj PIN-om</string>
     <string name="verification_code">Kôd za provjeru</string>
     <string name="view_login">Prikaži prijavu</string>
@@ -371,7 +371,6 @@
     <string name="download">Preuzmi</string>
     <string name="login_expired">Sesija je istekla.</string>
     <string name="biometrics_direction">Biometrijska autentifikacija</string>
-    <string name="biometrics">biometrijom</string>
     <string name="biometrics_failed">Biometrija neuspješna</string>
     <string name="biometrics_decoding_failure">Prijavi se svojom Glavnom lozinkom ili PIN-om i isključi, pa ponovno uključi biometrijsku prijavu u Postavkama.</string>
     <string name="use_biometrics_to_unlock">Koristi biometriju za otključavanje</string>
@@ -1070,4 +1069,5 @@ bilo kakav problem.</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokalne stavke su sažete. Klikni za proširivanje.</string>
     <string name="items_expanded_click_to_collapse">Stavke su proširene. Klikni za sažimanje.</string>
     <string name="items_are_collapsed_click_to_expand">Stavke su sažete. Klikni za proširivanje.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

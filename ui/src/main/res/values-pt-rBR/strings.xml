@@ -146,7 +146,7 @@
     <string name="syncing">Sincronizando...</string>
     <string name="syncing_complete">Sincronização completa</string>
     <string name="two_step_login">Login em Duas Etapas</string>
-    <string name="unlock_with">Desbloquear com %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Desbloquear com Código PIN</string>
     <string name="verification_code">Código de Verificação</string>
     <string name="view_login">Ver login</string>
@@ -372,7 +372,6 @@ A leitura será feita automaticamente.</string>
     <string name="download">Baixar</string>
     <string name="login_expired">A sua sessão expirou.</string>
     <string name="biometrics_direction">Verificação biométrica</string>
-    <string name="biometrics">Biometria</string>
     <string name="biometrics_failed">Falha na Biometria</string>
     <string name="biometrics_decoding_failure">Faça o login com sua senha mestra ou PIN, então reative o login biométrico nas Configurações.</string>
     <string name="use_biometrics_to_unlock">Usar biometria para desbloquear</string>
@@ -962,8 +961,8 @@ Você deseja mudar para esta conta?</string>
     <string name="view_text_send">Ver Envio de texto</string>
     <string name="delete_send">Excluir Envio</string>
     <string name="missing_send_resync_your_vault">Envio ausente, sincronize seu cofre</string>
-    <string name="use_dynamic_colors">Use dynamic colors</string>
-    <string name="use_dynamic_colors_question">Use dynamic colors?</string>
+    <string name="use_dynamic_colors">Usar cores dinâmicas</string>
+    <string name="use_dynamic_colors_question">Usar cores dinâmicas?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">As cores dinâmicas usam as cores do sistema e podem não atender todas as diretrizes de acessibilidade.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Operação de senha falhou porque o navegador (%1$s) não é confiável. Selecione \"Confiar\" para adicionar %1$s à lista de aplicativos confiáveis ou \"Cancelar\"\ para abortar a operação.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">A operação de senha falhou porque o navegador não é confiável.</string>
@@ -1070,4 +1069,5 @@ Você deseja mudar para esta conta?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>
