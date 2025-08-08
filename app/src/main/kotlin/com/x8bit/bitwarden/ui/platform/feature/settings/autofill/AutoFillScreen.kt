@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.spanStyleOf
@@ -495,29 +496,33 @@ private fun UriMatchSelectionButton(
     onOptionSelected: (MultiSelectOption.Row) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val regularOptionsList: List<MultiSelectOption.Row> =
-        UriMatchType.entries
-            .filter { !it.isAdvancedMatching() }
-            .map { MultiSelectOption.Row(title = it.displayLabel()) }
-    val advancedOptionsList = mutableListOf<MultiSelectOption>()
     val advancedOptions = UriMatchType.entries.filter { it.isAdvancedMatching() }
-    if (advancedOptions.isNotEmpty()) {
-        advancedOptionsList.add(MultiSelectOption.Header(
+    val options = persistentListOfNotNull(
+        *UriMatchType
+            .entries
+            .filter { !it.isAdvancedMatching() }
+            .map { MultiSelectOption.Row(it.displayLabel()) }
+            .toTypedArray(),
+        if (advancedOptions.isNotEmpty()) {
+            MultiSelectOption.Header(
                 title = stringResource(id = BitwardenString.advanced_options),
                 testTag = "AdvancedOptionsSection",
-            ))
-        advancedOptions.forEach { uriMatchType ->
-            advancedOptionsList.add(MultiSelectOption.Row(title = uriMatchType.displayLabel()))
-        }
-    }
+            )
+        } else {
+            null
+        },
+        *advancedOptions
+            .map { MultiSelectOption.Row(it.displayLabel()) }
+            .toTypedArray(),
+    )
 
     BitwardenMultiSelectButton(
         label = stringResource(id = BitwardenString.default_uri_match_detection),
-        options = (regularOptionsList + advancedOptionsList).toImmutableList(),
+        options = options,
         selectedOption = MultiSelectOption.Row(selectedUriMatchType.displayLabel()),
         onOptionSelected = onOptionSelected,
         cardStyle = CardStyle.Full,
-        supportingContent = { SupportingAnnotatedTextForMatchDetection(selectedUriMatchType) },
+        supportingContent = { SupportingTextForMatchDetection(selectedUriMatchType) },
         modifier = modifier,
     )
 }
@@ -554,7 +559,7 @@ private fun getAdvancedMatchingWarningResId(matchType: UriMatchType): Int {
 }
 
 @Composable
-private fun SupportingAnnotatedTextForMatchDetection(
+private fun SupportingTextForMatchDetection(
     uriMatchType: UriMatchType,
     resources: Resources = LocalContext.current.resources,
 ) {

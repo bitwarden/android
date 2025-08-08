@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
+import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -24,7 +25,6 @@ import com.x8bit.bitwarden.ui.platform.components.dropdown.MultiSelectOption
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
-import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.isAdvancedMatching
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriMatchDisplayType
@@ -33,7 +33,6 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.util.isAdvancedMatching
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDisplayMatchType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toUriMatchType
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 
 /**
  * The URI item displayed to the user.
@@ -105,19 +104,11 @@ fun VaultAddEditUriItem(
             onDismissRequest = { shouldShowMatchDialog = false },
         ) {
             BitwardenMultiSelectDialogContent(
-                options = (UriMatchDisplayType
-                    .entries
-                    .filter { !it.isAdvancedMatching() }
-                    .map {
-                        MultiSelectOption.Row(
-                            it.displayLabel(
-                                defaultUriOption = defaultUriMatchType
-                                    .displayLabel
-                                    .invoke(),
-                            ).invoke(),
-                        )
-                    } + advancedOptionsList())
-                    .toImmutableList(),
+                options = uriMatchingOptions(
+                    defaultUriOption = defaultUriMatchType
+                        .displayLabel
+                        .invoke(),
+                ),
                 selectedOption = MultiSelectOption.Row(
                     uriItem
                         .match
@@ -256,19 +247,24 @@ private fun LearnMoreAboutMatchDetectionDialog(
 }
 
 @Composable
-private fun advancedOptionsList(): ImmutableList<MultiSelectOption> {
-    return buildList {
-        val advancedOptions = UriMatchType.entries.filter { it.isAdvancedMatching() }
+private fun uriMatchingOptions(defaultUriOption: String): ImmutableList<MultiSelectOption> {
+    val advancedOptions = UriMatchDisplayType.entries.filter { it.isAdvancedMatching() }
+    return persistentListOfNotNull(
+        *UriMatchDisplayType
+            .entries
+            .filter { !it.isAdvancedMatching() }
+            .map { MultiSelectOption.Row(it.displayLabel(defaultUriOption).invoke()) }
+            .toTypedArray(),
         if (advancedOptions.isNotEmpty()) {
-            add(
-                MultiSelectOption.Header(
-                    title = stringResource(BitwardenString.advanced_options),
-                    testTag = "AdvancedOptionsSection",
-                ),
+            MultiSelectOption.Header(
+                title = stringResource(id = BitwardenString.advanced_options),
+                testTag = "AdvancedOptionsSection",
             )
-            advancedOptions.forEach { uriMatchType ->
-                add(MultiSelectOption.Row(title = uriMatchType.displayLabel()))
-            }
-        }
-    }.toImmutableList()
+        } else {
+            null
+        },
+        *advancedOptions
+            .map { MultiSelectOption.Row(it.displayLabel(defaultUriOption).invoke()) }
+            .toTypedArray(),
+    )
 }
