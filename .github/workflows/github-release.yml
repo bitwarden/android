@@ -191,14 +191,13 @@ jobs:
             --draft \
             $ARTIFACTS_PATH/*/*)
 
-          echo "✅ Release created: $release_url"
-
-          # Get release info for outputs
-          release_data=$(gh release view "$_TAG_NAME" --json id)
-          release_id=$(echo "$release_data" | jq -r .id)
-
-          echo "id=$release_id" >> $GITHUB_OUTPUT
+          # Extract release tag from URL
+          release_id_from_url=$(echo "$release_url" | sed 's/.*\/tag\///')
+          echo "release_id_from_url=$release_id_from_url" >> $GITHUB_OUTPUT
           echo "url=$release_url" >> $GITHUB_OUTPUT
+
+          echo "✅ Release created: $release_url"
+          echo "🔖 Release ID from URL: $release_id_from_url"
 
       - name: Update Release Description
         id: update_release_description
@@ -206,10 +205,10 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
           _VERSION_NAME: ${{ steps.get_release_info.outputs.version_name }}
-          _TAG_NAME: ${{ steps.get_release_info.outputs.tag_name }}
+          _RELEASE_ID: ${{ steps.create_release.outputs.release_id_from_url }}
         run: |
-          echo "Getting current release body. Tag: $_TAG_NAME"
-          current_body=$(gh release view "$_TAG_NAME" --json body --jq .body)
+          echo "Getting current release body. Release ID: $_RELEASE_ID"
+          current_body=$(gh release view "$_RELEASE_ID" --json body --jq .body)
 
           product_release_notes=$(cat product_release_notes.txt)
 
@@ -220,7 +219,7 @@ jobs:
           ${current_body}
           **Builds Source:** https://github.com/${{ github.repository }}/actions/runs/$ARTIFACT_RUN_ID"
 
-          new_release_url=$(gh release edit "$_TAG_NAME" --notes "$updated_body")
+          new_release_url=$(gh release edit "$_RELEASE_ID" --notes "$updated_body")
 
           # draft release links change after editing
           echo "release_url=$new_release_url" >> $GITHUB_OUTPUT
