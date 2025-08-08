@@ -278,29 +278,29 @@ jobs:
           _TEST_APK_SIGNED_PATH: app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-test.apk
         run: |
           ./gradlew :app:assembleStandardReleaseAndroidTest
-          # bundle exec fastlane assembleTestApk \
-          #   storeFile:app_play-keystore.jks \
-          #   storePassword:${{ env.PLAY-KEYSTORE-PASSWORD }} \
-          #   keyAlias:bitwarden \
-          #   keyPassword:${{ env.PLAY-KEYSTORE-PASSWORD }}
-          # mv $_TEST_APK_PATH $_TEST_APK_SIGNED_PATH
+          bundle exec fastlane assembleTestApk \
+            storeFile:app_play-keystore.jks \
+            storePassword:${{ env.PLAY-KEYSTORE-PASSWORD }} \
+            keyAlias:bitwarden \
+            keyPassword:${{ env.PLAY-KEYSTORE-PASSWORD }}
+          mv $_TEST_APK_PATH $_TEST_APK_SIGNED_PATH
 
       # TODO: test if bundle exec fastlane assembleTestApk works and replace this step
-      - name: Sign and rename test APK
-        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
-        env:
-          _TEST_APK_PATH: app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-standard-release-androidTest.apk
-          _TEST_APK_SIGNED_PATH: app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-test.apk
-          _PLAY_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-KEYSTORE-PASSWORD }}
-          _PLAY_KEYSTORE_ALIAS: ${{ steps.get-kv-secrets.outputs.PLAY-KEYSTORE-ALIAS }}
-        run: |
-          $ANDROID_SDK_ROOT/build-tools/34.0.0/apksigner sign \
-            --ks keystores/app_play-keystore.jks \
-            --ks-key-alias bitwarden \
-            --ks-pass pass:$_PLAY_KEYSTORE_PASSWORD \
-            --key-pass pass:$_PLAY_KEYSTORE_PASSWORD \
-            $_TEST_APK_PATH
-          mv $_TEST_APK_PATH $_TEST_APK_SIGNED_PATH
+      # - name: Sign and rename test APK
+      #   if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
+      #   env:
+      #     _TEST_APK_PATH: app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-standard-release-androidTest.apk
+      #     _TEST_APK_SIGNED_PATH: app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-test.apk
+      #     _PLAY_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-KEYSTORE-PASSWORD }}
+      #     _PLAY_KEYSTORE_ALIAS: ${{ steps.get-kv-secrets.outputs.PLAY-KEYSTORE-ALIAS }}
+      #   run: |
+      #     $ANDROID_SDK_ROOT/build-tools/34.0.0/apksigner sign \
+      #       --ks keystores/app_play-keystore.jks \
+      #       --ks-key-alias bitwarden \
+      #       --ks-pass pass:$_PLAY_KEYSTORE_PASSWORD \
+      #       --key-pass pass:$_PLAY_KEYSTORE_PASSWORD \
+      #       $_TEST_APK_PATH
+      #     mv $_TEST_APK_PATH $_TEST_APK_SIGNED_PATH
 
       - name: Generate beta Play Store APK
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
