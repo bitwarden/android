@@ -108,7 +108,7 @@ jobs:
           echo "🔖 New tag name: $tag_name"
           echo "tag_name=$tag_name" >> $GITHUB_OUTPUT
 
-          last_release_tag=$(git tag -l --sort=-authordate | grep "$APP_NAME_SUFFIX" | head -n 1)
+          last_release_tag=$(git tag -l --sort=-authordate | grep "$_APP_NAME_SUFFIX" | head -n 1)
           echo "🔖 Last release tag: $last_release_tag"
           echo "last_release_tag=$last_release_tag" >> $GITHUB_OUTPUT
 
