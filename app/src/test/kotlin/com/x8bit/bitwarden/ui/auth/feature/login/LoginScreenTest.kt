@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.login
 
-import android.net.Uri
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
@@ -319,13 +318,6 @@ class LoginScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `NavigateToCaptcha should call intentManager startCustomTabsActivity`() {
-        val mockUri = mockk<Uri>()
-        mutableEventFlow.tryEmit(LoginEvent.NavigateToCaptcha(mockUri))
-        verify { intentManager.startCustomTabsActivity(mockUri) }
-    }
-
-    @Test
     fun `NavigateToMasterPasswordHint should call onNavigateToMasterPasswordHint`() {
         mutableEventFlow.tryEmit(LoginEvent.NavigateToMasterPasswordHint("email"))
         assertTrue(onNavigateToMasterPasswordHintCalled)
@@ -359,7 +351,6 @@ private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
 private val DEFAULT_STATE =
     LoginState(
         emailAddress = EMAIL,
-        captchaToken = null,
         isLoginButtonEnabled = false,
         passwordInput = "",
         environmentLabel = "",

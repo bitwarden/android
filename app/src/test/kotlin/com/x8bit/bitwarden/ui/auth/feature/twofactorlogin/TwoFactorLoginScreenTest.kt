@@ -271,13 +271,6 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `NavigateToCaptcha should call intentManager startCustomTabsActivity`() {
-        val mockUri = mockk<Uri>()
-        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToCaptcha(mockUri))
-        verify { intentManager.startCustomTabsActivity(mockUri) }
-    }
-
-    @Test
     fun `NavigateToDuo should call intentManager startCustomTabsActivity`() {
         val mockUri = mockk<Uri>()
         mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToDuo(mockUri))
@@ -351,7 +344,6 @@ private val DEFAULT_STATE = TwoFactorLoginState(
     isContinueButtonEnabled = false,
     isRememberEnabled = false,
     isNewDeviceVerification = false,
-    captchaToken = null,
     email = "example@email.com",
     password = "password123",
     orgIdentifier = "orgIdentifier",

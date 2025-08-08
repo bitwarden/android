@@ -1,9 +1,7 @@
 package com.x8bit.bitwarden.ui.auth.feature.login
 
-import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
@@ -15,8 +13,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
-import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -41,14 +37,11 @@ import org.junit.jupiter.api.Test
 @Suppress("LargeClass")
 class LoginViewModelTest : BaseViewModelTest() {
 
-    private val mutableCaptchaTokenResultFlow =
-        bufferedMutableSharedFlow<CaptchaCallbackTokenResult>()
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val authRepository: AuthRepository = mockk(relaxed = true) {
         coEvery {
             getIsKnownDevice(EMAIL)
         } returns KnownDeviceResult.Success(false)
-        every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
         every { userStateFlow } returns mutableUserStateFlow
         every { logout(any()) } just runs
     }
@@ -60,7 +53,6 @@ class LoginViewModelTest : BaseViewModelTest() {
     @BeforeEach
     fun setUp() {
         mockkStatic(
-            ::generateUriForCaptcha,
             SavedStateHandle::toLoginArgs,
         )
     }
@@ -68,7 +60,6 @@ class LoginViewModelTest : BaseViewModelTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(
-            ::generateUriForCaptcha,
             SavedStateHandle::toLoginArgs,
         )
     }
@@ -265,7 +256,6 @@ class LoginViewModelTest : BaseViewModelTest() {
             authRepository.login(
                 email = EMAIL,
                 password = "",
-                captchaToken = null,
             )
         } returns LoginResult.Error(errorMessage = "mock_error", error = error)
         val viewModel = createViewModel()
@@ -292,7 +282,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             )
         }
         coVerify {
-            authRepository.login(email = EMAIL, password = "", captchaToken = null)
+            authRepository.login(email = EMAIL, password = "")
         }
     }
 
@@ -304,7 +294,6 @@ class LoginViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     password = "",
-                    captchaToken = null,
                 )
             } returns LoginResult.UnofficialServerError
             val viewModel = createViewModel()
@@ -330,7 +319,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 )
             }
             coVerify {
-                authRepository.login(email = EMAIL, password = "", captchaToken = null)
+                authRepository.login(email = EMAIL, password = "")
             }
         }
 
@@ -342,7 +331,6 @@ class LoginViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     password = "",
-                    captchaToken = null,
                 )
             } returns LoginResult.EncryptionKeyMigrationRequired
             fakeEnvironmentRepository.environment = Environment.SelfHosted(
@@ -378,7 +366,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 )
             }
             coVerify {
-                authRepository.login(email = EMAIL, password = "", captchaToken = null)
+                authRepository.login(email = EMAIL, password = "")
             }
         }
 
@@ -390,7 +378,6 @@ class LoginViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     password = "",
-                    captchaToken = null,
                 )
             } returns LoginResult.EncryptionKeyMigrationRequired
             fakeEnvironmentRepository.environment = Environment.SelfHosted(
@@ -424,7 +411,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 )
             }
             coVerify {
-                authRepository.login(email = EMAIL, password = "", captchaToken = null)
+                authRepository.login(email = EMAIL, password = "")
             }
         }
 
@@ -436,7 +423,6 @@ class LoginViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     password = "",
-                    captchaToken = null,
                 )
             } returns LoginResult.EncryptionKeyMigrationRequired
             fakeEnvironmentRepository.environment = Environment.SelfHosted(
@@ -470,7 +456,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 )
             }
             coVerify {
-                authRepository.login(email = EMAIL, password = "", captchaToken = null)
+                authRepository.login(email = EMAIL, password = "")
             }
         }
 
@@ -482,7 +468,6 @@ class LoginViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     password = "",
-                    captchaToken = null,
                 )
             } returns LoginResult.CertificateError
             val viewModel = createViewModel()
@@ -508,7 +493,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 )
             }
             coVerify {
-                authRepository.login(email = EMAIL, password = "", captchaToken = null)
+                authRepository.login(email = EMAIL, password = "")
             }
         }
 
@@ -518,7 +503,6 @@ class LoginViewModelTest : BaseViewModelTest() {
             authRepository.login(
                 email = EMAIL,
                 password = "",
-                captchaToken = null,
             )
         } returns LoginResult.Success
         val viewModel = createViewModel()
@@ -539,34 +523,9 @@ class LoginViewModelTest : BaseViewModelTest() {
             )
         }
         coVerify {
-            authRepository.login(email = EMAIL, password = "", captchaToken = null)
+            authRepository.login(email = EMAIL, password = "")
         }
     }
-
-    @Test
-    fun `LoginButtonClick login returns CaptchaRequired should emit NavigateToCaptcha`() =
-        runTest {
-            val mockkUri = mockk<Uri>()
-            every {
-                generateUriForCaptcha(captchaId = "mock_captcha_id")
-            } returns mockkUri
-            coEvery {
-                authRepository.login(
-                    email = EMAIL,
-                    password = "",
-                    captchaToken = null,
-                )
-            } returns LoginResult.CaptchaRequired(captchaId = "mock_captcha_id")
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(LoginAction.LoginButtonClick)
-                assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-                assertEquals(LoginEvent.NavigateToCaptcha(uri = mockkUri), awaitItem())
-            }
-            coVerify {
-                authRepository.login(email = EMAIL, password = "", captchaToken = null)
-            }
-        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -577,7 +536,6 @@ class LoginViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     password = password,
-                    captchaToken = null,
                 )
             } returns LoginResult.TwoFactorRequired
 
@@ -604,7 +562,6 @@ class LoginViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     password = password,
-                    captchaToken = null,
                 )
             }
         }
@@ -618,7 +575,6 @@ class LoginViewModelTest : BaseViewModelTest() {
                 authRepository.login(
                     email = EMAIL,
                     password = password,
-                    captchaToken = null,
                 )
             } returns LoginResult.NewDeviceVerification(errorMessage = "new device verification needed")
 
@@ -643,7 +599,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 )
             }
             coVerify {
-                authRepository.login(email = EMAIL, password = password, captchaToken = null)
+                authRepository.login(email = EMAIL, password = password)
             }
         }
 
@@ -743,22 +699,6 @@ class LoginViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Test
-    fun `captchaTokenFlow success update should trigger a login`() = runTest {
-        coEvery {
-            authRepository.login(
-                email = EMAIL,
-                password = "",
-                captchaToken = "token",
-            )
-        } returns LoginResult.Success
-        createViewModel()
-        mutableCaptchaTokenResultFlow.tryEmit(CaptchaCallbackTokenResult.Success("token"))
-        coVerify {
-            authRepository.login(email = EMAIL, password = "", captchaToken = "token")
-        }
-    }
-
     private fun createViewModel(state: LoginState? = null): LoginViewModel =
         LoginViewModel(
             authRepository = authRepository,
@@ -766,7 +706,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             vaultRepository = vaultRepository,
             savedStateHandle = SavedStateHandle().apply {
                 set(key = "state", value = state)
-                every { toLoginArgs() } returns LoginArgs(emailAddress = EMAIL, captchaToken = null)
+                every { toLoginArgs() } returns LoginArgs(emailAddress = EMAIL)
             },
         )
 
@@ -778,7 +718,6 @@ class LoginViewModelTest : BaseViewModelTest() {
             isLoginButtonEnabled = false,
             environmentLabel = Environment.Us.label,
             dialogState = null,
-            captchaToken = null,
             accountSummaries = emptyList(),
             shouldShowLoginWithDevice = false,
         )

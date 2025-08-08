@@ -79,10 +79,6 @@ fun LoginScreen(
                 onNavigateToMasterPasswordHint(event.emailAddress)
             }
 
-            is LoginEvent.NavigateToCaptcha -> {
-                intentManager.startCustomTabsActivity(uri = event.uri)
-            }
-
             is LoginEvent.NavigateToEnterpriseSignOn -> {
                 onNavigateToEnterpriseSignOn(event.emailAddress)
             }

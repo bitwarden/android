@@ -84,10 +84,9 @@ fun NavGraphBuilder.authGraph(
             onNavigateToPreventAccountLockout = {
                 navController.navigateToPreventAccountLockout()
             },
-            onNavigateToLogin = { emailAddress, captchaToken ->
+            onNavigateToLogin = { emailAddress ->
                 navController.navigateToLogin(
                     emailAddress = emailAddress,
-                    captchaToken = captchaToken,
                     navOptions = navOptions {
                         popUpTo(route = LandingRoute)
                     },
@@ -110,7 +109,6 @@ fun NavGraphBuilder.authGraph(
             onNavigateToLogin = { emailAddress ->
                 navController.navigateToLogin(
                     emailAddress = emailAddress,
-                    captchaToken = null,
                 )
             },
             onNavigateToEnvironment = {

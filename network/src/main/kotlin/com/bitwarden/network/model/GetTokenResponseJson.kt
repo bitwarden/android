@@ -84,15 +84,6 @@ sealed class GetTokenResponseJson {
     ) : GetTokenResponseJson()
 
     /**
-     * Models json body of a captcha error.
-     */
-    @Serializable
-    data class CaptchaRequired(
-        @SerialName("HCaptcha_SiteKey")
-        val captchaKey: String,
-    ) : GetTokenResponseJson()
-
-    /**
      * Models json body of an invalid request.
      *
      * This model supports older versions of the error response model that used lower-case keys.
@@ -134,11 +125,12 @@ sealed class GetTokenResponseJson {
             get() = if (errorMessage?.lowercase() == "new device verification required") {
                 InvalidType.NewDeviceVerification
             } else if (errorMessage
-                ?.lowercase()
-                ?.contains(
-                    "encryption key migration is required. please log in to the web vault at",
-                ) == true) {
-                    InvalidType.EncryptionKeyMigrationRequired
+                    ?.lowercase()
+                    ?.contains(
+                        "encryption key migration is required. please log in to the web vault at",
+                    ) == true
+            ) {
+                InvalidType.EncryptionKeyMigrationRequired
             } else {
                 InvalidType.GenericInvalid
             }
@@ -164,9 +156,6 @@ sealed class GetTokenResponseJson {
      * `{"1":{"Email":"sh*****@example.com"},"0":{"Email":null}}`
      * The keys are the raw values of the [TwoFactorAuthMethod],
      * and the map is any extra information for the method.
-     * @property captchaToken The captcha token used in the second
-     * login attempt if the user has already passed a captcha
-     * authentication in the first attempt.
      * @property ssoToken  If the user is logging on via Single
      * Sign On, they'll need this value to complete authentication
      * after entering their two-factor code.
@@ -178,9 +167,6 @@ sealed class GetTokenResponseJson {
 
         @SerialName("TwoFactorProviders")
         val twoFactorProviders: List<String>?,
-
-        @SerialName("CaptchaBypassToken")
-        val captchaToken: String?,
 
         @SerialName("SsoEmail2faSessionToken")
         val ssoToken: String?,

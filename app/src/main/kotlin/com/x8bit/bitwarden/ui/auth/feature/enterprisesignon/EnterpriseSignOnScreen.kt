@@ -64,10 +64,6 @@ fun EnterpriseSignOnScreen(
                 intentManager.startCustomTabsActivity(event.uri)
             }
 
-            is EnterpriseSignOnEvent.NavigateToCaptcha -> {
-                intentManager.startCustomTabsActivity(event.uri)
-            }
-
             is EnterpriseSignOnEvent.NavigateToSetPassword -> {
                 onNavigateToSetPassword()
             }

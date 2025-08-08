@@ -14,10 +14,8 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SSO_URI
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
-import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForSso
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -53,7 +51,6 @@ class EnterpriseSignOnViewModel @Inject constructor(
         ?: EnterpriseSignOnState(
             dialogState = null,
             orgIdentifierInput = "",
-            captchaToken = null,
         ),
 ) {
 
@@ -77,16 +74,6 @@ class EnterpriseSignOnViewModel @Inject constructor(
             .ssoCallbackResultFlow
             .onEach {
                 sendAction(EnterpriseSignOnAction.Internal.OnSsoCallbackResult(it))
-            }
-            .launchIn(viewModelScope)
-
-        // Automatically attempt to login again if a captcha token is received.
-        authRepository
-            .captchaTokenResultFlow
-            .onEach {
-                sendAction(
-                    EnterpriseSignOnAction.Internal.OnReceiveCaptchaToken(it),
-                )
             }
             .launchIn(viewModelScope)
 
@@ -118,10 +105,6 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 handleOnLoginResult(action)
             }
 
-            is EnterpriseSignOnAction.Internal.OnReceiveCaptchaToken -> {
-                handleOnReceiveCaptchaToken(action)
-            }
-
             is EnterpriseSignOnAction.Internal.OnVerifiedOrganizationDomainSsoDetailsReceive -> {
                 handleOnVerifiedOrganizationDomainSsoDetailsReceive(action)
             }
@@ -151,15 +134,6 @@ class EnterpriseSignOnViewModel @Inject constructor(
     @Suppress("LongMethod")
     private fun handleOnLoginResult(action: EnterpriseSignOnAction.Internal.OnLoginResult) {
         when (val loginResult = action.loginResult) {
-            is LoginResult.CaptchaRequired -> {
-                mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(
-                    event = EnterpriseSignOnEvent.NavigateToCaptcha(
-                        uri = generateUriForCaptcha(captchaId = loginResult.captchaId),
-                    ),
-                )
-            }
-
             is LoginResult.Error -> {
                 showError(
                     message = loginResult.errorMessage?.asText()
@@ -304,30 +278,6 @@ class EnterpriseSignOnViewModel @Inject constructor(
         attemptLogin()
     }
 
-    private fun handleOnReceiveCaptchaToken(
-        action: EnterpriseSignOnAction.Internal.OnReceiveCaptchaToken,
-    ) {
-        when (val tokenResult = action.tokenResult) {
-            CaptchaCallbackTokenResult.MissingToken -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = EnterpriseSignOnState.DialogState.Error(
-                            title = BitwardenString.log_in_denied.asText(),
-                            message = BitwardenString.captcha_failed.asText(),
-                        ),
-                    )
-                }
-            }
-
-            is CaptchaCallbackTokenResult.Success -> {
-                mutableStateFlow.update {
-                    it.copy(captchaToken = tokenResult.token)
-                }
-                attemptLogin()
-            }
-        }
-    }
-
     private fun prevalidateSso() {
         if (!networkConnectionManager.isNetworkConnected) {
             mutableStateFlow.update {
@@ -393,7 +343,6 @@ class EnterpriseSignOnViewModel @Inject constructor(
                                 ssoCode = ssoCallbackResult.code,
                                 ssoCodeVerifier = ssoData.codeVerifier,
                                 ssoRedirectUri = SSO_URI,
-                                captchaToken = state.captchaToken,
                                 organizationIdentifier = state.orgIdentifierInput,
                             )
                         sendAction(EnterpriseSignOnAction.Internal.OnLoginResult(result))
@@ -511,7 +460,6 @@ class EnterpriseSignOnViewModel @Inject constructor(
 data class EnterpriseSignOnState(
     val dialogState: DialogState?,
     val orgIdentifierInput: String,
-    val captchaToken: String?,
 ) : Parcelable {
     /**
      * Represents the current state of any dialogs on the screen.
@@ -559,11 +507,6 @@ sealed class EnterpriseSignOnEvent {
      * Navigates to a custom tab for SSO login using [uri].
      */
     data class NavigateToSsoLogin(val uri: Uri) : EnterpriseSignOnEvent()
-
-    /**
-     * Navigates to the captcha verification screen.
-     */
-    data class NavigateToCaptcha(val uri: Uri) : EnterpriseSignOnEvent()
 
     /**
      * Navigates to the set master password screen.
@@ -643,11 +586,6 @@ sealed class EnterpriseSignOnAction {
             val message: String?,
             val error: Throwable?,
         ) : Internal()
-
-        /**
-         * A captcha callback result has been received
-         */
-        data class OnReceiveCaptchaToken(val tokenResult: CaptchaCallbackTokenResult) : Internal()
 
         /**
          * A result was received when requesting an [VerifiedOrganizationDomainSsoDetailsResult].
