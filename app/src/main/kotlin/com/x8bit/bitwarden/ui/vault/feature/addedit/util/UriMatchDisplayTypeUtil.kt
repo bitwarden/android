@@ -51,7 +51,7 @@ fun UriMatchDisplayType.isAdvancedMatching(): Boolean =
  */
 fun UriMatchDisplayType.displayLabel(defaultUriOption: String): Text {
     return if (this == UriMatchDisplayType.DEFAULT) {
-        BitwardenString.default_text.asText(defaultUriOption)
+        BitwardenString.default_text_value.asText(defaultUriOption)
     } else {
         this.text
     }

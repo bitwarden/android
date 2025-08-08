@@ -286,7 +286,7 @@ Scanning will happen automatically.</string>
     <string name="new_uri">New URI</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">Base domain</string>
-    <string name="default_text">Default (%1$s)</string>
+    <string name="default_text">Default</string>
     <string name="exact">Exact</string>
     <string name="host">Host</string>
     <string name="reg_ex">Regular expression</string>
@@ -1077,4 +1077,5 @@ Do you want to switch to this account?</string>
     <string name="keep_your_credential_secure">Keep your credentials secure</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
     <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_text_value">Default (%1$s)</string>
 </resources>

@@ -105,29 +105,30 @@ fun VaultAddEditUriItem(
             onDismissRequest = { shouldShowMatchDialog = false },
         ) {
             BitwardenMultiSelectDialogContent(
-                options = UriMatchDisplayType
+                options = (UriMatchDisplayType
                     .entries
                     .filter { !it.isAdvancedMatching() }
                     .map {
-                        it
-                            .displayLabel(
+                        MultiSelectOption.Row(
+                            it.displayLabel(
                                 defaultUriOption = defaultUriMatchType
                                     .displayLabel
                                     .invoke(),
-                            )
-                            .invoke()
-                    }
+                            ).invoke(),
+                        )
+                    } + advancedOptionsList())
                     .toImmutableList(),
-                selectedOption = uriItem
-                    .match
-                    .toDisplayMatchType()
-                    .displayLabel(
-                        defaultUriOption = defaultUriMatchType
-                            .displayLabel
-                            .invoke(),
-                    )
-                    .invoke(),
-                sectionOptions = buildSubSectionsList(),
+                selectedOption = MultiSelectOption.Row(
+                    uriItem
+                        .match
+                        .toDisplayMatchType()
+                        .displayLabel(
+                            defaultUriOption = defaultUriMatchType
+                                .displayLabel
+                                .invoke(),
+                        )
+                        .invoke(),
+                ),
                 onOptionSelected = { selectedOption ->
                     shouldShowMatchDialog = false
 
@@ -135,7 +136,11 @@ fun VaultAddEditUriItem(
                         UriMatchDisplayType
                             .entries
                             .first {
-                                it.text.invoke(resources) == selectedOption
+                                it.displayLabel(
+                                    defaultUriMatchType
+                                        .displayLabel
+                                        .toString(resources),
+                                ).invoke(resources) == selectedOption.title
                             }
 
                     if (newSelectedType.isAdvancedMatching()) {
@@ -155,7 +160,7 @@ fun VaultAddEditUriItem(
     val currentOptionToConfirm = optionPendingConfirmation
 
     if (shouldShowAdvancedMatchDialog && currentOptionToConfirm != null) {
-        BuildAdvancedMatchDetectionWarning(
+        AdvancedMatchDetectionWarning(
             pendingOption = currentOptionToConfirm,
             defaultUriMatchType = defaultUriMatchType,
             onDialogConfirm = {
@@ -174,7 +179,7 @@ fun VaultAddEditUriItem(
     }
 
     if (shouldShowLearnMoreMatchDetectionDialog) {
-        BuildLearnMoreAboutMatchDetectionDialog(
+        LearnMoreAboutMatchDetectionDialog(
             uriMatchDisplayType = uriItem.match.toDisplayMatchType(),
             onDialogConfirm = {
                 intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
@@ -188,7 +193,7 @@ fun VaultAddEditUriItem(
 }
 
 @Composable
-private fun BuildAdvancedMatchDetectionWarning(
+private fun AdvancedMatchDetectionWarning(
     pendingOption: UriMatchDisplayType,
     defaultUriMatchType: UriMatchType,
     onDialogConfirm: () -> Unit,
@@ -231,7 +236,7 @@ private fun BuildAdvancedMatchDetectionWarning(
 }
 
 @Composable
-private fun BuildLearnMoreAboutMatchDetectionDialog(
+private fun LearnMoreAboutMatchDetectionDialog(
     uriMatchDisplayType: UriMatchDisplayType,
     onDialogConfirm: () -> Unit,
     onDialogDismiss: () -> Unit,
@@ -251,13 +256,13 @@ private fun BuildLearnMoreAboutMatchDetectionDialog(
 }
 
 @Composable
-private fun buildSubSectionsList(): ImmutableList<MultiSelectOption>? {
+private fun advancedOptionsList(): ImmutableList<MultiSelectOption> {
     return buildList {
         val advancedOptions = UriMatchType.entries.filter { it.isAdvancedMatching() }
         if (advancedOptions.isNotEmpty()) {
             add(
                 MultiSelectOption.Header(
-                    title = stringResource(id = BitwardenString.advanced_options),
+                    title = stringResource(BitwardenString.advanced_options),
                     testTag = "AdvancedOptionsSection",
                 ),
             )
