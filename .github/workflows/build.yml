@@ -278,7 +278,6 @@ jobs:
           _TEST_APK_PATH: app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-standard-release-androidTest.apk
           _TEST_APK_SIGNED_PATH: app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-test.apk
         run: |
-          ./gradlew :app:assembleStandardReleaseAndroidTest
           bundle exec fastlane assembleTestApk \
             storeFile:app_play-keystore.jks \
             storePassword:${{ env.PLAY-KEYSTORE-PASSWORD }} \

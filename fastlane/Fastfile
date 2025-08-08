@@ -69,11 +69,10 @@ platform :android do
     )
   end
 
-  # TODO: test if lane builds and signs correctly
-  desc "Assemble test  APK"
+  desc "Assemble test APK"
   lane :assembleTestApk do |options|
     buildAndSignBitwarden(
-      taskName: "app:assembleStandardReleaseAndroidTest",
+      taskName: "assembleAndroidTest",
       buildType: "Release",
       storeFile: options[:storeFile],
       storePassword: options[:storePassword],

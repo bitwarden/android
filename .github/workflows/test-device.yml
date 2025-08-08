@@ -27,9 +27,6 @@ jobs:
   test-device:
     name: Check main build against real devices
     runs-on: ubuntu-24.04
-    # TODO: do we need this?
-    # env:
-      # _GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Log in to Azure
