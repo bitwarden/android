@@ -125,6 +125,33 @@ jobs:
             find $ARTIFACTS_PATH -type f
           fi
 
+          # Files that won't be included in any release
+          files_to_remove=(
+            "com.x8bit.bitwarden.aab"
+            "com.x8bit.bitwarden.aab-sha256.txt"
+
+            "com.x8bit.bitwarden.beta.apk"
+            "com.x8bit.bitwarden.beta.apk-sha256.txt"
+            "com.x8bit.bitwarden.beta.aab"
+            "com.x8bit.bitwarden.beta.aab-sha256.txt"
+
+            "com.x8bit.bitwarden.beta-fdroid.apk"
+            "com.x8bit.bitwarden.beta-fdroid.apk-sha256.txt"
+
+            "com.x8bit.bitwarden.dev.apk"
+            "com.x8bit.bitwarden.dev.apk-sha256.txt"
+
+            "com.bitwarden.authenticator.aab"
+            "authenticator-android-aab-sha256.txt"
+          )
+
+          for file in "${files_to_remove[@]}"; do
+            find $ARTIFACTS_PATH -name "$file" -type f -delete
+          done
+
+          echo "🔖 Files to be included in the release:"
+          find $ARTIFACTS_PATH -type f
+
       - name: Log in to Azure
         uses: bitwarden/gh-actions/azure-login@main
         with:
