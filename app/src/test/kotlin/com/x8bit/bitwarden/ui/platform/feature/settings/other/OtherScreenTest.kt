@@ -97,10 +97,7 @@ class OtherScreenTest : BitwardenComposeTest() {
     @Test
     fun `on clear clipboard row click should show show clipboard selection dialog`() {
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Never. Clear clipboard. " +
-                    "Automatically clear copied values from your clipboard.",
-            )
+            .onNodeWithContentDescription(label = "Never. Clear clipboard")
             .performScrollTo()
             .performClick()
         composeTestRule
@@ -112,10 +109,7 @@ class OtherScreenTest : BitwardenComposeTest() {
     @Test
     fun `on clear clipboard dialog item click should send ClearClipboardFrequencyChange`() {
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Never. Clear clipboard. " +
-                    "Automatically clear copied values from your clipboard.",
-            )
+            .onNodeWithContentDescription(label = "Never. Clear clipboard")
             .performScrollTo()
             .performClick()
         composeTestRule
@@ -136,10 +130,7 @@ class OtherScreenTest : BitwardenComposeTest() {
     @Test
     fun `on clear clipboard dialog cancel should dismiss dialog`() {
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Never. Clear clipboard. " +
-                    "Automatically clear copied values from your clipboard.",
-            )
+            .onNodeWithContentDescription(label = "Never. Clear clipboard")
             .performScrollTo()
             .performClick()
         composeTestRule.onNodeWithText("Cancel").performClick()
