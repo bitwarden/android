@@ -146,7 +146,7 @@
     <string name="syncing">Synkroniserar...</string>
     <string name="syncing_complete">Synkronisering slutförd</string>
     <string name="two_step_login">Tvåfaktorsautentisering</string>
-    <string name="unlock_with">Lås upp med %1$s</string>
+    <string name="unlock_with_biometrics">Lås upp med biometri</string>
     <string name="unlock_with_pin">Lås upp med PIN-kod</string>
     <string name="verification_code">Verifieringskod</string>
     <string name="view_login">Visa inloggning</string>
@@ -372,7 +372,6 @@ Skanningen sker automatiskt.</string>
     <string name="download">Ladda ner</string>
     <string name="login_expired">Din inloggningssession har upphört.</string>
     <string name="biometrics_direction">Biometrisk verifiering</string>
-    <string name="biometrics">Biometri</string>
     <string name="biometrics_failed">Biometri misslyckades</string>
     <string name="biometrics_decoding_failure">Logga in med ditt huvudlösenord eller PIN-kod och aktivera sedan biometriska inloggningar i Inställningar.</string>
     <string name="use_biometrics_to_unlock">Använd biometri för att låsa upp</string>
@@ -1070,4 +1069,5 @@ Vill du byta till detta konto?</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokala objekt är infällda, klicka för att expandera.</string>
     <string name="items_expanded_click_to_collapse">Objekt är expanderade, klicka för att fälla in.</string>
     <string name="items_are_collapsed_click_to_expand">Objekt är infällda, klicka för att expandera.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

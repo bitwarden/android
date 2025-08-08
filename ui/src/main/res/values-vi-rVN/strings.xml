@@ -146,7 +146,7 @@
     <string name="syncing">Đang đồng bộ...</string>
     <string name="syncing_complete">Đồng bộ hoàn tất</string>
     <string name="two_step_login">Đăng nhập hai bước</string>
-    <string name="unlock_with">Mở khóa bằng %1$s</string>
+    <string name="unlock_with_biometrics">Mở khóa bằng Sinh trắc học</string>
     <string name="unlock_with_pin">Mở khóa bằng mã PIN</string>
     <string name="verification_code">Mã xác minh</string>
     <string name="view_login">Xem thông tin đăng nhập</string>
@@ -316,8 +316,8 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="password_history_count"><annotation link="passwordHistory">Lịch sử mật khẩu: <annotation arg="0">%1$s</annotation></annotation></string>
     <string name="types">Loại</string>
     <string name="no_passwords_to_list">Không có mật khẩu nào.</string>
-    <string name="search_file_sends">Tìm tệp trong Send</string>
-    <string name="search_text_sends">Tìm văn bản trong Send</string>
+    <string name="search_file_sends">Tìm Send tập tin</string>
+    <string name="search_text_sends">Tìm Send văn bản</string>
     <string name="type">Loại</string>
     <string name="move_down">Chuyển xuống</string>
     <string name="move_up">Chuyển lên</string>
@@ -372,7 +372,6 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="download">Tải xuống</string>
     <string name="login_expired">Phiên đăng nhập của bạn đã hết hạn.</string>
     <string name="biometrics_direction">Xác minh sinh trắc học</string>
-    <string name="biometrics">Sinh trắc học</string>
     <string name="biometrics_failed">Xác thực sinh trắc học thất bại</string>
     <string name="biometrics_decoding_failure">Đăng nhập bằng Mật khẩu chính hoặc Mã PIN của bạn, sau đó bật lại tính năng đăng nhập bằng sinh trắc học trong Cài đặt.</string>
     <string name="use_biometrics_to_unlock">Dùng sinh trắc học để mở khóa</string>
@@ -462,8 +461,8 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="send_link">Liên kết Send</string>
     <string name="search_sends">Tìm kiếm Send</string>
     <string name="edit_send">Chỉnh sửa Send</string>
-    <string name="edit_file_send">Chỉnh sửa tệp Send</string>
-    <string name="edit_text_send">Chỉnh sửa văn bản Send</string>
+    <string name="edit_file_send">Chỉnh sửa Send tập tin</string>
+    <string name="edit_text_send">Chỉnh sửa Send văn bản</string>
     <string name="add_file_send">Send tập tin mới</string>
     <string name="add_text_send">Send văn bản mới</string>
     <string name="are_you_sure_delete_send">Bạn có chắc chắn muốn xóa Send này?</string>
@@ -755,7 +754,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="please_restart_registration_or_try_logging_in">Vui lòng tiến hành đăng ký lại hoặc thử đăng nhập. Bạn có thể đã có tài khoản.</string>
     <string name="restart_registration">Đăng ký lại</string>
     <string name="authenticator_sync">Đồng bộ hóa trình xác thực</string>
-    <string name="allow_bitwarden_authenticator_syncing">Cho phép đồng bộ hóa trình xác thực</string>
+    <string name="allow_bitwarden_authenticator_syncing">Đồng bộ với Bitwarden Authenticator</string>
     <string name="there_was_an_issue_validating_the_registration_token">Có vấn đề trong quá trình xác thực token đăng ký.</string>
     <string name="turn_on_autofill">Bật tự động điền</string>
     <string name="use_autofill_to_log_into_your_accounts">Dùng tính năng tự động điền để đăng nhập vào tài khoản của bạn chỉ bằng một lần chạm.</string>
@@ -960,8 +959,8 @@ các vấn đề.</string>
     <string name="cannot_delete_your_account">Không thể xóa tài khoản của bạn</string>
     <string name="cannot_delete_your_account_explanation">Không thể thực hiện hành động này vì tài khoản của bạn thuộc sở hữu của một tổ chức. Liên hệ với quản trị viên tổ chức của bạn để biết thêm thông tin chi tiết.</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">Tài khoản này sẽ sớm bị xóa. Đăng nhập %1$s để tiếp tục sử dụng Bitwarden.</string>
-    <string name="view_file_send">Xem tệp Send</string>
-    <string name="view_text_send">Xem văn bản Send</string>
+    <string name="view_file_send">Xem Send tập tin</string>
+    <string name="view_text_send">Xem Send văn bản</string>
     <string name="delete_send">Xóa Send</string>
     <string name="missing_send_resync_your_vault">Thiếu Send, đồng bộ lại kho của bạn</string>
     <string name="use_dynamic_colors">Dùng màu tương thích</string>
@@ -1048,7 +1047,7 @@ các vấn đề.</string>
     <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Đồng bộ hóa với ứng dụng Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Để xem tất cả mã xác minh của bạn, bạn cần cho phép đồng bộ hóa trên tất cả tài khoản của mình.</string>
-    <string name="take_me_to_app_settings">Đưa tôi đến cài đặt ứng dụng</string>
+    <string name="take_me_to_app_settings">Đi đến cài đặt ứng dụng</string>
     <string name="something_went_wrong">Đã xảy ra lỗi</string>
     <string name="please_try_again">Vui lòng thử lại</string>
     <string name="copy_to_bitwarden_vault">Sao chép vào kho lưu trữ Bitwarden</string>
@@ -1072,4 +1071,5 @@ các vấn đề.</string>
     <string name="local_items_are_collapsed_click_to_expand">Các mục địa phương đã được thu gọn, nhấp để mở rộng.</string>
     <string name="items_expanded_click_to_collapse">Các mục được mở rộng, nhấp để thu gọn.</string>
     <string name="items_are_collapsed_click_to_expand">Các mục đã được thu gọn, nhấp để mở rộng.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

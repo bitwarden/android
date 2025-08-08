@@ -146,7 +146,7 @@
     <string name="syncing">正在同步...</string>
     <string name="syncing_complete">同步完成</string>
     <string name="two_step_login">两步登录</string>
-    <string name="unlock_with">使用 %1$s 解锁</string>
+    <string name="unlock_with_biometrics">使用生物识别解锁</string>
     <string name="unlock_with_pin">使用 PIN 码解锁</string>
     <string name="verification_code">验证码</string>
     <string name="view_login">查看登录</string>
@@ -372,7 +372,6 @@
     <string name="download">下载</string>
     <string name="login_expired">您的登录会话已过期。</string>
     <string name="biometrics_direction">生物识别验证</string>
-    <string name="biometrics">生物识别</string>
     <string name="biometrics_failed">生物识别失败</string>
     <string name="biometrics_decoding_failure">使用您的主密码或 PIN 码登录后在「设置」中重新启用生物识别登录。</string>
     <string name="use_biometrics_to_unlock">使用生物识别解锁</string>
@@ -1071,4 +1070,5 @@
     <string name="local_items_are_collapsed_click_to_expand">本地项目被折叠，点击以展开。</string>
     <string name="items_expanded_click_to_collapse">项目被展开，点击以折叠。</string>
     <string name="items_are_collapsed_click_to_expand">项目被折叠，点击以展开。</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

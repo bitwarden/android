@@ -146,7 +146,7 @@
     <string name="syncing">Menyinkronkan...</string>
     <string name="syncing_complete">Sinkronisasi selesai.</string>
     <string name="two_step_login">Info masuk dua langkah</string>
-    <string name="unlock_with">Buka denga %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Buka dengan kode PIN</string>
     <string name="verification_code">Kode Verifikasi</string>
     <string name="view_login">View login</string>
@@ -372,7 +372,6 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="download">Unduh</string>
     <string name="login_expired">Sesi masuk Anda telah berakhir.</string>
     <string name="biometrics_direction">Verifikasi Biometrik</string>
-    <string name="biometrics">Biometrik</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Gunakan Biometrik Untuk Membuka Kunci</string>
@@ -1070,4 +1069,5 @@ Do you want to switch to this account?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>
