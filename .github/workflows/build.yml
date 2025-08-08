@@ -143,7 +143,7 @@ jobs:
         uses: bitwarden/gh-actions/get-keyvault-secrets@main
         with:
           keyvault: gh-android
-          secrets: "UPLOAD-KEYSTORE-PASSWORD,UPLOAD-BETA-KEYSTORE-PASSWORD,UPLOAD-BETA-KEY-PASSWORD,PLAY-KEYSTORE-PASSWORD,PLAY-BETA-KEYSTORE-PASSWORD,PLAY-BETA-KEY-PASSWORD"
+          secrets: "UPLOAD-KEYSTORE-PASSWORD,UPLOAD-BETA-KEYSTORE-PASSWORD,UPLOAD-BETA-KEY-PASSWORD,PLAY-KEYSTORE-PASSWORD,PLAY-BETA-KEYSTORE-PASSWORD,PLAY-BETA-KEY-PASSWORD,BWS-ACCESS-TOKEN"
 
       - name: Retrieve secrets
         env:
@@ -261,6 +261,47 @@ jobs:
           keyAlias:bitwarden \
           keyPassword:${{ env.PLAY-KEYSTORE-PASSWORD }}
 
+      - name: Retrieve test data
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
+        uses: bitwarden/sm-action@14f92f1d294ae3c2b6a3845d389cd2c318b0dfd8 # v2.2.0
+        with:
+          access_token: ${{ steps.get-kv-secrets.outputs.BWS-ACCESS-TOKEN }}
+          secrets: |
+            63e93f73-5118-4a62-9db8-b3160176aa8a > TEST_ACCOUNT_CREDS
+
+      - name: Configure .json test data file
+        run: printf %s '${{ env.TEST_ACCOUNT_CREDS }}' > app/src/androidTest/assets/TestData.json
+
+      - name: Build test APK (espresso)
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
+        env:
+          _TEST_APK_PATH: app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-standard-release-androidTest.apk
+          _TEST_APK_SIGNED_PATH: app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-test.apk
+        run: |
+          bundle exec fastlane assembleTestApk \
+            storeFile:app_play-keystore.jks \
+            storePassword:${{ env.PLAY-KEYSTORE-PASSWORD }} \
+            keyAlias:bitwarden \
+            keyPassword:${{ env.PLAY-KEYSTORE-PASSWORD }}
+          mv $_TEST_APK_PATH $_TEST_APK_SIGNED_PATH
+
+      # TODO: test if bundle exec fastlane assembleTestApk works and replace this step
+      # - name: Sign and rename test APK
+      #   if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
+      #   env:
+      #     _TEST_APK_PATH: app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-standard-release-androidTest.apk
+      #     _TEST_APK_SIGNED_PATH: app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-test.apk
+      #     _PLAY_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-KEYSTORE-PASSWORD }}
+      #     _PLAY_KEYSTORE_ALIAS: ${{ steps.get-kv-secrets.outputs.PLAY-KEYSTORE-ALIAS }}
+      #   run: |
+      #     $ANDROID_SDK_ROOT/build-tools/34.0.0/apksigner sign \
+      #       --ks keystores/app_play-keystore.jks \
+      #       --ks-key-alias bitwarden \
+      #       --ks-pass pass:$_PLAY_KEYSTORE_PASSWORD \
+      #       --key-pass pass:$_PLAY_KEYSTORE_PASSWORD \
+      #       $_TEST_APK_PATH
+      #     mv $_TEST_APK_PATH $_TEST_APK_SIGNED_PATH
+
       - name: Generate beta Play Store APK
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
         env:
@@ -300,6 +341,14 @@ jobs:
         with:
           name: com.x8bit.bitwarden.apk
           path: app/build/outputs/apk/standard/release/com.x8bit.bitwarden.apk
+          if-no-files-found: error
+
+      - name: Upload test .apk artifact
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: com.x8bit.bitwarden-test.apk
+          path: app/build/outputs/apk/androidTest/standard/release/com.x8bit.bitwarden-test.apk
           if-no-files-found: error
 
       - name: Upload beta .apk artifact
@@ -421,6 +470,19 @@ jobs:
         run: |
           bundle exec fastlane publishProdToPlayStore
           bundle exec fastlane publishBetaToPlayStore
+
+  test-device:
+    name: Test device
+    needs: publish_playstore
+    uses: bitwarden/android/.github/workflows/test-device.yml@QA-1126b/adding-native-sanity-test #TODO replace branch with main before merging
+    with:
+      apk_filename: com.x8bit.bitwarden.apk
+      test_apk_filename: com.x8bit.bitwarden-test.apk
+    permissions:
+      actions: read
+      checks: write
+      contents: read
+      id-token: write
 
   publish_fdroid:
     name: Publish F-Droid artifacts
