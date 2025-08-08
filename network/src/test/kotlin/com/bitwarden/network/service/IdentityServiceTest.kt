@@ -334,6 +334,20 @@ class IdentityServiceTest : BaseServiceTest() {
     }
 
     @Test
+    fun `refreshTokenSynchronously when response is a 403 error should return an Forbidden`() {
+        server.enqueue(MockResponse().setResponseCode(403))
+        val result = identityService.refreshTokenSynchronously(refreshToken = REFRESH_TOKEN)
+        assertTrue(result.getOrThrow() is RefreshTokenResponseJson.Forbidden)
+    }
+
+    @Test
+    fun `refreshTokenSynchronously when response is a 401 error should return an Unauthorized`() {
+        server.enqueue(MockResponse().setResponseCode(401))
+        val result = identityService.refreshTokenSynchronously(refreshToken = REFRESH_TOKEN)
+        assertTrue(result.getOrThrow() is RefreshTokenResponseJson.Unauthorized)
+    }
+
+    @Test
     fun `registerFinish success json should be Success`() = runTest {
         val expectedResponse = RegisterResponseJson.Success(
             captchaBypassToken = "mock_token",

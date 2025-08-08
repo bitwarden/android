@@ -146,6 +146,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -154,6 +155,7 @@ import javax.inject.Singleton
 @Suppress("LargeClass", "LongParameterList", "TooManyFunctions")
 @Singleton
 class AuthRepositoryImpl(
+    private val clock: Clock,
     private val accountsService: AccountsService,
     private val devicesService: DevicesService,
     private val haveIBeenPwnedService: HaveIBeenPwnedService,
@@ -779,10 +781,19 @@ class AuthRepositoryImpl(
                 when (refreshTokenResponse) {
                     is RefreshTokenResponseJson.Error -> {
                         if (refreshTokenResponse.isInvalidGrant) {
-                            // We only logout for an invalid grant
                             logout(userId = userId, reason = LogoutReason.InvalidGrant)
                         }
                         IllegalStateException(refreshTokenResponse.error).asFailure()
+                    }
+
+                    is RefreshTokenResponseJson.Forbidden -> {
+                        logout(userId = userId, reason = LogoutReason.RefreshForbidden)
+                        refreshTokenResponse.error.asFailure()
+                    }
+
+                    is RefreshTokenResponseJson.Unauthorized -> {
+                        logout(userId = userId, reason = LogoutReason.RefreshUnauthorized)
+                        refreshTokenResponse.error.asFailure()
                     }
 
                     is RefreshTokenResponseJson.Success -> {
@@ -792,6 +803,8 @@ class AuthRepositoryImpl(
                             accountTokens = AccountTokensJson(
                                 accessToken = refreshTokenResponse.accessToken,
                                 refreshToken = refreshTokenResponse.refreshToken,
+                                expiresAtSec = clock.instant().epochSecond +
+                                    refreshTokenResponse.expiresIn,
                             ),
                         )
                         refreshTokenResponse.accessToken.asSuccess()
@@ -1778,6 +1791,7 @@ class AuthRepositoryImpl(
             accountTokens = AccountTokensJson(
                 accessToken = loginResponse.accessToken,
                 refreshToken = loginResponse.refreshToken,
+                expiresAtSec = clock.instant().epochSecond + loginResponse.expiresInSeconds,
             ),
         )
         settingsRepository.hasUserLoggedInOrCreatedAccount = true

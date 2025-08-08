@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.util
 
-import com.bitwarden.vault.CollectionView
+import com.bitwarden.collections.CollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createEditCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createEditExceptPasswordsCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createManageCollectionView

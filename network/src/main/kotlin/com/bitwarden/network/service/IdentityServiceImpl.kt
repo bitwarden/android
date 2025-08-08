@@ -20,6 +20,7 @@ import com.bitwarden.network.util.DeviceModelProvider
 import com.bitwarden.network.util.NetworkErrorCode
 import com.bitwarden.network.util.base64UrlEncode
 import com.bitwarden.network.util.executeForNetworkResult
+import com.bitwarden.network.util.getNetworkErrorCodeOrNull
 import com.bitwarden.network.util.parseErrorBodyOrNull
 import com.bitwarden.network.util.toResult
 import kotlinx.serialization.json.Json
@@ -131,13 +132,28 @@ internal class IdentityServiceImpl(
         .executeForNetworkResult()
         .toResult()
         .recoverCatching { throwable ->
-            throwable
-                .toBitwardenError()
+            val bitwardenError = throwable.toBitwardenError()
+            bitwardenError
                 .parseErrorBodyOrNull<RefreshTokenResponseJson.Error>(
                     code = NetworkErrorCode.BAD_REQUEST,
                     json = json,
                 )
-                ?: throw throwable
+                ?: run {
+                    when (bitwardenError.getNetworkErrorCodeOrNull()) {
+                        NetworkErrorCode.UNAUTHORIZED -> {
+                            RefreshTokenResponseJson.Unauthorized(throwable)
+                        }
+
+                        NetworkErrorCode.FORBIDDEN -> {
+                            RefreshTokenResponseJson.Forbidden(throwable)
+                        }
+
+                        NetworkErrorCode.BAD_REQUEST,
+                        NetworkErrorCode.TOO_MANY_REQUESTS,
+                        null,
+                            -> throw throwable
+                    }
+                }
         }
 
     override suspend fun registerFinish(

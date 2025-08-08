@@ -40,4 +40,18 @@ sealed class RefreshTokenResponseJson {
     ) : RefreshTokenResponseJson() {
         val isInvalidGrant: Boolean get() = error == "invalid_grant"
     }
+
+    /**
+     * Models a failure response with a 403 "Forbidden" response code.
+     */
+    data class Forbidden(
+        val error: Throwable,
+    ) : RefreshTokenResponseJson()
+
+    /**
+     * Models a failure response with a 401 "Unauthorized" response code.
+     */
+    data class Unauthorized(
+        val error: Throwable,
+    ) : RefreshTokenResponseJson()
 }

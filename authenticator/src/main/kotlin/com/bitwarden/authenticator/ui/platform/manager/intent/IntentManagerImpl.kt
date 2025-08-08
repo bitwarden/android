@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
@@ -45,7 +46,7 @@ class IntentManagerImpl(
 
     override fun getFileDataFromActivityResult(
         activityResult: ActivityResult,
-    ): IntentManager.FileData? {
+    ): FileData? {
         if (activityResult.resultCode != Activity.RESULT_OK) return null
         val uri = activityResult.data?.data ?: return null
         return getLocalFileData(uri)
@@ -66,9 +67,8 @@ class IntentManagerImpl(
         Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             // Attempt to get the MIME type from the file extension
             val extension = MimeTypeMap.getFileExtensionFromUrl(fileName)
-            type = extension?.let {
-                MimeTypeMap.getSingleton().getMimeTypeFromExtension(it)
-            }
+            type = extension
+                ?.let { MimeTypeMap.getSingleton().getMimeTypeFromExtension(it) }
                 ?: "*/*"
 
             addCategory(Intent.CATEGORY_OPENABLE)
@@ -77,7 +77,7 @@ class IntentManagerImpl(
 
     override fun startApplicationDetailsSettingsActivity() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        intent.data = Uri.parse("package:" + context.packageName)
+        intent.data = "package:$context.packageName".toUri()
         startActivity(intent = intent)
     }
 
@@ -101,7 +101,7 @@ class IntentManagerImpl(
         )
     }
 
-    private fun getLocalFileData(uri: Uri): IntentManager.FileData? =
+    private fun getLocalFileData(uri: Uri): FileData? =
         context
             .contentResolver
             .query(
@@ -120,12 +120,13 @@ class IntentManagerImpl(
                     .getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME)
                     .takeIf { it >= 0 }
                     ?.let { cursor.getString(it) }
+                    ?: return@use null
                 val fileSize = cursor
                     .getColumnIndex(MediaStore.MediaColumns.SIZE)
                     .takeIf { it >= 0 }
                     ?.let { cursor.getLong(it) }
-                if (fileName == null || fileSize == null) return@use null
-                IntentManager.FileData(
+                    ?: return@use null
+                FileData(
                     fileName = fileName,
                     uri = uri,
                     sizeBytes = fileSize,

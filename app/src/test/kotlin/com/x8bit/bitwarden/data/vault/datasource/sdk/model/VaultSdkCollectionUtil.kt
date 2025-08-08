@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
-import com.bitwarden.vault.Collection
+import com.bitwarden.collections.Collection
 
 /**
  * Create a mock [Collection] with a given [number].

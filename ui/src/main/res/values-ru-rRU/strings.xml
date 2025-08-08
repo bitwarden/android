@@ -146,7 +146,7 @@
     <string name="syncing">Синхронизация...</string>
     <string name="syncing_complete">Синхронизация выполнена</string>
     <string name="two_step_login">Двухэтапная аутентификация</string>
-    <string name="unlock_with">Разблокировка %1$s</string>
+    <string name="unlock_with_biometrics">Разблокировать с помощью биометрии</string>
     <string name="unlock_with_pin">Разблокировка PIN-кодом</string>
     <string name="verification_code">Код подтверждения</string>
     <string name="view_login">Просмотр логина</string>
@@ -372,7 +372,6 @@
     <string name="download">Загрузить</string>
     <string name="login_expired">Истек срок действия вашего сеанса.</string>
     <string name="biometrics_direction">Биометрическая верификация.</string>
-    <string name="biometrics">биометрией</string>
     <string name="biometrics_failed">Сбой биометрии</string>
     <string name="biometrics_decoding_failure">Войдите с помощью мастер-пароля или PIN-кода, а затем повторно включите биометрию в настройках.</string>
     <string name="use_biometrics_to_unlock">Использовать биометрию</string>
@@ -1070,4 +1069,5 @@
     <string name="local_items_are_collapsed_click_to_expand">Локальные элементы свернуты, нажмите, чтобы развернуть.</string>
     <string name="items_expanded_click_to_collapse">Элементы развернуты, нажмите, чтобы свернуть.</string>
     <string name="items_are_collapsed_click_to_expand">Элементы свернуты, нажмите, чтобы развернуть.</string>
+    <string name="select_a_card_for_x">Выберите карту для %s</string>
 </resources>

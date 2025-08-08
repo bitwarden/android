@@ -146,7 +146,7 @@
     <string name="syncing">Синхронизиране…</string>
     <string name="syncing_complete">Синхронизацията завърши.</string>
     <string name="two_step_login">Двустепенно удостоверяване</string>
-    <string name="unlock_with">Отключване с %1$s</string>
+    <string name="unlock_with_biometrics">Отключване с биометрични данни</string>
     <string name="unlock_with_pin">Отключване с ПИН</string>
     <string name="verification_code">Код за потвърждаване</string>
     <string name="view_login">Преглед на елемента за вписване</string>
@@ -372,7 +372,6 @@
     <string name="download">Изтегляне</string>
     <string name="login_expired">Сесията ви изтече.</string>
     <string name="biometrics_direction">Потвърждаване с биометрични данни.</string>
-    <string name="biometrics">Биометрични данни</string>
     <string name="biometrics_failed">Неуспешно удостоверяване чрез биометрични данни</string>
     <string name="biometrics_decoding_failure">Впишете се с главната си парола или ПИН, а след това включете вписването чрез биометрични данни в Настройките.</string>
     <string name="use_biometrics_to_unlock">Отключване с биометрични данни</string>
@@ -1072,4 +1071,5 @@
     <string name="local_items_are_collapsed_click_to_expand">Наличните на това устройство елементи са свити. Щракнете за разгъване.</string>
     <string name="items_expanded_click_to_collapse">Елементите са разгънати. Щракнете за свиване.</string>
     <string name="items_are_collapsed_click_to_expand">Елементите са свити. Щракнете за разгъване.</string>
+    <string name="select_a_card_for_x">Изберете карта за %s</string>
 </resources>

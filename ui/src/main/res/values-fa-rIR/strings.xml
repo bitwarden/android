@@ -146,7 +146,7 @@
     <string name="syncing">در حال همگام‌سازی...</string>
     <string name="syncing_complete">همگام‌سازی کامل شد.</string>
     <string name="two_step_login">ورود دو مرحله‌ای</string>
-    <string name="unlock_with">باز کردن با %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">باز کردن با کد پین</string>
     <string name="verification_code">کد تأیید</string>
     <string name="view_login">مشاهده ورود</string>
@@ -372,7 +372,6 @@
     <string name="download">بارگیری</string>
     <string name="login_expired">نشست ورود شما منقضی شده است.</string>
     <string name="biometrics_direction">تأیید بیومتریک</string>
-    <string name="biometrics">بیومتریک</string>
     <string name="biometrics_failed">زیست‌سنجی ناموفق بود</string>
     <string name="biometrics_decoding_failure">با کلمه عبور اصلی یا کد پین خود وارد شوید سپس ورود بیومتریک را مجدداً در تنظیمات فعال کنید.</string>
     <string name="use_biometrics_to_unlock">برای قفل گشایی از بیومتریک استفاده کن</string>
@@ -1070,4 +1069,5 @@
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

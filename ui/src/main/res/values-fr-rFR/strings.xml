@@ -146,7 +146,7 @@
     <string name="syncing">Synchronisation...</string>
     <string name="syncing_complete">Synchronisation achevée</string>
     <string name="two_step_login">Authentification à deux facteurs</string>
-    <string name="unlock_with">Déverrouiller avec %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Déverrouiller avec un code PIN</string>
     <string name="verification_code">Code de vérification</string>
     <string name="view_login">Voir les identifiants</string>
@@ -372,7 +372,6 @@ La numérisation se fera automatiquement.</string>
     <string name="download">Télécharger</string>
     <string name="login_expired">Votre session a expiré.</string>
     <string name="biometrics_direction">Vérification biométrique</string>
-    <string name="biometrics">Biométrie</string>
     <string name="biometrics_failed">Échec de la biométrie</string>
     <string name="biometrics_decoding_failure">Connectez-vous avec votre mot de passe principal ou votre code PIN, puis réactivez la connexion biométrique dans Paramètres.</string>
     <string name="use_biometrics_to_unlock">Utiliser la biométrie pour déverrouiller</string>
@@ -884,7 +883,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="certificate_alias">Certificate alias</string>
     <string name="import_certificate">Import certificate</string>
     <string name="choose_system_certificate">Choose system certificate</string>
-    <string name="certificate_installed">Certificate installed</string>
+    <string name="certificate_installed">Certificat installé</string>
     <string name="certificate_installation_failed">Certificate installation failed</string>
     <string name="unsupported_certificate_type">Unsupported certificate type</string>
     <string name="certificate_password_incorrect">Certificate password incorrect</string>
@@ -1070,4 +1069,5 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="local_items_are_collapsed_click_to_expand">Les éléments locaux sont réduits, cliquez pour développer.</string>
     <string name="items_expanded_click_to_collapse">Les éléments sont développés, cliquez pour réduire.</string>
     <string name="items_are_collapsed_click_to_expand">Les éléments sont réduits, cliquez pour les développer.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

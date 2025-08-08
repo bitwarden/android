@@ -8,6 +8,7 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import com.bitwarden.ui.platform.model.FileData
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import kotlinx.parcelize.Parcelize
 
@@ -78,14 +79,14 @@ interface IntentManager {
     fun shareText(text: String)
 
     /**
+     * Launches the share sheet with an error report based on the provided [throwable].
+     */
+    fun shareErrorReport(throwable: Throwable)
+
+    /**
      * Processes the [activityResult] and attempts to get the relevant file data from it.
      */
     fun getFileDataFromActivityResult(activityResult: ActivityResult): FileData?
-
-    /**
-     * Processes the [intent] and attempts to get the relevant file data from it.
-     */
-    fun getFileDataFromIntent(intent: Intent): FileData?
 
     /**
      * Processes the [intent] and attempts to derive [ShareData] information from it.
@@ -94,8 +95,12 @@ interface IntentManager {
 
     /**
      * Creates an intent for choosing a file saved to disk.
+     *
+     * @param withCameraIntents Whether to include camera intents in the chooser.
+     * @param mimeType The MIME type of the files to be selected. Defaults to wildcard to allow all
+     * types.
      */
-    fun createFileChooserIntent(withCameraIntents: Boolean): Intent
+    fun createFileChooserIntent(withCameraIntents: Boolean, mimeType: String = "*/*"): Intent
 
     /**
      * Creates an intent to use when selecting to save an item with [fileName] to disk.
@@ -106,16 +111,6 @@ interface IntentManager {
      * Open the default email app on device.
      */
     fun startDefaultEmailApplication()
-
-    /**
-     * Represents file information.
-     */
-    @Parcelize
-    data class FileData(
-        val fileName: String,
-        val uri: Uri,
-        val sizeBytes: Long,
-    ) : Parcelable
 
     /**
      * Represents data for a share request coming from outside the app.

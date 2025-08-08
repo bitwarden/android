@@ -58,9 +58,11 @@ android {
         versionCode = libs.versions.appVersionCode.get().toInt()
         versionName = libs.versions.appVersionName.get()
 
-        setProperty("archivesBaseName", "com.x8bit.bitwarden")
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Set the base archive name for publishing purposes. This is used to derive the APK and AAB
+        // artifact names when uploading to Firebase and Play Store.
+        base.archivesName = "com.x8bit.bitwarden"
 
         buildConfigField(
             type = "String",
