@@ -85,7 +85,7 @@
     <string name="edit_card">Karte bearbeiten</string>
     <string name="edit_identity">Identität bearbeiten</string>
     <string name="edit_note">Notiz bearbeiten</string>
-    <string name="edit_ssh_key">Edit SSH key</string>
+    <string name="edit_ssh_key">SSH-Schlüssel bearbeiten</string>
     <string name="enter_email_for_hint">Gebe die E-Mail Adresse deines Kontos ein, um den Hinweis für dein Master-Passwort zu erhalten.</string>
     <string name="favorite">Favorit</string>
     <string name="unfavorite">Aus Favoriten entfernen</string>
@@ -146,14 +146,14 @@
     <string name="syncing">Wird synchronisiert...</string>
     <string name="syncing_complete">Synchronisierung abgeschlossen</string>
     <string name="two_step_login">Zwei-Faktor-Authentifizierung</string>
-    <string name="unlock_with">Mit %1$s entsperren</string>
+    <string name="unlock_with_biometrics">Mit Biometrie entsperren</string>
     <string name="unlock_with_pin">Mit PIN-Code entsperren</string>
     <string name="verification_code">Verifizierungscode</string>
     <string name="view_login">Zugangsdaten anzeigen</string>
     <string name="view_card">Karte anzeigen</string>
     <string name="view_identity">Identität anzeigen</string>
     <string name="view_note">Notiz anzeigen</string>
-    <string name="view_ssh_key">View SSH key</string>
+    <string name="view_ssh_key">SSH-Schlüssel ansehen</string>
     <string name="web_vault">Bitwarden Web-Tresor</string>
     <string name="items">Einträge</string>
     <string name="items_for_uri">Zugangsdaten für %1$s</string>
@@ -372,7 +372,6 @@ Das Scannen erfolgt automatisch.</string>
     <string name="download">Herunterladen</string>
     <string name="login_expired">Deine Sitzung ist abgelaufen.</string>
     <string name="biometrics_direction">Biometrische Verifizierung</string>
-    <string name="biometrics">Biometrie</string>
     <string name="biometrics_failed">Biometrie fehlgeschlagen</string>
     <string name="biometrics_decoding_failure">Melde dich mit deinem Master-Passwort oder PIN an und aktiviere dann die biometrische Anmeldung in den Einstellungen erneut.</string>
     <string name="use_biometrics_to_unlock">Biometrie zum Entsperren verwenden</string>
@@ -1058,7 +1057,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="choose_save_location_message">Speichere diesen Authentifizierungsschlüssel hier oder füge ihn zu Zugangsdaten in deiner Bitwarden App hinzu.</string>
     <string name="save_option_as_default">Option als Standard speichern</string>
     <string name="account_synced_from_bitwarden_app">Konto über Bitwarden App synchronisiert</string>
-    <string name="local_codes">Local codes (%1$d)</string>
+    <string name="local_codes">Lokale Codes (%1$d)</string>
     <string name="required_information_missing">Erforderliche Informationen fehlen</string>
     <string name="required_information_missing_message">"Benötigte Informationen fehlen (z.B. „Dienste“ oder „Geheimnis“). Überprüfe deine Datei und versuche es erneut. Besuche bitwarden.com/help für Unterstützung"</string>
     <string name="file_could_not_be_processed">"Datei konnte nicht verarbeitet werden"</string>
@@ -1069,4 +1068,5 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokale Einträge sind eingeklappt, klicke zum Ausklappen.</string>
     <string name="items_expanded_click_to_collapse">Einträge sind ausgeklappt, klicke zum Einklappen.</string>
     <string name="items_are_collapsed_click_to_expand">Einträge sind eingeklappt, klicke zum Ausklappen.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

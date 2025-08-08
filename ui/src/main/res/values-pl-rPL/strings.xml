@@ -146,7 +146,7 @@
     <string name="syncing">Synchronizacja...</string>
     <string name="syncing_complete">Synchronizacja została zakończona</string>
     <string name="two_step_login">Logowanie dwustopniowe</string>
-    <string name="unlock_with">Odblokuj przez %1$s</string>
+    <string name="unlock_with_biometrics">Odblokuj biometrią</string>
     <string name="unlock_with_pin">Odblokuj kodem PIN</string>
     <string name="verification_code">Kod weryfikacyjny</string>
     <string name="view_login">Pokaż dane logowania</string>
@@ -372,7 +372,6 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="download">Pobierz</string>
     <string name="login_expired">Twoja sesja wygasła.</string>
     <string name="biometrics_direction">Weryfikacja biometryczna</string>
-    <string name="biometrics">Biometria</string>
     <string name="biometrics_failed">Logowanie biometryczne nie powiodło się</string>
     <string name="biometrics_decoding_failure">Zaloguj się za pomocą hasła głównego lub kodu PIN, a następnie włącz ponownie logowanie biometryczne w ustawieniach.</string>
     <string name="use_biometrics_to_unlock">Odblokuj biometrią</string>
@@ -385,11 +384,11 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="export_vault_file_pw_protect_info">Plik zostanie zaszyfrowany hasłem.</string>
     <string name="export_vault_confirmation_title">Potwierdź eksportowanie sejfu</string>
     <string name="warning">Ostrzeżenie</string>
-    <string name="export_vault_failure">Wystąpił problem z wyeksportowaniem sejfu. Jeśli problem nadal występuje, musisz wyeksportować dane z sejfu internetowego.</string>
+    <string name="export_vault_failure">Wystąpił problem z wyeksportowaniem sejfu. Jeśli problem się powtarza, wyeksportuj dane z sejfu internetowego.</string>
     <string name="export_vault_success">Sejf został wyeksportowany</string>
     <string name="clone">Klonuj</string>
     <string name="password_generator_policy_in_effect">Co najmniej jedna zasada organizacji wpływa na ustawienia generatora</string>
-    <string name="unable_to_save_attachment">Wystąpił problem z zapisaniem załącznika. Jeśli problem nadal występuje, musisz zapisać plik w sejfie internetowym.</string>
+    <string name="unable_to_save_attachment">Wystąpił problem z zapisaniem załącznika. Jeśli problem się powtarza, zapisz plik w sejfie internetowym.</string>
     <string name="save_attachment_success">Załącznik został zapisany</string>
     <string name="autofill_tile_accessibility_required">Aby korzystać z kafelka autouzupełniania, włącz usługę ułatwienia dostępu w ustawieniach Bitwarden.</string>
     <string name="autofill_tile_uri_not_found">Nie znaleziono pól hasła</string>
@@ -1069,4 +1068,5 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokalne elementy są zwinięte. Kliknij, aby rozwinąć.</string>
     <string name="items_expanded_click_to_collapse">Elementy są rozwinięte. Kliknij, aby zwinąć.</string>
     <string name="items_are_collapsed_click_to_expand">Elementy są zwinięte. Kliknij, aby rozwinąć.</string>
+    <string name="select_a_card_for_x">Wybierz kartę dla %s</string>
 </resources>

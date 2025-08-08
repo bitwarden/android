@@ -146,7 +146,7 @@
     <string name="syncing">Sinkroniseer...</string>
     <string name="syncing_complete">Klaar gesinchroniseer.</string>
     <string name="two_step_login">Tweestapaantekening</string>
-    <string name="unlock_with">Ontgrendel met %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Ontgrendel met PIN-kode</string>
     <string name="verification_code">Bevestigingskode</string>
     <string name="view_login">View login</string>
@@ -372,7 +372,6 @@ Skandering gebeur outomaties.</string>
     <string name="download">Laai af</string>
     <string name="login_expired">U aantekensessie het verstryk.</string>
     <string name="biometrics_direction">Biometriese waarmerking</string>
-    <string name="biometrics">Biometrie</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Gebruik biometrie vir ontgrendeling</string>
@@ -1070,4 +1069,5 @@ Wil u na die rekening omskakel?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

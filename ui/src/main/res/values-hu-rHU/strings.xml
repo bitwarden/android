@@ -146,7 +146,7 @@
     <string name="syncing">Szinkronizálás...</string>
     <string name="syncing_complete">A szinkronizálás kész.</string>
     <string name="two_step_login">Kétlépcsős bejelentkezés</string>
-    <string name="unlock_with">Feloldás: %1$s</string>
+    <string name="unlock_with_biometrics">Biometrikus feloldás</string>
     <string name="unlock_with_pin">Kinyitás PIN-kóddal</string>
     <string name="verification_code">Ellenőrzőkód</string>
     <string name="view_login">Bejelentkezés megtekintése</string>
@@ -371,7 +371,6 @@
     <string name="download">Letöltés</string>
     <string name="login_expired">A bejelentkezési munkamenet lejárt.</string>
     <string name="biometrics_direction">Biometrikus ellenőrzés</string>
-    <string name="biometrics">Biometria</string>
     <string name="biometrics_failed">A biometria nem sikerült.</string>
     <string name="biometrics_decoding_failure">Jelentkezzünk be a mesterjelszóval vagy a PIN kóddal, majd engedélyezzük újra a biometrikus bejelentkezést a Beállításokban.</string>
     <string name="use_biometrics_to_unlock">Biometria használata a feloldáshoz</string>
@@ -1069,4 +1068,5 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="local_items_are_collapsed_click_to_expand">A helyi elemek összezárásra kerülnek, kattintás az kinyitáshoz.</string>
     <string name="items_expanded_click_to_collapse">Az elemek kinyitásra kerülnek, kattintás az összezáráshoz.</string>
     <string name="items_are_collapsed_click_to_expand">Az elemek összezárásra kerülnek, kattintás az kinyitáshoz.</string>
+    <string name="select_a_card_for_x">Válasszunk egy kártyát %s használatához</string>
 </resources>

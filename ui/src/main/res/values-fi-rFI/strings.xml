@@ -146,7 +146,7 @@
     <string name="syncing">Synkronoidaan...</string>
     <string name="syncing_complete">Synkronointi suoritettiin</string>
     <string name="two_step_login">Kaksivaiheinen kirjautuminen</string>
-    <string name="unlock_with">Avaus %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Avaus PIN-koodilla</string>
     <string name="verification_code">Todennuskoodi</string>
     <string name="view_login">Näytä kirjautumistieto</string>
@@ -372,7 +372,6 @@ Koodi skannataan automaattisesti.</string>
     <string name="download">Lataa</string>
     <string name="login_expired">Kirjautumisistuntosi on erääntynyt.</string>
     <string name="biometrics_direction">Biometrinen todennus</string>
-    <string name="biometrics">biometrialla</string>
     <string name="biometrics_failed">Biometria epäonnistui</string>
     <string name="biometrics_decoding_failure">Kirjaudu pääsalasanalla tai PIN-koodilla ja palauta biometrinen kirjautuminen käyttöön asetuksista.</string>
     <string name="use_biometrics_to_unlock">Avaa biometrialla</string>
@@ -1070,4 +1069,5 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="local_items_are_collapsed_click_to_expand">Paikalliset kohteet on pienennetty. Paina laajentaaksesi.</string>
     <string name="items_expanded_click_to_collapse">Kohteet on laajennettu. Paina pienentääksesi.</string>
     <string name="items_are_collapsed_click_to_expand">Kohteet ovat tiivistetty. Paina laajentaaksesi.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

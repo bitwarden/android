@@ -146,7 +146,7 @@
     <string name="syncing">Синхронізація...</string>
     <string name="syncing_complete">Синхронізацію завершено</string>
     <string name="two_step_login">Двоетапна перевірка</string>
-    <string name="unlock_with">Розблокування з %1$s</string>
+    <string name="unlock_with_biometrics">Розблокувати з біометрією</string>
     <string name="unlock_with_pin">Розблокування з PIN-кодом</string>
     <string name="verification_code">Код підтвердження</string>
     <string name="view_login">Переглянути запис</string>
@@ -169,7 +169,7 @@
     <string name="authenticator_app_title">Програма автентифікації</string>
     <string name="enter_verification_code_app">Введіть 6-значний код підтвердження з програми автентифікації.</string>
     <string name="enter_verification_code_email">Введіть 6-значний код підтвердження, надісланий на %1$s.</string>
-    <string name="enter_verification_code_new_device">Ми не впізнаємо цей пристрій. Введіть восьмизначний код підтвердження, надісланий на [%1$s].</string>
+    <string name="enter_verification_code_new_device">Цей пристрій не розпізнано. Введіть код підтвердження, надісланий на вашу електронну пошту.</string>
     <string name="recovery_code_title">Код відновлення</string>
     <string name="remember">Запам\'ятати</string>
     <string name="remember_email">Запам\'ятати е-пошту</string>
@@ -264,7 +264,7 @@
     <string name="address">Адреса</string>
     <string name="expiration">Термін дії</string>
     <string name="show_website_icons">Показувати піктограми вебсайтів</string>
-    <string name="show_website_icons_help">Show website icons help</string>
+    <string name="show_website_icons_help">Показати довідку щодо піктограм вебсайтів</string>
     <string name="show_website_icons_description">Показувати зображення біля кожного запису</string>
     <string name="icons_url">URL-адреса сервера піктограм</string>
     <string name="vault_is_locked">Сховище заблоковано</string>
@@ -342,7 +342,7 @@
     <string name="pin">PIN-код</string>
     <string name="unlock">Розблокувати</string>
     <string name="thirty_minutes">30 хвилин</string>
-    <string name="set_pin_description">PIN-код має складатися принаймні з 4 символів. Налаштування PIN-коду буде скинуто, якщо ви коли-небудь вийдете зі сховища.</string>
+    <string name="set_pin_description">PIN-код має складатися принаймні з 4 символів. Налаштування PIN-коду буде скинуто, якщо ви вручну вийдете з програми Bitwarden.</string>
     <string name="logged_in_as_on">Ви увійшли як %1$s на %2$s.</string>
     <string name="vault_locked_master_password">Сховище заблоковано. Введіть головний пароль для продовження.</string>
     <string name="vault_locked_pin">Ваше сховище заблоковане. Для продовження підтвердьте свій PIN-код.</string>
@@ -372,7 +372,6 @@
     <string name="download">Завантажити</string>
     <string name="login_expired">Тривалість вашого сеансу завершилась.</string>
     <string name="biometrics_direction">Біометрична перевірка</string>
-    <string name="biometrics">біометрією</string>
     <string name="biometrics_failed">Збій біометрії</string>
     <string name="biometrics_decoding_failure">Увійдіть за допомогою головного пароля або PIN-коду, а потім активуйте вхід з біометрією в налаштуваннях.</string>
     <string name="use_biometrics_to_unlock">Використовувати біометрію для розблокування</string>
@@ -697,7 +696,7 @@
     <string name="launch_web_authn">Запустити WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Сталася помилка під час запуску двоетапної перевірки WebAuthn</string>
     <string name="self_hosted_server_url">URL-адреса власного сервера</string>
-    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Не вдалося виконати операцію з обліковими даними, оскільки неможливо перевірити користувача.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Не вдалося виконати операцію з ключем доступу, оскільки неможливо перевірити користувача.</string>
     <string name="user_verification_direction">Перевірка користувача</string>
     <string name="create_account_on">Створити обліковий запис на</string>
@@ -898,12 +897,12 @@
     <string name="passkey_operation_failed_because_the_request_is_invalid">Не вдалося виконати операцію з ключем доступу, оскільки запит недійсний.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Не вдалося виконати операцію з ключем доступу, тому що не вибрано жодного елемента.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Не вдалося виконати операцію з ключем доступу, оскільки запит не підтримується.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
-    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
-    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
-    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
-    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Не вдалося виконати операцію з паролем, тому що вибраного елемента не існує.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Не вдалося виконати операцію з паролем, тому що не вибрано жодного елемента.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Не вдалося виконати операцію з обліковими даними через перевищення спроб перевірки користувача.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Не вдалося виконати операцію з обліковими даними, тому що користувача заблоковано.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Не вдалося виконати операцію з обліковими даними, тому що вибраного елемента не існує.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Не вдалося виконати операцію з обліковими даними через скасування перевірки користувача.</string>
     <string name="self_host_server_url">URL-адреса власного сервера</string>
     <string name="use_brave_autofill_integration">Використовувати інтеграцію автозаповнення з Brave</string>
     <string name="use_chrome_autofill_integration">Використовувати інтеграцію автозаповнення з Chrome</string>
@@ -964,9 +963,9 @@
     <string name="view_text_send">Переглянути текстове відправлення</string>
     <string name="delete_send">Видалити відправлення</string>
     <string name="missing_send_resync_your_vault">Немає відправлення. Повторно синхронізуйте сховище.</string>
-    <string name="use_dynamic_colors">Use dynamic colors</string>
-    <string name="use_dynamic_colors_question">Use dynamic colors?</string>
-    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Для динамічних кольорів використовуються системні кольори, які можуть не відповідати всім рекомендаціям щодо доступності.</string>
+    <string name="use_dynamic_colors">Використовувати динамічні кольори</string>
+    <string name="use_dynamic_colors_question">Використовувати динамічні кольори?</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Ця кольорова схема автоматично застосовує системні кольори в Bitwarden на основі ваших поточних шпалер. Ці кольори можуть не відповідати всім рекомендаціям доступності.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Не вдалося виконати операцію з ключем доступу, оскільки браузер (%1$s) не розпізнано. Виберіть \"Довіряти\", щоб додати %1$s до списку локальних довірених програм.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Не вдалося виконати операцію з ключем доступу, оскільки браузер не є довіреним.</string>
     <string name="trust">Довіряти</string>
@@ -986,8 +985,8 @@
     <string name="are_you_sure_you_want_to_stop_trusting_x">Ви дійсно хочете скасувати довіру для %s?</string>
     <string name="installed_apps">Встановлені програми</string>
     <string name="delete_x">Видалити %s</string>
-    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
-    <string name="decryption_error">Decryption error</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Не вдалося розшифрувати. Зверніться до служби підтримки.</string>
+    <string name="decryption_error">Помилка розшифрування</string>
     <string name="add_item_rotation">Додати оновлення запису</string>
     <string name="scan_a_qr_code">Сканувати QR-код</string>
     <string name="cannot_add_authenticator_key">Не вдається додати ключ автентифікації?</string>
@@ -1051,7 +1050,7 @@
     <string name="take_me_to_app_settings">Перейти до налаштувань програми</string>
     <string name="something_went_wrong">Щось пішло не так</string>
     <string name="please_try_again">Повторіть спробу</string>
-    <string name="copy_to_bitwarden_vault">Копіювати в сховище Bitwarden</string>
+    <string name="copy_to_bitwarden_vault">Копіювати до сховища Bitwarden</string>
     <string name="default_save_option">Типовий параметр збереження</string>
     <string name="save_to_bitwarden">Зберегти в Bitwarden</string>
     <string name="save_here">Зберегти тут</string>
@@ -1072,4 +1071,5 @@
     <string name="local_items_are_collapsed_click_to_expand">Локальні записи згорнуто. Натисніть, щоб розгорнути.</string>
     <string name="items_expanded_click_to_collapse">Записи розгорнуто. Натисніть, щоб згорнути.</string>
     <string name="items_are_collapsed_click_to_expand">Записи згорнуто. Натисніть, щоб розгорнути.</string>
+    <string name="select_a_card_for_x">Вибрати картку для %s</string>
 </resources>

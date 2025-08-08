@@ -146,7 +146,7 @@
     <string name="syncing">מסנכרן...</string>
     <string name="syncing_complete">הסנכרון הושלם</string>
     <string name="two_step_login">כניסה דו־שלבית</string>
-    <string name="unlock_with">בטל נעילה עם %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">בטל נעילה עם קוד PIN</string>
     <string name="verification_code">קוד אימות</string>
     <string name="view_login">הצג כניסה</string>
@@ -372,7 +372,6 @@
     <string name="download">הורדה</string>
     <string name="login_expired">פג תוקפה של הפעלת הכניסה שלך.</string>
     <string name="biometrics_direction">אימות ביומטרי</string>
-    <string name="biometrics">זיהוי ביומטרי</string>
     <string name="biometrics_failed">זיהוי ביומטרי נכשל</string>
     <string name="biometrics_decoding_failure">היכנס עם הסיסמה הראשית שלך או PIN ואז תאפשר מחדש כניסה ביומטרית בהגדרות.</string>
     <string name="use_biometrics_to_unlock">השתמש בזיהוי ביומטרי כדי לפתוח</string>
@@ -1070,4 +1069,5 @@
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>
