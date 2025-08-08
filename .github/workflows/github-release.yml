@@ -50,6 +50,8 @@ jobs:
             exit 1
           fi
 
+          echo "🔖 Release branch: $release_branch"
+          echo "🔖 Workflow name: $workflow_name"
           echo "release_branch=$release_branch" >> $GITHUB_OUTPUT
           echo "workflow_name=$workflow_name" >> $GITHUB_OUTPUT
 
@@ -67,6 +69,8 @@ jobs:
               exit 1
               ;;
           esac
+          echo "🔖 App name: $app_name"
+          echo "🔖 App name suffix: $app_name_suffix"
 
       - name: Get version info from run logs and set release tag name
         id: get_release_info
