@@ -50,9 +50,13 @@ fun UriMatchDisplayType.isAdvancedMatching(): Boolean =
  * Returns a human-readable display label for the given [UriMatchType].
  */
 fun UriMatchDisplayType.displayLabel(defaultUriOption: String): Text {
-    return if (this == UriMatchDisplayType.DEFAULT) {
-        BitwardenString.default_text_value.asText(defaultUriOption)
-    } else {
-        this.text
+    return when (this) {
+        UriMatchDisplayType.DEFAULT -> BitwardenString.default_text.asText(defaultUriOption)
+        UriMatchDisplayType.BASE_DOMAIN -> BitwardenString.base_domain.asText()
+        UriMatchDisplayType.HOST -> BitwardenString.host.asText()
+        UriMatchDisplayType.STARTS_WITH -> BitwardenString.starts_with.asText()
+        UriMatchDisplayType.REGULAR_EXPRESSION -> BitwardenString.reg_ex.asText()
+        UriMatchDisplayType.EXACT -> BitwardenString.exact.asText()
+        UriMatchDisplayType.NEVER -> BitwardenString.never.asText()
     }
 }

@@ -172,6 +172,7 @@ fun VaultAddEditUriItem(
     if (shouldShowLearnMoreMatchDetectionDialog) {
         LearnMoreAboutMatchDetectionDialog(
             uriMatchDisplayType = uriItem.match.toDisplayMatchType(),
+            defaultUriOption = defaultUriMatchType.displayLabel(),
             onDialogConfirm = {
                 intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
                 shouldShowLearnMoreMatchDetectionDialog = false
@@ -229,6 +230,7 @@ private fun AdvancedMatchDetectionWarning(
 @Composable
 private fun LearnMoreAboutMatchDetectionDialog(
     uriMatchDisplayType: UriMatchDisplayType,
+    defaultUriOption: String,
     onDialogConfirm: () -> Unit,
     onDialogDismiss: () -> Unit,
 ) {
@@ -236,7 +238,13 @@ private fun LearnMoreAboutMatchDetectionDialog(
         title = stringResource(id = BitwardenString.keep_your_credential_secure),
         message = stringResource(
             id = BitwardenString.learn_more_about_how_to_keep_credentirals_secure,
-            formatArgs = arrayOf(uriMatchDisplayType.text()),
+            formatArgs = arrayOf(
+                uriMatchDisplayType
+                    .displayLabel(
+                        defaultUriOption = defaultUriOption,
+                    )
+                    .invoke(),
+            ),
         ),
         confirmButtonText = stringResource(id = BitwardenString.learn_more),
         dismissButtonText = stringResource(id = BitwardenString.cancel),
