@@ -57,12 +57,12 @@ jobs:
 
           case "$workflow_name" in
             *"Password Manager"* | "Build")
-              echo "app_name=Password Manager" >> $GITHUB_OUTPUT
-              echo "app_name_suffix=bwpm" >> $GITHUB_OUTPUT
+              app_name="Password Manager"
+              app_name_suffix="bwpm"
               ;;
             *"Authenticator"*)
-              echo "app_name=Authenticator" >> $GITHUB_OUTPUT
-              echo "app_name_suffix=bwa" >> $GITHUB_OUTPUT
+              app_name="Authenticator"
+              app_name_suffix="bwa"
               ;;
             *)
               echo "::error::Unknown workflow name: $workflow_name"
@@ -71,6 +71,8 @@ jobs:
           esac
           echo "🔖 App name: $app_name"
           echo "🔖 App name suffix: $app_name_suffix"
+          echo "app_name=$app_name" >> $GITHUB_OUTPUT
+          echo "app_name_suffix=$app_name_suffix" >> $GITHUB_OUTPUT
 
       - name: Get version info from run logs and set release tag name
         id: get_release_info
