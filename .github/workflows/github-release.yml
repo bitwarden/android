@@ -148,7 +148,8 @@ jobs:
           for file in "${files_to_remove[@]}"; do
             find $ARTIFACTS_PATH -name "$file" -type f -delete
           done
-
+          echo "🔖 Removed internal artifacts."
+          echo ""
           echo "🔖 Files to be included in the release:"
           find $ARTIFACTS_PATH -type f
 
