@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -25,10 +26,14 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
+import com.bitwarden.ui.platform.base.util.spanStyleOf
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
@@ -40,10 +45,12 @@ import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.x8bit.bitwarden.ui.platform.components.dropdown.MultiSelectOption
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
@@ -52,6 +59,7 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.BrowserAutofillSettingsCard
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.handlers.AutoFillHandlers
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.isAdvancedMatching
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.collections.immutable.toImmutableList
 
@@ -182,7 +190,9 @@ private fun AutoFillScreenContent(
         )
         Spacer(modifier = Modifier.height(height = 8.dp))
         BitwardenSwitch(
-            label = stringResource(id = BitwardenString.autofill_services),
+            label = stringResource(
+                id = BitwardenString.autofill_services,
+            ),
             supportingText = stringResource(
                 id = BitwardenString.autofill_services_explanation_long,
             ),
@@ -334,7 +344,9 @@ private fun FillStyleSelector(
 ) {
     BitwardenMultiSelectButton(
         label = stringResource(id = BitwardenString.display_autofill_suggestions),
-        supportingText = stringResource(id = BitwardenString.use_inline_autofill_explanation_long),
+        supportingText = stringResource(
+            id = BitwardenString.use_inline_autofill_explanation_long,
+        ),
         options = AutofillStyle.entries.map { it.label() }.toImmutableList(),
         selectedOption = selectedStyle.label(),
         onOptionSelected = {
@@ -389,22 +401,203 @@ private fun DefaultUriMatchTypeRow(
     onUriMatchTypeSelect: (UriMatchType) -> Unit,
     modifier: Modifier = Modifier,
     resources: Resources = LocalContext.current.resources,
+    intentManager: IntentManager = LocalIntentManager.current,
 ) {
-    BitwardenMultiSelectButton(
-        label = stringResource(id = BitwardenString.default_uri_match_detection),
-        options = UriMatchType.entries.map { it.displayLabel() }.toImmutableList(),
-        selectedOption = selectedUriMatchType.displayLabel(),
+    var showAdvancedDialog by rememberSaveable { mutableStateOf(false) }
+    var optionPendingConfirmation by rememberSaveable { mutableStateOf<UriMatchType?>(null) }
+    var shouldShowLearnMoreMatchDetectionDialog by rememberSaveable { mutableStateOf(false) }
+
+    UriMatchSelectionButton(
+        selectedUriMatchType = selectedUriMatchType,
         onOptionSelected = { selectedOption ->
-            onUriMatchTypeSelect(
+            val newSelectedType =
                 UriMatchType
                     .entries
-                    .first { it.displayLabel.toString(resources) == selectedOption },
-            )
+                    .first {
+                        MultiSelectOption.Row(it
+                            .displayLabel
+                            .toString(resources)) == selectedOption
+                    }
+
+            if (newSelectedType.isAdvancedMatching()) {
+                optionPendingConfirmation = newSelectedType
+                showAdvancedDialog = true
+            } else {
+                onUriMatchTypeSelect(newSelectedType)
+                optionPendingConfirmation = null
+                showAdvancedDialog = false
+            }
         },
-        supportingText = stringResource(
-            id = BitwardenString.default_uri_match_detection_description,
-        ),
-        cardStyle = CardStyle.Full,
         modifier = modifier,
+    )
+
+    val currentOptionToConfirm = optionPendingConfirmation
+    if (showAdvancedDialog && currentOptionToConfirm != null) {
+        BuildAdvancedMatchDetectionWarning(
+            pendingOption = currentOptionToConfirm,
+            onDialogConfirm = {
+                onUriMatchTypeSelect(currentOptionToConfirm)
+                showAdvancedDialog = false
+                optionPendingConfirmation = null
+                shouldShowLearnMoreMatchDetectionDialog = true
+            },
+            onDialogDismiss = {
+                showAdvancedDialog = false
+                optionPendingConfirmation = null
+            },
+        )
+    }
+
+    if (shouldShowLearnMoreMatchDetectionDialog) {
+        BuildLearnMoreAboutMatchDetectionDialog(
+            uriMatchType = selectedUriMatchType,
+            onDialogConfirm = {
+                intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
+                shouldShowLearnMoreMatchDetectionDialog = false
+            },
+            onDialogDismiss = {
+                shouldShowLearnMoreMatchDetectionDialog = false
+            },
+        )
+    }
+}
+
+@Composable
+private fun BuildAdvancedMatchDetectionWarning(
+    pendingOption: UriMatchType,
+    onDialogConfirm: () -> Unit,
+    onDialogDismiss: () -> Unit,
+) {
+    val descriptionStringResId = getAdvancedMatchingWarningResId(pendingOption)
+
+    BitwardenTwoButtonDialog(
+        title = stringResource(
+            id = BitwardenString.are_you_sure_you_want_to_use,
+            formatArgs = arrayOf(
+                pendingOption.displayLabel(),
+            ),
+        ),
+        message = stringResource(
+            id = descriptionStringResId,
+            formatArgs = arrayOf(pendingOption.displayLabel()),
+        ),
+        confirmButtonText = stringResource(id = BitwardenString.yes),
+        dismissButtonText = stringResource(id = BitwardenString.cancel),
+        onConfirmClick = onDialogConfirm,
+        onDismissClick = onDialogDismiss,
+        onDismissRequest = onDialogDismiss,
+    )
+}
+
+@Composable
+private fun UriMatchSelectionButton(
+    selectedUriMatchType: UriMatchType,
+    onOptionSelected: (MultiSelectOption.Row) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val regularOptionsList: List<MultiSelectOption.Row> =
+        UriMatchType.entries
+            .filter { !it.isAdvancedMatching() }
+            .map { MultiSelectOption.Row(title = it.displayLabel()) }
+    val advancedOptionsList = mutableListOf<MultiSelectOption>()
+    val advancedOptions = UriMatchType.entries.filter { it.isAdvancedMatching() }
+    if (advancedOptions.isNotEmpty()) {
+        advancedOptionsList.add(MultiSelectOption.Header(
+                title = stringResource(id = BitwardenString.advanced_options),
+                testTag = "AdvancedOptionsSection",
+            ))
+        advancedOptions.forEach { uriMatchType ->
+            advancedOptionsList.add(MultiSelectOption.Row(title = uriMatchType.displayLabel()))
+        }
+    }
+
+    BitwardenMultiSelectButton(
+        label = stringResource(id = BitwardenString.default_uri_match_detection),
+        options = (regularOptionsList + advancedOptionsList).toImmutableList(),
+        selectedOption = MultiSelectOption.Row(selectedUriMatchType.displayLabel()),
+        onOptionSelected = onOptionSelected,
+        cardStyle = CardStyle.Full,
+        supportingContent = { SupportingAnnotatedTextForMatchDetection(selectedUriMatchType) },
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun BuildLearnMoreAboutMatchDetectionDialog(
+    uriMatchType: UriMatchType,
+    onDialogConfirm: () -> Unit,
+    onDialogDismiss: () -> Unit,
+) {
+    BitwardenTwoButtonDialog(
+        title = stringResource(id = BitwardenString.keep_your_credential_secure),
+        message = stringResource(
+            id = BitwardenString.learn_more_about_how_to_keep_credentirals_secure,
+            formatArgs = arrayOf(uriMatchType.displayLabel()),
+        ),
+        confirmButtonText = stringResource(id = BitwardenString.learn_more),
+        dismissButtonText = stringResource(id = BitwardenString.close),
+        onConfirmClick = onDialogConfirm,
+        onDismissClick = onDialogDismiss,
+        onDismissRequest = onDialogDismiss,
+    )
+}
+
+private fun getAdvancedMatchingWarningResId(matchType: UriMatchType): Int {
+    return when (matchType) {
+        UriMatchType.STARTS_WITH -> BitwardenString.selected_matching_option_is_an_advanced_option
+        UriMatchType.REGULAR_EXPRESSION ->
+            BitwardenString.selected_matching_option_is_an_advanced_option_if_used_incorrectly
+
+        // Not expected
+        else -> BitwardenString.selected_matching_option_is_an_advanced_option
+    }
+}
+
+@Composable
+private fun SupportingAnnotatedTextForMatchDetection(
+    uriMatchType: UriMatchType,
+    resources: Resources = LocalContext.current.resources,
+) {
+    var supportingAnnotatedString =
+        annotatedStringResource(
+            id = BitwardenString.default_uri_match_detection_description,
+        )
+
+    if (uriMatchType.isAdvancedMatching()) {
+        val descriptionStringResId = getAdvancedMatchingWarningResId(uriMatchType)
+        supportingAnnotatedString = supportingAnnotatedString
+            .plus(
+                AnnotatedString("\n")
+                    .plus(
+                        annotatedStringResource(
+                            id = BitwardenString.warning_bold,
+                            emphasisHighlightStyle = spanStyleOf(
+                                textStyle = BitwardenTheme.typography.bodyMediumEmphasis,
+                                color = BitwardenTheme.colorScheme.text.secondary,
+                            ),
+                        ),
+                    )
+                    .plus(
+                        annotatedStringResource(
+                            id = descriptionStringResId,
+                            args = arrayOf(
+                                uriMatchType
+                                    .displayLabel
+                                    .toString(resources),
+                            ),
+                            style = spanStyleOf(
+                                textStyle = BitwardenTheme.typography.bodySmall,
+                                color = BitwardenTheme.colorScheme.text.secondary,
+                            ),
+                        ),
+                    ),
+            )
+    }
+
+    Text(
+        text = supportingAnnotatedString,
+        style = BitwardenTheme.typography.bodySmall,
+        color = BitwardenTheme.colorScheme.text.secondary,
+        modifier = Modifier.fillMaxWidth(),
     )
 }

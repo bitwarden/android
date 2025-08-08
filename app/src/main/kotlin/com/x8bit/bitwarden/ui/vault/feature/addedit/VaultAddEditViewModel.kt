@@ -42,6 +42,7 @@ import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrN
 import com.x8bit.bitwarden.data.platform.manager.util.toCreateCredentialRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -202,6 +203,7 @@ class VaultAddEditViewModel @Inject constructor(
                 shouldExitOnSave = shouldExitOnSave,
                 shouldShowCoachMarkTour = false,
                 shouldClearSpecialCircumstance = autofillSelectionData == null,
+                defaultUriMatchType = settingsRepository.defaultUriMatchType,
             )
         },
 ) {
@@ -2230,6 +2232,7 @@ data class VaultAddEditState(
     val shouldClearSpecialCircumstance: Boolean = true,
     val totpData: TotpData? = null,
     val createCredentialRequest: CreateCredentialRequest? = null,
+    val defaultUriMatchType: UriMatchType,
     private val shouldShowCoachMarkTour: Boolean,
 ) : Parcelable {
 

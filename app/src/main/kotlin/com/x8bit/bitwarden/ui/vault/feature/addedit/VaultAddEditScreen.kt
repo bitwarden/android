@@ -412,6 +412,7 @@ fun VaultAddEditScreen(
                     VaultAddEditContent(
                         state = viewState,
                         isAddItemMode = state.isAddItemMode,
+                        defaultUriMatchType = state.defaultUriMatchType,
                         loginItemTypeHandlers = loginItemTypeHandlers,
                         commonTypeHandlers = commonTypeHandlers,
                         permissionsManager = permissionsManager,
