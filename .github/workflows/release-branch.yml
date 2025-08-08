@@ -9,7 +9,8 @@ on:
         type: choice
         options:
           - RC
-          - Hotfix
+          - Hotfix Password Manager
+          - Hotfix Authenticator
           - Test
 
 jobs:
@@ -48,9 +49,17 @@ jobs:
 
       - name: Create Hotfix Branch
         id: hotfix_branch
-        if: inputs.release_type == 'Hotfix'
+        if: startsWith(inputs.release_type, 'Hotfix')
+        env:
+          _RELEASE_TYPE: ${{ inputs.release_type }}
         run: |
-          latest_tag=$(git tag -l --sort=-creatordate | head -n 1)
+          app_codename="bwpm"
+          if [ "$_RELEASE_TYPE" == "Hotfix Authenticator" ]; then
+            app_codename="bwa"
+          fi
+          echo "🌿 app codename: $app_codename"
+
+          latest_tag=$(git tag -l --sort=-creatordate | grep "$app_codename" | head -n 1)
           if [ -z "$latest_tag" ]; then
             echo "::error::No tags found in the repository"
             exit 1
