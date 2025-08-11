@@ -21,10 +21,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,7 +43,6 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 /**
  * A button which uses a read-only text field for layout and style purposes.
  */
-@Suppress("LongMethod")
 @Composable
 fun BitwardenTextSelectionButton(
     label: String,
@@ -60,7 +59,6 @@ fun BitwardenTextSelectionButton(
     actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
     actions: @Composable RowScope.() -> Unit = {},
 ) {
-
     BitwardenTextSelectionButton(
         label = label,
         selectedOption = selectedOption,
@@ -68,7 +66,6 @@ fun BitwardenTextSelectionButton(
         cardStyle = cardStyle,
         modifier = modifier,
         enabled = enabled,
-        supportingText = supportingText,
         tooltip = tooltip,
         insets = insets,
         textFieldTestTag = textFieldTestTag,
@@ -89,8 +86,8 @@ fun BitwardenTextSelectionButton(
 }
 
 /**
- * A button which uses a read-only text field for layout and style purposes,
- * receiving the supportingContent
+ *
+ * A button which uses a read-only text field for layout and style purposes.
  */
 @Suppress("LongMethod")
 @Composable
@@ -101,7 +98,6 @@ fun BitwardenTextSelectionButton(
     cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    supportingText: String? = null,
     tooltip: TooltipData? = null,
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
@@ -110,15 +106,12 @@ fun BitwardenTextSelectionButton(
     supportingContent: @Composable (ColumnScope.() -> Unit)?,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
-
     Column(
         modifier = modifier
             .defaultMinSize(minHeight = 60.dp)
-            .clearAndSetSemantics {
+            .semantics {
                 role = semanticRole
-                contentDescription = supportingText
-                    ?.let { "$selectedOption. $label. $it" }
-                    ?: "$selectedOption. $label"
+                contentDescription = "$selectedOption. $label"
                 customActions = persistentListOfNotNull(
                     tooltip?.let {
                         CustomAccessibilityAction(

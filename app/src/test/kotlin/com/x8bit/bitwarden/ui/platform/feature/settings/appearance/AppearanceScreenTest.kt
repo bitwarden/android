@@ -124,9 +124,7 @@ class AppearanceScreenTest : BitwardenComposeTest() {
     @Test
     fun `on theme row click should display theme selection dialog`() {
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Default (System). Theme. Change the application's color theme",
-            )
+            .onNodeWithContentDescription(label = "Default (System). Theme")
             .performScrollTo()
             .performClick()
         composeTestRule
@@ -138,9 +136,7 @@ class AppearanceScreenTest : BitwardenComposeTest() {
     @Test
     fun `on theme selection dialog item click should send ThemeChange`() {
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Default (System). Theme. Change the application's color theme",
-            )
+            .onNodeWithContentDescription(label = "Default (System). Theme")
             .performScrollTo()
             .performClick()
         composeTestRule
@@ -161,9 +157,7 @@ class AppearanceScreenTest : BitwardenComposeTest() {
     @Test
     fun `on theme selection dialog cancel click should dismiss dialog`() {
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Default (System). Theme. Change the application's color theme",
-            )
+            .onNodeWithContentDescription(label = "Default (System). Theme")
             .performScrollTo()
             .performClick()
         composeTestRule

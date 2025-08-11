@@ -1,9 +1,12 @@
 package com.x8bit.bitwarden.ui.platform.components.dropdown
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -24,6 +27,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
+import com.x8bit.bitwarden.ui.platform.components.dropdown.model.MultiSelectOption
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -38,8 +42,8 @@ import kotlinx.collections.immutable.toImmutableList
  * @param options A list of strings representing the available options in the dialog.
  * @param selectedOption The currently selected option that is displayed in the [OutlinedTextField]
  * (or `null` if no option is selected).
- * @param onOptionSelected A lambda that is invoked when an option
- * is selected from the dropdown menu.
+ * @param onOptionSelected A lambda that is invoked when an option is selected from the dropdown
+ * menu.
  * @param isEnabled Whether or not the button is enabled.
  * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
@@ -76,7 +80,6 @@ fun BitwardenMultiSelectButton(
         cardStyle = cardStyle,
         modifier = modifier,
         isEnabled = isEnabled,
-        supportingText = supportingText,
         supportingContent = supportingText?.let {
             {
                 Text(
@@ -102,16 +105,15 @@ fun BitwardenMultiSelectButton(
  * When the field is clicked, a dropdown menu appears with a list of options to select from.
  *
  * @param label The descriptive text label for the [OutlinedTextField].
- * @param options A list of strings representing the available options in the dialog.
+ * @param options A list of [MultiSelectOption] representing the available options in the dialog.
  * @param selectedOption The currently selected option that is displayed in the [OutlinedTextField]
  * (or `null` if no option is selected).
- * @param onOptionSelected A lambda that is invoked when an option
- * is selected from the dropdown menu.
+ * @param onOptionSelected A lambda that is invoked when an option is selected from the dropdown
+ * menu.
  * @param isEnabled Whether or not the button is enabled.
+ * @param supportingContent An optional supporting content that will appear below the button.
  * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
- * @param supportingContent An optional supporting content composable that will appear below the
- * text input.
  * @param tooltip A nullable [TooltipData], representing the tooltip icon.
  * @param insets Inner padding to be applied withing the card.
  * @param textFieldTestTag The optional test tag associated with the inner text field.
@@ -129,7 +131,6 @@ fun BitwardenMultiSelectButton(
     cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
-    supportingText: String? = null,
     supportingContent: @Composable (ColumnScope.() -> Unit)?,
     tooltip: TooltipData? = null,
     insets: PaddingValues = PaddingValues(),
@@ -147,7 +148,6 @@ fun BitwardenMultiSelectButton(
         },
         cardStyle = cardStyle,
         enabled = isEnabled,
-        supportingText = supportingText,
         supportingContent = supportingContent,
         tooltip = tooltip,
         insets = insets,
@@ -176,18 +176,18 @@ fun BitwardenMultiSelectButton(
 }
 
 /**
- * Renders the list of items and an optional section within a multi-select dialog.
+ * Renders the list of items within a multi-select dialog.
  *
  * This composable is typically used as the content for [BitwardenSelectionDialog].
  *
- * @param options A list of [MultiSelectOption] representing the available options in the dialog.
+ * @param options A list of strings representing the available options in the dialog.
  * @param selectedOption The currently selected option that is displayed in the [OutlinedTextField]
  * (or `null` if no option is selected).
  * @param onOptionSelected A lambda that is invoked when an option
  * is selected from the dropdown menu.
  */
 @Composable
-fun BitwardenMultiSelectDialogContent(
+fun ColumnScope.BitwardenMultiSelectDialogContent(
     options: ImmutableList<MultiSelectOption>,
     selectedOption: MultiSelectOption.Row?,
     onOptionSelected: (MultiSelectOption.Row) -> Unit,
@@ -195,15 +195,20 @@ fun BitwardenMultiSelectDialogContent(
     options.forEach {
         when (it) {
             is MultiSelectOption.Header -> {
-                Text(
+                Column(
                     modifier = Modifier
+                        .nullableTestTag(tag = it.testTag)
                         .padding(horizontal = 16.dp)
-                        .fillMaxWidth()
-                        .nullableTestTag(it.testTag),
-                    text = it.title,
-                    color = BitwardenTheme.colorScheme.text.secondary,
-                    style = BitwardenTheme.typography.titleSmall,
-                )
+                        .fillMaxWidth(),
+                ) {
+                    Spacer(modifier = Modifier.height(height = 4.dp))
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = it.title,
+                        color = BitwardenTheme.colorScheme.text.secondary,
+                        style = BitwardenTheme.typography.titleSmall,
+                    )
+                }
             }
 
             is MultiSelectOption.Row -> {
@@ -211,6 +216,7 @@ fun BitwardenMultiSelectDialogContent(
                     text = it.title.asText(),
                     isSelected = it == selectedOption,
                     onClick = { onOptionSelected(it) },
+                    modifier = Modifier.nullableTestTag(tag = it.testTag),
                 )
             }
         }
@@ -229,36 +235,4 @@ private fun BitwardenMultiSelectButton_preview() {
             cardStyle = CardStyle.Full,
         )
     }
-}
-
-/**
- * Represents an option in a multi-select list, which can either be a header or a selectable row.
- *
- * This sealed class is used to define the structure of items within an optional section
- * of a [BitwardenMultiSelectDialogContent].
- */
-sealed class MultiSelectOption {
-    /**
-     * Represents a header item in a multi-select list.
-     *
-     * Headers are used to visually group related options within the list.
-     * They are not selectable.
-     *
-     * @param title The text to display for the header.
-     * @param testTag An optional test tag for UI testing purposes.
-     */
-    data class Header(
-        val title: String,
-        val testTag: String? = null,
-    ) : MultiSelectOption()
-
-    /**
-     * Represents a row item in a multi-select list.
-     * Should be preceded by a [Header] item.
-     *
-     * @param title The text to display for the header.
-     */
-    data class Row(
-        val title: String,
-    ) : MultiSelectOption()
 }
