@@ -240,9 +240,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         }
         composeTestRule
             .onNodeWithContentDescription(
-                label = "Popup (shows over input field). Display autofill suggestions. " +
-                    "Choose how your autofill suggestions will appear when you sign in " +
-                    "to other apps on your device.",
+                label = "Popup (shows over input field). Display autofill suggestions",
             )
             .performScrollTo()
             .performClick()
@@ -267,18 +265,14 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         }
         composeTestRule
             .onNodeWithContentDescription(
-                label = "Inline (shows in keyboard). Display autofill suggestions. " +
-                    "Choose how your autofill suggestions will appear when you sign in " +
-                    "to other apps on your device.",
+                label = "Inline (shows in keyboard). Display autofill suggestions",
             )
             .performScrollTo()
             .assertIsDisplayed()
         mutableStateFlow.update { it.copy(autofillStyle = AutofillStyle.POPUP) }
         composeTestRule
             .onNodeWithContentDescription(
-                label = "Popup (shows over input field). Display autofill suggestions. " +
-                    "Choose how your autofill suggestions will appear when you sign in " +
-                    "to other apps on your device.",
+                label = "Popup (shows over input field). Display autofill suggestions",
             )
             .performScrollTo()
             .assertIsDisplayed()
@@ -292,9 +286,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescription(
-                label = "Inline (shows in keyboard). Display autofill suggestions. " +
-                    "Choose how your autofill suggestions will appear when you sign in " +
-                    "to other apps on your device.",
+                label = "Inline (shows in keyboard). Display autofill suggestions",
             )
             .performScrollTo()
             .assertIsDisplayed()
@@ -305,9 +297,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescription(
-                label = "Inline (shows in keyboard). Display autofill suggestions. " +
-                    "Choose how your autofill suggestions will appear when you sign in " +
-                    "to other apps on your device.",
+                label = "Inline (shows in keyboard). Display autofill suggestions",
             )
             .assertDoesNotExist()
     }
@@ -350,9 +340,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescription(
-                label = "Inline (shows in keyboard). Display autofill suggestions. " +
-                    "Choose how your autofill suggestions will appear when you sign in " +
-                    "to other apps on your device.",
+                label = "Inline (shows in keyboard). Display autofill suggestions",
             )
             .performScrollTo()
             .assertIsDisplayed()
@@ -363,9 +351,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescription(
-                label = "Inline (shows in keyboard). Display autofill suggestions. " +
-                    "Choose how your autofill suggestions will appear when you sign in " +
-                    "to other apps on your device.",
+                label = "Inline (shows in keyboard). Display autofill suggestions",
             )
             .assertDoesNotExist()
     }
@@ -418,7 +404,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     fun `on default URI match type click should display dialog`() {
         composeTestRule.assertNoDialogExists()
         composeTestRule
-            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .onNodeWithText(text = "Default URI match detection")
             .performScrollTo()
             .assert(!hasAnyAncestor(isDialog()))
             .performClick()
@@ -432,7 +418,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `on default URI match type dialog item click should send DefaultUriMatchTypeSelect and close the dialog`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .onNodeWithText(text = "Default URI match detection")
             .performScrollTo()
             .performClick()
 
@@ -454,7 +440,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     @Test
     fun `on default URI match type dialog cancel click should close the dialog`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
+            .onNodeWithText(text = "Default URI match detection")
             .performScrollTo()
             .performClick()
 
