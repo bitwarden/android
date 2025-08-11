@@ -6646,7 +6646,6 @@ class AuthRepositoryTest {
         private const val REFRESH_TOKEN = "refreshToken"
         private const val REFRESH_TOKEN_2 = "refreshToken2"
         private const val ACCESS_TOKEN_2_EXPIRES_IN = 3600
-        private const val CAPTCHA_KEY = "captcha"
         private const val TWO_FACTOR_CODE = "123456"
         private val TWO_FACTOR_METHOD = TwoFactorAuthMethod.EMAIL
         private const val TWO_FACTOR_REMEMBER = true

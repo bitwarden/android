@@ -516,7 +516,7 @@ sealed class CompleteRegistrationEvent {
     data object NavigateToMakePasswordStrong : CompleteRegistrationEvent()
 
     /**
-     * Navigates to the captcha verification screen.
+     * Navigates to the Login screen.
      */
     data class NavigateToLogin(
         val email: String,
