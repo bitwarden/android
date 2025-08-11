@@ -3,7 +3,9 @@ package com.x8bit.bitwarden.data.autofill.util
 import android.app.assist.AssistStructure
 import android.view.View
 import android.widget.EditText
+import androidx.annotation.VisibleForTesting
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.x8bit.bitwarden.data.autofill.model.AutofillHint
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 
 /**
@@ -12,38 +14,12 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillView
 private const val DEFAULT_SCHEME: String = "https"
 
 /**
- * The set of raw autofill hints that should be ignored.
- */
-private val IGNORED_RAW_HINTS: List<String> = listOf(
-    "search",
-    "find",
-    "recipient",
-    "edit",
-)
-
-/**
- * The supported password autofill hints.
- */
-private val SUPPORTED_RAW_PASSWORD_HINTS: List<String> = listOf(
-    "password",
-    "pswd",
-)
-
-/**
- * The supported raw autofill hints.
- */
-private val SUPPORTED_RAW_USERNAME_HINTS: List<String> = listOf(
-    "email",
-    "phone",
-    "username",
-)
-
-/**
  * The supported autofill Android View hints.
  */
 private val SUPPORTED_VIEW_HINTS: List<String> = listOf(
     View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH,
     View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR,
+    View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_DATE,
     View.AUTOFILL_HINT_CREDIT_CARD_NUMBER,
     View.AUTOFILL_HINT_CREDIT_CARD_SECURITY_CODE,
     View.AUTOFILL_HINT_EMAIL_ADDRESS,
@@ -60,7 +36,7 @@ private val AssistStructure.ViewNode.isInputField: Boolean
             ?.let {
                 try {
                     Class.forName(it)
-                } catch (e: ClassNotFoundException) {
+                } catch (_: ClassNotFoundException) {
                     null
                 }
             }
@@ -78,11 +54,7 @@ fun AssistStructure.ViewNode.toAutofillView(): AutofillView? =
         .autofillId
         // We only care about nodes with a valid `AutofillId`.
         ?.let { nonNullAutofillId ->
-            val supportedHint = this
-                .autofillHints
-                ?.firstOrNull { SUPPORTED_VIEW_HINTS.contains(it) }
-
-            if (supportedHint != null || this.isInputField) {
+            if (supportedAutofillHint != null || this.isInputField) {
                 val autofillOptions = this
                     .autofillOptions
                     .orEmpty()
@@ -99,7 +71,7 @@ fun AssistStructure.ViewNode.toAutofillView(): AutofillView? =
                 buildAutofillView(
                     autofillOptions = autofillOptions,
                     autofillViewData = autofillViewData,
-                    supportedHint = supportedHint,
+                    autofillHint = supportedAutofillHint,
                 )
             } else {
                 null
@@ -107,14 +79,55 @@ fun AssistStructure.ViewNode.toAutofillView(): AutofillView? =
         }
 
 /**
+ * The first supported autofill hint for this view node, or null if none are found.
+ */
+private val AssistStructure.ViewNode.supportedAutofillHint: AutofillHint?
+    get() = firstSupportedAutofillHintOrNull()
+        ?: when {
+            this.isUsernameField -> AutofillHint.USERNAME
+            this.isPasswordField -> AutofillHint.PASSWORD
+            this.isCardExpirationMonthField -> AutofillHint.CARD_EXPIRATION_MONTH
+            this.isCardExpirationYearField -> AutofillHint.CARD_EXPIRATION_YEAR
+            this.isCardExpirationDateField -> AutofillHint.CARD_EXPIRATION_DATE
+            this.isCardNumberField -> AutofillHint.CARD_NUMBER
+            this.isCardSecurityCodeField -> AutofillHint.CARD_SECURITY_CODE
+            this.isCardholderNameField -> AutofillHint.CARD_CARDHOLDER
+            else -> null
+        }
+
+/**
+ * Get the first supported autofill hint from the view node's autofillHints, or null if none are
+ * found.
+ */
+private fun AssistStructure.ViewNode.firstSupportedAutofillHintOrNull(): AutofillHint? =
+    autofillHints
+        ?.firstOrNull { SUPPORTED_VIEW_HINTS.contains(it) }
+        ?.toBitwardenAutofillHintOrNull()
+
+private fun String.toBitwardenAutofillHintOrNull(): AutofillHint? =
+    when (this) {
+        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH -> AutofillHint.CARD_EXPIRATION_MONTH
+        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR -> AutofillHint.CARD_EXPIRATION_YEAR
+        View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_DATE -> AutofillHint.CARD_EXPIRATION_DATE
+        View.AUTOFILL_HINT_CREDIT_CARD_NUMBER -> AutofillHint.CARD_NUMBER
+        View.AUTOFILL_HINT_CREDIT_CARD_SECURITY_CODE -> AutofillHint.CARD_SECURITY_CODE
+        View.AUTOFILL_HINT_PASSWORD -> AutofillHint.PASSWORD
+        View.AUTOFILL_HINT_EMAIL_ADDRESS,
+        View.AUTOFILL_HINT_USERNAME,
+            -> AutofillHint.USERNAME
+
+        else -> null
+    }
+
+/**
  * Attempt to convert this [AssistStructure.ViewNode] and [autofillViewData] into an [AutofillView].
  */
 private fun AssistStructure.ViewNode.buildAutofillView(
     autofillOptions: List<String>,
     autofillViewData: AutofillView.Data,
-    supportedHint: String?,
-): AutofillView = when {
-    supportedHint == View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH -> {
+    autofillHint: AutofillHint?,
+): AutofillView = when (autofillHint) {
+    AutofillHint.CARD_EXPIRATION_MONTH -> {
         val monthValue = this
             .autofillValue
             ?.extractMonthValue(
@@ -127,31 +140,43 @@ private fun AssistStructure.ViewNode.buildAutofillView(
         )
     }
 
-    supportedHint == View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR -> {
+    AutofillHint.CARD_EXPIRATION_YEAR -> {
         AutofillView.Card.ExpirationYear(
             data = autofillViewData,
         )
     }
 
-    supportedHint == View.AUTOFILL_HINT_CREDIT_CARD_NUMBER -> {
+    AutofillHint.CARD_EXPIRATION_DATE -> {
+        AutofillView.Card.ExpirationDate(
+            data = autofillViewData,
+        )
+    }
+
+    AutofillHint.CARD_NUMBER -> {
         AutofillView.Card.Number(
             data = autofillViewData,
         )
     }
 
-    supportedHint == View.AUTOFILL_HINT_CREDIT_CARD_SECURITY_CODE -> {
+    AutofillHint.CARD_SECURITY_CODE -> {
         AutofillView.Card.SecurityCode(
             data = autofillViewData,
         )
     }
 
-    this.isPasswordField(supportedHint) -> {
+    AutofillHint.CARD_CARDHOLDER -> {
+        AutofillView.Card.CardholderName(
+            data = autofillViewData,
+        )
+    }
+
+    AutofillHint.PASSWORD -> {
         AutofillView.Login.Password(
             data = autofillViewData,
         )
     }
 
-    this.isUsernameField(supportedHint) -> {
+    AutofillHint.USERNAME -> {
         AutofillView.Login.Username(
             data = autofillViewData,
         )
@@ -167,41 +192,97 @@ private fun AssistStructure.ViewNode.buildAutofillView(
 /**
  * Check whether this [AssistStructure.ViewNode] represents a password field.
  */
-fun AssistStructure.ViewNode.isPasswordField(
-    supportedHint: String?,
-): Boolean {
-    if (supportedHint == View.AUTOFILL_HINT_PASSWORD) return true
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isPasswordField: Boolean
+    get() {
+        val isUsernameField = this.isUsernameField
+        if (
+            this.inputType.isPasswordInputType &&
+            !this.containsIgnoredHintTerms() &&
+            !isUsernameField
+        ) {
+            return true
+        }
 
-    val isInvalidField = this.idEntry?.containsAnyTerms(IGNORED_RAW_HINTS) == true ||
-        this.hint?.containsAnyTerms(IGNORED_RAW_HINTS) == true
-    val isUsernameField = this.isUsernameField(supportedHint)
-    if (this.inputType.isPasswordInputType && !isInvalidField && !isUsernameField) return true
-
-    return this
-        .htmlInfo
-        .isPasswordField()
-}
+        return hint?.containsAnyTerms(SUPPORTED_RAW_PASSWORD_HINTS) == true ||
+            htmlInfo.isPasswordField()
+    }
 
 /**
  * Check whether this [AssistStructure.ViewNode] includes any password specific terms.
  */
-fun AssistStructure.ViewNode.hasPasswordTerms(): Boolean =
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal fun AssistStructure.ViewNode.hasPasswordTerms(): Boolean =
     this.idEntry?.containsAnyTerms(SUPPORTED_RAW_PASSWORD_HINTS) == true ||
-        this.hint?.containsAnyTerms(SUPPORTED_RAW_PASSWORD_HINTS) == true
+        this.hint?.containsAnyTerms(SUPPORTED_RAW_PASSWORD_HINTS) == true ||
+        this.htmlInfo.hints().any { it.containsAnyTerms(SUPPORTED_RAW_PASSWORD_HINTS) }
 
 /**
  * Check whether this [AssistStructure.ViewNode] represents a username field.
  */
-fun AssistStructure.ViewNode.isUsernameField(
-    supportedHint: String?,
-): Boolean =
-    supportedHint == View.AUTOFILL_HINT_USERNAME ||
-        supportedHint == View.AUTOFILL_HINT_EMAIL_ADDRESS ||
-        inputType.isUsernameInputType ||
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isUsernameField: Boolean
+    get() = inputType.isUsernameInputType ||
         idEntry?.containsAnyTerms(SUPPORTED_RAW_USERNAME_HINTS) == true ||
         hint?.containsAnyTerms(SUPPORTED_RAW_USERNAME_HINTS) == true ||
         htmlInfo.isUsernameField()
 
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a card expiration month field.
+ */
+private val AssistStructure.ViewNode.isCardExpirationMonthField: Boolean
+    get() = idEntry?.matchesAnyExpressions(SUPPORTED_RAW_CARD_EXP_MONTH_HINT_PATTERNS) == true ||
+        hint?.matchesAnyExpressions(SUPPORTED_RAW_CARD_EXP_MONTH_HINT_PATTERNS) == true ||
+        htmlInfo.isCardExpirationMonthField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a card expiration year field.
+ */
+private val AssistStructure.ViewNode.isCardExpirationYearField: Boolean
+    get() = idEntry?.matchesAnyExpressions(SUPPORTED_RAW_CARD_EXP_YEAR_HINT_PATTERNS) == true ||
+        hint?.matchesAnyExpressions(SUPPORTED_RAW_CARD_EXP_YEAR_HINT_PATTERNS) == true ||
+        htmlInfo.isCardExpirationYearField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a card expiration date field.
+ */
+private val AssistStructure.ViewNode.isCardExpirationDateField: Boolean
+    get() = idEntry?.matchesAnyExpressions(SUPPORTED_RAW_CARD_EXP_DATE_HINT_PATTERNS) == true ||
+        hint?.matchesAnyExpressions(SUPPORTED_RAW_CARD_EXP_DATE_HINT_PATTERNS) == true ||
+        htmlInfo.isCardExpirationDateField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a card number field based.
+ */
+private val AssistStructure.ViewNode.isCardNumberField: Boolean
+    get() = idEntry?.matchesAnyExpressions(SUPPORTED_RAW_CARD_NUMBER_HINT_PATTERNS) == true ||
+        hint?.matchesAnyExpressions(SUPPORTED_RAW_CARD_NUMBER_HINT_PATTERNS) == true ||
+        htmlInfo.isCardNumberField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a card security code field based.
+ */
+private val AssistStructure.ViewNode.isCardSecurityCodeField: Boolean
+    get() =
+        idEntry?.matchesAnyExpressions(SUPPORTED_RAW_CARD_SECURITY_CODE_HINT_PATTERNS) == true ||
+            hint?.matchesAnyExpressions(SUPPORTED_RAW_CARD_SECURITY_CODE_HINT_PATTERNS) == true ||
+            htmlInfo.isCardSecurityCodeField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a cardholder name field based.
+ */
+private val AssistStructure.ViewNode.isCardholderNameField: Boolean
+    get() = idEntry?.matchesAnyExpressions(SUPPORTED_RAW_CARDHOLDER_NAME_HINT_PATTERNS) == true ||
+        hint?.matchesAnyExpressions(SUPPORTED_RAW_CARDHOLDER_NAME_HINT_PATTERNS) == true ||
+        htmlInfo.isCardholderNameField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] contains any ignored hint terms.
+ */
+private fun AssistStructure.ViewNode.containsIgnoredHintTerms(): Boolean =
+    this.idEntry?.containsAnyTerms(IGNORED_RAW_HINTS) == true ||
+        this.hint?.containsAnyTerms(IGNORED_RAW_HINTS) == true ||
+        this.htmlInfo.hints().any { it.containsAnyTerms(IGNORED_RAW_HINTS) }
 /**
  * The website that this [AssistStructure.ViewNode] is a part of representing.
  */

@@ -146,7 +146,7 @@
     <string name="syncing">Sincronizzazione in corso</string>
     <string name="syncing_complete">Sincronizzazione completata</string>
     <string name="two_step_login">Configurazione 2FA (autenticazione a due fattori)</string>
-    <string name="unlock_with">Sblocco con %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Sblocco con Codice PIN</string>
     <string name="verification_code">Codice di verifica</string>
     <string name="view_login">Visualizza il login</string>
@@ -371,10 +371,9 @@
     <string name="download">Scarica</string>
     <string name="login_expired">Sessione scaduta</string>
     <string name="biometrics_direction">Autenticazione biometrica</string>
-    <string name="biometrics">Biometria</string>
     <string name="biometrics_failed">Autenticazione biometrica fallita</string>
     <string name="biometrics_decoding_failure">Effettua l\'accesso con la password principale o il codice PIN. Puoi riabilitare l\'autenticazione biometrica nelle impostazioni.</string>
-    <string name="use_biometrics_to_unlock">Sblocca con la biometria</string>
+    <string name="use_biometrics_to_unlock">Sblocca con dati biometrici</string>
     <string name="file_format">Formato del file</string>
     <string name="export_vault_master_password_description">Inserisci la password principale dell\'account Bitwarden</string>
     <string name="send_verification_code_to_email">Invia un codice di verifica all\'indirizzo email</string>
@@ -1069,4 +1068,5 @@ Vuoi passare a questo account?</string>
     <string name="local_items_are_collapsed_click_to_expand">Elementi locali nascosti; tocca per espandere la lista.</string>
     <string name="items_expanded_click_to_collapse">Elementi visibili; tocca per nascondere.</string>
     <string name="items_are_collapsed_click_to_expand">Elementi nascosti; tocca per mostrarli.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

@@ -146,7 +146,7 @@
     <string name="syncing">Synkroniserer...</string>
     <string name="syncing_complete">Synkronisering fullført.</string>
     <string name="two_step_login">Tostegsinnskriving</string>
-    <string name="unlock_with">Lås opp med %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Lås opp med PIN-kode</string>
     <string name="verification_code">Stadfestingskode</string>
     <string name="view_login">View login</string>
@@ -372,7 +372,6 @@ Skanning skjer automatisk.</string>
     <string name="download">Lasta ned</string>
     <string name="login_expired">Innskrivingsøkta di er gått ut.</string>
     <string name="biometrics_direction">Biometrisk stadfesting</string>
-    <string name="biometrics">Biometri</string>
     <string name="biometrics_failed">Biometri feila</string>
     <string name="biometrics_decoding_failure">Logg inn med hovudpassordet ditt eller PIN-koden din og reaktiver biometrisk innlogging i Innstillingar.</string>
     <string name="use_biometrics_to_unlock">Bruka biometri for å låsa opp</string>
@@ -1070,4 +1069,5 @@ Do you want to switch to this account?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

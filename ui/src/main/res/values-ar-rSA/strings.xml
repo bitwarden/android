@@ -146,7 +146,7 @@
     <string name="syncing">جارِ المزامنة...</string>
     <string name="syncing_complete">اكتمال المزامنة.</string>
     <string name="two_step_login">تحديد المصادقة الثنائية</string>
-    <string name="unlock_with">فتح مع %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">إلغاء القفل باستخدام رقم التعريف الشخصي</string>
     <string name="verification_code">رمز التحقق</string>
     <string name="view_login">عرض تسجيل الدخول</string>
@@ -372,7 +372,6 @@
     <string name="download">تنزيل</string>
     <string name="login_expired">انتهت صَلاحِيَة جَلسة تسجيل دخولك.</string>
     <string name="biometrics_direction">المصادقة البيومترية</string>
-    <string name="biometrics">البصمات</string>
     <string name="biometrics_failed">فشل القياسات الحيوية</string>
     <string name="biometrics_decoding_failure">تسجيل الدخول باستخدام كلمة المرور الرئيسية أو رمز PIN ثم إعادة تمكين تسجيل الدخول الحيوي في الإعدادات.</string>
     <string name="use_biometrics_to_unlock">استخدام القياسات الحيوية للفتح</string>
@@ -1070,4 +1069,5 @@
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

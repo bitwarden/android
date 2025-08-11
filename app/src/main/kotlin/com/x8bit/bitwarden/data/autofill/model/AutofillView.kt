@@ -55,6 +55,20 @@ sealed class AutofillView {
         ) : Card()
 
         /**
+         * The expiration date [AutofillView] for the [Card] data partition.
+         */
+        data class ExpirationDate(
+            override val data: Data,
+        ) : Card()
+
+        /**
+         * The cardholder name [AutofillView] for the [Card] data partition.
+         */
+        data class CardholderName(
+            override val data: Data,
+        ) : Card()
+
+        /**
          * The number [AutofillView] for the [Card] data partition.
          */
         data class Number(

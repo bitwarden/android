@@ -146,7 +146,7 @@
     <string name="syncing">S\'està sincronitzant...</string>
     <string name="syncing_complete">Sincronització completa.</string>
     <string name="two_step_login">Inici de sessió en dues passes</string>
-    <string name="unlock_with">Desbloqueja amb %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Desbloqueja amb codi PIN</string>
     <string name="verification_code">Codi de verificació</string>
     <string name="view_login">View login</string>
@@ -372,7 +372,6 @@ L\'escaneig es farà automàticament.</string>
     <string name="download">Baixa</string>
     <string name="login_expired">La vostra sessió ha caducat.</string>
     <string name="biometrics_direction">Desbloqueja amb biometria</string>
-    <string name="biometrics">Dades biomètriques</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Desbloqueja amb biometria</string>
@@ -1070,4 +1069,5 @@ Voleu canviar a aquest compte?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

@@ -146,7 +146,7 @@
     <string name="syncing">സമന്വയിപ്പിക്കുന്നു...</string>
     <string name="syncing_complete">സമന്വയം പൂർത്തിയായി.</string>
     <string name="two_step_login">രണ്ട്-ഘട്ട പ്രവേശനം</string>
-    <string name="unlock_with">%1$s ഉപയോഗിച്ച് അൺലോക്കുചെയ്യുക</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">പിൻ ഉപയോഗിച്ച് അൺലോക്കുചെയ്യുക</string>
     <string name="verification_code">സ്ഥിരീകരണ കോഡ്</string>
     <string name="view_login">View login</string>
@@ -372,7 +372,6 @@
     <string name="download">ഡൗൺലോഡ്</string>
     <string name="login_expired">നിങ്ങളുടെ പ്രവർത്തന സമയം കഴിഞ്ഞിരിക്കുന്നു.</string>
     <string name="biometrics_direction">ബയോമെട്രിക് പരിശോധന</string>
-    <string name="biometrics">ബയോമെട്രിക്സ്</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">അൺലോക്കുചെയ്യാൻ ബയോമെട്രിക്സ് ഉപയോഗിക്കുക</string>
@@ -1070,4 +1069,5 @@ Do you want to switch to this account?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

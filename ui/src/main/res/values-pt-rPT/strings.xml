@@ -146,7 +146,7 @@
     <string name="syncing">A sincronizar...</string>
     <string name="syncing_complete">Sincronização concluída</string>
     <string name="two_step_login">Verificação de dois passos</string>
-    <string name="unlock_with">Desbloquear com %1$s</string>
+    <string name="unlock_with_biometrics">Desbloquear com biometria</string>
     <string name="unlock_with_pin">Desbloquear com código PIN</string>
     <string name="verification_code">Código de verificação</string>
     <string name="view_login">Ver credencial</string>
@@ -372,7 +372,6 @@ A leitura será efetuada automaticamente.</string>
     <string name="download">Transferir</string>
     <string name="login_expired">A sua sessão expirou.</string>
     <string name="biometrics_direction">Verificação biométrica</string>
-    <string name="biometrics">Biometria</string>
     <string name="biometrics_failed">Falha na biometria</string>
     <string name="biometrics_decoding_failure">Inicie sessão com a sua palavra-passe mestra ou PIN e volte a ativar o início de sessão biométrico nas Definições.</string>
     <string name="use_biometrics_to_unlock">Utilizar a biometria para desbloquear</string>
@@ -1070,4 +1069,5 @@ Pretende mudar para esta conta?</string>
     <string name="local_items_are_collapsed_click_to_expand">Os itens locais estão recolhidos, clique para expandir.</string>
     <string name="items_expanded_click_to_collapse">Os itens estão expandidos, clique para recolher.</string>
     <string name="items_are_collapsed_click_to_expand">Os itens estão recolhidos, clique para expandir.</string>
+    <string name="select_a_card_for_x">Selecione um cartão para %s</string>
 </resources>

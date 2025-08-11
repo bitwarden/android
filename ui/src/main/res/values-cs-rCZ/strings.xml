@@ -146,7 +146,7 @@
     <string name="syncing">Synchronizování...</string>
     <string name="syncing_complete">Synchronizace byla dokončena</string>
     <string name="two_step_login">Dvoufázové přihlášení</string>
-    <string name="unlock_with">Odemknout pomocí %1$s</string>
+    <string name="unlock_with_biometrics">Odemknout pomocí biometrie</string>
     <string name="unlock_with_pin">Odemknout pomocí PIN kódu</string>
     <string name="verification_code">Ověřovací kód</string>
     <string name="view_login">Zobrazit přihlašovací údaje</string>
@@ -372,7 +372,6 @@ Načtení proběhne automaticky.</string>
     <string name="download">Stáhnout</string>
     <string name="login_expired">Platnost přihlášení vypršela.</string>
     <string name="biometrics_direction">Použít biometrii k ověření</string>
-    <string name="biometrics">Biometrie</string>
     <string name="biometrics_failed">Biometrika selhala</string>
     <string name="biometrics_decoding_failure">Přihlaste se pomocí hlavního hesla nebo PINu a poté znovu zapněte biometrické přihlášení v Nastavení.</string>
     <string name="use_biometrics_to_unlock">Použít biometrii k odemknutí</string>
@@ -1071,4 +1070,5 @@ při opakování problémů.</string>
     <string name="local_items_are_collapsed_click_to_expand">Místní položky jsou sbaleny; klepnutím rozbalíte.</string>
     <string name="items_expanded_click_to_collapse">Položky jsou rozbaleny; klepnutím sbalíte.</string>
     <string name="items_are_collapsed_click_to_expand">Položky jsou sbaleny; klepnutím rozbalíte.</string>
+    <string name="select_a_card_for_x">Vyberte kartu pro %s</string>
 </resources>

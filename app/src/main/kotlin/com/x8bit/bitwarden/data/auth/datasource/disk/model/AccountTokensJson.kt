@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.time.Instant
 
 /**
  * Container for the user's API tokens.
@@ -19,7 +20,7 @@ data class AccountTokensJson(
     val refreshToken: String?,
 
     @SerialName("expiresAtSec")
-    val expiresAtSec: Long = Long.MAX_VALUE,
+    val expiresAtSec: Long = Instant.MAX.epochSecond,
 ) {
     /**
      * Returns `true` if the user is logged in, `false otherwise.

@@ -146,7 +146,7 @@
     <string name="syncing">Synchronizujem...</string>
     <string name="syncing_complete">Synchronizácia kompletná.</string>
     <string name="two_step_login">Dvojstupňové prihlásenie</string>
-    <string name="unlock_with">Odomknúť s %1$s</string>
+    <string name="unlock_with_biometrics">Odomknúť pomocou biometrie</string>
     <string name="unlock_with_pin">Odomknúť s PIN kódom</string>
     <string name="verification_code">Overovací kód</string>
     <string name="view_login">Zobraziť prihlásenie</string>
@@ -372,7 +372,6 @@ Skenovanie prebehne automaticky.</string>
     <string name="download">Stiahnuť</string>
     <string name="login_expired">Platnosť relácie prihlásenia vypršala.</string>
     <string name="biometrics_direction">Na overenie použiť biometrické údaje.</string>
-    <string name="biometrics">Biometrické údaje</string>
     <string name="biometrics_failed">Biometria zlyhala</string>
     <string name="biometrics_decoding_failure">Prihláste sa hlavným heslom alebo PIN kódom, a potom znova zapnite prihlásenie biometrickými údajmi v nastaveniach.</string>
     <string name="use_biometrics_to_unlock">Použiť biometrické údaje na odomknutie</string>
@@ -1070,4 +1069,5 @@ Chcete prepnúť na tento účet?</string>
     <string name="local_items_are_collapsed_click_to_expand">Miestne položky sú zbalené, kliknutím ich rozbalíte.</string>
     <string name="items_expanded_click_to_collapse">Položky sú rozbalené, kliknutím ich zbalíte.</string>
     <string name="items_are_collapsed_click_to_expand">Položky sú zbalené, kliknutím ich rozbalíte.</string>
+    <string name="select_a_card_for_x">Vyberte kartu pre %s</string>
 </resources>

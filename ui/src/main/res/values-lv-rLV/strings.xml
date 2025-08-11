@@ -146,7 +146,7 @@
     <string name="syncing">Sinhronizē…</string>
     <string name="syncing_complete">Sinhronizācija pabeigta</string>
     <string name="two_step_login">Divpakāpju pieteikšanās</string>
-    <string name="unlock_with">Atslēgt ar %1$s</string>
+    <string name="unlock_with_biometrics">Atslēgt ar biometriju</string>
     <string name="unlock_with_pin">Atslēgt ar PIN kodu</string>
     <string name="verification_code">Apliecinājuma kods</string>
     <string name="view_login">Apskatīt pieteikšanās vienumu</string>
@@ -372,7 +372,6 @@ Nolasīšana notiks automātiski.</string>
     <string name="download">Lejupielādēt</string>
     <string name="login_expired">Pieteikšanās sesija ir beigusies.</string>
     <string name="biometrics_direction">Apliecināšana ar biometriju</string>
-    <string name="biometrics">Biometrija</string>
     <string name="biometrics_failed">Biometrija neizdevās</string>
     <string name="biometrics_decoding_failure">Jāpiesakās ar savu galveno paroli vai PIN, tad iestatījumos atkārtoti jāiespējo pieteikšanās ar biometriju.</string>
     <string name="use_biometrics_to_unlock">Izmantot biometriju, lai atslēgtu</string>
@@ -1070,4 +1069,5 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>
