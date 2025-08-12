@@ -63,6 +63,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedOnboardingStatus = mutableMapOf<String, OnboardingStatus?>()
     private val storedShowImportLogins = mutableMapOf<String, Boolean?>()
     private val storedLastLockTimestampState = mutableMapOf<String, Instant?>()
+    private val storedAccountKeys = mutableMapOf<String, SyncResponseJson.Profile.AccountKeys?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -137,10 +138,22 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedUserKeys[userId] = userKey
     }
 
+    @Deprecated("Use getAccountKeys instead.", replaceWith = ReplaceWith("getAccountKeys"))
     override fun getPrivateKey(userId: String): String? = storedPrivateKeys[userId]
 
+    @Deprecated("Use storeAccountKeys instead.", replaceWith = ReplaceWith("storeAccountKeys"))
     override fun storePrivateKey(userId: String, privateKey: String?) {
         storedPrivateKeys[userId] = privateKey
+    }
+
+    override fun getAccountKeys(userId: String): SyncResponseJson.Profile.AccountKeys? =
+        storedAccountKeys[userId]
+
+    override fun storeAccountKeys(
+        userId: String,
+        accountKeys: SyncResponseJson.Profile.AccountKeys?,
+    ) {
+        storedAccountKeys[userId] = accountKeys
     }
 
     override fun getTwoFactorToken(email: String): String? = storedTwoFactorTokens[email]
