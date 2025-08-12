@@ -26,7 +26,6 @@ module Supply
       end
 
       releases = track_from.releases
-      UI.message("Track contents: #{track_from.to_json}")
 
       version_code = Supply.config[:version_code].to_s
       if !Supply.config[:skip_release_verification]
@@ -78,6 +77,8 @@ module Supply
         release.status = Supply.config[:track_promote_release_status]
         release.user_fraction = nil
       end
+
+      UI.message("Promoting release with version: #{release.name} (#{release.version_codes.first})")
 
       if track_to
         # Its okay to set releases to an array containing the newest release
