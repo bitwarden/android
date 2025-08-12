@@ -383,8 +383,16 @@ class FakeAuthDiskSource : AuthDiskSource {
     /**
      * Assert that the [privateKey] was stored successfully using the [userId].
      */
+    @Deprecated("Use assertAccountKeys instead.", replaceWith = ReplaceWith("assertAccountKeys"))
     fun assertPrivateKey(userId: String, privateKey: String?) {
         assertEquals(privateKey, storedPrivateKeys[userId])
+    }
+
+    /**
+     * Assert that the [accountKeys] was stored successfully using the [userId].
+     */
+    fun assertAccountKeys(userId: String, accountKeys: AccountKeysJson?) {
+        assertEquals(accountKeys, storedAccountKeys[userId])
     }
 
     /**

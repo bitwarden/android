@@ -1014,6 +1014,10 @@ class VaultRepositoryImpl(
                 userId = userId,
                 privateKey = profile.privateKey,
             )
+            storeAccountKeys(
+                userId = userId,
+                accountKeys = profile.accountKeys,
+            )
             storeOrganizationKeys(
                 userId = userId,
                 organizationKeys = profile.organizations
@@ -1038,10 +1042,16 @@ class VaultRepositoryImpl(
     ): VaultUnlockResult {
         val account = authDiskSource.userState?.accounts?.get(userId)
             ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
-        val privateKey = authDiskSource.getPrivateKey(userId = userId)
+        val accountKeys = authDiskSource.getAccountKeys(userId = userId)
+        val privateKey = accountKeys
+            ?.publicKeyEncryptionKeyPair
+            ?.wrappedPrivateKey
+            ?: authDiskSource.getPrivateKey(userId = userId)
             ?: return VaultUnlockResult.InvalidStateError(
                 error = MissingPropertyException("Private key"),
             )
+        val signingKey = accountKeys?.signatureKeyPair?.wrappedSigningKey
+        val securityState = accountKeys?.securityState?.securityState
         val organizationKeys = authDiskSource
             .getOrganizationKeys(userId = userId)
         return unlockVault(
@@ -1049,6 +1059,8 @@ class VaultRepositoryImpl(
             email = account.profile.email,
             kdf = account.profile.toSdkParams(),
             privateKey = privateKey,
+            signingKey = signingKey,
+            securityState = securityState,
             initUserCryptoMethod = initUserCryptoMethod,
             organizationKeys = organizationKeys,
         )

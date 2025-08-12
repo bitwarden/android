@@ -1230,9 +1230,11 @@ class VaultRepositoryTest {
             coEvery {
                 vaultLockManager.unlockVault(
                     userId = userId,
-                    kdf = MOCK_PROFILE.toSdkParams(),
                     email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
                     privateKey = privateKey,
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = biometricsKey,
                     ),
@@ -1251,9 +1253,11 @@ class VaultRepositoryTest {
             coVerify {
                 vaultLockManager.unlockVault(
                     userId = userId,
-                    kdf = MOCK_PROFILE.toSdkParams(),
                     email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
                     privateKey = privateKey,
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = biometricsKey,
                     ),
@@ -1346,9 +1350,11 @@ class VaultRepositoryTest {
             coEvery {
                 vaultLockManager.unlockVault(
                     userId = userId,
-                    kdf = MOCK_PROFILE.toSdkParams(),
                     email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
                     privateKey = privateKey,
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = encryptedBytes.toString(Charsets.ISO_8859_1),
                     ),
@@ -1367,9 +1373,11 @@ class VaultRepositoryTest {
             coVerify(exactly = 1) {
                 vaultLockManager.unlockVault(
                     userId = userId,
-                    kdf = MOCK_PROFILE.toSdkParams(),
                     email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
                     privateKey = privateKey,
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = encryptedBytes.toString(Charsets.ISO_8859_1),
                     ),
@@ -1406,9 +1414,11 @@ class VaultRepositoryTest {
             coEvery {
                 vaultLockManager.unlockVault(
                     userId = userId,
-                    kdf = MOCK_PROFILE.toSdkParams(),
                     email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
                     privateKey = privateKey,
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = biometricsKey,
                     ),
@@ -1438,9 +1448,11 @@ class VaultRepositoryTest {
             coVerify {
                 vaultLockManager.unlockVault(
                     userId = userId,
-                    kdf = MOCK_PROFILE.toSdkParams(),
                     email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
                     privateKey = "mockPrivateKey-1",
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = biometricsKey,
                     ),
@@ -1473,9 +1485,11 @@ class VaultRepositoryTest {
             coEvery {
                 vaultLockManager.unlockVault(
                     userId = userId,
-                    kdf = MOCK_PROFILE.toSdkParams(),
                     email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
                     privateKey = privateKey,
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = authenticatorSyncUnlockKey,
                     ),
@@ -1498,9 +1512,11 @@ class VaultRepositoryTest {
             coVerify {
                 vaultLockManager.unlockVault(
                     userId = userId,
-                    kdf = MOCK_PROFILE.toSdkParams(),
                     email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
                     privateKey = "mockPrivateKey-1",
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = authenticatorSyncUnlockKey,
                     ),
@@ -1521,9 +1537,11 @@ class VaultRepositoryTest {
             coEvery {
                 vaultLockManager.unlockVault(
                     userId = userId,
-                    kdf = MOCK_PROFILE.toSdkParams(),
                     email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
                     privateKey = privateKey,
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = authenticatorSyncUnlockKey,
                     ),
@@ -1546,9 +1564,11 @@ class VaultRepositoryTest {
             coVerify {
                 vaultLockManager.unlockVault(
                     userId = userId,
-                    kdf = MOCK_PROFILE.toSdkParams(),
                     email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
                     privateKey = "mockPrivateKey-1",
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = authenticatorSyncUnlockKey,
                     ),
@@ -1668,14 +1688,15 @@ class VaultRepositoryTest {
             coVerify {
                 vaultLockManager.unlockVault(
                     userId = userId,
-                    kdf = MOCK_PROFILE.toSdkParams(),
                     email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
                     privateKey = "mockPrivateKey-1",
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.Password(
                         password = "mockPassword-1",
                         userKey = "mockKey-1",
                     ),
-
                     organizationKeys = createMockOrganizationKeys(number = 1),
                 )
             }
@@ -1725,9 +1746,11 @@ class VaultRepositoryTest {
             coVerify {
                 vaultLockManager.unlockVault(
                     userId = userId,
-                    kdf = MOCK_PROFILE.toSdkParams(),
                     email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
                     privateKey = "mockPrivateKey-1",
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.Password(
                         password = "mockPassword-1",
                         userKey = "mockKey-1",
@@ -1762,14 +1785,15 @@ class VaultRepositoryTest {
             coVerify {
                 vaultLockManager.unlockVault(
                     userId = userId,
-                    kdf = MOCK_PROFILE.toSdkParams(),
                     email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
                     privateKey = "mockPrivateKey-1",
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.Password(
                         password = "mockPassword-1",
                         userKey = "mockKey-1",
                     ),
-
                     organizationKeys = createMockOrganizationKeys(number = 1),
                 )
             }
@@ -1867,9 +1891,11 @@ class VaultRepositoryTest {
             coVerify {
                 vaultLockManager.unlockVault(
                     userId = userId,
-                    kdf = MOCK_PROFILE.toSdkParams(),
                     email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
                     privateKey = "mockPrivateKey-1",
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.Pin(
                         pin = "1234",
                         pinProtectedUserKey = "mockKey-1",
@@ -1896,9 +1922,11 @@ class VaultRepositoryTest {
             coVerify {
                 vaultLockManager.unlockVault(
                     userId = userId,
-                    kdf = MOCK_PROFILE.toSdkParams(),
                     email = "email",
+                    kdf = MOCK_PROFILE.toSdkParams(),
                     privateKey = "mockPrivateKey-1",
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.Pin(
                         pin = "1234",
                         pinProtectedUserKey = "mockKey-1",
@@ -4748,9 +4776,11 @@ class VaultRepositoryTest {
         coEvery {
             vaultLockManager.unlockVault(
                 userId = userId,
-                kdf = MOCK_PROFILE.toSdkParams(),
                 email = "email",
+                kdf = MOCK_PROFILE.toSdkParams(),
                 privateKey = "mockPrivateKey-1",
+                signingKey = null,
+                securityState = null,
                 initUserCryptoMethod = InitUserCryptoMethod.Password(
                     password = mockMasterPassword,
                     userKey = "mockKey-1",
@@ -4763,9 +4793,11 @@ class VaultRepositoryTest {
         coEvery {
             vaultLockManager.unlockVault(
                 userId = userId,
-                kdf = MOCK_PROFILE.toSdkParams(),
                 email = "email",
+                kdf = MOCK_PROFILE.toSdkParams(),
                 privateKey = "mockPrivateKey-1",
+                signingKey = null,
+                securityState = null,
                 initUserCryptoMethod = InitUserCryptoMethod.Pin(
                     pin = mockPin,
                     pinProtectedUserKey = "mockKey-1",
