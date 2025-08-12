@@ -194,6 +194,10 @@ fun VaultAddEditScreen(
             }
 
             is VaultAddEditEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
+
+            VaultAddEditEvent.NavigateToLearnMore -> {
+                intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
+            }
         }
     }
 

@@ -131,10 +131,15 @@ class AutoFillViewModel @Inject constructor(
         is AutoFillAction.BrowserAutofillSelected -> handleBrowserAutofillSelected(action)
         AutoFillAction.AboutPrivilegedAppsClick -> handleAboutPrivilegedAppsClick()
         AutoFillAction.PrivilegedAppsClick -> handlePrivilegedAppsClick()
+        AutoFillAction.LearnMoreClick -> handleLearnMoreClick()
     }
 
     private fun handlePrivilegedAppsClick() {
         sendEvent(AutoFillEvent.NavigateToPrivilegedAppsListScreen)
+    }
+
+    private fun handleLearnMoreClick() {
+        sendEvent(AutoFillEvent.NavigateToLearnMore)
     }
 
     private fun handleInternalAction(action: AutoFillAction.Internal) {
@@ -390,6 +395,11 @@ sealed class AutoFillEvent {
      * Navigate to the privileged apps list screen.
      */
     data object NavigateToPrivilegedAppsListScreen : AutoFillEvent()
+
+    /**
+     * Navigate to the learn more.
+     */
+    data object NavigateToLearnMore : AutoFillEvent()
 }
 
 /**
@@ -475,6 +485,11 @@ sealed class AutoFillAction {
      * User has clicked the privileged apps row.
      */
     data object PrivilegedAppsClick : AutoFillAction()
+
+    /**
+     * User has clicked the learn more help link.
+     */
+    data object LearnMoreClick : AutoFillAction()
 
     /**
      * Internal actions.

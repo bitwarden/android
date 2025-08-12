@@ -47,6 +47,7 @@ data class VaultAddEditLoginTypeHandlers(
     val onStartLoginCoachMarkTour: () -> Unit,
     val onDismissLearnAboutLoginsCard: () -> Unit,
     val onAuthenticatorHelpToolTipClick: () -> Unit,
+    val onLearnMoreClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -141,6 +142,11 @@ data class VaultAddEditLoginTypeHandlers(
                 onDismissLearnAboutLoginsCard = {
                     viewModel.trySendAction(
                         VaultAddEditAction.ItemType.LoginType.LearnAboutLoginsDismissed,
+                    )
+                },
+                onLearnMoreClick = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.LoginType.LearnMoreClick,
                     )
                 },
             )

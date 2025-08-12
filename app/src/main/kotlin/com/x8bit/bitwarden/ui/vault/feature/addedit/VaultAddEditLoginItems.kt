@@ -194,6 +194,7 @@ fun LazyListScope.vaultAddEditLoginItems(
             uriItem = uriItem,
             onUriValueChange = loginItemTypeHandlers.onUriValueChange,
             onUriItemRemoved = loginItemTypeHandlers.onRemoveUriClick,
+            onLearnMoreClick = loginItemTypeHandlers.onLearnMoreClick,
             cardStyle = cardStyle,
             defaultUriMatchType = defaultUriMatchType,
             modifier = Modifier

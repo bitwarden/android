@@ -1058,7 +1058,15 @@ class VaultAddEditViewModel @Inject constructor(
             VaultAddEditAction.ItemType.LoginType.AuthenticatorHelpToolTipClick -> {
                 handleAuthenticatorHelpToolTipClick()
             }
+
+            VaultAddEditAction.ItemType.LoginType.LearnMoreClick -> {
+                handleLearnMoreClick()
+            }
         }
+    }
+
+    private fun handleLearnMoreClick() {
+        sendEvent(VaultAddEditEvent.NavigateToLearnMore)
     }
 
     private fun handleStartLearnAboutLogins() {
@@ -2883,6 +2891,11 @@ sealed class VaultAddEditEvent {
      * Navigate the user to the tooltip URI for Authenticator key help.
      */
     data object NavigateToAuthenticatorKeyTooltipUri : VaultAddEditEvent()
+
+    /**
+     * Navigate the user to the learn more help page
+     */
+    data object NavigateToLearnMore : VaultAddEditEvent()
 }
 
 /**
@@ -3219,6 +3232,11 @@ sealed class VaultAddEditAction {
              * User has clicked the call to action on the authenticator help tooltip.
              */
             data object AuthenticatorHelpToolTipClick : LoginType()
+
+            /**
+             * User has clicked the call to action on the learn more help link.
+             */
+            data object LearnMoreClick : LoginType()
         }
 
         /**

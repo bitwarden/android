@@ -4,13 +4,13 @@ import android.content.res.Resources
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.core.net.toUri
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
@@ -45,6 +45,7 @@ fun VaultAddEditUriItem(
     onUriValueChange: (UriItem) -> Unit,
     cardStyle: CardStyle,
     defaultUriMatchType: UriMatchType,
+    onLearnMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
     resources: Resources = LocalContext.current.resources,
     intentManager: IntentManager = LocalIntentManager.current,
@@ -52,12 +53,11 @@ fun VaultAddEditUriItem(
     var shouldShowOptionsDialog by rememberSaveable { mutableStateOf(false) }
     var shouldShowMatchDialog by rememberSaveable { mutableStateOf(false) }
     var shouldShowAdvancedMatchDialog by rememberSaveable { mutableStateOf(false) }
-    var optionPendingConfirmation by rememberSaveable {
-        mutableStateOf<UriMatchDisplayType?>(
-            null,
-        )
-    }
+    var optionPendingConfirmation by rememberSaveable { mutableStateOf<UriMatchDisplayType?>(null) }
     var shouldShowLearnMoreMatchDetectionDialog by rememberSaveable { mutableStateOf(false) }
+    val defaultUriOption = remember(defaultUriMatchType) {
+        defaultUriMatchType.displayLabel.toString(resources)
+    }
 
     BitwardenTextField(
         label = stringResource(id = BitwardenString.website_uri),
@@ -104,20 +104,12 @@ fun VaultAddEditUriItem(
             onDismissRequest = { shouldShowMatchDialog = false },
         ) {
             BitwardenMultiSelectDialogContent(
-                options = uriMatchingOptions(
-                    defaultUriOption = defaultUriMatchType
-                        .displayLabel
-                        .invoke(),
-                ),
+                options = uriMatchingOptions(defaultUriOption = defaultUriOption),
                 selectedOption = MultiSelectOption.Row(
                     uriItem
                         .match
                         .toDisplayMatchType()
-                        .displayLabel(
-                            defaultUriOption = defaultUriMatchType
-                                .displayLabel
-                                .invoke(),
-                        )
+                        .displayLabel(defaultUriOption = defaultUriOption)
                         .invoke(),
                 ),
                 onOptionSelected = { selectedOption ->
@@ -127,11 +119,8 @@ fun VaultAddEditUriItem(
                         UriMatchDisplayType
                             .entries
                             .first {
-                                it.displayLabel(
-                                    defaultUriMatchType
-                                        .displayLabel
-                                        .toString(resources),
-                                ).invoke(resources) == selectedOption.title
+                                it.displayLabel(defaultUriOption)
+                                    .invoke(resources) == selectedOption.title
                             }
 
                     if (newSelectedType.isAdvancedMatching()) {
@@ -172,9 +161,9 @@ fun VaultAddEditUriItem(
     if (shouldShowLearnMoreMatchDetectionDialog) {
         LearnMoreAboutMatchDetectionDialog(
             uriMatchDisplayType = uriItem.match.toDisplayMatchType(),
-            defaultUriOption = defaultUriMatchType.displayLabel(),
+            defaultUriOption = defaultUriOption,
             onDialogConfirm = {
-                intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
+                onLearnMoreClick()
                 shouldShowLearnMoreMatchDetectionDialog = false
             },
             onDialogDismiss = {
@@ -193,22 +182,26 @@ private fun AdvancedMatchDetectionWarning(
 ) {
 
     val descriptionStringResId = when (pendingOption) {
-        UriMatchDisplayType.STARTS_WITH ->
-            BitwardenString.selected_matching_option_is_an_advanced_option
-
-        UriMatchDisplayType.REGULAR_EXPRESSION ->
-            BitwardenString.selected_matching_option_is_an_advanced_option_if_used_incorrectly
-
-        else -> {
-            return
+        UriMatchDisplayType.STARTS_WITH -> {
+            BitwardenString.advanced_option_with_increased_risk_of_exposing_credentials
         }
+
+        UriMatchDisplayType.REGULAR_EXPRESSION -> {
+            BitwardenString.advanced_option_increased_risk_exposing_credentials_used_incorrectly
+        }
+
+        UriMatchDisplayType.DEFAULT,
+        UriMatchDisplayType.HOST,
+        UriMatchDisplayType.BASE_DOMAIN,
+        UriMatchDisplayType.EXACT,
+        UriMatchDisplayType.NEVER,
+            ->
+            error("Unexpected option on AdvancedMatchDetectionWarning")
     }
 
     val nameOfSelectedMatchDisplayType = pendingOption
-        .displayLabel(
-            defaultUriOption = defaultUriMatchType
-                .displayLabel(),
-        ).invoke()
+        .displayLabel(defaultUriOption = defaultUriMatchType.displayLabel())
+        .invoke()
 
     BitwardenTwoButtonDialog(
         title = stringResource(
