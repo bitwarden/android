@@ -261,7 +261,6 @@ class AuthRepositoryTest {
     private val logsManager: LogsManager = mockk {
         every { setUserData(userId = any(), environmentType = any()) } just runs
     }
-
     private val repository: AuthRepository = AuthRepositoryImpl(
         clock = FIXED_CLOCK,
         accountsService = accountsService,
@@ -470,7 +469,7 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     fun `loading the policies should emit masterPasswordPolicyFlow if the password fails any checks`() =
         runTest {
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
             coEvery {
                 identityService.preLogin(email = EMAIL)
             } returns PRE_LOGIN_SUCCESS.asSuccess()
@@ -489,17 +488,25 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.Password(
                         password = PASSWORD,
                         userKey = successResponse.key!!,
                     ),
-                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                 )
             } returns VaultUnlockResult.Success
             coEvery { vaultRepository.syncIfNecessary() } just runs
             every {
-                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
                     previousUserState = null,
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
@@ -531,9 +538,9 @@ class AuthRepositoryTest {
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
             coVerify { identityService.preLogin(email = EMAIL) }
-            fakeAuthDiskSource.assertPrivateKey(
+            fakeAuthDiskSource.assertAccountKeys(
                 userId = USER_ID_1,
-                privateKey = "privateKey",
+                accountKeys = ACCOUNT_KEYS,
             )
             fakeAuthDiskSource.assertUserKey(
                 userId = USER_ID_1,
@@ -556,11 +563,19 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.Password(
                         password = PASSWORD,
                         userKey = successResponse.key!!,
                     ),
-                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                 )
                 vaultRepository.syncIfNecessary()
@@ -1464,66 +1479,204 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `completeTdeLogin without private key fails`() = runTest {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        val requestPrivateKey = "requestPrivateKey"
-        val asymmetricalKey = "asymmetricalKey"
-        val result = repository.completeTdeLogin(
-            requestPrivateKey = requestPrivateKey,
-            asymmetricalKey = asymmetricalKey,
-        )
-        assertEquals(
-            LoginResult.Error(errorMessage = null, error = MissingPropertyException("Private Key")),
-            result,
-        )
-    }
-
-    @Test
-    fun `completeTdeLogin should unlock the vault and return success`() = runTest {
-        val requestPrivateKey = "requestPrivateKey"
-        val asymmetricalKey = "asymmetricalKey"
-        val privateKey = "privateKey"
-        val orgKeys = mapOf("orgId" to "orgKey")
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        fakeAuthDiskSource.storePrivateKey(userId = USER_ID_1, privateKey = privateKey)
-        fakeAuthDiskSource.storeOrganizationKeys(userId = USER_ID_1, organizationKeys = orgKeys)
-        coEvery {
-            vaultRepository.unlockVault(
-                userId = USER_ID_1,
-                email = SINGLE_USER_STATE_1.activeAccount.profile.email,
-                kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                privateKey = privateKey,
-                initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
-                    requestPrivateKey = requestPrivateKey,
-                    method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
-                ),
-                organizationKeys = orgKeys,
+    fun `completeTdeLogin without private key fails when EnrollAeadOnKeyRotation is disabled`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            val requestPrivateKey = "requestPrivateKey"
+            val asymmetricalKey = "asymmetricalKey"
+            val result = repository.completeTdeLogin(
+                requestPrivateKey = requestPrivateKey,
+                asymmetricalKey = asymmetricalKey,
             )
-        } returns VaultUnlockResult.Success
-        coEvery { vaultRepository.syncIfNecessary() } just runs
-
-        val result = repository.completeTdeLogin(
-            requestPrivateKey = requestPrivateKey,
-            asymmetricalKey = asymmetricalKey,
-        )
-
-        coVerify(exactly = 1) {
-            vaultRepository.unlockVault(
-                userId = USER_ID_1,
-                email = SINGLE_USER_STATE_1.activeAccount.profile.email,
-                kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                privateKey = privateKey,
-                initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
-                    requestPrivateKey = requestPrivateKey,
-                    method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
+            assertEquals(
+                LoginResult.Error(
+                    errorMessage = null,
+                    error = MissingPropertyException("Private Key"),
                 ),
-                organizationKeys = orgKeys,
+                result,
             )
-            vaultRepository.syncIfNecessary()
-            settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
         }
-        assertEquals(LoginResult.Success, result)
-    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `completeTdeLogin without private key and account keys fails when EnrollAeadOnKeyRotation is enabled`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            val requestPrivateKey = "requestPrivateKey"
+            val asymmetricalKey = "asymmetricalKey"
+            val result = repository.completeTdeLogin(
+                requestPrivateKey = requestPrivateKey,
+                asymmetricalKey = asymmetricalKey,
+            )
+            assertEquals(
+                LoginResult.Error(
+                    errorMessage = null,
+                    error = MissingPropertyException("Private Key"),
+                ),
+                result,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `completeTdeLogin without account keys unlocks vault with private key when EnrollAeadOnKeyRotation is enabled`() =
+        runTest {
+            val privateKey = "privateKey"
+            val requestPrivateKey = "requestPrivateKey"
+            val asymmetricalKey = "asymmetricalKey"
+            val orgKeys = mapOf("orgId" to "orgKey")
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storePrivateKey(userId = USER_ID_1, privateKey = privateKey)
+            fakeAuthDiskSource.storeOrganizationKeys(userId = USER_ID_1, organizationKeys = orgKeys)
+            fakeAuthDiskSource.storeAccountKeys(userId = USER_ID_1, accountKeys = null)
+            coEvery {
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = SINGLE_USER_STATE_1.activeAccount.profile.email,
+                    kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
+                    privateKey = privateKey,
+                    signingKey = null,
+                    securityState = null,
+                    initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                        requestPrivateKey = requestPrivateKey,
+                        method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
+                    ),
+                    organizationKeys = orgKeys,
+                )
+            } returns VaultUnlockResult.Success
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+
+            val result = repository.completeTdeLogin(
+                requestPrivateKey = requestPrivateKey,
+                asymmetricalKey = asymmetricalKey,
+            )
+            coVerify(exactly = 1) {
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = SINGLE_USER_STATE_1.activeAccount.profile.email,
+                    kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
+                    privateKey = privateKey,
+                    signingKey = null,
+                    securityState = null,
+                    initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                        requestPrivateKey = requestPrivateKey,
+                        method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
+                    ),
+                    organizationKeys = orgKeys,
+                )
+                vaultRepository.syncIfNecessary()
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
+            }
+            assertEquals(LoginResult.Success, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `completeTdeLogin unlocks vault with account keys when EnrollAeadOnKeyRotation is enabled`() =
+        runTest {
+            val requestPrivateKey = "requestPrivateKey"
+            val asymmetricKey = "asymmetricalKey"
+            val privateKey = "privateKey"
+            val accountKeys = createMockAccountKeysJson(number = 1)
+            val orgKeys = mapOf("orgId" to "orgKey")
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storePrivateKey(userId = USER_ID_1, privateKey = privateKey)
+            fakeAuthDiskSource.storeAccountKeys(userId = USER_ID_1, accountKeys = accountKeys)
+            fakeAuthDiskSource.storeOrganizationKeys(userId = USER_ID_1, organizationKeys = orgKeys)
+            coEvery {
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = SINGLE_USER_STATE_1.activeAccount.profile.email,
+                    kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
+                    privateKey = accountKeys.publicKeyEncryptionKeyPair.wrappedPrivateKey,
+                    signingKey = accountKeys.signatureKeyPair?.wrappedSigningKey,
+                    securityState = accountKeys.securityState?.securityState,
+                    initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                        requestPrivateKey = requestPrivateKey,
+                        method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricKey),
+                    ),
+                    organizationKeys = orgKeys,
+                )
+            } returns VaultUnlockResult.Success
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+
+            val result = repository.completeTdeLogin(
+                requestPrivateKey = requestPrivateKey,
+                asymmetricalKey = asymmetricKey,
+            )
+
+            coVerify(exactly = 1) {
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = SINGLE_USER_STATE_1.activeAccount.profile.email,
+                    kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
+                    privateKey = accountKeys.publicKeyEncryptionKeyPair.wrappedPrivateKey,
+                    signingKey = accountKeys.signatureKeyPair?.wrappedSigningKey,
+                    securityState = accountKeys.securityState?.securityState,
+                    initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                        requestPrivateKey = requestPrivateKey,
+                        method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricKey),
+                    ),
+                    organizationKeys = orgKeys,
+                )
+                vaultRepository.syncIfNecessary()
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
+            }
+            assertEquals(LoginResult.Success, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `completeTdeLogin unlocks vault with private key when EnrollAeadOnKeyRotation is disabled`() =
+        runTest {
+            val requestPrivateKey = "requestPrivateKey"
+            val asymmetricalKey = "asymmetricalKey"
+            val privateKey = "privateKey"
+            val orgKeys = mapOf("orgId" to "orgKey")
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storePrivateKey(userId = USER_ID_1, privateKey = privateKey)
+            fakeAuthDiskSource.storeOrganizationKeys(userId = USER_ID_1, organizationKeys = orgKeys)
+            coEvery {
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = SINGLE_USER_STATE_1.activeAccount.profile.email,
+                    kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
+                    privateKey = privateKey,
+                    signingKey = null,
+                    securityState = null,
+                    initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                        requestPrivateKey = requestPrivateKey,
+                        method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
+                    ),
+                    organizationKeys = orgKeys,
+                )
+            } returns VaultUnlockResult.Success
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+
+            val result = repository.completeTdeLogin(
+                requestPrivateKey = requestPrivateKey,
+                asymmetricalKey = asymmetricalKey,
+            )
+
+            coVerify(exactly = 1) {
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = SINGLE_USER_STATE_1.activeAccount.profile.email,
+                    kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
+                    privateKey = privateKey,
+                    signingKey = null,
+                    securityState = null,
+                    initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                        requestPrivateKey = requestPrivateKey,
+                        method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
+                    ),
+                    organizationKeys = orgKeys,
+                )
+                vaultRepository.syncIfNecessary()
+                settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
+            }
+            assertEquals(LoginResult.Success, result)
+        }
 
     @Test
     fun `completeTdeLogin where vault unlock fails should return LoginResult error`() = runTest {
@@ -1541,6 +1694,8 @@ class AuthRepositoryTest {
                 email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                 kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
                 privateKey = privateKey,
+                signingKey = null,
+                securityState = null,
                 initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                     requestPrivateKey = requestPrivateKey,
                     method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
@@ -1561,6 +1716,8 @@ class AuthRepositoryTest {
                 email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                 kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
                 privateKey = privateKey,
+                signingKey = null,
+                securityState = null,
                 initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                     requestPrivateKey = requestPrivateKey,
                     method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
@@ -1754,7 +1911,7 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     fun `login get token succeeds should return Success, unlockVault, update AuthState, update stored keys, and sync`() =
         runTest {
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
             coEvery {
                 identityService.preLogin(email = EMAIL)
             } returns PRE_LOGIN_SUCCESS.asSuccess()
@@ -1773,17 +1930,25 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.Password(
                         password = PASSWORD,
                         userKey = successResponse.key!!,
                     ),
-                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                 )
             } returns VaultUnlockResult.Success
             coEvery { vaultRepository.syncIfNecessary() } just runs
             every {
-                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
                     previousUserState = null,
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
@@ -1795,6 +1960,10 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertPrivateKey(
                 userId = USER_ID_1,
                 privateKey = "privateKey",
+            )
+            fakeAuthDiskSource.assertAccountKeys(
+                userId = USER_ID_1,
+                accountKeys = ACCOUNT_KEYS,
             )
             fakeAuthDiskSource.assertUserKey(
                 userId = USER_ID_1,
@@ -1817,11 +1986,19 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.Password(
                         password = PASSWORD,
                         userKey = successResponse.key!!,
                     ),
-                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                 )
                 vaultRepository.syncIfNecessary()
@@ -1837,7 +2014,7 @@ class AuthRepositoryTest {
     @Test
     fun `login should return Error result when get token succeeds but unlock vault fails`() =
         runTest {
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
             val expectedErrorMessage = "crypto key failure"
 
             coEvery {
@@ -1859,11 +2036,19 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.Password(
                         password = PASSWORD,
                         userKey = successResponse.key!!,
                     ),
-                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                 )
             } returns VaultUnlockResult.AuthenticationError(
@@ -1872,7 +2057,7 @@ class AuthRepositoryTest {
             )
             coEvery { vaultRepository.syncIfNecessary() } just runs
             every {
-                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
                     previousUserState = null,
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
@@ -1887,6 +2072,10 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertPrivateKey(
                 userId = USER_ID_1,
                 privateKey = null,
+            )
+            fakeAuthDiskSource.assertAccountKeys(
+                userId = USER_ID_1,
+                accountKeys = null,
             )
             fakeAuthDiskSource.assertUserKey(
                 userId = USER_ID_1,
@@ -1910,11 +2099,19 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.Password(
                         password = PASSWORD,
                         userKey = successResponse.key!!,
                     ),
-                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                 )
             }
@@ -1935,7 +2132,7 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     fun `login get token succeeds with null keys and hasMasterPassword false should not call unlockVault`() =
         runTest {
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
                 key = null,
                 privateKey = null,
                 userDecryptionOptions = UserDecryptionOptionsJson(
@@ -1997,8 +2194,16 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = any(),
-                    privateKey = any(),
                     organizationKeys = null,
                 )
             }
@@ -2013,7 +2218,7 @@ class AuthRepositoryTest {
             repository.hasPendingAccountAddition = true
 
             // Set up login for User 1
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
             coEvery {
                 identityService.preLogin(email = EMAIL)
             } returns PRE_LOGIN_SUCCESS.asSuccess()
@@ -2032,17 +2237,25 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.Password(
                         password = PASSWORD,
                         userKey = successResponse.key!!,
                     ),
-                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                 )
             } returns VaultUnlockResult.Success
             coEvery { vaultRepository.syncIfNecessary() } just runs
             every {
-                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
                     previousUserState = SINGLE_USER_STATE_2,
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
@@ -2056,6 +2269,10 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertPrivateKey(
                 userId = USER_ID_1,
                 privateKey = "privateKey",
+            )
+            fakeAuthDiskSource.assertAccountKeys(
+                userId = USER_ID_1,
+                accountKeys = ACCOUNT_KEYS,
             )
             fakeAuthDiskSource.assertUserKey(
                 userId = USER_ID_1,
@@ -2074,11 +2291,19 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.Password(
                         password = PASSWORD,
                         userKey = successResponse.key!!,
                     ),
-                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                 )
                 vaultRepository.syncIfNecessary()
@@ -2171,7 +2396,7 @@ class AuthRepositoryTest {
         }
 
         // Login with two factor data.
-        val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+        val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
             twoFactorToken = "twoFactorTokenToStore",
         )
         coEvery {
@@ -2190,11 +2415,19 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 email = EMAIL,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
+                privateKey = successResponse.accountKeys!!
+                    .publicKeyEncryptionKeyPair
+                    .wrappedPrivateKey,
+                signingKey = successResponse.accountKeys
+                    ?.signatureKeyPair
+                    ?.wrappedSigningKey,
+                securityState = successResponse.accountKeys
+                    ?.securityState
+                    ?.securityState,
                 initUserCryptoMethod = InitUserCryptoMethod.Password(
                     password = PASSWORD,
                     userKey = successResponse.key!!,
                 ),
-                privateKey = successResponse.privateKey!!,
                 organizationKeys = null,
             )
         } returns VaultUnlockResult.Success
@@ -2261,7 +2494,7 @@ class AuthRepositoryTest {
             }
 
             // Login with two factor data.
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
                 twoFactorToken = "twoFactorTokenToStore",
             )
             coEvery {
@@ -2281,11 +2514,19 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.Password(
                         password = PASSWORD,
                         userKey = successResponse.key!!,
                     ),
-                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                 )
             } returns VaultUnlockResult.InvalidStateError(error = error)
@@ -2322,7 +2563,7 @@ class AuthRepositoryTest {
             method = TwoFactorAuthMethod.REMEMBER.value.toString(),
             remember = false,
         )
-        val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+        val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
         coEvery {
             identityService.preLogin(email = EMAIL)
         } returns PRE_LOGIN_SUCCESS.asSuccess()
@@ -2342,17 +2583,25 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 email = EMAIL,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
+                privateKey = successResponse.accountKeys!!
+                    .publicKeyEncryptionKeyPair
+                    .wrappedPrivateKey,
+                signingKey = successResponse.accountKeys
+                    ?.signatureKeyPair
+                    ?.wrappedSigningKey,
+                securityState = successResponse.accountKeys
+                    ?.securityState
+                    ?.securityState,
                 initUserCryptoMethod = InitUserCryptoMethod.Password(
                     password = PASSWORD,
                     userKey = successResponse.key!!,
                 ),
-                privateKey = successResponse.privateKey!!,
                 organizationKeys = null,
             )
         } returns VaultUnlockResult.Success
         coEvery { vaultRepository.syncIfNecessary() } just runs
         every {
-            GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+            GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
                 previousUserState = null,
                 environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
             )
@@ -2364,6 +2613,10 @@ class AuthRepositoryTest {
         fakeAuthDiskSource.assertPrivateKey(
             userId = USER_ID_1,
             privateKey = "privateKey",
+        )
+        fakeAuthDiskSource.assertAccountKeys(
+            userId = USER_ID_1,
+            accountKeys = ACCOUNT_KEYS,
         )
         fakeAuthDiskSource.assertUserKey(
             userId = USER_ID_1,
@@ -2383,11 +2636,19 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 email = EMAIL,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
+                privateKey = successResponse.accountKeys!!
+                    .publicKeyEncryptionKeyPair
+                    .wrappedPrivateKey,
+                signingKey = successResponse.accountKeys
+                    ?.signatureKeyPair
+                    ?.wrappedSigningKey,
+                securityState = successResponse.accountKeys
+                    ?.securityState
+                    ?.securityState,
                 initUserCryptoMethod = InitUserCryptoMethod.Password(
                     password = PASSWORD,
                     userKey = successResponse.key!!,
                 ),
-                privateKey = successResponse.privateKey!!,
                 organizationKeys = null,
             )
             vaultRepository.syncIfNecessary()
@@ -2546,7 +2807,7 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     fun `login with device get token succeeds should return Success, update AuthState, update stored keys, and sync with MasteryKey`() =
         runTest {
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -2560,7 +2821,7 @@ class AuthRepositoryTest {
             } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
             every {
-                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
                     previousUserState = null,
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
@@ -2570,8 +2831,15 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.privateKey!!,
-                    organizationKeys = null,
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                         method = AuthRequestMethod.MasterKey(
@@ -2579,6 +2847,7 @@ class AuthRepositoryTest {
                             protectedMasterKey = DEVICE_ASYMMETRICAL_KEY,
                         ),
                     ),
+                    organizationKeys = null,
                 )
             } returns VaultUnlockResult.Success
             val result = repository.login(
@@ -2594,6 +2863,10 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertPrivateKey(
                 userId = USER_ID_1,
                 privateKey = "privateKey",
+            )
+            fakeAuthDiskSource.assertAccountKeys(
+                userId = USER_ID_1,
+                accountKeys = ACCOUNT_KEYS,
             )
             fakeAuthDiskSource.assertUserKey(
                 userId = USER_ID_1,
@@ -2614,8 +2887,15 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.privateKey!!,
-                    organizationKeys = null,
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                         method = AuthRequestMethod.MasterKey(
@@ -2623,6 +2903,7 @@ class AuthRepositoryTest {
                             protectedMasterKey = DEVICE_ASYMMETRICAL_KEY,
                         ),
                     ),
+                    organizationKeys = null,
                 )
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
                 settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
@@ -2637,7 +2918,7 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     fun `login with device should return Error result when get token succeeds but unlock vault fails`() =
         runTest {
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -2651,7 +2932,7 @@ class AuthRepositoryTest {
             } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
             every {
-                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
                     previousUserState = null,
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
@@ -2661,8 +2942,15 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.privateKey!!,
-                    organizationKeys = null,
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                         method = AuthRequestMethod.MasterKey(
@@ -2670,6 +2958,7 @@ class AuthRepositoryTest {
                             protectedMasterKey = DEVICE_ASYMMETRICAL_KEY,
                         ),
                     ),
+                    organizationKeys = null,
                 )
             } returns VaultUnlockResult.Success
             val result = repository.login(
@@ -2685,6 +2974,10 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertPrivateKey(
                 userId = USER_ID_1,
                 privateKey = "privateKey",
+            )
+            fakeAuthDiskSource.assertAccountKeys(
+                userId = USER_ID_1,
+                accountKeys = ACCOUNT_KEYS,
             )
             fakeAuthDiskSource.assertUserKey(
                 userId = USER_ID_1,
@@ -2705,8 +2998,15 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.privateKey!!,
-                    organizationKeys = null,
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                         method = AuthRequestMethod.MasterKey(
@@ -2714,6 +3014,7 @@ class AuthRepositoryTest {
                             protectedMasterKey = DEVICE_ASYMMETRICAL_KEY,
                         ),
                     ),
+                    organizationKeys = null,
                 )
             }
             assertEquals(
@@ -2817,7 +3118,7 @@ class AuthRepositoryTest {
         }
 
         // Login with two factor data.
-        val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+        val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
             twoFactorToken = "twoFactorTokenToStore",
         )
         coEvery {
@@ -2844,7 +3145,15 @@ class AuthRepositoryTest {
                 userId = SINGLE_USER_STATE_1.activeUserId,
                 email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                 kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                privateKey = successResponse.privateKey!!,
+                privateKey = successResponse.accountKeys!!
+                    .publicKeyEncryptionKeyPair
+                    .wrappedPrivateKey,
+                signingKey = successResponse.accountKeys
+                    ?.signatureKeyPair
+                    ?.wrappedSigningKey,
+                securityState = successResponse.accountKeys
+                    ?.securityState
+                    ?.securityState,
                 initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                     requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                     method = AuthRequestMethod.MasterKey(
@@ -2951,7 +3260,7 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     fun `SSO login get token succeeds should return Success, update AuthState, update stored keys, and sync`() =
         runTest {
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -2965,7 +3274,7 @@ class AuthRepositoryTest {
             } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
             every {
-                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
                     previousUserState = null,
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
@@ -2982,6 +3291,10 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertPrivateKey(
                 userId = USER_ID_1,
                 privateKey = "privateKey",
+            )
+            fakeAuthDiskSource.assertAccountKeys(
+                userId = USER_ID_1,
+                accountKeys = ACCOUNT_KEYS,
             )
             fakeAuthDiskSource.assertUserKey(
                 userId = USER_ID_1,
@@ -3012,7 +3325,7 @@ class AuthRepositoryTest {
     fun `SSO login get token succeeds with key connector and master password should return success and not unlock the vault`() =
         runTest {
             val keyConnectorUrl = "www.example.com"
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
                 keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = true,
@@ -3047,6 +3360,7 @@ class AuthRepositoryTest {
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = "privateKey")
+            fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = ACCOUNT_KEYS)
             fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = "key")
             coVerify(exactly = 1) {
                 identityService.getToken(
@@ -3072,7 +3386,7 @@ class AuthRepositoryTest {
         runTest {
             val error = Throwable("Fail!")
             val keyConnectorUrl = "www.example.com"
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
                 keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = false,
@@ -3113,6 +3427,7 @@ class AuthRepositoryTest {
 
             assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+            fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
             fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
             coVerify(exactly = 1) {
                 identityService.getToken(
@@ -3170,11 +3485,13 @@ class AuthRepositoryTest {
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
                     privateKey = "privateKey",
-                    organizationKeys = null,
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
                         masterKey = masterKey,
                         userKey = "key",
                     ),
+                    organizationKeys = null,
                 )
             } returns VaultUnlockResult.Success
             coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -3215,11 +3532,13 @@ class AuthRepositoryTest {
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
                     privateKey = "privateKey",
-                    organizationKeys = null,
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
                         masterKey = masterKey,
                         userKey = "key",
                     ),
+                    organizationKeys = null,
                 )
                 vaultRepository.syncIfNecessary()
             }
@@ -3235,7 +3554,7 @@ class AuthRepositoryTest {
         runTest {
             val error = Throwable("Fail!")
             val keyConnectorUrl = "www.example.com"
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
                 keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = false,
@@ -3243,6 +3562,7 @@ class AuthRepositoryTest {
                 ),
                 key = null,
                 privateKey = null,
+                accountKeys = null,
             )
             coEvery {
                 identityService.getToken(
@@ -3287,6 +3607,7 @@ class AuthRepositoryTest {
             val continueResult = repository.continueKeyConnectorLogin()
             assertEquals(LoginResult.Error(errorMessage = null, error = error), continueResult)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+            fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
             fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
             coVerify(exactly = 1) {
                 identityService.getToken(
@@ -3360,11 +3681,13 @@ class AuthRepositoryTest {
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
                     privateKey = PRIVATE_KEY,
-                    organizationKeys = null,
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
                         masterKey = masterKey,
                         userKey = ENCRYPTED_USER_KEY,
                     ),
+                    organizationKeys = null,
                 )
             } returns VaultUnlockResult.Success
             coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -3414,11 +3737,13 @@ class AuthRepositoryTest {
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
                     privateKey = "privateKey",
-                    organizationKeys = null,
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
                         masterKey = masterKey,
                         userKey = ENCRYPTED_USER_KEY,
                     ),
+                    organizationKeys = null,
                 )
                 vaultRepository.syncIfNecessary()
             }
@@ -3433,7 +3758,7 @@ class AuthRepositoryTest {
     fun `SSO login get token succeeds with key connector when key, privateKey and master password are null should return ConfirmKeyConnectorDomain`() =
         runTest {
             val keyConnectorUrl = "www.example.com"
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
                 keyConnectorUrl = keyConnectorUrl,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     hasMasterPassword = false,
@@ -3441,6 +3766,7 @@ class AuthRepositoryTest {
                 ),
                 key = null,
                 privateKey = null,
+                accountKeys = null,
             )
             coEvery {
                 identityService.getToken(
@@ -3530,11 +3856,13 @@ class AuthRepositoryTest {
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
                     privateKey = PRIVATE_KEY,
-                    organizationKeys = null,
+                    signingKey = null,
+                    securityState = null,
                     initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
                         masterKey = masterKey,
                         userKey = ENCRYPTED_USER_KEY,
                     ),
+                    organizationKeys = null,
                 )
             } returns VaultUnlockResult.Success
 
@@ -3576,7 +3904,7 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     fun `login with device get token succeeds should return Success, update AuthState, update stored keys, and sync with UserKey`() =
         runTest {
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -3590,7 +3918,7 @@ class AuthRepositoryTest {
             } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
             every {
-                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
                     previousUserState = null,
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
@@ -3600,14 +3928,22 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.privateKey!!,
-                    organizationKeys = null,
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                         method = AuthRequestMethod.UserKey(
                             protectedUserKey = DEVICE_ASYMMETRICAL_KEY,
                         ),
                     ),
+                    organizationKeys = null,
                 )
             } returns VaultUnlockResult.Success
             val result = repository.login(
@@ -3623,6 +3959,10 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertPrivateKey(
                 userId = USER_ID_1,
                 privateKey = "privateKey",
+            )
+            fakeAuthDiskSource.assertAccountKeys(
+                userId = USER_ID_1,
+                accountKeys = ACCOUNT_KEYS,
             )
             fakeAuthDiskSource.assertUserKey(
                 userId = USER_ID_1,
@@ -3643,14 +3983,22 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.privateKey!!,
-                    organizationKeys = null,
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                         method = AuthRequestMethod.UserKey(
                             protectedUserKey = DEVICE_ASYMMETRICAL_KEY,
                         ),
                     ),
+                    organizationKeys = null,
                 )
             }
             assertEquals(
@@ -3666,7 +4014,7 @@ class AuthRepositoryTest {
         runTest {
             val deviceKey = "deviceKey"
             fakeAuthDiskSource.storeDeviceKey(USER_ID_1, deviceKey)
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
                 key = null,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS,
             )
@@ -3700,6 +4048,7 @@ class AuthRepositoryTest {
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = "privateKey")
+            fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = ACCOUNT_KEYS)
             fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
             fakeAuthDiskSource.assertDeviceKey(userId = USER_ID_1, deviceKey = null)
             assertEquals(SINGLE_USER_STATE_1, fakeAuthDiskSource.userState)
@@ -3728,7 +4077,7 @@ class AuthRepositoryTest {
             val encryptedUserKey = "encryptedUserKey"
             val encryptedPrivateKey = "encryptedPrivateKey"
             fakeAuthDiskSource.storeDeviceKey(USER_ID_1, deviceKey)
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
                 key = null,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS.copy(
                     trustedDeviceUserDecryptionOptions = TRUSTED_DEVICE_DECRYPTION_OPTIONS.copy(
@@ -3742,7 +4091,15 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                     kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                    privateKey = requireNotNull(successResponse.privateKey),
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.DeviceKey(
                         deviceKey = deviceKey,
                         protectedDevicePrivateKey = encryptedPrivateKey,
@@ -3781,6 +4138,7 @@ class AuthRepositoryTest {
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = "privateKey")
+            fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = ACCOUNT_KEYS)
             fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
             fakeAuthDiskSource.assertDeviceKey(userId = USER_ID_1, deviceKey = deviceKey)
             assertEquals(SINGLE_USER_STATE_1, fakeAuthDiskSource.userState)
@@ -3798,7 +4156,15 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                     kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                    privateKey = requireNotNull(successResponse.privateKey),
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.DeviceKey(
                         deviceKey = deviceKey,
                         protectedDevicePrivateKey = encryptedPrivateKey,
@@ -3823,7 +4189,7 @@ class AuthRepositoryTest {
                 requestFingerprint = "fingerprint",
                 requestAccessCode = "accessCode",
             )
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
                 key = null,
                 userDecryptionOptions = USER_DECRYPTION_OPTIONS,
             )
@@ -3840,7 +4206,15 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                     kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                    privateKey = requireNotNull(successResponse.privateKey),
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = pendingAuthRequest.requestPrivateKey,
                         method = AuthRequestMethod.UserKey(protectedUserKey = authRequestKey),
@@ -3878,6 +4252,7 @@ class AuthRepositoryTest {
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = "privateKey")
+            fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = ACCOUNT_KEYS)
             fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = authRequestKey)
             assertEquals(SINGLE_USER_STATE_1, fakeAuthDiskSource.userState)
             coVerify(exactly = 1) {
@@ -3894,7 +4269,15 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                     kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                    privateKey = requireNotNull(successResponse.privateKey),
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = pendingAuthRequest.requestPrivateKey,
                         method = AuthRequestMethod.UserKey(protectedUserKey = authRequestKey),
@@ -3917,7 +4300,7 @@ class AuthRepositoryTest {
             repository.hasPendingAccountAddition = true
 
             // Set up login for User 1
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -3931,7 +4314,7 @@ class AuthRepositoryTest {
             } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
             every {
-                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
                     previousUserState = SINGLE_USER_STATE_2,
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
@@ -3950,6 +4333,10 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertPrivateKey(
                 userId = USER_ID_1,
                 privateKey = "privateKey",
+            )
+            fakeAuthDiskSource.assertAccountKeys(
+                userId = USER_ID_1,
+                accountKeys = ACCOUNT_KEYS,
             )
             fakeAuthDiskSource.assertUserKey(
                 userId = USER_ID_1,
@@ -4068,7 +4455,7 @@ class AuthRepositoryTest {
         }
 
         // Login with two factor data.
-        val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+        val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.copy(
             twoFactorToken = "twoFactorTokenToStore",
         )
         coEvery {
@@ -4112,7 +4499,7 @@ class AuthRepositoryTest {
             method = TwoFactorAuthMethod.REMEMBER.value.toString(),
             remember = false,
         )
-        val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+        val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
         coEvery {
             identityService.getToken(
                 email = EMAIL,
@@ -4127,7 +4514,7 @@ class AuthRepositoryTest {
         } returns successResponse.asSuccess()
         coEvery { vaultRepository.syncIfNecessary() } just runs
         every {
-            GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+            GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
                 previousUserState = null,
                 environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
             )
@@ -4144,6 +4531,10 @@ class AuthRepositoryTest {
         fakeAuthDiskSource.assertPrivateKey(
             userId = USER_ID_1,
             privateKey = "privateKey",
+        )
+        fakeAuthDiskSource.assertAccountKeys(
+            userId = USER_ID_1,
+            accountKeys = ACCOUNT_KEYS,
         )
         fakeAuthDiskSource.assertUserKey(
             userId = USER_ID_1,
@@ -4805,6 +5196,7 @@ class AuthRepositoryTest {
         assertEquals(SetPasswordResult.Error(error = NoActiveUserException()), result)
         fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+        fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
     }
 
@@ -4866,6 +5258,7 @@ class AuthRepositoryTest {
         assertEquals(SetPasswordResult.Error(error = error), result)
         fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+        fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
     }
 
@@ -4906,6 +5299,7 @@ class AuthRepositoryTest {
         assertEquals(SetPasswordResult.Error(error = error), result)
         fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+        fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
     }
 
@@ -4965,6 +5359,7 @@ class AuthRepositoryTest {
         assertEquals(SetPasswordResult.Error(error = error), result)
         fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+        fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
     }
 
@@ -5180,6 +5575,7 @@ class AuthRepositoryTest {
             passwordHash = passwordHash,
         )
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+        fakeAuthDiskSource.assertAccountKeys(userId = USER_ID_1, accountKeys = null)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
         fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1_WITH_PASS)
         coVerify(exactly = 1) {
@@ -6427,7 +6823,7 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     fun `on successful login a new user should have onboarding status set if has not previously logged in`() =
         runTest {
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
             coEvery {
                 identityService.preLogin(email = EMAIL)
             } returns PRE_LOGIN_SUCCESS.asSuccess()
@@ -6446,17 +6842,25 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.Password(
                         password = PASSWORD,
                         userKey = successResponse.key!!,
                     ),
-                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                 )
             } returns VaultUnlockResult.Success
             coEvery { vaultRepository.syncIfNecessary() } just runs
             every {
-                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
                     previousUserState = null,
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
@@ -6469,6 +6873,10 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertPrivateKey(
                 userId = USER_ID_1,
                 privateKey = "privateKey",
+            )
+            fakeAuthDiskSource.assertAccountKeys(
+                userId = USER_ID_1,
+                accountKeys = ACCOUNT_KEYS,
             )
             fakeAuthDiskSource.assertUserKey(
                 userId = USER_ID_1,
@@ -6485,7 +6893,7 @@ class AuthRepositoryTest {
     @Test
     fun `on successful login does not set onboarding status if user has previously logged in`() =
         runTest {
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
             coEvery {
                 identityService.preLogin(email = EMAIL)
             } returns PRE_LOGIN_SUCCESS.asSuccess()
@@ -6504,17 +6912,25 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = successResponse.accountKeys!!
+                        .publicKeyEncryptionKeyPair
+                        .wrappedPrivateKey,
+                    signingKey = successResponse.accountKeys
+                        ?.signatureKeyPair
+                        ?.wrappedSigningKey,
+                    securityState = successResponse.accountKeys
+                        ?.securityState
+                        ?.securityState,
                     initUserCryptoMethod = InitUserCryptoMethod.Password(
                         password = PASSWORD,
                         userKey = successResponse.key!!,
                     ),
-                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                 )
             } returns VaultUnlockResult.Success
             coEvery { vaultRepository.syncIfNecessary() } just runs
             every {
-                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
                     previousUserState = null,
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
@@ -6527,6 +6943,10 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertPrivateKey(
                 userId = USER_ID_1,
                 privateKey = "privateKey",
+            )
+            fakeAuthDiskSource.assertAccountKeys(
+                userId = USER_ID_1,
+                accountKeys = ACCOUNT_KEYS,
             )
             fakeAuthDiskSource.assertUserKey(
                 userId = USER_ID_1,
@@ -6671,6 +7091,7 @@ class AuthRepositoryTest {
         private const val USER_ID_2 = "b9d32ec0-6497-4582-9798-b350f53bfa02"
         private const val ORGANIZATION_IDENTIFIER = "organizationIdentifier"
         private val ORGANIZATIONS = listOf(createMockOrganization(number = 0))
+        private val ACCOUNT_KEYS = createMockAccountKeysJson(number = 1)
         private val TWO_FACTOR_AUTH_METHODS_DATA = mapOf(
             TwoFactorAuthMethod.EMAIL to JsonObject(
                 mapOf("Email" to JsonPrimitive("ex***@email.com")),
@@ -6704,6 +7125,13 @@ class AuthRepositoryTest {
             trustedDeviceUserDecryptionOptions = TRUSTED_DEVICE_DECRYPTION_OPTIONS,
             keyConnectorUserDecryptionOptions = null,
         )
+
+        @Deprecated(
+            message = "Use GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS instead",
+            replaceWith = ReplaceWith(
+                expression = "GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS",
+            ),
+        )
         private val GET_TOKEN_RESPONSE_SUCCESS = GetTokenResponseJson.Success(
             accessToken = ACCESS_TOKEN,
             refreshToken = "refreshToken",
@@ -6715,7 +7143,26 @@ class AuthRepositoryTest {
             kdfMemory = 16,
             kdfParallelism = 4,
             privateKey = "privateKey",
-            accountKeys = createMockAccountKeysJson(number = 1),
+            accountKeys = null,
+            shouldForcePasswordReset = true,
+            shouldResetMasterPassword = true,
+            twoFactorToken = null,
+            masterPasswordPolicyOptions = null,
+            userDecryptionOptions = null,
+            keyConnectorUrl = null,
+        )
+        private val GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS = GetTokenResponseJson.Success(
+            accessToken = ACCESS_TOKEN,
+            refreshToken = "refreshToken",
+            tokenType = "Bearer",
+            expiresInSeconds = 3600,
+            key = "key",
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            privateKey = "privateKey",
+            accountKeys = ACCOUNT_KEYS,
             shouldForcePasswordReset = true,
             shouldResetMasterPassword = true,
             twoFactorToken = null,
