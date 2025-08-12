@@ -1,4 +1,4 @@
- package com.x8bit.bitwarden.ui.auth.feature.login
+package com.x8bit.bitwarden.ui.auth.feature.login
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
