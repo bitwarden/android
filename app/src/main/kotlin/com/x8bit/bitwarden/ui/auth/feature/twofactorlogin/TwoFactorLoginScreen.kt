@@ -104,10 +104,6 @@ fun TwoFactorLoginScreen(
                 intentManager.launchUri(uri = event.uri)
             }
 
-            is TwoFactorLoginEvent.NavigateToCaptcha -> {
-                intentManager.startCustomTabsActivity(uri = event.uri)
-            }
-
             is TwoFactorLoginEvent.NavigateToDuo -> {
                 intentManager.startCustomTabsActivity(uri = event.uri)
             }
@@ -352,7 +348,6 @@ private fun TwoFactorLoginScreenContentPreview() {
                 displayEmail = "email@dot.com",
                 isContinueButtonEnabled = true,
                 isRememberEnabled = true,
-                captchaToken = null,
                 email = "",
                 password = "",
                 orgIdentifier = null,

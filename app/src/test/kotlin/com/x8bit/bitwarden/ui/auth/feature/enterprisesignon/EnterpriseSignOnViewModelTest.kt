@@ -14,9 +14,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
-import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForSso
 import com.x8bit.bitwarden.data.platform.manager.model.NetworkConnection
 import com.x8bit.bitwarden.data.platform.manager.util.FakeNetworkConnectionManager
@@ -43,11 +41,8 @@ import org.junit.jupiter.api.Test
 class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
     private val mutableSsoCallbackResultFlow = bufferedMutableSharedFlow<SsoCallbackResult>()
-    private val mutableCaptchaTokenResultFlow =
-        bufferedMutableSharedFlow<CaptchaCallbackTokenResult>()
     private val authRepository: AuthRepository = mockk {
         every { ssoCallbackResultFlow } returns mutableSsoCallbackResultFlow
-        every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
         every { rememberedOrgIdentifier } returns null
         every { rememberedOrgIdentifier = "Bitwarden" } just runs
         coEvery {
@@ -341,7 +336,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val orgIdentifier = "Bitwarden"
             val error = Throwable("Fail!")
             coEvery {
-                authRepository.login(any(), any(), any(), any(), any(), any())
+                authRepository.login(any(), any(), any(), any(), any())
             } returns LoginResult.Error(errorMessage = null, error = error)
 
             val viewModel = createViewModel(
@@ -397,7 +392,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
                     ssoRedirectUri = "bitwarden://sso-callback",
-                    captchaToken = null,
                     organizationIdentifier = orgIdentifier,
                 )
             }
@@ -409,7 +403,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         runTest {
             val orgIdentifier = "Bitwarden"
             coEvery {
-                authRepository.login(any(), any(), any(), any(), any(), any())
+                authRepository.login(any(), any(), any(), any(), any())
             } returns LoginResult.NewDeviceVerification(errorMessage = "new device verification required")
 
             val viewModel = createViewModel(
@@ -464,7 +458,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
                     ssoRedirectUri = "bitwarden://sso-callback",
-                    captchaToken = null,
                     organizationIdentifier = orgIdentifier,
                 )
             }
@@ -476,7 +469,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         runTest {
             val orgIdentifier = "Bitwarden"
             coEvery {
-                authRepository.login(any(), any(), any(), any(), any(), any())
+                authRepository.login(any(), any(), any(), any(), any())
             } returns LoginResult.EncryptionKeyMigrationRequired
 
             environmentRepository.environment = Environment.SelfHosted(
@@ -539,7 +532,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
                     ssoRedirectUri = "bitwarden://sso-callback",
-                    captchaToken = null,
                     organizationIdentifier = orgIdentifier,
                 )
             }
@@ -551,7 +543,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         runTest {
             val orgIdentifier = "Bitwarden"
             coEvery {
-                authRepository.login(any(), any(), any(), any(), any(), any())
+                authRepository.login(any(), any(), any(), any(), any())
             } returns LoginResult.EncryptionKeyMigrationRequired
 
             environmentRepository.environment = Environment.SelfHosted(
@@ -614,7 +606,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
                     ssoRedirectUri = "bitwarden://sso-callback",
-                    captchaToken = null,
                     organizationIdentifier = orgIdentifier,
                 )
             }
@@ -626,7 +617,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         runTest {
             val orgIdentifier = "Bitwarden"
             coEvery {
-                authRepository.login(any(), any(), any(), any(), any(), any())
+                authRepository.login(any(), any(), any(), any(), any())
             } returns LoginResult.EncryptionKeyMigrationRequired
 
             environmentRepository.environment = Environment.SelfHosted(
@@ -689,7 +680,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
                     ssoRedirectUri = "bitwarden://sso-callback",
-                    captchaToken = null,
                     organizationIdentifier = orgIdentifier,
                 )
             }
@@ -701,7 +691,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         runTest {
             val orgIdentifier = "Bitwarden"
             coEvery {
-                authRepository.login(any(), any(), any(), any(), any(), any())
+                authRepository.login(any(), any(), any(), any(), any())
             } returns LoginResult.CertificateError
 
             val viewModel = createViewModel(
@@ -756,7 +746,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
                     ssoRedirectUri = "bitwarden://sso-callback",
-                    captchaToken = null,
                     organizationIdentifier = orgIdentifier,
                 )
             }
@@ -767,8 +756,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     fun `ssoCallbackResultFlow Success with same state with login Success should show loading dialog, hide it, and save org identifier`() =
         runTest {
             coEvery {
-                authRepository.login(any(), any(), any(), any(), any(), any())
+                authRepository.login(any(), any(), any(), any(), any())
             } returns LoginResult.Success
+
             every {
                 authRepository.rememberedOrgIdentifier
             } returns "Bitwarden"
@@ -809,7 +799,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
                     ssoRedirectUri = "bitwarden://sso-callback",
-                    captchaToken = null,
                     organizationIdentifier = "Bitwarden",
                 )
             }
@@ -820,69 +809,10 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ssoCallbackResultFlow Success with same state with login CaptchaRequired should show loading dialog, hide it, and send NavigateToCaptcha event`() =
-        runTest {
-            coEvery {
-                authRepository.login(any(), any(), any(), any(), any(), any())
-            } returns LoginResult.CaptchaRequired("captcha")
-            every {
-                authRepository.rememberedOrgIdentifier
-            } returns "Bitwarden"
-            val uri: Uri = mockk()
-            every {
-                generateUriForCaptcha(captchaId = "captcha")
-            } returns uri
-
-            val initialState = DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden")
-            val viewModel = createViewModel(
-                initialState = initialState,
-                ssoData = DEFAULT_SSO_DATA,
-            )
-            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
-
-            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-                assertEquals(initialState, stateFlow.awaitItem())
-
-                mutableSsoCallbackResultFlow.tryEmit(ssoCallbackResult)
-
-                assertEquals(
-                    initialState.copy(
-                        dialogState = EnterpriseSignOnState.DialogState.Loading(
-                            BitwardenString.logging_in.asText(),
-                        ),
-                    ),
-                    stateFlow.awaitItem(),
-                )
-
-                assertEquals(
-                    initialState,
-                    stateFlow.awaitItem(),
-                )
-
-                assertEquals(
-                    EnterpriseSignOnEvent.NavigateToCaptcha(uri),
-                    eventFlow.awaitItem(),
-                )
-            }
-
-            coVerify(exactly = 1) {
-                authRepository.login(
-                    email = "test@gmail.com",
-                    ssoCode = "lmn",
-                    ssoCodeVerifier = "def",
-                    ssoRedirectUri = "bitwarden://sso-callback",
-                    captchaToken = null,
-                    organizationIdentifier = "Bitwarden",
-                )
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
     fun `ssoCallbackResultFlow Success with same state with login TwoFactorRequired should show loading dialog, hide it, and send NavigateToTwoFactorLogin event`() =
         runTest {
             coEvery {
-                authRepository.login(any(), any(), any(), any(), any(), any())
+                authRepository.login(any(), any(), any(), any(), any())
             } returns LoginResult.TwoFactorRequired
             every {
                 authRepository.rememberedOrgIdentifier
@@ -925,7 +855,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
                     ssoRedirectUri = "bitwarden://sso-callback",
-                    captchaToken = null,
                     organizationIdentifier = "Bitwarden",
                 )
             }
@@ -936,7 +865,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         runTest {
             val orgIdentifier = "Bitwarden"
             coEvery {
-                authRepository.login(any(), any(), any(), any(), any(), any())
+                authRepository.login(any(), any(), any(), any(), any())
             } returns LoginResult.ConfirmKeyConnectorDomain("bitwarden.com")
 
             val viewModel = createViewModel(
@@ -990,74 +919,10 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     ssoCode = "lmn",
                     ssoCodeVerifier = "def",
                     ssoRedirectUri = "bitwarden://sso-callback",
-                    captchaToken = null,
                     organizationIdentifier = orgIdentifier,
                 )
             }
         }
-
-    @Test
-    fun `captchaTokenResultFlow MissingToken should show error dialog`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE, awaitItem())
-
-            mutableCaptchaTokenResultFlow.tryEmit(CaptchaCallbackTokenResult.MissingToken)
-
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialogState = EnterpriseSignOnState.DialogState.Error(
-                        title = BitwardenString.log_in_denied.asText(),
-                        message = BitwardenString.captcha_failed.asText(),
-                    ),
-                ),
-                awaitItem(),
-            )
-        }
-    }
-
-    @Test
-    fun `captchaTokenResultFlow Success should update the state and attempt to login`() = runTest {
-        coEvery {
-            authRepository.login(any(), any(), any(), any(), any(), any())
-        } returns LoginResult.Success
-        every {
-            authRepository.rememberedOrgIdentifier
-        } returns "Bitwarden"
-
-        val initialState = DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden")
-        val viewModel = createViewModel(
-            initialState = initialState,
-            ssoData = DEFAULT_SSO_DATA,
-            ssoCallbackResult = SsoCallbackResult.Success(
-                state = "abc",
-                code = "lmn",
-            ),
-        )
-        viewModel.stateFlow.test {
-            assertEquals(
-                initialState,
-                awaitItem(),
-            )
-
-            mutableCaptchaTokenResultFlow.tryEmit(CaptchaCallbackTokenResult.Success("token"))
-
-            assertEquals(
-                initialState.copy(
-                    captchaToken = "token",
-                    dialogState = EnterpriseSignOnState.DialogState.Loading(
-                        BitwardenString.logging_in.asText(),
-                    ),
-                ),
-                awaitItem(),
-            )
-
-            assertEquals(
-                initialState.copy(captchaToken = "token"),
-                awaitItem(),
-            )
-        }
-    }
 
     @Suppress("MaxLineLength")
     @Test
@@ -1415,7 +1280,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         private val DEFAULT_STATE = EnterpriseSignOnState(
             dialogState = null,
             orgIdentifierInput = "",
-            captchaToken = null,
         )
         private val DEFAULT_SSO_DATA = SsoResponseData(
             state = "abc",

@@ -134,10 +134,8 @@ class IdentityServiceTest : BaseServiceTest() {
 
     @Test
     fun `register success json should be Success`() = runTest {
-        val expectedResponse = RegisterResponseJson.Success(
-            captchaBypassToken = "mock_token",
-        )
-        val response = MockResponse().setBody(CAPTCHA_BYPASS_TOKEN_RESPONSE_JSON)
+        val expectedResponse = RegisterResponseJson.Success
+        val response = MockResponse().setBody(LOGIN_SUCCESS_JSON)
         server.enqueue(response)
         assertEquals(
             expectedResponse.asSuccess(),
@@ -176,30 +174,6 @@ class IdentityServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `register captcha json should be CaptchaRequired`() = runTest {
-        val json = """
-            {
-              "validationErrors": {
-                "HCaptcha_SiteKey": [
-                  "mock_token"
-                ]
-              }
-            }
-            """
-        val expectedResponse = RegisterResponseJson.CaptchaRequired(
-            validationErrors = RegisterResponseJson.CaptchaRequired.ValidationErrors(
-                captchaKeys = listOf("mock_token"),
-            ),
-        )
-        val response = MockResponse().setResponseCode(400).setBody(json)
-        server.enqueue(response)
-        assertEquals(
-            expectedResponse.asSuccess(),
-            identityService.register(registerRequestBody),
-        )
-    }
-
-    @Test
     fun `getToken when request response is Success should return Success`() = runTest {
         server.enqueue(MockResponse().setBody(LOGIN_SUCCESS_JSON))
         val result = identityService.getToken(
@@ -208,7 +182,6 @@ class IdentityServiceTest : BaseServiceTest() {
                 username = EMAIL,
                 password = PASSWORD_HASH,
             ),
-            captchaToken = null,
             uniqueAppId = UNIQUE_APP_ID,
         )
         assertEquals(LOGIN_SUCCESS.asSuccess(), result)
@@ -223,25 +196,9 @@ class IdentityServiceTest : BaseServiceTest() {
                 username = EMAIL,
                 password = PASSWORD_HASH,
             ),
-            captchaToken = null,
             uniqueAppId = UNIQUE_APP_ID,
         )
         assertTrue(result.isFailure)
-    }
-
-    @Test
-    fun `getToken when response is CaptchaRequired should return CaptchaRequired`() = runTest {
-        server.enqueue(MockResponse().setResponseCode(400).setBody(CAPTCHA_BODY_JSON))
-        val result = identityService.getToken(
-            email = EMAIL,
-            authModel = IdentityTokenAuthModel.MasterPassword(
-                username = EMAIL,
-                password = PASSWORD_HASH,
-            ),
-            captchaToken = null,
-            uniqueAppId = UNIQUE_APP_ID,
-        )
-        assertEquals(CAPTCHA_BODY.asSuccess(), result)
     }
 
     @Test
@@ -253,7 +210,6 @@ class IdentityServiceTest : BaseServiceTest() {
                 username = EMAIL,
                 password = PASSWORD_HASH,
             ),
-            captchaToken = null,
             uniqueAppId = UNIQUE_APP_ID,
         )
         assertEquals(TWO_FACTOR_BODY.asSuccess(), result)
@@ -268,7 +224,6 @@ class IdentityServiceTest : BaseServiceTest() {
                 username = EMAIL,
                 password = PASSWORD_HASH,
             ),
-            captchaToken = null,
             uniqueAppId = UNIQUE_APP_ID,
         )
         assertEquals(INVALID_LOGIN.asSuccess(), result)
@@ -284,7 +239,6 @@ class IdentityServiceTest : BaseServiceTest() {
                     username = EMAIL,
                     password = PASSWORD_HASH,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
             assertEquals(INVALID_LOGIN.asSuccess(), result)
@@ -349,10 +303,8 @@ class IdentityServiceTest : BaseServiceTest() {
 
     @Test
     fun `registerFinish success json should be Success`() = runTest {
-        val expectedResponse = RegisterResponseJson.Success(
-            captchaBypassToken = "mock_token",
-        )
-        val response = MockResponse().setBody(CAPTCHA_BYPASS_TOKEN_RESPONSE_JSON)
+        val expectedResponse = RegisterResponseJson.Success
+        val response = MockResponse().setBody(LOGIN_SUCCESS_JSON)
         server.enqueue(response)
         assertEquals(
             expectedResponse.asSuccess(),
@@ -494,7 +446,6 @@ class IdentityServiceTest : BaseServiceTest() {
             email = EMAIL,
             masterPasswordHash = "mockk_masterPasswordHash",
             masterPasswordHint = "mockk_masterPasswordHint",
-            captchaResponse = "mockk_captchaResponse",
             key = "mockk_key",
             keys = RegisterRequestJson.Keys(
                 publicKey = "mockk_publicKey",
@@ -508,7 +459,6 @@ class IdentityServiceTest : BaseServiceTest() {
             masterPasswordHash = "mockk_masterPasswordHash",
             masterPasswordHint = "mockk_masterPasswordHint",
             emailVerificationToken = "mock_emailVerificationToken",
-            captchaResponse = "mockk_captchaResponse",
             userSymmetricKey = "mockk_key",
             userAsymmetricKeys = RegisterFinishRequestJson.Keys(
                 publicKey = "mockk_publicKey",
@@ -566,18 +516,10 @@ private val REFRESH_TOKEN_SUCCESS_BODY = RefreshTokenResponseJson.Success(
     tokenType = "Bearer",
 )
 
-private const val CAPTCHA_BODY_JSON = """
-{
-  "HCaptcha_SiteKey": "123"
-}
-"""
-private val CAPTCHA_BODY = GetTokenResponseJson.CaptchaRequired("123")
-
 private const val TWO_FACTOR_BODY_JSON = """
 {
   "TwoFactorProviders2": {"1": {"Email": "ex***@email.com"}, "0": {"Email": null}},
   "SsoEmail2faSessionToken": "exampleToken",
-  "CaptchaBypassToken": "BWCaptchaBypass_ABCXYZ",
   "TwoFactorProviders": ["1", "3", "0"]
 }
 """
@@ -587,7 +529,6 @@ private val TWO_FACTOR_BODY = GetTokenResponseJson.TwoFactorRequired(
         TwoFactorAuthMethod.AUTHENTICATOR_APP to JsonObject(mapOf("Email" to JsonNull)),
     ),
     ssoToken = "exampleToken",
-    captchaToken = "BWCaptchaBypass_ABCXYZ",
     twoFactorProviders = listOf("1", "3", "0"),
 )
 
@@ -705,12 +646,6 @@ private const val INVALID_MODEL_STATE_EMAIL_TAKEN_ERROR_JSON = """
   "exceptionStackTrace": null,
   "innerExceptionMessage": null,
   "object": "error"
-}
-"""
-
-private const val CAPTCHA_BYPASS_TOKEN_RESPONSE_JSON = """
-{
-  "captchaBypassToken": "mock_token"
 }
 """
 

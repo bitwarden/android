@@ -43,11 +43,7 @@ internal class IdentityServiceImpl(
             .recoverCatching { throwable ->
                 val bitwardenError = throwable.toBitwardenError()
                 bitwardenError
-                    .parseErrorBodyOrNull<RegisterResponseJson.CaptchaRequired>(
-                        code = NetworkErrorCode.BAD_REQUEST,
-                        json = json,
-                    )
-                    ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
+                    .parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
                         codes = listOf(
                             NetworkErrorCode.BAD_REQUEST,
                             NetworkErrorCode.TOO_MANY_REQUESTS,
@@ -61,7 +57,6 @@ internal class IdentityServiceImpl(
         uniqueAppId: String,
         email: String,
         authModel: IdentityTokenAuthModel,
-        captchaToken: String?,
         twoFactorData: TwoFactorDataModel?,
         newDeviceOtp: String?,
     ): Result<GetTokenResponseJson> = unauthenticatedIdentityApi
@@ -81,7 +76,6 @@ internal class IdentityServiceImpl(
             twoFactorCode = twoFactorData?.code,
             twoFactorMethod = twoFactorData?.method,
             twoFactorRemember = twoFactorData?.remember?.let { if (it) "1" else "0 " },
-            captchaResponse = captchaToken,
             authRequestId = authModel.authRequestId,
             newDeviceOtp = newDeviceOtp,
         )
@@ -89,11 +83,7 @@ internal class IdentityServiceImpl(
         .recoverCatching { throwable ->
             val bitwardenError = throwable.toBitwardenError()
             bitwardenError
-                .parseErrorBodyOrNull<GetTokenResponseJson.CaptchaRequired>(
-                    code = NetworkErrorCode.BAD_REQUEST,
-                    json = json,
-                )
-                ?: bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.TwoFactorRequired>(
+                .parseErrorBodyOrNull<GetTokenResponseJson.TwoFactorRequired>(
                     code = NetworkErrorCode.BAD_REQUEST,
                     json = json,
                 )

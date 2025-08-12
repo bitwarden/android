@@ -112,15 +112,6 @@ class EnterpriseSignOnScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `NavigateToCaptcha should call startCustomTabsActivity`() {
-        val captchaUri = Uri.parse("https://captcha.com")
-        mutableEventFlow.tryEmit(EnterpriseSignOnEvent.NavigateToCaptcha(captchaUri))
-        verify(exactly = 1) {
-            intentManager.startCustomTabsActivity(captchaUri)
-        }
-    }
-
-    @Test
     fun `NavigateToSetPassword should call onNavigateToSetPassword`() {
         mutableEventFlow.tryEmit(EnterpriseSignOnEvent.NavigateToSetPassword)
         assertTrue(onNavigateToSetPasswordCalled)
@@ -279,7 +270,6 @@ class EnterpriseSignOnScreenTest : BitwardenComposeTest() {
         private val DEFAULT_STATE = EnterpriseSignOnState(
             dialogState = null,
             orgIdentifierInput = "",
-            captchaToken = null,
         )
     }
 }

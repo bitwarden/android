@@ -11,12 +11,10 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestType
 import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
-import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -38,13 +36,10 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
     private val mutableCreateAuthRequestWithUpdatesFlow =
         bufferedMutableSharedFlow<CreateAuthRequestResult>()
-    private val mutableCaptchaTokenResultFlow =
-        bufferedMutableSharedFlow<CaptchaCallbackTokenResult>()
     private val authRepository = mockk<AuthRepository> {
         coEvery {
             createAuthRequestWithUpdates(email = EMAIL, authRequestType = any())
         } returns mutableCreateAuthRequestWithUpdatesFlow
-        coEvery { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
     }
     private val snackbarRelayManager: SnackbarRelayManager = mockk {
         every { sendSnackbarData(data = any(), relay = any()) } just runs
@@ -181,7 +176,6 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
                     requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
                     masterPasswordHash = DEFAULT_LOGIN_DATA.masterPasswordHash,
-                    captchaToken = null,
                 )
             } returns LoginResult.Success
             val viewModel = createViewModel()
@@ -232,7 +226,6 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
                     requestPrivateKey = AUTH_REQUEST_PRIVATE_KEY,
                     masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
-                    captchaToken = null,
                 )
             }
         }
@@ -315,7 +308,6 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
                     requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
                     masterPasswordHash = DEFAULT_LOGIN_DATA.masterPasswordHash,
-                    captchaToken = null,
                 )
             } returns LoginResult.TwoFactorRequired
             val viewModel = createViewModel()
@@ -341,7 +333,6 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
                     requestPrivateKey = AUTH_REQUEST_PRIVATE_KEY,
                     masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
-                    captchaToken = null,
                 )
             }
         }
@@ -358,7 +349,6 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
                     requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
                     masterPasswordHash = DEFAULT_LOGIN_DATA.masterPasswordHash,
-                    captchaToken = null,
                 )
             } returns LoginResult.Error(errorMessage = null, error = error)
             val viewModel = createViewModel()
@@ -409,7 +399,6 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
                     requestPrivateKey = AUTH_REQUEST_PRIVATE_KEY,
                     masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
-                    captchaToken = null,
                 )
             }
         }
@@ -426,7 +415,6 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
                     requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
                     masterPasswordHash = DEFAULT_LOGIN_DATA.masterPasswordHash,
-                    captchaToken = null,
                 )
             } returns LoginResult.UnofficialServerError
             val viewModel = createViewModel()
@@ -476,7 +464,6 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
                     requestPrivateKey = AUTH_REQUEST_PRIVATE_KEY,
                     masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
-                    captchaToken = null,
                 )
             }
         }
@@ -493,7 +480,6 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
                     requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
                     masterPasswordHash = DEFAULT_LOGIN_DATA.masterPasswordHash,
-                    captchaToken = null,
                 )
             } returns LoginResult.CertificateError
             val viewModel = createViewModel()
@@ -543,7 +529,6 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
                     requestPrivateKey = AUTH_REQUEST_PRIVATE_KEY,
                     masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
-                    captchaToken = null,
                 )
             }
         }
@@ -560,7 +545,6 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
                     requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
                     masterPasswordHash = DEFAULT_LOGIN_DATA.masterPasswordHash,
-                    captchaToken = null,
                 )
             } returns LoginResult.NewDeviceVerification(errorMessage = "new device verification required")
             val viewModel = createViewModel()
@@ -610,68 +594,9 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
                     requestPrivateKey = AUTH_REQUEST_PRIVATE_KEY,
                     masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
-                    captchaToken = null,
                 )
             }
         }
-
-    @Test
-    fun `on captchaTokenResultFlow missing token should should display error dialog`() = runTest {
-        val viewModel = createViewModel()
-        mutableCaptchaTokenResultFlow.tryEmit(CaptchaCallbackTokenResult.MissingToken)
-        assertEquals(
-            DEFAULT_STATE.copy(
-                dialogState = LoginWithDeviceState.DialogState.Error(
-                    title = BitwardenString.log_in_denied.asText(),
-                    message = BitwardenString.captcha_failed.asText(),
-                ),
-            ),
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Test
-    fun `on captchaTokenResultFlow success should update the token`() = runTest {
-        val captchaToken = "captchaToken"
-        val initialState = DEFAULT_STATE.copy(loginData = DEFAULT_LOGIN_DATA)
-        coEvery {
-            authRepository.login(
-                email = EMAIL,
-                requestId = DEFAULT_LOGIN_DATA.requestId,
-                accessCode = DEFAULT_LOGIN_DATA.accessCode,
-                asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
-                requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
-                masterPasswordHash = DEFAULT_LOGIN_DATA.masterPasswordHash,
-                captchaToken = captchaToken,
-            )
-        } just awaits
-        val viewModel = createViewModel(initialState)
-        viewModel.stateFlow.test {
-            assertEquals(initialState, awaitItem())
-            mutableCaptchaTokenResultFlow.tryEmit(CaptchaCallbackTokenResult.Success(captchaToken))
-            assertEquals(
-                initialState.copy(
-                    loginData = DEFAULT_LOGIN_DATA.copy(captchaToken = captchaToken),
-                    dialogState = LoginWithDeviceState.DialogState.Loading(
-                        message = BitwardenString.logging_in.asText(),
-                    ),
-                ),
-                awaitItem(),
-            )
-        }
-
-        coVerify(exactly = 1) {
-            authRepository.login(
-                email = EMAIL,
-                requestId = AUTH_REQUEST.id,
-                accessCode = AUTH_REQUEST_ACCESS_CODE,
-                asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
-                requestPrivateKey = AUTH_REQUEST_PRIVATE_KEY,
-                masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
-                captchaToken = captchaToken,
-            )
-        }
-    }
 
     @Test
     fun `on createAuthRequestWithUpdates Error received should show content with error dialog`() {
@@ -803,5 +728,4 @@ private val DEFAULT_LOGIN_DATA = LoginWithDeviceState.LoginData(
     masterPasswordHash = "verySecureHash",
     asymmetricalKey = "public",
     privateKey = "private_key",
-    captchaToken = null,
 )

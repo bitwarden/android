@@ -87,7 +87,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.toLoginErrorResult
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
@@ -330,10 +329,6 @@ class AuthRepositoryImpl(
                     firstTimeState = firstTimeActionManager.currentOrDefaultUserFirstTimeState,
                 ),
         )
-
-    private val captchaTokenChannel = Channel<CaptchaCallbackTokenResult>(capacity = Int.MAX_VALUE)
-    override val captchaTokenResultFlow: Flow<CaptchaCallbackTokenResult> =
-        captchaTokenChannel.receiveAsFlow()
 
     private val duoTokenChannel = Channel<DuoCallbackTokenResult>(capacity = Int.MAX_VALUE)
     override val duoTokenResultFlow: Flow<DuoCallbackTokenResult> = duoTokenChannel.receiveAsFlow()
@@ -619,7 +614,6 @@ class AuthRepositoryImpl(
     override suspend fun login(
         email: String,
         password: String,
-        captchaToken: String?,
     ): LoginResult = identityService
         .preLogin(email = email)
         .flatMap {
@@ -638,7 +632,6 @@ class AuthRepositoryImpl(
                     username = email,
                     password = passwordHash,
                 ),
-                captchaToken = captchaToken,
             )
         }
         .fold(
@@ -658,7 +651,6 @@ class AuthRepositoryImpl(
         asymmetricalKey: String,
         requestPrivateKey: String,
         masterPasswordHash: String?,
-        captchaToken: String?,
     ): LoginResult =
         loginCommon(
             email = email,
@@ -673,14 +665,12 @@ class AuthRepositoryImpl(
                 asymmetricalKey = asymmetricalKey,
                 privateKey = requestPrivateKey,
             ),
-            captchaToken = captchaToken,
         )
 
     override suspend fun login(
         email: String,
         password: String?,
         twoFactorData: TwoFactorDataModel,
-        captchaToken: String?,
         orgIdentifier: String?,
     ): LoginResult = identityTokenAuthModel
         ?.let {
@@ -689,7 +679,6 @@ class AuthRepositoryImpl(
                 password = password,
                 authModel = it,
                 twoFactorData = twoFactorData,
-                captchaToken = captchaToken ?: twoFactorResponse?.captchaToken,
                 deviceData = twoFactorDeviceData,
                 orgIdentifier = orgIdentifier,
             )
@@ -703,7 +692,6 @@ class AuthRepositoryImpl(
         email: String,
         password: String?,
         newDeviceOtp: String,
-        captchaToken: String?,
         orgIdentifier: String?,
     ): LoginResult = identityTokenAuthModel
         ?.let {
@@ -712,7 +700,6 @@ class AuthRepositoryImpl(
                 password = password,
                 authModel = it,
                 newDeviceOtp = newDeviceOtp,
-                captchaToken = captchaToken ?: twoFactorResponse?.captchaToken,
                 deviceData = twoFactorDeviceData,
                 orgIdentifier = orgIdentifier,
             )
@@ -746,7 +733,6 @@ class AuthRepositoryImpl(
         ssoCode: String,
         ssoCodeVerifier: String,
         ssoRedirectUri: String,
-        captchaToken: String?,
         organizationIdentifier: String,
     ): LoginResult = loginCommon(
         email = email,
@@ -755,7 +741,6 @@ class AuthRepositoryImpl(
             ssoCodeVerifier = ssoCodeVerifier,
             ssoRedirectUri = ssoRedirectUri,
         ),
-        captchaToken = captchaToken,
         orgIdentifier = organizationIdentifier,
     )
 
@@ -905,7 +890,6 @@ class AuthRepositoryImpl(
         masterPassword: String,
         masterPasswordHint: String?,
         emailVerificationToken: String?,
-        captchaToken: String?,
         shouldCheckDataBreaches: Boolean,
         isMasterPasswordStrong: Boolean,
     ): RegisterResult {
@@ -940,7 +924,6 @@ class AuthRepositoryImpl(
                             email = email,
                             masterPasswordHash = registerKeyResponse.masterPasswordHash,
                             masterPasswordHint = masterPasswordHint,
-                            captchaResponse = captchaToken,
                             key = registerKeyResponse.encryptedUserKey,
                             keys = RegisterRequestJson.Keys(
                                 publicKey = registerKeyResponse.keys.public,
@@ -957,7 +940,6 @@ class AuthRepositoryImpl(
                             masterPasswordHash = registerKeyResponse.masterPasswordHash,
                             masterPasswordHint = masterPasswordHint,
                             emailVerificationToken = emailVerificationToken,
-                            captchaResponse = captchaToken,
                             userSymmetricKey = registerKeyResponse.encryptedUserKey,
                             userAsymmetricKeys = RegisterFinishRequestJson.Keys(
                                 publicKey = registerKeyResponse.keys.public,
@@ -972,18 +954,9 @@ class AuthRepositoryImpl(
             .fold(
                 onSuccess = {
                     when (it) {
-                        is RegisterResponseJson.CaptchaRequired -> {
-                            it.validationErrors.captchaKeys.firstOrNull()
-                                ?.let { key -> RegisterResult.CaptchaRequired(captchaId = key) }
-                                ?: RegisterResult.Error(
-                                    errorMessage = null,
-                                    error = MissingPropertyException("Captcha ID"),
-                                )
-                        }
-
                         is RegisterResponseJson.Success -> {
                             settingsRepository.hasUserLoggedInOrCreatedAccount = true
-                            RegisterResult.Success(captchaToken = it.captchaBypassToken)
+                            RegisterResult.Success
                         }
 
                         is RegisterResponseJson.Invalid -> {
@@ -1227,10 +1200,6 @@ class AuthRepositoryImpl(
                 onFailure = { SetPasswordResult.Error(error = it) },
                 onSuccess = { SetPasswordResult.Success },
             )
-    }
-
-    override fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult) {
-        captchaTokenChannel.trySend(tokenResult)
     }
 
     override fun setDuoCallbackTokenResult(tokenResult: DuoCallbackTokenResult) {
@@ -1624,7 +1593,6 @@ class AuthRepositoryImpl(
         twoFactorData: TwoFactorDataModel? = null,
         deviceData: DeviceDataModel? = null,
         orgIdentifier: String? = null,
-        captchaToken: String?,
         newDeviceOtp: String? = null,
     ): LoginResult = identityService
         .getToken(
@@ -1632,7 +1600,6 @@ class AuthRepositoryImpl(
             email = email,
             authModel = authModel,
             twoFactorData = twoFactorData ?: getRememberedTwoFactorData(email),
-            captchaToken = captchaToken,
             newDeviceOtp = newDeviceOtp,
         )
         .fold(
@@ -1651,10 +1618,6 @@ class AuthRepositoryImpl(
             },
             onSuccess = { loginResponse ->
                 when (loginResponse) {
-                    is GetTokenResponseJson.CaptchaRequired -> LoginResult.CaptchaRequired(
-                        captchaId = loginResponse.captchaKey,
-                    )
-
                     is GetTokenResponseJson.TwoFactorRequired -> handleLoginCommonTwoFactorRequired(
                         loginResponse = loginResponse,
                         email = email,
