@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.auth.feature.login
+ package com.x8bit.bitwarden.ui.auth.feature.login
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -50,8 +50,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -68,7 +66,6 @@ fun LoginScreen(
     onNavigateToLoginWithDevice: (emailAddress: String) -> Unit,
     onNavigateToTwoFactorLogin: (String, String?, Boolean) -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
-    intentManager: IntentManager = LocalIntentManager.current,
     keyboardController: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
