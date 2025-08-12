@@ -450,6 +450,20 @@ class AutoFillViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when LearnMoreClick action is handled NavigateToLearnMore event is sent`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AutoFillAction.LearnMoreClick)
+                assertEquals(
+                    AutoFillEvent.NavigateToLearnMore,
+                    awaitItem(),
+                )
+            }
+        }
+
     private fun createViewModel(
         state: AutoFillState? = DEFAULT_STATE,
     ): AutoFillViewModel = AutoFillViewModel(

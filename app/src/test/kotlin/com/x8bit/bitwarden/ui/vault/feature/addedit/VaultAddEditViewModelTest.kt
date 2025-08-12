@@ -4572,6 +4572,20 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when LearnMoreClick action is handled NavigateToLearnMore event is sent`() =
+        runTest {
+            val viewModel = createAddVaultItemViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAddEditAction.ItemType.LoginType.LearnMoreClick)
+                assertEquals(
+                    VaultAddEditEvent.NavigateToLearnMore,
+                    awaitItem(),
+                )
+            }
+        }
+
     //region Helper functions
 
     @Suppress("LongParameterList")

@@ -1653,7 +1653,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         verify(exactly = 1) {
-            intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.LearnMoreClick,
+            )
         }
     }
 
@@ -4138,6 +4140,12 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 VaultAddEditAction.ItemType.LoginType.StartLearnAboutLogins,
             )
         }
+    }
+
+    @Test
+    fun `on NavigateToLearnMore should call launchUri`() {
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToLearnMore)
+        intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
     }
 
     //region Helper functions
