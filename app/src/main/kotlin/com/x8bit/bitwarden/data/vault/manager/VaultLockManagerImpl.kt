@@ -7,6 +7,7 @@ import android.content.IntentFilter
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.data.manager.realtime.RealtimeManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.concurrentMapOf
@@ -77,6 +78,7 @@ private const val MAXIMUM_INVALID_UNLOCK_ATTEMPTS = 5
 @Suppress("TooManyFunctions", "LongParameterList")
 class VaultLockManagerImpl(
     private val clock: Clock,
+    private val realtimeManager: RealtimeManager,
     private val authDiskSource: AuthDiskSource,
     private val authSdkSource: AuthSdkSource,
     private val vaultSdkSource: VaultSdkSource,
@@ -613,7 +615,7 @@ class VaultLockManagerImpl(
                 handleTimeoutAction(userId = userId, vaultTimeoutAction = vaultTimeoutAction)
             },
             vaultTimeoutAction = vaultTimeoutAction,
-            startTimeMs = clock.millis(),
+            startTimeMs = realtimeManager.elapsedRealtimeMs,
             durationMs = delayMs,
         )
     }
@@ -674,11 +676,12 @@ class VaultLockManagerImpl(
     private inner class ScreenStateBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             userIdTimerJobMap.map { (userId, data) ->
+                val durationSoFarMs = (realtimeManager.elapsedRealtimeMs - data.startTimeMs)
+                    .coerceAtLeast(minimumValue = 0L)
                 handleTimeoutActionWithDelay(
                     userId = userId,
                     vaultTimeoutAction = data.vaultTimeoutAction,
-                    delayMs = data.durationMs - (clock.millis() - data.startTimeMs)
-                        .coerceAtLeast(minimumValue = 0L),
+                    delayMs = data.durationMs - durationSoFarMs,
                 )
             }
         }

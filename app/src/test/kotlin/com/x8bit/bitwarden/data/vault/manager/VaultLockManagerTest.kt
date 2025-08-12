@@ -8,6 +8,7 @@ import app.cash.turbine.test
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.data.manager.realtime.RealtimeManager
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.HashPurpose
@@ -100,10 +101,14 @@ class VaultLockManagerTest {
     }
     private val testDispatcher = UnconfinedTestDispatcher()
     private val fakeDispatcherManager = FakeDispatcherManager(unconfined = testDispatcher)
+    private val realtimeManager: RealtimeManager = mockk {
+        every { elapsedRealtimeMs } returns FIXED_CLOCK.millis()
+    }
 
     private val vaultLockManager: VaultLockManager = VaultLockManagerImpl(
         context = context,
         clock = FIXED_CLOCK,
+        realtimeManager = realtimeManager,
         authDiskSource = fakeAuthDiskSource,
         authSdkSource = authSdkSource,
         vaultSdkSource = vaultSdkSource,

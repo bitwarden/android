@@ -20,6 +20,8 @@ import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManagerImpl
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepository
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
+import com.bitwarden.core.data.manager.realtime.RealtimeManager
+import com.bitwarden.core.data.manager.realtime.RealtimeManagerImpl
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.manager.toast.ToastManagerImpl
 import com.bitwarden.data.manager.DispatcherManager
@@ -48,6 +50,10 @@ object PlatformManagerModule {
         context = context,
         toastManager = toastManager,
     )
+
+    @Provides
+    @Singleton
+    fun provideRealtimeManager(): RealtimeManager = RealtimeManagerImpl()
 
     @Provides
     @Singleton
