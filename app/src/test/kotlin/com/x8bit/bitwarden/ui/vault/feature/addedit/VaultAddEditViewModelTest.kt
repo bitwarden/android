@@ -4572,7 +4572,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `when LearnMoreClick action is handled NavigateToLearnMore event is sent`() =
         runTest {

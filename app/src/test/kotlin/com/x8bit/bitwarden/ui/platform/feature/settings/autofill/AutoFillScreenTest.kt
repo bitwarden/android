@@ -725,7 +725,6 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `on Advanced matching warning dialog confirm should display learn more dialog`() {
         composeTestRule

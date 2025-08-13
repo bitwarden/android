@@ -424,7 +424,7 @@ private fun DefaultUriMatchTypeRow(
 
     val currentOptionToConfirm = optionPendingConfirmation
     if (showAdvancedDialog && currentOptionToConfirm != null) {
-        BuildAdvancedMatchDetectionWarning(
+        AdvancedMatchDetectionWarningDialog(
             pendingOption = currentOptionToConfirm,
             onDialogConfirm = {
                 onUriMatchTypeSelect(currentOptionToConfirm)
@@ -440,7 +440,7 @@ private fun DefaultUriMatchTypeRow(
     }
 
     if (shouldShowLearnMoreMatchDetectionDialog) {
-        BuildLearnMoreAboutMatchDetectionDialog(
+        MatchDetectionLearnMoreDialog(
             uriMatchType = selectedUriMatchType,
             onDialogConfirm = {
                 onNavigateToLearnMore()
@@ -454,7 +454,7 @@ private fun DefaultUriMatchTypeRow(
 }
 
 @Composable
-private fun BuildAdvancedMatchDetectionWarning(
+private fun AdvancedMatchDetectionWarningDialog(
     pendingOption: UriMatchType,
     onDialogConfirm: () -> Unit,
     onDialogDismiss: () -> Unit,
@@ -473,7 +473,9 @@ private fun BuildAdvancedMatchDetectionWarning(
             UriMatchType.DOMAIN,
             UriMatchType.EXACT,
             UriMatchType.NEVER,
-                -> error("Unexpected value $pendingOption on BuildAdvancedMatchDetectionWarning")
+                -> {
+                error("Unexpected value $pendingOption on AdvancedMatchDetectionWarningDialog")
+            }
         }
 
     BitwardenTwoButtonDialog(
@@ -538,7 +540,7 @@ private fun UriMatchSelectionButton(
 }
 
 @Composable
-private fun BuildLearnMoreAboutMatchDetectionDialog(
+private fun MatchDetectionLearnMoreDialog(
     uriMatchType: UriMatchType,
     onDialogConfirm: () -> Unit,
     onDialogDismiss: () -> Unit,
@@ -575,7 +577,9 @@ private fun SupportingTextForMatchDetection(
             UriMatchType.DOMAIN,
             UriMatchType.EXACT,
             UriMatchType.NEVER,
-                -> BitwardenString.default_uri_match_detection_description
+                -> {
+                BitwardenString.default_uri_match_detection_description
+            }
         }
 
     val supportingAnnotatedString =
