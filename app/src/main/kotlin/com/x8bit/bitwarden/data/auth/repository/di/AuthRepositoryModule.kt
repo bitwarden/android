@@ -27,6 +27,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -39,6 +40,7 @@ object AuthRepositoryModule {
     @Provides
     @Singleton
     fun providesAuthRepository(
+        clock: Clock,
         accountsService: AccountsService,
         devicesService: DevicesService,
         identityService: IdentityService,
@@ -61,6 +63,7 @@ object AuthRepositoryModule {
         firstTimeActionManager: FirstTimeActionManager,
         logsManager: LogsManager,
     ): AuthRepository = AuthRepositoryImpl(
+        clock = clock,
         accountsService = accountsService,
         devicesService = devicesService,
         identityService = identityService,

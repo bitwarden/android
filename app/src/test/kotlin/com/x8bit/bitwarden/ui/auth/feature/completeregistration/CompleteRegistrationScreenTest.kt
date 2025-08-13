@@ -61,10 +61,9 @@ class CompleteRegistrationScreenTest : BitwardenComposeTest() {
                 onNavigateToPreventAccountLockout = {
                     onNavigateToPreventAccountLockoutCalled = true
                 },
-                onNavigateToLogin = { email, captchaToken ->
+                onNavigateToLogin = { email ->
                     onNavigateToLoginCalled = true
                     assertTrue(email == EMAIL)
-                    assertTrue(captchaToken == TOKEN)
                 },
                 viewModel = viewModel,
             )
@@ -261,7 +260,6 @@ class CompleteRegistrationScreenTest : BitwardenComposeTest() {
         mutableEventFlow.tryEmit(
             CompleteRegistrationEvent.NavigateToLogin(
                 email = EMAIL,
-                captchaToken = TOKEN,
             ),
         )
 

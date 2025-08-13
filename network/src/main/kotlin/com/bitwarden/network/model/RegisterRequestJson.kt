@@ -9,7 +9,6 @@ import kotlinx.serialization.Serializable
  * @param email the email to be registered.
  * @param masterPasswordHash the master password (encrypted).
  * @param masterPasswordHint the hint for the master password (nullable).
- * @param captchaResponse the captcha bypass token.
  * @param key the user key for the request (encrypted).
  * @param keys a [Keys] object containing public and private keys.
  * @param kdfType the kdf type represented as an [Int].
@@ -25,9 +24,6 @@ data class RegisterRequestJson(
 
     @SerialName("masterPasswordHint")
     val masterPasswordHint: String?,
-
-    @SerialName("captchaResponse")
-    val captchaResponse: String?,
 
     @SerialName("key")
     val key: String,

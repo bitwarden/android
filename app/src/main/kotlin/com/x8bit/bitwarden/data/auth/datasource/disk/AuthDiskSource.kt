@@ -126,12 +126,33 @@ interface AuthDiskSource : AppIdProvider {
     /**
      * Retrieves a private key using a [userId].
      */
+    @Deprecated(
+        message = "Use getAccountKeys instead.",
+        replaceWith = ReplaceWith("getAccountKeys"),
+    )
     fun getPrivateKey(userId: String): String?
 
     /**
      * Stores a private key using a [userId].
      */
+    @Deprecated(
+        message = "Use storeAccountKeys instead.",
+        replaceWith = ReplaceWith("storeAccountKeys"),
+    )
     fun storePrivateKey(userId: String, privateKey: String?)
+
+    /**
+     * Returns the profile account keys for the given [userId].
+     */
+    fun getAccountKeys(userId: String): SyncResponseJson.Profile.AccountKeys?
+
+    /**
+     * Stores the profile account keys for the given [userId].
+     */
+    fun storeAccountKeys(
+        userId: String,
+        accountKeys: SyncResponseJson.Profile.AccountKeys?,
+    )
 
     /**
      * Retrieves a user auto-unlock key for the given [userId].

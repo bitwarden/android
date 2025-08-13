@@ -146,7 +146,7 @@
     <string name="syncing">Sinchronizuojama...</string>
     <string name="syncing_complete">Sinchronizacija baigta</string>
     <string name="two_step_login">Dviejų žingsnių prisijungimas</string>
-    <string name="unlock_with">Atrakinti naudojant %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Atrakinti PIN kodu</string>
     <string name="verification_code">Patvirtinimo kodas</string>
     <string name="view_login">View login</string>
@@ -372,7 +372,6 @@ Nuskaitymas vyks automatiškai.</string>
     <string name="download">Atsisiųsti</string>
     <string name="login_expired">Sesijos laikas baigėsi.</string>
     <string name="biometrics_direction">Biometrinis autentifikavimas</string>
-    <string name="biometrics">Biometrika</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Naudoti biometrinius duomenis arba ekrano užraktą</string>
@@ -1070,4 +1069,5 @@ Ar norite pereiti prie šios paskyros?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>

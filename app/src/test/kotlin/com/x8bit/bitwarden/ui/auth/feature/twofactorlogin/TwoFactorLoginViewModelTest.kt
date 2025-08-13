@@ -16,10 +16,8 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
-import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -42,14 +40,11 @@ import org.junit.jupiter.api.Test
 
 @Suppress("LargeClass")
 class TwoFactorLoginViewModelTest : BaseViewModelTest() {
-    private val mutableCaptchaTokenResultFlow =
-        bufferedMutableSharedFlow<CaptchaCallbackTokenResult>()
     private val mutableDuoTokenResultFlow = bufferedMutableSharedFlow<DuoCallbackTokenResult>()
     private val mutableYubiKeyResultFlow = bufferedMutableSharedFlow<YubiKeyResult>()
     private val mutableWebAuthResultFlow = bufferedMutableSharedFlow<WebAuthResult>()
     private val authRepository: AuthRepository = mockk {
         every { twoFactorResponse } returns TWO_FACTOR_RESPONSE
-        every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
         every { duoTokenResultFlow } returns mutableDuoTokenResultFlow
         every { yubiKeyResultFlow } returns mutableYubiKeyResultFlow
         every { webAuthResultFlow } returns mutableWebAuthResultFlow
@@ -59,7 +54,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 email = any(),
                 password = any(),
                 twoFactorData = any(),
-                captchaToken = any(),
                 orgIdentifier = any(),
             )
         } returns LoginResult.Success
@@ -72,7 +66,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     @BeforeEach
     fun setUp() {
         mockkStatic(
-            ::generateUriForCaptcha,
             ::generateUriForWebAuth,
             SavedStateHandle::toTwoFactorLoginArgs,
         )
@@ -82,7 +75,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(
-            ::generateUriForCaptcha,
             ::generateUriForWebAuth,
             SavedStateHandle::toTwoFactorLoginArgs,
         )
@@ -177,7 +169,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     method = TwoFactorAuthMethod.YUBI_KEY.value.toString(),
                     remember = DEFAULT_STATE.isRememberEnabled,
                 ),
-                captchaToken = DEFAULT_STATE.captchaToken,
                 orgIdentifier = DEFAULT_STATE.orgIdentifier,
             )
         }
@@ -196,7 +187,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     method = TwoFactorAuthMethod.WEB_AUTH.value.toString(),
                     remember = false,
                 ),
-                captchaToken = null,
                 orgIdentifier = DEFAULT_ORG_IDENTIFIER,
             )
         } returns LoginResult.Success
@@ -217,7 +207,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     method = TwoFactorAuthMethod.WEB_AUTH.value.toString(),
                     remember = false,
                 ),
-                captchaToken = null,
                 orgIdentifier = DEFAULT_ORG_IDENTIFIER,
             )
         }
@@ -255,38 +244,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `captchaTokenFlow success update should trigger a login`() = runTest {
-        coEvery {
-            authRepository.login(
-                email = DEFAULT_EMAIL_ADDRESS,
-                password = DEFAULT_PASSWORD,
-                twoFactorData = TwoFactorDataModel(
-                    code = "",
-                    method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
-                    remember = false,
-                ),
-                captchaToken = "token",
-                orgIdentifier = DEFAULT_ORG_IDENTIFIER,
-            )
-        } returns LoginResult.Success
-        createViewModel()
-        mutableCaptchaTokenResultFlow.tryEmit(CaptchaCallbackTokenResult.Success("token"))
-        coVerify {
-            authRepository.login(
-                email = DEFAULT_EMAIL_ADDRESS,
-                password = DEFAULT_PASSWORD,
-                twoFactorData = TwoFactorDataModel(
-                    code = "",
-                    method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
-                    remember = false,
-                ),
-                captchaToken = "token",
-                orgIdentifier = DEFAULT_ORG_IDENTIFIER,
-            )
-        }
-    }
-
-    @Test
     fun `duoTokenResultFlow success update should trigger a login`() = runTest {
         coEvery {
             authRepository.login(
@@ -297,7 +254,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     method = TwoFactorAuthMethod.DUO.value.toString(),
                     remember = false,
                 ),
-                captchaToken = null,
                 orgIdentifier = DEFAULT_ORG_IDENTIFIER,
             )
         } returns LoginResult.Success
@@ -316,7 +272,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     method = TwoFactorAuthMethod.DUO.value.toString(),
                     remember = false,
                 ),
-                captchaToken = null,
                 orgIdentifier = DEFAULT_ORG_IDENTIFIER,
             )
         }
@@ -411,7 +366,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
                     remember = false,
                 ),
-                captchaToken = null,
                 orgIdentifier = DEFAULT_ORG_IDENTIFIER,
             )
         } returns LoginResult.Success
@@ -443,7 +397,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
                     remember = false,
                 ),
-                captchaToken = null,
                 orgIdentifier = DEFAULT_ORG_IDENTIFIER,
             )
         }
@@ -460,7 +413,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             )
             val response = GetTokenResponseJson.TwoFactorRequired(
                 authMethodsData = authMethodsData,
-                captchaToken = null,
                 ssoToken = null,
                 twoFactorProviders = null,
             )
@@ -495,7 +447,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             )
             val response = GetTokenResponseJson.TwoFactorRequired(
                 authMethodsData = authMethodsData,
-                captchaToken = null,
                 ssoToken = null,
                 twoFactorProviders = null,
             )
@@ -531,7 +482,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             val data = JsonObject(mapOf("AuthUrl" to JsonPrimitive("bitwarden.com")))
             val response = GetTokenResponseJson.TwoFactorRequired(
                 authMethodsData = mapOf(TwoFactorAuthMethod.WEB_AUTH to data),
-                captchaToken = null,
                 ssoToken = null,
                 twoFactorProviders = null,
             )
@@ -574,7 +524,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         runTest {
             val response = GetTokenResponseJson.TwoFactorRequired(
                 authMethodsData = emptyMap(),
-                captchaToken = null,
                 ssoToken = null,
                 twoFactorProviders = null,
             )
@@ -596,55 +545,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `ContinueButtonClick login returns CaptchaRequired should emit NavigateToCaptcha`() =
-        runTest {
-            val mockkUri = mockk<Uri>()
-            every {
-                generateUriForCaptcha(captchaId = "mock_captcha_id")
-            } returns mockkUri
-            coEvery {
-                authRepository.login(
-                    email = DEFAULT_EMAIL_ADDRESS,
-                    password = DEFAULT_PASSWORD,
-                    twoFactorData = TwoFactorDataModel(
-                        code = "",
-                        method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
-                        remember = false,
-                    ),
-                    captchaToken = null,
-                    orgIdentifier = DEFAULT_ORG_IDENTIFIER,
-                )
-            } returns LoginResult.CaptchaRequired(captchaId = "mock_captcha_id")
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
-
-                assertEquals(
-                    DEFAULT_STATE,
-                    viewModel.stateFlow.value,
-                )
-
-                assertEquals(
-                    TwoFactorLoginEvent.NavigateToCaptcha(uri = mockkUri),
-                    awaitItem(),
-                )
-            }
-            coVerify {
-                authRepository.login(
-                    email = DEFAULT_EMAIL_ADDRESS,
-                    password = DEFAULT_PASSWORD,
-                    twoFactorData = TwoFactorDataModel(
-                        code = "",
-                        method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
-                        remember = false,
-                    ),
-                    captchaToken = null,
-                    orgIdentifier = DEFAULT_ORG_IDENTIFIER,
-                )
-            }
-        }
-
-    @Test
     fun `ContinueButtonClick login returns Error should update dialogState`() = runTest {
         val error = Throwable("Fail!")
         coEvery {
@@ -656,7 +556,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
                     remember = false,
                 ),
-                captchaToken = null,
                 orgIdentifier = DEFAULT_ORG_IDENTIFIER,
             )
         } returns LoginResult.Error(errorMessage = null, error = error)
@@ -698,7 +597,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
                     remember = false,
                 ),
-                captchaToken = null,
                 orgIdentifier = DEFAULT_ORG_IDENTIFIER,
             )
         }
@@ -717,7 +615,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                         method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
                         remember = false,
                     ),
-                    captchaToken = null,
                     orgIdentifier = DEFAULT_ORG_IDENTIFIER,
                 )
             } returns LoginResult.Error(errorMessage = "Mock error message", error = error)
@@ -759,7 +656,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                         method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
                         remember = false,
                     ),
-                    captchaToken = null,
                     orgIdentifier = DEFAULT_ORG_IDENTIFIER,
                 )
             }
@@ -778,7 +674,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                         method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
                         remember = false,
                     ),
-                    captchaToken = null,
                     orgIdentifier = DEFAULT_ORG_IDENTIFIER,
                 )
             } returns LoginResult.UnofficialServerError
@@ -819,7 +714,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                         method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
                         remember = false,
                     ),
-                    captchaToken = null,
                     orgIdentifier = DEFAULT_ORG_IDENTIFIER,
                 )
             }
@@ -838,7 +732,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                         method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
                         remember = false,
                     ),
-                    captchaToken = null,
                     orgIdentifier = DEFAULT_ORG_IDENTIFIER,
                 )
             } returns LoginResult.CertificateError
@@ -879,7 +772,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                         method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
                         remember = false,
                     ),
-                    captchaToken = null,
                     orgIdentifier = DEFAULT_ORG_IDENTIFIER,
                 )
             }
@@ -898,7 +790,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                         method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
                         remember = false,
                     ),
-                    captchaToken = null,
                     orgIdentifier = DEFAULT_ORG_IDENTIFIER,
                 )
             } returns LoginResult.NewDeviceVerification(errorMessage = "new device verification required")
@@ -939,7 +830,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                         method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
                         remember = false,
                     ),
-                    captchaToken = null,
                     orgIdentifier = DEFAULT_ORG_IDENTIFIER,
                 )
             }
@@ -1204,7 +1094,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         )
         val localAuthRepository: AuthRepository = mockk {
             every { twoFactorResponse } returns TWO_FACTOR_RESPONSE
-            every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
             every { duoTokenResultFlow } returns mutableDuoTokenResultFlow
             every { yubiKeyResultFlow } returns mutableYubiKeyResultFlow
             every { webAuthResultFlow } returns mutableWebAuthResultFlow
@@ -1213,7 +1102,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     email = any(),
                     password = any(),
                     newDeviceOtp = any(),
-                    captchaToken = any(),
                     orgIdentifier = any(),
                 )
             } returns LoginResult.Success
@@ -1243,7 +1131,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 email = DEFAULT_STATE.email,
                 password = DEFAULT_STATE.password,
                 newDeviceOtp = code.trim(),
-                captchaToken = DEFAULT_STATE.captchaToken,
                 orgIdentifier = DEFAULT_STATE.orgIdentifier,
             )
         }
@@ -1325,7 +1212,6 @@ private val TWO_FACTOR_AUTH_METHODS_DATA = mapOf(
 
 private val TWO_FACTOR_RESPONSE = GetTokenResponseJson.TwoFactorRequired(
     authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
-    captchaToken = null,
     ssoToken = null,
     twoFactorProviders = null,
 )
@@ -1345,7 +1231,6 @@ private val DEFAULT_STATE = TwoFactorLoginState(
     dialogState = null,
     isContinueButtonEnabled = false,
     isRememberEnabled = false,
-    captchaToken = null,
     email = DEFAULT_EMAIL_ADDRESS,
     password = DEFAULT_PASSWORD,
     orgIdentifier = DEFAULT_ORG_IDENTIFIER,

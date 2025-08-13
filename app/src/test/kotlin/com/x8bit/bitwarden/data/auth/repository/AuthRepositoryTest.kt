@@ -104,7 +104,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
@@ -154,6 +153,9 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import javax.net.ssl.SSLHandshakeException
 
@@ -259,7 +261,8 @@ class AuthRepositoryTest {
         every { setUserData(userId = any(), environmentType = any()) } just runs
     }
 
-    private val repository = AuthRepositoryImpl(
+    private val repository: AuthRepository = AuthRepositoryImpl(
+        clock = FIXED_CLOCK,
         accountsService = accountsService,
         devicesService = devicesService,
         identityService = identityService,
@@ -477,7 +480,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -503,7 +505,7 @@ class AuthRepositoryTest {
             } returns SINGLE_USER_STATE_1
 
             // Start the login flow so that all the necessary data is cached.
-            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            val result = repository.login(email = EMAIL, password = PASSWORD)
 
             // Set policies that will fail the password.
             mutableActivePolicyFlow.emit(
@@ -547,7 +549,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.unlockVault(
@@ -878,27 +879,95 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `refreshAccessTokenSynchronously returns failure and logs out on failure`() = runTest {
-        fakeAuthDiskSource.storeAccountTokens(
-            userId = USER_ID_1,
-            accountTokens = ACCOUNT_TOKENS_1,
-        )
-        coEvery {
-            identityService.refreshTokenSynchronously(REFRESH_TOKEN)
-        } returns Throwable("Fail").asFailure()
+    fun `refreshAccessTokenSynchronously returns failure if refreshTokenSynchronously fails`() =
+        runTest {
+            fakeAuthDiskSource.storeAccountTokens(
+                userId = USER_ID_1,
+                accountTokens = ACCOUNT_TOKENS_1,
+            )
+            coEvery {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            } returns Throwable("Fail").asFailure()
 
-        assertTrue(repository.refreshAccessTokenSynchronously(USER_ID_1).isFailure)
+            assertTrue(repository.refreshAccessTokenSynchronously(USER_ID_1).isFailure)
 
-        coVerify(exactly = 1) {
-            identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            coVerify(exactly = 1) {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            }
         }
-    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `refreshAccessTokenSynchronously returns logs out and returns failure if refreshTokenSynchronously returns invalid_grant`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeAccountTokens(
+                userId = USER_ID_1,
+                accountTokens = ACCOUNT_TOKENS_1,
+            )
+            coEvery {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            } returns RefreshTokenResponseJson.Error(error = "invalid_grant").asSuccess()
+
+            assertTrue(repository.refreshAccessTokenSynchronously(USER_ID_1).isFailure)
+
+            coVerify(exactly = 1) {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+                userLogoutManager.logout(userId = USER_ID_1, reason = LogoutReason.InvalidGrant)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `refreshAccessTokenSynchronously returns logs out and returns failure if refreshTokenSynchronously returns Forbidden`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeAccountTokens(
+                userId = USER_ID_1,
+                accountTokens = ACCOUNT_TOKENS_1,
+            )
+            coEvery {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            } returns RefreshTokenResponseJson.Forbidden(error = Throwable("Fail!")).asSuccess()
+
+            assertTrue(repository.refreshAccessTokenSynchronously(USER_ID_1).isFailure)
+
+            coVerify(exactly = 1) {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+                userLogoutManager.logout(userId = USER_ID_1, reason = LogoutReason.RefreshForbidden)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `refreshAccessTokenSynchronously returns logs out and returns failure if refreshTokenSynchronously returns Unauthorized`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeAccountTokens(
+                userId = USER_ID_1,
+                accountTokens = ACCOUNT_TOKENS_1,
+            )
+            coEvery {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            } returns RefreshTokenResponseJson.Unauthorized(error = Throwable("Fail!")).asSuccess()
+
+            assertTrue(repository.refreshAccessTokenSynchronously(USER_ID_1).isFailure)
+
+            coVerify(exactly = 1) {
+                identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+                userLogoutManager.logout(
+                    userId = USER_ID_1,
+                    reason = LogoutReason.RefreshUnauthorized,
+                )
+            }
+        }
 
     @Test
     fun `refreshAccessTokenSynchronously returns success and sets account tokens`() = runTest {
         val updatedAccountTokens = AccountTokensJson(
             accessToken = ACCESS_TOKEN_2,
             refreshToken = REFRESH_TOKEN_2,
+            expiresAtSec = FIXED_CLOCK.instant().epochSecond + ACCESS_TOKEN_2_EXPIRES_IN,
         )
         fakeAuthDiskSource.storeAccountTokens(
             userId = USER_ID_1,
@@ -1511,7 +1580,7 @@ class AuthRepositoryTest {
         coEvery {
             identityService.preLogin(email = EMAIL)
         } returns error.asFailure()
-        val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+        val result = repository.login(email = EMAIL, password = PASSWORD)
         assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
         coVerify { identityService.preLogin(email = EMAIL) }
@@ -1532,11 +1601,10 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns error.asFailure()
-            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
             assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
             coVerify { identityService.preLogin(email = EMAIL) }
@@ -1547,7 +1615,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             }
@@ -1568,11 +1635,10 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns RuntimeException().asFailure()
-            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.UnofficialServerError, result)
             assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
             coVerify { identityService.preLogin(email = EMAIL) }
@@ -1592,11 +1658,10 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns SSLHandshakeException("error").asFailure()
-            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.CertificateError, result)
             assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
             coVerify { identityService.preLogin(email = EMAIL) }
@@ -1608,7 +1673,7 @@ class AuthRepositoryTest {
             coEvery {
                 identityService.preLogin(email = EMAIL)
             } returns SSLHandshakeException("error").asFailure()
-            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.CertificateError, result)
             assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
             coVerify { identityService.preLogin(email = EMAIL) }
@@ -1626,7 +1691,6 @@ class AuthRepositoryTest {
                     username = EMAIL,
                     password = PASSWORD_HASH,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         } returns GetTokenResponseJson
@@ -1637,7 +1701,7 @@ class AuthRepositoryTest {
             )
             .asSuccess()
 
-        val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+        val result = repository.login(email = EMAIL, password = PASSWORD)
         assertEquals(LoginResult.Error(errorMessage = "mock_error_message", error = null), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
         coVerify { identityService.preLogin(email = EMAIL) }
@@ -1648,7 +1712,6 @@ class AuthRepositoryTest {
                     username = EMAIL,
                     password = PASSWORD_HASH,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         }
@@ -1668,7 +1731,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns GetTokenResponseJson
@@ -1679,7 +1741,7 @@ class AuthRepositoryTest {
                 )
                 .asSuccess()
 
-            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(
                 LoginResult.NewDeviceVerification(errorMessage = "new device verification required"),
                 result,
@@ -1702,7 +1764,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -1726,7 +1787,7 @@ class AuthRepositoryTest {
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
             } returns SINGLE_USER_STATE_1
-            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
             coVerify { identityService.preLogin(email = EMAIL) }
@@ -1749,7 +1810,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.unlockVault(
@@ -1789,7 +1849,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -1817,7 +1876,7 @@ class AuthRepositoryTest {
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
             } returns SINGLE_USER_STATE_1
-            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(
                 LoginResult.Error(errorMessage = expectedErrorMessage, error = error),
                 result,
@@ -1843,7 +1902,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
 
@@ -1895,7 +1953,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -1909,7 +1966,6 @@ class AuthRepositoryTest {
             val result = repository.login(
                 email = EMAIL,
                 password = PASSWORD,
-                captchaToken = null,
             )
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
@@ -1925,7 +1981,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.syncIfNecessary()
@@ -1968,7 +2023,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -1993,7 +2047,7 @@ class AuthRepositoryTest {
                 )
             } returns MULTI_USER_STATE
 
-            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            val result = repository.login(email = EMAIL, password = PASSWORD)
 
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
@@ -2013,7 +2067,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.unlockVault(
@@ -2039,37 +2092,6 @@ class AuthRepositoryTest {
         }
 
     @Test
-    fun `login get token returns captcha request should return CaptchaRequired`() = runTest {
-        coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
-        coEvery {
-            identityService.getToken(
-                email = EMAIL,
-                authModel = IdentityTokenAuthModel.MasterPassword(
-                    username = EMAIL,
-                    password = PASSWORD_HASH,
-                ),
-                captchaToken = null,
-                uniqueAppId = UNIQUE_APP_ID,
-            )
-        } returns GetTokenResponseJson.CaptchaRequired(CAPTCHA_KEY).asSuccess()
-        val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
-        assertEquals(LoginResult.CaptchaRequired(CAPTCHA_KEY), result)
-        assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
-        coVerify { identityService.preLogin(email = EMAIL) }
-        coVerify {
-            identityService.getToken(
-                email = EMAIL,
-                authModel = IdentityTokenAuthModel.MasterPassword(
-                    username = EMAIL,
-                    password = PASSWORD_HASH,
-                ),
-                captchaToken = null,
-                uniqueAppId = UNIQUE_APP_ID,
-            )
-        }
-    }
-
-    @Test
     fun `login get token returns two factor request should return TwoFactorRequired`() = runTest {
         coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
@@ -2079,25 +2101,22 @@ class AuthRepositoryTest {
                     username = EMAIL,
                     password = PASSWORD_HASH,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         } returns GetTokenResponseJson
             .TwoFactorRequired(
                 authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
-                captchaToken = null,
                 ssoToken = null,
                 twoFactorProviders = null,
             )
             .asSuccess()
-        val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+        val result = repository.login(email = EMAIL, password = PASSWORD)
         assertEquals(LoginResult.TwoFactorRequired, result)
         assertEquals(
             repository.twoFactorResponse,
             GetTokenResponseJson.TwoFactorRequired(
                 authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
                 twoFactorProviders = null,
-                captchaToken = null,
                 ssoToken = null,
             ),
         )
@@ -2110,7 +2129,6 @@ class AuthRepositoryTest {
                     username = EMAIL,
                     password = PASSWORD_HASH,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         }
@@ -2128,18 +2146,16 @@ class AuthRepositoryTest {
                     username = EMAIL,
                     password = PASSWORD_HASH,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         } returns GetTokenResponseJson
             .TwoFactorRequired(
                 authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
-                captchaToken = null,
                 ssoToken = null,
                 twoFactorProviders = null,
             )
             .asSuccess()
-        val firstResult = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+        val firstResult = repository.login(email = EMAIL, password = PASSWORD)
         assertEquals(LoginResult.TwoFactorRequired, firstResult)
         coVerify { identityService.preLogin(email = EMAIL) }
         coVerify {
@@ -2149,7 +2165,6 @@ class AuthRepositoryTest {
                     username = EMAIL,
                     password = PASSWORD_HASH,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         }
@@ -2165,7 +2180,6 @@ class AuthRepositoryTest {
                     username = EMAIL,
                     password = PASSWORD_HASH,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = TWO_FACTOR_DATA,
             )
@@ -2194,7 +2208,6 @@ class AuthRepositoryTest {
             email = EMAIL,
             password = PASSWORD,
             twoFactorData = TWO_FACTOR_DATA,
-            captchaToken = null,
             orgIdentifier = null,
         )
         assertEquals(LoginResult.Success, finalResult)
@@ -2211,7 +2224,6 @@ class AuthRepositoryTest {
         runTest {
             val twoFactorResponse = GetTokenResponseJson.TwoFactorRequired(
                 authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
-                captchaToken = null,
                 ssoToken = null,
                 twoFactorProviders = null,
             )
@@ -2225,7 +2237,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns twoFactorResponse.asSuccess()
@@ -2233,7 +2244,6 @@ class AuthRepositoryTest {
             val firstResult = repository.login(
                 email = EMAIL,
                 password = PASSWORD,
-                captchaToken = null,
             )
 
             assertEquals(LoginResult.TwoFactorRequired, firstResult)
@@ -2245,7 +2255,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             }
@@ -2261,7 +2270,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                     twoFactorData = TWO_FACTOR_DATA,
                 )
@@ -2290,7 +2298,6 @@ class AuthRepositoryTest {
                 email = EMAIL,
                 password = PASSWORD,
                 twoFactorData = TWO_FACTOR_DATA,
-                captchaToken = null,
                 orgIdentifier = null,
             )
             assertEquals(LoginResult.Error(errorMessage = null, error = error), finalResult)
@@ -2325,7 +2332,6 @@ class AuthRepositoryTest {
                     username = EMAIL,
                     password = PASSWORD_HASH,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = rememberedTwoFactorData,
             )
@@ -2350,7 +2356,7 @@ class AuthRepositoryTest {
                 environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
             )
         } returns SINGLE_USER_STATE_1
-        val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+        val result = repository.login(email = EMAIL, password = PASSWORD)
         assertEquals(LoginResult.Success, result)
         assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
         coVerify { identityService.preLogin(email = EMAIL) }
@@ -2369,7 +2375,6 @@ class AuthRepositoryTest {
                     username = EMAIL,
                     password = PASSWORD_HASH,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = rememberedTwoFactorData,
             )
@@ -2402,7 +2407,6 @@ class AuthRepositoryTest {
             email = EMAIL,
             password = PASSWORD,
             twoFactorData = TWO_FACTOR_DATA,
-            captchaToken = null,
             orgIdentifier = null,
         )
         assertEquals(
@@ -2426,7 +2430,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns GetTokenResponseJson
@@ -2438,7 +2441,7 @@ class AuthRepositoryTest {
                 )
                 .asSuccess()
 
-            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.EncryptionKeyMigrationRequired, result)
             assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
             coVerify {
@@ -2449,7 +2452,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             }
@@ -2466,7 +2468,6 @@ class AuthRepositoryTest {
                     authRequestId = DEVICE_REQUEST_ID,
                     accessCode = DEVICE_ACCESS_CODE,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         } returns error.asFailure()
@@ -2477,7 +2478,6 @@ class AuthRepositoryTest {
             asymmetricalKey = DEVICE_ASYMMETRICAL_KEY,
             requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
             masterPasswordHash = PASSWORD_HASH,
-            captchaToken = null,
         )
         assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
@@ -2489,7 +2489,6 @@ class AuthRepositoryTest {
                     authRequestId = DEVICE_REQUEST_ID,
                     accessCode = DEVICE_ACCESS_CODE,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         }
@@ -2506,7 +2505,6 @@ class AuthRepositoryTest {
                         authRequestId = DEVICE_REQUEST_ID,
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns GetTokenResponseJson
@@ -2524,7 +2522,6 @@ class AuthRepositoryTest {
                 asymmetricalKey = DEVICE_ASYMMETRICAL_KEY,
                 requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                 masterPasswordHash = PASSWORD_HASH,
-                captchaToken = null,
             )
             assertEquals(
                 LoginResult.Error(errorMessage = "mock_error_message", error = null),
@@ -2539,7 +2536,6 @@ class AuthRepositoryTest {
                         authRequestId = DEVICE_REQUEST_ID,
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             }
@@ -2558,7 +2554,6 @@ class AuthRepositoryTest {
                         authRequestId = DEVICE_REQUEST_ID,
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -2592,7 +2587,6 @@ class AuthRepositoryTest {
                 asymmetricalKey = DEVICE_ASYMMETRICAL_KEY,
                 requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                 masterPasswordHash = PASSWORD_HASH,
-                captchaToken = null,
             )
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
@@ -2612,7 +2606,6 @@ class AuthRepositoryTest {
                         authRequestId = DEVICE_REQUEST_ID,
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.syncIfNecessary()
@@ -2652,7 +2645,6 @@ class AuthRepositoryTest {
                         authRequestId = DEVICE_REQUEST_ID,
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -2686,7 +2678,6 @@ class AuthRepositoryTest {
                 asymmetricalKey = DEVICE_ASYMMETRICAL_KEY,
                 requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                 masterPasswordHash = PASSWORD_HASH,
-                captchaToken = null,
             )
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
@@ -2706,7 +2697,6 @@ class AuthRepositoryTest {
                         authRequestId = DEVICE_REQUEST_ID,
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.syncIfNecessary()
@@ -2733,46 +2723,6 @@ class AuthRepositoryTest {
         }
 
     @Test
-    fun `login with device get token returns captcha request should return CaptchaRequired`() =
-        runTest {
-            coEvery {
-                identityService.getToken(
-                    email = EMAIL,
-                    authModel = IdentityTokenAuthModel.AuthRequest(
-                        username = EMAIL,
-                        authRequestId = DEVICE_REQUEST_ID,
-                        accessCode = DEVICE_ACCESS_CODE,
-                    ),
-                    captchaToken = null,
-                    uniqueAppId = UNIQUE_APP_ID,
-                )
-            } returns GetTokenResponseJson.CaptchaRequired(CAPTCHA_KEY).asSuccess()
-            val result = repository.login(
-                email = EMAIL,
-                requestId = DEVICE_REQUEST_ID,
-                accessCode = DEVICE_ACCESS_CODE,
-                asymmetricalKey = DEVICE_ASYMMETRICAL_KEY,
-                requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
-                masterPasswordHash = PASSWORD_HASH,
-                captchaToken = null,
-            )
-            assertEquals(LoginResult.CaptchaRequired(CAPTCHA_KEY), result)
-            assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
-            coVerify {
-                identityService.getToken(
-                    email = EMAIL,
-                    authModel = IdentityTokenAuthModel.AuthRequest(
-                        username = EMAIL,
-                        authRequestId = DEVICE_REQUEST_ID,
-                        accessCode = DEVICE_ACCESS_CODE,
-                    ),
-                    captchaToken = null,
-                    uniqueAppId = UNIQUE_APP_ID,
-                )
-            }
-        }
-
-    @Test
     fun `login with device get token returns two factor request should return TwoFactorRequired`() =
         runTest {
             coEvery {
@@ -2783,14 +2733,12 @@ class AuthRepositoryTest {
                         authRequestId = DEVICE_REQUEST_ID,
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns GetTokenResponseJson
                 .TwoFactorRequired(
                     authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
                     twoFactorProviders = null,
-                    captchaToken = null,
                     ssoToken = null,
                 )
                 .asSuccess()
@@ -2801,7 +2749,6 @@ class AuthRepositoryTest {
                 asymmetricalKey = DEVICE_ASYMMETRICAL_KEY,
                 requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                 masterPasswordHash = PASSWORD_HASH,
-                captchaToken = null,
             )
             assertEquals(LoginResult.TwoFactorRequired, result)
             assertEquals(
@@ -2809,7 +2756,6 @@ class AuthRepositoryTest {
                 GetTokenResponseJson.TwoFactorRequired(
                     authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
                     twoFactorProviders = null,
-                    captchaToken = null,
                     ssoToken = null,
                 ),
             )
@@ -2822,7 +2768,6 @@ class AuthRepositoryTest {
                         authRequestId = DEVICE_REQUEST_ID,
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             }
@@ -2840,14 +2785,12 @@ class AuthRepositoryTest {
                     authRequestId = DEVICE_REQUEST_ID,
                     accessCode = DEVICE_ACCESS_CODE,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         } returns GetTokenResponseJson
             .TwoFactorRequired(
                 authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
                 twoFactorProviders = null,
-                captchaToken = null,
                 ssoToken = null,
             )
             .asSuccess()
@@ -2858,7 +2801,6 @@ class AuthRepositoryTest {
             asymmetricalKey = DEVICE_ASYMMETRICAL_KEY,
             requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
             masterPasswordHash = PASSWORD_HASH,
-            captchaToken = null,
         )
         assertEquals(LoginResult.TwoFactorRequired, firstResult)
         coVerify {
@@ -2869,7 +2811,6 @@ class AuthRepositoryTest {
                     authRequestId = DEVICE_REQUEST_ID,
                     accessCode = DEVICE_ACCESS_CODE,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         }
@@ -2886,7 +2827,6 @@ class AuthRepositoryTest {
                     authRequestId = DEVICE_REQUEST_ID,
                     accessCode = DEVICE_ACCESS_CODE,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = TWO_FACTOR_DATA,
             )
@@ -2918,7 +2858,6 @@ class AuthRepositoryTest {
             email = EMAIL,
             password = null,
             twoFactorData = TWO_FACTOR_DATA,
-            captchaToken = null,
             orgIdentifier = null,
         )
         assertEquals(LoginResult.Success, finalResult)
@@ -2940,7 +2879,6 @@ class AuthRepositoryTest {
                     ssoCodeVerifier = SSO_CODE_VERIFIER,
                     ssoRedirectUri = SSO_REDIRECT_URI,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         } returns error.asFailure()
@@ -2949,7 +2887,6 @@ class AuthRepositoryTest {
             ssoCode = SSO_CODE,
             ssoCodeVerifier = SSO_CODE_VERIFIER,
             ssoRedirectUri = SSO_REDIRECT_URI,
-            captchaToken = null,
             organizationIdentifier = ORGANIZATION_IDENTIFIER,
         )
         assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
@@ -2962,7 +2899,6 @@ class AuthRepositoryTest {
                     ssoCodeVerifier = SSO_CODE_VERIFIER,
                     ssoRedirectUri = SSO_REDIRECT_URI,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         }
@@ -2978,7 +2914,6 @@ class AuthRepositoryTest {
                     ssoCodeVerifier = SSO_CODE_VERIFIER,
                     ssoRedirectUri = SSO_REDIRECT_URI,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         } returns GetTokenResponseJson
@@ -2994,7 +2929,6 @@ class AuthRepositoryTest {
             ssoCode = SSO_CODE,
             ssoCodeVerifier = SSO_CODE_VERIFIER,
             ssoRedirectUri = SSO_REDIRECT_URI,
-            captchaToken = null,
             organizationIdentifier = ORGANIZATION_IDENTIFIER,
         )
         assertEquals(LoginResult.Error(errorMessage = "mock_error_message", error = null), result)
@@ -3007,7 +2941,6 @@ class AuthRepositoryTest {
                     ssoCodeVerifier = SSO_CODE_VERIFIER,
                     ssoRedirectUri = SSO_REDIRECT_URI,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         }
@@ -3026,7 +2959,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -3042,7 +2974,6 @@ class AuthRepositoryTest {
                 ssoCode = SSO_CODE,
                 ssoCodeVerifier = SSO_CODE_VERIFIER,
                 ssoRedirectUri = SSO_REDIRECT_URI,
-                captchaToken = null,
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
             assertEquals(LoginResult.Success, result)
@@ -3063,7 +2994,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.syncIfNecessary()
@@ -3096,7 +3026,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -3112,7 +3041,6 @@ class AuthRepositoryTest {
                 ssoCode = SSO_CODE,
                 ssoCodeVerifier = SSO_CODE_VERIFIER,
                 ssoRedirectUri = SSO_REDIRECT_URI,
-                captchaToken = null,
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
             assertEquals(LoginResult.Success, result)
@@ -3127,7 +3055,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.syncIfNecessary()
@@ -3159,7 +3086,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -3181,7 +3107,6 @@ class AuthRepositoryTest {
                 ssoCode = SSO_CODE,
                 ssoCodeVerifier = SSO_CODE_VERIFIER,
                 ssoRedirectUri = SSO_REDIRECT_URI,
-                captchaToken = null,
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
 
@@ -3196,7 +3121,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 keyConnectorManager.getMasterKeyFromKeyConnector(
@@ -3230,7 +3154,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -3265,7 +3188,6 @@ class AuthRepositoryTest {
                 ssoCode = SSO_CODE,
                 ssoCodeVerifier = SSO_CODE_VERIFIER,
                 ssoRedirectUri = SSO_REDIRECT_URI,
-                captchaToken = null,
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
 
@@ -3281,7 +3203,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 keyConnectorManager.getMasterKeyFromKeyConnector(
@@ -3330,7 +3251,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -3358,7 +3278,6 @@ class AuthRepositoryTest {
                 ssoCode = SSO_CODE,
                 ssoCodeVerifier = SSO_CODE_VERIFIER,
                 ssoRedirectUri = SSO_REDIRECT_URI,
-                captchaToken = null,
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
 
@@ -3376,7 +3295,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 keyConnectorManager.migrateNewUserToKeyConnector(
@@ -3421,7 +3339,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -3462,7 +3379,6 @@ class AuthRepositoryTest {
                 ssoCode = SSO_CODE,
                 ssoCodeVerifier = SSO_CODE_VERIFIER,
                 ssoRedirectUri = SSO_REDIRECT_URI,
-                captchaToken = null,
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
 
@@ -3481,7 +3397,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 keyConnectorManager.migrateNewUserToKeyConnector(
@@ -3534,7 +3449,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -3549,7 +3463,6 @@ class AuthRepositoryTest {
                 ssoCode = SSO_CODE,
                 ssoCodeVerifier = SSO_CODE_VERIFIER,
                 ssoRedirectUri = SSO_REDIRECT_URI,
-                captchaToken = null,
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
             assertEquals(LoginResult.ConfirmKeyConnectorDomain(keyConnectorUrl), result)
@@ -3587,7 +3500,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -3632,7 +3544,6 @@ class AuthRepositoryTest {
                 ssoCode = SSO_CODE,
                 ssoCodeVerifier = SSO_CODE_VERIFIER,
                 ssoRedirectUri = SSO_REDIRECT_URI,
-                captchaToken = null,
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
             assertEquals(LoginResult.ConfirmKeyConnectorDomain(keyConnectorUrl), loginResult)
@@ -3650,7 +3561,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.syncIfNecessary()
@@ -3674,7 +3584,6 @@ class AuthRepositoryTest {
                         authRequestId = DEVICE_REQUEST_ID,
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -3707,7 +3616,6 @@ class AuthRepositoryTest {
                 asymmetricalKey = DEVICE_ASYMMETRICAL_KEY,
                 requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                 masterPasswordHash = null,
-                captchaToken = null,
             )
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
@@ -3727,7 +3635,6 @@ class AuthRepositoryTest {
                         authRequestId = DEVICE_REQUEST_ID,
                         accessCode = DEVICE_ACCESS_CODE,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.syncIfNecessary()
@@ -3770,7 +3677,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -3787,7 +3693,6 @@ class AuthRepositoryTest {
                 ssoCode = SSO_CODE,
                 ssoCodeVerifier = SSO_CODE_VERIFIER,
                 ssoRedirectUri = SSO_REDIRECT_URI,
-                captchaToken = null,
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
 
@@ -3805,7 +3710,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.syncIfNecessary()
@@ -3854,7 +3758,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -3871,7 +3774,6 @@ class AuthRepositoryTest {
                 ssoCode = SSO_CODE,
                 ssoCodeVerifier = SSO_CODE_VERIFIER,
                 ssoRedirectUri = SSO_REDIRECT_URI,
-                captchaToken = null,
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
 
@@ -3889,7 +3791,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.unlockVault(
@@ -3954,7 +3855,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -3971,7 +3871,6 @@ class AuthRepositoryTest {
                 ssoCode = SSO_CODE,
                 ssoCodeVerifier = SSO_CODE_VERIFIER,
                 ssoRedirectUri = SSO_REDIRECT_URI,
-                captchaToken = null,
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
 
@@ -3988,7 +3887,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.unlockVault(
@@ -4027,7 +3925,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -4044,7 +3941,6 @@ class AuthRepositoryTest {
                 ssoCode = SSO_CODE,
                 ssoCodeVerifier = SSO_CODE_VERIFIER,
                 ssoRedirectUri = SSO_REDIRECT_URI,
-                captchaToken = null,
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
 
@@ -4066,7 +3962,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.syncIfNecessary()
@@ -4080,44 +3975,6 @@ class AuthRepositoryTest {
         }
 
     @Test
-    fun `SSO login get token returns captcha request should return CaptchaRequired`() = runTest {
-        coEvery {
-            identityService.getToken(
-                email = EMAIL,
-                authModel = IdentityTokenAuthModel.SingleSignOn(
-                    ssoCode = SSO_CODE,
-                    ssoCodeVerifier = SSO_CODE_VERIFIER,
-                    ssoRedirectUri = SSO_REDIRECT_URI,
-                ),
-                captchaToken = null,
-                uniqueAppId = UNIQUE_APP_ID,
-            )
-        } returns GetTokenResponseJson.CaptchaRequired(CAPTCHA_KEY).asSuccess()
-        val result = repository.login(
-            email = EMAIL,
-            ssoCode = SSO_CODE,
-            ssoCodeVerifier = SSO_CODE_VERIFIER,
-            ssoRedirectUri = SSO_REDIRECT_URI,
-            captchaToken = null,
-            organizationIdentifier = ORGANIZATION_IDENTIFIER,
-        )
-        assertEquals(LoginResult.CaptchaRequired(CAPTCHA_KEY), result)
-        assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
-        coVerify {
-            identityService.getToken(
-                email = EMAIL,
-                authModel = IdentityTokenAuthModel.SingleSignOn(
-                    ssoCode = SSO_CODE,
-                    ssoCodeVerifier = SSO_CODE_VERIFIER,
-                    ssoRedirectUri = SSO_REDIRECT_URI,
-                ),
-                captchaToken = null,
-                uniqueAppId = UNIQUE_APP_ID,
-            )
-        }
-    }
-
-    @Test
     fun `SSO login get token returns two factor request should return TwoFactorRequired`() =
         runTest {
             coEvery {
@@ -4128,13 +3985,11 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns GetTokenResponseJson
                 .TwoFactorRequired(
                     authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
-                    captchaToken = null,
                     ssoToken = null,
                     twoFactorProviders = null,
                 )
@@ -4144,7 +3999,6 @@ class AuthRepositoryTest {
                 ssoCode = SSO_CODE,
                 ssoCodeVerifier = SSO_CODE_VERIFIER,
                 ssoRedirectUri = SSO_REDIRECT_URI,
-                captchaToken = null,
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
             assertEquals(LoginResult.TwoFactorRequired, result)
@@ -4152,7 +4006,6 @@ class AuthRepositoryTest {
                 repository.twoFactorResponse,
                 GetTokenResponseJson.TwoFactorRequired(
                     authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
-                    captchaToken = null,
                     ssoToken = null,
                     twoFactorProviders = null,
                 ),
@@ -4166,7 +4019,6 @@ class AuthRepositoryTest {
                         ssoCodeVerifier = SSO_CODE_VERIFIER,
                         ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             }
@@ -4184,13 +4036,11 @@ class AuthRepositoryTest {
                     ssoCodeVerifier = SSO_CODE_VERIFIER,
                     ssoRedirectUri = SSO_REDIRECT_URI,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         } returns GetTokenResponseJson
             .TwoFactorRequired(
                 authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
-                captchaToken = null,
                 ssoToken = null,
                 twoFactorProviders = null,
             )
@@ -4201,7 +4051,6 @@ class AuthRepositoryTest {
             ssoCode = SSO_CODE,
             ssoCodeVerifier = SSO_CODE_VERIFIER,
             ssoRedirectUri = SSO_REDIRECT_URI,
-            captchaToken = null,
             organizationIdentifier = ORGANIZATION_IDENTIFIER,
         )
         assertEquals(LoginResult.TwoFactorRequired, firstResult)
@@ -4213,7 +4062,6 @@ class AuthRepositoryTest {
                     ssoCodeVerifier = SSO_CODE_VERIFIER,
                     ssoRedirectUri = SSO_REDIRECT_URI,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         }
@@ -4230,7 +4078,6 @@ class AuthRepositoryTest {
                     ssoCodeVerifier = SSO_CODE_VERIFIER,
                     ssoRedirectUri = SSO_REDIRECT_URI,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = TWO_FACTOR_DATA,
             )
@@ -4246,7 +4093,6 @@ class AuthRepositoryTest {
             email = EMAIL,
             password = null,
             twoFactorData = TWO_FACTOR_DATA,
-            captchaToken = null,
             orgIdentifier = null,
         )
         assertEquals(LoginResult.Success, finalResult)
@@ -4274,7 +4120,6 @@ class AuthRepositoryTest {
                     ssoCodeVerifier = SSO_CODE_VERIFIER,
                     ssoRedirectUri = SSO_REDIRECT_URI,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = rememberedTwoFactorData,
             )
@@ -4291,7 +4136,6 @@ class AuthRepositoryTest {
             ssoCode = SSO_CODE,
             ssoCodeVerifier = SSO_CODE_VERIFIER,
             ssoRedirectUri = SSO_REDIRECT_URI,
-            captchaToken = null,
             organizationIdentifier = ORGANIZATION_IDENTIFIER,
         )
         assertEquals(LoginResult.Success, result)
@@ -4312,7 +4156,6 @@ class AuthRepositoryTest {
                     ssoCodeVerifier = SSO_CODE_VERIFIER,
                     ssoRedirectUri = SSO_REDIRECT_URI,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = rememberedTwoFactorData,
             )
@@ -4336,7 +4179,6 @@ class AuthRepositoryTest {
                     email = EMAIL,
                     masterPasswordHash = PASSWORD_HASH,
                     masterPasswordHint = null,
-                    captchaResponse = null,
                     key = ENCRYPTED_USER_KEY,
                     keys = RegisterRequestJson.Keys(
                         publicKey = PUBLIC_KEY,
@@ -4346,17 +4188,16 @@ class AuthRepositoryTest {
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
-        } returns RegisterResponseJson.Success(captchaBypassToken = CAPTCHA_KEY).asSuccess()
+        } returns RegisterResponseJson.Success.asSuccess()
 
         val result = repository.register(
             email = EMAIL,
             masterPassword = PASSWORD,
             masterPasswordHint = null,
-            captchaToken = null,
             shouldCheckDataBreaches = true,
             isMasterPasswordStrong = true,
         )
-        assertEquals(RegisterResult.Success(CAPTCHA_KEY), result)
+        assertEquals(RegisterResult.Success, result)
     }
 
     @Test
@@ -4370,7 +4211,6 @@ class AuthRepositoryTest {
                 email = EMAIL,
                 masterPassword = PASSWORD,
                 masterPasswordHint = null,
-                captchaToken = null,
                 shouldCheckDataBreaches = true,
                 isMasterPasswordStrong = true,
             )
@@ -4388,7 +4228,6 @@ class AuthRepositoryTest {
                 email = EMAIL,
                 masterPassword = PASSWORD,
                 masterPasswordHint = null,
-                captchaToken = null,
                 shouldCheckDataBreaches = true,
                 isMasterPasswordStrong = false,
             )
@@ -4406,7 +4245,6 @@ class AuthRepositoryTest {
                 email = EMAIL,
                 masterPassword = PASSWORD,
                 masterPasswordHint = null,
-                captchaToken = null,
                 shouldCheckDataBreaches = true,
                 isMasterPasswordStrong = false,
             )
@@ -4424,7 +4262,6 @@ class AuthRepositoryTest {
                     email = EMAIL,
                     masterPasswordHash = PASSWORD_HASH,
                     masterPasswordHint = null,
-                    captchaResponse = null,
                     key = ENCRYPTED_USER_KEY,
                     keys = RegisterRequestJson.Keys(
                         publicKey = PUBLIC_KEY,
@@ -4434,17 +4271,16 @@ class AuthRepositoryTest {
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
-        } returns RegisterResponseJson.Success(captchaBypassToken = CAPTCHA_KEY).asSuccess()
+        } returns RegisterResponseJson.Success.asSuccess()
 
         val result = repository.register(
             email = EMAIL,
             masterPassword = PASSWORD,
             masterPasswordHint = null,
-            captchaToken = null,
             shouldCheckDataBreaches = true,
             isMasterPasswordStrong = true,
         )
-        assertEquals(RegisterResult.Success(CAPTCHA_KEY), result)
+        assertEquals(RegisterResult.Success, result)
         coVerify { haveIBeenPwnedService.hasPasswordBeenBreached(PASSWORD) }
     }
 
@@ -4457,7 +4293,6 @@ class AuthRepositoryTest {
                     email = EMAIL,
                     masterPasswordHash = PASSWORD_HASH,
                     masterPasswordHint = null,
-                    captchaResponse = null,
                     key = ENCRYPTED_USER_KEY,
                     keys = RegisterRequestJson.Keys(
                         publicKey = PUBLIC_KEY,
@@ -4467,106 +4302,17 @@ class AuthRepositoryTest {
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
-        } returns RegisterResponseJson.Success(captchaBypassToken = CAPTCHA_KEY).asSuccess()
+        } returns RegisterResponseJson.Success.asSuccess()
 
         val result = repository.register(
             email = EMAIL,
             masterPassword = PASSWORD,
             masterPasswordHint = null,
-            captchaToken = null,
             shouldCheckDataBreaches = false,
             isMasterPasswordStrong = true,
         )
-        assertEquals(RegisterResult.Success(CAPTCHA_KEY), result)
+        assertEquals(RegisterResult.Success, result)
     }
-
-    @Test
-    fun `register returns CaptchaRequired captchaKeys empty should return Error no message`() =
-        runTest {
-            coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
-            coEvery {
-                identityService.register(
-                    body = RegisterRequestJson(
-                        email = EMAIL,
-                        masterPasswordHash = PASSWORD_HASH,
-                        masterPasswordHint = null,
-                        captchaResponse = null,
-                        key = ENCRYPTED_USER_KEY,
-                        keys = RegisterRequestJson.Keys(
-                            publicKey = PUBLIC_KEY,
-                            encryptedPrivateKey = PRIVATE_KEY,
-                        ),
-                        kdfType = KdfTypeJson.PBKDF2_SHA256,
-                        kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
-                    ),
-                )
-            } returns RegisterResponseJson
-                .CaptchaRequired(
-                    validationErrors = RegisterResponseJson
-                        .CaptchaRequired
-                        .ValidationErrors(
-                            captchaKeys = emptyList(),
-                        ),
-                )
-                .asSuccess()
-
-            val result = repository.register(
-                email = EMAIL,
-                masterPassword = PASSWORD,
-                masterPasswordHint = null,
-                captchaToken = null,
-                shouldCheckDataBreaches = false,
-                isMasterPasswordStrong = true,
-            )
-            assertEquals(
-                RegisterResult.Error(
-                    errorMessage = null,
-                    error = MissingPropertyException("Captcha ID"),
-                ),
-                result,
-            )
-        }
-
-    @Test
-    fun `register returns CaptchaRequired captchaKeys should return CaptchaRequired`() =
-        runTest {
-            coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
-            coEvery {
-                identityService.register(
-                    body = RegisterRequestJson(
-                        email = EMAIL,
-                        masterPasswordHash = PASSWORD_HASH,
-                        masterPasswordHint = null,
-                        captchaResponse = null,
-                        key = ENCRYPTED_USER_KEY,
-                        keys = RegisterRequestJson.Keys(
-                            publicKey = PUBLIC_KEY,
-                            encryptedPrivateKey = PRIVATE_KEY,
-                        ),
-                        kdfType = KdfTypeJson.PBKDF2_SHA256,
-                        kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
-                    ),
-                )
-            } returns RegisterResponseJson
-                .CaptchaRequired(
-                    validationErrors = RegisterResponseJson
-                        .CaptchaRequired
-                        .ValidationErrors(
-                            captchaKeys = listOf(CAPTCHA_KEY),
-                        ),
-                )
-                .asSuccess()
-
-            val result = repository.register(
-                email = EMAIL,
-                masterPassword = PASSWORD,
-                masterPasswordHint = null,
-                captchaToken = null,
-                shouldCheckDataBreaches = false,
-                isMasterPasswordStrong = true,
-            )
-            assertEquals(RegisterResult.CaptchaRequired(captchaId = CAPTCHA_KEY), result)
-        }
 
     @Test
     fun `register Failure should return Error with no message`() = runTest {
@@ -4578,7 +4324,6 @@ class AuthRepositoryTest {
                     email = EMAIL,
                     masterPasswordHash = PASSWORD_HASH,
                     masterPasswordHint = null,
-                    captchaResponse = null,
                     key = ENCRYPTED_USER_KEY,
                     keys = RegisterRequestJson.Keys(
                         publicKey = PUBLIC_KEY,
@@ -4594,7 +4339,6 @@ class AuthRepositoryTest {
             email = EMAIL,
             masterPassword = PASSWORD,
             masterPasswordHint = null,
-            captchaToken = null,
             shouldCheckDataBreaches = false,
             isMasterPasswordStrong = true,
         )
@@ -4610,7 +4354,6 @@ class AuthRepositoryTest {
                     email = EMAIL,
                     masterPasswordHash = PASSWORD_HASH,
                     masterPasswordHint = null,
-                    captchaResponse = null,
                     key = ENCRYPTED_USER_KEY,
                     keys = RegisterRequestJson.Keys(
                         publicKey = PUBLIC_KEY,
@@ -4628,7 +4371,6 @@ class AuthRepositoryTest {
             email = EMAIL,
             masterPassword = PASSWORD,
             masterPasswordHint = null,
-            captchaToken = null,
             shouldCheckDataBreaches = false,
             isMasterPasswordStrong = true,
         )
@@ -4644,7 +4386,6 @@ class AuthRepositoryTest {
                     email = EMAIL,
                     masterPasswordHash = PASSWORD_HASH,
                     masterPasswordHint = null,
-                    captchaResponse = null,
                     key = ENCRYPTED_USER_KEY,
                     keys = RegisterRequestJson.Keys(
                         publicKey = PUBLIC_KEY,
@@ -4665,7 +4406,6 @@ class AuthRepositoryTest {
             email = EMAIL,
             masterPassword = PASSWORD,
             masterPasswordHint = null,
-            captchaToken = null,
             shouldCheckDataBreaches = false,
             isMasterPasswordStrong = true,
         )
@@ -4682,7 +4422,6 @@ class AuthRepositoryTest {
                     masterPasswordHash = PASSWORD_HASH,
                     masterPasswordHint = null,
                     emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
-                    captchaResponse = null,
                     userSymmetricKey = ENCRYPTED_USER_KEY,
                     userAsymmetricKeys = RegisterFinishRequestJson.Keys(
                         publicKey = PUBLIC_KEY,
@@ -4692,18 +4431,17 @@ class AuthRepositoryTest {
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
-        } returns RegisterResponseJson.Success(captchaBypassToken = CAPTCHA_KEY).asSuccess()
+        } returns RegisterResponseJson.Success.asSuccess()
 
         val result = repository.register(
             email = EMAIL,
             masterPassword = PASSWORD,
             masterPasswordHint = null,
             emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
-            captchaToken = null,
             shouldCheckDataBreaches = false,
             isMasterPasswordStrong = true,
         )
-        assertEquals(RegisterResult.Success(CAPTCHA_KEY), result)
+        assertEquals(RegisterResult.Success, result)
     }
 
     @Test
@@ -5596,17 +5334,6 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `setCaptchaCallbackToken should change the value of captchaTokenResultFlow`() = runTest {
-        repository.captchaTokenResultFlow.test {
-            repository.setCaptchaCallbackTokenResult(CaptchaCallbackTokenResult.Success("mockk"))
-            assertEquals(
-                CaptchaCallbackTokenResult.Success("mockk"),
-                awaitItem(),
-            )
-        }
-    }
-
-    @Test
     fun `setDuoCallbackToken should change the value of duoTokenResultFlow`() = runTest {
         repository.duoTokenResultFlow.test {
             repository.setDuoCallbackTokenResult(DuoCallbackTokenResult.Success("mockk"))
@@ -5819,18 +5546,16 @@ class AuthRepositoryTest {
                     username = EMAIL,
                     password = PASSWORD_HASH,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         } returns GetTokenResponseJson
             .TwoFactorRequired(
                 authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
-                captchaToken = null,
                 ssoToken = null,
                 twoFactorProviders = null,
             )
             .asSuccess()
-        val firstResult = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+        val firstResult = repository.login(email = EMAIL, password = PASSWORD)
         assertEquals(LoginResult.TwoFactorRequired, firstResult)
         coVerify { identityService.preLogin(email = EMAIL) }
         coVerify {
@@ -5840,7 +5565,6 @@ class AuthRepositoryTest {
                     username = EMAIL,
                     password = PASSWORD_HASH,
                 ),
-                captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
         }
@@ -6713,7 +6437,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -6738,7 +6461,7 @@ class AuthRepositoryTest {
                 )
             } returns SINGLE_USER_STATE_1
             every { settingsRepository.getUserHasLoggedInValue(USER_ID_1) } returns false
-            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
             coVerify { identityService.preLogin(email = EMAIL) }
@@ -6772,7 +6495,6 @@ class AuthRepositoryTest {
                         username = EMAIL,
                         password = PASSWORD_HASH,
                     ),
-                    captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
@@ -6797,7 +6519,7 @@ class AuthRepositoryTest {
                 )
             } returns SINGLE_USER_STATE_1
             every { settingsRepository.getUserHasLoggedInValue(USER_ID_1) } returns true
-            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            val result = repository.login(email = EMAIL, password = PASSWORD)
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
             coVerify { identityService.preLogin(email = EMAIL) }
@@ -6908,6 +6630,10 @@ class AuthRepositoryTest {
         }
 
     companion object {
+        private val FIXED_CLOCK: Clock = Clock.fixed(
+            Instant.parse("2023-10-27T12:00:00Z"),
+            ZoneOffset.UTC,
+        )
         private const val UNIQUE_APP_ID = "testUniqueAppId"
         private const val NAME = "Example Name"
         private const val EMAIL = "test@bitwarden.com"
@@ -6919,7 +6645,7 @@ class AuthRepositoryTest {
         private const val ACCESS_TOKEN_2 = "accessToken2"
         private const val REFRESH_TOKEN = "refreshToken"
         private const val REFRESH_TOKEN_2 = "refreshToken2"
-        private const val CAPTCHA_KEY = "captcha"
+        private const val ACCESS_TOKEN_2_EXPIRES_IN = 3600
         private const val TWO_FACTOR_CODE = "123456"
         private val TWO_FACTOR_METHOD = TwoFactorAuthMethod.EMAIL
         private const val TWO_FACTOR_REMEMBER = true
@@ -6961,7 +6687,7 @@ class AuthRepositoryTest {
         )
         private val REFRESH_TOKEN_RESPONSE_JSON = RefreshTokenResponseJson.Success(
             accessToken = ACCESS_TOKEN_2,
-            expiresIn = 3600,
+            expiresIn = ACCESS_TOKEN_2_EXPIRES_IN,
             refreshToken = REFRESH_TOKEN_2,
             tokenType = "Bearer",
         )

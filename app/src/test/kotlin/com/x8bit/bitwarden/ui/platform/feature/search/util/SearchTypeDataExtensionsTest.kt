@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import android.net.Uri
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -10,7 +11,6 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
-import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.CopyableCipherFields
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView

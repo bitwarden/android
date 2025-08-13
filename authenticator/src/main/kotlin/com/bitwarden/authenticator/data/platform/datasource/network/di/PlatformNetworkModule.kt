@@ -9,6 +9,7 @@ import com.bitwarden.network.BitwardenServiceClient
 import com.bitwarden.network.bitwardenServiceClient
 import com.bitwarden.network.interceptor.AuthTokenProvider
 import com.bitwarden.network.interceptor.BaseUrlsProvider
+import com.bitwarden.network.model.AuthTokenData
 import com.bitwarden.network.model.BitwardenServiceClientConfig
 import com.bitwarden.network.service.ConfigService
 import com.bitwarden.network.ssl.CertificateProvider
@@ -54,7 +55,7 @@ object PlatformNetworkModule {
             baseUrlsProvider = baseUrlsProvider,
             enableHttpBodyLogging = BuildConfig.DEBUG,
             authTokenProvider = object : AuthTokenProvider {
-                override fun getActiveAccessTokenOrNull(): String? = null
+                override fun getAuthTokenDataOrNull(): AuthTokenData? = null
             },
             certificateProvider = object : CertificateProvider {
                 override fun chooseClientAlias(

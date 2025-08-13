@@ -229,7 +229,6 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .assertDoesNotExist()
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `clicking a UsernameOption should send UsernameTypeOption action`() {
         updateState(
@@ -242,9 +241,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
 
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Plus addressed email. Username type. Use your email provider's subaddress capabilities",
-            )
+            .onNodeWithContentDescription(label = "Plus addressed email. Username type")
             .performClick()
 
         // Choose the option from the menu
@@ -1459,12 +1456,8 @@ class GeneratorScreenTest : BitwardenComposeTest() {
     fun `in Username state, clicking the tooltip icon should send the TooltipClick action`() {
         updateState(DEFAULT_STATE.copy(selectedType = GeneratorState.MainType.Username()))
 
-        @Suppress("MaxLineLength")
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Plus addressed email. Username type. Use your email provider's subaddress capabilities",
-                useUnmergedTree = true,
-            )
+            .onNodeWithContentDescription(label = "Plus addressed email. Username type")
             // Find the button
             .onChildren()
             .filterToOne(hasClickAction())

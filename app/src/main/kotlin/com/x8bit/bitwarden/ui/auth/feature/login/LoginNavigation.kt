@@ -14,13 +14,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class LoginRoute(
     val emailAddress: String,
-    val captchaToken: String?,
 )
 
 /**
  * Class to retrieve login arguments from the [SavedStateHandle].
  */
-data class LoginArgs(val emailAddress: String, val captchaToken: String?)
+data class LoginArgs(val emailAddress: String)
 
 /**
  * Constructs a [LoginArgs] from the [SavedStateHandle] and internal route data.
@@ -29,7 +28,6 @@ fun SavedStateHandle.toLoginArgs(): LoginArgs {
     val route = this.toRoute<LoginRoute>()
     return LoginArgs(
         emailAddress = route.emailAddress,
-        captchaToken = route.captchaToken,
     )
 }
 
@@ -38,11 +36,10 @@ fun SavedStateHandle.toLoginArgs(): LoginArgs {
  */
 fun NavController.navigateToLogin(
     emailAddress: String,
-    captchaToken: String?,
     navOptions: NavOptions? = null,
 ) {
     this.navigate(
-        route = LoginRoute(emailAddress = emailAddress, captchaToken = captchaToken),
+        route = LoginRoute(emailAddress = emailAddress),
         navOptions = navOptions,
     )
 }

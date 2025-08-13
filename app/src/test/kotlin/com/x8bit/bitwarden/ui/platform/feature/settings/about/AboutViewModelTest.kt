@@ -2,10 +2,12 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.manager.util.deviceData
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
@@ -50,6 +52,14 @@ class AboutViewModelTest : BaseViewModelTest() {
     private val mutableServerConfigStateFlow = MutableStateFlow<ServerConfig?>(null)
     private val serverConfigRepository: ServerConfigRepository = mockk {
         every { serverConfigStateFlow } returns mutableServerConfigStateFlow
+    }
+    private val buildInfoManager: BuildInfoManager = mockk {
+        every { buildTypeName } returns "mockBuildType"
+        every { versionData } returns "mockVersionData"
+        every { sdkData } returns "mockSdkData"
+        every { deviceData } returns "mockDeviceData"
+        every { ciBuildInfo } returns "mockCiBuildInfo"
+        every { isFdroid } returns false
     }
 
     @AfterEach
@@ -233,6 +243,7 @@ class AboutViewModelTest : BaseViewModelTest() {
         logsManager = logsManager,
         settingsRepository = settingsRepository,
         serverConfigRepository = serverConfigRepository,
+        buildInfoManager = buildInfoManager,
     )
 }
 

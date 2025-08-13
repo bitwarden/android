@@ -48,6 +48,7 @@ private const val USES_KEY_CONNECTOR = "usesKeyConnector"
 private const val ONBOARDING_STATUS_KEY = "onboardingStatus"
 private const val SHOW_IMPORT_LOGINS_KEY = "showImportLogins"
 private const val LAST_LOCK_TIMESTAMP = "lastLockTimestamp"
+private const val PROFILE_ACCOUNT_KEYS_KEY = "profileAccountKeys"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -142,6 +143,7 @@ class AuthDiskSourceImpl(
         storePinProtectedUserKey(userId = userId, pinProtectedUserKey = null)
         storeEncryptedPin(userId = userId, encryptedPin = null)
         storePrivateKey(userId = userId, privateKey = null)
+        storeAccountKeys(userId = userId, accountKeys = null)
         storeOrganizationKeys(userId = userId, organizationKeys = null)
         storeOrganizations(userId = userId, organizations = null)
         storeUserBiometricInitVector(userId = userId, iv = null)
@@ -228,13 +230,29 @@ class AuthDiskSourceImpl(
         )
     }
 
+    @Deprecated("Use getAccountKeys instead.", replaceWith = ReplaceWith("getAccountKeys"))
     override fun getPrivateKey(userId: String): String? =
         getString(key = MASTER_KEY_ENCRYPTION_PRIVATE_KEY.appendIdentifier(userId))
 
+    @Deprecated("Use storeAccountKeys instead.", replaceWith = ReplaceWith("storeAccountKeys"))
     override fun storePrivateKey(userId: String, privateKey: String?) {
         putString(
             key = MASTER_KEY_ENCRYPTION_PRIVATE_KEY.appendIdentifier(userId),
             value = privateKey,
+        )
+    }
+
+    override fun getAccountKeys(userId: String): SyncResponseJson.Profile.AccountKeys? =
+        getEncryptedString(key = PROFILE_ACCOUNT_KEYS_KEY.appendIdentifier(userId))
+            ?.let { json.decodeFromStringOrNull(it) }
+
+    override fun storeAccountKeys(
+        userId: String,
+        accountKeys: SyncResponseJson.Profile.AccountKeys?,
+    ) {
+        putEncryptedString(
+            key = PROFILE_ACCOUNT_KEYS_KEY.appendIdentifier(userId),
+            value = accountKeys?.let { json.encodeToString(it) },
         )
     }
 

@@ -79,6 +79,11 @@ interface IntentManager {
     fun shareText(text: String)
 
     /**
+     * Launches the share sheet with an error report based on the provided [throwable].
+     */
+    fun shareErrorReport(throwable: Throwable)
+
+    /**
      * Processes the [activityResult] and attempts to get the relevant file data from it.
      */
     fun getFileDataFromActivityResult(activityResult: ActivityResult): FileData?
@@ -90,8 +95,12 @@ interface IntentManager {
 
     /**
      * Creates an intent for choosing a file saved to disk.
+     *
+     * @param withCameraIntents Whether to include camera intents in the chooser.
+     * @param mimeType The MIME type of the files to be selected. Defaults to wildcard to allow all
+     * types.
      */
-    fun createFileChooserIntent(withCameraIntents: Boolean): Intent
+    fun createFileChooserIntent(withCameraIntents: Boolean, mimeType: String = "*/*"): Intent
 
     /**
      * Creates an intent to use when selecting to save an item with [fileName] to disk.

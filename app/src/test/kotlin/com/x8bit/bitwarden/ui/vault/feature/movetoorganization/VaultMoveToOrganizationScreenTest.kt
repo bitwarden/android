@@ -121,7 +121,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
     @Test
     fun `the organization option field description should update according to state`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "Choose an organization that", substring = true)
+            .onNodeWithText(text = "Choose an organization that", substring = true)
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -130,7 +130,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
 
         composeTestRule
         composeTestRule
-            .onNodeWithContentDescription(label = "Choose an organization that", substring = true)
+            .onNodeWithText(text = "Choose an organization that", substring = true)
             .assertIsNotDisplayed()
     }
 
@@ -169,12 +169,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
     @Test
     fun `selecting an organization should send OrganizationSelect action`() {
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(
-                label = "mockOrganizationName-1. Organization. " +
-                    "Choose an organization that you wish to move this item to. Moving to an " +
-                    "organization transfers ownership of the item to that organization. You " +
-                    "will no longer be the direct owner of this item once it has been moved.",
-            )
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-1. Organization")
             .performClick()
         // Choose the option from the menu
         composeTestRule
@@ -205,12 +200,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
     @Test
     fun `the organization option field should display according to state`() {
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(
-                label = "mockOrganizationName-1. Organization. " +
-                    "Choose an organization that you wish to move this item to. Moving to an " +
-                    "organization transfers ownership of the item to that organization. You " +
-                    "will no longer be the direct owner of this item once it has been moved.",
-            )
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-1. Organization")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -223,12 +213,7 @@ class VaultMoveToOrganizationScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(
-                label = "mockOrganizationName-2. Organization. " +
-                    "Choose an organization that you wish to move this item to. Moving to an " +
-                    "organization transfers ownership of the item to that organization. You " +
-                    "will no longer be the direct owner of this item once it has been moved.",
-            )
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-2. Organization")
             .assertIsDisplayed()
     }
 

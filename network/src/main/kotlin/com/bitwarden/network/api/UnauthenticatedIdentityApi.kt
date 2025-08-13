@@ -39,7 +39,6 @@ internal interface UnauthenticatedIdentityApi {
         @Field(value = "deviceName") deviceName: String,
         @Field(value = "deviceType") deviceType: String,
         @Field(value = "grant_type") grantType: String,
-        @Field(value = "captchaResponse") captchaResponse: String?,
         @Field(value = "code") ssoCode: String?,
         @Field(value = "code_verifier") ssoCodeVerifier: String?,
         @Field(value = "redirect_uri") ssoRedirectUri: String?,

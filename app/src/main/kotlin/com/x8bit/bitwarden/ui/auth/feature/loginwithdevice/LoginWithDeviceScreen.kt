@@ -41,8 +41,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 
 /**
  * The top level composable for the Login with Device screen.
@@ -53,15 +51,11 @@ fun LoginWithDeviceScreen(
     onNavigateBack: () -> Unit,
     onNavigateToTwoFactorLogin: (emailAddress: String) -> Unit,
     viewModel: LoginWithDeviceViewModel = hiltViewModel(),
-    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             LoginWithDeviceEvent.NavigateBack -> onNavigateBack()
-            is LoginWithDeviceEvent.NavigateToCaptcha -> {
-                intentManager.startCustomTabsActivity(uri = event.uri)
-            }
 
             is LoginWithDeviceEvent.NavigateToTwoFactorLogin -> {
                 onNavigateToTwoFactorLogin(event.emailAddress)

@@ -146,7 +146,7 @@
     <string name="syncing">Synchroniseren...</string>
     <string name="syncing_complete">Synchronisatie voltooid</string>
     <string name="two_step_login">Tweestapsaanmelding</string>
-    <string name="unlock_with">Ontgrendelen met %1$s</string>
+    <string name="unlock_with_biometrics">Biometrisch ontgrendelen</string>
     <string name="unlock_with_pin">Ontgrendelen met PIN</string>
     <string name="verification_code">Verificatiecode</string>
     <string name="view_login">Login bekijken</string>
@@ -372,7 +372,6 @@ Het scannen gebeurt automatisch.</string>
     <string name="download">Downloaden</string>
     <string name="login_expired">Je inlogsessie is verlopen.</string>
     <string name="biometrics_direction">Biometrische verificatie</string>
-    <string name="biometrics">Biometrie</string>
     <string name="biometrics_failed">Biometrie mislukt</string>
     <string name="biometrics_decoding_failure">Log in met je hoofdwachtwoord of pincode en schakel daarna biometrische login opnieuw in in bij de instellingen.</string>
     <string name="use_biometrics_to_unlock">Biometrie gebruiken om te ontgrendelen</string>
@@ -1070,4 +1069,5 @@ Wilt u naar dit account wisselen?</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokale items zijn ingevouwen, klik om uit te vouwen.</string>
     <string name="items_expanded_click_to_collapse">Items zijn uitgevouwen, klik om in te vouwen.</string>
     <string name="items_are_collapsed_click_to_expand">Items zijn ingevouwen, klik om uit te vouwen.</string>
+    <string name="select_a_card_for_x">Kies een kaart voor %s</string>
 </resources>

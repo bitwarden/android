@@ -146,7 +146,7 @@
     <string name="syncing">동기화 중...</string>
     <string name="syncing_complete">동기화를 완료했습니다.</string>
     <string name="two_step_login">2단계 인증</string>
-    <string name="unlock_with">%1$s을 사용하여 잠금 해제</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">PIN 코드를 사용하여 잠금 해제</string>
     <string name="verification_code">인증 코드</string>
     <string name="view_login">View login</string>
@@ -372,7 +372,6 @@
     <string name="download">다운로드</string>
     <string name="login_expired">로그인 세션이 만료되었습니다.</string>
     <string name="biometrics_direction">인증하기 위해 생체 인식을 사용하세요.</string>
-    <string name="biometrics">생체 인식</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">잠금 해제에 생체 인식 사용</string>
@@ -1070,4 +1069,5 @@
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
 </resources>
