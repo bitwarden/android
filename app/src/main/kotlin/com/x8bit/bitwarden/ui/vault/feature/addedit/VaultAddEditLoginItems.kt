@@ -29,6 +29,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkActionText
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
 import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
@@ -54,6 +55,7 @@ fun LazyListScope.vaultAddEditLoginItems(
     onPreviousCoachMark: () -> Unit,
     onCoachMarkTourComplete: () -> Unit,
     onCoachMarkDismissed: () -> Unit,
+    defaultUriMatchType: UriMatchType,
 ) = coachMarkScope.run {
     item {
         Spacer(modifier = Modifier.height(height = 16.dp))
@@ -192,7 +194,9 @@ fun LazyListScope.vaultAddEditLoginItems(
             uriItem = uriItem,
             onUriValueChange = loginItemTypeHandlers.onUriValueChange,
             onUriItemRemoved = loginItemTypeHandlers.onRemoveUriClick,
+            onLearnMoreClick = loginItemTypeHandlers.onLearnMoreClick,
             cardStyle = cardStyle,
+            defaultUriMatchType = defaultUriMatchType,
             modifier = Modifier
                 .fillMaxWidth(),
         )
