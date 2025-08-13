@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,6 +51,7 @@ import com.x8bit.bitwarden.ui.platform.components.image.BitwardenGifImage
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAutofillSettingsActivity
 
 /**
  * Top level composable for the Auto-fill setup screen.
@@ -62,12 +64,15 @@ fun SetupAutoFillScreen(
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: SetupAutoFillViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handler = rememberSetupAutoFillHandler(viewModel = viewModel)
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             SetupAutoFillEvent.NavigateToAutofillSettings -> {
-                val showFallback = !intentManager.startSystemAutofillSettingsActivity()
+                val showFallback = !intentManager.startSystemAutofillSettingsActivity(
+                    context = context,
+                )
                 if (showFallback) {
                     handler.sendAutoFillServiceFallback.invoke()
                 }

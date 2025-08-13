@@ -39,7 +39,7 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
 
     private val intentManager = mockk<IntentManager>(relaxed = true) {
         every { startCustomTabsActivity(any()) } just runs
-        every { startActivity(any()) } just runs
+        every { startActivity(any()) } returns true
         every { launchUri(any()) } just runs
     }
 

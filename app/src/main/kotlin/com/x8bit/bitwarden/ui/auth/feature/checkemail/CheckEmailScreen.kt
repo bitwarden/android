@@ -44,6 +44,7 @@ import com.x8bit.bitwarden.ui.auth.feature.checkemail.handlers.rememberCheckEmai
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.utils.startDefaultEmailApplication
 
 /**
  * Top level composable for the check email screen.

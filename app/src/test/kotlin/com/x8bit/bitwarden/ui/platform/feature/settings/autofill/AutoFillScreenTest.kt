@@ -20,14 +20,20 @@ import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.utils.startBrowserAutofillSettingsActivity
+import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAccessibilitySettingsActivity
+import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAutofillSettingsActivity
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -49,15 +55,23 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         every { stateFlow } returns mutableStateFlow
     }
     private val intentManager: IntentManager = mockk {
-        every { startSystemAutofillSettingsActivity() } answers { isSystemSettingsRequestSuccess }
         every { startCredentialManagerSettings(any()) } just runs
-        every { startSystemAccessibilitySettingsActivity() } just runs
         every { launchUri(any()) } just runs
-        every { startBrowserAutofillSettingsActivity(any()) } returns true
     }
 
     @Before
     fun setUp() {
+        mockkStatic(
+            IntentManager::startSystemAutofillSettingsActivity,
+            IntentManager::startSystemAccessibilitySettingsActivity,
+            IntentManager::startBrowserAutofillSettingsActivity,
+        )
+        every { intentManager.startBrowserAutofillSettingsActivity(any()) } returns true
+        every {
+            intentManager.startSystemAutofillSettingsActivity(any())
+        } answers { isSystemSettingsRequestSuccess }
+        every { intentManager.startSystemAccessibilitySettingsActivity() } just runs
+
         setContent(
             intentManager = intentManager,
         ) {
@@ -74,6 +88,15 @@ class AutoFillScreenTest : BitwardenComposeTest() {
                 viewModel = viewModel,
             )
         }
+    }
+
+    @After
+    fun tearDown() {
+        unmockkStatic(
+            IntentManager::startSystemAutofillSettingsActivity,
+            IntentManager::startSystemAccessibilitySettingsActivity,
+            IntentManager::startBrowserAutofillSettingsActivity,
+        )
     }
 
     @Test
@@ -93,7 +116,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToAutofillSettings)
 
         verify {
-            intentManager.startSystemAutofillSettingsActivity()
+            intentManager.startSystemAutofillSettingsActivity(any())
         }
         composeTestRule.assertNoDialogExists()
     }
@@ -106,7 +129,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToAutofillSettings)
 
         verify {
-            intentManager.startSystemAutofillSettingsActivity()
+            intentManager.startSystemAutofillSettingsActivity(any())
         }
 
         composeTestRule

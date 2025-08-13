@@ -13,8 +13,10 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAutofillSettingsActivity
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.verify
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -106,19 +108,23 @@ class SetupAutofillScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `NavigateToAutoFillSettings should start system autofill settings activity`() {
-        every { intentManager.startSystemAutofillSettingsActivity() } returns true
-        mutableEventFlow.tryEmit(SetupAutoFillEvent.NavigateToAutofillSettings)
-        verify {
-            intentManager.startSystemAutofillSettingsActivity()
+        mockkStatic(IntentManager::startSystemAutofillSettingsActivity) {
+            every { intentManager.startSystemAutofillSettingsActivity(any()) } returns true
+            mutableEventFlow.tryEmit(SetupAutoFillEvent.NavigateToAutofillSettings)
+            verify {
+                intentManager.startSystemAutofillSettingsActivity(any())
+            }
         }
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `NavigateToAutoFillSettings should send AutoFillServiceFallback action when intent fails`() {
-        every { intentManager.startSystemAutofillSettingsActivity() } returns false
-        mutableEventFlow.tryEmit(SetupAutoFillEvent.NavigateToAutofillSettings)
-        verify { viewModel.trySendAction(SetupAutoFillAction.AutoFillServiceFallback) }
+        mockkStatic(IntentManager::startSystemAutofillSettingsActivity) {
+            every { intentManager.startSystemAutofillSettingsActivity(any()) } returns false
+            mutableEventFlow.tryEmit(SetupAutoFillEvent.NavigateToAutofillSettings)
+            verify { viewModel.trySendAction(SetupAutoFillAction.AutoFillServiceFallback) }
+        }
     }
 
     @Test

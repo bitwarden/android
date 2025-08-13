@@ -29,10 +29,12 @@ import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.utils.startApplicationDetailsSettingsActivity
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
@@ -53,8 +55,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
 
     private val intentManager = mockk<IntentManager> {
         every { launchUri(any()) } just runs
-        every { startActivity(any()) } just runs
-        every { startApplicationDetailsSettingsActivity() } just runs
+        every { startActivity(any()) } returns true
     }
     private val captureBiometricsSuccess = slot<(cipher: Cipher?) -> Unit>()
     private val captureBiometricsCancel = slot<() -> Unit>()
@@ -104,9 +105,11 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `on NavigateToApplicationDataSettings should launch the correct intent`() {
-        mutableEventFlow.tryEmit(AccountSecurityEvent.NavigateToApplicationDataSettings)
-
-        verify { intentManager.startApplicationDetailsSettingsActivity() }
+        mockkStatic(IntentManager::startApplicationDetailsSettingsActivity) {
+            every { intentManager.startApplicationDetailsSettingsActivity(any()) } just runs
+            mutableEventFlow.tryEmit(AccountSecurityEvent.NavigateToApplicationDataSettings)
+            verify { intentManager.startApplicationDetailsSettingsActivity(any()) }
+        }
     }
 
     @Test
