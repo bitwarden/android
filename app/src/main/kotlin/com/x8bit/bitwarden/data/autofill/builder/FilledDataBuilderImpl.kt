@@ -122,15 +122,9 @@ class FilledDataBuilderImpl(
                     is AutofillView.Card.Number -> autofillCipher.number
                     is AutofillView.Card.SecurityCode -> autofillCipher.code
                 }
-                // Only create FilledItem if the value is not empty to avoid overwriting
-                // user-entered data with empty values
-                if (value.isNotEmpty()) {
-                    autofillView.buildFilledItemOrNull(
-                        value = value,
-                    )
-                } else {
-                    null
-                }
+                autofillView.buildFilledItemOrNull(
+                    value = value,
+                )
             }
 
         return FilledPartition(
@@ -155,15 +149,9 @@ class FilledDataBuilderImpl(
                     is AutofillView.Login.Username -> autofillCipher.username
                     is AutofillView.Login.Password -> autofillCipher.password
                 }
-                // Only create FilledItem if the value is not empty to avoid overwriting
-                // user-entered data with empty values
-                if (value.isNotEmpty()) {
-                    autofillView.buildFilledItemOrNull(
-                        value = value,
-                    )
-                } else {
-                    null
-                }
+                autofillView.buildFilledItemOrNull(
+                    value = value,
+                )
             }
 
         return FilledPartition(
