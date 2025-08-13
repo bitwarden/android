@@ -10,7 +10,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.provider.Settings
 import android.webkit.MimeTypeMap
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -30,7 +29,6 @@ import com.bitwarden.ui.platform.manager.util.deviceData
 import com.bitwarden.ui.platform.manager.util.fileProviderAuthority
 import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import java.io.File
 import java.time.Clock
 
@@ -55,12 +53,11 @@ class IntentManagerImpl(
     private val clock: Clock,
     private val buildInfoManager: BuildInfoManager,
 ) : IntentManager {
-    override fun startActivity(intent: Intent) {
-        try {
-            context.startActivity(intent)
-        } catch (_: ActivityNotFoundException) {
-            // no-op
-        }
+    override fun startActivity(intent: Intent): Boolean = try {
+        context.startActivity(intent)
+        true
+    } catch (_: ActivityNotFoundException) {
+        false
     }
 
     @Composable
@@ -79,48 +76,10 @@ class IntentManagerImpl(
             .launchUrl(context, uri)
     }
 
-    override fun startSystemAccessibilitySettingsActivity() {
-        context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-    }
-
-    override fun startSystemAutofillSettingsActivity(): Boolean =
-        try {
-            val intent = Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE)
-                .apply {
-                    data = "package:${context.packageName}".toUri()
-                }
-            context.startActivity(intent)
-            true
-        } catch (_: ActivityNotFoundException) {
-            false
-        }
-
-    override fun startApplicationDetailsSettingsActivity() {
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        intent.data = "package:${context.packageName}".toUri()
-        startActivity(intent = intent)
-    }
-
     override fun startCredentialManagerSettings(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             CredentialManager.create(context).createSettingsPendingIntent().send()
         }
-    }
-
-    override fun startBrowserAutofillSettingsActivity(
-        browserPackage: BrowserPackage,
-    ): Boolean = try {
-        val intent = Intent(Intent.ACTION_APPLICATION_PREFERENCES)
-            .apply {
-                addCategory(Intent.CATEGORY_DEFAULT)
-                addCategory(Intent.CATEGORY_APP_BROWSER)
-                addCategory(Intent.CATEGORY_PREFERENCE)
-                setPackage(browserPackage.packageName)
-            }
-        context.startActivity(intent)
-        true
-    } catch (_: ActivityNotFoundException) {
-        false
     }
 
     override fun launchUri(uri: Uri) {
@@ -270,13 +229,6 @@ class IntentManagerImpl(
             addCategory(Intent.CATEGORY_OPENABLE)
             putExtra(Intent.EXTRA_TITLE, fileName)
         }
-
-    override fun startDefaultEmailApplication() {
-        val intent = Intent(Intent.ACTION_MAIN)
-        intent.addCategory(Intent.CATEGORY_APP_EMAIL)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
-    }
 
     private fun createPlayStoreIntent(packageName: String): Intent {
         val playStoreUri = "https://play.google.com/store/apps/details"

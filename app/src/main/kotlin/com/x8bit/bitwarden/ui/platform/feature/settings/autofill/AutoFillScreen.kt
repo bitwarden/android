@@ -61,6 +61,9 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.handlers.AutoFi
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.isAdvancedMatching
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.utils.startBrowserAutofillSettingsActivity
+import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAccessibilitySettingsActivity
+import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAutofillSettingsActivity
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -90,7 +93,9 @@ fun AutoFillScreen(
             }
 
             AutoFillEvent.NavigateToAutofillSettings -> {
-                val isSuccess = intentManager.startSystemAutofillSettingsActivity()
+                val isSuccess = intentManager.startSystemAutofillSettingsActivity(
+                    context = context,
+                )
 
                 shouldShowAutofillFallbackDialog = !isSuccess
             }
