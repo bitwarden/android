@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk
 
+import com.bitwarden.network.model.AccountKeysJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.provider.AppIdProvider
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -144,14 +145,14 @@ interface AuthDiskSource : AppIdProvider {
     /**
      * Returns the profile account keys for the given [userId].
      */
-    fun getAccountKeys(userId: String): SyncResponseJson.Profile.AccountKeys?
+    fun getAccountKeys(userId: String): AccountKeysJson?
 
     /**
      * Stores the profile account keys for the given [userId].
      */
     fun storeAccountKeys(
         userId: String,
-        accountKeys: SyncResponseJson.Profile.AccountKeys?,
+        accountKeys: AccountKeysJson?,
     )
 
     /**

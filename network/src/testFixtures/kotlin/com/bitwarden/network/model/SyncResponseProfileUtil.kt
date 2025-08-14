@@ -18,7 +18,7 @@ fun createMockProfile(
     isEmailVerified: Boolean = false,
     isTwoFactorEnabled: Boolean = false,
     privateKey: String? = "mockPrivateKey-$number",
-    accountKeys: SyncResponseJson.Profile.AccountKeys? = createMockPrivateKeys(number = number),
+    accountKeys: AccountKeysJson? = createMockAccountKeysJson(number = number),
     isPremium: Boolean = false,
     culture: String? = "mockCulture-$number",
     name: String? = "mockName-$number",
@@ -57,60 +57,6 @@ fun createMockProfile(
         securityStamp = securityStamp,
         providers = providers,
         creationDate = creationDate,
-    )
-
-/**
- * Create a mock set of private keys with a given [number].
- */
-fun createMockPrivateKeys(
-    number: Int,
-): SyncResponseJson.Profile.AccountKeys =
-    SyncResponseJson.Profile.AccountKeys(
-        signatureKeyPair = createMockSignatureKeyPair(number = number),
-        publicKeyEncryptionKeyPair = createMockPublicKeyEncryptionKeyPair(number = number),
-        securityState = createMockSecurityState(number = number),
-    )
-
-/**
- * Create a mock [SyncResponseJson.Profile.AccountKeys.SecurityState] with a given [number].
- */
-fun createMockSecurityState(
-    number: Int,
-    securityState: String = "mockSecurityState-$number",
-    securityVersion: Int = number,
-): SyncResponseJson.Profile.AccountKeys.SecurityState =
-    SyncResponseJson.Profile.AccountKeys.SecurityState(
-        securityState = securityState,
-        securityVersion = securityVersion,
-    )
-
-/**
- * Create a mock [SyncResponseJson.Profile.AccountKeys.PublicKeyEncryptionKeyPair] with a given
- * number.
- */
-fun createMockPublicKeyEncryptionKeyPair(
-    number: Int,
-    publicKey: String = "mockPublicKey-$number",
-    wrappedPrivateKey: String = "mockWrappedPrivateKey-$number",
-    signedPublicKey: String? = "mockSignedPublicKey-$number",
-): SyncResponseJson.Profile.AccountKeys.PublicKeyEncryptionKeyPair =
-    SyncResponseJson.Profile.AccountKeys.PublicKeyEncryptionKeyPair(
-        publicKey = publicKey,
-        wrappedPrivateKey = wrappedPrivateKey,
-        signedPublicKey = signedPublicKey,
-    )
-
-/**
- * Create a mock [SyncResponseJson.Profile.AccountKeys.SignatureKeyPair] with a given number.
- */
-fun createMockSignatureKeyPair(
-    number: Int,
-    wrappedSigningKey: String = "mockWrappedSigningKey-$number",
-    verifyingKey: String = "mockVerifyingKey-$number",
-): SyncResponseJson.Profile.AccountKeys.SignatureKeyPair =
-    SyncResponseJson.Profile.AccountKeys.SignatureKeyPair(
-        wrappedSigningKey = wrappedSigningKey,
-        verifyingKey = verifyingKey,
     )
 
 /**
