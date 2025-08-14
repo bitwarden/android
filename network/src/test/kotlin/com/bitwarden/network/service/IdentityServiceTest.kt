@@ -21,6 +21,7 @@ import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.network.model.UserDecryptionOptionsJson
 import com.bitwarden.network.model.VerifyEmailTokenRequestJson
 import com.bitwarden.network.model.VerifyEmailTokenResponseJson
+import com.bitwarden.network.model.createMockAccountKeysJson
 import com.bitwarden.network.util.DeviceModelProvider
 import io.mockk.every
 import io.mockk.mockk
@@ -539,6 +540,23 @@ private const val LOGIN_SUCCESS_JSON = """
   "token_type": "Bearer",
   "refresh_token": "refreshToken",
   "PrivateKey": "privateKey",
+  "AccountKeys": {
+      "signatureKeyPair": {
+        "wrappedSigningKey": "mockWrappedSigningKey-1",
+        "verifyingKey": "mockVerifyingKey-1"
+      },
+      "publicKeyEncryptionKeyPair": {
+        "wrappedPrivateKey": "mockWrappedPrivateKey-1",
+        "publicKey": "mockPublicKey-1",
+        "signedPublicKey": "mockSignedPublicKey-1",
+        "object": "publicKeyEncryptionKeyPair"
+      },
+      "securityState": {
+        "securityState": "mockSecurityState-1",
+        "securityVersion": 1
+      },
+      "object": "privateKeys"
+  },
   "Key": "key",
   "MasterPasswordPolicy": {
     "MinComplexity": 10,
@@ -583,6 +601,7 @@ private val LOGIN_SUCCESS = GetTokenResponseJson.Success(
     kdfMemory = 16,
     kdfParallelism = 4,
     privateKey = "privateKey",
+    accountKeys = createMockAccountKeysJson(number = 1),
     shouldForcePasswordReset = true,
     shouldResetMasterPassword = true,
     twoFactorToken = null,

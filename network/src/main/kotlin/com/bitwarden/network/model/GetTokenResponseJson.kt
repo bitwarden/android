@@ -23,6 +23,9 @@ sealed class GetTokenResponseJson {
      * @property kdfIterations The number of iterations when calculating a user's password.
      * @property kdfMemory The amount of memory to use when calculating a password hash (MB).
      * @property kdfParallelism The number of threads to use when calculating a password hash.
+     * @property accountKeys The user's account keys, which include the signature key pair and
+     * public key encryption key pair. This is temporarily nullable to support older accounts that
+     * have not been upgraded to use account keys instead of the deprecated `PrivateKey` field.
      * @property shouldForcePasswordReset Whether or not the app must force a password reset.
      * @property shouldResetMasterPassword Whether or not the user is required to reset their
      * master password.
@@ -49,6 +52,12 @@ sealed class GetTokenResponseJson {
         @SerialName("Key")
         val key: String?,
 
+        @Deprecated(
+            message = "Use `accountKeys` instead.",
+            replaceWith = ReplaceWith(
+                "loginResponse.accountKeys?.publicKeyEncryptionKeyPair?.wrappedPrivateKey",
+            ),
+        )
         @SerialName("PrivateKey")
         val privateKey: String?,
 
@@ -63,6 +72,9 @@ sealed class GetTokenResponseJson {
 
         @SerialName("KdfParallelism")
         val kdfParallelism: Int?,
+
+        @SerialName("AccountKeys")
+        val accountKeys: AccountKeysJson?,
 
         @SerialName("ForcePasswordReset")
         val shouldForcePasswordReset: Boolean,
