@@ -49,6 +49,7 @@ import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -65,7 +66,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPassword
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.radio.BitwardenRadioButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost

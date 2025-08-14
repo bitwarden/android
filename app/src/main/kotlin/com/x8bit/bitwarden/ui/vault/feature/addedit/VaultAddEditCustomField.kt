@@ -12,6 +12,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -20,8 +22,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialo
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTextEntryDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import kotlinx.collections.immutable.ImmutableList

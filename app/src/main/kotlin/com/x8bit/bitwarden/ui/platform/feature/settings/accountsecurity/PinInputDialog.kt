@@ -33,10 +33,10 @@ import androidx.compose.ui.window.Dialog
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
 
 private const val MINIMUM_PIN_LENGTH: Int = 4

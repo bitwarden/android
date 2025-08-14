@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.field
+package com.bitwarden.ui.platform.components.field
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
@@ -14,9 +14,9 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
+import com.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
 
 /**
  * Represents a Bitwarden-styled password field that is completely hidden and non-interactable.

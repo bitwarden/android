@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.field.toolbar
+package com.bitwarden.ui.platform.components.field.toolbar
 
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.platform.TextToolbar

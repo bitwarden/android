@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -22,7 +23,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialo
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectDialogContent
 import com.x8bit.bitwarden.ui.platform.components.dropdown.model.MultiSelectOption
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager

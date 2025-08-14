@@ -22,6 +22,9 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
+import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.bitwarden.ui.platform.components.model.CardStyle
@@ -29,9 +32,6 @@ import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
