@@ -335,13 +335,8 @@ object PlatformManagerModule {
     @Singleton
     fun provideRestrictionManager(
         @ApplicationContext context: Context,
-        appStateManager: AppStateManager,
-        dispatcherManager: DispatcherManager,
         environmentRepository: EnvironmentRepository,
     ): RestrictionManager = RestrictionManagerImpl(
-        appStateManager = appStateManager,
-        dispatcherManager = dispatcherManager,
-        context = context,
         environmentRepository = environmentRepository,
         restrictionsManager = requireNotNull(context.getSystemService()),
     )

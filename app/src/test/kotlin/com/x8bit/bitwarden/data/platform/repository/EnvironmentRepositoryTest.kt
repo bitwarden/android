@@ -29,7 +29,7 @@ class EnvironmentRepositoryTest {
     private val fakeEnvironmentDiskSource = FakeEnvironmentDiskSource()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
 
-    private val repository = EnvironmentRepositoryImpl(
+    private val repository: EnvironmentRepository = EnvironmentRepositoryImpl(
         environmentDiskSource = fakeEnvironmentDiskSource,
         authDiskSource = fakeAuthDiskSource,
         dispatcherManager = dispatcherManager,
@@ -46,7 +46,7 @@ class EnvironmentRepositoryTest {
     }
 
     @Test
-    fun `changes to the active user should update the environment if necessary`() {
+    fun `after initialize changes to the active user should update the environment if necessary`() {
         assertEquals(
             Environment.Us,
             repository.environment,
@@ -55,6 +55,8 @@ class EnvironmentRepositoryTest {
             null,
             fakeEnvironmentDiskSource.preAuthEnvironmentUrlData,
         )
+
+        repository.initialize()
 
         // Updating the environment for the active user to a non-null value triggers an update
         // in the saved environment.
