@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.model
+package com.bitwarden.ui.platform.components.field.model
 
 import androidx.compose.ui.platform.TextToolbar
 

@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.field
+package com.bitwarden.ui.platform.components.field
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -50,16 +50,16 @@ import com.bitwarden.ui.platform.base.util.tabNavigation
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
+import com.bitwarden.ui.platform.components.field.model.TextToolbarType
+import com.bitwarden.ui.platform.components.field.toolbar.BitwardenCutCopyTextToolbar
+import com.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.row.BitwardenRowOfActions
+import com.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenCutCopyTextToolbar
-import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
-import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
-import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 
 /**
  * Represents a Bitwarden-styled password field that hoists show/hide password state to the caller.
