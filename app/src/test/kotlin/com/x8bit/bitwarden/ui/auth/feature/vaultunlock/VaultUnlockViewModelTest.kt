@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.auth.feature.vaultunlock
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -22,8 +21,6 @@ import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -55,7 +52,6 @@ import javax.crypto.Cipher
 class VaultUnlockViewModelTest : BaseViewModelTest() {
 
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
-    private val environmentRepository = FakeEnvironmentRepository()
     private val authRepository = mockk<AuthRepository> {
         every { activeUserId } answers { mutableUserStateFlow.value?.activeUserId }
         every { userStateFlow } returns mutableUserStateFlow
@@ -196,19 +192,6 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         verify(exactly = 0) {
             authRepository.logout(reason = any())
         }
-    }
-
-    @Test
-    fun `environment url should update when environment repo emits an update`() {
-        val viewModel = createViewModel()
-        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-        environmentRepository.environment = Environment.SelfHosted(
-            environmentUrlData = EnvironmentUrlDataJson(base = "https://vault.qa.bitwarden.pw"),
-        )
-        assertEquals(
-            DEFAULT_STATE.copy(environmentUrl = "vault.qa.bitwarden.pw"),
-            viewModel.stateFlow.value,
-        )
     }
 
     @Test
@@ -1352,11 +1335,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Suppress("LongParameterList")
     private fun createViewModel(
         state: VaultUnlockState? = null,
         unlockType: UnlockType = UnlockType.STANDARD,
-        environmentRepo: EnvironmentRepository = environmentRepository,
         vaultRepo: VaultRepository = vaultRepository,
         biometricsEncryptionManager: BiometricsEncryptionManager = encryptionManager,
         lockManager: VaultLockManager = vaultLockManager,
@@ -1367,7 +1348,6 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         },
         authRepository = authRepository,
         vaultRepo = vaultRepo,
-        environmentRepo = environmentRepo,
         biometricsEncryptionManager = biometricsEncryptionManager,
         bitwardenCredentialManager = bitwardenCredentialManager,
         specialCircumstanceManager = specialCircumstanceManager,
