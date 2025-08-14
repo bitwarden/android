@@ -23,7 +23,7 @@ class FillResponseBuilderImpl : FillResponseBuilder {
         saveInfo: SaveInfo?,
     ): FillResponse? =
         if (filledData.fillableAutofillIds.isNotEmpty()) {
-            Timber.w("Autofill request constructing FillResponse")
+            Timber.d("Autofill request constructing FillResponse")
             val fillResponseBuilder = FillResponse.Builder()
             saveInfo?.let { nonNullSaveInfo -> fillResponseBuilder.setSaveInfo(nonNullSaveInfo) }
 

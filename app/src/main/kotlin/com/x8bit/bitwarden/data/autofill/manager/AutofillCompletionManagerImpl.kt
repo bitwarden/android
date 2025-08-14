@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Primary implementation of [AutofillCompletionManager].
@@ -41,6 +42,7 @@ class AutofillCompletionManagerImpl(
             .intent
             ?.getAutofillAssistStructureOrNull()
             ?: run {
+                Timber.w("Assist structure not found")
                 activity.cancelAndFinish()
                 return
             }
@@ -51,6 +53,7 @@ class AutofillCompletionManagerImpl(
                 assistStructure = assistStructure,
             )
         if (autofillRequest !is AutofillRequest.Fillable) {
+            Timber.w("Request is not fillable")
             activity.cancelAndFinish()
             return
         }
@@ -68,11 +71,13 @@ class AutofillCompletionManagerImpl(
                     authIntentSender = null,
                 )
                 ?: run {
+                    Timber.w("Dataset not found")
                     activity.cancelAndFinish()
                     return@launch
                 }
             totpManager.tryCopyTotpToClipboard(cipherView = cipherView)
             val resultIntent = createAutofillSelectionResultIntent(dataset)
+            Timber.d("Autofill success")
             activity.setResultAndFinish(resultIntent = resultIntent)
             cipherView.id?.let {
                 organizationEventManager.trackEvent(
