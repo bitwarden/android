@@ -28,7 +28,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.CredentialExchangeProtocolImport,
     FlagKey.RemoveCardPolicy,
     FlagKey.UserManagedPrivilegedApps,
-    FlagKey.EnrollAeadOnKeyRotation,
         -> BooleanFlagItem(
         label = flagKey.getDisplayLabel(),
         key = flagKey as FlagKey<Boolean>,
@@ -76,9 +75,5 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.RemoveCardPolicy -> stringResource(BitwardenString.remove_card_policy)
     FlagKey.BitwardenAuthenticationEnabled -> {
         stringResource(BitwardenString.bitwarden_authentication_enabled)
-    }
-
-    FlagKey.EnrollAeadOnKeyRotation -> {
-        stringResource(BitwardenString.enroll_aead_on_key_rotation)
     }
 }
