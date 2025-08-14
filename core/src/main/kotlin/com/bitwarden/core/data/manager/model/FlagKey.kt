@@ -89,14 +89,6 @@ sealed class FlagKey<out T : Any> {
         override val defaultValue: Boolean = false
     }
 
-    /**
-     * Represents the feature flag to enable the enrollment of AEAD on key rotation.
-     */
-    data object EnrollAeadOnKeyRotation : FlagKey<Boolean>() {
-        override val keyName: String = "enroll-aead-on-key-rotation"
-        override val defaultValue: Boolean = false
-    }
-
     //region Dummy keys for testing
     /**
      * Data object holding the key for a [Boolean] flag to be used in tests.
