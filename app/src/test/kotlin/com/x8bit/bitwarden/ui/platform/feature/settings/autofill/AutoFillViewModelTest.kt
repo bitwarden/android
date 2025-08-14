@@ -5,12 +5,12 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.util.isBuildVersionAtLeast
-import com.bitwarden.ui.autofill.model.BrowserPackage
-import com.bitwarden.ui.autofill.model.BrowserThirdPartyAutoFillData
-import com.bitwarden.ui.autofill.model.BrowserThirdPartyAutofillStatus
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFillData
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState

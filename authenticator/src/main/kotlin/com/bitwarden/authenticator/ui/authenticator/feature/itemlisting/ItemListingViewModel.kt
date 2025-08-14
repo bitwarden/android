@@ -1,9 +1,7 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
-import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
@@ -560,14 +558,7 @@ class ItemListingViewModel @Inject constructor(
     }
 
     private fun handleSyncWithBitwardenClick() {
-        sendEvent(ItemListingEvent.NavigateToBitwardenSettings(
-            Intent(
-                Intent.ACTION_VIEW,
-                "bitwarden://settings/account_security".toUri(),
-            ).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            },
-        ))
+        sendEvent(ItemListingEvent.NavigateToBitwardenSettings)
     }
 
     private fun handleSyncWithBitwardenDismiss() {
@@ -874,9 +865,7 @@ sealed class ItemListingEvent {
     /**
      * Navigate to Bitwarden account security settings.
      */
-    data class NavigateToBitwardenSettings(
-        val intent: Intent,
-    ) : ItemListingEvent()
+    data object NavigateToBitwardenSettings : ItemListingEvent()
 
     /**
      * Show a Toast with [message].

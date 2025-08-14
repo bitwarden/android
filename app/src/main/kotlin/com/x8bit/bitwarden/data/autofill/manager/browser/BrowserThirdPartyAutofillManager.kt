@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.manager.browser
 
-import com.bitwarden.ui.autofill.model.BrowserThirdPartyAutoFillData
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFillData
 
 /**
  * Manager class used to determine if a device has installed versions of a browser (either the

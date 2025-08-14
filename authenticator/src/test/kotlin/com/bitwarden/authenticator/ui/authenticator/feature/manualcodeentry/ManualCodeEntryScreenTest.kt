@@ -41,7 +41,7 @@ class ManualCodeEntryScreenTest : AuthenticatorComposeTest() {
     }
 
     private val intentManager: IntentManager = mockk {
-        every { startActivity(intent = any()) } just runs
+        every { startActivity(intent = any()) } returns true
     }
     private val permissionsManager = FakePermissionManager()
 

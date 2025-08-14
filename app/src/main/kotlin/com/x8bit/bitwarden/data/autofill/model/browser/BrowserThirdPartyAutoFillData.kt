@@ -1,4 +1,4 @@
-package com.bitwarden.ui.autofill.model
+package com.x8bit.bitwarden.data.autofill.model.browser
 
 /**
  * Relevant data relating to the third party autofill status of a specific browser app.
