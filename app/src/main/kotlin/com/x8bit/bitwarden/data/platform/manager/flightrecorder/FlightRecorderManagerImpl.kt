@@ -190,7 +190,7 @@ internal class FlightRecorderManagerImpl(
             }
     }
 
-    private inner class FlightRecorderTree : Timber.Tree() {
+    private inner class FlightRecorderTree : Timber.DebugTree() {
         var flightRecorderData: FlightRecorderDataSet.FlightRecorderData? = null
             set(value) {
                 value?.let {

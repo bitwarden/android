@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -40,7 +41,10 @@ class AutofillTotpCopyViewModel @Inject constructor(
     private fun handleIntentReceived(action: AutofillTotpCopyAction.IntentReceived) {
         viewModelScope
             .launchWithTimeout(
-                timeoutBlock = { finishActivity() },
+                timeoutBlock = {
+                    Timber.w("Autofill -- Timeout")
+                    finishActivity()
+                },
                 timeoutDuration = CIPHER_WAIT_TIMEOUT_MILLIS,
             ) {
                 // Extract TOTP copy data from the intent.
@@ -49,16 +53,31 @@ class AutofillTotpCopyViewModel @Inject constructor(
                     .getTotpCopyIntentOrNull()
                     ?.cipherId
 
-                if (cipherId == null || isVaultLocked()) {
+                if (cipherId == null) {
+                    Timber.w("Autofill -- Cipher was not provided")
+                    finishActivity()
+                    return@launchWithTimeout
+                }
+                if (isVaultLocked()) {
+                    Timber.w("Autofill -- Vault is locked")
                     finishActivity()
                     return@launchWithTimeout
                 }
 
                 // Try and find the matching cipher.
                 when (val result = vaultRepository.getCipher(cipherId = cipherId)) {
-                    GetCipherResult.CipherNotFound -> finishActivity()
-                    is GetCipherResult.Failure -> finishActivity()
+                    GetCipherResult.CipherNotFound -> {
+                        Timber.w("Autofill -- Cipher not found")
+                        finishActivity()
+                    }
+
+                    is GetCipherResult.Failure -> {
+                        Timber.w(result.error, "Autofill -- Get cipher failure")
+                        finishActivity()
+                    }
+
                     is GetCipherResult.Success -> {
+                        Timber.d("Autofill -- Cipher found")
                         sendEvent(AutofillTotpCopyEvent.CompleteAutofill(result.cipherView))
                     }
                 }
