@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.slider
+package com.bitwarden.ui.platform.components.slider
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
@@ -40,9 +40,9 @@ import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.base.util.toDp
 import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.slider.color.bitwardenSliderColors
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.slider.color.bitwardenSliderColors
 
 /**
  * A custom Bitwarden-themed slider.
