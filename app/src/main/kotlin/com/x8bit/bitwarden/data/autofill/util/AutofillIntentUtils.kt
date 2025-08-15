@@ -14,17 +14,17 @@ import androidx.core.os.bundleOf
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.util.toPendingIntentMutabilityFlag
 import com.bitwarden.ui.platform.util.getSafeParcelableExtra
-import com.x8bit.bitwarden.AutofillTotpCopyActivity
+import com.x8bit.bitwarden.AutofillCallbackActivity
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
+import com.x8bit.bitwarden.data.autofill.model.AutofillCallbackData
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
-import com.x8bit.bitwarden.data.autofill.model.AutofillTotpCopyData
 import kotlin.random.Random
 
 private const val AUTOFILL_SAVE_ITEM_DATA_KEY = "autofill-save-item-data"
 private const val AUTOFILL_SELECTION_DATA_KEY = "autofill-selection-data"
-private const val AUTOFILL_TOTP_COPY_DATA_KEY = "autofill-totp-copy-data"
+private const val AUTOFILL_CALLBACK_DATA_KEY = "autofill-callback-data"
 private const val AUTOFILL_BUNDLE_KEY = "autofill-bundle-key"
 
 /**
@@ -55,21 +55,21 @@ fun createAutofillSelectionIntent(
         }
 
 /**
- * Creates an [IntentSender] built with the data required for performing a TOTP copying during
- * the autofill flow.
+ * Creates an [IntentSender] built with the data required for performing an Autofill callback
+ * during the autofill flow.
  */
-fun createTotpCopyIntentSender(
+fun createAutofillCallbackIntentSender(
     cipherId: String,
     context: Context,
 ): IntentSender {
     val intent = Intent(
         context,
-        AutofillTotpCopyActivity::class.java,
+        AutofillCallbackActivity::class.java,
     )
         .putExtra(
             AUTOFILL_BUNDLE_KEY,
             bundleOf(
-                AUTOFILL_TOTP_COPY_DATA_KEY to AutofillTotpCopyData(cipherId = cipherId),
+                AUTOFILL_CALLBACK_DATA_KEY to AutofillCallbackData(cipherId = cipherId),
             ),
         )
     return PendingIntent
@@ -143,12 +143,12 @@ fun Intent.getAutofillSelectionDataOrNull(): AutofillSelectionData? =
         ?.getSafeParcelableExtra(AUTOFILL_SELECTION_DATA_KEY)
 
 /**
- * Checks if the given [Intent] contains data for TOTP copying. The [AutofillTotpCopyData] will be
+ * Checks if the given [Intent] contains Autofill callback data. The [AutofillCallbackData] will be
  * returned when present.
  */
-fun Intent.getTotpCopyIntentOrNull(): AutofillTotpCopyData? =
+fun Intent.getAutofillCallbackIntentOrNull(): AutofillCallbackData? =
     getBundleExtra(AUTOFILL_BUNDLE_KEY)
-        ?.getSafeParcelableExtra(AUTOFILL_TOTP_COPY_DATA_KEY)
+        ?.getSafeParcelableExtra(AUTOFILL_CALLBACK_DATA_KEY)
 
 /**
  * Checks if the given [Activity] was created for Autofill. This is useful to avoid locking the

@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.autofill.util.getTotpCopyIntentOrNull
+import com.x8bit.bitwarden.data.autofill.util.getAutofillCallbackIntentOrNull
 import com.x8bit.bitwarden.data.platform.util.launchWithTimeout
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -22,23 +22,23 @@ import javax.inject.Inject
 private const val CIPHER_WAIT_TIMEOUT_MILLIS: Long = 500
 
 /**
- * A view model that handles logic for the [AutofillTotpCopyActivity].
+ * A view model that handles logic for the [AutofillCallbackActivity].
  */
 @HiltViewModel
-class AutofillTotpCopyViewModel @Inject constructor(
+class AutofillCallbackViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
-) : BaseViewModel<Unit, AutofillTotpCopyEvent, AutofillTotpCopyAction>(Unit) {
+) : BaseViewModel<Unit, AutofillCallbackEvent, AutofillCallbackAction>(Unit) {
     private val activeUserId: String? get() = authRepository.activeUserId
 
-    override fun handleAction(action: AutofillTotpCopyAction): Unit = when (action) {
-        is AutofillTotpCopyAction.IntentReceived -> handleIntentReceived(action)
+    override fun handleAction(action: AutofillCallbackAction): Unit = when (action) {
+        is AutofillCallbackAction.IntentReceived -> handleIntentReceived(action)
     }
 
     /**
      * Process the received intent and alert the activity of what to do next.
      */
-    private fun handleIntentReceived(action: AutofillTotpCopyAction.IntentReceived) {
+    private fun handleIntentReceived(action: AutofillCallbackAction.IntentReceived) {
         viewModelScope
             .launchWithTimeout(
                 timeoutBlock = {
@@ -50,7 +50,7 @@ class AutofillTotpCopyViewModel @Inject constructor(
                 // Extract TOTP copy data from the intent.
                 val cipherId = action
                     .intent
-                    .getTotpCopyIntentOrNull()
+                    .getAutofillCallbackIntentOrNull()
                     ?.cipherId
 
                 if (cipherId == null) {
@@ -78,7 +78,7 @@ class AutofillTotpCopyViewModel @Inject constructor(
 
                     is GetCipherResult.Success -> {
                         Timber.d("Autofill -- Cipher found")
-                        sendEvent(AutofillTotpCopyEvent.CompleteAutofill(result.cipherView))
+                        sendEvent(AutofillCallbackEvent.CompleteAutofill(result.cipherView))
                     }
                 }
             }
@@ -88,7 +88,7 @@ class AutofillTotpCopyViewModel @Inject constructor(
      * Send an event to the activity that signals it to finish.
      */
     private fun finishActivity() {
-        sendEvent(AutofillTotpCopyEvent.FinishActivity)
+        sendEvent(AutofillCallbackEvent.FinishActivity)
     }
 
     private suspend fun isVaultLocked(): Boolean {
@@ -105,30 +105,30 @@ class AutofillTotpCopyViewModel @Inject constructor(
 }
 
 /**
- * Represents actions that can be sent to the [AutofillTotpCopyViewModel].
+ * Represents actions that can be sent to the [AutofillCallbackViewModel].
  */
-sealed class AutofillTotpCopyAction {
+sealed class AutofillCallbackAction {
     /**
      * An [intent] has been received and is ready to be processed.
      */
     data class IntentReceived(
         val intent: Intent,
-    ) : AutofillTotpCopyAction()
+    ) : AutofillCallbackAction()
 }
 
 /**
- * Represents events emitted by the [AutofillTotpCopyViewModel].
+ * Represents events emitted by the [AutofillCallbackViewModel].
  */
-sealed class AutofillTotpCopyEvent {
+sealed class AutofillCallbackEvent {
     /**
      * Complete autofill with the provided [cipherView].
      */
     data class CompleteAutofill(
         val cipherView: CipherView,
-    ) : AutofillTotpCopyEvent()
+    ) : AutofillCallbackEvent()
 
     /**
      * Finish the activity.
      */
-    data object FinishActivity : AutofillTotpCopyEvent()
+    data object FinishActivity : AutofillCallbackEvent()
 }
