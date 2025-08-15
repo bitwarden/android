@@ -286,7 +286,7 @@ Skanning skjer automatisk.</string>
     <string name="new_uri">Ny URI</string>
     <string name="add_website">Legg til nettstad</string>
     <string name="base_domain">Grunndomene</string>
-    <string name="default_text">Standard</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Nøyaktig</string>
     <string name="host">Vert</string>
     <string name="reg_ex">Regulært uttrykk</string>
@@ -356,7 +356,7 @@ Skanning skjer automatisk.</string>
     <string name="clear_clipboard">Tøm utklippstavla</string>
     <string name="clear_clipboard_description">Automatically clear copied values from your clipboard.</string>
     <string name="default_uri_match_detection">Default URI match detection</string>
-    <string name="default_uri_match_detection_description">Choose the default way that URI match detection is handled for logins when performing actions such as autofill.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Brigda fargetemaet på appen</string>
     <string name="copy_notes">Kopier notat</string>
@@ -483,7 +483,6 @@ Skanning skjer automatisk.</string>
     <string name="password_prompt">Spør om hovudpassord å nyo</string>
     <string name="password_confirmation">Stadfesta hovudpassord</string>
     <string name="password_confirmation_desc">This action is protected, to continue please re-enter your master password to verify your identity.</string>
-    <string name="captcha_failed">Captcha failed. Please try again.</string>
     <string name="update_master_password">Update master password</string>
     <string name="update_master_password_warning">Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</string>
     <string name="updating_password">Updating password</string>
@@ -1070,4 +1069,13 @@ Do you want to switch to this account?</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

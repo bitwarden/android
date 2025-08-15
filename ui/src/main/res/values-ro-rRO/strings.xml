@@ -286,7 +286,7 @@ Scanarea se va face automat.</string>
     <string name="new_uri">URI nou</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">Domeniu de bază</string>
-    <string name="default_text">Implicit</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Exact</string>
     <string name="host">Gazdă</string>
     <string name="reg_ex">Expresie regulată</string>
@@ -356,7 +356,7 @@ Scanarea se va face automat.</string>
     <string name="clear_clipboard">Golire clipboard</string>
     <string name="clear_clipboard_description">Șterge automat valorile copiate din clipboard.</string>
     <string name="default_uri_match_detection">Detectare implicită a potrivirii URI</string>
-    <string name="default_uri_match_detection_description">Alege modul implicit de gestionare a detectării de potrivire URI pentru conectări când se efectuează acțiuni precum auto-completarea.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Temă</string>
     <string name="theme_description">Schimbare temă de culori a aplicației.</string>
     <string name="copy_notes">Copiere notă</string>
@@ -483,7 +483,6 @@ Scanarea se va face automat.</string>
     <string name="password_prompt">Re-solicitare parolă principală</string>
     <string name="password_confirmation">Confirmare parolă principală</string>
     <string name="password_confirmation_desc">Această acțiune este protejată. Pentru a continua, vă rugăm să reintroduceți parola principală pentru a vă verifica identitatea.</string>
-    <string name="captcha_failed">Captcha a eșuat. Încercați din nou.</string>
     <string name="update_master_password">Actualizare parolă principală</string>
     <string name="update_master_password_warning">Parola principală a fost schimbată recent de către un administrator al organizației. Pentru a accesa seiful, trebuie să vă actualizați acum parola principală. Continuarea vă va deconecta de la sesiunea curentă, cerându-vă să vă conectați din nou. Sesiunile active de pe alte dispozitive pot continua să rămână active timp de până la o oră.</string>
     <string name="updating_password">Actualizarea parolei</string>
@@ -1070,4 +1069,13 @@ Doriți să comutați la acest cont?</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

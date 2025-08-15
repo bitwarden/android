@@ -146,7 +146,7 @@
     <string name="syncing">Sinkronizacija...</string>
     <string name="syncing_complete">Sinkronizacija dovršena.</string>
     <string name="two_step_login">Prijava dvostrukom autentifikacijom</string>
-    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
+    <string name="unlock_with_biometrics">Otključaj biometrijom</string>
     <string name="unlock_with_pin">Otključaj PIN-om</string>
     <string name="verification_code">Kôd za provjeru</string>
     <string name="view_login">Prikaži prijavu</string>
@@ -285,7 +285,7 @@
     <string name="new_uri">Novi URI</string>
     <string name="add_website">Dodaj web stranicu</string>
     <string name="base_domain">Primarna domena</string>
-    <string name="default_text">Zadano</string>
+    <string name="default_text">Zadano (%1$s)</string>
     <string name="exact">Točno</string>
     <string name="host">Host</string>
     <string name="reg_ex">Regularni izraz</string>
@@ -355,7 +355,7 @@
     <string name="clear_clipboard">Očisti međuspremnik</string>
     <string name="clear_clipboard_description">Vremenski period automatskog pražnjenja međuspremnika.</string>
     <string name="default_uri_match_detection">Zadano otkrivanje URI podudaranja</string>
-    <string name="default_uri_match_detection_description">Biranje zadanog načina na koji će se riješavati otkrivanje URI-ja za prijavu pri izvođenju radnji kao što je auto-ispuna.</string>
+    <string name="default_uri_match_detection_description">Otkrivanje podudaranja URI-ja upravlja kako Bitwarden identificira prijedloge za auto-ispunu.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Mijenja boju aplikacije.</string>
     <string name="copy_notes">Kopiraj bilješku</string>
@@ -482,7 +482,6 @@
     <string name="password_prompt">Ponovno zatraži glavnu lozinku</string>
     <string name="password_confirmation">Potvrda glavne lozinke</string>
     <string name="password_confirmation_desc">Ova radnja je zaštićena. Za nastavak i potvrdu identiteta, unesi svoju glavnu lozinku.</string>
-    <string name="captcha_failed">Captcha pogrešna.</string>
     <string name="update_master_password">Ažuriraj glavnu lozinku</string>
     <string name="update_master_password_warning">Tvoju glavnu lozinku je nedavno promijenio administrator tvoje organizacije. Za pristup trezoru, potrebno je ažurirati glavnu lozinku, što će te odjaviti iz trenutne sesije, te ćeš se morati ponovno prijaviti. Aktivne sesije na drugim uređajima mogu ostati aktivne još sat vremena.</string>
     <string name="updating_password">Ažuriranje lozinke</string>
@@ -1069,5 +1068,14 @@ bilo kakav problem.</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokalne stavke su sažete. Klikni za proširivanje.</string>
     <string name="items_expanded_click_to_collapse">Stavke su proširene. Klikni za sažimanje.</string>
     <string name="items_are_collapsed_click_to_expand">Stavke su sažete. Klikni za proširivanje.</string>
-    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="select_a_card_for_x">Odaberi karticu za %s</string>
+    <string name="advanced_options">Napredne mogućnosti</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Više o otkrivanju podudaranja</annotation></string>
+    <string name="keep_your_credential_secure">Čuvaj svoje vjerodajnice sigurnima</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Nauči kako čuvati vjerojajnice sigurnima koristeći „%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Sigurno želiš koristiti „%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">Otkrivanje podudaranja URI-ja upravlja kako Bitwarden identificira prijedloge za auto-ispunu.\n<annotation emphasis="bold">Upozorenje:</annotation>„Regularni izraz” je napredna mogućnost s povećanim rizikom curenja vjerodajnica u slučaju krivog korištenja.</string>
+    <string name="default_uri_match_detection_description_advanced_options">Otkrivanje podudaranja URI-ja upravlja kako Bitwarden identificira prijedloge za auto-ispunu.\n<annotation emphasis="bold">Upozorenje:</annotation>„Počinje s” je napredna mogućnost s povećanim rizikom curenja vjerodajnica u slučaju krivog korištenja.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">„Počinje s” je napredna mogućnost s povećnim rizikom od otkrivanja vjerodajnica.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">„Regularni izraz” je napredna mogućnost s povećanim rizikom curenja vjerodajnica u slučaju krivog korištenja.</string>
 </resources>

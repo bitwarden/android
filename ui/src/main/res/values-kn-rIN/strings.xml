@@ -286,7 +286,7 @@ Scanning will happen automatically.</string>
     <string name="new_uri">ಹೊಸ ಯುಆರ್ಐ</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">ಮೂಲ ಡೊಮೇನ್</string>
-    <string name="default_text">ಡಿಫಾಲ್ಟ್</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">ನಿಖರವಾಗಿ</string>
     <string name="host">ಅತಿಥೆಯ</string>
     <string name="reg_ex">ನಿಯಮಿತ ಅಭಿವ್ಯಕ್ತಿ</string>
@@ -356,7 +356,7 @@ Scanning will happen automatically.</string>
     <string name="clear_clipboard">ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ತೆರವುಗೊಳಿಸಿ</string>
     <string name="clear_clipboard_description">ನಿಮ್ಮ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ನಿಂದ ನಕಲಿಸಿದ ಮೌಲ್ಯಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ತೆರವುಗೊಳಿಸಿ.</string>
     <string name="default_uri_match_detection">ಡೀಫಾಲ್ಟ್ ಯುಆರ್ಐ ಹೊಂದಾಣಿಕೆ ಪತ್ತೆ</string>
-    <string name="default_uri_match_detection_description">ಸ್ವಯಂ ಭರ್ತಿಯಂತಹ ಕ್ರಿಯೆಗಳನ್ನು ನಿರ್ವಹಿಸುವಾಗ ಲಾಗಿನ್‌ಗಳಿಗಾಗಿ URI ಹೊಂದಾಣಿಕೆ ಪತ್ತೆಹಚ್ಚುವಿಕೆಯನ್ನು ನಿರ್ವಹಿಸುವ ಪೂರ್ವನಿಯೋಜಿತ ಮಾರ್ಗವನ್ನು ಆರಿಸಿ.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">ಥೀಮ್ಸ್</string>
     <string name="theme_description">ಅಪ್ಲಿಕೇಶನ್‌ನ ಬಣ್ಣ ಥೀಮ್ ಅನ್ನು ಬದಲಾಯಿಸಿ.</string>
     <string name="copy_notes">ಟಿಪ್ಪಣಿ ನಕಲಿಸಿ</string>
@@ -483,7 +483,6 @@ Scanning will happen automatically.</string>
     <string name="password_prompt">ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ ಮರು-ಪ್ರಾಂಪ್ಟ್</string>
     <string name="password_confirmation">ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ ದೃಢೀಕರಣ</string>
     <string name="password_confirmation_desc">ಮುಂದುವರಿಯಲು ಈ ಕ್ರಿಯೆಯನ್ನು ರಕ್ಷಿಸಲಾಗಿದೆ, ದಯವಿಟ್ಟು ನಿಮ್ಮ ಗುರುತನ್ನು ಪರಿಶೀಲಿಸಲು ನಿಮ್ಮ ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ಮರು ನಮೂದಿಸಿ.</string>
-    <string name="captcha_failed">Captcha failed. Please try again.</string>
     <string name="update_master_password">Update master password</string>
     <string name="update_master_password_warning">Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</string>
     <string name="updating_password">Updating password</string>
@@ -1070,4 +1069,13 @@ Do you want to switch to this account?</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

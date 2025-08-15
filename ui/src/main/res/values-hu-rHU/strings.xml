@@ -285,7 +285,7 @@
     <string name="new_uri">Új URI</string>
     <string name="add_website">Webhely hozzáadása</string>
     <string name="base_domain">Alap domain</string>
-    <string name="default_text">Alapértelmezett</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Pontos</string>
     <string name="host">Kiszolgáló</string>
     <string name="reg_ex">Reguláris kifejezés</string>
@@ -355,7 +355,7 @@
     <string name="clear_clipboard">Vágólap ürítése</string>
     <string name="clear_clipboard_description">Automatikusan törli a vágólapra másolt értékeket.</string>
     <string name="default_uri_match_detection">URI-egyezések alapértelmezett felismerése</string>
-    <string name="default_uri_match_detection_description">Az URI egyezés érzékelés alapértelmezett módjának kiválasztása a bejelentkezéseknél olyan műveletek esetében mint az automatikus kitöltés.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Téma</string>
     <string name="theme_description">Az alkalmazás színének megváltoztatása.</string>
     <string name="copy_notes">Jegyzet másolása</string>
@@ -482,7 +482,6 @@
     <string name="password_prompt">Mesterjelszó újbóli bekérése</string>
     <string name="password_confirmation">Mesterjelszó megerősítése</string>
     <string name="password_confirmation_desc">Ez a művelet védett. A folytatásért ismételten meg kell adni a mesterjelszőt az személyazonosság ellenőrzéséhez.</string>
-    <string name="captcha_failed">A Captcha sikertelen. Próbáljuk újra.</string>
     <string name="update_master_password">Mesterjelszó frissítése</string>
     <string name="update_master_password_warning">A szervezet egyik adminisztrátora nemrég megváltoztatta a mesterjelszót. A széf eléréséhez most frissíteni kell a mesterjelszót. Továbblépéskor kijelentkezés történik a jelenlegi munkamenetből és újra be kell jelentkezni. Ha van aktív munkamenet más eszközön, az még legfeljebb egy óráig aktív maradhat.</string>
     <string name="updating_password">Jelszó frissítése</string>
@@ -1069,4 +1068,13 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="items_expanded_click_to_collapse">Az elemek kinyitásra kerülnek, kattintás az összezáráshoz.</string>
     <string name="items_are_collapsed_click_to_expand">Az elemek összezárásra kerülnek, kattintás az kinyitáshoz.</string>
     <string name="select_a_card_for_x">Válasszunk egy kártyát %s használatához</string>
+    <string name="advanced_options">Haladó opciók</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Bővebben az egyezés felismeréséről</annotation></string>
+    <string name="keep_your_credential_secure">Tartsuk biztonságban a hitelesítő adatokat.</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">További információ arról, hogyan tarthatjuk biztonságban a hitelesítő adatokat “%1$s” használatakor.</string>
+    <string name="are_you_sure_you_want_to_use">Biztosan szeretnénk használni: “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">Az URI egyezés észlelése szabályozza, hogy a Bitwarden hogyan azonosítsa az automatikus kitöltési javaslatokat.\n&lt;annotation emphous=„bold“&gt;Figyelem:&lt;/annotation&gt; “A reguláris kifejezés” egy fejlett opció, amely növeli a hitelesítő adatok felfedésének kockázatát, ha helytelenül használják.</string>
+    <string name="default_uri_match_detection_description_advanced_options">Az URI egyezés észlelése szabályozza, hogy a Bitwarden hogyan azonosítsa az automatikus kitöltési javaslatokat.\n&lt;annotation emphous=„bold“&gt;Figyelem:&lt;/annotation&gt; A “Kezdés:” egy fejlett lehetőség, amely növeli a hitelesítő adatok felfedésének kockázatát.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">A “Kezdés:” egy fejlett opció, amely növeli a hitelesítő adatok felfedésének kockázatát.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“A reguláris kifejezés” egy fejlett opció, amely megnöveli a hitelesítő adatok felfedésének kockázatát, ha helytelenül használják.</string>
 </resources>
