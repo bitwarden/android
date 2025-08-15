@@ -32,6 +32,7 @@ class AutofillSaveItemExtensionsTest {
                 common = VaultAddEditState.ViewState.Content.Common(),
                 isIndividualVaultDisabled = false,
                 type = VaultAddEditState.ViewState.Content.ItemType.Card(
+                    cardHolderName = "cardholderName",
                     number = "number",
                     expirationMonth = VaultCardExpirationMonth.JANUARY,
                     expirationYear = "2024",
@@ -39,6 +40,7 @@ class AutofillSaveItemExtensionsTest {
                 ),
             ),
             AutofillSaveItem.Card(
+                cardholderName = "cardholderName",
                 number = "number",
                 expirationMonth = "1",
                 expirationYear = "2024",
