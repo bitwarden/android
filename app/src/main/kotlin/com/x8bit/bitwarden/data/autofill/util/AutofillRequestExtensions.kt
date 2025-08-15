@@ -11,7 +11,7 @@ fun AutofillRequest.Fillable.toAutofillSaveItem(): AutofillSaveItem =
     when (this.partition) {
         is AutofillPartition.Card -> {
             AutofillSaveItem.Card(
-                cardholderName = partition.cardholderName,
+                cardholderName = partition.cardholderNameSaveValue,
                 number = partition.numberSaveValue,
                 expirationMonth = partition.expirationMonthSaveValue,
                 expirationYear = partition.expirationYearSaveValue,
