@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.manager.intent
+package com.bitwarden.ui.platform.manager
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
@@ -48,7 +48,7 @@ private const val TEMP_CAMERA_IMAGE_DIR: String = "camera_temp"
  */
 @Suppress("TooManyFunctions")
 @OmitFromCoverage
-class IntentManagerImpl(
+internal class IntentManagerImpl(
     private val context: Context,
     private val clock: Clock,
     private val buildInfoManager: BuildInfoManager,

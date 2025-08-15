@@ -12,6 +12,7 @@ import android.service.autofill.Dataset
 import android.view.autofill.AutofillManager
 import androidx.core.os.bundleOf
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.util.toPendingIntentMutabilityFlag
 import com.bitwarden.ui.platform.util.getSafeParcelableExtra
 import com.x8bit.bitwarden.AutofillCallbackActivity
 import com.x8bit.bitwarden.MainActivity

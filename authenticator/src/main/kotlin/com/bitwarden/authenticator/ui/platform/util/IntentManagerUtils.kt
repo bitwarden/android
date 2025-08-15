@@ -6,7 +6,7 @@ import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
 
 /**
  * Launches the authenticator app settings.

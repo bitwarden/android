@@ -15,9 +15,9 @@ import com.bitwarden.authenticator.ui.platform.base.AuthenticatorComposeTest
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -88,7 +88,7 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
 
     @Test
     fun `on NavigateToBitwardenApp receive should launch bitwarden account security deep link`() {
-        every { intentManager.startActivity(any()) } just runs
+        every { intentManager.startActivity(any()) } returns true
         val intentSlot = slot<Intent>()
         val expectedIntent = Intent(
             Intent.ACTION_VIEW,

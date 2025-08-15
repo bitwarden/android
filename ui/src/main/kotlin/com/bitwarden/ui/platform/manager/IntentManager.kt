@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.manager.intent
+package com.bitwarden.ui.platform.manager
 
 import android.content.Context
 import android.content.Intent

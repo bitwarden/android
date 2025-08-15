@@ -216,6 +216,15 @@ jobs:
           distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}
 
+      - name: Update app CI Build info
+        run: |
+          ./scripts/update_app_ci_build_info.sh \
+          $GITHUB_REPOSITORY \
+          $GITHUB_REF_NAME \
+          $GITHUB_SHA \
+          $GITHUB_RUN_ID \
+          $GITHUB_RUN_ATTEMPT
+
       - name: Increment version
         run: |
           DEFAULT_VERSION_CODE=$GITHUB_RUN_NUMBER
