@@ -5,8 +5,8 @@ import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.autofill.model.AutofillTotpCopyData
-import com.x8bit.bitwarden.data.autofill.util.getTotpCopyIntentOrNull
+import com.x8bit.bitwarden.data.autofill.model.AutofillCallbackData
+import com.x8bit.bitwarden.data.autofill.util.getAutofillCallbackIntentOrNull
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
@@ -24,8 +24,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class AutofillTotpCopyViewModelTest : BaseViewModelTest() {
-    private lateinit var autofillTotpCopyViewModel: AutofillTotpCopyViewModel
+class AutofillCallbackViewModelTest : BaseViewModelTest() {
+    private lateinit var autofillCallbackViewModel: AutofillCallbackViewModel
 
     private val mutableVaultUnlockDataStateFlow: MutableStateFlow<List<VaultUnlockData>> =
         MutableStateFlow(emptyList())
@@ -41,9 +41,9 @@ class AutofillTotpCopyViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(Intent::getTotpCopyIntentOrNull)
+        mockkStatic(Intent::getAutofillCallbackIntentOrNull)
 
-        autofillTotpCopyViewModel = AutofillTotpCopyViewModel(
+        autofillCallbackViewModel = AutofillCallbackViewModel(
             authRepository = authRepository,
             vaultRepository = vaultRepository,
         )
@@ -51,7 +51,7 @@ class AutofillTotpCopyViewModelTest : BaseViewModelTest() {
 
     @AfterEach
     fun teardown() {
-        unmockkStatic(Intent::getTotpCopyIntentOrNull)
+        unmockkStatic(Intent::getAutofillCallbackIntentOrNull)
     }
 
     @Suppress("MaxLineLength")
@@ -62,20 +62,20 @@ class AutofillTotpCopyViewModelTest : BaseViewModelTest() {
             val cipherView: CipherView = mockk {
                 every { id } returns CIPHER_ID
             }
-            val totpCopyData = AutofillTotpCopyData(
+            val totpCopyData = AutofillCallbackData(
                 cipherId = CIPHER_ID,
             )
-            val action = AutofillTotpCopyAction.IntentReceived(
+            val action = AutofillCallbackAction.IntentReceived(
                 intent = intent,
             )
-            val expectedEvent = AutofillTotpCopyEvent.CompleteAutofill(
+            val expectedEvent = AutofillCallbackEvent.CompleteAutofill(
                 cipherView = cipherView,
             )
             val vaultUnlockData = VaultUnlockData(
                 userId = ACTIVE_USER_ID,
                 status = VaultUnlockData.Status.UNLOCKED,
             )
-            every { intent.getTotpCopyIntentOrNull() } returns totpCopyData
+            every { intent.getAutofillCallbackIntentOrNull() } returns totpCopyData
             every { authRepository.activeUserId } returns ACTIVE_USER_ID
             every { vaultRepository.isVaultUnlocked(userId = ACTIVE_USER_ID) } returns true
             coEvery {
@@ -84,10 +84,10 @@ class AutofillTotpCopyViewModelTest : BaseViewModelTest() {
             mutableVaultUnlockDataStateFlow.value = listOf(vaultUnlockData)
 
             // Test
-            autofillTotpCopyViewModel.trySendAction(action)
+            autofillCallbackViewModel.trySendAction(action)
 
             // Verify
-            autofillTotpCopyViewModel.eventFlow.test {
+            autofillCallbackViewModel.eventFlow.test {
                 assertEquals(expectedEvent, awaitItem())
                 expectNoEvents()
             }
@@ -96,17 +96,17 @@ class AutofillTotpCopyViewModelTest : BaseViewModelTest() {
     @Test
     fun `on IntentReceived should emit FinishActivity when cipherID is not`() = runTest {
         // Setup
-        val action = AutofillTotpCopyAction.IntentReceived(
+        val action = AutofillCallbackAction.IntentReceived(
             intent = intent,
         )
-        val expectedEvent = AutofillTotpCopyEvent.FinishActivity
-        every { intent.getTotpCopyIntentOrNull() } returns null
+        val expectedEvent = AutofillCallbackEvent.FinishActivity
+        every { intent.getAutofillCallbackIntentOrNull() } returns null
 
         // Test
-        autofillTotpCopyViewModel.trySendAction(action)
+        autofillCallbackViewModel.trySendAction(action)
 
         // Verify
-        autofillTotpCopyViewModel.eventFlow.test {
+        autofillCallbackViewModel.eventFlow.test {
             assertEquals(expectedEvent, awaitItem())
             expectNoEvents()
         }
@@ -117,21 +117,21 @@ class AutofillTotpCopyViewModelTest : BaseViewModelTest() {
     fun `on IntentReceived should emit FinishActivity when cipherID is extracted and no active user`() =
         runTest {
             // Setup
-            val totpCopyData = AutofillTotpCopyData(
+            val totpCopyData = AutofillCallbackData(
                 cipherId = CIPHER_ID,
             )
-            val action = AutofillTotpCopyAction.IntentReceived(
+            val action = AutofillCallbackAction.IntentReceived(
                 intent = intent,
             )
-            val expectedEvent = AutofillTotpCopyEvent.FinishActivity
-            every { intent.getTotpCopyIntentOrNull() } returns totpCopyData
+            val expectedEvent = AutofillCallbackEvent.FinishActivity
+            every { intent.getAutofillCallbackIntentOrNull() } returns totpCopyData
             every { authRepository.activeUserId } returns null
 
             // Test
-            autofillTotpCopyViewModel.trySendAction(action)
+            autofillCallbackViewModel.trySendAction(action)
 
             // Verify
-            autofillTotpCopyViewModel.eventFlow.test {
+            autofillCallbackViewModel.eventFlow.test {
                 assertEquals(expectedEvent, awaitItem())
                 expectNoEvents()
             }
@@ -142,22 +142,22 @@ class AutofillTotpCopyViewModelTest : BaseViewModelTest() {
     fun `on IntentReceived should emit FinishActivity when cipherID is extracted and vault locked`() =
         runTest {
             // Setup
-            val totpCopyData = AutofillTotpCopyData(
+            val totpCopyData = AutofillCallbackData(
                 cipherId = CIPHER_ID,
             )
-            val action = AutofillTotpCopyAction.IntentReceived(
+            val action = AutofillCallbackAction.IntentReceived(
                 intent = intent,
             )
-            val expectedEvent = AutofillTotpCopyEvent.FinishActivity
-            every { intent.getTotpCopyIntentOrNull() } returns totpCopyData
+            val expectedEvent = AutofillCallbackEvent.FinishActivity
+            every { intent.getAutofillCallbackIntentOrNull() } returns totpCopyData
             every { authRepository.activeUserId } returns ACTIVE_USER_ID
             every { vaultRepository.isVaultUnlocked(userId = ACTIVE_USER_ID) } returns false
 
             // Test
-            autofillTotpCopyViewModel.trySendAction(action)
+            autofillCallbackViewModel.trySendAction(action)
 
             // Verify
-            autofillTotpCopyViewModel.eventFlow.test {
+            autofillCallbackViewModel.eventFlow.test {
                 assertEquals(expectedEvent, awaitItem())
                 expectNoEvents()
             }
@@ -171,18 +171,18 @@ class AutofillTotpCopyViewModelTest : BaseViewModelTest() {
             val cipherView: CipherView = mockk {
                 every { id } returns "NEW CIPHER ID"
             }
-            val totpCopyData = AutofillTotpCopyData(
+            val totpCopyData = AutofillCallbackData(
                 cipherId = CIPHER_ID,
             )
-            val action = AutofillTotpCopyAction.IntentReceived(
+            val action = AutofillCallbackAction.IntentReceived(
                 intent = intent,
             )
-            val expectedEvent = AutofillTotpCopyEvent.FinishActivity
+            val expectedEvent = AutofillCallbackEvent.FinishActivity
             val vaultUnlockData = VaultUnlockData(
                 userId = ACTIVE_USER_ID,
                 status = VaultUnlockData.Status.UNLOCKED,
             )
-            every { intent.getTotpCopyIntentOrNull() } returns totpCopyData
+            every { intent.getAutofillCallbackIntentOrNull() } returns totpCopyData
             every { authRepository.activeUserId } returns ACTIVE_USER_ID
             every { vaultRepository.isVaultUnlocked(userId = ACTIVE_USER_ID) } returns true
             coEvery {
@@ -191,10 +191,10 @@ class AutofillTotpCopyViewModelTest : BaseViewModelTest() {
             mutableVaultUnlockDataStateFlow.value = listOf(vaultUnlockData)
 
             // Test
-            autofillTotpCopyViewModel.trySendAction(action)
+            autofillCallbackViewModel.trySendAction(action)
 
             // Verify
-            autofillTotpCopyViewModel.eventFlow.test {
+            autofillCallbackViewModel.eventFlow.test {
                 assertEquals(expectedEvent, awaitItem())
                 expectNoEvents()
             }
@@ -203,28 +203,28 @@ class AutofillTotpCopyViewModelTest : BaseViewModelTest() {
     @Test
     fun `on IntentReceived should emit FinishActivity when timeout is elapsed`() = runTest {
         // Setup
-        val totpCopyData = AutofillTotpCopyData(
+        val totpCopyData = AutofillCallbackData(
             cipherId = CIPHER_ID,
         )
-        val action = AutofillTotpCopyAction.IntentReceived(
+        val action = AutofillCallbackAction.IntentReceived(
             intent = intent,
         )
-        val expectedEvent = AutofillTotpCopyEvent.FinishActivity
+        val expectedEvent = AutofillCallbackEvent.FinishActivity
         val vaultUnlockData = VaultUnlockData(
             userId = ACTIVE_USER_ID,
             status = VaultUnlockData.Status.UNLOCKED,
         )
-        every { intent.getTotpCopyIntentOrNull() } returns totpCopyData
+        every { intent.getAutofillCallbackIntentOrNull() } returns totpCopyData
         every { authRepository.activeUserId } returns ACTIVE_USER_ID
         every { vaultRepository.isVaultUnlocked(userId = ACTIVE_USER_ID) } returns true
         coEvery { vaultRepository.getCipher(cipherId = CIPHER_ID) } just awaits
         mutableVaultUnlockDataStateFlow.value = listOf(vaultUnlockData)
 
         // Test
-        autofillTotpCopyViewModel.trySendAction(action)
+        autofillCallbackViewModel.trySendAction(action)
 
         // Verify
-        autofillTotpCopyViewModel.eventFlow.test {
+        autofillCallbackViewModel.eventFlow.test {
             assertEquals(expectedEvent, awaitItem())
             expectNoEvents()
         }
