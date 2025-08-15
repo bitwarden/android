@@ -5,8 +5,6 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
-import androidx.compose.ui.test.hasAnySibling
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
@@ -23,6 +21,7 @@ import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.util.isBottomSheet
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -468,9 +467,9 @@ class ImportLoginsScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithContentDescription("Close")
-            .filterToOne(hasAnySibling(hasText("Bitwarden Tools")))
+            .filterToOne(hasAnyAncestor(isBottomSheet))
             .assertIsDisplayed()
-            .performSemanticsAction(SemanticsActions.OnClick)
+            .performClick()
 
         dispatcher.advanceTimeByAndRunCurrent(1000L)
 

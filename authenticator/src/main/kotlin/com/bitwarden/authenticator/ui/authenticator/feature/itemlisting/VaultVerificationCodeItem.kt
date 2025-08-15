@@ -1,6 +1,5 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -56,7 +55,6 @@ import com.bitwarden.ui.platform.resource.BitwardenString
  * @param showMoveToBitwarden Whether the option to move the item to Bitwarden is displayed.
  * @param modifier The modifier for the item.
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Suppress("LongMethod", "MagicNumber")
 @Composable
 fun VaultVerificationCodeItem(
