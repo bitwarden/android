@@ -25,6 +25,8 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 class IntentManagerImpl(
     private val context: Context,
 ) : IntentManager {
+    override val packageName: String get() = context.packageName
+
     override fun startActivity(intent: Intent) {
         try {
             context.startActivity(intent)

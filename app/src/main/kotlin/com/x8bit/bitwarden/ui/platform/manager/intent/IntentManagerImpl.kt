@@ -53,6 +53,8 @@ class IntentManagerImpl(
     private val clock: Clock,
     private val buildInfoManager: BuildInfoManager,
 ) : IntentManager {
+    override val packageName: String get() = context.packageName
+
     override fun startActivity(intent: Intent): Boolean = try {
         context.startActivity(intent)
         true
@@ -76,7 +78,7 @@ class IntentManagerImpl(
             .launchUrl(context, uri)
     }
 
-    override fun startCredentialManagerSettings(context: Context) {
+    override fun startCredentialManagerSettings() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             CredentialManager.create(context).createSettingsPendingIntent().send()
         }

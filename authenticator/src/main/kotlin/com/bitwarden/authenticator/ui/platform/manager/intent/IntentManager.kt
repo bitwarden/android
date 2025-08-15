@@ -11,9 +11,13 @@ import com.bitwarden.ui.platform.model.FileData
 /**
  * A manager class for simplifying the handling of Android Intents within a given context.
  */
-@Suppress("TooManyFunctions")
 @Immutable
 interface IntentManager {
+    /**
+     * The package name for the current app, this can be used to generate an [Intent].
+     */
+    val packageName: String
+
     /**
      * Start an activity using the provided [Intent].
      */
