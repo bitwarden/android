@@ -4,7 +4,9 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -74,6 +76,19 @@ class AutofillSaveItemExtensionsTest {
                 uri = "https://www.test.com",
             )
                 .toDefaultAddTypeContent(isIndividualVaultDisabled = true),
+        )
+    }
+
+    @Test
+    fun `toVaultItemCipherType should return the correct VaultItemCipherType`() {
+        assertEquals(
+            VaultItemCipherType.CARD,
+            mockk<AutofillSaveItem.Card>().toVaultItemCipherType(),
+        )
+
+        assertEquals(
+            VaultItemCipherType.LOGIN,
+            mockk<AutofillSaveItem.Login>().toVaultItemCipherType(),
         )
     }
 }

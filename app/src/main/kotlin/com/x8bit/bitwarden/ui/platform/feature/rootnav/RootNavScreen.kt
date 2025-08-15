@@ -61,9 +61,9 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.navigateToAddEditSend
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toVaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListingAsRoot
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
-import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import java.util.concurrent.atomic.AtomicReference
 
@@ -225,7 +225,7 @@ fun RootNavScreen(
                 navController.navigateToVaultAddEdit(
                     args = VaultAddEditArgs(
                         vaultAddEditType = VaultAddEditType.AddItem,
-                        vaultItemCipherType = VaultItemCipherType.LOGIN,
+                        vaultItemCipherType = currentState.autofillSaveItem.toVaultItemCipherType(),
                     ),
                     navOptions = rootNavOptions,
                 )
