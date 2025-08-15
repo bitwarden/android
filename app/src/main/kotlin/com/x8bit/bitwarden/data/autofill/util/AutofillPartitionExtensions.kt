@@ -9,16 +9,19 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillView
 val AutofillPartition.Card.expirationMonthSaveValue: String?
     get() = this
         .views
-        .firstOrNull { it is AutofillView.Card.ExpirationMonth && it.monthValue != null }
-        ?.data
-        ?.textValue
+        .filterIsInstance<AutofillView.Card.ExpirationMonth>()
+        .firstOrNull { it.monthValue != null }
+        ?.monthValue
 
 /**
  * The text value representation of the year from the [AutofillPartition.Card].
  */
 val AutofillPartition.Card.expirationYearSaveValue: String?
     get() = this
-        .extractNonNullTextValueOrNull { it is AutofillView.Card.ExpirationYear }
+        .views
+        .filterIsInstance<AutofillView.Card.ExpirationYear>()
+        .firstOrNull { it.yearValue != null }
+        ?.yearValue
 
 /**
  * The text value representation of the card number from the [AutofillPartition.Card].
