@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 
-import android.content.Context
 import android.content.res.Resources
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
@@ -93,7 +92,6 @@ fun AccountSecurityScreen(
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
-    val context: Context = LocalContext.current
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
     val unlockWithBiometricToggle: (cipher: Cipher) -> Unit = remember(viewModel) {
@@ -108,7 +106,7 @@ fun AccountSecurityScreen(
             AccountSecurityEvent.NavigateBack -> onNavigateBack()
 
             AccountSecurityEvent.NavigateToApplicationDataSettings -> {
-                intentManager.startApplicationDetailsSettingsActivity(context = context)
+                intentManager.startApplicationDetailsSettingsActivity()
             }
 
             AccountSecurityEvent.NavigateToDeleteAccount -> onNavigateToDeleteAccount()

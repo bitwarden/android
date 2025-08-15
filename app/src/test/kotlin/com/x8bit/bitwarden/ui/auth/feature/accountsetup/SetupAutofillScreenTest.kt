@@ -109,10 +109,10 @@ class SetupAutofillScreenTest : BitwardenComposeTest() {
     @Test
     fun `NavigateToAutoFillSettings should start system autofill settings activity`() {
         mockkStatic(IntentManager::startSystemAutofillSettingsActivity) {
-            every { intentManager.startSystemAutofillSettingsActivity(any()) } returns true
+            every { intentManager.startSystemAutofillSettingsActivity() } returns true
             mutableEventFlow.tryEmit(SetupAutoFillEvent.NavigateToAutofillSettings)
             verify {
-                intentManager.startSystemAutofillSettingsActivity(any())
+                intentManager.startSystemAutofillSettingsActivity()
             }
         }
     }
@@ -121,7 +121,7 @@ class SetupAutofillScreenTest : BitwardenComposeTest() {
     @Test
     fun `NavigateToAutoFillSettings should send AutoFillServiceFallback action when intent fails`() {
         mockkStatic(IntentManager::startSystemAutofillSettingsActivity) {
-            every { intentManager.startSystemAutofillSettingsActivity(any()) } returns false
+            every { intentManager.startSystemAutofillSettingsActivity() } returns false
             mutableEventFlow.tryEmit(SetupAutoFillEvent.NavigateToAutofillSettings)
             verify { viewModel.trySendAction(SetupAutoFillAction.AutoFillServiceFallback) }
         }

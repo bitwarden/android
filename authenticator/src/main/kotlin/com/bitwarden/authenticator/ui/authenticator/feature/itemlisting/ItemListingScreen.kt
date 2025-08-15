@@ -138,7 +138,7 @@ fun ItemListingScreen(
 
             is ItemListingEvent.NavigateToEditItem -> onNavigateToEditItemScreen(event.id)
             is ItemListingEvent.NavigateToAppSettings -> {
-                intentManager.startAuthenticatorAppSettings(context)
+                intentManager.startAuthenticatorAppSettings()
             }
 
             ItemListingEvent.NavigateToBitwardenListing -> {

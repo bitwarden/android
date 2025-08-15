@@ -55,7 +55,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         every { stateFlow } returns mutableStateFlow
     }
     private val intentManager: IntentManager = mockk {
-        every { startCredentialManagerSettings(any()) } just runs
+        every { startCredentialManagerSettings() } just runs
         every { launchUri(any()) } just runs
     }
 
@@ -68,7 +68,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         )
         every { intentManager.startBrowserAutofillSettingsActivity(any()) } returns true
         every {
-            intentManager.startSystemAutofillSettingsActivity(any())
+            intentManager.startSystemAutofillSettingsActivity()
         } answers { isSystemSettingsRequestSuccess }
         every { intentManager.startSystemAccessibilitySettingsActivity() } just runs
 
@@ -116,7 +116,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToAutofillSettings)
 
         verify {
-            intentManager.startSystemAutofillSettingsActivity(any())
+            intentManager.startSystemAutofillSettingsActivity()
         }
         composeTestRule.assertNoDialogExists()
     }
@@ -129,7 +129,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToAutofillSettings)
 
         verify {
-            intentManager.startSystemAutofillSettingsActivity(any())
+            intentManager.startSystemAutofillSettingsActivity()
         }
 
         composeTestRule
@@ -150,7 +150,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     fun `on NavigateToSettings should attempt to navigate to credential manager settings`() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToSettings)
 
-        verify { intentManager.startCredentialManagerSettings(any()) }
+        verify { intentManager.startCredentialManagerSettings() }
 
         composeTestRule.assertNoDialogExists()
     }

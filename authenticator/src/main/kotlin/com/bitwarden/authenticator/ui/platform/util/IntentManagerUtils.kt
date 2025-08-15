@@ -2,7 +2,6 @@
 
 package com.bitwarden.authenticator.ui.platform.util
 
-import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
@@ -12,10 +11,10 @@ import com.bitwarden.ui.platform.manager.IntentManager
 /**
  * Launches the authenticator app settings.
  */
-fun IntentManager.startAuthenticatorAppSettings(context: Context) {
+fun IntentManager.startAuthenticatorAppSettings() {
     startActivity(
         Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            .setData("package:${context.packageName}".toUri()),
+            .setData("package:$packageName".toUri()),
     )
 }
 

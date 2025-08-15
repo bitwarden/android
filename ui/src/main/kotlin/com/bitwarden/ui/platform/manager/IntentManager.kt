@@ -21,6 +21,11 @@ import java.time.Clock
 @Immutable
 interface IntentManager {
     /**
+     * The package name for the current app, this can be used to generate an [Intent].
+     */
+    val packageName: String
+
+    /**
      * Start an activity using the provided [Intent].
      *
      * @return `true` if the activity was started successfully, `false` otherwise.
@@ -35,7 +40,7 @@ interface IntentManager {
     /**
      * Starts the credential manager settings.
      */
-    fun startCredentialManagerSettings(context: Context)
+    fun startCredentialManagerSettings()
 
     /**
      * Start an activity to view the given [uri] in an external browser.
