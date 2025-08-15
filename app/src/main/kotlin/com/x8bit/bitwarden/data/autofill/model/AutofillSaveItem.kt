@@ -16,9 +16,11 @@ sealed class AutofillSaveItem : Parcelable {
      * @property expirationMonth The expiration month in string form (if applicable).
      * @property expirationYear The expiration year in string form (if applicable).
      * @property securityCode The security code for the card (if applicable).
+     * @property cardholderName The name on the card (if applicable).
      */
     @Parcelize
     data class Card(
+        val cardholderName: String?,
         val number: String?,
         val expirationMonth: String?,
         val expirationYear: String?,
