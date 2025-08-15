@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
@@ -63,6 +64,8 @@ fun VaultAddEditUriItem(
         label = stringResource(id = BitwardenString.website_uri),
         value = uriItem.uri.orEmpty(),
         onValueChange = { onUriValueChange(uriItem.copy(uri = it)) },
+        singleLine = false,
+        keyboardType = KeyboardType.Uri,
         actions = {
             BitwardenStandardIconButton(
                 vectorIconRes = BitwardenDrawable.ic_cog,
