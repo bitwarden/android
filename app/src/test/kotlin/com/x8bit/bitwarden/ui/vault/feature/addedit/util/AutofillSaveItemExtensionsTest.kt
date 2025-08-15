@@ -39,6 +39,7 @@ class AutofillSaveItemExtensionsTest {
                 ),
             ),
             AutofillSaveItem.Card(
+                cardholderName = "cardholderName",
                 number = "number",
                 expirationMonth = "1",
                 expirationYear = "2024",
