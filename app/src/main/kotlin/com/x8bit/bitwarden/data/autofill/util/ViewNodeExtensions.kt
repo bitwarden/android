@@ -141,8 +141,15 @@ private fun AssistStructure.ViewNode.buildAutofillView(
     }
 
     AutofillHint.CARD_EXPIRATION_YEAR -> {
+        val yearValue = this
+            .autofillValue
+            ?.extractYearValue(
+                autofillOptions = autofillOptions,
+            )
+
         AutofillView.Card.ExpirationYear(
             data = autofillViewData,
+            yearValue = yearValue,
         )
     }
 
