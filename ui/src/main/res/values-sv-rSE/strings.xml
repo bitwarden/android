@@ -286,7 +286,7 @@ Skanningen sker automatiskt.</string>
     <string name="new_uri">Ny URI</string>
     <string name="add_website">Lägg till webbplats</string>
     <string name="base_domain">Basdomän</string>
-    <string name="default_text">Standard</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Exakt</string>
     <string name="host">Värd</string>
     <string name="reg_ex">Reguljärt uttryck</string>
@@ -356,7 +356,7 @@ Skanningen sker automatiskt.</string>
     <string name="clear_clipboard">Rensa urklipp</string>
     <string name="clear_clipboard_description">Rensa automatiskt kopierade värden från urklipp.</string>
     <string name="default_uri_match_detection">Standardmatchning för URI</string>
-    <string name="default_uri_match_detection_description">Välj standardalternativet för hur matchning av URI är hanterat för inloggningar när du utför operationer såsom automatisk ifyllnad.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Ändra appens färgtema</string>
     <string name="copy_notes">Kopiera anteckning</string>
@@ -483,7 +483,6 @@ Skanningen sker automatiskt.</string>
     <string name="password_prompt">Återupprepa huvudlösenord</string>
     <string name="password_confirmation">Bekräfta huvudlösenord</string>
     <string name="password_confirmation_desc">Denna åtgärd är skyddad. För att fortsätta, vänligen verifiera din identitet genom att ange ditt huvudlösenord.</string>
-    <string name="captcha_failed">Captcha misslyckades. Försök igen.</string>
     <string name="update_master_password">Uppdatera huvudlösenord</string>
     <string name="update_master_password_warning">Ditt huvudlösenord ändrades nyligen av en administratör i din organisation. För att få tillgång till valvet måste du uppdatera ditt huvudlösenord nu. Om du fortsätter kommer du att loggas ut från din nuvarande session, vilket kräver att du loggar in igen. Aktiva sessioner på andra enheter kan komma att vara aktiva i upp till en timme.</string>
     <string name="updating_password">Uppdaterar lösenord</string>
@@ -1069,5 +1068,14 @@ Vill du byta till detta konto?</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokala objekt är infällda, klicka för att expandera.</string>
     <string name="items_expanded_click_to_collapse">Objekt är expanderade, klicka för att fälla in.</string>
     <string name="items_are_collapsed_click_to_expand">Objekt är infällda, klicka för att expandera.</string>
-    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="select_a_card_for_x">Välj ett kort för %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

@@ -19,7 +19,7 @@ import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
  */
 fun IntentManager.startSystemAutofillSettingsActivity(
     context: Context,
-): Boolean = !startActivity(
+): Boolean = startActivity(
     intent = Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE)
         .setData("package:${context.packageName}".toUri()),
 )

@@ -1556,7 +1556,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Close")
+            .onAllNodesWithText("Cancel")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 

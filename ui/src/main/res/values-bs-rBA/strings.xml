@@ -286,7 +286,7 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="new_uri">Novi URI</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">Osnovni domen</string>
-    <string name="default_text">Zadano</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Egzatan</string>
     <string name="host">Host</string>
     <string name="reg_ex">Regularni izraz</string>
@@ -356,7 +356,7 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="clear_clipboard">Očisti međumemoriju</string>
     <string name="clear_clipboard_description">Automatski očistiti kopirane vrijednosti iz vaše međumemorije.</string>
     <string name="default_uri_match_detection">Zadani otkrivanje URI podudaranja</string>
-    <string name="default_uri_match_detection_description">Biranje zadanog načina na koji će se riješavati otkrivanje URI-ja za prijavu pri izvođenju radnji kao što je auto-ispuna lozinki.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Tema aplikacije</string>
     <string name="theme_description">Promijenite boju teme u aplikaciji ovdje.</string>
     <string name="copy_notes">Kopiraj bilješke</string>
@@ -483,7 +483,6 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="password_prompt">Ponovno zatraži glavnu lozinku</string>
     <string name="password_confirmation">Potvrda glavne lozinke</string>
     <string name="password_confirmation_desc">Ova radnja je zaštićena. Za nastavak i potvrdu identiteta, unesi svoju glavnu lozinku.</string>
-    <string name="captcha_failed">Captcha pogrešna. Pokušaj ponovo.</string>
     <string name="update_master_password">Ažuriraj glavnu lozinku</string>
     <string name="update_master_password_warning">Tvoju glavnu lozinku je nedavno promijenio administrator tvoje organizacije. Za pristup trezoru, potrebno je ažurirati glavnu lozinku, što će te odjaviti iz trenutne sesije, te ćeš se morati ponovno prijaviti. Aktivne sesije na drugim uređajima mogu ostati aktivne još sat vremena.</string>
     <string name="updating_password">Ažuriranje lozinke</string>
@@ -1069,4 +1068,13 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

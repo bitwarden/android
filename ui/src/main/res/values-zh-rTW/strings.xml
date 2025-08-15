@@ -286,7 +286,7 @@
     <string name="new_uri">新增 URI</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">基底網域</string>
-    <string name="default_text">預設</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">完全相符</string>
     <string name="host">主機</string>
     <string name="reg_ex">規則運算式</string>
@@ -356,7 +356,7 @@
     <string name="clear_clipboard">清除剪貼簿</string>
     <string name="clear_clipboard_description">自動清除剪貼簿中複製的值。</string>
     <string name="default_uri_match_detection">預設的 URI 一致性偵測方式</string>
-    <string name="default_uri_match_detection_description">選擇在執行自動填入等動作時對登入資料進行 URI 一致性偵測的預設方式。</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">主題</string>
     <string name="theme_description">變更應用程式的主題色彩。</string>
     <string name="copy_notes">複製備註</string>
@@ -483,7 +483,6 @@
     <string name="password_prompt">重新詢問主密碼</string>
     <string name="password_confirmation">確認主密碼</string>
     <string name="password_confirmation_desc">此動作受到保護。若要繼續，請重新輸入您的主密碼以驗證您的身分。</string>
-    <string name="captcha_failed">Captcha 驗證失敗，請再試一次。</string>
     <string name="update_master_password">更新主密碼</string>
     <string name="update_master_password_warning">您的主密碼最近被您的組織管理者變更過。您必須現在更新主密碼才能存取密碼庫。繼續操作會登出您目前的工作階段，並要求您重新登入帳戶。其他裝置上的活動工作階段最多會保持一個小時。</string>
     <string name="updating_password">正在更新密碼</string>
@@ -1070,4 +1069,13 @@
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

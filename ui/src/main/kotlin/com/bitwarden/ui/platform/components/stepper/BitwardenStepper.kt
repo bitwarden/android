@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.stepper
+package com.bitwarden.ui.platform.components.stepper
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues

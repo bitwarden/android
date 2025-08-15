@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
@@ -60,6 +61,8 @@ fun VaultAddEditUriItem(
         label = stringResource(id = BitwardenString.website_uri),
         value = uriItem.uri.orEmpty(),
         onValueChange = { onUriValueChange(uriItem.copy(uri = it)) },
+        singleLine = false,
+        keyboardType = KeyboardType.Uri,
         actions = {
             BitwardenStandardIconButton(
                 vectorIconRes = BitwardenDrawable.ic_cog,
@@ -210,7 +213,7 @@ private fun AdvancedMatchDetectionWarning(
             formatArgs = arrayOf(nameOfSelectedMatchDisplayType),
         ),
         confirmButtonText = stringResource(id = BitwardenString.yes),
-        dismissButtonText = stringResource(id = BitwardenString.close),
+        dismissButtonText = stringResource(id = BitwardenString.cancel),
         onConfirmClick = onDialogConfirm,
         onDismissClick = onDialogDismiss,
         onDismissRequest = onDialogDismiss,
@@ -237,7 +240,7 @@ private fun LearnMoreAboutMatchDetectionDialog(
             ),
         ),
         confirmButtonText = stringResource(id = BitwardenString.learn_more),
-        dismissButtonText = stringResource(id = BitwardenString.cancel),
+        dismissButtonText = stringResource(id = BitwardenString.close),
         onConfirmClick = onDialogConfirm,
         onDismissClick = onDialogDismiss,
         onDismissRequest = onDialogDismiss,

@@ -286,7 +286,7 @@ Skandering gebeur outomaties.</string>
     <string name="new_uri">Nuwe URI</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">Basisdomein</string>
-    <string name="default_text">Verstek</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Presies</string>
     <string name="host">Gasheer</string>
     <string name="reg_ex">Gewone uitdrukking</string>
@@ -356,7 +356,7 @@ Skandering gebeur outomaties.</string>
     <string name="clear_clipboard">Wis Knipbord</string>
     <string name="clear_clipboard_description">Wis gekopieerde waardes outomaties vanuit u knipbord.</string>
     <string name="default_uri_match_detection">Verstek URI-ooreenkomsbespeuring</string>
-    <string name="default_uri_match_detection_description">Kies die verstek manier waarop URI-ooreenkomsbespeuring vir aantekeninge hanteer word wanneer aksies soos outovul uitgevoer word.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Verander die toepassing se kleurtema.</string>
     <string name="copy_notes">Kopieer notas</string>
@@ -483,7 +483,6 @@ Skandering gebeur outomaties.</string>
     <string name="password_prompt">Vra weer vir hoofwagwoord</string>
     <string name="password_confirmation">Hoofwagwoordbevestiging</string>
     <string name="password_confirmation_desc">Hierdie aksie is beskerm. Voer u hoofwagwoord in om u identiteit te bevestig om voort te gaan.</string>
-    <string name="captcha_failed">Captcha het misluk. Probeer weer.</string>
     <string name="update_master_password">Werk hoofwagwoord by</string>
     <string name="update_master_password_warning">U hoofwagwoord is onlangs deur ’n administrateur in u organisasie verander. Om toegang tot u kluis te verkry moet u u hoofwagwoord nóú bywerk. Deur voort te gaan word u uit u huidige sessie geteken, waarna u weer sal moet aanteken. Aktiewe sessies op ander toestelle kan vir tot ’n uur steeds aktief bly.</string>
     <string name="updating_password">Wagwoord word bygewerk</string>
@@ -1070,4 +1069,13 @@ Wil u na die rekening omskakel?</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

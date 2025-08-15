@@ -286,7 +286,7 @@
     <string name="new_uri">புது உரலி</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">அடித்தள களம்</string>
-    <string name="default_text">இயல்புநிலை</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">சரியான</string>
     <string name="host">வழங்கி</string>
     <string name="reg_ex">சுருங்குறித்தொடர்</string>
@@ -356,7 +356,7 @@
     <string name="clear_clipboard">நகலகத்தைத் துடை</string>
     <string name="clear_clipboard_description">நகலெடுத்த மதிப்புகளை உம் நகலகத்திலிருந்து தானாக துடை.</string>
     <string name="default_uri_match_detection">இயல்புநிலை உரலிப்பொருத்தங்கண்டறிதல்</string>
-    <string name="default_uri_match_detection_description">தன்னிரப்பல் போன்ற செயற்புரிகையில் உள்நுழைவுகளுக்கான உரலிப்பொருத்தங்கண்டறிதலின் இயல்புநிலை  முறையைத் தேர்வுசெய்.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">நிற அமைப்பு</string>
     <string name="theme_description">செயலியின் நிற அமைப்பை மாற்று.</string>
     <string name="copy_notes">குறிப்பை நகலெடு</string>
@@ -483,7 +483,6 @@
     <string name="password_prompt">பிரதான கடவுச்சொல் மறு-தூண்டி</string>
     <string name="password_confirmation">பிரதான கடவுச்சொல் உறுதியாக்கம்</string>
     <string name="password_confirmation_desc">இச்செயல் காக்கப்பட்டது, தொடர உம் அடையாளத்தைச் சரிபார்க்க உம் பிரதான கடவுச்சொல்லை மீண்டுமுள்ளிடவும்.</string>
-    <string name="captcha_failed">கேப்ட்ச்சா தோல்வி. மீண்டும் முயலவும்.</string>
     <string name="update_master_password">பிரதான கடவுச்சொல்லைப் புதுப்பி</string>
     <string name="update_master_password_warning">உம் நிறுவனத்திலுள்ள நிர்வாகியால் உம் பிரதான கடவுச்சொல் அண்மையில் மாற்றப்பட்டது. பெட்டகத்தை அணுக, உம் பிரதான கடவுச்சொல்லை இப்போது புதுப்பிக்க வேண்டும். தொடர்தல் உம் தற்போதைய அமர்விலிருந்து உம்மை வெளியேற்றி, திரும்ப உள்நுழைய கோரும். மற்ற சாதனங்களில் செயலிலுள்ள அமர்வுகள் ஒரு மணிநேரம் வரை தொடர்ந்து நிலைத்திருக்கக்கூடும்.</string>
     <string name="updating_password">கடவுச்சொல்லைப் புதுப்பிக்கிறது</string>
@@ -1070,4 +1069,13 @@
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

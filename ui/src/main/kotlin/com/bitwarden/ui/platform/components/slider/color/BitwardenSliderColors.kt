@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.slider.color
+package com.bitwarden.ui.platform.components.slider.color
 
 import androidx.compose.material3.SliderColors
 import androidx.compose.runtime.Composable

@@ -68,7 +68,7 @@
     <string name="value_has_been_copied">%1$s ir starpliktuvē</string>
     <string name="verify_master_password">Apstiprināt galveno paroli</string>
     <string name="verify_pin">Apstiprināt PIN</string>
-    <string name="view">Skatīt</string>
+    <string name="view">Apskatīt</string>
     <string name="yes">Jā</string>
     <string name="account">Konts</string>
     <string name="account_created_success">Jaunais konts tika izveidots.</string>
@@ -152,7 +152,7 @@
     <string name="view_login">Apskatīt pieteikšanās vienumu</string>
     <string name="view_card">Apskatīt karti</string>
     <string name="view_identity">Apskatīt identitāti</string>
-    <string name="view_note">Apskatīt pezīmi</string>
+    <string name="view_note">Apskatīt piezīmi</string>
     <string name="view_ssh_key">Apskatīt SSH atslēgu</string>
     <string name="web_vault">Bitwarden tīmekļa glabātava</string>
     <string name="items">Vienumi</string>
@@ -170,7 +170,7 @@
     <string name="enter_verification_code_app">Jāievada 6 ciparu apliecinājuma kods no autentificētāja lietotnes.</string>
     <string name="enter_verification_code_email">Jāievada 6 ciparu apliecinājuma kods, kas tika nosūtīts uz %1$s.</string>
     <string name="enter_verification_code_new_device">Mēs neatpazīstam šo ierīci. Jāievada 8 ciparu apliecinājuma kods, kas tika nosūtīts [%1$s].</string>
-    <string name="recovery_code_title">Atgūšanas kods</string>
+    <string name="recovery_code_title">Atkopes kods</string>
     <string name="remember">Atcerēties</string>
     <string name="remember_email">Atcerēties e-pasta adresi</string>
     <string name="send_verification_code_again">Atkārtoti nosūtīt kodu</string>
@@ -286,7 +286,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="new_uri">Jauns URI</string>
     <string name="add_website">Pievient tīmekļvietni</string>
     <string name="base_domain">Pamata domēns</string>
-    <string name="default_text">Noklusējums</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Tiešs</string>
     <string name="host">Saimniekdators</string>
     <string name="reg_ex">Regulārā izteiksme</string>
@@ -356,7 +356,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="clear_clipboard">Notīrīt starpliktuvi</string>
     <string name="clear_clipboard_description">Automātiski noņemt starpliktuvē ievietotās vērtības.</string>
     <string name="default_uri_match_detection">Noklusējuma URI atbilstības noteikšana</string>
-    <string name="default_uri_match_detection_description">Izvēlēties noklusējuma veidu, kādā URI atbilstības noteikšana tiek apstrādāta, kad tiek veiktas tādas darbības kā automātiska aizpildīšana.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Izskats</string>
     <string name="theme_description">Mainīt lietotnes izskata krāsas.</string>
     <string name="copy_notes">Ievietot piezīmes starpliktuvē</string>
@@ -451,7 +451,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="maximum_access_count_reached">Sasniegts lielākais pieļaujamais piekļuves reižu skaits</string>
     <string name="current_access_count">Pašreizējais piekļuvju skaits</string>
     <string name="new_password">Jauna parole</string>
-    <string name="password_info">Pēc izvēles pieprasīt paroli, lai lietotāji varētu piekļūt šim Send.</string>
+    <string name="password_info">Pieprasīt šo paroli, lai apskatītu Send.</string>
     <string name="remove_password">Noņemt paroli</string>
     <string name="removing_send_password">Noņem paroli</string>
     <string name="password_removed">Parole noņemta</string>
@@ -483,7 +483,6 @@ Nolasīšana notiks automātiski.</string>
     <string name="password_prompt">Galvenās paroles pārvaicāšana</string>
     <string name="password_confirmation">Galvenās paroles apstiprināšana</string>
     <string name="password_confirmation_desc">Šī darbība ir aizsargāta, lai turpinātu, ir jāievada galvenā parole, lai apstiprinātu identitāti.</string>
-    <string name="captcha_failed">Captcha neizdevās. Lūgums mēģināt vēlreiz.</string>
     <string name="update_master_password">Atjaunināt galveno paroli</string>
     <string name="update_master_password_warning">Apvienības pārvaldnieks nesen nomainīja galveno paroli. Tā ir jāatjaunina, lai varētu piekļūt glabātavai. Turpinot tiks izbeigta pašreizējā sesija un tiks pieprasīta atkārtota pieteikšanās. Esošās sesijas citās ierīcēs var turpināt darboties līdz vienai stundai.</string>
     <string name="updating_password">Atjaunina paroli</string>
@@ -598,7 +597,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="a_notification_has_been_sent_to_your_device">Uz ierīci ir nosūtīts paziņojums.</string>
     <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Lūgums pārliecināties, ka glabātava ir atslēgta un atpazīšanas vārdkopa ir tāda pati arī citā ierīcē.</string>
     <string name="resend_notification">Atkārtoti nosūtīt paziņojumu</string>
-    <string name="view_all_login_options">Skatīt visas pieteikšanās iespējas</string>
+    <string name="view_all_login_options">Apskatīt visas pieteikšanās iespējas</string>
     <string name="pending_log_in_requests">Neapstiprinātie pieteikšanās pieprasījumi</string>
     <string name="decline_all_requests">Noraidīt visus pieprasījumus</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Vai tiešām noraidīt visus neapstiprinātos pieteikšanās pieprasījumus?</string>
@@ -1044,7 +1043,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
     <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
-    <string name="sync_with_bitwarden_action_card_message">In order to view all of your verification codes, you’ll need to allow for syncing on all of your accounts.</string>
+    <string name="sync_with_bitwarden_action_card_message">Lai varētu apskatīt visus savus apliecinājuma kodus, ir nepieciešams ļaut sinhronizēšanu visos savos kontos.</string>
     <string name="take_me_to_app_settings">Take me to the app settings</string>
     <string name="something_went_wrong">Kaut kas nogājis greizi</string>
     <string name="please_try_again">Please try again</string>
@@ -1069,5 +1068,14 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
-    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="select_a_card_for_x">Atlasīt karti %s</string>
+    <string name="advanced_options">Papildu iespējas</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Vairāk par atbilstības noteikšanu</annotation></string>
+    <string name="keep_your_credential_secure">Turi savus pieteikšanās datus drošībā</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Uzzini vairāk par to, kā turēt pieteikšanās datus drošībā, kad izmanto “%1$s”!</string>
+    <string name="are_you_sure_you_want_to_use">Vai tiešām izmantot “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>
