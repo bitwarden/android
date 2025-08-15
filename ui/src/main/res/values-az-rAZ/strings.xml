@@ -286,7 +286,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="new_uri">Yeni URI</string>
     <string name="add_website">Veb sayt əlavə et</string>
     <string name="base_domain">Baza domeni</string>
-    <string name="default_text">İlkin</string>
+    <string name="default_text">İlkin  (%1$s)</string>
     <string name="exact">Tam</string>
     <string name="host">Host</string>
     <string name="reg_ex">Müntəzəm ifadə</string>
@@ -356,7 +356,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="clear_clipboard">Lövhəni təmizlə</string>
     <string name="clear_clipboard_description">Kopyalanmış dəyərləri lövhədən avtomatik təmizlə.</string>
     <string name="default_uri_match_detection">İlkin URI uyuşma aşkarlaması</string>
-    <string name="default_uri_match_detection_description">Avto-doldurma kimi əməliyyatları icra edərkən giriş etmə prosesi üçün URI uyuşma aşkarlamasının idarə edliəcəyi ilkin yolu seçin.</string>
+    <string name="default_uri_match_detection_description">URI uyuşma aşkarlaması, Bitwarden-in avto-doldurma təkliflərini necə müəyyən etdiyini göstərir.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Tətbiqin rəng temasını dəyişdirin.</string>
     <string name="copy_notes">Qeydləri kopyala</string>
@@ -483,7 +483,6 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="password_prompt">Ana parolu təkrar soruş</string>
     <string name="password_confirmation">Ana parol təsdiqi</string>
     <string name="password_confirmation_desc">Bu əməliyyat qorumalıdır, davam etmək üçün lütfən kimliyinizi doğrulamaq üçün ana parolunuzu təkrar daxil edin.</string>
-    <string name="captcha_failed">Captcha uğursuz oldu. Lütfən yenidən sınayın.</string>
     <string name="update_master_password">Ana parolu güncəllə</string>
     <string name="update_master_password_warning">Ana parolunuz təzəlikcə təşkilatınızdakı bir inzibatçı tərəfindən dəyişdirildi. Seyfə erişmək üçün Ana parolunuzu indi güncəlləməlisiniz. Davam etsəniz, hazırkı seansdan çıxış etmiş və təkrar giriş etməli olacaqsınız. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər.</string>
     <string name="updating_password">Parol yenilənir</string>
@@ -1070,5 +1069,14 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="local_items_are_collapsed_click_to_expand">Daxili elementlər yığcamlaşdırıldı, genişləndirmək üçün toxunun.</string>
     <string name="items_expanded_click_to_collapse">Elementlər genişləndirildi, yığcamlaşdırmaq üçün toxunun.</string>
     <string name="items_are_collapsed_click_to_expand">Elementlər yığcamlaşdırıldı, genişləndirmək üçün toxunun.</string>
-    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="select_a_card_for_x">%s bir kart seçin</string>
+    <string name="advanced_options">Qabaqcıl seçimlər</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Uyuşma aşkarlaması barədə daha çox</annotation></string>
+    <string name="keep_your_credential_secure">Kimlik məlumatlarınızı güvəndə saxlayın</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">“%1$s” istifadə edərək kimlik məlumatlarını necə güvəndə saxlayacağınızı öyrənin.</string>
+    <string name="are_you_sure_you_want_to_use">“%1$s” istifadə etmək istədiyinizə əminsiniz?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI uyuşma aşkarlanması, Bitwarden-in avto-doldurma təkliflərini necə müəyyənləşdirdiyini idarə edir.\n<annotation emphasis="bold">Xəbərdarlıq:</annotation> “Müntəzəm ifadə”, yanlış istifadə edilərsə kimlik məlumatlarının ifşa olunma riskini artıran qabaqcıl bir seçimdir.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI uyuşma aşkarlanması, Bitwarden-in avto-doldurma təkliflərini necə müəyyənləşdirdiyini idarə edir.\n<annotation emphasis="bold">Xəbərdarlıq:</annotation> “İlə başlayır”, kimlik məlumatlarının ifşa olunma riskini artıran qabaqcıl bir seçimdir.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"İlə başlayır\", kimlik məlumatlarının ifşa olunma riskini artıran qabaqcıl bir seçimdir.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Müntəzəm ifadə\", yanlış istifadə edilərsə kimlik məlumatlarının ifşa olunma riskini artıran qabaqcıl bir seçimdir.</string>
 </resources>

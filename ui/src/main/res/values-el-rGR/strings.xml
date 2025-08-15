@@ -286,7 +286,7 @@
     <string name="new_uri">Νέο URI</string>
     <string name="add_website">Προσθήκη ιστοσελίδας</string>
     <string name="base_domain">Βασικός τομέας</string>
-    <string name="default_text">Προεπιλογή</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Ακριβής</string>
     <string name="host">Διακομιστής</string>
     <string name="reg_ex">Κανονική έκφραση</string>
@@ -356,7 +356,7 @@
     <string name="clear_clipboard">Εκκαθάριση πρόχειρου</string>
     <string name="clear_clipboard_description">Αυτόματη εκκαθάριση αντιγραμμένων τιμών προχείρου.</string>
     <string name="default_uri_match_detection">Προεπιλεγμένη Ανίχνευση Αντιστοιχίας URI</string>
-    <string name="default_uri_match_detection_description">Επιλέξτε τον προκαθορισμένο τρόπο με τον οποίο αντιμετωπίζεται η ανίχνευση αντιστοίχισης URI για τις συνδέσεις, κατά την εκτέλεση ενεργειών, όπως είναι η αυτόματη συμπλήρωση.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Θέμα</string>
     <string name="theme_description">Αλλαγή χρώματος, θέματος εφαρμογής.</string>
     <string name="copy_notes">Αντιγραφή σημείωσης</string>
@@ -483,7 +483,6 @@
     <string name="password_prompt">Απαίτηση κύριου κωδικού πρόσβασης</string>
     <string name="password_confirmation">Επιβεβαίωση κύριου κωδικού πρόσβασης</string>
     <string name="password_confirmation_desc">Αυτή η ενέργεια προστατεύεται, για να συνεχίσετε, πληκτρολογήστε ξανά τον κύριο κωδικό πρόσβασης για να επαληθεύσετε την ταυτότητα σας.</string>
-    <string name="captcha_failed">Το Captcha απέτυχε. Παρακαλώ προσπάθησε ξανα.</string>
     <string name="update_master_password">Ενημερώστε τον κύριο κωδικό πρόσβασης</string>
     <string name="update_master_password_warning">Ο Κύριος Κωδικός Πρόσβασής σας άλλαξε πρόσφατα από διαχειριστή στον οργανισμό σας. Για να αποκτήσετε πρόσβαση στο vault, πρέπει να ενημερώσετε το κύριο κωδικό τώρα. Η διαδικασία θα σας αποσυνδέσει από την τρέχουσα συνεδρία σας, απαιτώντας από εσάς να συνδεθείτε ξανά. Οι ενεργές συνεδρίες σε άλλες συσκευές ενδέχεται να συνεχίσουν να είναι ενεργές για μία ώρα.</string>
     <string name="updating_password">Ενημέρωση Κωδικού Πρόσβασης</string>
@@ -1070,4 +1069,13 @@
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

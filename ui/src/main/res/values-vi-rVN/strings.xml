@@ -3,7 +3,7 @@
     <string name="about">Thông tin</string>
     <string name="add_folder">Thêm thư mục</string>
     <string name="add_item">Thêm mục</string>
-    <string name="an_error_has_occurred">Đã xảy ra lỗi.</string>
+    <string name="an_error_has_occurred">Đã xảy ra lỗi</string>
     <string name="back">Quay lại</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Hủy bỏ</string>
@@ -17,7 +17,7 @@
     <string name="edit_folder">Sửa thư mục</string>
     <string name="email">Email</string>
     <string name="email_address">Địa chỉ email</string>
-    <string name="enter_pin">Nhập mã PIN của bạn.</string>
+    <string name="enter_pin">Nhập mã PIN của bạn</string>
     <string name="favorites">Yêu thích</string>
     <string name="folder">Thư mục</string>
     <string name="folder_created">Đã tạo thư mục mới.</string>
@@ -265,14 +265,14 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="expiration">Hết hạn</string>
     <string name="show_website_icons">Hiện biểu tượng trang web</string>
     <string name="show_website_icons_help">Hiện biểu tượng trang web trợ giúp</string>
-    <string name="show_website_icons_description">Hiện logo trang web bên cạnh mỗi đăng nhập.</string>
+    <string name="show_website_icons_description">Hiện logo trang web bên cạnh mỗi đăng nhập</string>
     <string name="icons_url">URL máy chủ biểu tượng</string>
     <string name="vault_is_locked">Kho đã khóa</string>
     <string name="go_to_my_vault">Đến kho của tôi</string>
     <string name="collections">Các bộ sưu tập</string>
     <string name="no_items_collection">Không có mục nào trong bộ sưu tập này.</string>
     <string name="no_items_folder">Không có mục nào trong thư mục này.</string>
-    <string name="no_items_trash">Không có gì trong thùng rác</string>
+    <string name="no_items_trash">Không có gì trong thùng rác.</string>
     <string name="autofill_accessibility_summary">Hỗ trợ điền tên đăng nhập và mật khẩu vào các trường tương ứng trong các ứng dụng khác và trên trang web.</string>
     <string name="autofill_service_description">Dịch vụ tự động điền của Bitwarden sử dụng Khung Tự động điền của Android để hỗ trợ điền thông tin đăng nhập, thẻ tín dụng và thông tin danh tính vào các ứng dụng khác trên thiết bị của bạn.</string>
     <string name="bitwarden_autofill_go_to_settings">Chúng tôi không thể mở cài đặt tự động điền cho bạn. Bạn có thể đi đến cài đặt tự động điền theo cách thủ công bằng cách vào Cài đặt &gt; Hệ thống &gt; Ngôn ngữ và nhập liệu &gt; Nâng cao &gt; Dịch vụ tự động điền.</string>
@@ -286,7 +286,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="new_uri">Đường dẫn mới</string>
     <string name="add_website">Thêm trang web</string>
     <string name="base_domain">Tên miền cơ sở</string>
-    <string name="default_text">Mặc định</string>
+    <string name="default_text">Mặc định (%1$s)</string>
     <string name="exact">Chính xác</string>
     <string name="host">Máy chủ</string>
     <string name="reg_ex">Biểu thức chính quy</string>
@@ -356,7 +356,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="clear_clipboard">Xóa bảng nhớ tạm</string>
     <string name="clear_clipboard_description">Tự động xóa mọi thứ đã sao chép khỏi bảng nhớ tạm.</string>
     <string name="default_uri_match_detection">Cách nhận diện đường dẫn (URI)</string>
-    <string name="default_uri_match_detection_description">Chọn cách hệ thống so khớp đường dẫn để xử lý đăng nhập khi thực hiện các thao tác như tự động điền.</string>
+    <string name="default_uri_match_detection_description">Phát hiện khớp URI kiểm soát cách Bitwarden xác định gợi ý tự động điền.</string>
     <string name="theme">Chủ đề</string>
     <string name="theme_description">Thay đổi màu sắc chủ đề của ứng dụng</string>
     <string name="copy_notes">Sao chép ghi chú</string>
@@ -483,7 +483,6 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="password_prompt">Nhập lại mật khẩu chính</string>
     <string name="password_confirmation">Xác nhận mật khẩu chính</string>
     <string name="password_confirmation_desc">Hành động này được bảo vệ. Để tiếp tục, hãy nhập lại mật khẩu chính của bạn để xác minh danh tính.</string>
-    <string name="captcha_failed">Mã Captcha không đúng. Vui lòng thử lại.</string>
     <string name="update_master_password">Cập nhật mật khẩu chính</string>
     <string name="update_master_password_warning">Mật khẩu chính của bạn gần đây đã được thay đổi bởi người quản trị trong tổ chức của bạn. Để truy cập kho, bạn phải cập nhật mật khẩu chính của mình ngay bây giờ. Việc tiếp tục sẽ đăng xuất khỏi kho và bạn sẽ cần đăng nhập lại. Ứng dụng Bitwaden trên các thiết bị khác có thể tiếp tục hoạt động trong tối đa một giờ sau đó sẽ bị đăng xuất.</string>
     <string name="updating_password">Đang cập nhật mật khẩu</string>
@@ -1071,5 +1070,16 @@ các vấn đề.</string>
     <string name="local_items_are_collapsed_click_to_expand">Các mục địa phương đã được thu gọn, nhấp để mở rộng.</string>
     <string name="items_expanded_click_to_collapse">Các mục được mở rộng, nhấp để thu gọn.</string>
     <string name="items_are_collapsed_click_to_expand">Các mục đã được thu gọn, nhấp để mở rộng.</string>
-    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="select_a_card_for_x">Chọn một thẻ cho %s</string>
+    <string name="advanced_options">Tùy chọn nâng cao</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Tìm hiểu thêm về phát hiện khớp</annotation></string>
+    <string name="keep_your_credential_secure">Giữ thông tin xác thực của bạn an toàn</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Tìm hiểu thêm về cách giữ thông tin xác thực an toàn khi sử dụng “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">Phát hiện khớp URI kiểm soát cách Bitwarden xác định gợi ý tự động điền.
+<annotation emphasis="bold">Cảnh báo:</annotation> “Biểu thức chính quy” là một tùy chọn nâng cao, có nguy cơ cao làm lộ thông tin xác thực nếu sử dụng không đúng cách.</string>
+    <string name="default_uri_match_detection_description_advanced_options">Phát hiện khớp URI kiểm soát cách Bitwarden xác định gợi ý tự động điền.
+<annotation emphasis="bold">Cảnh báo:</annotation> “Bắt đầu với” là một tùy chọn nâng cao, có nguy cơ cao làm lộ thông tin xác thực.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Tùy chọn ‘Bắt đầu với’ là một tùy chọn nâng cao, có nguy cơ cao làm lộ thông tin xác thực.”</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Biểu thức chính quy” là một tùy chọn nâng cao, có nguy cơ cao làm lộ thông tin xác thực nếu sử dụng không đúng cách.</string>
 </resources>

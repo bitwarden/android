@@ -286,7 +286,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="new_uri">Yeni URI</string>
     <string name="add_website">Web sitesi ekle</string>
     <string name="base_domain">Ana alan adı</string>
-    <string name="default_text">Varsayılan</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Tam</string>
     <string name="host">Sunucu</string>
     <string name="reg_ex">Düzenli ifade</string>
@@ -356,7 +356,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="clear_clipboard">Panoyu temizle</string>
     <string name="clear_clipboard_description">Kopyalanan değerleri panodan otomatik olarak temizle.</string>
     <string name="default_uri_match_detection">Varsayılan URI eşleşme tespiti</string>
-    <string name="default_uri_match_detection_description">Otomatik doldurma gibi eylemler gerçekleştirilirken hesaplar için URI eşleşme tespitinin nasıl yapılacağını seçin.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Uygulamanın renk temasını değiştir</string>
     <string name="copy_notes">Notu kopyala</string>
@@ -483,7 +483,6 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="password_prompt">Ana parolayı yeniden iste</string>
     <string name="password_confirmation">Ana parola onayı</string>
     <string name="password_confirmation_desc">Bu işlem korumalıdır. İşleme devam etmek için lütfen ana parolanızı yeniden girin.</string>
-    <string name="captcha_failed">Captcha başarısız oldu. Lütfen yeniden deneyin.</string>
     <string name="update_master_password">Ana parolayı güncelle</string>
     <string name="update_master_password_warning">Ana parolanız kuruluşunuzdaki bir yönetici tarafından yakın zamanda değiştirildi. Kasanıza erişmek için ana parolanızı güncellemelisiniz. Devam ettiğinizde oturumunuz kapanacak ve yeniden oturum açmanız gerekecektir. Diğer cihazlardaki aktif oturumlar bir saate kadar aktif kalabilir.</string>
     <string name="updating_password">Parola güncelleniyor</string>
@@ -1069,4 +1068,13 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="items_expanded_click_to_collapse">Öğeler genişletildi, daraltmak için tıklayın.</string>
     <string name="items_are_collapsed_click_to_expand">Öğeler daraltıldı, genişletmek için tıklayın.</string>
     <string name="select_a_card_for_x">%s için kart seçin</string>
+    <string name="advanced_options">Gelişmiş seçenekler</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Eşleşme tespiti hakkında daha fazla bilgi</annotation></string>
+    <string name="keep_your_credential_secure">Hesap bilgilerinizi güvende tutun</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

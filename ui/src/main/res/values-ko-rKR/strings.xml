@@ -286,7 +286,7 @@
     <string name="new_uri">새 URI</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">기본 도메인</string>
-    <string name="default_text">기본값</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">정확히 일치</string>
     <string name="host">호스트</string>
     <string name="reg_ex">정규 표현식</string>
@@ -356,7 +356,7 @@
     <string name="clear_clipboard">클립보드 비우기</string>
     <string name="clear_clipboard_description">클립보드에 복사된 값을 자동으로 제거합니다.</string>
     <string name="default_uri_match_detection">기본 URI 일치 인식</string>
-    <string name="default_uri_match_detection_description">자동 완성 등의 작업에서 각 로그인 항목의 URI 일치 감지를 처리할 기본 방법을 선택하세요.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">테마</string>
     <string name="theme_description">애플리케이션의 색상 테마를 변경합니다.</string>
     <string name="copy_notes">메모 복사</string>
@@ -483,7 +483,6 @@
     <string name="password_prompt">마스터 비밀번호 재확인</string>
     <string name="password_confirmation">마스터 비밀번호 확인</string>
     <string name="password_confirmation_desc">이 작업은 보호되어 있습니다. 계속하려면 마스터 비밀번호를 입력하여 신원을 인증하세요.</string>
-    <string name="captcha_failed">캡차가 실패했습니다. 다시 시도해 주세요.</string>
     <string name="update_master_password">마스터 비밀번호 변경</string>
     <string name="update_master_password_warning">최근에 조직 관리자가 마스터 비밀번호를 변경했습니다. 보관함에 액세스하려면 지금 마스터 비밀번호를 업데이트해야 합니다. 계속하면 현재 세션에서 로그아웃되며 다시 로그인해야 합니다. 다른 장치의 활성 세션은 최대 1시간 동안 계속 활성 상태로 유지될 수 있습니다.</string>
     <string name="updating_password">비밀번호 변경 중</string>
@@ -1070,4 +1069,13 @@
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

@@ -286,7 +286,7 @@
     <string name="new_uri">新增 URI</string>
     <string name="add_website">添加网站</string>
     <string name="base_domain">基础域名</string>
-    <string name="default_text">默认</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">精确</string>
     <string name="host">主机</string>
     <string name="reg_ex">正则表达式</string>
@@ -356,7 +356,7 @@
     <string name="clear_clipboard">清除剪贴板</string>
     <string name="clear_clipboard_description">自动清除复制到剪贴板的值。</string>
     <string name="default_uri_match_detection">默认的 URI 匹配检测方式</string>
-    <string name="default_uri_match_detection_description">选择在执行诸如自动填充之类的操作时对登录进行 URI 匹配检测的默认方式。</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">主题</string>
     <string name="theme_description">更改应用程序的颜色主题。</string>
     <string name="copy_notes">复制备注</string>
@@ -483,7 +483,6 @@
     <string name="password_prompt">主密码重新提示</string>
     <string name="password_confirmation">确认主密码</string>
     <string name="password_confirmation_desc">此操作受到保护，要继续，请重新输入主密码以验证您的身份。</string>
-    <string name="captcha_failed">Captcha 验证失败。请重试。</string>
     <string name="update_master_password">更新主密码</string>
     <string name="update_master_password_warning">您的主密码最近被您组织的管理员更改过。要访问密码库，必须立即更新您的主密码。继续操作将使您退出当前会话，并要求您重新登录。其他设备上的活动会话可能会继续保持活动状态长达一小时。</string>
     <string name="updating_password">正在更新密码</string>
@@ -1059,7 +1058,7 @@
     <string name="choose_save_location_message">将此身份验证器密钥保存到此处，或将其添加到您的 Bitwarden 应用程序的登录中。</string>
     <string name="save_option_as_default">保存选项为默认值</string>
     <string name="account_synced_from_bitwarden_app">从 Bitwarden App 同步帐户</string>
-    <string name="local_codes">Local codes (%1$d)</string>
+    <string name="local_codes">本地代码 (%1$d)</string>
     <string name="required_information_missing">缺少所需信息</string>
     <string name="required_information_missing_message">"缺少所需信息(例如，“服务”或“机密”)。请检查您的文件，然后再试一次。请访问 bitwarden.com/help 以获取支持"</string>
     <string name="file_could_not_be_processed">"无法处理文件"</string>
@@ -1070,5 +1069,14 @@
     <string name="local_items_are_collapsed_click_to_expand">本地项目被折叠，点击以展开。</string>
     <string name="items_expanded_click_to_collapse">项目被展开，点击以折叠。</string>
     <string name="items_are_collapsed_click_to_expand">项目被折叠，点击以展开。</string>
-    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="select_a_card_for_x">选择 %s 的卡片</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>
