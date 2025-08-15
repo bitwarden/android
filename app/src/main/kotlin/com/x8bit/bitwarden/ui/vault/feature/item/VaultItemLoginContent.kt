@@ -29,12 +29,12 @@ import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
+import com.bitwarden.ui.platform.components.text.BitwardenClickableText
+import com.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
 import com.x8bit.bitwarden.ui.vault.feature.item.component.itemHeader
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers

@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.text
+package com.bitwarden.ui.platform.components.text
 
 import androidx.annotation.StringRes
 import androidx.compose.material3.Text
