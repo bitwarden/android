@@ -180,7 +180,7 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun handleContinueButtonClicked() {
-        if (!state.emailInput.isValidEmail()) {
+        if (!state.emailInput.isValidEmail(useStrictValidation = false)) {
             mutableStateFlow.update {
                 it.copy(
                     dialog = LandingState.DialogState.Error(
