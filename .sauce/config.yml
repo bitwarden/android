@@ -1,0 +1,32 @@
+apiVersion: v1alpha
+kind: espresso
+defaults:
+  timeout: 10m
+sauce:
+  region: us-west-1
+  # Controls how many suites are executed at the same time (sauce test env only).
+  concurrency: 1
+  retries: 1
+  visibility: team
+  metadata:
+    tags:
+      - Android
+      - sanity-e2e
+    build: Sanity check on Real devices
+reporters:
+  junit:
+    enabled: true
+    filename: saucectl-report.xml
+espresso:
+  app: storage:filename=com.x8bit.bitwarden.apk
+  testApp: storage:filename=com.x8bit.bitwarden-standard-release-androidTest.apk
+suites:
+  - name: "Android - Sanity"
+    devices:
+      - name: "Google.*"
+        platformVersion: "^1[3456].*"
+        options:
+          deviceType: PHONE
+    testOptions:
+      package: e2e.tests
+      resigningEnabled: false
