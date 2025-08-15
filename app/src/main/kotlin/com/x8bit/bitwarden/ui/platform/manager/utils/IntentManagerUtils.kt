@@ -19,7 +19,7 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
  */
 fun IntentManager.startSystemAutofillSettingsActivity(
     context: Context,
-): Boolean = !startActivity(
+): Boolean = startActivity(
     intent = Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE)
         .setData("package:${context.packageName}".toUri()),
 )
