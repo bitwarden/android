@@ -169,6 +169,8 @@ class VaultLockManagerImpl(
         email: String,
         kdf: Kdf,
         privateKey: String,
+        signingKey: String?,
+        securityState: String?,
         initUserCryptoMethod: InitUserCryptoMethod,
         organizationKeys: Map<String, String>?,
     ): VaultUnlockResult = withContext(context = NonCancellable) {
@@ -184,8 +186,8 @@ class VaultLockManagerImpl(
                             privateKey = privateKey,
                             method = initUserCryptoMethod,
                             userId = userId,
-                            signingKey = null,
-                            securityState = null,
+                            signingKey = signingKey,
+                            securityState = securityState,
                         ),
                     )
                     .flatMap { result ->
@@ -645,16 +647,22 @@ class VaultLockManagerImpl(
     ): VaultUnlockResult {
         val account = authDiskSource.userState?.accounts?.get(userId)
             ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
-        val privateKey = authDiskSource.getPrivateKey(userId = userId)
+        val accountKeys = authDiskSource.getAccountKeys(userId = userId)
+        val privateKey = accountKeys?.publicKeyEncryptionKeyPair?.wrappedPrivateKey
+            ?: authDiskSource.getPrivateKey(userId = userId)
             ?: return VaultUnlockResult.InvalidStateError(
                 error = MissingPropertyException("Private key"),
             )
+        val signingKey = accountKeys?.signatureKeyPair?.wrappedSigningKey
+        val securityState = accountKeys?.securityState?.securityState
         val organizationKeys = authDiskSource.getOrganizationKeys(userId = userId)
         return unlockVault(
             userId = userId,
             email = account.profile.email,
             kdf = account.profile.toSdkParams(),
             privateKey = privateKey,
+            signingKey = signingKey,
+            securityState = securityState,
             initUserCryptoMethod = initUserCryptoMethod,
             organizationKeys = organizationKeys,
         )

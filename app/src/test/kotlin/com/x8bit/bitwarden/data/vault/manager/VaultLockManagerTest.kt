@@ -939,13 +939,15 @@ class VaultLockManagerTest {
 
             val result = vaultLockManager.unlockVault(
                 userId = USER_ID,
-                kdf = kdf,
                 email = email,
+                kdf = kdf,
+                privateKey = privateKey,
+                signingKey = null,
+                securityState = null,
                 initUserCryptoMethod = InitUserCryptoMethod.Password(
                     password = masterPassword,
                     userKey = userKey,
                 ),
-                privateKey = privateKey,
                 organizationKeys = organizationKeys,
             )
 
@@ -1050,13 +1052,15 @@ class VaultLockManagerTest {
 
             val result = vaultLockManager.unlockVault(
                 userId = USER_ID,
-                kdf = kdf,
                 email = email,
+                kdf = kdf,
+                privateKey = privateKey,
+                signingKey = null,
+                securityState = null,
                 initUserCryptoMethod = InitUserCryptoMethod.Password(
                     password = masterPassword,
                     userKey = userKey,
                 ),
-                privateKey = privateKey,
                 organizationKeys = organizationKeys,
             )
 
@@ -1146,13 +1150,15 @@ class VaultLockManagerTest {
 
             val result = vaultLockManager.unlockVault(
                 userId = USER_ID,
-                kdf = kdf,
                 email = email,
+                kdf = kdf,
+                privateKey = privateKey,
+                signingKey = null,
+                securityState = null,
                 initUserCryptoMethod = InitUserCryptoMethod.Password(
                     password = masterPassword,
                     userKey = userKey,
                 ),
-                privateKey = privateKey,
                 organizationKeys = organizationKeys,
             )
 
@@ -1230,13 +1236,15 @@ class VaultLockManagerTest {
 
             val result = vaultLockManager.unlockVault(
                 userId = USER_ID,
-                kdf = kdf,
                 email = email,
+                kdf = kdf,
+                privateKey = privateKey,
+                signingKey = null,
+                securityState = null,
                 initUserCryptoMethod = InitUserCryptoMethod.Password(
                     password = masterPassword,
                     userKey = userKey,
                 ),
-                privateKey = privateKey,
                 organizationKeys = organizationKeys,
             )
 
@@ -1313,13 +1321,15 @@ class VaultLockManagerTest {
 
             val result = vaultLockManager.unlockVault(
                 userId = USER_ID,
-                kdf = kdf,
                 email = email,
+                kdf = kdf,
+                privateKey = privateKey,
+                signingKey = null,
+                securityState = null,
                 initUserCryptoMethod = InitUserCryptoMethod.Password(
                     password = masterPassword,
                     userKey = userKey,
                 ),
-                privateKey = privateKey,
                 organizationKeys = organizationKeys,
             )
 
@@ -1396,13 +1406,15 @@ class VaultLockManagerTest {
 
             val result = vaultLockManager.unlockVault(
                 userId = USER_ID,
-                kdf = kdf,
                 email = email,
+                kdf = kdf,
+                privateKey = privateKey,
+                signingKey = null,
+                securityState = null,
                 initUserCryptoMethod = InitUserCryptoMethod.Password(
                     password = masterPassword,
                     userKey = userKey,
                 ),
-                privateKey = privateKey,
                 organizationKeys = organizationKeys,
             )
 
@@ -1485,13 +1497,15 @@ class VaultLockManagerTest {
 
             val result = vaultLockManager.unlockVault(
                 userId = USER_ID,
-                kdf = kdf,
                 email = email,
+                kdf = kdf,
+                privateKey = privateKey,
+                signingKey = null,
+                securityState = null,
                 initUserCryptoMethod = InitUserCryptoMethod.Password(
                     password = masterPassword,
                     userKey = userKey,
                 ),
-                privateKey = privateKey,
                 organizationKeys = organizationKeys,
             )
 
@@ -1661,9 +1675,11 @@ class VaultLockManagerTest {
 
         vaultLockManager.unlockVault(
             userId = userId,
-            kdf = kdf,
             email = email,
+            kdf = kdf,
             privateKey = privateKey,
+            signingKey = null,
+            securityState = null,
             initUserCryptoMethod = InitUserCryptoMethod.Password(
                 password = masterPassword,
                 userKey = userKey,
@@ -1712,9 +1728,11 @@ class VaultLockManagerTest {
 
         val result = vaultLockManager.unlockVault(
             userId = userId,
-            kdf = kdf,
             email = email,
+            kdf = kdf,
             privateKey = privateKey,
+            signingKey = null,
+            securityState = null,
             initUserCryptoMethod = InitUserCryptoMethod.Password(
                 password = masterPassword,
                 userKey = userKey,
