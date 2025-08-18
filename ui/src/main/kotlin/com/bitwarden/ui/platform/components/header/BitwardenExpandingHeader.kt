@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.header
+package com.bitwarden.ui.platform.components.header
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.AnimationConstants
