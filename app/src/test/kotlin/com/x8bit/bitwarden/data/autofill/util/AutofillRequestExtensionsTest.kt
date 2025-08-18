@@ -31,7 +31,7 @@ class AutofillRequestExtensionsTest {
             every { expirationYearSaveValue } returns SAVE_VALUE_YEAR
             every { numberSaveValue } returns SAVE_VALUE_NUMBER
             every { securityCodeSaveValue } returns SAVE_VALUE_CODE
-            every { cardholderName } returns SAVE_VALUE_CARDHOLDER_NAME
+            every { cardholderNameSaveValue } returns SAVE_VALUE_CARDHOLDER_NAME
         }
         val autofillRequest: AutofillRequest.Fillable = mockk {
             every { partition } returns autofillPartition
