@@ -22,8 +22,70 @@ env:
   _JAVA_VERSION: 17
 
 jobs:
+  update:
+    name: Update SDK
+    if: ${{ inputs.run-mode == 'Update' }}
+    runs-on: ubuntu-24.04
+    permissions:
+      packages: read
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup Android Build
+        uses: ./.github/actions/setup-android-build
+
+      - name: Switch to branch
+        id: switch-branch
+        run: |
+          BRANCH_NAME="sdlc/sdk-update"
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          git switch -c $BRANCH_NAME
+
+      - name: Update SDK Version
+        env:
+          _SDK_PACKAGE: ${{ inputs.sdk-package }}
+          _SDK_VERSION: ${{ inputs.sdk-version }}
+        run: |
+          ./scripts/update-sdk-version.sh "$_SDK_PACKAGE" "$_SDK_VERSION"
+
+
+      - name: Create branch and commit
+        env:
+          _SDK_PACKAGE: ${{ inputs.sdk-package }}
+          _SDK_VERSION: ${{ inputs.sdk-version }}
+          _BRANCH_NAME: ${{ steps.switch-branch.outputs.branch_name }}
+        run: |
+          echo "👀 Committing SDK version update..."
+
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+
+          git add .
+          git commit -m "SDK Update - $_SDK_PACKAGE $_SDK_VERSION"
+          git push origin $_BRANCH_NAME
+
+      # TODO update description with sdk changelog since last update
+      - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _BRANCH_NAME: ${{ steps.switch-branch.outputs.branch_name }}
+        run: |
+          PR_BODY="Updates the SDK version to $_SDK_PACKAGE $_SDK_VERSION"
+
+          # Use echo -e to interpret escape sequences and pipe to gh pr create
+          PR_URL=$(echo -e "$PR_BODY" | gh pr create \
+            --title "Update SDK to $_SDK_VERSION" \
+            --body-file - \
+            --base main \
+            --head $_BRANCH_NAME \
+            --label "automated-pr" \
+            --label "t:ci")
+
   test:
     name: Test SDK Update
+    if: ${{ inputs.run-mode == 'Test' }}
     runs-on: ubuntu-24.04
     permissions:
       packages: read
