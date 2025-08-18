@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.scrim
+package com.bitwarden.ui.platform.components.scrim
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
