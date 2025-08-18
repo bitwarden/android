@@ -45,6 +45,7 @@ jobs:
         run: |
           BRANCH_NAME="sdlc/sdk-update"
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          git pull
           git switch -c $BRANCH_NAME
 
       - name: Get current SDK version
