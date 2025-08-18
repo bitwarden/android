@@ -105,4 +105,13 @@ sealed class OrganizationEvent {
         override val type: OrganizationEventType
             get() = OrganizationEventType.CIPHER_CLIENT_VIEWED
     }
+
+    /**
+     * Tracks when user's individual vault is exported.
+     */
+    data object UserClientExportedVault : OrganizationEvent() {
+        override val cipherId: String? = null
+        override val type: OrganizationEventType
+            get() = OrganizationEventType.USER_CLIENT_EXPORTED_VAULT
+    }
 }
