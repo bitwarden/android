@@ -18,7 +18,6 @@ import com.bitwarden.network.model.VerifyEmailTokenResponseJson
 import com.bitwarden.network.model.toBitwardenError
 import com.bitwarden.network.util.DeviceModelProvider
 import com.bitwarden.network.util.NetworkErrorCode
-import com.bitwarden.network.util.base64UrlEncode
 import com.bitwarden.network.util.executeForNetworkResult
 import com.bitwarden.network.util.getNetworkErrorCodeOrNull
 import com.bitwarden.network.util.parseErrorBodyOrNull
