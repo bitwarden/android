@@ -40,6 +40,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.assertScrollableNodeDoesNotExist
@@ -54,12 +55,12 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import com.x8bit.bitwarden.ui.util.isBottomSheet
 import com.x8bit.bitwarden.ui.util.isCoachMarkToolTip
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
@@ -1556,7 +1557,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Close")
+            .onAllNodesWithText("Cancel")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -2608,9 +2609,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithContentDescription("Close")
-            .filterToOne(hasAnySibling(hasText("Owner")))
+            .filterToOne(hasAnyAncestor(isBottomSheet))
             .assertIsDisplayed()
-            .performSemanticsAction(SemanticsActions.OnClick)
+            .performClick()
 
         dispatcher.advanceTimeByAndRunCurrent(1000L)
 
@@ -2644,9 +2645,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithText("Save")
-            .filterToOne(hasAnySibling(hasText("Owner")))
+            .filterToOne(hasAnyAncestor(isBottomSheet))
             .assertIsDisplayed()
-            .performSemanticsAction(SemanticsActions.OnClick)
+            .performClick()
 
         verify {
             viewModel.trySendAction(VaultAddEditAction.Common.OwnershipChange(ownerId = ownerId))
@@ -2827,9 +2828,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithContentDescription("Close")
-            .filterToOne(hasAnySibling(hasText("Folders")))
+            .filterToOne(hasAnyAncestor(isBottomSheet))
             .assertIsDisplayed()
-            .performSemanticsAction(SemanticsActions.OnClick)
+            .performClick()
 
         dispatcher.advanceTimeByAndRunCurrent(1000L)
 
@@ -2886,9 +2887,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithText("Save")
-            .filterToOne(hasAnySibling(hasText("Folders")))
+            .filterToOne(hasAnyAncestor(isBottomSheet))
             .assertIsDisplayed()
-            .performSemanticsAction(SemanticsActions.OnClick)
+            .performClick()
 
         verify {
             viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(newFolderName))
@@ -2919,9 +2920,9 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onAllNodesWithText("Save")
-            .filterToOne(hasAnySibling(hasText("Folders")))
+            .filterToOne(hasAnyAncestor(isBottomSheet))
             .assertIsDisplayed()
-            .performSemanticsAction(SemanticsActions.OnClick)
+            .performClick()
 
         verify {
             viewModel.trySendAction(VaultAddEditAction.Common.FolderChange(folderId = folderId))

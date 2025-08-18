@@ -106,9 +106,9 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
     @Test
     fun `on NavigateToApplicationDataSettings should launch the correct intent`() {
         mockkStatic(IntentManager::startApplicationDetailsSettingsActivity) {
-            every { intentManager.startApplicationDetailsSettingsActivity(any()) } just runs
+            every { intentManager.startApplicationDetailsSettingsActivity() } just runs
             mutableEventFlow.tryEmit(AccountSecurityEvent.NavigateToApplicationDataSettings)
-            verify { intentManager.startApplicationDetailsSettingsActivity(any()) }
+            verify { intentManager.startApplicationDetailsSettingsActivity() }
         }
     }
 

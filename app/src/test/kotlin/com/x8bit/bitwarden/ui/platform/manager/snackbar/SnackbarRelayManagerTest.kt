@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.platform.manager.snackbar
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals

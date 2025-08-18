@@ -13,6 +13,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.SemanticsPropertyKey
+import androidx.compose.ui.semantics.SemanticsPropertyReceiver
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
@@ -22,6 +25,7 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import kotlinx.coroutines.launch
+import org.jetbrains.annotations.VisibleForTesting
 
 /**
  * A reusable modal bottom sheet that applies provides a bottom sheet layout with the
@@ -53,7 +57,7 @@ fun BitwardenModalBottomSheet(
     if (!showBottomSheet) return
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        modifier = modifier,
+        modifier = modifier.semantics { this.IsBottomSheet = true },
         dragHandle = null,
         sheetState = sheetState,
         contentWindowInsets = {
@@ -87,6 +91,13 @@ fun BitwardenModalBottomSheet(
         }
     }
 }
+
+/**
+ * SemanticPropertyKey used for Unit tests where checking if the content is part of a bottom sheet.
+ */
+@VisibleForTesting
+val IsBottomSheetKey = SemanticsPropertyKey<Boolean>("IsBottomSheet")
+private var SemanticsPropertyReceiver.IsBottomSheet by IsBottomSheetKey
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

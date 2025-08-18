@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.snackbar
+package com.bitwarden.ui.platform.components.snackbar
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides

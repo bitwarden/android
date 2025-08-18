@@ -15,18 +15,18 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 /**
- * An activity for copying a TOTP code to the clipboard. This is done when an autofill item is
- * selected and it requires TOTP authentication. Due to the constraints of the autofill framework,
- * we also have to re-fulfill the autofill for the views that are being filled.
+ * An activity that is launched to complete Autofill. This is done when an autofill item is selected
+ * and is associated with a valid cipher. Due to the constraints of the autofill framework, we also
+ * have to re-fulfill the autofill for the views that are being filled.
  */
 @OmitFromCoverage
 @AndroidEntryPoint
-class AutofillTotpCopyActivity : AppCompatActivity() {
+class AutofillCallbackActivity : AppCompatActivity() {
 
     @Inject
     lateinit var autofillCompletionManager: AutofillCompletionManager
 
-    private val autofillTotpCopyViewModel: AutofillTotpCopyViewModel by viewModels()
+    private val viewModel: AutofillCallbackViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         intent = intent.validate()
@@ -34,11 +34,7 @@ class AutofillTotpCopyActivity : AppCompatActivity() {
 
         observeViewModelEvents()
 
-        autofillTotpCopyViewModel.trySendAction(
-            AutofillTotpCopyAction.IntentReceived(
-                intent = intent,
-            ),
-        )
+        viewModel.trySendAction(AutofillCallbackAction.IntentReceived(intent = intent))
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -50,17 +46,12 @@ class AutofillTotpCopyActivity : AppCompatActivity() {
     }
 
     private fun observeViewModelEvents() {
-        autofillTotpCopyViewModel
+        viewModel
             .eventFlow
             .onEach { event ->
                 when (event) {
-                    is AutofillTotpCopyEvent.CompleteAutofill -> {
-                        handleCompleteAutofill(event)
-                    }
-
-                    is AutofillTotpCopyEvent.FinishActivity -> {
-                        finishActivity()
-                    }
+                    is AutofillCallbackEvent.CompleteAutofill -> handleCompleteAutofill(event)
+                    is AutofillCallbackEvent.FinishActivity -> finishActivity()
                 }
             }
             .launchIn(lifecycleScope)
@@ -69,7 +60,7 @@ class AutofillTotpCopyActivity : AppCompatActivity() {
     /**
      * Complete autofill with the provided data.
      */
-    private fun handleCompleteAutofill(event: AutofillTotpCopyEvent.CompleteAutofill) {
+    private fun handleCompleteAutofill(event: AutofillCallbackEvent.CompleteAutofill) {
         autofillCompletionManager.completeAutofill(
             activity = this,
             cipherView = event.cipherView,

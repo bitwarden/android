@@ -82,7 +82,6 @@ fun AutoFillScreen(
     onNavigateToPrivilegedAppsList: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     var shouldShowAutofillFallbackDialog by rememberSaveable { mutableStateOf(false) }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -93,10 +92,7 @@ fun AutoFillScreen(
             }
 
             AutoFillEvent.NavigateToAutofillSettings -> {
-                val isSuccess = intentManager.startSystemAutofillSettingsActivity(
-                    context = context,
-                )
-
+                val isSuccess = intentManager.startSystemAutofillSettingsActivity()
                 shouldShowAutofillFallbackDialog = !isSuccess
             }
 
@@ -105,7 +101,7 @@ fun AutoFillScreen(
             }
 
             AutoFillEvent.NavigateToSettings -> {
-                intentManager.startCredentialManagerSettings(context)
+                intentManager.startCredentialManagerSettings()
             }
 
             AutoFillEvent.NavigateToSetupAutofill -> onNavigateToSetupAutofill()

@@ -2,8 +2,6 @@
 
 package com.x8bit.bitwarden.ui.platform.manager.utils
 
-import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.core.net.toUri
@@ -17,11 +15,9 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
  * @param context The context from which to start the activity.
  * @return `true` if the activity was started successfully, `false` otherwise.
  */
-fun IntentManager.startSystemAutofillSettingsActivity(
-    context: Context,
-): Boolean = !startActivity(
+fun IntentManager.startSystemAutofillSettingsActivity(): Boolean = startActivity(
     intent = Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE)
-        .setData("package:${context.packageName}".toUri()),
+        .setData("package:$packageName".toUri()),
 )
 
 /**
@@ -36,7 +32,7 @@ fun IntentManager.startSystemAccessibilitySettingsActivity() {
  */
 fun IntentManager.startBrowserAutofillSettingsActivity(
     browserPackage: BrowserPackage,
-): Boolean = try {
+): Boolean {
     val intent = Intent(Intent.ACTION_APPLICATION_PREFERENCES)
         .apply {
             addCategory(Intent.CATEGORY_DEFAULT)
@@ -44,17 +40,15 @@ fun IntentManager.startBrowserAutofillSettingsActivity(
             addCategory(Intent.CATEGORY_PREFERENCE)
             setPackage(browserPackage.packageName)
         }
-    startActivity(intent)
-} catch (_: ActivityNotFoundException) {
-    false
+    return startActivity(intent)
 }
 
 /**
  * Starts the application's settings activity.
  */
-fun IntentManager.startApplicationDetailsSettingsActivity(context: Context) {
+fun IntentManager.startApplicationDetailsSettingsActivity() {
     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-    intent.data = "package:${context.packageName}".toUri()
+    intent.data = "package:$packageName".toUri()
     startActivity(intent = intent)
 }
 

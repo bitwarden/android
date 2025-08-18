@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
-import android.provider.Settings
 import android.webkit.MimeTypeMap
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -14,7 +13,6 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -27,10 +25,12 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 class IntentManagerImpl(
     private val context: Context,
 ) : IntentManager {
+    override val packageName: String get() = context.packageName
+
     override fun startActivity(intent: Intent) {
         try {
             context.startActivity(intent)
-        } catch (e: ActivityNotFoundException) {
+        } catch (_: ActivityNotFoundException) {
             // no-op
         }
     }
@@ -75,12 +75,6 @@ class IntentManagerImpl(
             putExtra(Intent.EXTRA_TITLE, fileName)
         }
 
-    override fun startApplicationDetailsSettingsActivity() {
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        intent.data = "package:$context.packageName".toUri()
-        startActivity(intent = intent)
-    }
-
     override fun launchUri(uri: Uri) {
         val newUri = if (uri.scheme == null) {
             uri.buildUpon().scheme("https").build()
@@ -88,17 +82,6 @@ class IntentManagerImpl(
             uri.normalizeScheme()
         }
         startActivity(Intent(Intent.ACTION_VIEW, newUri))
-    }
-
-    override fun startMainBitwardenAppAccountSettings() {
-        startActivity(
-            Intent(
-                Intent.ACTION_VIEW,
-                "bitwarden://settings/account_security".toUri(),
-            ).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            },
-        )
     }
 
     private fun getLocalFileData(uri: Uri): FileData? =

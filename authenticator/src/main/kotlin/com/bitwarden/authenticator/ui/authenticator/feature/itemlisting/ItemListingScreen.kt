@@ -1,9 +1,6 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
 import android.Manifest
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -83,6 +80,8 @@ import com.bitwarden.authenticator.ui.platform.composition.LocalPermissionsManag
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
 import com.bitwarden.authenticator.ui.platform.theme.Typography
+import com.bitwarden.authenticator.ui.platform.util.startAuthenticatorAppSettings
+import com.bitwarden.authenticator.ui.platform.util.startBitwardenAccountSettings
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -139,10 +138,7 @@ fun ItemListingScreen(
 
             is ItemListingEvent.NavigateToEditItem -> onNavigateToEditItemScreen(event.id)
             is ItemListingEvent.NavigateToAppSettings -> {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                intent.data = Uri.parse("package:" + context.packageName)
-
-                intentManager.startActivity(intent = intent)
+                intentManager.startAuthenticatorAppSettings()
             }
 
             ItemListingEvent.NavigateToBitwardenListing -> {
@@ -156,7 +152,7 @@ fun ItemListingScreen(
             }
 
             ItemListingEvent.NavigateToBitwardenSettings -> {
-                intentManager.startMainBitwardenAppAccountSettings()
+                intentManager.startBitwardenAccountSettings()
             }
 
             is ItemListingEvent.ShowFirstTimeSyncSnackbar -> {
