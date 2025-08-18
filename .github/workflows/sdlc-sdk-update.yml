@@ -1,16 +1,50 @@
 name: SDLC / SDK Update
+run-name: ${{ format('SDK Update - {0} {1}', inputs.run-mode, inputs.sdk-version) }}
 
 on:
   workflow_dispatch:
+    inputs:
+      run-mode:
+        description: "Run Mode"
+        type: choice
+        options:
+          - Update # opens a PR in this repo updating the SDK
+          - Test # used for testing sdk-internal repo PRs
+        required: true
+      sdk-package:
+        description: "SDK Package"
+        default: "com.bitwarden:sdk-android.dev"
+      sdk-version:
+        description: "SDK Version"
+        default: "1.0.0-2577-fix-wasm-import"
 
-permissions:
-  contents: read
+env:
+  _JAVA_VERSION: 17
 
 jobs:
-  update:
-    name: Update SDK
+  test:
+    name: Test SDK Update
     runs-on: ubuntu-24.04
+    permissions:
+      packages: read
 
     steps:
-      - name: Placeholder
-        run: echo ":feelsgood:" >> $GITHUB_STEP_SUMMARY
+      - name: Check out repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup Android Build
+        uses: ./.github/actions/setup-android-build
+
+      - name: Update SDK Version
+        env:
+          _SDK_PACKAGE: ${{ inputs.sdk-package }}
+          _SDK_VERSION: ${{ inputs.sdk-version }}
+        run: |
+          ./scripts/update-sdk-version.sh "$_SDK_PACKAGE" "$_SDK_VERSION"
+
+      - name: Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Used in settings.gradle.kts to download the SDK from GitHub Maven Packages
+        run: |
+          bundle exec fastlane assembleDebugApks
+          bundle exec fastlane buildAuthenticatorDebug
