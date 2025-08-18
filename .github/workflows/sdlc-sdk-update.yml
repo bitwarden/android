@@ -16,17 +16,17 @@ on:
         default: "com.bitwarden:sdk-android.dev"
       sdk-version:
         description: "SDK Version"
-        default: "1.0.0-2577-fix-wasm-import"
-
-permissions:
-  contents: read
-  packages: read
+        default: "1.0.0-2663-3355fed7"
 
 jobs:
   update:
     name: Update SDK
     if: ${{ inputs.run-mode == 'Update' }}
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
+      packages: read
 
     steps:
       - name: Check out repo
@@ -111,6 +111,9 @@ jobs:
     name: Test SDK Update
     if: ${{ inputs.run-mode == 'Test' }}
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: read
 
     steps:
       - name: Check out repo
