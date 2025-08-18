@@ -96,8 +96,8 @@ jobs:
         run: |
           echo "👀 Committing SDK version update..."
 
-          # git config user.name "GitHub Actions Bot"
-          # git config user.email "actions@github.com"
+          git config user.name "bw-ghapp[bot]"
+          git config user.email "178206702+bw-ghapp[bot]@users.noreply.github.com"
 
           git add .
           git commit -m "SDK Update - $_SDK_PACKAGE $_SDK_VERSION"
