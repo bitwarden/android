@@ -37,9 +37,6 @@ jobs:
         with:
           inputs: ${{ toJson(inputs) }}
 
-      - name: Setup Android Build
-        uses: ./.github/actions/setup-android-build
-
       - name: Switch to branch
         id: switch-branch
         run: |
