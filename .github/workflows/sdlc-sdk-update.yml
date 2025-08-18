@@ -24,7 +24,6 @@ jobs:
     if: ${{ inputs.run-mode == 'Update' }}
     runs-on: ubuntu-24.04
     permissions:
-      packages: read
       id-token: write
 
     steps:
