@@ -43,13 +43,22 @@ jobs:
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
           git switch -c $BRANCH_NAME
 
+      - name: Get current SDK version
+        id: get-current-sdk
+        run: |
+          SDK_VERSION=$(grep "bitwardenSdk =" gradle/libs.versions.toml | cut -d'"' -f2)
+          GIT_REF=$(echo "$SDK_VERSION" | cut -d'-' -f3-) # handles both commit hashes and branch names
+          echo "Current SDK version: $SDK_VERSION"
+          echo "Current SDK git ref: $GIT_REF"
+          echo "version=$SDK_VERSION" >> $GITHUB_OUTPUT
+          echo "git_ref=$GIT_REF" >> $GITHUB_OUTPUT
+
       - name: Update SDK Version
         env:
           _SDK_PACKAGE: ${{ inputs.sdk-package }}
           _SDK_VERSION: ${{ inputs.sdk-version }}
         run: |
           ./scripts/update-sdk-version.sh "$_SDK_PACKAGE" "$_SDK_VERSION"
-
 
       - name: Create branch and commit
         env:
