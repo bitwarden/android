@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.segment.color
+package com.bitwarden.ui.platform.components.segment.color
 
 import androidx.compose.material3.SegmentedButtonColors
 import androidx.compose.runtime.Composable

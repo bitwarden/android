@@ -17,7 +17,6 @@ import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -33,7 +32,6 @@ internal interface UnauthenticatedIdentityApi {
         @Field(value = "scope", encoded = true) scope: String,
         @Field(value = "client_id") clientId: String,
         @Field(value = "username") email: String,
-        @Header(value = "Auth-Email") authEmail: String,
         @Field(value = "password") passwordHash: String?,
         @Field(value = "deviceIdentifier") deviceIdentifier: String,
         @Field(value = "deviceName") deviceName: String,
