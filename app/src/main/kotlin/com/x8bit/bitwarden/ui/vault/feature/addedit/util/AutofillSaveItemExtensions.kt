@@ -21,6 +21,7 @@ fun AutofillSaveItem.toDefaultAddTypeContent(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 isIndividualVaultDisabled = isIndividualVaultDisabled,
                 type = VaultAddEditState.ViewState.Content.ItemType.Card(
+                    cardHolderName = this.cardholderName.orEmpty(),
                     number = this.number.orEmpty(),
                     expirationMonth = VaultCardExpirationMonth
                         .entries

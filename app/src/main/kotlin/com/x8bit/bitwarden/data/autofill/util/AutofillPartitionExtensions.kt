@@ -35,6 +35,13 @@ val AutofillPartition.Card.securityCodeSaveValue: String?
         .extractNonNullTextValueOrNull { it is AutofillView.Card.SecurityCode }
 
 /**
+ * The text value representation of the cardholder name from the [AutofillPartition.Card].
+ */
+val AutofillPartition.Card.cardholderName: String?
+    get() = this
+        .extractNonNullTextValueOrNull { it is AutofillView.Card.CardholderName }
+
+/**
  * The text value representation of the password from the [AutofillPartition.Login].
  */
 val AutofillPartition.Login.passwordSaveValue: String?
