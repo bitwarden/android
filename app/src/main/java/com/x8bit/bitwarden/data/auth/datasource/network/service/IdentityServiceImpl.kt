@@ -67,7 +67,6 @@ class IdentityServiceImpl(
         .getToken(
             scope = "api offline_access",
             clientId = "mobile",
-            authEmail = email.base64UrlEncode(),
             deviceIdentifier = uniqueAppId,
             deviceName = deviceModelProvider.deviceModel,
             deviceType = "0",

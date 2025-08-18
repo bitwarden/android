@@ -33,7 +33,6 @@ interface UnauthenticatedIdentityApi {
         @Field(value = "scope", encoded = true) scope: String,
         @Field(value = "client_id") clientId: String,
         @Field(value = "username") email: String,
-        // Auth-Email header is deprecated and no longer needed
         @Field(value = "password") passwordHash: String?,
         @Field(value = "deviceIdentifier") deviceIdentifier: String,
         @Field(value = "deviceName") deviceName: String,
