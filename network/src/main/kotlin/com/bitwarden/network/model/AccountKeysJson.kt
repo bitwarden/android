@@ -1,7 +1,9 @@
 package com.bitwarden.network.model
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
 /**
  * Represents private keys in the vault response.
@@ -10,15 +12,19 @@ import kotlinx.serialization.Serializable
  * @property publicKeyEncryptionKeyPair The public key encryption key pair of the profile.
  * @property securityState The security state of the profile (nullable).
  */
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class AccountKeysJson(
-    @SerialName("signatureKeyPair")
+    @SerialName("SignatureKeyPair")
+    @JsonNames("signatureKeyPair")
     val signatureKeyPair: SignatureKeyPair?,
 
-    @SerialName("publicKeyEncryptionKeyPair")
+    @SerialName("PublicKeyEncryptionKeyPair")
+    @JsonNames("publicKeyEncryptionKeyPair")
     val publicKeyEncryptionKeyPair: PublicKeyEncryptionKeyPair,
 
-    @SerialName("securityState")
+    @SerialName("SecurityState")
+    @JsonNames("securityState")
     val securityState: SecurityState?,
 ) {
 
@@ -30,10 +36,12 @@ data class AccountKeysJson(
      */
     @Serializable
     data class SignatureKeyPair(
-        @SerialName("wrappedSigningKey")
+        @SerialName("WrappedSigningKey")
+        @JsonNames("wrappedSigningKey")
         val wrappedSigningKey: String,
 
-        @SerialName("verifyingKey")
+        @SerialName("VerifyingKey")
+        @JsonNames("verifyingKey")
         val verifyingKey: String,
     )
 
@@ -48,13 +56,16 @@ data class AccountKeysJson(
      */
     @Serializable
     data class PublicKeyEncryptionKeyPair(
-        @SerialName("wrappedPrivateKey")
+        @SerialName("WrappedPrivateKey")
+        @JsonNames("wrappedPrivateKey")
         val wrappedPrivateKey: String,
 
-        @SerialName("publicKey")
+        @SerialName("PublicKey")
+        @JsonNames("publicKey")
         val publicKey: String,
 
-        @SerialName("signedPublicKey")
+        @SerialName("SignedPublicKey")
+        @JsonNames("signedPublicKey")
         val signedPublicKey: String?,
     )
 
@@ -66,10 +77,12 @@ data class AccountKeysJson(
      */
     @Serializable
     data class SecurityState(
-        @SerialName("securityState")
+        @SerialName("SecurityState")
+        @JsonNames("securityState")
         val securityState: String,
 
-        @SerialName("securityVersion")
+        @SerialName("SecurityVersion")
+        @JsonNames("securityVersion")
         val securityVersion: Int,
     )
 }
