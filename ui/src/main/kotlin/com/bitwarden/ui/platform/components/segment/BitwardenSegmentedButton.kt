@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.segment
+package com.bitwarden.ui.platform.components.segment
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.base.util.toDp
+import com.bitwarden.ui.platform.components.segment.color.bitwardenSegmentedButtonColors
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.segment.color.bitwardenSegmentedButtonColors
 import kotlinx.collections.immutable.ImmutableList
 
 private const val FONT_SCALE_THRESHOLD = 1.5f
