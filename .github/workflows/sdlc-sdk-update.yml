@@ -22,9 +22,6 @@ permissions:
   contents: read
   packages: read
 
-env:
-  _JAVA_VERSION: 17
-
 jobs:
   update:
     name: Update SDK
