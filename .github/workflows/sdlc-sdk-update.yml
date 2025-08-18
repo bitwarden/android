@@ -1,0 +1,13 @@
+name: SDLC / SDK Update
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update:
+    name: Update SDK
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Placeholder
+        run: echo ":feelsgood:" >> $GITHUB_STEP_SUMMARY
