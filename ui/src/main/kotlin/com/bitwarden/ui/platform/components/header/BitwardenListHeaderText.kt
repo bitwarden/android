@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.header
+package com.bitwarden.ui.platform.components.header
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
@@ -17,8 +17,8 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 @Composable
 fun BitwardenListHeaderText(
     label: String,
-    supportingLabel: String? = null,
     modifier: Modifier = Modifier,
+    supportingLabel: String? = null,
 ) {
     val supportLabel = supportingLabel?.let { " ($it)" }.orEmpty()
     Text(
