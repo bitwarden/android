@@ -24,8 +24,6 @@ jobs:
     if: ${{ inputs.run-mode == 'Update' }}
     runs-on: ubuntu-24.04
     permissions:
-      contents: write
-      pull-requests: write
       packages: read
       id-token: write
 
@@ -105,7 +103,7 @@ jobs:
 
       - name: Create Pull Request
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           _BRANCH_NAME: ${{ steps.switch-branch.outputs.branch_name }}
           _SDK_PACKAGE: ${{ inputs.sdk-package }}
           _SDK_VERSION: ${{ inputs.sdk-version }}
