@@ -33,6 +33,9 @@ echo "$CLEANED_CHANGELOG"
 echo
 echo "<details>
 <summary>Raw changelog</summary>
+
+\`\`\`
 $CHANGELOG
+\`\`\`
 </details>
 "

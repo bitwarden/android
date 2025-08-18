@@ -103,7 +103,7 @@ jobs:
             --label "t:ci")
 
           echo "🚀 Created PR: $PR_URL"
-          echo "🚀 Created PR: $PR_URL" >> $GITHUB_STEP_SUMMARY
+          echo "## 🚀 Created PR: $PR_URL" >> $GITHUB_STEP_SUMMARY
 
   test:
     name: Test SDK Update
