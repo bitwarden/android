@@ -32,6 +32,11 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
+      - name: Log inputs to job summary
+        uses: ./.github/actions/log-inputs
+        with:
+          inputs: ${{ toJson(inputs) }}
+
       - name: Setup Android Build
         uses: ./.github/actions/setup-android-build
 
