@@ -3,6 +3,9 @@ name: SDLC / SDK Update
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   update:
     name: Update SDK
