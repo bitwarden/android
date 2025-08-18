@@ -161,4 +161,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Used in settings.gradle.kts to download the SDK from GitHub Maven Packages
         run: |
           bundle exec fastlane assembleDebugApks
-          bundle exec fastlane buildAuthenticatorDebug
