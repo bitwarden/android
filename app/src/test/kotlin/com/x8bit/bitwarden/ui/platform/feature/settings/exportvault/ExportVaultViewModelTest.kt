@@ -823,7 +823,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
 
                 verify(exactly = 1) {
                     organizationEventManager.trackEvent(
-                        event = OrganizationEvent.UserClientExportedVault(null),
+                        event = OrganizationEvent.UserClientExportedVault,
                     )
                 }
 

@@ -406,7 +406,7 @@ class ExportVaultViewModel @Inject constructor(
         }
 
         organizationEventManager.trackEvent(
-            event = OrganizationEvent.UserClientExportedVault(null),
+            event = OrganizationEvent.UserClientExportedVault,
         )
         sendEvent(ExportVaultEvent.ShowSnackbar(BitwardenString.export_vault_success.asText()))
     }
