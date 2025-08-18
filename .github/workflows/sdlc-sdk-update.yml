@@ -10,7 +10,7 @@ on:
         options:
           - Update # opens a PR in this repo updating the SDK
           - Test # used for testing sdk-internal repo PRs
-        default: "Test"
+        default: Test
       sdk-package:
         description: "SDK Package"
         default: "com.bitwarden:sdk-android.dev"
