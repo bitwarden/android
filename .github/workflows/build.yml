@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - release/**/*
   workflow_dispatch:
     inputs:
       version-name:
@@ -30,20 +31,34 @@ env:
   JAVA_VERSION: 17
   GITHUB_ACTION_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
+permissions:
+  contents: read
+  packages: read
+  id-token: write
+
 jobs:
   build:
     name: Build
     runs-on: ubuntu-24.04
 
     steps:
+      - name: Log inputs to job summary
+        run: |
+          echo "<details><summary>Job Inputs</summary>" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo '${{ toJson(inputs) }}' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "</details>" >> $GITHUB_STEP_SUMMARY
+
       - name: Check out repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@0bdd871935719febd78681f197cd39af5b6e16a6 # v4.2.2
+        uses: gradle/actions/wrapper-validation@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4.4.1
 
       - name: Cache Gradle files
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             ~/.gradle/caches
@@ -53,7 +68,7 @@ jobs:
             ${{ runner.os }}-gradle-v2-
 
       - name: Cache build output
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             ${{ github.workspace }}/build-cache
@@ -62,13 +77,13 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure JDK
-        uses: actions/setup-java@7a6d8a8234af8eb26422e24e3006232cccaa061b # v4.6.0
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@28c4deda893d5a96a6b2d958c5b47fc18d65c9d3 # v1.213.0
+        uses: ruby/setup-ruby@bb6434c747fa7022e12fa1cae2a0951fcffcff26 # v1.253.0
         with:
           bundler-cache: true
 
@@ -85,7 +100,7 @@ jobs:
         run: bundle exec fastlane assembleDebugApks
 
       - name: Upload test reports on failure
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: failure()
         with:
           name: test-reports
@@ -106,7 +121,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@28c4deda893d5a96a6b2d958c5b47fc18d65c9d3 # v1.213.0
+        uses: ruby/setup-ruby@bb6434c747fa7022e12fa1cae2a0951fcffcff26 # v1.253.0
         with:
           bundler-cache: true
 
@@ -117,9 +132,18 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Log in to Azure
-        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
+        uses: bitwarden/gh-actions/azure-login@main
         with:
-          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
+
+      - name: Get Azure Key Vault secrets
+        id: get-kv-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: gh-android
+          secrets: "UPLOAD-KEYSTORE-PASSWORD,UPLOAD-BETA-KEYSTORE-PASSWORD,UPLOAD-BETA-KEY-PASSWORD,PLAY-KEYSTORE-PASSWORD,PLAY-BETA-KEYSTORE-PASSWORD,PLAY-BETA-KEY-PASSWORD"
 
       - name: Retrieve secrets
         env:
@@ -156,11 +180,14 @@ jobs:
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
           --name app_play_prod_firebase-creds.json --file ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json --output none
 
+      - name: Log out from Azure
+        uses: bitwarden/gh-actions/azure-logout@main
+
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@0bdd871935719febd78681f197cd39af5b6e16a6 # v4.2.2
+        uses: gradle/actions/wrapper-validation@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4.4.1
 
       - name: Cache Gradle files
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             ~/.gradle/caches
@@ -170,7 +197,7 @@ jobs:
             ${{ runner.os }}-gradle-v2-
 
       - name: Cache build output
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             ${{ github.workspace }}/build-cache
@@ -179,7 +206,7 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure JDK
-        uses: actions/setup-java@7a6d8a8234af8eb26422e24e3006232cccaa061b # v4.6.0
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}
@@ -195,7 +222,7 @@ jobs:
 
       - name: Increment version
         run: |
-          DEFAULT_VERSION_CODE=$((11000+$GITHUB_RUN_NUMBER))
+          DEFAULT_VERSION_CODE=$((11000+GITHUB_RUN_NUMBER))
           bundle exec fastlane setBuildVersionInfo \
           versionCode:${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }} \
           versionName:${{ inputs.version-name }}
@@ -203,48 +230,48 @@ jobs:
       - name: Generate release Play Store bundle
         if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' }}
         env:
-          UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+          UPLOAD-KEYSTORE-PASSWORD: ${{ steps.get-kv-secrets.outputs.UPLOAD-KEYSTORE-PASSWORD }}
         run: |
           bundle exec fastlane bundlePlayStoreRelease \
           storeFile:app_upload-keystore.jks \
-          storePassword:${{ env.UPLOAD_KEYSTORE_PASSWORD }} \
+          storePassword:${{ env.UPLOAD-KEYSTORE-PASSWORD }} \
           keyAlias:upload \
-          keyPassword:${{ env.UPLOAD_KEYSTORE_PASSWORD }}
+          keyPassword:${{ env.UPLOAD-KEYSTORE-PASSWORD }}
 
       - name: Generate beta Play Store bundle
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
         env:
-          UPLOAD_BETA_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_BETA_KEYSTORE_PASSWORD }}
-          UPLOAD_BETA_KEY_PASSWORD: ${{ secrets.UPLOAD_BETA_KEY_PASSWORD }}
+          UPLOAD-BETA-KEYSTORE-PASSWORD: ${{ steps.get-kv-secrets.outputs.UPLOAD-BETA-KEYSTORE-PASSWORD }}
+          UPLOAD-BETA-KEY-PASSWORD: ${{ steps.get-kv-secrets.outputs.UPLOAD-BETA-KEY-PASSWORD }}
         run: |
           bundle exec fastlane bundlePlayStoreBeta \
           storeFile:app_beta_upload-keystore.jks \
-          storePassword:${{ env.UPLOAD_BETA_KEYSTORE_PASSWORD }} \
+          storePassword:${{ env.UPLOAD-BETA-KEYSTORE-PASSWORD }} \
           keyAlias:bitwarden-beta-upload \
-          keyPassword:${{ env.UPLOAD_BETA_KEY_PASSWORD }}
+          keyPassword:${{ env.UPLOAD-BETA-KEY-PASSWORD }}
 
       - name: Generate release Play Store APK
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
         env:
-          PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
+          PLAY-KEYSTORE-PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-KEYSTORE-PASSWORD }}
         run: |
           bundle exec fastlane assemblePlayStoreReleaseApk \
           storeFile:app_play-keystore.jks \
-          storePassword:${{ env.PLAY_KEYSTORE_PASSWORD }} \
+          storePassword:${{ env.PLAY-KEYSTORE-PASSWORD }} \
           keyAlias:bitwarden \
-          keyPassword:${{ env.PLAY_KEYSTORE_PASSWORD }}
+          keyPassword:${{ env.PLAY-KEYSTORE-PASSWORD }}
 
       - name: Generate beta Play Store APK
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
         env:
-          PLAY_BETA_KEYSTORE_PASSWORD: ${{ secrets.PLAY_BETA_KEYSTORE_PASSWORD }}
-          PLAY_BETA_KEY_PASSWORD: ${{ secrets.PLAY_BETA_KEY_PASSWORD }}
+          PLAY-BETA-KEYSTORE-PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-BETA-KEYSTORE-PASSWORD }}
+          PLAY-BETA-KEY-PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-BETA-KEY-PASSWORD }}
         run: |
           bundle exec fastlane assemblePlayStoreBetaApk \
           storeFile:app_beta_play-keystore.jks \
-          storePassword:${{ env.PLAY_BETA_KEYSTORE_PASSWORD }} \
+          storePassword:${{ env.PLAY-BETA-KEYSTORE-PASSWORD }} \
           keyAlias:bitwarden-beta \
-          keyPassword:${{ env.PLAY_BETA_KEY_PASSWORD }}
+          keyPassword:${{ env.PLAY-BETA-KEY-PASSWORD }}
 
       - name: Generate debug Play Store APKs
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
@@ -253,7 +280,7 @@ jobs:
 
       - name: Upload release Play Store .aab artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.aab
           path: app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden.aab
@@ -261,7 +288,7 @@ jobs:
 
       - name: Upload beta Play Store .aab artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.beta.aab
           path: app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden.beta.aab
@@ -269,7 +296,7 @@ jobs:
 
       - name: Upload release .apk artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.apk
           path: app/build/outputs/apk/standard/release/com.x8bit.bitwarden.apk
@@ -277,7 +304,7 @@ jobs:
 
       - name: Upload beta .apk artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.beta.apk
           path: app/build/outputs/apk/standard/beta/com.x8bit.bitwarden.beta.apk
@@ -286,7 +313,7 @@ jobs:
       # When building variants other than 'prod'
       - name: Upload debug .apk artifact
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.${{ matrix.variant }}.apk
           path: app/build/outputs/apk/standard/debug/com.x8bit.bitwarden.dev.apk
@@ -324,7 +351,7 @@ jobs:
 
       - name: Upload .apk SHA file for release
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.apk-sha256.txt
           path: ./com.x8bit.bitwarden.apk-sha256.txt
@@ -332,7 +359,7 @@ jobs:
 
       - name: Upload .apk SHA file for beta
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.beta.apk-sha256.txt
           path: ./com.x8bit.bitwarden.beta.apk-sha256.txt
@@ -340,7 +367,7 @@ jobs:
 
       - name: Upload .aab SHA file for release
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.aab-sha256.txt
           path: ./com.x8bit.bitwarden.aab-sha256.txt
@@ -348,7 +375,7 @@ jobs:
 
       - name: Upload .aab SHA file for beta
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.beta.aab-sha256.txt
           path: ./com.x8bit.bitwarden.beta.aab-sha256.txt
@@ -356,7 +383,7 @@ jobs:
 
       - name: Upload .apk SHA file for debug
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.${{ matrix.variant }}.apk-sha256.txt
           path: ./com.x8bit.bitwarden.${{ matrix.variant }}.apk-sha256.txt
@@ -405,7 +432,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@28c4deda893d5a96a6b2d958c5b47fc18d65c9d3 # v1.213.0
+        uses: ruby/setup-ruby@bb6434c747fa7022e12fa1cae2a0951fcffcff26 # v1.253.0
         with:
           bundler-cache: true
 
@@ -416,9 +443,18 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Log in to Azure
-        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
+        uses: bitwarden/gh-actions/azure-login@main
         with:
-          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
+
+      - name: Get Azure Key Vault secrets
+        id: get-kv-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: gh-android
+          secrets: "FDROID-KEYSTORE-PASSWORD,FDROID-BETA-KEYSTORE-PASSWORD,FDROID-BETA-KEY-PASSWORD"
 
       - name: Retrieve secrets
         env:
@@ -441,11 +477,14 @@ jobs:
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
           --name app_fdroid_firebase-creds.json --file ${{ github.workspace }}/secrets/app_fdroid_firebase-creds.json --output none
 
+      - name: Log out from Azure
+        uses: bitwarden/gh-actions/azure-logout@main
+
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@0bdd871935719febd78681f197cd39af5b6e16a6 # v4.2.2
+        uses: gradle/actions/wrapper-validation@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4.4.1
 
       - name: Cache Gradle files
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             ~/.gradle/caches
@@ -455,7 +494,7 @@ jobs:
             ${{ runner.os }}-gradle-v2-
 
       - name: Cache build output
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             ${{ github.workspace }}/build-cache
@@ -464,7 +503,7 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure JDK
-        uses: actions/setup-java@7a6d8a8234af8eb26422e24e3006232cccaa061b # v4.6.0
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}
@@ -481,21 +520,21 @@ jobs:
       # Start from 11000 to prevent collisions with mobile build version codes
       - name: Increment version
         run: |
-          DEFAULT_VERSION_CODE=$((11000+$GITHUB_RUN_NUMBER))
+          DEFAULT_VERSION_CODE=$((11000+GITHUB_RUN_NUMBER))
           VERSION_CODE="${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }}"
           bundle exec fastlane setBuildVersionInfo \
           versionCode:$VERSION_CODE \
           versionName:${{ inputs.version-name || '' }}
 
-          regex='versionName = "([^"]+)"'
-          if [[ "$(cat app/build.gradle.kts)" =~ $regex ]]; then
+          regex='appVersionName = "([^"]+)"'
+          if [[ "$(cat gradle/libs.versions.toml)" =~ $regex ]]; then
             VERSION_NAME="${BASH_REMATCH[1]}"
           fi
           echo "Version Name: ${VERSION_NAME}" >> $GITHUB_STEP_SUMMARY
           echo "Version Number: $VERSION_CODE" >> $GITHUB_STEP_SUMMARY
       - name: Generate F-Droid artifacts
         env:
-          FDROID_STORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
+          FDROID_STORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.FDROID-KEYSTORE-PASSWORD }}
         run: |
           bundle exec fastlane assembleFDroidReleaseApk \
           storeFile:app_fdroid-keystore.jks \
@@ -505,17 +544,17 @@ jobs:
 
       - name: Generate F-Droid Beta Artifacts
         env:
-          FDROID_BETA_KEYSTORE_PASSWORD: ${{ secrets.FDROID_BETA_KEYSTORE_PASSWORD }}
-          FDROID_BETA_KEY_PASSWORD: ${{ secrets.FDROID_BETA_KEY_PASSWORD }}
+          FDROID-BETA-KEYSTORE-PASSWORD: ${{ steps.get-kv-secrets.outputs.FDROID-BETA-KEYSTORE-PASSWORD }}
+          FDROID-BETA-KEY-PASSWORD: ${{ steps.get-kv-secrets.outputs.FDROID-BETA-KEY-PASSWORD }}
         run: |
           bundle exec fastlane assembleFDroidBetaApk \
           storeFile:app_beta_fdroid-keystore.jks \
-          storePassword:"${{ env.FDROID_BETA_KEYSTORE_PASSWORD }}" \
+          storePassword:"${{ env.FDROID-BETA-KEYSTORE-PASSWORD }}" \
           keyAlias:bitwarden-beta \
-          keyPassword:"${{ env.FDROID_BETA_KEY_PASSWORD }}"
+          keyPassword:"${{ env.FDROID-BETA-KEY-PASSWORD }}"
 
       - name: Upload F-Droid .apk artifact
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden-fdroid.apk
           path: app/build/outputs/apk/fdroid/release/com.x8bit.bitwarden-fdroid.apk
@@ -527,14 +566,14 @@ jobs:
           > ./com.x8bit.bitwarden-fdroid.apk-sha256.txt
 
       - name: Upload F-Droid SHA file
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden-fdroid.apk-sha256.txt
           path: ./com.x8bit.bitwarden-fdroid.apk-sha256.txt
           if-no-files-found: error
 
       - name: Upload F-Droid Beta .apk artifact
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.beta-fdroid.apk
           path: app/build/outputs/apk/fdroid/beta/com.x8bit.bitwarden.beta-fdroid.apk
@@ -546,7 +585,7 @@ jobs:
           > ./com.x8bit.bitwarden.beta-fdroid.apk-sha256.txt
 
       - name: Upload F-Droid Beta SHA file
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.beta-fdroid.apk-sha256.txt
           path: ./com.x8bit.bitwarden.beta-fdroid.apk-sha256.txt

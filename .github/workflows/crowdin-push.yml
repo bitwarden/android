@@ -1,25 +1,29 @@
-name: Crowdin Push
+name: CI / Crowdin Push
+run-name: Crowdin Push - ${{ github.event_name == 'workflow_dispatch' && 'Manual' || 'CI' }}
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - "main"
+      - main
 
 jobs:
   crowdin-push:
-    name: Crowdin Push
+    name: Crowdin Push - ${{ github.event_name }}
     runs-on: ubuntu-24.04
-    env:
-      _CROWDIN_PROJECT_ID: "269690"
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Check out repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Log in to Azure
-        uses: Azure/login@cb79c773a3cfa27f31f25eb3f677781210c9ce3d # v1.6.1
+        uses: bitwarden/gh-actions/azure-login@main
         with:
-          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
 
       - name: Retrieve secrets
         id: retrieve-secrets
@@ -29,11 +33,15 @@ jobs:
           secrets: "crowdin-api-token"
 
       - name: Upload sources
-        uses: crowdin/github-action@d1632879d4d4da358f2d040f79fa094571c9a649 # v2.5.1
+        uses: crowdin/github-action@9fd07c1c5b36b15f082d1d860dc399f16f849bd7 # v2.9.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
+          _CROWDIN_PROJECT_ID: "269690"
         with:
           config: crowdin.yml
           upload_sources: true
           upload_translations: false
+
+      - name: Log out from Azure
+        uses: bitwarden/gh-actions/azure-logout@main

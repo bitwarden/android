@@ -2,13 +2,13 @@
 <resources>
 
     <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:textCursorDrawable">@null</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionModeOverlay">true</item>
-        <item name="android:windowLayoutInDisplayCutoutMode">default</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">@integer/displayCutoutMode</item>
+        <item name="android:backgroundDimAmount">@dimen/dialogDimBackgroundAmount</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
     </style>
 
     <!-- Launch theme (for auto dark/light based on system) -->
@@ -18,8 +18,8 @@
         <item name="windowSplashScreenBackground">@color/ic_launcher_background</item>
     </style>
 
-    <!-- A translucent theme for the autofill TOTP copy activity -->
-    <style name="AutofillTotpCopyTheme" parent="Theme.AppCompat.NoActionBar">
+    <!-- A translucent theme for the autofill callback activity -->
+    <style name="AutofillCallbackTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>

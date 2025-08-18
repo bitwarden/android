@@ -43,11 +43,17 @@ buildCache {
     local {
         isEnabled = true
         directory = File(rootDir, "build-cache")
-        removeUnusedEntriesAfterDays = 15
     }
 }
 
 rootProject.name = "Bitwarden"
-include(":app")
-include(":authenticatorbridge")
-include(":authenticator")
+include(
+    ":annotation",
+    ":app",
+    ":authenticator",
+    ":authenticatorbridge",
+    ":core",
+    ":data",
+    ":network",
+    ":ui",
+)

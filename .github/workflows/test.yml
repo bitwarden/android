@@ -9,7 +9,7 @@ on:
   pull_request:
     types: [opened, synchronize]
   merge_group:
-    type: [checks_requested]
+    types: [checks_requested]
   workflow_dispatch:
 
 env:
@@ -23,16 +23,17 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       packages: read
+      pull-requests: write
 
     steps:
       - name: Check out repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@0bdd871935719febd78681f197cd39af5b6e16a6 # v4.2.2
+        uses: gradle/actions/wrapper-validation@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4.4.1
 
       - name: Cache Gradle files
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             ~/.gradle/caches
@@ -42,7 +43,7 @@ jobs:
             ${{ runner.os }}-gradle-v2-
 
       - name: Cache build output
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             ${{ github.workspace }}/build-cache
@@ -51,12 +52,12 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@28c4deda893d5a96a6b2d958c5b47fc18d65c9d3 # v1.213.0
+        uses: ruby/setup-ruby@bb6434c747fa7022e12fa1cae2a0951fcffcff26 # v1.253.0
         with:
           bundler-cache: true
 
       - name: Configure JDK
-        uses: actions/setup-java@7a6d8a8234af8eb26422e24e3006232cccaa061b # v4.6.0
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           distribution: "temurin"
           java-version: ${{ env._JAVA_VERSION }}
@@ -74,40 +75,30 @@ jobs:
           bundle exec fastlane check
 
       - name: Upload test reports
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: always()
         with:
           name: test-reports
           path: |
+            build/reports/kover/reportMergedCoverage.xml
             app/build/reports/tests/
-            app/build/reports/kover/reportStandardDebug.xml
-
-  report:
-    name: Process Test Reports
-    needs: test
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-      issues: write
-      pull-requests: write
-    if: success()
-
-    steps:
-      - name: Download test artifacts
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
-        if: github.event_name == 'push' || github.event_name == 'pull_request'
-        with:
-          name: test-reports
+            authenticator/build/reports/tests/
+            authenticatorbridge/build/reports/tests/
+            core/build/reports/tests/
+            data/build/reports/tests/
+            network/build/reports/tests/
+            ui/build/reports/tests/
 
       - name: Upload to codecov.io
         id: upload-to-codecov
-        uses: codecov/codecov-action@1e68e06f1dbfde0e4cefc87efeba9e4643565303 # v5.1.2
+        uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5.4.3
         if: github.event_name == 'push' || github.event_name == 'pull_request'
         continue-on-error: true
         with:
           os: linux
-          files: kover/reportStandardDebug.xml
+          files: build/reports/kover/reportMergedCoverage.xml
           fail_ci_if_error: true
+          disable_search: true
 
       - name: Comment PR if tests failed
         if: steps.upload-to-codecov.outcome == 'failure' && (github.event_name == 'push' || github.event_name == 'pull_request')
@@ -119,7 +110,7 @@ jobs:
           echo "> [!WARNING]" >> $GITHUB_STEP_SUMMARY
           echo "> Uploading code coverage report failed. Please check the \"Upload to codecov.io\" step of \"Process Test Reports\" job for more details." >> $GITHUB_STEP_SUMMARY
 
-          if [ ! -z "$PR_NUMBER" ]; then
+          if [ -n "$PR_NUMBER" ]; then
             message=$'> [!WARNING]\n> @'$RUN_ACTOR' Uploading code coverage report failed. Please check the "Upload to codecov.io" step of [Process Test Reports job]('$_GITHUB_ACTION_RUN_URL') for more details.'
             gh pr comment --repo $GITHUB_REPOSITORY $PR_NUMBER --body "$message"
           fi

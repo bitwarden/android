@@ -9,9 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.components.model.IconResource
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 
 /**
  * An icon button that displays an icon from the provided [IconResource].
@@ -52,7 +52,7 @@ private fun BitwardenIconButtonWithResource_preview() {
     AuthenticatorTheme {
         BitwardenIconButtonWithResource(
             iconRes = IconResource(
-                iconPainter = painterResource(id = R.drawable.ic_tooltip),
+                iconPainter = painterResource(id = BitwardenDrawable.ic_tooltip),
                 contentDescription = "Sample Icon",
             ),
             onClick = {},

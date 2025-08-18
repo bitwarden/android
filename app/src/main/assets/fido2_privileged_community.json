@@ -12,20 +12,6 @@
         ]
       }
     },
-
-    {
-      "type": "android",
-      "info": {
-        "package_name": "net.quetta.browser",
-        "signatures": [
-          {
-            "build": "release",
-            "cert_fingerprint_sha256": "BE:FE:E7:31:12:6A:A5:6E:7E:FD:AE:AF:5E:F3:FA:EA:44:1C:19:CC:E0:CA:EC:42:6B:65:BB:F8:2C:59:46:80"
-          }
-        ]
-      }
-    },
-
     {
       "type": "android",
       "info": {
@@ -58,18 +44,6 @@
           {
             "build": "release",
             "cert_fingerprint_sha256": "C5:E2:91:B5:A5:71:F9:C8:CD:9A:97:99:C2:C9:4E:02:EC:97:03:94:88:93:F2:CA:75:6D:67:B9:42:04:F9:04"
-          }
-        ]
-      }
-    },
-    {
-      "type": "android",
-      "info": {
-        "package_name": "org.mozilla.fenix",
-        "signatures": [
-          {
-            "build": "release",
-            "cert_fingerprint_sha256": "50:04:77:90:88:E7:F9:88:D5:BC:5C:C5:F8:79:8F:EB:F4:F8:CD:08:4A:1B:2A:46:EF:D4:C8:EE:4A:EA:F2:11"
           }
         ]
       }

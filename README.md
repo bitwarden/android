@@ -4,6 +4,7 @@
 
 - [Compatibility](#compatibility)
 - [Setup](#setup)
+- [Theme](#theme)
 - [Dependencies](#dependencies)
 
 ## Compatibility
@@ -14,7 +15,6 @@
 - **Orientations Supported**: Portrait and Landscape
 
 ## Setup
-
 
 1. Clone the repository:
 
@@ -52,11 +52,76 @@
 
     Please avoid mixing formatting and logical changes in the same commit/PR. When possible, fix any large formatting issues in a separate PR before opening one to make logical changes to the same code. This helps others focus on the meaningful code changes when reviewing the code.
 
+4. Setup JDK `Version` `17`:
+
+    - Navigate to `Preferences > Build, Execution, Deployment > Build Tools > Gradle`.
+    - Hit the selected Gradle JDK next to `Gradle JDK:`.
+    - Select a `17.x` version or hit `Download JDK...` if not present.
+    - Select `Version` `17`.
+    - Select your preferred `Vendor`.
+    - Hit `Download`.
+    - Hit `Apply`.
+
+5. Setup `detekt` pre-commit hook (optional):
+
+Run the following script from the root of the repository to install the hook. This will overwrite any existing pre-commit hook if present.
+
+```shell
+echo "Writing detekt pre-commit hook..."
+cat << 'EOL' > .git/hooks/pre-commit
+#!/usr/bin/env bash
+
+echo "Running detekt check..."
+OUTPUT="/tmp/detekt-$(date +%s)"
+./gradlew -Pprecommit=true detekt > $OUTPUT
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ]; then
+  cat $OUTPUT
+  rm $OUTPUT
+  echo "***********************************************"
+  echo "                 detekt failed                 "
+  echo " Please fix the above issues before committing "
+  echo "***********************************************"
+  exit $EXIT_CODE
+fi
+rm $OUTPUT
+EOL
+echo "detekt pre-commit hook written to .git/hooks/pre-commit"
+echo "Making the hook executable"
+chmod +x .git/hooks/pre-commit
+
+echo "detekt pre-commit hook installed successfully to .git/hooks/pre-commit"
+```
+
+## Theme
+
+### Icons & Illustrations
+
+The app supports light mode, dark mode and dynamic colors. Most icons in the app will display correctly using tinting but multi-tonal icons and illustrations require extra processing in order to be displayed properly with dynamic colors.
+
+All illustrations and multi-tonal icons require the svg paths to be tagged with the `name` attribute in order for each individual path to be tinted the appropriate color. Any untagged path will not be tinted and the resulting image will be incorrect.
+
+The supported tags are as follows:
+
+* outline
+* primary
+* secondary
+* tertiary
+* accent
+* logo
+* navigation
+* navigationActiveAccent
+
 ## Dependencies
 
 ### Application Dependencies
 
 The following is a list of all third-party dependencies included as part of the application beyond the standard Android SDK.
+
+- **AndroidX Activity**
+    - https://developer.android.com/jetpack/androidx/releases/activity
+    - Purpose: Allows access composable APIs built on top of Activity.
+    - License: Apache 2.0
 
 - **AndroidX Appcompat**
     - https://developer.android.com/jetpack/androidx/releases/appcompat
@@ -78,7 +143,7 @@ The following is a list of all third-party dependencies included as part of the 
     - Purpose: Displays webpages with the user's default browser.
     - License: Apache 2.0
 
-- **AndroidX CameraX Camera2**
+- **AndroidX Camera**
     - https://developer.android.com/jetpack/androidx/releases/camera
     - Purpose: Display and capture images for barcode scanning.
     - License: Apache 2.0
@@ -88,9 +153,9 @@ The following is a list of all third-party dependencies included as part of the 
     - Purpose: A Kotlin-based declarative UI framework.
     - License: Apache 2.0
 
-- **AndroidX Core SplashScreen**
+- **AndroidX Core**
     - https://developer.android.com/jetpack/androidx/releases/core
-    - Purpose: Backwards compatible SplashScreen API implementation.
+    - Purpose: Backwards compatible platform features and APIs.
     - License: Apache 2.0
 
 - **AndroidX Credentials**
@@ -101,6 +166,11 @@ The following is a list of all third-party dependencies included as part of the 
 - **AndroidX Lifecycle**
     - https://developer.android.com/jetpack/androidx/releases/lifecycle
     - Purpose: Lifecycle aware components and tooling.
+    - License: Apache 2.0
+
+- **AndroidX Navigation**
+    - https://developer.android.com/jetpack/androidx/releases/navigation
+    - Purpose: Provides a consistent API for navigating between Android components.
     - License: Apache 2.0
 
 - **AndroidX Room**
@@ -123,21 +193,6 @@ The following is a list of all third-party dependencies included as part of the 
     - Purpose: Dependency injection framework.
     - License: Apache 2.0
 
-- **Firebase Cloud Messaging**
-    - https://github.com/firebase/firebase-android-sdk
-    - Purpose: Allows for push notification support. (**NOTE:** This dependency is not included in builds distributed via F-Droid.)
-    - License: Apache 2.0
-
-- **Firebase Crashlytics**
-    - https://github.com/firebase/firebase-android-sdk
-    - Purpose: SDK for crash and non-fatal error reporting. (**NOTE:** This dependency is not included in builds distributed via F-Droid.)
-    - License: Apache 2.0
-  
-- **Google Play Reviews**
-  - https://developer.android.com/reference/com/google/android/play/core/release-notes
-  - Purpose: On standard builds provide an interface to add a review for the password manager application in Google Play.
-  - License: Apache 2.0
-
 - **Glide**
     - https://github.com/bumptech/glide
     - Purpose: Image loading and caching.
@@ -158,11 +213,6 @@ The following is a list of all third-party dependencies included as part of the 
     - Purpose: JSON serialization library for Kotlin.
     - License: Apache 2.0
 
-- **kotlinx.serialization converter**
-    - https://github.com/square/retrofit/tree/trunk/retrofit-converters/kotlinx-serialization
-    - Purpose: Converter for Retrofit 2 and kotlinx.serialization.
-    - License: Apache 2.0
-
 - **OkHttp 3**
     - https://github.com/square/okhttp
     - Purpose: An HTTP client used by the library to intercept and log traffic.
@@ -178,14 +228,26 @@ The following is a list of all third-party dependencies included as part of the 
     - Purpose: Extensible logging library for Android.
     - License: Apache 2.0
 
-- **zxcvbn4j**
-    - https://github.com/nulab/zxcvbn4j
-    - Purpose: Password strength estimation.
-    - License: MIT
-
 - **ZXing**
     - https://github.com/zxing/zxing
     - Purpose: Barcode scanning and generation.
+    - License: Apache 2.0
+
+The following is an additional list of third-party dependencies that are only included in the non-F-Droid build variants of the application.
+
+- **Firebase Cloud Messaging**
+    - https://github.com/firebase/firebase-android-sdk
+    - Purpose: Allows for push notification support.
+    - License: Apache 2.0
+
+- **Firebase Crashlytics**
+    - https://github.com/firebase/firebase-android-sdk
+    - Purpose: SDK for crash and non-fatal error reporting.
+    - License: Apache 2.0
+
+- **Google Play Reviews**
+    - https://developer.android.com/reference/com/google/android/play/core/release-notes
+    - Purpose: On standard builds provide an interface to add a review for the password manager application in Google Play.
     - License: Apache 2.0
 
 ### Development Environment Dependencies

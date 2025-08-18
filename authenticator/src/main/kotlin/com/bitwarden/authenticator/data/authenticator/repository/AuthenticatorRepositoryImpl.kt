@@ -16,20 +16,18 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVer
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
 import com.bitwarden.authenticator.data.authenticator.repository.util.sortAlphabetically
 import com.bitwarden.authenticator.data.authenticator.repository.util.toAuthenticatorItems
-import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
-import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
-import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
-import com.bitwarden.authenticator.data.platform.repository.model.DataState
-import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
-import com.bitwarden.authenticator.data.platform.repository.util.map
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.map
+import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.ui.platform.model.FileData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -48,7 +46,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -65,7 +62,6 @@ private const val STOP_TIMEOUT_DELAY_MS: Long = 5_000L
 class AuthenticatorRepositoryImpl @Inject constructor(
     private val authenticatorBridgeManager: AuthenticatorBridgeManager,
     private val authenticatorDiskSource: AuthenticatorDiskSource,
-    private val featureFlagManager: FeatureFlagManager,
     private val totpCodeManager: TotpCodeManager,
     private val fileManager: FileManager,
     private val importManager: ImportManager,
@@ -156,44 +152,14 @@ class AuthenticatorRepositoryImpl @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override val sharedCodesStateFlow: StateFlow<SharedVerificationCodesState> by lazy {
-        if (!featureFlagManager.getFeatureFlag(FlagKey.PasswordManagerSync)) {
-            MutableStateFlow(SharedVerificationCodesState.FeatureNotEnabled)
-        } else {
-            authenticatorBridgeManager
-                .accountSyncStateFlow
-                .flatMapLatest { accountSyncState ->
-                    when (accountSyncState) {
-                        AccountSyncState.AppNotInstalled ->
-                            MutableStateFlow(SharedVerificationCodesState.AppNotInstalled)
-
-                        AccountSyncState.SyncNotEnabled ->
-                            MutableStateFlow(SharedVerificationCodesState.SyncNotEnabled)
-
-                        AccountSyncState.Error ->
-                            MutableStateFlow(SharedVerificationCodesState.Error)
-
-                        AccountSyncState.Loading ->
-                            MutableStateFlow(SharedVerificationCodesState.Loading)
-
-                        AccountSyncState.OsVersionNotSupported -> MutableStateFlow(
-                            SharedVerificationCodesState.OsVersionNotSupported,
-                        )
-
-                        is AccountSyncState.Success -> {
-                            val verificationCodesList =
-                                accountSyncState.accounts.toAuthenticatorItems()
-                            totpCodeManager
-                                .getTotpCodesFlow(verificationCodesList)
-                                .map { SharedVerificationCodesState.Success(it) }
-                        }
-                    }
-                }
-                .stateIn(
-                    scope = unconfinedScope,
-                    started = SharingStarted.WhileSubscribed(),
-                    initialValue = SharedVerificationCodesState.Loading,
-                )
-        }
+        authenticatorBridgeManager
+            .accountSyncStateFlow
+            .flatMapLatest { it.toSharedVerificationCodesStateFlow() }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_DELAY_MS),
+                initialValue = SharedVerificationCodesState.Loading,
+            )
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -282,7 +248,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
 
     override suspend fun importVaultData(
         format: ImportFileFormat,
-        fileData: IntentManager.FileData,
+        fileData: FileData,
     ): ImportDataResult = fileManager.uriToByteArray(fileData.uri)
         .map {
             importManager
@@ -298,6 +264,33 @@ class AuthenticatorRepositoryImpl @Inject constructor(
 
     override val firstTimeAccountSyncFlow: Flow<Unit>
         get() = firstTimeAccountSyncChannel.receiveAsFlow()
+
+    @Suppress("MaxLineLength")
+    private fun AccountSyncState.toSharedVerificationCodesStateFlow(): Flow<SharedVerificationCodesState> =
+        when (this) {
+            AccountSyncState.AppNotInstalled ->
+                flowOf(SharedVerificationCodesState.AppNotInstalled)
+
+            AccountSyncState.SyncNotEnabled ->
+                flowOf(SharedVerificationCodesState.SyncNotEnabled)
+
+            AccountSyncState.Error ->
+                flowOf(SharedVerificationCodesState.Error)
+
+            AccountSyncState.Loading ->
+                flowOf(SharedVerificationCodesState.Loading)
+
+            AccountSyncState.OsVersionNotSupported -> flowOf(
+                SharedVerificationCodesState.OsVersionNotSupported,
+            )
+
+            is AccountSyncState.Success -> {
+                val verificationCodesList = accounts.toAuthenticatorItems()
+                totpCodeManager
+                    .getTotpCodesFlow(verificationCodesList)
+                    .map { SharedVerificationCodesState.Success(it) }
+            }
+        }
 
     private suspend fun encodeVaultDataToCsv(fileUri: Uri): ExportDataResult {
         val headerLine =

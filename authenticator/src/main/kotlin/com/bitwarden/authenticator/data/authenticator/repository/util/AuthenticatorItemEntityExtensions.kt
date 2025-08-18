@@ -1,7 +1,7 @@
 package com.bitwarden.authenticator.data.authenticator.repository.util
 
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
-import com.bitwarden.authenticator.data.platform.util.SpecialCharWithPrecedenceComparator
+import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
 
 /**
  * Sorts the data in alphabetical order by name. Using lexicographical sorting but giving

@@ -1,0 +1,64 @@
+name: Passkey Bug Report
+description: File a Passkey / FIDO2 related bug report
+labels: [ "app:password-manager", "bug-passkey" ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this Passkey-related bug report!
+
+        Please provide as much detail as possible to help us investigate the issue.
+
+  - type: dropdown
+    id: origin
+    attributes:
+      label: Origin
+      description: Are you using a web browser or a native application?
+      options:
+        - Web (Browser)
+        - Native Application (non-browser app)
+    validations:
+      required: true
+
+  - type: input
+    id: rp-id
+    attributes:
+      label: Web URL or App name
+      description: The website domain or app name you were trying to use the Passkey with
+      placeholder: "e.g. example.com or ExampleApp"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: operation-type
+    attributes:
+      label: Passkey Action
+      description: What passkey related action(s) were you trying to perform?
+      options:
+        - label: Creating new passkey (Registration)
+        - label: Signing in (Authentication)
+    validations:
+      required: true
+
+  - type: textarea
+    id: build-info
+    attributes:
+      label: Build Information
+      description: Please retrieve the build information from the About screen by tapping the Version number field
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional Information
+      description: Any additional context, steps to reproduce, error messages, or relevant information about the issue
+
+  - type: checkboxes
+    id: issue-tracking-info
+    attributes:
+      label: Issue Tracking Info
+      description: |
+        Issue tracking information
+      options:
+        - label: I understand that work is tracked outside of Github. A PR will be linked to this issue should one be opened to address it, but Bitwarden doesn't use fields like "assigned", "milestone", or "project" to track progress.

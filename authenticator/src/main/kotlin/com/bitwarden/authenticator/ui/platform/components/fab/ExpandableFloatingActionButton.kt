@@ -33,10 +33,10 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.components.model.IconResource
 import com.bitwarden.authenticator.ui.platform.theme.Typography
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.Text
 
 /**
  * A FAB that expands, when clicked, to display a collection of options that can be clicked.
@@ -62,7 +62,7 @@ fun <T : ExpandableFabOption> ExpandableFloatingActionButton(
         } else {
             0f
         },
-        label = stringResource(R.string.add_item_rotation),
+        label = stringResource(BitwardenString.add_item_rotation),
     )
     Column(
         modifier = modifier.wrapContentSize(),

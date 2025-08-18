@@ -1,29 +1,29 @@
 package com.bitwarden.authenticator.data.platform.datasource.disk
 
 import android.content.SharedPreferences
-import com.bitwarden.authenticator.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
-import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
-import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.data.datasource.disk.BaseDiskSource
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onSubscription
 
-private const val APP_THEME_KEY = "$BASE_KEY:theme"
-private const val APP_LANGUAGE_KEY = "$BASE_KEY:appLocale"
-private const val DEFAULT_SAVE_OPTION_KEY = "$BASE_KEY:defaultSaveOption"
-private const val SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY = "$BASE_KEY:biometricIntegritySource"
-private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "$BASE_KEY:accountBiometricIntegrityValid"
-private const val ALERT_THRESHOLD_SECONDS_KEY = "$BASE_KEY:alertThresholdSeconds"
-private const val FIRST_LAUNCH_KEY = "$BASE_KEY:hasSeenWelcomeTutorial"
-private const val CRASH_LOGGING_ENABLED_KEY = "$BASE_KEY:crashLoggingEnabled"
+private const val APP_THEME_KEY = "theme"
+private const val APP_LANGUAGE_KEY = "appLocale"
+private const val DEFAULT_SAVE_OPTION_KEY = "defaultSaveOption"
+private const val SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY = "biometricIntegritySource"
+private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "accountBiometricIntegrityValid"
+private const val ALERT_THRESHOLD_SECONDS_KEY = "alertThresholdSeconds"
+private const val FIRST_LAUNCH_KEY = "hasSeenWelcomeTutorial"
+private const val CRASH_LOGGING_ENABLED_KEY = "crashLoggingEnabled"
 private const val SCREEN_CAPTURE_ALLOW_KEY = "screenCaptureAllowed"
 private const val HAS_USER_DISMISSED_DOWNLOAD_BITWARDEN_KEY =
-    "$BASE_KEY:hasUserDismissedDownloadBitwardenCard"
+    "hasUserDismissedDownloadBitwardenCard"
 private const val HAS_USER_DISMISSED_SYNC_WITH_BITWARDEN_KEY =
-    "$BASE_KEY:hasUserDismissedSyncWithBitwardenCard"
+    "hasUserDismissedSyncWithBitwardenCard"
 private const val PREVIOUSLY_SYNCED_BITWARDEN_ACCOUNT_IDS_KEY =
-    "$BASE_KEY:previouslySyncedBitwardenAccountIds"
+    "previouslySyncedBitwardenAccountIds"
 private const val DEFAULT_ALERT_THRESHOLD_SECONDS = 7
 
 /**
@@ -138,13 +138,13 @@ class SettingsDiskSourceImpl(
             .onSubscription { emit(getBoolean(CRASH_LOGGING_ENABLED_KEY)) }
 
     override var hasUserDismissedDownloadBitwardenCard: Boolean?
-        get() = getBoolean(HAS_USER_DISMISSED_DOWNLOAD_BITWARDEN_KEY, null)
+        get() = getBoolean(HAS_USER_DISMISSED_DOWNLOAD_BITWARDEN_KEY)
         set(value) {
             putBoolean(HAS_USER_DISMISSED_DOWNLOAD_BITWARDEN_KEY, value)
         }
 
     override var hasUserDismissedSyncWithBitwardenCard: Boolean?
-        get() = getBoolean(HAS_USER_DISMISSED_SYNC_WITH_BITWARDEN_KEY, null)
+        get() = getBoolean(HAS_USER_DISMISSED_SYNC_WITH_BITWARDEN_KEY)
         set(value) {
             putBoolean(HAS_USER_DISMISSED_SYNC_WITH_BITWARDEN_KEY, value)
         }
@@ -158,8 +158,7 @@ class SettingsDiskSourceImpl(
     }
 
     override fun getAlertThresholdSeconds() =
-        getInt(ALERT_THRESHOLD_SECONDS_KEY, default = DEFAULT_ALERT_THRESHOLD_SECONDS)
-            ?: DEFAULT_ALERT_THRESHOLD_SECONDS
+        getInt(ALERT_THRESHOLD_SECONDS_KEY) ?: DEFAULT_ALERT_THRESHOLD_SECONDS
 
     override fun getAlertThresholdSecondsFlow(): Flow<Int> = mutableAlertThresholdSecondsFlow
         .onSubscription { emit(getAlertThresholdSeconds()) }

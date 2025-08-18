@@ -3,7 +3,6 @@ package com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,11 +25,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenWideSwitch
 import com.bitwarden.authenticator.ui.platform.components.util.maxDialogHeight
 import com.bitwarden.authenticator.ui.platform.components.util.maxDialogWidth
+import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * Displays a dialog asking the user where they would like to save a new QR code.
@@ -41,7 +40,6 @@ import com.bitwarden.authenticator.ui.platform.components.util.maxDialogWidth
  * parameter is true if the user checked "Save option as default".
  */
 @Composable
-@OptIn(ExperimentalLayoutApi::class)
 @Suppress("LongMethod")
 fun ChooseSaveLocationDialog(
     onSaveHereClick: (Boolean) -> Unit,
@@ -72,7 +70,7 @@ fun ChooseSaveLocationDialog(
                 modifier = Modifier
                     .padding(horizontal = 24.dp)
                     .fillMaxWidth(),
-                text = stringResource(R.string.verification_code_created),
+                text = stringResource(BitwardenString.verification_code_created),
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.headlineSmall,
             )
@@ -82,14 +80,14 @@ fun ChooseSaveLocationDialog(
                     .weight(1f, fill = false)
                     .padding(horizontal = 24.dp)
                     .fillMaxWidth(),
-                text = stringResource(R.string.choose_save_location_message),
+                text = stringResource(BitwardenString.choose_save_location_message),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodyMedium,
             )
             Spacer(Modifier.height(16.dp))
             BitwardenWideSwitch(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                label = stringResource(R.string.save_option_as_default),
+                label = stringResource(BitwardenString.save_option_as_default),
                 isChecked = isSaveAsDefaultChecked,
                 onCheckedChange = { isSaveAsDefaultChecked = !isSaveAsDefaultChecked },
             )
@@ -98,17 +96,17 @@ fun ChooseSaveLocationDialog(
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier.padding(horizontal = 8.dp),
             ) {
-                BitwardenTextButton(
+                AuthenticatorTextButton(
                     modifier = Modifier
                         .padding(horizontal = 4.dp),
-                    label = stringResource(R.string.save_here),
+                    label = stringResource(BitwardenString.save_here),
                     labelTextColor = MaterialTheme.colorScheme.primary,
                     onClick = { onSaveHereClick.invoke(isSaveAsDefaultChecked) },
                 )
-                BitwardenTextButton(
+                AuthenticatorTextButton(
                     modifier = Modifier
                         .padding(horizontal = 4.dp),
-                    label = stringResource(R.string.save_to_bitwarden),
+                    label = stringResource(BitwardenString.save_to_bitwarden),
                     labelTextColor = MaterialTheme.colorScheme.primary,
                     onClick = { onTakeMeToBitwardenClick.invoke(isSaveAsDefaultChecked) },
                 )

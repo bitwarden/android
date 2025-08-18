@@ -15,7 +15,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
@@ -23,9 +22,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
 import com.bitwarden.authenticator.ui.platform.components.util.maxDialogHeight
+import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * Displays a dialog with a title and "Cancel" button.
@@ -40,12 +39,11 @@ import com.bitwarden.authenticator.ui.platform.components.util.maxDialogHeight
  * [BitwardenSelectionRow].
  */
 @Suppress("LongMethod")
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BitwardenSelectionDialog(
     title: String,
     subtitle: String? = null,
-    dismissLabel: String = stringResource(R.string.cancel),
+    dismissLabel: String = stringResource(BitwardenString.cancel),
     onDismissRequest: () -> Unit,
     onDismissActionClick: () -> Unit = onDismissRequest,
     selectionItems: @Composable ColumnScope.() -> Unit = {},
@@ -112,7 +110,7 @@ fun BitwardenSelectionDialog(
                         .background(MaterialTheme.colorScheme.outlineVariant),
                 )
             }
-            BitwardenTextButton(
+            AuthenticatorTextButton(
                 modifier = Modifier.padding(24.dp),
                 label = dismissLabel,
                 onClick = onDismissActionClick,

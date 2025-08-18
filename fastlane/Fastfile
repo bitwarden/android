@@ -13,6 +13,9 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
+require_relative 'patches/supply_custom_promote_config'
+require_relative 'patches/supply_custom_promote'
+
 default_platform(:android)
 
 platform :android do
@@ -105,10 +108,17 @@ platform :android do
     )
   end
 
-  desc "Runs Standard Debug tests and generates Kover report"
+  desc "Runs lint, tests, and generates Kover reports for all project modules"
   lane :check do
     gradle(
-        tasks: ["app:testStandardDebug", "app:lintStandardDebug", "app:detekt", "app:koverXmlReportStandardDebug"]
+        tasks: [
+          "detekt",
+          "lintStandardDebug",
+          "lintDebug",
+          "testStandardDebug",
+          "testDebug",
+          "koverXmlReportMergedCoverage",
+        ]
     )
   end
 
@@ -116,14 +126,14 @@ platform :android do
   fastlane_require "time"
   lane :setBuildVersionInfo do |options|
 
-    # Read-in app build config file.
-    buildConfigPath = "../app/build.gradle.kts"
-    buildConfigFile = File.open(buildConfigPath)
-    buildConfigText = buildConfigFile.read
-    buildConfigFile.close
+    # Read-in app toml file.
+    tomlLibraryPath = "../gradle/libs.versions.toml"
+    tomlLibraryFile = File.open(tomlLibraryPath)
+    tomlLibraryText = tomlLibraryFile.read
+    tomlLibraryFile.close
 
-    currentVersionCode = buildConfigText.match(/versionCode = (\d+)/).captures[0]
-    currentVersionName = buildConfigText.match(/versionName = "(.+)"/).captures[0]
+    currentVersionCode = tomlLibraryText.match(/appVersionCode = "(\d+)"/).captures[0]
+    currentVersionName = tomlLibraryText.match(/appVersionName = "(.+)"/).captures[0]
 
     if options[:versionName].nil? or options[:versionName].to_s.empty?
         puts "Fetching latest tags from origin..."
@@ -154,12 +164,12 @@ platform :android do
 
     # Replace version information.
     puts "Setting version code to #{options[:versionCode]}."
-    buildConfigText.gsub!("versionCode = #{currentVersionCode}", "versionCode = #{options[:versionCode]}")
+    tomlLibraryText.gsub!("appVersionCode = \"#{currentVersionCode}\"", "appVersionCode = \"#{options[:versionCode]}\"")
     puts "Setting version name to #{nextVersionName}."
-    buildConfigText.gsub!("versionName = \"#{currentVersionName}\"", "versionName = \"#{nextVersionName}\"")
+    tomlLibraryText.gsub!("appVersionName = \"#{currentVersionName}\"", "appVersionName = \"#{nextVersionName}\"")
 
     # Save changes
-    File.open(buildConfigPath, "w") { |buildConfigFile| buildConfigFile << buildConfigText }
+    File.open(tomlLibraryPath, "w") { |tomlLibraryFile| tomlLibraryFile << tomlLibraryText }
   end
 
   desc "Generate artifacts for the given [build] signed with the provided [keystore] and credentials."
@@ -258,60 +268,38 @@ platform :android do
     releaseNotes
   end
 
-  # Authenticator
-  desc "Runs tests"
-  lane :checkAuthenticator do
-    gradle(tasks: ["authenticator:testDebug", "authenticator:lintDebug", "authenticator:detekt","authenticator:koverXmlReportDebug"])
-  end
-
-  desc "Apply build version information"
-  fastlane_require "time"
-  lane :setAuthenticatorBuildVersionInfo do |options|
-
-    # Read-in app build config file.
-    buildConfigPath = "../authenticator/build.gradle.kts"
-    buildConfigFile = File.open(buildConfigPath)
-    buildConfigText = buildConfigFile.read
-    buildConfigFile.close
-
-    currentVersionCode = buildConfigText.match(/versionCode = (\d+)/).captures[0]
-    currentVersionName = buildConfigText.match(/versionName = "(.+)"/).captures[0]
-
-    if options[:versionName].nil? or options[:versionName].to_s.empty?
-        puts "Fetching latest tags from origin..."
-        `git fetch --prune --no-recurse-submodules --filter=tree:0 --depth=1 --tags origin`
-        puts "Getting latest version name from previous git tag..."
-        latestTag = `git describe --tags $(git rev-list --tags --max-count=1)`.chomp()
-        puts "Using tag #{latestTag} to calculate version name..."
-        latestTag.slice!(0)
-        puts "Current version name resolved to #{latestTag}."
-
-        versionParts = latestTag.split(".")
-        currentMajor = versionParts[0]
-        currentMinor = versionParts[1]
-        currentRevision = versionParts[2]
-
-        currentDate = Time.new
-        major = currentDate.year.to_s
-        minor = currentDate.strftime "%-m"
-
-        revision = 0
-        if currentMajor == major and currentMinor == minor
-            revision = currentRevision.to_i + 1
-        end
-        nextVersionName = "#{major}.#{minor}.#{revision}"
+  desc "Get latest published version for a given package name and Play Store track"
+  lane :getLatestPlayStoreVersion do |options|
+    package_name = options[:package_name]
+    track = options[:track]
+    # Hardcoding paths for now, it will simplify transitioning to the new build .env files
+    case package_name
+    when "com.x8bit.bitwarden", "com.x8bit.bitwarden.beta"
+      json_key = "secrets/play_creds.json"
+    when "com.bitwarden.authenticator"
+      json_key = "secrets/authenticator_play_store-creds.json"
     else
-        nextVersionName = options[:versionName].to_s
+      UI.important "Unexpected package name: #{package_name}, using default play store json key"
+      json_key = "secrets/play_creds.json"
     end
 
-    # Replace version information.
-    puts "Setting version code to #{options[:versionCode]}."
-    buildConfigText.gsub!("versionCode = #{currentVersionCode}", "versionCode = #{options[:versionCode]}")
-    puts "Setting version name to #{nextVersionName}."
-    buildConfigText.gsub!("versionName = \"#{currentVersionName}\"", "versionName = \"#{nextVersionName}\"")
+    release_name = google_play_track_release_names(
+      package_name: package_name,
+      track: track,
+      json_key: json_key,
+    )
 
-    # Save changes
-    File.open(buildConfigPath, "w") { |buildConfigFile| buildConfigFile << buildConfigText }
+    version_code = google_play_track_version_codes(
+      package_name: package_name,
+      track: track,
+      json_key: json_key,
+    )
+
+    latest_version_name = release_name.first
+    latest_version_number = version_code.first.to_s.strip
+
+    UI.message("version_name: #{latest_version_name}")
+    UI.message("version_number: #{latest_version_number}")
   end
 
   desc "Assemble debug variants"
@@ -381,5 +369,79 @@ platform :android do
       aab: "authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab",
       mapping: "authenticator/build/outputs/mapping/release/mapping.txt",
     )
+  end
+
+  desc "Retrieve build from Github releases"
+    lane :retrieveBuildFromGithub do |options|
+
+    version_codes = Actions.lane_context[SharedValues::GOOGLE_PLAY_TRACK_VERSION_CODES]
+    UI.message("Version codes in beta track: #{version_codes}")
+  end
+
+  desc "Update release notes for all locales."
+  lane :updateReleaseNotes do |options|
+    changelog = options[:releaseNotes]
+    version_code = options[:versionCode]
+
+    auth_locales = ["en-US"]
+    pw_manager_locales = ["ca", "cs-CZ", "da-DK", "de-DE", "en-US", "es-ES", "et", "fr-FR", "hr", "hu-HU", "id", "it-IT", "iw-IL", "ja-JP", "nl-NL", "pl-PL", "pt-BR", "pt-PT", "ro", "ru-RU", "sk", "sv-SE", "tr-TR", "uk", "vi", "zh-CN", "zh-TW"]
+    if options[:packageName] == "com.bitwarden.authenticator"
+      locales = auth_locales
+    elsif options[:packageName] == "com.x8bit.bitwarden" || options[:packageName] == "com.x8bit.bitwarden.beta"
+      locales = pw_manager_locales
+    else
+      UI.important "Unexpected package name: #{options[:packageName]}, using default locales"
+      locales = pw_manager_locales
+    end
+
+    locales.each do |locale|
+      dir = "metadata/android/#{locale}/changelogs"
+      FileUtils.mkdir_p(dir)
+      File.write("#{dir}/#{version_code}.txt", changelog)
+    end
+  end
+
+  desc "Promote to production."
+  lane :promoteToProduction do |options|
+    release_options = {
+      package_name: options[:packageName],
+      version_code: options[:versionCode].to_i,
+      version_name: options[:versionName],
+      track: options[:track],
+      track_promote_to: options[:trackPromoteTo],
+      skip_release_verification: true,
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+    }
+
+    if options[:releaseNotes].nil? or options[:releaseNotes].to_s.empty?
+      release_options[:skip_upload_metadata] = true
+    else
+      release_options[:skip_upload_metadata] = false
+    end
+
+    if options[:rolloutPercentage].to_f < 1
+      release_options[:track_promote_release_status] = "inProgress"
+      release_options[:rollout] = options[:rolloutPercentage]
+    else
+      release_options[:release_status] = "completed"
+    end
+
+    begin
+    UI.message("🚀 Starting release to #{options[:trackPromoteTo]}...")
+
+    supply(release_options)
+
+      rescue => error
+      message = error.to_s
+
+      if message.include?("You cannot rollout this release because it does not allow any existing users to upgrade to the newly added APKs")
+        UI.error("❌ App Store Error: Cannot rollout release because no existing users can upgrade to the new build.")
+        UI.error("This might mean the version is older than what is currently available on the track, pick a newer build.")
+      else
+        UI.error("❌ Unexpected error during release: #{message}")
+      end
+      raise
+    end
   end
 end

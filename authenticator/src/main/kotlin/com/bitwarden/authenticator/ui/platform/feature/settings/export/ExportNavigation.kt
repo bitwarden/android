@@ -3,12 +3,14 @@ package com.bitwarden.authenticator.ui.platform.feature.settings.export
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import com.bitwarden.authenticator.ui.platform.base.util.composableWithSlideTransitions
+import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
 /**
- * Route for the export data screen.
+ * The type-safe route for the export screen.
  */
-const val EXPORT_ROUTE = "export"
+@Serializable
+data object ExportRoute
 
 /**
  * Add the export data destination to the nav graph.
@@ -16,7 +18,7 @@ const val EXPORT_ROUTE = "export"
 fun NavGraphBuilder.exportDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions(EXPORT_ROUTE) {
+    composableWithSlideTransitions<ExportRoute> {
         ExportScreen(
             onNavigateBack = onNavigateBack,
         )
@@ -27,5 +29,5 @@ fun NavGraphBuilder.exportDestination(
  * Navigate to the export data screen.
  */
 fun NavController.navigateToExport(navOptions: NavOptions? = null) {
-    navigate(EXPORT_ROUTE, navOptions)
+    navigate(route = ExportRoute, navOptions = navOptions)
 }

@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 // For more info on versioning, see the README.
-val version = "1.0.0"
+val version = "1.0.1"
 
 plugins {
     alias(libs.plugins.android.library)
@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         // This min value is selected to accommodate known consumers
-        minSdk = 28
+        minSdk = libs.versions.minSdkBwa.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -28,7 +28,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -46,7 +46,7 @@ android {
         outputs
             .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
             .forEach { output ->
-                val outputFileName = "authenticatorbridge-${version}-${variant.baseName}.aar"
+                val outputFileName = "authenticatorbridge-$version-${variant.baseName}.aar"
                 output.outputFileName = outputFileName
             }
     }
@@ -54,18 +54,22 @@ android {
 
 kotlin {
     compilerOptions {
-        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
+        jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
     }
 }
 
 dependencies {
     // SDK dependencies:
+    implementation(project(":annotation"))
+    implementation(project(":core"))
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.kotlinx.serialization)
     implementation(libs.kotlinx.coroutines.core)
 
     // Test environment dependencies:
+    testImplementation(platform(libs.junit.bom))
+    testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.junit.junit5)
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.square.turbine)

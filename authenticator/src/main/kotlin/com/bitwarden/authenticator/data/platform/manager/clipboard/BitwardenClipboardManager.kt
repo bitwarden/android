@@ -1,7 +1,7 @@
 package com.bitwarden.authenticator.data.platform.manager.clipboard
 
 import androidx.compose.ui.text.AnnotatedString
-import com.bitwarden.authenticator.ui.platform.base.util.Text
+import com.bitwarden.ui.util.Text
 
 /**
  * Wrapper class for using the clipboard.

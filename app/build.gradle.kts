@@ -10,19 +10,17 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.androidx.room)
     // Crashlytics is enabled for all builds initially but removed for FDroid builds in gradle and
     // standardDebug builds in the merged manifest.
     alias(libs.plugins.crashlytics)
-    alias(libs.plugins.detekt)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
-    alias(libs.plugins.sonarqube)
 }
 
 /**
@@ -49,26 +47,32 @@ android {
     namespace = "com.x8bit.bitwarden"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
+
     defaultConfig {
         applicationId = "com.x8bit.bitwarden"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "2024.9.0"
-
-        setProperty("archivesBaseName", "com.x8bit.bitwarden")
-
-        ksp {
-            // The location in which the generated Room Database Schemas will be stored in the repo.
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
+        versionCode = libs.versions.appVersionCode.get().toInt()
+        versionName = libs.versions.appVersionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Set the base archive name for publishing purposes. This is used to derive the APK and AAB
+        // artifact names when uploading to Firebase and Play Store.
+        base.archivesName = "com.x8bit.bitwarden"
 
         buildConfigField(
             type = "String",
             name = "CI_INFO",
-            value = "${ciProperties.getOrDefault("ci.info", "\"local\"")}"
+            value = "${ciProperties.getOrDefault("ci.info", "\"\uD83D\uDCBB local\"")}",
+        )
+        buildConfigField(
+            type = "String",
+            name = "SDK_VERSION",
+            value = "\"${libs.versions.bitwardenSdk.get()}\"",
         )
     }
 
@@ -102,9 +106,11 @@ android {
             applicationIdSuffix = ".beta"
             isDebuggable = false
             isMinifyEnabled = true
+            isShrinkResources = true
+            matchingFallbacks += listOf("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
 
             buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "false")
@@ -113,9 +119,10 @@ android {
         release {
             isDebuggable = false
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
 
             buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "false")
@@ -180,7 +187,6 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    @Suppress("UnstableApiUsage")
     testOptions {
         // Required for Robolectric
         unitTests.isIncludeAndroidResources = true
@@ -196,7 +202,7 @@ android {
 
 kotlin {
     compilerOptions {
-        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
+        jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
     }
 }
 
@@ -214,7 +220,13 @@ dependencies {
         add("standardImplementation", dependencyNotation)
     }
 
-    implementation(files("libs/authenticatorbridge-1.0.0-release.aar"))
+    implementation(files("libs/authenticatorbridge-1.0.1-release.aar"))
+
+    implementation(project(":annotation"))
+    implementation(project(":core"))
+    implementation(project(":data"))
+    implementation(project(":network"))
+    implementation(project(":ui"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
@@ -227,6 +239,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.adaptive)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
@@ -251,12 +264,10 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization)
-    implementation(libs.nulab.zxcvbn4j)
+    implementation(platform(libs.square.okhttp.bom))
     implementation(libs.square.okhttp)
-    implementation(libs.square.okhttp.logging)
     implementation(platform(libs.square.retrofit.bom))
     implementation(libs.square.retrofit)
-    implementation(libs.square.retrofit.kotlinx.serialization)
     implementation(libs.timber)
     implementation(libs.zxing.zxing.core)
 
@@ -270,105 +281,29 @@ dependencies {
     standardImplementation(libs.google.firebase.crashlytics)
     standardImplementation(libs.google.play.review)
 
+    // Pull in test fixtures from other modules
+    testImplementation(testFixtures(project(":data")))
+    testImplementation(testFixtures(project(":network")))
+    testImplementation(testFixtures(project(":ui")))
+
     testImplementation(libs.androidx.compose.ui.test)
     testImplementation(libs.google.hilt.android.testing)
+    testImplementation(platform(libs.junit.bom))
+    testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.junit.junit5)
     testImplementation(libs.junit.vintage)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.robolectric.robolectric)
-    testImplementation(libs.square.okhttp.mockwebserver)
     testImplementation(libs.square.turbine)
-
-    detektPlugins(libs.detekt.detekt.formatting)
-    detektPlugins(libs.detekt.detekt.rules)
-}
-
-detekt {
-    autoCorrect = true
-    config.from(files("$rootDir/detekt-config.yml"))
-}
-
-kover {
-    currentProject {
-        sources {
-            excludeJava = true
-        }
-    }
-    reports {
-        filters {
-            excludes {
-                androidGeneratedClasses()
-                annotatedBy(
-                    // Compose previews
-                    "androidx.compose.ui.tooling.preview.Preview",
-                    "androidx.compose.ui.tooling.preview.PreviewScreenSizes",
-                    // Manually excluded classes/files/etc.
-                    "com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage",
-                )
-                classes(
-                    // Navigation helpers
-                    "*.*NavigationKt*",
-                    // Composable singletons
-                    "*.*ComposableSingletons*",
-                    // Generated classes related to interfaces with default values
-                    "*.*DefaultImpls*",
-                    // Databases
-                    "*.database.*Database*",
-                    "*.dao.*Dao*",
-                    // Dagger Hilt
-                    "dagger.hilt.*",
-                    "hilt_aggregated_deps.*",
-                    "*_Factory",
-                    "*_Factory\$*",
-                    "*_*Factory",
-                    "*_*Factory\$*",
-                    "*.Hilt_*",
-                    "*_HiltModules",
-                    "*_HiltModules*",
-                    "*_HiltModules\$*",
-                    "*_Impl",
-                    "*_Impl\$*",
-                    "*_MembersInjector",
-                )
-                packages(
-                    // Dependency injection
-                    "*.di",
-                    // Models
-                    "*.model",
-                    // Custom UI components
-                    "com.x8bit.bitwarden.ui.platform.components",
-                    // Theme-related code
-                    "com.x8bit.bitwarden.ui.platform.theme",
-                )
-            }
-        }
-    }
 }
 
 tasks {
-    getByName("check") {
-        // Add detekt with type resolution to check
-        dependsOn("detekt")
-    }
-
-    getByName("sonar") {
-        dependsOn("check")
-    }
-
-    withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-        jvmTarget = libs.versions.jvmTarget.get()
-    }
-    withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
-        jvmTarget = libs.versions.jvmTarget.get()
-    }
-
     withType<Test> {
         useJUnitPlatform()
         maxHeapSize = "2g"
         maxParallelForks = Runtime.getRuntime().availableProcessors()
-        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC"
-        android.sourceSets["main"].res.srcDirs("src/test/res")
+        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" + "-Duser.country=US"
     }
 }
 
@@ -380,18 +315,6 @@ afterEvaluate {
     fdroidTasksToDisable
         .filter { it.name.contains("Fdroid") }
         .forEach { it.enabled = false }
-}
-
-sonar {
-    properties {
-        property("sonar.projectKey", "bitwarden_android")
-        property("sonar.organization", "bitwarden")
-        property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.sources", "app/src/")
-        property("sonar.tests", "app/src/")
-        property("sonar.test.inclusions", "app/src/test/")
-        property("sonar.exclusions", "app/src/test/")
-    }
 }
 
 private fun renameFile(path: String, newName: String) {

@@ -1,25 +1,36 @@
-name: Crowdin Sync
+name: Cron / Crowdin Pull
+run-name: Crowdin Pull - ${{ github.event_name == 'workflow_dispatch' && 'Manual' || 'Scheduled' }}
 
 on:
   workflow_dispatch:
-    inputs: {}
   schedule:
     - cron: '0 0 * * 5'
 
 jobs:
   crowdin-sync:
-    name: Autosync
+    name: Crowdin Pull - ${{ github.event_name }}
     runs-on: ubuntu-24.04
-    env:
-      _CROWDIN_PROJECT_ID: "269690"
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
     steps:
       - name: Checkout repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Login to Azure - CI Subscription
-        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
+      - name: Log in to Azure
+        uses: bitwarden/gh-actions/azure-login@main
         with:
-          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
+
+      - name: Get Azure Key Vault secrets
+        id: get-kv-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: gh-org-bitwarden
+          secrets: "BW-GHAPP-ID,BW-GHAPP-KEY"
 
       - name: Retrieve secrets
         id: retrieve-secrets
@@ -28,18 +39,22 @@ jobs:
           keyvault: "bitwarden-ci"
           secrets: "crowdin-api-token, github-gpg-private-key, github-gpg-private-key-passphrase"
 
+      - name: Log out from Azure
+        uses: bitwarden/gh-actions/azure-logout@main
+
       - name: Generate GH App token
-        uses: actions/create-github-app-token@c1a285145b9d317df6ced56c09f525b5c2b6f755 # v1.11.1
+        uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
         id: app-token
         with:
-          app-id: ${{ secrets.BW_GHAPP_ID }}
-          private-key: ${{ secrets.BW_GHAPP_KEY }}
+          app-id: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-ID }}
+          private-key: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-KEY }}
 
       - name: Download translations
-        uses: crowdin/github-action@d1632879d4d4da358f2d040f79fa094571c9a649 # v2.5.1
+        uses: crowdin/github-action@9fd07c1c5b36b15f082d1d860dc399f16f849bd7 # v2.9.0
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
+          _CROWDIN_PROJECT_ID: "269690"
         with:
           config: crowdin.yml
           upload_sources: false
@@ -47,10 +62,10 @@ jobs:
           download_translations: true
           github_user_name: "bitwarden-devops-bot"
           github_user_email: "106330231+bitwarden-devops-bot@users.noreply.github.com"
-          commit_message: "Autosync the updated translations"
-          localization_branch_name: crowdin-auto-sync
+          commit_message: "Crowdin Pull"
+          localization_branch_name: "crowdin-pull"
           create_pull_request: true
-          pull_request_title: "Autosync Crowdin Translations"
-          pull_request_body: "Autosync the updated translations"
+          pull_request_title: "Crowdin Pull"
+          pull_request_body: ":inbox_tray: New translations received!"
           gpg_private_key: ${{ steps.retrieve-secrets.outputs.github-gpg-private-key }}
           gpg_passphrase: ${{ steps.retrieve-secrets.outputs.github-gpg-private-key-passphrase }}

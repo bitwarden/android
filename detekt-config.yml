@@ -27,7 +27,7 @@ output-reports:
 
 comments:
   active: true
-  excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**', '**ServiceImpl.kt' ]
+  excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**', '**ServiceImpl.kt', '**/testFixtures/**' ]
   AbsentOrWrongFileLicense:
     active: false
     licenseTemplateFile: 'license.template'
@@ -101,7 +101,7 @@ complexity:
     ignoreStringsRegex: '$^'
   TooManyFunctions:
     active: true
-    excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
+    excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**', '**/testFixtures/**' ]
     thresholdInFiles: 11
     thresholdInClasses: 11
     thresholdInInterfaces: 11
@@ -399,6 +399,7 @@ naming:
     rootPackage: ''
   MatchingDeclarationName:
     active: true
+    excludes: [ '**/ui/**/*Navigation.kt' ]
     mustBeFirst: true
   MemberNameEqualsClassName:
     active: true

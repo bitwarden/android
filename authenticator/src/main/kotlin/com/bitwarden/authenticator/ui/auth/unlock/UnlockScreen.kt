@@ -1,6 +1,5 @@
 package com.bitwarden.authenticator.ui.auth.unlock
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,23 +20,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
-import com.bitwarden.authenticator.ui.platform.base.util.asText
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledTonalButton
 import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
-import com.bitwarden.authenticator.ui.platform.theme.LocalBiometricsManager
+import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asText
 
 /**
  * Top level composable for the unlock screen.
@@ -50,18 +49,11 @@ fun UnlockScreen(
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     onUnlocked: () -> Unit,
 ) {
-
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
     var showBiometricsPrompt by remember { mutableStateOf(true) }
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            is UnlockEvent.ShowToast -> {
-                Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
-            }
-
             UnlockEvent.NavigateToItemListing -> onUnlocked()
         }
     }
@@ -69,7 +61,7 @@ fun UnlockScreen(
     when (val dialog = state.dialog) {
         is UnlockState.Dialog.Error -> BitwardenBasicDialog(
             visibilityState = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
+                title = BitwardenString.an_error_has_occurred.asText(),
                 message = dialog.message,
             ),
             onDismissRequest = remember(viewModel) {
@@ -80,7 +72,7 @@ fun UnlockScreen(
         )
 
         UnlockState.Dialog.Loading -> BitwardenLoadingDialog(
-            visibilityState = LoadingDialogState.Shown(R.string.loading.asText()),
+            visibilityState = LoadingDialogState.Shown(BitwardenString.loading.asText()),
         )
 
         null -> Unit
@@ -131,12 +123,12 @@ fun UnlockScreen(
                         .height(74.dp)
                         .fillMaxWidth(),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                    painter = painterResource(id = R.drawable.ic_logo_horizontal),
-                    contentDescription = stringResource(R.string.bitwarden_authenticator),
+                    painter = painterResource(id = BitwardenDrawable.ic_logo_horizontal),
+                    contentDescription = stringResource(BitwardenString.bitwarden_authenticator),
                 )
                 Spacer(modifier = Modifier.height(32.dp))
-                BitwardenFilledTonalButton(
-                    label = stringResource(id = R.string.use_biometrics_to_unlock),
+                AuthenticatorFilledTonalButton(
+                    label = stringResource(id = BitwardenString.use_biometrics_to_unlock),
                     onClick = {
                         biometricsManager.promptBiometrics(
                             onSuccess = onBiometricsUnlock,

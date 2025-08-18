@@ -1,0 +1,218 @@
+package com.x8bit.bitwarden.data.credentials.processor
+
+import android.content.Context
+import android.os.Build
+import android.os.CancellationSignal
+import android.os.OutcomeReceiver
+import androidx.annotation.RequiresApi
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
+import androidx.credentials.CredentialManager
+import androidx.credentials.exceptions.ClearCredentialException
+import androidx.credentials.exceptions.ClearCredentialUnsupportedException
+import androidx.credentials.exceptions.CreateCredentialCancellationException
+import androidx.credentials.exceptions.CreateCredentialException
+import androidx.credentials.exceptions.CreateCredentialUnknownException
+import androidx.credentials.exceptions.GetCredentialCancellationException
+import androidx.credentials.exceptions.GetCredentialException
+import androidx.credentials.exceptions.GetCredentialUnknownException
+import androidx.credentials.provider.AuthenticationAction
+import androidx.credentials.provider.BeginCreateCredentialRequest
+import androidx.credentials.provider.BeginCreateCredentialResponse
+import androidx.credentials.provider.BeginCreatePublicKeyCredentialRequest
+import androidx.credentials.provider.BeginGetCredentialRequest
+import androidx.credentials.provider.BeginGetCredentialResponse
+import androidx.credentials.provider.BiometricPromptData
+import androidx.credentials.provider.CreateEntry
+import androidx.credentials.provider.ProviderClearCredentialStateRequest
+import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
+import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
+import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import java.time.Clock
+import javax.crypto.Cipher
+
+/**
+ * The default implementation of [CredentialProviderProcessor]. Its purpose is to handle
+ * [CredentialManager] requests from other applications.
+ */
+@Suppress("LongParameterList", "TooManyFunctions")
+@RequiresApi(Build.VERSION_CODES.S)
+class CredentialProviderProcessorImpl(
+    private val context: Context,
+    private val authRepository: AuthRepository,
+    private val bitwardenCredentialManager: BitwardenCredentialManager,
+    private val pendingIntentManager: CredentialManagerPendingIntentManager,
+    private val clock: Clock,
+    private val biometricsEncryptionManager: BiometricsEncryptionManager,
+    dispatcherManager: DispatcherManager,
+) : CredentialProviderProcessor {
+
+    private val ioScope = CoroutineScope(dispatcherManager.io)
+
+    override fun processCreateCredentialRequest(
+        request: BeginCreateCredentialRequest,
+        cancellationSignal: CancellationSignal,
+        callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException>,
+    ) {
+        val userId = authRepository.activeUserId
+        if (userId == null) {
+            callback.onError(CreateCredentialUnknownException("Active user is required."))
+            return
+        }
+
+        val createCredentialJob = ioScope.launch {
+            processCreateCredentialRequest(request = request)
+                ?.let { callback.onResult(it) }
+                ?: callback.onError(CreateCredentialUnknownException())
+        }
+        cancellationSignal.setOnCancelListener {
+            if (createCredentialJob.isActive) {
+                createCredentialJob.cancel()
+            }
+            callback.onError(CreateCredentialCancellationException())
+        }
+    }
+
+    override fun processGetCredentialRequest(
+        request: BeginGetCredentialRequest,
+        cancellationSignal: CancellationSignal,
+        callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException>,
+    ) {
+        // If the user is not logged in, return an error.
+        val userState = authRepository.userStateFlow.value
+        if (userState == null) {
+            callback.onError(GetCredentialUnknownException("Active user is required."))
+            return
+        }
+
+        // Return an unlock action if the current account is locked.
+        if (!userState.activeAccount.isVaultUnlocked) {
+            val authenticationAction = AuthenticationAction(
+                title = context.getString(BitwardenString.unlock),
+                pendingIntent = pendingIntentManager.createFido2UnlockPendingIntent(
+                    userId = userState.activeUserId,
+                ),
+            )
+
+            callback.onResult(
+                BeginGetCredentialResponse(
+                    authenticationActions = listOf(authenticationAction),
+                ),
+            )
+            return
+        }
+
+        // Otherwise, find all matching credentials from the current vault.
+        val getCredentialJob = ioScope.launch {
+            bitwardenCredentialManager
+                .getCredentialEntries(
+                    getCredentialsRequest = GetCredentialsRequest(
+                        userId = userState.activeUserId,
+                        BeginGetCredentialRequest.asBundle(request),
+                    ),
+                )
+                .onSuccess { callback.onResult(BeginGetCredentialResponse(credentialEntries = it)) }
+                .onFailure { callback.onError(GetCredentialUnknownException(it.message)) }
+        }
+        cancellationSignal.setOnCancelListener {
+            callback.onError(GetCredentialCancellationException())
+            getCredentialJob.cancel()
+        }
+    }
+
+    override fun processClearCredentialStateRequest(
+        request: ProviderClearCredentialStateRequest,
+        cancellationSignal: CancellationSignal,
+        callback: OutcomeReceiver<Void?, ClearCredentialException>,
+    ) {
+        // no-op: RFU
+        callback.onError(ClearCredentialUnsupportedException())
+    }
+
+    private fun processCreateCredentialRequest(
+        request: BeginCreateCredentialRequest,
+    ): BeginCreateCredentialResponse? {
+        return when (request) {
+            is BeginCreatePublicKeyCredentialRequest -> {
+                handleCreatePasskeyQuery(request)
+            }
+
+            else -> null
+        }
+    }
+
+    private fun handleCreatePasskeyQuery(
+        request: BeginCreatePublicKeyCredentialRequest,
+    ): BeginCreateCredentialResponse? {
+        val requestJson = request
+            .candidateQueryData
+            .getString("androidx.credentials.BUNDLE_KEY_REQUEST_JSON")
+
+        if (requestJson.isNullOrEmpty()) return null
+
+        val userState = authRepository.userStateFlow.value ?: return null
+
+        return BeginCreateCredentialResponse.Builder()
+            .setCreateEntries(userState.accounts.toCreateEntries(userState.activeUserId))
+            .build()
+    }
+
+    private fun List<UserState.Account>.toCreateEntries(activeUserId: String) =
+        map { it.toCreateEntry(isActive = activeUserId == it.userId) }
+
+    private fun UserState.Account.toCreateEntry(isActive: Boolean): CreateEntry {
+        val accountName = name ?: email
+        val entryBuilder = CreateEntry
+            .Builder(
+                accountName = accountName,
+                pendingIntent = pendingIntentManager.createFido2CreationPendingIntent(
+                    userId = userId,
+                ),
+            )
+            .setDescription(
+                context.getString(
+                    BitwardenString.your_passkey_will_be_saved_to_your_bitwarden_vault_for_x,
+                    accountName,
+                ),
+            )
+            // Set the last used time to "now" so the active account is the default option in the
+            // system prompt.
+            .setLastUsedTime(if (isActive) clock.instant() else null)
+            .setAutoSelectAllowed(true)
+
+        if (isVaultUnlocked) {
+            biometricsEncryptionManager
+                .getOrCreateCipher(userId)
+                ?.let { entryBuilder.setBiometricPromptDataIfSupported(cipher = it) }
+        }
+        return entryBuilder.build()
+    }
+
+    private fun CreateEntry.Builder.setBiometricPromptDataIfSupported(
+        cipher: Cipher,
+    ): CreateEntry.Builder {
+        return if (!isBuildVersionAtLeast(Build.VERSION_CODES.VANILLA_ICE_CREAM)) {
+            this
+        } else {
+            setBiometricPromptData(
+                biometricPromptData = buildPromptDataWithCipher(cipher),
+            )
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
+    private fun buildPromptDataWithCipher(
+        cipher: Cipher,
+    ): BiometricPromptData = BiometricPromptData.Builder()
+        .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+        .setCryptoObject(BiometricPrompt.CryptoObject(cipher))
+        .build()
+}
