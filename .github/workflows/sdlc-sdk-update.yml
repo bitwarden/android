@@ -18,6 +18,10 @@ on:
         description: "SDK Version"
         default: "1.0.0-2577-fix-wasm-import"
 
+permissions:
+  contents: read
+  packages: read
+
 env:
   _JAVA_VERSION: 17
 
@@ -26,8 +30,6 @@ jobs:
     name: Update SDK
     if: ${{ inputs.run-mode == 'Update' }}
     runs-on: ubuntu-24.04
-    permissions:
-      packages: read
 
     steps:
       - name: Check out repo
@@ -75,13 +77,22 @@ jobs:
           git commit -m "SDK Update - $_SDK_PACKAGE $_SDK_VERSION"
           git push origin $_BRANCH_NAME
 
-      # TODO update description with sdk changelog since last update
       - name: Create Pull Request
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _BRANCH_NAME: ${{ steps.switch-branch.outputs.branch_name }}
+          _SDK_PACKAGE: ${{ inputs.sdk-package }}
+          _SDK_VERSION: ${{ inputs.sdk-version }}
+          _OLD_SDK_VERSION: ${{ steps.get-current-sdk.outputs.version }}
+          _OLD_SDK_GIT_REF: ${{ steps.get-current-sdk.outputs.git_ref }}
         run: |
-          PR_BODY="Updates the SDK version to $_SDK_PACKAGE $_SDK_VERSION"
+          NEW_SDK_GIT_REF=$(echo "$_SDK_VERSION" | cut -d'-' -f3-)
+          CHANGELOG=$(./scripts/get-sdk-changelog.sh "$_OLD_SDK_GIT_REF" "$NEW_SDK_GIT_REF")
+          PR_BODY="Updates the SDK version from \`$_OLD_SDK_VERSION\` to \`$_SDK_PACKAGE $_SDK_VERSION\`
+
+          ## What's Changed
+
+          $CHANGELOG"
 
           # Use echo -e to interpret escape sequences and pipe to gh pr create
           PR_URL=$(echo -e "$PR_BODY" | gh pr create \
@@ -92,12 +103,12 @@ jobs:
             --label "automated-pr" \
             --label "t:ci")
 
+          echo "🚀 Created PR: $PR_URL"
+
   test:
     name: Test SDK Update
     if: ${{ inputs.run-mode == 'Test' }}
     runs-on: ubuntu-24.04
-    permissions:
-      packages: read
 
     steps:
       - name: Check out repo
