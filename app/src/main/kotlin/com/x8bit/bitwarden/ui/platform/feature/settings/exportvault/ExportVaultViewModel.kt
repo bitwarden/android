@@ -21,6 +21,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
@@ -54,6 +56,7 @@ class ExportVaultViewModel @Inject constructor(
     private val fileManager: FileManager,
     private val clock: Clock,
     private val featureFlagManager: FeatureFlagManager,
+    private val organizationEventManager: OrganizationEventManager,
 ) : BaseViewModel<ExportVaultState, ExportVaultEvent, ExportVaultAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: ExportVaultState(
@@ -402,6 +405,9 @@ class ExportVaultViewModel @Inject constructor(
             return
         }
 
+        organizationEventManager.trackEvent(
+            event = OrganizationEvent.UserClientExportedVault,
+        )
         sendEvent(ExportVaultEvent.ShowSnackbar(BitwardenString.export_vault_success.asText()))
     }
 

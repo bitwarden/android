@@ -22,7 +22,9 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
@@ -31,7 +33,9 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.Export
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -82,6 +86,10 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         every {
             getFeatureFlag(FlagKey.RemoveCardPolicy)
         } returns false
+    }
+
+    private val organizationEventManager = mockk<OrganizationEventManager> {
+        every { trackEvent(event = any()) } just runs
     }
 
     @Test
@@ -792,27 +800,39 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ExportLocationReceive should emit ShowSnackbar on success`() = runTest {
-        val exportData = "TestExportVaultData"
-        val viewModel = createViewModel(
-            DEFAULT_STATE.copy(
-                exportData = exportData,
-            ),
-        )
-        val uri = mockk<Uri>()
-        coEvery { fileManager.stringToUri(fileUri = any(), dataString = exportData) } returns true
-
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ExportVaultAction.ExportLocationReceive(uri))
-
-            coVerify { fileManager.stringToUri(fileUri = any(), dataString = exportData) }
-
-            assertEquals(
-                ExportVaultEvent.ShowSnackbar(BitwardenString.export_vault_success.asText()),
-                awaitItem(),
+    fun `ExportLocationReceive should emit ShowSnackbar and UserClientExportedVault on success`() =
+        runTest {
+            val exportData = "TestExportVaultData"
+            val viewModel = createViewModel(
+                DEFAULT_STATE.copy(
+                    exportData = exportData,
+                ),
             )
+            val uri = mockk<Uri>()
+            coEvery {
+                fileManager.stringToUri(
+                    fileUri = any(),
+                    dataString = exportData,
+                )
+            } returns true
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(ExportVaultAction.ExportLocationReceive(uri))
+
+                coVerify { fileManager.stringToUri(fileUri = any(), dataString = exportData) }
+
+                verify(exactly = 1) {
+                    organizationEventManager.trackEvent(
+                        event = OrganizationEvent.UserClientExportedVault,
+                    )
+                }
+
+                assertEquals(
+                    ExportVaultEvent.ShowSnackbar(BitwardenString.export_vault_success.asText()),
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     private fun createViewModel(
         initialState: ExportVaultState? = null,
@@ -826,6 +846,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         vaultRepository = vaultRepository,
         clock = clock,
         featureFlagManager = featureFlagManager,
+        organizationEventManager = organizationEventManager,
     )
 }
 
