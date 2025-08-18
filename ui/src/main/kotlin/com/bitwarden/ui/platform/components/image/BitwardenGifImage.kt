@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.image
+package com.bitwarden.ui.platform.components.image
 
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
