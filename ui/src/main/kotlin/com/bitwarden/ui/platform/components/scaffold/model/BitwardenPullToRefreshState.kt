@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.model
+package com.bitwarden.ui.platform.components.scaffold.model
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

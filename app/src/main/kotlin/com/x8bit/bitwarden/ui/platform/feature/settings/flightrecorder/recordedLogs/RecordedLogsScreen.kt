@@ -42,6 +42,7 @@ import com.bitwarden.ui.platform.components.content.BitwardenEmptyContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
@@ -53,7 +54,6 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import kotlinx.collections.immutable.persistentListOf
 
 /**

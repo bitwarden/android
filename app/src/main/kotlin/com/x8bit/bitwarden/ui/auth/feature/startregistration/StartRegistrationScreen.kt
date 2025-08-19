@@ -46,6 +46,7 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -63,7 +64,6 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.handlers.rememberSt
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 
 /**
  * Top level composable for the start registration screen.

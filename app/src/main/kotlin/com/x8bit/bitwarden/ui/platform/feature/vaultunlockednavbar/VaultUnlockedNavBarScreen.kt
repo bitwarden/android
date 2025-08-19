@@ -21,9 +21,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.navigation.model.NavigationItem
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.scaffold.model.ScaffoldNavigationData
 import com.bitwarden.ui.platform.theme.RootTransitionProviders
-import com.x8bit.bitwarden.ui.platform.components.model.ScaffoldNavigationData
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.navigateToAbout

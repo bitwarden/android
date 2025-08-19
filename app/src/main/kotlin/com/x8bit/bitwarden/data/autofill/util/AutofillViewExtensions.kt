@@ -11,29 +11,34 @@ import com.x8bit.bitwarden.data.autofill.model.FilledItem
 fun AutofillView.buildFilledItemOrNull(
     value: String,
 ): FilledItem? =
-    when (this.data.autofillType) {
-        View.AUTOFILL_TYPE_DATE -> {
-            value
-                .toLongOrNull()
-                ?.let { AutofillValue.forDate(it) }
-        }
+    // Do not try to autofill fields that are empty in the vault
+    if (value.isEmpty()) {
+        null
+    } else {
+        when (this.data.autofillType) {
+            View.AUTOFILL_TYPE_DATE -> {
+                value
+                    .toLongOrNull()
+                    ?.let { AutofillValue.forDate(it) }
+            }
 
-        View.AUTOFILL_TYPE_LIST -> this.buildListAutofillValueOrNull(value = value)
-        View.AUTOFILL_TYPE_TEXT -> AutofillValue.forText(value)
-        View.AUTOFILL_TYPE_TOGGLE -> {
-            value
-                .toBooleanStrictOrNull()
-                ?.let { AutofillValue.forToggle(it) }
-        }
+            View.AUTOFILL_TYPE_LIST -> this.buildListAutofillValueOrNull(value = value)
+            View.AUTOFILL_TYPE_TEXT -> AutofillValue.forText(value)
+            View.AUTOFILL_TYPE_TOGGLE -> {
+                value
+                    .toBooleanStrictOrNull()
+                    ?.let { AutofillValue.forToggle(it) }
+            }
 
-        else -> null
+            else -> null
+        }
+            ?.let { autofillValue ->
+                FilledItem(
+                    autofillId = this.data.autofillId,
+                    value = autofillValue,
+                )
+            }
     }
-        ?.let { autofillValue ->
-            FilledItem(
-                autofillId = this.data.autofillId,
-                value = autofillValue,
-            )
-        }
 
 /**
  * Build a list [AutofillValue] out of [value] or return null if not possible.
