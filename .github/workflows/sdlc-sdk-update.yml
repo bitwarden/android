@@ -13,10 +13,11 @@ on:
         default: Test
       sdk-package:
         description: "SDK Package"
-        default: "com.bitwarden:sdk-android.dev"
+        default: "com.bitwarden:sdk-android"
       sdk-version:
         description: "SDK Version"
-        default: "1.0.0-2663-3355fed7"
+        default: "1.0.0-2451-48134927"
+        #default: "1.0.0-2493-bceb681a" # broke android
 
 jobs:
   update:
@@ -160,4 +161,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Used in settings.gradle.kts to download the SDK from GitHub Maven Packages
         run: |
-          bundle exec fastlane assembleDebugApks
+          ./gradlew assembleDebug --warn
