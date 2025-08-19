@@ -8,18 +8,20 @@ on:
         description: "Run Mode"
         type: choice
         options:
-          - Update # opens a PR in this repo updating the SDK
           - Test # used for testing sdk-internal repo PRs
+          - Update # opens a PR in this repo updating the SDK
         default: Test
       sdk-package:
-        description: "SDK Package"
-        default: "com.bitwarden:sdk-android"
+        description: "SDK Package ID"
+        required: true
+        default: "com.bitwarden:sdk-android.dev"
       sdk-version:
         description: "SDK Version"
-        default: "1.0.0-2451-48134927"
-        #default: "1.0.0-2493-bceb681a" # broke android
+        required: true
+        default: "1.0.0-2686-km-update-kdf-sdk"
       pr-id:
         description: "Pull Request ID"
+        default: "383"
 
 jobs:
   update:
