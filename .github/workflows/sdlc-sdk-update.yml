@@ -1,5 +1,5 @@
 name: SDLC / SDK Update
-run-name: ${{ format('SDK Update - {0} {1}', inputs.run-mode, inputs.sdk-version) }}
+run-name: ${{ format('SDK {0} - {1}', inputs.run-mode, inputs.sdk-version) }}
 
 on:
   workflow_dispatch:
@@ -21,7 +21,7 @@ on:
 
 jobs:
   update:
-    name: Update SDK
+    name: Update and PR
     if: ${{ inputs.run-mode == 'Update' }}
     runs-on: ubuntu-24.04
     permissions:
@@ -131,7 +131,7 @@ jobs:
           echo "## 🚀 Created PR: $PR_URL" >> $GITHUB_STEP_SUMMARY
 
   test:
-    name: Test SDK Update
+    name: Test Update
     if: ${{ inputs.run-mode == 'Test' }}
     runs-on: ubuntu-24.04
     permissions:
