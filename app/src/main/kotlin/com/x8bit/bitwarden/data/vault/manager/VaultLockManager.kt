@@ -65,6 +65,8 @@ interface VaultLockManager {
         email: String,
         kdf: Kdf,
         privateKey: String,
+        signingKey: String?,
+        securityState: String?,
         initUserCryptoMethod: InitUserCryptoMethod,
         organizationKeys: Map<String, String>?,
     ): VaultUnlockResult
