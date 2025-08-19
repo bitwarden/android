@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.util
+package com.bitwarden.ui.util
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
@@ -12,7 +12,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
 
 private const val ACCOUNT = "Account"
 private const val ADD_ACCOUNT = "Add account"

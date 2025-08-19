@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.model
+package com.bitwarden.ui.platform.components.account.model
 
 import android.os.Parcelable
 import androidx.compose.ui.graphics.Color

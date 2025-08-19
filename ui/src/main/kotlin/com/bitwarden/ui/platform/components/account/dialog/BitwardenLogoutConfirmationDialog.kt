@@ -1,10 +1,10 @@
-package com.x8bit.bitwarden.ui.platform.components.dialog
+package com.bitwarden.ui.platform.components.account.dialog
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 
 /**
  * A reusable dialog for confirming whether or not the user wants to log out.
