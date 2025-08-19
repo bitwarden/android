@@ -87,7 +87,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText(text = "Save")
+            .onNodeWithText(text = "Apply")
             .assertIsDisplayed()
     }
 
@@ -104,7 +104,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText(text = "Save")
+            .onNodeWithText(text = "Apply")
             .assertIsDisplayed()
     }
 
@@ -126,7 +126,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on save click should send SaveClick`() {
+    fun `on Apply click should send SaveClick`() {
         updateState(
             DEFAULT_STATE.copy(
                 generatorMode = GeneratorMode.Modal.Username(website = null),
@@ -134,7 +134,7 @@ class GeneratorScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithText(text = "Save")
+            .onNodeWithText(text = "Apply")
             .performClick()
 
         verify {
