@@ -21,7 +21,6 @@ on:
         default: "1.0.0-2686-km-update-kdf-sdk"
       pr-id:
         description: "Pull Request ID"
-        default: "383"
 
 jobs:
   update:
