@@ -56,6 +56,9 @@ import com.bitwarden.ui.platform.components.field.model.TextToolbarType
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
+import com.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
+import com.bitwarden.ui.platform.components.segment.SegmentedButtonOptionContent
+import com.bitwarden.ui.platform.components.segment.SegmentedButtonState
 import com.bitwarden.ui.platform.components.slider.BitwardenSlider
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
@@ -80,9 +83,6 @@ import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighl
 import com.x8bit.bitwarden.ui.platform.components.coachmark.rememberLazyListCoachMarkState
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
-import com.x8bit.bitwarden.ui.platform.components.segment.SegmentedButtonOptionContent
-import com.x8bit.bitwarden.ui.platform.components.segment.SegmentedButtonState
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passphrase.Companion.PASSPHRASE_MAX_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passphrase.Companion.PASSPHRASE_MIN_NUMBER_OF_WORDS

@@ -40,6 +40,8 @@ import com.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorButton
 import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
+import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -48,8 +50,6 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
-import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendCustomDateChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendDeletionDateChooser

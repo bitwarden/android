@@ -54,12 +54,18 @@ class ViewNodeExtensionsTest {
         mockkStatic(Int::isPasswordInputType)
         mockkStatic(Int::isUsernameInputType)
         mockkStatic(AutofillValue::extractMonthValue)
+        mockkStatic(AutofillValue::extractYearValue)
         mockkStatic(AutofillValue::extractTextValue)
         every {
             testAutofillValue.extractMonthValue(
                 autofillOptions = AUTOFILL_OPTIONS_LIST,
             )
         } returns MONTH_VALUE
+        every {
+            testAutofillValue.extractYearValue(
+                autofillOptions = AUTOFILL_OPTIONS_LIST,
+            )
+        } returns YEAR_VALUE
         every { testAutofillValue.extractTextValue() } returns TEXT_VALUE
     }
 
@@ -70,6 +76,7 @@ class ViewNodeExtensionsTest {
         unmockkStatic(Int::isPasswordInputType)
         unmockkStatic(Int::isUsernameInputType)
         unmockkStatic(AutofillValue::extractMonthValue)
+        unmockkStatic(AutofillValue::extractYearValue)
         unmockkStatic(AutofillValue::extractTextValue)
     }
 
@@ -170,6 +177,7 @@ class ViewNodeExtensionsTest {
         val autofillHint = View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR
         val expected = AutofillView.Card.ExpirationYear(
             data = autofillViewData,
+            yearValue = YEAR_VALUE,
         )
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
@@ -183,6 +191,7 @@ class ViewNodeExtensionsTest {
         setupUnsupportedInputFieldViewNode()
         val expected = AutofillView.Card.ExpirationYear(
             data = autofillViewData,
+            yearValue = YEAR_VALUE,
         )
         SUPPORTED_RAW_CARD_EXP_YEAR_HINTS.forEach { hint ->
             every { viewNode.hint } returns hint
@@ -199,6 +208,7 @@ class ViewNodeExtensionsTest {
         setupUnsupportedInputFieldViewNode()
         val expected = AutofillView.Card.ExpirationYear(
             data = autofillViewData,
+            yearValue = YEAR_VALUE,
         )
         every { viewNode.htmlInfo.hints() } returns SUPPORTED_RAW_CARD_EXP_YEAR_HINTS
 
@@ -495,6 +505,7 @@ class ViewNodeExtensionsTest {
         val autofillHintTwo = View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR
         val expected = AutofillView.Card.ExpirationYear(
             data = autofillViewData,
+            yearValue = YEAR_VALUE,
         )
         every { viewNode.autofillHints } returns arrayOf(autofillHintOne, autofillHintTwo)
 
@@ -855,4 +866,5 @@ private val SUPPORTED_RAW_CARDHOLDER_NAME_HINTS: List<String> = listOf(
     "name_on_card",
 )
 private const val MONTH_VALUE: String = "MONTH_VALUE"
+private const val YEAR_VALUE: String = "YEAR_VALUE"
 private const val TEXT_VALUE: String = "TEXT_VALUE"

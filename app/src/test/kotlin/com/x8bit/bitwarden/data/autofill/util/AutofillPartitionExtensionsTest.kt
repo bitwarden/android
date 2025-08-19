@@ -26,6 +26,7 @@ class AutofillPartitionExtensionsTest {
         hasPasswordTerms = false,
     )
 
+    //region Card tests
     @Test
     fun `expirationMonthSaveValue should return null when no month views present`() {
         // Setup
@@ -107,6 +108,7 @@ class AutofillPartitionExtensionsTest {
             views = listOf(
                 AutofillView.Card.ExpirationYear(
                     data = autofillDataEmptyText,
+                    yearValue = null,
                 ),
             ),
         )
@@ -125,6 +127,7 @@ class AutofillPartitionExtensionsTest {
             views = listOf(
                 AutofillView.Card.ExpirationYear(
                     data = autofillDataValidText,
+                    yearValue = TEXT_VALUE,
                 ),
             ),
         )
@@ -143,6 +146,7 @@ class AutofillPartitionExtensionsTest {
             views = listOf(
                 AutofillView.Card.ExpirationYear(
                     data = autofillDataValidText,
+                    yearValue = TEXT_VALUE,
                 ),
             ),
         )
@@ -197,6 +201,7 @@ class AutofillPartitionExtensionsTest {
             views = listOf(
                 AutofillView.Card.ExpirationYear(
                     data = autofillDataValidText,
+                    yearValue = TEXT_VALUE,
                 ),
             ),
         )
@@ -244,6 +249,60 @@ class AutofillPartitionExtensionsTest {
         assertEquals(TEXT_VALUE, actual)
     }
 
+    @Test
+    fun `cardholderNameSaveValue should return null when no name views present`() {
+        // Setup
+        val autofillPartition = AutofillPartition.Card(
+            views = listOf(
+                AutofillView.Card.ExpirationYear(
+                    data = autofillDataValidText,
+                    yearValue = TEXT_VALUE,
+                ),
+            ),
+        )
+
+        // Test
+        val actual = autofillPartition.cardholderNameSaveValue
+
+        // Verify
+        assertNull(actual)
+    }
+
+    @Test
+    fun `cardholderNameSaveValue should return null when has name view but no textValue`() {
+        // Setup
+        val autofillPartition = AutofillPartition.Card(
+            views = listOf(
+                AutofillView.Card.CardholderName(
+                    data = autofillDataEmptyText,
+                ),
+            ),
+        )
+
+        val actual = autofillPartition.cardholderNameSaveValue
+
+        assertNull(actual)
+    }
+
+    @Test
+    fun `cardholderNameSaveValue should return text value when has name view has textValue`() {
+        // Setup
+        val autofillPartition = AutofillPartition.Card(
+            views = listOf(
+                AutofillView.Card.CardholderName(
+                    data = autofillDataValidText,
+                ),
+            ),
+        )
+
+        val actual = autofillPartition.cardholderNameSaveValue
+
+        assertEquals(TEXT_VALUE, actual)
+    }
+
+    //endregion Card tests
+
+    // region Login tests
     @Test
     fun `passwordSaveValue should return null when no password views present`() {
         // Setup
@@ -351,6 +410,7 @@ class AutofillPartitionExtensionsTest {
         // Verify
         assertEquals(TEXT_VALUE, actual)
     }
+    //endregion Login tests
 }
 
 private const val TEXT_VALUE: String = "TEXT_VALUE"

@@ -48,10 +48,14 @@ sealed class AutofillView {
         ) : Card()
 
         /**
-         * The expiration year [AutofillView] for the [Card] data partition.
+         * The expiration year [AutofillView] for the [Card] data partition. This implementation
+         * also has its own [yearValue] because it can be present in lists, in which case there
+         * is specialized logic for determining its [yearValue]. The [Data.textValue] is very
+         * likely going to be a very different value.
          */
         data class ExpirationYear(
             override val data: Data,
+            val yearValue: String?,
         ) : Card()
 
         /**

@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.radio.color
+package com.bitwarden.ui.platform.components.radio.color
 
 import androidx.compose.material3.RadioButtonColors
 import androidx.compose.runtime.Composable
