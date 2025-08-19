@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.dropdown
+package com.bitwarden.ui.platform.components.dropdown
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -23,11 +23,11 @@ import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.components.button.BitwardenTextSelectionButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
+import com.bitwarden.ui.platform.components.dropdown.model.MultiSelectOption
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.ui.platform.components.dropdown.model.MultiSelectOption
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList

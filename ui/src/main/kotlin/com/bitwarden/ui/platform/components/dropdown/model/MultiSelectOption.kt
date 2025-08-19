@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.dropdown.model
+package com.bitwarden.ui.platform.components.dropdown.model
 
 /**
  * Represents an option in a multi-select list, which can either be a header or a selectable row.

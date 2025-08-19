@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.bottomsheet
+package com.bitwarden.ui.platform.components.bottomsheet
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets

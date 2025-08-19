@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.account
+package com.bitwarden.ui.platform.components.account
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -52,6 +52,13 @@ import com.bitwarden.ui.platform.base.util.lowercaseWithCurrentLocal
 import com.bitwarden.ui.platform.base.util.scrolledContainerBackground
 import com.bitwarden.ui.platform.base.util.toSafeOverlayColor
 import com.bitwarden.ui.platform.base.util.toUnscaledTextUnit
+import com.bitwarden.ui.platform.components.account.dialog.BitwardenLogoutConfirmationDialog
+import com.bitwarden.ui.platform.components.account.dialog.BitwardenRemovalConfirmationDialog
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
+import com.bitwarden.ui.platform.components.account.util.iconRes
+import com.bitwarden.ui.platform.components.account.util.iconTestTag
+import com.bitwarden.ui.platform.components.account.util.initials
+import com.bitwarden.ui.platform.components.account.util.supportingTextResOrNull
 import com.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
@@ -60,13 +67,6 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLogoutConfirmationDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenRemovalConfirmationDialog
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconRes
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconTestTag
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.supportingTextResOrNull
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 

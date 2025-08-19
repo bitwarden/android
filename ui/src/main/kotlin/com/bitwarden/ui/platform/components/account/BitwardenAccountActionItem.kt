@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.account
+package com.bitwarden.ui.platform.components.account
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.R
 import com.bitwarden.ui.platform.base.util.toSafeOverlayColor
 import com.bitwarden.ui.platform.base.util.toUnscaledTextUnit
 import com.bitwarden.ui.platform.components.button.color.bitwardenStandardIconButtonColors
@@ -54,7 +55,7 @@ fun BitwardenAccountActionItem(
             style = TextStyle(
                 fontSize = 11.dp.toUnscaledTextUnit(),
                 lineHeight = 13.dp.toUnscaledTextUnit(),
-                fontFamily = FontFamily(Font(com.bitwarden.ui.R.font.dm_sans_bold)),
+                fontFamily = FontFamily(Font(R.font.dm_sans_bold)),
                 fontWeight = FontWeight.W600,
             ),
             color = color.toSafeOverlayColor(),
