@@ -26,19 +26,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.style.Hyphens
+import androidx.compose.ui.text.style.LineBreak
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.base.util.toDp
+import com.bitwarden.ui.platform.base.util.toMaxScale
 import com.bitwarden.ui.platform.components.segment.color.bitwardenSegmentedButtonColors
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.ImmutableList
-
-private const val FONT_SCALE_THRESHOLD = 1.5f
 
 /**
  * Displays a Bitwarden styled row of segmented buttons.
@@ -107,12 +107,6 @@ fun SingleChoiceSegmentedButtonRowScope.SegmentedButtonOptionContent(
     option: SegmentedButtonState,
     modifier: Modifier = Modifier,
 ) {
-    val fontScale = LocalConfiguration.current.fontScale
-    val labelVerticalPadding = if (fontScale > FONT_SCALE_THRESHOLD) {
-        8.dp
-    } else {
-        0.dp
-    }
     SegmentedButton(
         enabled = option.isEnabled,
         selected = option.isChecked,
@@ -123,13 +117,12 @@ fun SingleChoiceSegmentedButtonRowScope.SegmentedButtonOptionContent(
         label = {
             Text(
                 text = option.text,
-                style = BitwardenTheme.typography.labelLarge.copy(
-                    hyphens = Hyphens.Auto,
-                ),
-                modifier = Modifier.padding(
-                    vertical = labelVerticalPadding,
-                    horizontal = 4.dp,
-                ),
+                style = BitwardenTheme.typography.labelLarge
+                    .copy(lineBreak = LineBreak.Heading)
+                    .toMaxScale(maxScaleFactor = 2f),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center,
             )
         },
         icon = {
