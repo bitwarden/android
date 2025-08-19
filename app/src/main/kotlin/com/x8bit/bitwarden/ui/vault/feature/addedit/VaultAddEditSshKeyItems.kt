@@ -27,20 +27,6 @@ fun LazyListScope.vaultAddEditSshKeyItems(
 ) {
     item {
         Spacer(modifier = Modifier.height(8.dp))
-        BitwardenTextField(
-            label = stringResource(id = BitwardenString.public_key),
-            value = sshKeyState.publicKey,
-            readOnly = true,
-            onValueChange = { },
-            textFieldTestTag = "PublicKeyEntry",
-            cardStyle = CardStyle.Top(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
-    }
-
-    item {
         BitwardenPasswordField(
             label = stringResource(id = BitwardenString.private_key),
             value = sshKeyState.privateKey,
@@ -50,6 +36,20 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             showPasswordChange = { sshKeyTypeHandlers.onPrivateKeyVisibilityChange(it) },
             showPasswordTestTag = "ViewPrivateKeyButton",
             passwordFieldTestTag = "PrivateKeyEntry",
+            cardStyle = CardStyle.Top(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+    }
+
+    item {
+        BitwardenTextField(
+            label = stringResource(id = BitwardenString.public_key),
+            value = sshKeyState.publicKey,
+            readOnly = true,
+            onValueChange = { },
+            textFieldTestTag = "PublicKeyEntry",
             cardStyle = CardStyle.Middle(),
             modifier = Modifier
                 .fillMaxWidth()
