@@ -63,32 +63,9 @@ fun VaultItemSshKeyContent(
             onExpandClick = { isExpanded = !isExpanded },
             applyIconBackground = commonState.iconData is IconData.Local,
         )
-        item(key = "publicKey") {
-            Spacer(modifier = Modifier.height(8.dp))
-            BitwardenTextField(
-                label = stringResource(id = BitwardenString.public_key),
-                value = sshKeyItemState.publicKey,
-                onValueChange = { },
-                singleLine = false,
-                readOnly = true,
-                actions = {
-                    BitwardenStandardIconButton(
-                        vectorIconRes = BitwardenDrawable.ic_copy,
-                        contentDescription = stringResource(id = BitwardenString.copy_public_key),
-                        onClick = vaultSshKeyItemTypeHandlers.onCopyPublicKeyClick,
-                        modifier = Modifier.testTag(tag = "SshKeyCopyPublicKeyButton"),
-                    )
-                },
-                cardStyle = CardStyle.Top(),
-                modifier = Modifier
-                    .testTag("SshKeyItemPublicKeyEntry")
-                    .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .animateItem(),
-            )
-        }
 
         item(key = "privateKey") {
+            Spacer(modifier = Modifier.height(8.dp))
             BitwardenPasswordField(
                 label = stringResource(id = BitwardenString.private_key),
                 value = sshKeyItemState.privateKey,
@@ -106,9 +83,33 @@ fun VaultItemSshKeyContent(
                 showPassword = sshKeyItemState.showPrivateKey,
                 showPasswordTestTag = "ViewPrivateKeyButton",
                 showPasswordChange = vaultSshKeyItemTypeHandlers.onShowPrivateKeyClick,
-                cardStyle = CardStyle.Middle(),
+                cardStyle = CardStyle.Top(),
                 modifier = Modifier
                     .testTag("SshKeyItemPrivateKeyEntry")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .animateItem(),
+            )
+        }
+
+        item(key = "publicKey") {
+            BitwardenTextField(
+                label = stringResource(id = BitwardenString.public_key),
+                value = sshKeyItemState.publicKey,
+                onValueChange = { },
+                singleLine = false,
+                readOnly = true,
+                actions = {
+                    BitwardenStandardIconButton(
+                        vectorIconRes = BitwardenDrawable.ic_copy,
+                        contentDescription = stringResource(id = BitwardenString.copy_public_key),
+                        onClick = vaultSshKeyItemTypeHandlers.onCopyPublicKeyClick,
+                        modifier = Modifier.testTag(tag = "SshKeyCopyPublicKeyButton"),
+                    )
+                },
+                cardStyle = CardStyle.Middle(),
+                modifier = Modifier
+                    .testTag("SshKeyItemPublicKeyEntry")
                     .fillMaxWidth()
                     .standardHorizontalMargin()
                     .animateItem(),
