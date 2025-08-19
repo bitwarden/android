@@ -92,6 +92,7 @@ private val AssistStructure.ViewNode.supportedAutofillHint: AutofillHint?
             this.isCardNumberField -> AutofillHint.CARD_NUMBER
             this.isCardSecurityCodeField -> AutofillHint.CARD_SECURITY_CODE
             this.isCardholderNameField -> AutofillHint.CARD_CARDHOLDER
+            this.isCardBrandField -> AutofillHint.CARD_BRAND
             else -> null
         }
 
@@ -122,6 +123,7 @@ private fun String.toBitwardenAutofillHintOrNull(): AutofillHint? =
 /**
  * Attempt to convert this [AssistStructure.ViewNode] and [autofillViewData] into an [AutofillView].
  */
+@Suppress("LongMethod")
 private fun AssistStructure.ViewNode.buildAutofillView(
     autofillOptions: List<String>,
     autofillViewData: AutofillView.Data,
@@ -189,7 +191,18 @@ private fun AssistStructure.ViewNode.buildAutofillView(
         )
     }
 
-    else -> {
+    AutofillHint.CARD_BRAND -> {
+        val brandValue = this.autofillValue
+            ?.extractCardBrandValue(
+                autofillOptions = autofillOptions,
+            )
+        AutofillView.Card.Brand(
+            data = autofillViewData,
+            brandValue = brandValue,
+        )
+    }
+
+    null -> {
         AutofillView.Unused(
             data = autofillViewData,
         )
@@ -237,7 +250,8 @@ internal val AssistStructure.ViewNode.isUsernameField: Boolean
 /**
  * Check whether this [AssistStructure.ViewNode] represents a card expiration month field.
  */
-private val AssistStructure.ViewNode.isCardExpirationMonthField: Boolean
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isCardExpirationMonthField: Boolean
     get() = idEntry?.matchesAnyExpressions(SUPPORTED_RAW_CARD_EXP_MONTH_HINT_PATTERNS) == true ||
         hint?.matchesAnyExpressions(SUPPORTED_RAW_CARD_EXP_MONTH_HINT_PATTERNS) == true ||
         htmlInfo.isCardExpirationMonthField()
@@ -245,7 +259,8 @@ private val AssistStructure.ViewNode.isCardExpirationMonthField: Boolean
 /**
  * Check whether this [AssistStructure.ViewNode] represents a card expiration year field.
  */
-private val AssistStructure.ViewNode.isCardExpirationYearField: Boolean
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isCardExpirationYearField: Boolean
     get() = idEntry?.matchesAnyExpressions(SUPPORTED_RAW_CARD_EXP_YEAR_HINT_PATTERNS) == true ||
         hint?.matchesAnyExpressions(SUPPORTED_RAW_CARD_EXP_YEAR_HINT_PATTERNS) == true ||
         htmlInfo.isCardExpirationYearField()
@@ -253,7 +268,8 @@ private val AssistStructure.ViewNode.isCardExpirationYearField: Boolean
 /**
  * Check whether this [AssistStructure.ViewNode] represents a card expiration date field.
  */
-private val AssistStructure.ViewNode.isCardExpirationDateField: Boolean
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isCardExpirationDateField: Boolean
     get() = idEntry?.matchesAnyExpressions(SUPPORTED_RAW_CARD_EXP_DATE_HINT_PATTERNS) == true ||
         hint?.matchesAnyExpressions(SUPPORTED_RAW_CARD_EXP_DATE_HINT_PATTERNS) == true ||
         htmlInfo.isCardExpirationDateField()
@@ -261,7 +277,8 @@ private val AssistStructure.ViewNode.isCardExpirationDateField: Boolean
 /**
  * Check whether this [AssistStructure.ViewNode] represents a card number field based.
  */
-private val AssistStructure.ViewNode.isCardNumberField: Boolean
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isCardNumberField: Boolean
     get() = idEntry?.matchesAnyExpressions(SUPPORTED_RAW_CARD_NUMBER_HINT_PATTERNS) == true ||
         hint?.matchesAnyExpressions(SUPPORTED_RAW_CARD_NUMBER_HINT_PATTERNS) == true ||
         htmlInfo.isCardNumberField()
@@ -269,7 +286,8 @@ private val AssistStructure.ViewNode.isCardNumberField: Boolean
 /**
  * Check whether this [AssistStructure.ViewNode] represents a card security code field based.
  */
-private val AssistStructure.ViewNode.isCardSecurityCodeField: Boolean
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isCardSecurityCodeField: Boolean
     get() =
         idEntry?.matchesAnyExpressions(SUPPORTED_RAW_CARD_SECURITY_CODE_HINT_PATTERNS) == true ||
             hint?.matchesAnyExpressions(SUPPORTED_RAW_CARD_SECURITY_CODE_HINT_PATTERNS) == true ||
@@ -278,10 +296,24 @@ private val AssistStructure.ViewNode.isCardSecurityCodeField: Boolean
 /**
  * Check whether this [AssistStructure.ViewNode] represents a cardholder name field based.
  */
-private val AssistStructure.ViewNode.isCardholderNameField: Boolean
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isCardholderNameField: Boolean
     get() = idEntry?.matchesAnyExpressions(SUPPORTED_RAW_CARDHOLDER_NAME_HINT_PATTERNS) == true ||
         hint?.matchesAnyExpressions(SUPPORTED_RAW_CARDHOLDER_NAME_HINT_PATTERNS) == true ||
         htmlInfo.isCardholderNameField()
+
+/**
+ * Check whether this [AssistStructure.ViewNode] represents a card brand field.
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+internal val AssistStructure.ViewNode.isCardBrandField: Boolean
+    get() = idEntry
+        ?.toLowerCaseAndStripNonAlpha()
+        ?.containsAnyTerms(SUPPORTED_RAW_CARD_BRAND_HINTS) == true ||
+        hint
+            ?.toLowerCaseAndStripNonAlpha()
+            ?.containsAnyTerms(SUPPORTED_RAW_CARD_BRAND_HINTS) == true ||
+        htmlInfo.isCardBrandField()
 
 /**
  * Check whether this [AssistStructure.ViewNode] contains any ignored hint terms.
@@ -290,6 +322,7 @@ private fun AssistStructure.ViewNode.containsIgnoredHintTerms(): Boolean =
     this.idEntry?.containsAnyTerms(IGNORED_RAW_HINTS) == true ||
         this.hint?.containsAnyTerms(IGNORED_RAW_HINTS) == true ||
         this.htmlInfo.hints().any { it.containsAnyTerms(IGNORED_RAW_HINTS) }
+
 /**
  * The website that this [AssistStructure.ViewNode] is a part of representing.
  */

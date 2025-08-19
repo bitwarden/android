@@ -46,6 +46,7 @@ sealed class AutofillCipher {
         val expirationMonth: String,
         val expirationYear: String,
         val number: String,
+        val brand: String,
     ) : AutofillCipher() {
         override val iconRes: Int
             @DrawableRes get() = BitwardenDrawable.ic_payment_card

@@ -26,3 +26,10 @@ fun String.matchesAnyExpressions(
     expressions.any {
         this.matches(regex = it)
     }
+
+/**
+ * Convert this [String] to lowercase and remove all non-alpha characters.
+ */
+fun String.toLowerCaseAndStripNonAlpha(): String = this
+    .lowercase()
+    .replace(Regex("[^a-z]"), "")

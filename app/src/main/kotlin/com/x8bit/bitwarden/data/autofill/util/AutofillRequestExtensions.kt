@@ -16,6 +16,7 @@ fun AutofillRequest.Fillable.toAutofillSaveItem(): AutofillSaveItem =
                 expirationMonth = partition.expirationMonthSaveValue,
                 expirationYear = partition.expirationYearSaveValue,
                 securityCode = partition.securityCodeSaveValue,
+                brand = partition.brandSaveValue,
             )
         }
 
