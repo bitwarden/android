@@ -53,3 +53,21 @@ fun AutofillValue.extractYearValue(
 
         else -> null
     }
+
+/**
+ * Extract a card brand value from this [AutofillValue].
+ */
+fun AutofillValue.extractCardBrandValue(
+    autofillOptions: List<String>,
+): String? =
+    when {
+        this.isList && autofillOptions.isNotEmpty() -> {
+            autofillOptions.getOrNull(listValue)
+        }
+
+        this.isText -> {
+            this.textValue.toString()
+        }
+
+        else -> null
+    }

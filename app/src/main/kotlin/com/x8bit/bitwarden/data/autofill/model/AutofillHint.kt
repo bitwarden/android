@@ -10,6 +10,7 @@ enum class AutofillHint {
     CARD_EXPIRATION_YEAR,
     CARD_NUMBER,
     CARD_SECURITY_CODE,
+    CARD_BRAND,
     PASSWORD,
     USERNAME,
 }

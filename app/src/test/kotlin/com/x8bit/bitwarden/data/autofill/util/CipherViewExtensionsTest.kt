@@ -104,6 +104,7 @@ class CipherViewExtensionsTest {
                         expirationMonth = "mockExpMonth-1",
                         expirationYear = "mockExpirationYear-1",
                         number = "mockNumber-1",
+                        brand = "mockBrand-1",
                     ),
                 ),
                 autofillCipherProvider.getCardAutofillCiphers(),

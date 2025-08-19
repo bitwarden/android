@@ -24,6 +24,7 @@ fun CipherView.toAutofillCipherProvider(): AutofillCipherProvider =
                     expirationMonth = card.expMonth.orEmpty(),
                     expirationYear = card.expYear.orEmpty(),
                     number = card.number.orEmpty(),
+                    brand = card.brand.orEmpty(),
                 ),
             )
         }

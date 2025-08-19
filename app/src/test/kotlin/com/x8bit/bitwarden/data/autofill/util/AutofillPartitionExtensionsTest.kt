@@ -300,6 +300,76 @@ class AutofillPartitionExtensionsTest {
         assertEquals(TEXT_VALUE, actual)
     }
 
+    @Test
+    fun `brandSaveValue should return null when no brand views present`() {
+        val autofillPartition = AutofillPartition.Card(
+            views = listOf(
+                AutofillView.Card.ExpirationYear(
+                    data = autofillDataValidText,
+                    yearValue = TEXT_VALUE,
+                ),
+            ),
+        )
+        val actual = autofillPartition.brandSaveValue
+        assertNull(actual)
+    }
+
+    @Test
+    fun `brandSaveValue should return null when has brand view but no textValue`() {
+        val autofillPartition = AutofillPartition.Card(
+            views = listOf(
+                AutofillView.Card.Brand(
+                    data = autofillDataEmptyText,
+                    brandValue = null,
+                ),
+            ),
+        )
+        val actual = autofillPartition.brandSaveValue
+        assertNull(actual)
+    }
+
+    @Test
+    fun `brandSaveValue should return text value when has brand view has textValue`() {
+        val autofillPartition = AutofillPartition.Card(
+            views = listOf(
+                AutofillView.Card.Brand(
+                    data = autofillDataValidText,
+                    brandValue = TEXT_VALUE,
+                ),
+            ),
+        )
+        val actual = autofillPartition.brandSaveValue
+        assertEquals(TEXT_VALUE, actual)
+    }
+
+    @Test
+    fun `brandSaveValue should return null when has brand view but no brandValue`() {
+        val autofillPartition = AutofillPartition.Card(
+            views = listOf(
+                AutofillView.Card.Brand(
+                    data = autofillDataValidText.copy(textValue = null),
+                    brandValue = null,
+                ),
+            ),
+        )
+        val actual = autofillPartition.brandSaveValue
+        assertNull(actual)
+    }
+
+    @Test
+    fun `brandSaveValue should return text value when has brand view has brandValue`() {
+        val autofillPartition = AutofillPartition.Card(
+            views = listOf(
+                AutofillView.Card.Brand(
+                    data = autofillDataValidText,
+                    brandValue = TEXT_VALUE,
+                ),
+            ),
+        )
+        val actual = autofillPartition.brandSaveValue
+        assertEquals(TEXT_VALUE, actual)
+    }
+
     //endregion Card tests
 
     // region Login tests

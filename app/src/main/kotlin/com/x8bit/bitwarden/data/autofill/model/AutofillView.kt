@@ -85,6 +85,17 @@ sealed class AutofillView {
         data class SecurityCode(
             override val data: Data,
         ) : Card()
+
+        /**
+         * The brand [AutofillView] for the [Card] data partition. This implementation also has its
+         * own [brandValue] because it can be present in lists, in which case there is specialized
+         * logic for determining its [brandValue]. The [Data.textValue] is very likely going to be
+         * a very different value.
+         */
+        data class Brand(
+            override val data: Data,
+            val brandValue: String?,
+        ) : Card()
     }
 
     /**

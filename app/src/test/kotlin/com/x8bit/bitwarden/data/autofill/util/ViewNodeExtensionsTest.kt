@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class ViewNodeExtensionsTest {
     private val expectedAutofillId: AutofillId = mockk()
     private val expectedIsFocused = true
@@ -701,6 +702,421 @@ class ViewNodeExtensionsTest {
             // Verify
             assertTrue(actual)
         }
+    }
+
+    @Test
+    fun `isCardholderNameField returns true when htmlInfo isCardholderNameField is true`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardholderNameField() } returns true
+
+        val actual = viewNode.isCardholderNameField
+
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isCardholderNameField returns true when hint is supported`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.htmlInfo.isCardholderNameField() } returns false
+
+        SUPPORTED_RAW_CARDHOLDER_NAME_HINTS.forEach {
+            every { viewNode.hint } returns it
+
+            val actual = viewNode.isCardholderNameField
+
+            assertTrue(actual) { "Failed for hint: $it" }
+        }
+    }
+
+    @Test
+    fun `isCardholderNameField returns true when idEntry is supported`() {
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardholderNameField() } returns false
+
+        SUPPORTED_RAW_CARDHOLDER_NAME_HINTS.forEach {
+            every { viewNode.idEntry } returns it
+
+            val actual = viewNode.isCardholderNameField
+
+            assertTrue(actual) { "Failed for idEntry: $it" }
+        }
+    }
+
+    @Test
+    fun `isCardholderNameField returns false when idEntry, hint, and htmlInfo are all null`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardholderNameField() } returns false
+
+        val actual = viewNode.isCardholderNameField
+
+        assertFalse(actual)
+    }
+
+    @Test
+    fun `isCardholderNameField returns false when idEntry, hint, and htmlInfo are not supported`() {
+        every { viewNode.idEntry } returns "unsupportedIdEntry"
+        every { viewNode.hint } returns "unsupportedHint"
+        every { viewNode.htmlInfo.isCardholderNameField() } returns false
+
+        val actual = viewNode.isCardholderNameField
+
+        assertFalse(actual)
+    }
+
+    @Test
+    fun `isCardBrandField returns true when htmlInfo isCardBrandField is true`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardBrandField() } returns true
+
+        val actual = viewNode.isCardBrandField
+
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isCardBrandField returns true when hint is supported`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.htmlInfo.isCardBrandField() } returns false
+
+        SUPPORTED_RAW_CARD_BRAND_HINTS.forEach {
+            every { viewNode.hint } returns it
+
+            val actual = viewNode.isCardBrandField
+
+            assertTrue(actual) { "Failed for hint: $it" }
+        }
+    }
+
+    @Test
+    fun `isCardBrandField returns true when idEntry is supported`() {
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardBrandField() } returns false
+
+        SUPPORTED_RAW_CARD_BRAND_HINTS.forEach {
+            every { viewNode.idEntry } returns it
+
+            val actual = viewNode.isCardBrandField
+
+            assertTrue(actual) { "Failed for idEntry: $it" }
+        }
+    }
+
+    @Test
+    fun `isCardBrandField returns false when idEntry, hint, and htmlInfo are all null`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardBrandField() } returns false
+
+        val actual = viewNode.isCardBrandField
+
+        assertFalse(actual)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `isCardBrandField returns false when idEntry and hint are not supported, and htmlInfo isCardBrandField is false`() {
+        every { viewNode.idEntry } returns "unsupportedIdEntry"
+        every { viewNode.hint } returns "unsupportedHint"
+        every { viewNode.htmlInfo.isCardBrandField() } returns false
+
+        val actual = viewNode.isCardBrandField
+
+        assertFalse(actual)
+    }
+
+    @Test
+    fun `isCardNumberField returns true when htmlInfo isCardNumberField is true`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardNumberField() } returns true
+
+        val actual = viewNode.isCardNumberField
+
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isCardNumberField returns true when hint is supported`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.htmlInfo.isCardNumberField() } returns false
+        every { viewNode.hint } returns "credit-card-number"
+
+        val actual = viewNode.isCardNumberField
+
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isCardNumberField returns true when idEntry is supported`() {
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardNumberField() } returns false
+        every { viewNode.idEntry } returns "credit-card-number"
+
+        val actual = viewNode.isCardNumberField
+
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isCardNumberField returns false when idEntry, hint, and htmlInfo are all null`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardNumberField() } returns false
+
+        val actual = viewNode.isCardNumberField
+
+        assertFalse(actual)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `isCardNumberField returns false when idEntry and hint are not supported, and htmlInfo isCardNumberField is false`() {
+        every { viewNode.idEntry } returns "unsupportedIdEntry"
+        every { viewNode.hint } returns "unsupportedHint"
+        every { viewNode.htmlInfo.isCardNumberField() } returns false
+
+        val actual = viewNode.isCardNumberField
+
+        assertFalse(actual)
+    }
+
+    @Test
+    fun `isCardSecurityCodeField returns true when htmlInfo isCardSecurityCodeField is true`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardSecurityCodeField() } returns true
+
+        val actual = viewNode.isCardSecurityCodeField
+
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isCardSecurityCodeField returns true when hint is supported`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.htmlInfo.isCardSecurityCodeField() } returns false
+
+        SUPPORTED_RAW_CARD_SECURITY_CODE_HINTS.forEach {
+            every { viewNode.hint } returns it
+
+            val actual = viewNode.isCardSecurityCodeField
+
+            assertTrue(actual) { "Failed for hint: $it" }
+        }
+    }
+
+    @Test
+    fun `isCardSecurityCodeField returns true when idEntry is supported`() {
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardSecurityCodeField() } returns false
+
+        SUPPORTED_RAW_CARD_SECURITY_CODE_HINTS.forEach {
+            every { viewNode.idEntry } returns it
+
+            val actual = viewNode.isCardSecurityCodeField
+
+            assertTrue(actual) { "Failed for idEntry: $it" }
+        }
+    }
+
+    @Test
+    fun `isCardSecurityCodeField returns false when idEntry, hint, and htmlInfo are all null`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardSecurityCodeField() } returns false
+
+        val actual = viewNode.isCardSecurityCodeField
+
+        assertFalse(actual)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `isCardSecurityCodeField returns false when idEntry and hint are not supported, and htmlInfo isCardSecurityCodeField is false`() {
+        every { viewNode.idEntry } returns "unsupportedIdEntry"
+        every { viewNode.hint } returns "unsupportedHint"
+        every { viewNode.htmlInfo.isCardSecurityCodeField() } returns false
+
+        val actual = viewNode.isCardSecurityCodeField
+
+        assertFalse(actual)
+    }
+
+    @Test
+    fun `isCardExpirationDateField returns true when htmlInfo isCardExpirationDateField is true`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardExpirationDateField() } returns true
+
+        // Test
+        val actual = viewNode.isCardExpirationDateField
+
+        // Verify
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isCardExpirationDateField returns true when hint is supported`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.htmlInfo.isCardExpirationDateField() } returns false
+        every { viewNode.hint } returns "expiration_date"
+
+        val actual = viewNode.isCardExpirationDateField
+
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isCardExpirationDateField returns true when idEntry is supported`() {
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardExpirationDateField() } returns false
+        every { viewNode.idEntry } returns "expiration_date"
+
+        val actual = viewNode.isCardExpirationDateField
+
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isCardExpirationDateField returns false when idEntry, hint, and htmlInfo are all null`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardExpirationDateField() } returns false
+
+        val actual = viewNode.isCardExpirationDateField
+
+        assertFalse(actual)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `isCardExpirationDateField returns false when idEntry and hint are not supported, and htmlInfo isCardExpirationDateField is false`() {
+        every { viewNode.idEntry } returns "unsupportedIdEntry"
+        every { viewNode.hint } returns "unsupportedHint"
+        every { viewNode.htmlInfo.isCardExpirationDateField() } returns false
+
+        val actual = viewNode.isCardExpirationDateField
+
+        assertFalse(actual)
+    }
+
+    @Test
+    fun `isCardExpirationYearField returns true when htmlInfo isCardExpirationYearField is true`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardExpirationYearField() } returns true
+
+        // Test
+        val actual = viewNode.isCardExpirationYearField
+
+        // Verify
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isCardExpirationYearField returns true when hint is supported`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.htmlInfo.isCardExpirationYearField() } returns false
+        every { viewNode.hint } returns "expiration_year"
+
+        val actual = viewNode.isCardExpirationYearField
+
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isCardExpirationYearField returns true when idEntry is supported`() {
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardExpirationYearField() } returns false
+        every { viewNode.idEntry } returns "expiration_year"
+
+        val actual = viewNode.isCardExpirationYearField
+
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isCardExpirationYearField returns false when idEntry, hint, and htmlInfo are all null`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardExpirationYearField() } returns false
+
+        val actual = viewNode.isCardExpirationYearField
+
+        assertFalse(actual)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `isCardExpirationYearField returns false when idEntry and hint are not supported and htmlInfo isCardExpirationYearField is false`() {
+        every { viewNode.idEntry } returns "unsupportedIdEntry"
+        every { viewNode.hint } returns "unsupportedHint"
+        every { viewNode.htmlInfo.isCardExpirationYearField() } returns false
+
+        val actual = viewNode.isCardExpirationYearField
+
+        assertFalse(actual)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `isCardExpirationMonthField returns true when htmlInfo isCardExpirationMonthField is true`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardExpirationMonthField() } returns true
+
+        // Test
+        val actual = viewNode.isCardExpirationMonthField
+
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isCardExpirationMonthField returns true when hint is supported`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.htmlInfo.isCardExpirationMonthField() } returns false
+        every { viewNode.hint } returns "expiration_month"
+
+        val actual = viewNode.isCardExpirationMonthField
+
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isCardExpirationMonthField returns true when idEntry is supported`() {
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardExpirationMonthField() } returns false
+        every { viewNode.idEntry } returns "expiration_month"
+
+        val actual = viewNode.isCardExpirationMonthField
+
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isCardExpirationMonthField returns false when idEntry, hint, and htmlInfo are all null`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isCardExpirationMonthField() } returns false
+
+        val actual = viewNode.isCardExpirationMonthField
+
+        assertFalse(actual)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `isCardExpirationMonthField returns false when idEntry and hint are not supported, and htmlInfo isCardExpirationMonthField is false`() {
+        every { viewNode.idEntry } returns "unsupportedIdEntry"
+        every { viewNode.hint } returns "unsupportedHint"
+        every { viewNode.htmlInfo.isCardExpirationMonthField() } returns false
+
+        val actual = viewNode.isCardExpirationMonthField
+
+        assertFalse(actual)
     }
 
     @Test

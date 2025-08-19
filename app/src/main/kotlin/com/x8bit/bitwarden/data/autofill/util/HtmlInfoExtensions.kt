@@ -53,6 +53,12 @@ fun HtmlInfo?.isCardSecurityCodeField(): Boolean = isInputField &&
     hints().containsAnyPatterns(SUPPORTED_RAW_CARD_SECURITY_CODE_HINT_PATTERNS)
 
 /**
+ * Whether this [HtmlInfo] represents a card brand field.
+ */
+fun HtmlInfo?.isCardBrandField(): Boolean = isInputField &&
+    hints().containsAnyTerms(SUPPORTED_RAW_CARD_BRAND_HINTS)
+
+/**
  * Attributes that can be used as hints to determine the type of data the associated node expects.
  *
  * This function is untestable as [HtmlInfo] contains [android.util.Pair] which requires
@@ -97,7 +103,11 @@ private fun List<String>.containsAnyPatterns(patterns: List<Regex>): Boolean = t
  * Checks if the list of strings contains any of the specified terms.
  */
 private fun List<String>.containsAnyTerms(terms: List<String>): Boolean =
-    this.any { string -> string.containsAnyTerms(terms) }
+    this.any { string ->
+        string
+            .toLowerCaseAndStripNonAlpha()
+            .containsAnyTerms(terms)
+    }
 
 /**
  * The supported attribute keys whose value can represent an autofill hint.

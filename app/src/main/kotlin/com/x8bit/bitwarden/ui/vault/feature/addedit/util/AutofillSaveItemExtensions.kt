@@ -4,8 +4,10 @@ import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
+import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
+import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
 import java.util.UUID
 
 /**
@@ -29,6 +31,9 @@ fun AutofillSaveItem.toDefaultAddTypeContent(
                         ?: VaultCardExpirationMonth.SELECT,
                     expirationYear = this.expirationYear.orEmpty(),
                     securityCode = this.securityCode.orEmpty(),
+                    brand = this.brand
+                        ?.findVaultCardBrandWithNameOrNull()
+                        ?: VaultCardBrand.SELECT,
                 ),
             )
         }

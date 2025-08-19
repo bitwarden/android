@@ -51,6 +51,7 @@ class AutofillUtilsTest {
                     name = "Cipher One",
                     number = "number",
                     subtitle = "Subtitle",
+                    brand = "Visa",
                 ),
                 second = AutofillAppInfo(
                     context = context,
@@ -69,6 +70,7 @@ class AutofillUtilsTest {
                     name = "Capital One",
                     number = "number",
                     subtitle = "JohnCardName",
+                    brand = "Visa",
                 ),
                 second = AutofillAppInfo(
                     context = context,

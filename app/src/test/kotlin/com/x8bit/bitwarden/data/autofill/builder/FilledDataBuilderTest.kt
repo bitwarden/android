@@ -191,6 +191,7 @@ class FilledDataBuilderTest {
                 name = "Cipher One",
                 number = number,
                 subtitle = "Subtitle",
+                brand = "Visa",
             )
             val filledItemCode: FilledItem = mockk()
             val filledItemExpirationMonth: FilledItem = mockk()
@@ -198,6 +199,7 @@ class FilledDataBuilderTest {
             val filledItemNumber: FilledItem = mockk()
             val filledItemCardholderName: FilledItem = mockk()
             val filledItemExpirationDate: FilledItem = mockk()
+            val filledItemCardBrand: FilledItem = mockk()
             val autofillViewCode: AutofillView.Card.SecurityCode = mockk {
                 every { buildFilledItemOrNull(code) } returns filledItemCode
             }
@@ -219,6 +221,9 @@ class FilledDataBuilderTest {
             val autofillViewExpirationDate: AutofillView.Card.ExpirationDate = mockk {
                 every { buildFilledItemOrNull(expirationDate) } returns filledItemExpirationDate
             }
+            val autofillViewCardBrand: AutofillView.Card.Brand = mockk {
+                every { buildFilledItemOrNull(autofillCipher.brand) } returns filledItemCardBrand
+            }
             val autofillPartition = AutofillPartition.Card(
                 views = listOf(
                     autofillViewCode,
@@ -228,6 +233,7 @@ class FilledDataBuilderTest {
                     autofillViewNumberTwo,
                     autofillViewCardholderName,
                     autofillViewExpirationDate,
+                    autofillViewCardBrand,
                 ),
             )
             val ignoreAutofillIds: List<AutofillId> = mockk()
@@ -248,6 +254,7 @@ class FilledDataBuilderTest {
                     filledItemNumber,
                     filledItemCardholderName,
                     filledItemExpirationDate,
+                    filledItemCardBrand,
                 ),
                 inlinePresentationSpec = null,
             )
@@ -281,6 +288,7 @@ class FilledDataBuilderTest {
                 autofillViewNumberTwo.buildFilledItemOrNull(number)
                 autofillViewCardholderName.buildFilledItemOrNull(cardholderName)
                 autofillViewExpirationDate.buildFilledItemOrNull(expirationDate)
+                autofillViewCardBrand.buildFilledItemOrNull(autofillCipher.brand)
             }
         }
 
@@ -302,11 +310,8 @@ class FilledDataBuilderTest {
                 name = "",
                 number = number,
                 subtitle = "",
+                brand = "",
             )
-            val filledItemCode: FilledItem = mockk()
-            val filledItemExpirationMonth: FilledItem = mockk()
-            val filledItemExpirationYear: FilledItem = mockk()
-            val filledItemNumber: FilledItem = mockk()
             val autofillViewCode: AutofillView.Card.SecurityCode = mockk()
             val autofillViewExpirationMonth: AutofillView.Card.ExpirationMonth = mockk()
             val autofillViewExpirationYear: AutofillView.Card.ExpirationYear = mockk()
@@ -314,6 +319,7 @@ class FilledDataBuilderTest {
             val autofillViewNumberTwo: AutofillView.Card.Number = mockk()
             val autofillViewCardholderName: AutofillView.Card.CardholderName = mockk()
             val autofillViewExpirationDate: AutofillView.Card.ExpirationDate = mockk()
+            val autofillViewBrand: AutofillView.Card.Brand = mockk()
             val autofillPartition = AutofillPartition.Card(
                 views = listOf(
                     autofillViewCode,
@@ -323,6 +329,7 @@ class FilledDataBuilderTest {
                     autofillViewNumberTwo,
                     autofillViewCardholderName,
                     autofillViewExpirationDate,
+                    autofillViewBrand,
                 ),
             )
             val ignoreAutofillIds: List<AutofillId> = mockk()
@@ -369,6 +376,10 @@ class FilledDataBuilderTest {
                 autofillViewExpirationYear.buildFilledItemOrNull(expirationYear)
                 autofillViewNumberOne.buildFilledItemOrNull(number)
                 autofillViewNumberTwo.buildFilledItemOrNull(number)
+                autofillViewCardholderName.buildFilledItemOrNull(autofillCipher.cardholderName)
+                autofillViewExpirationMonth.buildFilledItemOrNull(autofillCipher.expirationMonth)
+                autofillViewExpirationYear.buildFilledItemOrNull(autofillCipher.expirationYear)
+                autofillViewBrand.buildFilledItemOrNull(autofillCipher.brand)
             }
         }
 

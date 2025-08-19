@@ -62,7 +62,7 @@ class AutofillCipherProviderTest {
         every { expMonth } returns CARD_EXP_MONTH
         every { expYear } returns CARD_EXP_YEAR
         every { number } returns CARD_NUMBER
-        every { brand } returns null
+        every { brand } returns CARD_BRAND
     }
     private val cardCipherView: CipherView = mockk {
         every { card } returns cardView
@@ -548,7 +548,8 @@ private const val CARD_EXP_MONTH = "January"
 private const val CARD_EXP_YEAR = "2029"
 private const val CARD_NAME = "John's Card"
 private const val CARD_NUMBER = "1234567890"
-private const val CARD_SUBTITLE = "7890"
+private const val CARD_BRAND = "Visa"
+private const val CARD_SUBTITLE = "$CARD_BRAND, *7890"
 private const val LOGIN_WITH_TOTP_CIPHER_ID = "1234567890"
 private const val LOGIN_WITHOUT_TOTP_CIPHER_ID = "ABCDEFGHIJ"
 private const val CARD_CIPHER_ID = "0987654321"
@@ -561,6 +562,7 @@ private val CARD_AUTOFILL_CIPHER = AutofillCipher.Card(
     name = CARD_NAME,
     number = CARD_NUMBER,
     subtitle = CARD_SUBTITLE,
+    brand = CARD_BRAND,
 )
 private const val LOGIN_NAME = "John's Login"
 private const val LOGIN_PASSWORD = "Password123"

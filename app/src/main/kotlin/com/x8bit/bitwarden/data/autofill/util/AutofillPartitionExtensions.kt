@@ -45,6 +45,17 @@ val AutofillPartition.Card.cardholderNameSaveValue: String?
         .extractNonNullTextValueOrNull { it is AutofillView.Card.CardholderName }
 
 /**
+ * The text value representation of the brand from the [AutofillPartition.Card].
+ */
+val AutofillPartition.Card.brandSaveValue: String?
+    get() = this
+        .views
+        .filterIsInstance<AutofillView.Card.Brand>()
+        .firstOrNull { it.brandValue != null }
+        ?.brandValue
+        ?: this.extractNonNullTextValueOrNull { it is AutofillView.Card.Brand }
+
+/**
  * The text value representation of the password from the [AutofillPartition.Login].
  */
 val AutofillPartition.Login.passwordSaveValue: String?
