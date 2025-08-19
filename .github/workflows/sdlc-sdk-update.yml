@@ -1,5 +1,5 @@
 name: SDLC / SDK Update
-run-name: ${{ format('SDK {0} - {1}', inputs.run-mode, inputs.sdk-version) }}
+run-name: "SDK ${{inputs.run-mode}}${{ inputs.pr-id && format(' #{0}', inputs.pr-id) || '' }} - ${{inputs.sdk-version}}"
 
 on:
   workflow_dispatch:
@@ -18,6 +18,8 @@ on:
         description: "SDK Version"
         default: "1.0.0-2451-48134927"
         #default: "1.0.0-2493-bceb681a" # broke android
+      pr-id:
+        description: "Pull Request ID"
 
 jobs:
   update:
