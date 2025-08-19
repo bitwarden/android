@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers
 
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.MasterPasswordRepromptData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingViewModel

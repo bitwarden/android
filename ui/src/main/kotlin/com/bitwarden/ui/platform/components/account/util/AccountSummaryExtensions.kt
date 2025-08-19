@@ -1,10 +1,10 @@
-package com.x8bit.bitwarden.ui.vault.feature.vault.util
+package com.bitwarden.ui.platform.components.account.util
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import java.util.Locale
 
 /**
