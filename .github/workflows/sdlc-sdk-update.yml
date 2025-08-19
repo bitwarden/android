@@ -161,4 +161,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Used in settings.gradle.kts to download the SDK from GitHub Maven Packages
         run: |
-          ./gradlew assembleDebug --warn --console=rich --stacktrace
+          ./gradlew assembleDebug --warn
