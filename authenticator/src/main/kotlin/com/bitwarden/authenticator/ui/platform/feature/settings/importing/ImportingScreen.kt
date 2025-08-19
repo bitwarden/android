@@ -34,10 +34,10 @@ import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenTwoBut
 import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
 import com.bitwarden.authenticator.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.authenticator.ui.platform.composition.LocalIntentManager
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -72,7 +72,10 @@ fun ImportingScreen(
             ImportEvent.NavigateBack -> onNavigateBack()
             is ImportEvent.NavigateToSelectImportFile -> {
                 launcher.launch(
-                    intentManager.createFileChooserIntent(event.importFileFormat.mimeType),
+                    intentManager.createFileChooserIntent(
+                        withCameraIntents = false,
+                        mimeType = event.importFileFormat.mimeType,
+                    ),
                 )
             }
 

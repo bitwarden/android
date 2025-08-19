@@ -4,7 +4,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import com.bitwarden.annotation.OmitFromCoverage
-import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
+import com.bitwarden.core.util.toPendingIntentMutabilityFlag
 import kotlin.random.Random
 
 /**
