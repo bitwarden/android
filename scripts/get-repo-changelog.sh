@@ -6,15 +6,15 @@
 set -euo pipefail
 
 if [ $# -lt 2 ]; then
-    echo "Usage: $0 <current-ref> <new-ref>"
-    echo "Example: $0 9fe3aeda fix-wasm-import"
-    echo "Example: $0 2450-9fe3aeda 2577-fix-wasm-import"
+    echo "Usage: $0 <repo> <current-ref> <new-ref>"
+    echo "Example: $0 bitwarden/sdk-internal 9fe3aeda fix-wasm-import"
+    echo "Example: $0 bitwarden/sdk-internal 2450-9fe3aeda 2577-fix-wasm-import"
     exit 1
 fi
 
-CURRENT_REF="$1"
-NEW_REF="$2"
-REPO="bitwarden/sdk-internal"
+REPO="$1"
+CURRENT_REF="$2"
+NEW_REF="$3"
 
 CHANGELOG=$(gh api "repos/$REPO/compare/$CURRENT_REF...$NEW_REF" \
     --jq '.commits[] | "- \(.commit.message | split("\n")[0])"' | head -20)

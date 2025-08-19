@@ -114,7 +114,7 @@ jobs:
           _OLD_SDK_GIT_REF: ${{ steps.get-current-sdk.outputs.git_ref }}
         run: |
           NEW_SDK_GIT_REF=$(echo "$_SDK_VERSION" | cut -d'-' -f3-)
-          CHANGELOG=$(./scripts/get-sdk-changelog.sh "$_OLD_SDK_GIT_REF" "$NEW_SDK_GIT_REF")
+          CHANGELOG=$(./scripts/get-repo-changelog.sh "bitwarden/sdk-internal" "$_OLD_SDK_GIT_REF" "$NEW_SDK_GIT_REF")
           PR_BODY="Updates the SDK version from \`$_OLD_SDK_VERSION\` to \`$_SDK_PACKAGE $_SDK_VERSION\`
 
           ## What's Changed
