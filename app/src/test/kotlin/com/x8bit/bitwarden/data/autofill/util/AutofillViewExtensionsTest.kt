@@ -323,4 +323,24 @@ class AutofillViewExtensionsTest {
         // Verify
         assertNull(actual)
     }
+
+    @Test
+    fun `buildFilledItemOrNull should return null when value is empty`() {
+        // Setup
+        val value = ""
+        val autofillViewData = autofillViewData.copy(
+            autofillType = View.AUTOFILL_TYPE_TEXT,
+        )
+        val autofillView = AutofillView.Login.Username(
+            data = autofillViewData,
+        )
+
+        // Test
+        val actual = autofillView.buildFilledItemOrNull(
+            value = value,
+        )
+
+        // Verify
+        assertNull(actual)
+    }
 }
