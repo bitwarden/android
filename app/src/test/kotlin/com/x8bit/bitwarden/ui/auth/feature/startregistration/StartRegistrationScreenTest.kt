@@ -14,10 +14,10 @@ import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.performCustomAccessibilityAction
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
@@ -39,7 +39,7 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
 
     private val intentManager = mockk<IntentManager>(relaxed = true) {
         every { startCustomTabsActivity(any()) } just runs
-        every { startActivity(any()) } just runs
+        every { startActivity(any()) } returns true
         every { launchUri(any()) } just runs
     }
 

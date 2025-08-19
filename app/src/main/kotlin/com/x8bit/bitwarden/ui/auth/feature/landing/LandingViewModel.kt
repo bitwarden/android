@@ -7,6 +7,7 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidEmail
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -16,7 +17,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
@@ -180,7 +180,7 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun handleContinueButtonClicked() {
-        if (!state.emailInput.isValidEmail()) {
+        if (!state.emailInput.isValidEmail(useStrictValidation = false)) {
             mutableStateFlow.update {
                 it.copy(
                     dialog = LandingState.DialogState.Error(

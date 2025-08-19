@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.data.platform.manager.di
 import android.app.Application
 import android.content.Context
 import androidx.core.content.getSystemService
+import com.bitwarden.core.data.manager.realtime.RealtimeManager
+import com.bitwarden.core.data.manager.realtime.RealtimeManagerImpl
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.manager.toast.ToastManagerImpl
 import com.bitwarden.data.manager.DispatcherManager
@@ -200,6 +202,10 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
+    fun provideRealtimeManager(): RealtimeManager = RealtimeManagerImpl()
+
+    @Provides
+    @Singleton
     fun provideToastManager(
         @ApplicationContext context: Context,
     ): ToastManager = ToastManagerImpl(
@@ -329,13 +335,8 @@ object PlatformManagerModule {
     @Singleton
     fun provideRestrictionManager(
         @ApplicationContext context: Context,
-        appStateManager: AppStateManager,
-        dispatcherManager: DispatcherManager,
         environmentRepository: EnvironmentRepository,
     ): RestrictionManager = RestrictionManagerImpl(
-        appStateManager = appStateManager,
-        dispatcherManager = dispatcherManager,
-        context = context,
         environmentRepository = environmentRepository,
         restrictionsManager = requireNotNull(context.getSystemService()),
     )

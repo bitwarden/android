@@ -51,6 +51,7 @@ import com.bitwarden.network.model.UserDecryptionOptionsJson
 import com.bitwarden.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 import com.bitwarden.network.model.VerifyEmailTokenRequestJson
 import com.bitwarden.network.model.VerifyEmailTokenResponseJson
+import com.bitwarden.network.model.createMockAccountKeysJson
 import com.bitwarden.network.model.createMockOrganization
 import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.network.service.AccountsService
@@ -6714,6 +6715,7 @@ class AuthRepositoryTest {
             kdfMemory = 16,
             kdfParallelism = 4,
             privateKey = "privateKey",
+            accountKeys = createMockAccountKeysJson(number = 1),
             shouldForcePasswordReset = true,
             shouldResetMasterPassword = true,
             twoFactorToken = null,

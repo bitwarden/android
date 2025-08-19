@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+private const val TEXT_VALUE = "TEXT_VALUE"
+
 class AutofillViewExtensionsTest {
     private val autofillId: AutofillId = mockk()
     private val autofillValue: AutofillValue = mockk()
@@ -48,6 +50,7 @@ class AutofillViewExtensionsTest {
         )
         val autofillView = AutofillView.Card.ExpirationYear(
             data = autofillViewData,
+            yearValue = TEXT_VALUE,
         )
         val expected = FilledItem(
             autofillId = autofillId,
@@ -76,6 +79,7 @@ class AutofillViewExtensionsTest {
         )
         val autofillView = AutofillView.Card.ExpirationYear(
             data = autofillViewData,
+            yearValue = null,
         )
 
         // Test
@@ -179,13 +183,14 @@ class AutofillViewExtensionsTest {
     fun `buildFilledItemOrNull should return index list value when list type, and value is found in options`() {
         // Setup
         val expectedValue = 1
-        val value = "2025"
+        val value = "1"
         val autofillViewData = autofillViewData.copy(
             autofillType = View.AUTOFILL_TYPE_LIST,
             autofillOptions = listOf("2024", value, "2026"),
         )
         val autofillView = AutofillView.Card.ExpirationYear(
             data = autofillViewData,
+            yearValue = null,
         )
         val expected = FilledItem(
             autofillId = autofillId,
@@ -216,6 +221,7 @@ class AutofillViewExtensionsTest {
         )
         val autofillView = AutofillView.Card.ExpirationYear(
             data = autofillViewData,
+            yearValue = value,
         )
 
         // Test

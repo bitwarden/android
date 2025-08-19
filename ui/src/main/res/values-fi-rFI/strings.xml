@@ -286,7 +286,7 @@ Koodi skannataan automaattisesti.</string>
     <string name="new_uri">Uusi URI</string>
     <string name="add_website">Lisää verkkosivusto</string>
     <string name="base_domain">Pääverkkotunnus</string>
-    <string name="default_text">Oletus</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Tarkka</string>
     <string name="host">Isäntä</string>
     <string name="reg_ex">Säännöllinen lauseke</string>
@@ -356,7 +356,7 @@ Koodi skannataan automaattisesti.</string>
     <string name="clear_clipboard">Tyhjennä leikepöytä</string>
     <string name="clear_clipboard_description">Poista kopioidut arvot leikepöydältä automaattisesti.</string>
     <string name="default_uri_match_detection">URI:n oletuarvoinen tunnistustapa</string>
-    <string name="default_uri_match_detection_description">Valitse kirjautumistietojen URI:en oletusarvoinen tunnistustapa suoritettaessa automaattisen täytön kaltaisia toimintoja.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Teema</string>
     <string name="theme_description">Vaihda sovelluksen väriteemaa.</string>
     <string name="copy_notes">Kopioi merkinnät</string>
@@ -483,7 +483,6 @@ Koodi skannataan automaattisesti.</string>
     <string name="password_prompt">Pääsalasanan uudelleenkysely</string>
     <string name="password_confirmation">Pääsalasanan vahvistus</string>
     <string name="password_confirmation_desc">Toiminto on suojattu. Jatka vahvistamalla henkilöllisyytesi syöttämällä pääsalasanasi uudelleen.</string>
-    <string name="captcha_failed">Captcha-vahvistus epäonnistui. Yritä uudelleen.</string>
     <string name="update_master_password">Päivitä pääsalasana</string>
     <string name="update_master_password_warning">Organisaatiosi ylläpito on hiljattain vaihtanut pääsalasanasi ja käyttääksesi holvia sinun on päivitettävä se nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan.</string>
     <string name="updating_password">Salasanaa vaihdetaan</string>
@@ -1070,4 +1069,13 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="items_expanded_click_to_collapse">Kohteet on laajennettu. Paina pienentääksesi.</string>
     <string name="items_are_collapsed_click_to_expand">Kohteet ovat tiivistetty. Paina laajentaaksesi.</string>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

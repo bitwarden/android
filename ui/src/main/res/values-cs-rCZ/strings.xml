@@ -286,7 +286,7 @@ Načtení proběhne automaticky.</string>
     <string name="new_uri">Nová URI</string>
     <string name="add_website">Přidat webovou stránku</string>
     <string name="base_domain">Základní doména</string>
-    <string name="default_text">Výchozí</string>
+    <string name="default_text">Výchozí (%1$s)</string>
     <string name="exact">Přesně</string>
     <string name="host">Hostitel</string>
     <string name="reg_ex">Regulární výraz</string>
@@ -356,7 +356,7 @@ Načtení proběhne automaticky.</string>
     <string name="clear_clipboard">Vymazat schránku</string>
     <string name="clear_clipboard_description">Automaticky vymaže zkopírované hodnoty z Vaší schránky.</string>
     <string name="default_uri_match_detection">Výchozí zjišťování shody URI</string>
-    <string name="default_uri_match_detection_description">Vyberte výchozí způsob, jakým se detekuje shoda URI přihlašovacích údajů. Používá se například pro automatické vyplňování.</string>
+    <string name="default_uri_match_detection_description">Detekce shody URI ovládá způsob, jakým Bitwarden identifikuje návrhy automatického vyplňování.</string>
     <string name="theme">Motiv</string>
     <string name="theme_description">Změní barevný motiv aplikace.</string>
     <string name="copy_notes">Kopírovat poznámku</string>
@@ -483,7 +483,6 @@ Načtení proběhne automaticky.</string>
     <string name="password_prompt">Zeptat se znovu na hlavní heslo</string>
     <string name="password_confirmation">Potvrzení hlavního hesla</string>
     <string name="password_confirmation_desc">Tato akce je chráněna. Chcete-li pokračovat, zadejte znovu Vaše hlavní heslo, abychom ověřili Vaši totožnost.</string>
-    <string name="captcha_failed">Captcha selhala. Zkuste to znovu.</string>
     <string name="update_master_password">Aktualizovat hlavní heslo</string>
     <string name="update_master_password_warning">Administrátor v organizaci nedávno změnil Vaše hlavní heslo. Pro přístup k trezoru jej nyní musíte změnit. Pokračování Vás odhlásí z Vaší aktuální relace a bude nutné se znovu přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny.</string>
     <string name="updating_password">Aktualizování hesla</string>
@@ -1071,4 +1070,13 @@ při opakování problémů.</string>
     <string name="items_expanded_click_to_collapse">Položky jsou rozbaleny; klepnutím sbalíte.</string>
     <string name="items_are_collapsed_click_to_expand">Položky jsou sbaleny; klepnutím rozbalíte.</string>
     <string name="select_a_card_for_x">Vyberte kartu pro %s</string>
+    <string name="advanced_options">Rozšířené volby</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Další informace o detekci shody</annotation></string>
+    <string name="keep_your_credential_secure">Uchovávejte Vaše přihlašovací údaje v bezpečí</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Zjistěte více o tom, jak udržet přihlašovací údaje při používání \"%1$s\" v bezpečí.</string>
+    <string name="are_you_sure_you_want_to_use">Opravdu chcete použít \"%1$s\"?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">Detekce shody URI ovládá způsob, jakým Bitwarden identifikuje návrhy automatického vyplňování.\n<annotation emphasis="bold">Varování:</annotation> \"Regulární výraz\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů, pokud je použita nesprávně.</string>
+    <string name="default_uri_match_detection_description_advanced_options">Detekce shody URI ovládá způsob, jakým Bitwarden identifikuje návrhy automatického vyplňování.\n<annotation emphasis="bold">Varování:</annotation> \"Začíná na\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů, pokud je použita nesprávně.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Začíná na\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Regulární výraz\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů.</string>
 </resources>

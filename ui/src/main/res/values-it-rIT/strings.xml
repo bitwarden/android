@@ -146,7 +146,7 @@
     <string name="syncing">Sincronizzazione in corso</string>
     <string name="syncing_complete">Sincronizzazione completata</string>
     <string name="two_step_login">Configurazione 2FA (autenticazione a due fattori)</string>
-    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
+    <string name="unlock_with_biometrics">Sblocca con i dati biometrici</string>
     <string name="unlock_with_pin">Sblocco con Codice PIN</string>
     <string name="verification_code">Codice di verifica</string>
     <string name="view_login">Visualizza il login</string>
@@ -285,7 +285,7 @@
     <string name="new_uri">Aggiungi un URL</string>
     <string name="add_website">Aggiungi un sito web</string>
     <string name="base_domain">Dominio di base</string>
-    <string name="default_text">Predefinito</string>
+    <string name="default_text">Predefinito (%1$s)</string>
     <string name="exact">Esatto</string>
     <string name="host">Host</string>
     <string name="reg_ex">Espressione regolare (regex)</string>
@@ -355,7 +355,7 @@
     <string name="clear_clipboard">Cancellazione automatica degli appunti</string>
     <string name="clear_clipboard_description">Cancella automaticamente i valori copiati negli appunti dopo un determinato periodo di tempo</string>
     <string name="default_uri_match_detection">Metodo di corrispondenza degli URL predefinito</string>
-    <string name="default_uri_match_detection_description">Scegli il metodo predefinito con cui viene rilevata la corrispondenza tra l\'URL di un sito web e quello salvato in un login</string>
+    <string name="default_uri_match_detection_description">La corrispondenza URL è il metodo predefinito per identificare i suggerimenti di riempimento automatico.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Cambia il tema dell\'applicazione</string>
     <string name="copy_notes">Copia le note</string>
@@ -482,7 +482,6 @@
     <string name="password_prompt">Richiesta per conferma della password principale</string>
     <string name="password_confirmation">Conferma la password principale</string>
     <string name="password_confirmation_desc">Questa azione è protetta. Inserisci la password principale.</string>
-    <string name="captcha_failed">Captcha fallito. Riprova.</string>
     <string name="update_master_password">Aggiorna la password principale</string>
     <string name="update_master_password_warning">La password principale dell\'account è stata cambiata da un amministratore dell\'organizzazione. Aggiorna la password principale per accedere alla cassaforte.
 Tutte le sessioni attive verranno terminate entro un\'ora.</string>
@@ -1068,5 +1067,14 @@ Vuoi passare a questo account?</string>
     <string name="local_items_are_collapsed_click_to_expand">Elementi locali nascosti; tocca per espandere la lista.</string>
     <string name="items_expanded_click_to_collapse">Elementi visibili; tocca per nascondere.</string>
     <string name="items_are_collapsed_click_to_expand">Elementi nascosti; tocca per mostrarli.</string>
-    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="select_a_card_for_x">Seleziona una carta per %s</string>
+    <string name="advanced_options">Opzioni avanzate</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Ulteriori informazioni sulla corrispondenza degli URL</annotation></string>
+    <string name="keep_your_credential_secure">Mantieni le tue credenziali sicure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Ulteriori informazioni su come mantenere le credenziali sicure quando si utilizza “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Vuoi davvero usare “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">Il metodo di rilevamento URL specifica il modo in cui Bitwarden rileva l\'indirizzo per mostrare suggerimenti pertinenti di riempimento automatico.\n<annotation emphasis="bold">Attenzione:</annotation> \'Espressione regolare\' è un\'opzione avanzata con un rischio maggiore di esporre le credenziali se usato senza cognizione di causa.</string>
+    <string name="default_uri_match_detection_description_advanced_options">Il metodo di rilevamento URL specifica il modo in cui Bitwarden rileva l\'indirizzo per mostrare suggerimenti pertinenti di riempimento automatico.\n<annotation emphasis="bold">Attenzione:</annotation> \'Inizia con\' è un\'opzione avanzata con un rischio maggiore di esporre le credenziali.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\'Inizia con\' è un\'opzione avanzata con un rischio maggiore di esporre le credenziali.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\'Espressione regolare\' è un\'opzione avanzata con un rischio maggiore di esporre le credenziali se usato senza cognizione di causa.</string>
 </resources>

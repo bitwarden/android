@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.data.datasource.disk.BaseEncryptedDiskSource
+import com.bitwarden.network.model.AccountKeysJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -242,13 +243,13 @@ class AuthDiskSourceImpl(
         )
     }
 
-    override fun getAccountKeys(userId: String): SyncResponseJson.Profile.AccountKeys? =
+    override fun getAccountKeys(userId: String): AccountKeysJson? =
         getEncryptedString(key = PROFILE_ACCOUNT_KEYS_KEY.appendIdentifier(userId))
             ?.let { json.decodeFromStringOrNull(it) }
 
     override fun storeAccountKeys(
         userId: String,
-        accountKeys: SyncResponseJson.Profile.AccountKeys?,
+        accountKeys: AccountKeysJson?,
     ) {
         putEncryptedString(
             key = PROFILE_ACCOUNT_KEYS_KEY.appendIdentifier(userId),

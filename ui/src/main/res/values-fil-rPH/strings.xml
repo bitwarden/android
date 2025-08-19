@@ -286,7 +286,7 @@ Awtomatikong itong magsa-scan.</string>
     <string name="new_uri">Bagong URI</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">Base domain</string>
-    <string name="default_text">Default</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Eksakto</string>
     <string name="host">Host</string>
     <string name="reg_ex">Regular na expression</string>
@@ -356,7 +356,7 @@ Awtomatikong itong magsa-scan.</string>
     <string name="clear_clipboard">Linisin ang clipboard</string>
     <string name="clear_clipboard_description">Awtomatikong linisin ang mga bagay na nakopya sa iyong clipboard.</string>
     <string name="default_uri_match_detection">Default na deteksyon ng pagkakatugma ng URI</string>
-    <string name="default_uri_match_detection_description">Piliin ang default na paraang ginagamit sa pag-detect sa pagkakatugma ng URI para sa mga login kung gumagawa ng mga kilos tulad ng pag-autofill.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Baguhin ang kulay at tema ng aplikasyon.</string>
     <string name="copy_notes">Kopyahin ang tala</string>
@@ -483,7 +483,6 @@ Awtomatikong itong magsa-scan.</string>
     <string name="password_prompt">Reprompt para sa master password</string>
     <string name="password_confirmation">Kumpirmasyon para sa master password</string>
     <string name="password_confirmation_desc">Protektado ang aksyong ito, mangyaring ilagay ulit ang master password mo para maberipika ang pagkakakilanlan mo.</string>
-    <string name="captcha_failed">Mali ang Captcha. Pakisubukan ulit.</string>
     <string name="update_master_password">I-update ang master password</string>
     <string name="update_master_password_warning">Kamakailang binago ng isang administrator sa organisasyon mo ang iyong master password. Para ma-access ang vault, kailangan mo nang i-update ngayon ang master password mo. Mala-log out ka sa kasalukuyan mong sesyon, at kailangan mong mag-log in ulit. Maaaring manatiling aktibo ang mga sesyon sa iba mo pang device hanggang sa isang oras.</string>
     <string name="updating_password">Ina-update ang password</string>
@@ -1070,4 +1069,13 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

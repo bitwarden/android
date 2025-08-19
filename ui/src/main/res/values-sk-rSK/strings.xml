@@ -286,7 +286,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="new_uri">Nové URI</string>
     <string name="add_website">Pridať webovú stránku</string>
     <string name="base_domain">Základná doména</string>
-    <string name="default_text">Predvolené</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Presný</string>
     <string name="host">Hostiteľ</string>
     <string name="reg_ex">Regulárny výraz</string>
@@ -356,7 +356,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="clear_clipboard">Vymazať schránku</string>
     <string name="clear_clipboard_description">Automaticky vymazať skopírované hodnoty zo schránky.</string>
     <string name="default_uri_match_detection">Predvolené zisťovanie zhody URI</string>
-    <string name="default_uri_match_detection_description">Vyberte si predvolený spôsob zisťovania zhody URI, ktorý bude použitý pre prihlasovacie údaje pri využití funkcií, ako je napríklad automatické vypĺňanie hesiel.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Motív</string>
     <string name="theme_description">Zmeniť motív aplikácie.</string>
     <string name="copy_notes">Kopírovať poznámku</string>
@@ -483,7 +483,6 @@ Skenovanie prebehne automaticky.</string>
     <string name="password_prompt">Znova zadajte hlavné heslo</string>
     <string name="password_confirmation">Potvrdenie hlavného hesla</string>
     <string name="password_confirmation_desc">Táto akcia je chránená. Ak chcete pokračovať, znova zadajte hlavné heslo a overte svoju totožnosť.</string>
-    <string name="captcha_failed">Captcha zlyhala. Prosím, skúste to znova.</string>
     <string name="update_master_password">Aktualizovať hlavné heslo</string>
     <string name="update_master_password_warning">Vaše hlavné heslo nedávno zmenil správca vo vašej organizácii. Ak chcete získať prístup k trezoru, musíte aktualizovať vaše hlavné heslo teraz. Pokračovaním sa odhlásite z aktuálnej relácie a budete sa musieť znova prihlásiť. Aktívne relácie na iných zariadeniach môžu zostať aktívne až jednu hodinu.</string>
     <string name="updating_password">Aktualizácia hesla</string>
@@ -1070,4 +1069,13 @@ Chcete prepnúť na tento účet?</string>
     <string name="items_expanded_click_to_collapse">Položky sú rozbalené, kliknutím ich zbalíte.</string>
     <string name="items_are_collapsed_click_to_expand">Položky sú zbalené, kliknutím ich rozbalíte.</string>
     <string name="select_a_card_for_x">Vyberte kartu pre %s</string>
+    <string name="advanced_options">Rozšírené možnosti</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Viac informácií o zisťovaní zhody</annotation></string>
+    <string name="keep_your_credential_secure">Udržujte svoje prihlasovacie údaje v bezpečí</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Ďalšie informácie o tom, ako zabezpečiť prihlasovacie údaje pri používaní \"%1$s\".</string>
+    <string name="are_you_sure_you_want_to_use">Naozaj chcete použiť \"%1$s\"?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">Zisťovanie zhody URI ovláda ako Bitwarden identifikuje návrhy na automatické vyplnenie.\n<annotation emphasis="bold">Upozornenie:</annotation>\"Regulárny výraz\" je pokročilá možnosť so zvýšeným rizikom úniku prihlasovacích údajov, ak sa použije nesprávne.</string>
+    <string name="default_uri_match_detection_description_advanced_options">Zisťovanie zhody URI ovláda ako Bitwarden identifikuje návrhy na automatické vyplnenie.\n<annotation emphasis="bold">Upozornenie:</annotation>\"Začína na\" je pokročilá možnosť so zvýšeným rizikom úniku prihlasovacích údajov.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Začína na\" je rozšírená možnosť so zvýšeným rizikom odhalenia prihlasovacích údajov.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Regulárny výraz\" je pokročilá možnosť so zvýšeným rizikom odhalenia prihlasovacích údajov, ak sa použije nesprávne.</string>
 </resources>

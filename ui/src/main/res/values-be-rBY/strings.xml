@@ -285,7 +285,7 @@
     <string name="new_uri">Новы URI</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">Асноўны дамен</string>
-    <string name="default_text">Прадвызначана</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Дакладна</string>
     <string name="host">Вузел</string>
     <string name="reg_ex">Рэгулярны выраз</string>
@@ -355,7 +355,7 @@
     <string name="clear_clipboard">Ачысціць буфер абмену</string>
     <string name="clear_clipboard_description">Аўтаматычна ачышчаць скапіяваныя значэнні з вашага буфера абмену.</string>
     <string name="default_uri_match_detection">Прадвызначанае выяўленне супадзення URI</string>
-    <string name="default_uri_match_detection_description">Выберыце прадвызначаны спосаб вызначэння адпаведнасці URI для лагінаў пры выкананні такіх дзеянняў, як аўтаматычнае запаўненне.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Тэма</string>
     <string name="theme_description">Змена каляровай тэмы праграмы.</string>
     <string name="copy_notes">Скапіяваць нататку</string>
@@ -482,7 +482,6 @@
     <string name="password_prompt">Паўторны запыт асноўнага пароля</string>
     <string name="password_confirmation">Пацвярджэнне асноўнага пароля</string>
     <string name="password_confirmation_desc">Гэта дзеянне абаронена. Паўторна ўвядзіце асноўны пароль, каб праверыць сваю асобу і працягнуць далей.</string>
-    <string name="captcha_failed">Збой CAPTCHA. Паспрабуйце яшчэ раз.</string>
     <string name="update_master_password">Абнавіць асноўны пароль</string>
     <string name="update_master_password_warning">Ваш асноўны пароль быў нядаўна зменены адміністратарам вашай арганізацыі. Для атрымання доступу да сховішча, вы павінны абнавіць яго. Працягваючы, вы выйдзіце з бягучага сеанса і вам неабходна будзе ўвайсці паўторна. Сеансы на іншых прыладах могуць заставацца актыўнымі на працягу адной гадзіны.</string>
     <string name="updating_password">Абнаўленне пароля</string>
@@ -1069,4 +1068,13 @@
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

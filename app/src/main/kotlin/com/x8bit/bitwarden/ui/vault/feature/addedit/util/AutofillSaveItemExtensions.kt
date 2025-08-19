@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import java.util.UUID
 
 /**
@@ -20,6 +21,7 @@ fun AutofillSaveItem.toDefaultAddTypeContent(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 isIndividualVaultDisabled = isIndividualVaultDisabled,
                 type = VaultAddEditState.ViewState.Content.ItemType.Card(
+                    cardHolderName = this.cardholderName.orEmpty(),
                     number = this.number.orEmpty(),
                     expirationMonth = VaultCardExpirationMonth
                         .entries
@@ -54,3 +56,11 @@ fun AutofillSaveItem.toDefaultAddTypeContent(
             )
         }
     }
+
+/**
+ * Converts an [AutofillSaveItem] to a [VaultItemCipherType].
+ */
+fun AutofillSaveItem.toVaultItemCipherType(): VaultItemCipherType = when (this) {
+    is AutofillSaveItem.Card -> VaultItemCipherType.CARD
+    is AutofillSaveItem.Login -> VaultItemCipherType.LOGIN
+}

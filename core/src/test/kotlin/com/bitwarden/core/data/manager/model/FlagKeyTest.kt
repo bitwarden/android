@@ -32,10 +32,6 @@ class FlagKeyTest {
             FlagKey.BitwardenAuthenticationEnabled.keyName,
             "bitwarden-authentication-enabled",
         )
-        assertEquals(
-            FlagKey.EnrollAeadOnKeyRotation.keyName,
-            "enroll-aead-on-key-rotation",
-        )
     }
 
     @Test
@@ -48,7 +44,6 @@ class FlagKeyTest {
                 FlagKey.UserManagedPrivilegedApps,
                 FlagKey.RemoveCardPolicy,
                 FlagKey.BitwardenAuthenticationEnabled,
-                FlagKey.EnrollAeadOnKeyRotation,
             ).all {
                 !it.defaultValue
             },

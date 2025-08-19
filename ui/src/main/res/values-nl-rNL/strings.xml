@@ -286,7 +286,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="new_uri">Nieuwe URI</string>
     <string name="add_website">Website toevoegen</string>
     <string name="base_domain">Basisdomein</string>
-    <string name="default_text">Standaard</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Exact</string>
     <string name="host">Hostnaam</string>
     <string name="reg_ex">Reguliere expressie</string>
@@ -356,7 +356,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="clear_clipboard">Klembord wissen</string>
     <string name="clear_clipboard_description">Gekopieerde waarden automatisch van het klembord wissen.</string>
     <string name="default_uri_match_detection">Standaard URI-overeenkomstdetectie</string>
-    <string name="default_uri_match_detection_description">Kies de standaardmethode voor detectie van URI-overeenkomsten voor logins bij acties, zoals automatisch invullen.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Thema</string>
     <string name="theme_description">Het kleurenthema van de applicatie wijzigen.</string>
     <string name="copy_notes">Notities kopiëren</string>
@@ -483,7 +483,6 @@ Het scannen gebeurt automatisch.</string>
     <string name="password_prompt">Hoofdwachtwoord opnieuw vragen</string>
     <string name="password_confirmation">Hoofdwachtwoord bevestigen</string>
     <string name="password_confirmation_desc">Deze actie is beveiligd. Voer je hoofdwachtwoord opnieuw in om je identiteit vast te stellen en door te gaan.</string>
-    <string name="captcha_failed">Captcha verificatie is mislukt. Probeer het nog eens.</string>
     <string name="update_master_password">Hoofdwachtwoord bijgewerken</string>
     <string name="update_master_password_warning">Je hoofdwachtwoord is onlangs veranderd door een beheerder in jouw organisatie. Om toegang te krijgen tot de kluis, moet je deze nu bijwerken. Doorgaan zal je huidige sessie uitloggen, waarna je opnieuw moet inloggen. Actieve sessies op andere apparaten blijven mogelijk nog een uur actief.</string>
     <string name="updating_password">Wachtwoord bijwerken</string>
@@ -1070,4 +1069,13 @@ Wilt u naar dit account wisselen?</string>
     <string name="items_expanded_click_to_collapse">Items zijn uitgevouwen, klik om in te vouwen.</string>
     <string name="items_are_collapsed_click_to_expand">Items zijn ingevouwen, klik om uit te vouwen.</string>
     <string name="select_a_card_for_x">Kies een kaart voor %s</string>
+    <string name="advanced_options">Geavanceerde opties</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Lees meer over overeenkomstdetectie</annotation></string>
+    <string name="keep_your_credential_secure">Houd je inloggegevens veilig</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Leer meer over hoe je de inloggegevens veilig kunt houden bij het gebruik van “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Weet je zeker dat je “%1$s” wilt gebruiken?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">De URI match detectie bepaalt hoe Bitwarden autofill-suggesties herkent.\n<annotation emphasis="bold">Waarschuwing:</annotation> \"Reguliere expressie\" is een geavanceerde optie met verhoogd risico voor het blootstellen van inloggegevens als je het niet goed gebruikt.</string>
+    <string name="default_uri_match_detection_description_advanced_options">De URI match detectie bepaalt hoe Bitwarden autofill-suggesties herkent.\n<annotation emphasis="bold">Waarschuwing:</annotation> \"Begint met\" is een geavanceerde optie met verhoogd risico voor het blootstellen van inloggegevens als je het niet goed gebruikt.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Begint met\" is een geavanceerde optie met een verhoogd risico op het blootstellen van inloggegevens.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Reguliere expressie\" is een geavanceerde optie met een verhoogd risico op het blootstellen van inloggegevens als je het verkeerd gebruikt.</string>
 </resources>

@@ -25,6 +25,7 @@ class AutoFillHandlers(
     val onAskToAddLoginClick: (isEnabled: Boolean) -> Unit,
     val onDefaultUriMatchTypeSelect: (defaultUriMatchType: UriMatchType) -> Unit,
     val onBlockAutoFillClick: () -> Unit,
+    val onLearnMoreClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -86,6 +87,7 @@ class AutoFillHandlers(
                 )
             },
             onBlockAutoFillClick = { viewModel.trySendAction(AutoFillAction.BlockAutoFillClick) },
+            onLearnMoreClick = { viewModel.trySendAction(AutoFillAction.LearnMoreClick) },
         )
     }
 }

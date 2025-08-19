@@ -12,6 +12,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
@@ -19,18 +20,25 @@ import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.utils.startBrowserAutofillSettingsActivity
+import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAccessibilitySettingsActivity
+import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAutofillSettingsActivity
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
+@Suppress("LargeClass")
 class AutoFillScreenTest : BitwardenComposeTest() {
 
     private var isSystemSettingsRequestSuccess = false
@@ -47,14 +55,23 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         every { stateFlow } returns mutableStateFlow
     }
     private val intentManager: IntentManager = mockk {
-        every { startSystemAutofillSettingsActivity() } answers { isSystemSettingsRequestSuccess }
-        every { startCredentialManagerSettings(any()) } just runs
-        every { startSystemAccessibilitySettingsActivity() } just runs
-        every { startBrowserAutofillSettingsActivity(any()) } returns true
+        every { startCredentialManagerSettings() } just runs
+        every { launchUri(any()) } just runs
     }
 
     @Before
     fun setUp() {
+        mockkStatic(
+            IntentManager::startSystemAutofillSettingsActivity,
+            IntentManager::startSystemAccessibilitySettingsActivity,
+            IntentManager::startBrowserAutofillSettingsActivity,
+        )
+        every { intentManager.startBrowserAutofillSettingsActivity(any()) } returns true
+        every {
+            intentManager.startSystemAutofillSettingsActivity()
+        } answers { isSystemSettingsRequestSuccess }
+        every { intentManager.startSystemAccessibilitySettingsActivity() } just runs
+
         setContent(
             intentManager = intentManager,
         ) {
@@ -71,6 +88,15 @@ class AutoFillScreenTest : BitwardenComposeTest() {
                 viewModel = viewModel,
             )
         }
+    }
+
+    @After
+    fun tearDown() {
+        unmockkStatic(
+            IntentManager::startSystemAutofillSettingsActivity,
+            IntentManager::startSystemAccessibilitySettingsActivity,
+            IntentManager::startBrowserAutofillSettingsActivity,
+        )
     }
 
     @Test
@@ -124,7 +150,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     fun `on NavigateToSettings should attempt to navigate to credential manager settings`() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToSettings)
 
-        verify { intentManager.startCredentialManagerSettings(any()) }
+        verify { intentManager.startCredentialManagerSettings() }
 
         composeTestRule.assertNoDialogExists()
     }
@@ -671,6 +697,114 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(AutoFillAction.PrivilegedAppsClick)
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on default URI match type dialog item click should send warning when is an Advanced Option`() {
+        composeTestRule
+            .onNodeWithText(text = "Default URI match detection")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Starts with")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(
+                "“Starts with” is an advanced option with " +
+                    "increased risk of exposing credentials.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on advanced match detection warning dialog click on cancel should not change the default URI match type`() {
+        composeTestRule
+            .onNodeWithText(text = "Default URI match detection")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Starts with")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(
+                AutoFillAction.DefaultUriMatchTypeSelect(
+                    defaultUriMatchType = UriMatchType.STARTS_WITH,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `on Advanced matching warning dialog confirm should display learn more dialog`() {
+        composeTestRule
+            .onNodeWithText(text = "Default URI match detection")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Starts with")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Keep your credentials secure")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on Advanced matching warning dialog click on more about match detection should call launchUri`() {
+        composeTestRule
+            .onNodeWithText(text = "Default URI match detection")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Starts with")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Learn more")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                AutoFillAction.LearnMoreClick,
+            )
+        }
+    }
+
+    @Test
+    fun `on NavigateToLearnMore should call launchUri`() {
+        mutableEventFlow.tryEmit(AutoFillEvent.NavigateToLearnMore)
+        intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
     }
 }
 

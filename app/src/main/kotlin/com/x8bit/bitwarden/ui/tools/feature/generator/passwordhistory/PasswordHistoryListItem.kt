@@ -22,10 +22,10 @@ import com.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
 import com.bitwarden.ui.platform.base.util.withVisualTransformation
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 
 /**
  * A composable function for displaying a password history list item.

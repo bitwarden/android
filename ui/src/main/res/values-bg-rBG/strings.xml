@@ -286,7 +286,7 @@
     <string name="new_uri">Нов адрес</string>
     <string name="add_website">Добавяне на уеб сайт</string>
     <string name="base_domain">Основен домейн</string>
-    <string name="default_text">Стандартно</string>
+    <string name="default_text">По подразбиране (%1$s)</string>
     <string name="exact">Точно</string>
     <string name="host">Сървър</string>
     <string name="reg_ex">Регулярен израз</string>
@@ -356,7 +356,7 @@
     <string name="clear_clipboard">Изчистване на буфера</string>
     <string name="clear_clipboard_description">Автоматично изчистване на буфера след поставяне на стойността.</string>
     <string name="default_uri_match_detection">Стандартно засичане на съвпадения на адреси</string>
-    <string name="default_uri_match_detection_description">Изберете начина за засичане на съвпадения на адресите за автоматичното дописване при вписване.</string>
+    <string name="default_uri_match_detection_description">Разпознаването на съвпадения чрез адреса задава начина, по който Битуорден определя кои елементи да предложи за автоматично попълване.</string>
     <string name="theme">Облик</string>
     <string name="theme_description">Промяна на цветовия облик на програмата.</string>
     <string name="copy_notes">Копиране на бележките</string>
@@ -483,7 +483,6 @@
     <string name="password_prompt">Повторно запитване за главната парола</string>
     <string name="password_confirmation">Потвърждение на главната парола</string>
     <string name="password_confirmation_desc">Това действие е защитено. За да продължите, въведете отново главната си парола, за да потвърдите самоличността си.</string>
-    <string name="captcha_failed">Грешка. Опитайте отново.</string>
     <string name="update_master_password">Промяна на главната парола</string>
     <string name="update_master_password_warning">Вашата главна парола наскоро е била сменена от администратор в организацията Ви. За да получите достъп до трезора, трябва да промените главната си парола сега. Това означава, че ще бъдете отписан(а) от текущата си сесия и ще трябва да се впишете отново. Активните сесии на други устройства може да продължат да бъдат активни още един час.</string>
     <string name="updating_password">Обновяване на паролата</string>
@@ -1072,4 +1071,13 @@
     <string name="items_expanded_click_to_collapse">Елементите са разгънати. Щракнете за свиване.</string>
     <string name="items_are_collapsed_click_to_expand">Елементите са свити. Щракнете за разгъване.</string>
     <string name="select_a_card_for_x">Изберете карта за %s</string>
+    <string name="advanced_options">Разширени настройки</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Повече относно разпознаването на съвпадения</annotation></string>
+    <string name="keep_your_credential_secure">Защитете данните си за вписване</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Научете повече относно това как да защитите данните си за вписване, когато ползвате „%1$s“.</string>
+    <string name="are_you_sure_you_want_to_use">Наистина ли искате да се използвате „%1$s“?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">Разпознаването на съвпадения по адрес управлява начина, по който Битуорден определя какви предложения за автоматично попълване да покаже.\n<annotation emphasis="bold">Внимание:</annotation> „Регулярен израз“ е по-сложен метод, който е и по-рисков, тъй като може да застраши сигурността на данните за вписване, ако се използва неправилно.</string>
+    <string name="default_uri_match_detection_description_advanced_options">Разпознаването на съвпадения по адрес управлява начина, по който Битуорден определя какви предложения за автоматично попълване да покаже.\n<annotation emphasis="bold">Внимание:</annotation> „Започва с“ е по-сложен метод, който е и по-рисков, тъй като може да застраши сигурността на данните за вписване.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">„Започва с“ е по-сложен метод, който е и по-рисков, тъй като може да застраши сигурността на данните за вписване.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">„Регулярен израз“ е по-сложен метод, който е и по-рисков, тъй като може да застраши сигурността на данните за вписване, ако се използва неправилно.</string>
 </resources>

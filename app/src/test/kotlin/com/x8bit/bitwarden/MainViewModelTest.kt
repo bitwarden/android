@@ -8,13 +8,13 @@ import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManagerImpl
@@ -160,6 +160,10 @@ class MainViewModelTest : BaseViewModelTest() {
                 mockk<GetPublicKeyCredentialOption>(relaxed = true),
             )
         }
+    private val toastManager: ToastManager = mockk {
+        every { show(message = any(), duration = any()) } just runs
+        every { show(messageId = any(), duration = any()) } just runs
+    }
 
     @BeforeEach
     fun setup() {
@@ -592,18 +596,11 @@ class MainViewModelTest : BaseViewModelTest() {
                 authRepository.validateEmailToken(email = intentEmail, token = token)
             } returns EmailTokenResult.Error(message = null, error = Throwable("Fail!"))
 
-            viewModel.eventFlow.test {
-                // We skip the first 2 events because they are the default appTheme and appLanguage
-                awaitItem()
-                awaitItem()
+            viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
 
-                viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
-                assertEquals(
-                    MainEvent.ShowToast(
-                        BitwardenString.there_was_an_issue_validating_the_registration_token
-                            .asText(),
-                    ),
-                    awaitItem(),
+            verify(exactly = 1) {
+                toastManager.show(
+                    BitwardenString.there_was_an_issue_validating_the_registration_token,
                 )
             }
         }
@@ -629,16 +626,10 @@ class MainViewModelTest : BaseViewModelTest() {
                 authRepository.validateEmailToken(email = intentEmail, token = token)
             } returns EmailTokenResult.Error(message = expectedMessage, error = null)
 
-            viewModel.eventFlow.test {
-                // We skip the first 2 events because they are the default appTheme and appLanguage
-                awaitItem()
-                awaitItem()
+            viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
 
-                viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
-                assertEquals(
-                    MainEvent.ShowToast(expectedMessage.asText()),
-                    awaitItem(),
-                )
+            verify(exactly = 1) {
+                toastManager.show(message = expectedMessage)
             }
         }
 
@@ -1157,6 +1148,7 @@ class MainViewModelTest : BaseViewModelTest() {
             set(SPECIAL_CIRCUMSTANCE_KEY, initialSpecialCircumstance)
         },
         appResumeManager = appResumeManager,
+        toastManager = toastManager,
     )
 }
 

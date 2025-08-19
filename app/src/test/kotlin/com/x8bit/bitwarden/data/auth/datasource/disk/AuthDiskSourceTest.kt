@@ -10,9 +10,9 @@ import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
+import com.bitwarden.network.model.createMockAccountKeysJson
 import com.bitwarden.network.model.createMockOrganization
 import com.bitwarden.network.model.createMockPolicy
-import com.bitwarden.network.model.createMockPrivateKeys
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
@@ -283,7 +283,7 @@ class AuthDiskSourceTest {
         authDiskSource.storePrivateKey(userId = userId, privateKey = "privateKey")
         authDiskSource.storeAccountKeys(
             userId = userId,
-            accountKeys = createMockPrivateKeys(number = 1),
+            accountKeys = createMockAccountKeysJson(number = 1),
         )
         authDiskSource.storeOrganizationKeys(
             userId = userId,
@@ -486,7 +486,7 @@ class AuthDiskSourceTest {
     fun `getAccountKeys should pull from SharedPreferences`() {
         val accountKeysBaseKey = "bwSecureStorage:profileAccountKeys"
         val mockUserId = "mockUserId"
-        val mockAccountKeys = createMockPrivateKeys(number = 1)
+        val mockAccountKeys = createMockAccountKeysJson(number = 1)
         fakeEncryptedSharedPreferences.edit {
             putString(
                 "${accountKeysBaseKey}_$mockUserId",
@@ -504,7 +504,7 @@ class AuthDiskSourceTest {
     fun `storeAccountKeys should update sharedPreferences`() {
         val accountKeysBaseKey = "bwSecureStorage:profileAccountKeys"
         val mockUserId = "mockUserId"
-        val mockAccountKeys = createMockPrivateKeys(number = 1)
+        val mockAccountKeys = createMockAccountKeysJson(number = 1)
         authDiskSource.storeAccountKeys(
             userId = mockUserId,
             accountKeys = mockAccountKeys,

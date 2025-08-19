@@ -8,9 +8,11 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.ui.platform.model.FileData
-import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import kotlinx.parcelize.Parcelize
+import java.time.Clock
 
 /**
  * A manager class for simplifying the handling of Android Intents within a given context.
@@ -19,9 +21,16 @@ import kotlinx.parcelize.Parcelize
 @Immutable
 interface IntentManager {
     /**
-     * Start an activity using the provided [Intent].
+     * The package name for the current app, this can be used to generate an [Intent].
      */
-    fun startActivity(intent: Intent)
+    val packageName: String
+
+    /**
+     * Start an activity using the provided [Intent].
+     *
+     * @return `true` if the activity was started successfully, `false` otherwise.
+     */
+    fun startActivity(intent: Intent): Boolean
 
     /**
      * Start a Custom Tabs Activity using the provided [Uri].
@@ -29,30 +38,9 @@ interface IntentManager {
     fun startCustomTabsActivity(uri: Uri)
 
     /**
-     * Attempts to start the system accessibility settings activity.
-     */
-    fun startSystemAccessibilitySettingsActivity()
-
-    /**
-     * Attempts to start the system autofill settings activity. The return value indicates whether
-     * or not this was successful.
-     */
-    fun startSystemAutofillSettingsActivity(): Boolean
-
-    /**
-     * Starts the application's settings activity.
-     */
-    fun startApplicationDetailsSettingsActivity()
-
-    /**
      * Starts the credential manager settings.
      */
-    fun startCredentialManagerSettings(context: Context)
-
-    /**
-     * Starts the browser autofill settings activity for the provided [BrowserPackage].
-     */
-    fun startBrowserAutofillSettingsActivity(browserPackage: BrowserPackage): Boolean
+    fun startCredentialManagerSettings()
 
     /**
      * Start an activity to view the given [uri] in an external browser.
@@ -108,11 +96,6 @@ interface IntentManager {
     fun createDocumentIntent(fileName: String): Intent
 
     /**
-     * Open the default email app on device.
-     */
-    fun startDefaultEmailApplication()
-
-    /**
      * Represents data for a share request coming from outside the app.
      */
     sealed class ShareData : Parcelable {
@@ -132,5 +115,22 @@ interface IntentManager {
         data class FileSend(
             val fileData: FileData,
         ) : ShareData()
+    }
+
+    @Suppress("UndocumentedPublicClass")
+    @OmitFromCoverage
+    companion object {
+        /**
+         * Creates a new [IntentManager] instance.
+         */
+        fun create(
+            context: Context,
+            clock: Clock,
+            buildInfoManager: BuildInfoManager,
+        ): IntentManager = IntentManagerImpl(
+            context = context,
+            clock = clock,
+            buildInfoManager = buildInfoManager,
+        )
     }
 }

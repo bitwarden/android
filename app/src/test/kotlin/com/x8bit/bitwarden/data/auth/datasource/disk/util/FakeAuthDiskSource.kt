@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk.util
 
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.network.model.AccountKeysJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -63,7 +64,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedOnboardingStatus = mutableMapOf<String, OnboardingStatus?>()
     private val storedShowImportLogins = mutableMapOf<String, Boolean?>()
     private val storedLastLockTimestampState = mutableMapOf<String, Instant?>()
-    private val storedAccountKeys = mutableMapOf<String, SyncResponseJson.Profile.AccountKeys?>()
+    private val storedAccountKeys = mutableMapOf<String, AccountKeysJson?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -146,12 +147,12 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedPrivateKeys[userId] = privateKey
     }
 
-    override fun getAccountKeys(userId: String): SyncResponseJson.Profile.AccountKeys? =
+    override fun getAccountKeys(userId: String): AccountKeysJson? =
         storedAccountKeys[userId]
 
     override fun storeAccountKeys(
         userId: String,
-        accountKeys: SyncResponseJson.Profile.AccountKeys?,
+        accountKeys: AccountKeysJson?,
     ) {
         storedAccountKeys[userId] = accountKeys
     }

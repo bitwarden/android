@@ -5,7 +5,6 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -54,6 +53,7 @@ import com.bitwarden.ui.platform.base.util.scrolledContainerBackground
 import com.bitwarden.ui.platform.base.util.toSafeOverlayColor
 import com.bitwarden.ui.platform.base.util.toUnscaledTextUnit
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
+import com.bitwarden.ui.platform.components.scrim.BitwardenAnimatedScrim
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -63,7 +63,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenRemovalConfirm
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.components.scrim.BitwardenAnimatedScrim
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconRes
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconTestTag
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
@@ -275,7 +274,6 @@ private fun AnimatedAccountSwitcher(
 }
 
 @Suppress("LongMethod")
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AccountSummaryItem(
     accountSummary: AccountSummary,
@@ -471,8 +469,7 @@ private fun BitwardenAccountSwitcher_preview() {
         onLogoutAccountClick = {},
         onAddAccountClick = {},
         onDismissRequest = {},
-        topAppBarScrollBehavior =
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
+        topAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
             state = rememberTopAppBarState(),
             canScroll = { false },
         ),

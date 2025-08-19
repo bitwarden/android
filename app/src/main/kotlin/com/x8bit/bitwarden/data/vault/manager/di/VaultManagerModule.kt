@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.manager.di
 
 import android.content.Context
+import com.bitwarden.core.data.manager.realtime.RealtimeManager
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.DownloadService
@@ -73,6 +74,7 @@ object VaultManagerModule {
     fun provideVaultLockManager(
         @ApplicationContext context: Context,
         clock: Clock,
+        realtimeManager: RealtimeManager,
         authDiskSource: AuthDiskSource,
         authSdkSource: AuthSdkSource,
         vaultSdkSource: VaultSdkSource,
@@ -85,6 +87,7 @@ object VaultManagerModule {
         VaultLockManagerImpl(
             context = context,
             clock = clock,
+            realtimeManager = realtimeManager,
             authDiskSource = authDiskSource,
             authSdkSource = authSdkSource,
             vaultSdkSource = vaultSdkSource,

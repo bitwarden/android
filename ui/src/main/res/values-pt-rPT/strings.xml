@@ -163,7 +163,7 @@
     <string name="disabled">Desativado</string>
     <string name="bitwarden_autofill_service_alert2">A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir do Serviço de preenchimento automático do Bitwarden. Saiba mais sobre como utilizar o Serviço de preenchimento automático do Bitwarden ao navegar até ao ecrã \"Definições\".</string>
     <string name="autofill">Preencher automaticamente</string>
-    <string name="autofill_or_view">Pretende preencher automaticamente ou visualizar este item?</string>
+    <string name="autofill_or_view">Pretende preencher automaticamente ou ver este item?</string>
     <string name="search">Procurar</string>
     <string name="learn_org">Saiba mais sobre as organizações</string>
     <string name="authenticator_app_title">Aplicação de autenticação</string>
@@ -286,7 +286,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="new_uri">Novo URI</string>
     <string name="add_website">Adicionar site</string>
     <string name="base_domain">Domínio de base</string>
-    <string name="default_text">Predefinido</string>
+    <string name="default_text">Predefinido (%1$s)</string>
     <string name="exact">Exato</string>
     <string name="host">Domínio</string>
     <string name="reg_ex">Expressão regular</string>
@@ -356,7 +356,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="clear_clipboard">Limpar área de transferência</string>
     <string name="clear_clipboard_description">Limpar automaticamente os valores copiados da sua área de transferência.</string>
     <string name="default_uri_match_detection">Deteção de correspondência de URI predefinida</string>
-    <string name="default_uri_match_detection_description">Escolha a forma predefinida como a deteção de correspondência de URI é tratada para credenciais ao executar ações como o preenchimento automático.</string>
+    <string name="default_uri_match_detection_description">A deteção de correspondência de URI controla a forma como o Bitwarden identifica sugestões de preenchimento automático.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Altere o tema de cores da aplicação.</string>
     <string name="copy_notes">Copiar nota</string>
@@ -451,7 +451,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="maximum_access_count_reached">Número máximo de acessos atingido</string>
     <string name="current_access_count">Número de acessos atual: %s</string>
     <string name="new_password">Nova palavra-passe</string>
-    <string name="password_info">Esta palavra-passe é necessária para visualizar o Send.</string>
+    <string name="password_info">Esta palavra-passe é necessária para ver o Send.</string>
     <string name="remove_password">Remover palavra-passe</string>
     <string name="removing_send_password">A remover palavra-passe</string>
     <string name="password_removed">Palavra-passe removida</string>
@@ -483,7 +483,6 @@ A leitura será efetuada automaticamente.</string>
     <string name="password_prompt">Pedir novamente a palavra-passe mestra</string>
     <string name="password_confirmation">Confirmação da palavra-passe mestra</string>
     <string name="password_confirmation_desc">Esta ação está protegida. Para continuar, por favor, reintroduza a sua palavra-passe mestra para verificar a sua identidade.</string>
-    <string name="captcha_failed">Falha no Captcha. Por favor, tente novamente.</string>
     <string name="update_master_password">Atualizar a palavra-passe mestra</string>
     <string name="update_master_password_warning">A sua palavra-passe mestra foi recentemente alterada por um administrador da sua organização. Para aceder ao cofre, tem de atualizar a sua palavra-passe mestra agora. Ao prosseguir, terminará a sua sessão atual e terá de iniciar sessão novamente. As sessões ativas noutros dispositivos poderão continuar ativas até uma hora.</string>
     <string name="updating_password">A atualizar palavra-passe</string>
@@ -1070,4 +1069,13 @@ Pretende mudar para esta conta?</string>
     <string name="items_expanded_click_to_collapse">Os itens estão expandidos, clique para recolher.</string>
     <string name="items_are_collapsed_click_to_expand">Os itens estão recolhidos, clique para expandir.</string>
     <string name="select_a_card_for_x">Selecione um cartão para %s</string>
+    <string name="advanced_options">Opções avançadas</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mais informações sobre a deteção de correspondências</annotation></string>
+    <string name="keep_your_credential_secure">Mantenha as suas credenciais seguras</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Saiba mais sobre como manter as credenciais seguras ao utilizar \"%1$s\".</string>
+    <string name="are_you_sure_you_want_to_use">Tem a certeza de que pretende utilizar \"%1$s\"?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">A deteção de correspondência de URI controla como o Bitwarden identifica sugestões de preenchimento automático.\n<annotation emphasis="bold">Aviso:</annotation> A \"Expressão regular\" é uma opção avançada com maior risco de expor credenciais se utilizada incorretamente.</string>
+    <string name="default_uri_match_detection_description_advanced_options">A deteção de correspondência de URI controla como o Bitwarden identifica sugestões de preenchimento automático.\n<annotation emphasis="bold">Aviso:</annotation> \"Começa com\" é uma opção avançada com maior risco de expor credenciais.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Começa com\" é uma opção avançada com um risco acrescido de exposição de credenciais.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">A \"Expressão regular\" é uma opção avançada com um risco acrescido de expor credenciais se for utilizada incorretamente.</string>
 </resources>

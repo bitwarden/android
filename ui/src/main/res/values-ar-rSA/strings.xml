@@ -286,7 +286,7 @@
     <string name="new_uri">رابط جديد</string>
     <string name="add_website">إضافة موقع</string>
     <string name="base_domain">النطاق الأساسي</string>
-    <string name="default_text">الافتراضي</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">بالضبط</string>
     <string name="host">المضيف</string>
     <string name="reg_ex">التعبير الاعتيادي</string>
@@ -356,7 +356,7 @@
     <string name="clear_clipboard">مسح الحافظة</string>
     <string name="clear_clipboard_description">مسح القيم المنسوخة تلقائيًا من حافظتك.</string>
     <string name="default_uri_match_detection">كشف تطابق الرابط الافتراضي</string>
-    <string name="default_uri_match_detection_description">اختر الطريقة الافتراضية التي يتم بها معالجة اكتشاف تطابق الرابط لعمليات تسجيل الدخول عند تنفيذ إجراءات مثل الملء التلقائي.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">المظهر</string>
     <string name="theme_description">تغيير سمة لون التطبيق.</string>
     <string name="copy_notes">نسخ الملاحظة</string>
@@ -483,7 +483,6 @@
     <string name="password_prompt">إعادة توجيه كلمة المرور الرئيسية</string>
     <string name="password_confirmation">تأكيد كلمة المرور الرئيسية</string>
     <string name="password_confirmation_desc">هذا الإجراء محمي، للاستمرار أعد إدخال كلمة المرور الرئيسية للتحقق من هويتك.</string>
-    <string name="captcha_failed">فشلت كلمة التحقق. الرجاء المحاولة مرة أخرى.</string>
     <string name="update_master_password">تحديث كلمة المرور الرئيسية</string>
     <string name="update_master_password_warning">تم تغيير كلمة المرور الرئيسية الخاصة بك مؤخرًا من قبل مسؤول في مؤسستك. من أجل الوصول إلى الخزانة، يجب عليك تحديث كلمة المرور الرئيسية الآن. سيتم تسجيل خروجك من الجلسة الحالية، مما يتطلب منك تسجيل الدخول مرة أخرى. وقد تظل الجلسات النشطة على أجهزة أخرى نشطة لمدة تصل إلى ساعة واحدة.</string>
     <string name="updating_password">تحديث كلمة المرور</string>
@@ -1070,4 +1069,13 @@
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

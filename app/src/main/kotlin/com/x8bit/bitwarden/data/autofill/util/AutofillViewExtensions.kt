@@ -47,22 +47,40 @@ fun AutofillView.buildFilledItemOrNull(
 private fun AutofillView.buildListAutofillValueOrNull(
     value: String,
 ): AutofillValue? =
-    if (this is AutofillView.Card.ExpirationMonth) {
-        val autofillOptionsSize = this.data.autofillOptions.size
-        // The idea here is that `value` is a numerical representation of a month.
-        val monthIndex = value.toIntOrNull()
-        when {
-            monthIndex == null -> null
-            // We expect there is some placeholder or empty space at the beginning of the list.
-            autofillOptionsSize == 13 -> AutofillValue.forList(monthIndex)
-            autofillOptionsSize >= monthIndex -> AutofillValue.forList(monthIndex - 1)
-            else -> null
+    when (this) {
+        is AutofillView.Card.ExpirationMonth -> {
+            val autofillOptionsSize = this.data.autofillOptions.size
+            // The idea here is that `value` is a numerical representation of a month.
+            val monthIndex = value.toIntOrNull()
+            when {
+                monthIndex == null -> null
+                // We expect there is some placeholder or empty space at the beginning of the list.
+                autofillOptionsSize == 13 -> AutofillValue.forList(monthIndex)
+                autofillOptionsSize >= monthIndex -> AutofillValue.forList(monthIndex - 1)
+                else -> null
+            }
         }
-    } else {
-        this
-            .data
-            .autofillOptions
-            .indexOfFirst { it == value }
-            .takeIf { it != -1 }
-            ?.let { AutofillValue.forList(it) }
+
+        is AutofillView.Card.ExpirationYear -> {
+            val autofillOptions = this.data.autofillOptions
+            autofillOptions
+                .firstOrNull { it == value || it.takeLast(2) == value.takeLast(2) }
+                ?.let { AutofillValue.forList(autofillOptions.indexOf(it)) }
+        }
+
+        is AutofillView.Card.CardholderName,
+        is AutofillView.Card.ExpirationDate,
+        is AutofillView.Card.Number,
+        is AutofillView.Card.SecurityCode,
+        is AutofillView.Login.Password,
+        is AutofillView.Login.Username,
+        is AutofillView.Unused,
+            -> {
+            this
+                .data
+                .autofillOptions
+                .indexOfFirst { it == value }
+                .takeIf { it != -1 }
+                ?.let { AutofillValue.forList(it) }
+        }
     }

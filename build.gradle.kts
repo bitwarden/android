@@ -1,3 +1,5 @@
+import io.gitlab.arturbosch.detekt.Detekt
+
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
@@ -129,10 +131,57 @@ tasks {
         dependsOn("koverXmlReportMergedCoverage")
     }
 
-    withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    withType<Detekt>().configureEach {
         jvmTarget = libs.versions.jvmTarget.get()
+        // If run as a precommit hook, only run on staged files.
+        // This can be manually trigger by adding `-Pprecommit=true` to the gradle command.
+        if (project.hasProperty("precommit")) {
+            val rootDir = project.rootDir
+            val projectDir = projectDir
+
+            val fileCollection = files()
+
+            setSource(
+                getGitStagedFiles(rootDir)
+                    .map { stagedFiles ->
+                        val stagedFilesFromThisProject = stagedFiles
+                            .filter { it.startsWith(projectDir) }
+
+                        fileCollection.setFrom(*stagedFilesFromThisProject.toTypedArray())
+
+                        fileCollection.asFileTree
+                    },
+            )
+        }
     }
     withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
         jvmTarget = libs.versions.jvmTarget.get()
+    }
+}
+
+/**
+ * Gets the staged files in the current Git repository.
+ */
+fun Project.getGitStagedFiles(rootDir: File): Provider<List<File>> {
+    return providers
+        .exec { commandLine("git", "--no-pager", "diff", "--name-only", "--cached") }
+        .standardOutput.asText
+        .map { outputText ->
+            outputText
+                .trim()
+                .split("\n")
+                .filter { it.isNotBlank() }
+                .map { File(rootDir, it) }
+        }
+}
+
+afterEvaluate {
+    tasks.withType(Detekt::class.java).configureEach {
+        val typeResolutionEnabled = !classpath.isEmpty
+        if (typeResolutionEnabled && project.hasProperty("precommit")) {
+            // We must exclude kts files from pre-commit hook to prevent detekt from crashing
+            // This is a workaround for the https://github.com/detekt/detekt/issues/5501
+            exclude("*.gradle.kts")
+        }
     }
 }

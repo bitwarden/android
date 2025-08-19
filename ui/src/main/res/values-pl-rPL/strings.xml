@@ -286,7 +286,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="new_uri">Nowy URI</string>
     <string name="add_website">Dodaj stronę internetową</string>
     <string name="base_domain">Domena podstawowa</string>
-    <string name="default_text">Domyślne</string>
+    <string name="default_text">Domyślne (%1$s)</string>
     <string name="exact">Dokładnie</string>
     <string name="host">Host</string>
     <string name="reg_ex">Wyrażenie regularne</string>
@@ -356,7 +356,7 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="clear_clipboard">Wyczyść schowek</string>
     <string name="clear_clipboard_description">Automatycznie wyczyść skopiowaną wartość ze schowka.</string>
     <string name="default_uri_match_detection">Domyślne wykrywanie dopasowania</string>
-    <string name="default_uri_match_detection_description">Wybierz domyślne wykrywanie dopasowania dla autouzupełniania.</string>
+    <string name="default_uri_match_detection_description">Wykrywanie dopasowania to sposób, w jaki Bitwarden identyfikuje sugestie autouzupełniania.</string>
     <string name="theme">Motyw</string>
     <string name="theme_description">Zmień motyw kolorystyczny aplikacji</string>
     <string name="copy_notes">Kopiuj notatkę</string>
@@ -483,7 +483,6 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="password_prompt">Potwierdź hasłem głównym</string>
     <string name="password_confirmation">Potwierdź hasło główne</string>
     <string name="password_confirmation_desc">Operacja jest chroniona. Aby kontynuować, wpisz ponownie hasło główne.</string>
-    <string name="captcha_failed">Weryfikacja Captcha nie powiodła się. Spróbuj ponownie.</string>
     <string name="update_master_password">Zaktualizuj hasło główne</string>
     <string name="update_master_password_warning">Hasło główne zostało zmienione przez administratora Twojej organizacji. Aby uzyskać dostęp do sejfu, zaktualizuj hasło główne. Kontynuowanie spowoduje wylogowanie z obecnej sesji i konieczność ponownego zalogowania się. Aktywne sesje na innych urządzeniach mogą pozostać aktywne przez maksymalnie godzinę.</string>
     <string name="updating_password">Aktualizowanie hasła</string>
@@ -645,8 +644,8 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="login_approved">Logowanie zostało potwierdzone</string>
     <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Logowanie za pomocą urządzenia musi być włączone w ustawieniach aplikacji Bitwarden. Potrzebujesz innej opcji?</string>
     <string name="log_in_with_device">Zaloguj się za pomocą urządzenia</string>
-    <string name="logging_in_on">Logowanie na</string>
-    <string name="logging_in_on_with_colon">Logowanie na:</string>
+    <string name="logging_in_on">Serwer</string>
+    <string name="logging_in_on_with_colon">Serwer:</string>
     <string name="vault">Sejf</string>
     <string name="appearance">Wygląd</string>
     <string name="account_security">Bezpieczeństwo konta</string>
@@ -698,8 +697,8 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="credential_operation_failed_because_user_could_not_be_verified">Operacja danych logowania nie powiodła się, ponieważ użytkownik nie mógł zostać zweryfikowany.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Operacja klucza dostępu nie powiodła się, ponieważ użytkownik nie mógł zostać zweryfikowany.</string>
     <string name="user_verification_direction">Weryfikacja użytkownika</string>
-    <string name="create_account_on">Utwórz konto na</string>
-    <string name="create_account_on_with_colon">Utwórz konto na:</string>
+    <string name="create_account_on">Serwer</string>
+    <string name="create_account_on_with_colon">Serwer:</string>
     <string name="we_sent_an_email_to">Wysłaliśmy wiadomość na adres <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Kontynuując, akceptujesz <annotation link="termsOfService">Regulamin</annotation> i <annotation link="privacyPolicy">Politykę prywatności</annotation></string>
     <string name="unsubscribe">Anuluj subskrypcję</string>
@@ -1069,4 +1068,13 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="items_expanded_click_to_collapse">Elementy są rozwinięte. Kliknij, aby zwinąć.</string>
     <string name="items_are_collapsed_click_to_expand">Elementy są zwinięte. Kliknij, aby rozwinąć.</string>
     <string name="select_a_card_for_x">Wybierz kartę dla %s</string>
+    <string name="advanced_options">Opcje zaawansowane</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Dowiedz się więcej o wykrywaniu dopasowania</annotation></string>
+    <string name="keep_your_credential_secure">Zabezpiecz dane logowania</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Dowiedz się więcej o tym, jak zabezpieczyć dane logowania korzystając z wykrywania dopasowania w opcji „%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Czy na pewno chcesz użyć „%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">Wykrywanie dopasowania to sposób, w jaki Bitwarden identyfikuje sugestie autouzupełniania.\n<annotation emphasis="bold">Ostrzeżenie:</annotation> „Wyrażenie regularne” jest zaawansowaną opcją zwiększającą ryzyko ujawnienia danych logowania.</string>
+    <string name="default_uri_match_detection_description_advanced_options">Wykrywanie dopasowania to sposób, w jaki Bitwarden identyfikuje sugestie autouzupełniania.\n<annotation emphasis="bold">Ostrzeżenie:</annotation> „Rozpoczyna się od” jest zaawansowaną opcją zwiększającą ryzyko ujawnienia danych logowania.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">„Rozpoczyna się od” jest zaawansowaną opcją zwiększającą ryzyko ujawnienia danych logowania.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">„Wyrażenie regularne” jest zaawansowaną opcją zwiększającą ryzyko ujawnienia danych logowania.</string>
 </resources>

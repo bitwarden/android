@@ -286,7 +286,7 @@ Escanearase automaticamente.</string>
     <string name="new_uri">Nova URI</string>
     <string name="add_website">Engadir sitio web</string>
     <string name="base_domain">Dominio base</string>
-    <string name="default_text">Por defecto</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Exacto</string>
     <string name="host">Servidor</string>
     <string name="reg_ex">Expresión regular</string>
@@ -356,7 +356,7 @@ Escanearase automaticamente.</string>
     <string name="clear_clipboard">Baleirar portapapeis</string>
     <string name="clear_clipboard_description">Limpar automaticamente os valores copiados do teu portapapeis.</string>
     <string name="default_uri_match_detection">Detección de coincidencias de URI por defecto</string>
-    <string name="default_uri_match_detection_description">Selecciona o tipo de Detección de coincidencias de URI que se empregará por defecto para accións como o autoenchido.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Cambiar o tema de cor da aplicación.</string>
     <string name="copy_notes">Copiar nota</string>
@@ -483,7 +483,6 @@ Escanearase automaticamente.</string>
     <string name="password_prompt">Volver solicitar o contrasinal mestre</string>
     <string name="password_confirmation">Repetir o contrasinal mestre</string>
     <string name="password_confirmation_desc">Esta acción está protexida. Para continuar por favor volve introducir o teu contrasinal mestre.</string>
-    <string name="captcha_failed">Captcha fallido. Por favor, volve intentalo.</string>
     <string name="update_master_password">Actualizar contrasinal mestre</string>
     <string name="update_master_password_warning">O teu contrasinal mestre foi recentemente cambiado por un administrador da túa organización. Para poder acceder á caixa forte debes actualizalo. A continuación cerrarase a túa sesión, requirindo volver iniciala. As sesións activas noutros dispositivos poden permanecer activas por unha hora.</string>
     <string name="updating_password">Actualizando contrasinal</string>
@@ -1070,4 +1069,13 @@ Queres comprobalo dende esa conta?</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>
