@@ -40,6 +40,9 @@ import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.scaffold.model.BitwardenPullToRefreshState
+import com.bitwarden.ui.platform.components.scaffold.model.rememberBitwardenPullToRefreshState
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbar
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHostState
@@ -52,9 +55,6 @@ import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitch
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.model.BitwardenPullToRefreshState
-import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppReviewManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
