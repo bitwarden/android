@@ -1,5 +1,5 @@
 name: SDLC / SDK Update
-run-name: "SDK ${{inputs.run-mode}}${{ inputs.pr-id && format(' #{0}', inputs.pr-id) || '' }} - ${{inputs.sdk-version}}"
+run-name: "SDK ${{inputs.run-mode == 'Update' && format('Update - {0}', inputs.sdk-version) || format('Test #{0} - {1}', inputs.pr-id, inputs.sdk-version)}}"
 
 on:
   workflow_dispatch:
