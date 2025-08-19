@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.dialog
+package com.bitwarden.ui.platform.components.dialog
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
