@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.components.dialog
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**

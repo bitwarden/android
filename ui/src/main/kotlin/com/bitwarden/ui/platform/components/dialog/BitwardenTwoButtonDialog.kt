@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.dialog
+package com.bitwarden.ui.platform.components.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,10 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.dialog.util.maxDialogHeight
+import com.bitwarden.ui.platform.components.dialog.util.maxDialogWidth
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
-import com.x8bit.bitwarden.ui.platform.components.util.maxDialogWidth
 
 /**
  * Represents a Bitwarden-styled dialog with two buttons.

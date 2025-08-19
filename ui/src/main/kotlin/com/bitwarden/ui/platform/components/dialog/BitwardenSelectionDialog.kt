@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.dialog
+package com.bitwarden.ui.platform.components.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -26,11 +26,11 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
+import com.bitwarden.ui.platform.components.dialog.util.maxDialogHeight
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
-import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
 
 /**
  * Displays a dialog with a title and "Cancel" button.
