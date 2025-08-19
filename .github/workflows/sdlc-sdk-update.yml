@@ -1,16 +1,167 @@
 name: SDLC / SDK Update
+run-name: "SDK ${{inputs.run-mode == 'Update' && format('Update - {0}', inputs.sdk-version) || format('Test #{0} - {1}', inputs.pr-id, inputs.sdk-version)}}"
 
 on:
   workflow_dispatch:
-
-permissions:
-  contents: read
+    inputs:
+      run-mode:
+        description: "Run Mode"
+        type: choice
+        options:
+          - Test # used for testing sdk-internal repo PRs
+          - Update # opens a PR in this repo updating the SDK
+        default: Test
+      sdk-package:
+        description: "SDK Package ID"
+        required: true
+        default: "com.bitwarden:sdk-android.dev"
+      sdk-version:
+        description: "SDK Version"
+        required: true
+        default: "1.0.0-2686-km-update-kdf-sdk"
+      pr-id:
+        description: "Pull Request ID"
 
 jobs:
   update:
-    name: Update SDK
+    name: Update and PR
+    if: ${{ inputs.run-mode == 'Update' }}
     runs-on: ubuntu-24.04
+    permissions:
+      id-token: write
 
     steps:
-      - name: Placeholder
-        run: echo ":feelsgood:" >> $GITHUB_STEP_SUMMARY
+      - name: Log in to Azure
+        uses: bitwarden/gh-actions/azure-login@main
+        with:
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
+
+      - name: Get Azure Key Vault secrets
+        id: get-kv-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: gh-org-bitwarden
+          secrets: "BW-GHAPP-ID,BW-GHAPP-KEY"
+
+      - name: Log out from Azure
+        uses: bitwarden/gh-actions/azure-logout@main
+
+      - name: Generate GH App token
+        uses: actions/create-github-app-token@0f859bf9e69e887678d5bbfbee594437cb440ffe # v2.1.0
+        id: app-token
+        with:
+          app-id: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-ID }}
+          private-key: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-KEY }}
+
+      - name: Check out repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Log inputs to job summary
+        uses: ./.github/actions/log-inputs
+        with:
+          inputs: ${{ toJson(inputs) }}
+
+      - name: Switch to branch
+        id: switch-branch
+        run: |
+          BRANCH_NAME="sdlc/sdk-update"
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          git switch -c $BRANCH_NAME
+
+      - name: Get current SDK version
+        id: get-current-sdk
+        run: |
+          SDK_VERSION=$(grep "bitwardenSdk =" gradle/libs.versions.toml | cut -d'"' -f2)
+          GIT_REF=$(echo "$SDK_VERSION" | cut -d'-' -f3-) # handles both commit hashes and branch names
+          echo "Current SDK version: $SDK_VERSION"
+          echo "Current SDK git ref: $GIT_REF"
+          echo "version=$SDK_VERSION" >> $GITHUB_OUTPUT
+          echo "git_ref=$GIT_REF" >> $GITHUB_OUTPUT
+
+      - name: Update SDK Version
+        env:
+          _SDK_PACKAGE: ${{ inputs.sdk-package }}
+          _SDK_VERSION: ${{ inputs.sdk-version }}
+        run: |
+          ./scripts/update-sdk-version.sh "$_SDK_PACKAGE" "$_SDK_VERSION"
+
+      - name: Create branch and commit
+        env:
+          _SDK_PACKAGE: ${{ inputs.sdk-package }}
+          _SDK_VERSION: ${{ inputs.sdk-version }}
+          _BRANCH_NAME: ${{ steps.switch-branch.outputs.branch_name }}
+        run: |
+          echo "👀 Committing SDK version update..."
+
+          git config user.name "bw-ghapp[bot]"
+          git config user.email "178206702+bw-ghapp[bot]@users.noreply.github.com"
+
+          git add gradle/libs.versions.toml
+          git commit -m "SDK Update - $_SDK_PACKAGE $_SDK_VERSION"
+          git push origin $_BRANCH_NAME
+
+      - name: Create Pull Request
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          _BRANCH_NAME: ${{ steps.switch-branch.outputs.branch_name }}
+          _SDK_PACKAGE: ${{ inputs.sdk-package }}
+          _SDK_VERSION: ${{ inputs.sdk-version }}
+          _OLD_SDK_VERSION: ${{ steps.get-current-sdk.outputs.version }}
+          _OLD_SDK_GIT_REF: ${{ steps.get-current-sdk.outputs.git_ref }}
+        run: |
+          NEW_SDK_GIT_REF=$(echo "$_SDK_VERSION" | cut -d'-' -f3-)
+          CHANGELOG=$(./scripts/get-repo-changelog.sh "bitwarden/sdk-internal" "$_OLD_SDK_GIT_REF" "$NEW_SDK_GIT_REF")
+          PR_BODY="Updates the SDK version from \`$_OLD_SDK_VERSION\` to \`$_SDK_PACKAGE $_SDK_VERSION\`
+
+          ## What's Changed
+
+          $CHANGELOG"
+
+          # Use echo -e to interpret escape sequences and pipe to gh pr create
+          PR_URL=$(echo -e "$PR_BODY" | gh pr create \
+            --title "Update SDK to $_SDK_VERSION" \
+            --body-file - \
+            --base main \
+            --head $_BRANCH_NAME \
+            --label "automated-pr" \
+            --label "t:ci")
+
+          echo "🚀 Created PR: $PR_URL"
+          echo "## 🚀 Created PR: $PR_URL" >> $GITHUB_STEP_SUMMARY
+
+  test:
+    name: Test Update
+    if: ${{ inputs.run-mode == 'Test' }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Log inputs to job summary
+        uses: ./.github/actions/log-inputs
+        with:
+          inputs: ${{ toJson(inputs) }}
+
+      - name: Setup Android Build
+        uses: ./.github/actions/setup-android-build
+
+      - name: Update SDK Version
+        env:
+          _SDK_PACKAGE: ${{ inputs.sdk-package }}
+          _SDK_VERSION: ${{ inputs.sdk-version }}
+        run: |
+          ./scripts/update-sdk-version.sh "$_SDK_PACKAGE" "$_SDK_VERSION"
+
+      - name: Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Used in settings.gradle.kts to download the SDK from GitHub Maven Packages
+        run: |
+          ./gradlew assembleDebug --warn

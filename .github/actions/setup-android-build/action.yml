@@ -1,0 +1,49 @@
+name: 'Setup Android Build'
+description: 'Setup Android build environment with Gradle, Ruby, and Fastlane'
+inputs:
+  java-version:
+    description: 'Java version to use'
+    required: false
+    default: '17'
+runs:
+  using: 'composite'
+  steps:
+    - name: Validate Gradle wrapper
+      uses: gradle/actions/wrapper-validation@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4.4.1
+
+    - name: Cache Gradle files
+      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-v2-
+
+    - name: Cache build output
+      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+      with:
+        path: |
+          ${{ github.workspace }}/build-cache
+        key: ${{ runner.os }}-build-cache-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-build-
+
+    - name: Configure Ruby
+      uses: ruby/setup-ruby@bb6434c747fa7022e12fa1cae2a0951fcffcff26 # v1.253.0
+      with:
+        bundler-cache: true
+
+    - name: Configure JDK
+      uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+      with:
+        distribution: "temurin"
+        java-version: ${{ inputs.java-version }}
+
+    - name: Install Fastlane
+      shell: bash
+      run: |
+        gem install bundler:2.2.27
+        bundle config path vendor/bundle
+        bundle install --jobs 4 --retry 3
