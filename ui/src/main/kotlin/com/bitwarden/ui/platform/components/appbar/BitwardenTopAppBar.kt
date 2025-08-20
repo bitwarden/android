@@ -30,8 +30,8 @@ import com.bitwarden.ui.platform.base.util.bottomDivider
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
 import com.bitwarden.ui.platform.components.appbar.color.bitwardenTopAppBarColors
+import com.bitwarden.ui.platform.components.appbar.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
-import com.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 

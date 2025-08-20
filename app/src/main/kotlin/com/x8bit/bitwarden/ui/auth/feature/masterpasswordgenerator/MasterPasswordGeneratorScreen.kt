@@ -34,9 +34,9 @@ import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
-import com.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter

@@ -20,15 +20,15 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
+import com.bitwarden.ui.platform.components.appbar.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
-import com.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager

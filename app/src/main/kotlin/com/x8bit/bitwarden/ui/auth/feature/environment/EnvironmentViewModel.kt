@@ -11,7 +11,7 @@ import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidUri
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessaryOrNull
-import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text

@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
-import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState

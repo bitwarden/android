@@ -16,7 +16,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.network.model.TwoFactorAuthMethod
-import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
