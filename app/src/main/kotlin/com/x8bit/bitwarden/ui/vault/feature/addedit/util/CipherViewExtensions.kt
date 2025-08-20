@@ -86,6 +86,7 @@ fun CipherView.toViewState(
                 address2 = identity?.address2.orEmpty(),
                 address3 = identity?.address3.orEmpty(),
                 city = identity?.city.orEmpty(),
+                state = identity?.state.orEmpty(),
                 zip = identity?.postalCode.orEmpty(),
                 country = identity?.country.orEmpty(),
             )

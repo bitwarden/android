@@ -158,6 +158,7 @@ class CipherViewExtensionsTest {
                     email = "placeholde@email.com",
                     phone = "555-555-5555",
                     city = "Minneapolis",
+                    state = "MN",
                     country = "USA",
                 ),
             ),
