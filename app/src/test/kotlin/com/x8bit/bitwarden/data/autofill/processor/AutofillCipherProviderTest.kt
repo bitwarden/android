@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.autofill.processor
 
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.vault.CardListView
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherListView
@@ -17,6 +19,7 @@ import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProviderImpl
 import com.x8bit.bitwarden.data.autofill.util.card
 import com.x8bit.bitwarden.data.autofill.util.login
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -54,6 +57,7 @@ class AutofillCipherProviderTest {
         every { id } returns CARD_CIPHER_ID
         every { name } returns CARD_NAME
         every { reprompt } returns CipherRepromptType.NONE
+        every { organizationId } returns null
         every { type } returns CipherListViewType.Card(v1 = cardListView)
     }
     private val cardView: CardView = mockk {
@@ -140,6 +144,11 @@ class AutofillCipherProviderTest {
             mutableVaultStateFlow.value.statusFor(ACTIVE_USER_ID) == VaultUnlockData.Status.UNLOCKED
         }
     }
+    private val policyManager: PolicyManager = mockk {
+        every {
+            getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+        } returns emptyList()
+    }
 
     private lateinit var autofillCipherProvider: AutofillCipherProvider
 
@@ -150,6 +159,7 @@ class AutofillCipherProviderTest {
             authRepository = authRepository,
             cipherMatchingManager = cipherMatchingManager,
             vaultRepository = vaultRepository,
+            policyManager = policyManager,
         )
     }
 
@@ -254,7 +264,7 @@ class AutofillCipherProviderTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getCardAutofillCiphers when unlocked should decrypt then return non-null, non-deleted, and non-reprompt card ciphers`() =
+    fun `getCardAutofillCiphers when unlocked should decrypt then return non-null, non-deleted, non-reprompt, and non-restricted card ciphers`() =
         runTest {
             val deletedCardCipherView: CipherListView = mockk {
                 every { deletedDate } returns mockk()
@@ -265,17 +275,27 @@ class AutofillCipherProviderTest {
                 every { reprompt } returns CipherRepromptType.PASSWORD
                 every { type } returns CipherListViewType.Card(cardListView)
             }
+            val restrictedCardCipherView: CipherListView = mockk {
+                every { deletedDate } returns null
+                every { type } returns CipherListViewType.Card(cardListView)
+                every { reprompt } returns CipherRepromptType.NONE
+                every { organizationId } returns ORGANIZATION_ID
+            }
             val decryptCipherListViewsResult = DecryptCipherListResult(
                 successes = listOf(
                     cardCipherListView,
                     deletedCardCipherView,
                     repromptCardCipherView,
+                    restrictedCardCipherView,
                     loginCipherListViewWithTotp,
                     loginCipherListViewWithoutTotp,
                 ),
                 failures = emptyList(),
             )
 
+            every {
+                policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            } returns listOf(createMockPolicy(number = 1, organizationId = ORGANIZATION_ID))
             coEvery {
                 vaultRepository.getCipher(CARD_CIPHER_ID)
             } returns GetCipherResult.Success(
@@ -542,6 +562,7 @@ class AutofillCipherProviderTest {
 }
 
 private const val ACTIVE_USER_ID = "activeUserId"
+private const val ORGANIZATION_ID = "organizationId"
 private const val CARD_CARDHOLDER_NAME = "John Doe"
 private const val CARD_CODE = "123"
 private const val CARD_EXP_MONTH = "January"
