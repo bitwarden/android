@@ -16,5 +16,5 @@ fun createMockSdkCollection(number: Int): Collection =
         readOnly = false,
         manage = true,
         defaultUserCollectionEmail = null,
-        type = CollectionType.SHARED_COLLECTION
+        type = CollectionType.SHARED_COLLECTION,
     )

@@ -14,7 +14,7 @@ fun createMockCollection(
     id: String = "mockId-$number",
     canManage: Boolean? = true,
     defaultUserCollectionEmail: String? = null,
-    type: CollectionTypeJson = CollectionTypeJson.SHARED_COLLECTION
+    type: CollectionTypeJson = CollectionTypeJson.SHARED_COLLECTION,
 ): SyncResponseJson.Collection =
     SyncResponseJson.Collection(
         organizationId = organizationId,
@@ -25,5 +25,5 @@ fun createMockCollection(
         id = id,
         canManage = canManage,
         defaultUserCollectionEmail = defaultUserCollectionEmail,
-        type = type
+        type = type,
     )
