@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.coachmark
+package com.bitwarden.ui.platform.components.coachmark
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

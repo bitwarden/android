@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.coachmark
+package com.bitwarden.ui.platform.components.coachmark.model
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -9,9 +9,7 @@ import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.geometry.Rect
 import com.bitwarden.core.data.util.concurrentMapOf
-import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
-import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightState
-import com.x8bit.bitwarden.ui.platform.components.tooltip.BitwardenToolTipState
+import com.bitwarden.ui.platform.components.tooltip.model.BitwardenToolTipState
 import kotlin.math.max
 import kotlin.math.min
 
