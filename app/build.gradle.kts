@@ -328,6 +328,7 @@ private fun renameFile(path: String, newName: String) {
     if (originalFile.renameTo(newFile)) {
         println("Renamed $originalFile to $newFile")
     } else {
+        @Suppress("TooGenericExceptionThrown")
         throw RuntimeException("Failed to rename $originalFile to $newFile")
     }
 }

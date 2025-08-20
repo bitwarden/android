@@ -81,6 +81,7 @@ android {
         debug {
             applicationIdSuffix = ".dev"
             manifestPlaceholders["targetBitwardenAppId"] = "com.x8bit.bitwarden.dev"
+            @Suppress("MaxLineLength")
             buildConfigField(
                 type = "com.bitwarden.authenticatorbridge.manager.model.AuthenticatorBridgeConnectionType",
                 name = "AUTHENTICATOR_BRIDGE_CONNECTION_TYPE",
@@ -94,6 +95,7 @@ android {
 
         release {
             manifestPlaceholders["targetBitwardenAppId"] = "com.x8bit.bitwarden"
+            @Suppress("MaxLineLength")
             buildConfigField(
                 type = "com.bitwarden.authenticatorbridge.manager.model.AuthenticatorBridgeConnectionType",
                 name = "AUTHENTICATOR_BRIDGE_CONNECTION_TYPE",
@@ -275,6 +277,7 @@ private fun renameFile(path: String, newName: String) {
     if (originalFile.renameTo(newFile)) {
         println("Renamed $originalFile to $newFile")
     } else {
+        @Suppress("TooGenericExceptionThrown")
         throw RuntimeException("Failed to rename $originalFile to $newFile")
     }
 }
