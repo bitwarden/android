@@ -6,6 +6,7 @@ import com.bitwarden.collections.CollectionView
 /**
  * Create a mock [CollectionView] with a given [number].
  */
+@Suppress("LongParameterList")
 fun createMockCollectionView(
     number: Int,
     name: String? = null,

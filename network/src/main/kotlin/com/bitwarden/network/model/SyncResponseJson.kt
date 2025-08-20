@@ -998,7 +998,8 @@ data class SyncResponseJson(
      * @property externalId The external ID of the collection (nullable).
      * @property isReadOnly If the collection is marked as read only.
      * @property id The ID of the collection.
-     * @property defaultUserCollectionEmail The offboarded user's email address to be used as name for the collection.
+     * @property defaultUserCollectionEmail The offboarded user's email address to be used as name
+     * for the collection.
      * @property type The collection's type.
      */
     @Serializable
@@ -1028,6 +1029,6 @@ data class SyncResponseJson(
         val defaultUserCollectionEmail: String?,
 
         @SerialName("type")
-        val type: CollectionTypeJson = CollectionTypeJson.SHARED_COLLECTION
+        val type: CollectionTypeJson = CollectionTypeJson.SHARED_COLLECTION,
     )
 }
