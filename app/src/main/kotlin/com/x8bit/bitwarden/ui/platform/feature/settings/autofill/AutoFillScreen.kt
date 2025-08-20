@@ -302,8 +302,8 @@ private fun AutoFillScreenContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenSwitch(
-            label = stringResource(id = BitwardenString.ask_to_add_login),
-            supportingText = stringResource(id = BitwardenString.ask_to_add_login_description),
+            label = stringResource(id = BitwardenString.ask_to_add_item),
+            supportingText = stringResource(id = BitwardenString.ask_to_add_item_description),
             isChecked = state.isAskToAddLoginEnabled,
             onCheckedChange = autoFillHandlers.onAskToAddLoginClick,
             cardStyle = CardStyle.Full,
