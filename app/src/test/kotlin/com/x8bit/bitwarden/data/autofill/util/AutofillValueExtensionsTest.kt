@@ -60,7 +60,7 @@ class AutofillValueExtensionsTest {
     }
 
     @Test
-    fun `extractMonthValue should return null not list or text`() {
+    fun `extractMonthValue should return null when not list or text`() {
         // Setup
         val autofillOptions = List(1) { "option-$it" }
         val autofillValue: AutofillValue = mockk {
@@ -126,7 +126,7 @@ class AutofillValueExtensionsTest {
     }
 
     @Test
-    fun `extractYearValue should return null not list or text`() {
+    fun `extractYearValue should return null when not list or text`() {
         // Setup
         val autofillOptions = List(1) { "option-$it" }
         val autofillValue: AutofillValue = mockk {
@@ -137,6 +137,64 @@ class AutofillValueExtensionsTest {
         // Test
         val actual = autofillValue.extractYearValue(autofillOptions)
 
+        // Verify
+        assertNull(actual)
+    }
+
+    @Test
+    fun `extractCardBrandValue should return listValue when isList and options are not empty`() {
+        // Setup
+        val autofillOptions = List(8) { "$it" }
+        val autofillValue: AutofillValue = mockk {
+            every { isList } returns true
+            every { listValue } returns LIST_VALUE
+        }
+        val expected = LIST_VALUE.toString()
+        // Test
+        val actual = autofillValue.extractCardBrandValue(autofillOptions)
+        // Verify
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `extractCardBrandValue should return null when isList and options are empty`() {
+        // Setup
+        val autofillOptions = emptyList<String>()
+        val autofillValue: AutofillValue = mockk {
+            every { isList } returns true
+            every { isText } returns false
+        }
+        // Test
+        val actual = autofillValue.extractCardBrandValue(autofillOptions)
+        // Verify
+        assertNull(actual)
+    }
+
+    @Test
+    fun `extractCardBrandValue should return textValue when isText`() {
+        // Setup
+        val autofillOptions = emptyList<String>()
+        val autofillValue: AutofillValue = mockk {
+            every { isList } returns false
+            every { isText } returns true
+            every { textValue } returns TEXT_VALUE
+        }
+
+        val actual = autofillValue.extractCardBrandValue(autofillOptions)
+
+        assertEquals(TEXT_VALUE, actual)
+    }
+
+    @Test
+    fun `extractCardBrandValue should return null when not list or text`() {
+        // Setup
+        val autofillOptions = List(1) { "option-$it" }
+        val autofillValue: AutofillValue = mockk {
+            every { isList } returns false
+            every { isText } returns false
+        }
+        // Test
+        val actual = autofillValue.extractCardBrandValue(autofillOptions)
         // Verify
         assertNull(actual)
     }

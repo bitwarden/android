@@ -135,3 +135,15 @@ val SUPPORTED_RAW_CARD_SECURITY_CODE_HINT_PATTERNS: List<Regex> = listOf(
     "\\b(?i)(?:credit[\\s_-])?(?:cc|card)(?:[\\s_-](?:verification|security))?([\\s_-]code)\\b"
         .toRegex(),
 )
+
+/**
+ * The supported card brand autofill hints.
+ */
+val SUPPORTED_RAW_CARD_BRAND_HINTS: List<String> = listOf(
+    "cctype",
+    "creditcardtype",
+    "cardtype",
+    "cardbrand",
+    "creditcardbrand",
+    "ccbrand",
+)

@@ -25,6 +25,7 @@ sealed class AutofillSaveItem : Parcelable {
         val expirationMonth: String?,
         val expirationYear: String?,
         val securityCode: String?,
+        val brand: String?,
     ) : AutofillSaveItem()
 
     /**

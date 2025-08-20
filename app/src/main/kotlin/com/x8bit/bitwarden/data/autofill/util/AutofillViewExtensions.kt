@@ -4,6 +4,8 @@ import android.view.View
 import android.view.autofill.AutofillValue
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import com.x8bit.bitwarden.data.autofill.model.FilledItem
+import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
 
 /**
  * Convert this [AutofillView] into a [FilledItem]. Return null if not possible.
@@ -66,6 +68,16 @@ private fun AutofillView.buildListAutofillValueOrNull(
             autofillOptions
                 .firstOrNull { it == value || it.takeLast(2) == value.takeLast(2) }
                 ?.let { AutofillValue.forList(autofillOptions.indexOf(it)) }
+        }
+
+        is AutofillView.Card.Brand -> {
+            value.findVaultCardBrandWithNameOrNull()
+                ?.takeUnless { it == VaultCardBrand.SELECT }
+                ?.let { vaultCardBrand ->
+                    this.data.autofillOptions
+                        .firstOrNull { it.findVaultCardBrandWithNameOrNull() == vaultCardBrand }
+                        ?.let { AutofillValue.forList(this.data.autofillOptions.indexOf(it)) }
+                }
         }
 
         is AutofillView.Card.CardholderName,

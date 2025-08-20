@@ -78,6 +78,7 @@ class AutofillCipherProviderImpl(
                                     expirationMonth = cipherView.card?.expMonth.orEmpty(),
                                     expirationYear = cipherView.card?.expYear.orEmpty(),
                                     number = cipherView.card?.number.orEmpty(),
+                                    brand = cipherView.card?.brand.orEmpty(),
                                 )
                             }
                         }
@@ -138,10 +139,12 @@ class AutofillCipherProviderImpl(
                 Timber.e("Cipher not found for autofill.")
                 null
             }
+
             is GetCipherResult.Failure -> {
                 Timber.e(result.error, "Failed to decrypt cipher for autofill.")
                 null
             }
+
             is GetCipherResult.Success -> result.cipherView
         }
 }

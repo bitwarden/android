@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
+import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import io.mockk.every
@@ -37,6 +38,7 @@ class AutofillSaveItemExtensionsTest {
                     expirationMonth = VaultCardExpirationMonth.JANUARY,
                     expirationYear = "2024",
                     securityCode = "securityCode",
+                    brand = VaultCardBrand.VISA,
                 ),
             ),
             AutofillSaveItem.Card(
@@ -45,6 +47,7 @@ class AutofillSaveItemExtensionsTest {
                 expirationMonth = "1",
                 expirationYear = "2024",
                 securityCode = "securityCode",
+                brand = "visa",
             )
                 .toDefaultAddTypeContent(isIndividualVaultDisabled = false),
         )
