@@ -45,6 +45,7 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
+import com.bitwarden.ui.platform.components.appbar.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
@@ -56,15 +57,14 @@ import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.field.model.TextToolbarType
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
-import com.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
 import com.bitwarden.ui.platform.components.segment.SegmentedButtonOptionContent
 import com.bitwarden.ui.platform.components.segment.SegmentedButtonState
 import com.bitwarden.ui.platform.components.slider.BitwardenSlider
-import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
-import com.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation

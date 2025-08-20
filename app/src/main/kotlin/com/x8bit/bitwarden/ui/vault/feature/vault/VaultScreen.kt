@@ -36,6 +36,7 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
+import com.bitwarden.ui.platform.components.appbar.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
@@ -44,14 +45,13 @@ import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
-import com.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.scaffold.model.BitwardenPullToRefreshState
 import com.bitwarden.ui.platform.components.scaffold.model.rememberBitwardenPullToRefreshState
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbar
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
-import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHostState
-import com.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarHostState
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager

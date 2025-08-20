@@ -1,4 +1,4 @@
-package com.bitwarden.ui.platform.components.snackbar
+package com.bitwarden.ui.platform.components.snackbar.model
 
 import android.os.Parcelable
 import androidx.compose.material3.SnackbarDuration
