@@ -3,12 +3,14 @@ package com.bitwarden.ui.platform.base.util
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
+import androidx.compose.ui.unit.sp
 
 /**
  * A function for converting pixels to [Dp] within a composable function.
@@ -49,3 +51,26 @@ fun Dp.toUnscaledTextUnit(): TextUnit {
     val scalingFactor = LocalConfiguration.current.fontScale
     return TextUnit(value / scalingFactor, TextUnitType.Sp)
 }
+
+/**
+ * Modifies the [TextUnit] value to have a maximum scale factor for accessibility.
+ */
+@Composable
+fun TextUnit.maxScaledSp(maxScaleFactor: Float): TextUnit {
+    val scaleFactor = LocalConfiguration.current.fontScale
+    val adjustedScaleFactor = scaleFactor.coerceAtMost(maximumValue = maxScaleFactor)
+    val adjustedValue = (this.value / scaleFactor) * adjustedScaleFactor
+    return adjustedValue.sp
+}
+
+/**
+ * Creates a copy of the [TextStyle] that has a maximum scale factor.
+ */
+@Composable
+fun TextStyle.toMaxScale(
+    maxScaleFactor: Float,
+): TextStyle = this.copy(
+    fontSize = this.fontSize.maxScaledSp(maxScaleFactor = maxScaleFactor),
+    lineHeight = this.lineHeight.maxScaledSp(maxScaleFactor = maxScaleFactor),
+    letterSpacing = this.letterSpacing.maxScaledSp(maxScaleFactor = maxScaleFactor),
+)
