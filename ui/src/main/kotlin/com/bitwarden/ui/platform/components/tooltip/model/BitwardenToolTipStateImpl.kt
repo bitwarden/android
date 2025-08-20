@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.tooltip
+package com.bitwarden.ui.platform.components.tooltip.model
 
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.MutatePriority
@@ -15,10 +15,9 @@ import kotlinx.coroutines.withTimeout
  * Default implementation of [BitwardenToolTipState]
  *
  * This is making use of the implementation of [TooltipState] provided via
- * [androidx.compose.material3.rememberTooltipState] but overriding [dismiss] to be
- * no-op.
+ * [androidx.compose.material3.rememberTooltipState] but overriding [dismiss] to be no-op.
  */
-class BitwardenToolTipStateImpl(
+internal class BitwardenToolTipStateImpl(
     initialIsVisible: Boolean,
     override val isPersistent: Boolean,
     private val mutatorMutex: MutatorMutex,

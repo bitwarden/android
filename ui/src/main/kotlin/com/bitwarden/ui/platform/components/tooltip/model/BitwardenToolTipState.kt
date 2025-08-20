@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.tooltip
+package com.bitwarden.ui.platform.components.tooltip.model
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TooltipState

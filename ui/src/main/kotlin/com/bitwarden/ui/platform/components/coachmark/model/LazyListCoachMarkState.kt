@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.coachmark
+package com.bitwarden.ui.platform.components.coachmark.model
 
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollBy

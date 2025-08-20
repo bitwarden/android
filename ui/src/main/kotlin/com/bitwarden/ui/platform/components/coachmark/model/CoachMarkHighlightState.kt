@@ -1,7 +1,7 @@
-package com.x8bit.bitwarden.ui.platform.components.coachmark.model
+package com.bitwarden.ui.platform.components.coachmark.model
 
 import androidx.compose.ui.geometry.Rect
-import com.x8bit.bitwarden.ui.platform.components.tooltip.BitwardenToolTipState
+import com.bitwarden.ui.platform.components.tooltip.model.BitwardenToolTipState
 
 /**
  * Represents a highlight within a coach mark sequence.

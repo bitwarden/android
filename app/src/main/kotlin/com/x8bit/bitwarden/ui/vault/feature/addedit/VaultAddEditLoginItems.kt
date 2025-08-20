@@ -22,6 +22,9 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.coachmark.CoachMarkActionText
+import com.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
+import com.bitwarden.ui.platform.components.coachmark.scope.CoachMarkScope
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
 import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
@@ -36,9 +39,6 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
-import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkActionText
-import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
-import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
 
 /**

@@ -1,13 +1,13 @@
-package com.x8bit.bitwarden.ui.platform.components.coachmark
+package com.bitwarden.ui.platform.components.coachmark.scope
 
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.util.Text
-import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
 
 /**
  * Defines the scope for creating coach mark highlights within a user interface.
