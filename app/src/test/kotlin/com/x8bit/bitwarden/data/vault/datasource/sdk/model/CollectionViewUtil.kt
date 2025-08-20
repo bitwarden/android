@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
+import com.bitwarden.collections.CollectionType
 import com.bitwarden.collections.CollectionView
 
 /**
@@ -11,6 +12,7 @@ fun createMockCollectionView(
     readOnly: Boolean = false,
     manage: Boolean = true,
     hidePasswords: Boolean = false,
+    type: CollectionType = CollectionType.SHARED_COLLECTION,
 ): CollectionView =
     CollectionView(
         id = "mockId-$number",
@@ -20,6 +22,7 @@ fun createMockCollectionView(
         externalId = "mockExternalId-$number",
         readOnly = readOnly,
         manage = manage,
+        type = type,
     )
 
 /**
