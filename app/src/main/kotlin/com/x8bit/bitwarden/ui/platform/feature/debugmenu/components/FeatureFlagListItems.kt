@@ -30,7 +30,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.CredentialExchangeProtocolExport,
     FlagKey.CipherKeyEncryption,
     FlagKey.UserManagedPrivilegedApps,
-    FlagKey.RemoveCardPolicy,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -79,7 +78,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
         stringResource(BitwardenString.user_trusted_privileged_app_management)
     }
 
-    FlagKey.RemoveCardPolicy -> stringResource(BitwardenString.remove_card_policy)
     FlagKey.BitwardenAuthenticationEnabled -> {
         stringResource(BitwardenString.bitwarden_authentication_enabled)
     }

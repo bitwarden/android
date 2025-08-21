@@ -250,14 +250,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         coEvery { addTrustedPrivilegedApp(any(), any()) } just runs
     }
 
-    private val mutableRemoveCardPolicyFeatureFlow = MutableStateFlow(false)
     private val featureFlagManager: FeatureFlagManager = mockk {
-        every {
-            getFeatureFlagFlow(FlagKey.RemoveCardPolicy)
-        } returns mutableRemoveCardPolicyFeatureFlow
-        every {
-            getFeatureFlag(FlagKey.UserManagedPrivilegedApps)
-        } returns true
+        every { getFeatureFlag(FlagKey.UserManagedPrivilegedApps) } returns true
     }
 
     private val initialState = createVaultItemListingState()
@@ -376,10 +370,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is enable`() =
+    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly`() =
         runTest {
-            mutableRemoveCardPolicyFeatureFlow.value = true
-
             val viewModel = createVaultItemListingViewModel()
             assertEquals(
                 initialState.copy(restrictItemTypesPolicyOrgIds = persistentListOf()),
@@ -401,33 +393,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 initialState.copy(
                     restrictItemTypesPolicyOrgIds = persistentListOf("Test Organization"),
                 ),
-                viewModel.stateFlow.value,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is disabled`() =
-        runTest {
-            val viewModel = createVaultItemListingViewModel()
-            assertEquals(
-                initialState,
-                viewModel.stateFlow.value,
-            )
-            mutableActivePoliciesFlow.emit(
-                listOf(
-                    SyncResponseJson.Policy(
-                        organizationId = "Test Organization",
-                        id = "testId",
-                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
-                        isEnabled = true,
-                        data = null,
-                    ),
-                ),
-            )
-
-            assertEquals(
-                initialState.copy(restrictItemTypesPolicyOrgIds = persistentListOf()),
                 viewModel.stateFlow.value,
             )
         }
@@ -1392,7 +1357,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `AddVaultItemClick inside a folder should hide card item selection dialog state when RESTRICT_ITEM_TYPES policy is enabled`() =
         runTest {
-            mutableRemoveCardPolicyFeatureFlow.value = true
             val viewModel = createVaultItemListingViewModel(
                 savedStateHandle = createSavedStateHandleWithVaultItemListingType(
                     vaultItemListingType = VaultItemListingType.Folder(folderId = "id"),
@@ -1431,7 +1395,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `AddVaultItemClick inside a collection should hide card item selection dialog state when RESTRICT_ITEM_TYPES policy is enabled`() =
         runTest {
-            mutableRemoveCardPolicyFeatureFlow.value = true
             val viewModel = createVaultItemListingViewModel(
                 savedStateHandle = createSavedStateHandleWithVaultItemListingType(
                     vaultItemListingType = VaultItemListingType.Collection(collectionId = "id"),
@@ -5014,8 +4977,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 title = BitwardenString.an_error_has_occurred.asText(),
                 message =
                     BitwardenString
-                    .credential_operation_failed_because_user_verification_was_cancelled
-                    .asText(),
+                        .credential_operation_failed_because_user_verification_was_cancelled
+                        .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )

@@ -147,14 +147,12 @@ private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf
     FlagKey.CredentialExchangeProtocolImport to true,
     FlagKey.CredentialExchangeProtocolExport to true,
     FlagKey.UserManagedPrivilegedApps to true,
-    FlagKey.RemoveCardPolicy to true,
 )
 
 private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf(
     FlagKey.CredentialExchangeProtocolImport to false,
     FlagKey.CredentialExchangeProtocolExport to false,
     FlagKey.UserManagedPrivilegedApps to false,
-    FlagKey.RemoveCardPolicy to false,
 )
 
 private val DEFAULT_STATE = DebugMenuState(
