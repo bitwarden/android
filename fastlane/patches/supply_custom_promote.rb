@@ -81,15 +81,18 @@ module Supply
       UI.message("Promoting release with version: #{release.name} (#{release.version_codes.first})")
 
       if track_to
+        UI.message("Using existing track_to")
         # Its okay to set releases to an array containing the newest release
         # Google Play will keep previous releases there this release is a partial rollout
         track_to.releases = [release]
       else
+        UI.message("Creating new track_to")
         track_to = AndroidPublisher::Track.new(
           track: Supply.config[:track_promote_to],
           releases: [release]
         )
       end
+      UI.message("track_to details: #{track_to.inspect}")
 
       UI.message("About to promote with release: #{release.inspect}")
 
