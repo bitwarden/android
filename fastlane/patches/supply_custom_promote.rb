@@ -8,10 +8,8 @@
 
 module Supply
   class Uploader
-    # Alias the original promote_track method so we can override it
     alias_method :original_promote_track, :promote_track
 
-    # Override promote_track to use custom logic if skip_release_verification is set
     def promote_track
       if Supply.config[:skip_release_verification]
         custom_promote_track
@@ -20,24 +18,19 @@ module Supply
       end
     end
 
-    # Custom promotion logic to handle cases where releases aren't recognized
     def custom_promote_track
       UI.message("Using custom promotion logic")
-      
-      # Fetch the source track to promote from
       track_from = client.tracks(Supply.config[:track]).first
       unless track_from
         UI.user_error!("Cannot promote from track '#{Supply.config[:track]}' - track doesn't exist")
       end
 
       releases = track_from.releases
-
-      version_code = Supply.config[:version_code].to_s
-
       UI.message("Available version codes in track '#{Supply.config[:track]}': #{release.version_codes.join(', ')}  for release '#{release.name}'")
 
-      # Release verification block: filter releases based on version_code or status
-      if !Supply.config[:skip_release_verification]        if version_code != ""
+      version_code = Supply.config[:version_code].to_s
+      if !Supply.config[:skip_release_verification]
+        if version_code != ""
           releases = releases.select do |release|
             release.version_codes.include?(version_code)
           end
@@ -47,7 +40,6 @@ module Supply
           end
         end
 
-        # Error handling for missing or ambiguous releases
         if releases.size == 0
           if version_code != ""
             UI.user_error!("Cannot find release with version code '#{version_code}' to promote in track '#{Supply.config[:track]}'")
@@ -58,7 +50,6 @@ module Supply
           UI.user_error!("Track '#{Supply.config[:track]}' has more than one release - use :version_code to filter the release to promote")
         end
       else
-        # Skip verification: require version_code and version_name, construct release manually
         UI.message("Skipping release verification as per configuration.")
         if version_code == ""
           UI.user_error!("Must provide a version code when release verification is skipped.")
@@ -73,16 +64,12 @@ module Supply
         )
       end
 
-      # Select the release to promote if verification was not skipped
       release = releases.first unless Supply.config[:skip_release_verification]
-
-      # Fetch or initialize the destination track to promote to
       track_to = client.tracks(Supply.config[:track_promote_to]).first || AndroidPublisher::Track.new(
         track: Supply.config[:track_promote_to],
         releases: []
       )
 
-      # Set rollout fraction and release status for partial rollouts
       rollout = (Supply.config[:rollout] || 0).to_f
       if rollout > 0 && rollout < 1
         release.status = Supply::ReleaseStatus::IN_PROGRESS
@@ -94,7 +81,6 @@ module Supply
 
       UI.message("Promoting release with version: #{release.name} (#{release.version_codes.first})")
 
-      # Assign the release to the destination track's releases array
       if track_to
         # Its okay to set releases to an array containing the newest release
         # Google Play will keep previous releases there this release is a partial rollout
@@ -106,7 +92,6 @@ module Supply
         )
       end
 
-      # Update the destination track with the new release
       client.update_track(Supply.config[:track_promote_to], track_to)
       UI.message("confirmed that update_track was reached: #{Supply.config[:track_promote_to]} #{release}")
     end
