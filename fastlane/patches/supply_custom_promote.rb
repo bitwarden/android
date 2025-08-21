@@ -26,7 +26,10 @@ module Supply
       end
 
       releases = track_from.releases
-      UI.message("Available version codes in track '#{Supply.config[:track]}': #{release.version_codes.join(', ')}  for release '#{release.name}'")
+      releases = releases.select do |release|
+            UI.message("Available version codes in track '#{Supply.config[:track]}': #{release.version_codes.join(', ')}  for release '#{release.name}'")
+      end
+      
 
       version_code = Supply.config[:version_code].to_s
       if !Supply.config[:skip_release_verification]
