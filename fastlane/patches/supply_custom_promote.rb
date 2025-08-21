@@ -20,7 +20,7 @@ module Supply
 
     def custom_promote_track
       UI.message("Using custom promotion logic")
-      track_from = client.tracks(Supply.config[:track]).first
+      track_from = client.tracks(Supply.config[:track], max_results: 500).first
       unless track_from
         UI.user_error!("Cannot promote from track '#{Supply.config[:track]}' - track doesn't exist")
       end
