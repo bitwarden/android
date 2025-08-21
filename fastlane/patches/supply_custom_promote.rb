@@ -12,21 +12,6 @@ module Supply
       end
     end
 
-    # Utility method: Print all version codes for the given version name
-    def print_version_codes_for_name
-      version_name = Supply.config[:version_name]
-      return if version_name.nil? || version_name.empty?
-
-      all_tracks = client.tracks(nil) # nil fetches all tracks
-      all_tracks.each do |track|
-        track.releases.each do |release|
-          if release.name == version_name
-            UI.message("Track '#{track.track}' has release '#{version_name}' with version codes: #{release.version_codes.join(', ')}")
-          end
-        end
-      end
-    end
-
     # Custom promotion logic for handling track promotion
     def custom_promote_track
       UI.message("Using custom promotion logic")
@@ -42,8 +27,20 @@ module Supply
 
       # Gather all releases from the source track and log their version codes
       releases = track_from.releases
-      releases = releases.select do |release|
-        UI.message("Available version codes in track '#{Supply.config[:track]}': #{release.version_codes.join(', ')}  for release '#{release.name}'")
+      version_name = Supply.config[:version_name]
+
+      if version_name.nil? || version_name.empty?
+        UI.message("No version name provided, skipping version code lookup.")
+        return
+      end
+
+      all_tracks = client.tracks(nil) # nil fetches all tracks
+      all_tracks.each do |track|
+        track.releases.each do |release|
+          if release.name == version_name
+            UI.message("Track '#{track.track}' has release '#{version_name}' with version codes: #{release.version_codes.join(', ')}")
+          end
+        end
       end
 
       # Get the version code to promote
