@@ -179,7 +179,9 @@ class SearchViewModel @Inject constructor(
         snackbarRelayManager
             .getSnackbarDataFlow(
                 SnackbarRelay.CIPHER_DELETED,
+                SnackbarRelay.CIPHER_DELETED_SOFT,
                 SnackbarRelay.CIPHER_RESTORED,
+                SnackbarRelay.CIPHER_UPDATED,
                 SnackbarRelay.SEND_DELETED,
                 SnackbarRelay.SEND_UPDATED,
             )
@@ -1348,7 +1350,7 @@ sealed class SearchAction {
          */
         data class SnackbarDataReceived(
             val data: BitwardenSnackbarData,
-        ) : Internal()
+        ) : Internal(), BackgroundEvent
 
         /**
          * Indicates a result for updating a cipher during the autofill-and-save process.

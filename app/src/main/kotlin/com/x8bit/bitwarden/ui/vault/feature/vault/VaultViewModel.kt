@@ -177,8 +177,11 @@ class VaultViewModel @Inject constructor(
                     delay(timeMillis = LOGIN_SUCCESS_SNACKBAR_DELAY)
                 },
             snackbarRelayManager.getSnackbarDataFlow(
+                SnackbarRelay.CIPHER_CREATED,
                 SnackbarRelay.CIPHER_DELETED,
+                SnackbarRelay.CIPHER_DELETED_SOFT,
                 SnackbarRelay.CIPHER_RESTORED,
+                SnackbarRelay.CIPHER_UPDATED,
                 SnackbarRelay.LOGINS_IMPORTED,
             ),
         )
@@ -1725,7 +1728,7 @@ sealed class VaultAction {
          */
         data class SnackbarDataReceive(
             val data: BitwardenSnackbarData,
-        ) : Internal()
+        ) : Internal(), BackgroundEvent
 
         /**
          * Indicates that the flight recorder data was received.

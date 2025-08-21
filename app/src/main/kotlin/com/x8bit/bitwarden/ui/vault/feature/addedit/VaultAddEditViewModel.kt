@@ -7,6 +7,7 @@ import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
 import com.bitwarden.network.model.PolicyTypeJson
@@ -114,7 +115,8 @@ private const val KEY_STATE = "state"
 class VaultAddEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     generatorRepository: GeneratorRepository,
-    snackbarRelayManager: SnackbarRelayManager,
+    private val snackbarRelayManager: SnackbarRelayManager,
+    private val toastManager: ToastManager,
     private val authRepository: AuthRepository,
     private val clipboardManager: BitwardenClipboardManager,
     private val policyManager: PolicyManager,
@@ -1192,7 +1194,7 @@ class VaultAddEditViewModel @Inject constructor(
         updateLoginContent { loginType ->
             loginType.copy(fido2CredentialCreationDateTime = null)
         }
-        sendEvent(event = VaultAddEditEvent.ShowToast(BitwardenString.passkey_removed.asText()))
+        sendEvent(event = VaultAddEditEvent.ShowSnackbar(BitwardenString.passkey_removed.asText()))
     }
 
     private fun handlePasswordVisibilityChange(
@@ -1656,10 +1658,9 @@ class VaultAddEditViewModel @Inject constructor(
                 if (state.shouldExitOnSave) {
                     sendEvent(event = VaultAddEditEvent.ExitApp)
                 } else {
-                    sendEvent(
-                        event = VaultAddEditEvent.ShowToast(
-                            BitwardenString.new_item_created.asText(),
-                        ),
+                    snackbarRelayManager.sendSnackbarData(
+                        data = BitwardenSnackbarData(BitwardenString.new_item_created.asText()),
+                        relay = SnackbarRelay.CIPHER_CREATED,
                     )
                     sendEvent(event = VaultAddEditEvent.NavigateBack)
                 }
@@ -1690,10 +1691,9 @@ class VaultAddEditViewModel @Inject constructor(
                 if (state.shouldExitOnSave) {
                     sendEvent(event = VaultAddEditEvent.ExitApp)
                 } else {
-                    sendEvent(
-                        event = VaultAddEditEvent.ShowToast(
-                            BitwardenString.item_updated.asText(),
-                        ),
+                    snackbarRelayManager.sendSnackbarData(
+                        data = BitwardenSnackbarData(BitwardenString.item_updated.asText()),
+                        relay = SnackbarRelay.CIPHER_UPDATED,
                     )
                     sendEvent(event = VaultAddEditEvent.NavigateBack)
                 }
@@ -1714,10 +1714,9 @@ class VaultAddEditViewModel @Inject constructor(
 
             DeleteCipherResult.Success -> {
                 clearDialogState()
-                sendEvent(
-                    VaultAddEditEvent.ShowToast(
-                        message = BitwardenString.item_soft_deleted.asText(),
-                    ),
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.item_soft_deleted.asText()),
+                    relay = SnackbarRelay.CIPHER_DELETED_SOFT,
                 )
                 sendEvent(VaultAddEditEvent.NavigateBack)
             }
@@ -1887,7 +1886,7 @@ class VaultAddEditViewModel @Inject constructor(
         when (val result = action.totpResult) {
             is TotpCodeResult.Success -> {
                 sendEvent(
-                    event = VaultAddEditEvent.ShowToast(
+                    event = VaultAddEditEvent.ShowSnackbar(
                         message = BitwardenString.authenticator_key_added.asText(),
                     ),
                 )
@@ -1962,11 +1961,8 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
         when (action.result) {
             is Fido2RegisterCredentialResult.Error -> {
-                sendEvent(
-                    VaultAddEditEvent.ShowToast(
-                        BitwardenString.an_error_has_occurred.asText(),
-                    ),
-                )
+                // Use toast here because we are closing the activity.
+                toastManager.show(BitwardenString.an_error_has_occurred)
                 sendEvent(
                     VaultAddEditEvent.CompleteFido2Registration(
                         RegisterFido2CredentialResult.Error(
@@ -1977,7 +1973,8 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is Fido2RegisterCredentialResult.Success -> {
-                sendEvent(VaultAddEditEvent.ShowToast(BitwardenString.item_updated.asText()))
+                // Use toast here because we are closing the activity.
+                toastManager.show(BitwardenString.item_updated)
                 sendEvent(
                     VaultAddEditEvent.CompleteFido2Registration(
                         RegisterFido2CredentialResult.Success(action.result.responseJson),
@@ -2804,12 +2801,21 @@ sealed class VaultAddEditEvent {
      */
     data class ShowSnackbar(
         val data: BitwardenSnackbarData,
-    ) : VaultAddEditEvent(), BackgroundEvent
-
-    /**
-     * Shows a toast with the given [message].
-     */
-    data class ShowToast(val message: Text) : VaultAddEditEvent()
+    ) : VaultAddEditEvent(), BackgroundEvent {
+        constructor(
+            message: Text,
+            messageHeader: Text? = null,
+            actionLabel: Text? = null,
+            withDismissAction: Boolean = false,
+        ) : this(
+            data = BitwardenSnackbarData(
+                message = message,
+                messageHeader = messageHeader,
+                actionLabel = actionLabel,
+                withDismissAction = withDismissAction,
+            ),
+        )
+    }
 
     /**
      * Leave the application.
