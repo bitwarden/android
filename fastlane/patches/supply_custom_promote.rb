@@ -16,9 +16,6 @@ module Supply
     def custom_promote_track
       UI.message("Using custom promotion logic")
 
-      # Always print version codes for the supplied version name (if provided)
-      print_version_codes_for_name
-
       # Fetch the source track to promote from
       track_from = client.tracks(Supply.config[:track]).first
       unless track_from
