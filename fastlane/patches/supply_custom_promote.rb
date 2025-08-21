@@ -91,6 +91,8 @@ module Supply
         )
       end
 
+      UI.message("About to promote with release: #{release.inspect}")
+
       client.update_track(Supply.config[:track_promote_to], track_to)
       UI.message("confirmed that update_track was reached: #{Supply.config[:track_promote_to]} #{release}")
     end
