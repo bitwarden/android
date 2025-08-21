@@ -26,11 +26,6 @@ module Supply
       releases = track_from.releases
       version_name = Supply.config[:version_name]
 
-      if version_name.nil? || version_name.empty?
-        UI.message("No version name provided, skipping version code lookup.")
-        return
-      end
-
       all_tracks = client.tracks(nil) # nil fetches all tracks
       all_tracks.each do |track|
         track.releases.each do |release|
@@ -40,6 +35,11 @@ module Supply
         end
       end
 
+
+      if version_name.nil? || version_name.empty?
+        UI.message("No version name provided, skipping version code lookup.")
+        return
+      end
       # Get the version code to promote
       version_code = Supply.config[:version_code].to_s
 
