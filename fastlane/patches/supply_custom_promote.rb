@@ -24,6 +24,7 @@ module Supply
 
       # Gather all releases from the source track and log their version codes
       releases = track_from.releases
+      UI.message(releases.map { |release| "Release: #{release.name}, Version Codes: #{release.version_codes.join(', ')}" }.join("\n"))
       version_name = Supply.config[:version_name]
 
       all_tracks = client.tracks(nil) # nil fetches all tracks
