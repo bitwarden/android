@@ -34,10 +34,10 @@ module Supply
 
       version_code = Supply.config[:version_code].to_s
 
+      UI.message("Available version codes in track '#{Supply.config[:track]}': #{release.version_codes.join(', ')}  for release '#{release.name}'")
+
       # Release verification block: filter releases based on version_code or status
-      if !Supply.config[:skip_release_verification]
-          UI.message("Available version codes in track '#{Supply.config[:track]}': #{release.version_codes.join(', ')}  for release '#{release.name}'")
-        if version_code != ""
+      if !Supply.config[:skip_release_verification]        if version_code != ""
           releases = releases.select do |release|
             release.version_codes.include?(version_code)
           end
