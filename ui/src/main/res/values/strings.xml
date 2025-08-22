@@ -110,7 +110,10 @@
     <string name="master_password_description">The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</string>
     <string name="master_password_hint">Master password hint (optional)</string>
     <string name="master_password_hint_description">A master password hint can help you remember your password if you forget it.</string>
-    <string name="master_password_length_val_message_x">Master password must be at least %1$s characters long.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Minimum numbers</string>
     <string name="min_special">Minimum special</string>
     <string name="never">Never</string>

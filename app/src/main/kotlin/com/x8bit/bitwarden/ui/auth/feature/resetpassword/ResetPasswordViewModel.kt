@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.resetpassword
 
+import androidx.compose.ui.res.pluralStringResource
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -199,8 +200,7 @@ class ResetPasswordViewModel @Inject constructor(
                     it.copy(
                         dialogState = ResetPasswordState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.master_password_length_val_message_x
-                                .asText(MIN_PASSWORD_LENGTH),
+                            message = pluralStringResource(BitwardenString.master_password_length_val_message_x, MIN_PASSWORD_LENGTH),
                         ),
                     )
                 }
