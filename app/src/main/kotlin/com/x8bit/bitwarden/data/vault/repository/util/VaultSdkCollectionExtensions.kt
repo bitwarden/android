@@ -25,16 +25,6 @@ fun SyncResponseJson.Collection.toEncryptedSdkCollection(): Collection =
     )
 
 /**
- * Converts a [CollectionType] object to a corresponding
- * Bitwarden SDK [CollectionTypeJson] object.
- */
-private fun CollectionTypeJson.toCollectionType(): CollectionType =
-    when (this) {
-        CollectionTypeJson.SHARED_COLLECTION -> CollectionType.SHARED_COLLECTION
-        CollectionTypeJson.DEFAULT_USER_COLLECTION -> CollectionType.DEFAULT_USER_COLLECTION
-    }
-
-/**
  * Converts a list of [SyncResponseJson.Collection] objects to a list of corresponding
  * Bitwarden SDK [Collection] objects.
  */
@@ -52,3 +42,13 @@ fun List<CollectionView>.sortAlphabetically(): List<CollectionView> {
         },
     )
 }
+
+/**
+ * Converts a [CollectionType] object to a corresponding
+ * Bitwarden SDK [CollectionTypeJson] object.
+ */
+fun CollectionTypeJson.toCollectionType(): CollectionType =
+    when (this) {
+        CollectionTypeJson.SHARED_COLLECTION -> CollectionType.SHARED_COLLECTION
+        CollectionTypeJson.DEFAULT_USER_COLLECTION -> CollectionType.DEFAULT_USER_COLLECTION
+    }

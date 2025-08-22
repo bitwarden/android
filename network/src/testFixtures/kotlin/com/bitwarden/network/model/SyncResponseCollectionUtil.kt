@@ -13,7 +13,7 @@ fun createMockCollection(
     isReadOnly: Boolean = false,
     id: String = "mockId-$number",
     canManage: Boolean? = true,
-    defaultUserCollectionEmail: String? = null,
+    defaultUserCollectionEmail: String? = "mockOffboardedUserEmail-$number",
     type: CollectionTypeJson = CollectionTypeJson.SHARED_COLLECTION,
 ): SyncResponseJson.Collection =
     SyncResponseJson.Collection(
