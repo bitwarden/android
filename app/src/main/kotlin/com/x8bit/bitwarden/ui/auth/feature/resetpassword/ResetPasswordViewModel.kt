@@ -200,7 +200,10 @@ class ResetPasswordViewModel @Inject constructor(
                     it.copy(
                         dialogState = ResetPasswordState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = pluralStringResource(BitwardenString.master_password_length_val_message_x, MIN_PASSWORD_LENGTH),
+                            message = BitwardenPlurals.master_password_length_val_message_x.asText(
+                                quantity = MIN_PASSWORD_LENGTH,
+                                args = arrayOf(MIN_PASSWORD_LENGTH),
+                            ),
                         ),
                     )
                 }

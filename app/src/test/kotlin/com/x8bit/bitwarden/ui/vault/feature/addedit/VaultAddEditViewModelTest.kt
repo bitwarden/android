@@ -2430,7 +2430,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     loginState.copy(
                         dialog = VaultAddEditState.DialogState.Generic(
-                            message = pluralStringResource(BitwardenString.password_exposed, breachCount),
+                            message = BitwardenPlurals.password_exposed(
+                                quantity = breachCount,
+                                args = arrayOf(breachCount),
+                            )
                         ),
                     ),
                     awaitItem(),

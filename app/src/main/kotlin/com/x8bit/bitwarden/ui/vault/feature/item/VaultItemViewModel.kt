@@ -975,7 +975,10 @@ class VaultItemViewModel @Inject constructor(
             is BreachCountResult.Success -> {
                 VaultItemState.DialogState.Generic(
                     message = if (result.breachCount > 0) {
-                        pluralStringResource(BitwardenString.password_exposed, result.breachCount)
+                        BitwardenPlurals.password_exposed(
+                            quantity = result.breachCount,
+                            args = arrayOf(result.breachCount),
+                        )
                     } else {
                         BitwardenString.password_safe.asText()
                     },

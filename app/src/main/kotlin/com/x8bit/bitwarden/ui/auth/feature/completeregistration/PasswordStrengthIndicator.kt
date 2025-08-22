@@ -154,7 +154,10 @@ private fun MinimumCharacterCount(
         }
         Spacer(modifier = Modifier.width(2.dp))
         Text(
-            text = pluralStringResource(BitwardenString.minimum_characters, minimumCharacterCount),
+            text = BitwardenPlurals.minimum_characters(
+                quantity = minimumCharacterCount,
+                args = arrayOf(minimumCharacterCount),
+            ),
             color = BitwardenTheme.colorScheme.text.secondary,
             style = BitwardenTheme.typography.labelSmall,
         )
