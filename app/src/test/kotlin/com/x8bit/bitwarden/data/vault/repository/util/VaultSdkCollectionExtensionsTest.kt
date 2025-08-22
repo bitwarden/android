@@ -5,7 +5,6 @@ import com.bitwarden.collections.CollectionType
 import com.bitwarden.network.model.CollectionTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
-import org.junit.Assert
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 
@@ -135,7 +134,7 @@ class VaultSdkCollectionExtensionsTest {
     fun `toCollectionType should convert CollectionTypeJson to CollectionType`() {
         val collectionType = CollectionTypeJson.SHARED_COLLECTION
         val sdkCollectionType = collectionType.toCollectionType()
-        Assert.assertEquals(
+        assertEquals(
             CollectionType.SHARED_COLLECTION,
             sdkCollectionType,
         )
