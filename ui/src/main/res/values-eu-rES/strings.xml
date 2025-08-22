@@ -4,6 +4,7 @@
     <string name="add_folder">Gehitu karpeta</string>
     <string name="add_item">Gehitu elementua</string>
     <string name="an_error_has_occurred">Akats bat gertatu da.</string>
+    <string name="apply">Apply</string>
     <string name="back">Itzuli</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Ezeztatu</string>
@@ -363,8 +364,8 @@
     <string name="exit_confirmation">Zihur al zaude Bitwardenetik irten nahi duzula?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Aplikazioa berrabiarazten denean, pasahitz nagusiarekin desblokeatu nahi duzu?</string>
-    <string name="ask_to_add_login">Galdetu saio-hasiera gehitzeko</string>
-    <string name="ask_to_add_login_description">Elementu bat gehitu nahi duzun galdetu, elementu hau zure kutxa gotorrean ez badago.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Aplikazioa berrabiarazten denean</string>
     <string name="capitalize">Hasierako letra larria</string>
     <string name="include_number">Sartu zenbakia</string>

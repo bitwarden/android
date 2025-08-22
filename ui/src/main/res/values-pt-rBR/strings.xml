@@ -4,6 +4,7 @@
     <string name="add_folder">Adicionar pasta</string>
     <string name="add_item">Adicionar Item</string>
     <string name="an_error_has_occurred">Ocorreu um erro.</string>
+    <string name="apply">Apply</string>
     <string name="back">Voltar</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Cancelar</string>
@@ -364,8 +365,8 @@ A leitura será feita automaticamente.</string>
     <string name="exit_confirmation">Você tem certeza que deseja sair do Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Exigir senha mestra ao reiniciar o app?</string>
     <string name="pin_require_master_password_restart">Você quer exigir o desbloqueio com a sua senha mestra quando o aplicativo for reiniciado?</string>
-    <string name="ask_to_add_login">Pedir para adicionar uma conta</string>
-    <string name="ask_to_add_login_description">Pedir para adicionar um item se um não for encontrado no seu cofre.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Ao reiniciar o App</string>
     <string name="capitalize">Iniciais em Maiúsculas</string>
     <string name="include_number">Incluir número</string>

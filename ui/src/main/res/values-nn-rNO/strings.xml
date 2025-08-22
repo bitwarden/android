@@ -4,6 +4,7 @@
     <string name="add_folder">Legg til ei mappe</string>
     <string name="add_item">Legg til ei oppføring</string>
     <string name="an_error_has_occurred">Noko gjekk gale.</string>
+    <string name="apply">Apply</string>
     <string name="back">Attende</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Avbryt</string>
@@ -364,8 +365,8 @@ Skanning skjer automatisk.</string>
     <string name="exit_confirmation">Er du trygg på at du vil fara ut av Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Vil du krevje opplåsing med superpassordet ditt når programmet startast på nytt?</string>
-    <string name="ask_to_add_login">Spør om å leggje til innlogging</string>
-    <string name="ask_to_add_login_description">Ask to add an item if one isn\'t found in your vault.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Ved oppstart av app å nyo</string>
     <string name="capitalize">Stor førebokstav</string>
     <string name="include_number">Inkluder tal</string>

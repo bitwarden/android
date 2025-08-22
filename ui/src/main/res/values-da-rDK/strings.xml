@@ -4,6 +4,7 @@
     <string name="add_folder">Tilføj mappe</string>
     <string name="add_item">Tilføj emne</string>
     <string name="an_error_has_occurred">En fejl er opstået.</string>
+    <string name="apply">Apply</string>
     <string name="back">Retur</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Afbryd</string>
@@ -364,8 +365,8 @@ Skanning vil ske automatisk.</string>
     <string name="exit_confirmation">Sikker på, at Bitwarden skal afsluttes?</string>
     <string name="require_master_password_on_app_restart">Kræv hovedadgangskode ved app-genstart?</string>
     <string name="pin_require_master_password_restart">Skal oplåsning med hovedadgangskoden kræves, når appen genstartes?</string>
-    <string name="ask_to_add_login">Spørg om at tilføje login</string>
-    <string name="ask_to_add_login_description">Spørg om at tilføje et emne, hvis der ikke findes et matchende i boksen.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Ved app-genstart</string>
     <string name="capitalize">Versal</string>
     <string name="include_number">Inkludér ciffer</string>

@@ -4,6 +4,7 @@
     <string name="add_folder">கோப்புறை சேர்</string>
     <string name="add_item">உருப்படியைச் சேர்</string>
     <string name="an_error_has_occurred">ஓரு பிழை நேர்ந்துவிட்டது.</string>
+    <string name="apply">Apply</string>
     <string name="back">பின்னே</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">ரத்துசெய்</string>
@@ -364,8 +365,8 @@
     <string name="exit_confirmation">Bitwarden இலிருந்து வெளியேற விரும்புகிறீர்களா?</string>
     <string name="require_master_password_on_app_restart">செயலி மறுதுவக்கத்தில் பிரதான கடவுச்சொல் கேட்கவா?</string>
     <string name="pin_require_master_password_restart">செயலி மறுதுவக்கத்தில் பூட்டவிழ்க்க உங்கள் பிரதான கடவுச்சொல்லை கோர வேண்டுமா?</string>
-    <string name="ask_to_add_login">உள்நுழைவைச் சேர்க்க கேள்</string>
-    <string name="ask_to_add_login_description">உமது பெட்டகத்தில் உருப்படி இல்லையெனில் சேர்க்க கேள்.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">செயலி மறுதொடக்கத்தில்</string>
     <string name="capitalize">பேரெழுத்தாக்கு</string>
     <string name="include_number">எண்ணை உள்ளடக்கு</string>

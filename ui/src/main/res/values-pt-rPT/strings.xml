@@ -4,6 +4,7 @@
     <string name="add_folder">Adicionar pasta</string>
     <string name="add_item">Adicionar item</string>
     <string name="an_error_has_occurred">Ocorreu um erro</string>
+    <string name="apply">Aplicar</string>
     <string name="back">Voltar</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Cancelar</string>
@@ -73,7 +74,7 @@
     <string name="account">Conta</string>
     <string name="account_created_success">A sua nova conta foi criada!</string>
     <string name="set_bitwarden_as_passkey_manager_description">Defina o Bitwarden como o seu fornecedor de chaves de acesso nas definições do dispositivo.</string>
-    <string name="avoid_ambiguous_characters">Evitar carateres ambíguos</string>
+    <string name="avoid_ambiguous_characters">Evitar caracteres ambíguos</string>
     <string name="bitwarden_autofill_service">Serviço de preenchimento automático do Bitwarden</string>
     <string name="change_master_password">Alterar palavra-passe mestra</string>
     <string name="close">Fechar</string>
@@ -109,9 +110,9 @@
     <string name="master_password_description">A palavra-passe mestra é a palavra-passe que utiliza para aceder ao seu cofre. É muito importante que não se esqueça da sua palavra-passe mestra. Não há forma de recuperar a palavra-passe no caso de a esquecer.</string>
     <string name="master_password_hint">Dica da palavra-passe mestra (opcional)</string>
     <string name="master_password_hint_description">Uma dica da palavra-passe mestra pode ajudá-lo a lembrar-se da sua palavra-passe, caso se esqueça dela.</string>
-    <string name="master_password_length_val_message_x">A palavra-passe mestra deve ter pelo menos %1$s carateres.</string>
+    <string name="master_password_length_val_message_x">A palavra-passe mestra deve ter pelo menos %1$s caracteres.</string>
     <string name="min_numbers">Mínimo de números</string>
-    <string name="min_special">Mínimo de carateres especiais</string>
+    <string name="min_special">Mínimo de caracteres especiais</string>
     <string name="never">Nunca</string>
     <string name="new_item_created">Item adicionado</string>
     <string name="no_cards">Não existem cartões no seu cofre.</string>
@@ -364,8 +365,8 @@ A leitura será efetuada automaticamente.</string>
     <string name="exit_confirmation">Tem a certeza de que pretende sair do Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Exigir a palavra-passe mestra ao reiniciar a app?</string>
     <string name="pin_require_master_password_restart">Pretende exigir o desbloqueio com a sua palavra-passe mestra quando a aplicação é reiniciada?</string>
-    <string name="ask_to_add_login">Pedir para adicionar credencial</string>
-    <string name="ask_to_add_login_description">Pedir para adicionar um item se não o encontrar no seu cofre.</string>
+    <string name="ask_to_add_item">Pedir para adicionar um item</string>
+    <string name="ask_to_add_item_description">Pedir para adicionar um item se não o encontrar no seu cofre.</string>
     <string name="on_restart">Ao reiniciar a app</string>
     <string name="capitalize">Capitalizar</string>
     <string name="include_number">Incluir número</string>
@@ -412,10 +413,10 @@ A leitura será efetuada automaticamente.</string>
     <string name="master_password_policy_in_effect">Uma ou mais políticas da organização exigem que a sua palavra-passe mestra cumpra os seguintes requisitos:</string>
     <string name="policy_in_effect_min_complexity">Pontuação mínima de complexidade de %1$s</string>
     <string name="policy_in_effect_min_length">Comprimento mínimo de %1$s</string>
-    <string name="policy_in_effect_uppercase">Contém um ou mais carateres em maiúsculas</string>
-    <string name="policy_in_effect_lowercase">Contém um ou mais carateres em minúsculas</string>
+    <string name="policy_in_effect_uppercase">Contém um ou mais caracteres em maiúsculas</string>
+    <string name="policy_in_effect_lowercase">Contém um ou mais caracteres em minúsculas</string>
     <string name="policy_in_effect_numbers">Contém um ou mais números</string>
-    <string name="policy_in_effect_special">Contém um ou mais dos seguintes carateres especiais: %1$s</string>
+    <string name="policy_in_effect_special">Contém um ou mais dos seguintes caracteres especiais: %1$s</string>
     <string name="master_password_policy_validation_title">Palavra-passe inválida</string>
     <string name="master_password_policy_validation_message">A palavra-passe não corresponde aos requisitos da organização. Verifique as informações da política e tente novamente.</string>
     <string name="loading">A carregar</string>
@@ -518,7 +519,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="uppercase_ato_z">Maiúsculas (A-Z)</string>
     <string name="lowercase_ato_z">Minúsculas (a-z)</string>
     <string name="numbers_zero_to_nine">Números (0-9)</string>
-    <string name="special_characters">Carateres especiais (!@#$%^&amp;*)</string>
+    <string name="special_characters">Caracteres especiais (!@#$%^&amp;*)</string>
     <string name="filter_by_vault">Filtrar itens por cofre</string>
     <string name="all_vaults">Todos os cofres</string>
     <string name="vaults">Cofres</string>
@@ -748,7 +749,7 @@ Pretende mudar para esta conta?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">O Bitwarden não pode repor uma palavra-passe mestra perdida ou esquecida.</string>
     <string name="choose_your_master_password">Escolha a sua palavra-passe mestra</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Escolha uma palavra-passe única e forte para manter as suas informações seguras.</string>
-    <string name="minimum_characters">%1$s carateres</string>
+    <string name="minimum_characters">%1$s caracteres</string>
     <string name="expired_link">Link expirado</string>
     <string name="please_restart_registration_or_try_logging_in">Por favor, reinicie o registo ou tente iniciar sessão. É possível que já tenha uma conta.</string>
     <string name="restart_registration">Reiniciar registo</string>

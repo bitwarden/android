@@ -4,6 +4,7 @@
     <string name="add_folder">Afig carpeta</string>
     <string name="add_item">Afegeix element</string>
     <string name="an_error_has_occurred">S\'ha produït un error.</string>
+    <string name="apply">Apply</string>
     <string name="back">Arrere</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Cancel·la</string>
@@ -364,8 +365,8 @@ L\'escaneig es farà automàticament.</string>
     <string name="exit_confirmation">Esteu segur que voleu tancar Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Sol·licita la contrasenya mestra en reiniciar l\'aplicació?</string>
     <string name="pin_require_master_password_restart">Voleu sol·licitar el desbloqueig amb la vostra contrasenya mestra quan es reinicie l’aplicació?</string>
-    <string name="ask_to_add_login">Sol·licita afegir els inicis de sessió</string>
-    <string name="ask_to_add_login_description">Sol·licita afegir un element si no se\'n troba cap a la caixa forta.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">En reiniciar l\'aplicació</string>
     <string name="capitalize">Majúscules inicials</string>
     <string name="include_number">Inclou número</string>

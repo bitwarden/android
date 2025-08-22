@@ -4,6 +4,7 @@
     <string name="add_folder">Mappa hozzáadása</string>
     <string name="add_item">Elem hozzáadása</string>
     <string name="an_error_has_occurred">Hiba történt.</string>
+    <string name="apply">Alkalmazás</string>
     <string name="back">Vissza</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Mégse</string>
@@ -363,8 +364,8 @@
     <string name="exit_confirmation">Biztosan kilépünk?</string>
     <string name="require_master_password_on_app_restart">Lezárás mesterjelszóval az alkalmazás újraindításakor?</string>
     <string name="pin_require_master_password_restart">Szükséges a feloldás mesterjelszóval az alkalmazás újraindításakor?</string>
-    <string name="ask_to_add_login">Bejelentkezés hozzáadás kérése</string>
-    <string name="ask_to_add_login_description">Kérjünk egy elem hozzáadást, ha az nem található a széfben.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Újraindításkor</string>
     <string name="capitalize">Nagy kezdőbetű</string>
     <string name="include_number">Szám is</string>

@@ -4,6 +4,7 @@
     <string name="add_folder">Dodaj folder</string>
     <string name="add_item">Dodaj element</string>
     <string name="an_error_has_occurred">Wystąpił błąd.</string>
+    <string name="apply">Zastosuj</string>
     <string name="back">Wstecz</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Anuluj</string>
@@ -364,8 +365,8 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="exit_confirmation">Czy na pewno chcesz wyjść z Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Wymagać hasła głównego po ponownym uruchomieniu aplikacji?</string>
     <string name="pin_require_master_password_restart">Czy chcesz wymagać odblokowywania hasłem głównym po ponownym uruchomieniu aplikacji?</string>
-    <string name="ask_to_add_login">Proponuj zapisywanie danych logowania</string>
-    <string name="ask_to_add_login_description">Proponuj zapisywanie danych logowania, jeśli nie ma ich w sejfie.</string>
+    <string name="ask_to_add_item">Proponuj zapisywanie elementu</string>
+    <string name="ask_to_add_item_description">Proponuj zapisywanie danych logowania, jeśli nie ma ich w sejfie.</string>
     <string name="on_restart">Po uruchomieniu aplikacji</string>
     <string name="capitalize">Wielkie litery</string>
     <string name="include_number">Cyfry</string>

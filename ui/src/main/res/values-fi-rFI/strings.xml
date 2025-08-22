@@ -4,6 +4,7 @@
     <string name="add_folder">Lisää kansio</string>
     <string name="add_item">Lisää kohde</string>
     <string name="an_error_has_occurred">Tapahtui virhe.</string>
+    <string name="apply">Apply</string>
     <string name="back">Takaisin</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Peruuta</string>
@@ -364,8 +365,8 @@ Koodi skannataan automaattisesti.</string>
     <string name="exit_confirmation">Haluatko varmasti poistua Bitwardenista?</string>
     <string name="require_master_password_on_app_restart">Vaadi pääsalasana sovellusta uudelleenkäynnistettäessä?</string>
     <string name="pin_require_master_password_restart">Vaaditaanko lukituksen avaus pääsalasanalla, kun sovellus käynnistetään uudelleen?</string>
-    <string name="ask_to_add_login">Kysy lisätäänkö kirjautumistieto</string>
-    <string name="ask_to_add_login_description">Kysy lisätäänkö uusi kohde, jos holvissa ei vielä ole sopivaa kohdetta.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Kun sovellus käynnistetään uudelleen</string>
     <string name="capitalize">Sanat isoilla alkukirjaimilla</string>
     <string name="include_number">Sisällytä numero</string>

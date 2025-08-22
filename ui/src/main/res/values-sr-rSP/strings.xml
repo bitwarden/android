@@ -4,6 +4,7 @@
     <string name="add_folder">Додај фасциклу</string>
     <string name="add_item">Додај ставку</string>
     <string name="an_error_has_occurred">Појавила се грешка.</string>
+    <string name="apply">Apply</string>
     <string name="back">Назад</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Откажи</string>
@@ -364,8 +365,8 @@
     <string name="exit_confirmation">Да ли сте сигурни да желите да изађете из Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Потражити главну лозинку при поновном покретању апликације?</string>
     <string name="pin_require_master_password_restart">Да ли желите да затражите откључавање главном лозинком када се апликација поново покрене?</string>
-    <string name="ask_to_add_login">Питај да се дода пријава</string>
-    <string name="ask_to_add_login_description">Затражи да се дода ставка ако она није пронађена у вашем сефу.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">На поновно покретање</string>
     <string name="capitalize">Прво слово велико</string>
     <string name="include_number">Убаци број</string>

@@ -4,6 +4,7 @@
     <string name="add_folder">Добавить папку</string>
     <string name="add_item">Добавить элемент</string>
     <string name="an_error_has_occurred">Произошла ошибка</string>
+    <string name="apply">Применить</string>
     <string name="back">Назад</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Отмена</string>
@@ -364,8 +365,8 @@
     <string name="exit_confirmation">Вы действительно хотите выйти из Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Требовать мастер-пароль при перезапуске приложения?</string>
     <string name="pin_require_master_password_restart">Хотите, чтобы при перезапуске приложения требовалась разблокировка с помощью мастер-пароля?</string>
-    <string name="ask_to_add_login">Спрашивать при добавлении логина</string>
-    <string name="ask_to_add_login_description">Запросить добавление элемента, если его нет в вашем хранилище.</string>
+    <string name="ask_to_add_item">Запросить добавление элемента</string>
+    <string name="ask_to_add_item_description">Запросить добавление элемента, если его нет в вашем хранилище.</string>
     <string name="on_restart">При перезапуске приложения</string>
     <string name="capitalize">С заглавной буквы</string>
     <string name="include_number">Добавить цифру</string>

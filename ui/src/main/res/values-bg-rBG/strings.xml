@@ -4,6 +4,7 @@
     <string name="add_folder">Добавяне на папка</string>
     <string name="add_item">Добавяне на елемент</string>
     <string name="an_error_has_occurred">Възникна грешка.</string>
+    <string name="apply">Прилагане</string>
     <string name="back">Назад</string>
     <string name="bitwarden">Битуорден</string>
     <string name="cancel">Отказ</string>
@@ -364,8 +365,8 @@
     <string name="exit_confirmation">Сигурни ли сте, че искате да спрете Битуорден?</string>
     <string name="require_master_password_on_app_restart">Изискване на главната парола при повторно пускане на приложението?</string>
     <string name="pin_require_master_password_restart">Искате ли да бъдете питани за главната парола при всяко пускане на Битуорден наново?</string>
-    <string name="ask_to_add_login">Питане за добавяне на запис</string>
-    <string name="ask_to_add_login_description">Питане за добавяне на запис, ако такъв не бъде намерен в трезора Ви.</string>
+    <string name="ask_to_add_item">Помолете за добавяне на елемент</string>
+    <string name="ask_to_add_item_description">Помолете за добавяне на елемент, ако такъв не може да бъде намерен в трезора Ви.</string>
     <string name="on_restart">При рестартиране на приложението</string>
     <string name="capitalize">Главни букви</string>
     <string name="include_number">И цифри</string>
