@@ -4,6 +4,7 @@
     <string name="add_folder">Ychwanegu ffolder</string>
     <string name="add_item">Ychwanegu eitem</string>
     <string name="an_error_has_occurred">Bu gwall.</string>
+    <string name="apply">Apply</string>
     <string name="back">Yn ôl</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Yn ôl</string>
@@ -364,8 +365,8 @@ Scanning will happen automatically.</string>
     <string name="exit_confirmation">Ydych chi\'n siŵr eich bod am adael Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Do you want to require unlocking with your master password when the application is restarted?</string>
-    <string name="ask_to_add_login">Gofyn i ychwanegu manylion mewngofnodi</string>
-    <string name="ask_to_add_login_description">Ask to add an item if one isn\'t found in your vault.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">On app restart</string>
     <string name="capitalize">Priflythrennu</string>
     <string name="include_number">Cynnwys rhif</string>

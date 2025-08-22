@@ -4,6 +4,7 @@
     <string name="add_folder">Klasör ekle</string>
     <string name="add_item">Kayıt ekle</string>
     <string name="an_error_has_occurred">Bir hata oluştu.</string>
+    <string name="apply">Uygula</string>
     <string name="back">Geri</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">İptal</string>
@@ -364,8 +365,8 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="exit_confirmation">Bitwarden\'dan çıkmak istediğinize emin misiniz?</string>
     <string name="require_master_password_on_app_restart">Uygulama yeniden başlatıldığında ana parola sorulsun mu?</string>
     <string name="pin_require_master_password_restart">Uygulama yeniden başlatılınca ana parola girilmesine zorunlu tutmak ister misiniz?</string>
-    <string name="ask_to_add_login">Hesap eklemeyi öner</string>
-    <string name="ask_to_add_login_description">Kasamda kayıt bulunamazsa eklemeyi öner.</string>
+    <string name="ask_to_add_item">Hesap eklemeyi öner</string>
+    <string name="ask_to_add_item_description">Kasamda kayıt bulunamazsa eklemeyi öner.</string>
     <string name="on_restart">Uygulama yeniden başlatılınca</string>
     <string name="capitalize">Baş harfleri büyük yap</string>
     <string name="include_number">Rakam ekle</string>

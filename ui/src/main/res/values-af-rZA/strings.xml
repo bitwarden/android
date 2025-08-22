@@ -4,6 +4,7 @@
     <string name="add_folder">Voeg vouer toe</string>
     <string name="add_item">Voeg item toe</string>
     <string name="an_error_has_occurred">’n Fout het voorgekom.</string>
+    <string name="apply">Apply</string>
     <string name="back">Terug</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Kanselleer</string>
@@ -364,8 +365,8 @@ Skandering gebeur outomaties.</string>
     <string name="exit_confirmation">Is u seker u wil Bitwarden verlaat?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Wil u vereis dat met die hoofwagwoord ontgrendel word wanneer die toep geherlanseer is?</string>
-    <string name="ask_to_add_login">Vra om aantekening toe te voeg</string>
-    <string name="ask_to_add_login_description">Vra om ’n item toe te voeg indien een nie in u kluis gevind word nie.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Nadat toep herbegin is</string>
     <string name="capitalize">Maak Beginhoofletters</string>
     <string name="include_number">Voeg syfer toe</string>

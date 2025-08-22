@@ -4,6 +4,7 @@
     <string name="add_folder">新增資料夾</string>
     <string name="add_item">新增項目</string>
     <string name="an_error_has_occurred">發生錯誤。</string>
+    <string name="apply">Apply</string>
     <string name="back">返回</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">取消</string>
@@ -364,8 +365,8 @@
     <string name="exit_confirmation">您確定要結束 Bitwarden 嗎？</string>
     <string name="require_master_password_on_app_restart">在應用程式重啟時重新詢問主密碼嗎？</string>
     <string name="pin_require_master_password_restart">當應用程式重新啟動時，是否要求使用主密碼解鎖？</string>
-    <string name="ask_to_add_login">詢問新增登入資料</string>
-    <string name="ask_to_add_login_description">在密碼庫中找不到相符的項目時詢問是否新增項目。</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">於程式重新啟動時</string>
     <string name="capitalize">大寫</string>
     <string name="include_number">包含數字</string>

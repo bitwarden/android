@@ -4,6 +4,7 @@
     <string name="add_folder">ഫോൾഡർ ചേർക്കുക</string>
     <string name="add_item">ഇനം ചേർക്കുക</string>
     <string name="an_error_has_occurred">ഒരു പിഴവ് സംഭവിച്ചിരിക്കുന്നു.</string>
+    <string name="apply">Apply</string>
     <string name="back">പുറകോട്ട്</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">റദ്ദാക്കുക</string>
@@ -364,8 +365,8 @@
     <string name="exit_confirmation">Bitwardenനിൽ നിന്ന്  നിങ്ങൾക്ക് പുറത്തുകടക്കണമെന്ന് ഉറപ്പാണോ?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">അപ്ലിക്കേഷൻ പുനരാരംഭിക്കുമ്പോൾ നിങ്ങളുടെപ്രാഥമിക പാസ്‌വേഡ് ഉപയോഗിച്ച് അൺലോക്കുചെയ്യാൻ ആഗ്രഹമുണ്ടോ?</string>
-    <string name="ask_to_add_login">Ask to add login</string>
-    <string name="ask_to_add_login_description">Ask to add an item if one isn\'t found in your vault.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">അപ്ലിക്കേഷൻ പുനരാരംഭിക്കുമ്പോൾ</string>
     <string name="capitalize">വലിയഅക്ഷരമാകുക</string>
     <string name="include_number">നമ്പർ ഉൾപ്പെടുത്തുക</string>

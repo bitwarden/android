@@ -4,6 +4,7 @@
     <string name="add_folder">Aggiungi una cartella</string>
     <string name="add_item">Aggiungi un elemento</string>
     <string name="an_error_has_occurred">Avviso</string>
+    <string name="apply">Apply</string>
     <string name="back">Indietro</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Annulla</string>
@@ -363,8 +364,8 @@
     <string name="exit_confirmation">Vuoi davvero chiudere Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Richiedi la password principale dopo il riavvio</string>
     <string name="pin_require_master_password_restart">Vuoi richiedere lo sblocco con la password principale quando l\'app viene riavviata?</string>
-    <string name="ask_to_add_login">Proposta per nuovi login</string>
-    <string name="ask_to_add_login_description">Proponi di aggiungere un login quando non è presente nella cassaforte</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Dopo il riavvio dell\'app</string>
     <string name="capitalize">Iniziale maiuscola</string>
     <string name="include_number">Numero casuale</string>

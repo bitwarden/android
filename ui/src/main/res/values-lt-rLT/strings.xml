@@ -4,6 +4,7 @@
     <string name="add_folder">Pridėti katalogą</string>
     <string name="add_item">Pridėti elementą</string>
     <string name="an_error_has_occurred">Įvyko klaida.</string>
+    <string name="apply">Apply</string>
     <string name="back">Atgal</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Atšaukti</string>
@@ -364,8 +365,8 @@ Nuskaitymas vyks automatiškai.</string>
     <string name="exit_confirmation">Ar tikrai norite išeiti iš „Bitwarden“?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Ar norite reikalauti atrakinti naudojant pagrindinį slaptažodį, kai programa paleidžiama iš naujo?</string>
-    <string name="ask_to_add_login">Prašyti pridėti prisijungimą</string>
-    <string name="ask_to_add_login_description">Paprašykite pridėti elementą, jei jo nerasta jūsų saugykloje.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Paleidus programą iš naujo</string>
     <string name="capitalize">Pradėti didžiosiomis</string>
     <string name="include_number">Įtraukti skaičius</string>

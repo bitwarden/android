@@ -4,6 +4,7 @@
     <string name="add_folder">Přidat složku</string>
     <string name="add_item">Přidat položku</string>
     <string name="an_error_has_occurred">Vyskytla se chyba.</string>
+    <string name="apply">Použít</string>
     <string name="back">Zpět</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Zrušit</string>
@@ -364,8 +365,8 @@ Načtení proběhne automaticky.</string>
     <string name="exit_confirmation">Opravdu chcete ukončit Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Vyžadovat hlavní heslo při restartu aplikace?</string>
     <string name="pin_require_master_password_restart">Chcete po restartování aplikace vyžadovat hlavní heslo pro odemknutí trezoru?</string>
-    <string name="ask_to_add_login">Ptát se na přidání přihlášení</string>
-    <string name="ask_to_add_login_description">Zeptá se na uložení údajů, pokud nebyly v trezoru nalezeny.</string>
+    <string name="ask_to_add_item">Zeptat se na přidání položky</string>
+    <string name="ask_to_add_item_description">Zeptá se na uložení údajů, pokud nebyly v trezoru nalezeny.</string>
     <string name="on_restart">Při restartu aplikace</string>
     <string name="capitalize">Velká písmena na začátku slova</string>
     <string name="include_number">Zahrnout číslice</string>

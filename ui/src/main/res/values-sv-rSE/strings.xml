@@ -4,6 +4,7 @@
     <string name="add_folder">Lägg till mapp</string>
     <string name="add_item">Lägg till objekt</string>
     <string name="an_error_has_occurred">Ett fel har inträffat</string>
+    <string name="apply">Verkställ</string>
     <string name="back">Tillbaka</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Avbryt</string>
@@ -286,7 +287,7 @@ Skanningen sker automatiskt.</string>
     <string name="new_uri">Ny URI</string>
     <string name="add_website">Lägg till webbplats</string>
     <string name="base_domain">Basdomän</string>
-    <string name="default_text">Default (%1$s)</string>
+    <string name="default_text">Standard (%1$s)</string>
     <string name="exact">Exakt</string>
     <string name="host">Värd</string>
     <string name="reg_ex">Reguljärt uttryck</string>
@@ -356,7 +357,7 @@ Skanningen sker automatiskt.</string>
     <string name="clear_clipboard">Rensa urklipp</string>
     <string name="clear_clipboard_description">Rensa automatiskt kopierade värden från urklipp.</string>
     <string name="default_uri_match_detection">Standardmatchning för URI</string>
-    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
+    <string name="default_uri_match_detection_description">Detektering av URI-matchning är hur Bitwarden identifierar automatisk ifyllning.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Ändra appens färgtema</string>
     <string name="copy_notes">Kopiera anteckning</string>
@@ -364,8 +365,8 @@ Skanningen sker automatiskt.</string>
     <string name="exit_confirmation">Är du säker på att du vill avsluta Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Kräv huvudlösenord vid omstart av appen?</string>
     <string name="pin_require_master_password_restart">Vill du behöva låsa upp med ditt huvudlösenord när programmet startas om?</string>
-    <string name="ask_to_add_login">Be om att lägga till inloggning</string>
-    <string name="ask_to_add_login_description">Be om att lägga till ett objekt om det inte finns i ditt valv.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Vid omstart av appen</string>
     <string name="capitalize">Versalisera</string>
     <string name="include_number">Inkludera siffra</string>
@@ -1069,13 +1070,13 @@ Vill du byta till detta konto?</string>
     <string name="items_expanded_click_to_collapse">Objekt är expanderade, klicka för att fälla in.</string>
     <string name="items_are_collapsed_click_to_expand">Objekt är infällda, klicka för att expandera.</string>
     <string name="select_a_card_for_x">Välj ett kort för %s</string>
-    <string name="advanced_options">Advanced options</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
-    <string name="keep_your_credential_secure">Keep your credentials secure</string>
-    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
-    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
-    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
-    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
-    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
-    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="advanced_options">Avancerade inställningar</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mer om matchningsdetektering</annotation></string>
+    <string name="keep_your_credential_secure">Håll dina uppgifter säkra</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Läs mer om hur du håller autentiseringsuppgifter säkra när du använder ”%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Är du säker på att du vill använda ”%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI-matchning kontrollerar hur Bitwarden identifierar förslag för automatisk ifyllning.\n<annotation emphasis="bold">Varning:</annotation> ”Reguljära uttryck” är ett avancerat alternativ som medför ökad risk för att användaruppgifter exponeras om det används felaktigt.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI-matchning kontrollerar hur Bitwarden identifierar förslag för automatisk ifyllning.\n<annotation emphasis="bold">Varning:</annotation> ”Börjar med” är ett avancerat alternativ som medför ökad risk för att inloggningsuppgifter exponeras.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Börjar med\" är ett avancerat alternativ med ökad risk för att röja inloggningsuppgifter.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">”Reguljära uttryck” är ett avancerat alternativ som medför ökad risk för att användaruppgifter exponeras om det används felaktigt.</string>
 </resources>

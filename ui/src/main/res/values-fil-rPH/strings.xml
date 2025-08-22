@@ -4,6 +4,7 @@
     <string name="add_folder">Bagong Folder</string>
     <string name="add_item">Bagong Item</string>
     <string name="an_error_has_occurred">Nagkaproblema.</string>
+    <string name="apply">Apply</string>
     <string name="back">Bumalik</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Kanselahin</string>
@@ -364,8 +365,8 @@ Awtomatikong itong magsa-scan.</string>
     <string name="exit_confirmation">Sigurado ka bang gusto mong umalis sa Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Gusto mo bang kailanganing gamitin ang master password pang-unlock kapag na-restart ang aplikasyon?</string>
-    <string name="ask_to_add_login">Magpaalam para magdagdag ng login</string>
-    <string name="ask_to_add_login_description">Magpaalam na idagdag ang isang item kung walang ganitong nakita sa vault mo.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Sa pag-restart ng app</string>
     <string name="capitalize">Kapitalisasyon</string>
     <string name="include_number">Magsama ng mga numero</string>
