@@ -1,8 +1,10 @@
 package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.bitwarden.collections.Collection
+import com.bitwarden.collections.CollectionType
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
+import com.bitwarden.network.model.CollectionTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 
 /**
@@ -18,6 +20,8 @@ fun SyncResponseJson.Collection.toEncryptedSdkCollection(): Collection =
         hidePasswords = this.shouldHidePasswords,
         readOnly = this.isReadOnly,
         manage = this.canManage ?: !this.isReadOnly,
+        defaultUserCollectionEmail = this.defaultUserCollectionEmail,
+        type = this.type.toCollectionType(),
     )
 
 /**
@@ -38,3 +42,13 @@ fun List<CollectionView>.sortAlphabetically(): List<CollectionView> {
         },
     )
 }
+
+/**
+ * Converts a [CollectionType] object to a corresponding
+ * Bitwarden SDK [CollectionTypeJson] object.
+ */
+fun CollectionTypeJson.toCollectionType(): CollectionType =
+    when (this) {
+        CollectionTypeJson.SHARED_COLLECTION -> CollectionType.SHARED_COLLECTION
+        CollectionTypeJson.DEFAULT_USER_COLLECTION -> CollectionType.DEFAULT_USER_COLLECTION
+    }
