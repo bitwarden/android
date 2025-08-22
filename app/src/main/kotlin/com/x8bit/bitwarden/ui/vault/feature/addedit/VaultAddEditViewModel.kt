@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
+import androidx.compose.ui.res.pluralStringResource
 import android.os.Parcelable
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.provider.CallingAppInfo
@@ -1946,7 +1947,7 @@ class VaultAddEditViewModel @Inject constructor(
                 is BreachCountResult.Success -> {
                     VaultAddEditState.DialogState.Generic(
                         message = if (result.breachCount > 0) {
-                            BitwardenString.password_exposed.asText(result.breachCount)
+                            pluralStringResource(BitwardenString.password_exposed, result.breachCount)
                         } else {
                             BitwardenString.password_safe.asText()
                         },
