@@ -76,6 +76,7 @@ import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
@@ -98,17 +99,13 @@ import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
-import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
-import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
-import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
-import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
@@ -116,11 +113,9 @@ import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
-import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
-import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
@@ -136,6 +131,7 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -253,14 +249,21 @@ class AuthRepositoryTest {
             getActivePoliciesFlow(type = PolicyTypeJson.MASTER_PASSWORD)
         } returns mutableActivePolicyFlow
     }
-
-    private val firstTimeActionManager = mockk<FirstTimeActionManager> {
-        every { currentOrDefaultUserFirstTimeState } returns FIRST_TIME_STATE
-        every { firstTimeStateFlow } returns MutableStateFlow(FIRST_TIME_STATE)
-    }
     private val logsManager: LogsManager = mockk {
         every { setUserData(userId = any(), environmentType = any()) } just runs
     }
+    private val mutableHasPendingAccountAdditionStateFlow = MutableStateFlow(false)
+    private val userStateManager: UserStateManager = mockk {
+        every {
+            hasPendingAccountAdditionStateFlow
+        } returns mutableHasPendingAccountAdditionStateFlow
+        every { hasPendingAccountAddition = any() } just runs
+        every { hasPendingAccountAddition } returns mutableHasPendingAccountAdditionStateFlow.value
+        every { hasPendingAccountDeletion = any() } just runs
+        val blockSlot = slot<suspend () -> LoginResult>()
+        coEvery { userStateTransaction(capture(blockSlot)) } coAnswers { blockSlot.captured() }
+    }
+
     private val repository: AuthRepository = AuthRepositoryImpl(
         clock = FIXED_CLOCK,
         accountsService = accountsService,
@@ -282,8 +285,8 @@ class AuthRepositoryTest {
         dispatcherManager = dispatcherManager,
         pushManager = pushManager,
         policyManager = policyManager,
-        firstTimeActionManager = firstTimeActionManager,
         logsManager = logsManager,
+        userStateManager = userStateManager,
     )
 
     @BeforeEach
@@ -360,108 +363,6 @@ class AuthRepositoryTest {
             )
             assertEquals(AuthState.Unauthenticated, awaitItem())
         }
-    }
-
-    @Test
-    fun `userStateFlow should update according to changes in its underlying data sources`() {
-        fakeAuthDiskSource.userState = null
-        assertEquals(
-            null,
-            repository.userStateFlow.value,
-        )
-
-        mutableVaultUnlockDataStateFlow.value = VAULT_UNLOCK_DATA
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        assertEquals(
-            SINGLE_USER_STATE_1.toUserState(
-                vaultState = VAULT_UNLOCK_DATA,
-                userAccountTokens = emptyList(),
-                userOrganizationsList = emptyList(),
-                userIsUsingKeyConnectorList = emptyList(),
-                hasPendingAccountAddition = false,
-                onboardingStatus = null,
-                isBiometricsEnabledProvider = { false },
-                vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-                isDeviceTrustedProvider = { false },
-                firstTimeState = FIRST_TIME_STATE,
-            ),
-            repository.userStateFlow.value,
-        )
-
-        fakeAuthDiskSource.apply {
-            storePinProtectedUserKey(
-                userId = USER_ID_1,
-                pinProtectedUserKey = "pinProtectedUseKey",
-            )
-            storePinProtectedUserKey(
-                userId = USER_ID_2,
-                pinProtectedUserKey = "pinProtectedUseKey",
-            )
-            userState = MULTI_USER_STATE
-        }
-        assertEquals(
-            MULTI_USER_STATE.toUserState(
-                vaultState = VAULT_UNLOCK_DATA,
-                userAccountTokens = emptyList(),
-                userOrganizationsList = emptyList(),
-                userIsUsingKeyConnectorList = emptyList(),
-                hasPendingAccountAddition = false,
-                isBiometricsEnabledProvider = { false },
-                vaultUnlockTypeProvider = { VaultUnlockType.PIN },
-                isDeviceTrustedProvider = { false },
-                onboardingStatus = null,
-                firstTimeState = FIRST_TIME_STATE,
-            ),
-            repository.userStateFlow.value,
-        )
-
-        val emptyVaultState = emptyList<VaultUnlockData>()
-        mutableVaultUnlockDataStateFlow.value = emptyVaultState
-        assertEquals(
-            MULTI_USER_STATE.toUserState(
-                vaultState = emptyVaultState,
-                userAccountTokens = emptyList(),
-                userOrganizationsList = emptyList(),
-                userIsUsingKeyConnectorList = emptyList(),
-                hasPendingAccountAddition = false,
-                isBiometricsEnabledProvider = { false },
-                vaultUnlockTypeProvider = { VaultUnlockType.PIN },
-                isDeviceTrustedProvider = { false },
-                onboardingStatus = null,
-                firstTimeState = FIRST_TIME_STATE,
-            ),
-            repository.userStateFlow.value,
-        )
-
-        fakeAuthDiskSource.apply {
-            storePinProtectedUserKey(
-                userId = USER_ID_1,
-                pinProtectedUserKey = null,
-            )
-            storePinProtectedUserKey(
-                userId = USER_ID_2,
-                pinProtectedUserKey = null,
-            )
-            storeOrganizations(
-                userId = USER_ID_1,
-                organizations = ORGANIZATIONS,
-            )
-        }
-        assertEquals(
-            MULTI_USER_STATE.toUserState(
-                vaultState = emptyVaultState,
-                userAccountTokens = emptyList(),
-                userOrganizationsList = USER_ORGANIZATIONS,
-                userIsUsingKeyConnectorList = USER_SHOULD_USER_KEY_CONNECTOR,
-                hasPendingAccountAddition = false,
-                isBiometricsEnabledProvider = { false },
-                vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-                isDeviceTrustedProvider = { false },
-                onboardingStatus = null,
-                firstTimeState = FIRST_TIME_STATE,
-            ),
-            repository.userStateFlow.value,
-        )
     }
 
     @Test
@@ -593,7 +494,10 @@ class AuthRepositoryTest {
                 ),
                 fakeAuthDiskSource.userState,
             )
-            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+            verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
+                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            }
         }
 
     @Test
@@ -689,63 +593,6 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `clear Pending Account Deletion should unblock userState updates`() = runTest {
-        val masterPassword = "hello world"
-        val hashedMasterPassword = "dlrow olleh"
-        val originalUserState = SINGLE_USER_STATE_1.toUserState(
-            vaultState = VAULT_UNLOCK_DATA,
-            userAccountTokens = emptyList(),
-            userOrganizationsList = emptyList(),
-            userIsUsingKeyConnectorList = emptyList(),
-            hasPendingAccountAddition = false,
-            isBiometricsEnabledProvider = { false },
-            vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-            isDeviceTrustedProvider = { false },
-            onboardingStatus = null,
-            firstTimeState = FIRST_TIME_STATE,
-        )
-        val finalUserState = SINGLE_USER_STATE_2.toUserState(
-            vaultState = VAULT_UNLOCK_DATA,
-            userAccountTokens = emptyList(),
-            userOrganizationsList = emptyList(),
-            userIsUsingKeyConnectorList = emptyList(),
-            hasPendingAccountAddition = false,
-            isBiometricsEnabledProvider = { false },
-            vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-            isDeviceTrustedProvider = { false },
-            onboardingStatus = null,
-            firstTimeState = FIRST_TIME_STATE,
-        )
-        val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
-        coEvery {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
-        } returns hashedMasterPassword.asSuccess()
-        coEvery {
-            accountsService.deleteAccount(
-                masterPasswordHash = hashedMasterPassword,
-                oneTimePassword = null,
-            )
-        } returns DeleteAccountResponseJson.Success.asSuccess()
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-
-        repository.userStateFlow.test {
-            assertEquals(originalUserState, awaitItem())
-
-            // Deleting the account sets the pending deletion flag
-            repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
-
-            // Update the account. No changes are emitted because
-            // the pending deletion blocks the update.
-            fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
-            expectNoEvents()
-
-            // Clearing the pending deletion allows the change to go through
-            repository.clearPendingAccountDeletion()
-            assertEquals(finalUserState, awaitItem())
-        }
-    }
-
-    @Test
     fun `delete account fails if not logged in`() = runTest {
         val masterPassword = "hello world"
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
@@ -768,6 +615,9 @@ class AuthRepositoryTest {
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
 
         assertEquals(DeleteAccountResult.Error(message = null, error = error), result)
+        verify(exactly = 1) {
+            userStateManager.hasPendingAccountDeletion = true
+        }
         coVerify {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
         }
@@ -793,6 +643,9 @@ class AuthRepositoryTest {
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
 
         assertEquals(DeleteAccountResult.Error(message = null, error = error), result)
+        verify(exactly = 1) {
+            userStateManager.hasPendingAccountDeletion = true
+        }
         coVerify {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
             accountsService.deleteAccount(
@@ -824,6 +677,9 @@ class AuthRepositoryTest {
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
 
         assertEquals(DeleteAccountResult.Error(message = "Fail", error = null), result)
+        verify(exactly = 1) {
+            userStateManager.hasPendingAccountDeletion = true
+        }
         coVerify {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
             accountsService.deleteAccount(
@@ -852,6 +708,9 @@ class AuthRepositoryTest {
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
 
         assertEquals(DeleteAccountResult.Success, result)
+        verify(exactly = 1) {
+            userStateManager.hasPendingAccountDeletion = true
+        }
         coVerify {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
             accountsService.deleteAccount(
@@ -877,6 +736,9 @@ class AuthRepositoryTest {
         )
 
         assertEquals(DeleteAccountResult.Success, result)
+        verify(exactly = 1) {
+            userStateManager.hasPendingAccountDeletion = true
+        }
         coVerify {
             accountsService.deleteAccount(
                 masterPasswordHash = null,
@@ -2008,7 +1870,10 @@ class AuthRepositoryTest {
                 SINGLE_USER_STATE_1,
                 fakeAuthDiskSource.userState,
             )
-            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+            verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
+                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            }
         }
 
     @Test
@@ -2188,7 +2053,10 @@ class AuthRepositoryTest {
                 SINGLE_USER_STATE_1,
                 fakeAuthDiskSource.userState,
             )
-            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+            verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
+                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            }
             coVerify(exactly = 0) {
                 vaultRepository.unlockVault(
                     userId = USER_ID_1,
@@ -2314,7 +2182,11 @@ class AuthRepositoryTest {
                 fakeAuthDiskSource.userState,
             )
             assertFalse(repository.hasPendingAccountAddition)
-            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+            verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition
+                userStateManager.hasPendingAccountAddition = true
+                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            }
         }
 
     @Test
@@ -2450,6 +2322,9 @@ class AuthRepositoryTest {
             email = EMAIL,
             twoFactorToken = "twoFactorTokenToStore",
         )
+        verify(exactly = 1) {
+            userStateManager.hasPendingAccountAddition = false
+        }
     }
 
     @Test
@@ -2657,7 +2532,8 @@ class AuthRepositoryTest {
             SINGLE_USER_STATE_1,
             fakeAuthDiskSource.userState,
         )
-        verify {
+        verify(exactly = 1) {
+            userStateManager.hasPendingAccountAddition = false
             settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
             settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
         }
@@ -2912,6 +2788,9 @@ class AuthRepositoryTest {
                 SINGLE_USER_STATE_1,
                 fakeAuthDiskSource.userState,
             )
+            verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
+            }
         }
 
     @Test
@@ -3021,7 +2900,10 @@ class AuthRepositoryTest {
                 SINGLE_USER_STATE_1,
                 fakeAuthDiskSource.userState,
             )
-            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+            verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
+                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            }
         }
 
     @Test
@@ -3176,6 +3058,9 @@ class AuthRepositoryTest {
             email = EMAIL,
             twoFactorToken = "twoFactorTokenToStore",
         )
+        verify(exactly = 1) {
+            userStateManager.hasPendingAccountAddition = false
+        }
     }
 
     @Test
@@ -3317,7 +3202,10 @@ class AuthRepositoryTest {
                 SINGLE_USER_STATE_1,
                 fakeAuthDiskSource.userState,
             )
-            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+            verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
+                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            }
         }
 
     @Test
@@ -3376,6 +3264,7 @@ class AuthRepositoryTest {
             }
             assertEquals(SINGLE_USER_STATE_1, fakeAuthDiskSource.userState)
             verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
             }
         }
@@ -3544,6 +3433,7 @@ class AuthRepositoryTest {
             }
             assertEquals(SINGLE_USER_STATE_1, fakeAuthDiskSource.userState)
             verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
             }
         }
@@ -3749,6 +3639,7 @@ class AuthRepositoryTest {
             }
             assertEquals(SINGLE_USER_STATE_1, fakeAuthDiskSource.userState)
             verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
             }
         }
@@ -3896,6 +3787,7 @@ class AuthRepositoryTest {
             }
             assertEquals(SINGLE_USER_STATE_1, fakeAuthDiskSource.userState)
             verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
             }
         }
@@ -4005,7 +3897,10 @@ class AuthRepositoryTest {
                 SINGLE_USER_STATE_1,
                 fakeAuthDiskSource.userState,
             )
-            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+            verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
+                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            }
         }
 
     @Test
@@ -4065,6 +3960,7 @@ class AuthRepositoryTest {
                 vaultRepository.syncIfNecessary()
             }
             verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
             }
         }
@@ -4175,6 +4071,7 @@ class AuthRepositoryTest {
                 vaultRepository.syncIfNecessary()
             }
             verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
             }
         }
@@ -4287,6 +4184,7 @@ class AuthRepositoryTest {
                 vaultRepository.syncIfNecessary()
             }
             verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
             }
         }
@@ -4359,7 +4257,11 @@ class AuthRepositoryTest {
                 fakeAuthDiskSource.userState,
             )
             assertFalse(repository.hasPendingAccountAddition)
-            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+            verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition
+                userStateManager.hasPendingAccountAddition = false
+                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            }
         }
 
     @Test
@@ -4489,6 +4391,9 @@ class AuthRepositoryTest {
             email = EMAIL,
             twoFactorToken = "twoFactorTokenToStore",
         )
+        verify(exactly = 1) {
+            userStateManager.hasPendingAccountAddition = false
+        }
     }
 
     @Test
@@ -4557,7 +4462,10 @@ class AuthRepositoryTest {
             SINGLE_USER_STATE_1,
             fakeAuthDiskSource.userState,
         )
-        verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+        verify(exactly = 1) {
+            userStateManager.hasPendingAccountAddition = false
+            settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+        }
     }
 
     @Test
@@ -6008,38 +5916,19 @@ class AuthRepositoryTest {
         val updatedUserId = USER_ID_2
 
         fakeAuthDiskSource.userState = null
-        assertNull(repository.userStateFlow.value)
 
         assertEquals(
             SwitchAccountResult.NoChange,
             repository.switchAccount(userId = updatedUserId),
         )
-
-        assertNull(repository.userStateFlow.value)
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `switchAccount when the given userId is the same as the current activeUserId should reset any pending account additions`() {
         val originalUserId = USER_ID_1
-        val originalUserState = SINGLE_USER_STATE_1.toUserState(
-            vaultState = VAULT_UNLOCK_DATA,
-            userAccountTokens = emptyList(),
-            userOrganizationsList = emptyList(),
-            userIsUsingKeyConnectorList = emptyList(),
-            hasPendingAccountAddition = false,
-            isBiometricsEnabledProvider = { false },
-            vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-            isDeviceTrustedProvider = { false },
-            onboardingStatus = null,
-            firstTimeState = FIRST_TIME_STATE,
-        )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeEnvironmentRepository.environment = Environment.Eu
-        assertEquals(
-            originalUserState,
-            repository.userStateFlow.value,
-        )
         repository.hasPendingAccountAddition = true
 
         assertEquals(
@@ -6047,46 +5936,24 @@ class AuthRepositoryTest {
             repository.switchAccount(userId = originalUserId),
         )
 
-        assertEquals(
-            originalUserState,
-            repository.userStateFlow.value,
-        )
-        assertFalse(repository.hasPendingAccountAddition)
         assertEquals(Environment.Us, fakeEnvironmentRepository.environment)
+        verify(exactly = 1) {
+            userStateManager.hasPendingAccountAddition = false
+        }
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `switchAccount when the given userId does not correspond to a saved account should do nothing`() {
         val invalidId = "invalidId"
-        val originalUserState = SINGLE_USER_STATE_1.toUserState(
-            vaultState = VAULT_UNLOCK_DATA,
-            userAccountTokens = emptyList(),
-            userOrganizationsList = emptyList(),
-            userIsUsingKeyConnectorList = emptyList(),
-            hasPendingAccountAddition = false,
-            isBiometricsEnabledProvider = { false },
-            vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-            isDeviceTrustedProvider = { false },
-            onboardingStatus = null,
-            firstTimeState = FIRST_TIME_STATE,
-        )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeEnvironmentRepository.environment = Environment.Eu
-        assertEquals(
-            originalUserState,
-            repository.userStateFlow.value,
-        )
 
         assertEquals(
             SwitchAccountResult.NoChange,
             repository.switchAccount(userId = invalidId),
         )
 
-        assertEquals(
-            originalUserState,
-            repository.userStateFlow.value,
-        )
         assertEquals(Environment.Us, fakeEnvironmentRepository.environment)
     }
 
@@ -6094,24 +5961,8 @@ class AuthRepositoryTest {
     @Test
     fun `switchAccount when the userId is valid should update the current UserState and reset any pending account additions`() {
         val updatedUserId = USER_ID_2
-        val originalUserState = MULTI_USER_STATE.toUserState(
-            vaultState = VAULT_UNLOCK_DATA,
-            userAccountTokens = emptyList(),
-            userOrganizationsList = emptyList(),
-            userIsUsingKeyConnectorList = emptyList(),
-            hasPendingAccountAddition = false,
-            isBiometricsEnabledProvider = { false },
-            vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-            isDeviceTrustedProvider = { false },
-            onboardingStatus = null,
-            firstTimeState = FIRST_TIME_STATE,
-        )
         fakeAuthDiskSource.userState = MULTI_USER_STATE
         fakeEnvironmentRepository.environment = Environment.Eu
-        assertEquals(
-            originalUserState,
-            repository.userStateFlow.value,
-        )
         repository.hasPendingAccountAddition = true
 
         assertEquals(
@@ -6119,12 +5970,10 @@ class AuthRepositoryTest {
             repository.switchAccount(userId = updatedUserId),
         )
 
-        assertEquals(
-            originalUserState.copy(activeUserId = updatedUserId),
-            repository.userStateFlow.value,
-        )
-        assertFalse(repository.hasPendingAccountAddition)
         assertEquals(Environment.Eu, fakeEnvironmentRepository.environment)
+        verify(exactly = 1) {
+            userStateManager.hasPendingAccountAddition = false
+        }
     }
 
     @Test
@@ -6888,6 +6737,9 @@ class AuthRepositoryTest {
             )
             // This should only be set after they complete a registration and not based on login.
             assertNull(fakeAuthDiskSource.getOnboardingStatus(USER_ID_1))
+            verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
+            }
         }
 
     @Test
@@ -6956,7 +6808,10 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 passwordHash = PASSWORD_HASH,
             )
-            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+            verify(exactly = 1) {
+                userStateManager.hasPendingAccountAddition = false
+                settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+            }
             assertNull(fakeAuthDiskSource.getOnboardingStatus(USER_ID_1))
         }
 
@@ -7011,42 +6866,6 @@ class AuthRepositoryTest {
             assertEquals(
                 LeaveOrganizationResult.Error(error = error),
                 continueResult,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `isUserManagedByOrganization should return true if any org userIsClaimedByOrganization is true`() =
-        runTest {
-            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-            fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
-            val organizations = listOf(
-                createMockOrganization(number = 0)
-                    .copy(
-                        userIsClaimedByOrganization = true,
-                    ),
-                createMockOrganization(number = 1),
-            )
-            fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
-            assertEquals(
-                SINGLE_USER_STATE_1.toUserState(
-                    vaultState = VAULT_UNLOCK_DATA,
-                    userAccountTokens = emptyList(),
-                    userOrganizationsList = listOf(
-                        UserOrganizations(
-                            userId = USER_ID_1,
-                            organizations = organizations.toOrganizations(),
-                        ),
-                    ),
-                    userIsUsingKeyConnectorList = emptyList(),
-                    hasPendingAccountAddition = false,
-                    onboardingStatus = null,
-                    isBiometricsEnabledProvider = { false },
-                    vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-                    isDeviceTrustedProvider = { false },
-                    firstTimeState = FIRST_TIME_STATE,
-                ),
-                repository.userStateFlow.value,
             )
         }
 
@@ -7259,27 +7078,11 @@ class AuthRepositoryTest {
             accessToken = ACCESS_TOKEN_2,
             refreshToken = "refreshToken",
         )
-        private val USER_ORGANIZATIONS = listOf(
-            UserOrganizations(
-                userId = USER_ID_1,
-                organizations = ORGANIZATIONS.toOrganizations(),
-            ),
-        )
-        private val USER_SHOULD_USER_KEY_CONNECTOR = listOf(
-            UserKeyConnectorState(
-                userId = USER_ID_1,
-                isUsingKeyConnector = null,
-            ),
-        )
         private val VAULT_UNLOCK_DATA = listOf(
             VaultUnlockData(
                 userId = USER_ID_1,
                 status = VaultUnlockData.Status.UNLOCKED,
             ),
-        )
-
-        private val FIRST_TIME_STATE = FirstTimeState(
-            showImportLoginsCard = true,
         )
 
         private val SERVER_CONFIG_DEFAULT = ServerConfig(

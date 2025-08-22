@@ -46,7 +46,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toInt
@@ -55,6 +54,7 @@ import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
@@ -77,13 +77,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
-import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
-import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
-import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
-import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.toLoginErrorResult
@@ -91,36 +86,25 @@ import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
-import com.x8bit.bitwarden.data.auth.repository.util.currentOnboardingStatus
-import com.x8bit.bitwarden.data.auth.repository.util.onboardingStatusChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toRemovedPasswordUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJsonWithPassword
-import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
-import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokensFlow
-import com.x8bit.bitwarden.data.auth.repository.util.userKeyConnectorStateFlow
-import com.x8bit.bitwarden.data.auth.repository.util.userKeyConnectorStateList
-import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsList
-import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsListFlow
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
-import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
-import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockError
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import kotlinx.coroutines.CoroutineScope
@@ -128,13 +112,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
@@ -144,7 +126,6 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import java.time.Clock
 import javax.inject.Singleton
 
@@ -172,12 +153,13 @@ class AuthRepositoryImpl(
     private val trustedDeviceManager: TrustedDeviceManager,
     private val userLogoutManager: UserLogoutManager,
     private val policyManager: PolicyManager,
-    firstTimeActionManager: FirstTimeActionManager,
+    private val userStateManager: UserStateManager,
     logsManager: LogsManager,
     pushManager: PushManager,
     dispatcherManager: DispatcherManager,
 ) : AuthRepository,
-    AuthRequestManager by authRequestManager {
+    AuthRequestManager by authRequestManager,
+    UserStateManager by userStateManager {
     /**
      * A scope intended for use when simply collecting multiple flows in order to combine them. The
      * use of [Dispatchers.Unconfined] allows for this to happen synchronously whenever any of
@@ -189,24 +171,6 @@ class AuthRepositoryImpl(
      * A scope intended for use when operating asynchronously.
      */
     private val ioScope = CoroutineScope(dispatcherManager.io)
-
-    private val mutableHasPendingAccountAdditionStateFlow = MutableStateFlow(false)
-
-    /**
-     * If there is a pending account deletion, continue showing the original UserState until it
-     * is confirmed. This is accomplished by blocking the emissions of the [userStateFlow]
-     * whenever set to `true`.
-     */
-    private val mutableHasPendingAccountDeletionStateFlow = MutableStateFlow(false)
-
-    /**
-     * Whenever a function needs to update multiple underlying data-points that contribute to the
-     * [UserState], we update this [MutableStateFlow] and continue to show the original `UserState`
-     * until the transaction is complete. This is accomplished by blocking the emissions of the
-     * [userStateFlow] whenever this is set to a value above 0 (a count is used if more than one
-     * process is updating data simultaneously).
-     */
-    private val mutableUserStateTransactionCountStateFlow = MutableStateFlow(0)
 
     /**
      * The auth information to make the identity token request will need to be
@@ -268,68 +232,6 @@ class AuthRepositoryImpl(
             initialValue = AuthState.Uninitialized,
         )
 
-    @Suppress("UNCHECKED_CAST", "MagicNumber")
-    override val userStateFlow: StateFlow<UserState?> = combine(
-        authDiskSource.userStateFlow,
-        authDiskSource.userAccountTokensFlow,
-        authDiskSource.userOrganizationsListFlow,
-        authDiskSource.userKeyConnectorStateFlow,
-        authDiskSource.onboardingStatusChangesFlow,
-        firstTimeActionManager.firstTimeStateFlow,
-        vaultRepository.vaultUnlockDataStateFlow,
-        mutableHasPendingAccountAdditionStateFlow,
-        // Ignore the data in the merge, but trigger an update when they emit.
-        merge(
-            mutableHasPendingAccountDeletionStateFlow,
-            mutableUserStateTransactionCountStateFlow,
-            vaultRepository.isActiveUserUnlockingFlow,
-        ),
-    ) { array ->
-        val userStateJson = array[0] as UserStateJson?
-        val userAccountTokens = array[1] as List<UserAccountTokens>
-        val userOrganizationsList = array[2] as List<UserOrganizations>
-        val userIsUsingKeyConnectorList = array[3] as List<UserKeyConnectorState>
-        val onboardingStatus = array[4] as OnboardingStatus?
-        val firstTimeState = array[5] as FirstTimeState
-        val vaultState = array[6] as List<VaultUnlockData>
-        val hasPendingAccountAddition = array[7] as Boolean
-        userStateJson?.toUserState(
-            vaultState = vaultState,
-            userAccountTokens = userAccountTokens,
-            userOrganizationsList = userOrganizationsList,
-            userIsUsingKeyConnectorList = userIsUsingKeyConnectorList,
-            hasPendingAccountAddition = hasPendingAccountAddition,
-            onboardingStatus = onboardingStatus,
-            isBiometricsEnabledProvider = ::isBiometricsEnabled,
-            vaultUnlockTypeProvider = ::getVaultUnlockType,
-            isDeviceTrustedProvider = ::isDeviceTrusted,
-            firstTimeState = firstTimeState,
-        )
-    }
-        .filterNot {
-            mutableHasPendingAccountDeletionStateFlow.value ||
-                mutableUserStateTransactionCountStateFlow.value > 0 ||
-                vaultRepository.isActiveUserUnlockingFlow.value
-        }
-        .stateIn(
-            scope = unconfinedScope,
-            started = SharingStarted.Eagerly,
-            initialValue = authDiskSource
-                .userState
-                ?.toUserState(
-                    vaultState = vaultRepository.vaultUnlockDataStateFlow.value,
-                    userAccountTokens = authDiskSource.userAccountTokens,
-                    userOrganizationsList = authDiskSource.userOrganizationsList,
-                    userIsUsingKeyConnectorList = authDiskSource.userKeyConnectorStateList,
-                    hasPendingAccountAddition = mutableHasPendingAccountAdditionStateFlow.value,
-                    onboardingStatus = authDiskSource.currentOnboardingStatus,
-                    isBiometricsEnabledProvider = ::isBiometricsEnabled,
-                    vaultUnlockTypeProvider = ::getVaultUnlockType,
-                    isDeviceTrustedProvider = ::isDeviceTrusted,
-                    firstTimeState = firstTimeActionManager.currentOrDefaultUserFirstTimeState,
-                ),
-        )
-
     private val duoTokenChannel = Channel<DuoCallbackTokenResult>(capacity = Int.MAX_VALUE)
     override val duoTokenResultFlow: Flow<DuoCallbackTokenResult> = duoTokenChannel.receiveAsFlow()
 
@@ -358,9 +260,6 @@ class AuthRepositoryImpl(
             }
         }
 
-    override var hasPendingAccountAddition: Boolean
-        by mutableHasPendingAccountAdditionStateFlow::value
-
     override val passwordPolicies: List<PolicyInformation.MasterPassword>
         get() = policyManager.getActivePolicies()
 
@@ -379,7 +278,7 @@ class AuthRepositoryImpl(
 
     init {
         combine(
-            mutableHasPendingAccountAdditionStateFlow,
+            userStateManager.hasPendingAccountAdditionStateFlow,
             authDiskSource.userStateFlow,
             environmentRepository.environmentStateFlow,
         ) { hasPendingAddition, userState, environment ->
@@ -460,16 +359,12 @@ class AuthRepositoryImpl(
             .launchIn(unconfinedScope)
     }
 
-    override fun clearPendingAccountDeletion() {
-        mutableHasPendingAccountDeletionStateFlow.value = false
-    }
-
     override suspend fun deleteAccountWithMasterPassword(
         masterPassword: String,
     ): DeleteAccountResult {
         val profile = authDiskSource.userState?.activeAccount?.profile
             ?: return DeleteAccountResult.Error(message = null, error = NoActiveUserException())
-        mutableHasPendingAccountDeletionStateFlow.value = true
+        userStateManager.hasPendingAccountDeletion = true
         return authSdkSource
             .hashPassword(
                 email = profile.email,
@@ -489,7 +384,7 @@ class AuthRepositoryImpl(
     override suspend fun deleteAccountWithOneTimePassword(
         oneTimePassword: String,
     ): DeleteAccountResult {
-        mutableHasPendingAccountDeletionStateFlow.value = true
+        userStateManager.hasPendingAccountDeletion = true
         return accountsService
             .deleteAccount(
                 masterPasswordHash = null,
@@ -501,13 +396,13 @@ class AuthRepositoryImpl(
     private fun Result<DeleteAccountResponseJson>.finalizeDeleteAccount(): DeleteAccountResult =
         fold(
             onFailure = {
-                clearPendingAccountDeletion()
+                userStateManager.hasPendingAccountDeletion = false
                 DeleteAccountResult.Error(error = it, message = null)
             },
             onSuccess = { response ->
                 when (response) {
                     is DeleteAccountResponseJson.Invalid -> {
-                        clearPendingAccountDeletion()
+                        userStateManager.hasPendingAccountDeletion = false
                         DeleteAccountResult.Error(message = response.message, error = null)
                     }
 
@@ -874,7 +769,7 @@ class AuthRepositoryImpl(
             // We need to make sure that the environment is set back to the correct spot.
             updateEnvironment()
             // No switching to do but clear any pending account additions
-            hasPendingAccountAddition = false
+            userStateManager.hasPendingAccountAddition = false
             return SwitchAccountResult.NoChange
         }
 
@@ -889,7 +784,7 @@ class AuthRepositoryImpl(
         authDiskSource.userState = currentUserState.copy(activeUserId = userId)
 
         // Clear any pending account additions
-        hasPendingAccountAddition = false
+        userStateManager.hasPendingAccountAddition = false
 
         return SwitchAccountResult.AccountSwitched
     }
@@ -1552,27 +1447,6 @@ class AuthRepositoryImpl(
             )
         }
 
-    private fun isBiometricsEnabled(
-        userId: String,
-    ): Boolean = authDiskSource.getUserBiometricUnlockKey(userId = userId) != null
-
-    private fun isDeviceTrusted(
-        userId: String,
-    ): Boolean = authDiskSource.getDeviceKey(userId = userId) != null
-
-    private fun getVaultUnlockType(
-        userId: String,
-    ): VaultUnlockType =
-        when {
-            authDiskSource.getPinProtectedUserKey(userId = userId) != null -> {
-                VaultUnlockType.PIN
-            }
-
-            else -> {
-                VaultUnlockType.MASTER_PASSWORD
-            }
-        }
-
     /**
      * Update the saved state with the force password reset reason.
      */
@@ -1683,7 +1557,7 @@ class AuthRepositoryImpl(
         deviceData: DeviceDataModel?,
         orgIdentifier: String?,
         userConfirmedKeyConnector: Boolean,
-    ): LoginResult = userStateTransaction {
+    ): LoginResult = userStateManager.userStateTransaction {
         val userStateJson = loginResponse.toUserState(
             previousUserState = authDiskSource.userState,
             environmentUrlData = environmentRepository.environment.environmentUrlData,
@@ -1722,7 +1596,7 @@ class AuthRepositoryImpl(
                 // we should ask him to confirm the domain
                 if (isNewKeyConnectorUser && isNotConfirmed) {
                     keyConnectorResponse = loginResponse
-                    return LoginResult.ConfirmKeyConnectorDomain(
+                    return@userStateTransaction LoginResult.ConfirmKeyConnectorDomain(
                         domain = keyConnectorUrl,
                     )
                 }
@@ -2156,22 +2030,6 @@ class AuthRepositoryImpl(
     }
 
     //endregion LoginCommon
-
-    /**
-     * Run the given [block] while preventing any updates to [UserState]. This is useful in cases
-     * where many individual changes might occur that would normally affect the [UserState] but we
-     * only want a single final emission. In the rare case that multiple threads are running
-     * transactions simultaneously, there will be no [UserState] updates until the last
-     * transaction completes.
-     */
-    private inline fun <T> userStateTransaction(block: () -> T): T {
-        mutableUserStateTransactionCountStateFlow.update { it.inc() }
-        return try {
-            block()
-        } finally {
-            mutableUserStateTransactionCountStateFlow.update { it.dec() }
-        }
-    }
 }
 
 /**
