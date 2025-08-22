@@ -25,6 +25,7 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.printToString
 import androidx.compose.ui.text.LinkAnnotation
 import com.bitwarden.ui.platform.components.bottomsheet.IsBottomSheetKey
+import com.bitwarden.ui.platform.components.coachmark.scope.IsCoachMarkToolTipKey
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.jupiter.api.assertThrows
@@ -35,6 +36,14 @@ import org.junit.jupiter.api.assertThrows
 val isBottomSheet: SemanticsMatcher
     get() = SemanticsMatcher("Node is used to to indicate it is a bottom sheet.") {
         it.config.getOrNull(IsBottomSheetKey) == true
+    }
+
+/**
+ * A [SemanticsMatcher] user to find Popup nodes used specifically for CoachMarkToolTips
+ */
+val isCoachMarkToolTip: SemanticsMatcher
+    get() = SemanticsMatcher("Node is used to show tool tip for active coach mark.") {
+        it.config.getOrNull(IsCoachMarkToolTipKey) == true
     }
 
 /**

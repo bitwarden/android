@@ -48,6 +48,8 @@ import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActio
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.coachmark.CoachMarkContainer
+import com.bitwarden.ui.platform.components.coachmark.model.rememberLazyListCoachMarkState
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -58,7 +60,7 @@ import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.radio.BitwardenRadioButton
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
-import com.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
@@ -68,8 +70,6 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
-import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkContainer
-import com.x8bit.bitwarden.ui.platform.components.coachmark.rememberLazyListCoachMarkState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog

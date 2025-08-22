@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.coachmark.model
+package com.bitwarden.ui.platform.components.coachmark.model
 
 private const val ROUNDED_RECT_DEFAULT_RADIUS = 8f
 

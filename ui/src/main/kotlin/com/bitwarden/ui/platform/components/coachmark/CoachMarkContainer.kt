@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.coachmark
+package com.bitwarden.ui.platform.components.coachmark
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -32,12 +32,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
+import com.bitwarden.ui.platform.components.coachmark.model.CoachMarkState
+import com.bitwarden.ui.platform.components.coachmark.model.rememberCoachMarkState
+import com.bitwarden.ui.platform.components.coachmark.scope.CoachMarkScope
+import com.bitwarden.ui.platform.components.coachmark.scope.CoachMarkScopeInstance
 import com.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
 import kotlinx.coroutines.launch
 
 /**

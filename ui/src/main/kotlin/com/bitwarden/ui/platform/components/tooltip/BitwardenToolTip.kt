@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.tooltip
+package com.bitwarden.ui.platform.components.tooltip
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

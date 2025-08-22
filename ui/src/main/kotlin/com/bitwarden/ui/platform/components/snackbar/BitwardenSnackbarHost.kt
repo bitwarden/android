@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarHostState
 
 /**
  * A custom Bitwarden-themed snackbar.

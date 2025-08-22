@@ -19,7 +19,7 @@ import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
-import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed

@@ -405,23 +405,23 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on ask to add login toggle should send AskToAddLoginClick`() {
+    fun `on Ask to add item toggle should send AskToAddLoginClick`() {
         composeTestRule
-            .onNodeWithText("Ask to add login")
+            .onNodeWithText("Ask to add item")
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(AutoFillAction.AskToAddLoginClick(true)) }
     }
 
     @Test
-    fun `ask to add login should be toggled on or off according to state`() {
+    fun `Ask to add item should be toggled on or off according to state`() {
         composeTestRule
-            .onNodeWithText("Ask to add login")
+            .onNodeWithText("Ask to add item")
             .performScrollTo()
             .assertIsOff()
         mutableStateFlow.update { it.copy(isAskToAddLoginEnabled = true) }
         composeTestRule
-            .onNodeWithText("Ask to add login")
+            .onNodeWithText("Ask to add item")
             .performScrollTo()
             .assertIsOn()
     }
