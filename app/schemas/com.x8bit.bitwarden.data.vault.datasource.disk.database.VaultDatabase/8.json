@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 7,
-    "identityHash": "4c6ad1f5268d7e8add7407201788aa2e",
+    "version": 8,
+    "identityHash": "11387825dab701f9d2dd2e940ffbd794",
     "entities": [
       {
         "tableName": "ciphers",
@@ -60,7 +60,7 @@
       },
       {
         "tableName": "collections",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `user_id` TEXT NOT NULL, `organization_id` TEXT NOT NULL, `should_hide_passwords` INTEGER NOT NULL, `name` TEXT NOT NULL, `external_id` TEXT, `read_only` INTEGER NOT NULL, `manage` INTEGER, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `user_id` TEXT NOT NULL, `organization_id` TEXT NOT NULL, `should_hide_passwords` INTEGER NOT NULL, `name` TEXT NOT NULL, `external_id` TEXT, `read_only` INTEGER NOT NULL, `manage` INTEGER, `default_user_collection_email` TEXT, `type` TEXT NOT NULL DEFAULT '0', PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -107,6 +107,18 @@
             "fieldPath": "canManage",
             "columnName": "manage",
             "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "defaultUserCollectionEmail",
+            "columnName": "default_user_collection_email",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'0'"
           }
         ],
         "primaryKey": {
@@ -246,7 +258,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4c6ad1f5268d7e8add7407201788aa2e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '11387825dab701f9d2dd2e940ffbd794')"
     ]
   }
 }
