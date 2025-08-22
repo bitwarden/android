@@ -4,6 +4,7 @@
     <string name="add_folder">Thêm thư mục</string>
     <string name="add_item">Thêm mục</string>
     <string name="an_error_has_occurred">Đã xảy ra lỗi</string>
+    <string name="apply">Apply</string>
     <string name="back">Quay lại</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Hủy bỏ</string>
@@ -364,8 +365,8 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="exit_confirmation">Bạn có chắc chắn muốn thoát Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Yêu cầu nhập mật khẩu chính khi khởi động lại ứng dụng?</string>
     <string name="pin_require_master_password_restart">Bạn có chắc chắn muốn nhập mật khẩu chính để mở khóa mỗi khi mở lại ứng dụng không?</string>
-    <string name="ask_to_add_login">Gợi ý thêm mục đăng nhập</string>
-    <string name="ask_to_add_login_description">Gợi ý thêm mục nếu không tìm thấy mục nào trong kho trùng khớp.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Khi khởi động lại ứng dụng</string>
     <string name="capitalize">Viết hoa</string>
     <string name="include_number">Bao gồm cả số</string>

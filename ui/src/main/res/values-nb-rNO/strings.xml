@@ -4,6 +4,7 @@
     <string name="add_folder">Legg til en mappe</string>
     <string name="add_item">Legg til gjenstand</string>
     <string name="an_error_has_occurred">En feil har oppstått.</string>
+    <string name="apply">Apply</string>
     <string name="back">Tilbake</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Lukk</string>
@@ -364,8 +365,8 @@ Skanning skjer automatisk.</string>
     <string name="exit_confirmation">Er du sikker på at du vil avslutte Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Ønsker du å låse opp ved å bruke hovedpassordet når applikasjonen startes på nytt?</string>
-    <string name="ask_to_add_login">Spør om å legge til innlogging</string>
-    <string name="ask_to_add_login_description">Spør om å legge til et element hvis det ikke finnes i hvelvet ditt.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Ved omstart av appen</string>
     <string name="capitalize">Stor forbokstav</string>
     <string name="include_number">Inkluder siffer</string>

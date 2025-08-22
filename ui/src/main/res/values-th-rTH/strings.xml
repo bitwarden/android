@@ -4,6 +4,7 @@
     <string name="add_folder">เพิ่มโฟลเดอร์</string>
     <string name="add_item">เพิ่มรายการ</string>
     <string name="an_error_has_occurred">พบข้อผิดพลาด</string>
+    <string name="apply">Apply</string>
     <string name="back">ย้อนกลับ</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">ยกเลิก</string>
@@ -364,8 +365,8 @@ Scanning will happen automatically.</string>
     <string name="exit_confirmation">Are you sure you want to exit Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">You you want to require unlocking with your master password when the application is restarted?</string>
-    <string name="ask_to_add_login">Ask to add login</string>
-    <string name="ask_to_add_login_description">Ask to add an item if one isn\'t found in your vault.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">On app restart</string>
     <string name="capitalize">Capitalize</string>
     <string name="include_number">Include number</string>

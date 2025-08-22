@@ -4,6 +4,7 @@
     <string name="add_folder">Προσθήκη Φακέλου</string>
     <string name="add_item">Προσθήκη στοιχείου</string>
     <string name="an_error_has_occurred">Παρουσιάστηκε σφάλμα.</string>
+    <string name="apply">Apply</string>
     <string name="back">Πίσω</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Ακύρωση</string>
@@ -364,8 +365,8 @@
     <string name="exit_confirmation">Είστε βέβαιοι ότι θέλετε να βγείτε από το Bitwarden;</string>
     <string name="require_master_password_on_app_restart">Να απαιτείται ο κύριος κωδικός πρόσβασης κατά την επανεκκίνηση της εφαρμογής;</string>
     <string name="pin_require_master_password_restart">Θέλετε να απαιτείται ξεκλείδωμα με τον κύριο κωδικό κατά την επανεκκίνηση της εφαρμογής;</string>
-    <string name="ask_to_add_login">Ρωτήστε για να προσθέστε σύνδεση</string>
-    <string name="ask_to_add_login_description">Ρωτήστε για να προσθέσετε ένα αντικείμενο αν δε βρεθεί στο vault σας.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Κατά την επανεκκίνηση της εφαρμογής</string>
     <string name="capitalize">Κεφαλαιοποίηση</string>
     <string name="include_number">Συμπερίληψη αριθμών</string>

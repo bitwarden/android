@@ -4,6 +4,7 @@
     <string name="add_folder">Pievienot mapi</string>
     <string name="add_item">Pievienot vienumu</string>
     <string name="an_error_has_occurred">Radusies kļūda.</string>
+    <string name="apply">Apply</string>
     <string name="back">Atpakaļ</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Atcelt</string>
@@ -364,8 +365,8 @@ Nolasīšana notiks automātiski.</string>
     <string name="exit_confirmation">Vai tiešām iziet no Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Pieprasīt galveno paroli pēc lietotnes pārsāknēšanas?</string>
     <string name="pin_require_master_password_restart">Vai pieprasīt atslēgšanu ar galveno paroli pēc lietotnes atkārtotas palaišanas?</string>
-    <string name="ask_to_add_login">Vaicāt, lai pievienotu pieteikšanās vienumu</string>
-    <string name="ask_to_add_login_description">Vaicāt pievienot vienumu, ja tāds nav atrodams glabātavā.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Pārsāknējot lietotni</string>
     <string name="capitalize">Izmantot lielos sākumburtus</string>
     <string name="include_number">Iekļaut ciparu</string>
@@ -1074,8 +1075,8 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="keep_your_credential_secure">Turi savus pieteikšanās datus drošībā</string>
     <string name="learn_more_about_how_to_keep_credentirals_secure">Uzzini vairāk par to, kā turēt pieteikšanās datus drošībā, kad izmanto “%1$s”!</string>
     <string name="are_you_sure_you_want_to_use">Vai tiešām izmantot “%1$s”?</string>
-    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
-    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
-    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
-    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI atbilstības noteikšana nosaka, kā Bitwarden atrod automātiskās aizpildes ieteikumus.\n<annotation emphasis="bold">Uzmanību:</annotation> “Regulārā izteiksme” ir lietpratējiem paredzēta iespēja ar paaugstinātu pieteikšanās datu atkāšanas bīstamību, ja tā tiek izmantota nepareizi.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI atbilstības noteikšana nosaka, kā Bitwarden atrod automātiskās aizpildes ieteikumus.\n<annotation emphasis="bold">Uzmanību:</annotation> “Sākas” ir lietpratējiem paredzēta iespēja ar paaugstinātu pieteikšanās datu atkāšanas bīstamību.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Sākas ar” ir lietpratējiem paredzēta iespēja ar paaugstinātu piekļuves datu atklāšanas bīstamību.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regulārā izteiksme” ir lietpratējiem paredzēta iespēja ar paaugstinātu piekļuves datu atklāšanas bīstamību.</string>
 </resources>

@@ -4,6 +4,7 @@
     <string name="add_folder">Qovluq əlavə et</string>
     <string name="add_item">Maddə əlavə edin</string>
     <string name="an_error_has_occurred">Bir xəta baş verdi.</string>
+    <string name="apply">Apply</string>
     <string name="back">Geri</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Ləğv et</string>
@@ -364,8 +365,8 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="exit_confirmation">Bitwarden-dən çıxış etmək istədiyinizə əminsiniz?</string>
     <string name="require_master_password_on_app_restart">Tətbiq yenidən başladılanda ana parol tələb edilsin?</string>
     <string name="pin_require_master_password_restart">Tətbiq yenidən başladılanda ana parol ilə kilid açılmasını məcburi etmək istəyirsiniz?</string>
-    <string name="ask_to_add_login">Giriş əlavə etmək üçün soruş</string>
-    <string name="ask_to_add_login_description">Seyfinizdə tapılmayan elementin əlavə edilməsi soruşulsun.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Tətbiq yenidən başladılanda</string>
     <string name="capitalize">İlk hərfi böyük yaz</string>
     <string name="include_number">Rəqəm əlavə et</string>

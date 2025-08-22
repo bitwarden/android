@@ -33,7 +33,6 @@ sealed class FlagKey<out T : Any> {
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
                 UserManagedPrivilegedApps,
-                RemoveCardPolicy,
             )
         }
     }
@@ -69,15 +68,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object UserManagedPrivilegedApps : FlagKey<Boolean>() {
         override val keyName: String = "pm-18970-user-managed-privileged-apps"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key to enable the removal of card item types.
-     * This flag will hide card types from organizations with policy enable and individual vaults
-     */
-    data object RemoveCardPolicy : FlagKey<Boolean>() {
-        override val keyName: String = "pm-16442-remove-card-item-type-policy"
         override val defaultValue: Boolean = false
     }
 

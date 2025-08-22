@@ -42,13 +42,13 @@ fun VaultData.toViewState(
     isIconLoadingDisabled: Boolean,
     baseIconUrl: String,
     vaultFilterType: VaultFilterType,
-    restrictItemTypesPolicyOrgIds: List<String>?,
+    restrictItemTypesPolicyOrgIds: List<String>,
 ): VaultState.ViewState {
 
     val filteredCipherViewListWithDeletedItems =
         decryptCipherListResult
             .successes
-            .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds ?: emptyList())
+            .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds)
             .toFilteredList(vaultFilterType)
 
     val filteredCipherViewList = filteredCipherViewListWithDeletedItems
@@ -154,7 +154,7 @@ fun VaultData.toViewState(
             trashItemsCount = filteredCipherViewListWithDeletedItems.count {
                 it.deletedDate != null
             },
-            showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds == null,
+            showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds.isEmpty(),
         )
     }
 }

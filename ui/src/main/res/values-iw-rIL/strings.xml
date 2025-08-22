@@ -4,6 +4,7 @@
     <string name="add_folder">הוסף תיקייה</string>
     <string name="add_item">הוסף פריט</string>
     <string name="an_error_has_occurred">אירעה שגיאה.</string>
+    <string name="apply">Apply</string>
     <string name="back">הקודם</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">ביטול</string>
@@ -364,8 +365,8 @@
     <string name="exit_confirmation">האם אתה בטוח שברצונך לצאת מ־Bitwarden?</string>
     <string name="require_master_password_on_app_restart">לדרוש סיסמה ראשית בעת הפעלה מחדש של היישום?</string>
     <string name="pin_require_master_password_restart">האם ברצונך לדרוש ביטול נעילה עם הסיסמה הראשית שלך כשהיישום מופעל מחדש?</string>
-    <string name="ask_to_add_login">בקש לשמור כניסה</string>
-    <string name="ask_to_add_login_description">בקש להוסיף פריט אם לא נמצא פריט בכספת שלך.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">בעת הפעלה מחדש של היישום</string>
     <string name="capitalize">הפוך תו ראשון לרישית</string>
     <string name="include_number">כלול מספר</string>

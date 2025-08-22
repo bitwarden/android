@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
@@ -27,7 +26,6 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySele
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.login
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -69,8 +67,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -99,7 +95,6 @@ class SearchViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
     private val vaultRepo: VaultRepository,
     private val authRepo: AuthRepository,
-    featureFlagManager: FeatureFlagManager,
     environmentRepo: EnvironmentRepository,
     settingsRepo: SettingsRepository,
     snackbarRelayManager: SnackbarRelayManager,
@@ -155,24 +150,10 @@ class SearchViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.RemoveCardPolicy)
-            .flatMapLatest { isFlagEnabled ->
-                if (isFlagEnabled) {
-                    policyManager
-                        .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
-                        .map { policies ->
-                            policies.map { it.organizationId }
-                        }
-                } else {
-                    flowOf(emptyList<String>())
-                }
-            }
-            .map { organizationIds ->
-                SearchAction.Internal.RestrictItemTypesPolicyUpdateReceive(
-                    restrictItemTypesPolicyOrdIds = organizationIds,
-                )
-            }
+        policyManager
+            .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            .map { policies -> policies.map { it.organizationId } }
+            .map { SearchAction.Internal.RestrictItemTypesPolicyUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 

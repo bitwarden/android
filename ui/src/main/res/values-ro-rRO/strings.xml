@@ -4,6 +4,7 @@
     <string name="add_folder">Adăugare dosar</string>
     <string name="add_item">Adăugare articol</string>
     <string name="an_error_has_occurred">S-a produs o eroare.</string>
+    <string name="apply">Apply</string>
     <string name="back">Înapoi</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Anulare</string>
@@ -364,8 +365,8 @@ Scanarea se va face automat.</string>
     <string name="exit_confirmation">Sigur doriți să ieșiți din Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Se solicită parola principală la repornirea aplicației?</string>
     <string name="pin_require_master_password_restart">Doriți să solicitați deblocarea cu parola principală atunci când aplicația este repornită?</string>
-    <string name="ask_to_add_login">Solicitare de adăugare cont</string>
-    <string name="ask_to_add_login_description">Solicitați adăugarea unui element dacă nu se găsește unul în seif.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">La repornirea aplicației</string>
     <string name="capitalize">Se folosesc majuscule inițiale</string>
     <string name="include_number">Se includ cifre</string>

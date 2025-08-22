@@ -4,6 +4,7 @@
     <string name="add_folder">फोल्डर बनाएं</string>
     <string name="add_item">आइटम बनाएं</string>
     <string name="an_error_has_occurred">एक गड़बड़ हुई।</string>
+    <string name="apply">Apply</string>
     <string name="back">पीछे जाएं</string>
     <string name="bitwarden">बिटवार्डन</string>
     <string name="cancel">कैंसिल करें</string>
@@ -363,8 +364,8 @@
     <string name="exit_confirmation">पक्का निकलें?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">ऐप रीस्टार्ट करने पर मास्टर पासवर्ड पूछें?</string>
-    <string name="ask_to_add_login">Ask to add login</string>
-    <string name="ask_to_add_login_description">Ask to add an item if one isn\'t found in your vault.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">ऐप रिस्टार्ट पर</string>
     <string name="capitalize">कैपिटलाइज़ करें</string>
     <string name="include_number">नंबर शामिल करें</string>

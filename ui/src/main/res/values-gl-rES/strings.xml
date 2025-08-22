@@ -4,6 +4,7 @@
     <string name="add_folder">Engadir cartafol</string>
     <string name="add_item">Engadir elemento</string>
     <string name="an_error_has_occurred">Produciuse un erro.</string>
+    <string name="apply">Apply</string>
     <string name="back">Atrás</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Cancelar</string>
@@ -364,8 +365,8 @@ Escanearase automaticamente.</string>
     <string name="exit_confirmation">Seguro que queres saír de Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Requirir contrasinal mestre ó abrir a app?</string>
     <string name="pin_require_master_password_restart">Queres requirir desbloquear co contrasinal mestre cando se reinicie a aplicación?</string>
-    <string name="ask_to_add_login">Ofrecer gardar credenciais</string>
-    <string name="ask_to_add_login_description">Ofrecer gardar un elemento se non se atopa na caixa forte.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Ó reiniciar a app</string>
     <string name="capitalize">Primeira letra maiúscula</string>
     <string name="include_number">Incluír número</string>

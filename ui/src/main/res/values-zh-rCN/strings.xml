@@ -4,6 +4,7 @@
     <string name="add_folder">添加文件夹</string>
     <string name="add_item">添加项目</string>
     <string name="an_error_has_occurred">发生错误</string>
+    <string name="apply">应用</string>
     <string name="back">后退</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">取消</string>
@@ -364,8 +365,8 @@
     <string name="exit_confirmation">确定要退出 Bitwarden 吗？</string>
     <string name="require_master_password_on_app_restart">App 重启时要求主密码吗？</string>
     <string name="pin_require_master_password_restart">您希望当应用程序重启时，要求使用主密码解锁吗？</string>
-    <string name="ask_to_add_login">询问添加登录</string>
-    <string name="ask_to_add_login_description">在密码库中找不到匹配项目时询问添加一个。</string>
+    <string name="ask_to_add_item">请求添加项目</string>
+    <string name="ask_to_add_item_description">在密码库中找不到匹配项目时请求添加一个。</string>
     <string name="on_restart">App 重启时</string>
     <string name="capitalize">首字母大写</string>
     <string name="include_number">包含数字</string>
@@ -1070,13 +1071,13 @@
     <string name="items_expanded_click_to_collapse">项目被展开，点击以折叠。</string>
     <string name="items_are_collapsed_click_to_expand">项目被折叠，点击以展开。</string>
     <string name="select_a_card_for_x">选择 %s 的卡片</string>
-    <string name="advanced_options">Advanced options</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
-    <string name="keep_your_credential_secure">Keep your credentials secure</string>
-    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
-    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
-    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
-    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
-    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
-    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="advanced_options">高级选项</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">有关匹配检测的更多信息</annotation></string>
+    <string name="keep_your_credential_secure">保持您的凭据安全</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">了解有关如何在使用 “%1$s“ 时保持凭据安全的更多信息。</string>
+    <string name="are_you_sure_you_want_to_use">您确定要使用 “%1$s” 吗？</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI 匹配检测控制 Bitwarden 如何识别自动填充建议。\n<annotation emphasis="bold">警告：</annotation> “正则表达式”是一个高级选项，如果使用不当，会增加暴露凭据的风险。</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI 匹配检测控制 Bitwarden 如何识别自动填充建议。\n<annotation emphasis="bold">警告：</annotation> “开始于”是一个高级选项，但会增加暴露凭据的风险。</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">”开始于“ 是一种高级选项，但会增加暴露凭据的风险。</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">”正则表达方式“ 是一种高级选项，会如果使用不当，会增加暴露凭据的风险。</string>
 </resources>

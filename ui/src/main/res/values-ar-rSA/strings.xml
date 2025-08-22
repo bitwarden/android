@@ -4,6 +4,7 @@
     <string name="add_folder">إضافة مجلّد</string>
     <string name="add_item">إضافة عنصر</string>
     <string name="an_error_has_occurred">لقد حدث خطأ.</string>
+    <string name="apply">Apply</string>
     <string name="back">رجوع</string>
     <string name="bitwarden">بت واردن</string>
     <string name="cancel">إلغاء</string>
@@ -364,8 +365,8 @@
     <string name="exit_confirmation">هل أنت متأكد من أنك تريد الخروج من بت واردن؟</string>
     <string name="require_master_password_on_app_restart">تتطلب كلمة مرور رئيسية عند إعادة تشغيل التطبيق؟</string>
     <string name="pin_require_master_password_restart">هل تريد طلب إلغاء القفل باستخدام كلمة المرور الرئيسية عند إعادة تشغيل التطبيق؟</string>
-    <string name="ask_to_add_login">اطلب إضافة تسجيل الدخول</string>
-    <string name="ask_to_add_login_description">اطلب إضافة عنصر إذا لم يتم العثور عليه في خزانتك.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">عند إعادة تشغيل التطبيق</string>
     <string name="capitalize">كبّر الحروف</string>
     <string name="include_number">تضمين الرقم</string>

@@ -4,6 +4,7 @@
     <string name="add_folder">Дадаць папку</string>
     <string name="add_item">Дадаць элемент</string>
     <string name="an_error_has_occurred">Адбылася памылка.</string>
+    <string name="apply">Apply</string>
     <string name="back">Назад</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Скасаваць</string>
@@ -363,8 +364,8 @@
     <string name="exit_confirmation">Вы сапраўды хочаце выйсці з Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Вы сапраўды хочаце, каб пасля перазапуску праграма патрабавала асноўны пароль для разблакіроўкі?</string>
-    <string name="ask_to_add_login">Пытацца пры дадаванні лагіна</string>
-    <string name="ask_to_add_login_description">Пытацца пра дадаванне элемента, калі ён адсутнічае ў вашым сховішчы.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Пры перазапуску праграмы</string>
     <string name="capitalize">Вялікія літары</string>
     <string name="include_number">Уключыць лічбу</string>

@@ -4,6 +4,7 @@
     <string name="add_folder">Dodaj mapo</string>
     <string name="add_item">Dodaj vnos</string>
     <string name="an_error_has_occurred">Prišlo je do napake</string>
+    <string name="apply">Apply</string>
     <string name="back">Nazaj</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Prekliči</string>
@@ -364,8 +365,8 @@ Scanning will happen automatically.</string>
     <string name="exit_confirmation">Ali res želite zapustiti Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Do you want to require unlocking with your master password when the application is restarted?</string>
-    <string name="ask_to_add_login">Ponudi shranjevanje prijav</string>
-    <string name="ask_to_add_login_description">Ponudi, da se shrani nova prijava, če je v trezorju še ni.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Ob ponovnem zagonu aplikacije</string>
     <string name="capitalize">Zapiši z veliko začetnico</string>
     <string name="include_number">Vključi številko</string>

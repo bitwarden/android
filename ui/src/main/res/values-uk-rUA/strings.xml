@@ -4,6 +4,7 @@
     <string name="add_folder">Додати теку</string>
     <string name="add_item">Додати запис</string>
     <string name="an_error_has_occurred">Сталася помилка</string>
+    <string name="apply">Apply</string>
     <string name="back">Назад</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Скасувати</string>
@@ -364,8 +365,8 @@
     <string name="exit_confirmation">Ви впевнені, що хочете вийти з Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Вимагати головний пароль після перезапуску програми?</string>
     <string name="pin_require_master_password_restart">Ви хочете вимагати розблокування головним паролем при перезапуску програми?</string>
-    <string name="ask_to_add_login">Запитувати про додавання запису</string>
-    <string name="ask_to_add_login_description">Запитувати про додавання запису, якщо його немає у вашому сховищі.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Під час перезапуску програми</string>
     <string name="capitalize">Великі літери</string>
     <string name="include_number">Включити число</string>
