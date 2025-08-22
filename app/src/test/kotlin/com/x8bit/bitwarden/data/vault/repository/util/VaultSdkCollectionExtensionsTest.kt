@@ -2,10 +2,8 @@ package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.bitwarden.collections.Collection
 import com.bitwarden.collections.CollectionType
-import com.bitwarden.network.model.CipherTypeJson
 import com.bitwarden.network.model.CollectionTypeJson
 import com.bitwarden.network.model.SyncResponseJson
-import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import org.junit.Assert
 import org.junit.Test
