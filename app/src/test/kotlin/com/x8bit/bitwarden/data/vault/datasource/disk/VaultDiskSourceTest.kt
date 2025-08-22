@@ -480,7 +480,7 @@ private val COLLECTION_ENTITY = CollectionEntity(
     externalId = "mockExternalId-3",
     isReadOnly = false,
     canManage = true,
-    defaultUserCollectionEmail = null,
+    defaultUserCollectionEmail = "mockOffboardedUserEmail-3",
     type = CollectionTypeJson.SHARED_COLLECTION,
 )
 

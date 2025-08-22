@@ -15,6 +15,6 @@ fun createMockSdkCollection(number: Int): Collection =
         externalId = "mockExternalId-$number",
         readOnly = false,
         manage = true,
-        defaultUserCollectionEmail = null,
+        defaultUserCollectionEmail = "mockOffboardedUserEmail-$number",
         type = CollectionType.SHARED_COLLECTION,
     )
