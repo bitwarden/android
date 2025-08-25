@@ -237,8 +237,7 @@ class MainActivity : AppCompatActivity() {
             // been fixed but certain phones that are no longer supported will never get the fix.
             // The OS bug is tracked here: https://issuetracker.google.com/issues/370180732
             startActivity(
-                Intent
-                    .makeMainActivity(componentName)
+                Intent(intent)
                     .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION),
             )
             finish()
