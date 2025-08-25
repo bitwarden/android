@@ -56,10 +56,8 @@ import com.bitwarden.authenticator.ui.platform.components.row.BitwardenTextRow
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenWideSwitch
 import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
-import com.bitwarden.authenticator.ui.platform.composition.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -67,7 +65,9 @@ import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.base.util.spanStyleOf
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -444,10 +444,7 @@ private fun UnlockWithBiometricsRow(
     var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
     BitwardenWideSwitch(
         modifier = modifier,
-        label = stringResource(
-            id = BitwardenString.unlock_with,
-            stringResource(id = BitwardenString.biometrics),
-        ),
+        label = stringResource(BitwardenString.unlock_with_biometrics),
         isChecked = isChecked || showBiometricsPrompt,
         onCheckedChange = { toggled ->
             if (toggled) {

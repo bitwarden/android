@@ -51,6 +51,23 @@ private const val SYNC_SUCCESS_JSON = """
     "twoFactorEnabled": false,
     "key": "mockKey-1",
     "privateKey": "mockPrivateKey-1",
+    "accountKeys": {
+      "signatureKeyPair": {
+        "wrappedSigningKey": "mockWrappedSigningKey-1",
+        "verifyingKey": "mockVerifyingKey-1"
+      },
+      "publicKeyEncryptionKeyPair": {
+        "wrappedPrivateKey": "mockWrappedPrivateKey-1",
+        "publicKey": "mockPublicKey-1",
+        "signedPublicKey": "mockSignedPublicKey-1",
+        "object": "publicKeyEncryptionKeyPair"
+      },
+      "securityState": {
+        "securityState": "mockSecurityState-1",
+        "securityVersion": 1
+      },
+      "object": "privateKeys"
+    },
     "securityStamp": "mockSecurityStamp-1",
     "forcePasswordReset": false,
     "usesKeyConnector": false,
@@ -197,7 +214,9 @@ private const val SYNC_SUCCESS_JSON = """
       "externalId": "mockExternalId-1",
       "readOnly": false,
       "id": "mockId-1",
-      "manage": true
+      "manage": true,
+      "defaultUserCollectionEmail": "mockOffboardedUserEmail-1",
+      "type": 0
     }
   ],
   "ciphers": [

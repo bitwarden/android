@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import android.net.Uri
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -9,7 +10,6 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
-import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.data.autofill.util.card
@@ -43,7 +43,7 @@ fun VaultData.toViewState(
     isIconLoadingDisabled: Boolean,
     baseIconUrl: String,
     vaultFilterType: VaultFilterType,
-    restrictItemTypesPolicyOrgIds: List<String>?,
+    restrictItemTypesPolicyOrgIds: List<String>,
 ): VaultState.ViewState {
     val filteredAllCipherViewListWithDeletedItems =
         decryptCipherListResult
@@ -55,7 +55,7 @@ fun VaultData.toViewState(
                         cipher.toFailureCipherListView()
                     },
             )
-            .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds ?: emptyList())
+            .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds)
             .toFilteredList(vaultFilterType)
 
     val filteredCipherViewList = filteredAllCipherViewListWithDeletedItems
@@ -202,7 +202,7 @@ fun VaultData.toViewState(
             trashItemsCount = filteredAllCipherViewListWithDeletedItems.count {
                 it.deletedDate != null
             },
-            showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds == null,
+            showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds.isEmpty(),
         )
     }
 }

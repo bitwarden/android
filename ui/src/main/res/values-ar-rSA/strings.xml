@@ -4,6 +4,7 @@
     <string name="add_folder">إضافة مجلّد</string>
     <string name="add_item">إضافة عنصر</string>
     <string name="an_error_has_occurred">لقد حدث خطأ.</string>
+    <string name="apply">Apply</string>
     <string name="back">رجوع</string>
     <string name="bitwarden">بت واردن</string>
     <string name="cancel">إلغاء</string>
@@ -146,7 +147,7 @@
     <string name="syncing">جارِ المزامنة...</string>
     <string name="syncing_complete">اكتمال المزامنة.</string>
     <string name="two_step_login">تحديد المصادقة الثنائية</string>
-    <string name="unlock_with">فتح مع %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">إلغاء القفل باستخدام رقم التعريف الشخصي</string>
     <string name="verification_code">رمز التحقق</string>
     <string name="view_login">عرض تسجيل الدخول</string>
@@ -286,7 +287,7 @@
     <string name="new_uri">رابط جديد</string>
     <string name="add_website">إضافة موقع</string>
     <string name="base_domain">النطاق الأساسي</string>
-    <string name="default_text">الافتراضي</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">بالضبط</string>
     <string name="host">المضيف</string>
     <string name="reg_ex">التعبير الاعتيادي</string>
@@ -356,7 +357,7 @@
     <string name="clear_clipboard">مسح الحافظة</string>
     <string name="clear_clipboard_description">مسح القيم المنسوخة تلقائيًا من حافظتك.</string>
     <string name="default_uri_match_detection">كشف تطابق الرابط الافتراضي</string>
-    <string name="default_uri_match_detection_description">اختر الطريقة الافتراضية التي يتم بها معالجة اكتشاف تطابق الرابط لعمليات تسجيل الدخول عند تنفيذ إجراءات مثل الملء التلقائي.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">المظهر</string>
     <string name="theme_description">تغيير سمة لون التطبيق.</string>
     <string name="copy_notes">نسخ الملاحظة</string>
@@ -364,15 +365,14 @@
     <string name="exit_confirmation">هل أنت متأكد من أنك تريد الخروج من بت واردن؟</string>
     <string name="require_master_password_on_app_restart">تتطلب كلمة مرور رئيسية عند إعادة تشغيل التطبيق؟</string>
     <string name="pin_require_master_password_restart">هل تريد طلب إلغاء القفل باستخدام كلمة المرور الرئيسية عند إعادة تشغيل التطبيق؟</string>
-    <string name="ask_to_add_login">اطلب إضافة تسجيل الدخول</string>
-    <string name="ask_to_add_login_description">اطلب إضافة عنصر إذا لم يتم العثور عليه في خزانتك.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">عند إعادة تشغيل التطبيق</string>
     <string name="capitalize">كبّر الحروف</string>
     <string name="include_number">تضمين الرقم</string>
     <string name="download">تنزيل</string>
     <string name="login_expired">انتهت صَلاحِيَة جَلسة تسجيل دخولك.</string>
     <string name="biometrics_direction">المصادقة البيومترية</string>
-    <string name="biometrics">البصمات</string>
     <string name="biometrics_failed">فشل القياسات الحيوية</string>
     <string name="biometrics_decoding_failure">تسجيل الدخول باستخدام كلمة المرور الرئيسية أو رمز PIN ثم إعادة تمكين تسجيل الدخول الحيوي في الإعدادات.</string>
     <string name="use_biometrics_to_unlock">استخدام القياسات الحيوية للفتح</string>
@@ -420,7 +420,6 @@
     <string name="master_password_policy_validation_title">كلمة المرور غير صالحة</string>
     <string name="master_password_policy_validation_message">كلمة المرور لا تفي بمتطلبات المؤسسة. الرجاء التحقق من معلومات السياسة وحاول مرة أخرى.</string>
     <string name="loading">جار التحميل</string>
-    <string name="accept_policies_error">لم يتم الاعتراف بشروط الخدمة وسياسة الخصوصية.</string>
     <string name="terms_of_service">اتفاقية خدمة المستخدم</string>
     <string name="privacy_policy">سياسة الخصوصيّة</string>
     <string name="passkey_management">إدارة مفتاح المرور</string>
@@ -485,7 +484,6 @@
     <string name="password_prompt">إعادة توجيه كلمة المرور الرئيسية</string>
     <string name="password_confirmation">تأكيد كلمة المرور الرئيسية</string>
     <string name="password_confirmation_desc">هذا الإجراء محمي، للاستمرار أعد إدخال كلمة المرور الرئيسية للتحقق من هويتك.</string>
-    <string name="captcha_failed">فشلت كلمة التحقق. الرجاء المحاولة مرة أخرى.</string>
     <string name="update_master_password">تحديث كلمة المرور الرئيسية</string>
     <string name="update_master_password_warning">تم تغيير كلمة المرور الرئيسية الخاصة بك مؤخرًا من قبل مسؤول في مؤسستك. من أجل الوصول إلى الخزانة، يجب عليك تحديث كلمة المرور الرئيسية الآن. سيتم تسجيل خروجك من الجلسة الحالية، مما يتطلب منك تسجيل الدخول مرة أخرى. وقد تظل الجلسات النشطة على أجهزة أخرى نشطة لمدة تصل إلى ساعة واحدة.</string>
     <string name="updating_password">تحديث كلمة المرور</string>
@@ -609,8 +607,6 @@
     <string name="language">اللّغة</string>
     <string name="language_change_x_description">تم تغيير اللغة إلى %1$s. الرجاء إعادة تشغيل التطبيق لرؤية التغيير</string>
     <string name="default_system">الافتراضي (النظام)</string>
-    <string name="important">مهم</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">لا يمكن استعادة كلمة المرور الرئيسية الخاصة بك إذا نسيت ذلك! %1$s أحرف الحد الأدنى.</string>
     <string name="weak_master_password">كلمة المرور الرئيسية الضعيفة</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">تم تحديد كلمة المرور ضعيفة. استخدم كلمة مرور قوية لحماية حسابك. هل أنت متأكد من أنك تريد استخدام كلمة مرور ضعيفة؟</string>
     <string name="weak">ضعيفة</string>
@@ -707,7 +703,6 @@
     <string name="create_account_on_with_colon">إنشاء حساب على:</string>
     <string name="we_sent_an_email_to">أرسلنا رسالة بريد إلكتروني إلى %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">من خلال المتابعة، أنت توافق على شروط الخدمة وسياسة الخصوصية</string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">بتفعيل هذا المفتاح، فإنك توافق على <annotation link="termsOfService">شروط الخدمة</annotation> و <annotation link="privacyPolicy">سياسة الخصوصية</annotation></string>
     <string name="unsubscribe">إلغاء الاشتراك</string>
     <string name="check_your_email">تحقق من بريدك الإلكتروني</string>
     <string name="open_email_app">افتح تطبيق البريد الإلكتروني</string>
@@ -865,8 +860,6 @@
     <string name="you_ll_only_need_to_set_up_authenticator_key">سوف تحتاج فقط إلى إعداد مفتاح المصادقة لتسجيل الدخول التي تتطلب المصادقة ذات عاملين بواسطة الكود. سيولد المفتاح باستمرار رموز من ستة أرقام يمكنك استخدامها لتسجيل الدخول.</string>
     <string name="coachmark_3_of_3">3 من 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">يجب عليك إضافة عنوان ويب لاستخدام التعبئة التلقائية للوصول إلى هذا الحساب.</string>
-    <string name="single_tap_passkey_creation">إنشاء مفتاح مرور لمرة واحدة</string>
-    <string name="single_tap_passkey_authentication">تسجيل الدخول بالضغط الواحد على مفتاح المرور</string>
     <string name="learn_about_new_logins">تعرف على تسجيلات الدخول الجديدة</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">سنمشي معك من خلال الميزات الرئيسية لإضافة تسجيل دخول جديد.</string>
     <string name="explore_the_generator">استكشف المولد</string>
@@ -1076,4 +1069,14 @@
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

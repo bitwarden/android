@@ -4,6 +4,7 @@
     <string name="add_folder">Bagong Folder</string>
     <string name="add_item">Bagong Item</string>
     <string name="an_error_has_occurred">Nagkaproblema.</string>
+    <string name="apply">Apply</string>
     <string name="back">Bumalik</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Kanselahin</string>
@@ -146,7 +147,7 @@
     <string name="syncing">Nagsi-sync...</string>
     <string name="syncing_complete">Tapos na ang pagsi-sync</string>
     <string name="two_step_login">Dalawang-hakbang na pag-log in</string>
-    <string name="unlock_with">Buksan gamit ang %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Buksan gamit ang PIN code</string>
     <string name="verification_code">Code pamberipika</string>
     <string name="view_login">View login</string>
@@ -286,7 +287,7 @@ Awtomatikong itong magsa-scan.</string>
     <string name="new_uri">Bagong URI</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">Base domain</string>
-    <string name="default_text">Default</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Eksakto</string>
     <string name="host">Host</string>
     <string name="reg_ex">Regular na expression</string>
@@ -356,7 +357,7 @@ Awtomatikong itong magsa-scan.</string>
     <string name="clear_clipboard">Linisin ang clipboard</string>
     <string name="clear_clipboard_description">Awtomatikong linisin ang mga bagay na nakopya sa iyong clipboard.</string>
     <string name="default_uri_match_detection">Default na deteksyon ng pagkakatugma ng URI</string>
-    <string name="default_uri_match_detection_description">Piliin ang default na paraang ginagamit sa pag-detect sa pagkakatugma ng URI para sa mga login kung gumagawa ng mga kilos tulad ng pag-autofill.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Baguhin ang kulay at tema ng aplikasyon.</string>
     <string name="copy_notes">Kopyahin ang tala</string>
@@ -364,15 +365,14 @@ Awtomatikong itong magsa-scan.</string>
     <string name="exit_confirmation">Sigurado ka bang gusto mong umalis sa Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Gusto mo bang kailanganing gamitin ang master password pang-unlock kapag na-restart ang aplikasyon?</string>
-    <string name="ask_to_add_login">Magpaalam para magdagdag ng login</string>
-    <string name="ask_to_add_login_description">Magpaalam na idagdag ang isang item kung walang ganitong nakita sa vault mo.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Sa pag-restart ng app</string>
     <string name="capitalize">Kapitalisasyon</string>
     <string name="include_number">Magsama ng mga numero</string>
     <string name="download">I-download</string>
     <string name="login_expired">Nag-expire na ang login session mo.</string>
     <string name="biometrics_direction">Beripikasyong biometriko</string>
-    <string name="biometrics">Biometriko</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Gumamit ng biometriko pang-unlock</string>
@@ -420,7 +420,6 @@ Awtomatikong itong magsa-scan.</string>
     <string name="master_password_policy_validation_title">\'Di-wastong password</string>
     <string name="master_password_policy_validation_message">Hindi nakapasa sa mga requirement ng organisasyon ang password. Sumangguni sa impormasyon tungkol sa mga patakaran at subukan ulit.</string>
     <string name="loading">Naglo-load</string>
-    <string name="accept_policies_error">Hindi pa natatanggap ang Mga Tuntunin ng Serbisyo at Patakaran sa Privacy.</string>
     <string name="terms_of_service">Mga Tuntunin ng Serbisyo</string>
     <string name="privacy_policy">Patakaran sa Privacy</string>
     <string name="passkey_management">Passkey management</string>
@@ -485,7 +484,6 @@ Awtomatikong itong magsa-scan.</string>
     <string name="password_prompt">Reprompt para sa master password</string>
     <string name="password_confirmation">Kumpirmasyon para sa master password</string>
     <string name="password_confirmation_desc">Protektado ang aksyong ito, mangyaring ilagay ulit ang master password mo para maberipika ang pagkakakilanlan mo.</string>
-    <string name="captcha_failed">Mali ang Captcha. Pakisubukan ulit.</string>
     <string name="update_master_password">I-update ang master password</string>
     <string name="update_master_password_warning">Kamakailang binago ng isang administrator sa organisasyon mo ang iyong master password. Para ma-access ang vault, kailangan mo nang i-update ngayon ang master password mo. Mala-log out ka sa kasalukuyan mong sesyon, at kailangan mong mag-log in ulit. Maaaring manatiling aktibo ang mga sesyon sa iba mo pang device hanggang sa isang oras.</string>
     <string name="updating_password">Ina-update ang password</string>
@@ -609,8 +607,6 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="language">Wika</string>
     <string name="language_change_x_description">Ginawang %1$s ang wika. I-restart ang app para mailapat ang pagbabago</string>
     <string name="default_system">Default (Sistema)</string>
-    <string name="important">Mahalaga</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Hindi na mare-recover ang master password kapag nakalimutan mo ito! Hindi ito dapat bumaba sa %1$s karakter.</string>
     <string name="weak_master_password">Mahinang Master Password</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Mahina ang password. Gumamit ng malakas na password para maprotektahan ang account mo. Sigurado ka bang gusto mong gumamit ng mahinang password?</string>
     <string name="weak">Mahina</string>
@@ -707,7 +703,6 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="create_account_on_with_colon">Create account on:</string>
     <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Unsubscribe</string>
     <string name="check_your_email">Check your email</string>
     <string name="open_email_app">Open email app</string>
@@ -865,8 +860,6 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
@@ -1076,4 +1069,14 @@ Gusto mo bang pumunta sa account na ito?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

@@ -1,20 +1,23 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder
 
-import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.printToLog
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.performCustomAccessibilityAction
 import com.x8bit.bitwarden.data.platform.repository.model.FlightRecorderDuration
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -83,13 +86,14 @@ class FlightRecorderScreenTest : BitwardenComposeTest() {
     @Test
     fun `on logging duration click should display select dialog`() {
         composeTestRule.assertNoDialogExists()
+        composeTestRule.onRoot().printToLog("BRAIN")
         composeTestRule
             .onNodeWithContentDescription(label = "1 hour. Logging duration")
             .performScrollTo()
             .performClick()
         composeTestRule
-            .onNodeWithText(text = "Logging duration")
-            .assert(hasAnyAncestor(isDialog()))
+            .onAllNodesWithText(text = "Logging duration")
+            .filterToOne(hasAnyAncestor(isDialog()))
             .isDisplayed()
     }
 

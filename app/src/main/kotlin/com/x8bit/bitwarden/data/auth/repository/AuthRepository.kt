@@ -32,7 +32,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
@@ -55,12 +54,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * Emits updates for changes to the [UserState].
      */
     val userStateFlow: StateFlow<UserState?>
-
-    /**
-     * Flow of the current [CaptchaCallbackTokenResult]. Subscribers should listen to the flow
-     * in order to receive updates whenever [setCaptchaCallbackTokenResult] is called.
-     */
-    val captchaTokenResultFlow: Flow<CaptchaCallbackTokenResult>
 
     /**
      * Flow of the current [DuoCallbackTokenResult]. Subscribers should listen to the flow
@@ -186,7 +179,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     suspend fun login(
         email: String,
         password: String,
-        captchaToken: String?,
     ): LoginResult
 
     /**
@@ -201,7 +193,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
         asymmetricalKey: String,
         requestPrivateKey: String,
         masterPasswordHash: String?,
-        captchaToken: String?,
     ): LoginResult
 
     /**
@@ -213,7 +204,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
         email: String,
         password: String?,
         twoFactorData: TwoFactorDataModel,
-        captchaToken: String?,
         orgIdentifier: String?,
     ): LoginResult
 
@@ -226,7 +216,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
         ssoCode: String,
         ssoCodeVerifier: String,
         ssoRedirectUri: String,
-        captchaToken: String?,
         organizationIdentifier: String,
     ): LoginResult
 
@@ -239,7 +228,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
         email: String,
         password: String?,
         newDeviceOtp: String,
-        captchaToken: String?,
         orgIdentifier: String?,
     ): LoginResult
 
@@ -294,7 +282,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
         masterPassword: String,
         masterPasswordHint: String?,
         emailVerificationToken: String? = null,
-        captchaToken: String?,
         shouldCheckDataBreaches: Boolean,
         isMasterPasswordStrong: Boolean,
     ): RegisterResult
@@ -331,11 +318,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
         password: String,
         passwordHint: String?,
     ): SetPasswordResult
-
-    /**
-     * Set the value of [captchaTokenResultFlow].
-     */
-    fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult)
 
     /**
      * Set the value of [duoTokenResultFlow].

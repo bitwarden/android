@@ -115,11 +115,11 @@
             android:theme="@android:style/Theme.NoDisplay" />
 
         <activity
-            android:name=".AutofillTotpCopyActivity"
+            android:name=".AutofillCallbackActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:noHistory="true"
-            android:theme="@style/AutofillTotpCopyTheme" />
+            android:theme="@style/AutofillCallbackTheme" />
 
         <activity
             android:name=".AuthCallbackActivity"
@@ -127,16 +127,6 @@
             android:launchMode="singleTop"
             android:noHistory="true"
             android:theme="@android:style/Theme.NoDisplay">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="captcha-callback"
-                    android:scheme="bitwarden" />
-            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

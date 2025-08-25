@@ -11,11 +11,11 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -97,10 +97,7 @@ class OtherScreenTest : BitwardenComposeTest() {
     @Test
     fun `on clear clipboard row click should show show clipboard selection dialog`() {
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Never. Clear clipboard. " +
-                    "Automatically clear copied values from your clipboard.",
-            )
+            .onNodeWithContentDescription(label = "Never. Clear clipboard")
             .performScrollTo()
             .performClick()
         composeTestRule
@@ -112,10 +109,7 @@ class OtherScreenTest : BitwardenComposeTest() {
     @Test
     fun `on clear clipboard dialog item click should send ClearClipboardFrequencyChange`() {
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Never. Clear clipboard. " +
-                    "Automatically clear copied values from your clipboard.",
-            )
+            .onNodeWithContentDescription(label = "Never. Clear clipboard")
             .performScrollTo()
             .performClick()
         composeTestRule
@@ -136,10 +130,7 @@ class OtherScreenTest : BitwardenComposeTest() {
     @Test
     fun `on clear clipboard dialog cancel should dismiss dialog`() {
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Never. Clear clipboard. " +
-                    "Automatically clear copied values from your clipboard.",
-            )
+            .onNodeWithContentDescription(label = "Never. Clear clipboard")
             .performScrollTo()
             .performClick()
         composeTestRule.onNodeWithText("Cancel").performClick()

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk.util
 
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.network.model.AccountKeysJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -63,6 +64,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedOnboardingStatus = mutableMapOf<String, OnboardingStatus?>()
     private val storedShowImportLogins = mutableMapOf<String, Boolean?>()
     private val storedLastLockTimestampState = mutableMapOf<String, Instant?>()
+    private val storedAccountKeys = mutableMapOf<String, AccountKeysJson?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -137,10 +139,22 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedUserKeys[userId] = userKey
     }
 
+    @Deprecated("Use getAccountKeys instead.", replaceWith = ReplaceWith("getAccountKeys"))
     override fun getPrivateKey(userId: String): String? = storedPrivateKeys[userId]
 
+    @Deprecated("Use storeAccountKeys instead.", replaceWith = ReplaceWith("storeAccountKeys"))
     override fun storePrivateKey(userId: String, privateKey: String?) {
         storedPrivateKeys[userId] = privateKey
+    }
+
+    override fun getAccountKeys(userId: String): AccountKeysJson? =
+        storedAccountKeys[userId]
+
+    override fun storeAccountKeys(
+        userId: String,
+        accountKeys: AccountKeysJson?,
+    ) {
+        storedAccountKeys[userId] = accountKeys
     }
 
     override fun getTwoFactorToken(email: String): String? = storedTwoFactorTokens[email]
@@ -369,8 +383,16 @@ class FakeAuthDiskSource : AuthDiskSource {
     /**
      * Assert that the [privateKey] was stored successfully using the [userId].
      */
+    @Deprecated("Use assertAccountKeys instead.", replaceWith = ReplaceWith("assertAccountKeys"))
     fun assertPrivateKey(userId: String, privateKey: String?) {
         assertEquals(privateKey, storedPrivateKeys[userId])
+    }
+
+    /**
+     * Assert that the [accountKeys] was stored successfully using the [userId].
+     */
+    fun assertAccountKeys(userId: String, accountKeys: AccountKeysJson?) {
+        assertEquals(accountKeys, storedAccountKeys[userId])
     }
 
     /**

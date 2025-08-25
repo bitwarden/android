@@ -4,6 +4,7 @@
     <string name="add_folder">Adicionar pasta</string>
     <string name="add_item">Adicionar Item</string>
     <string name="an_error_has_occurred">Ocorreu um erro.</string>
+    <string name="apply">Apply</string>
     <string name="back">Voltar</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Cancelar</string>
@@ -85,7 +86,7 @@
     <string name="edit_card">Editar cartão</string>
     <string name="edit_identity">Editar identidade</string>
     <string name="edit_note">Editar nota</string>
-    <string name="edit_ssh_key">Edit SSH key</string>
+    <string name="edit_ssh_key">Editar chave SSH</string>
     <string name="enter_email_for_hint">Digite o endereço de e-mail da sua conta para receber a dica da sua senha mestra.</string>
     <string name="favorite">Favorito</string>
     <string name="unfavorite">Desfavoritar</string>
@@ -101,8 +102,8 @@
     <string name="one_minute">1 minuto</string>
     <string name="four_hours">4 horas</string>
     <string name="immediately">Imediatamente</string>
-    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
-    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
+    <string name="vault_timeout_log_out_confirmation_title">Definir tempo limite da sessão para \"Encerrar sessão\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">Após o período de tempo limite, você será desconectado. Você precisará estar conectado à internet para entrar e acessar o seu cofre novamente. Suas configurações e PIN salvos neste dispositivo não serão alterados.</string>
     <string name="logging_in">Iniciando Sessão...</string>
     <string name="login_to_bitwarden">Iniciar sessão no Bitwarden</string>
     <string name="master_password_confirmation_val_message">A confirmação de senha não está correta.</string>
@@ -146,14 +147,14 @@
     <string name="syncing">Sincronizando...</string>
     <string name="syncing_complete">Sincronização completa</string>
     <string name="two_step_login">Login em Duas Etapas</string>
-    <string name="unlock_with">Desbloquear com %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Desbloquear com Código PIN</string>
     <string name="verification_code">Código de Verificação</string>
     <string name="view_login">Ver login</string>
     <string name="view_card">Ver cartão</string>
     <string name="view_identity">Ver identidade</string>
     <string name="view_note">Ver nota</string>
-    <string name="view_ssh_key">View SSH key</string>
+    <string name="view_ssh_key">Ver chave SSH</string>
     <string name="web_vault">Cofre Web bitwarden</string>
     <string name="items">Itens</string>
     <string name="items_for_uri">Itens para %1$s</string>
@@ -286,7 +287,7 @@ A leitura será feita automaticamente.</string>
     <string name="new_uri">Novo URI</string>
     <string name="add_website">Adicionar site</string>
     <string name="base_domain">Domínio de base</string>
-    <string name="default_text">Padrão</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Exato</string>
     <string name="host">Servidor</string>
     <string name="reg_ex">Expressão regular</string>
@@ -356,7 +357,7 @@ A leitura será feita automaticamente.</string>
     <string name="clear_clipboard">Limpar a Área de Transferência</string>
     <string name="clear_clipboard_description">Limpar automaticamente valores copiados da sua área de transferência.</string>
     <string name="default_uri_match_detection">Detecção de Correspondência de URI Padrão</string>
-    <string name="default_uri_match_detection_description">Escolha a maneira padrão pela qual a detecção de correspondência de URI é manipulada para credenciais ao executar ações como preenchimento automático.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Altere o tema de cor do aplicativo.</string>
     <string name="copy_notes">Copiar Nota</string>
@@ -364,15 +365,14 @@ A leitura será feita automaticamente.</string>
     <string name="exit_confirmation">Você tem certeza que deseja sair do Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Exigir senha mestra ao reiniciar o app?</string>
     <string name="pin_require_master_password_restart">Você quer exigir o desbloqueio com a sua senha mestra quando o aplicativo for reiniciado?</string>
-    <string name="ask_to_add_login">Pedir para adicionar uma conta</string>
-    <string name="ask_to_add_login_description">Pedir para adicionar um item se um não for encontrado no seu cofre.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Ao reiniciar o App</string>
     <string name="capitalize">Iniciais em Maiúsculas</string>
     <string name="include_number">Incluir número</string>
     <string name="download">Baixar</string>
     <string name="login_expired">A sua sessão expirou.</string>
     <string name="biometrics_direction">Verificação biométrica</string>
-    <string name="biometrics">Biometria</string>
     <string name="biometrics_failed">Falha na Biometria</string>
     <string name="biometrics_decoding_failure">Faça o login com sua senha mestra ou PIN, então reative o login biométrico nas Configurações.</string>
     <string name="use_biometrics_to_unlock">Usar biometria para desbloquear</string>
@@ -420,7 +420,6 @@ A leitura será feita automaticamente.</string>
     <string name="master_password_policy_validation_title">Senha Inválida</string>
     <string name="master_password_policy_validation_message">A senha não atende aos requisitos da organização. Por favor, verifique as informações da política e tente novamente.</string>
     <string name="loading">Carregando</string>
-    <string name="accept_policies_error">Os Termos de Serviço e a Política de Privacidade não foram reconhecidos.</string>
     <string name="terms_of_service">Termos de Serviço</string>
     <string name="privacy_policy">Política de Privacidade</string>
     <string name="passkey_management">Gerenciamento de chaves de acesso</string>
@@ -485,7 +484,6 @@ A leitura será feita automaticamente.</string>
     <string name="password_prompt">Nova solicitação de senha mestra</string>
     <string name="password_confirmation">Confirmação de senha mestra</string>
     <string name="password_confirmation_desc">Esta ação é protegida, para continuar por favor reinsira a sua senha mestra para verificar a sua identidade.</string>
-    <string name="captcha_failed">Captcha falhou. Por favor, tente novamente.</string>
     <string name="update_master_password">Atualizar senha mestra</string>
     <string name="update_master_password_warning">A sua senha mestra foi alterada recentemente por um administrador na sua organização. Para acessar o cofre, você precisa atualizar sua senha mestra agora. O processo desconectará você da sessão atual, exigindo que você inicie a sessão novamente. Sessões ativas em outros dispositivos podem continuar ativas por até uma hora.</string>
     <string name="updating_password">Atualizando senha</string>
@@ -609,8 +607,6 @@ Você deseja mudar para esta conta?</string>
     <string name="language">Idioma</string>
     <string name="language_change_x_description">O idioma foi alterado para %1$s. Por favor, reinicie o aplicativo para ver a alteração</string>
     <string name="default_system">Padrão (Sistema)</string>
-    <string name="important">Importante</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Sua senha mestra não pode ser recuperada se você esquecê-la! Mínimo de %1$s caracteres.</string>
     <string name="weak_master_password">Senha mestra fraca</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Senha fraca identificada. Use uma senha forte para proteger a sua conta. Você tem certeza que deseja usar uma senha fraca?</string>
     <string name="weak">Fraca</string>
@@ -700,14 +696,13 @@ Você deseja mudar para esta conta?</string>
     <string name="launch_web_authn">Iniciar WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Houve um erro ao iniciar a autenticação de dois fatores WebAuthn</string>
     <string name="self_hosted_server_url">URL do servidor auto-hospedado</string>
-    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">A operação de credencial falhou porque o usuário não pôde ser verificado.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">A operação da senha falhou porque o usuário não pôde ser verificado.</string>
     <string name="user_verification_direction">Verificação de usuário</string>
     <string name="create_account_on">Criar conta em</string>
     <string name="create_account_on_with_colon">Criar conta em:</string>
     <string name="we_sent_an_email_to">Enviamos um e-mail para %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ao continuar, você concorda com os Termos de Serviço e Política de Privacidade</string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Ao ativar esse botão, você concorda com os <annotation link="termsOfService">Termos de Serviço</annotation> e a <annotation link="privacyPolicy">Política de Privacidade</annotation></string>
     <string name="unsubscribe">Cancelar inscrição</string>
     <string name="check_your_email">Verifique seu e-mail</string>
     <string name="open_email_app">Abrir app de email</string>
@@ -865,8 +860,6 @@ Você deseja mudar para esta conta?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Você só precisará configurar a Chave de Autenticação para logins que exigem autenticação de dois fatores com um código. A chave irá gerar continuamente códigos de seis dígitos que você pode usar para entrar.</string>
     <string name="coachmark_3_of_3">3 de 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Você deve adicionar um endereço web para usar o preenchimento automático para acessar esta conta.</string>
-    <string name="single_tap_passkey_creation">Criação de senha com um toque</string>
-    <string name="single_tap_passkey_authentication">Entrada de senha com um toque</string>
     <string name="learn_about_new_logins">Aprenda sobre novos logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Vamos guiá-lo através dos principais recursos para adicionar um novo login.</string>
     <string name="explore_the_generator">Explore o gerador</string>
@@ -904,12 +897,12 @@ Você deseja mudar para esta conta?</string>
     <string name="passkey_operation_failed_because_the_request_is_invalid">A operação da chave de acesso falhou porque o pedido é inválido.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">A operação da chave de acesso falhou porque não foi selecionado nenhum item.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A operação com a chave de acesso falhou porque a solicitação não é compatível.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
-    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
-    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
-    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
-    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">A operação de senha falhou porque o item selecionado não existe.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">A operação de senha falhou porque nenhum item foi selecionado.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">A operação de credenciais falhou porque o número de tentativas de verificação do usuário foi excedido.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">A operação de credenciais falhou porque o usuário está bloqueado.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">A operação de credencial falhou porque o item selecionado não existe.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">A operação de credenciais falhou porque a verificação do usuário foi cancelada.</string>
     <string name="self_host_server_url">URL do servidor auto-hospedado</string>
     <string name="use_brave_autofill_integration">Usar a integração do autopreenchimento do Brave</string>
     <string name="use_chrome_autofill_integration">Usar integração com o preenchimento automático do Chrome</string>
@@ -968,8 +961,8 @@ Você deseja mudar para esta conta?</string>
     <string name="view_text_send">Ver Envio de texto</string>
     <string name="delete_send">Excluir Envio</string>
     <string name="missing_send_resync_your_vault">Envio ausente, sincronize seu cofre</string>
-    <string name="use_dynamic_colors">Use dynamic colors</string>
-    <string name="use_dynamic_colors_question">Use dynamic colors?</string>
+    <string name="use_dynamic_colors">Usar cores dinâmicas</string>
+    <string name="use_dynamic_colors_question">Usar cores dinâmicas?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">As cores dinâmicas usam as cores do sistema e podem não atender todas as diretrizes de acessibilidade.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Operação de senha falhou porque o navegador (%1$s) não é confiável. Selecione \"Confiar\" para adicionar %1$s à lista de aplicativos confiáveis ou \"Cancelar\"\ para abortar a operação.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">A operação de senha falhou porque o navegador não é confiável.</string>
@@ -990,8 +983,8 @@ Você deseja mudar para esta conta?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Tem certeza de que deseja parar de confiar em %s?</string>
     <string name="installed_apps">Apps instalados</string>
     <string name="delete_x">Excluir %s</string>
-    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
-    <string name="decryption_error">Decryption error</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Falha ao descriptografar a cifra. Entre em contato com o suporte.</string>
+    <string name="decryption_error">Erro ao descriptografar</string>
     <string name="add_item_rotation">Adicionar Rotação do Item</string>
     <string name="scan_a_qr_code">Escanear QR code</string>
     <string name="cannot_add_authenticator_key">Não foi possível adicionar chave de autenticação?</string>
@@ -1076,4 +1069,14 @@ Você deseja mudar para esta conta?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

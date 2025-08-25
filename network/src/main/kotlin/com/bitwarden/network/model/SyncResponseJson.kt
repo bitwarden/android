@@ -142,6 +142,8 @@ data class SyncResponseJson(
      * @property isEmailVerified If the profile has a verified email.
      * @property isTwoFactorEnabled If the profile has two factor authentication enabled.
      * @property privateKey The private key of the profile (nullable).
+     * @property accountKeys The account keys associated with the profile. This is temporarily
+     * nullable to maintain backwards compatibility.
      * @property isPremium If the profile is premium.
      * @property culture The culture of the profile (nullable).
      * @property name The name of the profile (nullable).
@@ -175,8 +177,15 @@ data class SyncResponseJson(
         @SerialName("twoFactorEnabled")
         val isTwoFactorEnabled: Boolean,
 
+        @Deprecated(
+            message = "Use `accountKeys` instead",
+            ReplaceWith("profile.accountKeys?.publicKeyEncryptionKeyPair?.wrappedPrivateKey"),
+        )
         @SerialName("privateKey")
         val privateKey: String?,
+
+        @SerialName("accountKeys")
+        val accountKeys: AccountKeysJson?,
 
         @SerialName("premium")
         val isPremium: Boolean,
@@ -989,6 +998,9 @@ data class SyncResponseJson(
      * @property externalId The external ID of the collection (nullable).
      * @property isReadOnly If the collection is marked as read only.
      * @property id The ID of the collection.
+     * @property defaultUserCollectionEmail The offboarded user's email address to be used as name
+     * for the collection.
+     * @property type The collection's type.
      */
     @Serializable
     data class Collection(
@@ -1012,5 +1024,11 @@ data class SyncResponseJson(
 
         @SerialName("manage")
         val canManage: Boolean?,
+
+        @SerialName("defaultUserCollectionEmail")
+        val defaultUserCollectionEmail: String?,
+
+        @SerialName("type")
+        val type: CollectionTypeJson = CollectionTypeJson.SHARED_COLLECTION,
     )
 }

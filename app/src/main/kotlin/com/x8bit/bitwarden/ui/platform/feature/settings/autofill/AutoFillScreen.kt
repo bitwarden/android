@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -26,33 +27,43 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
+import com.bitwarden.ui.platform.base.util.spanStyleOf
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.ui.platform.components.card.actionCardExitAnimation
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.bitwarden.ui.platform.components.dropdown.model.MultiSelectOption
+import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.model.TooltipData
+import com.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
+import com.bitwarden.ui.platform.components.row.BitwardenTextRow
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
-import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.BrowserAutofillSettingsCard
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.handlers.AutoFillHandlers
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.isAdvancedMatching
+import com.x8bit.bitwarden.ui.platform.manager.utils.startBrowserAutofillSettingsActivity
+import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAccessibilitySettingsActivity
+import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAutofillSettingsActivity
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -71,7 +82,6 @@ fun AutoFillScreen(
     onNavigateToPrivilegedAppsList: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     var shouldShowAutofillFallbackDialog by rememberSaveable { mutableStateOf(false) }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -83,7 +93,6 @@ fun AutoFillScreen(
 
             AutoFillEvent.NavigateToAutofillSettings -> {
                 val isSuccess = intentManager.startSystemAutofillSettingsActivity()
-
                 shouldShowAutofillFallbackDialog = !isSuccess
             }
 
@@ -92,7 +101,7 @@ fun AutoFillScreen(
             }
 
             AutoFillEvent.NavigateToSettings -> {
-                intentManager.startCredentialManagerSettings(context)
+                intentManager.startCredentialManagerSettings()
             }
 
             AutoFillEvent.NavigateToSetupAutofill -> onNavigateToSetupAutofill()
@@ -108,6 +117,10 @@ fun AutoFillScreen(
 
             AutoFillEvent.NavigateToPrivilegedAppsListScreen -> {
                 onNavigateToPrivilegedAppsList()
+            }
+
+            AutoFillEvent.NavigateToLearnMore -> {
+                intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
             }
         }
     }
@@ -289,8 +302,8 @@ private fun AutoFillScreenContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenSwitch(
-            label = stringResource(id = BitwardenString.ask_to_add_login),
-            supportingText = stringResource(id = BitwardenString.ask_to_add_login_description),
+            label = stringResource(id = BitwardenString.ask_to_add_item),
+            supportingText = stringResource(id = BitwardenString.ask_to_add_item_description),
             isChecked = state.isAskToAddLoginEnabled,
             onCheckedChange = autoFillHandlers.onAskToAddLoginClick,
             cardStyle = CardStyle.Full,
@@ -303,6 +316,7 @@ private fun AutoFillScreenContent(
         DefaultUriMatchTypeRow(
             selectedUriMatchType = state.defaultUriMatchType,
             onUriMatchTypeSelect = autoFillHandlers.onDefaultUriMatchTypeSelect,
+            onNavigateToLearnMore = autoFillHandlers.onLearnMoreClick,
             modifier = Modifier
                 .testTag("DefaultUriMatchDetectionChooser")
                 .standardHorizontalMargin()
@@ -387,24 +401,205 @@ private fun AccessibilityAutofillSwitch(
 private fun DefaultUriMatchTypeRow(
     selectedUriMatchType: UriMatchType,
     onUriMatchTypeSelect: (UriMatchType) -> Unit,
+    onNavigateToLearnMore: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var showAdvancedDialog by rememberSaveable { mutableStateOf(false) }
+    var optionPendingConfirmation by rememberSaveable { mutableStateOf<UriMatchType?>(null) }
+    var shouldShowLearnMoreMatchDetectionDialog by rememberSaveable { mutableStateOf(false) }
+
+    UriMatchSelectionButton(
+        selectedUriMatchType = selectedUriMatchType,
+        onOptionSelected = { selectedOption ->
+            if (selectedOption.isAdvancedMatching()) {
+                optionPendingConfirmation = selectedOption
+                showAdvancedDialog = true
+            } else {
+                onUriMatchTypeSelect(selectedOption)
+                optionPendingConfirmation = null
+                showAdvancedDialog = false
+            }
+        },
+        modifier = modifier,
+    )
+
+    val currentOptionToConfirm = optionPendingConfirmation
+    if (showAdvancedDialog && currentOptionToConfirm != null) {
+        AdvancedMatchDetectionWarningDialog(
+            pendingOption = currentOptionToConfirm,
+            onDialogConfirm = {
+                onUriMatchTypeSelect(currentOptionToConfirm)
+                showAdvancedDialog = false
+                optionPendingConfirmation = null
+                shouldShowLearnMoreMatchDetectionDialog = true
+            },
+            onDialogDismiss = {
+                showAdvancedDialog = false
+                optionPendingConfirmation = null
+            },
+        )
+    }
+
+    if (shouldShowLearnMoreMatchDetectionDialog) {
+        MatchDetectionLearnMoreDialog(
+            uriMatchType = selectedUriMatchType,
+            onDialogConfirm = {
+                onNavigateToLearnMore()
+                shouldShowLearnMoreMatchDetectionDialog = false
+            },
+            onDialogDismiss = {
+                shouldShowLearnMoreMatchDetectionDialog = false
+            },
+        )
+    }
+}
+
+@Composable
+private fun AdvancedMatchDetectionWarningDialog(
+    pendingOption: UriMatchType,
+    onDialogConfirm: () -> Unit,
+    onDialogDismiss: () -> Unit,
+) {
+    val descriptionStringResId =
+        when (pendingOption) {
+            UriMatchType.STARTS_WITH -> {
+                BitwardenString.advanced_option_with_increased_risk_of_exposing_credentials
+            }
+
+            UriMatchType.REGULAR_EXPRESSION -> {
+                BitwardenString.advanced_option_increased_risk_exposing_credentials_used_incorrectly
+            }
+
+            UriMatchType.HOST,
+            UriMatchType.DOMAIN,
+            UriMatchType.EXACT,
+            UriMatchType.NEVER,
+                -> {
+                error("Unexpected value $pendingOption on AdvancedMatchDetectionWarningDialog")
+            }
+        }
+
+    BitwardenTwoButtonDialog(
+        title = stringResource(
+            id = BitwardenString.are_you_sure_you_want_to_use,
+            formatArgs = arrayOf(
+                pendingOption.displayLabel(),
+            ),
+        ),
+        message = stringResource(
+            id = descriptionStringResId,
+        ),
+        confirmButtonText = stringResource(id = BitwardenString.yes),
+        dismissButtonText = stringResource(id = BitwardenString.cancel),
+        onConfirmClick = onDialogConfirm,
+        onDismissClick = onDialogDismiss,
+        onDismissRequest = onDialogDismiss,
+    )
+}
+
+@Composable
+private fun UriMatchSelectionButton(
+    selectedUriMatchType: UriMatchType,
+    onOptionSelected: (UriMatchType) -> Unit,
     modifier: Modifier = Modifier,
     resources: Resources = LocalContext.current.resources,
 ) {
+    val advancedOptions = UriMatchType.entries.filter { it.isAdvancedMatching() }
+    val options = persistentListOfNotNull(
+        *UriMatchType
+            .entries
+            .filter { !it.isAdvancedMatching() }
+            .map { MultiSelectOption.Row(it.displayLabel()) }
+            .toTypedArray(),
+        if (advancedOptions.isNotEmpty()) {
+            MultiSelectOption.Header(
+                title = stringResource(id = BitwardenString.advanced_options),
+                testTag = "AdvancedOptionsSection",
+            )
+        } else {
+            null
+        },
+        *advancedOptions
+            .map { MultiSelectOption.Row(it.displayLabel()) }
+            .toTypedArray(),
+    )
+
     BitwardenMultiSelectButton(
         label = stringResource(id = BitwardenString.default_uri_match_detection),
-        options = UriMatchType.entries.map { it.displayLabel() }.toImmutableList(),
-        selectedOption = selectedUriMatchType.displayLabel(),
-        onOptionSelected = { selectedOption ->
-            onUriMatchTypeSelect(
-                UriMatchType
-                    .entries
-                    .first { it.displayLabel.toString(resources) == selectedOption },
-            )
+        options = options,
+        selectedOption = MultiSelectOption.Row(selectedUriMatchType.displayLabel()),
+        onOptionSelected = { row ->
+            val newSelectedType = UriMatchType
+                .entries
+                .first { it.displayLabel(resources) == row.title }
+            onOptionSelected(newSelectedType)
         },
-        supportingText = stringResource(
-            id = BitwardenString.default_uri_match_detection_description,
-        ),
         cardStyle = CardStyle.Full,
+        supportingContent = { SupportingTextForMatchDetection(selectedUriMatchType) },
         modifier = modifier,
+    )
+}
+
+@Composable
+private fun MatchDetectionLearnMoreDialog(
+    uriMatchType: UriMatchType,
+    onDialogConfirm: () -> Unit,
+    onDialogDismiss: () -> Unit,
+) {
+    BitwardenTwoButtonDialog(
+        title = stringResource(id = BitwardenString.keep_your_credential_secure),
+        message = stringResource(
+            id = BitwardenString.learn_more_about_how_to_keep_credentirals_secure,
+            formatArgs = arrayOf(uriMatchType.displayLabel()),
+        ),
+        confirmButtonText = stringResource(id = BitwardenString.learn_more),
+        dismissButtonText = stringResource(id = BitwardenString.close),
+        onConfirmClick = onDialogConfirm,
+        onDismissClick = onDialogDismiss,
+        onDismissRequest = onDialogDismiss,
+    )
+}
+
+@Composable
+private fun SupportingTextForMatchDetection(
+    uriMatchType: UriMatchType,
+) {
+    val stringResId =
+        when (uriMatchType) {
+            UriMatchType.STARTS_WITH -> {
+                BitwardenString.default_uri_match_detection_description_advanced_options
+            }
+
+            UriMatchType.REGULAR_EXPRESSION -> {
+                BitwardenString.default_uri_match_detection_description_advanced_options_incorrectly
+            }
+
+            UriMatchType.HOST,
+            UriMatchType.DOMAIN,
+            UriMatchType.EXACT,
+            UriMatchType.NEVER,
+                -> {
+                BitwardenString.default_uri_match_detection_description
+            }
+        }
+
+    val supportingAnnotatedString =
+        annotatedStringResource(
+            id = stringResId,
+            emphasisHighlightStyle = spanStyleOf(
+                textStyle = BitwardenTheme.typography.bodyMediumEmphasis,
+                color = BitwardenTheme.colorScheme.text.secondary,
+            ),
+            style = spanStyleOf(
+                textStyle = BitwardenTheme.typography.bodySmall,
+                color = BitwardenTheme.colorScheme.text.secondary,
+            ),
+        )
+
+    Text(
+        text = supportingAnnotatedString,
+        style = BitwardenTheme.typography.bodySmall,
+        color = BitwardenTheme.colorScheme.text.secondary,
+        modifier = Modifier.fillMaxWidth(),
     )
 }

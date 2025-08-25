@@ -4,11 +4,11 @@ import android.content.Intent
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -36,7 +36,6 @@ import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticato
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut
 import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
@@ -84,6 +83,7 @@ class MainViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val appResumeManager: AppResumeManager,
     private val clock: Clock,
+    private val toastManager: ToastManager,
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
     initialState = MainState(
         theme = settingsRepository.appTheme,
@@ -433,16 +433,15 @@ class MainViewModel @Inject constructor(
             )
             when (emailTokenResult) {
                 is EmailTokenResult.Error -> {
-                    sendEvent(
-                        MainEvent.ShowToast(
-                            message = emailTokenResult
-                                .message
-                                ?.asText()
-                                ?: BitwardenString
-                                    .there_was_an_issue_validating_the_registration_token
-                                    .asText(),
-                        ),
-                    )
+                    emailTokenResult
+                        .message
+                        ?.let { toastManager.show(message = it) }
+                        ?: run {
+                            toastManager.show(
+                                messageId = BitwardenString
+                                    .there_was_an_issue_validating_the_registration_token,
+                            )
+                        }
                 }
 
                 EmailTokenResult.Expired -> {
@@ -584,11 +583,6 @@ sealed class MainEvent {
      * Navigate to the debug menu.
      */
     data object NavigateToDebugMenu : MainEvent()
-
-    /**
-     * Show a toast with the given [message].
-     */
-    data class ShowToast(val message: Text) : MainEvent()
 
     /**
      * Indicates that the app language has been updated.

@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.handlers
 
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultAction

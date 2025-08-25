@@ -4,6 +4,7 @@
     <string name="add_folder">Map toevoegen</string>
     <string name="add_item">Item toevoegen</string>
     <string name="an_error_has_occurred">Er is een fout opgetreden.</string>
+    <string name="apply">Toepassen</string>
     <string name="back">Terug</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Annuleren</string>
@@ -146,7 +147,7 @@
     <string name="syncing">Synchroniseren...</string>
     <string name="syncing_complete">Synchronisatie voltooid</string>
     <string name="two_step_login">Tweestapsaanmelding</string>
-    <string name="unlock_with">Ontgrendelen met %1$s</string>
+    <string name="unlock_with_biometrics">Biometrisch ontgrendelen</string>
     <string name="unlock_with_pin">Ontgrendelen met PIN</string>
     <string name="verification_code">Verificatiecode</string>
     <string name="view_login">Login bekijken</string>
@@ -286,7 +287,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="new_uri">Nieuwe URI</string>
     <string name="add_website">Website toevoegen</string>
     <string name="base_domain">Basisdomein</string>
-    <string name="default_text">Standaard</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Exact</string>
     <string name="host">Hostnaam</string>
     <string name="reg_ex">Reguliere expressie</string>
@@ -356,7 +357,7 @@ Het scannen gebeurt automatisch.</string>
     <string name="clear_clipboard">Klembord wissen</string>
     <string name="clear_clipboard_description">Gekopieerde waarden automatisch van het klembord wissen.</string>
     <string name="default_uri_match_detection">Standaard URI-overeenkomstdetectie</string>
-    <string name="default_uri_match_detection_description">Kies de standaardmethode voor detectie van URI-overeenkomsten voor logins bij acties, zoals automatisch invullen.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Thema</string>
     <string name="theme_description">Het kleurenthema van de applicatie wijzigen.</string>
     <string name="copy_notes">Notities kopiëren</string>
@@ -364,15 +365,14 @@ Het scannen gebeurt automatisch.</string>
     <string name="exit_confirmation">Weet je zeker dat je Bitwarden wilt afsluiten?</string>
     <string name="require_master_password_on_app_restart">Hoofdwachtwoord vereisen bij herstart van de app?</string>
     <string name="pin_require_master_password_restart">Wil je verplicht ontgrendelen met je hoofdwachtwoord zodra de applicatie opnieuw wordt gestart?</string>
-    <string name="ask_to_add_login">Vragen login toe te voegen</string>
-    <string name="ask_to_add_login_description">Vraag om een item toe te voegen als deze niet in je kluis is gevonden.</string>
+    <string name="ask_to_add_item">Vraag om item toe te voegen</string>
+    <string name="ask_to_add_item_description">Vraag om een item toe te voegen als deze niet in je kluis is gevonden.</string>
     <string name="on_restart">Na opnieuw starten</string>
     <string name="capitalize">Beginhoofdletters</string>
     <string name="include_number">Cijfer toevoegen</string>
     <string name="download">Downloaden</string>
     <string name="login_expired">Je inlogsessie is verlopen.</string>
     <string name="biometrics_direction">Biometrische verificatie</string>
-    <string name="biometrics">Biometrie</string>
     <string name="biometrics_failed">Biometrie mislukt</string>
     <string name="biometrics_decoding_failure">Log in met je hoofdwachtwoord of pincode en schakel daarna biometrische login opnieuw in in bij de instellingen.</string>
     <string name="use_biometrics_to_unlock">Biometrie gebruiken om te ontgrendelen</string>
@@ -420,7 +420,6 @@ Het scannen gebeurt automatisch.</string>
     <string name="master_password_policy_validation_title">Ongeldig wachtwoord</string>
     <string name="master_password_policy_validation_message">Het wachtwoord voldoet niet aan de organisatievereisten. Controleer het beleid en probeer het opnieuw.</string>
     <string name="loading">Laden</string>
-    <string name="accept_policies_error">Algemene voorwaarden en privacybeleid zijn nog niet erkend.</string>
     <string name="terms_of_service">Algemene voorwaarden</string>
     <string name="privacy_policy">Privacybeleid</string>
     <string name="passkey_management">Passkey-beheer</string>
@@ -485,7 +484,6 @@ Het scannen gebeurt automatisch.</string>
     <string name="password_prompt">Hoofdwachtwoord opnieuw vragen</string>
     <string name="password_confirmation">Hoofdwachtwoord bevestigen</string>
     <string name="password_confirmation_desc">Deze actie is beveiligd. Voer je hoofdwachtwoord opnieuw in om je identiteit vast te stellen en door te gaan.</string>
-    <string name="captcha_failed">Captcha verificatie is mislukt. Probeer het nog eens.</string>
     <string name="update_master_password">Hoofdwachtwoord bijgewerken</string>
     <string name="update_master_password_warning">Je hoofdwachtwoord is onlangs veranderd door een beheerder in jouw organisatie. Om toegang te krijgen tot de kluis, moet je deze nu bijwerken. Doorgaan zal je huidige sessie uitloggen, waarna je opnieuw moet inloggen. Actieve sessies op andere apparaten blijven mogelijk nog een uur actief.</string>
     <string name="updating_password">Wachtwoord bijwerken</string>
@@ -609,8 +607,6 @@ Wilt u naar dit account wisselen?</string>
     <string name="language">Taal</string>
     <string name="language_change_x_description">De taal is veranderd in %1$s. Herstart de app om de verandering te zien</string>
     <string name="default_system">Standaard (Systeem)</string>
-    <string name="important">Belangrijk</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Je hoofdwachtwoord kan niet worden hersteld als je het vergeet! Minimaal %1$s tekens.</string>
     <string name="weak_master_password">Zwak hoofdwachtwoord</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Zwakke wachtwoord geïdentificeerd. Gebruik een sterk wachtwoord om uw account te beschermen. Weet u zeker dat u een zwak wachtwoord wilt gebruiken?</string>
     <string name="weak">Zwak</string>
@@ -707,7 +703,6 @@ Wilt u naar dit account wisselen?</string>
     <string name="create_account_on_with_colon">Account maken bij:</string>
     <string name="we_sent_an_email_to">We hebben een e-mail gestuurd naar %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Door verder te gaan, gaat je akkoord met de Algemene voorwaarden en het Privacybeleid</string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Het het inschakelen ga je akkoord met de <annotation link="termsOfService">Algemene voorwaarden</annotation> en het <annotation link="privacyPolicy">Privacybeleid</annotation></string>
     <string name="unsubscribe">Afmelden</string>
     <string name="check_your_email">Check je e-mail</string>
     <string name="open_email_app">E-mail-app openen</string>
@@ -865,8 +860,6 @@ Wilt u naar dit account wisselen?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Je hoeft alleen de Authenticator sleutel in te stellen voor logins die tweestapsverificatie vereisen met een code. De sleutel genereert continu zescijferige codes die je kunt gebruiken om in te loggen.</string>
     <string name="coachmark_3_of_3">3 VAN 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Je moet een webadres toevoegen om auto-invullen te gebruiken om toegang te krijgen tot dit account.</string>
-    <string name="single_tap_passkey_creation">Passkey aanmaken met één tik</string>
-    <string name="single_tap_passkey_authentication">Passkey login met één tik</string>
     <string name="learn_about_new_logins">Meer informatie over nieuwe logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We doorlopen de belangrijkste functies voor het toevoegen van een nieuwe login.</string>
     <string name="explore_the_generator">Ontdek de generator</string>
@@ -1076,4 +1069,14 @@ Wilt u naar dit account wisselen?</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokale items zijn ingevouwen, klik om uit te vouwen.</string>
     <string name="items_expanded_click_to_collapse">Items zijn uitgevouwen, klik om in te vouwen.</string>
     <string name="items_are_collapsed_click_to_expand">Items zijn ingevouwen, klik om uit te vouwen.</string>
+    <string name="select_a_card_for_x">Kies een kaart voor %s</string>
+    <string name="advanced_options">Geavanceerde opties</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Lees meer over overeenkomstdetectie</annotation></string>
+    <string name="keep_your_credential_secure">Houd je inloggegevens veilig</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Leer meer over hoe je de inloggegevens veilig kunt houden bij het gebruik van “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Weet je zeker dat je “%1$s” wilt gebruiken?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">De URI match detectie bepaalt hoe Bitwarden autofill-suggesties herkent.\n<annotation emphasis="bold">Waarschuwing:</annotation> \"Reguliere expressie\" is een geavanceerde optie met verhoogd risico voor het blootstellen van inloggegevens als je het niet goed gebruikt.</string>
+    <string name="default_uri_match_detection_description_advanced_options">De URI match detectie bepaalt hoe Bitwarden autofill-suggesties herkent.\n<annotation emphasis="bold">Waarschuwing:</annotation> \"Begint met\" is een geavanceerde optie met verhoogd risico voor het blootstellen van inloggegevens als je het niet goed gebruikt.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Begint met\" is een geavanceerde optie met een verhoogd risico op het blootstellen van inloggegevens.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Reguliere expressie\" is een geavanceerde optie met een verhoogd risico op het blootstellen van inloggegevens als je het verkeerd gebruikt.</string>
 </resources>

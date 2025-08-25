@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.hexToColor
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
+import com.bitwarden.ui.platform.components.account.util.initials
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -25,15 +27,12 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.util.toCreateCredentialRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toGetCredentialsRequestOrNull
-import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.emptyInputDialogMessage
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenErrorMessage
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -61,7 +60,6 @@ class VaultUnlockViewModel @Inject constructor(
     private val bitwardenCredentialManager: BitwardenCredentialManager,
     private val appResumeManager: AppResumeManager,
     private val vaultLockManager: VaultLockManager,
-    environmentRepo: EnvironmentRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<VaultUnlockState, VaultUnlockEvent, VaultUnlockAction>(
     // We load the state from the savedStateHandle for testing purposes.
@@ -96,7 +94,7 @@ class VaultUnlockViewModel @Inject constructor(
             initials = activeAccountSummary.initials,
             email = activeAccountSummary.email,
             dialog = null,
-            environmentUrl = environmentRepo.environment.label,
+            environmentUrl = activeAccount.environment.label,
             input = "",
             isBiometricEnabled = activeAccount.isBiometricsEnabled,
             isBiometricsValid = isBiometricsValid,
@@ -113,14 +111,6 @@ class VaultUnlockViewModel @Inject constructor(
     },
 ) {
     init {
-        environmentRepo
-            .environmentStateFlow
-            .onEach { environment ->
-                mutableStateFlow.update {
-                    it.copy(environmentUrl = environment.label)
-                }
-            }
-            .launchIn(viewModelScope)
         authRepository
             .userStateFlow
             .onEach {

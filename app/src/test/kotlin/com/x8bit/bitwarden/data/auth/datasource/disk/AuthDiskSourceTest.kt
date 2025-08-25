@@ -10,6 +10,7 @@ import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
+import com.bitwarden.network.model.createMockAccountKeysJson
 import com.bitwarden.network.model.createMockOrganization
 import com.bitwarden.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -280,6 +281,10 @@ class AuthDiskSourceTest {
             userAutoUnlockKey = "userAutoUnlockKey",
         )
         authDiskSource.storePrivateKey(userId = userId, privateKey = "privateKey")
+        authDiskSource.storeAccountKeys(
+            userId = userId,
+            accountKeys = createMockAccountKeysJson(number = 1),
+        )
         authDiskSource.storeOrganizationKeys(
             userId = userId,
             organizationKeys = mapOf("organizationId" to "key"),
@@ -330,6 +335,7 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getUserKey(userId = userId))
         assertNull(authDiskSource.getUserAutoUnlockKey(userId = userId))
         assertNull(authDiskSource.getPrivateKey(userId = userId))
+        assertNull(authDiskSource.getAccountKeys(userId = userId))
         assertNull(authDiskSource.getOrganizationKeys(userId = userId))
         assertNull(authDiskSource.getOrganizations(userId = userId))
         assertNull(authDiskSource.getPolicies(userId = userId))
@@ -473,6 +479,43 @@ class AuthDiskSourceTest {
         assertEquals(
             mockPrivateKey,
             actual,
+        )
+    }
+
+    @Test
+    fun `getAccountKeys should pull from SharedPreferences`() {
+        val accountKeysBaseKey = "bwSecureStorage:profileAccountKeys"
+        val mockUserId = "mockUserId"
+        val mockAccountKeys = createMockAccountKeysJson(number = 1)
+        fakeEncryptedSharedPreferences.edit {
+            putString(
+                "${accountKeysBaseKey}_$mockUserId",
+                json.encodeToString(mockAccountKeys),
+            )
+        }
+        val actual = authDiskSource.getAccountKeys(userId = mockUserId)
+        assertEquals(
+            mockAccountKeys,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeAccountKeys should update sharedPreferences`() {
+        val accountKeysBaseKey = "bwSecureStorage:profileAccountKeys"
+        val mockUserId = "mockUserId"
+        val mockAccountKeys = createMockAccountKeysJson(number = 1)
+        authDiskSource.storeAccountKeys(
+            userId = mockUserId,
+            accountKeys = mockAccountKeys,
+        )
+        val actual = fakeEncryptedSharedPreferences.getString(
+            "${accountKeysBaseKey}_$mockUserId",
+            null,
+        )
+        assertEquals(
+            json.encodeToJsonElement(mockAccountKeys),
+            json.parseToJsonElement(requireNotNull(actual)),
         )
     }
 

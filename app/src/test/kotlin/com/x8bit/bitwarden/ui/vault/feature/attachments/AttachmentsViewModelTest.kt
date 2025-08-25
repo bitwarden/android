@@ -6,6 +6,7 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -19,7 +20,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.attachments.util.toViewState
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -159,7 +159,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             ),
             isPremiumUser = true,
         )
-        val fileData = IntentManager.FileData(
+        val fileData = FileData(
             fileName = fileName,
             uri = uri,
             sizeBytes = sizeToBig,
@@ -204,7 +204,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                 ),
                 isPremiumUser = true,
             )
-            val fileData = IntentManager.FileData(
+            val fileData = FileData(
                 fileName = fileName,
                 uri = uri,
                 sizeBytes = sizeJustRight,
@@ -279,7 +279,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                 ),
                 isPremiumUser = true,
             )
-            val fileData = IntentManager.FileData(
+            val fileData = FileData(
                 fileName = fileName,
                 uri = uri,
                 sizeBytes = sizeJustRight,
@@ -350,7 +350,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             ),
             isPremiumUser = true,
         )
-        val fileData = IntentManager.FileData(
+        val fileData = FileData(
             fileName = fileName,
             uri = uri,
             sizeBytes = sizeJustRight,
@@ -414,7 +414,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     @Test
     fun `ChooseFile should update state with new file data`() = runTest {
         val uri = createMockUri()
-        val fileData = IntentManager.FileData(
+        val fileData = FileData(
             fileName = "filename-1",
             uri = uri,
             sizeBytes = 100L,

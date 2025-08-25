@@ -4,6 +4,7 @@
     <string name="add_folder">Přidat složku</string>
     <string name="add_item">Přidat položku</string>
     <string name="an_error_has_occurred">Vyskytla se chyba.</string>
+    <string name="apply">Použít</string>
     <string name="back">Zpět</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Zrušit</string>
@@ -146,7 +147,7 @@
     <string name="syncing">Synchronizování...</string>
     <string name="syncing_complete">Synchronizace byla dokončena</string>
     <string name="two_step_login">Dvoufázové přihlášení</string>
-    <string name="unlock_with">Odemknout pomocí %1$s</string>
+    <string name="unlock_with_biometrics">Odemknout pomocí biometrie</string>
     <string name="unlock_with_pin">Odemknout pomocí PIN kódu</string>
     <string name="verification_code">Ověřovací kód</string>
     <string name="view_login">Zobrazit přihlašovací údaje</string>
@@ -286,7 +287,7 @@ Načtení proběhne automaticky.</string>
     <string name="new_uri">Nová URI</string>
     <string name="add_website">Přidat webovou stránku</string>
     <string name="base_domain">Základní doména</string>
-    <string name="default_text">Výchozí</string>
+    <string name="default_text">Výchozí (%1$s)</string>
     <string name="exact">Přesně</string>
     <string name="host">Hostitel</string>
     <string name="reg_ex">Regulární výraz</string>
@@ -356,7 +357,7 @@ Načtení proběhne automaticky.</string>
     <string name="clear_clipboard">Vymazat schránku</string>
     <string name="clear_clipboard_description">Automaticky vymaže zkopírované hodnoty z Vaší schránky.</string>
     <string name="default_uri_match_detection">Výchozí zjišťování shody URI</string>
-    <string name="default_uri_match_detection_description">Vyberte výchozí způsob, jakým se detekuje shoda URI přihlašovacích údajů. Používá se například pro automatické vyplňování.</string>
+    <string name="default_uri_match_detection_description">Detekce shody URI ovládá způsob, jakým Bitwarden identifikuje návrhy automatického vyplňování.</string>
     <string name="theme">Motiv</string>
     <string name="theme_description">Změní barevný motiv aplikace.</string>
     <string name="copy_notes">Kopírovat poznámku</string>
@@ -364,15 +365,14 @@ Načtení proběhne automaticky.</string>
     <string name="exit_confirmation">Opravdu chcete ukončit Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Vyžadovat hlavní heslo při restartu aplikace?</string>
     <string name="pin_require_master_password_restart">Chcete po restartování aplikace vyžadovat hlavní heslo pro odemknutí trezoru?</string>
-    <string name="ask_to_add_login">Ptát se na přidání přihlášení</string>
-    <string name="ask_to_add_login_description">Zeptá se na uložení údajů, pokud nebyly v trezoru nalezeny.</string>
+    <string name="ask_to_add_item">Zeptat se na přidání položky</string>
+    <string name="ask_to_add_item_description">Zeptá se na uložení údajů, pokud nebyly v trezoru nalezeny.</string>
     <string name="on_restart">Při restartu aplikace</string>
     <string name="capitalize">Velká písmena na začátku slova</string>
     <string name="include_number">Zahrnout číslice</string>
     <string name="download">Stáhnout</string>
     <string name="login_expired">Platnost přihlášení vypršela.</string>
     <string name="biometrics_direction">Použít biometrii k ověření</string>
-    <string name="biometrics">Biometrie</string>
     <string name="biometrics_failed">Biometrika selhala</string>
     <string name="biometrics_decoding_failure">Přihlaste se pomocí hlavního hesla nebo PINu a poté znovu zapněte biometrické přihlášení v Nastavení.</string>
     <string name="use_biometrics_to_unlock">Použít biometrii k odemknutí</string>
@@ -420,7 +420,6 @@ Načtení proběhne automaticky.</string>
     <string name="master_password_policy_validation_title">Neplatné heslo</string>
     <string name="master_password_policy_validation_message">Heslo nesplňuje požadavky organizace. Zkontrolujte požadavky a zkuste to znovu.</string>
     <string name="loading">Načítání</string>
-    <string name="accept_policies_error">Podmínky použití a Zásady ochrany osobních údajů nebyly odsouhlaseny.</string>
     <string name="terms_of_service">Podmínky použití</string>
     <string name="privacy_policy">Zásady ochrany osobních údajů</string>
     <string name="passkey_management">Správa přístupových klíčů</string>
@@ -485,7 +484,6 @@ Načtení proběhne automaticky.</string>
     <string name="password_prompt">Zeptat se znovu na hlavní heslo</string>
     <string name="password_confirmation">Potvrzení hlavního hesla</string>
     <string name="password_confirmation_desc">Tato akce je chráněna. Chcete-li pokračovat, zadejte znovu Vaše hlavní heslo, abychom ověřili Vaši totožnost.</string>
-    <string name="captcha_failed">Captcha selhala. Zkuste to znovu.</string>
     <string name="update_master_password">Aktualizovat hlavní heslo</string>
     <string name="update_master_password_warning">Administrátor v organizaci nedávno změnil Vaše hlavní heslo. Pro přístup k trezoru jej nyní musíte změnit. Pokračování Vás odhlásí z Vaší aktuální relace a bude nutné se znovu přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny.</string>
     <string name="updating_password">Aktualizování hesla</string>
@@ -608,8 +606,6 @@ Chcete se přepnout na tento účet?</string>
     <string name="language">Jazyk</string>
     <string name="language_change_x_description">Jazyk byl změněn na %1$s. Pro zobrazení změn restartujte aplikaci.</string>
     <string name="default_system">Výchozí (Systémový)</string>
-    <string name="important">Důležité</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Pokud zapomenete Vaše hlavní heslo, nebude možné jej obnovit! Heslo musí mít alespoň %1$s znaků.</string>
     <string name="weak_master_password">Slabé hlavní heslo</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Slabé heslo bylo nalezeno mezi odhalenými hesly. K zabezpečení Vašeho účtu používejte silné a jedinečné heslo. Opravdu chcete používat toto heslo?</string>
     <string name="weak">Slabé</string>
@@ -706,7 +702,6 @@ Chcete se přepnout na tento účet?</string>
     <string name="create_account_on_with_colon">Vytvořit účet na:</string>
     <string name="we_sent_an_email_to">Poslali jsme e-mail na <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Pokračováním souhlasíte s <annotation link="termsOfService">Podmínkami služby</annotation> a <annotation link="privacyPolicy">Zásadami ochrany osobních údajů</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Zapnutím tohoto spínače souhlasíte s <annotation link="termsOfService">Podmínkami služby</annotation> a <annotation link="privacyPolicy">Zásadami ochrany osobních údajů</annotation></string>
     <string name="unsubscribe">Odhlásit odběr</string>
     <string name="check_your_email">Zkontrolujte Váš e-mail</string>
     <string name="open_email_app">Otevřít e-mailovou aplikaci</string>
@@ -864,8 +859,6 @@ Chcete se přepnout na tento účet?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Budete jen muset nastavit Authenticator pro přihlášení, která vyžadují dvoufaktorové ověření s kódem. Klíč průběžně generuje šestimístné kódy, které můžete použít pro přihlášení.</string>
     <string name="coachmark_3_of_3">3 Z 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Pro přístup k tomuto účtu musíte přidat webovou adresu pro automatické vyplnění.</string>
-    <string name="single_tap_passkey_creation">Vytvoření přístupového hesla jedním klepnutím</string>
-    <string name="single_tap_passkey_authentication">Přihlášení přístupovým heslem jedním klepnutím</string>
     <string name="learn_about_new_logins">Více o nových přihlášeních</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Provedeme Vás klíčovými funkcemi pro přidání nového přihlášení.</string>
     <string name="explore_the_generator">Prozkoumat generátor</string>
@@ -1077,4 +1070,14 @@ při opakování problémů.</string>
     <string name="local_items_are_collapsed_click_to_expand">Místní položky jsou sbaleny; klepnutím rozbalíte.</string>
     <string name="items_expanded_click_to_collapse">Položky jsou rozbaleny; klepnutím sbalíte.</string>
     <string name="items_are_collapsed_click_to_expand">Položky jsou sbaleny; klepnutím rozbalíte.</string>
+    <string name="select_a_card_for_x">Vyberte kartu pro %s</string>
+    <string name="advanced_options">Rozšířené volby</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Další informace o detekci shody</annotation></string>
+    <string name="keep_your_credential_secure">Uchovávejte Vaše přihlašovací údaje v bezpečí</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Zjistěte více o tom, jak udržet přihlašovací údaje při používání \"%1$s\" v bezpečí.</string>
+    <string name="are_you_sure_you_want_to_use">Opravdu chcete použít \"%1$s\"?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">Detekce shody URI ovládá způsob, jakým Bitwarden identifikuje návrhy automatického vyplňování.\n<annotation emphasis="bold">Varování:</annotation> \"Regulární výraz\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů, pokud je použita nesprávně.</string>
+    <string name="default_uri_match_detection_description_advanced_options">Detekce shody URI ovládá způsob, jakým Bitwarden identifikuje návrhy automatického vyplňování.\n<annotation emphasis="bold">Varování:</annotation> \"Začíná na\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů, pokud je použita nesprávně.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Začíná na\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Regulární výraz\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů.</string>
 </resources>

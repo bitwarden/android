@@ -18,8 +18,8 @@
         <item name="windowSplashScreenBackground">@color/ic_launcher_background</item>
     </style>
 
-    <!-- A translucent theme for the autofill TOTP copy activity -->
-    <style name="AutofillTotpCopyTheme" parent="Theme.AppCompat.NoActionBar">
+    <!-- A translucent theme for the autofill callback activity -->
+    <style name="AutofillCallbackTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>

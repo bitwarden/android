@@ -36,14 +36,15 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.auth.feature.checkemail.handlers.rememberCheckEmailHandler
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.utils.startDefaultEmailApplication
 
 /**
  * Top level composable for the check email screen.

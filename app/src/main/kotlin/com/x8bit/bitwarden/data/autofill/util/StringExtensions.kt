@@ -16,3 +16,20 @@ fun String.containsAnyTerms(
             ignoreCase = ignoreCase,
         )
     }
+
+/**
+ * Check whether this string matches any of these [expressions].
+ */
+fun String.matchesAnyExpressions(
+    expressions: List<Regex>,
+): Boolean =
+    expressions.any {
+        this.matches(regex = it)
+    }
+
+/**
+ * Convert this [String] to lowercase and remove all non-alpha characters.
+ */
+fun String.toLowerCaseAndStripNonAlpha(): String = this
+    .lowercase()
+    .replace(Regex("[^a-z]"), "")

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.item
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
@@ -10,13 +11,13 @@ import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -40,7 +41,6 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData

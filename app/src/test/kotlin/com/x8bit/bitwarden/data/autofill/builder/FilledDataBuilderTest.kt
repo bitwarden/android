@@ -177,11 +177,13 @@ class FilledDataBuilderTest {
         runTest {
             // Setup
             val code = "123"
-            val expirationMonth = "January"
+            val expirationMonth = "01"
             val expirationYear = "1999"
             val number = "1234567890"
+            val expirationDate = "0199"
+            val cardholderName = "John"
             val autofillCipher = AutofillCipher.Card(
-                cardholderName = "John",
+                cardholderName = cardholderName,
                 cipherId = null,
                 code = code,
                 expirationMonth = expirationMonth,
@@ -189,11 +191,15 @@ class FilledDataBuilderTest {
                 name = "Cipher One",
                 number = number,
                 subtitle = "Subtitle",
+                brand = "Visa",
             )
             val filledItemCode: FilledItem = mockk()
             val filledItemExpirationMonth: FilledItem = mockk()
             val filledItemExpirationYear: FilledItem = mockk()
             val filledItemNumber: FilledItem = mockk()
+            val filledItemCardholderName: FilledItem = mockk()
+            val filledItemExpirationDate: FilledItem = mockk()
+            val filledItemCardBrand: FilledItem = mockk()
             val autofillViewCode: AutofillView.Card.SecurityCode = mockk {
                 every { buildFilledItemOrNull(code) } returns filledItemCode
             }
@@ -209,6 +215,15 @@ class FilledDataBuilderTest {
             val autofillViewNumberTwo: AutofillView.Card.Number = mockk {
                 every { buildFilledItemOrNull(number) } returns null
             }
+            val autofillViewCardholderName: AutofillView.Card.CardholderName = mockk {
+                every { buildFilledItemOrNull(cardholderName) } returns filledItemCardholderName
+            }
+            val autofillViewExpirationDate: AutofillView.Card.ExpirationDate = mockk {
+                every { buildFilledItemOrNull(expirationDate) } returns filledItemExpirationDate
+            }
+            val autofillViewCardBrand: AutofillView.Card.Brand = mockk {
+                every { buildFilledItemOrNull(autofillCipher.brand) } returns filledItemCardBrand
+            }
             val autofillPartition = AutofillPartition.Card(
                 views = listOf(
                     autofillViewCode,
@@ -216,6 +231,9 @@ class FilledDataBuilderTest {
                     autofillViewExpirationYear,
                     autofillViewNumberOne,
                     autofillViewNumberTwo,
+                    autofillViewCardholderName,
+                    autofillViewExpirationDate,
+                    autofillViewCardBrand,
                 ),
             )
             val ignoreAutofillIds: List<AutofillId> = mockk()
@@ -234,6 +252,9 @@ class FilledDataBuilderTest {
                     filledItemExpirationMonth,
                     filledItemExpirationYear,
                     filledItemNumber,
+                    filledItemCardholderName,
+                    filledItemExpirationDate,
+                    filledItemCardBrand,
                 ),
                 inlinePresentationSpec = null,
             )
@@ -265,6 +286,100 @@ class FilledDataBuilderTest {
                 autofillViewExpirationYear.buildFilledItemOrNull(expirationYear)
                 autofillViewNumberOne.buildFilledItemOrNull(number)
                 autofillViewNumberTwo.buildFilledItemOrNull(number)
+                autofillViewCardholderName.buildFilledItemOrNull(cardholderName)
+                autofillViewExpirationDate.buildFilledItemOrNull(expirationDate)
+                autofillViewCardBrand.buildFilledItemOrNull(autofillCipher.brand)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `build should skip empty AutofillValues and return empty data when Card data is blank`() =
+        runTest {
+            // Setup
+            val code = ""
+            val expirationMonth = ""
+            val expirationYear = ""
+            val number = ""
+            val autofillCipher = AutofillCipher.Card(
+                cardholderName = "",
+                cipherId = null,
+                code = code,
+                expirationMonth = expirationMonth,
+                expirationYear = expirationYear,
+                name = "",
+                number = number,
+                subtitle = "",
+                brand = "",
+            )
+            val autofillViewCode: AutofillView.Card.SecurityCode = mockk()
+            val autofillViewExpirationMonth: AutofillView.Card.ExpirationMonth = mockk()
+            val autofillViewExpirationYear: AutofillView.Card.ExpirationYear = mockk()
+            val autofillViewNumberOne: AutofillView.Card.Number = mockk()
+            val autofillViewNumberTwo: AutofillView.Card.Number = mockk()
+            val autofillViewCardholderName: AutofillView.Card.CardholderName = mockk()
+            val autofillViewExpirationDate: AutofillView.Card.ExpirationDate = mockk()
+            val autofillViewBrand: AutofillView.Card.Brand = mockk()
+            val autofillPartition = AutofillPartition.Card(
+                views = listOf(
+                    autofillViewCode,
+                    autofillViewExpirationMonth,
+                    autofillViewExpirationYear,
+                    autofillViewNumberOne,
+                    autofillViewNumberTwo,
+                    autofillViewCardholderName,
+                    autofillViewExpirationDate,
+                    autofillViewBrand,
+                ),
+            )
+            val ignoreAutofillIds: List<AutofillId> = mockk()
+            val autofillRequest = AutofillRequest.Fillable(
+                ignoreAutofillIds = ignoreAutofillIds,
+                inlinePresentationSpecs = emptyList(),
+                maxInlineSuggestionsCount = 0,
+                packageName = null,
+                partition = autofillPartition,
+                uri = URI,
+            )
+            val filledPartition = FilledPartition(
+                autofillCipher = autofillCipher,
+                filledItems = emptyList(),
+                inlinePresentationSpec = null,
+            )
+            val expected = FilledData(
+                filledPartitions = listOf(
+                    filledPartition,
+                ),
+                ignoreAutofillIds = ignoreAutofillIds,
+                originalPartition = autofillPartition,
+                uri = URI,
+                vaultItemInlinePresentationSpec = null,
+                isVaultLocked = false,
+            )
+            coEvery {
+                autofillCipherProvider.getCardAutofillCiphers()
+            } returns listOf(autofillCipher)
+
+            // Test
+            val actual = filledDataBuilder.build(
+                autofillRequest = autofillRequest,
+            )
+
+            // Verify
+            assertEquals(expected, actual)
+            coVerify(exactly = 1) {
+                autofillCipherProvider.getCardAutofillCiphers()
+            }
+            coVerify(exactly = 0) {
+                autofillViewCode.buildFilledItemOrNull(code)
+                autofillViewExpirationMonth.buildFilledItemOrNull(expirationMonth)
+                autofillViewExpirationYear.buildFilledItemOrNull(expirationYear)
+                autofillViewNumberOne.buildFilledItemOrNull(number)
+                autofillViewNumberTwo.buildFilledItemOrNull(number)
+                autofillViewCardholderName.buildFilledItemOrNull(autofillCipher.cardholderName)
+                autofillViewExpirationMonth.buildFilledItemOrNull(autofillCipher.expirationMonth)
+                autofillViewExpirationYear.buildFilledItemOrNull(autofillCipher.expirationYear)
+                autofillViewBrand.buildFilledItemOrNull(autofillCipher.brand)
             }
         }
 

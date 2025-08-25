@@ -116,15 +116,13 @@ class FilledDataBuilderImpl(
     ): FilledPartition {
         val filledItems = autofillViews
             .mapNotNull { autofillView ->
-                val value = when (autofillView) {
-                    is AutofillView.Card.ExpirationMonth -> autofillCipher.expirationMonth
-                    is AutofillView.Card.ExpirationYear -> autofillCipher.expirationYear
-                    is AutofillView.Card.Number -> autofillCipher.number
-                    is AutofillView.Card.SecurityCode -> autofillCipher.code
-                }
-                autofillView.buildFilledItemOrNull(
-                    value = value,
-                )
+                autofillCipher
+                    .getAutofillValueOrNull(autofillView)
+                    ?.let { value ->
+                        autofillView.buildFilledItemOrNull(
+                            value = value,
+                        )
+                    }
             }
 
         return FilledPartition(
@@ -161,6 +159,48 @@ class FilledDataBuilderImpl(
         )
     }
 }
+
+/**
+ * Get the autofill value for the given [autofillView], or null if no value is available.
+ */
+private fun AutofillCipher.Card.getAutofillValueOrNull(autofillView: AutofillView.Card): String? =
+    when (autofillView) {
+        is AutofillView.Card.CardholderName -> {
+            cardholderName.takeIf { it.isNotEmpty() }
+        }
+
+        is AutofillView.Card.ExpirationMonth -> {
+            expirationMonth.takeIf { it.isNotEmpty() }
+        }
+
+        is AutofillView.Card.ExpirationYear -> {
+            expirationYear.takeIf { it.isNotEmpty() }
+        }
+
+        is AutofillView.Card.Number -> {
+            number
+                .filter { it.isDigit() }
+                .takeIf { it.isNotEmpty() }
+        }
+
+        is AutofillView.Card.SecurityCode -> {
+            code
+                .filter { it.isDigit() }
+                .takeIf { it.isNotEmpty() }
+        }
+
+        is AutofillView.Card.ExpirationDate -> {
+            if (expirationMonth.isNotBlank() && expirationYear.isNotBlank()) {
+                expirationMonth.padStart(2, '0') + expirationYear.takeLast(2)
+            } else {
+                null
+            }
+        }
+
+        is AutofillView.Card.Brand -> {
+            brand.takeIf { it.isNotEmpty() }
+        }
+    }
 
 /**
  * Get the item at the [index]. If that fails, return the last item in the list. If that also fails,

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import androidx.navigation.navOptions
 import com.bitwarden.ui.platform.base.createMockNavHostController
+import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupAutofillRoute
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupCompleteRoute
@@ -242,9 +243,9 @@ class RootNavScreenTest : BitwardenComposeTest() {
             }
         }
 
-        // Make sure navigating to vault unlocked for autofill save works as expected:
+        // Make sure navigating to vault unlocked for autofill save for login works as expected:
         rootNavStateFlow.value = RootNavState.VaultUnlockedForAutofillSave(
-            autofillSaveItem = mockk(),
+            autofillSaveItem = mockk<AutofillSaveItem.Login>(),
         )
         composeTestRule.runOnIdle {
             verify {
@@ -257,6 +258,29 @@ class RootNavScreenTest : BitwardenComposeTest() {
                         vaultAddEditMode = VaultAddEditMode.ADD,
                         vaultItemId = null,
                         vaultItemCipherType = VaultItemCipherType.LOGIN,
+                        selectedFolderId = null,
+                        selectedCollectionId = null,
+                    ),
+                    navOptions = expectedNavOptions,
+                )
+            }
+        }
+
+        // Make sure navigating to vault unlocked for autofill save for card works as expected:
+        rootNavStateFlow.value = RootNavState.VaultUnlockedForAutofillSave(
+            autofillSaveItem = mockk<AutofillSaveItem.Card>(),
+        )
+        composeTestRule.runOnIdle {
+            verify {
+                mockNavHostController.navigate(
+                    route = VaultUnlockedGraphRoute,
+                    navOptions = expectedNavOptions,
+                )
+                mockNavHostController.navigate(
+                    route = VaultAddEditRoute(
+                        vaultAddEditMode = VaultAddEditMode.ADD,
+                        vaultItemId = null,
+                        vaultItemCipherType = VaultItemCipherType.CARD,
                         selectedFolderId = null,
                         selectedCollectionId = null,
                     ),

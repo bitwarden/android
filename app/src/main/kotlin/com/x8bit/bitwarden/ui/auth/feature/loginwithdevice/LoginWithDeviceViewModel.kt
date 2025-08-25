@@ -1,21 +1,18 @@
 package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
-import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
-import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.util.toAuthRequestType
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -56,11 +53,6 @@ class LoginWithDeviceViewModel @Inject constructor(
 
     init {
         sendNewAuthRequest(isResend = false)
-        authRepository
-            .captchaTokenResultFlow
-            .map { LoginWithDeviceAction.Internal.ReceiveCaptchaToken(tokenResult = it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: LoginWithDeviceAction) {
@@ -95,10 +87,6 @@ class LoginWithDeviceViewModel @Inject constructor(
                 handleNewAuthRequestResultReceived(action)
             }
 
-            is LoginWithDeviceAction.Internal.ReceiveCaptchaToken -> {
-                handleReceiveCaptchaToken(action)
-            }
-
             is LoginWithDeviceAction.Internal.ReceiveLoginResult -> {
                 handleReceiveLoginResult(action)
             }
@@ -125,7 +113,6 @@ class LoginWithDeviceViewModel @Inject constructor(
                             masterPasswordHash = result.authRequest.masterPasswordHash,
                             asymmetricalKey = requireNotNull(result.authRequest.key),
                             privateKey = result.privateKey,
-                            captchaToken = null,
                         ),
                     )
                 }
@@ -183,44 +170,11 @@ class LoginWithDeviceViewModel @Inject constructor(
         }
     }
 
-    private fun handleReceiveCaptchaToken(
-        action: LoginWithDeviceAction.Internal.ReceiveCaptchaToken,
-    ) {
-        when (val tokenResult = action.tokenResult) {
-            CaptchaCallbackTokenResult.MissingToken -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = LoginWithDeviceState.DialogState.Error(
-                            title = BitwardenString.log_in_denied.asText(),
-                            message = BitwardenString.captcha_failed.asText(),
-                        ),
-                    )
-                }
-            }
-
-            is CaptchaCallbackTokenResult.Success -> {
-                mutableStateFlow.update {
-                    it.copy(loginData = it.loginData?.copy(captchaToken = tokenResult.token))
-                }
-                attemptLogin()
-            }
-        }
-    }
-
     @Suppress("MaxLineLength", "LongMethod")
     private fun handleReceiveLoginResult(
         action: LoginWithDeviceAction.Internal.ReceiveLoginResult,
     ) {
         when (val loginResult = action.loginResult) {
-            is LoginResult.CaptchaRequired -> {
-                mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(
-                    event = LoginWithDeviceEvent.NavigateToCaptcha(
-                        uri = generateUriForCaptcha(captchaId = loginResult.captchaId),
-                    ),
-                )
-            }
-
             is LoginResult.TwoFactorRequired -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(
@@ -315,7 +269,6 @@ class LoginWithDeviceViewModel @Inject constructor(
                         asymmetricalKey = loginData.asymmetricalKey,
                         requestPrivateKey = loginData.privateKey,
                         masterPasswordHash = loginData.masterPasswordHash,
-                        captchaToken = loginData.captchaToken,
                     )
                 }
 
@@ -502,7 +455,6 @@ data class LoginWithDeviceState(
     data class LoginData(
         val accessCode: String,
         val requestId: String,
-        val captchaToken: String?,
         val masterPasswordHash: String?,
         val asymmetricalKey: String,
         val privateKey: String,
@@ -517,11 +469,6 @@ sealed class LoginWithDeviceEvent {
      * Navigates back to the previous screen.
      */
     data object NavigateBack : LoginWithDeviceEvent()
-
-    /**
-     * Navigates to the captcha verification screen.
-     */
-    data class NavigateToCaptcha(val uri: Uri) : LoginWithDeviceEvent()
 
     /**
      * Navigates to the two-factor login screen.
@@ -564,13 +511,6 @@ sealed class LoginWithDeviceAction {
          */
         data class NewAuthRequestResultReceive(
             val result: CreateAuthRequestResult,
-        ) : Internal()
-
-        /**
-         * Indicates a captcha callback token has been received.
-         */
-        data class ReceiveCaptchaToken(
-            val tokenResult: CaptchaCallbackTokenResult,
         ) : Internal()
 
         /**

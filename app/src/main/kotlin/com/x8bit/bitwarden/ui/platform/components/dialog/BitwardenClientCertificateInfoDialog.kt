@@ -21,11 +21,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 
 /**
  * Represents a Bitwarden-styled dialog for entering client certificate password and alias.

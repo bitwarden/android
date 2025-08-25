@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.repository.util.baseIconUrl
@@ -11,7 +10,10 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.hexToColor
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
+import com.bitwarden.ui.platform.components.account.util.initials
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -25,7 +27,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
@@ -40,8 +41,6 @@ import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
@@ -49,7 +48,6 @@ import com.x8bit.bitwarden.ui.vault.components.util.toVaultItemCipherTypeOrNull
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAppBarTitle
@@ -68,7 +66,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
@@ -101,7 +98,6 @@ class VaultViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val networkConnectionManager: NetworkConnectionManager,
     snackbarRelayManager: SnackbarRelayManager,
-    featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -203,15 +199,7 @@ class VaultViewModel @Inject constructor(
 
         policyManager
             .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
-            .combine(
-                featureFlagManager.getFeatureFlagFlow(FlagKey.RemoveCardPolicy),
-            ) { policies, enabledFlag ->
-                if (enabledFlag && policies.isNotEmpty()) {
-                    policies.map { it.organizationId }
-                } else {
-                    null
-                }
-            }
+            .map { policies -> policies.map { it.organizationId } }
             .map { VaultAction.Internal.PolicyUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -299,7 +287,7 @@ class VaultViewModel @Inject constructor(
         val excludedOptions = persistentListOfNotNull(
             CreateVaultItemType.SSH_KEY,
             CreateVaultItemType.CARD.takeUnless {
-                state.restrictItemTypesPolicyOrgIds.isNullOrEmpty()
+                state.restrictItemTypesPolicyOrgIds.isEmpty()
             },
         )
 
@@ -1120,9 +1108,9 @@ data class VaultState(
     private val isPullToRefreshSettingEnabled: Boolean,
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
-    val restrictItemTypesPolicyOrgIds: List<String>?,
     val cipherDecryptionFailureIds: ImmutableList<String>,
     val hasShownDecryptionFailureAlert: Boolean,
+    val restrictItemTypesPolicyOrgIds: List<String>,
 ) : Parcelable {
 
     /**
@@ -1861,7 +1849,7 @@ sealed class VaultAction {
          * Indicates that a policy update has been received.
          */
         data class PolicyUpdateReceive(
-            val restrictItemTypesPolicyOrdIds: List<String>?,
+            val restrictItemTypesPolicyOrdIds: List<String>,
         ) : Internal()
 
         /**
@@ -1886,7 +1874,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
     errorTitle: Text,
     errorMessage: Text,
     isRefreshing: Boolean,
-    restrictItemTypesPolicyOrgIds: List<String>?,
+    restrictItemTypesPolicyOrgIds: List<String>,
 ) {
     this.update {
         if (vaultData != null) {

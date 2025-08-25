@@ -4,6 +4,7 @@
     <string name="add_folder">Legg til en mappe</string>
     <string name="add_item">Legg til gjenstand</string>
     <string name="an_error_has_occurred">En feil har oppstått.</string>
+    <string name="apply">Apply</string>
     <string name="back">Tilbake</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Lukk</string>
@@ -146,7 +147,7 @@
     <string name="syncing">Synkroniserer...</string>
     <string name="syncing_complete">Synkronisering fullført.</string>
     <string name="two_step_login">2-trinnsinnlogging</string>
-    <string name="unlock_with">Lås opp med %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Lås opp med PIN-kode</string>
     <string name="verification_code">Verifiseringskode</string>
     <string name="view_login">Vis innlogging</string>
@@ -286,7 +287,7 @@ Skanning skjer automatisk.</string>
     <string name="new_uri">Ny URI</string>
     <string name="add_website">Legg til nettsted</string>
     <string name="base_domain">Grunndomene</string>
-    <string name="default_text">Standard</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Nøyaktig</string>
     <string name="host">Vert</string>
     <string name="reg_ex">Regulært uttrykk</string>
@@ -356,7 +357,7 @@ Skanning skjer automatisk.</string>
     <string name="clear_clipboard">Tøm utklippstavlen</string>
     <string name="clear_clipboard_description">Slett kopierte verdier fra utklippstavlen automatisk.</string>
     <string name="default_uri_match_detection">Standard URI-samsvarsgjenkjenning</string>
-    <string name="default_uri_match_detection_description">Velg standardmåten for å håndtere URI-samsvarsgjenkjenning for pålogginger ved f.eks. auto-utfylling.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Endre appens fargetema.</string>
     <string name="copy_notes">Kopier notater</string>
@@ -364,15 +365,14 @@ Skanning skjer automatisk.</string>
     <string name="exit_confirmation">Er du sikker på at du vil avslutte Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Ønsker du å låse opp ved å bruke hovedpassordet når applikasjonen startes på nytt?</string>
-    <string name="ask_to_add_login">Spør om å legge til innlogging</string>
-    <string name="ask_to_add_login_description">Spør om å legge til et element hvis det ikke finnes i hvelvet ditt.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Ved omstart av appen</string>
     <string name="capitalize">Stor forbokstav</string>
     <string name="include_number">Inkluder siffer</string>
     <string name="download">Last ned</string>
     <string name="login_expired">Økten din har utløpt.</string>
     <string name="biometrics_direction">Biometrisk verifisering</string>
-    <string name="biometrics">Biometri</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Bruk biometri for å låse opp</string>
@@ -420,7 +420,6 @@ Skanning skjer automatisk.</string>
     <string name="master_password_policy_validation_title">Ugyldig passord</string>
     <string name="master_password_policy_validation_message">Passordet oppfyller ikke organisasjonens krav. Kontroller organisasjonens vilkår og prøv på nytt.</string>
     <string name="loading">Laster</string>
-    <string name="accept_policies_error">Vilkårene for tjeneste og personvernerklæring er ikke akseptert.</string>
     <string name="terms_of_service">Tjenestevilkår</string>
     <string name="privacy_policy">Personvernsretningslinjer</string>
     <string name="passkey_management">Passkey management</string>
@@ -485,7 +484,6 @@ Skanning skjer automatisk.</string>
     <string name="password_prompt">Forespørsel om hovedpassord på nytt</string>
     <string name="password_confirmation">Hovedpassord bekreftelse</string>
     <string name="password_confirmation_desc">Denne handlingen er beskyttet, for å fortsette å skrive inn hovedpassordet på nytt for å verifisere din identitet.</string>
-    <string name="captcha_failed">Captcha feilet. Prøv på nytt.</string>
     <string name="update_master_password">Oppdater hovedpassord</string>
     <string name="update_master_password_warning">Hovedpassordet ditt ble nylig endret av en administrator i organisasjonen din. For å få tilgang til hvelvet, må du oppdatere hovedpassordet ditt nå. Hvis du fortsetter, logges du ut av den nåværende økten, og du må logge på igjen. Aktive økter på andre enheter kan fortsette å være aktive i opptil én time.</string>
     <string name="updating_password">Oppdaterer passord</string>
@@ -609,8 +607,6 @@ Vil du bytte til denne kontoen?</string>
     <string name="language">Språk</string>
     <string name="language_change_x_description">Språket er endret til %1$s. Start appen på nytt for å se endringen</string>
     <string name="default_system">Standard (System)</string>
-    <string name="important">Viktig</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Hovedpassordet ditt kan ikke gjenopprettes hvis du glemmer det! Minst %1$s tegn.</string>
     <string name="weak_master_password">Svakt hovedpassord</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Svakt passord er identifisert. Bruk et sterkt passord for å beskytte kontoen din. Er du sikker på at du vil bruke et svakt passord?</string>
     <string name="weak">Svakt</string>
@@ -707,7 +703,6 @@ Vil du bytte til denne kontoen?</string>
     <string name="create_account_on_with_colon">Create account on:</string>
     <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Avabonner</string>
     <string name="check_your_email">Sjekk E-postinnboksen din</string>
     <string name="open_email_app">Open email app</string>
@@ -865,8 +860,6 @@ Vil du bytte til denne kontoen?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
@@ -1076,4 +1069,14 @@ Vil du bytte til denne kontoen?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.manager.snackbar
 
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import kotlinx.serialization.Serializable
 
 /**

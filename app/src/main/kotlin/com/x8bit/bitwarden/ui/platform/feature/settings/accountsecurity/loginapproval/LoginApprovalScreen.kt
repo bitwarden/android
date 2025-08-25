@@ -33,13 +33,13 @@ import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 

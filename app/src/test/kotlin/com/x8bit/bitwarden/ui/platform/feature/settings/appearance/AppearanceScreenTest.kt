@@ -14,10 +14,10 @@ import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -124,9 +124,7 @@ class AppearanceScreenTest : BitwardenComposeTest() {
     @Test
     fun `on theme row click should display theme selection dialog`() {
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Default (System). Theme. Change the application's color theme",
-            )
+            .onNodeWithContentDescription(label = "Default (System). Theme")
             .performScrollTo()
             .performClick()
         composeTestRule
@@ -138,9 +136,7 @@ class AppearanceScreenTest : BitwardenComposeTest() {
     @Test
     fun `on theme selection dialog item click should send ThemeChange`() {
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Default (System). Theme. Change the application's color theme",
-            )
+            .onNodeWithContentDescription(label = "Default (System). Theme")
             .performScrollTo()
             .performClick()
         composeTestRule
@@ -161,9 +157,7 @@ class AppearanceScreenTest : BitwardenComposeTest() {
     @Test
     fun `on theme selection dialog cancel click should dismiss dialog`() {
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Default (System). Theme. Change the application's color theme",
-            )
+            .onNodeWithContentDescription(label = "Default (System). Theme")
             .performScrollTo()
             .performClick()
         composeTestRule

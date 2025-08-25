@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
+import com.bitwarden.collections.Collection
+import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DeriveKeyConnectorRequest
 import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.InitOrgCryptoRequest
@@ -22,8 +24,6 @@ import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.Collection
-import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.EncryptionContext
 import com.bitwarden.vault.Folder
@@ -97,6 +97,7 @@ class VaultSdkSourceImpl(
                     exception.message == "Wrong password" -> {
                         DeriveKeyConnectorResult.WrongPasswordError
                     }
+
                     else -> DeriveKeyConnectorResult.Error(exception)
                 }
             }

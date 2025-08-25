@@ -4,6 +4,7 @@
     <string name="add_folder">Ordner hinzufügen</string>
     <string name="add_item">Neuer Eintrag</string>
     <string name="an_error_has_occurred">Es ist ein Fehler aufgetreten.</string>
+    <string name="apply">Apply</string>
     <string name="back">Zurück</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Abbrechen</string>
@@ -85,7 +86,7 @@
     <string name="edit_card">Karte bearbeiten</string>
     <string name="edit_identity">Identität bearbeiten</string>
     <string name="edit_note">Notiz bearbeiten</string>
-    <string name="edit_ssh_key">Edit SSH key</string>
+    <string name="edit_ssh_key">SSH-Schlüssel bearbeiten</string>
     <string name="enter_email_for_hint">Gebe die E-Mail Adresse deines Kontos ein, um den Hinweis für dein Master-Passwort zu erhalten.</string>
     <string name="favorite">Favorit</string>
     <string name="unfavorite">Aus Favoriten entfernen</string>
@@ -101,8 +102,8 @@
     <string name="one_minute">1 Minute</string>
     <string name="four_hours">4 Stunden</string>
     <string name="immediately">Sofort</string>
-    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
-    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
+    <string name="vault_timeout_log_out_confirmation_title">Sitzungs-Timeout auf \"Abmelden\" setzen?</string>
+    <string name="vault_timeout_log_out_confirmation_message">Nach dem Timeout wirst du abgemeldet. Du musst mit dem Internet verbunden sein, um dich anzumelden und erneut auf deinen Tresor zuzugreifen. Deine gespeicherten Einstellungen und PIN auf diesem Gerät werden nicht geändert.</string>
     <string name="logging_in">Anmeldung läuft...</string>
     <string name="login_to_bitwarden">Bei Bitwarden anmelden</string>
     <string name="master_password_confirmation_val_message">Passwortbestätigung ist nicht korrekt.</string>
@@ -146,14 +147,14 @@
     <string name="syncing">Wird synchronisiert...</string>
     <string name="syncing_complete">Synchronisierung abgeschlossen</string>
     <string name="two_step_login">Zwei-Faktor-Authentifizierung</string>
-    <string name="unlock_with">Mit %1$s entsperren</string>
+    <string name="unlock_with_biometrics">Mit Biometrie entsperren</string>
     <string name="unlock_with_pin">Mit PIN-Code entsperren</string>
     <string name="verification_code">Verifizierungscode</string>
     <string name="view_login">Zugangsdaten anzeigen</string>
     <string name="view_card">Karte anzeigen</string>
     <string name="view_identity">Identität anzeigen</string>
     <string name="view_note">Notiz anzeigen</string>
-    <string name="view_ssh_key">View SSH key</string>
+    <string name="view_ssh_key">SSH-Schlüssel ansehen</string>
     <string name="web_vault">Bitwarden Web-Tresor</string>
     <string name="items">Einträge</string>
     <string name="items_for_uri">Zugangsdaten für %1$s</string>
@@ -264,7 +265,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="address">Adresse</string>
     <string name="expiration">Gültig bis</string>
     <string name="show_website_icons">Website-Symbole anzeigen</string>
-    <string name="show_website_icons_help">Show website icons help</string>
+    <string name="show_website_icons_help">Hilfe zu Website-Symbolen anzeigen</string>
     <string name="show_website_icons_description">Ein wiedererkennbares Bild neben jeden Zugangsdaten anzeigen.</string>
     <string name="icons_url">URL des Icons-Servers</string>
     <string name="vault_is_locked">Tresor ist gesperrt</string>
@@ -286,7 +287,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="new_uri">Neue URI</string>
     <string name="add_website">Website hinzufügen</string>
     <string name="base_domain">Basis-Domäne</string>
-    <string name="default_text">Standard</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Exakt</string>
     <string name="host">Host</string>
     <string name="reg_ex">Regulärer Ausdruck</string>
@@ -356,7 +357,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="clear_clipboard">Zwischenablage leeren</string>
     <string name="clear_clipboard_description">Kopierte Einträge automatisch aus der Zwischenablage löschen.</string>
     <string name="default_uri_match_detection">Standard URI-Übereinstimmungserkennung</string>
-    <string name="default_uri_match_detection_description">Wähle die Standardmethode, mit der die URI-Übereinstimmungserkennung für Anmeldungen bei Aktionen wie dem automatischen Ausfüllen behandelt wird.</string>
+    <string name="default_uri_match_detection_description">Die URI-Übereinstimmungserkennung kontrolliert wie Bitwarden Auto-Ausfüllen-Vorschläge erkennt.</string>
     <string name="theme">Design</string>
     <string name="theme_description">Ändere das Farbschema der Anwendung.</string>
     <string name="copy_notes">Notiz kopieren</string>
@@ -364,15 +365,14 @@ Das Scannen erfolgt automatisch.</string>
     <string name="exit_confirmation">Bist du sicher, dass du Bitwarden verlassen möchtest?</string>
     <string name="require_master_password_on_app_restart">Master-Passwort beim App-Neustart verlangen?</string>
     <string name="pin_require_master_password_restart">Möchtest du mit deinem Master-Passwort entsperren, wenn die Anwendung neu gestartet wird?</string>
-    <string name="ask_to_add_login">Nach dem Hinzufügen von Zugangsdaten fragen</string>
-    <string name="ask_to_add_login_description">Nach dem Hinzufügen eines Eintrags fragen, wenn dieser nicht in deinem Tresor gefunden wurde.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Beim Neustart der App</string>
     <string name="capitalize">Wortanfänge großschreiben</string>
     <string name="include_number">Ziffern einschließen</string>
     <string name="download">Herunterladen</string>
     <string name="login_expired">Deine Sitzung ist abgelaufen.</string>
     <string name="biometrics_direction">Biometrische Verifizierung</string>
-    <string name="biometrics">Biometrie</string>
     <string name="biometrics_failed">Biometrie fehlgeschlagen</string>
     <string name="biometrics_decoding_failure">Melde dich mit deinem Master-Passwort oder PIN an und aktiviere dann die biometrische Anmeldung in den Einstellungen erneut.</string>
     <string name="use_biometrics_to_unlock">Biometrie zum Entsperren verwenden</string>
@@ -420,7 +420,6 @@ Das Scannen erfolgt automatisch.</string>
     <string name="master_password_policy_validation_title">Ungültiges Passwort</string>
     <string name="master_password_policy_validation_message">Passwort entspricht nicht den Anforderungen der Organisation. Bitte überprüfe die Richtlinien-Informationen und versuche es erneut.</string>
     <string name="loading">Wird geladen</string>
-    <string name="accept_policies_error">Die Nutzungsbedingungen und Datenschutzerklärung wurden nicht akzeptiert.</string>
     <string name="terms_of_service">Nutzungsbedingungen</string>
     <string name="privacy_policy">Datenschutzbestimmungen</string>
     <string name="passkey_management">Passkey-Verwaltung</string>
@@ -485,7 +484,6 @@ Das Scannen erfolgt automatisch.</string>
     <string name="password_prompt">Master-Passwort erneut abfragen</string>
     <string name="password_confirmation">Master-Passwort bestätigen</string>
     <string name="password_confirmation_desc">Diese Aktion ist geschützt. Um fortzufahren, gib bitte dein Master-Passwort erneut ein, um deine Identität zu verifizieren.</string>
-    <string name="captcha_failed">Captcha fehlgeschlagen. Bitte versuche es erneut.</string>
     <string name="update_master_password">Master-Passwort aktualisieren</string>
     <string name="update_master_password_warning">Dein Master-Passwort wurde kürzlich von einem Administrator deiner Organisation geändert. Um auf den Tresor zuzugreifen, musst du dein Master-Passwort jetzt aktualisieren. Wenn Du fortfährst, wirst du aus der aktuellen Sitzung abgemeldet und eine erneute Anmeldung ist erforderlich. Aktive Sitzungen auf anderen Geräten können bis zu einer Stunde weiterhin aktiv bleiben.</string>
     <string name="updating_password">Passwort wird aktualisiert</string>
@@ -531,7 +529,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="verification_codes">Verifizierungscodes</string>
     <string name="premium_subscription_required">Premium-Abonnement erforderlich</string>
     <string name="cannot_add_authenticator_key_scan_qr_code">Authentifizierungsschlüssel kann nicht hinzugefügt werden? <annotation link="scanQrCode">QR-Code scannen</annotation></string>
-    <string name="scan_qr_code">QR-Code scannen</string>
+    <string name="scan_qr_code"><annotation link="scanQrCode">QR-Code scannen</annotation></string>
     <string name="cannot_scan_qr_code_enter_key_manually">QR-Code kann nicht gescannt werden? <annotation link="enterKeyManually">Schlüssel manuell eingeben</annotation></string>
     <string name="authenticator_key_scanner">Authentifizierungsschlüssel</string>
     <string name="authenticator_key_help">Hilfe zum Authenticator-Schlüssel</string>
@@ -608,8 +606,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="language">Sprache</string>
     <string name="language_change_x_description">Die Sprache wurde auf %1$s geändert. Bitte starte die App neu, um die Änderung zu sehen</string>
     <string name="default_system">Standard (System)</string>
-    <string name="important">Wichtig</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Dein Master-Passwort kann nicht wiederhergestellt werden, wenn du es vergisst! Mindestens %1$s Zeichen.</string>
     <string name="weak_master_password">Schwaches Master-Passwort</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Schwaches Passwort erkannt. Verwende ein starkes Passwort, um dein Konto zu schützen. Bist du sicher, dass du ein schwaches Passwort verwenden möchtest?</string>
     <string name="weak">Schwach</string>
@@ -699,14 +695,13 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="launch_web_authn">WebAuthn starten</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Es gab einen Fehler beim Starten der WebAuthn Zwei-Faktor-Authentifizierung</string>
     <string name="self_hosted_server_url">Selbst gehostete Server-URL</string>
-    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Der Anmeldevorgang ist fehlgeschlagen, da der Benutzer nicht verifiziert werden konnte.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Der Passkey-Vorgang ist fehlgeschlagen, da der Benutzer nicht verifiziert werden konnte.</string>
     <string name="user_verification_direction">Benutzer-Verifizierung</string>
     <string name="create_account_on">Konto erstellt am</string>
     <string name="create_account_on_with_colon">Konto erstellt am:</string>
     <string name="we_sent_an_email_to">Wir haben eine E-Mail an %1$s gesendet.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Wenn du fortfährst, stimmst du den Nutzungsbedingungen und der Datenschutzvereinbarung zu</string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Durch Aktivieren dieses Schalters stimmst du den <annotation link="termsOfService">Nutzungsbedingungen</annotation> und <annotation link="privacyPolicy">Datenschutzbestimmungen</annotation> zu</string>
     <string name="unsubscribe">Deabonnieren</string>
     <string name="check_your_email">Überprüfe deine E-Mails</string>
     <string name="open_email_app">E-Mail-App öffnen</string>
@@ -864,8 +859,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Du musst den Authentifizierungsschlüssel nur für Zugangsdaten einrichten, die eine zwei-Faktor-Authentifizierung mit einem Code erfordern. Der Schlüssel generiert kontinuierlich sechsstellige Codes, mit denen du dich anmelden kannst.</string>
     <string name="coachmark_3_of_3">3 von 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Du musst eine Website-Adresse hinzufügen, um automatisches Ausfüllen für den Zugriff auf dieses Konto benutzen zu können.</string>
-    <string name="single_tap_passkey_creation">Passkey-Erstellung mit einem Tap</string>
-    <string name="single_tap_passkey_authentication">Passkey-Anmeldung mit einen Tap</string>
     <string name="learn_about_new_logins">Erfahre mehr über neue Zugangsdaten</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Wir führen dich durch die wichtigsten Funktionen zum Hinzufügen neuer Zugangsdaten.</string>
     <string name="explore_the_generator">Erkunde den Generator</string>
@@ -903,12 +896,12 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="passkey_operation_failed_because_the_request_is_invalid">Der Passkey-Vorgang ist fehlgeschlagen, da die Anfrage ungültig ist.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Der Passkey-Vorgang ist fehlgeschlagen, da kein Eintrag ausgewählt wurde.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Der Passkey-Vorgang ist fehlgeschlagen, weil die Anfrage nicht unterstützt wird.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
-    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
-    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
-    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
-    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Der Passwort-Vorgang ist fehlgeschlagen, da der ausgewählte Eintrag nicht existiert.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Der Passwort-Vorgang ist fehlgeschlagen, da kein Eintrag ausgewählt wurde.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Der Anmeldevorgang ist fehlgeschlagen, da die Anzahl der Benutzer-Verifizierungsversuche überschritten wurde.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Der Berechtigungsvorgang ist fehlgeschlagen, da der Benutzer gesperrt ist.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Der Anmeldevorgang ist fehlgeschlagen, da der ausgewählte Eintrag nicht vorhanden ist.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Der Anmeldevorgang ist fehlgeschlagen, da die Benutzerverifizierung abgebrochen wurde.</string>
     <string name="self_host_server_url">Selbst gehostete Server-URL</string>
     <string name="use_brave_autofill_integration">Brave Auto-Ausfüllen-Integration verwenden</string>
     <string name="use_chrome_autofill_integration">Chrome Auto-Ausfüllen-Integration verwenden</string>
@@ -989,7 +982,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Bist du sicher, dass du aufhören willst, %s zu vertrauen?</string>
     <string name="installed_apps">Installierte Apps</string>
     <string name="delete_x">%s löschen</string>
-    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Entschlüsseln des Eintrags fehlgeschlagen. Kontaktiere den Support.</string>
     <string name="decryption_error">Entschlüsselungsfehler</string>
     <string name="add_item_rotation">Eintrags-Rotation hinzufügen</string>
     <string name="scan_a_qr_code">Einen QR-Code scannen</string>
@@ -1050,7 +1043,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="shared_codes_error">Codes aus der Bitwarden-App konnten nicht synchronisiert werden. Stelle sicher, dass beide Apps auf dem neusten Stand sind. Du kannst weiterhin auf deine existierenden Codes in der Bitwarden-App zugreifen.</string>
     <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Mit der Bitwarden-App synchronisieren</string>
-    <string name="sync_with_bitwarden_action_card_message">Lasse die Authenticator-App-Synchronisierung in den Einstellungen zu, um hier alle deine Verifizierungscodes anzuzeigen.</string>
+    <string name="sync_with_bitwarden_action_card_message">Um alle deine Verifizierungscodes anzeigen zu können, musst du die Synchronisierung aller deiner Konten erlauben.</string>
     <string name="take_me_to_app_settings">Bring mich zu den App-Einstellungen</string>
     <string name="something_went_wrong">Etwas ist schiefgelaufen</string>
     <string name="please_try_again">Bitte versuche es erneut</string>
@@ -1064,7 +1057,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="choose_save_location_message">Speichere diesen Authentifizierungsschlüssel hier oder füge ihn zu Zugangsdaten in deiner Bitwarden App hinzu.</string>
     <string name="save_option_as_default">Option als Standard speichern</string>
     <string name="account_synced_from_bitwarden_app">Konto über Bitwarden App synchronisiert</string>
-    <string name="local_codes">Local codes (%1$d)</string>
+    <string name="local_codes">Lokale Codes (%1$d)</string>
     <string name="required_information_missing">Erforderliche Informationen fehlen</string>
     <string name="required_information_missing_message">"Benötigte Informationen fehlen (z.B. „Dienste“ oder „Geheimnis“). Überprüfe deine Datei und versuche es erneut. Besuche bitwarden.com/help für Unterstützung"</string>
     <string name="file_could_not_be_processed">"Datei konnte nicht verarbeitet werden"</string>
@@ -1075,4 +1068,14 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokale Einträge sind eingeklappt, klicke zum Ausklappen.</string>
     <string name="items_expanded_click_to_collapse">Einträge sind ausgeklappt, klicke zum Einklappen.</string>
     <string name="items_are_collapsed_click_to_expand">Einträge sind eingeklappt, klicke zum Ausklappen.</string>
+    <string name="select_a_card_for_x">Wähle eine Karte für %s aus</string>
+    <string name="advanced_options">Erweiterte Optionen</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mehr über die Übereinstimmungserkennung</annotation></string>
+    <string name="keep_your_credential_secure">Schütze deine Zugangsdaten</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Erfahre mehr darüber, wie du Zugangsdaten bei der Verwendung von \"%1$s\" schützen kannst.</string>
+    <string name="are_you_sure_you_want_to_use">Bist du sicher, dass du \"%1$s\" verwenden möchtest?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">Die URI-Übereinstimmungserkennung steuert, wie Bitwarden Auto-Ausfüllen-Vorschläge erkennt.\n<annotation emphasis="bold">Warnung:</annotation> „Regulärer Ausdruck“ ist eine erweiterte Option, die bei unsachgemäßer Verwendung ein erhöhtes Risiko der Kompromittierung von Zugangsdaten darstellt.</string>
+    <string name="default_uri_match_detection_description_advanced_options">Die URI-Übereinstimmungserkennung steuert, wie Bitwarden Auto-Ausfüllen-Vorschläge erkennt.\n<annotation emphasis="bold">Warnung:</annotation> \"Beginnt mit\" ist eine erweiterte Option mit erhöhtem Risiko der Kompromittierung von Zugangsdaten.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Beginnt mit\" ist eine erweiterte Option mit erhöhtem Risiko der Kompromittierung von Zugangsdaten.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">„Regulärer Ausdruck“ ist eine erweiterte Option, die bei unsachgemäßer Verwendung ein erhöhtes Risiko der Kompromittierung von Zugangsdaten darstellt.</string>
 </resources>

@@ -11,18 +11,20 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.compositionLocalOf
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManagerImpl
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManagerImpl
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManagerUnsupportedApiImpl
+import com.x8bit.bitwarden.ui.platform.manager.BitwardenBuildInfoManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManagerImpl
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
@@ -46,7 +48,12 @@ fun LocalManagerProvider(
     biometricsManager: BiometricsManager = BiometricsManagerImpl(activity = activity),
     clock: Clock = Clock.systemDefaultZone(),
     exitManager: ExitManager = ExitManagerImpl(activity = activity),
-    intentManager: IntentManager = IntentManagerImpl(context = activity, clock = clock),
+    buildInfoManager: BuildInfoManager = BitwardenBuildInfoManagerImpl(),
+    intentManager: IntentManager = IntentManager.create(
+        context = activity,
+        clock = clock,
+        buildInfoManager = buildInfoManager,
+    ),
     credentialProviderCompletionManager: CredentialProviderCompletionManager =
         createCredentialProviderCompletionManager(activity = activity),
     keyChainManager: KeyChainManager = KeyChainManagerImpl(activity = activity),
@@ -103,13 +110,6 @@ val LocalExitManager: ProvidableCompositionLocal<ExitManager> = compositionLocal
  */
 val LocalFeatureFlagsState: ProvidableCompositionLocal<FeatureFlagsState> = compositionLocalOf {
     error("CompositionLocal FeatureFlagsState not present")
-}
-
-/**
- * Provides access to the intent manager throughout the app.
- */
-val LocalIntentManager: ProvidableCompositionLocal<IntentManager> = compositionLocalOf {
-    error("CompositionLocal LocalIntentManager not present")
 }
 
 /**

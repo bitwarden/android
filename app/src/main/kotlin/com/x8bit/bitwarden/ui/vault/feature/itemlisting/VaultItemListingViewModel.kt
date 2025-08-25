@@ -21,11 +21,14 @@ import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
@@ -77,8 +80,6 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialRes
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
@@ -109,7 +110,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -211,15 +211,7 @@ class VaultItemListingViewModel @Inject constructor(
 
         policyManager
             .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
-            .combine(
-                featureFlagManager.getFeatureFlagFlow(FlagKey.RemoveCardPolicy),
-            ) { policies, enabledFlag ->
-                if (enabledFlag) {
-                    policies.map { it.organizationId }
-                } else {
-                    emptyList()
-                }
-            }
+            .map { policies -> policies.map { it.organizationId } }
             .map { VaultItemListingsAction.Internal.RestrictItemTypesPolicyUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -2507,19 +2499,35 @@ class VaultItemListingViewModel @Inject constructor(
      * Takes the given vault data and filters it for autofill if necessary.
      */
     private suspend fun DataState<VaultData>.filterForAutofillIfNecessary(): DataState<VaultData> {
-        val matchUri = state
-            .autofillSelectionData
-            ?.uri
-            ?: return this
-        return this.map { vaultData ->
-            vaultData.copy(
-                decryptCipherListResult = vaultData.decryptCipherListResult.copy(
-                    successes = cipherMatchingManager.filterCiphersForMatches(
-                        cipherListViews = vaultData.decryptCipherListResult.successes,
-                        matchUri = matchUri,
-                    ),
-                ),
-            )
+        val autofillSelectionData = state.autofillSelectionData ?: return this
+        return when (autofillSelectionData.type) {
+            AutofillSelectionData.Type.CARD -> {
+                this.map { vaultData ->
+                    vaultData.copy(
+                        decryptCipherListResult = vaultData.decryptCipherListResult.copy(
+                            successes = vaultData.decryptCipherListResult.successes
+                                .filter { it.type is CipherListViewType.Card },
+                        ),
+                    )
+                }
+            }
+
+            AutofillSelectionData.Type.LOGIN -> {
+                val matchUri = state
+                    .autofillSelectionData
+                    ?.uri
+                    ?: return this
+                this.map { vaultData ->
+                    vaultData.copy(
+                        decryptCipherListResult = vaultData.decryptCipherListResult.copy(
+                            successes = cipherMatchingManager.filterCiphersForMatches(
+                                cipherListViews = vaultData.decryptCipherListResult.successes,
+                                matchUri = matchUri,
+                            ),
+                        ),
+                    )
+                }
+            }
         }
     }
 
@@ -2657,9 +2665,21 @@ data class VaultItemListingState(
      */
     val appBarTitle: Text
         get() = autofillSelectionData
-            ?.uri
-            ?.toHostOrPathOrNull()
-            ?.let { BitwardenString.items_for_uri.asText(it) }
+            ?.let { data ->
+                data.uri
+                    ?.toHostOrPathOrNull()
+                    ?.let {
+                        when (data.type) {
+                            AutofillSelectionData.Type.CARD -> {
+                                BitwardenString.select_a_card_for_x.asText(it)
+                            }
+
+                            AutofillSelectionData.Type.LOGIN -> {
+                                BitwardenString.items_for_uri.asText(it)
+                            }
+                        }
+                    }
+            }
             ?: createCredentialRequest
                 ?.relyingPartyIdOrNull
                 ?.let { BitwardenString.items_for_uri.asText(it) }

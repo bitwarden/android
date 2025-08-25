@@ -25,10 +25,6 @@ class FlagKeyTest {
             "pm-18970-user-managed-privileged-apps",
         )
         assertEquals(
-            FlagKey.RemoveCardPolicy.keyName,
-            "pm-16442-remove-card-item-type-policy",
-        )
-        assertEquals(
             FlagKey.BitwardenAuthenticationEnabled.keyName,
             "bitwarden-authentication-enabled",
         )
@@ -42,7 +38,6 @@ class FlagKeyTest {
                 FlagKey.CredentialExchangeProtocolExport,
                 FlagKey.CipherKeyEncryption,
                 FlagKey.UserManagedPrivilegedApps,
-                FlagKey.RemoveCardPolicy,
                 FlagKey.BitwardenAuthenticationEnabled,
             ).all {
                 !it.defaultValue

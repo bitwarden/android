@@ -3,8 +3,11 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
+import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -30,17 +33,21 @@ class AutofillSaveItemExtensionsTest {
                 common = VaultAddEditState.ViewState.Content.Common(),
                 isIndividualVaultDisabled = false,
                 type = VaultAddEditState.ViewState.Content.ItemType.Card(
+                    cardHolderName = "cardholderName",
                     number = "number",
                     expirationMonth = VaultCardExpirationMonth.JANUARY,
                     expirationYear = "2024",
                     securityCode = "securityCode",
+                    brand = VaultCardBrand.VISA,
                 ),
             ),
             AutofillSaveItem.Card(
+                cardholderName = "cardholderName",
                 number = "number",
                 expirationMonth = "1",
                 expirationYear = "2024",
                 securityCode = "securityCode",
+                brand = "visa",
             )
                 .toDefaultAddTypeContent(isIndividualVaultDisabled = false),
         )
@@ -74,6 +81,19 @@ class AutofillSaveItemExtensionsTest {
                 uri = "https://www.test.com",
             )
                 .toDefaultAddTypeContent(isIndividualVaultDisabled = true),
+        )
+    }
+
+    @Test
+    fun `toVaultItemCipherType should return the correct VaultItemCipherType`() {
+        assertEquals(
+            VaultItemCipherType.CARD,
+            mockk<AutofillSaveItem.Card>().toVaultItemCipherType(),
+        )
+
+        assertEquals(
+            VaultItemCipherType.LOGIN,
+            mockk<AutofillSaveItem.Login>().toVaultItemCipherType(),
         )
     }
 }

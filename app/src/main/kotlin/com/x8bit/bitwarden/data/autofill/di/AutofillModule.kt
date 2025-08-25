@@ -108,11 +108,13 @@ object AutofillModule {
         authRepository: AuthRepository,
         cipherMatchingManager: CipherMatchingManager,
         vaultRepository: VaultRepository,
+        policyManager: PolicyManager,
     ): AutofillCipherProvider =
         AutofillCipherProviderImpl(
             authRepository = authRepository,
             cipherMatchingManager = cipherMatchingManager,
             vaultRepository = vaultRepository,
+            policyManager = policyManager,
         )
 
     @Singleton

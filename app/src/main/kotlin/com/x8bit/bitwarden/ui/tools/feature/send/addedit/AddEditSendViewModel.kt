@@ -11,6 +11,8 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -28,8 +30,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
@@ -889,7 +889,7 @@ sealed class AddEditSendAction {
     /**
      * User has chosen a file to be part of the send.
      */
-    data class FileChoose(val fileData: IntentManager.FileData) : AddEditSendAction()
+    data class FileChoose(val fileData: FileData) : AddEditSendAction()
 
     /**
      * User clicked the remove password button.

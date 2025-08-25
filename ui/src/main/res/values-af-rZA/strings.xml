@@ -4,6 +4,7 @@
     <string name="add_folder">Voeg vouer toe</string>
     <string name="add_item">Voeg item toe</string>
     <string name="an_error_has_occurred">’n Fout het voorgekom.</string>
+    <string name="apply">Apply</string>
     <string name="back">Terug</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Kanselleer</string>
@@ -146,7 +147,7 @@
     <string name="syncing">Sinkroniseer...</string>
     <string name="syncing_complete">Klaar gesinchroniseer.</string>
     <string name="two_step_login">Tweestapaantekening</string>
-    <string name="unlock_with">Ontgrendel met %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Ontgrendel met PIN-kode</string>
     <string name="verification_code">Bevestigingskode</string>
     <string name="view_login">View login</string>
@@ -286,7 +287,7 @@ Skandering gebeur outomaties.</string>
     <string name="new_uri">Nuwe URI</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">Basisdomein</string>
-    <string name="default_text">Verstek</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Presies</string>
     <string name="host">Gasheer</string>
     <string name="reg_ex">Gewone uitdrukking</string>
@@ -356,7 +357,7 @@ Skandering gebeur outomaties.</string>
     <string name="clear_clipboard">Wis Knipbord</string>
     <string name="clear_clipboard_description">Wis gekopieerde waardes outomaties vanuit u knipbord.</string>
     <string name="default_uri_match_detection">Verstek URI-ooreenkomsbespeuring</string>
-    <string name="default_uri_match_detection_description">Kies die verstek manier waarop URI-ooreenkomsbespeuring vir aantekeninge hanteer word wanneer aksies soos outovul uitgevoer word.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Verander die toepassing se kleurtema.</string>
     <string name="copy_notes">Kopieer notas</string>
@@ -364,15 +365,14 @@ Skandering gebeur outomaties.</string>
     <string name="exit_confirmation">Is u seker u wil Bitwarden verlaat?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Wil u vereis dat met die hoofwagwoord ontgrendel word wanneer die toep geherlanseer is?</string>
-    <string name="ask_to_add_login">Vra om aantekening toe te voeg</string>
-    <string name="ask_to_add_login_description">Vra om ’n item toe te voeg indien een nie in u kluis gevind word nie.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Nadat toep herbegin is</string>
     <string name="capitalize">Maak Beginhoofletters</string>
     <string name="include_number">Voeg syfer toe</string>
     <string name="download">Laai af</string>
     <string name="login_expired">U aantekensessie het verstryk.</string>
     <string name="biometrics_direction">Biometriese waarmerking</string>
-    <string name="biometrics">Biometrie</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Gebruik biometrie vir ontgrendeling</string>
@@ -420,7 +420,6 @@ Skandering gebeur outomaties.</string>
     <string name="master_password_policy_validation_title">Ongeldige wagwoord</string>
     <string name="master_password_policy_validation_message">Wagwoord voldoen nie aan organisasievereistes nie. Gaan die beleidsinligting na en probeer weer.</string>
     <string name="loading">Laai tans</string>
-    <string name="accept_policies_error">Gebruiksvoorwaardes en privaatheidsbeleid is nie erken nie.</string>
     <string name="terms_of_service">Gebruiksvoorwaardes</string>
     <string name="privacy_policy">Privaatheidsbeleid</string>
     <string name="passkey_management">Passkey management</string>
@@ -485,7 +484,6 @@ Skandering gebeur outomaties.</string>
     <string name="password_prompt">Vra weer vir hoofwagwoord</string>
     <string name="password_confirmation">Hoofwagwoordbevestiging</string>
     <string name="password_confirmation_desc">Hierdie aksie is beskerm. Voer u hoofwagwoord in om u identiteit te bevestig om voort te gaan.</string>
-    <string name="captcha_failed">Captcha het misluk. Probeer weer.</string>
     <string name="update_master_password">Werk hoofwagwoord by</string>
     <string name="update_master_password_warning">U hoofwagwoord is onlangs deur ’n administrateur in u organisasie verander. Om toegang tot u kluis te verkry moet u u hoofwagwoord nóú bywerk. Deur voort te gaan word u uit u huidige sessie geteken, waarna u weer sal moet aanteken. Aktiewe sessies op ander toestelle kan vir tot ’n uur steeds aktief bly.</string>
     <string name="updating_password">Wagwoord word bygewerk</string>
@@ -609,8 +607,6 @@ Wil u na die rekening omskakel?</string>
     <string name="language">Taal</string>
     <string name="language_change_x_description">Die taal is na %1$s verander. Asseblief herbegin die toep om die veranderinge te sien</string>
     <string name="default_system">Verstek (Sisteem)</string>
-    <string name="important">Belangrik</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Jou hoofwagwoord kan nie geherstel word as jy dit vergeet het nie! %1$s karakters minimum.</string>
     <string name="weak_master_password">Swak Hoofwagwoord</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Swak wagwoord geïdentifiseer. Gebruik \'n sterk wagwoord om jou rekening te beskerm. Is jy seker dat jy \'n swak wagwoord wil gebruik?</string>
     <string name="weak">Swak</string>
@@ -707,7 +703,6 @@ Wil u na die rekening omskakel?</string>
     <string name="create_account_on_with_colon">Create account on:</string>
     <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Unsubscribe</string>
     <string name="check_your_email">Check your email</string>
     <string name="open_email_app">Open email app</string>
@@ -865,8 +860,6 @@ Wil u na die rekening omskakel?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
@@ -1076,4 +1069,14 @@ Wil u na die rekening omskakel?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

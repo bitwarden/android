@@ -46,40 +46,40 @@ import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
+import com.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
 import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.coachmark.CoachMarkContainer
+import com.bitwarden.ui.platform.components.coachmark.model.rememberLazyListCoachMarkState
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.radio.BitwardenRadioButton
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
+import com.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
-import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
-import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkContainer
-import com.x8bit.bitwarden.ui.platform.components.coachmark.rememberLazyListCoachMarkState
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.radio.BitwardenRadioButton
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
-import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInputDialog
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
@@ -194,6 +194,10 @@ fun VaultAddEditScreen(
             }
 
             is VaultAddEditEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
+
+            VaultAddEditEvent.NavigateToLearnMore -> {
+                intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
+            }
         }
     }
 
@@ -412,6 +416,7 @@ fun VaultAddEditScreen(
                     VaultAddEditContent(
                         state = viewState,
                         isAddItemMode = state.isAddItemMode,
+                        defaultUriMatchType = state.defaultUriMatchType,
                         loginItemTypeHandlers = loginItemTypeHandlers,
                         commonTypeHandlers = commonTypeHandlers,
                         permissionsManager = permissionsManager,

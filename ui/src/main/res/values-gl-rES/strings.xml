@@ -4,6 +4,7 @@
     <string name="add_folder">Engadir cartafol</string>
     <string name="add_item">Engadir elemento</string>
     <string name="an_error_has_occurred">Produciuse un erro.</string>
+    <string name="apply">Apply</string>
     <string name="back">Atrás</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Cancelar</string>
@@ -146,7 +147,7 @@
     <string name="syncing">Sincronizando...</string>
     <string name="syncing_complete">Sincronización completa</string>
     <string name="two_step_login">Verificación en dous pasos</string>
-    <string name="unlock_with">Desbloquear con %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Desbloquear con PIN</string>
     <string name="verification_code">Código de verificación</string>
     <string name="view_login">View login</string>
@@ -286,7 +287,7 @@ Escanearase automaticamente.</string>
     <string name="new_uri">Nova URI</string>
     <string name="add_website">Engadir sitio web</string>
     <string name="base_domain">Dominio base</string>
-    <string name="default_text">Por defecto</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Exacto</string>
     <string name="host">Servidor</string>
     <string name="reg_ex">Expresión regular</string>
@@ -356,7 +357,7 @@ Escanearase automaticamente.</string>
     <string name="clear_clipboard">Baleirar portapapeis</string>
     <string name="clear_clipboard_description">Limpar automaticamente os valores copiados do teu portapapeis.</string>
     <string name="default_uri_match_detection">Detección de coincidencias de URI por defecto</string>
-    <string name="default_uri_match_detection_description">Selecciona o tipo de Detección de coincidencias de URI que se empregará por defecto para accións como o autoenchido.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Cambiar o tema de cor da aplicación.</string>
     <string name="copy_notes">Copiar nota</string>
@@ -364,15 +365,14 @@ Escanearase automaticamente.</string>
     <string name="exit_confirmation">Seguro que queres saír de Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Requirir contrasinal mestre ó abrir a app?</string>
     <string name="pin_require_master_password_restart">Queres requirir desbloquear co contrasinal mestre cando se reinicie a aplicación?</string>
-    <string name="ask_to_add_login">Ofrecer gardar credenciais</string>
-    <string name="ask_to_add_login_description">Ofrecer gardar un elemento se non se atopa na caixa forte.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Ó reiniciar a app</string>
     <string name="capitalize">Primeira letra maiúscula</string>
     <string name="include_number">Incluír número</string>
     <string name="download">Descarga</string>
     <string name="login_expired">A túa sesión caducou.</string>
     <string name="biometrics_direction">Verifiación biométrica</string>
-    <string name="biometrics">Biometría</string>
     <string name="biometrics_failed">Fallo da biometría</string>
     <string name="biometrics_decoding_failure">Entra co teu Contrasinal Mestre ou PIN e volve a activar a biometría en Axustes.</string>
     <string name="use_biometrics_to_unlock">Empregar biometría para desbloquear</string>
@@ -420,7 +420,6 @@ Escanearase automaticamente.</string>
     <string name="master_password_policy_validation_title">Contrasinal non válido</string>
     <string name="master_password_policy_validation_message">O contrasinal non cumpre os requisitos da organización. Por favor revisa as directivas e volve intentalo.</string>
     <string name="loading">Cargando</string>
-    <string name="accept_policies_error">Os Termos de Servizo e a Política de Privacidade non foron aceptados.</string>
     <string name="terms_of_service">Termos de Servizo</string>
     <string name="privacy_policy">Política de Privacidade</string>
     <string name="passkey_management">Xestión de Claves de Acceso</string>
@@ -485,7 +484,6 @@ Escanearase automaticamente.</string>
     <string name="password_prompt">Volver solicitar o contrasinal mestre</string>
     <string name="password_confirmation">Repetir o contrasinal mestre</string>
     <string name="password_confirmation_desc">Esta acción está protexida. Para continuar por favor volve introducir o teu contrasinal mestre.</string>
-    <string name="captcha_failed">Captcha fallido. Por favor, volve intentalo.</string>
     <string name="update_master_password">Actualizar contrasinal mestre</string>
     <string name="update_master_password_warning">O teu contrasinal mestre foi recentemente cambiado por un administrador da túa organización. Para poder acceder á caixa forte debes actualizalo. A continuación cerrarase a túa sesión, requirindo volver iniciala. As sesións activas noutros dispositivos poden permanecer activas por unha hora.</string>
     <string name="updating_password">Actualizando contrasinal</string>
@@ -609,8 +607,6 @@ Queres comprobalo dende esa conta?</string>
     <string name="language">Lingua</string>
     <string name="language_change_x_description">A lingua foi cambiada a %1$s. Por favor, reinicie a aplicación para ver o cambio</string>
     <string name="default_system">Predeterminado (Sistema)</string>
-    <string name="important">Importante</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">O teu contrasinal mestre non pode ser recuperado se o esqueces! Mínimo de %1$s caracteres.</string>
     <string name="weak_master_password">Contrasinal mestre feble</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Contrasinal feble e atopado nunha filtración de datos. Emprega un contrasinal forte e único para a túa conta. Seguro que queres utilizar este contrasinal?</string>
     <string name="weak">Feble</string>
@@ -707,7 +703,6 @@ Queres comprobalo dende esa conta?</string>
     <string name="create_account_on_with_colon">Crear unha conta en:</string>
     <string name="we_sent_an_email_to">Enviamos un correo a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ó continuar, aceptas os <annotation link="termsOfService">Termos de Servizo</annotation> e a <annotation link="privacyPolicy">Política de Privacidade</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Ó marcar esta opción, aceptas os <annotation link="termsOfService">Termos de Servizo</annotation> e a <annotation link="privacyPolicy">Política de Privacidade</annotation></string>
     <string name="unsubscribe">Cancelar subscrición</string>
     <string name="check_your_email">Revisa o teu correo</string>
     <string name="open_email_app">Abrir app de email</string>
@@ -865,8 +860,6 @@ Queres comprobalo dende esa conta?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Só precisas dunha clave de autenticación se contas con autenticación de dous factores con código. A clave xerará códigos de seis díxitos que poderás empregar para iniciar sesión.</string>
     <string name="coachmark_3_of_3">3 de 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Debes engadir un sitio web pausa que funcione o autoenchido.</string>
-    <string name="single_tap_passkey_creation">Creación de Claves de acceso dun toque</string>
-    <string name="single_tap_passkey_authentication">Iniciar sesión con Clave de acceso</string>
     <string name="learn_about_new_logins">Aprender sobre novas credenciais</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Imos acompañarte polos puntos clave da creación de credenciais.</string>
     <string name="explore_the_generator">Explorar o xerador</string>
@@ -1076,4 +1069,14 @@ Queres comprobalo dende esa conta?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

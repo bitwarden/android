@@ -4,6 +4,7 @@
     <string name="add_folder">फोल्डर बनाएं</string>
     <string name="add_item">आइटम बनाएं</string>
     <string name="an_error_has_occurred">एक गड़बड़ हुई।</string>
+    <string name="apply">Apply</string>
     <string name="back">पीछे जाएं</string>
     <string name="bitwarden">बिटवार्डन</string>
     <string name="cancel">कैंसिल करें</string>
@@ -146,7 +147,7 @@
     <string name="syncing">सिंक हो रहा है…</string>
     <string name="syncing_complete">सिंक हो गया</string>
     <string name="two_step_login">टू-स्टेप लॉगइन</string>
-    <string name="unlock_with">%1$s से खोलें</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">पिन कोड से खोलें</string>
     <string name="verification_code">वेरिफिकेशन कोड</string>
     <string name="view_login">View login</string>
@@ -285,7 +286,7 @@
     <string name="new_uri">नया यूआरआई</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">बेस डोमेन</string>
-    <string name="default_text">डिफॉल्ट</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">सटीक</string>
     <string name="host">होस्ट</string>
     <string name="reg_ex">रेगुलर एक्सप्रेशन</string>
@@ -355,7 +356,7 @@
     <string name="clear_clipboard">क्लिपबोर्ड साफ करें</string>
     <string name="clear_clipboard_description">Automatically clear copied values from your clipboard.</string>
     <string name="default_uri_match_detection">Default URI match detection</string>
-    <string name="default_uri_match_detection_description">Choose the default way that URI match detection is handled for logins when performing actions such as autofill.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">थीम</string>
     <string name="theme_description">ऐप का थीम बदलें।</string>
     <string name="copy_notes">नोट कॉपी करें</string>
@@ -363,15 +364,14 @@
     <string name="exit_confirmation">पक्का निकलें?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">ऐप रीस्टार्ट करने पर मास्टर पासवर्ड पूछें?</string>
-    <string name="ask_to_add_login">Ask to add login</string>
-    <string name="ask_to_add_login_description">Ask to add an item if one isn\'t found in your vault.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">ऐप रिस्टार्ट पर</string>
     <string name="capitalize">कैपिटलाइज़ करें</string>
     <string name="include_number">नंबर शामिल करें</string>
     <string name="download">डाउनलोड करें</string>
     <string name="login_expired">अपने लॉगिन सत्र समाप्त हो गया है।</string>
     <string name="biometrics_direction">बायोमेट्रिक सत्यापन</string>
-    <string name="biometrics">बायोमेट्रिक</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Use biometrics to unlock</string>
@@ -419,7 +419,6 @@
     <string name="master_password_policy_validation_title">अवैध पासवर्ड</string>
     <string name="master_password_policy_validation_message">Password does not meet organization requirements. Please check the policy information and try again.</string>
     <string name="loading">लोड हो रहा है</string>
-    <string name="accept_policies_error">सेवा की शर्ते और प्राइवसी पॉलिसी माने नहीं गए हैं।</string>
     <string name="terms_of_service">सेवा की शर्ते</string>
     <string name="privacy_policy">प्राइवसी पॉलिसी</string>
     <string name="passkey_management">Passkey management</string>
@@ -484,7 +483,6 @@
     <string name="password_prompt">Master password re-prompt</string>
     <string name="password_confirmation">Master password confirmation</string>
     <string name="password_confirmation_desc">This action is protected, to continue please re-enter your master password to verify your identity.</string>
-    <string name="captcha_failed">Captcha failed. Please try again.</string>
     <string name="update_master_password">Update master password</string>
     <string name="update_master_password_warning">Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</string>
     <string name="updating_password">Updating password</string>
@@ -608,8 +606,6 @@ Do you want to switch to this account?</string>
     <string name="language">भाषा</string>
     <string name="language_change_x_description">भाषा %1$s में बदली गई। बदलाव देखने के लिए ऐप बंद करके वापस खोलें।</string>
     <string name="default_system">डिफॉल्ट (सिस्टम)</string>
-    <string name="important">ज़रूरी</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">मुख्य पासवर्ड भूलने के बाद रिकवर नहीं कर सकते। %1$s अक्षर कम-से-कम।</string>
     <string name="weak_master_password">कमज़ोर मुख्य पासवर्ड</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">पासवर्ड कमज़ोर है। अपना खाता महफूज़ रखने के लिए एक ताकतवर पासवर्ड इस्तेमाल करें। कमज़ोर पासवर्ड पक्का इस्तेमाल करें?</string>
     <string name="weak">कमज़ोर</string>
@@ -706,7 +702,6 @@ Do you want to switch to this account?</string>
     <string name="create_account_on_with_colon">Create account on:</string>
     <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Unsubscribe</string>
     <string name="check_your_email">Check your email</string>
     <string name="open_email_app">Open email app</string>
@@ -864,8 +859,6 @@ Do you want to switch to this account?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
@@ -1075,4 +1068,14 @@ Do you want to switch to this account?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

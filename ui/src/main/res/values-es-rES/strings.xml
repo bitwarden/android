@@ -4,6 +4,7 @@
     <string name="add_folder">Añadir carpeta</string>
     <string name="add_item">Añadir elemento</string>
     <string name="an_error_has_occurred">Ha ocurrido un error.</string>
+    <string name="apply">Apply</string>
     <string name="back">Atrás</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Cancelar</string>
@@ -85,7 +86,7 @@
     <string name="edit_card">Editar tarjeta</string>
     <string name="edit_identity">Editar identidad</string>
     <string name="edit_note">Editar nota</string>
-    <string name="edit_ssh_key">Edit SSH key</string>
+    <string name="edit_ssh_key">Editar clave SSH</string>
     <string name="enter_email_for_hint">Introduce el correo electrónico de tu cuenta para recibir la pista de tu contraseña maestra.</string>
     <string name="favorite">Favorito</string>
     <string name="unfavorite">Eliminar favorito</string>
@@ -101,8 +102,8 @@
     <string name="one_minute">1 minuto</string>
     <string name="four_hours">4 horas</string>
     <string name="immediately">Inmediatamente</string>
-    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
-    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
+    <string name="vault_timeout_log_out_confirmation_title">¿Establecer tiempo de espera de sesión a \"Cerrar sesión\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">Tras el tiempo de espera, tu sesión cerrará. Necesitarás estar conectado a internet para iniciar sesión y volver a acceder a tu caja fuerte. Los ajustes y el PIN guardados en este dispositivo no cambiarán.</string>
     <string name="logging_in">Iniciando sesión...</string>
     <string name="login_to_bitwarden">Iniciar sesión en Bitwarden</string>
     <string name="master_password_confirmation_val_message">La confirmación de la contraseña no es correcta.</string>
@@ -146,20 +147,20 @@
     <string name="syncing">Sincronizando...</string>
     <string name="syncing_complete">Sincronización completada</string>
     <string name="two_step_login">Autenticación en dos pasos</string>
-    <string name="unlock_with">Desbloquear con %1$s</string>
+    <string name="unlock_with_biometrics">Desbloquear con Biometría</string>
     <string name="unlock_with_pin">Desbloquear con código PIN</string>
     <string name="verification_code">Código de verificación</string>
     <string name="view_login">Ver inicio de sesión</string>
     <string name="view_card">Ver tarjeta</string>
     <string name="view_identity">Ver identidad</string>
     <string name="view_note">Ver nota</string>
-    <string name="view_ssh_key">View SSH key</string>
+    <string name="view_ssh_key">Ver clave SSH</string>
     <string name="web_vault">Caja fuerte web de Bitwarden</string>
     <string name="items">Elementos</string>
     <string name="items_for_uri">Elementos para %1$s</string>
     <string name="no_items_for_uri">No hay elementos en tu caja fuerte para %1$s.</string>
     <string name="no_items_for_vault">No hay items en su caja fuerte que coincidan con \"%1$s\"</string>
-    <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
+    <string name="search_for_a_login_or_add_a_new_login">Buscar un inicio de sesión o añadir un nuevo inicio de sesión</string>
     <string name="disabled">Desactivado</string>
     <string name="bitwarden_autofill_service_alert2">La forma más fácil de añadir nuevos inicios de sesión a tu caja fuerte es utilizando el Servicio de Autocompletar de Bitwarden. Aprenda más sobre cómo utilizar el Servicio de Autocompletar de Bitwarden en el menú \"Ajustes\".</string>
     <string name="autofill">Autocompletar</string>
@@ -169,7 +170,7 @@
     <string name="authenticator_app_title">Aplicación de autenticación</string>
     <string name="enter_verification_code_app">Introduce el código de verificación de 6 dígitos de tu aplicación autenticadora.</string>
     <string name="enter_verification_code_email">Introduce el código de verificación de 6 dígitos que ha sido enviado por correo a %1$s.</string>
-    <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the code sent to your email to verify your identity.</string>
+    <string name="enter_verification_code_new_device">No reconocemos este dispositivo. Introduce el código enviado a tu correo electrónico para verificar tu identidad.</string>
     <string name="recovery_code_title">Código de recuperación</string>
     <string name="remember">Recordar</string>
     <string name="remember_email">Recordar correo electrónico</string>
@@ -200,11 +201,11 @@ El escaneo se realizará automáticamente.</string>
     <string name="no_attachments">No hay adjuntos.</string>
     <string name="file_source">Fuente de archivo</string>
     <string name="max_file_size">El tamaño máximo de archivo es de 100MB.</string>
-    <string name="required_max_file_size">Required. Maximum file size is 100 MB.</string>
+    <string name="required_max_file_size">Obligatorio. El tamaño máximo de archivo es 100 MB.</string>
     <string name="learn_more">Aprende más</string>
     <string name="api_url">URL del servidor de la API</string>
     <string name="client_certificate_mtls">Certificado de cliente (mTLS)</string>
-    <string name="certificate_used_for_client_authentication">Certificate used for client authentication.</string>
+    <string name="certificate_used_for_client_authentication">Certificado usado para la autenticación de cliente.</string>
     <string name="custom_environment">Entorno personalizado</string>
     <string name="custom_environment_footer">Para usuarios avanzados. Puedes especificar la URL base de cada servicio de forma independiente.</string>
     <string name="environment_saved">Las URLs del entorno han sido guardadas.</string>
@@ -286,7 +287,7 @@ El escaneo se realizará automáticamente.</string>
     <string name="new_uri">Nueva URI</string>
     <string name="add_website">Añadir página web</string>
     <string name="base_domain">Dominio base</string>
-    <string name="default_text">Por defecto</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Exacta</string>
     <string name="host">Servidor</string>
     <string name="reg_ex">Expresión regular</string>
@@ -356,7 +357,7 @@ El escaneo se realizará automáticamente.</string>
     <string name="clear_clipboard">Limpiar el portapapeles</string>
     <string name="clear_clipboard_description">Borrar automáticamente los valores copiados de tu portapapeles.</string>
     <string name="default_uri_match_detection">Detección por defecto de coincidencia de URI</string>
-    <string name="default_uri_match_detection_description">Elija la forma por defecto en la que se maneja la detección de coincidencias URI para inicios de sesión cuando se realizan acciones tales como autocompletar.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Cambiar el color de la aplicación.</string>
     <string name="copy_notes">Copiar nota</string>
@@ -364,15 +365,14 @@ El escaneo se realizará automáticamente.</string>
     <string name="exit_confirmation">¿Está seguro de que desea salir de Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">¿Quiere solicitar el desbloqueo con su contraseña maestra cuando se reinicie la aplicación?</string>
-    <string name="ask_to_add_login">Pedir que se añada el inicio de sesión</string>
-    <string name="ask_to_add_login_description">Pedir que se añada un elemento si no se encuentra uno en tu caja fuerte.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Al reiniciar la aplicación</string>
     <string name="capitalize">Mayúsculas iniciales</string>
     <string name="include_number">Incluir número</string>
     <string name="download">Descargar</string>
     <string name="login_expired">Su sesión ha expirado.</string>
     <string name="biometrics_direction">Verificación biométrica</string>
-    <string name="biometrics">biometría</string>
     <string name="biometrics_failed">TOTP</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Utilizar biometría para desbloquear</string>
@@ -420,7 +420,6 @@ El escaneo se realizará automáticamente.</string>
     <string name="master_password_policy_validation_title">Contraseña no válida</string>
     <string name="master_password_policy_validation_message">La contraseña no cumple con los requisitos de la organización. Por favor, compruebe la información de la política e inténtelo de nuevo.</string>
     <string name="loading">Cargando</string>
-    <string name="accept_policies_error">Todavía no has aceptado los términos del servicio y la política de privacidad.</string>
     <string name="terms_of_service">Términos y condiciones del servicio</string>
     <string name="privacy_policy">Política de privacidad</string>
     <string name="passkey_management">Gestión de claves de acceso</string>
@@ -485,7 +484,6 @@ El escaneo se realizará automáticamente.</string>
     <string name="password_prompt">Volver a preguntar contraseña maestra</string>
     <string name="password_confirmation">Confirmación de contraseña maestra</string>
     <string name="password_confirmation_desc">Esta acción está protegida, para continuar por favor vuelva a introducir su contraseña maestra para verificar su identidad.</string>
-    <string name="captcha_failed">Captcha fallido. Por favor, inténtalo de nuevo.</string>
     <string name="update_master_password">Actualizar contraseña maestra</string>
     <string name="update_master_password_warning">Su contraseña maestra ha sido cambiada recientemente por un administrador de su organización. Para acceder a la caja fuerte, debe actualizar su contraseña maestra ahora. Proceder le desconectará de su sesión actual, requiriendo que vuelva a iniciar sesión. Las sesiones activas en otros dispositivos pueden seguir estando activas durante una hora.</string>
     <string name="updating_password">Actualizando contraseña</string>
@@ -609,8 +607,6 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="language">Idioma</string>
     <string name="language_change_x_description">El idioma se ha cambiado a %1$s. Por favor, reinicia la aplicación para aplicar los cambios</string>
     <string name="default_system">Por defecto (Sistema)</string>
-    <string name="important">Importante</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Tu contraseña maestra no se puede recuperar si la olvidas! %1$s caracteres como mínimo.</string>
     <string name="weak_master_password">Contraseña maestra débil</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Contraseña débil identificada. Utilice una contraseña fuerte para proteger su cuenta. ¿Está seguro de que desea utilizar una contraseña débil?</string>
     <string name="weak">Débil</string>
@@ -708,7 +704,6 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="create_account_on_with_colon">Crea una cuenta en:</string>
     <string name="we_sent_an_email_to">Hemos enviado un correo electrónico a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Al continuar, aceptas los <annotation link="termsOfService">Términos de Servicio</annotation> y la <annotation link="privacyPolicy">Política de Privacidad</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Al activar este interruptor, aceptas los <annotation link="termsOfService">Términos de Servicio</annotation> y la <annotation link="privacyPolicy">Política de Privacidad</annotation></string>
     <string name="unsubscribe">Unsubscribe</string>
     <string name="check_your_email">Comprueba tu correo electrónico</string>
     <string name="open_email_app">Abrir aplicación de correo electrónico</string>
@@ -866,8 +861,6 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 DE 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
@@ -1048,7 +1041,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="download_bitwarden_card_message">Almacena todos tus inicios de sesión y sincroniza los códigos de verificación directamente con la aplicación Authenticator.</string>
     <string name="download_now">Descargar ahora</string>
     <string name="sync_with_bitwarden_app">Sincronizar con la aplicación Bitwarden</string>
-    <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
+    <string name="learn_more_link"><annotation link="learnMore">Más información</annotation></string>
     <string name="shared_codes_error">No se pueden sincronizar los códigos desde la aplicación de Bitwarden. Asegúrate de que ambas aplicaciones estén actualizadas. Aún puedes acceder a tus códigos existentes en la aplicación de Bitwarden.</string>
     <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sincronizar con la aplicación Bitwarden</string>
@@ -1077,4 +1070,14 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="local_items_are_collapsed_click_to_expand">Los elementos locales están colapsados, clic para expandir.</string>
     <string name="items_expanded_click_to_collapse">Los elementos están expandidos, clic para colapsar.</string>
     <string name="items_are_collapsed_click_to_expand">Los elementos están colapsados, clic para expandir.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

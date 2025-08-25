@@ -4,6 +4,7 @@
     <string name="add_folder">Add folder</string>
     <string name="add_item">Add Item</string>
     <string name="an_error_has_occurred">An error has occurred</string>
+    <string name="apply">Apply</string>
     <string name="back">Back</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Cancel</string>
@@ -146,7 +147,7 @@
     <string name="syncing">Syncing...</string>
     <string name="syncing_complete">Syncing complete</string>
     <string name="two_step_login">Two-step login</string>
-    <string name="unlock_with">Unlock with %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Unlock with PIN code</string>
     <string name="verification_code">Verification code</string>
     <string name="view_login">View login</string>
@@ -286,7 +287,7 @@ Scanning will happen automatically.</string>
     <string name="new_uri">New URI</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">Base domain</string>
-    <string name="default_text">Default</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Exact</string>
     <string name="host">Host</string>
     <string name="reg_ex">Regular expression</string>
@@ -356,7 +357,7 @@ Scanning will happen automatically.</string>
     <string name="clear_clipboard">Clear clipboard</string>
     <string name="clear_clipboard_description">Automatically clear copied values from your clipboard.</string>
     <string name="default_uri_match_detection">Default URI match detection</string>
-    <string name="default_uri_match_detection_description">Choose the default way that URI match detection is handled for logins when performing actions such as autofill.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Theme</string>
     <string name="theme_description">Change the application\'s color theme</string>
     <string name="copy_notes">Copy note</string>
@@ -364,15 +365,14 @@ Scanning will happen automatically.</string>
     <string name="exit_confirmation">Are you sure you want to exit Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Do you want to require unlocking with your master password when the application is restarted?</string>
-    <string name="ask_to_add_login">Ask to add login</string>
-    <string name="ask_to_add_login_description">Ask to add an item if one isn\'t found in your vault.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">On app restart</string>
     <string name="capitalize">Capitalize</string>
     <string name="include_number">Include number</string>
     <string name="download">Download</string>
     <string name="login_expired">Your login session has expired.</string>
     <string name="biometrics_direction">Biometric verification</string>
-    <string name="biometrics">Biometrics</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Use biometrics to unlock</string>
@@ -484,7 +484,6 @@ Scanning will happen automatically.</string>
     <string name="password_prompt">Master password re-prompt</string>
     <string name="password_confirmation">Master password confirmation</string>
     <string name="password_confirmation_desc">This action is protected, to continue please re-enter your master password to verify your identity.</string>
-    <string name="captcha_failed">Captcha failed. Please try again.</string>
     <string name="update_master_password">Update master password</string>
     <string name="update_master_password_warning">Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</string>
     <string name="updating_password">Updating password</string>
@@ -1077,4 +1076,14 @@ Do you want to switch to this account?</string>
         <item quantity="one">Bitwarden could not decrypt 1 vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
         <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
     </plurals>
+    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

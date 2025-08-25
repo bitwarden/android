@@ -1,16 +1,15 @@
 package com.x8bit.bitwarden.ui.auth.feature.startregistration
 
-import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
-import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ContinueClick
@@ -27,26 +26,18 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEv
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToPrivacyPolicy
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToTerms
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToUnsubscribe
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 @Suppress("LargeClass")
 class StartRegistrationViewModelTest : BaseViewModelTest() {
-    private val mockAuthRepository = mockk<AuthRepository> {
-        every { captchaTokenResultFlow } returns flowOf()
-    }
+    private val mockAuthRepository = mockk<AuthRepository>()
     private val mutableSnackbarSharedFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
     private val snackbarRelayManager = mockk<SnackbarRelayManager> {
         every {
@@ -54,16 +45,6 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         } returns mutableSnackbarSharedFlow
     }
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
-
-    @BeforeEach
-    fun setUp() {
-        mockkStatic(::generateUriForCaptcha)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(::generateUriForCaptcha)
-    }
 
     @Test
     fun `initial state should be correct`() {
@@ -186,10 +167,6 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
     @Test
     fun `ContinueClick register returns Success with emailVerificationToken should emit NavigateToCompleteRegistration`() =
         runTest {
-            val mockkUri = mockk<Uri>()
-            every {
-                generateUriForCaptcha(captchaId = "mock_captcha_id")
-            } returns mockkUri
             coEvery {
                 mockAuthRepository.sendVerificationEmail(
                     email = EMAIL,
@@ -216,10 +193,6 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
     @Test
     fun `ContinueClick register returns Success without emailVerificationToken should emit NavigateToCheckEmail`() =
         runTest {
-            val mockkUri = mockk<Uri>()
-            every {
-                generateUriForCaptcha(captchaId = "mock_captcha_id")
-            } returns mockkUri
             coEvery {
                 mockAuthRepository.sendVerificationEmail(
                     email = EMAIL,

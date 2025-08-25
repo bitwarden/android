@@ -9,7 +9,9 @@ on:
         type: choice
         options:
           - RC
-          - Hotfix
+          - Hotfix Password Manager
+          - Hotfix Authenticator
+          - Test
 
 jobs:
   create-release-branch:
@@ -17,38 +19,54 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: write
+      actions: write
     steps:
       - name: Check out repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
         with:
           fetch-depth: 0
 
-      - name: Create RC Branch
-        if: inputs.release_type == 'RC'
+      - name: Create RC or Test Branch
+        id: rc_branch
+        if: inputs.release_type == 'RC' || inputs.release_type == 'Test'
         env:
-          RC_PREFIX_DATE: "true" # replace with input if needed
+          _TEST_MODE: ${{ inputs.release_type == 'Test' }}
+          _RELEASE_TYPE: ${{ inputs.release_type }}
         run: |
-          if [ "$RC_PREFIX_DATE" = "true" ]; then
-            current_date=$(date +'%Y.%m')
-            branch_name="release/${current_date}-rc${{ github.run_number }}"
-          else
-            branch_name="release/rc${{ github.run_number }}"
+          current_date=$(date +'%Y.%-m')
+          branch_name="${current_date}-rc${{ github.run_number }}"
+
+          if [ "$_TEST_MODE" = "true" ]; then
+            branch_name="WORKFLOW-TEST-${branch_name}"
           fi
+          branch_name="release/${branch_name}"
+
           git switch main
           git switch -c $branch_name
           git push origin $branch_name
-          echo "# :cherry_blossom: RC branch: ${branch_name}" >> $GITHUB_STEP_SUMMARY
+          echo "# :cherry_blossom: ${_RELEASE_TYPE} branch: ${branch_name}" >> $GITHUB_STEP_SUMMARY
+          echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
 
       - name: Create Hotfix Branch
-        if: inputs.release_type == 'Hotfix'
+        id: hotfix_branch
+        if: startsWith(inputs.release_type, 'Hotfix')
+        env:
+          _RELEASE_TYPE: ${{ inputs.release_type }}
         run: |
-          latest_tag=$(git tag -l --sort=-creatordate | head -n 1)
+          app_codename="bwpm"
+          if [ "$_RELEASE_TYPE" == "Hotfix Authenticator" ]; then
+            app_codename="bwa"
+          fi
+          echo "🌿 app codename: $app_codename"
+
+          latest_tag=$(git tag -l --sort=-creatordate | grep "$app_codename" | head -n 1)
           if [ -z "$latest_tag" ]; then
             echo "::error::No tags found in the repository"
             exit 1
           fi
           branch_name="release/hotfix-${latest_tag}"
           echo "🌿 branch name: $branch_name"
+          echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
           if git show-ref --verify --quiet "refs/remotes/origin/$branch_name"; then
             echo "# :fire: :warning: Hotfix branch already exists: ${branch_name}" >> $GITHUB_STEP_SUMMARY
             exit 0
@@ -56,3 +74,12 @@ jobs:
           git switch -c $branch_name $latest_tag
           git push origin $branch_name
           echo "# :fire: Hotfix branch: ${branch_name}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Trigger CI Workflows
+        env:
+          GH_TOKEN: ${{ github.token }}
+          _BRANCH_NAME: ${{ steps.rc_branch.outputs.branch_name || steps.hotfix_branch.outputs.branch_name }}
+        run: |
+          echo "🌿 branch name: $_BRANCH_NAME"
+          gh workflow run build.yml --ref $_BRANCH_NAME -f distribute-to-firebase=true -f publish-to-play-store=true
+          gh workflow run build-authenticator.yml --ref $_BRANCH_NAME -f distribute-to-firebase=true -f publish-to-play-store=true

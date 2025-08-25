@@ -4,10 +4,10 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -18,13 +18,13 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.toExportFormat
 import com.x8bit.bitwarden.ui.platform.util.fileExtension
@@ -53,7 +53,7 @@ class ExportVaultViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     private val fileManager: FileManager,
     private val clock: Clock,
-    private val featureFlagManager: FeatureFlagManager,
+    private val organizationEventManager: OrganizationEventManager,
 ) : BaseViewModel<ExportVaultState, ExportVaultEvent, ExportVaultAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: ExportVaultState(
@@ -402,6 +402,9 @@ class ExportVaultViewModel @Inject constructor(
             return
         }
 
+        organizationEventManager.trackEvent(
+            event = OrganizationEvent.UserClientExportedVault,
+        )
         sendEvent(ExportVaultEvent.ShowSnackbar(BitwardenString.export_vault_success.asText()))
     }
 
@@ -461,19 +464,14 @@ class ExportVaultViewModel @Inject constructor(
     }
 
     private fun getRestrictedItemTypes(): List<CipherType> {
-        val isRemoveCardPolicyFeatureEnabled =
-            featureFlagManager.getFeatureFlag(FlagKey.RemoveCardPolicy)
-        if (!isRemoveCardPolicyFeatureEnabled) {
-            return emptyList()
+        val hasActiveRestrictItemTypesPolicy = policyManager
+            .getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            .isNotEmpty()
+        return if (!hasActiveRestrictItemTypesPolicy) {
+            emptyList()
+        } else {
+            listOf(CipherType.CARD)
         }
-
-        val hasActiveRestrictItemTypesPolicy =
-            policyManager.getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES).isNotEmpty()
-        if (!hasActiveRestrictItemTypesPolicy) {
-            return emptyList()
-        }
-
-        return listOf(CipherType.CARD)
     }
 }
 
@@ -528,7 +526,7 @@ sealed class ExportVaultEvent {
     data object NavigateBack : ExportVaultEvent()
 
     /**
-     * Shows a toast with the given [message].
+     * Shows a toast with the given [data].
      */
     data class ShowSnackbar(
         val data: BitwardenSnackbarData,

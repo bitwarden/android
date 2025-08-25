@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
-import android.net.Uri
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
@@ -11,13 +10,13 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -111,15 +110,6 @@ class LoginWithDeviceScreenTest : BitwardenComposeTest() {
         val email = "test@email.com"
         mutableEventFlow.tryEmit(LoginWithDeviceEvent.NavigateToTwoFactorLogin(email))
         assertEquals(email, onNavigateToTwoFactorLoginEmail)
-    }
-
-    @Test
-    fun `NavigateToCaptcha should call launchUri on intentManager`() {
-        val uri = mockk<Uri>()
-        mutableEventFlow.tryEmit(LoginWithDeviceEvent.NavigateToCaptcha(uri))
-        verify(exactly = 1) {
-            intentManager.startCustomTabsActivity(uri)
-        }
     }
 
     @Test

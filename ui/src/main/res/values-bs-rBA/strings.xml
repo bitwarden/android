@@ -4,6 +4,7 @@
     <string name="add_folder">Dodaj folder</string>
     <string name="add_item">Dodaj stavku</string>
     <string name="an_error_has_occurred">Došlo je do greške.</string>
+    <string name="apply">Apply</string>
     <string name="back">Nazad</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Otkaži</string>
@@ -146,7 +147,7 @@
     <string name="syncing">Sinhronizacija...</string>
     <string name="syncing_complete">Sinhronizacija je završena.</string>
     <string name="two_step_login">Prijava u dva koraka</string>
-    <string name="unlock_with">Otključajte sa %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Otključajte pomoću PIN koda</string>
     <string name="verification_code">Verifikacioni kod</string>
     <string name="view_login">View login</string>
@@ -286,7 +287,7 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="new_uri">Novi URI</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">Osnovni domen</string>
-    <string name="default_text">Zadano</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Egzatan</string>
     <string name="host">Host</string>
     <string name="reg_ex">Regularni izraz</string>
@@ -356,7 +357,7 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="clear_clipboard">Očisti međumemoriju</string>
     <string name="clear_clipboard_description">Automatski očistiti kopirane vrijednosti iz vaše međumemorije.</string>
     <string name="default_uri_match_detection">Zadani otkrivanje URI podudaranja</string>
-    <string name="default_uri_match_detection_description">Biranje zadanog načina na koji će se riješavati otkrivanje URI-ja za prijavu pri izvođenju radnji kao što je auto-ispuna lozinki.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Tema aplikacije</string>
     <string name="theme_description">Promijenite boju teme u aplikaciji ovdje.</string>
     <string name="copy_notes">Kopiraj bilješke</string>
@@ -364,15 +365,14 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="exit_confirmation">Sigurno želiš izaći iz Bitwarden-a?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Obavezno otključavanje glavnom lozinkom pri ponovnom pokretanju aplikacije?</string>
-    <string name="ask_to_add_login">Upitaj za dodavanje prijave</string>
-    <string name="ask_to_add_login_description">Upitaj za dodavanje, ako se stavka već ne nalazi u trezoru.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Kod ponovnog pokretanja</string>
     <string name="capitalize">Prva slova velika</string>
     <string name="include_number">Uključi broj</string>
     <string name="download">Preuzmi</string>
     <string name="login_expired">Sesija je istekla.</string>
     <string name="biometrics_direction">Biometrijska autentifikacija</string>
-    <string name="biometrics">biometrijom</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Koristi biometriju za otključavanje</string>
@@ -420,7 +420,6 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="master_password_policy_validation_title">Neispravna lozinka</string>
     <string name="master_password_policy_validation_message">Lozinka ne zadovoljava organizacijska pravila. Provjeri informacije o pravilima organizacije i pokušaj ponovno.</string>
     <string name="loading">Učitavanje</string>
-    <string name="accept_policies_error">Uvjeti korištenja i Pravila privatnosti nisu prihvaćeni.</string>
     <string name="terms_of_service">Uslovi korištenja</string>
     <string name="privacy_policy">Pravila o privatnosti</string>
     <string name="passkey_management">Passkey management</string>
@@ -485,7 +484,6 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="password_prompt">Ponovno zatraži glavnu lozinku</string>
     <string name="password_confirmation">Potvrda glavne lozinke</string>
     <string name="password_confirmation_desc">Ova radnja je zaštićena. Za nastavak i potvrdu identiteta, unesi svoju glavnu lozinku.</string>
-    <string name="captcha_failed">Captcha pogrešna. Pokušaj ponovo.</string>
     <string name="update_master_password">Ažuriraj glavnu lozinku</string>
     <string name="update_master_password_warning">Tvoju glavnu lozinku je nedavno promijenio administrator tvoje organizacije. Za pristup trezoru, potrebno je ažurirati glavnu lozinku, što će te odjaviti iz trenutne sesije, te ćeš se morati ponovno prijaviti. Aktivne sesije na drugim uređajima mogu ostati aktivne još sat vremena.</string>
     <string name="updating_password">Ažuriranje lozinke</string>
@@ -608,8 +606,6 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="language">Language</string>
     <string name="language_change_x_description">The language has been changed to %1$s. Please restart the app to see the change</string>
     <string name="default_system">Default (System)</string>
-    <string name="important">Važno</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Tvoja glavna lozinka ne može biti oporavljena ukoliko je zaboraviš! %1$s znakova najmanje.</string>
     <string name="weak_master_password">Slaba glavna lozinka</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Slaba lozinka prepoznata. Koristite jaku lozinku za zaštitu Vašeg računa. Da li ste sigurni da želite koristiti slabu lozinku?</string>
     <string name="weak">Slabo</string>
@@ -706,7 +702,6 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="create_account_on_with_colon">Create account on:</string>
     <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Unsubscribe</string>
     <string name="check_your_email">Check your email</string>
     <string name="open_email_app">Open email app</string>
@@ -864,8 +859,6 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
@@ -1075,4 +1068,14 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

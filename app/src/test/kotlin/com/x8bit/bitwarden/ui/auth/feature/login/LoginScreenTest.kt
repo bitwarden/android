@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.login
 
-import android.net.Uri
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
@@ -15,23 +14,23 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
+import com.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.bitwarden.ui.util.assertNoDialogExists
+import com.bitwarden.ui.util.assertRemovalConfirmationDialogIsDisplayed
+import com.bitwarden.ui.util.assertSwitcherIsDisplayed
+import com.bitwarden.ui.util.assertSwitcherIsNotDisplayed
+import com.bitwarden.ui.util.performAccountClick
+import com.bitwarden.ui.util.performAccountIconClick
+import com.bitwarden.ui.util.performAccountLongClick
+import com.bitwarden.ui.util.performAddAccountClick
+import com.bitwarden.ui.util.performLockAccountClick
+import com.bitwarden.ui.util.performLogoutAccountClick
+import com.bitwarden.ui.util.performRemoveAccountClick
+import com.bitwarden.ui.util.performYesDialogButtonClick
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
-import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
-import com.x8bit.bitwarden.ui.util.assertRemovalConfirmationDialogIsDisplayed
-import com.x8bit.bitwarden.ui.util.assertSwitcherIsDisplayed
-import com.x8bit.bitwarden.ui.util.assertSwitcherIsNotDisplayed
-import com.x8bit.bitwarden.ui.util.performAccountClick
-import com.x8bit.bitwarden.ui.util.performAccountIconClick
-import com.x8bit.bitwarden.ui.util.performAccountLongClick
-import com.x8bit.bitwarden.ui.util.performAddAccountClick
-import com.x8bit.bitwarden.ui.util.performLockAccountClick
-import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
-import com.x8bit.bitwarden.ui.util.performRemoveAccountClick
-import com.x8bit.bitwarden.ui.util.performYesDialogButtonClick
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -319,13 +318,6 @@ class LoginScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `NavigateToCaptcha should call intentManager startCustomTabsActivity`() {
-        val mockUri = mockk<Uri>()
-        mutableEventFlow.tryEmit(LoginEvent.NavigateToCaptcha(mockUri))
-        verify { intentManager.startCustomTabsActivity(mockUri) }
-    }
-
-    @Test
     fun `NavigateToMasterPasswordHint should call onNavigateToMasterPasswordHint`() {
         mutableEventFlow.tryEmit(LoginEvent.NavigateToMasterPasswordHint("email"))
         assertTrue(onNavigateToMasterPasswordHintCalled)
@@ -359,7 +351,6 @@ private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
 private val DEFAULT_STATE =
     LoginState(
         emailAddress = EMAIL,
-        captchaToken = null,
         isLoginButtonEnabled = false,
         passwordInput = "",
         environmentLabel = "",

@@ -4,6 +4,7 @@
     <string name="add_folder">Lägg till mapp</string>
     <string name="add_item">Lägg till objekt</string>
     <string name="an_error_has_occurred">Ett fel har inträffat</string>
+    <string name="apply">Verkställ</string>
     <string name="back">Tillbaka</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Avbryt</string>
@@ -65,14 +66,14 @@
     <string name="username">Användarnamn</string>
     <string name="validation_field_required">%1$s-fältet krävs.</string>
     <string name="you_must_attach_a_file_to_save_this_send">Du måste bifoga en fil för att spara denna send.</string>
-    <string name="value_has_been_copied">%1$s har kopierats</string>
+    <string name="value_has_been_copied">%1$s kopierades</string>
     <string name="verify_master_password">Bekräfta huvudlösenord</string>
     <string name="verify_pin">Bekräfta PIN-kod</string>
     <string name="view">Visa</string>
     <string name="yes">Ja</string>
     <string name="account">Konto</string>
     <string name="account_created_success">Ditt nya konto har skapats!</string>
-    <string name="set_bitwarden_as_passkey_manager_description">Ange Bitwarden som din lösenordsleverantör i enhetsinställningarna.</string>
+    <string name="set_bitwarden_as_passkey_manager_description">Ange Bitwarden som din inloggningsnyckelleverantör i enhetsinställningarna.</string>
     <string name="avoid_ambiguous_characters">Undvik tvetydiga tecken</string>
     <string name="bitwarden_autofill_service">Bitwardens hjälpmedelsservice för automatisk ifyllnad</string>
     <string name="change_master_password">Ändra huvudlösenord</string>
@@ -146,7 +147,7 @@
     <string name="syncing">Synkroniserar...</string>
     <string name="syncing_complete">Synkronisering slutförd</string>
     <string name="two_step_login">Tvåfaktorsautentisering</string>
-    <string name="unlock_with">Lås upp med %1$s</string>
+    <string name="unlock_with_biometrics">Lås upp med biometri</string>
     <string name="unlock_with_pin">Lås upp med PIN-kod</string>
     <string name="verification_code">Verifieringskod</string>
     <string name="view_login">Visa inloggning</string>
@@ -286,7 +287,7 @@ Skanningen sker automatiskt.</string>
     <string name="new_uri">Ny URI</string>
     <string name="add_website">Lägg till webbplats</string>
     <string name="base_domain">Basdomän</string>
-    <string name="default_text">Standard</string>
+    <string name="default_text">Standard (%1$s)</string>
     <string name="exact">Exakt</string>
     <string name="host">Värd</string>
     <string name="reg_ex">Reguljärt uttryck</string>
@@ -356,7 +357,7 @@ Skanningen sker automatiskt.</string>
     <string name="clear_clipboard">Rensa urklipp</string>
     <string name="clear_clipboard_description">Rensa automatiskt kopierade värden från urklipp.</string>
     <string name="default_uri_match_detection">Standardmatchning för URI</string>
-    <string name="default_uri_match_detection_description">Välj standardalternativet för hur matchning av URI är hanterat för inloggningar när du utför operationer såsom automatisk ifyllnad.</string>
+    <string name="default_uri_match_detection_description">Detektering av URI-matchning är hur Bitwarden identifierar automatisk ifyllning.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Ändra appens färgtema</string>
     <string name="copy_notes">Kopiera anteckning</string>
@@ -364,15 +365,14 @@ Skanningen sker automatiskt.</string>
     <string name="exit_confirmation">Är du säker på att du vill avsluta Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Kräv huvudlösenord vid omstart av appen?</string>
     <string name="pin_require_master_password_restart">Vill du behöva låsa upp med ditt huvudlösenord när programmet startas om?</string>
-    <string name="ask_to_add_login">Be om att lägga till inloggning</string>
-    <string name="ask_to_add_login_description">Be om att lägga till ett objekt om det inte finns i ditt valv.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Vid omstart av appen</string>
     <string name="capitalize">Versalisera</string>
     <string name="include_number">Inkludera siffra</string>
     <string name="download">Ladda ner</string>
     <string name="login_expired">Din inloggningssession har upphört.</string>
     <string name="biometrics_direction">Biometrisk verifiering</string>
-    <string name="biometrics">Biometri</string>
     <string name="biometrics_failed">Biometri misslyckades</string>
     <string name="biometrics_decoding_failure">Logga in med ditt huvudlösenord eller PIN-kod och aktivera sedan biometriska inloggningar i Inställningar.</string>
     <string name="use_biometrics_to_unlock">Använd biometri för att låsa upp</string>
@@ -420,7 +420,6 @@ Skanningen sker automatiskt.</string>
     <string name="master_password_policy_validation_title">Ogiltigt lösenord</string>
     <string name="master_password_policy_validation_message">Lösenordet uppfyller inte organisationens krav. Kontrollera policyn och försök igen.</string>
     <string name="loading">Laddar</string>
-    <string name="accept_policies_error">Användarvillkoren och Integritetspolicyn har inte accepterats.</string>
     <string name="terms_of_service">Användarvillkor</string>
     <string name="privacy_policy">Integritetspolicy</string>
     <string name="passkey_management">Nyckelhantering</string>
@@ -485,7 +484,6 @@ Skanningen sker automatiskt.</string>
     <string name="password_prompt">Återupprepa huvudlösenord</string>
     <string name="password_confirmation">Bekräfta huvudlösenord</string>
     <string name="password_confirmation_desc">Denna åtgärd är skyddad. För att fortsätta, vänligen verifiera din identitet genom att ange ditt huvudlösenord.</string>
-    <string name="captcha_failed">Captcha misslyckades. Försök igen.</string>
     <string name="update_master_password">Uppdatera huvudlösenord</string>
     <string name="update_master_password_warning">Ditt huvudlösenord ändrades nyligen av en administratör i din organisation. För att få tillgång till valvet måste du uppdatera ditt huvudlösenord nu. Om du fortsätter kommer du att loggas ut från din nuvarande session, vilket kräver att du loggar in igen. Aktiva sessioner på andra enheter kan komma att vara aktiva i upp till en timme.</string>
     <string name="updating_password">Uppdaterar lösenord</string>
@@ -609,8 +607,6 @@ Vill du byta till detta konto?</string>
     <string name="language">Språk</string>
     <string name="language_change_x_description">Språket har ändrats till %1$s. Starta om appen för att se ändringen</string>
     <string name="default_system">Standard (System)</string>
-    <string name="important">Viktigt</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Ditt huvudlösenord kan inte återställas om du glömmer det! Minst %1$s tecken.</string>
     <string name="weak_master_password">Svagt huvudlösenord</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Ett svagt lösenord upptäcktes. Skydda ditt konto med ett starkt lösenord. Är du säker på att du vill använda ett svagt lösenord?</string>
     <string name="weak">Svagt</string>
@@ -632,8 +628,8 @@ Vill du byta till detta konto?</string>
     <string name="turn_off_using_public_device">Stäng av med en offentlig enhet</string>
     <string name="remember_this_device">Kom ihåg denna enhet</string>
     <string name="passkey">Nyckel</string>
-    <string name="passkey_will_not_be_copied">Nyckel kommer inte kopieras</string>
-    <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Nyckeln kommer inte att kopieras till det klonade objektet. Vill du klona det här objektet?</string>
+    <string name="passkey_will_not_be_copied">Inloggningsnyckel kommer inte kopieras</string>
+    <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">Inloggningsnyckeln kommer inte att kopieras till det klonade objektet. Vill du fortsätta klona det här objektet?</string>
     <string name="master_password_re_prompt_help">Återupprepa huvudlösenord hjälp</string>
     <string name="admin_approval_requested">Godkännande från administratör har begärts</string>
     <string name="your_request_has_been_sent_to_your_admin">Din begäran har skickats till din administratör.</string>
@@ -681,16 +677,16 @@ Vill du byta till detta konto?</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Ställ in ett upplåsningsalternativ för att ändra vad som händer när tidsgränsen uppnås.</string>
     <string name="save_passkey_as_new_login">Spara nyckel som ny inloggning</string>
     <string name="overwrite_passkey">Skriv över inloggningsnyckel?</string>
-    <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">Detta objekt innehåller redan en passnyckel. Är du säker på att du vill skriva över den aktuella passnyckeln?</string>
+    <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">Detta objekt innehåller redan en inloggningsnyckel. Är du säker på att du vill skriva över den aktuella inloggningsnyckeln?</string>
     <string name="duo_two_step_login_is_required_for_your_account">Duo tvåstegsverifiering krävs för ditt konto.</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Följ stegen från Duo för att slutföra inloggningen.</string>
     <string name="launch_duo">Starta Duo</string>
     <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Din inloggningsnyckel kommer att sparas i ditt Bitwarden-valv för %1$s</string>
     <string name="passkeys_not_supported_for_this_app">Inloggningsnycklar stöds inte för den här appen</string>
-    <string name="passkey_operation_failed_because_browser_is_not_privileged">Passkey-operationen misslyckades eftersom webbläsaren inte är privilegierad</string>
-    <string name="passkey_operation_failed_because_browser_signature_does_not_match">Passkey-operationen misslyckades eftersom webbläsarens signatur inte stämmer överens</string>
-    <string name="passkey_operation_failed_because_of_missing_asset_links">Passkey-operationen misslyckades på grund av saknade tillgångslänkar</string>
-    <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey-operationen misslyckades eftersom appen inte kunde verifieras</string>
+    <string name="passkey_operation_failed_because_browser_is_not_privileged">Åtgärden för inloggningsnyckel misslyckades eftersom webbläsaren inte är privilegierad</string>
+    <string name="passkey_operation_failed_because_browser_signature_does_not_match">Åtgärden för inloggningsnyckel misslyckades eftersom webbläsarens signatur inte stämmer överens</string>
+    <string name="passkey_operation_failed_because_of_missing_asset_links">Åtgärden för inloggningsnyckel misslyckades på grund av saknade tillgångslänkar</string>
+    <string name="passkey_operation_failed_because_app_could_not_be_verified">Åtgärden för inloggningsnyckel misslyckades eftersom appen inte kunde verifieras</string>
     <string name="confirm_file_password">Bekräfta fillösenord</string>
     <string name="file_password">Fillösenord</string>
     <string name="password_protected">Lösenordsskyddad</string>
@@ -700,14 +696,13 @@ Vill du byta till detta konto?</string>
     <string name="launch_web_authn">Starta WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Det uppstod ett fel vid start av WebAuthns tvåfaktorsautentisering</string>
     <string name="self_hosted_server_url">URL för server med egen hosting</string>
-    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
-    <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey-operationen misslyckades eftersom användaren inte kunde verifieras.</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">Åtgärd för inloggningsuppgifter misslyckades därför att användaren inte kunde verifieras.</string>
+    <string name="passkey_operation_failed_because_user_could_not_be_verified">Åtgärden för inloggningsnyckel misslyckades eftersom användaren inte kunde verifieras.</string>
     <string name="user_verification_direction">Användarverifiering</string>
     <string name="create_account_on">Skapa konto på</string>
     <string name="create_account_on_with_colon">Skapa konto på:</string>
     <string name="we_sent_an_email_to">Vi har skickat ett e-postmeddelande till %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Genom att fortsätta godkänner du <annotation link="termsOfService">användarvillkoren</annotation> och <annotation link="privacyPolicy">integritetspolicyn</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Genom att aktivera denna knapp godkänner du <annotation link="termsOfService">användarvillkoren</annotation> och <annotation link="privacyPolicy">integritetspolicyn</annotation></string>
     <string name="unsubscribe">Avsluta prenumeration</string>
     <string name="check_your_email">Kontrollera din e-post</string>
     <string name="open_email_app">Öppna e-postappen</string>
@@ -722,7 +717,7 @@ Vill du byta till detta konto?</string>
     <string name="your_data_when_and_where_you_need_it">Dina data, när och var du behöver dem</string>
     <string name="welcome_message_4">Spara obegränsat antal lösenord på obegränsat antal enheter med Bitwarden-appar för mobiler, webbläsare och datorer.</string>
     <string name="remove_passkey">Ta bort nyckel</string>
-    <string name="passkey_removed">Passkey borttagen</string>
+    <string name="passkey_removed">Inloggningsnyckel borttagen</string>
     <string name="what_makes_a_password_strong">Vad gör ett lösenord starkt?</string>
     <string name="a_secure_memorable_password">Ett säkert lösenord som är lätt att komma ihåg</string>
     <string name="account_setup">Kontoinställningar</string>
@@ -865,8 +860,6 @@ Vill du byta till detta konto?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Du behöver bara ställa in Authenticator Key för inloggningar som kräver tvåfaktorsautentisering med en kod. Nyckeln kommer kontinuerligt att generera sexsiffriga koder som du kan använda för att logga in.</string>
     <string name="coachmark_3_of_3">3 AV 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Du måste lägga till en webbadress för att använda autofyll för att komma åt det här kontot.</string>
-    <string name="single_tap_passkey_creation">Skapa passerkort med en enda knapptryckning</string>
-    <string name="single_tap_passkey_authentication">Inloggning med en knapptryckning och nyckel</string>
     <string name="learn_about_new_logins">Lär dig mer om nya inloggningar</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Vi guidar dig genom de viktigaste funktionerna för att lägga till en ny inloggning.</string>
     <string name="explore_the_generator">Utforska generatorn</string>
@@ -897,19 +890,19 @@ Vill du byta till detta konto?</string>
     <string name="invalid_certificate_chain">Ogiltig certifikatkedja</string>
     <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Att använda ett systemcertifikat är mindre säkert än att lagra certifikatet i Bitwarden. Continuing visar en lista över tillgängliga systemcertifikat om ett sådant redan är installerat.</string>
     <string name="link">Länk</string>
-    <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey-operationen misslyckades eftersom värd-URL:en inte finns med i begäran.</string>
-    <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey-operationen misslyckades eftersom appens signatur är ogiltig.</string>
-    <string name="passkey_registration_failed_due_to_an_internal_error">Passkey-registreringen misslyckades på grund av ett internt fel.</string>
-    <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey-operationen misslyckades eftersom den förlitande parten inte kan identifieras.</string>
-    <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey-operationen misslyckades eftersom begäran är ogiltig.</string>
-    <string name="passkey_operation_failed_because_no_item_was_selected">Passkey-operationen misslyckades eftersom inget objekt valdes.</string>
-    <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey-operationen misslyckades eftersom begäran inte stöds.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
-    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
-    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
-    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
-    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
+    <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Åtgärden för inloggningsnyckel misslyckades eftersom värd-URL:en inte finns med i begäran.</string>
+    <string name="passkey_operation_failed_because_app_signature_is_invalid">Åtgärden för inloggningsnyckel misslyckades eftersom appens signatur är ogiltig.</string>
+    <string name="passkey_registration_failed_due_to_an_internal_error">Registrering av inloggningsnyckel misslyckades på grund av ett internt fel.</string>
+    <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Åtgärden för inloggningsnyckel misslyckades eftersom den förlitande parten inte kan identifieras.</string>
+    <string name="passkey_operation_failed_because_the_request_is_invalid">Åtgärden för inloggningsnyckel misslyckades eftersom begäran är ogiltig.</string>
+    <string name="passkey_operation_failed_because_no_item_was_selected">Åtgärden för inloggningsnyckel misslyckades eftersom inget objekt valdes.</string>
+    <string name="passkey_operation_failed_because_the_request_is_unsupported">Åtgärden för inloggningsnyckel misslyckades eftersom begäran inte stöds.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Åtgärd för lösenord misslyckades därför att det valda objektet inte finns.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Åtgärd för lösenord misslyckades därför att inget objekt valdes.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Åtgärd för inloggningsuppgifter misslyckades därför att antalet försök att verifiera användaren överstegs.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Åtgärd för inloggningsuppgifter misslyckades därför att användaren är utlåst.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Åtgärd för inloggningsuppgifter misslyckades därför att det valda objektet inte finns.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Åtgärd för inloggningsuppgifter misslyckades därför att verifiering av användaren avbröts.</string>
     <string name="self_host_server_url">URL för server med egen värd</string>
     <string name="use_brave_autofill_integration">Använd Brave autofyll-integration</string>
     <string name="use_chrome_autofill_integration">Använd Chrome autofyll-integration</string>
@@ -971,16 +964,16 @@ Vill du byta till detta konto?</string>
     <string name="use_dynamic_colors">Använd dynamiska färger</string>
     <string name="use_dynamic_colors_question">Använd dynamiska färger?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamiska färger använder systemfärgerna och uppfyller kanske inte alla riktlinjer för tillgänglighet.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey-operationen misslyckades eftersom webbläsaren (%1$s) inte känns igen. Välj \"Trust\" för att lägga till %1$s i listan över lokalt betrodda program.</string>
-    <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey-operationen misslyckades eftersom webbläsaren inte är pålitlig.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Åtgärden för inloggningsnyckel misslyckades eftersom webbläsaren (%1$s) inte känns igen. Välj ”Betrodd” för att lägga till %1$s i listan över lokalt betrodda program.</string>
+    <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Åtgärden för inloggningsnyckel misslyckades eftersom webbläsaren inte är pålitlig.</string>
     <string name="trust">Förtroende</string>
-    <string name="trusted_by_you_learn_more">Det här är program eller webbläsare som Bitwarden inte litar på som standard, men som du litar på för att utföra nyckeloperationer.</string>
-    <string name="trusted_by_community_learn_more">Det här är applikationer som inte ingår i Google Play Store, men Bitwarden litar på att utföra passskey-operationer efter att medlemmar i samhället använder och rapporterar dem som säkra.</string>
+    <string name="trusted_by_you_learn_more">Det här är program eller webbläsare som Bitwarden inte litar på som standard, men som du litar på för att utföra inloggningsnyckelåtgärder.</string>
+    <string name="trusted_by_community_learn_more">Det här är applikationer som inte ingår i Google Play Store, men Bitwarden litar på att utföra inloggningsnyckelåtgärder efter att medlemmar i gemenskapen använder och rapporterar dem som säkra.</string>
     <string name="trusted_by_google_learn_more">Det här är program som Google anser vara säkra och finns tillgängliga i Googles Play Store.</string>
     <string name="trusted_by_you">Betrodd av dig</string>
     <string name="trusted_by_the_community">Betrodd av gemenskapen</string>
     <string name="trusted_by_google">Betrodd av Google</string>
-    <string name="privileged_apps_description">För att skydda användare från nätfiskeförsök genomför Bitwarden som standard endast passerkortsoperationer via program eller webbläsare som är betrodda av Google eller Bitwarden-communityn.</string>
+    <string name="privileged_apps_description">För att skydda användare från nätfiskeförsök genomför Bitwarden som standard endast inloggningsnyckelåtgärder via program eller webbläsare som är betrodda av Google eller Bitwarden-gemenskapen.</string>
     <string name="about_privileged_applications">Om privilegierade applikationer</string>
     <string name="learn_more_about_privileged_apps">Läs mer om privilegierade appar</string>
     <string name="privileged_apps">Privilegierade appar</string>
@@ -1076,4 +1069,14 @@ Vill du byta till detta konto?</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokala objekt är infällda, klicka för att expandera.</string>
     <string name="items_expanded_click_to_collapse">Objekt är expanderade, klicka för att fälla in.</string>
     <string name="items_are_collapsed_click_to_expand">Objekt är infällda, klicka för att expandera.</string>
+    <string name="select_a_card_for_x">Välj ett kort för %s</string>
+    <string name="advanced_options">Avancerade inställningar</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mer om matchningsdetektering</annotation></string>
+    <string name="keep_your_credential_secure">Håll dina uppgifter säkra</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Läs mer om hur du håller autentiseringsuppgifter säkra när du använder ”%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Är du säker på att du vill använda ”%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI-matchning kontrollerar hur Bitwarden identifierar förslag för automatisk ifyllning.\n<annotation emphasis="bold">Varning:</annotation> ”Reguljära uttryck” är ett avancerat alternativ som medför ökad risk för att användaruppgifter exponeras om det används felaktigt.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI-matchning kontrollerar hur Bitwarden identifierar förslag för automatisk ifyllning.\n<annotation emphasis="bold">Varning:</annotation> ”Börjar med” är ett avancerat alternativ som medför ökad risk för att inloggningsuppgifter exponeras.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Börjar med\" är ett avancerat alternativ med ökad risk för att röja inloggningsuppgifter.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">”Reguljära uttryck” är ett avancerat alternativ som medför ökad risk för att användaruppgifter exponeras om det används felaktigt.</string>
 </resources>

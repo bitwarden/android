@@ -9,6 +9,8 @@ import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -22,7 +24,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
@@ -30,7 +31,6 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
@@ -50,8 +50,6 @@ import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
@@ -172,13 +170,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { trackEvent(event = any()) } just runs
     }
 
-    private val mutableRemoveCardPolicyFeatureFlow = MutableStateFlow(false)
-    private val mutableSshKeyVaultItemsEnabledFlow = MutableStateFlow(false)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every {
-            getFeatureFlagFlow(FlagKey.RemoveCardPolicy)
-        } returns mutableRemoveCardPolicyFeatureFlow
-    }
     private val reviewPromptManager: ReviewPromptManager = mockk()
 
     private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
@@ -220,7 +211,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `UserState updates with a non-null value when switching accounts should do nothing`() {
         val viewModel = createViewModel()
@@ -415,10 +405,8 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is enable`() =
+    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly`() =
         runTest {
-            mutableRemoveCardPolicyFeatureFlow.value = true
-
             val viewModel = createViewModel()
             assertEquals(
                 DEFAULT_STATE,
@@ -438,33 +426,6 @@ class VaultViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 DEFAULT_STATE.copy(restrictItemTypesPolicyOrgIds = listOf("Test Organization")),
-                viewModel.stateFlow.value,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is disabled`() =
-        runTest {
-            val viewModel = createViewModel()
-            assertEquals(
-                DEFAULT_STATE,
-                viewModel.stateFlow.value,
-            )
-            mutableActivePoliciesFlow.emit(
-                listOf(
-                    SyncResponseJson.Policy(
-                        organizationId = "Test Organization",
-                        id = "testId",
-                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
-                        isEnabled = true,
-                        data = null,
-                    ),
-                ),
-            )
-
-            assertEquals(
-                DEFAULT_STATE.copy(restrictItemTypesPolicyOrgIds = null),
                 viewModel.stateFlow.value,
             )
         }
@@ -770,7 +731,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
                 baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                 hasMasterPassword = true,
-                restrictItemTypesPolicyOrgIds = null,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
             .copy(
@@ -795,7 +756,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
                     baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                     hasMasterPassword = true,
-                    restrictItemTypesPolicyOrgIds = null,
+                    restrictItemTypesPolicyOrgIds = emptyList(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -805,7 +766,6 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `vaultDataStateFlow Loaded with items should update state to Content`() = runTest {
-        mutableSshKeyVaultItemsEnabledFlow.value = true
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Loaded(
                 data = VaultData(
@@ -1260,7 +1220,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `vaultDataStateFlow NoNetwork with items should update state to Content`() =
         runTest {
@@ -1361,7 +1320,6 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `vaultDataStateFlow Loaded should include SSH key vault items`() =
         runTest {
-            mutableSshKeyVaultItemsEnabledFlow.value = true
             mutableVaultDataStateFlow.tryEmit(
                 value = DataState.Loaded(
                     data = VaultData(
@@ -2791,7 +2749,6 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `SelectAddItemType action should set dialog state to SelectVaultAddItemType accordingly when RESTRICT_ITEM_TYPES is enabled`() =
         runTest {
-            mutableRemoveCardPolicyFeatureFlow.value = true
             val viewModel = createViewModel()
             mutableActivePoliciesFlow.emit(
                 listOf(
@@ -2870,7 +2827,6 @@ class VaultViewModelTest : BaseViewModelTest() {
             settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,
             organizationEventManager = organizationEventManager,
-            featureFlagManager = featureFlagManager,
             firstTimeActionManager = firstTimeActionManager,
             snackbarRelayManager = snackbarRelayManager,
             reviewPromptManager = reviewPromptManager,
@@ -2985,7 +2941,7 @@ private fun createMockVaultState(
         showImportActionCard = true,
         isRefreshing = false,
         flightRecorderSnackBar = null,
-        restrictItemTypesPolicyOrgIds = null,
         cipherDecryptionFailureIds = persistentListOf(),
         hasShownDecryptionFailureAlert = false,
+        restrictItemTypesPolicyOrgIds = emptyList(),
     )

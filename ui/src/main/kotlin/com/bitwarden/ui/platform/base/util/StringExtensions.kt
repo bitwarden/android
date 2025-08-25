@@ -43,16 +43,25 @@ fun String?.orZeroWidthSpace(): String = this.orNullIfBlank() ?: ZERO_WIDTH_CHAR
 /**
  * Whether or not string is a valid email address.
  *
- * This validates that the email is valid by asserting that:
+ * By default, this function will [useStrictValidation] by asserting that:
  * * The string starts with a string of characters including periods, underscores, percent symbols,
  * plus's, minus's, forward slash's, asterisks, and alphanumeric characters.
  * * Followed by an '@' symbol.
  * * Followed by a string of characters including periods, minus's, and alphanumeric characters.
  * * Followed by a period.
  * * Followed by at least 2 more alphanumeric characters.
+ *
+ * When [useStrictValidation] is `false`, this function will only assert that the string contains an
+ * '@' symbol.
+ *
+ * @param useStrictValidation Whether or not to use strict validation. Defaults to `true`.
  */
-fun String.isValidEmail(): Boolean =
-    this.matches(regex = "^[A-Za-z0-9._%+-/*]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$".toRegex())
+fun String.isValidEmail(useStrictValidation: Boolean = true): Boolean =
+    if (useStrictValidation) {
+        this.matches(regex = "^[A-Za-z0-9._%+-/*]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$".toRegex())
+    } else {
+        this.contains("@")
+    }
 
 /**
  * Returns `true` if the given [String] is a non-blank, valid URI and `false` otherwise.

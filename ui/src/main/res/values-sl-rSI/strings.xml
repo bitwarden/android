@@ -4,6 +4,7 @@
     <string name="add_folder">Dodaj mapo</string>
     <string name="add_item">Dodaj vnos</string>
     <string name="an_error_has_occurred">Prišlo je do napake</string>
+    <string name="apply">Apply</string>
     <string name="back">Nazaj</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Prekliči</string>
@@ -146,7 +147,7 @@
     <string name="syncing">Sinhroniziram...</string>
     <string name="syncing_complete">Sinhronizacija končana.</string>
     <string name="two_step_login">Prijava v dveh korakih</string>
-    <string name="unlock_with">Odkleni z %1$s</string>
+    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
     <string name="unlock_with_pin">Odkleni s PIN kodo</string>
     <string name="verification_code">Verifikacijska koda</string>
     <string name="view_login">View login</string>
@@ -286,7 +287,7 @@ Scanning will happen automatically.</string>
     <string name="new_uri">Nov URI</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">Primarna domena</string>
-    <string name="default_text">Privzeto</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Točno</string>
     <string name="host">Gostitelj</string>
     <string name="reg_ex">Regularni izraz</string>
@@ -356,7 +357,7 @@ Scanning will happen automatically.</string>
     <string name="clear_clipboard">Počisti odložišče</string>
     <string name="clear_clipboard_description">Samodejno počisti kopirane vrednosti iz odložišča.</string>
     <string name="default_uri_match_detection">Privzet način ujemanja URI</string>
-    <string name="default_uri_match_detection_description">Izberi privzet način URI ujemanja med prijavljanjem s samodejnim izpolnjevanjem.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Spremeni temo aplikacije.</string>
     <string name="copy_notes">Kopiraj opombo</string>
@@ -364,15 +365,14 @@ Scanning will happen automatically.</string>
     <string name="exit_confirmation">Ali res želite zapustiti Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Do you want to require unlocking with your master password when the application is restarted?</string>
-    <string name="ask_to_add_login">Ponudi shranjevanje prijav</string>
-    <string name="ask_to_add_login_description">Ponudi, da se shrani nova prijava, če je v trezorju še ni.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Ob ponovnem zagonu aplikacije</string>
     <string name="capitalize">Zapiši z veliko začetnico</string>
     <string name="include_number">Vključi številko</string>
     <string name="download">Prenesi</string>
     <string name="login_expired">Vaša seja je potekla.</string>
     <string name="biometrics_direction">Biometrična avtentikacija</string>
-    <string name="biometrics">biometričnim preverjanjem</string>
     <string name="biometrics_failed">Biometrics Failed</string>
     <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
     <string name="use_biometrics_to_unlock">Uporabi biometrično preverjanje za odklep</string>
@@ -420,7 +420,6 @@ Scanning will happen automatically.</string>
     <string name="master_password_policy_validation_title">Napačno geslo</string>
     <string name="master_password_policy_validation_message">Password does not meet organization requirements. Please check the policy information and try again.</string>
     <string name="loading">Nalaganje</string>
-    <string name="accept_policies_error">Terms of Service and Privacy Policy have not been acknowledged.</string>
     <string name="terms_of_service">Pogoji uporabe</string>
     <string name="privacy_policy">Politika zasebnosti</string>
     <string name="passkey_management">Passkey management</string>
@@ -485,7 +484,6 @@ Scanning will happen automatically.</string>
     <string name="password_prompt">Ponovno zahtevaj glavno geslo</string>
     <string name="password_confirmation">Master password confirmation</string>
     <string name="password_confirmation_desc">This action is protected, to continue please re-enter your master password to verify your identity.</string>
-    <string name="captcha_failed">Captcha failed. Please try again.</string>
     <string name="update_master_password">Posodobi glavno geslo</string>
     <string name="update_master_password_warning">Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</string>
     <string name="updating_password">Updating password</string>
@@ -609,8 +607,6 @@ Do you want to switch to this account?</string>
     <string name="language">Jezik</string>
     <string name="language_change_x_description">Spremenjeno v jezik %1$s. Prosimo, ponovno zaženite aplikacijo za prikaz sprememb.</string>
     <string name="default_system">Privzet (sistemski)</string>
-    <string name="important">Pomembno</string>
-    <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Če pozabite glavno geslo, ga ne bo mogoče obnoviti! Vsaj %1$s znakov.</string>
     <string name="weak_master_password">Šibko glavno geslo</string>
     <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Vaše geslo je šibko. Za zaščito svojega računa potrebujete močno geslo. Ste prepričani, da želite uporabiti šibko geslo?</string>
     <string name="weak">Šibko</string>
@@ -707,7 +703,6 @@ Do you want to switch to this account?</string>
     <string name="create_account_on_with_colon">Create account on:</string>
     <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
-    <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="unsubscribe">Unsubscribe</string>
     <string name="check_your_email">Check your email</string>
     <string name="open_email_app">Open email app</string>
@@ -865,8 +860,6 @@ Do you want to switch to this account?</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3 OF 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
-    <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-    <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
     <string name="learn_about_new_logins">Learn about new logins</string>
     <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Explore the generator</string>
@@ -1076,4 +1069,14 @@ Do you want to switch to this account?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
 </resources>

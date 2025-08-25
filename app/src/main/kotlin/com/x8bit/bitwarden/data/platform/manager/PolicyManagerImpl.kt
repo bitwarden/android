@@ -99,6 +99,7 @@ class PolicyManagerImpl(
 
             PolicyTypeJson.PASSWORD_GENERATOR,
             PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
+            PolicyTypeJson.RESTRICT_ITEM_TYPES,
                 -> {
                 false
             }

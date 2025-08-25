@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.asStateFlow
  * A faked implementation of [EnvironmentRepository] based on in-memory caching.
  */
 class FakeEnvironmentRepository : EnvironmentRepository {
+
+    override fun initialize() = Unit
+
     override var environment: Environment
         get() = mutableEnvironmentStateFlow.value
         set(value) {
