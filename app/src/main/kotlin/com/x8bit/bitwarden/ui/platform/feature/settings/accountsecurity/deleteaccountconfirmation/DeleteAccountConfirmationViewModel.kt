@@ -69,7 +69,7 @@ class DeleteAccountConfirmationViewModel @Inject constructor(
     }
 
     private fun handleDeleteAccountAcknowledge() {
-        authRepository.clearPendingAccountDeletion()
+        authRepository.hasPendingAccountDeletion = false
         mutableStateFlow.update { it.copy(dialog = null) }
     }
 
