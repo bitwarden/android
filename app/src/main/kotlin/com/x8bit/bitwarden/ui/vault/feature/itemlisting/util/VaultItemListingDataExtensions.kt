@@ -397,7 +397,7 @@ private fun CipherListView.toDisplayItem(
 ): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
-        title = name,
+        title = name.asText(),
         titleTestTag = "CipherNameLabel",
         secondSubtitle = this.toSecondSubtitle(
             fido2CredentialRpId = login?.fido2Credentials?.firstOrNull()?.rpId,
@@ -442,7 +442,7 @@ private fun List<CipherListView>.toDisplayItemListDecryptionError(): List<VaultI
 private fun CipherListView.toDisplayItemDecryptionError(): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
-        title = name,
+        title = BitwardenString.error_cannot_decrypt.asText(),
         titleTestTag = "CipherNameLabel",
         secondSubtitle = null,
         secondSubtitleTestTag = null,
@@ -508,7 +508,7 @@ private fun SendView.toDisplayItem(
 ): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
-        title = name,
+        title = name.asText(),
         titleTestTag = "SendNameLabel",
         secondSubtitle = null,
         secondSubtitleTestTag = null,

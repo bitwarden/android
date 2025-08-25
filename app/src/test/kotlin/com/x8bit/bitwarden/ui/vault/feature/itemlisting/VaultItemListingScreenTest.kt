@@ -65,7 +65,6 @@ import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
-import com.x8bit.bitwarden.ui.vault.feature.vault.VaultAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
@@ -2500,7 +2499,7 @@ private val STATE_FOR_AUTOFILL = DEFAULT_STATE.copy(
 private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = "mockId-$number",
-        title = "mockTitle-$number",
+        title = "mockTitle-$number".asText(),
         titleTestTag = "SendNameLabel",
         secondSubtitle = null,
         secondSubtitleTestTag = null,
@@ -2556,7 +2555,7 @@ private fun createCipherDisplayItem(
 ): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = "mockId-$number",
-        title = "mockTitle-$number",
+        title = "mockTitle-$number".asText(),
         titleTestTag = "CipherNameLabel",
         secondSubtitle = null,
         secondSubtitleTestTag = null,

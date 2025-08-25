@@ -275,7 +275,11 @@ private fun CipherListView.toVaultItemOrNull(
     return when (type) {
         is CipherListViewType.Login -> VaultState.ViewState.VaultItem.Login(
             id = id,
-            name = name.asText(),
+            name = if (hasDecryptionError) {
+                BitwardenString.error_cannot_decrypt.asText()
+            } else {
+                name.asText()
+            },
             username = login?.username?.asText(),
             startIcon = login?.uris.toLoginIconData(
                 isIconLoadingDisabled = isIconLoadingDisabled,

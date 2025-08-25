@@ -202,16 +202,10 @@ fun VaultItemListingContent(
                 Spacer(modifier = Modifier.height(height = 8.dp))
             }
             itemsIndexed(state.displayItemList) { index, it ->
-                val isDecryptionErrorType =
-                    it.itemType == VaultItemListingState.DisplayItem.ItemType.DecryptionError
                 BitwardenListItem(
                     startIcon = it.iconData,
                     startIconTestTag = it.iconTestTag,
-                    label = if (isDecryptionErrorType) {
-                        stringResource(id = BitwardenString.error_cannot_decrypt)
-                    } else {
-                        it.title
-                    },
+                    label = it.title.invoke(),
                     labelTestTag = it.titleTestTag,
                     secondSupportingLabel = it.secondSubtitle,
                     secondSupportingLabelTestTag = it.secondSubtitleTestTag,

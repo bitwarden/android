@@ -91,7 +91,7 @@ class VaultDataExtensionsTest {
                 favoriteItems = listOf(
                     VaultState.ViewState.VaultItem.Login(
                         id = "mockId-2",
-                        name = mockCipher.name.asText(),
+                        name = BitwardenString.error_cannot_decrypt.asText(),
                         startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
                         startIconTestTag = "LoginCipherIcon",
                         extraIconList = mockCipher.toFailureCipherListView().toLabelIcons(),

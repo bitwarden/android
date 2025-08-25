@@ -34,7 +34,7 @@ fun createMockDisplayItemForCipher(
         CipherType.LOGIN -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
-                title = "mockName-$number",
+                title = "mockName-$number".asText(),
                 titleTestTag = "CipherNameLabel",
                 secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
@@ -91,7 +91,7 @@ fun createMockDisplayItemForCipher(
         CipherType.SECURE_NOTE -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
-                title = "mockName-$number",
+                title = "mockName-$number".asText(),
                 titleTestTag = "CipherNameLabel",
                 secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
@@ -138,7 +138,7 @@ fun createMockDisplayItemForCipher(
         CipherType.CARD -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
-                title = "mockName-$number",
+                title = "mockName-$number".asText(),
                 titleTestTag = "CipherNameLabel",
                 secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
@@ -189,7 +189,7 @@ fun createMockDisplayItemForCipher(
         CipherType.IDENTITY -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
-                title = "mockName-$number",
+                title = "mockName-$number".asText(),
                 titleTestTag = "CipherNameLabel",
                 secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
@@ -232,7 +232,7 @@ fun createMockDisplayItemForCipher(
         CipherType.SSH_KEY -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
-                title = "mockName-$number",
+                title = "mockName-$number".asText(),
                 titleTestTag = "CipherNameLabel",
                 secondSubtitle = secondSubtitle,
                 secondSubtitleTestTag = secondSubtitleTestTag,
@@ -285,7 +285,7 @@ fun createMockDisplayItemForSend(
         SendType.FILE -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
-                title = "mockName-$number",
+                title = "mockName-$number".asText(),
                 titleTestTag = "SendNameLabel",
                 secondSubtitle = null,
                 secondSubtitleTestTag = null,
@@ -334,7 +334,7 @@ fun createMockDisplayItemForSend(
         SendType.TEXT -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
-                title = "mockName-$number",
+                title = "mockName-$number".asText(),
                 titleTestTag = "SendNameLabel",
                 secondSubtitle = null,
                 secondSubtitleTestTag = null,
@@ -388,7 +388,7 @@ fun createMockDisplayItemForDecryptionError(
     number: Int,
 ): VaultItemListingState.DisplayItem = VaultItemListingState.DisplayItem(
     id = "mockId-$number",
-    title = "mockName-$number",
+    title = "mockName-$number".asText(),
     titleTestTag = "CipherNameLabel",
     secondSubtitle = null,
     secondSubtitleTestTag = null,

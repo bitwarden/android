@@ -957,7 +957,8 @@ class VaultItemListingViewModel @Inject constructor(
                 dialogState = VaultItemListingState.DialogState.CipherDecryptionError(
                     title = BitwardenString.decryption_error.asText(),
                     message = BitwardenString
-                        .bitwarden_could_not_decrypt_this_vault_item_description_long.asText(),
+                        .bitwarden_could_not_decrypt_this_vault_item_description_long
+                        .asText(),
                     selectedCipherId = itemId,
                 ),
             )
@@ -2924,7 +2925,7 @@ data class VaultItemListingState(
      */
     data class DisplayItem(
         val id: String,
-        val title: String,
+        val title: Text,
         val titleTestTag: String,
         val secondSubtitle: String?,
         val secondSubtitleTestTag: String?,

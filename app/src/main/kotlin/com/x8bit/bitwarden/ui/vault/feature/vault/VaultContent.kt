@@ -122,11 +122,7 @@ fun VaultContent(
                     startIcon = favoriteItem.startIcon,
                     startIconTestTag = favoriteItem.startIconTestTag,
                     trailingLabelIcons = favoriteItem.extraIconList,
-                    label = if (favoriteItem.hasDecryptionError) {
-                        stringResource(id = BitwardenString.error_cannot_decrypt)
-                    } else {
-                        favoriteItem.name()
-                    },
+                    label = favoriteItem.name(),
                     supportingLabel = favoriteItem.supportingLabel?.invoke(),
                     onClick = {
                         if (favoriteItem.shouldShowMasterPasswordReprompt) {
