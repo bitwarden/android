@@ -55,7 +55,7 @@ class DeleteAccountConfirmationViewModelTest : BaseViewModelTest() {
     @Test
     fun `DeleteAccountAcknowledge should clear dialog and call clearPendingAccountDeletion`() =
         runTest {
-            every { authRepo.clearPendingAccountDeletion() } just runs
+            every { authRepo.hasPendingAccountDeletion = false } just runs
             val state = DEFAULT_STATE.copy(
                 dialog =
                     DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.DeleteSuccess(),
@@ -68,7 +68,7 @@ class DeleteAccountConfirmationViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
             verify {
-                authRepo.clearPendingAccountDeletion()
+                authRepo.hasPendingAccountDeletion = false
             }
         }
 

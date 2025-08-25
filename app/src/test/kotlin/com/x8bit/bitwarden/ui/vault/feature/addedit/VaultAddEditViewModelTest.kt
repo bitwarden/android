@@ -9,6 +9,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
@@ -75,6 +76,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
@@ -210,6 +212,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every {
             getSnackbarDataFlow(relay = any(), relays = anyVararg())
         } returns mutableSnackbarDataFlow
+        every { sendSnackbarData(data = any(), relay = any()) } just runs
+    }
+    private val toastManager: ToastManager = mockk {
+        every { show(messageId = any(), duration = any()) } just runs
+        every { show(message = any(), duration = any()) } just runs
     }
 
     @BeforeEach
@@ -617,12 +624,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultAddEditEvent.ShowToast(BitwardenString.item_soft_deleted.asText()),
-                    awaitItem(),
-                )
-                assertEquals(
                     VaultAddEditEvent.NavigateBack,
                     awaitItem(),
+                )
+            }
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.item_soft_deleted.asText()),
+                    relay = SnackbarRelay.CIPHER_DELETED_SOFT,
                 )
             }
         }
@@ -735,14 +744,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithName, stateFlow.awaitItem())
 
                 assertEquals(
-                    VaultAddEditEvent.ShowToast(
-                        BitwardenString.new_item_created.asText(),
-                    ),
-                    eventFlow.awaitItem(),
-                )
-                assertEquals(
                     VaultAddEditEvent.NavigateBack,
                     eventFlow.awaitItem(),
+                )
+            }
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.new_item_created.asText()),
+                    relay = SnackbarRelay.CIPHER_CREATED,
                 )
             }
             coVerify(exactly = 1) {
@@ -906,13 +915,15 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithName, stateTurbine.awaitItem())
                 assertEquals(stateWithDialog, stateTurbine.awaitItem())
                 assertEquals(stateWithName, stateTurbine.awaitItem())
-                assertEquals(
-                    VaultAddEditEvent.ShowToast(BitwardenString.new_item_created.asText()),
-                    eventTurbine.awaitItem(),
-                )
                 assertEquals(VaultAddEditEvent.NavigateBack, eventTurbine.awaitItem())
             }
             assertNotNull(specialCircumstanceManager.specialCircumstance)
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.new_item_created.asText()),
+                    relay = SnackbarRelay.CIPHER_CREATED,
+                )
+            }
             coVerify(exactly = 1) {
                 vaultRepository.createCipherInOrganization(any(), any())
             }
@@ -1070,10 +1081,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 assertEquals(stateWithName, stateFlow.awaitItem())
                 assertEquals(stateWithSavingDialog, stateFlow.awaitItem())
-                assertEquals(
-                    VaultAddEditEvent.ShowToast(BitwardenString.item_updated.asText()),
-                    eventFlow.awaitItem(),
-                )
                 assertEquals(stateWithName, stateFlow.awaitItem())
                 assertEquals(
                     VaultAddEditEvent.CompleteFido2Registration(
@@ -1083,6 +1090,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     ),
                     eventFlow.awaitItem(),
                 )
+                verify(exactly = 1) {
+                    toastManager.show(messageId = BitwardenString.item_updated)
+                }
                 coVerify(exactly = 1) {
                     bitwardenCredentialManager.registerFido2Credential(
                         userId = mockUserId,
@@ -1337,13 +1347,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             } returns CreateCipherResult.Success
             viewModel.eventFlow.test {
                 viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
-                assertEquals(
-                    VaultAddEditEvent.ShowToast(
-                        BitwardenString.new_item_created.asText(),
-                    ),
-                    awaitItem(),
-                )
                 assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
+            }
+            verify(exactly = 1) {
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.new_item_created.asText()),
+                    relay = SnackbarRelay.CIPHER_CREATED,
+                )
             }
         }
 
@@ -1668,13 +1678,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         } returns UpdateCipherResult.Success
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
-            assertEquals(
-                VaultAddEditEvent.ShowToast(
-                    BitwardenString.item_updated.asText(),
-                ),
-                awaitItem(),
-            )
             assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
+        }
+        verify(exactly = 1) {
+            snackbarRelayManager.sendSnackbarData(
+                data = BitwardenSnackbarData(BitwardenString.item_updated.asText()),
+                relay = SnackbarRelay.CIPHER_UPDATED,
+            )
         }
     }
 
@@ -2579,7 +2589,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 )
 
                 assertEquals(
-                    VaultAddEditEvent.ShowToast(BitwardenString.authenticator_key_added.asText()),
+                    VaultAddEditEvent.ShowSnackbar(
+                        message = BitwardenString.authenticator_key_added.asText(),
+                    ),
                     awaitItem(),
                 )
 
@@ -3306,6 +3318,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 generatorRepository = generatorRepository,
                 settingsRepository = settingsRepository,
                 snackbarRelayManager = snackbarRelayManager,
+                toastManager = toastManager,
                 specialCircumstanceManager = specialCircumstanceManager,
                 resourceManager = resourceManager,
                 clock = fixedClock,
@@ -4509,11 +4522,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 viewModel.eventFlow.test {
                     assertEquals(
-                        VaultAddEditEvent.ShowToast(BitwardenString.an_error_has_occurred.asText()),
-                        awaitItem(),
-                    )
-
-                    assertEquals(
                         VaultAddEditEvent.CompleteFido2Registration(
                             RegisterFido2CredentialResult.Error(
                                 BitwardenString.passkey_registration_failed_due_to_an_internal_error
@@ -4522,6 +4530,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         ),
                         awaitItem(),
                     )
+                }
+                verify(exactly = 1) {
+                    toastManager.show(messageId = BitwardenString.an_error_has_occurred)
                 }
             }
 
@@ -4556,11 +4567,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 viewModel.eventFlow.test {
                     assertEquals(
-                        VaultAddEditEvent.ShowToast(BitwardenString.item_updated.asText()),
-                        awaitItem(),
-                    )
-
-                    assertEquals(
                         VaultAddEditEvent.CompleteFido2Registration(
                             RegisterFido2CredentialResult.Success(
                                 responseJson = "mockResponse",
@@ -4568,6 +4574,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         ),
                         awaitItem(),
                     )
+                }
+                verify(exactly = 1) {
+                    toastManager.show(messageId = BitwardenString.item_updated)
                 }
             }
     }
@@ -4709,6 +4718,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             generatorRepository = generatorRepo,
             settingsRepository = settingsRepository,
             snackbarRelayManager = snackbarRelayManager,
+            toastManager = toastManager,
             specialCircumstanceManager = specialCircumstanceManager,
             resourceManager = bitwardenResourceManager,
             clock = clock,

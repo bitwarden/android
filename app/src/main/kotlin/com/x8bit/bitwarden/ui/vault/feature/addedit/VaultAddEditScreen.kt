@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -29,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -114,8 +112,6 @@ fun VaultAddEditScreen(
     onNavigateToMoveToOrganization: (cipherId: String, showOnlyCollections: Boolean) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
     val userVerificationHandlers = remember(viewModel) {
         VaultAddEditUserVerificationHandlers.create(viewModel = viewModel)
     }
@@ -139,10 +135,6 @@ fun VaultAddEditScreen(
 
             is VaultAddEditEvent.NavigateToGeneratorModal -> {
                 onNavigateToGeneratorModal(event.generatorMode)
-            }
-
-            is VaultAddEditEvent.ShowToast -> {
-                Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
             }
 
             is VaultAddEditEvent.NavigateToAttachments -> onNavigateToAttachments(event.cipherId)

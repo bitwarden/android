@@ -6,6 +6,7 @@ import com.bitwarden.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
+import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
@@ -27,7 +28,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
@@ -44,16 +44,11 @@ import kotlinx.coroutines.flow.StateFlow
  * Provides an API for observing an modifying authentication state.
  */
 @Suppress("TooManyFunctions")
-interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
+interface AuthRepository : AuthenticatorProvider, AuthRequestManager, UserStateManager {
     /**
      * Models the current auth state.
      */
     val authStateFlow: StateFlow<AuthState>
-
-    /**
-     * Emits updates for changes to the [UserState].
-     */
-    val userStateFlow: StateFlow<UserState?>
 
     /**
      * Flow of the current [DuoCallbackTokenResult]. Subscribers should listen to the flow
@@ -111,15 +106,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     var shouldTrustDevice: Boolean
 
     /**
-     * Tracks whether there is an additional account that is pending login/registration in order to
-     * have multiple accounts available.
-     *
-     * This allows a direct view into and modification of [UserState.hasPendingAccountAddition].
-     * Note that this call has no effect when there is no [UserState] information available.
-     */
-    var hasPendingAccountAddition: Boolean
-
-    /**
      * Return the cached password policies for the current user.
      */
     val passwordPolicies: List<PolicyInformation.MasterPassword>
@@ -139,11 +125,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * whether the user has ever logged in or created an account before.
      */
     val showWelcomeCarousel: Boolean
-
-    /**
-     * Clears the pending deletion state that occurs when the an account is successfully deleted.
-     */
-    fun clearPendingAccountDeletion()
 
     /**
      * Attempt to delete the current account using the [masterPassword] and log them out
