@@ -95,10 +95,7 @@ class VaultDataExtensionsTest {
                         startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
                         startIconTestTag = "LoginCipherIcon",
                         extraIconList = mockCipher.toFailureCipherListView().toLabelIcons(),
-                        overflowOptions = mockCipher.toFailureCipherListView().toOverflowActions(
-                            hasMasterPassword = true,
-                            isPremiumUser = true,
-                        ),
+                        overflowOptions = emptyList(),
                         shouldShowMasterPasswordReprompt = false,
                         username = null,
                         hasDecryptionError = true,
