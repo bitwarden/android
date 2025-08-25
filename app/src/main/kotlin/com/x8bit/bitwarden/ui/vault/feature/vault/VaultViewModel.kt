@@ -937,9 +937,7 @@ class VaultViewModel @Inject constructor(
                 cipherDecryptionFailureIds = vaultData
                     .decryptCipherListResult
                     .failures
-                    .mapNotNull {
-                        it.id
-                    }
+                    .mapNotNull { cipher -> cipher.id }
                     .toImmutableList(),
             )
         }
