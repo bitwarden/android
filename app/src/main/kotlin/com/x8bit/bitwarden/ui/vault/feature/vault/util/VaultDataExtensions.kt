@@ -282,10 +282,14 @@ private fun CipherListView.toVaultItemOrNull(
                 baseIconUrl = baseIconUrl,
                 usePasskeyDefaultIcon = false,
             ),
-            overflowOptions = toOverflowActions(
-                hasMasterPassword = hasMasterPassword,
-                isPremiumUser = isPremiumUser,
-            ),
+            overflowOptions = if (hasDecryptionError) {
+                emptyList()
+            } else {
+                toOverflowActions(
+                    hasMasterPassword = hasMasterPassword,
+                    isPremiumUser = isPremiumUser,
+                )
+            },
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = hasMasterPassword &&
                 reprompt == CipherRepromptType.PASSWORD,
