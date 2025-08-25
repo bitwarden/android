@@ -58,6 +58,7 @@ fun VaultData.toViewState(
             .applyFilters(
                 vaultFilterType = vaultFilterType,
                 restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
+                excludeDeleted = false,
             )
 
     val activeCipherViews = allCipherViews
@@ -68,7 +69,7 @@ fun VaultData.toViewState(
         .applyFilters(
             vaultFilterType = vaultFilterType,
             restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
-            excludeDeletedCipher = true,
+            excludeDeleted = true,
         )
 
     val activeUndecryptableCipherViews = decryptCipherListResult
@@ -79,7 +80,7 @@ fun VaultData.toViewState(
         .applyFilters(
             vaultFilterType = vaultFilterType,
             restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
-            excludeDeletedCipher = true,
+            excludeDeleted = true,
         )
 
     val filteredFolderViewList = folderViewList
@@ -434,8 +435,14 @@ fun List<CipherListView>.applyRestrictItemTypesPolicy(
 private fun List<CipherListView>.applyFilters(
     vaultFilterType: VaultFilterType,
     restrictItemTypesPolicyOrgIds: List<String>,
-    excludeDeletedCipher: Boolean = false,
+    excludeDeleted: Boolean,
 ): List<CipherListView> = this
-    .filter { excludeDeletedCipher && it.deletedDate == null }
+    .let {
+        if (excludeDeleted) {
+            it.filter { cipher -> cipher.deletedDate == null }
+        } else {
+            it
+        }
+    }
     .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds)
     .toFilteredList(vaultFilterType)
