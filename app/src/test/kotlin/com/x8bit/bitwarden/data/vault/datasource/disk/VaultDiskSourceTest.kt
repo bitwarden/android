@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.data.vault.datasource.disk
 import app.cash.turbine.test
 import com.bitwarden.core.di.CoreModule
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
-import com.bitwarden.network.model.CollectionTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCollection
@@ -481,7 +480,7 @@ private val COLLECTION_ENTITY = CollectionEntity(
     isReadOnly = false,
     canManage = true,
     defaultUserCollectionEmail = "mockOffboardedUserEmail-3",
-    type = CollectionTypeJson.SHARED_COLLECTION,
+    type = "0",
 )
 
 private const val DOMAINS_JSON = """

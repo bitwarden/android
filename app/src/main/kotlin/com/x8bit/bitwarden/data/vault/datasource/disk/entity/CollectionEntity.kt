@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.data.vault.datasource.disk.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.bitwarden.network.model.CollectionTypeJson
 
 /**
  * Entity representing a collection in the database.
@@ -39,5 +38,5 @@ data class CollectionEntity(
     val defaultUserCollectionEmail: String?,
 
     @ColumnInfo(name = "type", defaultValue = "0")
-    val type: CollectionTypeJson,
+    val type: String,
 )
