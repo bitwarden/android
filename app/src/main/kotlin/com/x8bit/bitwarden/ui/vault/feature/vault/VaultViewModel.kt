@@ -697,7 +697,7 @@ class VaultViewModel @Inject constructor(
         )
     }
 
-    private fun showCipherDecryptionErrorItemClick(itemId: String?) {
+    private fun showCipherDecryptionErrorItemClick(itemId: String) {
         mutableStateFlow.update {
             it.copy(
                 dialog = VaultState.DialogState.CipherDecryptionError(
@@ -1441,7 +1441,7 @@ data class VaultState(
         data class CipherDecryptionError(
             val title: Text,
             val message: Text,
-            val selectedCipherId: String?,
+            val selectedCipherId: String,
         ) : DialogState()
 
         /**
@@ -1699,7 +1699,7 @@ sealed class VaultAction {
      * Click to share cipher decryption error details.
      */
     data class ShareCipherDecryptionErrorClick(
-        val selectedCipherId: String?,
+        val selectedCipherId: String,
     ) : VaultAction()
 
     /**

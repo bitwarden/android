@@ -45,7 +45,7 @@ fun VaultData.toViewState(
     vaultFilterType: VaultFilterType,
     restrictItemTypesPolicyOrgIds: List<String>,
 ): VaultState.ViewState {
-    val filteredAllCipherViewListWithDeletedItems =
+    val allCipherViews =
         decryptCipherListResult
             .successes
             .plus(
@@ -55,30 +55,36 @@ fun VaultData.toViewState(
                         cipher.toFailureCipherListView()
                     },
             )
-            .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds)
-            .toFilteredList(vaultFilterType)
+            .applyFilters(
+                vaultFilterType = vaultFilterType,
+                restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
+            )
 
-    val filteredCipherViewList = filteredAllCipherViewListWithDeletedItems
+    val activeCipherViews = allCipherViews
         .filter { it.deletedDate == null }
 
-    val filteredSuccessCipherViewList = decryptCipherListResult
+    val activeDecryptedCipherViews = decryptCipherListResult
         .successes
-        .filter { it.deletedDate == null }
-        .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds ?: emptyList())
-        .toFilteredList(vaultFilterType)
+        .applyFilters(
+            vaultFilterType = vaultFilterType,
+            restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
+            excludeDeletedCipher = true,
+        )
 
-    val filteredFailureCipherViewList = decryptCipherListResult
+    val activeUndecryptableCipherViews = decryptCipherListResult
         .failures
-        .filter { it.deletedDate == null }
         .map { cipher ->
             cipher.toFailureCipherListView()
         }
-        .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds ?: emptyList())
-        .toFilteredList(vaultFilterType)
+        .applyFilters(
+            vaultFilterType = vaultFilterType,
+            restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
+            excludeDeletedCipher = true,
+        )
 
     val filteredFolderViewList = folderViewList
         .toFilteredList(
-            cipherList = filteredCipherViewList,
+            cipherList = activeCipherViews,
             vaultFilterType = vaultFilterType,
         )
         .getFilteredFolders()
@@ -87,11 +93,11 @@ fun VaultData.toViewState(
         .toFilteredList(vaultFilterType)
         .getFilteredCollections()
 
-    return if (filteredAllCipherViewListWithDeletedItems.isEmpty()) {
+    return if (allCipherViews.isEmpty()) {
         VaultState.ViewState.NoItems
     } else {
         val itemTypesCount: Int = CipherType.entries.size
-        val noFolderItems = filteredSuccessCipherViewList
+        val noFolderItems = activeDecryptedCipherViews
             .filter { it.folderId.isNullOrBlank() }
             .mapNotNull {
                 it.toVaultItemOrNull(
@@ -103,7 +109,7 @@ fun VaultData.toViewState(
                 )
             }
             .plus(
-                elements = filteredFailureCipherViewList
+                elements = activeUndecryptableCipherViews
                     .filter { it.folderId.isNullOrBlank() }
                     .mapNotNull {
                         it.toVaultItemOrNull(
@@ -117,8 +123,8 @@ fun VaultData.toViewState(
             )
         val shouldShowUnGroupedItems = filteredCollectionViewList.isEmpty() &&
             noFolderItems.size < NO_FOLDER_ITEM_THRESHOLD
-        val totpItems = filteredCipherViewList.filter { it.login?.totp != null }
-        val cardCount = filteredCipherViewList.count { it.type is CipherListViewType.Card }
+        val totpItems = activeCipherViews.filter { it.login?.totp != null }
+        val cardCount = activeCipherViews.count { it.type is CipherListViewType.Card }
         VaultState.ViewState.Content(
             itemTypesCount = itemTypesCount,
             totpItemsCount = if (isPremium) {
@@ -126,15 +132,15 @@ fun VaultData.toViewState(
             } else {
                 totpItems.count { it.organizationUseTotp }
             },
-            loginItemsCount = filteredCipherViewList.count { it.type is CipherListViewType.Login },
+            loginItemsCount = activeCipherViews.count { it.type is CipherListViewType.Login },
             cardItemsCount = cardCount,
-            identityItemsCount = filteredCipherViewList
+            identityItemsCount = activeCipherViews
                 .count { it.type is CipherListViewType.Identity },
-            secureNoteItemsCount = filteredCipherViewList
+            secureNoteItemsCount = activeCipherViews
                 .count { it.type is CipherListViewType.SecureNote },
-            sshKeyItemsCount = filteredCipherViewList
+            sshKeyItemsCount = activeCipherViews
                 .count { it.type is CipherListViewType.SshKey },
-            favoriteItems = filteredSuccessCipherViewList
+            favoriteItems = activeDecryptedCipherViews
                 .filter { it.favorite }
                 .mapNotNull {
                     it.toVaultItemOrNull(
@@ -146,7 +152,7 @@ fun VaultData.toViewState(
                     )
                 }
                 .plus(
-                    elements = filteredFailureCipherViewList
+                    elements = activeUndecryptableCipherViews
                         .filter { it.favorite }
                         .mapNotNull {
                             it.toVaultItemOrNull(
@@ -163,7 +169,7 @@ fun VaultData.toViewState(
                     VaultState.ViewState.FolderItem(
                         id = folderView.id,
                         name = folderView.name.asText(),
-                        itemCount = filteredCipherViewList
+                        itemCount = activeCipherViews
                             .count {
                                 !it.id.isNullOrBlank() &&
                                     folderView.id == it.folderId
@@ -192,14 +198,14 @@ fun VaultData.toViewState(
                     VaultState.ViewState.CollectionItem(
                         id = requireNotNull(collectionView.id),
                         name = collectionView.name,
-                        itemCount = filteredCipherViewList
+                        itemCount = activeCipherViews
                             .count {
                                 !it.id.isNullOrBlank() &&
                                     collectionView.id in it.collectionIds
                             },
                     )
                 },
-            trashItemsCount = filteredAllCipherViewListWithDeletedItems.count {
+            trashItemsCount = allCipherViews.count {
                 it.deletedDate != null
             },
             showCardGroup = cardCount != 0 || restrictItemTypesPolicyOrgIds.isEmpty(),
@@ -424,3 +430,12 @@ fun List<CipherListView>.applyRestrictItemTypesPolicy(
                     restrictItemTypesPolicyOrgIds.contains(cipherListView.organizationId)
             }
         }
+
+private fun List<CipherListView>.applyFilters(
+    vaultFilterType: VaultFilterType,
+    restrictItemTypesPolicyOrgIds: List<String>,
+    excludeDeletedCipher: Boolean = false,
+): List<CipherListView> = this
+    .filter { excludeDeletedCipher && it.deletedDate == null }
+    .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds)
+    .toFilteredList(vaultFilterType)

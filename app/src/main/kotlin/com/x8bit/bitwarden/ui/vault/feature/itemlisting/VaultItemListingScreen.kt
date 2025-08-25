@@ -357,7 +357,7 @@ private fun VaultItemListingDialogs(
     onDismissUserVerification: () -> Unit,
     onVaultItemTypeSelected: (CreateVaultItemType) -> Unit,
     onTrustPrivilegedAppClick: (selectedCipherId: String?) -> Unit,
-    onShareCipherDecryptionErrorClick: (selectedCipherId: String?) -> Unit,
+    onShareCipherDecryptionErrorClick: (selectedCipherId: String) -> Unit,
 ) {
     when (dialogState) {
         is VaultItemListingState.DialogState.Error -> BitwardenBasicDialog(

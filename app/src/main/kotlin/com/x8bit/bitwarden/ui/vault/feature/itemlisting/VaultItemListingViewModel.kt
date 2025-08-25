@@ -636,10 +636,10 @@ class VaultItemListingViewModel @Inject constructor(
         sendEvent(VaultItemListingEvent.ShowShareSheet(action.sendUrl))
     }
 
-    private fun handleShareCipherDecryptionErrorClick(cipherId: String?) {
+    private fun handleShareCipherDecryptionErrorClick(cipherId: String) {
         sendEvent(
             event = VaultItemListingEvent.ShowShareSheet(
-                content = cipherId.orEmpty(),
+                content = cipherId,
             ),
         )
     }
@@ -948,7 +948,7 @@ class VaultItemListingViewModel @Inject constructor(
         sendEvent(event)
     }
 
-    private fun showCipherDecryptionErrorItemClick(itemId: String?) {
+    private fun showCipherDecryptionErrorItemClick(itemId: String) {
         mutableStateFlow.update {
             it.copy(
                 dialogState = VaultItemListingState.DialogState.CipherDecryptionError(
@@ -2736,7 +2736,7 @@ data class VaultItemListingState(
         data class CipherDecryptionError(
             val title: Text,
             val message: Text,
-            val selectedCipherId: String?,
+            val selectedCipherId: String,
         ) : DialogState()
 
         /**
@@ -3383,7 +3383,7 @@ sealed class VaultItemListingsAction {
      * Click to share cipher decryption error details.
      */
     data class ShareCipherDecryptionErrorClick(
-        val selectedCipherId: String?,
+        val selectedCipherId: String,
     ) : VaultItemListingsAction()
 
     /**

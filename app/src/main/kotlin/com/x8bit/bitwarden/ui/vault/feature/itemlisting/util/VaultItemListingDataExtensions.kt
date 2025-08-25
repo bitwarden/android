@@ -117,22 +117,22 @@ fun VaultData.toViewState(
 ): VaultItemListingState.ViewState {
     val filteredCipherViewList = decryptCipherListResult
         .successes
-        .filter { cipherListView ->
-            cipherListView.determineListingPredicate(itemListingType)
-        }
-        .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds)
-        .toFilteredList(vaultFilterType)
+        .applyFilters(
+            itemListingType = itemListingType,
+            vaultFilterType = vaultFilterType,
+            restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
+        )
 
     val filteredFailuresCipherViewList = decryptCipherListResult
         .failures
         .map { cipher ->
             cipher.toFailureCipherListView()
         }
-        .filter { cipherListView ->
-            cipherListView.determineListingPredicate(itemListingType)
-        }
-        .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds)
-        .toFilteredList(vaultFilterType)
+        .applyFilters(
+            itemListingType = itemListingType,
+            vaultFilterType = vaultFilterType,
+            restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
+        )
 
     val allFilteredCipherViewList = filteredFailuresCipherViewList
         .plus(filteredCipherViewList)
@@ -543,3 +543,12 @@ private val CipherListViewType.iconRes: Int
         CipherListViewType.Identity -> BitwardenDrawable.ic_id_card
         CipherListViewType.SshKey -> BitwardenDrawable.ic_ssh_key
     }
+
+private fun List<CipherListView>.applyFilters(
+    itemListingType: VaultItemListingState.ItemListingType.Vault,
+    vaultFilterType: VaultFilterType,
+    restrictItemTypesPolicyOrgIds: List<String>,
+): List<CipherListView> = this
+    .filter { it.determineListingPredicate(itemListingType) }
+    .applyRestrictItemTypesPolicy(restrictItemTypesPolicyOrgIds)
+    .toFilteredList(vaultFilterType)

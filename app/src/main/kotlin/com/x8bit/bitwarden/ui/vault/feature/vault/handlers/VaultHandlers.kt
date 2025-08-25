@@ -45,7 +45,7 @@ data class VaultHandlers(
     val importActionCardClick: () -> Unit,
     val flightRecorderGoToSettingsClick: () -> Unit,
     val dismissFlightRecorderSnackbar: () -> Unit,
-    val onShareCipherDecryptionErrorClick: (selectedCipherId: String?) -> Unit,
+    val onShareCipherDecryptionErrorClick: (selectedCipherId: String) -> Unit,
     val onShareAllCipherDecryptionErrorsClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
