@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -56,6 +57,7 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppReviewManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
@@ -172,6 +174,10 @@ fun VaultScreen(
             }
 
             VaultEvent.NavigateToAbout -> onNavigateToAboutScreen()
+
+            is VaultEvent.ShowShareSheet -> {
+                intentManager.shareText(event.content)
+            }
         }
     }
     val vaultHandlers = remember(viewModel) { VaultHandlers.create(viewModel) }
@@ -422,6 +428,39 @@ private fun VaultDialogs(
             onDismissRequest = vaultHandlers.dialogDismiss,
             excludedOptions = dialogState.excludedOptions,
         )
+
+        is VaultState.DialogState.CipherDecryptionError -> {
+            BitwardenTwoButtonDialog(
+                title = dialogState.title(),
+                message = dialogState.message(),
+                confirmButtonText = stringResource(BitwardenString.copy_error_report),
+                dismissButtonText = stringResource(BitwardenString.close),
+                onConfirmClick = {
+                    vaultHandlers.onShareCipherDecryptionErrorClick(dialogState.selectedCipherId)
+                },
+                onDismissClick = vaultHandlers.dialogDismiss,
+                onDismissRequest = vaultHandlers.dialogDismiss,
+            )
+        }
+
+        is VaultState.DialogState.VaultLoadCipherDecryptionError -> {
+            BitwardenTwoButtonDialog(
+                title = dialogState.title(),
+                message = pluralStringResource(
+                    id = BitwardenPlurals
+                        .bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long,
+                    count = dialogState.cipherCount,
+                    dialogState.cipherCount,
+                ),
+                confirmButtonText = stringResource(BitwardenString.copy_error_report),
+                dismissButtonText = stringResource(BitwardenString.close),
+                onConfirmClick = {
+                    vaultHandlers.onShareAllCipherDecryptionErrorsClick()
+                },
+                onDismissClick = vaultHandlers.dialogDismiss,
+                onDismissRequest = vaultHandlers.dialogDismiss,
+            )
+        }
 
         null -> Unit
     }

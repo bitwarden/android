@@ -579,6 +579,211 @@ class VaultScreenTest : BitwardenComposeTest() {
         verify { viewModel.trySendAction(VaultAction.DialogDismiss) }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `cipher decryption error dialog should be shown or hidden according to the state`() {
+        val errorTitle = "Decryption error"
+        val errorMessage =
+            "Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss."
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithText(errorTitle)
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(errorMessage)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.CipherDecryptionError(
+                    title = errorTitle.asText(),
+                    message = errorMessage.asText(),
+                    selectedCipherId = "1",
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(errorTitle)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(errorMessage)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `share and copy button click on the CipherDecryptionError screen should send ShareCipherDecryptionErrorClick`() {
+        val errorTitle = "Decryption error"
+        val errorMessage =
+            "Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss."
+        val shareAndCopyText = "Copy error report"
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.CipherDecryptionError(
+                    title = errorTitle.asText(),
+                    message = errorMessage.asText(),
+                    selectedCipherId = "1",
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(shareAndCopyText)
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAction.ShareCipherDecryptionErrorClick("1"),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `close button click on the CipherDecryptionError screen should send DialogDismiss`() {
+        val errorTitle = "Decryption error"
+        val errorMessage =
+            "Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss."
+        val closeText = "Close"
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.CipherDecryptionError(
+                    title = errorTitle.asText(),
+                    message = errorMessage.asText(),
+                    selectedCipherId = "1",
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(closeText)
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAction.DialogDismiss,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vault load cipher decryption error dialog should be shown or hidden according to the state`() {
+        val errorTitle = "Decryption error"
+        val errorMessage =
+            "Bitwarden could not decrypt 1 vault item. Copy and share this error report with customer success to avoid additional data loss."
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithText(errorTitle)
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(errorMessage)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.VaultLoadCipherDecryptionError(
+                    title = errorTitle.asText(),
+                    cipherCount = 1,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(errorTitle)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(errorMessage)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vault load cipher decryption error dialog should show plural when error is more than one`() {
+        val errorTitle = "Decryption error"
+        val errorMessage =
+            "Bitwarden could not decrypt 3 vault items. Copy and share this error report with customer success to avoid additional data loss."
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithText(errorTitle)
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(errorMessage)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.VaultLoadCipherDecryptionError(
+                    title = errorTitle.asText(),
+                    cipherCount = 3,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(errorTitle)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(errorMessage)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `share and copy button click on the VaultLoadCipherDecryptionError screen should send ShareAllCipherDecryptionErrorsClick`() {
+        val errorTitle = "Decryption error"
+        val shareAndCopyText = "Copy error report"
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.VaultLoadCipherDecryptionError(
+                    title = errorTitle.asText(),
+                    cipherCount = 3,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(shareAndCopyText)
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAction.ShareAllCipherDecryptionErrorsClick,
+            )
+        }
+    }
+
+    @Test
+    fun `close button click on the VaultLoadCipherDecryptionError should send DialogDismiss`() {
+        val errorTitle = "Decryption error"
+        val closeText = "Close"
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.VaultLoadCipherDecryptionError(
+                    title = errorTitle.asText(),
+                    cipherCount = 3,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(closeText)
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAction.DialogDismiss,
+            )
+        }
+    }
+
     @Test
     fun `syncing dialog should be displayed according to state`() {
         composeTestRule.assertNoDialogExists()
@@ -791,6 +996,15 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `ShowShareSheet event should call shareText`() {
+        val text = "share this text"
+        mutableEventFlow.tryEmit(VaultEvent.ShowShareSheet(text))
+        verify(exactly = 1) {
+            intentManager.shareText(text)
+        }
+    }
+
+    @Test
     fun `NavigateOutOfApp event should call exitApplication on the ExitManager`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateOutOfApp)
         verify { exitManager.exitApplication() }
@@ -861,6 +1075,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = username.asText(),
             overflowOptions = emptyList(),
             shouldShowMasterPasswordReprompt = false,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -897,6 +1112,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = userName.asText(),
             overflowOptions = emptyList(),
             shouldShowMasterPasswordReprompt = true,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -955,6 +1171,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = userName.asText(),
             overflowOptions = emptyList(),
             shouldShowMasterPasswordReprompt = true,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -1020,6 +1237,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                 ),
             ),
             shouldShowMasterPasswordReprompt = true,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -1090,6 +1308,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = userName.asText(),
             overflowOptions = persistentListOf(overflowAction),
             shouldShowMasterPasswordReprompt = true,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -1240,6 +1459,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = userName.asText(),
             overflowOptions = emptyList(),
             shouldShowMasterPasswordReprompt = false,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -1276,6 +1496,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = userName.asText(),
             overflowOptions = persistentListOf(overflowAction),
             shouldShowMasterPasswordReprompt = true,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -1346,6 +1567,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = userName.asText(),
             overflowOptions = persistentListOf(overflowAction),
             shouldShowMasterPasswordReprompt = true,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -1410,6 +1632,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = userName.asText(),
             overflowOptions = emptyList(),
             shouldShowMasterPasswordReprompt = true,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -1468,6 +1691,7 @@ class VaultScreenTest : BitwardenComposeTest() {
             username = userName.asText(),
             overflowOptions = emptyList(),
             shouldShowMasterPasswordReprompt = true,
+            hasDecryptionError = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -1851,6 +2075,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                             name = "mockSshKey".asText(),
                             overflowOptions = emptyList(),
                             shouldShowMasterPasswordReprompt = false,
+                            hasDecryptionError = false,
                         ),
                     ),
                 ),
@@ -2071,6 +2296,8 @@ private val DEFAULT_STATE: VaultState = VaultState(
     isRefreshing = false,
     showImportActionCard = false,
     flightRecorderSnackBar = null,
+    cipherDecryptionFailureIds = persistentListOf(),
+    hasShownDecryptionFailureAlert = false,
     restrictItemTypesPolicyOrgIds = emptyList(),
 )
 

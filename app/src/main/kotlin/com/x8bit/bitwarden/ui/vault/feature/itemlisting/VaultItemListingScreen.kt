@@ -319,6 +319,13 @@ fun VaultItemListingScreen(
                 )
             }
         },
+        onShareCipherDecryptionErrorClick = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    VaultItemListingsAction.ShareCipherDecryptionErrorClick(it),
+                )
+            }
+        },
     )
 
     val vaultItemListingHandlers = remember(viewModel) {
@@ -350,6 +357,7 @@ private fun VaultItemListingDialogs(
     onDismissUserVerification: () -> Unit,
     onVaultItemTypeSelected: (CreateVaultItemType) -> Unit,
     onTrustPrivilegedAppClick: (selectedCipherId: String?) -> Unit,
+    onShareCipherDecryptionErrorClick: (selectedCipherId: String) -> Unit,
 ) {
     when (dialogState) {
         is VaultItemListingState.DialogState.Error -> BitwardenBasicDialog(
@@ -362,6 +370,20 @@ private fun VaultItemListingDialogs(
         is VaultItemListingState.DialogState.Loading -> BitwardenLoadingDialog(
             text = dialogState.message(),
         )
+
+        is VaultItemListingState.DialogState.CipherDecryptionError -> {
+            BitwardenTwoButtonDialog(
+                title = dialogState.title(),
+                message = dialogState.message(),
+                confirmButtonText = stringResource(BitwardenString.copy_error_report),
+                dismissButtonText = stringResource(BitwardenString.close),
+                onConfirmClick = {
+                    onShareCipherDecryptionErrorClick(dialogState.selectedCipherId)
+                },
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
+        }
 
         is VaultItemListingState.DialogState.CredentialManagerOperationFail -> BitwardenBasicDialog(
             title = dialogState.title(),

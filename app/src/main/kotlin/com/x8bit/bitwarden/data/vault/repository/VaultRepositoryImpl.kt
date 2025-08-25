@@ -1103,7 +1103,6 @@ class VaultRepositoryImpl(
                     )
                     .fold(
                         onSuccess = { result ->
-                            // TODO (PM-18210): Display decryption result failures
                             DataState.Loaded(
                                 result.copy(successes = result.successes.sortAlphabetically()),
                             )

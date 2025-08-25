@@ -45,6 +45,8 @@ data class VaultHandlers(
     val importActionCardClick: () -> Unit,
     val flightRecorderGoToSettingsClick: () -> Unit,
     val dismissFlightRecorderSnackbar: () -> Unit,
+    val onShareCipherDecryptionErrorClick: (selectedCipherId: String) -> Unit,
+    val onShareAllCipherDecryptionErrorsClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -125,6 +127,18 @@ data class VaultHandlers(
                 dismissFlightRecorderSnackbar = {
                     viewModel.trySendAction(VaultAction.DismissFlightRecorderSnackbar)
                 },
+                onShareCipherDecryptionErrorClick =
+                    {
+                        viewModel.trySendAction(
+                            VaultAction.ShareCipherDecryptionErrorClick(it),
+                        )
+                    },
+                onShareAllCipherDecryptionErrorsClick =
+                    {
+                        viewModel.trySendAction(
+                            VaultAction.ShareAllCipherDecryptionErrorsClick,
+                        )
+                    },
             )
     }
 }

@@ -344,6 +344,10 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             is VaultItemListingsAction.Internal -> handleInternalAction(action)
+
+            is VaultItemListingsAction.ShareCipherDecryptionErrorClick -> {
+                handleShareCipherDecryptionErrorClick(cipherId = action.selectedCipherId)
+            }
         }
     }
 
@@ -633,6 +637,14 @@ class VaultItemListingViewModel @Inject constructor(
         action: ListingItemOverflowAction.SendAction.ShareUrlClick,
     ) {
         sendEvent(VaultItemListingEvent.ShowShareSheet(action.sendUrl))
+    }
+
+    private fun handleShareCipherDecryptionErrorClick(cipherId: String) {
+        sendEvent(
+            event = VaultItemListingEvent.ShowShareSheet(
+                content = cipherId,
+            ),
+        )
     }
 
     private fun handleRemoveSendPasswordClick(
@@ -929,8 +941,27 @@ class VaultItemListingViewModel @Inject constructor(
                     sendType = itemType.type.toSendItemType(),
                 )
             }
+
+            VaultItemListingState.DisplayItem.ItemType.DecryptionError -> {
+                showCipherDecryptionErrorItemClick(itemId = action.id)
+                return
+            }
         }
+
         sendEvent(event)
+    }
+
+    private fun showCipherDecryptionErrorItemClick(itemId: String) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.CipherDecryptionError(
+                    title = BitwardenString.decryption_error.asText(),
+                    message = BitwardenString
+                        .bitwarden_could_not_decrypt_this_vault_item_description_long.asText(),
+                    selectedCipherId = itemId,
+                ),
+            )
+        }
     }
 
     private fun handleItemClickForProviderCreateCredentialRequest(
@@ -2702,6 +2733,16 @@ data class VaultItemListingState(
         ) : DialogState()
 
         /**
+         * Represents a dialog indicating that a cipher decryption error occurred.
+         */
+        @Parcelize
+        data class CipherDecryptionError(
+            val title: Text,
+            val message: Text,
+            val selectedCipherId: String,
+        ) : DialogState()
+
+        /**
          * Represents a dialog indicating that a CredentialManager operation encountered an error.
          */
         @Parcelize
@@ -2912,6 +2953,11 @@ data class VaultItemListingState(
              * Indicates the item type is a vault item.
              */
             data class Vault(val type: CipherType) : ItemType()
+
+            /**
+             * Indicates the item type is a decryption error.
+             */
+            object DecryptionError : ItemType()
         }
     }
 
@@ -3335,6 +3381,13 @@ sealed class VaultItemListingsAction {
      * Click the lock button.
      */
     data object LockClick : VaultItemListingsAction()
+
+    /**
+     * Click to share cipher decryption error details.
+     */
+    data class ShareCipherDecryptionErrorClick(
+        val selectedCipherId: String,
+    ) : VaultItemListingsAction()
 
     /**
      * Click the refresh button.
