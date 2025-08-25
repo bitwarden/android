@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
+import androidx.compose.ui.res.pluralStringResource
 import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
@@ -974,7 +975,10 @@ class VaultItemViewModel @Inject constructor(
             is BreachCountResult.Success -> {
                 VaultItemState.DialogState.Generic(
                     message = if (result.breachCount > 0) {
-                        BitwardenString.password_exposed.asText(result.breachCount)
+                        BitwardenPlurals.password_exposed(
+                            quantity = result.breachCount,
+                            args = arrayOf(result.breachCount),
+                        )
                     } else {
                         BitwardenString.password_safe.asText()
                     },

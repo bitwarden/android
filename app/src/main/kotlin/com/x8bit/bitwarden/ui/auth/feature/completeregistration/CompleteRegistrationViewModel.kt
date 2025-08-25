@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
+import androidx.compose.ui.res.pluralStringResource
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -321,8 +322,10 @@ class CompleteRegistrationViewModel @Inject constructor(
                 it.copy(
                     dialog = CompleteRegistrationDialog.Error(
                         title = BitwardenString.an_error_has_occurred.asText(),
-                        message = BitwardenString.master_password_length_val_message_x
-                            .asText(MIN_PASSWORD_LENGTH),
+                        message = BitwardenPlurals.master_password_length_val_message_x.asText(
+                            quantity = MIN_PASSWORD_LENGTH,
+                            args = arrayOf(MIN_PASSWORD_LENGTH),
+                        ),
                     ),
                 )
             }

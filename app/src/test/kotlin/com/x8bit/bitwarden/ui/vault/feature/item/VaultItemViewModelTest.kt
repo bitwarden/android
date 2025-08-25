@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
+import androidx.compose.ui.res.pluralStringResource
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
@@ -1289,7 +1290,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     loginState.copy(
                         dialog = VaultItemState.DialogState.Generic(
-                            message = BitwardenString.password_exposed.asText(breachCount),
+                            message = BitwardenPlurals.password_exposed(
+                                quantity = breachCount,
+                                args = arrayOf(breachCount),
+                            )
                         ),
                     ),
                     awaitItem(),
