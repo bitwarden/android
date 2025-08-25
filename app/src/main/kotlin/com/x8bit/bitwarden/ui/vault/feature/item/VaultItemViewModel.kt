@@ -207,7 +207,11 @@ class VaultItemViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         snackbarRelayManager
-            .getSnackbarDataFlow(SnackbarRelay.CIPHER_MOVED_TO_ORGANIZATION)
+            .getSnackbarDataFlow(
+                SnackbarRelay.CIPHER_DELETED_SOFT,
+                SnackbarRelay.CIPHER_MOVED_TO_ORGANIZATION,
+                SnackbarRelay.CIPHER_UPDATED,
+            )
             .map { VaultItemAction.Internal.SnackbarDataReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)

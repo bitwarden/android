@@ -218,8 +218,11 @@ class VaultItemListingViewModel @Inject constructor(
 
         snackbarRelayManager
             .getSnackbarDataFlow(
+                SnackbarRelay.CIPHER_CREATED,
                 SnackbarRelay.CIPHER_DELETED,
+                SnackbarRelay.CIPHER_DELETED_SOFT,
                 SnackbarRelay.CIPHER_RESTORED,
+                SnackbarRelay.CIPHER_UPDATED,
                 SnackbarRelay.SEND_DELETED,
                 SnackbarRelay.SEND_UPDATED,
             )
@@ -3586,7 +3589,7 @@ sealed class VaultItemListingsAction {
          */
         data class SnackbarDataReceived(
             val data: BitwardenSnackbarData,
-        ) : Internal()
+        ) : Internal(), BackgroundEvent
 
         /**
          * Indicates that an error occurred while decrypting a cipher.
