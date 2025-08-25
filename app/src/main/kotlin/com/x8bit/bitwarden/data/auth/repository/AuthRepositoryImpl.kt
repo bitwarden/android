@@ -95,6 +95,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
+import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
@@ -144,6 +145,7 @@ class AuthRepositoryImpl(
     private val authSdkSource: AuthSdkSource,
     private val vaultSdkSource: VaultSdkSource,
     private val authDiskSource: AuthDiskSource,
+    private val settingsDiskSource: SettingsDiskSource,
     private val configDiskSource: ConfigDiskSource,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
@@ -297,11 +299,16 @@ class AuthRepositoryImpl(
             .launchIn(unconfinedScope)
         pushManager
             .syncOrgKeysFlow
-            .onEach {
-                val userId = activeUserId ?: return@onEach
-                // TODO: [PM-20593] Investigate why tokens are explicitly refreshed.
-                refreshAccessTokenSynchronously(userId = userId)
-                vaultRepository.sync(forced = true)
+            .onEach { userId ->
+                if (userId == activeUserId) {
+                    // TODO: [PM-20593] Investigate why tokens are explicitly refreshed.
+                    refreshAccessTokenSynchronously(userId = userId)
+                    // We just sync now to get the latest data
+                    vaultRepository.sync(forced = true)
+                } else {
+                    // We clear the last sync time to ensure we sync when we become the active user
+                    settingsDiskSource.storeLastSyncTime(userId = userId, lastSyncTime = null)
+                }
             }
             // This requires the ioScope to ensure that refreshAccessTokenSynchronously
             // happens on a background thread

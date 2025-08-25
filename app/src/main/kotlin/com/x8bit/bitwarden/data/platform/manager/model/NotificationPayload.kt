@@ -74,4 +74,13 @@ sealed class NotificationPayload {
         @JsonNames("UserId", "userId") override val userId: String?,
         @JsonNames("Id", "id") val loginRequestId: String?,
     ) : NotificationPayload()
+
+    /**
+     * A notification payload for resynchronizing organization keys.
+     */
+    @Serializable
+    data class SynchronizeOrganizationKeysNotifications(
+        @JsonNames("UserId", "userId") override val userId: String?,
+        @JsonNames("Id", "id") val loginRequestId: String?,
+    ) : NotificationPayload()
 }

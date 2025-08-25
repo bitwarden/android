@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserStateManager
 import com.x8bit.bitwarden.data.auth.manager.UserStateManagerImpl
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.AuthRepositoryImpl
+import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -52,6 +53,7 @@ object AuthRepositoryModule {
         authSdkSource: AuthSdkSource,
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
+        settingsDiskSource: SettingsDiskSource,
         configDiskSource: ConfigDiskSource,
         dispatcherManager: DispatcherManager,
         environmentRepository: EnvironmentRepository,
@@ -74,6 +76,7 @@ object AuthRepositoryModule {
         authSdkSource = authSdkSource,
         vaultSdkSource = vaultSdkSource,
         authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
         configDiskSource = configDiskSource,
         haveIBeenPwnedService = haveIBeenPwnedService,
         dispatcherManager = dispatcherManager,

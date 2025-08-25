@@ -66,7 +66,7 @@ class PushManagerImpl @Inject constructor(
         bufferedMutableSharedFlow<SyncFolderDeleteData>()
     private val mutableSyncFolderUpsertSharedFlow =
         bufferedMutableSharedFlow<SyncFolderUpsertData>()
-    private val mutableSyncOrgKeysSharedFlow = bufferedMutableSharedFlow<Unit>()
+    private val mutableSyncOrgKeysSharedFlow = bufferedMutableSharedFlow<String>()
     private val mutableSyncSendDeleteSharedFlow =
         bufferedMutableSharedFlow<SyncSendDeleteData>()
     private val mutableSyncSendUpsertSharedFlow =
@@ -93,7 +93,7 @@ class PushManagerImpl @Inject constructor(
     override val syncFolderUpsertFlow: SharedFlow<SyncFolderUpsertData>
         get() = mutableSyncFolderUpsertSharedFlow.asSharedFlow()
 
-    override val syncOrgKeysFlow: SharedFlow<Unit>
+    override val syncOrgKeysFlow: SharedFlow<String>
         get() = mutableSyncOrgKeysSharedFlow.asSharedFlow()
 
     override val syncSendDeleteFlow: SharedFlow<SyncSendDeleteData>
@@ -232,9 +232,13 @@ class PushManagerImpl @Inject constructor(
             }
 
             NotificationType.SYNC_ORG_KEYS -> {
-                if (isLoggedIn(userId)) {
-                    mutableSyncOrgKeysSharedFlow.tryEmit(Unit)
-                }
+                json
+                    .decodeFromString<NotificationPayload.SynchronizeOrganizationKeysNotifications>(
+                        string = notification.payload,
+                    )
+                    .userId
+                    .takeIf { authDiskSource.userState?.accounts.orEmpty().containsKey(it) }
+                    ?.let { mutableSyncOrgKeysSharedFlow.tryEmit(it) }
             }
 
             NotificationType.SYNC_SEND_CREATE,
