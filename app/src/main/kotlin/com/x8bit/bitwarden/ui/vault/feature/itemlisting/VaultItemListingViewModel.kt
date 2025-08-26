@@ -346,7 +346,7 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.Internal -> handleInternalAction(action)
 
             is VaultItemListingsAction.ShareCipherDecryptionErrorClick -> {
-                handleShareCipherDecryptionErrorClick(cipherId = action.selectedCipherId)
+                handleShareCipherDecryptionErrorClick(action)
             }
         }
     }
@@ -639,10 +639,12 @@ class VaultItemListingViewModel @Inject constructor(
         sendEvent(VaultItemListingEvent.ShowShareSheet(action.sendUrl))
     }
 
-    private fun handleShareCipherDecryptionErrorClick(cipherId: String) {
+    private fun handleShareCipherDecryptionErrorClick(
+        action: VaultItemListingsAction.ShareCipherDecryptionErrorClick,
+    ) {
         sendEvent(
             event = VaultItemListingEvent.ShowShareSheet(
-                content = cipherId,
+                content = action.selectedCipherId,
             ),
         )
     }
