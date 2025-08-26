@@ -777,7 +777,10 @@ class VaultViewModel @Inject constructor(
         }
 
         vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
-            updateVaultState(vaultData)
+            updateVaultState(
+                vaultData = vaultData,
+                dialog = state.dialog,
+            )
         }
     }
 
@@ -924,7 +927,7 @@ class VaultViewModel @Inject constructor(
 
     private fun updateVaultState(
         vaultData: VaultData,
-        dialog: VaultState.DialogState? = state.dialog,
+        dialog: VaultState.DialogState? = null,
         hasShownDecryptionFailureAlert: Boolean = state.hasShownDecryptionFailureAlert,
     ) {
         mutableStateFlow.update {
