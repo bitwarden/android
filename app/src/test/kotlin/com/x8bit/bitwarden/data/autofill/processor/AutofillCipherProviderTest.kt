@@ -279,7 +279,13 @@ class AutofillCipherProviderTest {
                 every { deletedDate } returns null
                 every { type } returns CipherListViewType.Card(cardListView)
                 every { reprompt } returns CipherRepromptType.NONE
-                every { organizationId } returns ORGANIZATION_ID
+                every { organizationId } returns ORGANIZATION_ID_WITH_CARD_TYPE_RESTRICTIONS
+            }
+            val personalVaultCardCipherView: CipherListView = mockk {
+                every { deletedDate } returns null
+                every { type } returns CipherListViewType.Card(cardListView)
+                every { reprompt } returns CipherRepromptType.NONE
+                every { organizationId } returns null
             }
             val decryptCipherListViewsResult = DecryptCipherListResult(
                 successes = listOf(
@@ -287,6 +293,7 @@ class AutofillCipherProviderTest {
                     deletedCardCipherView,
                     repromptCardCipherView,
                     restrictedCardCipherView,
+                    personalVaultCardCipherView,
                     loginCipherListViewWithTotp,
                     loginCipherListViewWithoutTotp,
                 ),
@@ -295,7 +302,12 @@ class AutofillCipherProviderTest {
 
             every {
                 policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
-            } returns listOf(createMockPolicy(number = 1, organizationId = ORGANIZATION_ID))
+            } returns listOf(
+                createMockPolicy(
+                    number = 1,
+                    organizationId = ORGANIZATION_ID_WITH_CARD_TYPE_RESTRICTIONS,
+                ),
+            )
             coEvery {
                 vaultRepository.getCipher(CARD_CIPHER_ID)
             } returns GetCipherResult.Success(
@@ -314,6 +326,7 @@ class AutofillCipherProviderTest {
             val expected = listOf(
                 CARD_AUTOFILL_CIPHER,
             )
+            every { cardCipherListView.organizationId } returns ORGANIZATION_ID
             every { cardCipherListView.subtitle } returns CARD_SUBTITLE
 
             // Test & Verify
@@ -563,6 +576,8 @@ class AutofillCipherProviderTest {
 
 private const val ACTIVE_USER_ID = "activeUserId"
 private const val ORGANIZATION_ID = "organizationId"
+private const val ORGANIZATION_ID_WITH_CARD_TYPE_RESTRICTIONS =
+    "organizationIdWithCardTypeRestrictions"
 private const val CARD_CARDHOLDER_NAME = "John Doe"
 private const val CARD_CODE = "123"
 private const val CARD_EXP_MONTH = "January"
