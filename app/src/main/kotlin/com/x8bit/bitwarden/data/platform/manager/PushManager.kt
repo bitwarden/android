@@ -52,7 +52,7 @@ interface PushManager {
     /**
      * Flow that represents requests intended to trigger syncing organization keys.
      */
-    val syncOrgKeysFlow: Flow<Unit>
+    val syncOrgKeysFlow: Flow<String>
 
     /**
      * Flow that represents requests intended to trigger a sync send delete.

@@ -470,6 +470,13 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         assertEquals(expected, storedFlightRecorderData)
     }
 
+    /**
+     * Asserts that the stored last sync time matches the [expected] one.
+     */
+    fun assertLastSyncTime(userId: String, expected: Instant?) {
+        assertEquals(expected, storedLastSyncTime[userId])
+    }
+
     //region Private helper functions
     private fun getMutableLastSyncTimeFlow(
         userId: String,

@@ -364,6 +364,17 @@ class PushManagerTest {
                     )
                 }
             }
+
+            @Test
+            fun `onMessageReceived with sync org keys emits to syncOrgKeysFlow`() = runTest {
+                pushManager.syncOrgKeysFlow.test {
+                    pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_MAP)
+                    assertEquals(
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                        awaitItem(),
+                    )
+                }
+            }
         }
 
         @Nested
@@ -546,13 +557,10 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived with sync org keys emits to syncOrgKeysFlow`() = runTest {
+            fun `onMessageReceived with sync org keys does not emit`() = runTest {
                 pushManager.syncOrgKeysFlow.test {
                     pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_MAP)
-                    assertEquals(
-                        Unit,
-                        awaitItem(),
-                    )
+                    expectNoEvents()
                 }
             }
 

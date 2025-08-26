@@ -111,6 +111,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
+import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
@@ -173,6 +174,7 @@ class AuthRepositoryTest {
         every { isActiveUserUnlockingFlow } returns mutableIsActiveUserUnlockingFlow
     }
     private val fakeAuthDiskSource = FakeAuthDiskSource()
+    private val fakeSettingsDiskSource = FakeSettingsDiskSource()
     private val fakeEnvironmentRepository =
         FakeEnvironmentRepository()
             .apply {
@@ -238,7 +240,7 @@ class AuthRepositoryTest {
     }
 
     private val mutableLogoutFlow = bufferedMutableSharedFlow<NotificationLogoutData>()
-    private val mutableSyncOrgKeysFlow = bufferedMutableSharedFlow<Unit>()
+    private val mutableSyncOrgKeysFlow = bufferedMutableSharedFlow<String>()
     private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
     private val pushManager: PushManager = mockk {
         every { logoutFlow } returns mutableLogoutFlow
@@ -274,6 +276,7 @@ class AuthRepositoryTest {
         authSdkSource = authSdkSource,
         vaultSdkSource = vaultSdkSource,
         authDiskSource = fakeAuthDiskSource,
+        settingsDiskSource = fakeSettingsDiskSource,
         configDiskSource = configDiskSource,
         environmentRepository = fakeEnvironmentRepository,
         settingsRepository = settingsRepository,
@@ -6364,21 +6367,37 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `syncOrgKeysFlow emissions should refresh access token and force sync`() {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+    fun `syncOrgKeysFlow emissions for active user should refresh access token and force sync`() {
+        fakeAuthDiskSource.userState = MULTI_USER_STATE
         fakeAuthDiskSource.storeAccountTokens(userId = USER_ID_1, accountTokens = ACCOUNT_TOKENS_1)
         coEvery {
             identityService.refreshTokenSynchronously(REFRESH_TOKEN)
         } returns REFRESH_TOKEN_RESPONSE_JSON.asSuccess()
-
         coEvery { vaultRepository.sync(forced = true) } just runs
 
-        mutableSyncOrgKeysFlow.tryEmit(Unit)
+        mutableSyncOrgKeysFlow.tryEmit(USER_ID_1)
 
         coVerify(exactly = 1) {
             identityService.refreshTokenSynchronously(REFRESH_TOKEN)
             vaultRepository.sync(forced = true)
         }
+    }
+
+    @Test
+    fun `syncOrgKeysFlow emissions for inactive user should clear the last sync time`() {
+        fakeAuthDiskSource.userState = MULTI_USER_STATE
+        fakeSettingsDiskSource.storeLastSyncTime(
+            userId = USER_ID_2,
+            lastSyncTime = FIXED_CLOCK.instant(),
+        )
+
+        mutableSyncOrgKeysFlow.tryEmit(USER_ID_2)
+
+        coVerify(exactly = 0) {
+            identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            vaultRepository.sync(forced = true)
+        }
+        fakeSettingsDiskSource.assertLastSyncTime(userId = USER_ID_2, null)
     }
 
     @Test
