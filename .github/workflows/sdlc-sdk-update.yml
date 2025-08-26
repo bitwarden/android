@@ -22,6 +22,10 @@ on:
       pr-id:
         description: "Pull Request ID"
 
+env:
+  _BOT_NAME: "bw-ghapp[bot]"
+  _BOT_EMAIL: "178206702+bw-ghapp[bot]@users.noreply.github.com"
+
 jobs:
   update:
     name: Update and PR
@@ -98,8 +102,8 @@ jobs:
         run: |
           echo "👀 Committing SDK version update..."
 
-          git config user.name "bw-ghapp[bot]"
-          git config user.email "178206702+bw-ghapp[bot]@users.noreply.github.com"
+          git config user.name "$_BOT_NAME"
+          git config user.email "$_BOT_EMAIL"
 
           git add gradle/libs.versions.toml
           git commit -m "SDK Update - $_SDK_PACKAGE $_SDK_VERSION"
