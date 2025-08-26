@@ -250,7 +250,7 @@ class VaultViewModel @Inject constructor(
             VaultAction.DismissFlightRecorderSnackbar -> handleDismissFlightRecorderSnackbar()
             VaultAction.FlightRecorderGoToSettingsClick -> handleFlightRecorderGoToSettingsClick()
             is VaultAction.ShareCipherDecryptionErrorClick -> {
-                handleShareCipherDecryptionErrorClick(cipherId = action.selectedCipherId)
+                handleShareCipherDecryptionErrorClick(action)
             }
 
             VaultAction.ShareAllCipherDecryptionErrorsClick -> {
@@ -267,10 +267,12 @@ class VaultViewModel @Inject constructor(
         sendEvent(VaultEvent.NavigateToAbout)
     }
 
-    private fun handleShareCipherDecryptionErrorClick(cipherId: String?) {
+    private fun handleShareCipherDecryptionErrorClick(
+        action: VaultAction.ShareCipherDecryptionErrorClick,
+    ) {
         sendEvent(
             event = VaultEvent.ShowShareSheet(
-                content = cipherId.orEmpty(),
+                content = action.selectedCipherId,
             ),
         )
     }
