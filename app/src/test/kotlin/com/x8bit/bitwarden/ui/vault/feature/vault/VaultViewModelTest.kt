@@ -937,7 +937,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                         ),
                     ),
                 )
-                advanceTimeBy(1500) // Allow time for state to update
+                // Allow time for state to update
+                advanceTimeBy(1500)
                 assertEquals(expectedState, viewModel.stateFlow.value)
                 assertEquals(
                     VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
@@ -991,7 +992,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                         sendViewList = emptyList(),
                     ),
                 )
-                advanceTimeBy(1500) // Allow time for state to update
+                // Allow time for state to update
+                advanceTimeBy(1500)
                 assertEquals(expectedState, viewModel.stateFlow.value)
                 assertEquals(
                     VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
