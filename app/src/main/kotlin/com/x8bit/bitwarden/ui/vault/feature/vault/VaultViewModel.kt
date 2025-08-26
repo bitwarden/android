@@ -777,7 +777,7 @@ class VaultViewModel @Inject constructor(
         }
 
         vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
-            updateVaultState(vaultData, clearDialog = false)
+            updateVaultState(vaultData)
         }
     }
 
@@ -906,26 +906,26 @@ class VaultViewModel @Inject constructor(
         }
 
         val shouldShowDecryptionAlert = !state.hasShownDecryptionFailureAlert &&
-            vaultData.data.decryptCipherListResult.failures.size > 0
+            vaultData.data.decryptCipherListResult.failures.isNotEmpty()
 
-        if (shouldShowDecryptionAlert) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialog = VaultState.DialogState.VaultLoadCipherDecryptionError(
-                        title = BitwardenString.decryption_error.asText(),
-                        cipherCount = vaultData.data.decryptCipherListResult.failures.size,
-                    ),
-                    hasShownDecryptionFailureAlert = true,
+        updateVaultState(
+            vaultData = vaultData.data,
+            dialog = if (shouldShowDecryptionAlert) {
+                VaultState.DialogState.VaultLoadCipherDecryptionError(
+                    title = BitwardenString.decryption_error.asText(),
+                    cipherCount = vaultData.data.decryptCipherListResult.failures.size,
                 )
-            }
-        }
-
-        updateVaultState(vaultData = vaultData.data, clearDialog = !shouldShowDecryptionAlert)
+            } else {
+                null
+            },
+            hasShownDecryptionFailureAlert = !shouldShowDecryptionAlert,
+        )
     }
 
     private fun updateVaultState(
         vaultData: VaultData,
-        clearDialog: Boolean = true,
+        dialog: VaultState.DialogState? = state.dialog,
+        hasShownDecryptionFailureAlert: Boolean = state.hasShownDecryptionFailureAlert,
     ) {
         mutableStateFlow.update {
             it.copy(
@@ -937,13 +937,14 @@ class VaultViewModel @Inject constructor(
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                 ),
-                dialog = if (clearDialog) null else state.dialog,
+                dialog = dialog,
                 isRefreshing = false,
                 cipherDecryptionFailureIds = vaultData
                     .decryptCipherListResult
                     .failures
                     .mapNotNull { cipher -> cipher.id }
                     .toImmutableList(),
+                hasShownDecryptionFailureAlert = hasShownDecryptionFailureAlert,
             )
         }
     }
