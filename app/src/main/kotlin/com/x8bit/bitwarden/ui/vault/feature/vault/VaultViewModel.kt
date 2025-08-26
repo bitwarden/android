@@ -920,7 +920,7 @@ class VaultViewModel @Inject constructor(
             }
         }
 
-        updateVaultState(vaultData.data, clearDialog = !shouldShowDecryptionAlert)
+        updateVaultState(vaultData = vaultData.data, clearDialog = !shouldShowDecryptionAlert)
     }
 
     private fun updateVaultState(
