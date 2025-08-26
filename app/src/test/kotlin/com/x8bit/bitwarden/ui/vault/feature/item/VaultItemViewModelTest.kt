@@ -1289,7 +1289,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     loginState.copy(
                         dialog = VaultItemState.DialogState.Generic(
-                            message = BitwardenString.password_exposed.asText(breachCount),
+                            message = BitwardenPlurals.password_exposed.asText(
+                                quantity = breachCount,
+                                args = arrayOf(breachCount),
+                            )
                         ),
                     ),
                     awaitItem(),

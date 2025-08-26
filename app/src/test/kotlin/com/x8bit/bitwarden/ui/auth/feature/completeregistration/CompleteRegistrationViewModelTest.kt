@@ -590,7 +590,10 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 passwordInput = input,
                 dialog = CompleteRegistrationDialog.Error(
                     title = BitwardenString.an_error_has_occurred.asText(),
-                    message = BitwardenString.master_password_length_val_message_x.asText(12),
+                    message = BitwardenPlurals.master_password_length_val_message_x.asText(
+                        quantity = 12,
+                        args = arrayOf(12),
+                    ),
                 ),
             )
             viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)

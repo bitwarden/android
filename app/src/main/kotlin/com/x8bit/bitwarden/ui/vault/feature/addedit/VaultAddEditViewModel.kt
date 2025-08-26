@@ -1945,7 +1945,10 @@ class VaultAddEditViewModel @Inject constructor(
                 is BreachCountResult.Success -> {
                     VaultAddEditState.DialogState.Generic(
                         message = if (result.breachCount > 0) {
-                            BitwardenString.password_exposed.asText(result.breachCount)
+                            BitwardenPlurals.password_exposed.asText(
+                                quantity = result.breachCount,
+                                args = arrayOf(result.breachCount),
+                            )
                         } else {
                             BitwardenString.password_safe.asText()
                         },
