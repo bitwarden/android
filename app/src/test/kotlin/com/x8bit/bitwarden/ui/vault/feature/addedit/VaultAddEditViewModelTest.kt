@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
-import androidx.compose.ui.res.pluralStringResource
 import androidx.core.os.bundleOf
 import androidx.credentials.CreatePasswordRequest
 import androidx.credentials.CreatePublicKeyCredentialRequest
@@ -2430,7 +2429,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     loginState.copy(
                         dialog = VaultAddEditState.DialogState.Generic(
-                            message = BitwardenPlurals.password_exposed(
+                            message = BitwardenPlurals.password_exposed.asText(
                                 quantity = breachCount,
                                 args = arrayOf(breachCount),
                             )

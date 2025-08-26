@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.resetPassword
 
-import androidx.compose.ui.res.pluralStringResource
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest

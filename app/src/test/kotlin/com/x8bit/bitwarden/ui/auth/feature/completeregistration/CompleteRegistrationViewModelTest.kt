@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
-import androidx.compose.ui.res.pluralStringResource
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -593,7 +592,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                     title = BitwardenString.an_error_has_occurred.asText(),
                     message = BitwardenPlurals.master_password_length_val_message_x.asText(
                         quantity = 12,
-                        args = 12,
+                        args = arrayOf(12),
                     ),
                 ),
             )
