@@ -388,7 +388,7 @@ fun createMockDisplayItemForDecryptionError(
     number: Int,
 ): VaultItemListingState.DisplayItem = VaultItemListingState.DisplayItem(
     id = "mockId-$number",
-    title = "mockName-$number".asText(),
+    title = BitwardenString.error_cannot_decrypt.asText(),
     titleTestTag = "CipherNameLabel",
     secondSubtitle = null,
     secondSubtitleTestTag = null,
