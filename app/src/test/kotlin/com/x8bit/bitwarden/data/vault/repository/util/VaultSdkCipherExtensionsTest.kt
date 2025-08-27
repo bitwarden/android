@@ -17,7 +17,9 @@ import com.bitwarden.network.model.createMockSecureNote
 import com.bitwarden.network.model.createMockSshKey
 import com.bitwarden.network.model.createMockUri
 import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CopyableCipherFields
 import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -33,11 +35,15 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSecureNo
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSshKey
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkUri
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.jupiter.api.assertNull
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import kotlin.collections.emptyList
 
 /**
  * Default date time used for [ZonedDateTime] properties of mock objects.
@@ -373,5 +379,63 @@ class VaultSdkCipherExtensionsTest {
             ),
             encryptionContext.toEncryptedNetworkCipherResponse(),
         )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toFailureCipherListView should convert Login Cipher to CipherListView with empty LoginListView`() {
+        val cipher = createMockSdkCipher(number = 1)
+
+        val result = cipher.toFailureCipherListView()
+
+        assertEquals("mockId-1", result.id)
+        assertEquals("mockOrganizationId-1", result.organizationId)
+        assertEquals("mockFolderId-1", result.folderId)
+        assertEquals(listOf("mockCollectionId-1"), result.collectionIds)
+        assertEquals("mockKey-1", result.key)
+        assertEquals("mockName-1", result.name)
+        assertEquals("", result.subtitle)
+        assertEquals(0.toUInt(), result.attachments)
+        assertEquals(false, result.hasOldAttachments)
+        assertEquals(null, result.localData)
+        assertEquals(emptyList<CopyableCipherFields>(), result.copyableFields)
+
+        assertTrue(result.type is CipherListViewType.Login)
+
+        val loginType = result.type as CipherListViewType.Login
+        assertNull(loginType.v1.fido2Credentials)
+        assertFalse(loginType.v1.hasFido2)
+        assertNull(loginType.v1.username)
+        assertNull(loginType.v1.totp)
+        assertNull(loginType.v1.uris)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toFailureCipherListView should convert Card Cipher to CipherListView with empty CardListView`() {
+        val cipher = createMockSdkCipher(number = 1)
+            .copy(
+                card = createMockSdkCard(number = 1),
+                type = CipherType.CARD,
+            )
+
+        val result = cipher.toFailureCipherListView()
+
+        assertEquals("mockId-1", result.id)
+        assertEquals("mockOrganizationId-1", result.organizationId)
+        assertEquals("mockFolderId-1", result.folderId)
+        assertEquals(listOf("mockCollectionId-1"), result.collectionIds)
+        assertEquals("mockKey-1", result.key)
+        assertEquals("mockName-1", result.name)
+        assertEquals("", result.subtitle)
+        assertEquals(0.toUInt(), result.attachments)
+        assertEquals(false, result.hasOldAttachments)
+        assertEquals(null, result.localData)
+        assertEquals(emptyList<CopyableCipherFields>(), result.copyableFields)
+
+        assertTrue(result.type is CipherListViewType.Card)
+
+        val loginType = result.type as CipherListViewType.Card
+        assertNull(loginType.v1.brand)
     }
 }
