@@ -71,7 +71,9 @@ class AutofillCipherProviderImpl(
                             // Must not require a reprompt.
                             it.reprompt == CipherRepromptType.NONE &&
                             // Must not be restricted by organization.
-                            it.organizationId !in organizationIdsWithCardTypeRestrictions
+                            !it.isExcludedByOrgCardRestrictions(
+                                organizationIdsWithCardTypeRestrictions,
+                            )
                     }
                     ?.let { nonNullCipherListView ->
                         nonNullCipherListView.id?.let { cipherId ->
@@ -154,4 +156,25 @@ class AutofillCipherProviderImpl(
 
             is GetCipherResult.Success -> result.cipherView
         }
+
+    /**
+     * Checks if this [CipherListView] item should be excluded from autofill due to
+     * organization-based card type restrictions.
+     *
+     * It's considered restricted if:
+     * 1. There are organizations with card type restrictions AND this item is a personal vault item
+     * (organizationId is null).
+     * 2. OR this item belongs to an organization that has card type restrictions.
+     */
+    private fun CipherListView.isExcludedByOrgCardRestrictions(
+        restrictingOrgIds: List<String>,
+    ): Boolean {
+        if (restrictingOrgIds.isEmpty()) {
+            return false
+        }
+        // If personal vault (no orgId), restricted if any org has restrictions.
+        return organizationId == null ||
+            // If part of an org, restricted if that org is in the restricting list.
+            organizationId in restrictingOrgIds
+    }
 }
