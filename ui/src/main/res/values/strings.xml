@@ -850,7 +850,6 @@ Do you want to switch to this account?</string>
     <string name="need_some_inspiration">"Need some inspiration?"</string>
     <string name="check_out_the_passphrase_generator">"Check out the passphrase generator"</string>
     <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
-    <string name="review_flow_launched">Review flow launched!</string>
     <string name="copy_private_key">Copy private key</string>
     <string name="login_credentials">Login Credentials</string>
     <string name="autofill_options">Autofill Options</string>
