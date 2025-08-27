@@ -77,6 +77,27 @@ jobs:
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
           git switch $BRANCH_NAME || git switch -c $BRANCH_NAME
 
+      - name: Prevent updating the branch when the last committer isn't the bot
+        env:
+          _BRANCH_NAME: ${{ steps.switch-branch.outputs.branch_name }}
+        run: |
+          LATEST_COMMIT_AUTHOR=$(git log -1 --format='%ae' $_BRANCH_NAME)
+
+          echo "Latest commit author: $LATEST_COMMIT_AUTHOR"
+          echo "Expected bot email: $_BOT_EMAIL"
+
+          if [ "$LATEST_COMMIT_AUTHOR" != "$_BOT_EMAIL" ]; then
+            echo "::error::Branch `$_BRANCH_NAME` has a commit not made by the bot." \
+              "This indicates manual changes have been made to the branch," \
+              "PR has to be merged or closed before running this workflow again."
+            EXISTING_PR=$(gh pr list --head $_BRANCH_NAME --base main --state open --json number --jq '.[0].number // empty')
+            PR_URL="https://github.com/${{ github.repository }}/pull/$EXISTING_PR"
+            echo "## ❌ Merge or close: $PR_URL" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+          echo "✅ Branch tip commit was made by the bot. Safe to proceed."
+
       - name: Get current SDK version
         id: get-current-sdk
         run: |
@@ -126,7 +147,6 @@ jobs:
 
           $CHANGELOG"
 
-          # Check if PR already exists
           EXISTING_PR=$(gh pr list --head $_BRANCH_NAME --base main --state open --json number --jq '.[0].number // empty')
 
           if [ -n "$EXISTING_PR" ]; then
