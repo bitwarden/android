@@ -12,7 +12,6 @@ import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 import timber.log.Timber
 
 /**
@@ -28,21 +27,13 @@ class Fido2CredentialStoreImpl(
     /**
      * Return all active ciphers that contain FIDO 2 credentials.
      */
-    override suspend fun allCredentials(): List<CipherListView> {
-        val syncResult = vaultRepository.syncForResult()
-        if (syncResult is SyncVaultDataResult.Error) {
-            syncResult.throwable
-                ?.let { throw it }
-                ?: throw IllegalStateException("Sync failed.")
-        }
-        return vaultRepository
-            .decryptCipherListResultStateFlow
-            .value
-            .data
-            ?.successes
-            .orEmpty()
-            .filter { it.isActiveWithFido2Credentials }
-    }
+    override suspend fun allCredentials(): List<CipherListView> = vaultRepository
+        .decryptCipherListResultStateFlow
+        .value
+        .data
+        ?.successes
+        .orEmpty()
+        .filter { it.isActiveWithFido2Credentials }
 
     /**
      * Returns ciphers that contain FIDO 2 credentials for the given [ripId] with the provided
@@ -51,15 +42,8 @@ class Fido2CredentialStoreImpl(
      * @param ids Optional list of FIDO 2 credential ID's to find.
      * @param ripId Relying Party ID to find.
      */
-    override suspend fun findCredentials(ids: List<ByteArray>?, ripId: String): List<CipherView> {
-        val syncResult = vaultRepository.syncForResult()
-        if (syncResult is SyncVaultDataResult.Error) {
-            syncResult.throwable
-                ?.let { throw it }
-                ?: throw IllegalStateException("Sync failed.")
-        }
-
-        return vaultRepository
+    override suspend fun findCredentials(ids: List<ByteArray>?, ripId: String): List<CipherView> =
+        vaultRepository
             .decryptCipherListResultStateFlow
             .value
             .data
@@ -78,7 +62,6 @@ class Fido2CredentialStoreImpl(
                             .toCipherViewOrNull()
                     }
             }
-    }
 
     /**
      * Save the provided [cred] to the users vault.
@@ -95,7 +78,7 @@ class Fido2CredentialStoreImpl(
                     ?: vaultRepository.createCipher(decryptedCipherView)
             }
             .onFailure { throw it }
-        }
+    }
 
     /**
      * Return a filtered list containing elements that match the given [relyingPartyId] and a
