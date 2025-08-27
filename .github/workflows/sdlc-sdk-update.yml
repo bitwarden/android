@@ -75,10 +75,20 @@ jobs:
         run: |
           BRANCH_NAME="sdlc/sdk-update"
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
-          git switch $BRANCH_NAME || git switch -c $BRANCH_NAME
+
+          if git switch $BRANCH_NAME; then
+            echo "✅ Switched to existing branch: $BRANCH_NAME"
+            echo "updating_existing_branch=true" >> $GITHUB_OUTPUT
+          else
+            echo "📝 Creating new branch: $BRANCH_NAME"
+            git switch -c $BRANCH_NAME
+            echo "updating_existing_branch=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Prevent updating the branch when the last committer isn't the bot
+        if: ${{ steps.switch-branch.outputs.updating_existing_branch == 'true' }}
         env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           _BRANCH_NAME: ${{ steps.switch-branch.outputs.branch_name }}
         run: |
           LATEST_COMMIT_AUTHOR=$(git log -1 --format='%ae' $_BRANCH_NAME)
@@ -90,7 +100,12 @@ jobs:
             echo "::error::Branch `$_BRANCH_NAME` has a commit not made by the bot." \
               "This indicates manual changes have been made to the branch," \
               "PR has to be merged or closed before running this workflow again."
+            echo "👀 Fetching existing PR..."
             EXISTING_PR=$(gh pr list --head $_BRANCH_NAME --base main --state open --json number --jq '.[0].number // empty')
+            if [ -n "$EXISTING_PR" ]; then
+              echo "::error::Couldn't find an existing PR for branch `$_BRANCH_NAME`."
+              exit 1
+            fi
             PR_URL="https://github.com/${{ github.repository }}/pull/$EXISTING_PR"
             echo "## ❌ Merge or close: $PR_URL" >> $GITHUB_STEP_SUMMARY
             exit 1
@@ -98,12 +113,21 @@ jobs:
 
           echo "✅ Branch tip commit was made by the bot. Safe to proceed."
 
-      - name: Get current SDK version
+      # Using main to retrieve the changelog on consecutive updates of the same PR.
+      - name: Get current SDK version from main branch
         id: get-current-sdk
         run: |
-          SDK_VERSION=$(grep "bitwardenSdk =" gradle/libs.versions.toml | cut -d'"' -f2)
+          echo "👀 Show main"
+          git show origin/main
+          echo "👀 Show main file"
+          git show origin/main:gradle/libs.versions.toml
+          SDK_VERSION=$(git show origin/main:gradle/libs.versions.toml | grep "bitwardenSdk =" | cut -d'"' -f2)
+          if [ -z "$SDK_VERSION" ]; then
+            echo "::error::Failed to get current SDK version from main branch."
+            exit 1
+          fi
           GIT_REF=$(echo "$SDK_VERSION" | cut -d'-' -f3-) # handles both commit hashes and branch names
-          echo "Current SDK version: $SDK_VERSION"
+          echo "Current SDK version (from main): $SDK_VERSION"
           echo "Current SDK git ref: $GIT_REF"
           echo "version=$SDK_VERSION" >> $GITHUB_OUTPUT
           echo "git_ref=$GIT_REF" >> $GITHUB_OUTPUT
