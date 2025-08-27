@@ -921,7 +921,11 @@ class VaultViewModel @Inject constructor(
             } else {
                 null
             },
-            hasShownDecryptionFailureAlert = !shouldShowDecryptionAlert,
+            hasShownDecryptionFailureAlert = if (shouldShowDecryptionAlert) {
+                true
+            } else {
+                state.hasShownDecryptionFailureAlert
+            },
         )
     }
 
