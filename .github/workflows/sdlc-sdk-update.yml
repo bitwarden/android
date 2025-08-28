@@ -103,7 +103,7 @@ jobs:
             echo "👀 Fetching existing PR..."
             gh pr list --head $_BRANCH_NAME --base main --state open --json number --jq '.[0].number // empty'
             EXISTING_PR=$(gh pr list --head $_BRANCH_NAME --base main --state open --json number --jq '.[0].number // empty')
-            if [ -n "$EXISTING_PR" ]; then
+            if [ -z "$EXISTING_PR" ]; then
               echo "::error::Couldn't find an existing PR for branch $_BRANCH_NAME."
               exit 1
             fi
