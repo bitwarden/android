@@ -117,9 +117,6 @@ jobs:
       - name: Get current SDK version from main branch
         id: get-current-sdk
         run: |
-          echo "👀 Show main"
-          git show origin/main
-          echo "👀 Show main file"
           git show origin/main:gradle/libs.versions.toml
           SDK_VERSION=$(git show origin/main:gradle/libs.versions.toml | grep "bitwardenSdk =" | cut -d'"' -f2)
           if [ -z "$SDK_VERSION" ]; then
