@@ -93,17 +93,18 @@ jobs:
         run: |
           LATEST_COMMIT_AUTHOR=$(git log -1 --format='%ae' $_BRANCH_NAME)
 
-          echo "Latest commit author: $LATEST_COMMIT_AUTHOR"
+          echo "Latest commit author in branch ($_BRANCH_NAME): $LATEST_COMMIT_AUTHOR"
           echo "Expected bot email: $_BOT_EMAIL"
 
           if [ "$LATEST_COMMIT_AUTHOR" != "$_BOT_EMAIL" ]; then
-            echo "::error::Branch `$_BRANCH_NAME` has a commit not made by the bot." \
+            echo "::error::Branch $_BRANCH_NAME has a commit not made by the bot." \
               "This indicates manual changes have been made to the branch," \
               "PR has to be merged or closed before running this workflow again."
             echo "👀 Fetching existing PR..."
+            gh pr list --head $_BRANCH_NAME --base main --state open --json number --jq '.[0].number // empty'
             EXISTING_PR=$(gh pr list --head $_BRANCH_NAME --base main --state open --json number --jq '.[0].number // empty')
             if [ -n "$EXISTING_PR" ]; then
-              echo "::error::Couldn't find an existing PR for branch `$_BRANCH_NAME`."
+              echo "::error::Couldn't find an existing PR for branch $_BRANCH_NAME."
               exit 1
             fi
             PR_URL="https://github.com/${{ github.repository }}/pull/$EXISTING_PR"
@@ -176,8 +177,7 @@ jobs:
               --title "Update SDK to $_SDK_VERSION" \
               --body-file -
             PR_URL="https://github.com/${{ github.repository }}/pull/$EXISTING_PR"
-            echo "🚀 Updated PR: $PR_URL"
-            echo "## 🚀 Updated PR: $PR_URL" >> $GITHUB_STEP_SUMMARY
+            echo "## ✅ Updated PR: $PR_URL" >> $GITHUB_STEP_SUMMARY
           else
             echo "📝 Creating new PR..."
             PR_URL=$(echo -e "$PR_BODY" | gh pr create \
@@ -187,7 +187,6 @@ jobs:
               --head $_BRANCH_NAME \
               --label "automated-pr" \
               --label "t:ci")
-            echo "🚀 Created PR: $PR_URL"
             echo "## 🚀 Created PR: $PR_URL" >> $GITHUB_STEP_SUMMARY
           fi
 
