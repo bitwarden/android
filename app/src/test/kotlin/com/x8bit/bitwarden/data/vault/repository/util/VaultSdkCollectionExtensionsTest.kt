@@ -103,7 +103,7 @@ class VaultSdkCollectionExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toSortAlphabetically should sort collections by name`() {
+    fun `toSortAlphabetically should sort collections by type and name`() {
         val list = listOf(
             createMockCollectionView(1).copy(name = "c"),
             createMockCollectionView(1).copy(name = "B"),
@@ -111,29 +111,35 @@ class VaultSdkCollectionExtensionsTest {
             createMockCollectionView(1).copy(name = "4"),
             createMockCollectionView(1).copy(name = "A"),
             createMockCollectionView(1).copy(name = "#"),
-            createMockCollectionView(1).copy(name = "D"),
+            createMockCollectionView(1).copy(
+                name = "D",
+                type = CollectionType.DEFAULT_USER_COLLECTION,
+            ),
         )
 
         val expected = listOf(
+            createMockCollectionView(1).copy(
+                name = "D",
+                type = CollectionType.DEFAULT_USER_COLLECTION,
+            ),
             createMockCollectionView(1).copy(name = "#"),
             createMockCollectionView(1).copy(name = "4"),
             createMockCollectionView(1).copy(name = "A"),
             createMockCollectionView(1).copy(name = "B"),
             createMockCollectionView(1).copy(name = "c"),
-            createMockCollectionView(1).copy(name = "D"),
             createMockCollectionView(1).copy(name = "z"),
         )
 
         assertEquals(
             expected,
-            list.sortAlphabetically(),
+            list.sortAlphabeticallyByType(),
         )
     }
 
     @Test
     fun `toCollectionType should convert CollectionTypeJson to CollectionType`() {
         val collectionType = CollectionTypeJson.SHARED_COLLECTION
-        val sdkCollectionType = collectionType.toCollectionType()
+        val sdkCollectionType = collectionType.toSdkCollectionType()
         assertEquals(
             CollectionType.SHARED_COLLECTION,
             sdkCollectionType,
