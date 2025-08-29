@@ -21,7 +21,7 @@ fun SyncResponseJson.Collection.toEncryptedSdkCollection(): Collection =
         readOnly = this.isReadOnly,
         manage = this.canManage ?: !this.isReadOnly,
         defaultUserCollectionEmail = this.defaultUserCollectionEmail,
-        type = this.type.toCollectionType(),
+        type = this.type.toSdkCollectionType(),
     )
 
 /**
@@ -32,14 +32,21 @@ fun List<SyncResponseJson.Collection>.toEncryptedSdkCollectionList(): List<Colle
     map { it.toEncryptedSdkCollection() }
 
 /**
- * Sorts the data in alphabetical order by name.
+ * Sorts the collections, grouping them by type, with `DEFAULT_USER_COLLECTION` types displayed
+ * first. Within each group, collections are sorted alphabetically by name.
  */
 @JvmName("toAlphabeticallySortedCollectionList")
-fun List<CollectionView>.sortAlphabetically(): List<CollectionView> {
+fun List<CollectionView>.sortAlphabeticallyByType(): List<CollectionView> {
     return this.sortedWith(
-        comparator = { collection1, collection2 ->
-            SpecialCharWithPrecedenceComparator.compare(collection1.name, collection2.name)
-        },
+        // DEFAULT_USER_COLLECTION come first
+        comparator = compareBy<CollectionView> { it.type != CollectionType.DEFAULT_USER_COLLECTION }
+            // Then sort by other CollectionType ordinals
+            .thenBy { it.type }
+            // Finally, sort by name within each group
+            .thenComparing(
+                CollectionView::name,
+                SpecialCharWithPrecedenceComparator,
+            ),
     )
 }
 
@@ -47,7 +54,7 @@ fun List<CollectionView>.sortAlphabetically(): List<CollectionView> {
  * Converts a [CollectionType] object to a corresponding
  * Bitwarden SDK [CollectionTypeJson] object.
  */
-fun CollectionTypeJson.toCollectionType(): CollectionType =
+fun CollectionTypeJson.toSdkCollectionType(): CollectionType =
     when (this) {
         CollectionTypeJson.SHARED_COLLECTION -> CollectionType.SHARED_COLLECTION
         CollectionTypeJson.DEFAULT_USER_COLLECTION -> CollectionType.DEFAULT_USER_COLLECTION
