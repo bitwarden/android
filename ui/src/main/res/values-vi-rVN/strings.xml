@@ -850,7 +850,6 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="need_some_inspiration">"Cần một chút cảm hứng?"</string>
     <string name="check_out_the_passphrase_generator">"Tham khảo trình tạo cụm mật khẩu"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Chúng tôi không thể xác minh chứng chỉ của máy chủ. Chuỗi chứng chỉ hoặc cài đặt proxy trên thiết bị hoặc máy chủ Bitwarden của bạn có thể chưa được cấu hình đúng cách.</string>
-    <string name="review_flow_launched">Quy trình đánh giá đã được khởi động!</string>
     <string name="copy_private_key">Sao chép khóa riêng tư</string>
     <string name="login_credentials">Thông tin đăng nhập</string>
     <string name="autofill_options">Tùy chọn tự động điền</string>
@@ -1071,6 +1070,12 @@ các vấn đề.</string>
     <string name="local_items_are_collapsed_click_to_expand">Các mục địa phương đã được thu gọn, nhấp để mở rộng.</string>
     <string name="items_expanded_click_to_collapse">Các mục được mở rộng, nhấp để thu gọn.</string>
     <string name="items_are_collapsed_click_to_expand">Các mục đã được thu gọn, nhấp để mở rộng.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Copy error report</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Chọn một thẻ cho %s</string>
     <string name="advanced_options">Tùy chọn nâng cao</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Tìm hiểu thêm về phát hiện khớp</annotation></string>

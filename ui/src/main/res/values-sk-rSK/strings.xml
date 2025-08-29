@@ -287,7 +287,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="new_uri">Nové URI</string>
     <string name="add_website">Pridať webovú stránku</string>
     <string name="base_domain">Základná doména</string>
-    <string name="default_text">Default (%1$s)</string>
+    <string name="default_text">Predvolené (%1$s)</string>
     <string name="exact">Presný</string>
     <string name="host">Hostiteľ</string>
     <string name="reg_ex">Regulárny výraz</string>
@@ -357,7 +357,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="clear_clipboard">Vymazať schránku</string>
     <string name="clear_clipboard_description">Automaticky vymazať skopírované hodnoty zo schránky.</string>
     <string name="default_uri_match_detection">Predvolené zisťovanie zhody URI</string>
-    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
+    <string name="default_uri_match_detection_description">Zisťovanie zhody URI ovláda, ako Bitwarden identifikuje návrhy na automatické vypĺňanie.</string>
     <string name="theme">Motív</string>
     <string name="theme_description">Zmeniť motív aplikácie.</string>
     <string name="copy_notes">Kopírovať poznámku</string>
@@ -529,7 +529,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="verification_codes">Overovacie kódy</string>
     <string name="premium_subscription_required">Vyžaduje sa predplatné Prémium</string>
     <string name="cannot_add_authenticator_key_scan_qr_code">Nemôžete pridať kľúč overovateľa? <annotation link="scanQrCode">Skenovať QR kód</annotation></string>
-    <string name="scan_qr_code"><annotation link="scanQrCode">Scan QR code</annotation></string>
+    <string name="scan_qr_code"><annotation link="scanQrCode">Skenovať QR kód</annotation></string>
     <string name="cannot_scan_qr_code_enter_key_manually">Nemôžete naskenovať QR kód? <annotation link="enterKeyManually">Zadajte kľúč manuálne</annotation></string>
     <string name="authenticator_key_scanner">Kľúč z aplikácie Authenticator</string>
     <string name="authenticator_key_help">Pomoc pre overovací kľúč</string>
@@ -850,7 +850,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="need_some_inspiration">"Potrebujete inšpiráciu?"</string>
     <string name="check_out_the_passphrase_generator">"Vyskúšajte náš generátor prístupových fráz"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Certifikát servera sa nám nepodarilo overiť. Reťazec certifikátov alebo nastavenia proxy servera na vašom zariadení alebo serveri Bitwarden nemusia byť správne nastavené.</string>
-    <string name="review_flow_launched">Prebieha hodnotenie!</string>
     <string name="copy_private_key">Kopírovať súkromný kľúč</string>
     <string name="login_credentials">Prihlasovacie údaje</string>
     <string name="autofill_options">Možnosti automatického vypĺňania</string>
@@ -1069,6 +1068,15 @@ Chcete prepnúť na tento účet?</string>
     <string name="local_items_are_collapsed_click_to_expand">Miestne položky sú zbalené, kliknutím ich rozbalíte.</string>
     <string name="items_expanded_click_to_collapse">Položky sú rozbalené, kliknutím ich zbalíte.</string>
     <string name="items_are_collapsed_click_to_expand">Položky sú zbalené, kliknutím ich rozbalíte.</string>
+    <string name="error_cannot_decrypt">[chyba: nedá sa dešifrovať]</string>
+    <string name="copy_error_report">Kopírovať hlásenie o chybe</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nedokázal dešifrovať túto položku trezoru. Skopírujte a zdieľajte toto hlásenie o chybe s oddelením Customer Success, aby ste zabránili ďalšej strate údajov.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden nedokázal dešifrovať 1 položku trezoru. Skopírujte a zdieľajte toto hlásenie o chybe s oddelením Customer Success, aby ste zabránili ďalšej strate údajov.</item>
+        <item quantity="few">Bitwarden nedokázal dešifrovať %1$d položky trezoru. Skopírujte a zdieľajte toto hlásenie o chybe s oddelením Customer Success, aby ste zabránili ďalšej strate údajov.</item>
+        <item quantity="many">Bitwarden nedokázal dešifrovať %1$d položiek trezoru. Skopírujte a zdieľajte toto hlásenie o chybe s oddelením Customer Success, aby ste zabránili ďalšej strate údajov.</item>
+        <item quantity="other">Bitwarden nedokázal dešifrovať %1$d položiek trezoru. Skopírujte a zdieľajte toto hlásenie o chybe s oddelením Customer Success, aby ste zabránili ďalšej strate údajov.</item>
+    </plurals>
     <string name="select_a_card_for_x">Vyberte kartu pre %s</string>
     <string name="advanced_options">Rozšírené možnosti</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Viac informácií o zisťovaní zhody</annotation></string>

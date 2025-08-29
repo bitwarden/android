@@ -850,7 +850,6 @@ Queres comprobalo dende esa conta?</string>
     <string name="need_some_inspiration">"Necesitas inspiración?"</string>
     <string name="check_out_the_passphrase_generator">"Proba o xerador de frases de contrasinal"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Non puidemos verificar o certificado do servidor. A cadea de certificado ou os axustes de proxy do teu dispositivo ou o teu servidor de Bitwarden poden non estar ben configurados.</string>
-    <string name="review_flow_launched">Fluxo de revisión executado!</string>
     <string name="copy_private_key">Copiar clave privada</string>
     <string name="login_credentials">Credenciais da conta</string>
     <string name="autofill_options">Autoenchido</string>
@@ -1069,6 +1068,13 @@ Queres comprobalo dende esa conta?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Copy error report</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Select a card for %s</string>
     <string name="advanced_options">Advanced options</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>

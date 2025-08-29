@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="about">Apie</string>
-    <string name="add_folder">Pridėti katalogą</string>
+    <string name="add_folder">Pridėti aplanką</string>
     <string name="add_item">Pridėti elementą</string>
-    <string name="an_error_has_occurred">Įvyko klaida.</string>
-    <string name="apply">Apply</string>
+    <string name="an_error_has_occurred">Įvyko klaida</string>
+    <string name="apply">Taikyti</string>
     <string name="back">Atgal</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Atšaukti</string>
@@ -18,7 +18,7 @@
     <string name="edit_folder">Redaguoti aplanką</string>
     <string name="email">El. paštas</string>
     <string name="email_address">El. pašto adresas</string>
-    <string name="enter_pin">Įveskite PIN kodą.</string>
+    <string name="enter_pin">Įveskite PIN kodą</string>
     <string name="favorites">Mėgstamiausi</string>
     <string name="folder">Aplankas</string>
     <string name="folder_created">Naujas aplankas sukurtas.</string>
@@ -27,10 +27,10 @@
     <string name="folders">Aplankai</string>
     <string name="folder_updated">Aplankas išsaugotas</string>
     <string name="hide">Slėpti</string>
-    <string name="internet_connection_required_message">Prisijunkite prie interneto, kad tęsti toliau.</string>
+    <string name="internet_connection_required_message">Prieš tęsdami, prisijunkite prie interneto.</string>
     <string name="internet_connection_required_title">Reikia interneto ryšio</string>
     <string name="invalid_master_password">Neteisingas pagrindinis slaptažodis. Pabandykite dar kartą.</string>
-    <string name="invalid_pin">Neteisingas PIN kodas. Bandyti dar kartą.</string>
+    <string name="invalid_pin">Neteisingas PIN kodas. Pabandykite dar kartą.</string>
     <string name="launch">Paleisti</string>
     <string name="log_in_verb">Log in</string>
     <string name="log_in_noun">Prisijungti</string>
@@ -61,7 +61,7 @@
     <string name="item_deleted">Elementas panaikintas</string>
     <string name="submit">Patvirtinti</string>
     <string name="sync">Sinchronizuoti</string>
-    <string name="uri">URI - \"nuoroda\"</string>
+    <string name="uri">URI</string>
     <string name="website_uri">Website (URI)</string>
     <string name="username">Vartotojo vardas</string>
     <string name="validation_field_required">Laukas „%1$s“ yra būtinas.</string>
@@ -75,7 +75,7 @@
     <string name="account_created_success">Your new account has been created!</string>
     <string name="set_bitwarden_as_passkey_manager_description">Set Bitwarden as your passkey provider in device settings.</string>
     <string name="avoid_ambiguous_characters">Vengti dviprasmiškų simbolių</string>
-    <string name="bitwarden_autofill_service">„Bitwarden“ automatinio pildymo paslauga</string>
+    <string name="bitwarden_autofill_service">„Bitwarden“ automatinio užpildymo paslauga</string>
     <string name="change_master_password">Keisti pagrindinį slaptažodį</string>
     <string name="close">Uždaryti</string>
     <string name="continue_text">Tęsti</string>
@@ -147,7 +147,7 @@
     <string name="syncing">Sinchronizuojama...</string>
     <string name="syncing_complete">Sinchronizacija baigta</string>
     <string name="two_step_login">Dviejų žingsnių prisijungimas</string>
-    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
+    <string name="unlock_with_biometrics">Atrakinti su biometrikais</string>
     <string name="unlock_with_pin">Atrakinti PIN kodu</string>
     <string name="verification_code">Patvirtinimo kodas</string>
     <string name="view_login">View login</string>
@@ -287,7 +287,7 @@ Nuskaitymas vyks automatiškai.</string>
     <string name="new_uri">Naujas URI</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">Bazinis domenas</string>
-    <string name="default_text">Default (%1$s)</string>
+    <string name="default_text">Numatytasis (%1$s)</string>
     <string name="exact">Tikslus</string>
     <string name="host">Serveris</string>
     <string name="reg_ex">Reguliari išraiška</string>
@@ -357,7 +357,7 @@ Nuskaitymas vyks automatiškai.</string>
     <string name="clear_clipboard">Išvalyti iškarpinę</string>
     <string name="clear_clipboard_description">Automatiškai išvalyti nukopijuotas reikšmes iškarpinėje.</string>
     <string name="default_uri_match_detection">Numatytasis URI atitikties aptikimas</string>
-    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
+    <string name="default_uri_match_detection_description">URI atitikimo aptikimas valdo, kaip „Bitwarden“ atpažįsta automatinio užpildymo pasiūlymus.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Pakeisti programos spalvos temą.</string>
     <string name="copy_notes">Kopijuoti pastabas</string>
@@ -365,8 +365,8 @@ Nuskaitymas vyks automatiškai.</string>
     <string name="exit_confirmation">Ar tikrai norite išeiti iš „Bitwarden“?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Ar norite reikalauti atrakinti naudojant pagrindinį slaptažodį, kai programa paleidžiama iš naujo?</string>
-    <string name="ask_to_add_item">Ask to add item</string>
-    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
+    <string name="ask_to_add_item">Prašyti įtraukti elementą</string>
+    <string name="ask_to_add_item_description">Paprašykite įtraukti elementą, jei jo nerastas savo saugykloje.</string>
     <string name="on_restart">Paleidus programą iš naujo</string>
     <string name="capitalize">Pradėti didžiosiomis</string>
     <string name="include_number">Įtraukti skaičius</string>
@@ -529,7 +529,7 @@ Nuskaitymas vyks automatiškai.</string>
     <string name="verification_codes">Patvirtinimo kodai</string>
     <string name="premium_subscription_required">Reikalingas Premium abonementas</string>
     <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
-    <string name="scan_qr_code"><annotation link="scanQrCode">Scan QR code</annotation></string>
+    <string name="scan_qr_code"><annotation link="scanQrCode">Skenuoti QR kodą</annotation></string>
     <string name="cannot_scan_qr_code_enter_key_manually">Cannot scan QR code? <annotation link="enterKeyManually">Enter key manually</annotation></string>
     <string name="authenticator_key_scanner">Autentifikatoriaus raktas</string>
     <string name="authenticator_key_help">Authenticator key help</string>
@@ -850,7 +850,6 @@ Ar norite pereiti prie šios paskyros?</string>
     <string name="need_some_inspiration">"Need some inspiration?"</string>
     <string name="check_out_the_passphrase_generator">"Check out the passphrase generator"</string>
     <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
-    <string name="review_flow_launched">Review flow launched!</string>
     <string name="copy_private_key">Copy private key</string>
     <string name="login_credentials">Login Credentials</string>
     <string name="autofill_options">Autofill Options</string>
@@ -966,13 +965,13 @@ Ar norite pereiti prie šios paskyros?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">This color scheme automatically applies system colors to Bitwarden based on your current wallpaper. These colors may not meet all accessibility guidelines.</string>
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
-    <string name="trust">Trust</string>
+    <string name="trust">Patikėti</string>
     <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but you trust to perform passkey operations.</string>
     <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
     <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
-    <string name="trusted_by_you">Trusted by You</string>
-    <string name="trusted_by_the_community">Trusted by the Community</string>
-    <string name="trusted_by_google">Trusted by Google</string>
+    <string name="trusted_by_you">Patikimas jūsų</string>
+    <string name="trusted_by_the_community">Patikimas bendruomenės</string>
+    <string name="trusted_by_google">Patikimas „Google“</string>
     <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through applications or web browsers trusted by Google or the Bitwarden community.</string>
     <string name="about_privileged_applications">About privileged applications</string>
     <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
@@ -983,10 +982,10 @@ Ar norite pereiti prie šios paskyros?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
     <string name="installed_apps">Installed apps</string>
     <string name="delete_x">Delete %s</string>
-    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
-    <string name="decryption_error">Decryption error</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Nepavyko iššifruoti šifro. Susisiekite su pagalbos komanda.</string>
+    <string name="decryption_error">Iššifravimo klaida.</string>
     <string name="add_item_rotation">Add Item Rotation</string>
-    <string name="scan_a_qr_code">Scan a QR code</string>
+    <string name="scan_a_qr_code">Skenuoti QR kodą</string>
     <string name="cannot_add_authenticator_key">Nepavyko nuskaityti autentifikavimo rakto?</string>
     <string name="enable_camera_permission_to_use_the_scanner">Įgalinkite fotoaparato leidimą naudoti skaitytuvą</string>
     <string name="empty_item_list">Empty Item Listing</string>
@@ -1028,9 +1027,9 @@ Ar norite pereiti prie šios paskyros?</string>
     <string name="key_is_required">Key is required.</string>
     <string name="name_is_required">Pavadinimas yra būtinas.</string>
     <string name="import_vault_failure">There was a problem importing your vault.</string>
-    <string name="import_vault">Import</string>
-    <string name="import_success">Vault import successful</string>
-    <string name="key_is_invalid">Key is invalid.</string>
+    <string name="import_vault">Importuoti</string>
+    <string name="import_success">Saugyklos importas sėkmingas</string>
+    <string name="key_is_invalid">Raktas netinkamas.</string>
     <string name="backup">Backup</string>
     <string name="data_backup_title">Data backup</string>
     <string name="data_backup_message">Bitwarden Authenticator data is backed up and can be restored with your regularly scheduled device backups.</string>
@@ -1069,6 +1068,15 @@ Ar norite pereiti prie šios paskyros?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Copy error report</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="few">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="many">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Select a card for %s</string>
     <string name="advanced_options">Advanced options</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>

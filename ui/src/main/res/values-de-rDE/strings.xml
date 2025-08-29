@@ -4,7 +4,7 @@
     <string name="add_folder">Ordner hinzufügen</string>
     <string name="add_item">Neuer Eintrag</string>
     <string name="an_error_has_occurred">Es ist ein Fehler aufgetreten.</string>
-    <string name="apply">Apply</string>
+    <string name="apply">Anwenden</string>
     <string name="back">Zurück</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Abbrechen</string>
@@ -287,7 +287,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="new_uri">Neue URI</string>
     <string name="add_website">Website hinzufügen</string>
     <string name="base_domain">Basis-Domäne</string>
-    <string name="default_text">Default (%1$s)</string>
+    <string name="default_text">Standard (%1$s)</string>
     <string name="exact">Exakt</string>
     <string name="host">Host</string>
     <string name="reg_ex">Regulärer Ausdruck</string>
@@ -849,7 +849,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="need_some_inspiration">"Brauchst du etwas Inspiration?"</string>
     <string name="check_out_the_passphrase_generator">"Schau dir den Passphrasen-Generator an"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Wir konnten das Zertifikat des Servers nicht verifizieren. Die Zertifikatskette oder die Proxy-Einstellungen auf deinem Gerät oder deinem Bitwarden-Server sind möglicherweise nicht korrekt eingerichtet.</string>
-    <string name="review_flow_launched">Überprüfungsablauf gestartet!</string>
     <string name="copy_private_key">Privaten Schlüssel kopieren</string>
     <string name="login_credentials">Anmeldedaten</string>
     <string name="autofill_options">Auto-Ausfüllen Optionen</string>
@@ -1068,6 +1067,13 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokale Einträge sind eingeklappt, klicke zum Ausklappen.</string>
     <string name="items_expanded_click_to_collapse">Einträge sind ausgeklappt, klicke zum Einklappen.</string>
     <string name="items_are_collapsed_click_to_expand">Einträge sind eingeklappt, klicke zum Ausklappen.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Copy error report</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Wähle eine Karte für %s aus</string>
     <string name="advanced_options">Erweiterte Optionen</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mehr über die Übereinstimmungserkennung</annotation></string>

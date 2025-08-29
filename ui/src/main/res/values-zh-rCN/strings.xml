@@ -850,7 +850,6 @@
     <string name="need_some_inspiration">"需要一些灵感吗？"</string>
     <string name="check_out_the_passphrase_generator">"查看密码短语生成器"</string>
     <string name="we_couldnt_verify_the_servers_certificate">我们无法验证服务器的证书。您的设备或 Bitwarden 服务器上的证书链或代理设置可能未正确设置。</string>
-    <string name="review_flow_launched">审查流程已发起！</string>
     <string name="copy_private_key">复制私钥</string>
     <string name="login_credentials">登录凭据</string>
     <string name="autofill_options">自动填充选项</string>
@@ -1070,6 +1069,12 @@
     <string name="local_items_are_collapsed_click_to_expand">本地项目被折叠，点击以展开。</string>
     <string name="items_expanded_click_to_collapse">项目被展开，点击以折叠。</string>
     <string name="items_are_collapsed_click_to_expand">项目被折叠，点击以展开。</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Copy error report</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">选择 %s 的卡片</string>
     <string name="advanced_options">高级选项</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">有关匹配检测的更多信息</annotation></string>

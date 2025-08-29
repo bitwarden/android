@@ -849,7 +849,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="need_some_inspiration">"Szükség van egy kis inspirációra?"</string>
     <string name="check_out_the_passphrase_generator">"Nézzük meg a jelszógenerátort"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Nem lehetett ellenőrizni a szerver tanúsítványát. Előfordulhat, hogy a tanúsítványlánc vagy a proxy beállítások az eszközön vagy a Bitwarden szerveren nincsenek megfelelően beállítva.</string>
-    <string name="review_flow_launched">A felülvizsgálati folyamat elindult!</string>
     <string name="copy_private_key">Személyes kulcs másolása</string>
     <string name="login_credentials">Bejelentkezési hitelesítő adatok</string>
     <string name="autofill_options">Automatikus kitöltés opciók</string>
@@ -1068,6 +1067,13 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="local_items_are_collapsed_click_to_expand">A helyi elemek összezárásra kerülnek, kattintás az kinyitáshoz.</string>
     <string name="items_expanded_click_to_collapse">Az elemek kinyitásra kerülnek, kattintás az összezáráshoz.</string>
     <string name="items_are_collapsed_click_to_expand">Az elemek összezárásra kerülnek, kattintás az kinyitáshoz.</string>
+    <string name="error_cannot_decrypt">[hiba: nem fejlthető vissza]</string>
+    <string name="copy_error_report">Hibajelentés másolása</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nem tudta visszafejteni ezt a széf elemet. Másoljuk és osszuk meg ezt a hibajelentést az ügyfél sikerrel, hogy elkerüljük a további adatvesztést.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">A Bitwarden nem tudta visszafejteni [% 1$i] széfelemet. Másoljuk és osszuk meg ezt a hibajelentést az ügyfél sikerrel, hogy elkerüljük a további adatvesztést.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Válasszunk egy kártyát %s használatához</string>
     <string name="advanced_options">Haladó opciók</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Bővebben az egyezés felismeréséről</annotation></string>

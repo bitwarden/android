@@ -850,7 +850,6 @@
     <string name="need_some_inspiration">"Имате ли нужда от вдъхновение?"</string>
     <string name="check_out_the_passphrase_generator">"Изпробвайте генератора на пароли-фрази"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Сертификатът на сървъра не може да бъде потвърден. Възможно е да има проблем в конфигурацията на сертификатите, настройките за сървър-посредник на устройството или на сървъра на Битуорден.</string>
-    <string name="review_flow_launched">Процесът на оценяване вече е наличен!</string>
     <string name="copy_private_key">Копиране на частния ключ</string>
     <string name="login_credentials">Данни за вписване</string>
     <string name="autofill_options">Опции за автоматично попълване</string>
@@ -1071,6 +1070,13 @@
     <string name="local_items_are_collapsed_click_to_expand">Наличните на това устройство елементи са свити. Щракнете за разгъване.</string>
     <string name="items_expanded_click_to_collapse">Елементите са разгънати. Щракнете за свиване.</string>
     <string name="items_are_collapsed_click_to_expand">Елементите са свити. Щракнете за разгъване.</string>
+    <string name="error_cannot_decrypt">[грешка: не може да се дешифрира]</string>
+    <string name="copy_error_report">Копиране на доклада за грешката</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Битуорден не може да дешифрира този елемент от трезора. Копирайте доклада за грешката и го изпратете на поддръжката, за да избегнете загубата на данни.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Битуорден не може да дешифрира 1 елемент от трезора. Копирайте доклада за грешката и го изпратете на поддръжката, за да избегнете загубата на данни.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Изберете карта за %s</string>
     <string name="advanced_options">Разширени настройки</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Повече относно разпознаването на съвпадения</annotation></string>
