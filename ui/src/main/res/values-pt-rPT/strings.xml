@@ -850,7 +850,6 @@ Pretende mudar para esta conta?</string>
     <string name="need_some_inspiration">"Precisa de alguma inspiração?"</string>
     <string name="check_out_the_passphrase_generator">"Dê uma vista de olhos no gerador de frases de acesso"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Não foi possível verificar o certificado do servidor. A cadeia de certificados ou as definições de proxy no seu dispositivo ou no seu servidor Bitwarden podem não estar corretamente configuradas.</string>
-    <string name="review_flow_launched">Fluxo de revisão lançado!</string>
     <string name="copy_private_key">Copiar chave privada</string>
     <string name="login_credentials">Credenciais de início de sessão</string>
     <string name="autofill_options">Opções de preenchimento automático</string>
@@ -1069,6 +1068,13 @@ Pretende mudar para esta conta?</string>
     <string name="local_items_are_collapsed_click_to_expand">Os itens locais estão recolhidos, clique para expandir.</string>
     <string name="items_expanded_click_to_collapse">Os itens estão expandidos, clique para recolher.</string>
     <string name="items_are_collapsed_click_to_expand">Os itens estão recolhidos, clique para expandir.</string>
+    <string name="error_cannot_decrypt">[erro: não é possível desencriptar]</string>
+    <string name="copy_error_report">Copiar relatório de erros</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">O Bitwarden não conseguiu desencriptar este item do cofre. Copie e partilhe este relatório de erro com o serviço de apoio ao cliente para evitar perdas de dados adicionais.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">O Bitwarden não conseguiu desencriptar %1$d item do cofre. Copie e partilhe este relatório de erro com o serviço de apoio ao cliente para evitar perdas de dados adicionais.</item>
+        <item quantity="other">O Bitwarden não conseguiu desencriptar %1$d itens do cofre. Copie e partilhe este relatório de erro com o serviço de apoio ao cliente para evitar perdas de dados adicionais.</item>
+    </plurals>
     <string name="select_a_card_for_x">Selecione um cartão para %s</string>
     <string name="advanced_options">Opções avançadas</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mais informações sobre a deteção de correspondências</annotation></string>

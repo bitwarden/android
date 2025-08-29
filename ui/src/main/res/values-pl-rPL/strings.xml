@@ -95,7 +95,7 @@
     <string name="get_password_hint">Uzyskaj podpowiedź do hasła głównego</string>
     <string name="import_items">Importuj elementy</string>
     <string name="last_sync">Ostatnia synchronizacja:</string>
-    <string name="length">Długość</string>
+    <string name="length">Liczba znaków</string>
     <string name="lock">Zablokuj</string>
     <string name="fifteen_minutes">15 minut</string>
     <string name="one_hour">1 godzina</string>
@@ -660,11 +660,11 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="autofill_services_explanation_long">Zezwala aplikacji Bitwarden na używanie zapisanych danych logowania do logowania się w innych aplikacjach.</string>
     <string name="use_inline_autofill_explanation_long">Zintegruj autouzupełnianie z klawiaturą podczas logowania się w innych aplikacjach.</string>
     <string name="additional_options">Dodatkowe opcje</string>
-    <string name="continue_to_web_app">Przejść do aplikacji internetowej?</string>
-    <string name="continue_to_x">Przejść do %1$s?</string>
-    <string name="continue_to_help_center">Przejść do centrum pomocy?</string>
-    <string name="continue_to_privacy_policy">Przejść do polityki prywatności?</string>
-    <string name="continue_to_device_settings">Przejść do ustawień urządzenia?</string>
+    <string name="continue_to_web_app">Kontynuować przejście do aplikacji internetowej?</string>
+    <string name="continue_to_x">Kontynuować przejście do %1$s?</string>
+    <string name="continue_to_help_center">Kontynuować przejście do centrum pomocy?</string>
+    <string name="continue_to_privacy_policy">Kontynuować przejście do polityki prywatności?</string>
+    <string name="continue_to_device_settings">Kontynuować przejście do ustawień urządzenia?</string>
     <string name="two_step_login_description_long">Zwiększ bezpieczeństwo konta, konfigurując logowanie dwustopniowe w aplikacji internetowej Bitwarden.</string>
     <string name="change_master_password_description_long">Możesz zmienić hasło główne w aplikacji internetowej Bitwarden.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Dowiedz się więcej o tym, jak korzystać z centrum pomocy Bitwarden.</string>
@@ -752,8 +752,8 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="expired_link">Link wygasł</string>
     <string name="please_restart_registration_or_try_logging_in">Rozpocznij rejestrację od początku lub spróbuj się zalogować. Możesz mieć już konto.</string>
     <string name="restart_registration">Rozpocznij rejestrację od początku</string>
-    <string name="authenticator_sync">Synchronizacja uwierzytelniania</string>
-    <string name="allow_bitwarden_authenticator_syncing">Włącz synchronizację uwierzytelniania</string>
+    <string name="authenticator_sync">Synchronizacja aplikacji Authenticator</string>
+    <string name="allow_bitwarden_authenticator_syncing">Synchronizacja z aplikacją Authenticator</string>
     <string name="there_was_an_issue_validating_the_registration_token">Wystąpił błąd podczas sprawdzania poprawności tokenu rejestracyjnego.</string>
     <string name="turn_on_autofill">Włącz autouzupełnienie</string>
     <string name="use_autofill_to_log_into_your_accounts">Użyj autouzupełniania, aby zalogować się na swoje konta jednym dotknięciem.</string>
@@ -849,7 +849,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="need_some_inspiration">"Szukasz inspiracji?"</string>
     <string name="check_out_the_passphrase_generator">"Sprawdź generator haseł wyrazowych"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Nie mogliśmy zweryfikować certyfikatu serwera. Łańcuch certyfikatów, ustawienia proxy urządzeniu lub serwer Bitwarden mogą nie być poprawnie skonfigurowane.</string>
-    <string name="review_flow_launched">Okno recenzji zostało uruchomione!</string>
     <string name="copy_private_key">Kopiuj klucz prywatny</string>
     <string name="login_credentials">Dane logowania</string>
     <string name="autofill_options">Opcje autouzupełniania</string>
@@ -1068,6 +1067,15 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokalne elementy są zwinięte. Kliknij, aby rozwinąć.</string>
     <string name="items_expanded_click_to_collapse">Elementy są rozwinięte. Kliknij, aby zwinąć.</string>
     <string name="items_are_collapsed_click_to_expand">Elementy są zwinięte. Kliknij, aby rozwinąć.</string>
+    <string name="error_cannot_decrypt">[błąd: nie można odszyfrować]</string>
+    <string name="copy_error_report">Kopiuj raport błędu</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nie mógł odszyfrować elementu sejfu. Skopiuj i udostępnij raport błędu działowi obsługi klienta, aby uniknąć dodatkowej utraty danych.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden nie mógł odszyfrować %1$d elementu sejfu. Skopiuj i udostępnij raport błędu działowi obsługi klienta, aby uniknąć dodatkowej utraty danych.</item>
+        <item quantity="few">Bitwarden nie mógł odszyfrować %1$d elementów sejfu. Skopiuj i udostępnij raport błędu działowi obsługi klienta, aby uniknąć dodatkowej utraty danych.</item>
+        <item quantity="many">Bitwarden nie mógł odszyfrować %1$d elementów sejfu. Skopiuj i udostępnij raport błędu działowi obsługi klienta, aby uniknąć dodatkowej utraty danych.</item>
+        <item quantity="other">Bitwarden nie mógł odszyfrować %1$d elementów sejfu. Skopiuj i udostępnij raport błędu działowi obsługi klienta, aby uniknąć dodatkowej utraty danych.</item>
+    </plurals>
     <string name="select_a_card_for_x">Wybierz kartę dla %s</string>
     <string name="advanced_options">Opcje zaawansowane</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Dowiedz się więcej o wykrywaniu dopasowania</annotation></string>

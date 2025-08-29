@@ -365,8 +365,8 @@ Skanningen sker automatiskt.</string>
     <string name="exit_confirmation">Är du säker på att du vill avsluta Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Kräv huvudlösenord vid omstart av appen?</string>
     <string name="pin_require_master_password_restart">Vill du behöva låsa upp med ditt huvudlösenord när programmet startas om?</string>
-    <string name="ask_to_add_item">Ask to add item</string>
-    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
+    <string name="ask_to_add_item">Fråga om att lägga till objekt</string>
+    <string name="ask_to_add_item_description">Fråga om att lägga till ett objekt om ett inte hittas i ditt valv.</string>
     <string name="on_restart">Vid omstart av appen</string>
     <string name="capitalize">Versalisera</string>
     <string name="include_number">Inkludera siffra</string>
@@ -850,7 +850,6 @@ Vill du byta till detta konto?</string>
     <string name="need_some_inspiration">"Behöver du lite inspiration?"</string>
     <string name="check_out_the_passphrase_generator">"Kolla in lösenordsfrasgeneratorn"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Vi kunde inte verifiera serverns certifikat. Certifikatkedjan eller proxyinställningarna på din enhet eller din Bitwarden-server kanske inte är korrekt konfigurerade.</string>
-    <string name="review_flow_launched">Granskningsflödet lanserat!</string>
     <string name="copy_private_key">Kopiera privat nyckel</string>
     <string name="login_credentials">Inloggningsuppgifter</string>
     <string name="autofill_options">Alternativ för autofyll</string>
@@ -1069,6 +1068,13 @@ Vill du byta till detta konto?</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokala objekt är infällda, klicka för att expandera.</string>
     <string name="items_expanded_click_to_collapse">Objekt är expanderade, klicka för att fälla in.</string>
     <string name="items_are_collapsed_click_to_expand">Objekt är infällda, klicka för att expandera.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Copy error report</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Välj ett kort för %s</string>
     <string name="advanced_options">Avancerade inställningar</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mer om matchningsdetektering</annotation></string>

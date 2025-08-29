@@ -4,7 +4,7 @@
     <string name="add_folder">Pievienot mapi</string>
     <string name="add_item">Pievienot vienumu</string>
     <string name="an_error_has_occurred">Radusies kļūda.</string>
-    <string name="apply">Apply</string>
+    <string name="apply">Pielietot</string>
     <string name="back">Atpakaļ</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Atcelt</string>
@@ -365,8 +365,8 @@ Nolasīšana notiks automātiski.</string>
     <string name="exit_confirmation">Vai tiešām iziet no Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Pieprasīt galveno paroli pēc lietotnes pārsāknēšanas?</string>
     <string name="pin_require_master_password_restart">Vai pieprasīt atslēgšanu ar galveno paroli pēc lietotnes atkārtotas palaišanas?</string>
-    <string name="ask_to_add_item">Ask to add item</string>
-    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
+    <string name="ask_to_add_item">Vaicāt, lai pievienotu vienumu</string>
+    <string name="ask_to_add_item_description">Vaicāt pievienot vienumu, ja tāds nav atrodams glabātavā.</string>
     <string name="on_restart">Pārsāknējot lietotni</string>
     <string name="capitalize">Izmantot lielos sākumburtus</string>
     <string name="include_number">Iekļaut ciparu</string>
@@ -850,7 +850,6 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="need_some_inspiration">"Nepieciešama iedvesma?"</string>
     <string name="check_out_the_passphrase_generator">"Ir vērts ieskatīties paroles vārdkopu veidotājā"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Mēs nevarējām apliecināt servera sertifikātu. Sertifikātu ķēde vai starpniekservera iestatījumi ierīcē, vai Bitwarden serveris varētu nebūt pareizi iestatīti.</string>
-    <string name="review_flow_launched">Palaista izskatīšanas plūsma.</string>
     <string name="copy_private_key">Ievietot privāto atslēgu starpliktuvē</string>
     <string name="login_credentials">Pieteikšanās dati</string>
     <string name="autofill_options">Automātiskās aizpildes iespējas</string>
@@ -1069,6 +1068,14 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="error_cannot_decrypt">[kļūda: nevar atšifrēt]</string>
+    <string name="copy_error_report">Ievietot kļūdas ziņojumu starpliktuvē</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nevarēja atšifrēt šo glabātavas vienumu. Šī kļūda jāievieto starpliktuvē un jākopīgo ar klientu atbalstu, lai izvairītos no papildu datu zudumiem.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="zero">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden nevarēja atšifrēt %1$d glabātavas vienumus. Šī kļūda jāievieto starpliktuvē un jākopīgo ar klientu atbalstu, lai izvairītos no papildu datu zudumiem.</item>
+    </plurals>
     <string name="select_a_card_for_x">Atlasīt karti %s</string>
     <string name="advanced_options">Papildu iespējas</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Vairāk par atbilstības noteikšanu</annotation></string>

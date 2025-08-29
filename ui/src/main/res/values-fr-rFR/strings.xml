@@ -850,7 +850,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="need_some_inspiration">"Besoin d'inspiration ?"</string>
     <string name="check_out_the_passphrase_generator">"Check out the passphrase generator"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Nous n\'avons pas pu vérifier le certificat du serveur. Il se peut que la chaîne de certificats ou les paramètres proxy de votre appareil ou de votre serveur Bitwarden ne soient pas configurés correctement.</string>
-    <string name="review_flow_launched">Flux de révision lancé !</string>
     <string name="copy_private_key">Copier la clé privée</string>
     <string name="login_credentials">Identifiants de connexion</string>
     <string name="autofill_options">Options de saisie automatique</string>
@@ -1069,6 +1068,13 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="local_items_are_collapsed_click_to_expand">Les éléments locaux sont réduits, cliquez pour développer.</string>
     <string name="items_expanded_click_to_collapse">Les éléments sont développés, cliquez pour réduire.</string>
     <string name="items_are_collapsed_click_to_expand">Les éléments sont réduits, cliquez pour les développer.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Copy error report</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Select a card for %s</string>
     <string name="advanced_options">Advanced options</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
