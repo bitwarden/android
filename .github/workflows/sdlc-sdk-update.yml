@@ -22,6 +22,10 @@ on:
       pr-id:
         description: "Pull Request ID"
 
+env:
+  _BOT_NAME: "bw-ghapp[bot]"
+  _BOT_EMAIL: "178206702+bw-ghapp[bot]@users.noreply.github.com"
+
 jobs:
   update:
     name: Update and PR
@@ -54,11 +58,15 @@ jobs:
         with:
           app-id: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-ID }}
           private-key: ${{ steps.get-kv-secrets.outputs.BW-GHAPP-KEY }}
+          permission-pull-requests: write
+          permission-actions: read
+          permission-contents: write
 
       - name: Check out repo
         uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
         with:
           token: ${{ steps.app-token.outputs.token }}
+          fetch-depth: 0
 
       - name: Log inputs to job summary
         uses: ./.github/actions/log-inputs
@@ -70,14 +78,57 @@ jobs:
         run: |
           BRANCH_NAME="sdlc/sdk-update"
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
-          git switch -c $BRANCH_NAME
 
-      - name: Get current SDK version
+          if git switch $BRANCH_NAME; then
+            echo "✅ Switched to existing branch: $BRANCH_NAME"
+            echo "updating_existing_branch=true" >> $GITHUB_OUTPUT
+          else
+            echo "📝 Creating new branch: $BRANCH_NAME"
+            git switch -c $BRANCH_NAME
+            echo "updating_existing_branch=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Prevent updating the branch when the last committer isn't the bot
+        if: ${{ steps.switch-branch.outputs.updating_existing_branch == 'true' }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          _BRANCH_NAME: ${{ steps.switch-branch.outputs.branch_name }}
+        run: |
+          LATEST_COMMIT_AUTHOR=$(git log -1 --format='%ae' $_BRANCH_NAME)
+
+          echo "Latest commit author in branch ($_BRANCH_NAME): $LATEST_COMMIT_AUTHOR"
+          echo "Expected bot email: $_BOT_EMAIL"
+
+          if [ "$LATEST_COMMIT_AUTHOR" != "$_BOT_EMAIL" ]; then
+            echo "::error::Branch $_BRANCH_NAME has a commit not made by the bot." \
+              "This indicates manual changes have been made to the branch," \
+              "PR has to be merged or closed before running this workflow again."
+            echo "👀 Fetching existing PR..."
+            gh pr list --head $_BRANCH_NAME --base main --state open --json number --jq '.[0].number // empty'
+            EXISTING_PR=$(gh pr list --head $_BRANCH_NAME --base main --state open --json number --jq '.[0].number // empty')
+            if [ -z "$EXISTING_PR" ]; then
+              echo "::error::Couldn't find an existing PR for branch $_BRANCH_NAME."
+              exit 1
+            fi
+            PR_URL="https://github.com/${{ github.repository }}/pull/$EXISTING_PR"
+            echo "## ❌ Merge or close: $PR_URL" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+          echo "✅ Branch tip commit was made by the bot. Safe to proceed."
+
+      # Using main to retrieve the changelog on consecutive updates of the same PR.
+      - name: Get current SDK version from main branch
         id: get-current-sdk
         run: |
-          SDK_VERSION=$(grep "bitwardenSdk =" gradle/libs.versions.toml | cut -d'"' -f2)
+          git show origin/main:gradle/libs.versions.toml
+          SDK_VERSION=$(git show origin/main:gradle/libs.versions.toml | grep "bitwardenSdk =" | cut -d'"' -f2)
+          if [ -z "$SDK_VERSION" ]; then
+            echo "::error::Failed to get current SDK version from main branch."
+            exit 1
+          fi
           GIT_REF=$(echo "$SDK_VERSION" | cut -d'-' -f3-) # handles both commit hashes and branch names
-          echo "Current SDK version: $SDK_VERSION"
+          echo "Current SDK version (from main): $SDK_VERSION"
           echo "Current SDK git ref: $GIT_REF"
           echo "version=$SDK_VERSION" >> $GITHUB_OUTPUT
           echo "git_ref=$GIT_REF" >> $GITHUB_OUTPUT
@@ -97,14 +148,14 @@ jobs:
         run: |
           echo "👀 Committing SDK version update..."
 
-          git config user.name "bw-ghapp[bot]"
-          git config user.email "178206702+bw-ghapp[bot]@users.noreply.github.com"
+          git config user.name "$_BOT_NAME"
+          git config user.email "$_BOT_EMAIL"
 
           git add gradle/libs.versions.toml
           git commit -m "SDK Update - $_SDK_PACKAGE $_SDK_VERSION"
           git push origin $_BRANCH_NAME
 
-      - name: Create Pull Request
+      - name: Create or Update Pull Request
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           _BRANCH_NAME: ${{ steps.switch-branch.outputs.branch_name }}
@@ -121,17 +172,26 @@ jobs:
 
           $CHANGELOG"
 
-          # Use echo -e to interpret escape sequences and pipe to gh pr create
-          PR_URL=$(echo -e "$PR_BODY" | gh pr create \
-            --title "Update SDK to $_SDK_VERSION" \
-            --body-file - \
-            --base main \
-            --head $_BRANCH_NAME \
-            --label "automated-pr" \
-            --label "t:ci")
+          EXISTING_PR=$(gh pr list --head $_BRANCH_NAME --base main --state open --json number --jq '.[0].number // empty')
 
-          echo "🚀 Created PR: $PR_URL"
-          echo "## 🚀 Created PR: $PR_URL" >> $GITHUB_STEP_SUMMARY
+          if [ -n "$EXISTING_PR" ]; then
+            echo "🔄 Updating existing PR #$EXISTING_PR..."
+            echo -e "$PR_BODY" | gh pr edit $EXISTING_PR \
+              --title "Update SDK to $_SDK_VERSION" \
+              --body-file -
+            PR_URL="https://github.com/${{ github.repository }}/pull/$EXISTING_PR"
+            echo "## ✅ Updated PR: $PR_URL" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "📝 Creating new PR..."
+            PR_URL=$(echo -e "$PR_BODY" | gh pr create \
+              --title "Update SDK to $_SDK_VERSION" \
+              --body-file - \
+              --base main \
+              --head $_BRANCH_NAME \
+              --label "automated-pr" \
+              --label "t:ci")
+            echo "## 🚀 Created PR: $PR_URL" >> $GITHUB_STEP_SUMMARY
+          fi
 
   test:
     name: Test Update
