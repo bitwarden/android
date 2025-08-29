@@ -871,9 +871,6 @@ class VaultAddEditViewModel @Inject constructor(
                         .toMutableList()
 
                 val index = items.lastIndexOf(action.customField)
-                if (index == 0) {
-                    return
-                }
 
                 Collections.swap(items, index, index - 1)
 
@@ -892,9 +889,6 @@ class VaultAddEditViewModel @Inject constructor(
                         .toMutableList()
 
                 val index = items.indexOf(action.customField)
-                if (index == items.lastIndex) {
-                    return
-                }
 
                 Collections.swap(items, index, index + 1)
 
