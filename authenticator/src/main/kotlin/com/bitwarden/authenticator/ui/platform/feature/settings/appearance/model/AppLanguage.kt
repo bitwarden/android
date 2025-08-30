@@ -1,8 +1,8 @@
 package com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model
 
-import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.Text
-import com.bitwarden.authenticator.ui.platform.base.util.asText
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 
 /**
  * Represents the languages supported by the app.
@@ -13,7 +13,7 @@ enum class AppLanguage(
 ) {
     DEFAULT(
         localeName = null,
-        text = R.string.default_system.asText(),
+        text = BitwardenString.default_system.asText(),
     ),
     AFRIKAANS(
         localeName = "af",
@@ -53,7 +53,7 @@ enum class AppLanguage(
     ),
     ENGLISH_BRITISH(
         localeName = "en-GB",
-        text = "English (British)".asText(),
+        text = "English (United Kingdom)".asText(),
     ),
     SPANISH(
         localeName = "es",

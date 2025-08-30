@@ -26,19 +26,21 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
-import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
-import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
+import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledTonalButton
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
 import com.bitwarden.authenticator.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
-import com.bitwarden.authenticator.ui.platform.theme.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
+import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.model.FileData
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -53,7 +55,7 @@ fun ImportingScreen(
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val importLocationReceive: (IntentManager.FileData) -> Unit = remember {
+    val importLocationReceive: (FileData) -> Unit = remember {
         {
             viewModel.trySendAction(ImportAction.ImportLocationReceive(it))
         }
@@ -70,7 +72,10 @@ fun ImportingScreen(
             ImportEvent.NavigateBack -> onNavigateBack()
             is ImportEvent.NavigateToSelectImportFile -> {
                 launcher.launch(
-                    intentManager.createFileChooserIntent(event.importFileFormat.mimeType),
+                    intentManager.createFileChooserIntent(
+                        withCameraIntents = false,
+                        mimeType = event.importFileFormat.mimeType,
+                    ),
                 )
             }
 
@@ -87,11 +92,11 @@ fun ImportingScreen(
             BitwardenTwoButtonDialog(
                 title = dialog.title?.invoke(),
                 message = dialog.message.invoke(),
-                confirmButtonText = stringResource(id = R.string.get_help),
+                confirmButtonText = stringResource(id = BitwardenString.get_help),
                 onConfirmClick = {
                     intentManager.launchUri("https://bitwarden.com/help".toUri())
                 },
-                dismissButtonText = stringResource(id = R.string.cancel),
+                dismissButtonText = stringResource(id = BitwardenString.cancel),
                 onDismissClick = {
                     viewModel.trySendAction(ImportAction.DialogDismiss)
                 },
@@ -118,11 +123,11 @@ fun ImportingScreen(
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            BitwardenTopAppBar(
-                title = stringResource(id = R.string.import_vault),
+            AuthenticatorTopAppBar(
+                title = stringResource(id = BitwardenString.import_vault),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = painterResource(id = R.drawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIcon = painterResource(id = BitwardenDrawable.ic_close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = remember(viewModel) {
                     {
                         viewModel.trySendAction(ImportAction.CloseButtonClick)
@@ -163,7 +168,7 @@ private fun ImportScreenContent(
     ) {
         val resources = LocalContext.current.resources
         BitwardenMultiSelectButton(
-            label = stringResource(id = R.string.file_format),
+            label = stringResource(id = BitwardenString.file_format),
             options = ImportFileFormat.entries.map { it.displayLabel() }.toImmutableList(),
             selectedOption = state.importFileFormat.displayLabel(),
             onOptionSelected = { selectedOptionLabel ->
@@ -180,8 +185,8 @@ private fun ImportScreenContent(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        BitwardenFilledTonalButton(
-            label = stringResource(id = R.string.import_vault),
+        AuthenticatorFilledTonalButton(
+            label = stringResource(id = BitwardenString.import_vault),
             onClick = onImportClick,
             modifier = Modifier
                 .semantics { testTag = "ImportVaultButton" }

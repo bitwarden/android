@@ -1,6 +1,6 @@
 package com.bitwarden.core.data.repository.util
 
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.repository.model.DataState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

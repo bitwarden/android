@@ -2,14 +2,14 @@ package com.bitwarden.authenticator.ui.platform.feature.settings.importing
 
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
-import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
-import com.bitwarden.authenticator.ui.platform.base.util.Text
-import com.bitwarden.authenticator.ui.platform.base.util.asText
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
+import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.model.FileData
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -100,8 +100,9 @@ class ImportingViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = ImportState.DialogState.Error(
-                            title = result.title ?: R.string.an_error_has_occurred.asText(),
-                            message = result.message ?: R.string.import_vault_failure.asText(),
+                            title = result.title ?: BitwardenString.an_error_has_occurred.asText(),
+                            message = result.message
+                                ?: BitwardenString.import_vault_failure.asText(),
                         ),
                     )
                 }
@@ -111,7 +112,7 @@ class ImportingViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(
                     ImportEvent.ShowToast(
-                        message = R.string.import_success.asText(),
+                        message = BitwardenString.import_success.asText(),
                     ),
                 )
                 sendEvent(ImportEvent.NavigateBack)
@@ -139,7 +140,7 @@ data class ImportState(
          * Represents a loading dialog with the given [message].
          */
         data class Loading(
-            val message: Text = R.string.loading.asText(),
+            val message: Text = BitwardenString.loading.asText(),
         ) : DialogState()
 
         /**
@@ -201,7 +202,7 @@ sealed class ImportAction {
     /**
      * Indicates the user selected a file to import.
      */
-    data class ImportLocationReceive(val fileUri: IntentManager.FileData) : ImportAction()
+    data class ImportLocationReceive(val fileUri: FileData) : ImportAction()
 
     /**
      * Models actions the [ImportingScreen] itself may send.

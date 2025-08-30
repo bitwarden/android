@@ -1,0 +1,35 @@
+name: Scan Protected Branches On Push
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+
+permissions: {}
+
+jobs:
+  sast:
+    name: Checkmarx
+    uses: bitwarden/gh-actions/.github/workflows/_checkmarx.yml@main
+    secrets:
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+    permissions:
+      contents: read
+      pull-requests: write
+      security-events: write
+      id-token: write
+
+  quality:
+    name: Sonar
+    uses: bitwarden/gh-actions/.github/workflows/_sonar.yml@main
+    secrets:
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write

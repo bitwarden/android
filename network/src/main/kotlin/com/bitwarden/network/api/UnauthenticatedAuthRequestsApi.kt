@@ -13,7 +13,7 @@ import retrofit2.http.Query
 /**
  * Defines unauthenticated raw calls under the /auth-requests API.
  */
-interface UnauthenticatedAuthRequestsApi {
+internal interface UnauthenticatedAuthRequestsApi {
 
     /**
      * Notifies the server of a new authentication request.

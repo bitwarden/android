@@ -3,7 +3,7 @@ package com.bitwarden.authenticator.data.auth.datasource.disk.di
 import android.content.SharedPreferences
 import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSource
 import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSourceImpl
-import com.bitwarden.data.datasource.di.EncryptedPreferences
+import com.bitwarden.data.datasource.disk.di.EncryptedPreferences
 import com.bitwarden.data.datasource.disk.di.UnencryptedPreferences
 import dagger.Module
 import dagger.Provides

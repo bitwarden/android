@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.hilt)
@@ -32,14 +34,14 @@ android {
         sourceCompatibility(libs.versions.jvmTarget.get())
         targetCompatibility(libs.versions.jvmTarget.get())
     }
-    kotlinOptions {
-        jvmTarget = libs.versions.jvmTarget.get()
-    }
 }
 
 dependencies {
+    implementation(project(":annotation"))
+
     implementation(libs.google.hilt.android)
     ksp(libs.google.hilt.compiler)
+    implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization)
 
@@ -48,6 +50,13 @@ dependencies {
     testImplementation(libs.junit.junit5)
     testImplementation(libs.junit.vintage)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk.mockk)
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
+    }
 }
 
 tasks {

@@ -7,9 +7,9 @@ import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSou
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyResult
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
-import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted

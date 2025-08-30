@@ -5,7 +5,6 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
@@ -14,13 +13,14 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.CreateIte
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.EditItemState.Companion.MAX_ALLOWED_CODE_DIGITS
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.EditItemState.Companion.MIN_ALLOWED_CODE_DIGITS
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.model.EditItemData
-import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
-import com.bitwarden.authenticator.ui.platform.base.util.Text
-import com.bitwarden.authenticator.ui.platform.base.util.asText
-import com.bitwarden.authenticator.ui.platform.base.util.concat
-import com.bitwarden.authenticator.ui.platform.base.util.isBase32
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
+import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.util.isBase32
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -42,7 +42,7 @@ class EditItemViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EditItemState, EditItemEvent, EditItemAction>(
     initialState = savedStateHandle[KEY_STATE] ?: EditItemState(
-        itemId = EditItemArgs(savedStateHandle).itemId,
+        itemId = savedStateHandle.toEditItemArgs().itemId,
         viewState = EditItemState.ViewState.Loading,
         dialog = null,
     ),
@@ -64,7 +64,7 @@ class EditItemViewModel @Inject constructor(
             is EditItemAction.CancelClick -> handleCancelClick()
             is EditItemAction.TypeOptionClick -> handleTypeOptionClick(action)
             is EditItemAction.IssuerNameTextChange -> handleIssuerNameTextChange(action)
-            is EditItemAction.UsernameTextChange -> handleIssuerTextChange(action)
+            is EditItemAction.UsernameTextChange -> handleUsernameTextChange(action)
             is EditItemAction.FavoriteToggleClick -> handleFavoriteToggleClick(action)
             is EditItemAction.RefreshPeriodOptionClick -> handlePeriodTextChange(action)
             is EditItemAction.TotpCodeTextChange -> handleTotpCodeTextChange(action)
@@ -87,8 +87,9 @@ class EditItemViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = EditItemState.DialogState.Generic(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required.asText(R.string.name.asText()),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.validation_field_required
+                            .asText(BitwardenString.name.asText()),
                     ),
                 )
             }
@@ -97,8 +98,9 @@ class EditItemViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = EditItemState.DialogState.Generic(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required.asText(R.string.key.asText()),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.validation_field_required
+                            .asText(BitwardenString.key.asText()),
                     ),
                 )
             }
@@ -107,8 +109,8 @@ class EditItemViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = EditItemState.DialogState.Generic(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.key_is_invalid.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.key_is_invalid.asText(),
                     ),
                 )
             }
@@ -118,7 +120,7 @@ class EditItemViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialog = EditItemState.DialogState.Loading(
-                    R.string.saving.asText(),
+                    BitwardenString.saving.asText(),
                 ),
             )
         }
@@ -156,7 +158,7 @@ class EditItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleIssuerTextChange(action: EditItemAction.UsernameTextChange) {
+    private fun handleUsernameTextChange(action: EditItemAction.UsernameTextChange) {
         updateItemData { currentItemData ->
             currentItemData.copy(
                 username = action.username,
@@ -224,14 +226,14 @@ class EditItemViewModel @Inject constructor(
             CreateItemResult.Error -> mutableStateFlow.update {
                 it.copy(
                     dialog = EditItemState.DialogState.Generic(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
                     ),
                 )
             }
 
             CreateItemResult.Success -> {
-                sendEvent(EditItemEvent.ShowToast(R.string.item_saved.asText()))
+                sendEvent(EditItemEvent.ShowToast(BitwardenString.item_saved.asText()))
                 sendEvent(EditItemEvent.NavigateBack)
             }
         }
@@ -244,7 +246,7 @@ class EditItemViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = EditItemState.ViewState.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -260,7 +262,7 @@ class EditItemViewModel @Inject constructor(
                             .data
                             ?.toViewState(expandAdvancedOptions)
                             ?: EditItemState.ViewState.Error(
-                                message = R.string.generic_error_message.asText(),
+                                message = BitwardenString.generic_error_message.asText(),
                             ),
                     )
                 }
@@ -278,9 +280,11 @@ class EditItemViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = EditItemState.ViewState.Error(
-                            message = R.string.internet_connection_required_title
+                            message = BitwardenString.internet_connection_required_title
                                 .asText()
-                                .concat(R.string.internet_connection_required_message.asText()),
+                                .concat(
+                                    BitwardenString.internet_connection_required_message.asText(),
+                                ),
                         ),
                     )
                 }
@@ -296,7 +300,7 @@ class EditItemViewModel @Inject constructor(
                             .data
                             ?.toViewState(expandAdvancedOptions)
                             ?: EditItemState.ViewState.Error(
-                                message = R.string.generic_error_message.asText(),
+                                message = BitwardenString.generic_error_message.asText(),
                             ),
                     )
                 }

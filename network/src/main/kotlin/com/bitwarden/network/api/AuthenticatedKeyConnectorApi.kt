@@ -11,7 +11,7 @@ import retrofit2.http.Url
  * Defines raw calls specific for key connectors that use custom urls.
  */
 @Keep
-interface AuthenticatedKeyConnectorApi {
+internal interface AuthenticatedKeyConnectorApi {
     @POST
     suspend fun storeMasterKeyToKeyConnector(
         @Url url: String,

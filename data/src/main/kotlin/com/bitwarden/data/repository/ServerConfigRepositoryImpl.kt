@@ -35,11 +35,11 @@ internal class ServerConfigRepositoryImpl(
     override suspend fun getServerConfig(forceRefresh: Boolean): ServerConfig? {
         val localConfig = configDiskSource.serverConfig
         val needsRefresh = localConfig == null ||
-            Instant
-                .ofEpochMilli(localConfig.lastSync)
-                .isAfter(
-                    clock.instant().plusSeconds(MINIMUM_CONFIG_SYNC_INTERVAL_SEC),
-                )
+            clock.instant().isAfter(
+                Instant
+                    .ofEpochMilli(localConfig.lastSync)
+                    .plusSeconds(MINIMUM_CONFIG_SYNC_INTERVAL_SEC),
+            )
 
         if (needsRefresh || forceRefresh) {
             configService

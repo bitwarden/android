@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - release/**/*
   workflow_dispatch:
     inputs:
       version-name:
@@ -29,20 +30,34 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   JAVA_VERSION: 17
 
+permissions:
+  contents: read
+  packages: read
+  id-token: write
+
 jobs:
   build:
     name: Build Authenticator
     runs-on: ubuntu-24.04
 
     steps:
+      - name: Log inputs to job summary
+        run: |
+          echo "<details><summary>Job Inputs</summary>" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo '${{ toJson(inputs) }}' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "</details>" >> $GITHUB_STEP_SUMMARY
+
       - name: Check out repo
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@0bdd871935719febd78681f197cd39af5b6e16a6 # v4.2.2
+        uses: gradle/actions/wrapper-validation@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4.4.2
 
       - name: Cache Gradle files
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
         with:
           path: |
             ~/.gradle/caches
@@ -52,7 +67,7 @@ jobs:
             ${{ runner.os }}-gradle-v2-
 
       - name: Cache build output
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
         with:
           path: |
             ${{ github.workspace }}/build-cache
@@ -61,13 +76,13 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure JDK
-        uses: actions/setup-java@7a6d8a8234af8eb26422e24e3006232cccaa061b # v4.6.0
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@28c4deda893d5a96a6b2d958c5b47fc18d65c9d3 # v1.213.0
+        uses: ruby/setup-ruby@829114fc20da43a41d27359103ec7a63020954d4 # v1.255.0
         with:
           bundler-cache: true
 
@@ -95,10 +110,10 @@ jobs:
 
     steps:
       - name: Check out repo
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@28c4deda893d5a96a6b2d958c5b47fc18d65c9d3 # v1.213.0
+        uses: ruby/setup-ruby@829114fc20da43a41d27359103ec7a63020954d4 # v1.255.0
         with:
           bundler-cache: true
 
@@ -109,9 +124,18 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Log in to Azure
-        uses: Azure/login@cb79c773a3cfa27f31f25eb3f677781210c9ce3d # v1.6.1
+        uses: bitwarden/gh-actions/azure-login@main
         with:
-          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
+
+      - name: Get Azure Key Vault secrets
+        id: get-kv-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: gh-android
+          secrets: "BWA-AAB-KEYSTORE-STORE-PASSWORD,BWA-AAB-KEYSTORE-KEY-PASSWORD,BWA-APK-KEYSTORE-STORE-PASSWORD,BWA-APK-KEYSTORE-KEY-PASSWORD"
 
       - name: Retrieve secrets
         env:
@@ -155,6 +179,9 @@ jobs:
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
           --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
 
+      - name: AZ Logout
+        uses: bitwarden/gh-actions/azure-logout@main
+
       - name: Verify Play Store credentials
         if: ${{ inputs.publish-to-play-store }}
         run: |
@@ -162,10 +189,10 @@ jobs:
           json_key:${{ github.workspace }}/secrets/authenticator_play_store-creds.json }}
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@0bdd871935719febd78681f197cd39af5b6e16a6 # v4.2.2
+        uses: gradle/actions/wrapper-validation@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4.4.2
 
       - name: Cache Gradle files
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
         with:
           path: |
             ~/.gradle/caches
@@ -175,7 +202,7 @@ jobs:
             ${{ runner.os }}-gradle-v2-
 
       - name: Cache build output
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
         with:
           path: |
             ${{ github.workspace }}/build-cache
@@ -184,21 +211,30 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure JDK
-        uses: actions/setup-java@7a6d8a8234af8eb26422e24e3006232cccaa061b # v4.6.0
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Update app CI Build info
+        run: |
+          ./scripts/update_app_ci_build_info.sh \
+          $GITHUB_REPOSITORY \
+          $GITHUB_REF_NAME \
+          $GITHUB_SHA \
+          $GITHUB_RUN_ID \
+          $GITHUB_RUN_ATTEMPT
 
       - name: Increment version
         run: |
           DEFAULT_VERSION_CODE=$GITHUB_RUN_NUMBER
           VERSION_CODE="${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }}"
-          bundle exec fastlane setAuthenticatorBuildVersionInfo \
+          bundle exec fastlane setBuildVersionInfo \
           versionCode:$VERSION_CODE \
           versionName:${{ inputs.version-name || '' }}
 
-          regex='versionName = "([^"]+)"'
-          if [[ "$(cat authenticator/build.gradle.kts)" =~ $regex ]]; then
+          regex='appVersionName = "([^"]+)"'
+          if [[ "$(cat gradle/libs.versions.toml)" =~ $regex ]]; then
             VERSION_NAME="${BASH_REMATCH[1]}"
           fi
           echo "Version Name: ${VERSION_NAME}" >> $GITHUB_STEP_SUMMARY
@@ -209,22 +245,22 @@ jobs:
         run: |
           bundle exec fastlane bundleAuthenticatorRelease \
           storeFile:${{ github.workspace }}/keystores/authenticator_aab-keystore.jks \
-          storePassword:'${{ secrets.BWA_AAB_KEYSTORE_STORE_PASSWORD }}' \
+          storePassword:'${{ steps.get-kv-secrets.outputs.BWA-AAB-KEYSTORE-STORE-PASSWORD }}' \
           keyAlias:authenticatorupload \
-          keyPassword:'${{ secrets.BWA_AAB_KEYSTORE_KEY_PASSWORD }}'
+          keyPassword:'${{ steps.get-kv-secrets.outputs.BWA-AAB-KEYSTORE-KEY-PASSWORD }}'
 
       - name: Generate release Play Store APK
         if: ${{ matrix.variant == 'apk' }}
         run: |
           bundle exec fastlane buildAuthenticatorRelease \
           storeFile:${{ github.workspace }}/keystores/authenticator_apk-keystore.jks \
-          storePassword:'${{ secrets.BWA_APK_KEYSTORE_STORE_PASSWORD }}' \
+          storePassword:'${{ steps.get-kv-secrets.outputs.BWA-APK-KEYSTORE-STORE-PASSWORD }}' \
           keyAlias:bitwardenauthenticator \
-          keyPassword:'${{ secrets.BWA_APK_KEYSTORE_KEY_PASSWORD }}'
+          keyPassword:'${{ steps.get-kv-secrets.outputs.BWA-APK-KEYSTORE-KEY-PASSWORD }}'
 
       - name: Upload release Play Store .aab artifact
         if: ${{ matrix.variant == 'aab' }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.bitwarden.authenticator.aab
           path: authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab
@@ -232,7 +268,7 @@ jobs:
 
       - name: Upload release .apk artifact
         if: ${{ matrix.variant == 'apk' }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.bitwarden.authenticator.apk
           path: authenticator/build/outputs/apk/release/com.bitwarden.authenticator.apk
@@ -252,7 +288,7 @@ jobs:
 
       - name: Upload .apk SHA file for release
         if: ${{ matrix.variant == 'apk' }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: authenticator-android-apk-sha256.txt
           path: ./authenticator-android-apk-sha256.txt
@@ -260,7 +296,7 @@ jobs:
 
       - name: Upload .aab SHA file for release
         if: ${{ matrix.variant == 'aab' }}
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: authenticator-android-aab-sha256.txt
           path: ./authenticator-android-aab-sha256.txt

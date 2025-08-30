@@ -2,9 +2,12 @@ import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import com.google.protobuf.gradle.proto
 import dagger.hilt.android.plugin.util.capitalize
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.androidx.room)
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.android)
@@ -17,25 +20,47 @@ plugins {
     alias(libs.plugins.sonarqube)
 }
 
+/**
+ * Loads CI-specific build properties that are not checked into source control.
+ */
+val ciProperties = Properties().apply {
+    val ciPropsFile = File(rootDir, "ci.properties")
+    if (ciPropsFile.exists()) {
+        FileInputStream(ciPropsFile).use { load(it) }
+    }
+}
+
 android {
     namespace = "com.bitwarden.authenticator"
     compileSdk = libs.versions.compileSdk.get().toInt()
+
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
 
     defaultConfig {
         applicationId = "com.bitwarden.authenticator"
         minSdk = libs.versions.minSdkBwa.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = libs.versions.appVersionCode.get().toInt()
+        versionName = libs.versions.appVersionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        setProperty("archivesBaseName", "com.bitwarden.authenticator")
+        // Set the base archive name for publishing purposes. This is used to derive the APK and AAB
+        // artifact names when uploading to Firebase and Play Store.
+        base.archivesName = "com.bitwarden.authenticator"
 
-        ksp {
-            // The location in which the generated Room Database Schemas will be stored in the repo.
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
+        buildConfigField(
+            type = "String",
+            name = "CI_INFO",
+            value = "${ciProperties.getOrDefault("ci.info", "\"\uD83D\uDCBB local\"")}",
+        )
+        buildConfigField(
+            type = "String",
+            name = "SDK_VERSION",
+            value = "\"${libs.versions.bitwardenSdk.get()}\"",
+        )
     }
 
     androidResources {
@@ -56,6 +81,7 @@ android {
         debug {
             applicationIdSuffix = ".dev"
             manifestPlaceholders["targetBitwardenAppId"] = "com.x8bit.bitwarden.dev"
+            @Suppress("MaxLineLength")
             buildConfigField(
                 type = "com.bitwarden.authenticatorbridge.manager.model.AuthenticatorBridgeConnectionType",
                 name = "AUTHENTICATOR_BRIDGE_CONNECTION_TYPE",
@@ -69,6 +95,7 @@ android {
 
         release {
             manifestPlaceholders["targetBitwardenAppId"] = "com.x8bit.bitwarden"
+            @Suppress("MaxLineLength")
             buildConfigField(
                 type = "com.bitwarden.authenticatorbridge.manager.model.AuthenticatorBridgeConnectionType",
                 name = "AUTHENTICATOR_BRIDGE_CONNECTION_TYPE",
@@ -143,17 +170,19 @@ android {
 
 kotlin {
     compilerOptions {
-        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
+        jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
     }
 }
 
 dependencies {
 
-    implementation(files("libs/authenticatorbridge-1.0.0-release.aar"))
+    implementation(files("libs/authenticatorbridge-1.0.1-release.aar"))
 
+    implementation(project(":annotation"))
     implementation(project(":core"))
     implementation(project(":data"))
     implementation(project(":network"))
+    implementation(project(":ui"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
@@ -195,11 +224,6 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization)
-    implementation(libs.square.okhttp)
-    implementation(libs.square.okhttp.logging)
-    implementation(platform(libs.square.retrofit.bom))
-    implementation(libs.square.retrofit)
-    implementation(libs.square.retrofit.kotlinx.serialization)
     implementation(libs.zxing.zxing.core)
 
     // For now we are restricted to running Compose tests for debug builds only
@@ -209,6 +233,7 @@ dependencies {
     // Pull in test fixtures from other modules.
     testImplementation(testFixtures(project(":data")))
     testImplementation(testFixtures(project(":network")))
+    testImplementation(testFixtures(project(":ui")))
 
     testImplementation(libs.androidx.compose.ui.test)
     testImplementation(libs.google.hilt.android.testing)
@@ -219,7 +244,6 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.robolectric.robolectric)
-    testImplementation(libs.square.okhttp.mockwebserver)
     testImplementation(libs.square.turbine)
 }
 
@@ -253,6 +277,7 @@ private fun renameFile(path: String, newName: String) {
     if (originalFile.renameTo(newFile)) {
         println("Renamed $originalFile to $newFile")
     } else {
+        @Suppress("TooGenericExceptionThrown")
         throw RuntimeException("Failed to rename $originalFile to $newFile")
     }
 }

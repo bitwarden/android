@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -22,7 +23,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -38,15 +39,17 @@ android {
 
 kotlin {
     compilerOptions {
-        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
+        jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
     }
 }
 
 dependencies {
+    implementation(project(":annotation"))
     implementation(project(":core"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.serialization)
+    implementation(platform(libs.square.okhttp.bom))
     implementation(libs.square.okhttp)
     implementation(libs.square.okhttp.logging)
     implementation(platform(libs.square.retrofit.bom))

@@ -1,6 +1,6 @@
 package com.bitwarden.authenticator.data.platform.manager.imports.model
 
-import com.bitwarden.authenticator.ui.platform.base.util.Text
+import com.bitwarden.ui.util.Text
 
 /**
  * Represents the result of a data import operation.

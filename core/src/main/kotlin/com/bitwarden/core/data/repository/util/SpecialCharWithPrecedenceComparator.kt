@@ -38,8 +38,9 @@ private fun compareCharsSpecialCharsWithPrecedence(c1: Char, c2: Char): Int {
         }
 
         else -> {
-            val upperCaseStr1 = c1.toString().uppercase(Locale.getDefault())
-            val upperCaseStr2 = c2.toString().uppercase(Locale.getDefault())
+            // Use Locale.ROOT for consistent, locale-insensitive comparison
+            val upperCaseStr1 = c1.toString().uppercase(Locale.ROOT)
+            val upperCaseStr2 = c2.toString().uppercase(Locale.ROOT)
             upperCaseStr1.compareTo(upperCaseStr2)
         }
     }

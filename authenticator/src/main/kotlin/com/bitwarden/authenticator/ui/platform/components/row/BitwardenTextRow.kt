@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 
 /**
@@ -37,7 +38,7 @@ fun BitwardenTextRow(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    description: String? = null,
+    description: AnnotatedString? = null,
     withDivider: Boolean = false,
     content: (@Composable () -> Unit)? = null,
 ) {

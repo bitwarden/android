@@ -42,19 +42,21 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ITEM_LISTING_GRAPH_ROUTE
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ITEM_LIST_ROUTE
+import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ItemListingGraphRoute
+import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ItemListingRoute
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.itemListingGraph
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.navigateToItemListGraph
-import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
-import com.bitwarden.authenticator.ui.platform.base.util.max
-import com.bitwarden.authenticator.ui.platform.base.util.toDp
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.components.scrim.BitwardenAnimatedScrim
-import com.bitwarden.authenticator.ui.platform.feature.settings.SETTINGS_GRAPH_ROUTE
+import com.bitwarden.authenticator.ui.platform.feature.settings.SettingsGraphRoute
 import com.bitwarden.authenticator.ui.platform.feature.settings.navigateToSettingsGraph
-import com.bitwarden.authenticator.ui.platform.theme.RootTransitionProviders
+import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.max
+import com.bitwarden.ui.platform.base.util.toDp
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.theme.RootTransitionProviders
+import com.bitwarden.ui.platform.util.toObjectNavigationRoute
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
@@ -161,7 +163,7 @@ private fun AuthenticatorNavBarScaffold(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = ITEM_LISTING_GRAPH_ROUTE,
+            startDestination = ItemListingGraphRoute,
             modifier = Modifier
                 .consumeWindowInsets(WindowInsets.navigationBars)
                 .consumeWindowInsets(WindowInsets.ime)
@@ -305,11 +307,11 @@ private sealed class AuthenticatorNavBarTab : Parcelable {
      */
     @Parcelize
     data object VerificationCodes : AuthenticatorNavBarTab() {
-        override val iconResSelected get() = R.drawable.ic_verification_codes_filled
-        override val iconRes get() = R.drawable.ic_verification_codes
-        override val labelRes get() = R.string.verification_codes
-        override val contentDescriptionRes get() = R.string.verification_codes
-        override val route get() = ITEM_LIST_ROUTE
+        override val iconResSelected get() = BitwardenDrawable.ic_verification_codes_filled
+        override val iconRes get() = BitwardenDrawable.ic_verification_codes
+        override val labelRes get() = BitwardenString.verification_codes
+        override val contentDescriptionRes get() = BitwardenString.verification_codes
+        override val route get() = ItemListingRoute.toObjectNavigationRoute()
         override val testTag get() = "VerificationCodesTab"
     }
 
@@ -318,13 +320,11 @@ private sealed class AuthenticatorNavBarTab : Parcelable {
      */
     @Parcelize
     data object Settings : AuthenticatorNavBarTab() {
-        override val iconResSelected get() = R.drawable.ic_settings_filled
-        override val iconRes get() = R.drawable.ic_settings
-        override val labelRes get() = R.string.settings
-        override val contentDescriptionRes get() = R.string.settings
-
-        // TODO: Replace with constant when settings screen is complete.
-        override val route get() = SETTINGS_GRAPH_ROUTE
+        override val iconResSelected get() = BitwardenDrawable.ic_settings_solid
+        override val iconRes get() = BitwardenDrawable.ic_settings
+        override val labelRes get() = BitwardenString.settings
+        override val contentDescriptionRes get() = BitwardenString.settings
+        override val route get() = SettingsGraphRoute.toObjectNavigationRoute()
         override val testTag get() = "SettingsTab"
     }
 }

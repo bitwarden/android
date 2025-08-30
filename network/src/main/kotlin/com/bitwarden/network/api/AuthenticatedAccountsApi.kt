@@ -13,7 +13,7 @@ import retrofit2.http.POST
 /**
  * Defines raw calls under the /accounts API with authentication applied.
  */
-interface AuthenticatedAccountsApi {
+internal interface AuthenticatedAccountsApi {
 
     /**
      * Converts the currently active account to a key-connector account.

@@ -7,7 +7,7 @@ import androidx.biometric.BiometricManager.Authenticators
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import com.bitwarden.authenticator.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**
  * Default implementation of the [BiometricsManager] to manage biometrics within the app.
@@ -89,8 +89,8 @@ class BiometricsManagerImpl(
         )
 
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle(activity.getString(R.string.bitwarden_authenticator))
-            .setDescription(activity.getString(R.string.biometrics_direction))
+            .setTitle(activity.getString(BitwardenString.bitwarden_authenticator))
+            .setDescription(activity.getString(BitwardenString.biometrics_direction))
             .setAllowedAuthenticators(allowedAuthenticators)
             .build()
 

@@ -13,7 +13,7 @@ private const val SERVER_CONFIGURATIONS = "serverConfigurations"
 /**
  * Primary implementation of [ConfigDiskSource].
  */
-class ConfigDiskSourceImpl(
+internal class ConfigDiskSourceImpl(
     sharedPreferences: SharedPreferences,
     private val json: Json,
 ) : BaseDiskSource(sharedPreferences = sharedPreferences),

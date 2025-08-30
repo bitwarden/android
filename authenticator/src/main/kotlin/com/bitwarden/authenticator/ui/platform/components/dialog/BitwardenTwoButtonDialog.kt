@@ -5,7 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
 
 /**
  * Represents a Bitwarden-styled dialog with two buttons.
@@ -36,14 +36,14 @@ fun BitwardenTwoButtonDialog(
     AlertDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
-            BitwardenTextButton(
+            AuthenticatorTextButton(
                 label = dismissButtonText,
                 labelTextColor = dismissTextColor,
                 onClick = onDismissClick,
             )
         },
         confirmButton = {
-            BitwardenTextButton(
+            AuthenticatorTextButton(
                 label = confirmButtonText,
                 labelTextColor = confirmTextColor,
                 onClick = onConfirmClick,

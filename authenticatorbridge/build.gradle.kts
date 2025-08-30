@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 // For more info on versioning, see the README.
-val version = "1.0.0"
+val version = "1.0.1"
 
 plugins {
     alias(libs.plugins.android.library)
@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         // This min value is selected to accommodate known consumers
-        minSdk = 28
+        minSdk = libs.versions.minSdkBwa.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -54,12 +54,14 @@ android {
 
 kotlin {
     compilerOptions {
-        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
+        jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
     }
 }
 
 dependencies {
     // SDK dependencies:
+    implementation(project(":annotation"))
+    implementation(project(":core"))
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.kotlinx.serialization)

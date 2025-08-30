@@ -47,12 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
-import com.bitwarden.authenticator.ui.platform.base.util.Text
-import com.bitwarden.authenticator.ui.platform.base.util.asText
-import com.bitwarden.authenticator.ui.platform.base.util.mirrorIfRtl
-import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenMediumTopAppBar
+import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorMediumTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionRow
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
@@ -60,15 +55,23 @@ import com.bitwarden.authenticator.ui.platform.components.row.BitwardenExternalL
 import com.bitwarden.authenticator.ui.platform.components.row.BitwardenTextRow
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenWideSwitch
-import com.bitwarden.authenticator.ui.platform.components.util.rememberVectorPainter
-import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
-import com.bitwarden.authenticator.ui.platform.theme.LocalBiometricsManager
-import com.bitwarden.authenticator.ui.platform.theme.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
+import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
+import com.bitwarden.ui.platform.base.util.mirrorIfRtl
+import com.bitwarden.ui.platform.base.util.spanStyleOf
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 
 /**
  * Display the settings screen.
@@ -107,6 +110,10 @@ fun SettingsScreen(
                 intentManager.launchUri("https://bitwarden.com/privacy".toUri())
             }
 
+            SettingsEvent.NavigateToSyncInformation -> {
+                intentManager.launchUri("https://bitwarden.com/help/totp-sync".toUri())
+            }
+
             SettingsEvent.NavigateToBitwardenApp -> {
 
                 intentManager.startActivity(
@@ -132,8 +139,8 @@ fun SettingsScreen(
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            BitwardenMediumTopAppBar(
-                title = stringResource(id = R.string.settings),
+            AuthenticatorMediumTopAppBar(
+                title = stringResource(id = BitwardenString.settings),
                 scrollBehavior = scrollBehavior,
             )
         },
@@ -176,6 +183,9 @@ fun SettingsScreen(
                     {
                         viewModel.trySendAction(SettingsAction.DataClick.SyncWithBitwardenClick)
                     }
+                },
+                onSyncLearnMoreClick = remember(viewModel) {
+                    { viewModel.trySendAction(SettingsAction.DataClick.SyncLearnMoreClick) }
                 },
                 onDefaultSaveOptionUpdated = remember(viewModel) {
                     {
@@ -253,7 +263,7 @@ private fun SecuritySettings(
 
     BitwardenListHeaderText(
         modifier = Modifier.padding(horizontal = 16.dp),
-        label = stringResource(id = R.string.security),
+        label = stringResource(id = BitwardenString.security),
     )
     Spacer(modifier = Modifier.height(8.dp))
     UnlockWithBiometricsRow(
@@ -280,17 +290,18 @@ private fun VaultSettings(
     onImportClick: () -> Unit,
     onBackupClick: () -> Unit,
     onSyncWithBitwardenClick: () -> Unit,
+    onSyncLearnMoreClick: () -> Unit,
     onDefaultSaveOptionUpdated: (DefaultSaveOption) -> Unit,
     shouldShowSyncWithBitwardenApp: Boolean,
     shouldShowDefaultSaveOptions: Boolean,
 ) {
     BitwardenListHeaderText(
         modifier = Modifier.padding(horizontal = 16.dp),
-        label = stringResource(id = R.string.data),
+        label = stringResource(id = BitwardenString.data),
     )
     Spacer(modifier = Modifier.height(8.dp))
     BitwardenTextRow(
-        text = stringResource(id = R.string.import_vault),
+        text = stringResource(id = BitwardenString.import_vault),
         onClick = onImportClick,
         modifier = modifier
             .semantics { testTag = "Import" },
@@ -300,7 +311,7 @@ private fun VaultSettings(
                 modifier = Modifier
                     .mirrorIfRtl()
                     .size(24.dp),
-                painter = painterResource(id = R.drawable.ic_navigate_next),
+                painter = painterResource(id = BitwardenDrawable.ic_navigate_next),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface,
             )
@@ -308,7 +319,7 @@ private fun VaultSettings(
     )
     Spacer(modifier = Modifier.height(8.dp))
     BitwardenTextRow(
-        text = stringResource(id = R.string.export),
+        text = stringResource(id = BitwardenString.export),
         onClick = onExportClick,
         modifier = modifier
             .semantics { testTag = "Export" },
@@ -318,7 +329,7 @@ private fun VaultSettings(
                 modifier = Modifier
                     .mirrorIfRtl()
                     .size(24.dp),
-                painter = painterResource(id = R.drawable.ic_navigate_next),
+                painter = painterResource(id = BitwardenDrawable.ic_navigate_next),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface,
             )
@@ -326,28 +337,42 @@ private fun VaultSettings(
     )
     Spacer(modifier = Modifier.height(8.dp))
     BitwardenExternalLinkRow(
-        text = stringResource(R.string.backup),
+        text = stringResource(BitwardenString.backup),
         onConfirmClick = onBackupClick,
         modifier = modifier
             .semantics { testTag = "Backup" },
-        dialogTitle = stringResource(R.string.data_backup_title),
-        dialogMessage = stringResource(R.string.data_backup_message),
-        dialogConfirmButtonText = stringResource(R.string.learn_more),
-        dialogDismissButtonText = stringResource(R.string.ok),
+        dialogTitle = stringResource(BitwardenString.data_backup_title),
+        dialogMessage = stringResource(BitwardenString.data_backup_message),
+        dialogConfirmButtonText = stringResource(BitwardenString.learn_more),
+        dialogDismissButtonText = stringResource(BitwardenString.okay),
     )
     if (shouldShowSyncWithBitwardenApp) {
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextRow(
-            text = stringResource(id = R.string.sync_with_bitwarden_app),
+            text = stringResource(id = BitwardenString.sync_with_bitwarden_app),
+            description = annotatedStringResource(
+                id = BitwardenString.learn_more_link,
+                style = spanStyleOf(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                ),
+                linkHighlightStyle = spanStyleOf(
+                    color = MaterialTheme.colorScheme.primary,
+                    textStyle = MaterialTheme.typography.labelLarge,
+                ),
+                onAnnotationClick = {
+                    when (it) {
+                        "learnMore" -> onSyncLearnMoreClick()
+                    }
+                },
+            ),
             onClick = onSyncWithBitwardenClick,
             modifier = modifier,
             withDivider = true,
             content = {
                 Icon(
-                    modifier = Modifier
-                        .mirrorIfRtl()
-                        .size(24.dp),
-                    painter = painterResource(id = R.drawable.ic_external_link),
+                    modifier = Modifier.mirrorIfRtl(),
+                    painter = painterResource(id = BitwardenDrawable.ic_external_link),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurface,
                 )
@@ -371,7 +396,7 @@ private fun DefaultSaveOptionSelectionRow(
     var shouldShowDefaultSaveOptionDialog by remember { mutableStateOf(false) }
 
     BitwardenTextRow(
-        text = stringResource(id = R.string.default_save_option),
+        text = stringResource(id = BitwardenString.default_save_option),
         onClick = { shouldShowDefaultSaveOptionDialog = true },
         modifier = modifier,
         withDivider = true,
@@ -386,9 +411,9 @@ private fun DefaultSaveOptionSelectionRow(
     var dialogSelection by remember { mutableStateOf(currentSelection) }
     if (shouldShowDefaultSaveOptionDialog) {
         BitwardenSelectionDialog(
-            title = stringResource(id = R.string.default_save_option),
-            subtitle = stringResource(id = R.string.default_save_options_subtitle),
-            dismissLabel = stringResource(id = R.string.confirm),
+            title = stringResource(id = BitwardenString.default_save_option),
+            subtitle = stringResource(id = BitwardenString.default_save_options_subtitle),
+            dismissLabel = stringResource(id = BitwardenString.confirm),
             onDismissRequest = { shouldShowDefaultSaveOptionDialog = false },
             onDismissActionClick = {
                 onSaveOptionUpdated(dialogSelection)
@@ -419,10 +444,7 @@ private fun UnlockWithBiometricsRow(
     var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
     BitwardenWideSwitch(
         modifier = modifier,
-        label = stringResource(
-            id = R.string.unlock_with,
-            stringResource(id = R.string.biometrics),
-        ),
+        label = stringResource(BitwardenString.unlock_with_biometrics),
         isChecked = isChecked || showBiometricsPrompt,
         onCheckedChange = { toggled ->
             if (toggled) {
@@ -454,7 +476,7 @@ private fun AppearanceSettings(
 ) {
     BitwardenListHeaderText(
         modifier = Modifier.padding(horizontal = 16.dp),
-        label = stringResource(id = R.string.appearance),
+        label = stringResource(id = BitwardenString.appearance),
     )
     ThemeSelectionRow(
         currentSelection = state.appearance.theme,
@@ -474,7 +496,7 @@ private fun ThemeSelectionRow(
     var shouldShowThemeSelectionDialog by remember { mutableStateOf(false) }
 
     BitwardenTextRow(
-        text = stringResource(id = R.string.theme),
+        text = stringResource(id = BitwardenString.theme),
         onClick = { shouldShowThemeSelectionDialog = true },
         modifier = modifier,
         withDivider = true,
@@ -484,7 +506,7 @@ private fun ThemeSelectionRow(
                 .mirrorIfRtl()
                 .size(24.dp),
             painter = painterResource(
-                id = R.drawable.ic_navigate_next,
+                id = BitwardenDrawable.ic_navigate_next,
             ),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface,
@@ -493,7 +515,7 @@ private fun ThemeSelectionRow(
 
     if (shouldShowThemeSelectionDialog) {
         BitwardenSelectionDialog(
-            title = stringResource(id = R.string.theme),
+            title = stringResource(id = BitwardenString.theme),
             onDismissRequest = { shouldShowThemeSelectionDialog = false },
         ) {
             AppTheme.entries.forEach { option ->
@@ -524,10 +546,10 @@ private fun HelpSettings(
 ) {
     BitwardenListHeaderText(
         modifier = Modifier.padding(horizontal = 16.dp),
-        label = stringResource(id = R.string.help),
+        label = stringResource(id = BitwardenString.help),
     )
     BitwardenTextRow(
-        text = stringResource(id = R.string.launch_tutorial),
+        text = stringResource(id = BitwardenString.launch_tutorial),
         onClick = onTutorialClick,
         modifier = modifier
             .semantics { testTag = "LaunchTutorial" },
@@ -535,13 +557,13 @@ private fun HelpSettings(
     )
     Spacer(modifier = Modifier.height(8.dp))
     BitwardenExternalLinkRow(
-        text = stringResource(id = R.string.bitwarden_help_center),
+        text = stringResource(id = BitwardenString.bitwarden_help_center),
         onConfirmClick = onHelpCenterClick,
         modifier = modifier
             .semantics { testTag = "BitwardenHelpCenter" },
-        dialogTitle = stringResource(id = R.string.continue_to_help_center),
+        dialogTitle = stringResource(id = BitwardenString.continue_to_help_center),
         dialogMessage = stringResource(
-            id = R.string.learn_more_about_how_to_use_bitwarden_on_the_help_center,
+            BitwardenString.learn_more_about_how_to_use_bitwarden_authenticator_on_the_help_center,
         ),
     )
 }
@@ -559,24 +581,24 @@ private fun AboutSettings(
 ) {
     BitwardenListHeaderText(
         modifier = modifier.padding(horizontal = 16.dp),
-        label = stringResource(id = R.string.about),
+        label = stringResource(id = BitwardenString.about),
     )
     BitwardenWideSwitch(
         modifier = modifier
             .padding(horizontal = 16.dp)
             .semantics { testTag = "SubmitCrashLogs" },
-        label = stringResource(id = R.string.submit_crash_logs),
+        label = stringResource(id = BitwardenString.submit_crash_logs),
         isChecked = state.isSubmitCrashLogsEnabled,
         onCheckedChange = onSubmitCrashLogsCheckedChange,
     )
     BitwardenExternalLinkRow(
-        text = stringResource(id = R.string.privacy_policy),
+        text = stringResource(id = BitwardenString.privacy_policy),
         modifier = modifier
             .semantics { testTag = "PrivacyPolicy" },
         onConfirmClick = onPrivacyPolicyClick,
-        dialogTitle = stringResource(id = R.string.continue_to_privacy_policy),
+        dialogTitle = stringResource(id = BitwardenString.continue_to_privacy_policy),
         dialogMessage = stringResource(
-            id = R.string.privacy_policy_description_long,
+            id = BitwardenString.privacy_policy_description_long,
         ),
     )
     CopyRow(
@@ -621,7 +643,7 @@ private fun CopyRow(
                 color = MaterialTheme.colorScheme.onSurface,
             )
             Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_copy),
+                painter = rememberVectorPainter(id = BitwardenDrawable.ic_copy),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface,
             )

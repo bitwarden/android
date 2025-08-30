@@ -3,7 +3,6 @@ package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
@@ -19,17 +18,18 @@ import com.bitwarden.authenticator.data.platform.manager.BitwardenEncodingManage
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.GoogleAuthenticatorProtos
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
-import com.bitwarden.core.data.repository.model.DataState
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toDisplayItem
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toSharedCodesDisplayState
-import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
-import com.bitwarden.authenticator.ui.platform.base.util.Text
-import com.bitwarden.authenticator.ui.platform.base.util.asText
-import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
+import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
+import com.bitwarden.authenticator.ui.authenticator.feature.util.toDisplayItem
+import com.bitwarden.authenticator.ui.authenticator.feature.util.toSharedCodesDisplayState
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
@@ -119,7 +119,7 @@ class ItemListingViewModel @Inject constructor(
             }
 
             is ItemListingAction.ItemClick -> {
-                handleCopyItemClick(action.authCode)
+                handleCopyCodeClick(action.authCode)
             }
 
             is ItemListingAction.DialogDismiss -> {
@@ -153,6 +153,14 @@ class ItemListingViewModel @Inject constructor(
             ItemListingAction.SyncWithBitwardenDismiss -> {
                 handleSyncWithBitwardenDismiss()
             }
+
+            ItemListingAction.SyncLearnMoreClick -> {
+                handleSyncLearnMoreClick()
+            }
+
+            is ItemListingAction.SectionExpandedClick -> {
+                handleSectionExpandedClick(action)
+            }
         }
     }
 
@@ -160,7 +168,7 @@ class ItemListingViewModel @Inject constructor(
         sendEvent(ItemListingEvent.NavigateToAppSettings)
     }
 
-    private fun handleCopyItemClick(authCode: String) {
+    private fun handleCopyCodeClick(authCode: String) {
         clipboardManager.setText(authCode)
     }
 
@@ -168,7 +176,7 @@ class ItemListingViewModel @Inject constructor(
         sendEvent(ItemListingEvent.NavigateToEditItem(itemId))
     }
 
-    private fun handleMoveToBitwardenClick(itemId: String) {
+    private fun handleCopyToBitwardenClick(itemId: String) {
         viewModelScope.launch {
             val item = authenticatorRepository
                 .getItemStateFlow(itemId)
@@ -181,8 +189,8 @@ class ItemListingViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = ItemListingState.DialogState.Error(
-                            title = R.string.something_went_wrong.asText(),
-                            message = R.string.please_try_again.asText(),
+                            title = BitwardenString.something_went_wrong.asText(),
+                            message = BitwardenString.please_try_again.asText(),
                         ),
                     )
                 }
@@ -194,7 +202,9 @@ class ItemListingViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialog = ItemListingState.DialogState.DeleteConfirmationPrompt(
-                    message = R.string.do_you_really_want_to_permanently_delete_cipher.asText(),
+                    message = BitwardenString
+                        .do_you_really_want_to_permanently_delete_this_cannot_be_undone
+                        .asText(),
                     itemId = itemId,
                 ),
             )
@@ -265,8 +275,8 @@ class ItemListingViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = ItemListingState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -278,7 +288,7 @@ class ItemListingViewModel @Inject constructor(
                 }
                 sendEvent(
                     ItemListingEvent.ShowToast(
-                        message = R.string.item_deleted.asText(),
+                        message = BitwardenString.item_deleted.asText(),
                     ),
                 )
             }
@@ -295,8 +305,8 @@ class ItemListingViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = ItemListingState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.authenticator_key_read_error.asText(),
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString.authenticator_key_read_error.asText(),
                         ),
                     )
                 }
@@ -305,7 +315,7 @@ class ItemListingViewModel @Inject constructor(
             CreateItemResult.Success -> {
                 sendEvent(
                     event = ItemListingEvent.ShowToast(
-                        message = R.string.verification_code_added.asText(),
+                        message = BitwardenString.verification_code_added.asText(),
                     ),
                 )
             }
@@ -448,6 +458,7 @@ class ItemListingViewModel @Inject constructor(
         }
     }
 
+    @Suppress("LongMethod")
     private fun handleAuthenticatorDataReceive(
         action: ItemListingAction.Internal.AuthCodesUpdated,
     ) {
@@ -469,10 +480,14 @@ class ItemListingViewModel @Inject constructor(
             SharedVerificationCodesState.SyncNotEnabled,
                 -> SharedCodesDisplayState.Codes(emptyList())
 
-            is SharedVerificationCodesState.Success ->
+            is SharedVerificationCodesState.Success -> {
+                val viewState = state.viewState as? ItemListingState.ViewState.Content
+                val currentCodes = viewState?.sharedItems as? SharedCodesDisplayState.Codes
                 action.sharedCodesState.toSharedCodesDisplayState(
                     alertThresholdSeconds = state.alertThresholdSeconds,
+                    currentSections = currentCodes?.sections.orEmpty(),
                 )
+            }
         }
 
         if (localItems.isEmpty() && sharedItemsState.isEmpty()) {
@@ -492,7 +507,7 @@ class ItemListingViewModel @Inject constructor(
                         it.toDisplayItem(
                             alertThresholdSeconds = state.alertThresholdSeconds,
                             sharedVerificationCodesState =
-                            authenticatorRepository.sharedCodesStateFlow.value,
+                                authenticatorRepository.sharedCodesStateFlow.value,
                         )
                     },
                 itemList = localItems
@@ -501,7 +516,7 @@ class ItemListingViewModel @Inject constructor(
                         it.toDisplayItem(
                             alertThresholdSeconds = state.alertThresholdSeconds,
                             sharedVerificationCodesState =
-                            authenticatorRepository.sharedCodesStateFlow.value,
+                                authenticatorRepository.sharedCodesStateFlow.value,
                         )
                     },
                 sharedItems = sharedItemsState,
@@ -517,9 +532,9 @@ class ItemListingViewModel @Inject constructor(
 
     private fun handleDropdownMenuClick(action: ItemListingAction.DropdownMenuClick) {
         when (action.menuAction) {
-            VaultDropdownMenuAction.COPY -> handleCopyItemClick(action.item.authCode)
+            VaultDropdownMenuAction.COPY_CODE -> handleCopyCodeClick(action.item.authCode)
             VaultDropdownMenuAction.EDIT -> handleEditItemClick(action.item.id)
-            VaultDropdownMenuAction.MOVE -> handleMoveToBitwardenClick(action.item.id)
+            VaultDropdownMenuAction.COPY_TO_BITWARDEN -> handleCopyToBitwardenClick(action.item.id)
             VaultDropdownMenuAction.DELETE -> handleDeleteItemClick(action.item.id)
         }
     }
@@ -558,6 +573,26 @@ class ItemListingViewModel @Inject constructor(
 
                     is ItemListingState.ViewState.NoItems -> it.viewState.copy(
                         actionCard = ItemListingState.ActionCardState.None,
+                    )
+                },
+            )
+        }
+    }
+
+    private fun handleSyncLearnMoreClick() {
+        sendEvent(ItemListingEvent.NavigateToSyncInformation)
+    }
+
+    private fun handleSectionExpandedClick(action: ItemListingAction.SectionExpandedClick) {
+        updateSharedItems { codes ->
+            codes.copy(
+                sections = codes.sections.map {
+                    it.copy(
+                        isExpanded = if (it == action.section) {
+                            !it.isExpanded
+                        } else {
+                            it.isExpanded
+                        },
                     )
                 },
             )
@@ -636,6 +671,29 @@ class ItemListingViewModel @Inject constructor(
             userId = null,
             favorite = false,
         )
+    }
+
+    private inline fun updateContent(
+        crossinline block: (
+            ItemListingState.ViewState.Content,
+        ) -> ItemListingState.ViewState.Content,
+    ) {
+        val updatedContent = (state.viewState as? ItemListingState.ViewState.Content)
+            ?.let(block)
+            ?: return
+        mutableStateFlow.update { it.copy(viewState = updatedContent) }
+    }
+
+    private inline fun updateSharedItems(
+        crossinline block: (SharedCodesDisplayState.Codes) -> SharedCodesDisplayState.Codes,
+    ) {
+        updateContent {
+            it.copy(
+                sharedItems = (it.sharedItems as? SharedCodesDisplayState.Codes)
+                    ?.let(block)
+                    ?: it.sharedItems,
+            )
+        }
     }
 }
 
@@ -795,6 +853,11 @@ sealed class ItemListingEvent {
     data object NavigateToAppSettings : ItemListingEvent()
 
     /**
+     * Navigate to the sync information web page.
+     */
+    data object NavigateToSyncInformation : ItemListingEvent()
+
+    /**
      * Navigate to Bitwarden play store listing.
      */
     data object NavigateToBitwardenListing : ItemListingEvent()
@@ -873,6 +936,18 @@ sealed class ItemListingAction {
     data object SyncWithBitwardenClick : ItemListingAction()
 
     /**
+     * The user tapped the learn more button on the sync action card.
+     */
+    data object SyncLearnMoreClick : ItemListingAction()
+
+    /**
+     * The user tapped the section header to expand or collapse the section.
+     */
+    data class SectionExpandedClick(
+        val section: SharedCodesDisplayState.SharedCodesAccountSection,
+    ) : ItemListingAction()
+
+    /**
      * The user dismissed sync Bitwarden action card.
      */
     data object SyncWithBitwardenDismiss : ItemListingAction()
@@ -886,7 +961,7 @@ sealed class ItemListingAction {
      * Represents an action triggered when the user clicks an item in the dropdown menu.
      *
      * @param menuAction The action selected from the dropdown menu.
-     * @param id The identifier of the item on which the action is being performed.
+     * @param item The item on which the action is being performed.
      */
     data class DropdownMenuClick(
         val menuAction: VaultDropdownMenuAction,

@@ -40,11 +40,12 @@ android {
 
 kotlin {
     compilerOptions {
-        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
+        jvmTarget = JvmTarget.fromTarget(libs.versions.jvmTarget.get())
     }
 }
 
 dependencies {
+    implementation(project(":annotation"))
     implementation(project(":core"))
     implementation(project(":network"))
 

@@ -1,17 +1,17 @@
 package com.bitwarden.authenticator.ui.platform.util
 
-import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.Text
-import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 
 /**
  *  Provides a human-readable label for the export format.
  */
 val ExportVaultFormat.displayLabel: Text
     get() = when (this) {
-        ExportVaultFormat.JSON -> R.string.export_format_label_json.asText()
-        ExportVaultFormat.CSV -> R.string.export_format_label_csv.asText()
+        ExportVaultFormat.JSON -> BitwardenString.json_extension.asText()
+        ExportVaultFormat.CSV -> BitwardenString.csv_extension.asText()
     }
 
 /**

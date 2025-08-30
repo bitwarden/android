@@ -19,9 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.bitwarden.authenticator.ui.platform.base.util.Text
-import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import kotlinx.parcelize.Parcelize
 
 /**

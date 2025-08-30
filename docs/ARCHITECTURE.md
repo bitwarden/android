@@ -1,6 +1,10 @@
 # Architecture
 
 - [Overview](#overview)
+- [Application Modules](#application-modules)
+  - [Core Library Modules](#core-library-modules)
+  - [Specialized Library Modules](#specialized-library-modules)
+  - [Supporting Modules (Source Sets and Test Fixtures)](#supporting-modules-source-sets-and-test-fixtures)
 - [Data Layer](#data-layer)
   - [Data Sources](#data-sources)
   - [Managers](#managers)
@@ -20,17 +24,45 @@
 
 ## Overview
 
-The app is broadly divided into the **data layer** and the **UI layer** and this is reflected in the two top-level packages of the app, `data` and `ui`. Each of these packages is then subdivided into the following sub-packages:
+The Bitwarden Android project employs a multi-module architecture to enhance separation of concerns, maintainability, and build efficiency. This architecture distinguishes between application modules, which are user-facing, and library modules, which provide shared functionalities.
 
-- `auth`
-- `autofill`
-- `platform`
-- `tools`
-- `vault`
+### Application modules
+These modules represent the entry points and primary user interfaces for the applications. They are structured with standard Android source sets to organize code for different build types and testing:
 
-Note that these packages are currently aligned with the [CODEOWNERS](../.github/CODEOWNERS) files for the project; no additional direct sub-packages of `ui` or `data` should be added. While this top-level structure is deliberately inflexible, the package structure within each `auth`, `autofill`, etc. are not specifically prescribed.
+* **`Bitwarden.app`**: This module constitutes the Bitwarden Password Manager application. It integrates various library modules to deliver password management and secure data storage features. It is responsible for the application's top-level setup, primary navigation graph, and dependency injection rooting for password manager functionalities. The `app` module utilizes product flavors to generate different versions of the application:
+    * `src/standard/`: Contains code and resources specific to the 'standard' product flavor. Builds produced from this flavor are intended for distribution via the Google Play Store and include functionality dependent on Google Play Services.
+    * `src/fdroid/`: Contains code and resources specific to the 'fdroid' product flavor. Builds produced from this flavor are intended for distribution via F-Droid. This flavor is stripped of all Google Play Services libraries and, as such, does not contain features like push notifications for real-time syncing.
+    * `src/debug/`: Contains code and resources specific to the 'debug' build type (e.g., for enabling debug-specific features, configurations, or alternative API endpoints), which can be combined with any product flavor.
+    * `src/release/`: Contains code and resources specific to the 'release' build type (e.g., for ProGuard/R8 configurations, release-specific API keys, or analytics configurations), which can be combined with any product flavor.
+* **`Bitwarden.authenticator`**: This module implements the Bitwarden Authenticator application. Its purpose is to store and generate two-factor authentication (2FA) codes, such as Time-based One-Time Passwords (TOTP), directly on the user's device. It provides the user interface and logic for managing authenticator accounts and displaying codes, functioning as a standalone authenticator application.
+    * `src/debug/`: Contains code and resources specific to the 'debug' build type of the Authenticator.
+    * `src/release/`: Contains code and resources specific to the 'release' build type of the Authenticator.
 
-The responsibilities of the data layer are to manage the storage and retrieval of data from low-level sources (such as from the network, persistence, or Bitwarden SDK) and to expose them in a more ready-to-consume manner by the UI layer via "repository" and "manager" classes. The UI layer is then responsible for any final processing of this data for display in the UI as well for receiving events from the UI, updating the tracked state accordingly.
+### Core Library Modules
+
+These libraries provide foundational capabilities utilized by application modules and other feature-specific libraries:
+
+* **`Bitwarden.core`**: A fundamental library containing shared business logic, essential data models (entities, value objects), domain-specific utilities, and common interfaces. It is designed with minimal or no direct Android framework dependencies to ensure high reusability and testability.
+* **`Bitwarden.data`**: Manages the data layer for the applications. Responsibilities include defining repositories, data sources (for network APIs and local persistence like Room), data transformation logic (mappers), and managing data synchronization. It abstracts data origin and storage details from other parts of the system.
+* **`Bitwarden.network`**: Encapsulates all network communication logic. This includes API client setup (e.g., using Retrofit or Ktor), defining request/response models for network operations, and handling network interceptors and authentication.
+* **`Bitwarden.ui`**: A library module providing common UI elements, theming resources (colors, typography, shapes), custom Jetpack Compose components, base UI classes, and UI-related utility functions. It ensures a consistent user experience across different features and applications.
+
+### Specialized Library Modules
+
+These libraries offer more targeted functionalities:
+
+* **`Bitwarden.authenticatorbridge`**: Serves as an interface or bridge facilitating communication and integration between the `Bitwarden.authenticator` module's functionalities and the`Bitwarden.app` module. This allows for controlled interaction while maintaining modular decoupling.
+* **`Bitwarden.annotation`**: Contains custom Java/Kotlin annotations used throughout the project. These annotations support compile-time code generation (e.g., for dependency injection with Dagger Hilt, or database schema generation with Room) and provide metadata for other development tools.
+
+### Supporting Modules (Source Sets and Test Fixtures)
+
+The project structure includes conventional Gradle source sets and test fixture modules that support
+development and testing:
+
+* **`src/main/`**: The primary source set of a module, containing its functional code.
+* **`src/test/`**: Contains local unit tests (JVM-based) for the associated module.
+* **`src/testFixtures/`**: Provides shared testing utilities, mock objects, sample data, or helper
+  functions reusable across various test modules.
 
 ## Data Layer
 
@@ -400,27 +432,24 @@ Note in particular how consumers of the above **do not need to know the details 
 <summary>Show example</summary>
 
 ```kotlin
-private const val IS_TOGGLE_ENABLED: String = "is_toggle_enabled"
-private const val EXAMPLE_ROUTE_PREFIX = "example"
-private const val EXAMPLE_ROUTE = "$EXAMPLE_ROUTE_PREFIX/{$IS_TOGGLE_ENABLED}"
+@Serializable
+data class ExampleRoute(
+    val isToggleEnabled: Boolean,
+)
 
 data class ExampleArgs(
     val isToggleEnabledInitialValue: Boolean,
-) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        isToggleEnabledInitialValue = checkNotNull(savedStateHandle[IS_TOGGLE_ENABLED]) as Boolean,
-    )
+)
+
+fun SavedStateHandle.toExampleArgs(): ExampleArgs {
+    val route = this.toRoute<ExampleRoute>()
+    return ExampleArgs(isToggleEnabledInitialValue = route.isToggleEnabled)
 }
 
 fun NavGraphBuilder.exampleDestination(
     onNavigateToNextScreen: (CompletionData) -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = EXAMPLE_ROUTE,
-        arguments = listOf(
-            navArgument(IS_TOGGLE_ENABLED) { type = NavType.BoolType }
-        ),
-    ) {
+    composableWithSlideTransitions<ExampleRoute> {
         ExampleScreen(onNavigateToNextScreen = onNavigateToNextScreen)
     }
 }
@@ -430,8 +459,8 @@ fun NavController.navigateToExample(
     navOptions: NavOptions? = null,
 ) {
     this.navigate(
-        "$EXAMPLE_ROUTE_PREFIX/$isToggleEnabled",
-        navOptions,
+        route = ExampleRoute(isToggleEnabled = isToggleEnabled),
+        navOptions = navOptions,
     )
 }
 ```

@@ -24,7 +24,7 @@
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
         android:name="com.android.chrome"
-        android:maxLongVersionCode="10000000000" />
+        android:maxLongVersionCode="711900039" />
     <compatibility-package
         android:name="com.android.htmlviewer"
         android:maxLongVersionCode="10000000000" />
@@ -36,7 +36,7 @@
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
         android:name="com.brave.browser"
-        android:maxLongVersionCode="10000000000" />
+        android:maxLongVersionCode="427912623" />
     <compatibility-package
         android:name="com.brave.browser_beta"
         android:maxLongVersionCode="10000000000" />
@@ -51,13 +51,7 @@
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
         android:name="com.chrome.beta"
-        android:maxLongVersionCode="10000000000" />
-    <compatibility-package
-        android:name="com.chrome.canary"
-        android:maxLongVersionCode="10000000000" />
-    <compatibility-package
-        android:name="com.chrome.dev"
-        android:maxLongVersionCode="10000000000" />
+        android:maxLongVersionCode="711900039" />
     <compatibility-package
         android:name="com.cookiegames.smartcookie"
         android:maxLongVersionCode="10000000000" />
@@ -87,6 +81,9 @@
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
         android:name="com.kiwibrowser.browser.dev"
+        android:maxLongVersionCode="10000000000" />
+    <compatibility-package
+        android:name="com.ktllq.play"
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
         android:name="com.lemurbrowser.exts"
@@ -170,10 +167,16 @@
         android:name="com.yandex.browser"
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
+        android:name="com.yjllq.chrome.beta"
+        android:maxLongVersionCode="10000000000" />
+    <compatibility-package
         android:name="com.yjllq.internet"
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
         android:name="com.yjllq.kito"
+        android:maxLongVersionCode="10000000000" />
+    <compatibility-package
+        android:name="com.yjllqint.kito"
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
         android:name="com.yujian.ResideMenuDemo"

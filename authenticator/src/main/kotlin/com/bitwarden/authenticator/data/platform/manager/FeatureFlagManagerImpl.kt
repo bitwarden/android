@@ -1,6 +1,6 @@
 package com.bitwarden.authenticator.data.platform.manager
 
-import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.repository.ServerConfigRepository
 import kotlinx.coroutines.flow.Flow
@@ -41,7 +41,6 @@ class FeatureFlagManagerImpl(
  */
 fun <T : Any> ServerConfig?.getFlagValueOrDefault(key: FlagKey<T>): T {
     val defaultValue = key.defaultValue
-    if (!key.isRemotelyConfigured) return key.defaultValue
     return this
         ?.serverData
         ?.featureStates
@@ -56,9 +55,9 @@ fun <T : Any> ServerConfig?.getFlagValueOrDefault(key: FlagKey<T>): T {
                     Int::class -> it.content.toInt() as T
                     else -> defaultValue
                 }
-            } catch (ex: ClassCastException) {
+            } catch (_: ClassCastException) {
                 defaultValue
-            } catch (ex: NumberFormatException) {
+            } catch (_: NumberFormatException) {
                 defaultValue
             }
         }

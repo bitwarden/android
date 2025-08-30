@@ -9,7 +9,7 @@ import retrofit2.http.Path
 /**
  * Defines API calls for push tokens.
  */
-interface PushApi {
+internal interface PushApi {
     @PUT("/devices/identifier/{appId}/token")
     suspend fun putDeviceToken(
         @Path("appId") appId: String,

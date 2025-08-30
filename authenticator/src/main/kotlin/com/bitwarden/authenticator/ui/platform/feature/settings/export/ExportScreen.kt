@@ -28,10 +28,8 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
-import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
+import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledTonalButton
 import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
@@ -40,9 +38,12 @@ import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogSt
 import com.bitwarden.authenticator.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
-import com.bitwarden.authenticator.ui.platform.theme.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
+import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenString
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -94,12 +95,12 @@ fun ExportScreen(
     }
     if (shouldShowConfirmationPrompt) {
         BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.export_confirmation_title),
+            title = stringResource(id = BitwardenString.export_confirmation_title),
             message = stringResource(
-                id = R.string.export_vault_warning,
+                id = BitwardenString.export_vault_warning,
             ),
-            confirmButtonText = stringResource(id = R.string.export),
-            dismissButtonText = stringResource(id = R.string.cancel),
+            confirmButtonText = stringResource(id = BitwardenString.export),
+            dismissButtonText = stringResource(id = BitwardenString.cancel),
             onConfirmClick = {
                 shouldShowConfirmationPrompt = false
                 confirmExportClick()
@@ -141,11 +142,11 @@ fun ExportScreen(
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            BitwardenTopAppBar(
-                title = stringResource(id = R.string.export),
+            AuthenticatorTopAppBar(
+                title = stringResource(id = BitwardenString.export),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = painterResource(id = R.drawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIcon = painterResource(id = BitwardenDrawable.ic_close),
+                navigationIconContentDescription = stringResource(id = BitwardenString.close),
                 onNavigationIconClick = remember(viewModel) {
                     {
                         viewModel.trySendAction(ExportAction.CloseButtonClick)
@@ -182,7 +183,7 @@ private fun ExportScreenContent(
     ) {
         val resources = LocalContext.current.resources
         BitwardenMultiSelectButton(
-            label = stringResource(id = R.string.file_format),
+            label = stringResource(id = BitwardenString.file_format),
             options = ExportVaultFormat.entries.map { it.displayLabel() }.toImmutableList(),
             selectedOption = state.exportVaultFormat.displayLabel(),
             onOptionSelected = { selectedOptionLabel ->
@@ -199,8 +200,8 @@ private fun ExportScreenContent(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        BitwardenFilledTonalButton(
-            label = stringResource(id = R.string.export),
+        AuthenticatorFilledTonalButton(
+            label = stringResource(id = BitwardenString.export),
             onClick = onExportClick,
             modifier = Modifier
                 .semantics { testTag = "ExportVaultButton" }
