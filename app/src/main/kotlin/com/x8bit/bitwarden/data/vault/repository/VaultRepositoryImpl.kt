@@ -82,6 +82,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.sortAlphabetically
+import com.x8bit.bitwarden.data.vault.repository.util.sortAlphabeticallyByType
 import com.x8bit.bitwarden.data.vault.repository.util.toDomainsData
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkSend
@@ -1167,7 +1168,7 @@ class VaultRepositoryImpl(
                     .fold(
                         onSuccess = { collections ->
                             DataState.Loaded(
-                                collections.sortAlphabetically(),
+                                collections.sortAlphabeticallyByType(),
                             )
                         },
                         onFailure = { throwable -> DataState.Error(throwable) },
