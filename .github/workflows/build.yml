@@ -18,12 +18,12 @@ on:
       distribute-to-firebase:
         description: "Optional. Distribute artifacts to Firebase."
         required: false
-        default: false
+        default: true
         type: boolean
       publish-to-play-store:
         description: "Optional. Deploy bundle artifact to Google Play Store"
         required: false
-        default: false
+        default: true
         type: boolean
 
 env:
