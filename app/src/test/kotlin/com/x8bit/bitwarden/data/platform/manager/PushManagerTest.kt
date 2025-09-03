@@ -343,6 +343,7 @@ class PushManagerTest {
                     pushManager.onMessageReceived(SYNC_SEND_DELETE_NOTIFICATION_MAP)
                     assertEquals(
                         SyncSendDeleteData(
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                             sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                         ),
                         awaitItem(),
@@ -456,10 +457,16 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived with sync send delete does nothing`() = runTest {
+            fun `onMessageReceived with sync send delete emits to syncSendDeleteFlow`() = runTest {
                 pushManager.syncSendDeleteFlow.test {
                     pushManager.onMessageReceived(SYNC_SEND_DELETE_NOTIFICATION_MAP)
-                    expectNoEvents()
+                    assertEquals(
+                        SyncSendDeleteData(
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                            sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                        ),
+                        awaitItem(),
+                    )
                 }
             }
 
