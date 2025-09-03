@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -154,9 +155,10 @@ private fun MinimumCharacterCount(
         }
         Spacer(modifier = Modifier.width(2.dp))
         Text(
-            text = BitwardenPlurals.minimum_characters.asText(
-                quantity = minimumCharacterCount,
-                args = arrayOf(minimumCharacterCount),
+            text = pluralStringResource(
+                id = BitwardenPlurals.minimum_characters,
+                count = minimumCharacterCount,
+                formatArgs = arrayOf(minimumCharacterCount),
             ),
             color = BitwardenTheme.colorScheme.text.secondary,
             style = BitwardenTheme.typography.labelSmall,
