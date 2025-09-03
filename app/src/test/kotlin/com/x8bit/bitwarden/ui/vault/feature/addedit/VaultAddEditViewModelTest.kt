@@ -2443,7 +2443,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             message = BitwardenPlurals.password_exposed.asText(
                                 quantity = breachCount,
                                 args = arrayOf(breachCount),
-                            )
+                            ),
                         ),
                     ),
                     awaitItem(),
