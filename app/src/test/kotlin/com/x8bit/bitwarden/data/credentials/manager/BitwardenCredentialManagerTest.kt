@@ -16,7 +16,6 @@ import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.core.data.repository.model.DataState
-import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
@@ -49,7 +48,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListVi
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPublicKeyAssertionResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPublicKeyAttestationResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKeyCredential
-import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
@@ -901,10 +899,16 @@ class BitwardenCredentialManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getCredentialEntries with public key credential options should return null when getCipher result is Failure`() =
+    fun `getCredentialEntries with public key credential options should return Failure when relyingPartyId is null`() =
         runTest {
+            every {
+                json.decodeFromStringOrNull<PasskeyAssertionOptions?>(any())
+            } returns createMockPasskeyAssertionOptions(
+                number = 1,
+                relyingPartyId = null,
+            )
             val mockBeginGetPublicKeyCredentialOption = mockk<BeginGetPublicKeyCredentialOption> {
-                every { requestJson } returns DEFAULT_FIDO2_AUTH_REQUEST_JSON
+                every { requestJson } returns ""
             }
             val mockGetCredentialsRequest = mockk<GetCredentialsRequest> {
                 every { callingAppInfo } returns mockCallingAppInfo
@@ -930,9 +934,6 @@ class BitwardenCredentialManagerTest {
                     ),
                 ),
             )
-            coEvery {
-                mockVaultRepository.getCipher(any())
-            } returns GetCipherResult.Failure(error = RuntimeException())
 
             mutableDecryptCipherListResultStateFlow.value = DataState.Loaded(
                 createMockDecryptCipherListResult(number = 1),
@@ -940,103 +941,7 @@ class BitwardenCredentialManagerTest {
             val result = bitwardenCredentialManager.getCredentialEntries(
                 getCredentialsRequest = mockGetCredentialsRequest,
             )
-            assertTrue(result.getOrNull()?.isEmpty() ?: false)
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getCredentialEntries with public key credential options should return empty list when getCipher result is CipherNotFound`() =
-        runTest {
-            val mockBeginGetPublicKeyCredentialOption = mockk<BeginGetPublicKeyCredentialOption> {
-                every { requestJson } returns DEFAULT_FIDO2_AUTH_REQUEST_JSON
-            }
-            val mockGetCredentialsRequest = mockk<GetCredentialsRequest> {
-                every { callingAppInfo } returns mockCallingAppInfo
-                every {
-                    beginGetPublicKeyCredentialOptions
-                } returns listOf(mockBeginGetPublicKeyCredentialOption)
-                every { beginGetPasswordOptions } returns emptyList()
-                every { userId } returns "mockUserId"
-            }
-
-            coEvery {
-                mockCipherMatchingManager.filterCiphersForMatches(
-                    cipherListViews = any(),
-                    matchUri = any(),
-                )
-            } returns listOf(
-                createMockCipherListView(
-                    number = 1,
-                    type = CipherListViewType.Login(
-                        createMockLoginListView(
-                            number = 1,
-                            hasFido2 = true,
-                        ),
-                    ),
-                ),
-            )
-            coEvery {
-                mockVaultRepository.getCipher(any())
-            } returns GetCipherResult.CipherNotFound
-
-            mutableDecryptCipherListResultStateFlow.value = DataState.Loaded(
-                createMockDecryptCipherListResult(number = 1),
-            )
-            val result = bitwardenCredentialManager.getCredentialEntries(
-                getCredentialsRequest = mockGetCredentialsRequest,
-            )
-            assertTrue(result.getOrNull()?.isEmpty() ?: false)
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getCredentialEntries with public key credential options should return error when FIDO 2 credential decryption fails`() =
-        runTest {
-            val mockBeginGetPublicKeyCredentialOption = mockk<BeginGetPublicKeyCredentialOption> {
-                every { requestJson } returns DEFAULT_FIDO2_AUTH_REQUEST_JSON
-            }
-            val mockGetCredentialsRequest = mockk<GetCredentialsRequest> {
-                every { callingAppInfo } returns mockCallingAppInfo
-                every {
-                    beginGetPublicKeyCredentialOptions
-                } returns listOf(mockBeginGetPublicKeyCredentialOption)
-                every { beginGetPasswordOptions } returns emptyList()
-                every { userId } returns "mockUserId"
-            }
-            coEvery {
-                mockCipherMatchingManager.filterCiphersForMatches(
-                    cipherListViews = any(),
-                    matchUri = any(),
-                )
-            } returns mockk()
-            coEvery {
-                mockVaultRepository.getCipher(any())
-            } returns GetCipherResult.Success(createMockCipherView(number = 1))
-            coEvery {
-                mockVaultSdkSource.decryptFido2CredentialAutofillViews(
-                    userId = "mockUserId",
-                    cipherViews = arrayOf(createMockCipherView(number = 1)),
-                )
-            } returns RuntimeException().asFailure()
-            mutableDecryptCipherListResultStateFlow.value = DataState.Loaded(
-                createMockDecryptCipherListResult(
-                    number = 1,
-                    successes = listOf(
-                        createMockCipherListView(
-                            number = 1,
-                            type = CipherListViewType.Login(
-                                createMockLoginListView(
-                                    number = 1,
-                                    hasFido2 = true,
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            )
-            val result = bitwardenCredentialManager.getCredentialEntries(mockGetCredentialsRequest)
             assertTrue(result.isFailure)
-            assertTrue(result.exceptionOrNull() is GetCredentialUnknownException)
         }
 
     @Suppress("MaxLineLength")
@@ -1156,9 +1061,8 @@ class BitwardenCredentialManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getCredentialEntries should build public key credential entries when decryption succeeds`() =
+    fun `getCredentialEntries should build public key credential entries when discovery succeeds`() =
         runTest {
-            val mockCipherView = createMockCipherView(number = 1)
             val mockBeginGetPublicKeyCredentialOption = mockk<BeginGetPublicKeyCredentialOption> {
                 every { requestJson } returns DEFAULT_FIDO2_AUTH_REQUEST_JSON
             }
@@ -1190,15 +1094,24 @@ class BitwardenCredentialManagerTest {
                     ),
                 ),
             )
+
             coEvery {
-                mockVaultRepository.getCipher(cipherId = "mockId-1")
-            } returns GetCipherResult.Success(mockCipherView)
-            coEvery {
-                mockVaultSdkSource.decryptFido2CredentialAutofillViews(
+                mockVaultSdkSource.silentlyDiscoverCredentials(
                     userId = "mockUserId",
-                    cipherViews = arrayOf(mockCipherView),
+                    fido2CredentialStore = any(),
+                    relyingPartyId = "mockRpId-1",
                 )
             } returns fido2CredentialAutofillViews.asSuccess()
+            every {
+                mockCredentialEntryBuilder.buildPublicKeyCredentialEntries(
+                    userId = "mockUserId",
+                    fido2CredentialAutofillViews = any(),
+                    beginGetPublicKeyCredentialOptions = listOf(
+                        mockBeginGetPublicKeyCredentialOption,
+                    ),
+                    isUserVerified = false,
+                )
+            } returns listOf(mockk<PublicKeyCredentialEntry>())
             coEvery {
                 mockCipherMatchingManager.filterCiphersForMatches(
                     cipherListViews = any(),
@@ -1212,16 +1125,6 @@ class BitwardenCredentialManagerTest {
                     successes = mockCipherListViews,
                 ),
             )
-            every {
-                mockCredentialEntryBuilder.buildPublicKeyCredentialEntries(
-                    userId = "mockUserId",
-                    fido2CredentialAutofillViews = fido2CredentialAutofillViews,
-                    beginGetPublicKeyCredentialOptions = listOf(
-                        mockBeginGetPublicKeyCredentialOption,
-                    ),
-                    isUserVerified = false,
-                )
-            } returns listOf(mockk<PublicKeyCredentialEntry>())
 
             val result = bitwardenCredentialManager.getCredentialEntries(mockGetCredentialsRequest)
             assertTrue(result.isSuccess)
@@ -1299,7 +1202,6 @@ class BitwardenCredentialManagerTest {
     @Test
     fun `getCredentialEntries should build password credential and public key credential entries together`() =
         runTest {
-            val mockCipherView = createMockCipherView(number = 1)
             val mockBeginGetPasswordCredentialOption = mockk<BeginGetPasswordOption>()
             val mockBeginGetPublicKeyCredentialOption = mockk<BeginGetPublicKeyCredentialOption> {
                 every { requestJson } returns DEFAULT_FIDO2_AUTH_REQUEST_JSON
@@ -1333,12 +1235,10 @@ class BitwardenCredentialManagerTest {
                 ),
             )
             coEvery {
-                mockVaultRepository.getCipher("mockId-1")
-            } returns GetCipherResult.Success(mockCipherView)
-            coEvery {
-                mockVaultSdkSource.decryptFido2CredentialAutofillViews(
+                mockVaultSdkSource.silentlyDiscoverCredentials(
                     userId = "mockUserId",
-                    cipherViews = anyVararg(),
+                    fido2CredentialStore = any(),
+                    relyingPartyId = "mockRpId-1",
                 )
             } returns fido2CredentialAutofillViews.asSuccess()
             every {
@@ -1409,7 +1309,7 @@ class BitwardenCredentialManagerTest {
                 )
                 mockCredentialEntryBuilder.buildPublicKeyCredentialEntries(
                     userId = "mockUserId",
-                    fido2CredentialAutofillViews = fido2CredentialAutofillViews,
+                    fido2CredentialAutofillViews = any(),
                     beginGetPublicKeyCredentialOptions = listOf(
                         mockBeginGetPublicKeyCredentialOption,
                     ),
@@ -1422,7 +1322,6 @@ class BitwardenCredentialManagerTest {
     @Test
     fun `getCredentialEntries should build password credential even if build public key credential entries fails`() =
         runTest {
-            val mockCipherView = createMockCipherView(number = 1)
             val mockBeginGetPasswordCredentialOption = mockk<BeginGetPasswordOption>()
             val mockBeginGetPublicKeyCredentialOption = mockk<BeginGetPublicKeyCredentialOption> {
                 every { requestJson } returns DEFAULT_FIDO2_AUTH_REQUEST_JSON
@@ -1457,12 +1356,10 @@ class BitwardenCredentialManagerTest {
                 ),
             )
             coEvery {
-                mockVaultRepository.getCipher("mockId-1")
-            } returns GetCipherResult.Success(mockCipherView)
-            coEvery {
-                mockVaultSdkSource.decryptFido2CredentialAutofillViews(
+                mockVaultSdkSource.silentlyDiscoverCredentials(
                     userId = "mockUserId",
-                    cipherViews = anyVararg(),
+                    fido2CredentialStore = any(),
+                    relyingPartyId = "mockRpId-1",
                 )
             } returns fido2CredentialAutofillViews.asSuccess()
             every {
@@ -1478,7 +1375,7 @@ class BitwardenCredentialManagerTest {
             coEvery {
                 mockCredentialEntryBuilder.buildPublicKeyCredentialEntries(
                     userId = "mockUserId",
-                    fido2CredentialAutofillViews = fido2CredentialAutofillViews,
+                    fido2CredentialAutofillViews = any(),
                     beginGetPublicKeyCredentialOptions = listOf(
                         mockBeginGetPublicKeyCredentialOption,
                     ),
@@ -1523,120 +1420,6 @@ class BitwardenCredentialManagerTest {
                 )
             }
         }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getCredentialEntries should fail if build public key credential entries fails and password entries are empty`() =
-        runTest {
-            val mockCipherView = createMockCipherView(number = 1)
-            val mockBeginGetPasswordCredentialOption = mockk<BeginGetPasswordOption>()
-            val mockBeginGetPublicKeyCredentialOption = mockk<BeginGetPublicKeyCredentialOption> {
-                every { requestJson } returns DEFAULT_FIDO2_AUTH_REQUEST_JSON
-            }
-            val mockGetCredentialsRequest = mockk<GetCredentialsRequest> {
-                every { callingAppInfo } returns mockCallingAppInfo
-                every {
-                    beginGetPublicKeyCredentialOptions
-                } returns listOf(mockBeginGetPublicKeyCredentialOption)
-                every {
-                    beginGetPasswordOptions
-                } returns listOf(mockBeginGetPasswordCredentialOption)
-                every { userId } returns "mockUserId"
-            }
-            val fido2CredentialAutofillViews = listOf(
-                createMockFido2CredentialAutofillView(
-                    number = 1,
-                    cipherId = "mockId-1",
-                    rpId = "mockRpId-1",
-                ),
-            )
-            val cipherListViews = listOf(
-                createMockCipherListView(
-                    number = 1,
-                    type = CipherListViewType.Login(
-                        createMockLoginListView(
-                            number = 1,
-                            hasFido2 = true,
-                            uris = emptyList(),
-                        ),
-                    ),
-                ),
-            )
-
-            coEvery {
-                mockVaultRepository.getCipher("mockId-1")
-            } returns GetCipherResult.Success(mockCipherView)
-            coEvery {
-                mockVaultSdkSource.decryptFido2CredentialAutofillViews(
-                    userId = "mockUserId",
-                    cipherViews = anyVararg(),
-                )
-            } returns Throwable("Decryption error").asFailure()
-            every {
-                mockCredentialEntryBuilder.buildPublicKeyCredentialEntries(
-                    userId = "mockUserId",
-                    fido2CredentialAutofillViews = fido2CredentialAutofillViews,
-                    beginGetPublicKeyCredentialOptions = listOf(
-                        mockBeginGetPublicKeyCredentialOption,
-                    ),
-                    isUserVerified = false,
-                )
-            } returns emptyList()
-            every {
-                mockCredentialEntryBuilder.buildPasswordCredentialEntries(
-                    userId = "mockUserId",
-                    cipherListViews = cipherListViews,
-                    beginGetPasswordCredentialOptions = listOf(
-                        mockBeginGetPasswordCredentialOption,
-                    ),
-                    isUserVerified = false,
-                )
-            } returns emptyList()
-            coEvery {
-                mockCipherMatchingManager.filterCiphersForMatches(
-                    cipherListViews = any(),
-                    matchUri = any(),
-                )
-            } returns cipherListViews
-
-            mutableDecryptCipherListResultStateFlow.value = DataState.Loaded(
-                createMockDecryptCipherListResult(
-                    number = 1,
-                    successes = listOf(
-                        createMockCipherListView(
-                            number = 1,
-                            type = CipherListViewType.Login(
-                                createMockLoginListView(
-                                    number = 1,
-                                    hasFido2 = true,
-                                    uris = emptyList(),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            )
-
-            val result = bitwardenCredentialManager.getCredentialEntries(mockGetCredentialsRequest)
-            assertTrue(result.isFailure)
-
-            verify(exactly = 0) {
-                mockCredentialEntryBuilder.buildPublicKeyCredentialEntries(
-                    userId = any(),
-                    fido2CredentialAutofillViews = any(),
-                    beginGetPublicKeyCredentialOptions = any(),
-                    isUserVerified = any(),
-                )
-            }
-            verify(exactly = 1) {
-                mockCredentialEntryBuilder.buildPasswordCredentialEntries(
-                    userId = any(),
-                    cipherListViews = any(),
-                    beginGetPasswordCredentialOptions = any(),
-                    isUserVerified = any(),
-                )
-            }
-        }
 }
 
 private const val DEFAULT_PACKAGE_NAME = "com.x8bit.bitwarden"
@@ -1654,22 +1437,7 @@ private val DEFAULT_ANDROID_ORIGIN = Origin.Android(
 private val DEFAULT_WEB_ORIGIN = Origin.Web("bitwarden.com")
 private const val DEFAULT_FIDO2_AUTH_REQUEST_JSON = """
 {
-  "allowCredentials": [
-    {
-      "id": "mockCredentialId-1",
-      "transports": [
-        "internal"
-      ],
-      "type": "public-key"
-    },
-    {
-      "id": "mockCredentialId-2",
-      "transports": [
-        "internal"
-      ],
-      "type": "public-key"
-    }
-  ],
+  "allowCredentials": [],
   "challenge": "mockChallenge",
   "rpId": "bitwarden.com",
   "userVerification": "preferred"

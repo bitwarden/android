@@ -4,6 +4,7 @@
     <string name="add_folder">Aggiungi una cartella</string>
     <string name="add_item">Aggiungi un elemento</string>
     <string name="an_error_has_occurred">Avviso</string>
+    <string name="apply">Applica</string>
     <string name="back">Indietro</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Annulla</string>
@@ -363,8 +364,8 @@
     <string name="exit_confirmation">Vuoi davvero chiudere Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Richiedi la password principale dopo il riavvio</string>
     <string name="pin_require_master_password_restart">Vuoi richiedere lo sblocco con la password principale quando l\'app viene riavviata?</string>
-    <string name="ask_to_add_login">Proposta per nuovi login</string>
-    <string name="ask_to_add_login_description">Proponi di aggiungere un login quando non è presente nella cassaforte</string>
+    <string name="ask_to_add_item">Chiedi di aggiungere un elemento</string>
+    <string name="ask_to_add_item_description">Propone di aggiungere un login quando non è presente nella cassaforte.</string>
     <string name="on_restart">Dopo il riavvio dell\'app</string>
     <string name="capitalize">Iniziale maiuscola</string>
     <string name="include_number">Numero casuale</string>
@@ -848,7 +849,6 @@ Vuoi passare a questo account?</string>
     <string name="need_some_inspiration">"Hai bisogno di ispirazione?"</string>
     <string name="check_out_the_passphrase_generator">"Controlla il generatore di passphrase"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Non è stato possibile verificare il certificato del server. La catena di certificati o le impostazioni proxy del tuo dispositivo o del tuo server Bitwarden potrebbero non essere configurati correttamente.</string>
-    <string name="review_flow_launched">Flusso di revisione avviato.</string>
     <string name="copy_private_key">Copia chiave privata</string>
     <string name="login_credentials">Credenziali di accesso</string>
     <string name="autofill_options">Opzioni di auto-compilazione</string>
@@ -1067,6 +1067,13 @@ Vuoi passare a questo account?</string>
     <string name="local_items_are_collapsed_click_to_expand">Elementi locali nascosti; tocca per espandere la lista.</string>
     <string name="items_expanded_click_to_collapse">Elementi visibili; tocca per nascondere.</string>
     <string name="items_are_collapsed_click_to_expand">Elementi nascosti; tocca per mostrarli.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Copy error report</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Seleziona una carta per %s</string>
     <string name="advanced_options">Opzioni avanzate</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Ulteriori informazioni sulla corrispondenza degli URL</annotation></string>

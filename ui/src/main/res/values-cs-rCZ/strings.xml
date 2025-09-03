@@ -4,6 +4,7 @@
     <string name="add_folder">Přidat složku</string>
     <string name="add_item">Přidat položku</string>
     <string name="an_error_has_occurred">Vyskytla se chyba.</string>
+    <string name="apply">Použít</string>
     <string name="back">Zpět</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Zrušit</string>
@@ -364,8 +365,8 @@ Načtení proběhne automaticky.</string>
     <string name="exit_confirmation">Opravdu chcete ukončit Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Vyžadovat hlavní heslo při restartu aplikace?</string>
     <string name="pin_require_master_password_restart">Chcete po restartování aplikace vyžadovat hlavní heslo pro odemknutí trezoru?</string>
-    <string name="ask_to_add_login">Ptát se na přidání přihlášení</string>
-    <string name="ask_to_add_login_description">Zeptá se na uložení údajů, pokud nebyly v trezoru nalezeny.</string>
+    <string name="ask_to_add_item">Zeptat se na přidání položky</string>
+    <string name="ask_to_add_item_description">Zeptá se na uložení údajů, pokud nebyly v trezoru nalezeny.</string>
     <string name="on_restart">Při restartu aplikace</string>
     <string name="capitalize">Velká písmena na začátku slova</string>
     <string name="include_number">Zahrnout číslice</string>
@@ -848,7 +849,6 @@ Chcete se přepnout na tento účet?</string>
     <string name="need_some_inspiration">"Potřebujete inspiraci?"</string>
     <string name="check_out_the_passphrase_generator">"Podívejte se na generátor heslové fráze"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Certifikát serveru se nám nepodařilo ověřit. Řetězec certifikátů nebo nastavení proxy serveru na Vašem zařízení nebo serveru Bitwardenu nemusí být správně nastaven.</string>
-    <string name="review_flow_launched">Přehled byl spuštěn!</string>
     <string name="copy_private_key">Kopírovat soukromý klíč</string>
     <string name="login_credentials">Přihlašovací údaje</string>
     <string name="autofill_options">Volby automatického vyplňování</string>
@@ -1069,6 +1069,15 @@ při opakování problémů.</string>
     <string name="local_items_are_collapsed_click_to_expand">Místní položky jsou sbaleny; klepnutím rozbalíte.</string>
     <string name="items_expanded_click_to_collapse">Položky jsou rozbaleny; klepnutím sbalíte.</string>
     <string name="items_are_collapsed_click_to_expand">Položky jsou sbaleny; klepnutím rozbalíte.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Zpráva o chybě kopírování</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nemohl dešifrovat tuto položku trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden nemohl dešifrovat 1 položku trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</item>
+        <item quantity="few">Bitwarden nemohl dešifrovat %1$d položky trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</item>
+        <item quantity="many">Bitwarden nemohl dešifrovat %1$d položek trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</item>
+        <item quantity="other">Bitwarden nemohl dešifrovat %1$d položek trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</item>
+    </plurals>
     <string name="select_a_card_for_x">Vyberte kartu pro %s</string>
     <string name="advanced_options">Rozšířené volby</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Další informace o detekci shody</annotation></string>

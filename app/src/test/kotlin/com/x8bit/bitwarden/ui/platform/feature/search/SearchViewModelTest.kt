@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
@@ -31,7 +30,6 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySele
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -156,13 +154,6 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             getSnackbarDataFlow(relay = any(), relays = anyVararg())
         } returns mutableSnackbarDataFlow
-    }
-
-    private val mutableRemoveCardPolicyFeatureFlow = MutableStateFlow(false)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every {
-            getFeatureFlagFlow(FlagKey.RemoveCardPolicy)
-        } returns mutableRemoveCardPolicyFeatureFlow
     }
 
     @BeforeEach
@@ -1676,10 +1667,8 @@ class SearchViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is enable`() =
+    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly`() =
         runTest {
-            mutableRemoveCardPolicyFeatureFlow.value = true
-
             val viewModel = createViewModel()
             assertEquals(
                 DEFAULT_STATE.copy(restrictItemTypesPolicyOrgIds = persistentListOf()),
@@ -1701,33 +1690,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(
                     restrictItemTypesPolicyOrgIds = persistentListOf("Test Organization"),
                 ),
-                viewModel.stateFlow.value,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is disabled`() =
-        runTest {
-            val viewModel = createViewModel()
-            assertEquals(
-                DEFAULT_STATE,
-                viewModel.stateFlow.value,
-            )
-            mutableActivePoliciesFlow.emit(
-                listOf(
-                    SyncResponseJson.Policy(
-                        organizationId = "Test Organization",
-                        id = "testId",
-                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
-                        isEnabled = true,
-                        data = null,
-                    ),
-                ),
-            )
-
-            assertEquals(
-                DEFAULT_STATE.copy(restrictItemTypesPolicyOrgIds = persistentListOf()),
                 viewModel.stateFlow.value,
             )
         }
@@ -1799,7 +1761,6 @@ class SearchViewModelTest : BaseViewModelTest() {
         autofillSelectionManager = autofillSelectionManager,
         organizationEventManager = organizationEventManager,
         snackbarRelayManager = snackbarRelayManager,
-        featureFlagManager = featureFlagManager,
     )
 
     /**

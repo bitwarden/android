@@ -4,6 +4,7 @@
     <string name="add_folder">Qovluq əlavə et</string>
     <string name="add_item">Maddə əlavə edin</string>
     <string name="an_error_has_occurred">Bir xəta baş verdi.</string>
+    <string name="apply">Tətbiq et</string>
     <string name="back">Geri</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Ləğv et</string>
@@ -49,7 +50,7 @@
     <string name="send_name_required">"Send adı (tələb olunur)"</string>
     <string name="no">Xeyr</string>
     <string name="notes">Qeydlər</string>
-    <string name="private_notes">Şəxsi notlar</string>
+    <string name="private_notes">Özəl notlar</string>
     <string name="okay">Yaxşı</string>
     <string name="password">Parol</string>
     <string name="save">Saxla</string>
@@ -305,7 +306,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="identification">İdentifikasiya</string>
     <string name="logins">Girişlər</string>
     <string name="secure_notes">Güvənli qeydlər</string>
-    <string name="personal_details">Şəxsi detallar</string>
+    <string name="personal_details">Fərdi detallar</string>
     <string name="contact_info">Əlaqə məlumatı</string>
     <string name="check_password_for_data_breaches">Parolları veri pozuntularına qarşı yoxla</string>
     <string name="password_exposed">Bu parol, veri pozuntularında %1$s dəfə üzə çıxıb. Onu dəyişdirməlisiniz.</string>
@@ -364,8 +365,8 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="exit_confirmation">Bitwarden-dən çıxış etmək istədiyinizə əminsiniz?</string>
     <string name="require_master_password_on_app_restart">Tətbiq yenidən başladılanda ana parol tələb edilsin?</string>
     <string name="pin_require_master_password_restart">Tətbiq yenidən başladılanda ana parol ilə kilid açılmasını məcburi etmək istəyirsiniz?</string>
-    <string name="ask_to_add_login">Giriş əlavə etmək üçün soruş</string>
-    <string name="ask_to_add_login_description">Seyfinizdə tapılmayan elementin əlavə edilməsi soruşulsun.</string>
+    <string name="ask_to_add_item">Element əlavə etməyi soruş</string>
+    <string name="ask_to_add_item_description">Seyfinizdə tapılmayan elementin əlavə edilməsi soruşulsun.</string>
     <string name="on_restart">Tətbiq yenidən başladılanda</string>
     <string name="capitalize">İlk hərfi böyük yaz</string>
     <string name="include_number">Rəqəm əlavə et</string>
@@ -420,7 +421,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="master_password_policy_validation_message">Parol, şirkət tələblərini qarşılamır. Lütfən siyasət məlumatlarını yoxlayıb yenidən sınayın.</string>
     <string name="loading">Yüklənir</string>
     <string name="terms_of_service">Xidmət Şərtləri</string>
-    <string name="privacy_policy">Gizlilik Siyasəti</string>
+    <string name="privacy_policy">Məxfilik Siyasəti</string>
     <string name="passkey_management">Keçid açarını idarəetmə</string>
     <string name="autofill_services">Avto-doldurma xidmətləri</string>
     <string name="display_autofill_suggestions">Avto-doldurma təkliflərini göstər</string>
@@ -662,12 +663,12 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="continue_to_web_app">Veb tətbiqlə davam edilsin?</string>
     <string name="continue_to_x">%1$s ilə davam edilsin?</string>
     <string name="continue_to_help_center">Kömək mərkəzi ilə davam edilsin?</string>
-    <string name="continue_to_privacy_policy">Gizlilik Siyasətinə davam edirsiniz?</string>
+    <string name="continue_to_privacy_policy">Məxfilik Siyasəti ilə davam edirsiniz?</string>
     <string name="continue_to_device_settings">Cihaz Ayarlarına davam edilsin?</string>
     <string name="two_step_login_description_long">Bitwarden veb tətbiqində iki addımlı girişi quraraq hesabınızı daha güvənli edin.</string>
     <string name="change_master_password_description_long">Ana parolunuzu Bitwarden veb tətbiqində dəyişdirə bilərsiniz.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Kömək mərkəzində Bitwarden-in necə istifadə ediləcəyi ilə bağlı ətraflı öyrənin.</string>
-    <string name="privacy_policy_description_long">bitwarden.com saytında gizlilik siyasətimizi nəzərdən keçirin.</string>
+    <string name="privacy_policy_description_long">bitwarden.com saytında məxfilik siyasətimizi nəzərdən keçirin.</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Veb tətbiqində Bitwarden hesabınızın daha çox özəlliyini kəşf edin.</string>
     <string name="learn_about_organizations_description_long">Bitwarden, bir təşkilatı istifadə edərək seyf elementlərinizi başqaları ilə paylaşmağınıza imkan verir. Daha ətraflı məlumat üçün bitwarden.com saytını ziyarət edin.</string>
     <string name="created_x">Yaradıldı: %1$s</string>
@@ -700,7 +701,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="create_account_on">Hesab yarat</string>
     <string name="create_account_on_with_colon">Hesab yarat:</string>
     <string name="we_sent_an_email_to">%1$s ünvanına bir e-poçt göndərdik.</string>
-    <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Davam edərək, Xidmət Şərtləri və Gizlilik Siyasəti ilə razılaşırsınız</string>
+    <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Davam edərək, <annotation link="termsOfService">Xidmət Şərtləri</annotation> və <annotation link="privacyPolicy">Məxfilik Siyasəti</annotation> ilə razılaşırsınız</string>
     <string name="unsubscribe">Abunəlikdən çıx</string>
     <string name="check_your_email">E-poçtunuzu yoxlayın</string>
     <string name="open_email_app">E-poçt tətbiqini aç</string>
@@ -848,7 +849,6 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="need_some_inspiration">"Dəstək lazımdır?"</string>
     <string name="check_out_the_passphrase_generator">"Parol yaradıcıya nəzər salın"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Serverin sertifikatını doğrulaya bilmədik. Cihazınızda və ya Bitwarden serverinizdə sertifikat zənciri və ya proksi ayarları düzgün qurulmamış ola bilər.</string>
-    <string name="review_flow_launched">İncələmə axını başladıldı!</string>
     <string name="copy_private_key">Private açarı kopyala</string>
     <string name="login_credentials">Giriş məlumatları</string>
     <string name="autofill_options">Avto-doldurma seçimləri</string>
@@ -1069,6 +1069,13 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="local_items_are_collapsed_click_to_expand">Daxili elementlər yığcamlaşdırıldı, genişləndirmək üçün toxunun.</string>
     <string name="items_expanded_click_to_collapse">Elementlər genişləndirildi, yığcamlaşdırmaq üçün toxunun.</string>
     <string name="items_are_collapsed_click_to_expand">Elementlər yığcamlaşdırıldı, genişləndirmək üçün toxunun.</string>
+    <string name="error_cannot_decrypt">[xəta: şifrə açıla bilmir]</string>
+    <string name="copy_error_report">Xəta hesabatını kopyala</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden, bu seyf elementinin şifrəsini aça bilmədi. Əlavə veri itkisini önləmək üçün bu xəta hesabatını kopyalayıb müştəri dəstəyi ilə paylaşın.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden, %1$d seyf elementinin şifrəsini aça bilmədi. Əlavə veri itkisini önləmək üçün bu xəta hesabatını kopyalayıb müştəri dəstəyi ilə paylaşın.</item>
+        <item quantity="other">Bitwarden, %1$d seyf elementinin şifrəsini aça bilmədi. Əlavə veri itkisini önləmək üçün bu xəta hesabatını kopyalayıb müştəri dəstəyi ilə paylaşın.</item>
+    </plurals>
     <string name="select_a_card_for_x">%s bir kart seçin</string>
     <string name="advanced_options">Qabaqcıl seçimlər</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Uyuşma aşkarlaması barədə daha çox</annotation></string>

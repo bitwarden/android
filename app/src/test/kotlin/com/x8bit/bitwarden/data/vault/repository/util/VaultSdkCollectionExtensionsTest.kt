@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.bitwarden.collections.Collection
+import com.bitwarden.collections.CollectionType
+import com.bitwarden.network.model.CollectionTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import org.junit.Test
@@ -18,6 +20,8 @@ class VaultSdkCollectionExtensionsTest {
                 readOnly = true,
                 id = "id",
                 manage = true,
+                defaultUserCollectionEmail = null,
+                type = CollectionType.SHARED_COLLECTION,
             ),
             SyncResponseJson.Collection(
                 organizationId = "organizationId",
@@ -27,6 +31,8 @@ class VaultSdkCollectionExtensionsTest {
                 isReadOnly = true,
                 id = "id",
                 canManage = true,
+                defaultUserCollectionEmail = null,
+                type = CollectionTypeJson.SHARED_COLLECTION,
             )
                 .toEncryptedSdkCollection(),
         )
@@ -43,6 +49,8 @@ class VaultSdkCollectionExtensionsTest {
                 readOnly = false,
                 id = "id",
                 manage = true,
+                defaultUserCollectionEmail = null,
+                type = CollectionType.SHARED_COLLECTION,
             ),
             SyncResponseJson.Collection(
                 organizationId = "organizationId",
@@ -52,6 +60,8 @@ class VaultSdkCollectionExtensionsTest {
                 isReadOnly = false,
                 id = "id",
                 canManage = null,
+                defaultUserCollectionEmail = null,
+                type = CollectionTypeJson.SHARED_COLLECTION,
             )
                 .toEncryptedSdkCollection(),
         )
@@ -70,6 +80,8 @@ class VaultSdkCollectionExtensionsTest {
                     readOnly = true,
                     id = "id",
                     manage = true,
+                    defaultUserCollectionEmail = null,
+                    type = CollectionType.SHARED_COLLECTION,
                 ),
             ),
             listOf(
@@ -81,6 +93,8 @@ class VaultSdkCollectionExtensionsTest {
                     isReadOnly = true,
                     id = "id",
                     canManage = true,
+                    defaultUserCollectionEmail = null,
+                    type = CollectionTypeJson.SHARED_COLLECTION,
                 )
                     .toEncryptedSdkCollection(),
             ),
@@ -89,7 +103,7 @@ class VaultSdkCollectionExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toSortAlphabetically should sort collections by name`() {
+    fun `toSortAlphabetically should sort collections by type and name`() {
         val list = listOf(
             createMockCollectionView(1).copy(name = "c"),
             createMockCollectionView(1).copy(name = "B"),
@@ -97,22 +111,38 @@ class VaultSdkCollectionExtensionsTest {
             createMockCollectionView(1).copy(name = "4"),
             createMockCollectionView(1).copy(name = "A"),
             createMockCollectionView(1).copy(name = "#"),
-            createMockCollectionView(1).copy(name = "D"),
+            createMockCollectionView(1).copy(
+                name = "D",
+                type = CollectionType.DEFAULT_USER_COLLECTION,
+            ),
         )
 
         val expected = listOf(
+            createMockCollectionView(1).copy(
+                name = "D",
+                type = CollectionType.DEFAULT_USER_COLLECTION,
+            ),
             createMockCollectionView(1).copy(name = "#"),
             createMockCollectionView(1).copy(name = "4"),
             createMockCollectionView(1).copy(name = "A"),
             createMockCollectionView(1).copy(name = "B"),
             createMockCollectionView(1).copy(name = "c"),
-            createMockCollectionView(1).copy(name = "D"),
             createMockCollectionView(1).copy(name = "z"),
         )
 
         assertEquals(
             expected,
-            list.sortAlphabetically(),
+            list.sortAlphabeticallyByType(),
+        )
+    }
+
+    @Test
+    fun `toCollectionType should convert CollectionTypeJson to CollectionType`() {
+        val collectionType = CollectionTypeJson.SHARED_COLLECTION
+        val sdkCollectionType = collectionType.toSdkCollectionType()
+        assertEquals(
+            CollectionType.SHARED_COLLECTION,
+            sdkCollectionType,
         )
     }
 }

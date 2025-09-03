@@ -11,6 +11,6 @@ typealias BitwardenDrawable = com.bitwarden.ui.R.drawable
 typealias BitwardenString = com.bitwarden.ui.R.string
 
 /**
- * A type alias for the string plurals resources in the Bitwarden UI module.
+ * A type alias for the plurals resources in the Bitwarden UI module.
  */
 typealias BitwardenPlurals = com.bitwarden.ui.R.plurals

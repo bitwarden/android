@@ -4,6 +4,7 @@
     <string name="add_folder">Додај фасциклу</string>
     <string name="add_item">Додај ставку</string>
     <string name="an_error_has_occurred">Појавила се грешка.</string>
+    <string name="apply">Apply</string>
     <string name="back">Назад</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Откажи</string>
@@ -364,8 +365,8 @@
     <string name="exit_confirmation">Да ли сте сигурни да желите да изађете из Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Потражити главну лозинку при поновном покретању апликације?</string>
     <string name="pin_require_master_password_restart">Да ли желите да затражите откључавање главном лозинком када се апликација поново покрене?</string>
-    <string name="ask_to_add_login">Питај да се дода пријава</string>
-    <string name="ask_to_add_login_description">Затражи да се дода ставка ако она није пронађена у вашем сефу.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">На поновно покретање</string>
     <string name="capitalize">Прво слово велико</string>
     <string name="include_number">Убаци број</string>
@@ -849,7 +850,6 @@
     <string name="need_some_inspiration">"Потребна вам је инспирација?"</string>
     <string name="check_out_the_passphrase_generator">"Испробајте генератор фраза"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Нисмо могли да верификујемо сертификат сервера. Ланац сертификата или подешавања проксија на вашем уређају или вашем Bitwarden серверу можда нису правилно подешени.</string>
-    <string name="review_flow_launched">Рецензија тока је покренута!</string>
     <string name="copy_private_key">Копирај приватни кључ</string>
     <string name="login_credentials">Акредитиве за пријављивање</string>
     <string name="autofill_options">Опције аутоматског попуњавања</string>
@@ -1068,6 +1068,14 @@
     <string name="local_items_are_collapsed_click_to_expand">Локални предмети су умањени, кликните да се проширу.</string>
     <string name="items_expanded_click_to_collapse">Предмети су проширени, кликните да се умањи.</string>
     <string name="items_are_collapsed_click_to_expand">Предмети су умањени, кликните да се проширу.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Copy error report</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="few">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Select a card for %s</string>
     <string name="advanced_options">Advanced options</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>

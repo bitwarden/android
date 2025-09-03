@@ -146,6 +146,8 @@ class VaultDiskSourceImpl(
                 externalId = collection.externalId,
                 isReadOnly = collection.isReadOnly,
                 canManage = collection.canManage,
+                defaultUserCollectionEmail = collection.defaultUserCollectionEmail,
+                type = json.encodeToString(collection.type),
             ),
         )
     }
@@ -167,6 +169,8 @@ class VaultDiskSourceImpl(
                             externalId = entity.externalId,
                             isReadOnly = entity.isReadOnly,
                             canManage = entity.canManage,
+                            defaultUserCollectionEmail = entity.defaultUserCollectionEmail,
+                            type = json.decodeFromString(entity.type),
                         )
                     }
                 },
@@ -290,6 +294,8 @@ class VaultDiskSourceImpl(
                             externalId = collection.externalId,
                             isReadOnly = collection.isReadOnly,
                             canManage = collection.canManage,
+                            defaultUserCollectionEmail = collection.defaultUserCollectionEmail,
+                            type = json.encodeToString(collection.type),
                         )
                     },
                 )

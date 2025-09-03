@@ -109,7 +109,7 @@ class DeleteAccountViewModel @Inject constructor(
     }
 
     private fun handleAccountDeletionConfirm() {
-        authRepository.clearPendingAccountDeletion()
+        authRepository.hasPendingAccountDeletion = false
         dismissDialog()
     }
 

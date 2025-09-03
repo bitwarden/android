@@ -205,7 +205,7 @@ fun VaultItemListingContent(
                 BitwardenListItem(
                     startIcon = it.iconData,
                     startIconTestTag = it.iconTestTag,
-                    label = it.title,
+                    label = it.title.invoke(),
                     labelTestTag = it.titleTestTag,
                     secondSupportingLabel = it.secondSubtitle,
                     secondSupportingLabelTestTag = it.secondSubtitleTestTag,

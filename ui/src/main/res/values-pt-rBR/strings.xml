@@ -4,6 +4,7 @@
     <string name="add_folder">Adicionar pasta</string>
     <string name="add_item">Adicionar Item</string>
     <string name="an_error_has_occurred">Ocorreu um erro.</string>
+    <string name="apply">Aplicar</string>
     <string name="back">Voltar</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Cancelar</string>
@@ -146,7 +147,7 @@
     <string name="syncing">Sincronizando...</string>
     <string name="syncing_complete">Sincronização completa</string>
     <string name="two_step_login">Login em Duas Etapas</string>
-    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
+    <string name="unlock_with_biometrics">Desbloquear com Biometria</string>
     <string name="unlock_with_pin">Desbloquear com Código PIN</string>
     <string name="verification_code">Código de Verificação</string>
     <string name="view_login">Ver login</string>
@@ -286,7 +287,7 @@ A leitura será feita automaticamente.</string>
     <string name="new_uri">Novo URI</string>
     <string name="add_website">Adicionar site</string>
     <string name="base_domain">Domínio de base</string>
-    <string name="default_text">Default (%1$s)</string>
+    <string name="default_text">Padrão (%1$s)</string>
     <string name="exact">Exato</string>
     <string name="host">Servidor</string>
     <string name="reg_ex">Expressão regular</string>
@@ -356,7 +357,7 @@ A leitura será feita automaticamente.</string>
     <string name="clear_clipboard">Limpar a Área de Transferência</string>
     <string name="clear_clipboard_description">Limpar automaticamente valores copiados da sua área de transferência.</string>
     <string name="default_uri_match_detection">Detecção de Correspondência de URI Padrão</string>
-    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
+    <string name="default_uri_match_detection_description">A detecção de correspondência de URI controla como o Bitwarden identifica sugestões de autopreenchimento.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Altere o tema de cor do aplicativo.</string>
     <string name="copy_notes">Copiar Nota</string>
@@ -364,8 +365,8 @@ A leitura será feita automaticamente.</string>
     <string name="exit_confirmation">Você tem certeza que deseja sair do Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Exigir senha mestra ao reiniciar o app?</string>
     <string name="pin_require_master_password_restart">Você quer exigir o desbloqueio com a sua senha mestra quando o aplicativo for reiniciado?</string>
-    <string name="ask_to_add_login">Pedir para adicionar uma conta</string>
-    <string name="ask_to_add_login_description">Pedir para adicionar um item se um não for encontrado no seu cofre.</string>
+    <string name="ask_to_add_item">Pedir para adicionar item</string>
+    <string name="ask_to_add_item_description">Pedir para adicionar um item se ele não for encontrado no seu cofre.</string>
     <string name="on_restart">Ao reiniciar o App</string>
     <string name="capitalize">Iniciais em Maiúsculas</string>
     <string name="include_number">Incluir número</string>
@@ -849,7 +850,6 @@ Você deseja mudar para esta conta?</string>
     <string name="need_some_inspiration">"Precisa de alguma inspiração?"</string>
     <string name="check_out_the_passphrase_generator">"Confira o gerador de frase secreta"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Não foi possível verificar o certificado do servidor. As configurações da cadeia de certificados ou de proxy no seu dispositivo ou no seu servidor do Bitwarden podem não estar configuradas corretamente.</string>
-    <string name="review_flow_launched">Fluxo de revisão iniciado!</string>
     <string name="copy_private_key">Copiar chave privada</string>
     <string name="login_credentials">Credenciais de Acesso</string>
     <string name="autofill_options">Opções de Preenchimento Automático</string>
@@ -1039,7 +1039,7 @@ Você deseja mudar para esta conta?</string>
     <string name="download_bitwarden_card_message">Armazene todos os seus logins e sincronize códigos de verificação diretamente com o app Autenticador.</string>
     <string name="download_now">Baixe agora</string>
     <string name="sync_with_bitwarden_app">Sincronizar com o aplicativo Bitwarden</string>
-    <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
+    <string name="learn_more_link"><annotation link="learnMore">Saber mais</annotation></string>
     <string name="shared_codes_error">Não é possível sincronizar os códigos do aplicativo Bitwarden. Certifique-se de que ambos os aplicativos estão atualizados. Você ainda pode acessar os códigos existentes no aplicativo Bitwarden.</string>
     <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sincronizar com o aplicativo Bitwarden</string>
@@ -1047,7 +1047,7 @@ Você deseja mudar para esta conta?</string>
     <string name="take_me_to_app_settings">Me leve para as configurações do aplicativo</string>
     <string name="something_went_wrong">Algo deu errado</string>
     <string name="please_try_again">Por favor, tente novamente</string>
-    <string name="copy_to_bitwarden_vault">Copy to Bitwarden vault</string>
+    <string name="copy_to_bitwarden_vault">Copiar para o cofre do Bitwarden</string>
     <string name="default_save_option">Opção padrão de salvar</string>
     <string name="save_to_bitwarden">Salvar no Bitwarden</string>
     <string name="save_here">Salvar aqui</string>
@@ -1057,25 +1057,32 @@ Você deseja mudar para esta conta?</string>
     <string name="choose_save_location_message">Salve esta chave de autenticador aqui, ou adicione-a a um login no seu aplicativo Bitwarden.</string>
     <string name="save_option_as_default">Salvar opção como padrão</string>
     <string name="account_synced_from_bitwarden_app">Conta sincronizada do aplicativo Bitwarden</string>
-    <string name="local_codes">Local codes (%1$d)</string>
+    <string name="local_codes">Códigos locais (%1$d)</string>
     <string name="required_information_missing">Informações necessárias faltando</string>
     <string name="required_information_missing_message">"As informações necessárias estão faltando (ex.: 'serviços' ou 'segredo'). Verifique o seu arquivo e tente novamente. Visite bitwarden.com/help para obter suporte"</string>
     <string name="file_could_not_be_processed">"O arquivo não pode ser processado"</string>
     <string name="file_could_not_be_processed_message">"O arquivo não pôde ser processado. Certifique-se de que é um JSON válido e tente novamente. Precisa de ajuda? Visite bitwarden.com/help"</string>
     <string name="get_help">Obter Ajuda</string>
-    <string name="expand_advanced_options">Expand advanced options</string>
-    <string name="local_items_are_expanded_click_to_collapse">Local items are expanded, click to collapse.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
-    <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
-    <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
-    <string name="select_a_card_for_x">Select a card for %s</string>
-    <string name="advanced_options">Advanced options</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
-    <string name="keep_your_credential_secure">Keep your credentials secure</string>
-    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
-    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
-    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
-    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
-    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
-    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="expand_advanced_options">Expandir opções avançadas</string>
+    <string name="local_items_are_expanded_click_to_collapse">Itens locais expandidos, clique para recolher.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Os itens locais estão recolhidos, clique para expandir.</string>
+    <string name="items_expanded_click_to_collapse">Itens expandidos, clique para recolher.</string>
+    <string name="items_are_collapsed_click_to_expand">Itens estão recolhidos, clique para expandir.</string>
+    <string name="error_cannot_decrypt">[erro: não foi possível descriptografar]</string>
+    <string name="copy_error_report">Copiar relatório de erros</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
+    <string name="select_a_card_for_x">Selecione um cartão para %s</string>
+    <string name="advanced_options">Opções avançadas</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mais sobre a detecção de correspondências</annotation></string>
+    <string name="keep_your_credential_secure">Mantenha suas credenciais seguras</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Saiba mais sobre como manter as credenciais seguras ao usar \"%1$s\".</string>
+    <string name="are_you_sure_you_want_to_use">Tem certeza que deseja usar \"%1$s\"?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">A detecção de correspondência de URI controla como o Bitwarden identifica sugestões de autopreenchimento.\n<annotation emphasis="bold">Aviso:</annotation> \"Expressão regular\" é uma opção avançada com maior risco de expor credenciais se usada incorretamente.</string>
+    <string name="default_uri_match_detection_description_advanced_options">A detecção de correspondência URI controla como o Bitwarden identifica sugestões de autopreenchimento.\n<annotation emphasis="bold">Aviso:</annotation> \"Inicia com\" é uma opção avançada com maior risco de expor as credenciais.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Começa com\" é uma opção avançada com maior risco de expor as credenciais.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Expressão regular\" é uma opção avançada com alto risco de expor credenciais se usada incorretamente.</string>
 </resources>

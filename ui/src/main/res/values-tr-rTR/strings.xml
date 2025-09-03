@@ -4,6 +4,7 @@
     <string name="add_folder">Klasör ekle</string>
     <string name="add_item">Kayıt ekle</string>
     <string name="an_error_has_occurred">Bir hata oluştu.</string>
+    <string name="apply">Uygula</string>
     <string name="back">Geri</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">İptal</string>
@@ -364,8 +365,8 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="exit_confirmation">Bitwarden\'dan çıkmak istediğinize emin misiniz?</string>
     <string name="require_master_password_on_app_restart">Uygulama yeniden başlatıldığında ana parola sorulsun mu?</string>
     <string name="pin_require_master_password_restart">Uygulama yeniden başlatılınca ana parola girilmesine zorunlu tutmak ister misiniz?</string>
-    <string name="ask_to_add_login">Hesap eklemeyi öner</string>
-    <string name="ask_to_add_login_description">Kasamda kayıt bulunamazsa eklemeyi öner.</string>
+    <string name="ask_to_add_item">Hesap eklemeyi öner</string>
+    <string name="ask_to_add_item_description">Kasamda kayıt bulunamazsa eklemeyi öner.</string>
     <string name="on_restart">Uygulama yeniden başlatılınca</string>
     <string name="capitalize">Baş harfleri büyük yap</string>
     <string name="include_number">Rakam ekle</string>
@@ -848,7 +849,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="need_some_inspiration">"İlhama mı ihtiyacınız var?"</string>
     <string name="check_out_the_passphrase_generator">"Check out the passphrase generator"</string>
     <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
-    <string name="review_flow_launched">Review flow launched!</string>
     <string name="copy_private_key">Özel anahtarı kopyala</string>
     <string name="login_credentials">HESAP BİLGİLERİ</string>
     <string name="autofill_options">OTOMATİK DOLDURMA SEÇENEKLERİ</string>
@@ -1067,6 +1067,13 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="local_items_are_collapsed_click_to_expand">Yerel öğeler daraltıldı, genişletmek için tıklayın.</string>
     <string name="items_expanded_click_to_collapse">Öğeler genişletildi, daraltmak için tıklayın.</string>
     <string name="items_are_collapsed_click_to_expand">Öğeler daraltıldı, genişletmek için tıklayın.</string>
+    <string name="error_cannot_decrypt">[hata: deşifre edilemiyor]</string>
+    <string name="copy_error_report">Hata raporunu kopyala</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">%s için kart seçin</string>
     <string name="advanced_options">Gelişmiş seçenekler</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Eşleşme tespiti hakkında daha fazla bilgi</annotation></string>

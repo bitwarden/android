@@ -18,12 +18,12 @@ on:
       distribute-to-firebase:
         description: "Optional. Distribute artifacts to Firebase."
         required: false
-        default: false
+        default: true
         type: boolean
       publish-to-play-store:
         description: "Optional. Deploy bundle artifact to Google Play Store"
         required: false
-        default: false
+        default: true
         type: boolean
 
 env:
@@ -417,7 +417,7 @@ jobs:
           bundle exec fastlane run validate_play_store_json_key
 
       - name: Publish Play Store bundle
-        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' && (inputs.publish-to-play-store || github.ref_name == 'main') }}
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' && (inputs.publish-to-play-store || github.event_name == 'push') }}
         run: |
           bundle exec fastlane publishProdToPlayStore
           bundle exec fastlane publishBetaToPlayStore

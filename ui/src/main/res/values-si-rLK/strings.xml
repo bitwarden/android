@@ -4,6 +4,7 @@
     <string name="add_folder">බහාලුම එකතු කරන්න</string>
     <string name="add_item">Add Item</string>
     <string name="an_error_has_occurred">An error has occurred</string>
+    <string name="apply">Apply</string>
     <string name="back">ආපසු</string>
     <string name="bitwarden">බිට්වාඩන්</string>
     <string name="cancel">අවලංගු කරන්න</string>
@@ -364,8 +365,8 @@ Scanning will happen automatically.</string>
     <string name="exit_confirmation">Are you sure you want to exit Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Do you want to require unlocking with your master password when the application is restarted?</string>
-    <string name="ask_to_add_login">Ask to add login</string>
-    <string name="ask_to_add_login_description">Ask to add an item if one isn\'t found in your vault.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">On app restart</string>
     <string name="capitalize">Capitalize</string>
     <string name="include_number">Include number</string>
@@ -849,7 +850,6 @@ Do you want to switch to this account?</string>
     <string name="need_some_inspiration">"Need some inspiration?"</string>
     <string name="check_out_the_passphrase_generator">"Check out the passphrase generator"</string>
     <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
-    <string name="review_flow_launched">Review flow launched!</string>
     <string name="copy_private_key">Copy private key</string>
     <string name="login_credentials">Login Credentials</string>
     <string name="autofill_options">Autofill Options</string>
@@ -1068,6 +1068,13 @@ Do you want to switch to this account?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Copy error report</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Select a card for %s</string>
     <string name="advanced_options">Advanced options</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>

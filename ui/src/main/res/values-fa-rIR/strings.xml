@@ -4,6 +4,7 @@
     <string name="add_folder">افزودن پوشه</string>
     <string name="add_item">افزودن مورد</string>
     <string name="an_error_has_occurred">خطایی رخ داده است</string>
+    <string name="apply">Apply</string>
     <string name="back">بازگشت</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">انصراف</string>
@@ -85,7 +86,7 @@
     <string name="edit_card">ویرایش کارت</string>
     <string name="edit_identity">ویرایش هویت</string>
     <string name="edit_note">ویرایش یادداشت</string>
-    <string name="edit_ssh_key">Edit SSH key</string>
+    <string name="edit_ssh_key">ویرایش کلید SSH</string>
     <string name="enter_email_for_hint">برای دریافت یادآور کلمه عبور اصلی خود نشانی ایمیل‌تان را وارد کنید.</string>
     <string name="favorite">مورد علاقه</string>
     <string name="unfavorite">حذف از مورد علاقه</string>
@@ -101,7 +102,7 @@
     <string name="one_minute">۱ دقیقه</string>
     <string name="four_hours">۴ ساعت</string>
     <string name="immediately">بلافاصله</string>
-    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
+    <string name="vault_timeout_log_out_confirmation_title">زمان پایان جلسه را روی «خروج» تنظیم کنید؟</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
     <string name="logging_in">در حال ورود...</string>
     <string name="login_to_bitwarden">وارد Bitwarden شوید</string>
@@ -153,7 +154,7 @@
     <string name="view_card">مشاهده کارت</string>
     <string name="view_identity">مشاهده هویت</string>
     <string name="view_note">مشاهده یادداشت</string>
-    <string name="view_ssh_key">View SSH key</string>
+    <string name="view_ssh_key">نمایش کلید SSH</string>
     <string name="web_vault">گاوصندوق وب Bitwarden</string>
     <string name="items">موارد</string>
     <string name="items_for_uri">موارد برای %1$s</string>
@@ -264,7 +265,7 @@
     <string name="address">نشانی</string>
     <string name="expiration">انقضاء</string>
     <string name="show_website_icons">نمایش نمادهای وب‌سایت</string>
-    <string name="show_website_icons_help">Show website icons help</string>
+    <string name="show_website_icons_help">نمایش آیکون‌های وب‌سایت، راهنما</string>
     <string name="show_website_icons_description">نمایش تصویری قابل تشخیص در کنار هر ورود</string>
     <string name="icons_url">نشانی اینترنتی سرور نمادها</string>
     <string name="vault_is_locked">گاوصندوق قفل شد</string>
@@ -286,7 +287,7 @@
     <string name="new_uri">نشانی اینترنتی جدید</string>
     <string name="add_website">افزودن وب‌سایت</string>
     <string name="base_domain">دامنه پایه</string>
-    <string name="default_text">Default (%1$s)</string>
+    <string name="default_text">پیش‌فرض(%1$s)</string>
     <string name="exact">دقیق</string>
     <string name="host">میزبان</string>
     <string name="reg_ex">عبارت منظم</string>
@@ -364,8 +365,8 @@
     <string name="exit_confirmation">آیا مطمئنید که می‌خواهید از Bitwarden خارج شوید؟</string>
     <string name="require_master_password_on_app_restart">در راه‌اندازی مجدد برنامه به کلمه عبور اصلی نیاز است؟</string>
     <string name="pin_require_master_password_restart">آیا می‌خواهید هنگام راه‌اندازی مجدد برنامه، نیاز به باز کردن قفل با کلمه عبور اصلی خود داشته باشید؟</string>
-    <string name="ask_to_add_login">درخواست افزودن ورود به سیستم</string>
-    <string name="ask_to_add_login_description">در صورتی که موردی در گاوصندوق شما یافت نشد، درخواست افزودن کنید.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">در راه‌اندازی مجدد برنامه</string>
     <string name="capitalize">بزرگ نوشتن حرف اول</string>
     <string name="include_number">شامل عدد</string>
@@ -849,7 +850,6 @@
     <string name="need_some_inspiration">"نیاز به کمی الهام دارید؟"</string>
     <string name="check_out_the_passphrase_generator">"از تولید کننده عبارت عبور دیدن کنید"</string>
     <string name="we_couldnt_verify_the_servers_certificate">نتوانستیم گواهی‌نامه سرور را تأیید کنیم. زنجیره گواهی‌نامه یا تنظیمات پروکسی روی دستگاه شما یا سرور Bitwarden ممکن است به درستی پیکربندی نشده باشد.</string>
-    <string name="review_flow_launched">فرایند بازبینی آغاز شد!</string>
     <string name="copy_private_key">کپی کلید خصوصی</string>
     <string name="login_credentials">اطلاعات ورود</string>
     <string name="autofill_options">گزینه‌های پر کردن خودکار</string>
@@ -991,7 +991,7 @@
     <string name="empty_item_list">Empty Item Listing</string>
     <string name="you_dont_have_items_to_display">You don\'t have any items to display.</string>
     <string name="empty_item_list_instruction">Add a new code to secure your accounts.</string>
-    <string name="add_code">Add code</string>
+    <string name="add_code">افزودن کد</string>
     <string name="verification_code_added">Verification code added</string>
     <string name="refresh_period">Refresh period</string>
     <string name="algorithm">Algorithm</string>
@@ -1068,6 +1068,13 @@
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Copy error report</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Select a card for %s</string>
     <string name="advanced_options">Advanced options</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>

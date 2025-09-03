@@ -82,6 +82,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.sortAlphabetically
+import com.x8bit.bitwarden.data.vault.repository.util.sortAlphabeticallyByType
 import com.x8bit.bitwarden.data.vault.repository.util.toDomainsData
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkSend
@@ -1103,7 +1104,6 @@ class VaultRepositoryImpl(
                     )
                     .fold(
                         onSuccess = { result ->
-                            // TODO (PM-18210): Display decryption result failures
                             DataState.Loaded(
                                 result.copy(successes = result.successes.sortAlphabetically()),
                             )
@@ -1168,7 +1168,7 @@ class VaultRepositoryImpl(
                     .fold(
                         onSuccess = { collections ->
                             DataState.Loaded(
-                                collections.sortAlphabetically(),
+                                collections.sortAlphabeticallyByType(),
                             )
                         },
                         onFailure = { throwable -> DataState.Error(throwable) },
@@ -1268,14 +1268,11 @@ class VaultRepositoryImpl(
         val revisionDate = syncCipherUpsertData.revisionDate
         val isUpdate = syncCipherUpsertData.isUpdate
 
-        val localCipher = decryptCipherListResultStateFlow
-            .mapNotNull { it.data?.successes }
-            .first()
-            .find { it.id == cipherId }
+        val localCipher = vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
 
         // Return if local cipher is more recent
         if (localCipher != null &&
-            localCipher.revisionDate.epochSecond > revisionDate.toEpochSecond()
+            localCipher.revisionDate.toEpochSecond() > revisionDate.toEpochSecond()
         ) {
             return
         }
@@ -1302,11 +1299,10 @@ class VaultRepositoryImpl(
 
         if (!shouldUpdate && shouldCheckCollections && organizationId != null) {
             // Check if there are any collections in common
-            shouldUpdate = collectionsStateFlow
-                .mapNotNull { it.data }
+            shouldUpdate = vaultDiskSource
+                .getCollections(userId = userId)
                 .first()
-                .mapNotNull { it.id }
-                .any { collectionIds?.contains(it) == true } == true
+                .any { collectionIds?.contains(it.id) == true }
         }
 
         if (!shouldUpdate) return

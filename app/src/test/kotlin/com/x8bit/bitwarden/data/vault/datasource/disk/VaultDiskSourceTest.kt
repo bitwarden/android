@@ -479,6 +479,8 @@ private val COLLECTION_ENTITY = CollectionEntity(
     externalId = "mockExternalId-3",
     isReadOnly = false,
     canManage = true,
+    defaultUserCollectionEmail = "mockOffboardedUserEmail-3",
+    type = "0",
 )
 
 private const val DOMAINS_JSON = """

@@ -214,7 +214,9 @@ private const val SYNC_SUCCESS_JSON = """
       "externalId": "mockExternalId-1",
       "readOnly": false,
       "id": "mockId-1",
-      "manage": true
+      "manage": true,
+      "defaultUserCollectionEmail": "mockOffboardedUserEmail-1",
+      "type": 0
     }
   ],
   "ciphers": [

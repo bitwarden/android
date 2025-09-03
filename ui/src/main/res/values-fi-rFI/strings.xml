@@ -4,6 +4,7 @@
     <string name="add_folder">Lisää kansio</string>
     <string name="add_item">Lisää kohde</string>
     <string name="an_error_has_occurred">Tapahtui virhe.</string>
+    <string name="apply">Apply</string>
     <string name="back">Takaisin</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Peruuta</string>
@@ -364,8 +365,8 @@ Koodi skannataan automaattisesti.</string>
     <string name="exit_confirmation">Haluatko varmasti poistua Bitwardenista?</string>
     <string name="require_master_password_on_app_restart">Vaadi pääsalasana sovellusta uudelleenkäynnistettäessä?</string>
     <string name="pin_require_master_password_restart">Vaaditaanko lukituksen avaus pääsalasanalla, kun sovellus käynnistetään uudelleen?</string>
-    <string name="ask_to_add_login">Kysy lisätäänkö kirjautumistieto</string>
-    <string name="ask_to_add_login_description">Kysy lisätäänkö uusi kohde, jos holvissa ei vielä ole sopivaa kohdetta.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Kun sovellus käynnistetään uudelleen</string>
     <string name="capitalize">Sanat isoilla alkukirjaimilla</string>
     <string name="include_number">Sisällytä numero</string>
@@ -849,7 +850,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="need_some_inspiration">"Tarvitsetko inspiraatiota?"</string>
     <string name="check_out_the_passphrase_generator">"Tutustu salalausegeneraattoriin"</string>
     <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
-    <string name="review_flow_launched">Review flow launched!</string>
     <string name="copy_private_key">Kopioi yksityinen avain</string>
     <string name="login_credentials">Kirjautumistiedot</string>
     <string name="autofill_options">Autofill Options</string>
@@ -1068,6 +1068,13 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="local_items_are_collapsed_click_to_expand">Paikalliset kohteet on pienennetty. Paina laajentaaksesi.</string>
     <string name="items_expanded_click_to_collapse">Kohteet on laajennettu. Paina pienentääksesi.</string>
     <string name="items_are_collapsed_click_to_expand">Kohteet ovat tiivistetty. Paina laajentaaksesi.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Copy error report</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Select a card for %s</string>
     <string name="advanced_options">Advanced options</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>

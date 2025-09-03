@@ -4,6 +4,7 @@
     <string name="add_folder">Добавить папку</string>
     <string name="add_item">Добавить элемент</string>
     <string name="an_error_has_occurred">Произошла ошибка</string>
+    <string name="apply">Применить</string>
     <string name="back">Назад</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Отмена</string>
@@ -364,8 +365,8 @@
     <string name="exit_confirmation">Вы действительно хотите выйти из Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Требовать мастер-пароль при перезапуске приложения?</string>
     <string name="pin_require_master_password_restart">Хотите, чтобы при перезапуске приложения требовалась разблокировка с помощью мастер-пароля?</string>
-    <string name="ask_to_add_login">Спрашивать при добавлении логина</string>
-    <string name="ask_to_add_login_description">Запросить добавление элемента, если его нет в вашем хранилище.</string>
+    <string name="ask_to_add_item">Запросить добавление элемента</string>
+    <string name="ask_to_add_item_description">Запросить добавление элемента, если его нет в вашем хранилище.</string>
     <string name="on_restart">При перезапуске приложения</string>
     <string name="capitalize">С заглавной буквы</string>
     <string name="include_number">Добавить цифру</string>
@@ -849,7 +850,6 @@
     <string name="need_some_inspiration">"Нужно вдохновение?"</string>
     <string name="check_out_the_passphrase_generator">"Проверьте генератор парольных фраз"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Мы не смогли проверить сертификат сервера. Возможно, цепочка сертификатов или настройки прокси на вашем устройстве или сервере Bitwarden настроены неправильно.</string>
-    <string name="review_flow_launched">Начался процесс обзора!</string>
     <string name="copy_private_key">Скопировать приватный ключ</string>
     <string name="login_credentials">Данные для авторизации</string>
     <string name="autofill_options">Параметры автозаполнения</string>
@@ -1068,6 +1068,15 @@
     <string name="local_items_are_collapsed_click_to_expand">Локальные элементы свернуты, нажмите, чтобы развернуть.</string>
     <string name="items_expanded_click_to_collapse">Элементы развернуты, нажмите, чтобы свернуть.</string>
     <string name="items_are_collapsed_click_to_expand">Элементы свернуты, нажмите, чтобы развернуть.</string>
+    <string name="error_cannot_decrypt">[ошибка: невозможно расшифровать]</string>
+    <string name="copy_error_report">Скопировать отчет об ошибке</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden не удалось расшифровать этот элемент хранилища. Скопируйте и передайте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden не удалось расшифровать %1$d элемент хранилища. Скопируйте и передайте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</item>
+        <item quantity="few">Bitwarden не удалось расшифровать %1$d элементов хранилища. Скопируйте и передайте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</item>
+        <item quantity="many">Bitwarden не удалось расшифровать %1$d элементов хранилища. Скопируйте и передайте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</item>
+        <item quantity="other">Bitwarden не удалось расшифровать %1$d элементов хранилища. Скопируйте и передайте этот отчет об ошибке в службу поддержки клиентов, чтобы избежать дополнительной потери данных.</item>
+    </plurals>
     <string name="select_a_card_for_x">Выберите карту для %s</string>
     <string name="advanced_options">Расширенные настройки</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Подробнее об обнаружении совпадений</annotation></string>

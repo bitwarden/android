@@ -4,6 +4,7 @@
     <string name="add_folder">Map toevoegen</string>
     <string name="add_item">Item toevoegen</string>
     <string name="an_error_has_occurred">Er is een fout opgetreden.</string>
+    <string name="apply">Toepassen</string>
     <string name="back">Terug</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Annuleren</string>
@@ -364,8 +365,8 @@ Het scannen gebeurt automatisch.</string>
     <string name="exit_confirmation">Weet je zeker dat je Bitwarden wilt afsluiten?</string>
     <string name="require_master_password_on_app_restart">Hoofdwachtwoord vereisen bij herstart van de app?</string>
     <string name="pin_require_master_password_restart">Wil je verplicht ontgrendelen met je hoofdwachtwoord zodra de applicatie opnieuw wordt gestart?</string>
-    <string name="ask_to_add_login">Vragen login toe te voegen</string>
-    <string name="ask_to_add_login_description">Vraag om een item toe te voegen als deze niet in je kluis is gevonden.</string>
+    <string name="ask_to_add_item">Vraag om item toe te voegen</string>
+    <string name="ask_to_add_item_description">Vraag om een item toe te voegen als deze niet in je kluis is gevonden.</string>
     <string name="on_restart">Na opnieuw starten</string>
     <string name="capitalize">Beginhoofdletters</string>
     <string name="include_number">Cijfer toevoegen</string>
@@ -849,7 +850,6 @@ Wilt u naar dit account wisselen?</string>
     <string name="need_some_inspiration">"Wat inspiratie nodig?"</string>
     <string name="check_out_the_passphrase_generator">"Bekijk de wachtwoordzingenerator"</string>
     <string name="we_couldnt_verify_the_servers_certificate">We konden het certificaat van de server niet verifiëren. De certificaatketen of proxy-instellingen op je apparaat of je Bitwarden-server zijn mogelijk niet correct ingesteld.</string>
-    <string name="review_flow_launched">Reviewflow gelanceerd!</string>
     <string name="copy_private_key">Privésleutel kopiëren</string>
     <string name="login_credentials">Inloggegevens</string>
     <string name="autofill_options">Opties voor automatisch aanvullen</string>
@@ -1068,6 +1068,13 @@ Wilt u naar dit account wisselen?</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokale items zijn ingevouwen, klik om uit te vouwen.</string>
     <string name="items_expanded_click_to_collapse">Items zijn uitgevouwen, klik om in te vouwen.</string>
     <string name="items_are_collapsed_click_to_expand">Items zijn ingevouwen, klik om uit te vouwen.</string>
+    <string name="error_cannot_decrypt">[fout: kan niet ontsleutelen]</string>
+    <string name="copy_error_report">Foutrapportage kopiëren</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden kon het onderstaande kluisitem niet ontsleutelen. Kopieer deze foutenrapporte en stuur het door naar klantondersteuning om meer dataverlies te voorkomen.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden kon één kluisitem niet ontsleutelen. Kopieer deze foutenrapporte en stuur het door naar klantondersteuning om meer dataverlies te voorkomen.</item>
+        <item quantity="other">Bitwarden kon %1$d kluisitems niet ontsleutelen. Kopieer deze foutenrapportage en stuur het door naar klantondersteuning om meer dataverlies te voorkomen.</item>
+    </plurals>
     <string name="select_a_card_for_x">Kies een kaart voor %s</string>
     <string name="advanced_options">Geavanceerde opties</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Lees meer over overeenkomstdetectie</annotation></string>

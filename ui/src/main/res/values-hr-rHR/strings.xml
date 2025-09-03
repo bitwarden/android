@@ -4,6 +4,7 @@
     <string name="add_folder">Dodaj mapu</string>
     <string name="add_item">Dodaj stavku</string>
     <string name="an_error_has_occurred">Došlo je do pogreške.</string>
+    <string name="apply">Apply</string>
     <string name="back">Natrag</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Odustani</string>
@@ -363,8 +364,8 @@
     <string name="exit_confirmation">Sigurno želiš izaći iz Bitwarden-a?</string>
     <string name="require_master_password_on_app_restart">Traži glavnu lozinku kod ponovnog pokretanja aplikacije?</string>
     <string name="pin_require_master_password_restart">Obavezno otključavanje glavnom lozinkom pri ponovnom pokretanju aplikacije?</string>
-    <string name="ask_to_add_login">Upitaj za dodavanje prijave</string>
-    <string name="ask_to_add_login_description">Upitaj za dodavanje, ako se stavka već ne nalazi u trezoru.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Pri ponovnom pokretanju</string>
     <string name="capitalize">Prva slova velika</string>
     <string name="include_number">Uključi broj</string>
@@ -848,7 +849,6 @@
     <string name="need_some_inspiration">"Trebaš inspiraciju?"</string>
     <string name="check_out_the_passphrase_generator">"Pogledaj generator fraznih lozinki"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Nismo mogli provjeriti certifikat poslužitelja. Postavke lanca certifikata ili proxyja na tvom uređaju ili Bitwarden poslužitelju možda nisu ispravno postavljene.</string>
-    <string name="review_flow_launched">Pokrenut tok pregleda!</string>
     <string name="copy_private_key">Kopiraj privatni ključ</string>
     <string name="login_credentials">Vjerodajnice za prijavu</string>
     <string name="autofill_options">Postavke auto-ispune</string>
@@ -1068,6 +1068,14 @@ bilo kakav problem.</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokalne stavke su sažete. Klikni za proširivanje.</string>
     <string name="items_expanded_click_to_collapse">Stavke su proširene. Klikni za sažimanje.</string>
     <string name="items_are_collapsed_click_to_expand">Stavke su sažete. Klikni za proširivanje.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Copy error report</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="few">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Odaberi karticu za %s</string>
     <string name="advanced_options">Napredne mogućnosti</string>
     <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Više o otkrivanju podudaranja</annotation></string>
