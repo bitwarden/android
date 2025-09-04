@@ -1385,12 +1385,9 @@ class VaultRepositoryImpl(
      * Deletes the send specified by [syncSendDeleteData] from disk.
      */
     private suspend fun deleteSend(syncSendDeleteData: SyncSendDeleteData) {
-        val userId = activeUserId ?: return
-
-        val sendId = syncSendDeleteData.sendId
         vaultDiskSource.deleteSend(
-            userId = userId,
-            sendId = sendId,
+            userId = syncSendDeleteData.userId,
+            sendId = syncSendDeleteData.sendId,
         )
     }
 

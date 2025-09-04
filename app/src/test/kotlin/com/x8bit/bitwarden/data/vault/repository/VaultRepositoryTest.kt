@@ -3679,13 +3679,9 @@ class VaultRepositoryTest {
     fun `syncSendDeleteFlow should delete send from disk`() {
         val userId = "mockId-1"
         val sendId = "mockId-1"
-
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
         coEvery { vaultDiskSource.deleteSend(userId = userId, sendId = sendId) } just runs
 
-        mutableSyncSendDeleteFlow.tryEmit(
-            SyncSendDeleteData(sendId = sendId),
-        )
+        mutableSyncSendDeleteFlow.tryEmit(SyncSendDeleteData(userId = userId, sendId = sendId))
 
         coVerify { vaultDiskSource.deleteSend(userId = userId, sendId = sendId) }
     }
