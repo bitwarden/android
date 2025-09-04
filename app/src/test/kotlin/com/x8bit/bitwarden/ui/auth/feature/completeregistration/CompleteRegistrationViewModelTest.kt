@@ -7,6 +7,7 @@ import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_0
@@ -591,7 +592,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 passwordInput = input,
                 dialog = CompleteRegistrationDialog.Error(
                     title = BitwardenString.an_error_has_occurred.asText(),
-                    message = BitwardenPlurals.master_password_length_val_message_x.asText(
+                    message = BitwardenPlurals.master_password_length_val_message_x.asPluralsText(
                         quantity = 12,
                         args = arrayOf(12),
                     ),

@@ -224,8 +224,7 @@ data class ItemSearchState(
             /**
              * The header to display for the local codes.
              */
-            val localListHeader: Text
-                get() = BitwardenString.local_codes.asText(args = arrayOf(itemList.size))
+            val localListHeader: Text get() = BitwardenString.local_codes.asText(itemList.size)
 
             /**
              * Whether or not there should be a "Local codes" header shown above local codes.
