@@ -227,9 +227,14 @@ class PushManagerImpl @Inject constructor(
                     .decodeFromString<NotificationPayload.SyncFolderNotification>(
                         string = notification.payload,
                     )
-                    .takeIf { isLoggedIn(userId) && it.userMatchesNotification(userId) }
-                    ?.folderId
-                    ?.let { mutableSyncFolderDeleteSharedFlow.tryEmit(SyncFolderDeleteData(it)) }
+                    .takeIf { it.userId != null && it.folderId != null }
+                    ?.let {
+                        SyncFolderDeleteData(
+                            userId = requireNotNull(it.userId),
+                            folderId = requireNotNull(it.folderId),
+                        )
+                    }
+                    ?.let { mutableSyncFolderDeleteSharedFlow.tryEmit(it) }
             }
 
             NotificationType.SYNC_ORG_KEYS -> {

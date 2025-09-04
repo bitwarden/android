@@ -2834,46 +2834,26 @@ class VaultRepositoryTest {
     fun `DeleteFolder with folderService Delete success should return DeleteFolderResult Success and update ciphers`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = MOCK_USER_STATE.activeUserId
             val folderId = "mockFolderId-1"
+            val mockCipher = createMockCipher(number = 1)
+            val ciphers = listOf(mockCipher, createMockCipher(number = 2))
             coEvery { folderService.deleteFolder(folderId) } returns Unit.asSuccess()
-            coEvery {
-                vaultDiskSource.deleteFolder(
-                    MOCK_USER_STATE.activeUserId,
-                    folderId,
-                )
-            } just runs
-
-            val mockCipher = createMockCipher(1)
-
-            val mutableCiphersStateFlow =
-                MutableStateFlow(
-                    listOf(
-                        mockCipher,
-                        createMockCipher(2),
-                    ),
-                )
-
-            coEvery {
-                vaultDiskSource.getCiphersFlow(MOCK_USER_STATE.activeUserId)
-            } returns mutableCiphersStateFlow
-
+            coEvery { vaultDiskSource.deleteFolder(userId = userId, folderId = folderId) } just runs
+            coEvery { vaultDiskSource.getCiphers(userId = userId) } returns ciphers
             coEvery {
                 vaultDiskSource.saveCipher(
-                    MOCK_USER_STATE.activeUserId,
-                    mockCipher.copy(
-                        folderId = null,
-                    ),
+                    userId = userId,
+                    cipher = mockCipher.copy(folderId = null),
                 )
             } just runs
 
-            val result = vaultRepository.deleteFolder(folderId)
+            val result = vaultRepository.deleteFolder(folderId = folderId)
 
             coVerify(exactly = 1) {
                 vaultDiskSource.saveCipher(
-                    MOCK_USER_STATE.activeUserId,
-                    mockCipher.copy(
-                        folderId = null,
-                    ),
+                    userId = userId,
+                    cipher = mockCipher.copy(folderId = null),
                 )
             }
 
@@ -4020,20 +4000,21 @@ class VaultRepositoryTest {
     fun `syncFolderDeleteFlow should delete folder from disk and update ciphers`() {
         val userId = "mockId-1"
         val folderId = "mockId-1"
+        val cipher = createMockCipher(number = 1, folderId = folderId)
+        val updatedCipher = createMockCipher(number = 1, folderId = null)
 
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
         coEvery { vaultDiskSource.deleteFolder(userId = userId, folderId = folderId) } just runs
-        coEvery {
-            vaultDiskSource.getCiphersFlow(userId)
-        } returns flowOf()
+        coEvery { vaultDiskSource.getCiphers(userId = userId) } returns listOf(cipher)
+        coEvery { vaultDiskSource.saveCipher(userId = userId, cipher = updatedCipher) } just runs
 
         mutableSyncFolderDeleteFlow.tryEmit(
-            SyncFolderDeleteData(folderId = folderId),
+            SyncFolderDeleteData(userId = userId, folderId = folderId),
         )
 
-        coVerify {
+        coVerify(exactly = 1) {
             vaultDiskSource.deleteFolder(userId = userId, folderId = folderId)
-            vaultDiskSource.getCiphersFlow(userId)
+            vaultDiskSource.getCiphers(userId = userId)
+            vaultDiskSource.saveCipher(userId = userId, cipher = updatedCipher)
         }
     }
 

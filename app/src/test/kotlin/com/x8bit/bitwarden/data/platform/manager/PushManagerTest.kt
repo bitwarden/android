@@ -285,6 +285,7 @@ class PushManagerTest {
                         pushManager.onMessageReceived(SYNC_FOLDER_DELETE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncFolderDeleteData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 folderId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                             ),
                             awaitItem(),
@@ -425,12 +426,19 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived with sync folder delete does nothing`() = runTest {
-                pushManager.syncFolderDeleteFlow.test {
-                    pushManager.onMessageReceived(SYNC_FOLDER_DELETE_NOTIFICATION_MAP)
-                    expectNoEvents()
+            fun `onMessageReceived with sync folder delete emits to syncFolderDeleteFlow`() =
+                runTest {
+                    pushManager.syncFolderDeleteFlow.test {
+                        pushManager.onMessageReceived(SYNC_FOLDER_DELETE_NOTIFICATION_MAP)
+                        assertEquals(
+                            SyncFolderDeleteData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                                folderId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                            ),
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
 
             @Test
             fun `onMessageReceived with sync folder update does nothing`() = runTest {

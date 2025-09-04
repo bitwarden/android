@@ -929,11 +929,9 @@ class VaultRepositoryImpl(
     }
 
     private suspend fun clearFolderIdFromCiphers(folderId: String, userId: String) {
-        vaultDiskSource.getCiphersFlow(userId).firstOrNull()?.forEach {
+        vaultDiskSource.getCiphers(userId = userId).forEach {
             if (it.folderId == folderId) {
-                vaultDiskSource.saveCipher(
-                    userId, it.copy(folderId = null),
-                )
+                vaultDiskSource.saveCipher(userId = userId, cipher = it.copy(folderId = null))
             }
         }
     }
@@ -1433,16 +1431,13 @@ class VaultRepositoryImpl(
      * Deletes the folder specified by [syncFolderDeleteData] from disk.
      */
     private suspend fun deleteFolder(syncFolderDeleteData: SyncFolderDeleteData) {
-        val userId = activeUserId ?: return
-
-        val folderId = syncFolderDeleteData.folderId
         clearFolderIdFromCiphers(
-            folderId = folderId,
-            userId = userId,
+            folderId = syncFolderDeleteData.folderId,
+            userId = syncFolderDeleteData.userId,
         )
         vaultDiskSource.deleteFolder(
-            folderId = folderId,
-            userId = userId,
+            folderId = syncFolderDeleteData.folderId,
+            userId = syncFolderDeleteData.userId,
         )
     }
 
