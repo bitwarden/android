@@ -1248,12 +1248,9 @@ class VaultRepositoryImpl(
      * Deletes the cipher specified by [syncCipherDeleteData] from disk.
      */
     private suspend fun deleteCipher(syncCipherDeleteData: SyncCipherDeleteData) {
-        val userId = activeUserId ?: return
-
-        val cipherId = syncCipherDeleteData.cipherId
         vaultDiskSource.deleteCipher(
-            userId = userId,
-            cipherId = cipherId,
+            userId = syncCipherDeleteData.userId,
+            cipherId = syncCipherDeleteData.cipherId,
         )
     }
 

@@ -190,9 +190,14 @@ class PushManagerImpl @Inject constructor(
                     .decodeFromString<NotificationPayload.SyncCipherNotification>(
                         string = notification.payload,
                     )
-                    .takeIf { isLoggedIn(userId) && it.userMatchesNotification(userId) }
-                    ?.cipherId
-                    ?.let { mutableSyncCipherDeleteSharedFlow.tryEmit(SyncCipherDeleteData(it)) }
+                    .takeIf { it.userId != null && it.cipherId != null }
+                    ?.let {
+                        SyncCipherDeleteData(
+                            userId = requireNotNull(it.userId),
+                            cipherId = requireNotNull(it.cipherId),
+                        )
+                    }
+                    ?.let { mutableSyncCipherDeleteSharedFlow.tryEmit(it) }
             }
 
             NotificationType.SYNC_CIPHERS,
