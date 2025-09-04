@@ -115,3 +115,11 @@ fun @receiver:StringRes Int.asText(): Text = ResText(this)
  * Convert a resource Id to [Text] with format args.
  */
 fun @receiver:StringRes Int.asText(vararg args: Any): Text = ResArgsText(this, args.asList())
+
+/**
+ * Convert a resource Id to [Text] with quantity and format args.
+ */
+fun @receiver:PluralsRes Int.asPluralsText(
+    quantity: Int,
+    vararg args: Any,
+): Text = PluralsText(id = this, quantity = quantity, args = args.asList())
