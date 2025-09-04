@@ -78,7 +78,7 @@ class SendDataExtensionsTest {
                     SendState.ViewState.Content.SendItem(
                         id = "mockId-1",
                         name = "mockName-1",
-                        deletionDate = "Oct 27, 2023, 12:00 PM",
+                        deletionDate = "Oct 27, 2023, 12:00\u202FPM",
                         type = SendState.ViewState.Content.SendItem.Type.FILE,
                         iconList = DEFAULT_SEND_STATUS_ICONS,
                         shareUrl = "www.test.com/#/send/mockAccessId-1/mockKey-1",
@@ -87,7 +87,7 @@ class SendDataExtensionsTest {
                     SendState.ViewState.Content.SendItem(
                         id = "mockId-2",
                         name = "mockName-2",
-                        deletionDate = "Oct 27, 2023, 12:00 PM",
+                        deletionDate = "Oct 27, 2023, 12:00\u202FPM",
                         type = SendState.ViewState.Content.SendItem.Type.TEXT,
                         iconList = DEFAULT_SEND_STATUS_ICONS,
                         shareUrl = "www.test.com/#/send/mockAccessId-2/mockKey-2",
