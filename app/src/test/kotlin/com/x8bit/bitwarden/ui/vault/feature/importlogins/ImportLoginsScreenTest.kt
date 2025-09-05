@@ -353,7 +353,7 @@ class ImportLoginsScreenTest : BitwardenComposeTest() {
             it.copy(dialogState = ImportLoginsState.DialogState.Syncing)
         }
         composeTestRule
-            .onNodeWithText(text = "Syncing logins...")
+            .onNodeWithText(text = "Syncing logins…")
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
     }
