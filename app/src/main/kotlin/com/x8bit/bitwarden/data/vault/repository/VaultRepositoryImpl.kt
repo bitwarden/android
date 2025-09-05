@@ -114,7 +114,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -1397,15 +1396,14 @@ class VaultRepositoryImpl(
         val isUpdate = syncSendUpsertData.isUpdate
         val revisionDate = syncSendUpsertData.revisionDate
 
-        val localSend = sendDataStateFlow
-            .mapNotNull { it.data }
+        val localSend = vaultDiskSource
+            .getSends(userId = userId)
             .first()
-            .sendViewList
             .find { it.id == sendId }
         val isValidCreate = !isUpdate && localSend == null
         val isValidUpdate = isUpdate &&
             localSend != null &&
-            localSend.revisionDate.epochSecond < revisionDate.toEpochSecond()
+            localSend.revisionDate.toEpochSecond() < revisionDate.toEpochSecond()
 
         if (!isValidCreate && !isValidUpdate) return
 
@@ -1447,21 +1445,20 @@ class VaultRepositoryImpl(
         val folderId = syncFolderUpsertData.folderId
         val isUpdate = syncFolderUpsertData.isUpdate
         val revisionDate = syncFolderUpsertData.revisionDate
-
-        val localFolder = foldersStateFlow
-            .mapNotNull { it.data }
+        val localFolder = vaultDiskSource
+            .getFolders(userId = userId)
             .first()
             .find { it.id == folderId }
         val isValidCreate = !isUpdate && localFolder == null
         val isValidUpdate = isUpdate &&
             localFolder != null &&
-            localFolder.revisionDate.epochSecond < revisionDate.toEpochSecond()
+            localFolder.revisionDate.toEpochSecond() < revisionDate.toEpochSecond()
 
         if (!isValidCreate && !isValidUpdate) return
 
         folderService
-            .getFolder(folderId)
-            .onSuccess { vaultDiskSource.saveFolder(userId, it) }
+            .getFolder(folderId = folderId)
+            .onSuccess { vaultDiskSource.saveFolder(userId = userId, folder = it) }
     }
     //endregion Push Notification helpers
 

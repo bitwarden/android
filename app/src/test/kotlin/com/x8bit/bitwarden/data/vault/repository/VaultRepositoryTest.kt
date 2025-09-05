@@ -3788,53 +3788,37 @@ class VaultRepositoryTest {
     fun `syncSendUpsertFlow update failure with 404 code should make a request for a send and then delete it`() =
         runTest {
             val number = 1
+            val userId = MOCK_USER_STATE.activeUserId
             val sendId = "mockId-$number"
 
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
             val response: HttpException = mockk {
                 every { code() } returns 404
             }
+            coEvery { sendsService.getSend(sendId = sendId) } returns response.asFailure()
             coEvery {
-                sendsService.getSend(sendId)
-            } returns response.asFailure()
-
-            coEvery {
-                vaultDiskSource.deleteSend(any(), any())
+                vaultDiskSource.deleteSend(userId = userId, sendId = sendId)
             } just runs
 
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
-            val sendView = createMockSendView(number = number)
+            val sendView = createMockSend(
+                number = number,
+                revisionDate = ZonedDateTime.now(clock).minus(5, ChronoUnit.MINUTES),
+            )
             coEvery {
-                vaultSdkSource.decryptSendList(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    sendList = listOf(createMockSdkSend(number = number)),
-                )
-            } returns listOf(sendView).asSuccess()
+                vaultDiskSource.getSends(userId = userId)
+            } returns MutableStateFlow(listOf(sendView))
 
-            val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
-            setupVaultDiskSourceFlows(sendsFlow = sendsFlow)
-
-            vaultRepository.sendDataStateFlow.test {
-                // Populate and consume items related to the sends flow
-                awaitItem()
-                sendsFlow.tryEmit(listOf(createMockSend(number = number)))
-                awaitItem()
-
-                mutableSyncSendUpsertFlow.tryEmit(
-                    SyncSendUpsertData(
-                        sendId = sendId,
-                        revisionDate = ZonedDateTime.now(),
-                        isUpdate = true,
-                    ),
-                )
-            }
+            mutableSyncSendUpsertFlow.tryEmit(
+                SyncSendUpsertData(
+                    sendId = sendId,
+                    revisionDate = ZonedDateTime.now(clock),
+                    isUpdate = true,
+                ),
+            )
 
             coVerify(exactly = 1) {
-                sendsService.getSend(sendId)
-                vaultDiskSource.deleteSend(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    sendId = sendId,
-                )
+                sendsService.getSend(sendId = sendId)
+                vaultDiskSource.deleteSend(userId = userId, sendId = sendId)
             }
         }
 
@@ -3842,51 +3826,31 @@ class VaultRepositoryTest {
     @Test
     fun `syncSendUpsertFlow create failure with 404 code should make a request for a send and do nothing`() =
         runTest {
+            val userId = MOCK_USER_STATE.activeUserId
             val sendId = "mockId-1"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
-            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
-
             val response: HttpException = mockk {
                 every { code() } returns 404
             }
+            coEvery { sendsService.getSend(sendId = sendId) } returns response.asFailure()
             coEvery {
-                sendsService.getSend(sendId)
-            } returns response.asFailure()
+                vaultDiskSource.getSends(userId = userId)
+            } returns MutableStateFlow(emptyList())
 
-            coEvery {
-                vaultSdkSource.decryptSendList(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    sendList = listOf(),
-                )
-            } returns emptyList<SendView>().asSuccess()
-
-            val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
-            setupVaultDiskSourceFlows(sendsFlow = sendsFlow)
-
-            vaultRepository.sendDataStateFlow.test {
-                // Populate and consume items related to the sends flow
-                awaitItem()
-                sendsFlow.tryEmit(emptyList())
-                awaitItem()
-
-                mutableSyncSendUpsertFlow.tryEmit(
-                    SyncSendUpsertData(
-                        sendId = sendId,
-                        revisionDate = ZonedDateTime.now(),
-                        isUpdate = false,
-                    ),
-                )
-            }
+            mutableSyncSendUpsertFlow.tryEmit(
+                SyncSendUpsertData(
+                    sendId = sendId,
+                    revisionDate = ZonedDateTime.now(clock),
+                    isUpdate = false,
+                ),
+            )
 
             coVerify(exactly = 1) {
-                sendsService.getSend(sendId)
+                sendsService.getSend(sendId = sendId)
             }
             coVerify(exactly = 0) {
-                vaultDiskSource.deleteSend(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    sendId = sendId,
-                )
+                vaultDiskSource.deleteSend(userId = userId, sendId = sendId)
             }
         }
 
@@ -3895,50 +3859,28 @@ class VaultRepositoryTest {
     fun `syncSendUpsertFlow valid create success should make a request for a send and then store it`() =
         runTest {
             val number = 1
+            val userId = MOCK_USER_STATE.activeUserId
             val sendId = "mockId-$number"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
-            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
             coEvery {
-                vaultSdkSource.decryptSendList(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    sendList = listOf(),
-                )
-            } returns listOf<SendView>().asSuccess()
+                vaultDiskSource.getSends(userId = userId)
+            } returns MutableStateFlow(emptyList())
+            val send = mockk<SyncResponseJson.Send>()
+            coEvery { sendsService.getSend(sendId = sendId) } returns send.asSuccess()
+            coEvery { vaultDiskSource.saveSend(userId = userId, send = send) } just runs
 
-            val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
-            setupVaultDiskSourceFlows(sendsFlow = sendsFlow)
-
-            val send: SyncResponseJson.Send = mockk()
-            coEvery {
-                sendsService.getSend(sendId)
-            } returns send.asSuccess()
-
-            coEvery {
-                vaultDiskSource.saveSend(any(), any())
-            } just runs
-
-            vaultRepository.sendDataStateFlow.test {
-                // Populate and consume items related to the sends flow
-                awaitItem()
-                sendsFlow.tryEmit(listOf())
-                awaitItem()
-
-                mutableSyncSendUpsertFlow.tryEmit(
-                    SyncSendUpsertData(
-                        sendId = sendId,
-                        revisionDate = ZonedDateTime.now(),
-                        isUpdate = false,
-                    ),
-                )
-            }
+            mutableSyncSendUpsertFlow.tryEmit(
+                SyncSendUpsertData(
+                    sendId = sendId,
+                    revisionDate = ZonedDateTime.now(clock),
+                    isUpdate = false,
+                ),
+            )
 
             coVerify(exactly = 1) {
-                sendsService.getSend(sendId)
-                vaultDiskSource.saveSend(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    send = send,
-                )
+                sendsService.getSend(sendId = sendId)
+                vaultDiskSource.saveSend(userId = userId, send = send)
             }
         }
 
@@ -3947,51 +3889,33 @@ class VaultRepositoryTest {
     fun `syncSendUpsertFlow valid update success should make a request for a send and then store it`() =
         runTest {
             val number = 1
+            val userId = MOCK_USER_STATE.activeUserId
             val sendId = "mockId-$number"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
-            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
-            val sendView = createMockSendView(number = number)
+            val sendView = createMockSend(
+                number = number,
+                revisionDate = ZonedDateTime.now(clock).minus(5, ChronoUnit.MINUTES),
+            )
             coEvery {
-                vaultSdkSource.decryptSendList(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    sendList = listOf(createMockSdkSend(number = number)),
-                )
-            } returns listOf(sendView).asSuccess()
+                vaultDiskSource.getSends(userId = userId)
+            } returns MutableStateFlow(listOf(sendView))
 
-            val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
-            setupVaultDiskSourceFlows(sendsFlow = sendsFlow)
+            val send = mockk<SyncResponseJson.Send>()
+            coEvery { sendsService.getSend(sendId = sendId) } returns send.asSuccess()
+            coEvery { vaultDiskSource.saveSend(userId = userId, send = send) } just runs
 
-            val send: SyncResponseJson.Send = mockk()
-            coEvery {
-                sendsService.getSend(sendId)
-            } returns send.asSuccess()
-
-            coEvery {
-                vaultDiskSource.saveSend(any(), any())
-            } just runs
-
-            vaultRepository.sendDataStateFlow.test {
-                // Populate and consume items related to the sends flow
-                awaitItem()
-                sendsFlow.tryEmit(listOf(createMockSend(number = number)))
-                awaitItem()
-
-                mutableSyncSendUpsertFlow.tryEmit(
-                    SyncSendUpsertData(
-                        sendId = sendId,
-                        revisionDate = ZonedDateTime.now(),
-                        isUpdate = true,
-                    ),
-                )
-            }
+            mutableSyncSendUpsertFlow.tryEmit(
+                SyncSendUpsertData(
+                    sendId = sendId,
+                    revisionDate = ZonedDateTime.now(clock),
+                    isUpdate = true,
+                ),
+            )
 
             coVerify(exactly = 1) {
-                sendsService.getSend(sendId)
-                vaultDiskSource.saveSend(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    send = send,
-                )
+                sendsService.getSend(sendId = sendId)
+                vaultDiskSource.saveSend(userId = userId, send = send)
             }
         }
 
@@ -4140,50 +4064,28 @@ class VaultRepositoryTest {
     fun `syncFolderUpsertFlow valid create success should make a request for a folder and then store it`() =
         runTest {
             val number = 1
+            val userId = MOCK_USER_STATE.activeUserId
             val folderId = "mockId-$number"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
-            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
             coEvery {
-                vaultSdkSource.decryptFolderList(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    folderList = listOf(),
-                )
-            } returns listOf<FolderView>().asSuccess()
+                vaultDiskSource.getFolders(userId = userId)
+            } returns MutableStateFlow(emptyList())
+            val folder = mockk<SyncResponseJson.Folder>()
+            coEvery { folderService.getFolder(folderId = folderId) } returns folder.asSuccess()
+            coEvery { vaultDiskSource.saveFolder(userId = userId, folder = folder) } just runs
 
-            val foldersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>()
-            setupVaultDiskSourceFlows(foldersFlow = foldersFlow)
-
-            val folder: SyncResponseJson.Folder = mockk()
-            coEvery {
-                folderService.getFolder(folderId)
-            } returns folder.asSuccess()
-
-            coEvery {
-                vaultDiskSource.saveFolder(any(), any())
-            } just runs
-
-            vaultRepository.foldersStateFlow.test {
-                // Populate and consume items related to the folders flow
-                awaitItem()
-                foldersFlow.tryEmit(listOf())
-                awaitItem()
-
-                mutableSyncFolderUpsertFlow.tryEmit(
-                    SyncFolderUpsertData(
-                        folderId = folderId,
-                        revisionDate = ZonedDateTime.now(),
-                        isUpdate = false,
-                    ),
-                )
-            }
+            mutableSyncFolderUpsertFlow.tryEmit(
+                SyncFolderUpsertData(
+                    folderId = folderId,
+                    revisionDate = ZonedDateTime.now(clock),
+                    isUpdate = false,
+                ),
+            )
 
             coVerify(exactly = 1) {
-                folderService.getFolder(folderId)
-                vaultDiskSource.saveFolder(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    folder = folder,
-                )
+                folderService.getFolder(folderId = folderId)
+                vaultDiskSource.saveFolder(userId = userId, folder = folder)
             }
         }
 
@@ -4192,51 +4094,32 @@ class VaultRepositoryTest {
     fun `syncFolderUpsertFlow valid update success should make a request for a folder and then store it`() =
         runTest {
             val number = 1
+            val userId = MOCK_USER_STATE.activeUserId
             val folderId = "mockId-$number"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
-            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
-            val folderView = createMockFolderView(number = number)
+            val folderView = createMockFolder(
+                number = number,
+                revisionDate = ZonedDateTime.now(clock).minus(5, ChronoUnit.MINUTES),
+            )
             coEvery {
-                vaultSdkSource.decryptFolderList(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    folderList = listOf(createMockSdkFolder(number = number)),
-                )
-            } returns listOf(folderView).asSuccess()
+                vaultDiskSource.getFolders(userId = userId)
+            } returns MutableStateFlow(listOf(folderView))
+            val folder = mockk<SyncResponseJson.Folder>()
+            coEvery { folderService.getFolder(folderId = folderId) } returns folder.asSuccess()
+            coEvery { vaultDiskSource.saveFolder(userId = userId, folder = folder) } just runs
 
-            val foldersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>()
-            setupVaultDiskSourceFlows(foldersFlow = foldersFlow)
-
-            val folder: SyncResponseJson.Folder = mockk()
-            coEvery {
-                folderService.getFolder(folderId)
-            } returns folder.asSuccess()
-
-            coEvery {
-                vaultDiskSource.saveFolder(any(), any())
-            } just runs
-
-            vaultRepository.foldersStateFlow.test {
-                // Populate and consume items related to the folders flow
-                awaitItem()
-                foldersFlow.tryEmit(listOf(createMockFolder(number = number)))
-                awaitItem()
-
-                mutableSyncFolderUpsertFlow.tryEmit(
-                    SyncFolderUpsertData(
-                        folderId = folderId,
-                        revisionDate = ZonedDateTime.now(),
-                        isUpdate = true,
-                    ),
-                )
-            }
+            mutableSyncFolderUpsertFlow.tryEmit(
+                SyncFolderUpsertData(
+                    folderId = folderId,
+                    revisionDate = ZonedDateTime.now(clock),
+                    isUpdate = true,
+                ),
+            )
 
             coVerify(exactly = 1) {
                 folderService.getFolder(folderId)
-                vaultDiskSource.saveFolder(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    folder = folder,
-                )
+                vaultDiskSource.saveFolder(userId = userId, folder = folder)
             }
         }
 
