@@ -27,12 +27,12 @@ interface NavigationItem {
     /**
      * Route of the tab's graph.
      */
-    val graphRoute: String
+    val graphRoute: Any
 
     /**
      * Route of the tab's start destination.
      */
-    val startDestinationRoute: String
+    val startDestinationRoute: Any
 
     /**
      * The test tag of the tab.
