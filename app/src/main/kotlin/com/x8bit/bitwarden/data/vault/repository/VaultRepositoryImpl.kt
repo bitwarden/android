@@ -73,6 +73,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
+import com.x8bit.bitwarden.data.vault.repository.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
@@ -968,6 +969,20 @@ class VaultRepositoryImpl(
             .fold(
                 onSuccess = { ExportVaultDataResult.Success(it) },
                 onFailure = { ExportVaultDataResult.Error(error = it) },
+            )
+    }
+
+    override suspend fun importCxfPayload(payload: String): ImportCxfPayloadResult {
+        val userId = activeUserId
+            ?: return ImportCxfPayloadResult.Error(error = NoActiveUserException())
+        return vaultSdkSource
+            .importCxf(
+                userId = userId,
+                payload = payload,
+            )
+            .fold(
+                onSuccess = { ImportCxfPayloadResult.Success(it) },
+                onFailure = { ImportCxfPayloadResult.Error(error = it) },
             )
     }
 

@@ -92,6 +92,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
+import com.x8bit.bitwarden.data.vault.repository.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
@@ -4254,6 +4255,48 @@ class VaultRepositoryTest {
                 result,
             )
         }
+
+    @Test
+    fun `importCxfPayload should return success result`() = runTest {
+        val userId = "mockId-1"
+        val payload = "payload"
+        val ciphers = listOf(createMockSdkCipher(number = 1))
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        coEvery {
+            vaultSdkSource.importCxf(
+                userId = userId,
+                payload = payload,
+            )
+        } returns ciphers.asSuccess()
+        val result = vaultRepository.importCxfPayload(payload)
+
+        assertEquals(
+            ImportCxfPayloadResult.Success(ciphers),
+            result,
+        )
+    }
+
+    @Test
+    fun `importCxfPayload should return error result`() = runTest {
+        val userId = "mockId-1"
+        val payload = "payload"
+        val expected = Throwable()
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        coEvery {
+            vaultSdkSource.importCxf(
+                userId = userId,
+                payload = payload,
+            )
+        } returns expected.asFailure()
+        val result = vaultRepository.importCxfPayload(payload)
+
+        assertEquals(
+            ImportCxfPayloadResult.Error(expected),
+            result,
+        )
+    }
 
     @Test
     fun `silentlyDiscoverCredentials should return result`() = runTest {
