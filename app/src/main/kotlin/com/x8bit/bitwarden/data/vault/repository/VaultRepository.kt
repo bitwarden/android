@@ -259,6 +259,13 @@ interface VaultRepository : CipherManager, VaultLockManager {
     ): ExportVaultDataResult
 
     /**
+     * Attempt to export the vault data to a CXF file.
+     *
+     * @param ciphers Ciphers selected for export.
+     */
+    suspend fun exportVaultDataToCxf(ciphers: List<CipherListView>): Result<String>
+
+    /**
      * Flow that represents the data for a specific vault list item as found by ID. This may emit
      * `null` if the item cannot be found.
      */
