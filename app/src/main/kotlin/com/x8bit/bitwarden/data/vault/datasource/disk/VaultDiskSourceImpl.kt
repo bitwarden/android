@@ -97,6 +97,24 @@ class VaultDiskSourceImpl(
         }
     }
 
+    override suspend fun getSelectedCiphers(
+        userId: String,
+        cipherIds: List<String>,
+    ): List<SyncResponseJson.Cipher> {
+        val entities = ciphersDao.getSelectedCiphers(userId = userId, cipherIds = cipherIds)
+        return withContext(context = dispatcherManager.default) {
+            entities
+                .map { entity ->
+                    async {
+                        json.decodeFromStringWithErrorCallback<SyncResponseJson.Cipher>(
+                            string = entity.cipherJson,
+                        ) { Timber.e(it, "Failed to deserialize Cipher in Vault") }
+                    }
+                }
+                .awaitAll()
+        }
+    }
+
     override suspend fun getTotpCiphers(userId: String): List<SyncResponseJson.Cipher> {
         val entities = ciphersDao.getAllTotpCiphers(userId = userId)
         return withContext(context = dispatcherManager.default) {

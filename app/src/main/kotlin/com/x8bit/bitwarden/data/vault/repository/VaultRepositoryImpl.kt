@@ -93,6 +93,7 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSend
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
+import com.x8bit.bitwarden.data.vault.repository.util.toSdkAccount
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import kotlinx.coroutines.CancellationException
@@ -968,6 +969,28 @@ class VaultRepositoryImpl(
             .fold(
                 onSuccess = { ExportVaultDataResult.Success(it) },
                 onFailure = { ExportVaultDataResult.Error(error = it) },
+            )
+    }
+
+    override suspend fun exportVaultDataToCxf(
+        ciphers: List<CipherListView>,
+    ): Result<String> {
+        val userId = activeUserId
+            ?: return NoActiveUserException().asFailure()
+        val account = authDiskSource.userState
+            ?.activeAccount
+            ?.toSdkAccount()
+            ?: return NoActiveUserException().asFailure()
+
+        val ciphers = vaultDiskSource
+            .getSelectedCiphers(userId = userId, cipherIds = ciphers.mapNotNull { it.id })
+            .map { it.toEncryptedSdkCipher() }
+
+        return vaultSdkSource
+            .exportVaultDataToCxf(
+                userId = userId,
+                account = account,
+                ciphers = ciphers,
             )
     }
 
