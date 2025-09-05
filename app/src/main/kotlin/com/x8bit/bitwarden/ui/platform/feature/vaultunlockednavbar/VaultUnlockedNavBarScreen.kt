@@ -24,6 +24,7 @@ import com.bitwarden.ui.platform.components.navigation.model.NavigationItem
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.scaffold.model.ScaffoldNavigationData
 import com.bitwarden.ui.platform.theme.RootTransitionProviders
+import com.bitwarden.ui.platform.util.toObjectNavigationRoute
 import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.navigateToAbout
@@ -272,14 +273,15 @@ private fun VaultUnlockedNavBarScaffold(
  * If direct navigation is required, the [navigate] lambda will be invoked with the appropriate
  * [NavOptions].
  */
+@Suppress("MaxLineLength")
 private fun NavController.navigateToTabOrRoot(
     tabToNavigateTo: VaultUnlockedNavBarTab,
     navigate: (NavOptions) -> Unit,
 ) {
-    if (tabToNavigateTo.startDestinationRoute == currentDestination?.route) {
+    if (tabToNavigateTo.startDestinationRoute.toObjectNavigationRoute() == currentDestination?.route) {
         // We are at the start destination already, so nothing to do.
         return
-    } else if (currentDestination?.parent?.route == tabToNavigateTo.graphRoute) {
+    } else if (currentDestination?.parent?.route == tabToNavigateTo.graphRoute.toObjectNavigationRoute()) {
         // We are not at the start destination but we are in the correct graph,
         // so lets pop up to the start destination.
         popBackStack(route = tabToNavigateTo.startDestinationRoute, inclusive = false)
@@ -300,8 +302,8 @@ private fun NavController.navigateToTabOrRoot(
 /**
  * Determine if the current destination is the same as the given tab.
  */
-private fun NavBackStackEntry?.isCurrentRoute(route: String): Boolean =
+private fun NavBackStackEntry?.isCurrentRoute(route: Any): Boolean =
     this
         ?.destination
         ?.hierarchy
-        ?.any { it.route == route } == true
+        ?.any { it.route == route.toObjectNavigationRoute() } == true
