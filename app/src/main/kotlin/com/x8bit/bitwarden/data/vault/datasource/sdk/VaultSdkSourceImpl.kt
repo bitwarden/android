@@ -10,6 +10,7 @@ import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.exporters.Account
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
@@ -488,6 +489,19 @@ class VaultSdkSourceImpl(
                 folders = folders,
                 ciphers = ciphers,
                 format = format,
+            )
+    }
+
+    override suspend fun exportVaultDataToCxf(
+        userId: String,
+        account: Account,
+        ciphers: List<Cipher>,
+    ): Result<String> = runCatchingWithLogs {
+        getClient(userId = userId)
+            .exporters()
+            .exportCxf(
+                account = account,
+                ciphers = ciphers,
             )
     }
 
