@@ -794,7 +794,7 @@ class VaultScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Syncing...")
+            .onNodeWithText("Syncing…")
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
     }

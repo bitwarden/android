@@ -141,7 +141,7 @@ fun AutoFillScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = BitwardenString.autofill),
+                title = stringResource(id = BitwardenString.autofill_title),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_back),
                 navigationIconContentDescription = stringResource(id = BitwardenString.back),
@@ -187,7 +187,7 @@ private fun AutoFillScreenContent(
             )
         }
         BitwardenListHeaderText(
-            label = stringResource(id = BitwardenString.autofill),
+            label = stringResource(id = BitwardenString.autofill_title),
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin()

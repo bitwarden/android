@@ -219,7 +219,7 @@ private fun AutofillSelectionDialog(
         selectionItems = {
             if (AutofillSelectionOption.AUTOFILL in displayItem.autofillSelectionOptions) {
                 BitwardenBasicDialogRow(
-                    text = stringResource(id = BitwardenString.autofill),
+                    text = stringResource(id = BitwardenString.autofill_title),
                     onClick = {
                         selectionCallback(
                             displayItem,

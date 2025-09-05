@@ -431,7 +431,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
             // Verify only the first collection name is shown
             composeTestRule
-                .onNodeWithText("My collection...")
+                .onNodeWithText("My collection…")
                 .assertIsDisplayed()
 
             // Verify other collection names are not shown by default.
