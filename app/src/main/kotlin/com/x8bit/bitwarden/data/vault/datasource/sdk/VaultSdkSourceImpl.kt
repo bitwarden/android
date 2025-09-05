@@ -505,6 +505,15 @@ class VaultSdkSourceImpl(
             )
     }
 
+    override suspend fun importCxf(
+        userId: String,
+        payload: String,
+    ): Result<List<Cipher>> = runCatchingWithLogs {
+        getClient(userId = userId)
+            .exporters()
+            .importCxf(payload = payload)
+    }
+
     override suspend fun registerFido2Credential(
         request: RegisterFido2CredentialRequest,
         fido2CredentialStore: Fido2CredentialStore,

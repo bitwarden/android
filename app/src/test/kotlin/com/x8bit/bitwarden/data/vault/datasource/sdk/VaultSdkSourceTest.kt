@@ -1167,6 +1167,35 @@ class VaultSdkSourceTest {
             )
         }
 
+    @Test
+    fun `importCxf should call SDK and return a Result with the correct data`() = runTest {
+        val userId = "userId"
+        val expected = listOf(createMockSdkCipher(number = 1))
+        val cxf = "cxf"
+
+        coEvery {
+            clientExporters.importCxf(
+                payload = cxf,
+            )
+        } returns expected
+
+        val result = vaultSdkSource.importCxf(
+            userId = userId,
+            payload = cxf,
+        )
+
+        coVerify {
+            clientExporters.importCxf(
+                payload = cxf,
+            )
+        }
+
+        assertEquals(
+            expected.asSuccess(),
+            result,
+        )
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `registerFido2Credential should return attestation response when registration completes`() =
