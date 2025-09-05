@@ -110,7 +110,11 @@
     <string name="master_password_description">Galvenā parole ir parole, kas tiek izmantota, lai piekļūtu glabātavai. Ir ļoti svarīgi, ka tā netiek aizmirsta, jo tādā gadījumā to nav iespējams atgūt.</string>
     <string name="master_password_hint">Galvenās paroles norāde (nav nepieciešama)</string>
     <string name="master_password_hint_description">Galvenās paroles norāde var palīdzēt atcerēties paroli, ja tā ir aizmirsta.</string>
-    <string name="master_password_length_val_message_x">Galvenajai parolei ir jābūt vismaz %1$s rakstzīmes garai.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="zero">Master password must be at least %d characters long.</item>
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Mazākais pieļaujamais ciparu skaits</string>
     <string name="min_special">Mazākais pieļaujamais īpašo rakstzīmju skaits</string>
     <string name="never">Nekad</string>
@@ -309,7 +313,11 @@ Nolasīšana notiks automātiski.</string>
     <string name="personal_details">Personiskā informācija</string>
     <string name="contact_info">Saziņas informācija</string>
     <string name="check_password_for_data_breaches">Pārbaudīt, vai parole ir datu noplūdēs</string>
-    <string name="password_exposed">Šī parole datu noplūdēs ir atklāta %1$s reizi(es). To vajadzētu nomainīt.</string>
+    <plurals name="password_exposed">
+        <item quantity="zero">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Šī parole netika atrasta nevienā zināmā datu noplūdē. Tai vajadzētu būt droši izmantojamai.</string>
     <string name="identity_name">Identitātes nosaukums</string>
     <string name="value">Vērtība</string>
@@ -749,7 +757,11 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden nevar atiestatīt pazaudētu vai aizmirstu galveno paroli.</string>
     <string name="choose_your_master_password">Jāizvēlas galvenā parole</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Jāizvēlas vienreizēja un spēcīga parole, lai turētu savu informāciju drošībā.</string>
-    <string name="minimum_characters">%1$s rakstzīmes</string>
+    <plurals name="minimum_characters">
+        <item quantity="zero">%d characters</item>
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Saitei beidzies derīgums</string>
     <string name="please_restart_registration_or_try_logging_in">Lūgums sākt reģistrēšanos no jauna vai mēģināt pieteikties. Tev jau varētu būt konts.</string>
     <string name="restart_registration">Sākt reģistrēšanos no jauna</string>

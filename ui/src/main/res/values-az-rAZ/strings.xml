@@ -110,7 +110,10 @@
     <string name="master_password_description">Ana parol, seyfinizə erişmək üçün istifadə edəcəyiniz paroldur. Ana parolu yadda saxlamaq çox vacibdir. Unutsanız, parolu bərpa etməyin heç bir yolu yoxdur.</string>
     <string name="master_password_hint">Ana parol məsləhəti (ixtiyari)</string>
     <string name="master_password_hint_description">Ana parol məsləhəti, unutduğunuz parolu xatırlamağınıza kömək edir.</string>
-    <string name="master_password_length_val_message_x">Ana parol ən azı %1$s simvol uzunluğunda olmalıdır.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Minimum rəqəm</string>
     <string name="min_special">Minimum simvol</string>
     <string name="never">Heç vaxt</string>
@@ -309,7 +312,10 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="personal_details">Fərdi detallar</string>
     <string name="contact_info">Əlaqə məlumatı</string>
     <string name="check_password_for_data_breaches">Parolları veri pozuntularına qarşı yoxla</string>
-    <string name="password_exposed">Bu parol, veri pozuntularında %1$s dəfə üzə çıxıb. Onu dəyişdirməlisiniz.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Bu parol, veri pozuntularında tapılmayıb. Rahatlıqla istifadə edə bilərsiniz.</string>
     <string name="identity_name">Kimlik adı</string>
     <string name="value">Dəyər</string>
@@ -748,7 +754,10 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden itmiş və ya unutulmuş ana parolu sıfırlaya bilməz.</string>
     <string name="choose_your_master_password">Ana parolunuzu seçin</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Məlumatlarınızı təhlükəsiz saxlamaq üçün unikal və güclü bir parol seçin.</string>
-    <string name="minimum_characters">%1$s xarakter</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Vaxtı bitmiş keçid</string>
     <string name="please_restart_registration_or_try_logging_in">Lütfən qeydiyyatı yenidən başladın və ya giriş etməyə çalışın. Artıq bir hesabınız ola bilər.</string>
     <string name="restart_registration">Qeydiyyatı yenidən başlat</string>

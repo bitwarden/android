@@ -110,7 +110,10 @@
     <string name="master_password_description">Pasahitz nagusia, kutxa gotorrera sartzeko erabiltzen duzun pasahitza da. Oso garrantzitsua da ez ahaztea, ahazten baduzu, ez dago pasahitza berreskuratzeko modurik.</string>
     <string name="master_password_hint">Pasahitz nagusirako pista (aukerakoa)</string>
     <string name="master_password_hint_description">Pasahitz nagusia ahazten baduzu, pista batek pasahitza gogoratzen lagunduko dizu.</string>
-    <string name="master_password_length_val_message_x">Pasahitz nagusiak %1$s karaktere izan behar ditu gutxienez.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Gutxieneko zenbaki kopurua</string>
     <string name="min_special">Gutxieneko karaktere bereziak</string>
     <string name="never">Inoiz ez</string>
@@ -308,7 +311,10 @@
     <string name="personal_details">Personal Details</string>
     <string name="contact_info">Contact Info</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
-    <string name="password_exposed">Pasahitz hau %1$s aldiz datu-iragazketetan aurkitu da. Aldatu egin beharko zenuke.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Pasahitz hau ez da inongo datu-filtrazio ezagunetan aurkitu. Erabiltzea segurua izan beharko luke.</string>
     <string name="identity_name">Identitate izena</string>
     <string name="value">Balioa</string>
@@ -747,7 +753,10 @@ Kontu honetara aldatu nahi duzu?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Choose your master password</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-    <string name="minimum_characters">%1$s characters</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Expired link</string>
     <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
     <string name="restart_registration">Restart registration</string>

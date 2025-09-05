@@ -110,7 +110,10 @@
     <string name="master_password_description">کلمه عبور اصلی، کلمه عبوری است که شما برای دسترسی به گاوصندوق خود استفاده می‌کنید. به یاد داشتن کلمه عبور اصلی بسیار اهمیت دارد. اگر فراموشش کنید هیچ راهی برای بازگردانی آن وجود ندارد.</string>
     <string name="master_password_hint">یادآور کلمه عبور اصلی (اختیاری)</string>
     <string name="master_password_hint_description">یادآور کلمه عبور اصلی کمک می‌کند در صورت فراموشی آن را به یاد بیارید.</string>
-    <string name="master_password_length_val_message_x">طول کلمه عبور اصلی باید حداقل %1$s کاراکتر باشد.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">حداقل اعداد</string>
     <string name="min_special">حداقل حرف خاص</string>
     <string name="never">هرگز</string>
@@ -309,7 +312,10 @@
     <string name="personal_details">جزئیات شخصی</string>
     <string name="contact_info">اطلاعات تماس</string>
     <string name="check_password_for_data_breaches">بررسی کلمه عبور برای افشا داده</string>
-    <string name="password_exposed">این کلمه عبور %1$s بار در نقض‌های داده افشا شده است. بهتر است آن را تغییر دهید.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">این کلمه عبور در هیچ یک از نقض‌های داده شناخته شده یافت نشد. استفاده از آن باید ایمن باشد.</string>
     <string name="identity_name">نام هویت</string>
     <string name="value">مقدار</string>
@@ -749,7 +755,10 @@
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden نمی‌تواند کلمه عبور اصلی گمشده یا فراموش‌شده را بازنشانی کند.</string>
     <string name="choose_your_master_password">کلمه عبور اصلی خود را انتخاب کنید</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">یک کلمه عبور منحصر به فرد و قوی انتخاب کنید تا اطلاعات شما امن بماند.</string>
-    <string name="minimum_characters">%1$s کاراکتر‌</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">پیوند منقضی شد</string>
     <string name="please_restart_registration_or_try_logging_in">لطفاً ثبت‌نام را دوباره آغاز کنید یا سعی کنید وارد حساب کاربری خود شوید. ممکن است از قبل حساب کاربری داشته باشید.</string>
     <string name="restart_registration">ثبت‌نام را دوباره آغاز کنید</string>

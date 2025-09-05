@@ -110,7 +110,10 @@
     <string name="master_password_description">Het hoofdwachtwoord is het wachtwoord waarmee je toegang krijgt tot je beveiligde kluis. Het is belangrijk dat je het hoofdwachtwoord niet vergeet, want er is geen manier om het te herstellen.</string>
     <string name="master_password_hint">Hoofdwachtwoordhint (optioneel)</string>
     <string name="master_password_hint_description">Een hoofdwachtwoordhint kan je helpen je wachtwoord te herinneren als je het vergeten bent.</string>
-    <string name="master_password_length_val_message_x">Hoofdwachtwoord moet minstens %1$s karakters lang zijn.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Min. aantal cijfers</string>
     <string name="min_special">Min. aantal speciaal</string>
     <string name="never">Nooit</string>
@@ -309,7 +312,10 @@ Het scannen gebeurt automatisch.</string>
     <string name="personal_details">Persoonsgegevens</string>
     <string name="contact_info">Contactinformatie</string>
     <string name="check_password_for_data_breaches">Controleer wachtwoord op datalekken</string>
-    <string name="password_exposed">Dit wachtwoord is %1$s keer gelekt. Je zou het moeten veranderen.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Dit wachtwoord is niet gevonden in de bekende datalekken. Het kan veilig gebruikt worden.</string>
     <string name="identity_name">Identiteitsnaam</string>
     <string name="value">Waarde</string>
@@ -749,7 +755,10 @@ Wilt u naar dit account wisselen?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden kan een verloren of vergeten hoofdwachtwoord niet herstellen.</string>
     <string name="choose_your_master_password">Kies je hoofdwachtwoord</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Kies een uniek en sterk wachtwoord om je gegevens veilig te houden.</string>
-    <string name="minimum_characters">%1$s tekens</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Verlopen link</string>
     <string name="please_restart_registration_or_try_logging_in">Herstart de registratie of probeer in te loggen. Je heeft mogelijk al een account.</string>
     <string name="restart_registration">Registratie herstarten</string>

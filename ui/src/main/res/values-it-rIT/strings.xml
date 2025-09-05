@@ -110,7 +110,10 @@
     <string name="master_password_description">La password principale è necessaria per accedere alla cassaforte. È molto importante non dimenticarla. Non è possibile recuperare questa password nel caso in cui la dimenticassi.</string>
     <string name="master_password_hint">Suggerimento per la password principale (opzionale)</string>
     <string name="master_password_hint_description">Questo suggerimento può aiutarti a ricordare la password principale nel caso in cui la dimenticassi.</string>
-    <string name="master_password_length_val_message_x">Inserisci una password con almeno %1$s caratteri</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Numero minimo di cifre</string>
     <string name="min_special">Numero minimo di caratteri speciali</string>
     <string name="never">Mai</string>
@@ -308,7 +311,10 @@
     <string name="personal_details">Dettagli personali</string>
     <string name="contact_info">Informazioni di contatto</string>
     <string name="check_password_for_data_breaches">Cerca la password nelle violazioni di dati</string>
-    <string name="password_exposed">Questa password è stata esposta %1$s volta/e nelle violazioni di dati note. Cambiala subito.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Questa password non è stata trovata in alcuna violazione di dati nota</string>
     <string name="identity_name">Nome dell\'identità</string>
     <string name="value">Valore</string>
@@ -748,7 +754,10 @@ Vuoi passare a questo account?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden non può reimpostare la parola d\'accesso principale al posto tuo.</string>
     <string name="choose_your_master_password">Imposta la password principale</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Imposta una password forte e unica per proteggere i tuoi dati.</string>
-    <string name="minimum_characters">%1$s caratteri</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Link scaduto</string>
     <string name="please_restart_registration_or_try_logging_in">Riprova la registrazione o tenta l\'accesso. Potresti già avere un account.</string>
     <string name="restart_registration">Riprova la registrazione</string>
@@ -1068,11 +1077,11 @@ Vuoi passare a questo account?</string>
     <string name="items_expanded_click_to_collapse">Elementi visibili; tocca per nascondere.</string>
     <string name="items_are_collapsed_click_to_expand">Elementi nascosti; tocca per mostrarli.</string>
     <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
-    <string name="copy_error_report">Copy error report</string>
-    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <string name="copy_error_report">Copia il testo della segnalazione</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden non riesce a decriptare questo elemento. Copia questa segnalazione di errore e inviala all\'assistenza tecnica per evitare ulteriori perdite di dati.</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
-        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
-        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="one">Impossibile decrittare l\'elemento %1$d. Segnala l\'errore all\'assistenza tecnica per evitare il rischio di perdita di dati.</item>
+        <item quantity="other">Impossibile decrittare %1$d elementi. Segnala l\'errore all\'assistenza tecnica per evitare il rischio di perdita di dati.</item>
     </plurals>
     <string name="select_a_card_for_x">Seleziona una carta per %s</string>
     <string name="advanced_options">Opzioni avanzate</string>

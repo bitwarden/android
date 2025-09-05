@@ -110,7 +110,9 @@
     <string name="master_password_description">主密碼是用於存取密碼庫的密碼。它非常重要，請您不要忘記它。若您忘記了主密碼，沒有任何方法能將其復原。</string>
     <string name="master_password_hint">主密碼提示（可省略）</string>
     <string name="master_password_hint_description">主密碼提示可以在您忘記主密碼時幫助您回憶主密碼。</string>
-    <string name="master_password_length_val_message_x">主密碼需要至少 %1$s 個字元。</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">最少數字位數</string>
     <string name="min_special">最少符號位數</string>
     <string name="never">永不</string>
@@ -309,7 +311,9 @@
     <string name="personal_details">個人詳細資訊</string>
     <string name="contact_info">Contact Info</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
-    <string name="password_exposed">此密碼在資料外洩事件中被暴露了 %1$s 次，應立即變更它。</string>
+    <plurals name="password_exposed">
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">任何已知的外洩密碼資料庫中都沒有此密碼，它目前是安全的。</string>
     <string name="identity_name">身分名稱</string>
     <string name="value">值</string>
@@ -749,7 +753,9 @@
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">選擇您的主密碼</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">選擇一個獨特且強度足夠的密碼來保護您的資訊安全。</string>
-    <string name="minimum_characters">%1$s 個字元</string>
+    <plurals name="minimum_characters">
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">過期連結</string>
     <string name="please_restart_registration_or_try_logging_in">請重啟註冊或是嘗試登入。您可能已經有一個帳號了。</string>
     <string name="restart_registration">重新啟動註冊</string>

@@ -110,7 +110,10 @@
     <string name="master_password_description">നിങ്ങളുടെ വാൾട്ടിലേക്ക് പ്രവേശിക്കാൻ ഉപയോഗിക്കുന്ന പാസ്‌വേഡാണ് പ്രാഥമിക പാസ്‌വേഡ്. നിങ്ങളുടെ പ്രാഥമിക പാസ്‌വേഡ് മറക്കാതിരിക്കുക എന്നത് വളരെ പ്രധാനമാണ്. നിങ്ങൾ പാസ്‌വേഡ് മറന്ന സാഹചര്യത്തിൽ, പാസ്‌വേഡ് വീണ്ടെടുക്കാൻ ഒരു മാർഗവുമില്ല.</string>
     <string name="master_password_hint">പ്രാഥമിക പാസ്‌വേഡ് സൂചന (ഇഷ്ടാനുസൃതമായ)</string>
     <string name="master_password_hint_description">നിങ്ങളുടെ പാസ്‌വേഡ് മറന്നാൽ അത് ഓർമ്മിക്കാൻ ഒരു പ്രാഥമിക പാസ്‌വേഡ് സൂചന സഹായിക്കും.</string>
-    <string name="master_password_length_val_message_x">പ്രാഥമിക പാസ്‌വേഡിന് കുറഞ്ഞത് %1$s പ്രതീകങ്ങളെങ്കിലും ദൈർഘ്യമുണ്ടായിരിക്കണം.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">കുറഞ്ഞ സംഖ്യകൾ</string>
     <string name="min_special">കുറഞ്ഞ പ്രത്യേക പ്രതീകങ്ങൾ</string>
     <string name="never">ഒരിക്കലും വേണ്ട</string>
@@ -309,7 +312,10 @@
     <string name="personal_details">Personal Details</string>
     <string name="contact_info">Contact Info</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
-    <string name="password_exposed">ഈ പാസ്‌വേഡ് ഡാറ്റാ %1$s ലംഘനങ്ങളിൽ ചോർന്നു. തങ്ങൾ ഇത് മാറ്റണം.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">അറിയപ്പെടുന്ന ഡാറ്റാ ലംഘനങ്ങളിൽ ഈ പാസ്‌വേഡ് കണ്ടെത്തിയില്ല. ഇത് ഉപയോഗിക്കുന്നത് സുരക്ഷിതമായിരിക്കും.</string>
     <string name="identity_name">തിരിച്ചറിയലിന്റെ പേര്</string>
     <string name="value">മൂല്യം</string>
@@ -749,7 +755,10 @@ Do you want to switch to this account?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Choose your master password</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-    <string name="minimum_characters">%1$s characters</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Expired link</string>
     <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
     <string name="restart_registration">Restart registration</string>

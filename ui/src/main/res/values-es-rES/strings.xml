@@ -110,7 +110,10 @@
     <string name="master_password_description">La contraseña maestra es la clave que utilizas para acceder a tu caja fuerte. Es muy importante que no olvides tu contraseña maestra. No hay forma de recuperarla si la olvidas.</string>
     <string name="master_password_hint">Pista de contraseña maestra (opcional)</string>
     <string name="master_password_hint_description">Una pista de tu contraseña maestra puede ayudarte a recordarla en caso de que la olvides.</string>
-    <string name="master_password_length_val_message_x">La contraseña maestra debe tener al menos %1$s caracteres.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Mínimo de caracteres numéricos</string>
     <string name="min_special">Mínimo de caracteres especiales</string>
     <string name="never">Nunca</string>
@@ -309,7 +312,10 @@ El escaneo se realizará automáticamente.</string>
     <string name="personal_details">Datos Personales</string>
     <string name="contact_info">Información de Contacto</string>
     <string name="check_password_for_data_breaches">Propietario</string>
-    <string name="password_exposed">Esta contraseña ha sido expuesta %1$s veces(s) en filtraciones de datos. Debería cambiarla.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Esta contraseña no fue encontrada en ninguna filtración de datos conocida. Debería poder utilizarla de forma segura.</string>
     <string name="identity_name">Nombre de la identidad</string>
     <string name="value">Valor</string>
@@ -750,7 +756,10 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Elige tu contraseña maestra</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Elige una contraseña fuerte y única para mantener tu información segura.</string>
-    <string name="minimum_characters">%1$s caracteres</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Enlace expirado</string>
     <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
     <string name="restart_registration">Reiniciar registro</string>

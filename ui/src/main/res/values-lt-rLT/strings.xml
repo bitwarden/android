@@ -110,7 +110,12 @@
     <string name="master_password_description">Pagrindinis slaptažodis yra slaptažodis, kurį naudojate norėdami pasiekti savo saugyklą. Labai svarbu nepamiršti pagrindinio slaptažodžio. Negalėsite atkurti slaptažodį, jei jį pamiršote.</string>
     <string name="master_password_hint">Pagrindinio slaptažodžio užuomina (neprivaloma)</string>
     <string name="master_password_hint_description">Pagrindinio slaptažodžio užuomina gali padėti prisiminti slaptažodį, jei jį pamiršite.</string>
-    <string name="master_password_length_val_message_x">Pagrindinis slaptažodis turi būti bent %1$s simbolių ilgio.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="few">Master password must be at least %d characters long.</item>
+        <item quantity="many">Master password must be at least %d characters long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Mažiausiai skaičių</string>
     <string name="min_special">Mažiausiai simbolių</string>
     <string name="never">Niekada</string>
@@ -309,7 +314,12 @@ Nuskaitymas vyks automatiškai.</string>
     <string name="personal_details">Personal Details</string>
     <string name="contact_info">Contact Info</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
-    <string name="password_exposed">Šis slaptažodis buvo atskleistas %1$s kartą (-us) dėl duomenų pažeidimų. Turėtumėte jį pakeisti.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="few">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="many">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Šis slaptažodis nebuvo rastas per jokius žinomus duomenų pažeidimus. Jis turėtų būti saugus naudoti.</string>
     <string name="identity_name">Tapatybės vardas</string>
     <string name="value">Vertė</string>
@@ -749,7 +759,12 @@ Ar norite pereiti prie šios paskyros?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Choose your master password</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-    <string name="minimum_characters">%1$s characters</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="few">%d characters</item>
+        <item quantity="many">%d characters</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Expired link</string>
     <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
     <string name="restart_registration">Restart registration</string>

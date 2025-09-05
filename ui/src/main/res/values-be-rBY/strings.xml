@@ -110,7 +110,12 @@
     <string name="master_password_description">Асноўны пароль — гэта ключ, які выкарыстоўваецца для доступу да вашага сховішча. Ён вельмі важны, таму не забывайце яго. Аднавіць асноўны пароль немагчыма ў выпадку, калі вы яго забылі.</string>
     <string name="master_password_hint">Падказка да асноўнага пароля (неабавязкова)</string>
     <string name="master_password_hint_description">Падказка да асноўнага пароля можа дапамагчы вам успомніць яго, калі вы яго забылі.</string>
-    <string name="master_password_length_val_message_x">Асноўны пароль павінен змяшчаць прынамсі %1$s сімвалаў.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="few">Master password must be at least %d characters long.</item>
+        <item quantity="many">Master password must be at least %d characters long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Мінімум лічбаў</string>
     <string name="min_special">Мінімум спецыяльных сімвалаў</string>
     <string name="never">Ніколі</string>
@@ -308,7 +313,12 @@
     <string name="personal_details">Personal Details</string>
     <string name="contact_info">Contact Info</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
-    <string name="password_exposed">Гэты пароль быў скампраметаваны наступную колькасць разоў: %1$s. Вы павінны змяніць яго.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="few">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="many">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Гэты пароль не быў знойдзены ў вядомых базах уцечак. Можна працягваць яго выкарыстоўваць.</string>
     <string name="identity_name">Імя пасведчання</string>
     <string name="value">Значэнне</string>
@@ -748,7 +758,12 @@
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Choose your master password</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-    <string name="minimum_characters">%1$s characters</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="few">%d characters</item>
+        <item quantity="many">%d characters</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Expired link</string>
     <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
     <string name="restart_registration">Restart registration</string>

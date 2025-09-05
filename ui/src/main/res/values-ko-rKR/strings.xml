@@ -110,7 +110,9 @@
     <string name="master_password_description">마스터 비밀번호는 보관함을 열 때 필요한 비밀번호입니다. 절대 마스터 비밀번호를 잊어버리지 마세요. 잊어버리면 복구할 수 있는 방법이 없습니다.</string>
     <string name="master_password_hint">마스터 비밀번호 힌트 (선택)</string>
     <string name="master_password_hint_description">마스터 비밀번호 힌트는 마스터 비밀번호를 잊었을 때 도움이 될 수 있습니다.</string>
-    <string name="master_password_length_val_message_x">마스터 비밀번호는 최소 %1$s자 이상이어야 합니다.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">숫자 최소 개수</string>
     <string name="min_special">특수 문자 최소 개수</string>
     <string name="never">잠그지 않음</string>
@@ -309,7 +311,9 @@
     <string name="personal_details">Personal Details</string>
     <string name="contact_info">Contact Info</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
-    <string name="password_exposed">이 비밀번호는 데이터 유출에 %1$s회 노출되었습니다. 비밀번호를 변경하는 것이 좋습니다.</string>
+    <plurals name="password_exposed">
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">이 비밀번호는 데이터 유출 목록에 없습니다. 사용하기에 안전한 비밀번호입니다.</string>
     <string name="identity_name">ID 이름</string>
     <string name="value">값</string>
@@ -749,7 +753,9 @@
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Choose your master password</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-    <string name="minimum_characters">%1$s characters</string>
+    <plurals name="minimum_characters">
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Expired link</string>
     <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
     <string name="restart_registration">Restart registration</string>
