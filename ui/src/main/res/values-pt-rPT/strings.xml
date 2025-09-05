@@ -110,7 +110,10 @@
     <string name="master_password_description">A palavra-passe mestra é a palavra-passe que utiliza para aceder ao seu cofre. É muito importante que não se esqueça da sua palavra-passe mestra. Não há forma de recuperar a palavra-passe no caso de a esquecer.</string>
     <string name="master_password_hint">Dica da palavra-passe mestra (opcional)</string>
     <string name="master_password_hint_description">Uma dica da palavra-passe mestra pode ajudá-lo a lembrar-se da sua palavra-passe, caso se esqueça dela.</string>
-    <string name="master_password_length_val_message_x">A palavra-passe mestra deve ter pelo menos %1$s caracteres.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">A palavra-passe mestra deve ter pelo menos %d carácter.</item>
+        <item quantity="other">A palavra-passe mestra deve ter pelo menos %d caracteres.</item>
+    </plurals>
     <string name="min_numbers">Mínimo de números</string>
     <string name="min_special">Mínimo de caracteres especiais</string>
     <string name="never">Nunca</string>
@@ -309,7 +312,10 @@ A leitura será efetuada automaticamente.</string>
     <string name="personal_details">Dados pessoais</string>
     <string name="contact_info">Informações de contacto</string>
     <string name="check_password_for_data_breaches">Verificar a palavra-passe para detetar violações de dados</string>
-    <string name="password_exposed">Esta palavra-passe foi exposta %1$s vez(es) em violações de dados. Deve alterá-la.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">Esta palavra-passe foi exposta %d vez em violações de dados. Deve alterá-la.</item>
+        <item quantity="other">Esta palavra-passe foi exposta %d vezes em violações de dados. Deve alterá-la.</item>
+    </plurals>
     <string name="password_safe">Esta palavra-passe não foi encontrada em nenhuma violação de dados conhecida. A sua utilização deve ser segura.</string>
     <string name="identity_name">Nome da identidade</string>
     <string name="value">Valor</string>
@@ -749,7 +755,10 @@ Pretende mudar para esta conta?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">O Bitwarden não pode repor uma palavra-passe mestra perdida ou esquecida.</string>
     <string name="choose_your_master_password">Escolha a sua palavra-passe mestra</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Escolha uma palavra-passe única e forte para manter as suas informações seguras.</string>
-    <string name="minimum_characters">%1$s caracteres</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d carácter</item>
+        <item quantity="other">%d caracteres</item>
+    </plurals>
     <string name="expired_link">Link expirado</string>
     <string name="please_restart_registration_or_try_logging_in">Por favor, reinicie o registo ou tente iniciar sessão. É possível que já tenha uma conta.</string>
     <string name="restart_registration">Reiniciar registo</string>

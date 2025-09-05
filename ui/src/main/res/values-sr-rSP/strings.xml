@@ -110,7 +110,11 @@
     <string name="master_password_description">Главна Лозинка је лозинка коју користите за приступ Вашем сефу. Врло је важно да је не заборавите. Не постоји начин да повратите лозинку у случају да је заборавите.</string>
     <string name="master_password_hint">Савет Главне Лозинке (опционо)</string>
     <string name="master_password_hint_description">Савет Главне Лозинке може да Вам помогне да се потсетите ако је заборавите.</string>
-    <string name="master_password_length_val_message_x">Главна лозинка треба имати барем %1$s карактера.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="few">Master password must be at least %d characters long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Минимално Бројева</string>
     <string name="min_special">Минимално специјалних</string>
     <string name="never">Никада</string>
@@ -309,7 +313,11 @@
     <string name="personal_details">Личне информације</string>
     <string name="contact_info">Контакт информације</string>
     <string name="check_password_for_data_breaches">Провери лозинку за провалу података</string>
-    <string name="password_exposed">Ова лозинка је изложена %1$s пута. Требали би да је промените.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="few">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Ова лозинка није никада изложена. Треба да је сигурна за употребу.</string>
     <string name="identity_name">Име идентитета</string>
     <string name="value">Вредност</string>
@@ -749,7 +757,11 @@
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden не може да рисетује изгубљену или заборављену главну лозинку.</string>
     <string name="choose_your_master_password">Одаберите вашу главну лозинку</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Изаберите јединствену и јаку лозинку да бисте заштитили своје податке.</string>
-    <string name="minimum_characters">%1$s знакова</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="few">%d characters</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Истекла веза</string>
     <string name="please_restart_registration_or_try_logging_in">Поново покрените регистрацију или покушајте да се пријавите. Можда већ имате налог.</string>
     <string name="restart_registration">Поново покрените регистрацију</string>
@@ -889,20 +901,20 @@
     <string name="invalid_certificate_chain">Неважећи ланац сертификата</string>
     <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Коришћење системских сертификата је мање безбедано него чување сертификата са Bitwarden. Наставак ће приказати листу доступних системских сертификата ако је неки већ инсталиран.</string>
     <string name="link">Линк</string>
-    <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey operation failed because host URL is not present in request.</string>
-    <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
-    <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
-    <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
-    <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
-    <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
-    <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
+    <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Операција са кључем за приступ није успела јер URL адреса домаћина није присутна у захтеву.</string>
+    <string name="passkey_operation_failed_because_app_signature_is_invalid">Операција са кључем за приступ није успела јер потпис апликације није важећи.</string>
+    <string name="passkey_registration_failed_due_to_an_internal_error">Регистрација кључа за приступ није успела због interne грешке.</string>
+    <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Операција са кључем за приступ није успела јер се ослонац (relying party) не може идентификовати.</string>
+    <string name="passkey_operation_failed_because_the_request_is_invalid">Операција са кључем за приступ није успела јер је захтев неважећи.</string>
+    <string name="passkey_operation_failed_because_no_item_was_selected">Операција са кључем за приступ није успела јер није изабрана ниједна ставка.</string>
+    <string name="passkey_operation_failed_because_the_request_is_unsupported">Операција са кључем за приступ није успела јер је захтев неподржан.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Операција лозинке није успела јер изабрана ставка не постоји.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Операција лозинке није успела јер нема изабране ставке.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Операција акредитива није успела јер су прекорачени покушаји верификације корисника.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Операција акредитива није успела јер је корисник закључан.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Операција акредитива није успела јер изабрана ставка не постоји.</string>
     <string name="credential_operation_failed_because_user_verification_was_cancelled">Операција акредитива није успела јер је корисничка верификација отказана.</string>
-    <string name="self_host_server_url">Self-host server URL</string>
+    <string name="self_host_server_url">УРЛ сервера који се самостално хостује</string>
     <string name="use_brave_autofill_integration">Користи Brave-ову интеграцију за аутоматско попуњавање</string>
     <string name="use_chrome_autofill_integration">Користи Chrome-ову интеграцију за аутоматско попуњавање</string>
     <string name="use_chrome_beta_autofill_integration">Користи Chrome-ову интеграцију за аутоматско попуњавање (Beta)</string>
@@ -913,17 +925,19 @@
     <string name="add_field">Додај поље</string>
     <string name="x_ellipses">%s...</string>
     <string name="share_error_details">Поделите детаље о грешци</string>
-    <string name="flight_recorder">Flight recorder</string>
-    <string name="flight_recorder_help">Flight recorder help</string>
-    <string name="view_recorded_logs">View recorded logs</string>
-    <string name="enable_flight_recorder_title">Enable flight recorder</string>
+    <string name="flight_recorder">Рекордер лета</string>
+    <string name="flight_recorder_help">Помоћ за рекордера лета</string>
+    <string name="view_recorded_logs">Погледајте снимљене извештаје</string>
+    <string name="enable_flight_recorder_title">Омогући рекордера лета</string>
     <string name="recorded_logs_title">Снимљени извештаји</string>
     <string name="no_logs_recorded">Нема извештаја</string>
     <string name="experiencing_an_issue">Доживљавате проблем?</string>
     <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Омогућите привремене евидентирање за прикупљање и локалног прегледавања извештаја. Када је омогућено, статуси апликације и мрежни позиви могу се пријавити - никада осетљиве информације о сефу.</string>
-    <string name="to_get_started_set_a_logging_duration">To get started, set a logging duration. Logging  will automatically turn off after this period, giving you time to capture activity while reproducing  any issues.</string>
-    <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
-    <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
+    <string name="to_get_started_set_a_logging_duration">Да бисте започели, подесите трајање бележења. Бележење 
+ће се аутоматски искључити после овог периода, дајући вам времена да снимите 
+активност приликом репродуковања било каквих проблема.</string>
+    <string name="logs_will_be_automatically_deleted_after_30_days">Записи ће бити аутоматски обрисани после 30 дана. Bitwarden може да приступи вашим подацима записа само када их поделите.</string>
+    <string name="for_details_on_what_is_and_isnt_logged">За детаље о томе шта се бележи, а шта не, посетите\n<annotation link="helpCenter">цentar за помоћ Bitwarden-а.</annotation></string>
     <string name="logging_duration">Трајање извештаја</string>
     <string name="flight_recorder_one_hour">1 сат</string>
     <string name="flight_recorder_eight_hours">8 сати</string>
@@ -932,17 +946,17 @@
     <string name="delete_all">Избриши све</string>
     <string name="share_all">Подели све</string>
     <string name="unable_to_share">Није могуће поделити</string>
-    <string name="please_try_again_or_select_a_different_log">Please try again or select a different log.</string>
-    <string name="the_log_file_you_are_trying_to_share_has_been_removed">The log file you are trying to share has been removed.</string>
-    <string name="delete_log">Delete log</string>
-    <string name="do_you_really_want_to_delete_this_log">Do you really want to delete this log?</string>
-    <string name="delete_logs">Delete logs</string>
-    <string name="do_you_really_want_to_delete_all_recorded_logs">Do you really want to delete all recorded logs?</string>
-    <string name="confirm_key_connector_domain">Confirm Key Connector domain</string>
-    <string name="key_connector_domain">Key Connector domain:</string>
-    <string name="key_connector_organization">Organization:</string>
-    <string name="password_no_longer_required_confirm_domain">A master password is no longer required for members of the following organization. Please confirm the domain below with your organization administrator.</string>
-    <string name="please_confirm_domain_with_admin">Please confirm the domain below with your organization administrator.\n\nKey Connector domain:\n%1$s</string>
+    <string name="please_try_again_or_select_a_different_log">Молимо покушајте поново или изаберите други запис.</string>
+    <string name="the_log_file_you_are_trying_to_share_has_been_removed">Датотека записа коју покушавате да поделите је уклоњена.</string>
+    <string name="delete_log">Обриши запис</string>
+    <string name="do_you_really_want_to_delete_this_log">Да ли заиста желите да избришете овај запис?</string>
+    <string name="delete_logs">Избриши записе</string>
+    <string name="do_you_really_want_to_delete_all_recorded_logs">Да ли заиста желите да избришете све записе?</string>
+    <string name="confirm_key_connector_domain">Потврдите домен конектора кључа</string>
+    <string name="key_connector_domain">Домен конектора кључа:</string>
+    <string name="key_connector_organization">Организација:</string>
+    <string name="password_no_longer_required_confirm_domain">Главна лозинка више није потребна за чланове следеће организације. Молимо потврдите домен са администратором организације.</string>
+    <string name="please_confirm_domain_with_admin">Молимо потврдите домен у наставку са администратором организације.\n\nДомен конектор кључа:\n%1$s</string>
     <string name="flight_recorder_banner_title">Рекордер лета упаљен</string>
     <string name="flight_recorder_banner_message">Рекордер лета је упаљен до %1$s у %2$s. Повратак на подешавања да бисте сада деактивирали.</string>
     <string name="go_to_settings">Иди на подешавања</string>

@@ -110,7 +110,10 @@
     <string name="master_password_description">मास्टर पासवर्ड वो पासवर्ड है जो तिजोरी एक्सेस करने के लिए इस्तेमाल होता है। मास्टर पासवर्ड ना भूलना बहुत ज़रूरी है। भूलने के बाद पासवर्ड वापस पाना मुमकिन नहीं है।</string>
     <string name="master_password_hint">मास्टर पासवर्ड हिंट (ज़रूरी नहीं)</string>
     <string name="master_password_hint_description">मास्टर पासवर्ड हिंट पासवर्ड भूल जाने के हालत में उसको याद करने में मदद करता है।</string>
-    <string name="master_password_length_val_message_x">मास्टर पासवर्ड कम-से-कम %1$s अक्षर लंबा होना चाहिए।</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">कम-से-कम इतने नंबर</string>
     <string name="min_special">कम-से-कम इतने खास</string>
     <string name="never">कभी नहीं</string>
@@ -308,7 +311,10 @@
     <string name="personal_details">Personal Details</string>
     <string name="contact_info">Contact Info</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
-    <string name="password_exposed">This password has been exposed %1$s time(s) in data breaches. You should change it.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">This password was not found in any known data breaches. It should be safe to use.</string>
     <string name="identity_name">आईडी का नाम</string>
     <string name="value">वैल्यू</string>
@@ -748,7 +754,10 @@ Do you want to switch to this account?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Choose your master password</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-    <string name="minimum_characters">%1$s characters</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Expired link</string>
     <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
     <string name="restart_registration">Restart registration</string>

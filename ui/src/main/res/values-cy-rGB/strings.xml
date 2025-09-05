@@ -110,7 +110,14 @@
     <string name="master_password_description">The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</string>
     <string name="master_password_hint">Awgrym o\'ch prif gyfrinair (dewisol)</string>
     <string name="master_password_hint_description">Gall awgrym o\'ch prif gyfrinair eich helpu i\'w gofio os ydych chi\'n ei anghofio.</string>
-    <string name="master_password_length_val_message_x">Rhaid i\'ch prif gyfrinair gynnwys o leiaf %1$s nod.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="zero">Master password must be at least %d characters long.</item>
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="two">Master password must be at least %d characters long.</item>
+        <item quantity="few">Master password must be at least %d characters long.</item>
+        <item quantity="many">Master password must be at least %d characters long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Isafswm rhifau</string>
     <string name="min_special">Isafswm nodau arbennig</string>
     <string name="never">byth</string>
@@ -309,7 +316,14 @@ Scanning will happen automatically.</string>
     <string name="personal_details">Personal Details</string>
     <string name="contact_info">Contact Info</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
-    <string name="password_exposed">Mae\'r cyfrinair hwn wedi cael ei ddatgelu %1$s o weithiau mewn achosion o ddatgelu data. Dylech chi ei newid.</string>
+    <plurals name="password_exposed">
+        <item quantity="zero">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="two">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="few">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="many">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Chafodd y cyfrinair hwn mo\'i ganfod mewn unrhyw achos hysbys o ddatgelu data. Dylai fod yn iawn i\'w ddefnyddio.</string>
     <string name="identity_name">Identity name</string>
     <string name="value">Gwerth</string>
@@ -749,7 +763,14 @@ Do you want to switch to this account?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Choose your master password</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-    <string name="minimum_characters">%1$s characters</string>
+    <plurals name="minimum_characters">
+        <item quantity="zero">%d characters</item>
+        <item quantity="one">%d character</item>
+        <item quantity="two">%d characters</item>
+        <item quantity="few">%d characters</item>
+        <item quantity="many">%d characters</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Expired link</string>
     <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
     <string name="restart_registration">Restart registration</string>

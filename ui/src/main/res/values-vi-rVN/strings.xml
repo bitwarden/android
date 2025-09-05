@@ -4,7 +4,7 @@
     <string name="add_folder">Thêm thư mục</string>
     <string name="add_item">Thêm mục</string>
     <string name="an_error_has_occurred">Đã xảy ra lỗi</string>
-    <string name="apply">Apply</string>
+    <string name="apply">Áp dụng</string>
     <string name="back">Quay lại</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Hủy bỏ</string>
@@ -110,7 +110,9 @@
     <string name="master_password_description">Mật khẩu chính là mật khẩu bạn sử dụng để truy cập vào kho lưu trữ của mình. Điều rất quan trọng là bạn không được quên mật khẩu chính. Không có cách nào để khôi phục mật khẩu nếu bạn quên nó.</string>
     <string name="master_password_hint">Gợi ý mật khẩu chính (tùy chọn)</string>
     <string name="master_password_hint_description">Một gợi ý mật khẩu có thể giúp bạn nhớ lại mật khẩu chính của bạn nếu bạn chợt quên.</string>
-    <string name="master_password_length_val_message_x">Mật khẩu chính phải có tối thiểu %1$s kí tự.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Số chữ số tối thiểu</string>
     <string name="min_special">Số kí tự đặc biệt tối thiểu</string>
     <string name="never">Không bao giờ</string>
@@ -309,7 +311,9 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="personal_details">Thông tin Cá nhân</string>
     <string name="contact_info">Thông tin liên hệ</string>
     <string name="check_password_for_data_breaches">Kiểm tra xem mật khẩu có bị lộ</string>
-    <string name="password_exposed">Mật khẩu này đã bị lộ %1$s lần trong các vụ rò rỉ dữ liệu. Bạn nên thay đổi nó.</string>
+    <plurals name="password_exposed">
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Không tìm thấy mật khẩu này trong các vụ rò rỉ dữ liệu trước đây. Nó an toàn để sử dụng.</string>
     <string name="identity_name">Tên định danh</string>
     <string name="value">Giá trị</string>
@@ -365,8 +369,8 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="exit_confirmation">Bạn có chắc chắn muốn thoát Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Yêu cầu nhập mật khẩu chính khi khởi động lại ứng dụng?</string>
     <string name="pin_require_master_password_restart">Bạn có chắc chắn muốn nhập mật khẩu chính để mở khóa mỗi khi mở lại ứng dụng không?</string>
-    <string name="ask_to_add_item">Ask to add item</string>
-    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
+    <string name="ask_to_add_item">Yêu cầu thêm mục</string>
+    <string name="ask_to_add_item_description">Gợi ý thêm mục nếu không tìm thấy mục nào trong kho trùng khớp.</string>
     <string name="on_restart">Khi khởi động lại ứng dụng</string>
     <string name="capitalize">Viết hoa</string>
     <string name="include_number">Bao gồm cả số</string>
@@ -749,7 +753,9 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden không thể đặt lại mật khẩu chính đã bị mất hoặc quên.</string>
     <string name="choose_your_master_password">Chọn mật khẩu chính của bạn</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Chọn mật khẩu mạnh và duy nhất để bảo vệ thông tin của bạn an toàn.</string>
-    <string name="minimum_characters">%1$s ký tự</string>
+    <plurals name="minimum_characters">
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Liên kết đã hết hạn</string>
     <string name="please_restart_registration_or_try_logging_in">Vui lòng tiến hành đăng ký lại hoặc thử đăng nhập. Bạn có thể đã có tài khoản.</string>
     <string name="restart_registration">Đăng ký lại</string>
@@ -1070,11 +1076,11 @@ các vấn đề.</string>
     <string name="local_items_are_collapsed_click_to_expand">Các mục địa phương đã được thu gọn, nhấp để mở rộng.</string>
     <string name="items_expanded_click_to_collapse">Các mục được mở rộng, nhấp để thu gọn.</string>
     <string name="items_are_collapsed_click_to_expand">Các mục đã được thu gọn, nhấp để mở rộng.</string>
-    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
-    <string name="copy_error_report">Copy error report</string>
-    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <string name="error_cannot_decrypt">[lỗi: không thể giải mã]</string>
+    <string name="copy_error_report">Sao chép báo lỗi</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden không thể giải mã mục này trong kho. Vui lòng sao chép và chia sẻ báo cáo lỗi này với bộ phận Hỗ trợ Khách hàng để tránh mất dữ liệu thêm.</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
-        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden không thể giải mã %1$d mục trong kho. Hãy sao chép và chia sẻ báo cáo lỗi này với bộ phận hỗ trợ khách hàng để tránh mất thêm dữ liệu.</item>
     </plurals>
     <string name="select_a_card_for_x">Chọn một thẻ cho %s</string>
     <string name="advanced_options">Tùy chọn nâng cao</string>
