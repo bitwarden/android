@@ -3317,11 +3317,10 @@ class VaultRepositoryTest {
         val userId = "mockId-1"
         val cipherId = "mockId-1"
 
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
         coEvery { vaultDiskSource.deleteCipher(userId = userId, cipherId = cipherId) } just runs
 
         mutableSyncCipherDeleteFlow.tryEmit(
-            SyncCipherDeleteData(cipherId = cipherId),
+            SyncCipherDeleteData(userId = userId, cipherId = cipherId),
         )
 
         coVerify { vaultDiskSource.deleteCipher(userId = userId, cipherId = cipherId) }

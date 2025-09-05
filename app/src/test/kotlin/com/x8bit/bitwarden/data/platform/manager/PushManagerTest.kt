@@ -237,6 +237,7 @@ class PushManagerTest {
                         pushManager.onMessageReceived(SYNC_CIPHER_DELETE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncCipherDeleteData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                             ),
                             awaitItem(),
@@ -316,6 +317,7 @@ class PushManagerTest {
                         pushManager.onMessageReceived(SYNC_LOGIN_DELETE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncCipherDeleteData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                             ),
                             awaitItem(),
@@ -405,7 +407,13 @@ class PushManagerTest {
             fun `onMessageReceived with sync cipher delete does nothing`() = runTest {
                 pushManager.syncCipherDeleteFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHER_DELETE_NOTIFICATION_MAP)
-                    expectNoEvents()
+                    assertEquals(
+                        SyncCipherDeleteData(
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                            cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                        ),
+                        awaitItem(),
+                    )
                 }
             }
 
@@ -449,12 +457,19 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived with sync login delete does nothing`() = runTest {
-                pushManager.syncCipherDeleteFlow.test {
-                    pushManager.onMessageReceived(SYNC_LOGIN_DELETE_NOTIFICATION_MAP)
-                    expectNoEvents()
+            fun `onMessageReceived with sync login delete emits to syncCipherDeleteFlow`() =
+                runTest {
+                    pushManager.syncCipherDeleteFlow.test {
+                        pushManager.onMessageReceived(SYNC_LOGIN_DELETE_NOTIFICATION_MAP)
+                        assertEquals(
+                            SyncCipherDeleteData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                                cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                            ),
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
 
             @Test
             fun `onMessageReceived with sync send create does nothing`() = runTest {
