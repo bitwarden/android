@@ -124,7 +124,7 @@ class FlightRecorderDataSetExtensionsTest {
                         id = "51",
                         title = "2015-10-10T02:55:52 – 2015-10-10T03:55:52".asText(),
                         subtextStart = "1.00 KB".asText(),
-                        subtextEnd = BitwardenString.expires_at.asText("10:15 PM"),
+                        subtextEnd = BitwardenString.expires_at.asText("10:15\u202FPM"),
                         isDeletedEnabled = true,
                     ),
                     RecordedLogsState.DisplayItem(

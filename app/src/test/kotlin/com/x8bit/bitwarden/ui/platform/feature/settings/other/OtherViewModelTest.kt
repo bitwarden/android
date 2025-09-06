@@ -157,7 +157,7 @@ class OtherViewModelTest : BaseViewModelTest() {
             mutableVaultLastSyncStateFlow.tryEmit(newSyncTime)
             assertEquals(
                 DEFAULT_STATE.copy(
-                    lastSyncTime = "Oct 27, 2023, 12:00 PM",
+                    lastSyncTime = "Oct 27, 2023, 12:00\u202FPM",
                     dialogState = null,
                 ),
                 awaitItem(),
@@ -236,6 +236,6 @@ private val DEFAULT_STATE = OtherState(
     allowScreenCapture = false,
     allowSyncOnRefresh = false,
     clearClipboardFrequency = ClearClipboardFrequency.NEVER,
-    lastSyncTime = "Oct 26, 2023, 12:00 PM",
+    lastSyncTime = "Oct 26, 2023, 12:00\u202FPM",
     dialogState = null,
 )

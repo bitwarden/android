@@ -28,7 +28,7 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  JAVA_VERSION: 17
+  JAVA_VERSION: 21
 
 permissions:
   contents: read

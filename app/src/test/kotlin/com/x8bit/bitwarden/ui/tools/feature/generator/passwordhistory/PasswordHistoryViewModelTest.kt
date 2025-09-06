@@ -172,7 +172,7 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
                     passwords = listOf(
                         PasswordHistoryState.GeneratedPassword(
                             password = "mockPassword-1",
-                            date = "10/27/23, 12:00 PM",
+                            date = "10/27/23, 12:00\u202FPM",
                         ),
                     ),
                 ),
