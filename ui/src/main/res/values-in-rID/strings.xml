@@ -110,7 +110,9 @@
     <string name="master_password_description">Kata sandi utama adalah kata sandi yang Anda gunakan untuk mengakses brankas Anda. Sangat penting bahwa Anda tidak lupa kata sandi utama Anda. Tidak ada cara untuk memulihkan kata sandi jika Anda melupakannya.</string>
     <string name="master_password_hint">Petunjuk Kata Sandi Utama (pilihan)</string>
     <string name="master_password_hint_description">Petunjuk kata sandi utama dapat membantu Anda mengingat kata sandi Anda jika Anda melupakannya.</string>
-    <string name="master_password_length_val_message_x">Kata sandi utama sedikitnya harus %1$s karakter.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Angka Minimum</string>
     <string name="min_special">Karakter Khusus Minimum</string>
     <string name="never">Jangan pernah</string>
@@ -309,7 +311,9 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="personal_details">Personal Details</string>
     <string name="contact_info">Contact Info</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
-    <string name="password_exposed">Sandi ini telah terungkap %1$s kali dalam pelanggaran data. Anda harus mengubahnya.</string>
+    <plurals name="password_exposed">
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Kata sandi ini tidak ditemukan dalam data pelanggaran yang dikenal. Kata sandi tersebut harusnya aman untuk digunakan.</string>
     <string name="identity_name">Nama Identitas</string>
     <string name="value">Nilai</string>
@@ -749,7 +753,9 @@ Do you want to switch to this account?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Choose your master password</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-    <string name="minimum_characters">%1$s characters</string>
+    <plurals name="minimum_characters">
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Expired link</string>
     <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
     <string name="restart_registration">Restart registration</string>

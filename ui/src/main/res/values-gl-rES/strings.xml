@@ -110,7 +110,10 @@
     <string name="master_password_description">O contrasinal mestre é a chave que empregas para acceder á túa caixa forte. É moi importante que non esquezas o teu contrasinal mestre. Non hai xeito de recuperala se a esqueces.</string>
     <string name="master_password_hint">Pista do contrasinal mestre (opcional)</string>
     <string name="master_password_hint_description">Unha pista do contrasinal mestre pode axudarte a lembrar o teu contrasinal se o esqueces.</string>
-    <string name="master_password_length_val_message_x">O contrasinal mestre debe ter polo menos %1$s caracteres.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Mínimo de cifras</string>
     <string name="min_special">Mínimo de caracteres especiais</string>
     <string name="never">Nunca</string>
@@ -309,7 +312,10 @@ Escanearase automaticamente.</string>
     <string name="personal_details">Personal Details</string>
     <string name="contact_info">Contact Info</string>
     <string name="check_password_for_data_breaches">Comprobar contrasinal en filtracións de datos</string>
-    <string name="password_exposed">Este contrasinal foi filtrado %1$s vez/veces. Deberías cambialo.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Este contrasinal non foi atopado en ningunha filtración de datos. Debería ser seguro.</string>
     <string name="identity_name">Nome da identidade</string>
     <string name="value">Valor</string>
@@ -749,7 +755,10 @@ Queres comprobalo dende esa conta?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Escolle un contrasinal mestre</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Escolle un contrasinal único e seguro para ofrecer a túa información.</string>
-    <string name="minimum_characters">%1$s caracteres</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Ligazón caducada</string>
     <string name="please_restart_registration_or_try_logging_in">Por favor, volve empezar o rexistro ou intenta iniciar sesión. Pode que xa teñas unha conta.</string>
     <string name="restart_registration">Reiniciar rexistro</string>

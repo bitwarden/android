@@ -110,7 +110,12 @@
     <string name="master_password_description">Hasło główne zapewnia dostęp do sejfu. To bardzo ważne, aby go nie zapomnieć, ponieważ jego odzyskanie jest niemożliwe.</string>
     <string name="master_password_hint">Podpowiedź do hasła głównego (opcjonalnie)</string>
     <string name="master_password_hint_description">Podpowiedź do hasła głównego może pomóc Ci przypomnieć hasło, jeśli je zapomnisz.</string>
-    <string name="master_password_length_val_message_x">Hasło główne musi składać się z co najmniej %1$s znaków.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Hasło główne musi zawierać co najmniej %d znak.</item>
+        <item quantity="few">Hasło główne musi zawierać co najmniej %d znaki.</item>
+        <item quantity="many">Hasło główne musi zawierać co najmniej %d znaków.</item>
+        <item quantity="other">Hasło główne musi zawierać co najmniej %d znaków.</item>
+    </plurals>
     <string name="min_numbers">Minimalna liczba cyfr</string>
     <string name="min_special">Minimalna liczba znaków specjalnych</string>
     <string name="never">Nigdy</string>
@@ -309,7 +314,12 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="personal_details">Dane osobowe</string>
     <string name="contact_info">Dane kontaktowe</string>
     <string name="check_password_for_data_breaches">Sprawdź hasło w wyciekach danych</string>
-    <string name="password_exposed">Hasło zostało ujawnione %1$s raz(y) w wyciekach danych. Zmień je.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">Hasło zostało ujawnione %d raz w wyciekach danych. Zmień je.</item>
+        <item quantity="few">Hasło zostało ujawnione %d razy w wyciekach danych. Zmień je.</item>
+        <item quantity="many">Hasło zostało ujawnione %d razy w wyciekach danych. Zmień je.</item>
+        <item quantity="other">Hasło zostało ujawnione %d razy w wyciekach danych. Zmień je.</item>
+    </plurals>
     <string name="password_safe">Hasło nie znajduje się w żadnym znanym wycieku danych. Powinno być bezpieczne.</string>
     <string name="identity_name">Nowa tożsamość</string>
     <string name="value">Wartość</string>
@@ -748,7 +758,12 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden nie może zresetować utraconego hasła głównego.</string>
     <string name="choose_your_master_password">Wybierz hasło główne</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Wybierz unikalne i mocne hasło, aby Twoje dane były bezpieczne.</string>
-    <string name="minimum_characters">%1$s znaków</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d znak</item>
+        <item quantity="few">%d znaki</item>
+        <item quantity="many">%d znaków</item>
+        <item quantity="other">%d znaków</item>
+    </plurals>
     <string name="expired_link">Link wygasł</string>
     <string name="please_restart_registration_or_try_logging_in">Rozpocznij rejestrację od początku lub spróbuj się zalogować. Możesz mieć już konto.</string>
     <string name="restart_registration">Rozpocznij rejestrację od początku</string>

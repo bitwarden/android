@@ -110,7 +110,12 @@
     <string name="master_password_description">Мастер-пароль – это ключ к вашему защищенному хранилищу. Он очень важен, поэтому не забывайте его. Восстановить мастер-пароль невозможно.</string>
     <string name="master_password_hint">Подсказка к мастер-паролю (необяз.)</string>
     <string name="master_password_hint_description">Подсказка к мастер-паролю может помочь вам его вспомнить.</string>
-    <string name="master_password_length_val_message_x">Мастер-пароль должен содержать не менее %1$s символов.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Мастер-пароль должен содержать не менее %d символов.</item>
+        <item quantity="few">Мастер-пароль должен содержать не менее %d символов.</item>
+        <item quantity="many">Мастер-пароль должен содержать не менее %d символов.</item>
+        <item quantity="other">Мастер-пароль должен содержать не менее %d символов.</item>
+    </plurals>
     <string name="min_numbers">Минимум цифр</string>
     <string name="min_special">Минимум символов</string>
     <string name="never">Никогда</string>
@@ -309,7 +314,12 @@
     <string name="personal_details">Личные данные</string>
     <string name="contact_info">Контактная информация</string>
     <string name="check_password_for_data_breaches">Проверить пароль на скомпрометированность</string>
-    <string name="password_exposed">Этот пароль был скомпрометирован %1$s раз(а). Вам следует его изменить.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">Этот пароль был скомпрометирован %d раз(а). Вам следует его изменить.</item>
+        <item quantity="few">Этот пароль был скомпрометирован %d раз(а). Вам следует его изменить.</item>
+        <item quantity="many">Этот пароль был скомпрометирован %d раз(а). Вам следует его изменить.</item>
+        <item quantity="other">Этот пароль был скомпрометирован %d раз(а). Вам следует его изменить.</item>
+    </plurals>
     <string name="password_safe">Этот пароль не обнаружен в известных базах утечек. Можно продолжать его использовать.</string>
     <string name="identity_name">Название личности</string>
     <string name="value">Значение</string>
@@ -749,7 +759,12 @@
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden не может сбросить утерянный или забытый мастер-пароль.</string>
     <string name="choose_your_master_password">Задайте мастер-пароль</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Задайте уникальный и надежный пароль, чтобы хранить информацию в безопасности.</string>
-    <string name="minimum_characters">Символов: %1$s</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">Символов: %d</item>
+        <item quantity="few">Символов: %d</item>
+        <item quantity="many">Символов: %d</item>
+        <item quantity="other">Символов: %d</item>
+    </plurals>
     <string name="expired_link">Истекшая ссылка</string>
     <string name="please_restart_registration_or_try_logging_in">Пожалуйста, повторите регистрацию или попробуйте авторизоваться. Возможно, у вас уже есть аккаунт.</string>
     <string name="restart_registration">Перезапустить регистрацию</string>

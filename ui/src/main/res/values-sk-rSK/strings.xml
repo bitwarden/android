@@ -110,7 +110,12 @@
     <string name="master_password_description">Hlavné heslo je heslo, ktoré použijete na prístup k svojmu trezoru. Je veľmi dôležité, aby ste svoje hlavné heslo nezabudli. Neexistuje možnosť, ako heslo obnoviť v prípade, že ho zabudnete.</string>
     <string name="master_password_hint">Nápoveď k hlavnému heslu (voliteľné)</string>
     <string name="master_password_hint_description">Nápoveď k hlavnému heslu vám môže pomôcť spomenúť si na heslo, ak ho zabudnete.</string>
-    <string name="master_password_length_val_message_x">Hlavné heslo musí obsahovať aspoň %1$s znakov.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="few">Master password must be at least %d characters long.</item>
+        <item quantity="many">Master password must be at least %d characters long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Minimum číslic</string>
     <string name="min_special">Minimum špeciálnych</string>
     <string name="never">Nikdy</string>
@@ -309,7 +314,12 @@ Skenovanie prebehne automaticky.</string>
     <string name="personal_details">Osobné údaje</string>
     <string name="contact_info">Kontaktné informácie</string>
     <string name="check_password_for_data_breaches">Skontrolovať kompromitáciu hesla</string>
-    <string name="password_exposed">Toto heslo uniklo %1$s krát v dátových únikoch. Mali by ste ho zmeniť.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="few">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="many">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Heslo nebolo nájdene v žiadnom úniku dát. Malo by byť bezpečné.</string>
     <string name="identity_name">Meno identity</string>
     <string name="value">Hodnota</string>
@@ -749,7 +759,12 @@ Chcete prepnúť na tento účet?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden nemôže resetovať stratené alebo zabudnuté hlavné heslo.</string>
     <string name="choose_your_master_password">Zvoľte si hlavné heslo</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Na udržanie vašich informácií v bezpečí si zvoľte unikátne a silné heslo.</string>
-    <string name="minimum_characters">%1$s znakov</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="few">%d characters</item>
+        <item quantity="many">%d characters</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Platnosť odkazu vypršala</string>
     <string name="please_restart_registration_or_try_logging_in">Zopakujte registráciu alebo sa pokúste prihlásiť. Možno už účet máte.</string>
     <string name="restart_registration">Zopakovať registráciu</string>

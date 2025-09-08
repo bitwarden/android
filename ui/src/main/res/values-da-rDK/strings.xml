@@ -110,7 +110,10 @@
     <string name="master_password_description">Hovedadgangskoden er den adgangskode, man benytter for at tilgå sin boks. Det er meget vigtigt, at man ikke glemmer sin hovedadgangskode, da der ikke er nogen måde, hvorpå koden kan genoprettes, dersom den glemmes.</string>
     <string name="master_password_hint">Hovedadgangskodetip (valgfrit)</string>
     <string name="master_password_hint_description">Et hovedeadgangskodentip kan være en hjælpe til at huske adgangskoden, hvis den glemmes.</string>
-    <string name="master_password_length_val_message_x">Hovedadgangskoden skal udgøre mindst %1$s tegn.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Minnimumsantal cifre</string>
     <string name="min_special">Minnimumsantal specialtegn</string>
     <string name="never">Aldrig</string>
@@ -309,7 +312,10 @@ Skanning vil ske automatisk.</string>
     <string name="personal_details">Personal Details</string>
     <string name="contact_info">Contact Info</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
-    <string name="password_exposed">Denne adgangskode er blevet afsløret %1$s gang(e) i datalæk, hvorfor den straks bør skiftes.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Denne adgangskode er ikke fundet i nogen kendte datalæk. Den burde være sikker at bruge.</string>
     <string name="identity_name">Identitetsnavn</string>
     <string name="value">Værdi</string>
@@ -749,7 +755,10 @@ Skift til denne konto?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Vælg hovedadgangskode</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Vælg en unik og stærk adgangskode for at holde brugeroplysningerne sikre.</string>
-    <string name="minimum_characters">%1$s tegn</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Udløbet link</string>
     <string name="please_restart_registration_or_try_logging_in">Genstart registreringen eller prøv at logge ind. En konto findes muligvis allerede.</string>
     <string name="restart_registration">Genstart registrering</string>

@@ -110,7 +110,14 @@
     <string name="master_password_description">كلمة المرور الرئيسية هي كلمة المرور المستخدمة للوصول إلى الخزنة الخاصة بك. من المهم جدا ً ألا تنسى ذلك. لا توجد طريقة للعثور عليها إذا نسيت.</string>
     <string name="master_password_hint">فهرس كلمة المرور الرئيسية (اختياري)</string>
     <string name="master_password_hint_description">يمكن أن تساعدك فكرة كلمة المرور الرئيسية على تذكر كلمة المرور الخاصة بك إذا نسيت.</string>
-    <string name="master_password_length_val_message_x">كلمة المرور الرئيسية يجب أن تكون على الأقل %1$s حرفاً.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="zero">Master password must be at least %d characters long.</item>
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="two">Master password must be at least %d characters long.</item>
+        <item quantity="few">Master password must be at least %d characters long.</item>
+        <item quantity="many">Master password must be at least %d characters long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">الحد الأدنى للأرقام</string>
     <string name="min_special">الحد الأدنى من الأحرف الخاصة</string>
     <string name="never">أبداً</string>
@@ -309,7 +316,14 @@
     <string name="personal_details">التفاصيل الشخصية</string>
     <string name="contact_info">معلومات الاتصال</string>
     <string name="check_password_for_data_breaches">تحقق من كلمة المرور لخروقات البيانات</string>
-    <string name="password_exposed">تم كشف كلمة المرور هذه %1$s مرة (مرات) في عمليات اختراق البيانات. يجب عليك تغييرها.</string>
+    <plurals name="password_exposed">
+        <item quantity="zero">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="two">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="few">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="many">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">لم يتم العثور على كلمة المرور هذه في أي عمليات اختراق معروفة للبيانات. يجب أن تكون آمنة للاستخدام.</string>
     <string name="identity_name">اسم الهوية</string>
     <string name="value">القيمة</string>
@@ -749,7 +763,14 @@
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">لا يمكن لبت واردن إعادة تعيين كلمة مرور رئيسية مفقودة أو منسية.</string>
     <string name="choose_your_master_password">اختر كلمة المرور الرئيسية</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">اختر كلمة مرور فريدة وقوية للحفاظ على سلامة معلوماتك.</string>
-    <string name="minimum_characters">%1$s أحرف</string>
+    <plurals name="minimum_characters">
+        <item quantity="zero">%d characters</item>
+        <item quantity="one">%d character</item>
+        <item quantity="two">%d characters</item>
+        <item quantity="few">%d characters</item>
+        <item quantity="many">%d characters</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">رابط منتهي الصلاحية</string>
     <string name="please_restart_registration_or_try_logging_in">الرجاء إعادة تشغيل التسجيل أو محاولة تسجيل الدخول. قد يكون لديك حساب بالفعل.</string>
     <string name="restart_registration">إعادة تشغيل التسجيل</string>

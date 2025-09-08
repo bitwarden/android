@@ -110,7 +110,10 @@
     <string name="master_password_description">Huvudlösenordet är det lösenord som du använder för att komma åt ditt valv. Det är väldigt viktigt att du inte glömmer bort ditt huvudlösenord, eftersom det inte går att återställa lösenordet om du skulle glömma bort det.</string>
     <string name="master_password_hint">Huvudlösenordsledtråd (valfri)</string>
     <string name="master_password_hint_description">En huvudlösenordsledtråd kan hjälpa dig att komma ihåg ditt huvudlösenord om du glömmer bort det.</string>
-    <string name="master_password_length_val_message_x">Huvudlösenordet måste vara minst %1$s tecken långt.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Minsta antal siffror</string>
     <string name="min_special">Minsta antal speciella tecken</string>
     <string name="never">Aldrig</string>
@@ -309,7 +312,10 @@ Skanningen sker automatiskt.</string>
     <string name="personal_details">Personlig information</string>
     <string name="contact_info">Kontaktuppgifter</string>
     <string name="check_password_for_data_breaches">Kontrollera lösenord för dataintrång</string>
-    <string name="password_exposed">Detta lösenord har avslöjats %1$s gång(er) i dataintrång. Du bör ändra det.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Detta lösenord hittades inte i några kända dataintrång. Det bör vara säkert att använda.</string>
     <string name="identity_name">Identitetsnamn</string>
     <string name="value">Värde</string>
@@ -749,7 +755,10 @@ Vill du byta till detta konto?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden kan inte återställa ett förlorat eller glömt huvudlösenord.</string>
     <string name="choose_your_master_password">Välj ditt huvudlösenord</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Välj ett unikt och starkt lösenord för att hålla din information säker.</string>
-    <string name="minimum_characters">%1$s tecken</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Utgången länk</string>
     <string name="please_restart_registration_or_try_logging_in">Starta om registreringen eller försök logga in. Du kanske redan har ett konto.</string>
     <string name="restart_registration">Starta om registrering</string>
@@ -1068,12 +1077,12 @@ Vill du byta till detta konto?</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokala objekt är infällda, klicka för att expandera.</string>
     <string name="items_expanded_click_to_collapse">Objekt är expanderade, klicka för att fälla in.</string>
     <string name="items_are_collapsed_click_to_expand">Objekt är infällda, klicka för att expandera.</string>
-    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
-    <string name="copy_error_report">Copy error report</string>
-    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <string name="error_cannot_decrypt">[fel: kan inte dekryptera]</string>
+    <string name="copy_error_report">Kopiera felrapport</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden kunde inte avkryptera detta valvobjekt. Kopiera och dela denna felrapport med kundtjänst för att undvika ytterligare dataförlust.</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
-        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
-        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="one">Bitwarden kunde inte dekryptera %1$d valvobjekt. Kopiera och dela denna felrapport med kund framgång för att undvika ytterligare dataförlust.</item>
+        <item quantity="other">Bitwarden kunde inte dekryptera %1$d valvobjekt. Kopiera och dela denna felrapport med kund framgång för att undvika ytterligare dataförlust.</item>
     </plurals>
     <string name="select_a_card_for_x">Välj ett kort för %s</string>
     <string name="advanced_options">Avancerade inställningar</string>

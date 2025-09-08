@@ -9,6 +9,7 @@ import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
+import com.bitwarden.exporters.Account
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
@@ -427,6 +428,23 @@ interface VaultSdkSource {
         ciphers: List<Cipher>,
         format: ExportFormat,
     ): Result<String>
+
+    /**
+     * Exports the users vault data to a CXF formatted string.
+     */
+    suspend fun exportVaultDataToCxf(
+        userId: String,
+        account: Account,
+        ciphers: List<Cipher>,
+    ): Result<String>
+
+    /**
+     * Imports the given CXF formatted [payload] into the users vault.
+     *
+     * @return Result of the import. If successful, a list of [Cipher]s deciphered from the CXF
+     * payload.
+     */
+    suspend fun importCxf(userId: String, payload: String): Result<List<Cipher>>
 
     /**
      * Register a new FIDO 2 credential to a cipher.

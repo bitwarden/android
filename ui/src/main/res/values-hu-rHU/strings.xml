@@ -110,7 +110,10 @@
     <string name="master_password_description">A mesterjelszó az a jelszó amit a széfed eléréséhez fogsz használni. Nagyon fontos, hogy ne felejtsd el a mesterjelszavad, mert nincs lehetőséged visszaállítani ha elfelejtetted.</string>
     <string name="master_password_hint">Mesterjelszó emlékeztető (nem kötelező)</string>
     <string name="master_password_hint_description">A mesterjelszó emlékeztető segíthet emlékezni a jelszavadra ha elfejetetted volna.</string>
-    <string name="master_password_length_val_message_x">A mesterjelszónak legalább %1$s karakter hosszúnak kell lennie.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Legalább ennyi szám</string>
     <string name="min_special">Legalább ennyi speciális karakter</string>
     <string name="never">Soha</string>
@@ -308,7 +311,10 @@
     <string name="personal_details">Személyes adatok</string>
     <string name="contact_info">Kapcsolattartó infó</string>
     <string name="check_password_for_data_breaches">A jelszó ellenőrzése, hogy nem történt-e adatszivárgás</string>
-    <string name="password_exposed">Ez a jelszó %1$s alkalommal jelent meg az adatszivárgásban. Változtassuk meg.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Ez a jelszó nem érintett egyetlen ismert adatszivárgásban sem. Biztonságos a használata.</string>
     <string name="identity_name">Azonosság név</string>
     <string name="value">Érték</string>
@@ -748,7 +754,10 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">A Bitward nem tudja visszaállítani az elveszett vagy elfelejtett mesterjelszót.</string>
     <string name="choose_your_master_password">Mesterjelszó kiválasztása</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Válasszunk egyedi és erős jelszót az adatok biztonságának megőrzése érdekében.</string>
-    <string name="minimum_characters">%1$s karakter</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">A hivatkozás lejárt.</string>
     <string name="please_restart_registration_or_try_logging_in">Indítsuk újra a regisztrációt vagy próbáljunk meg bejelentkezni. Valószínűleg már létezik a fiók.</string>
     <string name="restart_registration">Regisztráció újra indítása</string>

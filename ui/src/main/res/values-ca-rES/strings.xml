@@ -110,7 +110,10 @@
     <string name="master_password_description">La contrasenya mestra és la clau que utilitzeu per accedir a la vostra caixa forta. És molt important que no la oblideu. No hi ha manera de recuperar-la en cas de perdre-la.</string>
     <string name="master_password_hint">Pista de la contrasenya mestra (opcional)</string>
     <string name="master_password_hint_description">Una pista de contrasenya mestra pot ajudar-vos a recordar-la si la oblideu.</string>
-    <string name="master_password_length_val_message_x">La contrasenya mestra ha de contenir almenys %1$s caràcters.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Mínim de caràcters numèrics</string>
     <string name="min_special">Mínim de caràcters especials</string>
     <string name="never">Mai</string>
@@ -309,7 +312,10 @@ L\'escaneig es farà automàticament.</string>
     <string name="personal_details">Personal Details</string>
     <string name="contact_info">Contact Info</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
-    <string name="password_exposed">Aquesta contrasenya ha estat exposada %1$s vegades en filtracions de seguretat de dades. Heu de canviar-la.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Aquesta contrasenya no s\'ha trobat en cap filtració de dades coneguda. Hauries de poder utilitzar-la de manera segura.</string>
     <string name="identity_name">Nom d\'identitat</string>
     <string name="value">Valor</string>
@@ -749,7 +755,10 @@ Voleu canviar a aquest compte?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Trieu la contrasenya mestra</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-    <string name="minimum_characters">%1$s characters</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Enllaç caducat</string>
     <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
     <string name="restart_registration">Restart registration</string>

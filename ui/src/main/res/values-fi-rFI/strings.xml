@@ -110,7 +110,10 @@
     <string name="master_password_description">Pääsalasanalla pääset käsiksi holviisi. On erittäin tärkeää, että muistat pääsalasanasi, koska sen palautus ei ole mahdollista, jos unohdat sen.</string>
     <string name="master_password_hint">Pääsalasanan vihje (valinnainen)</string>
     <string name="master_password_hint_description">Pääsalasanan vihje voi auttaa sinua muistamaan unohtamasi salasanan.</string>
-    <string name="master_password_length_val_message_x">Pääsalasanan tulee sisältää vähintään %1$s merkkiä.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Numeroita vähintään</string>
     <string name="min_special">Erikoismerkkejä vähintään</string>
     <string name="never">Ei koskaan</string>
@@ -309,7 +312,10 @@ Koodi skannataan automaattisesti.</string>
     <string name="personal_details">Henkilötiedot</string>
     <string name="contact_info">Yhteystiedot</string>
     <string name="check_password_for_data_breaches">Tarkasta salasana tietomurtojen varalta</string>
-    <string name="password_exposed">Salasana on paljastunut %1$s tietovuodossa. Se tulisi vaihtaa.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Salasanaa ei löytynyt tunnetuista tietovuodoista. Sen pitäisi olla turvallinen.</string>
     <string name="identity_name">Henkilöllisyyden nimi</string>
     <string name="value">Arvo</string>
@@ -749,7 +755,10 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Valitse pääsalasanasi</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Suojaa tietosi valitsemalla ainutlaatuinen ja vahva salasana.</string>
-    <string name="minimum_characters">%1$s merkkiä</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Vanhentunut linkki</string>
     <string name="please_restart_registration_or_try_logging_in">Aloita rekisteröityminen alusta tai yritä kirjautua sisään uudelleen. Sinulla saattaa jo olla tili.</string>
     <string name="restart_registration">Aloita rekisteröityminen alusta</string>

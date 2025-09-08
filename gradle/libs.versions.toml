@@ -3,7 +3,7 @@
 
 # App version
 appVersionCode = "1"
-appVersionName = "2025.7.0"
+appVersionName = "2025.9.1"
 
 # SDK Versions
 compileSdk = "36"
@@ -35,7 +35,7 @@ detekt = "1.23.8"
 firebaseBom = "34.2.0"
 glide = "1.0.0-beta01"
 googleGuava = "33.4.8-jre"
-googleProtoBufJava = "4.31.1"
+googleProtoBufJava = "4.32.0"
 googleProtoBufPlugin = "0.9.5"
 googleServices = "4.4.3"
 googleReview = "2.0.2"

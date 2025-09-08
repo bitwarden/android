@@ -14,8 +14,10 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
@@ -1945,7 +1947,11 @@ class VaultAddEditViewModel @Inject constructor(
                 is BreachCountResult.Success -> {
                     VaultAddEditState.DialogState.Generic(
                         message = if (result.breachCount > 0) {
-                            BitwardenString.password_exposed.asText(result.breachCount)
+                            BitwardenPlurals.password_exposed
+                                .asPluralsText(
+                                    quantity = result.breachCount,
+                                    args = arrayOf(result.breachCount),
+                                )
                         } else {
                             BitwardenString.password_safe.asText()
                         },

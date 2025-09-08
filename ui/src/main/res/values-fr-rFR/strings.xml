@@ -110,7 +110,10 @@
     <string name="master_password_description">Le mot de passe principal est le mot de passe que vous utilisez pour accéder à votre coffre. Il est très important de ne pas oublier votre mot de passe principal. Il n\'existe aucun moyen de récupérer le mot de passe si vous l\'oubliez.</string>
     <string name="master_password_hint">Indice du mot de passe principal (facultatif)</string>
     <string name="master_password_hint_description">Un indice de mot de passe principal peut vous aider à vous souvenir de votre mot de passe si vous l\'oubliez.</string>
-    <string name="master_password_length_val_message_x">Le mot de passe principal doit comporter au moins %1$s caractères.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Chiffres minimum</string>
     <string name="min_special">Caractères spéciaux minimum</string>
     <string name="never">Jamais</string>
@@ -309,7 +312,10 @@ La numérisation se fera automatiquement.</string>
     <string name="personal_details">Informations personnelles</string>
     <string name="contact_info">Coordonnées</string>
     <string name="check_password_for_data_breaches">Chercher si ce mot de passe a été retrouvé dans des fuites de données</string>
-    <string name="password_exposed">Ce mot de passe a été exposé %1$s fois dans des fuites de données. Vous devriez le changer.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Ce mot de passe n\'a été trouvé dans aucune fuite de données connue. Il semble sécurisé.</string>
     <string name="identity_name">Identité</string>
     <string name="value">Valeur</string>
@@ -749,7 +755,10 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden ne peut pas réinitialiser un mot de passe principal perdu ou oublié.</string>
     <string name="choose_your_master_password">Choisissez votre mot de passe principal</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choisissez un mot de passe unique et robuste pour garder vos informations en sécurité.</string>
-    <string name="minimum_characters">%1$s caractères</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Lien expiré</string>
     <string name="please_restart_registration_or_try_logging_in">Veuillez recommencer l\'inscription ou essayer de vous connecter. Vous avez peut-être déjà un compte.</string>
     <string name="restart_registration">Recommencer l\'inscription</string>

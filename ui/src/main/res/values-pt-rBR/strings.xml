@@ -110,7 +110,10 @@
     <string name="master_password_description">A senha mestra é a senha que você usa para acessar o seu cofre. É muito importante que você não esqueça sua senha mestra. Não há nenhuma maneira de recuperar a senha caso você se esqueça.</string>
     <string name="master_password_hint">Dica de senha mestra (opcional)</string>
     <string name="master_password_hint_description">Uma dica de senha mestra pode ajudá-lo(a) a lembrá-la caso você a esqueça.</string>
-    <string name="master_password_length_val_message_x">A senha mestra deve ter pelo menos %1$s caracteres.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Números mínimos</string>
     <string name="min_special">Especiais Minímos</string>
     <string name="never">Nunca</string>
@@ -309,7 +312,10 @@ A leitura será feita automaticamente.</string>
     <string name="personal_details">Dados Pessoais</string>
     <string name="contact_info">Informações de Contato</string>
     <string name="check_password_for_data_breaches">Procurar senha em vazamento de dados</string>
-    <string name="password_exposed">Esta senha foi exposta %1$s vez(es) em brechas de dados. Você deve alterá-la.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Esta senha não foi encontrada em brechas de dados conhecidas. Deve ser segura para se usar.</string>
     <string name="identity_name">Nome de Identidade</string>
     <string name="value">Valor</string>
@@ -749,7 +755,10 @@ Você deseja mudar para esta conta?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">O Bitwarden não consegue recuperar uma senha mestra perdida ou esquecida.</string>
     <string name="choose_your_master_password">Escolha sua senha mestra</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Escolha uma senha única e forte para manter suas informações seguras.</string>
-    <string name="minimum_characters">%1$s caracteres</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Link expirado</string>
     <string name="please_restart_registration_or_try_logging_in">Por favor, reinicie o registro ou tente iniciar uma sessão. Você pode já ter uma conta.</string>
     <string name="restart_registration">Reiniciar registro</string>

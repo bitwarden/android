@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import java.time.Clock
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -129,8 +130,8 @@ class PushManagerImpl @Inject constructor(
     @Suppress("LongMethod", "CyclomaticComplexMethod")
     private fun onMessageReceived(notification: BitwardenNotification) {
         if (authDiskSource.uniqueAppId == notification.contextId) return
-
         val userId = activeUserId ?: return
+        Timber.d("Push Notification Received: ${notification.notificationType}")
 
         when (val type = notification.notificationType) {
             NotificationType.AUTH_REQUEST,
@@ -189,9 +190,14 @@ class PushManagerImpl @Inject constructor(
                     .decodeFromString<NotificationPayload.SyncCipherNotification>(
                         string = notification.payload,
                     )
-                    .takeIf { isLoggedIn(userId) && it.userMatchesNotification(userId) }
-                    ?.cipherId
-                    ?.let { mutableSyncCipherDeleteSharedFlow.tryEmit(SyncCipherDeleteData(it)) }
+                    .takeIf { it.userId != null && it.cipherId != null }
+                    ?.let {
+                        SyncCipherDeleteData(
+                            userId = requireNotNull(it.userId),
+                            cipherId = requireNotNull(it.cipherId),
+                        )
+                    }
+                    ?.let { mutableSyncCipherDeleteSharedFlow.tryEmit(it) }
             }
 
             NotificationType.SYNC_CIPHERS,
@@ -226,9 +232,14 @@ class PushManagerImpl @Inject constructor(
                     .decodeFromString<NotificationPayload.SyncFolderNotification>(
                         string = notification.payload,
                     )
-                    .takeIf { isLoggedIn(userId) && it.userMatchesNotification(userId) }
-                    ?.folderId
-                    ?.let { mutableSyncFolderDeleteSharedFlow.tryEmit(SyncFolderDeleteData(it)) }
+                    .takeIf { it.userId != null && it.folderId != null }
+                    ?.let {
+                        SyncFolderDeleteData(
+                            userId = requireNotNull(it.userId),
+                            folderId = requireNotNull(it.folderId),
+                        )
+                    }
+                    ?.let { mutableSyncFolderDeleteSharedFlow.tryEmit(it) }
             }
 
             NotificationType.SYNC_ORG_KEYS -> {
@@ -266,9 +277,14 @@ class PushManagerImpl @Inject constructor(
                     .decodeFromString<NotificationPayload.SyncSendNotification>(
                         string = notification.payload,
                     )
-                    .takeIf { isLoggedIn(userId) && it.userMatchesNotification(userId) }
-                    ?.sendId
-                    ?.let { mutableSyncSendDeleteSharedFlow.tryEmit(SyncSendDeleteData(it)) }
+                    .takeIf { it.userId != null && it.sendId != null }
+                    ?.let {
+                        SyncSendDeleteData(
+                            userId = requireNotNull(it.userId),
+                            sendId = requireNotNull(it.sendId),
+                        )
+                    }
+                    ?.let { mutableSyncSendDeleteSharedFlow.tryEmit(it) }
             }
         }
     }

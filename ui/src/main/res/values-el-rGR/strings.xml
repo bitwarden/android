@@ -110,7 +110,10 @@
     <string name="master_password_description">Ο κύριος κωδικός χρησιμοποιείται για πρόσβαση στη κρύπτη σας. Είναι πολύ σημαντικό να μην τον ξεχάσετε. Δεν υπάρχει τρόπος να τον ανακτήσετε σε αυτή την περίπτωση.</string>
     <string name="master_password_hint">Υπόδειξη κύριου κωδικού (προαιρετικό)</string>
     <string name="master_password_hint_description">Η υπόδειξη κύριου κωδικού μπορεί να σας βοηθήσει να θυμηθείτε τον κωδικό σας αν τον ξεχάσετε.</string>
-    <string name="master_password_length_val_message_x">Ο κύριος κωδικός πρέπει να έχει μήκος τουλάχιστον %1$s χαρακτήρες.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Ελάχιστα αριθμητικά ψηφία</string>
     <string name="min_special">Ελάχιστοι ειδικοί χαρακτήρες</string>
     <string name="never">Ποτέ</string>
@@ -309,7 +312,10 @@
     <string name="personal_details">Προσωπικά στοιχεία</string>
     <string name="contact_info">Στοιχεία επικοινωνίας</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
-    <string name="password_exposed">Ο κωδικός αυτός έχει εκτεθεί %1$s φορά (ες) σε διαρροές δεδομένων. Πρέπει να τον αλλάξετε.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Ο κωδικός αυτός δεν βρέθηκε σε γνωστές διαρροές δεδομένων. Είναι ασφαλής για χρήση.</string>
     <string name="identity_name">Όνομα ταυτότητας</string>
     <string name="value">Τιμή</string>
@@ -749,7 +755,10 @@
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Επιλέξτε τον κύριο κωδικό πρόσβασης σας</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Επιλέξτε έναν μοναδικό και ισχυρό κωδικό πρόσβασης για να διατηρήσετε τις πληροφορίες σας ασφαλείς.</string>
-    <string name="minimum_characters">%1$s χαρακτήρες</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Ληγμένος σύνδεσμος</string>
     <string name="please_restart_registration_or_try_logging_in">Επανεκκινήστε την εγγραφή ή δοκιμάστε να συνδεθείτε. Μπορεί να διαθέτετε ήδη λογαριασμό.</string>
     <string name="restart_registration">Επανεκκίνηση εγγραφής</string>
