@@ -12,7 +12,7 @@
     <string name="copy_password">Kopiér adgangskode</string>
     <string name="copy_username">Kopiér brugernavn</string>
     <string name="delete">Slet</string>
-    <string name="deleting">Sletter...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Slet fortsat, sikker? Dette kan ikke fortrydes.</string>
     <string name="edit">Redigér</string>
     <string name="edit_folder">Redigér mappe</string>
@@ -55,7 +55,7 @@
     <string name="password">Adgangskode</string>
     <string name="save">Gem</string>
     <string name="move">Flyt</string>
-    <string name="saving">Gemmer...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Indstillinger</string>
     <string name="show">Vis</string>
     <string name="item_deleted">Emne slettet</string>
@@ -104,7 +104,7 @@
     <string name="immediately">Straks</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
-    <string name="logging_in">Logger ind...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Log ind på Bitwarden</string>
     <string name="master_password_confirmation_val_message">Adgangskodebekræftelse er forkert.</string>
     <string name="master_password_description">Hovedadgangskoden er den adgangskode, man benytter for at tilgå sin boks. Det er meget vigtigt, at man ikke glemmer sin hovedadgangskode, da der ikke er nogen måde, hvorpå koden kan genoprettes, dersom den glemmes.</string>
@@ -146,8 +146,8 @@
     <string name="select">Vælg</string>
     <string name="item_details">Item details</string>
     <string name="item_updated">Emne gemt</string>
-    <string name="submitting">Indsender...</string>
-    <string name="syncing">Synker...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Synkning fuldført</string>
     <string name="two_step_login">Totrins-login</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -166,7 +166,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Søg efter eller tilføj et nyt login</string>
     <string name="disabled">Deaktiveret</string>
     <string name="bitwarden_autofill_service_alert2">Den letteste måde at føje nye logins til boksen er fra Bitwarden Autoudfyldningstjeneste. Læs mere om brugen af Bitwarden Autoudfyldningstjeneste ved at gå til skærmen \"Indstillinger\".</string>
-    <string name="autofill">Autoudfyld</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">Skal dette emne autoudfyldes eller vises?</string>
     <string name="search">Søg</string>
     <string name="learn_org">Læs om organisationer</string>
@@ -185,7 +185,7 @@
     <string name="add_new_attachment">Tilføj ny vedhæftning</string>
     <string name="attachments">Vedhæftninger</string>
     <string name="unable_to_download_file">Kunne ikke downloade fil.</string>
-    <string name="downloading">Downloader...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Størrelsen på denne vedhæftning er %1$s. Sikker på, at den skal downloades på enheden?</string>
     <string name="authenticator_key">Godkendelsesnøgle (TOTP)</string>
     <string name="verification_code_totp">Bekræftelseskode (TOTP)</string>
@@ -399,10 +399,10 @@ Skanning vil ske automatisk.</string>
     <string name="save_attachment_success">Vedhæftning gemt</string>
     <string name="autofill_tile_accessibility_required">Aktivér \"Autoudfyld-tilgængelighedstjeneste\" fra Bitwarden-indstillinger for at benytte flisen Autoudfyld.</string>
     <string name="autofill_tile_uri_not_found">Ingen adgangskodefelter fundet</string>
-    <string name="soft_deleting">Sender til papirkurven...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Emne er sendt til papirkurven.</string>
     <string name="restore">Gendan</string>
-    <string name="restoring">Gendanner...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Emne gendannet</string>
     <string name="trash">Papirkurv</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Sikker på, at der skal slettes permanent? Dette kan ikke fortrydes.</string>
@@ -811,7 +811,7 @@ Skift til denne konto?</string>
     <string name="need_help_check_out_import_help">Behov for hjælp? Tjek import-hjælp ud.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Gem den eksporterede fil et sted på computeren, hvor man nemt kan finde den.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Dette er ikke en genkendt Bitwarden-server. Man skal muligvis tjekke med sin udbyder eller opdatere sin server.</string>
-    <string name="syncing_logins_loading_message">Synker logins...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Download webbrowserudvidelsen</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Gå til bitwarden.com/download for at integrere Bitwarden i den foretrukne webbrowser for en problemfri oplevelse.</string>
     <string name="use_the_web_app">Brug web-appen</string>
@@ -920,7 +920,7 @@ Skift til denne konto?</string>
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
     <string name="add_field">Add field</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Share error details</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>

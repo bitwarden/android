@@ -12,7 +12,7 @@
     <string name="copy_password">Parolayı kopyala</string>
     <string name="copy_username">Kullanıcı adını kopyala</string>
     <string name="delete">Sil</string>
-    <string name="deleting">Siliniyor...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Gerçekten silmek istiyor musunuz? Bu işlem geri alınamaz.</string>
     <string name="edit">Düzenle</string>
     <string name="edit_folder">Klasörü düzenle</string>
@@ -55,7 +55,7 @@
     <string name="password">Parola</string>
     <string name="save">Kaydet</string>
     <string name="move">Taşı</string>
-    <string name="saving">Kaydediliyor...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Ayarlar</string>
     <string name="show">Göster</string>
     <string name="item_deleted">Kayıt silindi</string>
@@ -104,7 +104,7 @@
     <string name="immediately">Hemen</string>
     <string name="vault_timeout_log_out_confirmation_title">Oturum zaman aşımı \"Çıkış yap\" olarak ayarlansın mı?</string>
     <string name="vault_timeout_log_out_confirmation_message">Zaman aşımı süresi dolunca oturumunuz kapatılacaktır. Yeniden oturum açıp kasaya erişmek için internete bağlı olmanız gerekecektir. Bu cihazda kayıtlı ayarlarınız ve PIN\'iniz değişmeyecektir.</string>
-    <string name="logging_in">Giriş yapılıyor...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Bitwarden\'a giriş yap</string>
     <string name="master_password_confirmation_val_message">Parola onayı doğru değil.</string>
     <string name="master_password_description">Ana parola, kasanıza ulaşmak için kullanacağınız paroladır. Ana parolanızı unutmamanız çok önemlidir. Unutursanız parolalarınızı asla kurtaramazsınız.</string>
@@ -146,8 +146,8 @@
     <string name="select">Seç</string>
     <string name="item_details">Kayıt ayrıntıları</string>
     <string name="item_updated">Öğe kaydedildi</string>
-    <string name="submitting">Gönderiliyor...</string>
-    <string name="syncing">Eşitleniyor...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Eşitleme tamamlandı</string>
     <string name="two_step_login">İki aşamalı giriş</string>
     <string name="unlock_with_biometrics">Kilidi biyometri ile aç</string>
@@ -166,7 +166,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Hesap ara veya yeni hesap ekle</string>
     <string name="disabled">Devre dışı</string>
     <string name="bitwarden_autofill_service_alert2">Kasanıza yeni hesaplar eklemenin en kolay yolu Bitwarden Otomatik Doldurma Hizmeti\'dir. Bu özellik hakkında daha fazla bilgi almak için \"Ayarlar\" ekranına gidin.</string>
-    <string name="autofill">Otomatik doldur</string>
+    <string name="autofill_title">Otomatik doldur</string>
     <string name="autofill_or_view">Bu kaydı otomatik doldurmak veya görüntülemek ister misiniz?</string>
     <string name="search">Ara</string>
     <string name="learn_org">Kuruluşlar hakkında bilgi al</string>
@@ -185,7 +185,7 @@
     <string name="add_new_attachment">Yeni dosya ekle</string>
     <string name="attachments">Dosyalar</string>
     <string name="unable_to_download_file">Dosya indirilemiyor.</string>
-    <string name="downloading">İndiriliyor...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Bu dosyanın boyutu %1$s. Dosyayı cihazınıza indirmek istediğinizden emin misiniz?</string>
     <string name="authenticator_key">Kimlik doğrulama anahtarı</string>
     <string name="verification_code_totp">Doğrulama kodu (TOTP)</string>
@@ -399,10 +399,10 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="save_attachment_success">Dosya başarıyla kaydedildi</string>
     <string name="autofill_tile_accessibility_required">Otomatik doldurma kutusunu kullanmak için lütfen Bitwarden ayarlarından \"Otomatik doldurma erişilebilirlik hizmeti\"ni açın.</string>
     <string name="autofill_tile_uri_not_found">Parola alanı tespit edilemedi</string>
-    <string name="soft_deleting">Çöp kutusuna gönderiliyor...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Kayıt çöp kutusuna gönderildi.</string>
     <string name="restore">Geri yükle</string>
-    <string name="restoring">Geri yükleniyor...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Kayıt geri yüklendi</string>
     <string name="trash">Çöp Kutusu</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</string>
@@ -731,10 +731,10 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="set_up_unlock_later">Kilit açma daha sonra mı ayarlansın?</string>
     <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">İstediğiniz zaman Ayarlar\'daki \"Hesap güvenliği\" kısmından bu adımı tamamlayabilirsiniz.</string>
     <string name="confirm">Onayla</string>
-    <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.</string>
+    <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Kasanıza hızlıca erişmek ve hesaplarınızı otomatik doldurmak için biyometrik girişi ayarlayın ve PIN kodu belirleyin.</string>
     <string name="never_lose_access_to_your_vault">Kasanıza erişiminizi kaybetmeyin</string>
     <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">Kasanıza her an erişebilmenizin en iyi yolu, önleminizi en baştan almaktır.</string>
-    <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
+    <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">Güvenli ve akılda kalıcı bir parola oluşturmanın en iyi yollarından biri bir parola cümlesi kullanmaktır. \nİşte nasıl yapılacağı:</string>
     <string name="create_a_hint">İpucu oluşturun</string>
     <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Talep ederseniz ipucunuz e-posta adresinize gönderilecektir.</string>
     <string name="write_your_password_down">Parolanızı not alın</string>
@@ -763,7 +763,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="restart_registration">Kaydı yeniden başlat</string>
     <string name="authenticator_sync">Authenticator senkronizasyonu</string>
     <string name="allow_bitwarden_authenticator_syncing">Authenticator ile eşitlemeye izin ver</string>
-    <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+    <string name="there_was_an_issue_validating_the_registration_token">Kayıt erişim anahtarını doğrulamada bir sorun oluştu.</string>
     <string name="turn_on_autofill">Otomatik doldurmayı etkinleştir</string>
     <string name="use_autofill_to_log_into_your_accounts">Hesaplarınıza tek dokunuşla giriş yapmak için otomatik doldurmayı kullanabilirsiniz.</string>
     <string name="turn_on_later">Daha sonra etkinleştir</string>
@@ -794,7 +794,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="class_2_biometrics_description">Biyometri ile kilit açma, güçlü biyometrik kimlik doğrulama gerektirir ve cihazınızdaki biyometri seçenekleriyle uyumlu değildir.</string>
     <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">Bilgisayarınızda <annotation emphasis="bold">mevcut tarayıcınızı veya parola yöneticinizi açın.</annotation></string>
     <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Parolalarınızı dışa aktarın.</annotation> Bu seçenek genellikle ayarlarınızda bulunur.</string>
-    <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Select Import data</annotation> in the web app, then Done below to finish syncing.</string>
+    <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">Web uygulamasında <annotation emphasis="bold">Verileri içe aktar</annotation> öğesini seçin, ardından senkronizasyonu tamamlamak için aşağıda Bitti öğesini seçin.</string>
     <string name="step_1_of_3">Adım 1/3</string>
     <string name="export_your_saved_logins">Kayıtlı hesaplarınızı dışa aktarın</string>
     <string name="delete_this_file_after_import_is_complete">İçe aktarma tamamlandıktan sonra bu dosyayı silmelisiniz.</string>
@@ -810,7 +810,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="need_help_check_out_import_help">Yardıma mı ihtiyacınız var? <annotation link="importHelp">İçe aktarma yardımına</annotation> göz atın.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Dışa aktardığınız dosyayı bilgisayarınızda kolayca bulabileceğiniz bir yere <annotation emphasis="bold">kaydedin</annotation>.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Bu Bitwarden sunucusu tanınmıyor. Servis sağlayıcınızdan bilgi alın veya sunucunuzu güncelleyin.</string>
-    <string name="syncing_logins_loading_message">Hesaplar eşitleniyor...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Tarayıcı uzantısını indirin</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Daha rahat kullanım için Bitwarden\'ı en sevdiğiniz tarayıcınıza entegre etmek isterseniz bitwarden.com/download adresine gidin.</string>
     <string name="use_the_web_app">Web uygulamasını kullanın</string>
@@ -919,7 +919,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="no_folder">Klasör yok</string>
     <string name="show_less">Daha az göster</string>
     <string name="add_field">Alan ekle</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Hata ayrıntılarını paylaş</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>

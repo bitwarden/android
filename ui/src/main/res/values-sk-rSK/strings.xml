@@ -12,7 +12,7 @@
     <string name="copy_password">Kopírovať heslo</string>
     <string name="copy_username">Kopírovať používateľské meno</string>
     <string name="delete">Odstrániť</string>
-    <string name="deleting">Odstraňuje sa...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Naozaj chcete odstrániť? Nedá sa to vrátiť späť.</string>
     <string name="edit">Upraviť</string>
     <string name="edit_folder">Upraviť priečinok</string>
@@ -55,7 +55,7 @@
     <string name="password">Heslo</string>
     <string name="save">Uložiť</string>
     <string name="move">Presunúť</string>
-    <string name="saving">Ukladá sa...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Nastavenia</string>
     <string name="show">Zobraziť</string>
     <string name="item_deleted">Položka bola odstránená.</string>
@@ -104,7 +104,7 @@
     <string name="immediately">Okamžite</string>
     <string name="vault_timeout_log_out_confirmation_title">Nastaviť časový limit na \"Odhlásiť\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">Po uplynutí časového limitu budete odhlásení. Na opätovné prihlásenie a prístup k trezoru budete musieť byť pripojení k internetu. Vaše nastavenia a PIN kód uložené v tomto zariadení sa nezmenia.</string>
-    <string name="logging_in">Prihlasovanie...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Prihlásiť sa do Bitwardenu</string>
     <string name="master_password_confirmation_val_message">Potvrdenie hesla nie je správne.</string>
     <string name="master_password_description">Hlavné heslo je heslo, ktoré použijete na prístup k svojmu trezoru. Je veľmi dôležité, aby ste svoje hlavné heslo nezabudli. Neexistuje možnosť, ako heslo obnoviť v prípade, že ho zabudnete.</string>
@@ -114,7 +114,7 @@
         <item quantity="one">Master password must be at least %d character long.</item>
         <item quantity="few">Master password must be at least %d characters long.</item>
         <item quantity="many">Master password must be at least %d characters long.</item>
-        <item quantity="other">Master password must be at least %d characters long.</item>
+        <item quantity="other">Hlavné heslo musí obsahovať aspoň %d znakov.</item>
     </plurals>
     <string name="min_numbers">Minimum číslic</string>
     <string name="min_special">Minimum špeciálnych</string>
@@ -148,8 +148,8 @@
     <string name="select">Vybrať</string>
     <string name="item_details">Podrobnosti o položke</string>
     <string name="item_updated">Položka bola aktualizovaná.</string>
-    <string name="submitting">Odosielam...</string>
-    <string name="syncing">Synchronizujem...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Synchronizácia kompletná.</string>
     <string name="two_step_login">Dvojstupňové prihlásenie</string>
     <string name="unlock_with_biometrics">Odomknúť pomocou biometrie</string>
@@ -168,7 +168,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Vyhľadať alebo pridať nové prihlasovacie údaje</string>
     <string name="disabled">Vypnuté</string>
     <string name="bitwarden_autofill_service_alert2">Najjednoduchší spôsob, ako pridať nové prihlasovacie údaje do vášho trezora, je prostredníctvom služby automatického vypĺňania Bitwardenu. Ďalšie informácie o používaní automatického vypĺňania Bitwardenu získate prechodom do obrazovky Nastavení.</string>
-    <string name="autofill">Automatické vypĺňanie</string>
+    <string name="autofill_title">Automatické vypĺňanie</string>
     <string name="autofill_or_view">Chcete automaticky vyplniť alebo zobraziť toto prihlásenie?</string>
     <string name="search">Hladať</string>
     <string name="learn_org">Zistiť viac o organizáciách</string>
@@ -187,7 +187,7 @@
     <string name="add_new_attachment">Pridať novú prílohu</string>
     <string name="attachments">Prílohy</string>
     <string name="unable_to_download_file">Nepodarilo sa stiahnuť súbor.</string>
-    <string name="downloading">Sťahovanie...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Táto príloha je veľká %1$s. Naozaj ju chcete stiahnúť do vášho zariadenia?</string>
     <string name="authenticator_key">Kľúč overovateľa (TOTP)</string>
     <string name="verification_code_totp">Overovací kód (TOTP)</string>
@@ -315,7 +315,7 @@ Skenovanie prebehne automaticky.</string>
     <string name="contact_info">Kontaktné informácie</string>
     <string name="check_password_for_data_breaches">Skontrolovať kompromitáciu hesla</string>
     <plurals name="password_exposed">
-        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="one">Toto heslo uniklo %d-krát v dátových únikoch. Mali by ste ho zmeniť.</item>
         <item quantity="few">This password has been exposed %d times in data breaches. You should change it.</item>
         <item quantity="many">This password has been exposed %d times in data breaches. You should change it.</item>
         <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
@@ -403,10 +403,10 @@ Skenovanie prebehne automaticky.</string>
     <string name="save_attachment_success">Príloha úspešne uložená</string>
     <string name="autofill_tile_accessibility_required">Zapnite službu dostupnosti pre automatické vypĺňanie v nastaveniach Bitwardenu, aby ste mohli používať dlaždicu pre automatické vypĺňanie.</string>
     <string name="autofill_tile_uri_not_found">Nenájdené žiadne políčka na heslo</string>
-    <string name="soft_deleting">Presúvanie do koša…</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Položka bola poslaná do koša.</string>
     <string name="restore">Obnoviť</string>
-    <string name="restoring">Obnovovanie...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Položka bola obnovená.</string>
     <string name="trash">Kôš</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Naozaj to chcete navždy odstrániť? Nedá sa to vrátiť späť.</string>
@@ -763,7 +763,7 @@ Chcete prepnúť na tento účet?</string>
         <item quantity="one">%d character</item>
         <item quantity="few">%d characters</item>
         <item quantity="many">%d characters</item>
-        <item quantity="other">%d characters</item>
+        <item quantity="other">%d znakov</item>
     </plurals>
     <string name="expired_link">Platnosť odkazu vypršala</string>
     <string name="please_restart_registration_or_try_logging_in">Zopakujte registráciu alebo sa pokúste prihlásiť. Možno už účet máte.</string>
@@ -817,7 +817,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="need_help_check_out_import_help">Potrebujete pomoc? Pozrite si pomoc pre importovanie.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Uložte exportovaný súbor na miesto v počítači, ktoré ľahko nájdete.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Toto nie je známy Bitwarden server. Možno bude potrebné overiť si to u svojho poskytovateľa alebo aktualizovať server.</string>
-    <string name="syncing_logins_loading_message">Synchronizácia prihlásení...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Stiahnuť rozšírenie pre prehliadač</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Pre pohodlné použivanie prejdite na stránku bitwarden.com/download a integrujte Bitwarden do svojho obľúbeného prehliadača.</string>
     <string name="use_the_web_app">Použiť webovú aplikáciu</string>
@@ -926,7 +926,7 @@ Chcete prepnúť na tento účet?</string>
     <string name="no_folder">Žiadny priečinok</string>
     <string name="show_less">Zobraziť menej</string>
     <string name="add_field">Pridať pole</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Zdieľať podrobnosti o chybe</string>
     <string name="flight_recorder">Čierna skrinka</string>
     <string name="flight_recorder_help">Pomocník pre čiernu skrinku</string>
