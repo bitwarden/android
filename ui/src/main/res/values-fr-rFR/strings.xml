@@ -12,7 +12,7 @@
     <string name="copy_password">Copier le mot de passe</string>
     <string name="copy_username">Copier le nom d\'utilisateur</string>
     <string name="delete">Supprimer</string>
-    <string name="deleting">Suppression...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Êtes-vous sûr de vouloir supprimer ? Cette action ne peut pas être annulée.</string>
     <string name="edit">Modifier</string>
     <string name="edit_folder">Éditer le dossier</string>
@@ -55,7 +55,7 @@
     <string name="password">Mot de passe</string>
     <string name="save">Enregistrer</string>
     <string name="move">Déplacer</string>
-    <string name="saving">Enregistrement...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Paramètres</string>
     <string name="show">Afficher</string>
     <string name="item_deleted">Élément supprimé</string>
@@ -104,7 +104,7 @@
     <string name="immediately">Immédiatement</string>
     <string name="vault_timeout_log_out_confirmation_title">Définir le délai d\'expiration de la session sur « Se déconnecter » ?</string>
     <string name="vault_timeout_log_out_confirmation_message">Après la période de temporisation, vous serez déconnecté. Vous devrez être connecté à Internet pour vous connecter et accéder à nouveau à votre coffre-fort. Vos paramètres et votre code PIN enregistrés sur cet appareil ne changeront pas.</string>
-    <string name="logging_in">Identification...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Se connecter à Bitwarden</string>
     <string name="master_password_confirmation_val_message">La confirmation du mot de passe est erronée.</string>
     <string name="master_password_description">Le mot de passe principal est le mot de passe que vous utilisez pour accéder à votre coffre. Il est très important de ne pas oublier votre mot de passe principal. Il n\'existe aucun moyen de récupérer le mot de passe si vous l\'oubliez.</string>
@@ -146,8 +146,8 @@
     <string name="select">Sélectionner</string>
     <string name="item_details">Détails de l\'élément</string>
     <string name="item_updated">Élément sauvegardé</string>
-    <string name="submitting">Soumission...</string>
-    <string name="syncing">Synchronisation...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Synchronisation achevée</string>
     <string name="two_step_login">Authentification à deux facteurs</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -166,7 +166,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Rechercher un login ou ajouter un nouveau login</string>
     <string name="disabled">Non</string>
     <string name="bitwarden_autofill_service_alert2">Le moyen le plus simple d\'ajouter de nouveaux identifiants à votre coffre est d\'utiliser le service de saisie automatique Bitwarden. Pour en savoir davantage sur l\'utilisation du service de saisie automatique Bitwarden, naviguez jusqu\'à l\'écran \"Paramètres\".</string>
-    <string name="autofill">Saisie automatique</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">Voulez-vous saisir automatiquement ou afficher cet élément ?</string>
     <string name="search">Rechercher</string>
     <string name="learn_org">En savoir plus sur les organisations</string>
@@ -185,7 +185,7 @@
     <string name="add_new_attachment">Ajouter une nouvelle pièce jointe</string>
     <string name="attachments">Pièces jointes</string>
     <string name="unable_to_download_file">Impossible de télécharger le fichier.</string>
-    <string name="downloading">Téléchargement...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Cette pièce jointe est d\'une taille de %1$s. Êtes-sûr de vouloir la télécharger sur votre appareil ?</string>
     <string name="authenticator_key">Clé d\'authentification (TOTP)</string>
     <string name="verification_code_totp">Code de vérification (TOTP)</string>
@@ -399,10 +399,10 @@ La numérisation se fera automatiquement.</string>
     <string name="save_attachment_success">La pièce jointe a été enregistrée avec succès</string>
     <string name="autofill_tile_accessibility_required">Veuillez activer le \"Service d\'accessibilité de saisie automatique\" dans les paramètres de Bitwarden pour utiliser la tuile de saisie automatique.</string>
     <string name="autofill_tile_uri_not_found">Aucun champ de mot de passe détecté</string>
-    <string name="soft_deleting">Envoi à la corbeille...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">L\'élément a été envoyé à la corbeille.</string>
     <string name="restore">Restaurer</string>
-    <string name="restoring">Restauration...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Élément restauré</string>
     <string name="trash">Corbeille</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Êtes-vous sûr de vouloir supprimer définitivement ? Cette action ne peut pas être annulée.</string>
@@ -811,7 +811,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="need_help_check_out_import_help">Besoin d\'aide ? Consultez la <annotation link="importHelp">page d\'aide à l\'importation</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Enregistrez le fichier exporté</annotation> dans un emplacement de votre ordinateur où vous pourrez le retrouver facilement.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Ce n\'est pas un serveur Bitwarden reconnu. Vous devrez peut-être vérifier auprès de votre fournisseur ou mettre à jour votre serveur.</string>
-    <string name="syncing_logins_loading_message">Synchronisation des identifiants...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Téléchargez l\'extension</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Allez sur bitwarden.com/download afin d\'intégrer Bitwarden dans votre navigateur favori pour une expérience fluide.</string>
     <string name="use_the_web_app">Utilisez l\'application web</string>
@@ -920,7 +920,7 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="no_folder">Aucun dossier</string>
     <string name="show_less">Afficher moins</string>
     <string name="add_field">Ajouter un champ</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Partager les détails de l\'erreur</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>

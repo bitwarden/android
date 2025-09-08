@@ -12,7 +12,7 @@
     <string name="copy_password">复制密码</string>
     <string name="copy_username">复制用户名</string>
     <string name="delete">删除</string>
-    <string name="deleting">正在删除...</string>
+    <string name="deleting">正在删除…</string>
     <string name="do_you_really_want_to_delete">您确定要删除吗？这个操作无法撤消。</string>
     <string name="edit">编辑</string>
     <string name="edit_folder">编辑文件夹</string>
@@ -55,7 +55,7 @@
     <string name="password">密码</string>
     <string name="save">保存</string>
     <string name="move">移动</string>
-    <string name="saving">正在保存...</string>
+    <string name="saving">正在保存…</string>
     <string name="settings">设置</string>
     <string name="show">显示</string>
     <string name="item_deleted">项目已删除</string>
@@ -104,14 +104,14 @@
     <string name="immediately">立即</string>
     <string name="vault_timeout_log_out_confirmation_title">将会话超时设置为「注销」吗？</string>
     <string name="vault_timeout_log_out_confirmation_message">超时后您将被注销。您需要连接到互联网才能再次登录并访问您的密码库。您在此设备上保存的设置和 PIN 不会更改。</string>
-    <string name="logging_in">正在登录...</string>
+    <string name="logging_in">正在登录…</string>
     <string name="login_to_bitwarden">登录到 Bitwarden</string>
     <string name="master_password_confirmation_val_message">两次填写的密码不一致。</string>
     <string name="master_password_description">主密码是用于访问您的密码库的密码。不要忘记您的主密码，这一点非常重要。一旦忘记，无任何办法恢复此密码。</string>
     <string name="master_password_hint">主密码提示（可选）</string>
     <string name="master_password_hint_description">主密码提示可以在您忘记密码时帮您回忆起来。</string>
     <plurals name="master_password_length_val_message_x">
-        <item quantity="other">Master password must be at least %d characters long.</item>
+        <item quantity="other">主密码长度必须至少为 %d 个字符。</item>
     </plurals>
     <string name="min_numbers">数字最少个数</string>
     <string name="min_special">符号最少个数</string>
@@ -145,8 +145,8 @@
     <string name="select">选择</string>
     <string name="item_details">项目详细信息</string>
     <string name="item_updated">项目已保存</string>
-    <string name="submitting">正在提交...</string>
-    <string name="syncing">正在同步...</string>
+    <string name="submitting">正在提交…</string>
+    <string name="syncing">正在同步…</string>
     <string name="syncing_complete">同步完成</string>
     <string name="two_step_login">两步登录</string>
     <string name="unlock_with_biometrics">使用生物识别解锁</string>
@@ -165,7 +165,7 @@
     <string name="search_for_a_login_or_add_a_new_login">搜索登录或添加新的登录</string>
     <string name="disabled">已禁用</string>
     <string name="bitwarden_autofill_service_alert2">向您的密码库中添加新登录项目的最简单方法，就是通过 Bitwarden 自动填充服务。转到「设置」界面进一步了解 Bitwarden 自动填充服务的使用。</string>
-    <string name="autofill">自动填充</string>
+    <string name="autofill_title">自动填充</string>
     <string name="autofill_or_view">您想自动填充还是查看此项目？</string>
     <string name="search">搜索</string>
     <string name="learn_org">了解组织</string>
@@ -184,7 +184,7 @@
     <string name="add_new_attachment">添加新附件</string>
     <string name="attachments">附件</string>
     <string name="unable_to_download_file">无法下载文件。</string>
-    <string name="downloading">正在下载...</string>
+    <string name="downloading">正在下载…</string>
     <string name="attachment_large_warning">此附件大小为 %1$s 。确定要将其下载到您的设备上吗？</string>
     <string name="authenticator_key">验证器密钥</string>
     <string name="verification_code_totp">验证码 (TOTP)</string>
@@ -289,7 +289,7 @@
     <string name="new_uri">新增 URI</string>
     <string name="add_website">添加网站</string>
     <string name="base_domain">基础域名</string>
-    <string name="default_text">默认（%1$s）</string>
+    <string name="default_text">默认 (%1$s)</string>
     <string name="exact">精确</string>
     <string name="host">主机</string>
     <string name="reg_ex">正则表达式</string>
@@ -312,7 +312,7 @@
     <string name="contact_info">联系信息</string>
     <string name="check_password_for_data_breaches">检查数据泄露中的密码</string>
     <plurals name="password_exposed">
-        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="other">此密码在泄露数据中已被公开 %d 次。请立即修改。</item>
     </plurals>
     <string name="password_safe">没有在已知的数据泄露中发现此密码，它暂时比较安全。</string>
     <string name="identity_name">身份名称</string>
@@ -397,10 +397,10 @@
     <string name="save_attachment_success">附件保存成功</string>
     <string name="autofill_tile_accessibility_required">请从 Bitwarden 设置中启用「自动填充无障碍服务」以使用自动填充磁贴。</string>
     <string name="autofill_tile_uri_not_found">未检测到密码字段</string>
-    <string name="soft_deleting">正在发送到回收站...</string>
+    <string name="soft_deleting">正在发送到回收站…</string>
     <string name="item_soft_deleted">项目已发送到回收站。</string>
     <string name="restore">恢复</string>
-    <string name="restoring">正在恢复...</string>
+    <string name="restoring">正在恢复…</string>
     <string name="item_restored">项目已恢复</string>
     <string name="trash">回收站</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">您确定要永久删除吗？此操作无法撤销。</string>
@@ -754,7 +754,7 @@
     <string name="choose_your_master_password">选择您的主密码</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">选择一个唯一且强大的密码，以保障您的信息安全。</string>
     <plurals name="minimum_characters">
-        <item quantity="other">%d characters</item>
+        <item quantity="other">%d 个字符</item>
     </plurals>
     <string name="expired_link">失效链接</string>
     <string name="please_restart_registration_or_try_logging_in">请重启注册或尝试登录。您可能已经有一个账户了。</string>
@@ -808,7 +808,7 @@
     <string name="need_help_check_out_import_help">需要帮助吗？请查看 <annotation link="importHelp">导入帮助</annotation>。</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">保存导出的文件</annotation>到计算机上您可以轻松找到的某个位置。</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">这是一个无法识别的 Bitwarden 服务器。您可能需要向您的提供商查询或更新您的服务器。</string>
-    <string name="syncing_logins_loading_message">正在同步登录信息...</string>
+    <string name="syncing_logins_loading_message">正在同步登录…</string>
     <string name="download_the_browser_extension">下载浏览器扩展</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">请访问 bitwarden.com/download，将 Bitwarden 集成到您最喜欢的浏览器中，以获得无缝体验。</string>
     <string name="use_the_web_app">使用网页 App</string>
@@ -917,7 +917,7 @@
     <string name="no_folder">无文件夹</string>
     <string name="show_less">显示更少</string>
     <string name="add_field">添加字段</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">分享错误详细信息</string>
     <string name="flight_recorder">飞行记录器</string>
     <string name="flight_recorder_help">飞行记录器帮助</string>
@@ -1048,7 +1048,7 @@
     <string name="sync_with_bitwarden_app">与 Bitwarden App 同步</string>
     <string name="learn_more_link"><annotation link="learnMore">了解更多</annotation></string>
     <string name="shared_codes_error">无法从 Bitwarden App 同步代码，请确保这两个 App 都是最新的。您仍然可以在 Bitwarden App 中访问您现有的代码。</string>
-    <string name="shared_accounts_header">%1$s | %2$s（%3$d）</string>
+    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">与 Bitwarden App 同步</string>
     <string name="sync_with_bitwarden_action_card_message">要查看您的所有验证码，您需要在您的所有账户上允许同步。</string>
     <string name="take_me_to_app_settings">跳转到 App 设置</string>
@@ -1064,7 +1064,7 @@
     <string name="choose_save_location_message">将此验证器密钥保存到此处，或将其添加到您的 Bitwarden App 的登录中。</string>
     <string name="save_option_as_default">保存选项为默认值</string>
     <string name="account_synced_from_bitwarden_app">账户已从 Bitwarden App 同步</string>
-    <string name="local_codes">本地代码（%1$d）</string>
+    <string name="local_codes">本地代码 (%1$d)</string>
     <string name="required_information_missing">缺少所需信息</string>
     <string name="required_information_missing_message">"缺少所需信息（例如，「服务」或「机密」）。请检查您的文件然后重试。请访问 bitwarden.com/help 以获取支持"</string>
     <string name="file_could_not_be_processed">"文件无法处理"</string>
