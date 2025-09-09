@@ -6,6 +6,7 @@ import com.bitwarden.core.DeriveKeyConnectorRequest
 import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
@@ -580,5 +581,15 @@ class VaultSdkSourceImpl(
                 credentialStore = fido2CredentialStore,
             )
             .silentlyDiscoverCredentials(relyingPartyId)
+    }
+
+    override suspend fun makeUpdateKdf(
+        userId: String,
+        password: String,
+        kdf: Kdf,
+    ): Result<UpdateKdfResponse> = runCatchingWithLogs {
+        getClient(userId = userId)
+            .crypto()
+            .makeUpdateKdf(password = password, kdf = kdf)
     }
 }
