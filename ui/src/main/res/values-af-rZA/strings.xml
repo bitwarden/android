@@ -12,7 +12,7 @@
     <string name="copy_password">Kopieer wagwoord</string>
     <string name="copy_username">Kopieer gebruikersnaam</string>
     <string name="delete">Skrap</string>
-    <string name="deleting">Skrap tans…</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Wil u dit regtig skrap? Dit kan nie ontdaan word nie.</string>
     <string name="edit">Wysig</string>
     <string name="edit_folder">Wysig vouer</string>
@@ -55,7 +55,7 @@
     <string name="password">Wagwoord</string>
     <string name="save">Bewaar</string>
     <string name="move">Skuif</string>
-    <string name="saving">Bewaar tans…</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Instellings</string>
     <string name="show">Toon</string>
     <string name="item_deleted">Item is geskrap.</string>
@@ -104,7 +104,7 @@
     <string name="immediately">Onmiddellik</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
-    <string name="logging_in">Teken tans aan…</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Log in to Bitwarden</string>
     <string name="master_password_confirmation_val_message">Wagwoordbevestiging is verkeerd.</string>
     <string name="master_password_description">Die hoofwagwoord is die wagwoord wat u gebruik vir toegang tot die kluis. Dit is baie belangrik dat u dit onthou. Dit kan op geen manier teruggevind word indien u dit vergeet nie.</string>
@@ -146,8 +146,8 @@
     <string name="select">Kies</string>
     <string name="item_details">Item details</string>
     <string name="item_updated">Item bygewerk.</string>
-    <string name="submitting">Word ingedien…</string>
-    <string name="syncing">Sinkroniseer...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Klaar gesinchroniseer.</string>
     <string name="two_step_login">Tweestapaantekening</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -166,7 +166,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">Gedeaktiveer</string>
     <string name="bitwarden_autofill_service_alert2">Die eenvoudigste manier om nuwe aantekeninge tot u kluis toe te voeg is vanuit die Bitwarden-outovuldiens. Leer meer oor die gebruik van die Bitwarden-outovuldiens in “Instellings”.</string>
-    <string name="autofill">Outovul</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">Wil u hierdie item outovul of bekyk?</string>
     <string name="search">Soek</string>
     <string name="learn_org">Meer oor organisasies</string>
@@ -185,7 +185,7 @@
     <string name="add_new_attachment">Voeg nuwe aanhegsel toe</string>
     <string name="attachments">Aanhegsels</string>
     <string name="unable_to_download_file">Kan nie lêer aflaai nie.</string>
-    <string name="downloading">Laai tans af…</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Hierdie aanhegsel is %1$s groot. Is u seker u wil dit op u toestel aflaai?</string>
     <string name="authenticator_key">Waarmerkkode (TOTP)</string>
     <string name="verification_code_totp">Bevestigingskode (TOTP)</string>
@@ -399,10 +399,10 @@ Skandering gebeur outomaties.</string>
     <string name="save_attachment_success">Aanhegsel suksesvol bewaar</string>
     <string name="autofill_tile_accessibility_required">Aktiveer asb. “Outovultoeganklikheidsdiens” in Bitwarden-instellings om die outovulteël te gebruik.</string>
     <string name="autofill_tile_uri_not_found">Geen wagwoordvelde bespeur</string>
-    <string name="soft_deleting">Stuur na die asblik…</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Item is na asblik verstuur.</string>
     <string name="restore">Stel terug</string>
-    <string name="restoring">Stel tans terug…</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Item is teruggestel.</string>
     <string name="trash">Asblik</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Wil u dit regtig permanent skrap? Dit kan nie ontdaan word nie.</string>
@@ -811,7 +811,7 @@ Wil u na die rekening omskakel?</string>
     <string name="need_help_check_out_import_help">Need help? Check out <annotation link="importHelp">import help</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
-    <string name="syncing_logins_loading_message">Syncing logins...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Download the browser extension</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favorite browser for a seamless experience.</string>
     <string name="use_the_web_app">Use the web app</string>
@@ -920,7 +920,7 @@ Wil u na die rekening omskakel?</string>
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
     <string name="add_field">Add field</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Share error details</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>

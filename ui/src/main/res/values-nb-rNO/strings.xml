@@ -12,7 +12,7 @@
     <string name="copy_password">Kopier passord</string>
     <string name="copy_username">Kopier brukernavn</string>
     <string name="delete">Slett</string>
-    <string name="deleting">Sletter...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Vil du virkelig slette den? Dette kan ikke angres på.</string>
     <string name="edit">Rediger</string>
     <string name="edit_folder">Rediger mappe</string>
@@ -55,7 +55,7 @@
     <string name="password">Passord</string>
     <string name="save">Lagre</string>
     <string name="move">Flytt</string>
-    <string name="saving">Lagrer...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Innstillinger</string>
     <string name="show">Vis</string>
     <string name="item_deleted">Elementet har blitt slettet.</string>
@@ -104,7 +104,7 @@
     <string name="immediately">Umiddelbart</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
-    <string name="logging_in">Logger på...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Logg inn på Bitwarden</string>
     <string name="master_password_confirmation_val_message">Passordbekreftelsen er ikke riktig.</string>
     <string name="master_password_description">Hovedpassordet er passordet du bruker for å få tilgang til hvelvet ditt. Det er svært viktig at du aldri glemmer hovedpassordet. Det er ikke mulig å gjenopprette passordet dersom du glemmer det.</string>
@@ -146,8 +146,8 @@
     <string name="select">Velg</string>
     <string name="item_details">Gjenstandens detaljer</string>
     <string name="item_updated">Element oppdatert.</string>
-    <string name="submitting">Sender inn...</string>
-    <string name="syncing">Synkroniserer...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Synkronisering fullført.</string>
     <string name="two_step_login">2-trinnsinnlogging</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -166,7 +166,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">Deaktivert</string>
     <string name="bitwarden_autofill_service_alert2">Den enkleste måten å legge til nye innlogginger i hvelvet ditt, er fra Bitwarden sin autofylltjeneste. Lær mer om å bruke Bitwarden sin autofylltjeneste ved å navigere til \"Innstillinger\".</string>
-    <string name="autofill">Auto-utfylling</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">Vil du auto-utfylle eller vise denne gjenstanden?</string>
     <string name="search">Søk</string>
     <string name="learn_org">Lær om organisasjoner</string>
@@ -185,7 +185,7 @@
     <string name="add_new_attachment">Legg til et nytt vedlegg</string>
     <string name="attachments">Vedlegg</string>
     <string name="unable_to_download_file">Kunne ikke laste ned filen.</string>
-    <string name="downloading">Laster ned...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Dette vedlegget er %1$s stort. Er du sikker på at du vil laste det ned til enheten din?</string>
     <string name="authenticator_key">Autentiseringsnøkkel (TOTP)</string>
     <string name="verification_code_totp">Verifiseringskode (TOTP)</string>
@@ -399,10 +399,10 @@ Skanning skjer automatisk.</string>
     <string name="save_attachment_success">Vedlegget ble lagret</string>
     <string name="autofill_tile_accessibility_required">Aktiver \"Auto-utfyllingstjenester\" fra Bitwarden-innstillingene for å bruke auto-utfyllingsflisen.</string>
     <string name="autofill_tile_uri_not_found">Ingen passordfelt oppdaget</string>
-    <string name="soft_deleting">Sender til papirkurv...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Elementet ble sendt til papirkurven.</string>
     <string name="restore">Gjenopprett</string>
-    <string name="restoring">Gjenoppretter...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Elementet har blitt gjenopprettet.</string>
     <string name="trash">Papirkurv</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Vil du virkelig slette denne permanent? Dette kan ikke angres.</string>

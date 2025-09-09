@@ -12,7 +12,7 @@
     <string name="copy_password">ಪಾಸ್ವರ್ಡ್ ನಕಲಿಸಿ</string>
     <string name="copy_username">ಬಳಕೆಹೆಸರು ನಕಲಿಸು</string>
     <string name="delete">ಅಳಿಸು</string>
-    <string name="deleting">ಅಳಿಸಲಾಗುತ್ತಿದೆ...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">ನೀವು ನಿಜವಾಗಿಯೂ ಅಳಿಸಲು ಬಯಸುವಿರಾ? ಇದನ್ನು ರದ್ದುಗೊಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
     <string name="edit">ಎಡಿಟ್</string>
     <string name="edit_folder">ಫೋಲ್ಡರ್ ಸಂಪಾದಿಸಿ</string>
@@ -55,7 +55,7 @@
     <string name="password">ಪಾಸ್ವರ್ಡ್</string>
     <string name="save">ಉಳಿಸಿ</string>
     <string name="move">Move</string>
-    <string name="saving">ಉಳಿಸುತ್ತಿದೆ...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">ಸೆಟ್ಟಿಂಗ್‍ಗಳು</string>
     <string name="show">ತೋರಿಸಿ</string>
     <string name="item_deleted">ಐಟಂ ಅಳಿಸಲಾಗಿದೆ.</string>
@@ -104,7 +104,7 @@
     <string name="immediately">ತಕ್ಷಣ</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
-    <string name="logging_in">ಲಾಗ್ ಇನ್ ಆಗುತ್ತಿದೆ ...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Log in to Bitwarden</string>
     <string name="master_password_confirmation_val_message">ಪಾಸ್ವರ್ಡ್ ದೃಢೀಕರಣ ಸರಿಯಾಗಿಲ್ಲ.</string>
     <string name="master_password_description">ನಿಮ್ಮ ವಾಲ್ಟ್ ಅನ್ನು ಪ್ರವೇಶಿಸಲು ನೀವು ಬಳಸುವ ಪಾಸ್ವರ್ಡ್ ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ ಆಗಿದೆ. ನಿಮ್ಮ ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ನೀವು ಮರೆಯದಿರುವುದು ಬಹಳ ಮುಖ್ಯ. ನೀವು ಅದನ್ನು ಮರೆತ ಸಂದರ್ಭದಲ್ಲಿ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ಮರುಪಡೆಯಲು ಯಾವುದೇ ಮಾರ್ಗವಿಲ್ಲ.</string>
@@ -146,8 +146,8 @@
     <string name="select">ಆಯ್ಕೆಮಾಡಿ</string>
     <string name="item_details">Item details</string>
     <string name="item_updated">ಐಟಂ ನವೀಕರಿಸಲಾಗಿದೆ.</string>
-    <string name="submitting">ಸಲ್ಲಿಸಲು...</string>
-    <string name="syncing">ಸಿಂಕ್ ಆಗುತ್ತಿದೆ...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">ಸಿಂಕ್ ಮುಗಿದಿದೆ</string>
     <string name="two_step_login">ಎರಡು ಹಂತದ ಲಾಗಿನ್</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -166,7 +166,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ</string>
     <string name="bitwarden_autofill_service_alert2">ನಿಮ್ಮ ವಾಲ್ಟ್‌ಗೆ ಹೊಸ ಲಾಗಿನ್‌ಗಳನ್ನು ಸೇರಿಸಲು ಸುಲಭವಾದ ಮಾರ್ಗವೆಂದರೆ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಸ್ವಯಂ-ಭರ್ತಿ ಸೇವೆಯಿಂದ. \"ಸೆಟ್ಟಿಂಗ್‌ಗಳು\" ಪರದೆಗೆ ನ್ಯಾವಿಗೇಟ್ ಮಾಡುವ ಮೂಲಕ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಸ್ವಯಂ-ಭರ್ತಿ ಸೇವೆಯನ್ನು ಬಳಸುವ ಬಗ್ಗೆ ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ.</string>
-    <string name="autofill">ಸ್ವಯಂ ಭರ್ತಿ</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">ಈ ಐಟಂ ಅನ್ನು ಸ್ವಯಂ ಭರ್ತಿ ಮಾಡಲು ಅಥವಾ ವೀಕ್ಷಿಸಲು ನೀವು ಬಯಸುವಿರಾ?</string>
     <string name="search">ಹುಡುಕಿ</string>
     <string name="learn_org">Learn about organizations</string>
@@ -185,7 +185,7 @@
     <string name="add_new_attachment">ಹೊಸ ಲಗತ್ತನ್ನು ಸೇರಿಸಿ</string>
     <string name="attachments">ಲಗತ್ತುಗಳು</string>
     <string name="unable_to_download_file">ಫೈಲ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
-    <string name="downloading">ಡೌನ್‌ಲೋಡ್ ಆಗುತ್ತಿದೆ…</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">ಈ ಲಗತ್ತು %1$s ಗಾತ್ರದಲ್ಲಿದೆ. ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ ಅದನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</string>
     <string name="authenticator_key">ದೃಢೀಕರಣ ಕೀ (TOTP)</string>
     <string name="verification_code_totp">ಪರಿಶೀಲನಾ ಕೋಡ್‌ಗಳು</string>
@@ -399,10 +399,10 @@ Scanning will happen automatically.</string>
     <string name="save_attachment_success">ಲಗತ್ತು ಯಶಸ್ವಿಯಾಗಿ ಉಳಿಸಲಾಗಿದೆ</string>
     <string name="autofill_tile_accessibility_required">ಸ್ವಯಂ-ಭರ್ತಿ ಟೈಲ್ ಅನ್ನು ಬಳಸಲು ದಯವಿಟ್ಟು ಬಿಟ್‌ವಾರ್ಡನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳಿಂದ \"ಸ್ವಯಂ-ಭರ್ತಿ ಪ್ರವೇಶಿಸುವಿಕೆ ಸೇವೆ\" ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ.</string>
     <string name="autofill_tile_uri_not_found">No password fields detected</string>
-    <string name="soft_deleting">ಅನುಪಯುಕ್ತಕ್ಕೆ ಕಳುಹಿಸಲಾಗುತ್ತಿದೆ ...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">ಐಟಂ ಅನ್ನು ಅನುಪಯುಕ್ತಕ್ಕೆ ಕಳುಹಿಸಲಾಗಿದೆ.</string>
     <string name="restore">ಪುನಸ್ಥಾಪಿಸಿ</string>
-    <string name="restoring">ಮರುಸ್ಥಾಪಿಸಲಾಗುತ್ತಿದೆ ...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">ಐಟಂ ಅನ್ನು ಮರುಸ್ಥಾಪಿಸಲಾಗಿದೆ.</string>
     <string name="trash">ಅನುಪಯುಕ್ತ</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">ನೀವು ನಿಜವಾಗಿಯೂ ಶಾಶ್ವತವಾಗಿ ಅಳಿಸಲು ಬಯಸುವಿರಾ? ಇದನ್ನು ರದ್ದುಗೊಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
@@ -811,7 +811,7 @@ Do you want to switch to this account?</string>
     <string name="need_help_check_out_import_help">Need help? Check out <annotation link="importHelp">import help</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
-    <string name="syncing_logins_loading_message">Syncing logins...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Download the browser extension</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favorite browser for a seamless experience.</string>
     <string name="use_the_web_app">Use the web app</string>
@@ -920,7 +920,7 @@ Do you want to switch to this account?</string>
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
     <string name="add_field">Add field</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Share error details</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>

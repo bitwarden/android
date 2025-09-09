@@ -12,7 +12,7 @@
     <string name="copy_password">Kopirajte lozinku</string>
     <string name="copy_username">Kopirajte korisničko ime</string>
     <string name="delete">Izbriši</string>
-    <string name="deleting">Brisanje...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Da li stvarno želite da izbrišete? Ovo se ne može poništiti.</string>
     <string name="edit">Uredi</string>
     <string name="edit_folder">Uredite folder</string>
@@ -55,7 +55,7 @@
     <string name="password">Lozinka</string>
     <string name="save">Spremi</string>
     <string name="move">Premjesti</string>
-    <string name="saving">Spremanje...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Postavke</string>
     <string name="show">Prikaži</string>
     <string name="item_deleted">Stavka je izbrisana.</string>
@@ -104,7 +104,7 @@
     <string name="immediately">Odmah</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
-    <string name="logging_in">Prijavljivanje…</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Log in to Bitwarden</string>
     <string name="master_password_confirmation_val_message">Potvrda lozinke nije tačna.</string>
     <string name="master_password_description">Glavna lozinka je lozinka koju koristite za pristup Vašem trezoru. Veoma je važno da ne zaboravite glavnu lozinku. Ne postoji način da povratite lozinku u slučaju da je zaboravite.</string>
@@ -147,8 +147,8 @@
     <string name="select">Izaberite</string>
     <string name="item_details">Item details</string>
     <string name="item_updated">Stavka je ažurirana.</string>
-    <string name="submitting">Potvrđivanje...</string>
-    <string name="syncing">Sinhronizacija...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Sinhronizacija je završena.</string>
     <string name="two_step_login">Prijava u dva koraka</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -167,7 +167,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">Onemogućeno</string>
     <string name="bitwarden_autofill_service_alert2">Najlakši način za dodavanje novih prijava u Vaš trezor je iz dodatka Bitwarden aplikacije. Saznajte više o korišćenju dodatka Bitwarden aplikacije u „Podešavanjima“.</string>
-    <string name="autofill">Popunite automatski</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">Da li želite da automatski popunite ili pogledate ovu stavku?</string>
     <string name="search">Pretraga</string>
     <string name="learn_org">Naučite o Organizacijama</string>
@@ -186,7 +186,7 @@
     <string name="add_new_attachment">Dodajte novi prilog</string>
     <string name="attachments">Prilozi</string>
     <string name="unable_to_download_file">Nije moguće preuzeti datoteku.</string>
-    <string name="downloading">Preuzimanje...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Veličina ovog priloga je %1$s. Da li ste sigurni da ga želite preuzeti na svom uređaju?</string>
     <string name="authenticator_key">Ključ autentifikatora (TOTP)</string>
     <string name="verification_code_totp">Verifikacioni kod (TOTP)</string>
@@ -401,10 +401,10 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="save_attachment_success">Prilog uspješno spremljen</string>
     <string name="autofill_tile_accessibility_required">U Bitwarden postavkama -&gt; „Usluga auto-ispune kroz pristupačnost” uključi opciju „Koristi pristupačnost”.</string>
     <string name="autofill_tile_uri_not_found">Nema pronađenih polja za unos lozinke</string>
-    <string name="soft_deleting">Slanje u smeće...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Stavka je poslana u smeće.</string>
     <string name="restore">Vrati</string>
-    <string name="restoring">Vraćanje...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Stavka je vraćena.</string>
     <string name="trash">Smeće</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Doista želite zauvijek izbrisati? To se ne može poništiti.</string>
@@ -813,7 +813,7 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="need_help_check_out_import_help">Need help? Check out <annotation link="importHelp">import help</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
-    <string name="syncing_logins_loading_message">Syncing logins...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Download the browser extension</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favorite browser for a seamless experience.</string>
     <string name="use_the_web_app">Use the web app</string>
@@ -922,7 +922,7 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
     <string name="add_field">Add field</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Share error details</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>

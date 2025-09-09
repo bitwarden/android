@@ -12,7 +12,7 @@
     <string name="copy_password">Parolu kopyala</string>
     <string name="copy_username">İstifadəçi adını kopyala</string>
     <string name="delete">Sil</string>
-    <string name="deleting">Silinir...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Həqiqətən silmək istəyirsiniz? Bunun geri dönüşü yoxdur.</string>
     <string name="edit">Düzəliş et</string>
     <string name="edit_folder">Qovluğa düzəliş et</string>
@@ -55,7 +55,7 @@
     <string name="password">Parol</string>
     <string name="save">Saxla</string>
     <string name="move">Daşı</string>
-    <string name="saving">Saxlanılır...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Ayarlar</string>
     <string name="show">Göstər</string>
     <string name="item_deleted">Element silindi.</string>
@@ -104,15 +104,15 @@
     <string name="immediately">Dərhal</string>
     <string name="vault_timeout_log_out_confirmation_title">Seans vaxt bitməsi \"Çıxış et\" olaraq təyin edilsin?</string>
     <string name="vault_timeout_log_out_confirmation_message">Vaxt bitdikdən sonra hesabdan çıxış ediləcək. Seyfinizə təkrar giriş edib erişmək üçün internetə bağlanmalısınız. Bu cihazdakı saxlanılmış ayarlarınız və PIN dəyişməyəcək.</string>
-    <string name="logging_in">Giriş edilir...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Bitwarden-ə giriş edin</string>
     <string name="master_password_confirmation_val_message">Parol təsdiqləmə doğru deyil.</string>
     <string name="master_password_description">Ana parol, seyfinizə erişmək üçün istifadə edəcəyiniz paroldur. Ana parolu yadda saxlamaq çox vacibdir. Unutsanız, parolu bərpa etməyin heç bir yolu yoxdur.</string>
     <string name="master_password_hint">Ana parol məsləhəti (ixtiyari)</string>
     <string name="master_password_hint_description">Ana parol məsləhəti, unutduğunuz parolu xatırlamağınıza kömək edir.</string>
     <plurals name="master_password_length_val_message_x">
-        <item quantity="one">Master password must be at least %d character long.</item>
-        <item quantity="other">Master password must be at least %d characters long.</item>
+        <item quantity="one">Ana parol ən azı %d xarakter uzunluğunda olmalıdır.</item>
+        <item quantity="other">Ana parol ən azı %d xarakter uzunluğunda olmalıdır.</item>
     </plurals>
     <string name="min_numbers">Minimum rəqəm</string>
     <string name="min_special">Minimum simvol</string>
@@ -146,8 +146,8 @@
     <string name="select">Seçin</string>
     <string name="item_details">Element detalları</string>
     <string name="item_updated">Element güncəlləndi.</string>
-    <string name="submitting">Göndərilir...</string>
-    <string name="syncing">Sinxronlaşdırılır...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Sinxr tamamlandı</string>
     <string name="two_step_login">İki mərhələli giriş</string>
     <string name="unlock_with_biometrics">Kilidi biometriklə aç</string>
@@ -166,7 +166,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Bir giriş axtar və ya yenisini əlavə et</string>
     <string name="disabled">Sıradan çıxarıldı</string>
     <string name="bitwarden_autofill_service_alert2">Seyfinizə yeni bir giriş əlavə etməyin ən asan yolu, Bitwarden Avto-doldurma Xidmətidir. Bitwarden Avto-doldurma Xidmətini istifadə etməklə bağlı daha ətraflı məlumat üçün \"Ayarlar\" ekranına gedin.</string>
-    <string name="autofill">Avto-doldurma</string>
+    <string name="autofill_title">Avto-doldur</string>
     <string name="autofill_or_view">Avto-doldurmaq və ya bu elementə baxmaq istəyirsiniz?</string>
     <string name="search">Axtar</string>
     <string name="learn_org">Təşkilatlar barədə daha ətraflı</string>
@@ -185,7 +185,7 @@
     <string name="add_new_attachment">Yeni qoşma əlavə et</string>
     <string name="attachments">Qoşmalar</string>
     <string name="unable_to_download_file">Fayl endirilə bilmir.</string>
-    <string name="downloading">Endirilir...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Bu qoşmanın həcmi %1$s. Faylı cihazınıza endirmək istədiyinizə əminsiniz?</string>
     <string name="authenticator_key">Kimlik doğrulayıcı açarı (TOTP)</string>
     <string name="verification_code_totp">Doğrulama kodu (TOTP)</string>
@@ -313,8 +313,8 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="contact_info">Əlaqə məlumatı</string>
     <string name="check_password_for_data_breaches">Parolları veri pozuntularına qarşı yoxla</string>
     <plurals name="password_exposed">
-        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
-        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="one">Bu parol, veri pozuntularında %d dəfə üzə çıxıb. Onu dəyişdirməlisiniz.</item>
+        <item quantity="other">Bu parol, veri pozuntularında %d dəfə üzə çıxıb. Onu dəyişdirməlisiniz.</item>
     </plurals>
     <string name="password_safe">Bu parol, veri pozuntularında tapılmayıb. Rahatlıqla istifadə edə bilərsiniz.</string>
     <string name="identity_name">Kimlik adı</string>
@@ -399,10 +399,10 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="save_attachment_success">Qoşma uğurla saxlanıldı</string>
     <string name="autofill_tile_accessibility_required">Avto-doldurma qutusunu istifadə etmək üçün lütfən Bitwarden ayarlarında \"Avto-doldurma Erişiləbilənlik Xidməti\"ni işə salın.</string>
     <string name="autofill_tile_uri_not_found">Heç bir parol sahəsi aşkarlanmadı</string>
-    <string name="soft_deleting">Tullantı qutusuna göndərilir...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Element tullantı qutusuna göndərildi.</string>
     <string name="restore">Bərpa et</string>
-    <string name="restoring">Bərpa edilid...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Element bərpa edildi.</string>
     <string name="trash">Tullantı qutusu</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Həqiqətən birdəfəlik silmək istəyirsiniz? Bunun geri dönüşü yoxdur.</string>
@@ -755,8 +755,8 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="choose_your_master_password">Ana parolunuzu seçin</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Məlumatlarınızı təhlükəsiz saxlamaq üçün unikal və güclü bir parol seçin.</string>
     <plurals name="minimum_characters">
-        <item quantity="one">%d character</item>
-        <item quantity="other">%d characters</item>
+        <item quantity="one">%d xarakter</item>
+        <item quantity="other">%d xarakter</item>
     </plurals>
     <string name="expired_link">Vaxtı bitmiş keçid</string>
     <string name="please_restart_registration_or_try_logging_in">Lütfən qeydiyyatı yenidən başladın və ya giriş etməyə çalışın. Artıq bir hesabınız ola bilər.</string>
@@ -810,7 +810,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="need_help_check_out_import_help">Kömək lazımdır? Daxilə köçürmə üzrə kömək səhifəmizə baxın.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Xaricə köçürdüyünüz faylı kompüterinizdə rahatlıqla tapa biləcəyiniz yerdə saxlayın.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Bu, bilinən Bitwarden serveri deyil. Provayderinizi yoxlamağınız və ya serverinizi güncəlləməyiniz lazım gələ bilər.</string>
-    <string name="syncing_logins_loading_message">Girişlər sinxronlaşdırılır...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Brauzer uzantısını endir</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Daha problemsiz bir təcrübə üçün Bitwarden-i sevimli brauzerinizə inteqrasiya etmək üçün bitwarden.com/download ünvanına gedin. </string>
     <string name="use_the_web_app">Veb tətbiqi istifadə et</string>
@@ -919,7 +919,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
     <string name="no_folder">Qovluq yoxdur</string>
     <string name="show_less">Daha az göstər</string>
     <string name="add_field">Xana əlavə et</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Xəta detallarını paylaş</string>
     <string name="flight_recorder">Uçuş yazıcısı</string>
     <string name="flight_recorder_help">Uçuş yazıcısı üzrə kömək</string>

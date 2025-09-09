@@ -12,7 +12,7 @@
     <string name="copy_password">രഹസ്യവാക്ക് പകർത്തുക</string>
     <string name="copy_username">ഉപയോക്തൃനാമം പകർത്തുക</string>
     <string name="delete">നീക്കംചെയ്യുക</string>
-    <string name="deleting">നീക്കംചെയ്യുന്നു...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">നിങ്ങൾക്ക്എന്നെന്നേക്കുമായി നീക്കം ചെയ്യാൻ ആഗ്രഹമുണ്ടോ? ഇത് പഴയപടിയാക്കാൻ കഴിയില്ല.</string>
     <string name="edit">തിരുത്തുക</string>
     <string name="edit_folder">ഫോൾഡർ തിരുത്തുക</string>
@@ -55,7 +55,7 @@
     <string name="password">പാസ്‌വേഡ്</string>
     <string name="save">സംരക്ഷിക്കുക</string>
     <string name="move">നീക്കുക</string>
-    <string name="saving">സംരക്ഷിക്കുന്നു...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">ക്രമീകരണങ്ങള്‍</string>
     <string name="show">കാണിക്കുക</string>
     <string name="item_deleted">ഇനം നീക്കം ചെയ്തു.</string>
@@ -104,7 +104,7 @@
     <string name="immediately">ഉടന്‍തന്നെ</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
-    <string name="logging_in">പ്രവേശിക്കുന്നു...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Log in to Bitwarden</string>
     <string name="master_password_confirmation_val_message">പാസ്‌വേഡ് സ്ഥിരീകരണം ശെരി അല്ല.</string>
     <string name="master_password_description">നിങ്ങളുടെ വാൾട്ടിലേക്ക് പ്രവേശിക്കാൻ ഉപയോഗിക്കുന്ന പാസ്‌വേഡാണ് പ്രാഥമിക പാസ്‌വേഡ്. നിങ്ങളുടെ പ്രാഥമിക പാസ്‌വേഡ് മറക്കാതിരിക്കുക എന്നത് വളരെ പ്രധാനമാണ്. നിങ്ങൾ പാസ്‌വേഡ് മറന്ന സാഹചര്യത്തിൽ, പാസ്‌വേഡ് വീണ്ടെടുക്കാൻ ഒരു മാർഗവുമില്ല.</string>
@@ -146,8 +146,8 @@
     <string name="select">തിരഞ്ഞെടുക്കുക</string>
     <string name="item_details">Item details</string>
     <string name="item_updated">ഇനം പുതുക്കി.</string>
-    <string name="submitting">സമർപ്പിക്കുന്നു...</string>
-    <string name="syncing">സമന്വയിപ്പിക്കുന്നു...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">സമന്വയം പൂർത്തിയായി.</string>
     <string name="two_step_login">രണ്ട്-ഘട്ട പ്രവേശനം</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -166,7 +166,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">പ്രവർത്തനരഹിതം</string>
     <string name="bitwarden_autofill_service_alert2">നിങ്ങളുടെ വാൾട്ടിലേക്കു  പുതിയ പ്രവേശനങ്ങൾ ചേർക്കുന്നതിനുള്ള ഏറ്റവും എളുപ്പ മാർഗം Bitwarden  അപ്ലിക്കേഷൻ എക്സ്റ്റൻഷൻ ആണ്. കൂടുതൽ വിവരങ്ങൾക്കായി \'ക്രമീകരണങ്ങൾ\' പേജിലേക്ക് പോവുക.</string>
-    <string name="autofill">ഓട്ടോഫിൽ</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">ഈ ഇനം ഓട്ടോഫിൽ ചെയ്യാനോ അല്ലെങ്കിൽ കാണാനോ നിങ്ങൾ ആഗ്രഹിക്കുന്നുണ്ടോ?</string>
     <string name="search">തിരയൂ</string>
     <string name="learn_org">സംഘടനകളെക്കുറിച്ച് കൂടുതൽ അറിയുക</string>
@@ -185,7 +185,7 @@
     <string name="add_new_attachment">പുതിയ അറ്റാച്ചുമെന്റ് ചേർക്കുക</string>
     <string name="attachments">അറ്റാച്ചുമെന്റുകൾ</string>
     <string name="unable_to_download_file">ഫയൽ ഡൗൺലോഡുചെയ്യാനായില്ല.</string>
-    <string name="downloading">ഡൗൺലോഡുചെയ്യുന്നു...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">ഈ അറ്റാച്ചുമെന്റ് %1$s വലുപ്പത്തിലാണ്. ഇത് നിങ്ങളുടെ ഉപകരണത്തിലേക്ക് ഡൌൺലോഡ് ചെയ്യണമെന്ന് നിങ്ങൾക്ക് ഉറപ്പാണോ?</string>
     <string name="authenticator_key">ഓതന്റിക്കേറ്റർ കീ  (TOTP)</string>
     <string name="verification_code_totp">സമയം അടിസ്ഥാനമാക്കിയ സ്ഥിരീകരണ കോഡ്(TOTP)</string>
@@ -399,10 +399,10 @@
     <string name="save_attachment_success">അറ്റാച്ചുമെന്റ് വിജയകരമായി സംരക്ഷിച്ചു</string>
     <string name="autofill_tile_accessibility_required">ഓട്ടോഫിൽ ടൈൽ ഉപയോഗിക്കുന്നതിന് Bitwarden ക്രമീകരണങ്ങളിൽ നിന്ന് \"ഓട്ടോഫിൽ ആക്സിസിബിലിറ്റി  സേവനം\" പ്രാപ്തമാക്കുക.</string>
     <string name="autofill_tile_uri_not_found">പാസ്‌വേഡ് ഫീൽഡുകളൊന്നും കണ്ടെത്തിയില്ല</string>
-    <string name="soft_deleting">ഇനം ട്രാഷിലേക്ക് അയയ്ക്കുന്നു...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">ഇനം ട്രാഷിലേക്ക് അയച്ചു.</string>
     <string name="restore">വീണ്ടെടുക്കുക</string>
-    <string name="restoring">വീണ്ടെടുക്കുന്നു...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">ഇനം വീണ്ടെടുടുത്തു.</string>
     <string name="trash">ട്രാഷ്</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">നിങ്ങൾക്ക്എന്നെന്നേക്കുമായി നീക്കം ചെയ്യാൻ ആഗ്രഹമുണ്ടോ? ഇത് പഴയപടിയാക്കാൻ കഴിയില്ല.</string>
@@ -811,7 +811,7 @@ Do you want to switch to this account?</string>
     <string name="need_help_check_out_import_help">Need help? Check out <annotation link="importHelp">import help</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
-    <string name="syncing_logins_loading_message">Syncing logins...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Download the browser extension</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favorite browser for a seamless experience.</string>
     <string name="use_the_web_app">Use the web app</string>
@@ -920,7 +920,7 @@ Do you want to switch to this account?</string>
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
     <string name="add_field">Add field</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Share error details</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>

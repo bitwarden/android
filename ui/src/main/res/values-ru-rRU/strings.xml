@@ -12,7 +12,7 @@
     <string name="copy_password">Скопировать пароль</string>
     <string name="copy_username">Скопировать имя пользователя</string>
     <string name="delete">Удалить</string>
-    <string name="deleting">Удаление...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Вы действительно хотите удалить? Это действие необратимо.</string>
     <string name="edit">Изменить</string>
     <string name="edit_folder">Изменение папки</string>
@@ -55,7 +55,7 @@
     <string name="password">Пароль</string>
     <string name="save">Сохранить</string>
     <string name="move">Переместить</string>
-    <string name="saving">Сохранение...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Настройки</string>
     <string name="show">Показать</string>
     <string name="item_deleted">Элемент удален.</string>
@@ -104,7 +104,7 @@
     <string name="immediately">Немедленно</string>
     <string name="vault_timeout_log_out_confirmation_title">Установить тайм-аут сессии для \"Выход\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">По истечении тайм-аута ваша сессия будет завершена. Для повторной авторизации и получения доступа к хранилищу, вам потребуется подключение к интернету. Ваши настройки и PIN-код, сохраненные на этом устройстве, не изменятся.</string>
-    <string name="logging_in">Вход...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Войти в Bitwarden</string>
     <string name="master_password_confirmation_val_message">Неверное подтверждение пароля.</string>
     <string name="master_password_description">Мастер-пароль – это ключ к вашему защищенному хранилищу. Он очень важен, поэтому не забывайте его. Восстановить мастер-пароль невозможно.</string>
@@ -148,8 +148,8 @@
     <string name="select">Выбрать</string>
     <string name="item_details">Информация об элементе</string>
     <string name="item_updated">Элемент сохранен</string>
-    <string name="submitting">Отправка...</string>
-    <string name="syncing">Синхронизация...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Синхронизация выполнена</string>
     <string name="two_step_login">Двухэтапная аутентификация</string>
     <string name="unlock_with_biometrics">Разблокировать с помощью биометрии</string>
@@ -168,7 +168,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Поиск или добавление нового логина</string>
     <string name="disabled">Отключено</string>
     <string name="bitwarden_autofill_service_alert2">Самый простой способ добавить новые логины в ваше хранилище – это служба автозаполнения Bitwarden. Дополнительные сведения об использовании службы автозаполнения Bitwarden в разделе \'Настройки\'.</string>
-    <string name="autofill">Автозаполнение</string>
+    <string name="autofill_title">Автозаполнение</string>
     <string name="autofill_or_view">Выполнить автозаполнение или просмотреть этот элемент?</string>
     <string name="search">Поиск</string>
     <string name="learn_org">Узнать об организациях</string>
@@ -187,7 +187,7 @@
     <string name="add_new_attachment">Добавить новое вложение</string>
     <string name="attachments">Вложения</string>
     <string name="unable_to_download_file">Не удается загрузить файл.</string>
-    <string name="downloading">Загрузка...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Размер этого вложения - %1$s. Вы действительно хотите загрузить его на устройство?</string>
     <string name="authenticator_key">Ключ аутентификатора</string>
     <string name="verification_code_totp">Код подтверждения (TOTP)</string>
@@ -403,10 +403,10 @@
     <string name="save_attachment_success">Вложение успешно сохранено</string>
     <string name="autofill_tile_accessibility_required">Пожалуйста, включите службу специальных возможностей автозаполнения Bitwarden для использования панели автозаполнения.</string>
     <string name="autofill_tile_uri_not_found">Полей ввода пароля не обнаружено</string>
-    <string name="soft_deleting">Отправка в корзину...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Элемент отправлен в корзину.</string>
     <string name="restore">Восстановить</string>
-    <string name="restoring">Восстановление...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Элемент восстановлен</string>
     <string name="trash">Корзина</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Вы действительно хотите удалить окончательно? Это нельзя отменить.</string>
@@ -817,7 +817,7 @@
     <string name="need_help_check_out_import_help">Нужна помощь? Ознакомьтесь с <annotation link="importHelp">помощью по импорту</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Сохраните экспортированный файл</annotation> на компьютере, где его можно будет легко найти.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Этот сервер Bitwarden не распознан. Возможно вам следует связаться с провайдером или изменить свой сервер.</string>
-    <string name="syncing_logins_loading_message">Синхронизация логинов...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Скачать расширение браузера</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Перейдите на bitwarden.com/download для интеграции Bitwarden в ваш любимый браузер для удобной работы.</string>
     <string name="use_the_web_app">Использовать веб-приложение</string>
@@ -926,7 +926,7 @@
     <string name="no_folder">Без папки</string>
     <string name="show_less">Меньше</string>
     <string name="add_field">Добавить поле</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Поделиться информацией об ошибке</string>
     <string name="flight_recorder">Бортовой самописец</string>
     <string name="flight_recorder_help">Помощь по бортовому самописцу</string>
