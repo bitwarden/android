@@ -6,15 +6,19 @@ import com.bitwarden.network.api.AuthenticatedKeyConnectorApi
 import com.bitwarden.network.api.UnauthenticatedAccountsApi
 import com.bitwarden.network.api.UnauthenticatedKeyConnectorApi
 import com.bitwarden.network.base.BaseServiceTest
+import com.bitwarden.network.model.KdfJsonRequest
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
+import com.bitwarden.network.model.MasterPasswordAuthenticationDataJsonRequest
+import com.bitwarden.network.model.MasterPasswordUnlockDataJsonRequest
 import com.bitwarden.network.model.PasswordHintResponseJson
 import com.bitwarden.network.model.RegisterRequestJson
 import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResendNewDeviceOtpRequestJson
 import com.bitwarden.network.model.ResetPasswordRequestJson
 import com.bitwarden.network.model.SetPasswordRequestJson
+import com.bitwarden.network.model.UpdateKdfJsonRequest
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -264,4 +268,50 @@ class AccountsServiceTest : BaseServiceTest() {
         )
         assertTrue(result.isSuccess)
     }
+
+    @Test
+    fun `updateKdf success should return Success`() = runTest {
+        val response = MockResponse().setResponseCode(200)
+        server.enqueue(response)
+
+        val result = service.updateKdf(body = UPDATE_KDF_REQUEST)
+
+        assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `updateKdf failure should return Failure`() = runTest {
+        val response = MockResponse().setResponseCode(400)
+        server.enqueue(response)
+
+        val result = service.updateKdf(body = UPDATE_KDF_REQUEST)
+
+        assertTrue(result.isFailure)
+    }
+
+    private val UPDATE_KDF_REQUEST = UpdateKdfJsonRequest(
+        authenticationData = MasterPasswordAuthenticationDataJsonRequest(
+            kdf = KdfJsonRequest(
+                kdfType = KdfTypeJson.PBKDF2_SHA256,
+                iterations = 7,
+                memory = 1,
+                parallelism = 2,
+            ),
+            masterPasswordAuthenticationHash = "mockMasterPasswordHash",
+            salt = "mockSalt",
+        ),
+        key = "mockKey",
+        masterPasswordHash = "mockMasterPasswordHash",
+        newMasterPasswordHash = "mockNewMasterPasswordHash",
+        unlockData = MasterPasswordUnlockDataJsonRequest(
+            kdf = KdfJsonRequest(
+                kdfType = KdfTypeJson.PBKDF2_SHA256,
+                iterations = 7,
+                memory = 1,
+                parallelism = 2,
+            ),
+            masterKeyWrappedUserKey = "mockMasterPasswordKey",
+            salt = "mockSalt",
+        ),
+    )
 }

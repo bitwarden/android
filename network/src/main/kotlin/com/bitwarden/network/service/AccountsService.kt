@@ -8,6 +8,7 @@ import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResendNewDeviceOtpRequestJson
 import com.bitwarden.network.model.ResetPasswordRequestJson
 import com.bitwarden.network.model.SetPasswordRequestJson
+import com.bitwarden.network.model.UpdateKdfJsonRequest
 
 /**
  * Provides an API for querying accounts endpoints.
@@ -109,4 +110,9 @@ interface AccountsService {
         accessToken: String,
         masterKey: String,
     ): Result<Unit>
+
+    /**
+     * Update the KDF settings for the current account.
+     */
+    suspend fun updateKdf(body: UpdateKdfJsonRequest): Result<Unit>
 }
