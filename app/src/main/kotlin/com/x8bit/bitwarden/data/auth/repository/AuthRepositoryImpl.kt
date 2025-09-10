@@ -15,6 +15,9 @@ import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
+import com.bitwarden.network.model.KdfTypeJson
+import com.bitwarden.network.model.MasterPasswordAuthenticationDataJsonRequest
+import com.bitwarden.network.model.MasterPasswordUnlockDataJsonRequest
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PasswordHintResponseJson
 import com.bitwarden.network.model.PolicyTypeJson
@@ -33,6 +36,7 @@ import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.network.model.TwoFactorDataModel
+import com.bitwarden.network.model.UpdateKdfJsonRequest
 import com.bitwarden.network.model.VerifyEmailTokenRequestJson
 import com.bitwarden.network.model.VerifyEmailTokenResponseJson
 import com.bitwarden.network.service.AccountsService
@@ -49,6 +53,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toInt
+import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfRequestModel
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
@@ -77,6 +82,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
@@ -129,6 +135,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import java.time.Clock
 import javax.inject.Singleton
+import kotlin.text.set
+import kotlin.text.toInt
 
 /**
  * Default implementation of [AuthRepository].
@@ -1211,6 +1219,98 @@ class AuthRepositoryImpl(
                 onSuccess = { PasswordStrengthResult.Success(passwordStrength = it) },
                 onFailure = { PasswordStrengthResult.Error(error = it) },
             )
+
+    override suspend fun needsKdfUpdateToMinimums(): Boolean {
+        val account = authDiskSource
+            .userState
+            ?.accounts
+            ?.get(activeUserId)
+            ?: return false
+
+        return account.profile.kdfType == KdfTypeJson.PBKDF2_SHA256 &&
+            account.profile.kdfIterations != null &&
+            account.profile.kdfIterations < DEFAULT_PBKDF2_ITERATIONS
+    }
+
+    override suspend fun updateKdfToMinimumsIfNeeded(password: String): UpdateKdfMinimumsResult {
+        val userId = activeUserId ?: return UpdateKdfMinimumsResult.ActiveAccountNotFound
+        val account = authDiskSource.userState?.accounts?.get(userId)
+            ?: return UpdateKdfMinimumsResult.ActiveAccountNotFound
+        account.profile
+
+        // Check if needs update kdf
+        if (!needsKdfUpdateToMinimums()) {
+            return UpdateKdfMinimumsResult.Success
+        }
+
+        // Generate updated KDF data
+        val updateKdfResponse = vaultSdkSource.makeUpdateKdf(
+            userId = userId,
+            password = password,
+            kdf = account.profile.toSdkParams(),
+        ).getOrElse { error ->
+            return UpdateKdfMinimumsResult.Error(error = error)
+        }
+
+        val authData = updateKdfResponse.masterPasswordAuthenticationData
+        val oldAuthData = updateKdfResponse.oldMasterPasswordAuthenticationData
+        val unlockData = updateKdfResponse.masterPasswordUnlockData
+        // Send update to server
+        val updateKdfRequest = UpdateKdfJsonRequest(
+            authenticationData = MasterPasswordAuthenticationDataJsonRequest(
+                kdf = authData.kdf.toKdfRequestModel(),
+                masterPasswordAuthenticationHash =
+                    authData.masterPasswordAuthenticationHash,
+                salt = authData.salt,
+            ),
+            key = unlockData.masterKeyWrappedUserKey,
+            masterPasswordHash = oldAuthData.masterPasswordAuthenticationHash,
+            newMasterPasswordHash = authData.masterPasswordAuthenticationHash,
+            unlockData = MasterPasswordUnlockDataJsonRequest(
+                kdf = unlockData.kdf.toKdfRequestModel(),
+                masterKeyWrappedUserKey = unlockData.masterKeyWrappedUserKey,
+                salt = unlockData.salt,
+            ),
+        )
+
+        accountsService
+            .updateKdf(body = updateKdfRequest)
+            .getOrElse { error ->
+                return UpdateKdfMinimumsResult.Error(error = error)
+            }
+
+        // TODO CHECK IF WE NEED TO SAVE NEW VALUES TO STATE
+        /**
+        // Update local storage
+        authDiskSource.storeMasterPasswordHash(
+        userId = profile.userId,
+        passwordHash = updateKdfResponse
+        .masterPasswordAuthenticationData.masterPasswordAuthenticationHash,
+        )
+        authDiskSource.storeUserKey(
+        userId = profile.userId,
+        userKey = updateKdfResponse.masterPasswordUnlockData.masterKeyWrappedUserKey,
+        )
+
+        // Update profile with new KDF parameters
+        val updatedProfile = profile.copy(
+        kdfType = authData.kdf.toKdfRequestModel().kdfType,
+        kdfIterations = authData.kdf.toKdfRequestModel().iterations,
+        kdfMemory = authData.kdf.toKdfRequestModel().memory,
+        kdfParallelism = authData.kdf.toKdfRequestModel().parallelism,
+        )
+
+        val updatedUserState = authDiskSource.userState?.copy(
+        accounts = authDiskSource.userState!!.accounts.toMutableMap().apply {
+        this[profile.userId] = account.copy(profile = updatedProfile)
+        }
+        )
+        authDiskSource.userState = updatedUserState
+
+         **/
+
+        return UpdateKdfMinimumsResult.Success
+    }
 
     override suspend fun validatePassword(password: String): ValidatePasswordResult {
         val userId = activeUserId ?: return ValidatePasswordResult.Error(NoActiveUserException())
