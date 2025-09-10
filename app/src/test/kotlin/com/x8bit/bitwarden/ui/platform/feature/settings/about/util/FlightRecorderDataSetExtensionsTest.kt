@@ -46,7 +46,7 @@ class FlightRecorderDataSetExtensionsTest {
             ),
         )
         val result = dataset.getStopsLoggingStringForActiveLog(clock = FIXED_CLOCK)
-        assertEquals(BitwardenString.stops_logging_on.asText("1/21/70", "4:27 AM"), result)
+        assertEquals(BitwardenString.stops_logging_on.asText("1/21/70", "4:27\u202FAM"), result)
     }
 }
 
