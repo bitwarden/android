@@ -195,7 +195,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
                 email = EMAIL,
                 fingerprint = AUTH_REQUEST.fingerprint,
                 ipAddress = AUTH_REQUEST.ipAddress,
-                time = "9/13/24, 12:00 AM",
+                time = "9/13/24, 12:00\u202FAM",
             ),
         )
         val viewModel = createViewModel()

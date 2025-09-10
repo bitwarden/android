@@ -38,6 +38,15 @@ interface CiphersDao {
     ): List<CipherEntity>
 
     /**
+     * Retrieves all ciphers from the database with the given [cipherIds] for a given [userId].
+     */
+    @Query("SELECT * FROM ciphers WHERE user_id = :userId AND id IN (:cipherIds)")
+    suspend fun getSelectedCiphers(
+        userId: String,
+        cipherIds: List<String>,
+    ): List<CipherEntity>
+
+    /**
      * Retrieves all ciphers from the database for a given [userId].
      */
     @Query("SELECT * FROM ciphers WHERE user_id = :userId AND has_totp = 1")

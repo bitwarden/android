@@ -170,8 +170,8 @@ fun createCommonContent(
     if (isEmpty) {
         VaultItemState.ViewState.Content.Common(
             name = "mockName",
-            created = BitwardenString.created.asText("Jan 1, 1970, 12:16 AM"),
-            lastUpdated = BitwardenString.last_edited.asText("Jan 1, 1970, 12:16 AM"),
+            created = BitwardenString.created.asText("Jan 1, 1970, 12:16\u202FAM"),
+            lastUpdated = BitwardenString.last_edited.asText("Jan 1, 1970, 12:16\u202FAM"),
             notes = null,
             customFields = emptyList(),
             requiresCloneConfirmation = false,
@@ -188,8 +188,8 @@ fun createCommonContent(
     } else {
         VaultItemState.ViewState.Content.Common(
             name = "mockName",
-            created = BitwardenString.created.asText("Jan 1, 1970, 12:16 AM"),
-            lastUpdated = BitwardenString.last_edited.asText("Jan 1, 1970, 12:16 AM"),
+            created = BitwardenString.created.asText("Jan 1, 1970, 12:16\u202FAM"),
+            lastUpdated = BitwardenString.last_edited.asText("Jan 1, 1970, 12:16\u202FAM"),
             notes = "Lots of notes",
             customFields = listOf(
                 FieldView(
@@ -271,7 +271,7 @@ fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemT
             )
         },
         passwordRevisionDate = BitwardenString.password_last_updated
-            .asText("Jan 1, 1970, 12:16 AM")
+            .asText("Jan 1, 1970, 12:16\u202FAM")
             .takeUnless { isEmpty },
         isPremiumUser = true,
         totpCodeItemData = TotpCodeItemData(
@@ -281,7 +281,7 @@ fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemT
         )
             .takeUnless { isEmpty },
         fido2CredentialCreationDateText = BitwardenString.created_x
-            .asText("Oct 27, 2023, 12:00 PM")
+            .asText("Oct 27, 2023, 12:00\u202FPM")
             .takeUnless { isEmpty },
         canViewTotpCode = true,
     )
