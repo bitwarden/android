@@ -46,3 +46,12 @@ jobs:
       contents: read
       pull-requests: write
       id-token: write
+
+  zizmor:
+    name: Zizmor
+    uses: bitwarden/gh-actions/.github/workflows/_zizmor.yml@main
+    needs: check-run
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
