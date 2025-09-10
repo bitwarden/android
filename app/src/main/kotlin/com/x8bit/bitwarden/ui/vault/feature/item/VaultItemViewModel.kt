@@ -255,6 +255,10 @@ class VaultItemViewModel @Inject constructor(
                 handleAttachmentDownloadClick(action)
             }
 
+            is VaultItemAction.Common.AttachmentPreviewClick -> {
+                handleAttachmentPreviewClick(action)
+            }
+
             is VaultItemAction.Common.AttachmentFileLocationReceive -> {
                 handleAttachmentFileLocationReceive(action)
             }
@@ -378,6 +382,33 @@ class VaultItemViewModel @Inject constructor(
                     VaultItemAction.Internal.AttachmentDecryptReceive(
                         result = result,
                         fileName = action.attachment.title,
+                        isPreview = false
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun handleAttachmentPreviewClick(
+        action: VaultItemAction.Common.AttachmentPreviewClick,
+    ) {
+        onContent { content ->
+            updateDialogState(
+                VaultItemState.DialogState.Loading(BitwardenString.loading.asText()),
+            )
+
+            viewModelScope.launch {
+                val result = vaultRepository
+                    .downloadAttachment(
+                        cipherView = requireNotNull(content.common.currentCipher),
+                        attachmentId = action.attachment.id,
+                    )
+
+                trySendAction(
+                    VaultItemAction.Internal.AttachmentDecryptReceive(
+                        result = result,
+                        fileName = action.attachment.title,
+                        isPreview = true
                     ),
                 )
             }
@@ -952,6 +983,10 @@ class VaultItemViewModel @Inject constructor(
                 handleAttachmentFinishedSavingToDisk(action)
             }
 
+            is VaultItemAction.Internal.AttachmentPreviewLoaded -> {
+                handleAttachmentPreviewLoaded()
+            }
+
             is VaultItemAction.Internal.IsIconLoadingDisabledUpdateReceive -> {
                 handleIsIconLoadingDisabledUpdateReceive(action)
             }
@@ -1142,11 +1177,15 @@ class VaultItemViewModel @Inject constructor(
 
             is DownloadAttachmentResult.Success -> {
                 temporaryAttachmentData = result.file
-                sendEvent(
-                    VaultItemEvent.NavigateToSelectAttachmentSaveLocation(
-                        fileName = action.fileName,
-                    ),
-                )
+                if (action.isPreview) {
+                    updateDialogState(VaultItemState.DialogState.AttachmentPreview(result.file))
+                } else {
+                    sendEvent(
+                        VaultItemEvent.NavigateToSelectAttachmentSaveLocation(
+                            fileName = action.fileName,
+                        ),
+                    )
+                }
             }
         }
     }
@@ -1166,6 +1205,12 @@ class VaultItemViewModel @Inject constructor(
                     BitwardenString.unable_to_save_attachment.asText(),
                 ),
             )
+        }
+    }
+
+    private fun handleAttachmentPreviewLoaded() {
+        viewModelScope.launch {
+            temporaryAttachmentData?.let { fileManager.delete(it) }
         }
     }
 
@@ -1425,6 +1470,7 @@ data class VaultItemState(
                     val url: String,
                     val isLargeFile: Boolean,
                     val isDownloadAllowed: Boolean,
+                    val isPreviewable: Boolean,
                 ) : Parcelable
 
                 /**
@@ -1727,6 +1773,12 @@ data class VaultItemState(
          */
         @Parcelize
         data object RestoreItemDialog : DialogState()
+
+        /**
+         * Displays a preview of an image attachment.
+         */
+        @Parcelize
+        data class AttachmentPreview(val file: File) : DialogState()
     }
 }
 
@@ -1910,6 +1962,13 @@ sealed class VaultItemAction {
          * The user has clicked the download button.
          */
         data class AttachmentDownloadClick(
+            val attachment: VaultItemState.ViewState.Content.Common.AttachmentItem,
+        ) : Common()
+
+        /**
+         * The user has clicked the preview button.
+         */
+        data class AttachmentPreviewClick(
             val attachment: VaultItemState.ViewState.Content.Common.AttachmentItem,
         ) : Common()
 
@@ -2153,6 +2212,7 @@ sealed class VaultItemAction {
         data class AttachmentDecryptReceive(
             val result: DownloadAttachmentResult,
             val fileName: String,
+            val isPreview: Boolean,
         ) : Internal()
 
         /**
@@ -2163,6 +2223,12 @@ sealed class VaultItemAction {
             val isSaved: Boolean,
             val file: File,
         ) : Internal()
+
+        /**
+         * Indicates the attachment file has been loaded into memory and the
+         * temporary file on disk can be deleted.
+         */
+        data object AttachmentPreviewLoaded : Internal()
 
         /**
          * Indicates the `isIconLoadingDisabled` setting has changed.

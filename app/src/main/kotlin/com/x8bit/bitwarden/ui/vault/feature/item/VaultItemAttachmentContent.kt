@@ -34,6 +34,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 fun AttachmentItemContent(
     attachmentItem: VaultItemState.ViewState.Content.Common.AttachmentItem,
     onAttachmentDownloadClick: (VaultItemState.ViewState.Content.Common.AttachmentItem) -> Unit,
+    onAttachmentPreviewClick: (VaultItemState.ViewState.Content.Common.AttachmentItem) -> Unit,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
@@ -42,7 +43,7 @@ fun AttachmentItemContent(
     Row(
         modifier = modifier
             .defaultMinSize(minHeight = 60.dp)
-            .cardStyle(cardStyle = cardStyle, paddingStart = 16.dp)
+            .cardStyle(cardStyle = cardStyle, paddingStart = 16.dp, paddingEnd = 8.dp)
             .testTag("CipherAttachment"),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -68,6 +69,22 @@ fun AttachmentItemContent(
         )
 
         Spacer(modifier = Modifier.width(8.dp))
+
+        if (attachmentItem.isPreviewable) {
+            BitwardenStandardIconButton(
+                vectorIconRes = BitwardenDrawable.ic_preview,
+                contentDescription = stringResource(id = BitwardenString.preview),
+                onClick = {
+                    if (!attachmentItem.isDownloadAllowed) {
+                        shouldShowPremiumWarningDialog = true
+                        return@BitwardenStandardIconButton
+                    }
+                    onAttachmentPreviewClick(attachmentItem)
+                },
+                modifier = Modifier
+                    .testTag("AttachmentPreviewButton"),
+            )
+        }
 
         BitwardenStandardIconButton(
             vectorIconRes = BitwardenDrawable.ic_download,
