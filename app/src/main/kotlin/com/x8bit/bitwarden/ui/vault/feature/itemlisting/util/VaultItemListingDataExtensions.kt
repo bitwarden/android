@@ -125,16 +125,14 @@ fun VaultData.toViewState(
 
     val filteredFailuresCipherViewList = decryptCipherListResult
         .failures
-        .takeIf { autofillSelectionData == null }
-        ?.map { cipher ->
+        .map { cipher ->
             cipher.toFailureCipherListView()
         }
-        ?.applyFilters(
+        .applyFilters(
             itemListingType = itemListingType,
             vaultFilterType = vaultFilterType,
             restrictItemTypesPolicyOrgIds = restrictItemTypesPolicyOrgIds,
         )
-        ?: emptyList()
 
     val allFilteredCipherViewList = filteredFailuresCipherViewList
         .plus(filteredCipherViewList)

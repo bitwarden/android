@@ -2513,6 +2513,7 @@ class VaultItemListingViewModel @Inject constructor(
                         decryptCipherListResult = vaultData.decryptCipherListResult.copy(
                             successes = vaultData.decryptCipherListResult.successes
                                 .filter { it.type is CipherListViewType.Card },
+                            failures = emptyList(),
                         ),
                     )
                 }
@@ -2530,6 +2531,7 @@ class VaultItemListingViewModel @Inject constructor(
                                 cipherListViews = vaultData.decryptCipherListResult.successes,
                                 matchUri = matchUri,
                             ),
+                            failures = emptyList(),
                         ),
                     )
                 }
@@ -2553,6 +2555,7 @@ class VaultItemListingViewModel @Inject constructor(
                         cipherListViews = vaultData.decryptCipherListResult.successes,
                         matchUri = matchUri,
                     ),
+                    failures = emptyList(),
                 ),
             )
         }
@@ -2574,6 +2577,7 @@ class VaultItemListingViewModel @Inject constructor(
                             searchTypeData = SearchTypeData.Vault.Logins,
                             searchTerm = query,
                         ),
+                    failures = emptyList(),
                 ),
             )
         }
