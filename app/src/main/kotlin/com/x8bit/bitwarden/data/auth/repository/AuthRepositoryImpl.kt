@@ -135,8 +135,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import java.time.Clock
 import javax.inject.Singleton
-import kotlin.text.set
-import kotlin.text.toInt
 
 /**
  * Default implementation of [AuthRepository].
