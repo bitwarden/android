@@ -12,6 +12,7 @@
     <string name="copy_password">Copy password</string>
     <string name="copy_username">Copy username</string>
     <string name="delete">Delete</string>
+    <string name="preview">Preview</string>
     <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Do you really want to delete? This cannot be undone.</string>
     <string name="edit">Edit</string>
