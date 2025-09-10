@@ -4,16 +4,16 @@ on:
   workflow_dispatch:
     inputs:
       artifact-run-id:
-        description: 'GitHub Action Run ID containing artifacts'
+        description: "GitHub Action Run ID containing artifacts"
         required: true
         type: string
       release-ticket-id:
-        description: 'Release Ticket ID - e.g. RELEASE-1762'
+        description: "Release Ticket ID - e.g. RELEASE-1762"
         required: true
         type: string
 
 env:
-    ARTIFACTS_PATH: artifacts
+  ARTIFACTS_PATH: artifacts
 
 jobs:
   create-release:
@@ -28,6 +28,7 @@ jobs:
         uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
         with:
           fetch-depth: 0
+          persist-credentials: true
 
       - name: Log inputs to job summary
         uses: ./.github/actions/log-inputs
@@ -40,7 +41,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
         run: |
-          workflow_data=$(gh run view $ARTIFACT_RUN_ID --json headBranch,workflowName)
+          workflow_data=$(gh run view "$ARTIFACT_RUN_ID" --json headBranch,workflowName)
           release_branch=$(echo "$workflow_data" | jq -r .headBranch)
           workflow_name=$(echo "$workflow_data" | jq -r .workflowName)
 
@@ -52,8 +53,8 @@ jobs:
 
           echo "🔖 Release branch: $release_branch"
           echo "🔖 Workflow name: $workflow_name"
-          echo "release_branch=$release_branch" >> $GITHUB_OUTPUT
-          echo "workflow_name=$workflow_name" >> $GITHUB_OUTPUT
+          echo "release_branch=$release_branch" >> "$GITHUB_OUTPUT"
+          echo "workflow_name=$workflow_name" >> "$GITHUB_OUTPUT"
 
           case "$workflow_name" in
             *"Password Manager"* | "Build")
@@ -71,8 +72,8 @@ jobs:
           esac
           echo "🔖 App name: $app_name"
           echo "🔖 App name suffix: $app_name_suffix"
-          echo "app_name=$app_name" >> $GITHUB_OUTPUT
-          echo "app_name_suffix=$app_name_suffix" >> $GITHUB_OUTPUT
+          echo "app_name=$app_name" >> "$GITHUB_OUTPUT"
+          echo "app_name_suffix=$app_name_suffix" >> "$GITHUB_OUTPUT"
 
       - name: Get version info from run logs and set release tag name
         id: get_release_info
@@ -81,7 +82,7 @@ jobs:
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
           _APP_NAME_SUFFIX: ${{ steps.get_release_branch.outputs.app_name_suffix }}
         run: |
-          workflow_log=$(gh run view $ARTIFACT_RUN_ID --log)
+          workflow_log=$(gh run view "$ARTIFACT_RUN_ID" --log)
 
           version_number_with_trailing_dot=$(grep -m 1 "Setting version code to" <<< "$workflow_log" | sed 's/.*Setting version code to //')
           version_number=${version_number_with_trailing_dot%.} # remove trailing dot
@@ -103,28 +104,28 @@ jobs:
             echo "✅ Found version number: $version_number"
           fi
 
-          echo "version_number=$version_number" >> $GITHUB_OUTPUT
-          echo "version_name=$version_name" >> $GITHUB_OUTPUT
+          echo "version_number=$version_number" >> "$GITHUB_OUTPUT"
+          echo "version_name=$version_name" >> "$GITHUB_OUTPUT"
 
           tag_name="v$version_name-$_APP_NAME_SUFFIX" # e.g. v2025.6.0-bwpm
           echo "🔖 New tag name: $tag_name"
-          echo "tag_name=$tag_name" >> $GITHUB_OUTPUT
+          echo "tag_name=$tag_name" >> "$GITHUB_OUTPUT"
 
           last_release_tag=$(git tag -l --sort=-authordate | grep "$_APP_NAME_SUFFIX" | head -n 1)
           echo "🔖 Last release tag: $last_release_tag"
-          echo "last_release_tag=$last_release_tag" >> $GITHUB_OUTPUT
+          echo "last_release_tag=$last_release_tag" >> "$GITHUB_OUTPUT"
 
       - name: Download artifacts
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
         run: |
-          gh run download $ARTIFACT_RUN_ID -D $ARTIFACTS_PATH
-          file_count=$(find $ARTIFACTS_PATH -type f | wc -l)
+          gh run download "$ARTIFACT_RUN_ID" -D "$ARTIFACTS_PATH"
+          file_count=$(find "$ARTIFACTS_PATH" -type f | wc -l)
           echo "Downloaded $file_count file(s)."
           if [ "$file_count" -gt 0 ]; then
             echo "Downloaded files:"
-            find $ARTIFACTS_PATH -type f
+            find "$ARTIFACTS_PATH" -type f
           fi
 
           # Files that won't be included in any release
@@ -148,12 +149,12 @@ jobs:
           )
 
           for file in "${files_to_remove[@]}"; do
-            find $ARTIFACTS_PATH -name "$file" -type f -delete
+            find "$ARTIFACTS_PATH" -name "$file" -type f -delete
           done
           echo "🔖 Removed internal artifacts."
           echo ""
           echo "🔖 Files to be included in the release:"
-          find $ARTIFACTS_PATH -type f
+          find "$ARTIFACTS_PATH" -type f
 
       - name: Log in to Azure
         uses: bitwarden/gh-actions/azure-login@main
@@ -183,7 +184,7 @@ jobs:
           _JIRA_API_TOKEN: ${{ steps.get-kv-secrets.outputs.JIRA-API-TOKEN }}
         run: |
           echo "Getting product release notes"
-          product_release_notes=$(python3 .github/scripts/jira-get-release-notes/jira_release_notes.py $_RELEASE_TICKET_ID $_JIRA_API_EMAIL $_JIRA_API_TOKEN)
+          product_release_notes=$(python3 .github/scripts/jira-get-release-notes/jira_release_notes.py "$_RELEASE_TICKET_ID" "$_JIRA_API_EMAIL" "$_JIRA_API_TOKEN")
 
           if [[ -z "$product_release_notes" || $product_release_notes == "Error checking"* ]]; then
             echo "::warning::Failed to fetch release notes from Jira. Output: $product_release_notes"
@@ -219,12 +220,12 @@ jobs:
             --notes-start-tag "$_LAST_RELEASE_TAG" \
             --latest=$is_latest_release \
             --draft \
-            $ARTIFACTS_PATH/*/*)
+            "$ARTIFACTS_PATH/*/*")
 
           # Extract release tag from URL
           release_id_from_url=$(echo "$release_url" | sed 's/.*\/tag\///')
-          echo "release_id_from_url=$release_id_from_url" >> $GITHUB_OUTPUT
-          echo "url=$release_url" >> $GITHUB_OUTPUT
+          echo "release_id_from_url=$release_id_from_url" >> "$GITHUB_OUTPUT"
+          echo "url=$release_url" >> "$GITHUB_OUTPUT"
 
           echo "✅ Release created: $release_url"
           echo "🔖 Release ID from URL: $release_id_from_url"
@@ -252,7 +253,7 @@ jobs:
           new_release_url=$(gh release edit "$_RELEASE_ID" --notes "$updated_body")
 
           # draft release links change after editing
-          echo "release_url=$new_release_url" >> $GITHUB_OUTPUT
+          echo "release_url=$new_release_url" >> "$GITHUB_OUTPUT"
 
       - name: Add Release Summary
         env:
@@ -263,20 +264,26 @@ jobs:
           _RELEASE_BRANCH: ${{ steps.get_release_branch.outputs.release_branch }}
           _RELEASE_URL: ${{ steps.update_release_description.outputs.release_url }}
         run: |
-          echo "# :fish_cake: Release ready at:" >> $GITHUB_STEP_SUMMARY
-          echo "$_RELEASE_URL" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "# :fish_cake: Release ready at:"
+            echo "$_RELEASE_URL"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
 
           if [[ "$_VERSION_NAME" == "0.0.0" || "$_VERSION_NUMBER" == "0" ]]; then
-            echo "> [!CAUTION]" >> $GITHUB_STEP_SUMMARY
-            echo "> Version name or number wasn't previously found and a default value was used. You'll need to manually update the release Title, Tag and Description, specifically, the "Full Changelog" link." >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
+            {
+              echo "> [!CAUTION]"
+              echo "> Version name or number wasn't previously found and a default value was used. You'll need to manually update the release Title, Tag and Description, specifically, the \"Full Changelog\" link."
+              echo ""
+            } >> "$GITHUB_STEP_SUMMARY"
           fi
 
-          echo ":clipboard: Confirm that the defined GitHub Release options are correct:"  >> $GITHUB_STEP_SUMMARY
-          echo " * :bookmark: New tag name: \`$_RELEASE_TAG\`" >> $GITHUB_STEP_SUMMARY
-          echo " * :palm_tree: Target branch: \`$_RELEASE_BRANCH\`" >> $GITHUB_STEP_SUMMARY
-          echo " * :ocean: Previous tag set in the description \"Full Changelog\" link: \`$_LAST_RELEASE_TAG\`" >> $GITHUB_STEP_SUMMARY
-          echo " * :white_check_mark: Description has automated release notes and they match the commits in the release branch" >> $GITHUB_STEP_SUMMARY
-          echo "> [!NOTE]" >> $GITHUB_STEP_SUMMARY
-          echo "> Commits directly pushed to branches without a Pull Request won't appear in the automated release notes." >> $GITHUB_STEP_SUMMARY
+          {
+            echo ":clipboard: Confirm that the defined GitHub Release options are correct:"
+            echo " * :bookmark: New tag name: \`$_RELEASE_TAG\`"
+            echo " * :palm_tree: Target branch: \`$_RELEASE_BRANCH\`"
+            echo " * :ocean: Previous tag set in the description \"Full Changelog\" link: \`$_LAST_RELEASE_TAG\`"
+            echo " * :white_check_mark: Description has automated release notes and they match the commits in the release branch"
+            echo "> [!NOTE]"
+            echo "> Commits directly pushed to branches without a Pull Request won't appear in the automated release notes." 
+          } >> "$GITHUB_STEP_SUMMARY"
