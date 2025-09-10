@@ -42,6 +42,7 @@ import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.item.component.AttachmentPreviewDialog
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
@@ -121,6 +122,9 @@ fun VaultItemScreen(
     VaultItemDialogs(
         dialog = state.dialog,
         onDismissRequest = { viewModel.trySendAction(VaultItemAction.Common.DismissDialogClick) },
+        onPreviewLoaded = {
+            viewModel.trySendAction(VaultItemAction.Internal.AttachmentPreviewLoaded)
+        },
         onConfirmDeleteClick = {
             viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick)
         },
@@ -271,10 +275,12 @@ fun VaultItemScreen(
     }
 }
 
+@Suppress("LongParameterList")
 @Composable
 private fun VaultItemDialogs(
     dialog: VaultItemState.DialogState?,
     onDismissRequest: () -> Unit,
+    onPreviewLoaded: () -> Unit,
     onConfirmDeleteClick: () -> Unit,
     onConfirmCloneWithoutFido2Credential: () -> Unit,
     onConfirmRestoreAction: () -> Unit,
@@ -337,6 +343,14 @@ private fun VaultItemDialogs(
             onDismissClick = onDismissRequest,
             onDismissRequest = onDismissRequest,
         )
+
+        is VaultItemState.DialogState.AttachmentPreview -> {
+            AttachmentPreviewDialog(
+                attachmentFile = dialog.file,
+                onDismissRequest = onDismissRequest,
+                onLoaded = onPreviewLoaded,
+            )
+        }
 
         null -> Unit
     }

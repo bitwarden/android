@@ -361,6 +361,7 @@ fun VaultItemIdentityContent(
                     attachmentItem = attachmentItem,
                     onAttachmentDownloadClick = vaultCommonItemTypeHandlers
                         .onAttachmentDownloadClick,
+                    onAttachmentPreviewClick = vaultCommonItemTypeHandlers.onAttachmentPreviewClick,
                     onUpgradeToPremiumClick = vaultCommonItemTypeHandlers.onUpgradeToPremiumClick,
                     cardStyle = attachments.toListItemCardStyle(index = index),
                 )
