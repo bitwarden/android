@@ -188,6 +188,9 @@ class VaultItemViewModel @Inject constructor(
                             folderName?.let { VaultItemLocation.Folder(it) },
                         )
 
+                        val hasOrganizations =
+                            !userState?.activeAccount?.organizations.isNullOrEmpty()
+
                         VaultItemStateData(
                             cipher = cipherView,
                             totpCodeItemData = totpCodeData,
@@ -196,6 +199,7 @@ class VaultItemViewModel @Inject constructor(
                             canAssociateToCollections = canAssignToCollections,
                             canEdit = canEdit,
                             relatedLocations = relatedLocations,
+                            hasOrganizations = hasOrganizations,
                         )
                     },
             )
@@ -1074,6 +1078,7 @@ class VaultItemViewModel @Inject constructor(
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             relatedLocations = this.data?.relatedLocations.orEmpty().toImmutableList(),
+            hasOrganizations = this.data?.hasOrganizations == true,
         )
         ?: VaultItemState.ViewState.Error(message = errorText)
 
@@ -1336,6 +1341,12 @@ data class VaultItemState(
             ?.canAssignToCollections
             ?: false
 
+    val hasOrganizations: Boolean
+        get() = viewState.asContentOrNull()
+            ?.common
+            ?.hasOrganizations
+            ?: false
+
     /**
      * The text to display on the deletion confirmation dialog.
      */
@@ -1392,6 +1403,7 @@ data class VaultItemState(
              * collections.
              * @property favorite Indicates that the cipher is favorite.
              * @property passwordHistoryCount An integer indicating how many times the password.
+             * @property hasOrganizations Indicates if the user has organizations.
              */
             @Parcelize
             data class Common(
@@ -1412,6 +1424,7 @@ data class VaultItemState(
                 val passwordHistoryCount: Int?,
                 val iconData: IconData,
                 val relatedLocations: ImmutableList<VaultItemLocation>,
+                val hasOrganizations: Boolean,
             ) : Parcelable {
 
                 /**

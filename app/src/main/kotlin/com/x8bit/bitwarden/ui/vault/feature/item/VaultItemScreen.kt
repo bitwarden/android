@@ -194,7 +194,10 @@ fun VaultItemScreen(
                                     }
                                 },
                             )
-                                .takeUnless { state.isCipherInCollection },
+                                .takeUnless {
+                                    state.isCipherInCollection ||
+                                        !state.hasOrganizations
+                                },
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.collections),
                                 onClick = remember(viewModel) {
