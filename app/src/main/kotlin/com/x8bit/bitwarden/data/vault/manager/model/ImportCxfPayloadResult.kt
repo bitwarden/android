@@ -1,0 +1,29 @@
+package com.x8bit.bitwarden.data.vault.manager.model
+
+/**
+ * Models result of the vault data being imported from a CXF payload.
+ */
+sealed class ImportCxfPayloadResult {
+
+    /**
+     * The vault data has been successfully imported.
+     */
+    data object Success : ImportCxfPayloadResult()
+
+    /**
+     * There are no items to import.
+     */
+    data object NoItems : ImportCxfPayloadResult()
+
+    /**
+     * The vault data has been successfully uploaded, but there was an error syncing the vault data.
+     */
+    data class SyncFailed(val error: Throwable) : ImportCxfPayloadResult()
+
+    /**
+     * There was an error importing the vault data.
+     *
+     * @param error The error that occurred during import.
+     */
+    data class Error(val error: Throwable) : ImportCxfPayloadResult()
+}

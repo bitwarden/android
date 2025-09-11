@@ -74,10 +74,12 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSend
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
+import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManager
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
+import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
@@ -87,7 +89,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
-import com.x8bit.bitwarden.data.vault.repository.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
@@ -216,6 +217,7 @@ class VaultRepositoryTest {
         every { syncFolderUpsertFlow } returns mutableSyncFolderUpsertFlow
     }
     private val vaultSyncManager: VaultSyncManager = mockk()
+    private val credentialExchangeImportManager: CredentialExchangeImportManager = mockk()
 
     private val vaultRepository = VaultRepositoryImpl(
         sendsService = sendsService,
@@ -235,6 +237,7 @@ class VaultRepositoryTest {
         databaseSchemeManager = databaseSchemeManager,
         reviewPromptManager = reviewPromptManager,
         vaultSyncManager = vaultSyncManager,
+        credentialExchangeImportManager = mockk(),
     )
 
     @BeforeEach
@@ -4084,19 +4087,18 @@ class VaultRepositoryTest {
     fun `importCxfPayload should return success result`() = runTest {
         val userId = "mockId-1"
         val payload = "payload"
-        val ciphers = listOf(createMockSdkCipher(number = 1))
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         coEvery {
-            vaultSdkSource.importCxf(
+            credentialExchangeImportManager.importCxfPayload(
                 userId = userId,
                 payload = payload,
             )
-        } returns ciphers.asSuccess()
+        } returns ImportCxfPayloadResult.Success
         val result = vaultRepository.importCxfPayload(payload)
 
         assertEquals(
-            ImportCxfPayloadResult.Success(ciphers),
+            ImportCxfPayloadResult.Success,
             result,
         )
     }
@@ -4109,11 +4111,11 @@ class VaultRepositoryTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         coEvery {
-            vaultSdkSource.importCxf(
+            credentialExchangeImportManager.importCxfPayload(
                 userId = userId,
                 payload = payload,
             )
-        } returns expected.asFailure()
+        } returns ImportCxfPayloadResult.Error(expected)
         val result = vaultRepository.importCxfPayload(payload)
 
         assertEquals(

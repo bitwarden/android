@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
+import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManager
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
@@ -52,6 +53,7 @@ object VaultRepositoryModule {
         clock: Clock,
         reviewPromptManager: ReviewPromptManager,
         vaultSyncManager: VaultSyncManager,
+        credentialExchangeImportManager: CredentialExchangeImportManager,
     ): VaultRepository = VaultRepositoryImpl(
         sendsService = sendsService,
         ciphersService = ciphersService,
@@ -70,5 +72,6 @@ object VaultRepositoryModule {
         clock = clock,
         reviewPromptManager = reviewPromptManager,
         vaultSyncManager = vaultSyncManager,
+        credentialExchangeImportManager = credentialExchangeImportManager,
     )
 }
