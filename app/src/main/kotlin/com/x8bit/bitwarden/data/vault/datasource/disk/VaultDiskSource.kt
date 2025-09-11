@@ -25,6 +25,14 @@ interface VaultDiskSource {
     suspend fun getCiphers(userId: String): List<SyncResponseJson.Cipher>
 
     /**
+     * Retrieves all ciphers with the given [cipherIds] from the data source for a given [userId].
+     */
+    suspend fun getSelectedCiphers(
+        userId: String,
+        cipherIds: List<String>,
+    ): List<SyncResponseJson.Cipher>
+
+    /**
      * Retrieves all ciphers from the data source for a given [userId] that contain TOTP codes.
      */
     suspend fun getTotpCiphers(userId: String): List<SyncResponseJson.Cipher>

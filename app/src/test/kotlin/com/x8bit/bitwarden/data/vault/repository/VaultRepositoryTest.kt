@@ -71,6 +71,8 @@ import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockAccount
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
@@ -4297,6 +4299,62 @@ class VaultRepositoryTest {
             result,
         )
     }
+
+    @Test
+    fun `exportVaultDataToCxf should return success result`() = runTest {
+        val userId = "mockId-1"
+        val account = createMockAccount(number = 1, email = "email", name = null)
+        val cipherListViews = listOf(createMockCipherListView(number = 1))
+
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        coEvery {
+            vaultSdkSource.exportVaultDataToCxf(
+                userId = userId,
+                account = account,
+                ciphers = any(),
+            )
+        } returns "TestResult".asSuccess()
+        coEvery {
+            vaultDiskSource.getSelectedCiphers(
+                userId = userId,
+                cipherIds = cipherListViews.mapNotNull { it.id },
+            )
+        } returns listOf(createMockCipher(number = 1))
+
+        val result = vaultRepository.exportVaultDataToCxf(ciphers = cipherListViews)
+
+        assertEquals("TestResult".asSuccess(), result)
+    }
+
+    @Test
+    fun `exportVaultDataToCxf should return error result when exportVaultDataToCxf fails`() =
+        runTest {
+            val userId = "mockId-1"
+            val account = createMockAccount(number = 1, email = "email", name = null)
+            val cipherListViews = listOf(createMockCipherListView(number = 1))
+            val throwable = Throwable()
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            coEvery {
+                vaultSdkSource.exportVaultDataToCxf(
+                    userId = userId,
+                    account = account,
+                    ciphers = any(),
+                )
+            } returns throwable.asFailure()
+
+            coEvery {
+                vaultDiskSource.getSelectedCiphers(
+                    userId = userId,
+                    cipherIds = cipherListViews.mapNotNull { it.id },
+                )
+            } returns listOf(createMockCipher(number = 1))
+
+            val result = vaultRepository.exportVaultDataToCxf(ciphers = cipherListViews)
+
+            assertEquals(throwable.asFailure(), result)
+        }
 
     @Test
     fun `silentlyDiscoverCredentials should return result`() = runTest {
