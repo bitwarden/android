@@ -1,6 +1,9 @@
+@file:OmitFromCoverage
+
 package com.bitwarden.cxf.manager.dsl
 
 import android.app.Activity
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
 import com.bitwarden.cxf.manager.CredentialExchangeCompletionManagerImpl
 
