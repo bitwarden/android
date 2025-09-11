@@ -1085,4 +1085,7 @@ Do you want to switch to this account?</string>
     <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="later">Later</string>
+    <string name="update_your_encryption_settings">Update your encryption settings</string>
+    <string name="the_new_recommended_encryption_settings_will_improve_your_account_security_desc_long">The new recommended encryption settings will improve your account security. Enter your master password to update now.</string>
 </resources>

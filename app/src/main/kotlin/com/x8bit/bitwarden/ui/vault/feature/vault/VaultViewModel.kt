@@ -1465,6 +1465,15 @@ data class VaultState(
         ) : DialogState()
 
         /**
+         * Represents a dialog indicating that the user needs to update their kdf settings.
+         */
+        @Parcelize
+        data class VaultLoadKdfUpdateRequired(
+            val title: Text,
+            val message: Text,
+        ) : DialogState()
+
+        /**
          * Represents an error dialog with the given [title] and [message].
          */
         @Parcelize

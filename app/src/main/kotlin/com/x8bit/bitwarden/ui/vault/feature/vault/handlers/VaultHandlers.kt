@@ -47,6 +47,7 @@ data class VaultHandlers(
     val dismissFlightRecorderSnackbar: () -> Unit,
     val onShareCipherDecryptionErrorClick: (selectedCipherId: String) -> Unit,
     val onShareAllCipherDecryptionErrorsClick: () -> Unit,
+    val onKdfUpdatePasswordRepromptSubmit: (password: String) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -137,6 +138,12 @@ data class VaultHandlers(
                     {
                         viewModel.trySendAction(
                             VaultAction.ShareAllCipherDecryptionErrorsClick,
+                        )
+                    },
+                onKdfUpdatePasswordRepromptSubmit =
+                    {
+                        viewModel.trySendAction(
+                            VaultAction.KdfUpdatePasswordRepromptSubmit(it),
                         )
                     },
             )

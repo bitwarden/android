@@ -59,6 +59,7 @@ import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppReviewManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
@@ -404,6 +405,7 @@ private fun VaultScreenScaffold(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun VaultDialogs(
     dialogState: VaultState.DialogState?,
@@ -459,6 +461,19 @@ private fun VaultDialogs(
                 },
                 onDismissClick = vaultHandlers.dialogDismiss,
                 onDismissRequest = vaultHandlers.dialogDismiss,
+            )
+        }
+
+        is VaultState.DialogState.VaultLoadKdfUpdateRequired -> {
+            BitwardenMasterPasswordDialog(
+                title = dialogState.title(),
+                message = dialogState.message(),
+                dismissButtonText = stringResource(BitwardenString.later),
+                onConfirmClick = {
+                    vaultHandlers.onKdfUpdatePasswordRepromptSubmit(it)
+                },
+                onDismissRequest = vaultHandlers.dialogDismiss,
+                filledButtonStyle = true,
             )
         }
 
