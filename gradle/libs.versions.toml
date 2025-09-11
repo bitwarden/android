@@ -22,6 +22,7 @@ androidxCamera = "1.4.2"
 androidxComposeBom = "2025.08.01"
 androidxCore = "1.17.0"
 androidxCredentials = "1.5.0"
+androidxCredentialsProviderEvents = "1.0.0-alpha02"
 androidxHiltNavigationCompose = "1.2.0"
 androidxLifecycle = "2.9.3"
 androidxNavigation = "2.9.3"
@@ -83,6 +84,8 @@ androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
 #noinspection CredentialDependency - Used for Passkey support, which is not available below Android 14
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "androidxCredentials" }
+androidx-credentials-providerevents = { module = "androidx.credentials.providerevents:providerevents", version.ref = "androidxCredentialsProviderEvents" }
+androidx-credentials-providerevents-play-services = { module = "androidx.credentials.providerevents:providerevents-play-services", version.ref = "androidxCredentialsProviderEvents" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
 androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
