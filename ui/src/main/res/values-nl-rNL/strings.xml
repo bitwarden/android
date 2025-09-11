@@ -664,7 +664,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="session_timeout_action">Actie voor sessie time-out</string>
     <string name="account_fingerprint_phrase">Vingerafdrukzin van je account</string>
     <string name="passkey_management_explanation_long">Gebruik Bitwarden voor het opslaan van nieuwe passkeys en inloggen met passkeys die zijn opgeslagen in je kluis.</string>
-    <string name="autofill_services_explanation_long">Het Android Autofill Framework helpt het het invullen van inloggegevens in andere apps op je apparaat.</string>
+    <string name="autofill_services_explanation_long">Het Android Autofill Framework helpt het invullen van inloggegevens in andere apps op je apparaat.</string>
     <string name="use_inline_autofill_explanation_long">Gebruik inline automatisch aanvullen als het geselecteerde toetsenbord dit ondersteunt. Gebruik anders de standaard overlay.</string>
     <string name="additional_options">Extra instellingen</string>
     <string name="continue_to_web_app">Doorgaan naar web-app?</string>
