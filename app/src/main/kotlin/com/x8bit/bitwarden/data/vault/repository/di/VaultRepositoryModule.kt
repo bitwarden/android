@@ -4,9 +4,7 @@ import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.network.service.SendsService
-import com.bitwarden.network.service.SyncService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -17,6 +15,7 @@ import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
+import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepositoryImpl
 import dagger.Module
@@ -36,7 +35,6 @@ object VaultRepositoryModule {
     @Provides
     @Singleton
     fun providesVaultRepository(
-        syncService: SyncService,
         sendsService: SendsService,
         ciphersService: CiphersService,
         folderService: FolderService,
@@ -50,12 +48,11 @@ object VaultRepositoryModule {
         dispatcherManager: DispatcherManager,
         totpCodeManager: TotpCodeManager,
         pushManager: PushManager,
-        userLogoutManager: UserLogoutManager,
         databaseSchemeManager: DatabaseSchemeManager,
         clock: Clock,
         reviewPromptManager: ReviewPromptManager,
+        vaultSyncManager: VaultSyncManager,
     ): VaultRepository = VaultRepositoryImpl(
-        syncService = syncService,
         sendsService = sendsService,
         ciphersService = ciphersService,
         folderService = folderService,
@@ -69,9 +66,9 @@ object VaultRepositoryModule {
         dispatcherManager = dispatcherManager,
         totpCodeManager = totpCodeManager,
         pushManager = pushManager,
-        userLogoutManager = userLogoutManager,
         databaseSchemeManager = databaseSchemeManager,
         clock = clock,
         reviewPromptManager = reviewPromptManager,
+        vaultSyncManager = vaultSyncManager,
     )
 }

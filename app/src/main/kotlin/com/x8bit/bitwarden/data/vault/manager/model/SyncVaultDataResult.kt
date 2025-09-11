@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.vault.repository.model
+package com.x8bit.bitwarden.data.vault.manager.model
 
 /**
  * Represents the result of a sync operation.
@@ -16,5 +16,5 @@ sealed class SyncVaultDataResult {
      *
      * @property throwable The exception that caused the failure, if any.
      */
-    data class Error(val throwable: Throwable?) : SyncVaultDataResult()
+    data class Error(val throwable: Throwable) : SyncVaultDataResult()
 }
