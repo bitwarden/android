@@ -77,7 +77,7 @@ import timber.log.Timber
 import java.time.Clock
 import javax.inject.Inject
 
-private const val VAULT_DATA_RECEIVED_DELAY: Long = 550L
+private const val VAULT_DATA_RECEIVED_DELAY: Long = 700L
 private const val LOGIN_SUCCESS_SNACKBAR_DELAY: Long = 550L
 
 /**
