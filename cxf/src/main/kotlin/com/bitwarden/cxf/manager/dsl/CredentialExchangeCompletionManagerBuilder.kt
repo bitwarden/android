@@ -17,6 +17,7 @@ import com.bitwarden.cxf.manager.CredentialExchangeCompletionManagerImpl
  *
  * @property activity The activity that will handle the completion of the credential exchange.
  */
+@OmitFromCoverage
 class CredentialExchangeCompletionManagerBuilder
 internal constructor(private val activity: Activity) {
     internal fun build(): CredentialExchangeCompletionManager =
