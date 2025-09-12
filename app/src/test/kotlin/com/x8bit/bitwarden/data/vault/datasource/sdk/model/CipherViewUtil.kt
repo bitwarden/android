@@ -166,6 +166,7 @@ fun createMockFido2CredentialAutofillView(
         rpId = rpId,
         userNameForUi = "mockUserNameForUi-$number",
         userHandle = "mockUserHandle-$number".encodeToByteArray(),
+        hasCounter = false,
     )
 
 /**
