@@ -12,7 +12,7 @@
     <string name="copy_password">Copy password</string>
     <string name="copy_username">Copy username</string>
     <string name="delete">Delete</string>
-    <string name="deleting">Deleting...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Do you really want to delete? This cannot be undone.</string>
     <string name="edit">Edit</string>
     <string name="edit_folder">Edit folder</string>
@@ -55,7 +55,7 @@
     <string name="password">Password</string>
     <string name="save">Save</string>
     <string name="move">Move</string>
-    <string name="saving">Saving...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Settings</string>
     <string name="show">Show</string>
     <string name="item_deleted">Item deleted</string>
@@ -104,13 +104,16 @@
     <string name="immediately">Immediately</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
-    <string name="logging_in">Logging in...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Log in to Bitwarden</string>
     <string name="master_password_confirmation_val_message">Password confirmation is not correct.</string>
     <string name="master_password_description">The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</string>
     <string name="master_password_hint">Master password hint (optional)</string>
     <string name="master_password_hint_description">A master password hint can help you remember your password if you forget it.</string>
-    <string name="master_password_length_val_message_x">Master password must be at least %1$s characters long.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Minimum numbers</string>
     <string name="min_special">Minimum special</string>
     <string name="never">Never</string>
@@ -143,8 +146,8 @@
     <string name="select">Select</string>
     <string name="item_details">Item details</string>
     <string name="item_updated">Item saved</string>
-    <string name="submitting">Submitting...</string>
-    <string name="syncing">Syncing...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Syncing complete</string>
     <string name="two_step_login">Two-step login</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -163,7 +166,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">Disabled</string>
     <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the \"Settings\" screen.</string>
-    <string name="autofill">Auto-fill</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">Do you want to auto-fill or view this item?</string>
     <string name="search">Search</string>
     <string name="learn_org">Learn about organisations</string>
@@ -182,7 +185,7 @@
     <string name="add_new_attachment">Add new attachment</string>
     <string name="attachments">Attachments</string>
     <string name="unable_to_download_file">Unable to download file.</string>
-    <string name="downloading">Downloading...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">This attachment is %1$s in size. Are you sure you want to download it onto your device?</string>
     <string name="authenticator_key">Authenticator key (TOTP)</string>
     <string name="verification_code_totp">Verification code (TOTP)</string>
@@ -309,7 +312,10 @@ Scanning will happen automatically.</string>
     <string name="personal_details">Personal Details</string>
     <string name="contact_info">Contact Info</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
-    <string name="password_exposed">This password has been exposed %1$s time(s) in data breaches. You should change it.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">This password was not found in any known data breaches. It should be safe to use.</string>
     <string name="identity_name">Identity name</string>
     <string name="value">Value</string>
@@ -393,10 +399,10 @@ Scanning will happen automatically.</string>
     <string name="save_attachment_success">Attachment saved successfully</string>
     <string name="autofill_tile_accessibility_required">Please turn on \"Auto-fill Accessibility Service\" from Bitwarden Settings to use the Auto-fill tile.</string>
     <string name="autofill_tile_uri_not_found">No password fields detected</string>
-    <string name="soft_deleting">Sending to bin...</string>
+    <string name="soft_deleting">Sending to bin…</string>
     <string name="item_soft_deleted">Item has been sent to bin.</string>
     <string name="restore">Restore</string>
-    <string name="restoring">Restoring...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Item restored</string>
     <string name="trash">Bin</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Do you really want to permanently delete? This cannot be undone.</string>
@@ -749,7 +755,10 @@ Do you want to switch to this account?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Choose your master password</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-    <string name="minimum_characters">%1$s characters</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Expired link</string>
     <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
     <string name="restart_registration">Restart registration</string>
@@ -802,7 +811,7 @@ Do you want to switch to this account?</string>
     <string name="need_help_check_out_import_help">Need help? Check out import help.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Save the exported file somewhere on your computer you can find easily.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognised Bitwarden server. You may need to check with your provider or update your server.</string>
-    <string name="syncing_logins_loading_message">Syncing logins...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Download the browser extension</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favourite browser for a seamless experience.</string>
     <string name="use_the_web_app">Use the web app</string>
@@ -911,7 +920,7 @@ Do you want to switch to this account?</string>
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
     <string name="add_field">Add field</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Share error details</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>

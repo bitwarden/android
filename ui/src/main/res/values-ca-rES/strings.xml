@@ -12,7 +12,7 @@
     <string name="copy_password">Copia contrasenya</string>
     <string name="copy_username">Copia el nom d\'usuari</string>
     <string name="delete">Suprimeix</string>
-    <string name="deleting">S\'està suprimint...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Eseu segur que voleu suprimir? Això no es pot desfer.</string>
     <string name="edit">Edita</string>
     <string name="edit_folder">Edita la carpeta</string>
@@ -55,7 +55,7 @@
     <string name="password">Contrasenya</string>
     <string name="save">Guarda</string>
     <string name="move">Desplaça</string>
-    <string name="saving">S\'està guardant...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Configuració</string>
     <string name="show">Mostra</string>
     <string name="item_deleted">S\'ha suprimit l\'element.</string>
@@ -104,13 +104,16 @@
     <string name="immediately">Immediatament</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
-    <string name="logging_in">S\'està iniciant sessió...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Inicia sessió a Bitwarden</string>
     <string name="master_password_confirmation_val_message">La confirmació de la contrasenya no és correcta.</string>
     <string name="master_password_description">La contrasenya mestra és la clau que utilitzeu per accedir a la vostra caixa forta. És molt important que no la oblideu. No hi ha manera de recuperar-la en cas de perdre-la.</string>
     <string name="master_password_hint">Pista de la contrasenya mestra (opcional)</string>
     <string name="master_password_hint_description">Una pista de contrasenya mestra pot ajudar-vos a recordar-la si la oblideu.</string>
-    <string name="master_password_length_val_message_x">La contrasenya mestra ha de contenir almenys %1$s caràcters.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Mínim de caràcters numèrics</string>
     <string name="min_special">Mínim de caràcters especials</string>
     <string name="never">Mai</string>
@@ -143,8 +146,8 @@
     <string name="select">Selecciona</string>
     <string name="item_details">Item details</string>
     <string name="item_updated">Element guardat</string>
-    <string name="submitting">S\'està enviant...</string>
-    <string name="syncing">S\'està sincronitzant...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Sincronització completa.</string>
     <string name="two_step_login">Inici de sessió en dues passes</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -163,7 +166,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">No</string>
     <string name="bitwarden_autofill_service_alert2">La forma més senzilla d\'afegir nous inicis de sessió a la caixa forta és amb el servei d\'emplenament automàtic de Bitwarden. Obteniu més informació sobre com utilitzar el servei en la pantalla \"Eines\".</string>
-    <string name="autofill">Emplenament automàtic</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">Voleu omplir automàticament o visualitzar aquest element?</string>
     <string name="search">Cerca</string>
     <string name="learn_org">Més informació sobre les organitzacions</string>
@@ -182,7 +185,7 @@
     <string name="add_new_attachment">Afegeix un adjunt nou</string>
     <string name="attachments">Adjunts</string>
     <string name="unable_to_download_file">No es pot descarregar el fitxer.</string>
-    <string name="downloading">S\'està baixant...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Aquest fitxer adjunt ocupa %1$s. Esteu segur que voleu descarregar-lo al vostre dispositiu?</string>
     <string name="authenticator_key">Clau d\'autenticació (TOTP)</string>
     <string name="verification_code_totp">Codi de verificació (TOTP)</string>
@@ -309,7 +312,10 @@ L\'escaneig es farà automàticament.</string>
     <string name="personal_details">Personal Details</string>
     <string name="contact_info">Contact Info</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
-    <string name="password_exposed">Aquesta contrasenya ha estat exposada %1$s vegades en filtracions de seguretat de dades. Heu de canviar-la.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Aquesta contrasenya no s\'ha trobat en cap filtració de dades coneguda. Hauries de poder utilitzar-la de manera segura.</string>
     <string name="identity_name">Nom d\'identitat</string>
     <string name="value">Valor</string>
@@ -393,10 +399,10 @@ L\'escaneig es farà automàticament.</string>
     <string name="save_attachment_success">L\'adjunt s\'ha guardat correctament</string>
     <string name="autofill_tile_accessibility_required">Activeu \"Servei d\'accessibilitat d\'emplenament automàtic\" de la configuració de Bitwarden per utilitzar el mosaic d\'emplenament automàtic.</string>
     <string name="autofill_tile_uri_not_found">No s\'han detectat camps de contrasenya</string>
-    <string name="soft_deleting">S\'està enviant a la paperera...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">L\'element s\'ha enviat a la paperera.</string>
     <string name="restore">Restaura</string>
-    <string name="restoring">S\'està restaurant...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">L\'element s\'ha restaurat</string>
     <string name="trash">Paperera</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Esteu segur que voleu suprimir-ho definitivament? Això no es pot desfer.</string>
@@ -749,7 +755,10 @@ Voleu canviar a aquest compte?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Trieu la contrasenya mestra</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-    <string name="minimum_characters">%1$s characters</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Enllaç caducat</string>
     <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
     <string name="restart_registration">Restart registration</string>
@@ -802,7 +811,7 @@ Voleu canviar a aquest compte?</string>
     <string name="need_help_check_out_import_help">Need help? Check out <annotation link="importHelp">import help</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
-    <string name="syncing_logins_loading_message">Syncing logins...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Download the browser extension</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favorite browser for a seamless experience.</string>
     <string name="use_the_web_app">Use the web app</string>
@@ -911,7 +920,7 @@ Voleu canviar a aquest compte?</string>
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
     <string name="add_field">Add field</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Share error details</string>
     <string name="flight_recorder">Registrador al vol</string>
     <string name="flight_recorder_help">Ajuda del Registrador al vol</string>

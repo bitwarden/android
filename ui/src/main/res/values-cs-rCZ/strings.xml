@@ -110,7 +110,12 @@
     <string name="master_password_description">Hlavní heslo je heslo, které používáte k přístupu do Vašeho trezoru. Je velmi důležité, abyste jej nezapomněli. Neexistuje totiž žádný způsob, jak heslo obnovit v případě, že jste jej zapomněli.</string>
     <string name="master_password_hint">Nápověda k hlavnímu heslu (volitelné)</string>
     <string name="master_password_hint_description">Nápověda k hlavnímu heslu Vám pomůže vzpomenout si heslo, pokud ho zapomenete.</string>
-    <string name="master_password_length_val_message_x">Hlavní heslo musí obsahovat alespoň %1$s znaků.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Hlavní heslo musí obsahovat alespoň %d znak.</item>
+        <item quantity="few">Hlavní heslo musí obsahovat alespoň %d znaky.</item>
+        <item quantity="many">Hlavní heslo musí obsahovat alespoň %d znaků.</item>
+        <item quantity="other">Hlavní heslo musí obsahovat alespoň %d znaků.</item>
+    </plurals>
     <string name="min_numbers">Minimální počet číslic</string>
     <string name="min_special">Minimální počet speciálních znaků</string>
     <string name="never">Nikdy</string>
@@ -163,7 +168,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Hledat přhlášení nebo přidat nové přihlášení</string>
     <string name="disabled">Zakázáno</string>
     <string name="bitwarden_autofill_service_alert2">Nejjednodušší způsob, jak přidat nové přihlašovací údaje do Vašeho trezoru, je služba automatického vyplňování Bitwarden. Další informace o použití této služby naleznete na obrazovce \"Nastavení\".</string>
-    <string name="autofill">Automatické vyplňování</string>
+    <string name="autofill_title">Automatické vyplňování</string>
     <string name="autofill_or_view">Chcete automaticky vyplnit nebo zobrazit tyto přihlašovací údaje?</string>
     <string name="search">Hledat</string>
     <string name="learn_org">Více o organizacích</string>
@@ -309,7 +314,12 @@ Načtení proběhne automaticky.</string>
     <string name="personal_details">Osobní údaje</string>
     <string name="contact_info">Kontaktní informace</string>
     <string name="check_password_for_data_breaches">Kontrola hesla pro případ narušení bezpečnosti dat</string>
-    <string name="password_exposed">K úniku tohoto hesla došlo celkem %1$sx. Měli byste jej změnit.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">K úniku tohoto hesla došlo celkem %dx. Měli byste jej změnit.</item>
+        <item quantity="few">K úniku tohoto hesla došlo celkem %dx. Měli byste jej změnit.</item>
+        <item quantity="many">K úniku tohoto hesla došlo celkem %dx. Měli byste jej změnit.</item>
+        <item quantity="other">K úniku tohoto hesla došlo celkem %dx. Měli byste jej změnit.</item>
+    </plurals>
     <string name="password_safe">V žádném ze známých případů nedošlo k úniku tohoto hesla. Mělo by být bezpečné používat jej i nadále.</string>
     <string name="identity_name">Název identity</string>
     <string name="value">Hodnota</string>
@@ -748,7 +758,12 @@ Chcete se přepnout na tento účet?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden nemůže obnovit ztracené nebo zapomenuté hlavní heslo.</string>
     <string name="choose_your_master_password">Zvolte hlavní heslo</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Zvolte jedinečné a silné heslo pro zabezpečení Vašich informací.</string>
-    <string name="minimum_characters">%1$s znaků</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d znak</item>
+        <item quantity="few">%d znaky</item>
+        <item quantity="many">%d znaků</item>
+        <item quantity="other">%d znaků</item>
+    </plurals>
     <string name="expired_link">Platnost odkazu vypršela</string>
     <string name="please_restart_registration_or_try_logging_in">Restartujte registraci nebo se zkuste přihlásit. Možná již máte účet.</string>
     <string name="restart_registration">Restartovat registraci</string>
@@ -801,7 +816,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="need_help_check_out_import_help">Potřebujete pomoc? Podívejte se na <annotation link="importHelp">nápovědu pro import</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Uložte exportovaný soubor</annotation> někde na Vašem počítači, kde jej můžete snadno najít.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Nejedná se o rozpoznaný server Bitwarden. Možná budete muset zkontrolovat svého poskytovatele nebo aktualizovat svůj server.</string>
-    <string name="syncing_logins_loading_message">Synchronizování přihlášení...</string>
+    <string name="syncing_logins_loading_message">Synchronizování přihlašovacích údajů...</string>
     <string name="download_the_browser_extension">Stáhnout rozšíření prohlížeče</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Přejděte na bitwarden.com/download a integrujte Bitwarden do svého oblíbeného prohlížeče pro bezproblémové používání.</string>
     <string name="use_the_web_app">Použít webovou aplikaci</string>
@@ -1073,7 +1088,7 @@ při opakování problémů.</string>
     <string name="copy_error_report">Zpráva o chybě kopírování</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nemohl dešifrovat tuto položku trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
-        <item quantity="one">Bitwarden nemohl dešifrovat 1 položku trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</item>
+        <item quantity="one">Bitwarden nemohl dešifrovat %1$d položku trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</item>
         <item quantity="few">Bitwarden nemohl dešifrovat %1$d položky trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</item>
         <item quantity="many">Bitwarden nemohl dešifrovat %1$d položek trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</item>
         <item quantity="other">Bitwarden nemohl dešifrovat %1$d položek trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</item>

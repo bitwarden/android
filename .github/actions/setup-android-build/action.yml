@@ -4,7 +4,7 @@ inputs:
   java-version:
     description: 'Java version to use'
     required: false
-    default: '17'
+    default: '21'
 runs:
   using: 'composite'
   steps:

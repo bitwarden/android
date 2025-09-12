@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
+import com.x8bit.bitwarden.data.vault.repository.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
@@ -257,6 +258,20 @@ interface VaultRepository : CipherManager, VaultLockManager {
         format: ExportFormat,
         restrictedTypes: List<CipherType>,
     ): ExportVaultDataResult
+
+    /**
+     * Attempt to import a CXF payload.
+     *
+     * @param payload The CXF payload to import.
+     */
+    suspend fun importCxfPayload(payload: String): ImportCxfPayloadResult
+
+    /**
+     * Attempt to export the vault data to a CXF file.
+     *
+     * @param ciphers Ciphers selected for export.
+     */
+    suspend fun exportVaultDataToCxf(ciphers: List<CipherListView>): Result<String>
 
     /**
      * Flow that represents the data for a specific vault list item as found by ID. This may emit

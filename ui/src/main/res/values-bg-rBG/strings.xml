@@ -110,7 +110,10 @@
     <string name="master_password_description">С главната парола получавате достъп до трезора си, не я губете! Ако я забравите, не съществува никакъв начин за нейното възстановяване.</string>
     <string name="master_password_hint">Подсказка за главната парола (по избор)</string>
     <string name="master_password_hint_description">Подсказката помага да си спомните паролата, ако сте я забравили.</string>
-    <string name="master_password_length_val_message_x">Главната парола трябва да е дълга поне %1$s знака.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Главната парола трябва да е с дължина поне %d знак.</item>
+        <item quantity="other">Главната парола трябва да е с дължина поне %d знака.</item>
+    </plurals>
     <string name="min_numbers">Минимален брой цифри</string>
     <string name="min_special">Минимален брой специални знаци</string>
     <string name="never">Никога</string>
@@ -163,7 +166,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Търсене на елемент за вписване или добавяне на нов такъв</string>
     <string name="disabled">Изключено</string>
     <string name="bitwarden_autofill_service_alert2">Най-лесният начин да добавяте нови записи към трезора си е с услугата за автоматично дописване на Битуорден. Може да научите повече как да я ползвате от екрана за настройки.</string>
-    <string name="autofill">Автоматично дописване</string>
+    <string name="autofill_title">Автоматично попълване</string>
     <string name="autofill_or_view">Искате да разгледате записа или да го ползвате за дописване?</string>
     <string name="search">Търсене</string>
     <string name="learn_org">Разберете повече за организациите</string>
@@ -182,7 +185,7 @@
     <string name="add_new_attachment">Прикачване на файл</string>
     <string name="attachments">Прикачени файлове</string>
     <string name="unable_to_download_file">Файлът не може да се изтегли.</string>
-    <string name="downloading">Изтегляне…</string>
+    <string name="downloading">Сваляне…</string>
     <string name="attachment_large_warning">Размерът на прикачения файл е %1$s. Сигурни ли сте, че искате да го свалите на устройството си?</string>
     <string name="authenticator_key">Удостоверителен ключ (TOTP)</string>
     <string name="verification_code_totp">Код за потвърждаване (TOTP)</string>
@@ -309,7 +312,10 @@
     <string name="personal_details">Лични данни</string>
     <string name="contact_info">Информация за връзка</string>
     <string name="check_password_for_data_breaches">Проверка дали паролата е засегната от пробиви</string>
-    <string name="password_exposed">Паролата е била разкрита поне %1$s път/и в пробиви. Непременно я сменете.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">Тази парола е била разкрита %d път в пробиви. Непременно я сменете.</item>
+        <item quantity="other">Тази парола е била разкрита %d пъти в пробиви. Непременно я сменете.</item>
+    </plurals>
     <string name="password_safe">Паролата не е била разкрита в известните пробиви. Засега ползването ѝ изглежда безопасно.</string>
     <string name="identity_name">Име на самоличността</string>
     <string name="value">Стойност</string>
@@ -396,7 +402,7 @@
     <string name="soft_deleting">Преместване в кошчето…</string>
     <string name="item_soft_deleted">Записът е преместен в кошчето.</string>
     <string name="restore">Възстановяване</string>
-    <string name="restoring">Възстановяване...</string>
+    <string name="restoring">Възстановяване…</string>
     <string name="item_restored">Записът бе възстановен.</string>
     <string name="trash">Кошче</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Наистина ли искате да го изтриете? Действието не може да бъде отменено.</string>
@@ -749,7 +755,10 @@
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Битуорден не може да нулира загубена или забравена парола.</string>
     <string name="choose_your_master_password">Изберете главна парола</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Изберете уникална и сложна парола, за да запазите информацията си защитена.</string>
-    <string name="minimum_characters">%1$s знака</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d знак</item>
+        <item quantity="other">%d знака</item>
+    </plurals>
     <string name="expired_link">Връзка с изтекла давност</string>
     <string name="please_restart_registration_or_try_logging_in">Моля, рестартирайте процеса на регистрация или опитайте да се впишете. Може вече да имате регистрация.</string>
     <string name="restart_registration">Рестартиране на регистрацията</string>

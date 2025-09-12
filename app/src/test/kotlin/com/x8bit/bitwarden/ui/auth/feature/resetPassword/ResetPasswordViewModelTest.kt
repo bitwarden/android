@@ -3,7 +3,9 @@ package com.x8bit.bitwarden.ui.auth.feature.resetPassword
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
@@ -133,8 +135,10 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
                 resetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
                 dialogState = ResetPasswordState.DialogState.Error(
                     title = BitwardenString.an_error_has_occurred.asText(),
-                    message = BitwardenString.master_password_length_val_message_x
-                        .asText(MIN_PASSWORD_LENGTH),
+                    message = BitwardenPlurals.master_password_length_val_message_x.asPluralsText(
+                        quantity = MIN_PASSWORD_LENGTH,
+                        args = arrayOf(MIN_PASSWORD_LENGTH),
+                    ),
                 ),
                 passwordInput = password,
                 passwordStrengthState = PasswordStrengthState.WEAK_1,

@@ -4,7 +4,7 @@
     <string name="add_folder">Додати теку</string>
     <string name="add_item">Додати запис</string>
     <string name="an_error_has_occurred">Сталася помилка</string>
-    <string name="apply">Apply</string>
+    <string name="apply">Застосувати</string>
     <string name="back">Назад</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Скасувати</string>
@@ -12,7 +12,7 @@
     <string name="copy_password">Копіювати пароль</string>
     <string name="copy_username">Копіювати ім\'я користувача</string>
     <string name="delete">Видалити</string>
-    <string name="deleting">Видалення...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Ви справді хочете видалити? Цю дію неможливо скасувати.</string>
     <string name="edit">Змінити</string>
     <string name="edit_folder">Редагування</string>
@@ -55,7 +55,7 @@
     <string name="password">Пароль</string>
     <string name="save">Зберегти</string>
     <string name="move">Перемістити</string>
-    <string name="saving">Збереження...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Налаштування</string>
     <string name="show">Показати</string>
     <string name="item_deleted">Запис видалено</string>
@@ -104,13 +104,18 @@
     <string name="immediately">Негайно</string>
     <string name="vault_timeout_log_out_confirmation_title">Встановити час очікування сеансу на \"Вийти\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">Після часу очікування сеансу ви вийдете з системи. Для повторного входу й відновлення доступу до сховища потрібне інтернет-з\'єднання. Збережені налаштування та PIN-код на цьому пристрої не зміняться.</string>
-    <string name="logging_in">Вхід...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Увійти в Bitwarden</string>
     <string name="master_password_confirmation_val_message">Підтвердження пароля неправильне.</string>
     <string name="master_password_description">Головний пароль використовується для доступу до вашого сховища. Дуже важливо, щоб ви запам\'ятали його. Якщо ви забудете головний пароль, його неможливо буде відновити.</string>
     <string name="master_password_hint">Підказка для головного пароля (необов\'язково)</string>
     <string name="master_password_hint_description">Якщо ви забудете головний пароль, підказка може допомогти вам згадати його.</string>
-    <string name="master_password_length_val_message_x">Довжина головного пароля має бути принаймні %1$s символів.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="few">Master password must be at least %d characters long.</item>
+        <item quantity="many">Master password must be at least %d characters long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Мінімум цифр</string>
     <string name="min_special">Мінімум спеціальних символів</string>
     <string name="never">Ніколи</string>
@@ -143,8 +148,8 @@
     <string name="select">Обрати</string>
     <string name="item_details">Подробиці запису</string>
     <string name="item_updated">Запис збережено</string>
-    <string name="submitting">Відправлення...</string>
-    <string name="syncing">Синхронізація...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Синхронізацію завершено</string>
     <string name="two_step_login">Двоетапна перевірка</string>
     <string name="unlock_with_biometrics">Розблокувати з біометрією</string>
@@ -163,7 +168,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Пошукати запис або додати новий</string>
     <string name="disabled">Вимкнено</string>
     <string name="bitwarden_autofill_service_alert2">Найлегшим способом додавання нових записів у сховище є використання служби автозаповнення Bitwarden. Дізнайтеся більше про використання служби автозаповнення Bitwarden в меню \"Налаштування\".</string>
-    <string name="autofill">Автозаповнення</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">Автоматично заповнити чи переглянути запис?</string>
     <string name="search">Пошук</string>
     <string name="learn_org">Докладніше про організації</string>
@@ -182,7 +187,7 @@
     <string name="add_new_attachment">Додати нове вкладення</string>
     <string name="attachments">Вкладення</string>
     <string name="unable_to_download_file">Увімкнути для завантаження файлу.</string>
-    <string name="downloading">Завантаження...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Це вкладення має розмір %1$s. Ви дійсно хочете завантажити його на свій пристрій?</string>
     <string name="authenticator_key">Ключ автентифікації</string>
     <string name="verification_code_totp">Код підтвердження (TOTP)</string>
@@ -287,7 +292,7 @@
     <string name="new_uri">Новий URI</string>
     <string name="add_website">Додати вебсайт</string>
     <string name="base_domain">Основний домен</string>
-    <string name="default_text">Default (%1$s)</string>
+    <string name="default_text">Типово (%1$s)</string>
     <string name="exact">Точно</string>
     <string name="host">Вузол</string>
     <string name="reg_ex">Регулярний вираз</string>
@@ -309,7 +314,12 @@
     <string name="personal_details">Особисті дані</string>
     <string name="contact_info">Контактні дані</string>
     <string name="check_password_for_data_breaches">Перевірити пароль у витоках даних</string>
-    <string name="password_exposed">Цей пароль було викрито %1$s разів з витоком даних. Вам слід його змінити.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="few">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="many">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Цей пароль не було знайдено у жодних відомих витоках даних. Його можна безпечно використовувати.</string>
     <string name="identity_name">Назва посвідчення</string>
     <string name="value">Значення</string>
@@ -357,7 +367,7 @@
     <string name="clear_clipboard">Очистити буфер обміну</string>
     <string name="clear_clipboard_description">Автоматично очищати скопійовані значення з буфера обміну.</string>
     <string name="default_uri_match_detection">Типове виявлення збігів URI</string>
-    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
+    <string name="default_uri_match_detection_description">Функція виявлення збігів URI керує ідентифікацією пропозицій автозаповнення Bitwarden.</string>
     <string name="theme">Тема</string>
     <string name="theme_description">Змінити колірну тему програми.</string>
     <string name="copy_notes">Копіювати нотатку</string>
@@ -365,8 +375,8 @@
     <string name="exit_confirmation">Ви впевнені, що хочете вийти з Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Вимагати головний пароль після перезапуску програми?</string>
     <string name="pin_require_master_password_restart">Ви хочете вимагати розблокування головним паролем при перезапуску програми?</string>
-    <string name="ask_to_add_item">Ask to add item</string>
-    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
+    <string name="ask_to_add_item">Запитувати про додавання запису</string>
+    <string name="ask_to_add_item_description">Запитувати про додавання запису, якщо його немає у вашому сховищі.</string>
     <string name="on_restart">Під час перезапуску програми</string>
     <string name="capitalize">Великі літери</string>
     <string name="include_number">Включити число</string>
@@ -393,10 +403,10 @@
     <string name="save_attachment_success">Вкладення успішно збережено</string>
     <string name="autofill_tile_accessibility_required">Увімкніть \"Службу доступності автозаповнення\" в налаштуваннях Bitwarden, щоб використовувати панель автозаповнення.</string>
     <string name="autofill_tile_uri_not_found">Полів пароля не виявлено</string>
-    <string name="soft_deleting">Перенесення до смітника...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Запис переміщено до смітника.</string>
     <string name="restore">Відновити</string>
-    <string name="restoring">Відновлення...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Запис відновлено</string>
     <string name="trash">Смітник</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Ви дійсно хочете остаточно видалити? Цю дію неможливо скасувати.</string>
@@ -749,7 +759,12 @@
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden не може скинути втрачений чи забутий головний пароль.</string>
     <string name="choose_your_master_password">Створити головний пароль</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Створіть унікальний, надійний пароль, щоб захистити вашу інформацію.</string>
-    <string name="minimum_characters">%1$s символів</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="few">%d characters</item>
+        <item quantity="many">%d characters</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Протерміноване посилання</string>
     <string name="please_restart_registration_or_try_logging_in">Перезапустіть реєстрацію або спробуйте увійти. Можливо, ви вже маєте обліковий запис.</string>
     <string name="restart_registration">Перезапустити реєстрацію</string>
@@ -802,7 +817,7 @@
     <string name="need_help_check_out_import_help">Потрібна допомога? Перегляньте <annotation link="importHelp">довідку щодо імпорту</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Збережіть експортований файл</annotation> у легкодоступному місці на цьому комп\'ютері.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Це не розпізнаний сервер Bitwarden. Можливо, вам необхідно перевірити параметри свого провайдера або оновити свій сервер.</string>
-    <string name="syncing_logins_loading_message">Синхронізація записів...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Завантажити розширення браузера</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Відкрийте bitwarden.com/download, щоб інтегрувати Bitwarden у свій браузер для найкращої продуктивності.</string>
     <string name="use_the_web_app">Використовувати вебпрограму</string>
@@ -911,7 +926,7 @@
     <string name="no_folder">Без теки</string>
     <string name="show_less">Згорнути</string>
     <string name="add_field">Додати поле</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Поширити подробиці про помилку</string>
     <string name="flight_recorder">Чорна скринька</string>
     <string name="flight_recorder_help">Довідка щодо чорної скриньки</string>
@@ -1070,23 +1085,23 @@
     <string name="local_items_are_collapsed_click_to_expand">Локальні записи згорнуто. Натисніть, щоб розгорнути.</string>
     <string name="items_expanded_click_to_collapse">Записи розгорнуто. Натисніть, щоб згорнути.</string>
     <string name="items_are_collapsed_click_to_expand">Записи згорнуто. Натисніть, щоб розгорнути.</string>
-    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
-    <string name="copy_error_report">Copy error report</string>
-    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <string name="error_cannot_decrypt">[помилка: неможливо розшифрувати]</string>
+    <string name="copy_error_report">Копіювати звіт про помилку</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden не вдалося розшифрувати цей елемент сховища. Скопіюйте цей звіт про помилку та поділіться ним зі службою підтримки, щоб уникнути втрати даних.</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
-        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
-        <item quantity="few">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
-        <item quantity="many">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
-        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="one">Bitwarden не може розшифрувати %1$d елемент сховища. Скопіюйте цей звіт про помилку та поділіться ним зі службою підтримки, щоб уникнути втрати даних.</item>
+        <item quantity="few">Bitwarden не може розшифрувати %1$d елементи сховища. Скопіюйте цей звіт про помилку та поділіться ним зі службою підтримки, щоб уникнути втрати даних.</item>
+        <item quantity="many">Bitwarden не може розшифрувати %1$d елементів сховища. Скопіюйте цей звіт про помилку та поділіться ним зі службою підтримки, щоб уникнути втрати даних.</item>
+        <item quantity="other">Bitwarden не може розшифрувати %1$d елементів сховища. Скопіюйте цей звіт про помилку та поділіться ним зі службою підтримки, щоб уникнути втрати даних.</item>
     </plurals>
     <string name="select_a_card_for_x">Вибрати картку для %s</string>
-    <string name="advanced_options">Advanced options</string>
-    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
-    <string name="keep_your_credential_secure">Keep your credentials secure</string>
-    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
-    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
-    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
-    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
-    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
-    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="advanced_options">Додаткові налаштування</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Докладніше про виявлення збігів</annotation></string>
+    <string name="keep_your_credential_secure">Захистіть свої облікові дані</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Докладніше про захист облікових даних під час використання “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Ви дійсно хочете використовувати “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">Функція виявлення збігів URI керує ідентифікацією пропозицій автозаповнення Bitwarden.\n<annotation emphasis="bold">Обережно!</annotation> Регулярний вираз – це функція для досвідчених користувачів, неправильне використання якої може призвести до розкриття облікових даних.</string>
+    <string name="default_uri_match_detection_description_advanced_options">Функція виявлення збігів URI керує ідентифікацією пропозицій автозаповнення Bitwarden.\n<annotation emphasis="bold">Обережно!</annotation> \"Починається з\" – це функція для досвідчених користувачів, використання якої може призвести до розкриття облікових даних.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Починається з\" – це функція для досвідчених користувачів, використання якої може призвести до розкриття облікових даних.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">Регулярний вираз – це функція для досвідчених користувачів, неправильне використання якої може призвести до розкриття облікових даних.</string>
 </resources>

@@ -24,6 +24,7 @@ dependencies {
     kover(project(":authenticator"))
     kover(project(":authenticatorbridge"))
     kover(project(":core"))
+    kover(project(":cxf"))
     kover(project(":data"))
     kover(project(":network"))
     kover(project(":ui"))
@@ -38,6 +39,7 @@ detekt {
         "authenticator/src",
         "authenticatorbridge/src",
         "core/src",
+        "cxf/src",
         "data/src",
         "network/src",
         "ui/src",

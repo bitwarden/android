@@ -12,7 +12,7 @@
     <string name="copy_password">Kopier passord</string>
     <string name="copy_username">Kopier brukernavn</string>
     <string name="delete">Slett</string>
-    <string name="deleting">Sletter...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Vil du virkelig slette den? Dette kan ikke angres på.</string>
     <string name="edit">Rediger</string>
     <string name="edit_folder">Rediger mappe</string>
@@ -55,7 +55,7 @@
     <string name="password">Passord</string>
     <string name="save">Lagre</string>
     <string name="move">Flytt</string>
-    <string name="saving">Lagrer...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Innstillinger</string>
     <string name="show">Vis</string>
     <string name="item_deleted">Elementet har blitt slettet.</string>
@@ -104,13 +104,16 @@
     <string name="immediately">Umiddelbart</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
-    <string name="logging_in">Logger på...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Logg inn på Bitwarden</string>
     <string name="master_password_confirmation_val_message">Passordbekreftelsen er ikke riktig.</string>
     <string name="master_password_description">Hovedpassordet er passordet du bruker for å få tilgang til hvelvet ditt. Det er svært viktig at du aldri glemmer hovedpassordet. Det er ikke mulig å gjenopprette passordet dersom du glemmer det.</string>
     <string name="master_password_hint">Et hint for hovedpassordet (valgfritt)</string>
     <string name="master_password_hint_description">Et hint om hovedpassordet kan hjelpe deg å huske passordet om du skulle glemme det.</string>
-    <string name="master_password_length_val_message_x">Hovedpassordet må være minst %1$s tegn.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Minst antall siffer</string>
     <string name="min_special">Minste antall spesialtegn</string>
     <string name="never">Aldri</string>
@@ -143,8 +146,8 @@
     <string name="select">Velg</string>
     <string name="item_details">Gjenstandens detaljer</string>
     <string name="item_updated">Element oppdatert.</string>
-    <string name="submitting">Sender inn...</string>
-    <string name="syncing">Synkroniserer...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Synkronisering fullført.</string>
     <string name="two_step_login">2-trinnsinnlogging</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -163,7 +166,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">Deaktivert</string>
     <string name="bitwarden_autofill_service_alert2">Den enkleste måten å legge til nye innlogginger i hvelvet ditt, er fra Bitwarden sin autofylltjeneste. Lær mer om å bruke Bitwarden sin autofylltjeneste ved å navigere til \"Innstillinger\".</string>
-    <string name="autofill">Auto-utfylling</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">Vil du auto-utfylle eller vise denne gjenstanden?</string>
     <string name="search">Søk</string>
     <string name="learn_org">Lær om organisasjoner</string>
@@ -182,7 +185,7 @@
     <string name="add_new_attachment">Legg til et nytt vedlegg</string>
     <string name="attachments">Vedlegg</string>
     <string name="unable_to_download_file">Kunne ikke laste ned filen.</string>
-    <string name="downloading">Laster ned...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Dette vedlegget er %1$s stort. Er du sikker på at du vil laste det ned til enheten din?</string>
     <string name="authenticator_key">Autentiseringsnøkkel (TOTP)</string>
     <string name="verification_code_totp">Verifiseringskode (TOTP)</string>
@@ -309,7 +312,10 @@ Skanning skjer automatisk.</string>
     <string name="personal_details">Personlige detaljer</string>
     <string name="contact_info">Kontaktinfo</string>
     <string name="check_password_for_data_breaches">Sjekk passord for datainnbrudd</string>
-    <string name="password_exposed">Dette passordet har blitt eksponert %1$s gang(er) i datalekkasjer. Du bør endre det.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Dette passordet ble ikke funnet i noen kjente datalekkasjer. Det bør være trygt å bruke.</string>
     <string name="identity_name">Identitetsnavn</string>
     <string name="value">Verdi</string>
@@ -393,10 +399,10 @@ Skanning skjer automatisk.</string>
     <string name="save_attachment_success">Vedlegget ble lagret</string>
     <string name="autofill_tile_accessibility_required">Aktiver \"Auto-utfyllingstjenester\" fra Bitwarden-innstillingene for å bruke auto-utfyllingsflisen.</string>
     <string name="autofill_tile_uri_not_found">Ingen passordfelt oppdaget</string>
-    <string name="soft_deleting">Sender til papirkurv...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Elementet ble sendt til papirkurven.</string>
     <string name="restore">Gjenopprett</string>
-    <string name="restoring">Gjenoppretter...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Elementet har blitt gjenopprettet.</string>
     <string name="trash">Papirkurv</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Vil du virkelig slette denne permanent? Dette kan ikke angres.</string>
@@ -749,7 +755,10 @@ Vil du bytte til denne kontoen?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Choose your master password</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-    <string name="minimum_characters">%1$s characters</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Utløpt lenke</string>
     <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
     <string name="restart_registration">Start registreringen på nytt</string>

@@ -12,7 +12,7 @@
     <string name="copy_password">Jelszó másolása</string>
     <string name="copy_username">Felhasználónév másolása</string>
     <string name="delete">Törlés</string>
-    <string name="deleting">Törlés...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Tényleg törölni akarod? Ezt nem lehet visszavonni.</string>
     <string name="edit">Szerkesztés</string>
     <string name="edit_folder">Mappa szerkesztése</string>
@@ -55,7 +55,7 @@
     <string name="password">Jelszó</string>
     <string name="save">Mentés</string>
     <string name="move">Áthelyezés</string>
-    <string name="saving">Mentés...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Beállítások</string>
     <string name="show">Mutat</string>
     <string name="item_deleted">Az elem törlésre került.</string>
@@ -104,13 +104,16 @@
     <string name="immediately">Azonnal</string>
     <string name="vault_timeout_log_out_confirmation_title">Állítsuk be a munkamenet időkorlátját \"Kijelentkezés\" értékre?</string>
     <string name="vault_timeout_log_out_confirmation_message">Az időtúllépési időszak után kijelentkezés történik. A bejelentkezéshez és a széf újbóli eléréséhez csatlakozni kell az internethez. Az ezen az eszközön mentett beállítások és a PIN kód nem változik.</string>
-    <string name="logging_in">Bejelentkezés...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Bejelentkezés a Bitwardenbe</string>
     <string name="master_password_confirmation_val_message">A megadott két jelszó nem egyezik.</string>
     <string name="master_password_description">A mesterjelszó az a jelszó amit a széfed eléréséhez fogsz használni. Nagyon fontos, hogy ne felejtsd el a mesterjelszavad, mert nincs lehetőséged visszaállítani ha elfelejtetted.</string>
     <string name="master_password_hint">Mesterjelszó emlékeztető (nem kötelező)</string>
     <string name="master_password_hint_description">A mesterjelszó emlékeztető segíthet emlékezni a jelszavadra ha elfejetetted volna.</string>
-    <string name="master_password_length_val_message_x">A mesterjelszónak legalább %1$s karakter hosszúnak kell lennie.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">A mesterjelszónak legalább %d karakter hosszúságúnak kell lennie.</item>
+        <item quantity="other">A mesterjelszónak legalább %d karakter hosszúságúnak kell lennie.</item>
+    </plurals>
     <string name="min_numbers">Legalább ennyi szám</string>
     <string name="min_special">Legalább ennyi speciális karakter</string>
     <string name="never">Soha</string>
@@ -143,8 +146,8 @@
     <string name="select">Kijelölés</string>
     <string name="item_details">Elem részletek</string>
     <string name="item_updated">Az elem frissítésre került.</string>
-    <string name="submitting">Küldés...</string>
-    <string name="syncing">Szinkronizálás...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">A szinkronizálás kész.</string>
     <string name="two_step_login">Kétlépcsős bejelentkezés</string>
     <string name="unlock_with_biometrics">Biometrikus feloldás</string>
@@ -163,7 +166,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Keressünk egy bejelentkezést vagy adjunk hozzá új bejelentkezést.</string>
     <string name="disabled">Letiltva</string>
     <string name="bitwarden_autofill_service_alert2">A legkönnyebb módja új bejelentkezések széfbe helyezéséhez a Bitwarden automatikus kitöltés szolgáltatásból. További információ olvasható a Bitwarden automatikus kitöltés szolgáltatás használatáról a  \"Beállítások\" képernyőn.</string>
-    <string name="autofill">Automatikus kitöltés</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">Automatikusan kitöltésre vagy megtekintésre kerüljön ez az elem?</string>
     <string name="search">Keresés</string>
     <string name="learn_org">Információ szervezetekről</string>
@@ -182,7 +185,7 @@
     <string name="add_new_attachment">Melléklet hozzáadása</string>
     <string name="attachments">Mellékletek</string>
     <string name="unable_to_download_file">Nem lehet letölteni a fájlt.</string>
-    <string name="downloading">Letöltés...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Ez a melléklet %1$s méretű. Biztosan letöltésre kerüljön az eszközre?</string>
     <string name="authenticator_key">Igazolókód (TOTP)</string>
     <string name="verification_code_totp">Ellenőrzőkód (TOTP)</string>
@@ -308,7 +311,10 @@
     <string name="personal_details">Személyes adatok</string>
     <string name="contact_info">Kapcsolattartó infó</string>
     <string name="check_password_for_data_breaches">A jelszó ellenőrzése, hogy nem történt-e adatszivárgás</string>
-    <string name="password_exposed">Ez a jelszó %1$s alkalommal jelent meg az adatszivárgásban. Változtassuk meg.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">Ezt a jelszót %d alkalommal tették közzé adatsértések miatt. Meg kellene változtatni.</item>
+        <item quantity="other">Ezt a jelszót %d alkalommal tették közzé adatsértések miatt. Meg kellene változtatni.</item>
+    </plurals>
     <string name="password_safe">Ez a jelszó nem érintett egyetlen ismert adatszivárgásban sem. Biztonságos a használata.</string>
     <string name="identity_name">Azonosság név</string>
     <string name="value">Érték</string>
@@ -392,10 +398,10 @@
     <string name="save_attachment_success">A melléklet sikeresen mentésre került.</string>
     <string name="autofill_tile_accessibility_required">Engedélyezzük az \"Automatikus kitöltés elérés szolgáltatás\" lehetőséget a Bitwarden beállításainál az automatikus kitöltés engedélyezéséhez.</string>
     <string name="autofill_tile_uri_not_found">Nincs érzékelt jelszó mező.</string>
-    <string name="soft_deleting">A lomtárba küldés folyamatban van...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Az elem a lomtárba került.</string>
     <string name="restore">Visszaállítás</string>
-    <string name="restoring">A visszaállítás folyamatban van...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Az elem visszaállításra került.</string>
     <string name="trash">Lomtár</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Valóban végleges legyen a törlés? A művelet nem vonható vissza.</string>
@@ -748,7 +754,10 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">A Bitward nem tudja visszaállítani az elveszett vagy elfelejtett mesterjelszót.</string>
     <string name="choose_your_master_password">Mesterjelszó kiválasztása</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Válasszunk egyedi és erős jelszót az adatok biztonságának megőrzése érdekében.</string>
-    <string name="minimum_characters">%1$s karakter</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d karakter</item>
+        <item quantity="other">%d karakter</item>
+    </plurals>
     <string name="expired_link">A hivatkozás lejárt.</string>
     <string name="please_restart_registration_or_try_logging_in">Indítsuk újra a regisztrációt vagy próbáljunk meg bejelentkezni. Valószínűleg már létezik a fiók.</string>
     <string name="restart_registration">Regisztráció újra indítása</string>
@@ -801,7 +810,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="need_help_check_out_import_help">Segítségre van szükség? Nézzük meg az importálás súgót.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Mentsük el az exportált fájlt olyan helyre a számítógépen, ahol könnyen megtalálhatjuk.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Ez nem egy felismert Bitwarden szerver. Konzultálhatunk a szolgáltatóval vagy frissítsük a szervert.</string>
-    <string name="syncing_logins_loading_message">Bejelentkezések szinkronizálása...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Böngésző bővítmény letöltése</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Keressük fel  a bitwarden.com/download webhelyet és integráljuk a Bitwardent kedvenc böngészőbe a zökkenőmentes élmény érdekében.</string>
     <string name="use_the_web_app">Webalkalmazás használata</string>
@@ -910,7 +919,7 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="no_folder">Nincs mappa</string>
     <string name="show_less">Kevesebb megjelenítése</string>
     <string name="add_field">Mező hozzáadása</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Hiba részletek megosztása</string>
     <string name="flight_recorder">Adatrögzítő</string>
     <string name="flight_recorder_help">Adatrögzítő súgó</string>

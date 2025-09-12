@@ -4,7 +4,7 @@
     <string name="add_folder">Dodaj mapu</string>
     <string name="add_item">Dodaj stavku</string>
     <string name="an_error_has_occurred">Došlo je do pogreške.</string>
-    <string name="apply">Apply</string>
+    <string name="apply">Primijeni</string>
     <string name="back">Natrag</string>
     <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Odustani</string>
@@ -12,7 +12,7 @@
     <string name="copy_password">Kopiraj lozinku</string>
     <string name="copy_username">Kopiraj korisničko ime</string>
     <string name="delete">Izbriši</string>
-    <string name="deleting">Brisanje...</string>
+    <string name="deleting">Brisanje…</string>
     <string name="do_you_really_want_to_delete">Sigurno želiš izbrisati? To se ne može poništiti.</string>
     <string name="edit">Uredi</string>
     <string name="edit_folder">Uredi mapu</string>
@@ -55,7 +55,7 @@
     <string name="password">Lozinka</string>
     <string name="save">Spremi</string>
     <string name="move">Premjesti</string>
-    <string name="saving">Spremanje...</string>
+    <string name="saving">Spremanje…</string>
     <string name="settings">Postavke</string>
     <string name="show">Prikaži</string>
     <string name="item_deleted">Stavka izbrisana</string>
@@ -104,13 +104,17 @@
     <string name="immediately">Odmah</string>
     <string name="vault_timeout_log_out_confirmation_title">Postavi istek sesije na „Odjava”</string>
     <string name="vault_timeout_log_out_confirmation_message">Nakon isteka trezora biti će napravljena odjava. Za prijavu i ponovni pristup svom trezoru moraš biti spojen na internet. Tvoje postavke i PIN, spremljeni na ovom uređaju neće se promijeniti.</string>
-    <string name="logging_in">Prijava...</string>
+    <string name="logging_in">Prijava…</string>
     <string name="login_to_bitwarden">Prijavi se u Bitwarden</string>
     <string name="master_password_confirmation_val_message">Potvrda lozinke nije točna.</string>
     <string name="master_password_description">Glavnu lozinku koristiš za pristup svom trezoru. Vrlo je važno da ne zaboraviš glavnu lozinku. Ne postoji način za oporavak lozinke u slučaju da ju zaboraviš.</string>
     <string name="master_password_hint">Podsjetnik glavne lozinke (neobavezno)</string>
     <string name="master_password_hint_description">Podsjetnik glavne lozinke ti može pomoći da se prisjetiš svoje lozinke ako ju zaboraviš.</string>
-    <string name="master_password_length_val_message_x">Glavna lozinka mora imati najmanje %1$s znakova.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Glavna lozinka mora imati barem %d znak.</item>
+        <item quantity="few">Glavna lozinka mora imati barem %d znaka.</item>
+        <item quantity="other">Glavna lozinka mora imati barem %d znakova.</item>
+    </plurals>
     <string name="min_numbers">Najmanje brojeva</string>
     <string name="min_special">Najmanje posebnih</string>
     <string name="never">Nikad</string>
@@ -143,8 +147,8 @@
     <string name="select">Odaberi</string>
     <string name="item_details">Detalji stavke</string>
     <string name="item_updated">Stavka spremljena</string>
-    <string name="submitting">Slanje...</string>
-    <string name="syncing">Sinkronizacija...</string>
+    <string name="submitting">Slanje…</string>
+    <string name="syncing">Sinkronizacija…</string>
     <string name="syncing_complete">Sinkronizacija dovršena.</string>
     <string name="two_step_login">Prijava dvostrukom autentifikacijom</string>
     <string name="unlock_with_biometrics">Otključaj biometrijom</string>
@@ -163,7 +167,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Potraži ili dodaj novu prijavu</string>
     <string name="disabled">Onemogućeno</string>
     <string name="bitwarden_autofill_service_alert2">Najlakši način za dodavanje novih prijava u tvoj trezor je Bitwarden uslugom auto-ispune. Saznajte više o korištenju usluge auto-ispune u Postavkama.</string>
-    <string name="autofill">Auto-ispuna</string>
+    <string name="autofill_title">Auto-ispuna</string>
     <string name="autofill_or_view">Želiš li auto-ispuniti ili pogledati ovu stavku?</string>
     <string name="search">Traži</string>
     <string name="learn_org">Više o organizacijama</string>
@@ -182,7 +186,7 @@
     <string name="add_new_attachment">Dodaj novi privitak</string>
     <string name="attachments">Privitci</string>
     <string name="unable_to_download_file">Nije moguće preuzeti datoteku.</string>
-    <string name="downloading">Preuzimanje...</string>
+    <string name="downloading">Preuzimanje…</string>
     <string name="attachment_large_warning">Ovaj privitak je velik (%1$s). Sigurno ga želiš preuzeti na uređaj?</string>
     <string name="authenticator_key">Ključ autentifikatora</string>
     <string name="verification_code_totp">Kôd za provjeru (TOTP)</string>
@@ -308,7 +312,11 @@
     <string name="personal_details">Osobni podaci</string>
     <string name="contact_info">Kontakt informacije</string>
     <string name="check_password_for_data_breaches">Provjeri je li lozinka procurila</string>
-    <string name="password_exposed">Ova lozinka je otkrivena %1$s put(a) prilikom krađe podataka. Trebalo bi ju promijeniti.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">Lozinka je jedanput izložena u curenjima podataka. Trebalo bi ju promijeniti. %d</item>
+        <item quantity="few">Lozinka je %d puta izložena u curenjima podataka. Trebalo bi ju promijeniti.</item>
+        <item quantity="other">Lozinka je %d puta izložena u curenjima podataka. Trebalo bi ju promijeniti.</item>
+    </plurals>
     <string name="password_safe">Lozinka nije pronađena niti u jednoj krađi podataka. Sigurna je za korištenje.</string>
     <string name="identity_name">Ime identiteta</string>
     <string name="value">Vrijednost</string>
@@ -364,8 +372,8 @@
     <string name="exit_confirmation">Sigurno želiš izaći iz Bitwarden-a?</string>
     <string name="require_master_password_on_app_restart">Traži glavnu lozinku kod ponovnog pokretanja aplikacije?</string>
     <string name="pin_require_master_password_restart">Obavezno otključavanje glavnom lozinkom pri ponovnom pokretanju aplikacije?</string>
-    <string name="ask_to_add_item">Ask to add item</string>
-    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
+    <string name="ask_to_add_item">Upitaj za dodvanje stavke</string>
+    <string name="ask_to_add_item_description">Upitaj za dodavanje, ako se stavka već ne nalazi u trezoru.</string>
     <string name="on_restart">Pri ponovnom pokretanju</string>
     <string name="capitalize">Prva slova velika</string>
     <string name="include_number">Uključi broj</string>
@@ -392,10 +400,10 @@
     <string name="save_attachment_success">Privitak uspješno spremljen</string>
     <string name="autofill_tile_accessibility_required">U Bitwarden postavkama -&gt; „Usluga auto-ispune kroz pristupačnost” uključi opciju „Koristi pristupačnost”.</string>
     <string name="autofill_tile_uri_not_found">Nema pronađenih polja za unos lozinke</string>
-    <string name="soft_deleting">Slanje u smeće...</string>
+    <string name="soft_deleting">Slanje u smeće…</string>
     <string name="item_soft_deleted">Stavka je poslana u smeće.</string>
     <string name="restore">Vrati</string>
-    <string name="restoring">Vraćanje...</string>
+    <string name="restoring">Vraćanje…</string>
     <string name="item_restored">Stavka vraćena</string>
     <string name="trash">Smeće</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Doista želite zauvijek izbrisati? To se ne može poništiti.</string>
@@ -747,7 +755,11 @@
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden ne može vratiti izgubljenu ili zaboravljenu glavnu lozinku.</string>
     <string name="choose_your_master_password">Odaberi svoju glavnu lozinku</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Odaberi jedinstvenu i jaku lozinku za zaštitu svojih podataka.</string>
-    <string name="minimum_characters">%1$s znakova</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d znak</item>
+        <item quantity="few">%d znaka</item>
+        <item quantity="other">%d znakova</item>
+    </plurals>
     <string name="expired_link">Istekla poveznica</string>
     <string name="please_restart_registration_or_try_logging_in">Ponovo pokreni registraciju ili se pokušaj prijaviti. Možda već imaš račun.</string>
     <string name="restart_registration">Ponovno pokreni registraciju</string>
@@ -800,7 +812,7 @@
     <string name="need_help_check_out_import_help">Trebaš pomoć? Pogledaj <annotation emphasis="bold">pomoć za uvoz</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Spremi izvezenu datoteku</annotation> na mjesto na računalu koje možeš lako naći.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Ovo nije prepoznati Bitwarden poslužitelj. Možda ćeš morati provjeriti kod svog davatelja usluga ili ažurirati svoj poslužitelj.</string>
-    <string name="syncing_logins_loading_message">Sinkronizacija prijava...</string>
+    <string name="syncing_logins_loading_message">Sinkronizacija prijava…</string>
     <string name="download_the_browser_extension">Preuzmi proširenje za preglednik</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Posjeti bitwarden.com/download za integraciju Bitwardena u svoj omiljeni preglednik za besprijekorno iskustvo.</string>
     <string name="use_the_web_app">Koristi web aplikaciju</string>
@@ -910,7 +922,7 @@
     <string name="no_folder">Nema mape</string>
     <string name="show_less">Pokaži manje</string>
     <string name="add_field">Dodaj polje</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Podijeli detalje greške</string>
     <string name="flight_recorder">Snimač leta</string>
     <string name="flight_recorder_help">Pomoć za snimač leta</string>
@@ -1068,13 +1080,13 @@ bilo kakav problem.</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokalne stavke su sažete. Klikni za proširivanje.</string>
     <string name="items_expanded_click_to_collapse">Stavke su proširene. Klikni za sažimanje.</string>
     <string name="items_are_collapsed_click_to_expand">Stavke su sažete. Klikni za proširivanje.</string>
-    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
-    <string name="copy_error_report">Copy error report</string>
-    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <string name="error_cannot_decrypt">[greška: dešifriranje nije moguće]</string>
+    <string name="copy_error_report">Kopiraj izvješće o pogrešci</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nije mogao dešifrirati ovu stavku trezora. Kopiraj i podijeli ovu grešku s odjelom korisničke podrške za izbjegavanje dodatnog gubitka podataka.</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
-        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
-        <item quantity="few">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
-        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="one">Bitwarden nije mogao dešifrirati %1$d stavku trezora. Kopiraj i podijeli ovu grešku s odjelom korisničke podrške za izbjegavanje dodatnog gubitka podataka.</item>
+        <item quantity="few">Bitwarden nije mogao dešifrirati %1$d stavke trezora. Kopiraj i podijeli ovu grešku s odjelom korisničke podrške za izbjegavanje dodatnog gubitka podataka.</item>
+        <item quantity="other">Bitwarden nije mogao dešifrirati %1$d stavki trezora. Kopiraj i podijeli ovu grešku s odjelom korisničke podrške za izbjegavanje dodatnog gubitka podataka.</item>
     </plurals>
     <string name="select_a_card_for_x">Odaberi karticu za %s</string>
     <string name="advanced_options">Napredne mogućnosti</string>

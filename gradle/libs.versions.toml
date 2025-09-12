@@ -3,7 +3,7 @@
 
 # App version
 appVersionCode = "1"
-appVersionName = "2025.7.0"
+appVersionName = "2025.9.1"
 
 # SDK Versions
 compileSdk = "36"
@@ -22,6 +22,7 @@ androidxCamera = "1.4.2"
 androidxComposeBom = "2025.08.01"
 androidxCore = "1.17.0"
 androidxCredentials = "1.5.0"
+androidxCredentialsProviderEvents = "1.0.0-alpha02"
 androidxHiltNavigationCompose = "1.2.0"
 androidxLifecycle = "2.9.3"
 androidxNavigation = "2.9.3"
@@ -29,26 +30,26 @@ androidxRoom = "2.7.2"
 androidxSecurityCrypto = "1.1.0"
 androidxSplash = "1.1.0-rc01"
 androidxWork = "2.10.3"
-bitwardenSdk = "1.0.0-2825-e05ba6eb"
+bitwardenSdk = "1.0.0-2944-8447df0c"
 crashlytics = "3.0.6"
 detekt = "1.23.8"
-firebaseBom = "34.1.0"
+firebaseBom = "34.2.0"
 glide = "1.0.0-beta01"
 googleGuava = "33.4.8-jre"
-googleProtoBufJava = "4.31.1"
+googleProtoBufJava = "4.32.0"
 googleProtoBufPlugin = "0.9.5"
 googleServices = "4.4.3"
 googleReview = "2.0.2"
-hilt = "2.57"
+hilt = "2.57.1"
 junit5 = "5.13.4"
-jvmTarget = "17"
+jvmTarget = "21"
 # kotlin and ksp **must** use compatible versions, do not update either without the other.
-kotlin = "2.2.0"
+kotlin = "2.2.10"
 kotlinxCollectionsImmutable = "0.4.0"
 kotlinxCoroutines = "1.10.2"
 kotlinxSerialization = "1.9.0"
 kotlinxKover = "0.9.1"
-ksp = "2.2.0-2.0.2"
+ksp = "2.2.10-2.0.2"
 mockk = "1.14.5"
 okhttp = "5.1.0"
 retrofitBom = "3.0.0"
@@ -83,6 +84,8 @@ androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
 #noinspection CredentialDependency - Used for Passkey support, which is not available below Android 14
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "androidxCredentials" }
+androidx-credentials-providerevents = { module = "androidx.credentials.providerevents:providerevents", version.ref = "androidxCredentialsProviderEvents" }
+androidx-credentials-providerevents-play-services = { module = "androidx.credentials.providerevents:providerevents-play-services", version.ref = "androidxCredentialsProviderEvents" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
 androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }

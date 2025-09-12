@@ -913,7 +913,9 @@ class VaultViewModel @Inject constructor(
 
         updateVaultState(
             vaultData = vaultData.data,
-            dialog = if (shouldShowDecryptionAlert) {
+            dialog = if (shouldShowDecryptionAlert ||
+                state.dialog is VaultState.DialogState.VaultLoadCipherDecryptionError
+            ) {
                 VaultState.DialogState.VaultLoadCipherDecryptionError(
                     title = BitwardenString.decryption_error.asText(),
                     cipherCount = vaultData.data.decryptCipherListResult.failures.size,

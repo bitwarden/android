@@ -13,8 +13,10 @@ import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
@@ -1289,7 +1291,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     loginState.copy(
                         dialog = VaultItemState.DialogState.Generic(
-                            message = BitwardenString.password_exposed.asText(breachCount),
+                            message = BitwardenPlurals.password_exposed.asPluralsText(
+                                quantity = breachCount,
+                                args = arrayOf(breachCount),
+                            ),
                         ),
                     ),
                     awaitItem(),

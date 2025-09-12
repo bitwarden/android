@@ -12,7 +12,7 @@
     <string name="copy_password">Passwort kopieren</string>
     <string name="copy_username">Benutzername kopieren</string>
     <string name="delete">Löschen</string>
-    <string name="deleting">Lösche...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Wirklich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.</string>
     <string name="edit">Bearbeiten</string>
     <string name="edit_folder">Ordner bearbeiten</string>
@@ -55,7 +55,7 @@
     <string name="password">Passwort</string>
     <string name="save">Speichern</string>
     <string name="move">Verschieben</string>
-    <string name="saving">Wird gespeichert...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Einstellungen</string>
     <string name="show">Anzeigen</string>
     <string name="item_deleted">Eintrag gelöscht</string>
@@ -104,13 +104,16 @@
     <string name="immediately">Sofort</string>
     <string name="vault_timeout_log_out_confirmation_title">Sitzungs-Timeout auf \"Abmelden\" setzen?</string>
     <string name="vault_timeout_log_out_confirmation_message">Nach dem Timeout wirst du abgemeldet. Du musst mit dem Internet verbunden sein, um dich anzumelden und erneut auf deinen Tresor zuzugreifen. Deine gespeicherten Einstellungen und PIN auf diesem Gerät werden nicht geändert.</string>
-    <string name="logging_in">Anmeldung läuft...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Bei Bitwarden anmelden</string>
     <string name="master_password_confirmation_val_message">Passwortbestätigung ist nicht korrekt.</string>
     <string name="master_password_description">Das Master-Passwort wird verwendet, um den Tresor zu öffnen. Es ist sehr wichtig, dass du das Passwort nicht vergisst, da es keine Möglichkeit gibt es zurückzusetzen.</string>
     <string name="master_password_hint">Master-Passwort-Hinweis (optional)</string>
     <string name="master_password_hint_description">Ein Hinweis auf dein Master-Passwort kann dir helfen, dich an das Passwort zu erinnern, solltest du es vergessen.</string>
-    <string name="master_password_length_val_message_x">Das Master-Passwort muss mindestens %1$s Zeichen lang sein.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Mindestanzahl Ziffern</string>
     <string name="min_special">Mindestanzahl Sonderzeichen</string>
     <string name="never">Niemals</string>
@@ -143,8 +146,8 @@
     <string name="select">Auswählen</string>
     <string name="item_details">Eintrag-Details</string>
     <string name="item_updated">Eintrag gespeichert</string>
-    <string name="submitting">Wird übermittelt...</string>
-    <string name="syncing">Wird synchronisiert...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Synchronisierung abgeschlossen</string>
     <string name="two_step_login">Zwei-Faktor-Authentifizierung</string>
     <string name="unlock_with_biometrics">Mit Biometrie entsperren</string>
@@ -163,7 +166,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Nach Zugangsdaten suchen oder neue Zugangsdaten hinzufügen</string>
     <string name="disabled">Deaktiviert</string>
     <string name="bitwarden_autofill_service_alert2">Die einfachste Möglichkeit, neue Zugangsdaten zu deinem Tresor hinzuzufügen, ist der Bitwarden Auto-Ausfüllen Dienst. Erfahre mehr über den Bitwarden Auto-Ausfüllen Dienst, indem du zu \"Einstellungen\" wechselst.</string>
-    <string name="autofill">Automatisches Ausfüllen</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">Möchtest du diese Zugangsdaten automatisch ausfüllen oder ansehen?</string>
     <string name="search">Durchsuchen</string>
     <string name="learn_org">Mehr über Organisationen erfahren</string>
@@ -182,7 +185,7 @@
     <string name="add_new_attachment">Neuen Anhang hinzufügen</string>
     <string name="attachments">Anhänge</string>
     <string name="unable_to_download_file">Datei kann nicht heruntergeladen werden.</string>
-    <string name="downloading">Wird heruntergeladen...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Dieser Anhang ist %1$s groß. Bist du sicher, dass du ihn herunterladen möchtest?</string>
     <string name="authenticator_key">Authentifizierungsschlüssel (TOTP)</string>
     <string name="verification_code_totp">Verifizierungscode (TOTP)</string>
@@ -309,7 +312,10 @@ Das Scannen erfolgt automatisch.</string>
     <string name="personal_details">Persönliche Details</string>
     <string name="contact_info">Kontaktinformationen</string>
     <string name="check_password_for_data_breaches">Passwort auf Datendiebstahl überprüfen</string>
-    <string name="password_exposed">Dieses Passwort wurde %1$s-mal in Passwortdiebstahl Datenbanken gefunden. Sie sollten es ändern.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Dieses Passwort wurde in keiner bekannten Passwortdiebstahl Datenbank gefunden. Es sollte sicher zu verwenden sein.</string>
     <string name="identity_name">Identitätsname</string>
     <string name="value">Wert</string>
@@ -393,10 +399,10 @@ Das Scannen erfolgt automatisch.</string>
     <string name="save_attachment_success">Anhang erfolgreich gespeichert</string>
     <string name="autofill_tile_accessibility_required">Bitte aktiviere \"Bedienungshilfen zum automatischen Ausfüllen\" in den Bitwarden-Einstellungen, um die Auto-Ausfüllen-Kachel zu verwenden.</string>
     <string name="autofill_tile_uri_not_found">Keine Passwortfelder erkannt</string>
-    <string name="soft_deleting">Wird in den Papierkorb verschoben…</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Eintrag wurde in den Papierkorb gelegt.</string>
     <string name="restore">Wiederherstellen</string>
-    <string name="restoring">Wiederherstellen ...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Eintrag wiederhergestellt</string>
     <string name="trash">Papierkorb</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Möchtest du wirklich dauerhaft löschen? Dies kann nicht rückgängig gemacht werden.</string>
@@ -748,7 +754,10 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden kann kein verlorenes oder vergessenes Master-Passwort zurücksetzen.</string>
     <string name="choose_your_master_password">Wähle dein Master-Passwort</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Wähle ein einzigartiges und starkes Passwort, damit deine Informationen sicher sind.</string>
-    <string name="minimum_characters">%1$s Zeichen</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Abgelaufener Link</string>
     <string name="please_restart_registration_or_try_logging_in">Bitte starte die Registrierung neu oder versuche dich anzumelden. Möglicherweise hast du bereits ein Konto.</string>
     <string name="restart_registration">Registrierung neu starten</string>
@@ -801,7 +810,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="need_help_check_out_import_help">Brauchst du Hilfe? Schau dir die Importhilfe an.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Speichere die exportierte Datei irgendwo auf deinem Computer, so dass du sie leicht wiederfinden kannst.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Dies ist kein anerkannter Bitwarden-Server. Möglicherweise musst du dich bei deinem Anbieter erkundigen oder deinen Server aktualisieren.</string>
-    <string name="syncing_logins_loading_message">Synchronisiere Zugangsdaten...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Die Browser-Erweiterung herunterladen</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Gehe zu bitwarden.com/download, um Bitwarden für eine nahtlose Benutzererfahrung in deinen bevorzugten Browser zu integrieren.</string>
     <string name="use_the_web_app">Verwende die Web-App</string>
@@ -910,7 +919,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="no_folder">Kein Ordner</string>
     <string name="show_less">Weniger anzeigen</string>
     <string name="add_field">Feld hinzufügen</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Fehlerdetails teilen</string>
     <string name="flight_recorder">Flugschreiber</string>
     <string name="flight_recorder_help">Flugschreiber-Hilfe</string>
@@ -1067,8 +1076,8 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="local_items_are_collapsed_click_to_expand">Lokale Einträge sind eingeklappt, klicke zum Ausklappen.</string>
     <string name="items_expanded_click_to_collapse">Einträge sind ausgeklappt, klicke zum Einklappen.</string>
     <string name="items_are_collapsed_click_to_expand">Einträge sind eingeklappt, klicke zum Ausklappen.</string>
-    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
-    <string name="copy_error_report">Copy error report</string>
+    <string name="error_cannot_decrypt">[Fehler: kann nicht entschlüsseln]</string>
+    <string name="copy_error_report">Fehlerbericht kopieren</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
         <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>

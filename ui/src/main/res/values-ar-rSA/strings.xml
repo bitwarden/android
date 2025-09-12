@@ -12,7 +12,7 @@
     <string name="copy_password">نسخ كلمة المرور</string>
     <string name="copy_username">انسخ اسم المستخدم</string>
     <string name="delete">حذف</string>
-    <string name="deleting">جارِ الحذف...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">هل تريد حقا أن تحذف؟ هذا لا يمكن التراجع عنها.</string>
     <string name="edit">تعديل</string>
     <string name="edit_folder">تحرير المجلد</string>
@@ -55,7 +55,7 @@
     <string name="password">كلمة المرور</string>
     <string name="save">حفظ</string>
     <string name="move">نقل</string>
-    <string name="saving">جارِ حفظ...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">الإعدادات</string>
     <string name="show">إظهار</string>
     <string name="item_deleted">تم حذف العنصر.</string>
@@ -104,13 +104,20 @@
     <string name="immediately">فورًا</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
-    <string name="logging_in">جارِ تسجيل الدخول...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">تسجيل الدخول إلى بت واردن</string>
     <string name="master_password_confirmation_val_message">تأكيد كلمة المرور غير صحيح.</string>
     <string name="master_password_description">كلمة المرور الرئيسية هي كلمة المرور المستخدمة للوصول إلى الخزنة الخاصة بك. من المهم جدا ً ألا تنسى ذلك. لا توجد طريقة للعثور عليها إذا نسيت.</string>
     <string name="master_password_hint">فهرس كلمة المرور الرئيسية (اختياري)</string>
     <string name="master_password_hint_description">يمكن أن تساعدك فكرة كلمة المرور الرئيسية على تذكر كلمة المرور الخاصة بك إذا نسيت.</string>
-    <string name="master_password_length_val_message_x">كلمة المرور الرئيسية يجب أن تكون على الأقل %1$s حرفاً.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="zero">Master password must be at least %d characters long.</item>
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="two">Master password must be at least %d characters long.</item>
+        <item quantity="few">Master password must be at least %d characters long.</item>
+        <item quantity="many">Master password must be at least %d characters long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">الحد الأدنى للأرقام</string>
     <string name="min_special">الحد الأدنى من الأحرف الخاصة</string>
     <string name="never">أبداً</string>
@@ -143,8 +150,8 @@
     <string name="select">تحديد</string>
     <string name="item_details">تفاصيل العنصر</string>
     <string name="item_updated">تم تحديث العنصر</string>
-    <string name="submitting">جارِ الإرسال...</string>
-    <string name="syncing">جارِ المزامنة...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">اكتمال المزامنة.</string>
     <string name="two_step_login">تحديد المصادقة الثنائية</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -163,7 +170,7 @@
     <string name="search_for_a_login_or_add_a_new_login">البحث عن تسجيل الدخول أو إضافة تسجيل دخول جديد</string>
     <string name="disabled">تعطيل</string>
     <string name="bitwarden_autofill_service_alert2">أسهل طريقة لإضافة تسجيلات دخول جديدة إلى خزانتك هي من خدمة التعبئة التلقائية بت واردن تعرف على المزيد حول استخدام خدمة الملء التلقائي لـ بت واردن عن طريق الانتقال إلى شاشة \"إعدادات\".</string>
-    <string name="autofill">التعبئة التلقائية</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">هل تريد الملأ التلقائي أو رؤية هذا المعرّف؟</string>
     <string name="search">بحث</string>
     <string name="learn_org">تعرف على المؤسسات</string>
@@ -182,7 +189,7 @@
     <string name="add_new_attachment">إضافة مرفق جديد</string>
     <string name="attachments">مرفقات</string>
     <string name="unable_to_download_file">تعذر تنزيل الملف.</string>
-    <string name="downloading">جارِ التحميل...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">حجم هذا المرفق %1$s. هل أنت متأكد أنك تريد تنزيله على جهازك؟</string>
     <string name="authenticator_key">مفتاح المصادقة (TOTP)</string>
     <string name="verification_code_totp">رمز التحقق (TOTP)</string>
@@ -309,7 +316,14 @@
     <string name="personal_details">التفاصيل الشخصية</string>
     <string name="contact_info">معلومات الاتصال</string>
     <string name="check_password_for_data_breaches">تحقق من كلمة المرور لخروقات البيانات</string>
-    <string name="password_exposed">تم كشف كلمة المرور هذه %1$s مرة (مرات) في عمليات اختراق البيانات. يجب عليك تغييرها.</string>
+    <plurals name="password_exposed">
+        <item quantity="zero">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="two">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="few">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="many">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">لم يتم العثور على كلمة المرور هذه في أي عمليات اختراق معروفة للبيانات. يجب أن تكون آمنة للاستخدام.</string>
     <string name="identity_name">اسم الهوية</string>
     <string name="value">القيمة</string>
@@ -393,10 +407,10 @@
     <string name="save_attachment_success">تم حفظ المرفق بنجاح</string>
     <string name="autofill_tile_accessibility_required">الرجاء تمكين \"خدمة الوصول إلى الملء التلقائي\" من إعدادات بت واردن لاستخدام الملء التلقائي.</string>
     <string name="autofill_tile_uri_not_found">لم يتم العثور على حقول كلمة المرور</string>
-    <string name="soft_deleting">إرسال إلى سلة المهملات...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">تم إرسال العنصر إلى سلة المهملات.</string>
     <string name="restore">استعادة</string>
-    <string name="restoring">إستعادة...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">تم استعادة العنصر.</string>
     <string name="trash">سلة المهملات</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">هل تريد حقاً الحذف نهائيًا؟ لا يمكن التراجع عن ذلك.</string>
@@ -749,7 +763,14 @@
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">لا يمكن لبت واردن إعادة تعيين كلمة مرور رئيسية مفقودة أو منسية.</string>
     <string name="choose_your_master_password">اختر كلمة المرور الرئيسية</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">اختر كلمة مرور فريدة وقوية للحفاظ على سلامة معلوماتك.</string>
-    <string name="minimum_characters">%1$s أحرف</string>
+    <plurals name="minimum_characters">
+        <item quantity="zero">%d characters</item>
+        <item quantity="one">%d character</item>
+        <item quantity="two">%d characters</item>
+        <item quantity="few">%d characters</item>
+        <item quantity="many">%d characters</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">رابط منتهي الصلاحية</string>
     <string name="please_restart_registration_or_try_logging_in">الرجاء إعادة تشغيل التسجيل أو محاولة تسجيل الدخول. قد يكون لديك حساب بالفعل.</string>
     <string name="restart_registration">إعادة تشغيل التسجيل</string>
@@ -802,7 +823,7 @@
     <string name="need_help_check_out_import_help">بحاجة إلى مساعدة؟ تحقق من مساعدة الاستيراد.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">حفظ الملف المصدّر في مكان ما على جهاز الكمبيوتر الخاص بك يمكنك العثور عليه بسهولة.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">هذا ليس خادم بت واردن المعترف به. قد تحتاج إلى التحقق مع المزود الخاص بك أو تحديث الخادم الخاص بك.</string>
-    <string name="syncing_logins_loading_message">مزامنة تسجيلات الدخول...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">تحميل ملحق المتصفح</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">اذهب إلى bitwarden.com/download لدمج بت واردن في المتصفح المفضل لديك للحصول على تجربة سلسة.</string>
     <string name="use_the_web_app">استخدام تطبيق الويب</string>
@@ -911,7 +932,7 @@
     <string name="no_folder">لا يوجد مجلد</string>
     <string name="show_less">عرض أقل</string>
     <string name="add_field">إضافة حقل</string>
-    <string name="x_ellipses">%s...</string>
+    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">مشاركة تفاصيل الخطأ</string>
     <string name="flight_recorder">مسجل الرحلة</string>
     <string name="flight_recorder_help">مساعدة مسجل الطيران</string>
