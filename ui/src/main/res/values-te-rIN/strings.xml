@@ -6,7 +6,6 @@
     <string name="an_error_has_occurred">An error has occurred</string>
     <string name="apply">Apply</string>
     <string name="back">Back</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Cancel</string>
     <string name="copy">Copy</string>
     <string name="copy_password">Copy password</string>
@@ -496,7 +495,6 @@ Scanning will happen automatically.</string>
     <string name="remove_master_password">Remove master password</string>
     <string name="leave_organization">Leave organization</string>
     <string name="leave_organization_name">Leave %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Authenticate WebAuthn</string>
     <string name="fido2_return_to_app">Return to app</string>
     <string name="reset_password_auto_enroll_invite_warning">This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</string>
@@ -574,12 +572,6 @@ select Add TOTP to store the key safely</string>
     <string name="api_key">API key</string>
     <string name="api_key_required_parenthesis">API key (required)</string>
     <string name="service">Service</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API access token (required)</string>
     <string name="api_access_token">API access token</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Are you sure you want to overwrite the current username?</string>
@@ -920,7 +912,6 @@ Do you want to switch to this account?</string>
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
     <string name="add_field">Add field</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Share error details</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>
@@ -1050,7 +1041,6 @@ Do you want to switch to this account?</string>
     <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
     <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
     <string name="sync_with_bitwarden_action_card_message">In order to view all of your verification codes, you’ll need to allow for syncing on all of your accounts.</string>
     <string name="take_me_to_app_settings">Take me to the app settings</string>
