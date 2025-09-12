@@ -74,7 +74,8 @@ class TwoFasExportParser : ExportParser() {
                         entry.name.equals(other = algorithm, ignoreCase = true)
                     }
             }
-            ?: throw IllegalArgumentException("Unsupported algorithm: ${otp.algorithm}.")
+            // Default to SHA1 if not specified
+            ?: AuthenticatorItemAlgorithm.SHA1
 
         return AuthenticatorItemEntity(
             id = UUID.randomUUID().toString(),
