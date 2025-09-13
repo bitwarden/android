@@ -6,7 +6,6 @@
     <string name="an_error_has_occurred">En feil har oppstått.</string>
     <string name="apply">Apply</string>
     <string name="back">Tilbake</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Lukk</string>
     <string name="copy">Kopier</string>
     <string name="copy_password">Kopier passord</string>
@@ -496,7 +495,6 @@ Skanning skjer automatisk.</string>
     <string name="remove_master_password">Fjern hovedpassord</string>
     <string name="leave_organization">Forlat organisasjonen</string>
     <string name="leave_organization_name">Vil du forlate %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Autentiser WebAuthn</string>
     <string name="fido2_return_to_app">Gå tilbake til appen</string>
     <string name="reset_password_auto_enroll_invite_warning">Denne organisasjonen har en virksomhetsvilkår som automatisk innrullerer deg i tilbakestilling av passord. Registrering vil tillate organisasjonsadministratorer å endre hovedpassordet ditt.</string>
@@ -574,12 +572,6 @@ velg Legg til TOTP for å lagre nøkkelen sikkert</string>
     <string name="api_key">API key</string>
     <string name="api_key_required_parenthesis">API-nøkkel (obligatorisk)</string>
     <string name="service">Tjeneste</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API access token (required)</string>
     <string name="api_access_token">API tilgangstoken</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Er du sikker på at du vil overskrive det nåværende brukernavnet?</string>
@@ -920,7 +912,6 @@ Vil du bytte til denne kontoen?</string>
     <string name="no_folder">Ingen mappe</string>
     <string name="show_less">Vis mindre</string>
     <string name="add_field">Legg til felt</string>
-    <string name="x_ellipses">%s...</string>
     <string name="share_error_details">Share error details</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>
@@ -1050,7 +1041,6 @@ Vil du bytte til denne kontoen?</string>
     <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
     <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
     <string name="sync_with_bitwarden_action_card_message">In order to view all of your verification codes, you’ll need to allow for syncing on all of your accounts.</string>
     <string name="take_me_to_app_settings">Take me to the app settings</string>

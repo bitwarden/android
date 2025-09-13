@@ -6,7 +6,6 @@
     <string name="an_error_has_occurred">Vyskytla se chyba.</string>
     <string name="apply">Použít</string>
     <string name="back">Zpět</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Zrušit</string>
     <string name="copy">Kopírovat</string>
     <string name="copy_password">Kopírovat heslo</string>
@@ -500,7 +499,6 @@ Načtení proběhne automaticky.</string>
     <string name="remove_master_password">Odebrat hlavní heslo</string>
     <string name="leave_organization">Opustit organizaci</string>
     <string name="leave_organization_name">Opustit %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Ověření WebAuthn</string>
     <string name="fido2_return_to_app">Zpět do aplikace</string>
     <string name="reset_password_auto_enroll_invite_warning">Tato organizace má podnikové zásady, které Vás automaticky zaregistrují k obnovení hesla. Registrace umožní správcům organizace změnit Vaše hlavní heslo.</string>
@@ -577,12 +575,6 @@ Načtení proběhne automaticky.</string>
     <string name="api_key">Klíč API</string>
     <string name="api_key_required_parenthesis">Klíč API (vyžadován)</string>
     <string name="service">Služba</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API přístupového tokenu (povinné)</string>
     <string name="api_access_token">Přístupový token API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Opravdu chcete přepsat aktuální uživatelské jméno?</string>
@@ -925,7 +917,6 @@ Chcete se přepnout na tento účet?</string>
     <string name="no_folder">Žádná složka</string>
     <string name="show_less">Zobrazit méně</string>
     <string name="add_field">Přidat pole</string>
-    <string name="x_ellipses">%s...</string>
     <string name="share_error_details">Sdílet podrobnosti o chybě</string>
     <string name="flight_recorder">Letový zapisovač</string>
     <string name="flight_recorder_help">Nápověda letového zapisovače</string>
@@ -1057,7 +1048,6 @@ při opakování problémů.</string>
     <string name="sync_with_bitwarden_app">Synchronizovat s aplikací Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">Další informace</annotation></string>
     <string name="shared_codes_error">Nelze synchronizovat kódy z aplikace Bitwarden. Zkontrolujte, zda jsou obě aplikace aktuální. Ke stávajícím kódům máte stále přístup v aplikaci Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Synchronizovat s aplikací Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Pokud chcete zobrazit všechny ověřovací kódy, budete muset povolit synchronizaci na všech Vašich účtech.</string>
     <string name="take_me_to_app_settings">Přejít do nastavení aplikace</string>

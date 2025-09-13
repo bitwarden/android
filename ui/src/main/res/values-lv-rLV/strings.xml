@@ -6,7 +6,6 @@
     <string name="an_error_has_occurred">Radusies kļūda.</string>
     <string name="apply">Pielietot</string>
     <string name="back">Atpakaļ</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Atcelt</string>
     <string name="copy">Ievietot starpliktuvē</string>
     <string name="copy_password">Ievietot paroli starpliktuvē</string>
@@ -498,7 +497,6 @@ Nolasīšana notiks automātiski.</string>
     <string name="remove_master_password">Noņemt galveno paroli</string>
     <string name="leave_organization">Pamest apvienību</string>
     <string name="leave_organization_name">Pamest %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Autentificēt WebAuthn</string>
     <string name="fido2_return_to_app">Atgriezties uz lietotni</string>
     <string name="reset_password_auto_enroll_invite_warning">Šajā apvienībā ir uzņēmuma nosacījums, kas automātiski ievieto lietotājus paroles atiestatīšanas sarakstā. Tas ļauj apvienības pārvaldniekiem mainīt lietotāju galveno paroli.</string>
@@ -576,12 +574,6 @@ jāizvēlas \"Pievienot TOTP\", lai droši glabātu atslēgu.</string>
     <string name="api_key">API atslēga</string>
     <string name="api_key_required_parenthesis">API atslēga (nepieciešama)</string>
     <string name="service">Pakalpojums</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API piekļuves pilnvara (nepieciešama)</string>
     <string name="api_access_token">API piekļuves pilnvara</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Vai tiešām pārrakstīt pašreizējo lietotājvārdu?</string>
@@ -923,7 +915,6 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="no_folder">Nav mapes</string>
     <string name="show_less">Rādīt mazāk</string>
     <string name="add_field">Pievienot lauku</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Kopīgot informāciju par kļūdu</string>
     <string name="flight_recorder">Melnā kaste</string>
     <string name="flight_recorder_help">Palīdzība par melno kasti</string>
@@ -1053,7 +1044,6 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
     <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
     <string name="sync_with_bitwarden_action_card_message">Lai varētu apskatīt visus savus apliecinājuma kodus, ir nepieciešams ļaut sinhronizēšanu visos savos kontos.</string>
     <string name="take_me_to_app_settings">Take me to the app settings</string>

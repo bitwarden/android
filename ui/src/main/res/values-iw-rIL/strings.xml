@@ -6,7 +6,6 @@
     <string name="an_error_has_occurred">אירעה שגיאה.</string>
     <string name="apply">החל</string>
     <string name="back">הקודם</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">ביטול</string>
     <string name="copy">העתק</string>
     <string name="copy_password">העתק סיסמה</string>
@@ -500,7 +499,6 @@
     <string name="remove_master_password">הסר סיסמה ראשית</string>
     <string name="leave_organization">עזוב ארגון</string>
     <string name="leave_organization_name">לעזוב את %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">אמת WebAuthn</string>
     <string name="fido2_return_to_app">חזור ליישום</string>
     <string name="reset_password_auto_enroll_invite_warning">לארגון זה יש מדיניות ארגונית שתרשום אותך באופן אוטומטי לאיפוס סיסמה. הרישום יאפשר למנהלי הארגון לשנות את הסיסמה הראשית שלך.</string>
@@ -578,12 +576,6 @@
     <string name="api_key">מפתח API</string>
     <string name="api_key_required_parenthesis">מפתח API (נדרש)</string>
     <string name="service">שירות</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">אסימון גישת API (נדרש)</string>
     <string name="api_access_token">אסימון גישה ל־API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">האם אתה בטוח שברצונך לדרוס את שם המשתמש הנוכחי?</string>
@@ -926,7 +918,6 @@
     <string name="no_folder">ללא תיקייה</string>
     <string name="show_less">הצג פחות</string>
     <string name="add_field">הוסף שדה</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">שתף פרטי שגיאה</string>
     <string name="flight_recorder">מקליט טיסה</string>
     <string name="flight_recorder_help">עזרה במקליט טיסה</string>
@@ -1056,7 +1047,6 @@
     <string name="sync_with_bitwarden_app">סנכרן עם יישום Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">למד עוד</annotation></string>
     <string name="shared_codes_error">לא ניתן לסנכרן קודים מתוך היישום Bitwarden. יש לוודא ששני היישומים מעודכנים. באפשרותך עדיין לגשת לקודים הקיימים שלך ביישום Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">סנכרן עם היישום Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">כדי להציג את כל קודי האימות שלך, תצטרך להתיר סנכרון בכל החשבונות שלך.</string>
     <string name="take_me_to_app_settings">קח אותי אל הגדרות היישום</string>

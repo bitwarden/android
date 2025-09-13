@@ -6,13 +6,12 @@
     <string name="an_error_has_occurred">Đã xảy ra lỗi</string>
     <string name="apply">Áp dụng</string>
     <string name="back">Quay lại</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Hủy bỏ</string>
     <string name="copy">Sao chép</string>
     <string name="copy_password">Sao chép mật khẩu</string>
     <string name="copy_username">Sao chép tên đăng nhập</string>
     <string name="delete">Xóa</string>
-    <string name="deleting">Deleting…</string>
+    <string name="deleting">Đang xóa…</string>
     <string name="do_you_really_want_to_delete">Bạn có chắc chắn muốn xóa không? Thao tác này không thể hoàn tác.</string>
     <string name="edit">Sửa</string>
     <string name="edit_folder">Sửa thư mục</string>
@@ -55,7 +54,7 @@
     <string name="password">Mật khẩu</string>
     <string name="save">Lưu</string>
     <string name="move">Di chuyển</string>
-    <string name="saving">Saving…</string>
+    <string name="saving">Đang lưu…</string>
     <string name="settings">Cài đặt</string>
     <string name="show">Hiện</string>
     <string name="item_deleted">Đã xóa mục</string>
@@ -104,14 +103,14 @@
     <string name="immediately">Tức thì</string>
     <string name="vault_timeout_log_out_confirmation_title">Đặt thời gian đếm ngược \"Đăng xuất\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">Sau thời gian này, bạn sẽ bị đăng xuất. Bạn cần kết nối với internet để đăng nhập lại và truy cập vào kho. Các cài đặt và mã PIN đã lưu trên thiết bị này sẽ không thay đổi.</string>
-    <string name="logging_in">Logging in…</string>
+    <string name="logging_in">Đang đăng nhập…</string>
     <string name="login_to_bitwarden">Đăng nhập Bitwarden</string>
     <string name="master_password_confirmation_val_message">Mật khẩu nhập lại không trùng khớp.</string>
     <string name="master_password_description">Mật khẩu chính là mật khẩu bạn sử dụng để truy cập vào kho lưu trữ của mình. Điều rất quan trọng là bạn không được quên mật khẩu chính. Không có cách nào để khôi phục mật khẩu nếu bạn quên nó.</string>
     <string name="master_password_hint">Gợi ý mật khẩu chính (tùy chọn)</string>
     <string name="master_password_hint_description">Một gợi ý mật khẩu có thể giúp bạn nhớ lại mật khẩu chính của bạn nếu bạn chợt quên.</string>
     <plurals name="master_password_length_val_message_x">
-        <item quantity="other">Master password must be at least %d characters long.</item>
+        <item quantity="other">Mật khẩu chính phải có ít nhất %d ký tự.</item>
     </plurals>
     <string name="min_numbers">Số chữ số tối thiểu</string>
     <string name="min_special">Số kí tự đặc biệt tối thiểu</string>
@@ -145,8 +144,8 @@
     <string name="select">Chọn</string>
     <string name="item_details">Chi tiết mục</string>
     <string name="item_updated">Đã lưu mục</string>
-    <string name="submitting">Submitting…</string>
-    <string name="syncing">Syncing…</string>
+    <string name="submitting">Đang gửi…</string>
+    <string name="syncing">Đang đồng bộ…</string>
     <string name="syncing_complete">Đồng bộ hoàn tất</string>
     <string name="two_step_login">Đăng nhập hai bước</string>
     <string name="unlock_with_biometrics">Mở khóa bằng Sinh trắc học</string>
@@ -165,7 +164,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Tìm kiếm mục đăng nhập hoặc thêm mục đăng nhập mới</string>
     <string name="disabled">Vô hiệu hóa</string>
     <string name="bitwarden_autofill_service_alert2">Cách dễ nhất để thêm một đăng nhập mới vào kho của bạn là bằng dịch vụ Tự động điền của Bitwarden. Tìm hiểu thêm về cách sử dụng dịch vụ Tự động điền của Bitwarden trong phần \'Cài đặt\'.</string>
-    <string name="autofill_title">Autofill</string>
+    <string name="autofill_title">Tự động điền</string>
     <string name="autofill_or_view">Bạn muốn tự động điền hay xem mục này?</string>
     <string name="search">Tìm kiếm</string>
     <string name="learn_org">Tìm hiểu về tổ chức</string>
@@ -184,7 +183,7 @@
     <string name="add_new_attachment">Thêm tệp đính kèm mới</string>
     <string name="attachments">Tệp đính kèm</string>
     <string name="unable_to_download_file">Không thể tải về tệp tin.</string>
-    <string name="downloading">Downloading…</string>
+    <string name="downloading">Đang tải về…</string>
     <string name="attachment_large_warning">Tệp tin đính kèm này có kích thước %1$s. Bạn có chắc muốn tải nó xuống thiết bị của mình?</string>
     <string name="authenticator_key">Khóa xác thực</string>
     <string name="verification_code_totp">Mã xác thực (TOTP)</string>
@@ -312,7 +311,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="contact_info">Thông tin liên hệ</string>
     <string name="check_password_for_data_breaches">Kiểm tra xem mật khẩu có bị lộ</string>
     <plurals name="password_exposed">
-        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="other">Mật khẩu này đã bị lộ %d lần trong các vụ rò rỉ dữ liệu. Bạn nên thay đổi mật khẩu này.</item>
     </plurals>
     <string name="password_safe">Không tìm thấy mật khẩu này trong các vụ rò rỉ dữ liệu trước đây. Nó an toàn để sử dụng.</string>
     <string name="identity_name">Tên định danh</string>
@@ -397,10 +396,10 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="save_attachment_success">Đã lưu tệp tin đính kèm thành công</string>
     <string name="autofill_tile_accessibility_required">Vui lòng bật \"Tự động điền bằng trợ năng\" từ Cài đặt Bitwarden để sử dụng ô Tự động điền.</string>
     <string name="autofill_tile_uri_not_found">Không tìm thấy trường mật khẩu nào</string>
-    <string name="soft_deleting">Sending to trash…</string>
+    <string name="soft_deleting">Đang chuyển vào thùng rác…</string>
     <string name="item_soft_deleted">Đã cho mục vào thùng rác.</string>
     <string name="restore">Khôi phục</string>
-    <string name="restoring">Restoring…</string>
+    <string name="restoring">Đang khôi phục…</string>
     <string name="item_restored">Đã khôi phục mục</string>
     <string name="trash">Thùng rác</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Bạn có chắc chắn muốn xóa vĩnh viễn không? Thao tác này không thể hoàn tác.</string>
@@ -494,7 +493,6 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="remove_master_password">Xóa mật khẩu chính</string>
     <string name="leave_organization">Rời khỏi tổ chức</string>
     <string name="leave_organization_name">Rời khỏi %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Xác thực WebAuthn</string>
     <string name="fido2_return_to_app">Quay lại ứng dụng</string>
     <string name="reset_password_auto_enroll_invite_warning">Tổ chức này có chính sách doanh nghiệp sẽ tự động đặt lại mật khẩu chính cho bạn. Đăng ký sẽ cho phép quản trị viên tổ chức thay đổi mật khẩu chính của bạn.</string>
@@ -572,12 +570,6 @@ chọn Thêm TOTP để lưu khóa an toàn</string>
     <string name="api_key">Khóa API</string>
     <string name="api_key_required_parenthesis">Khóa API (bắt buộc)</string>
     <string name="service">Dịch vụ</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">Token truy cập API (bắt buộc)</string>
     <string name="api_access_token">Token truy cập API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Bạn có chắc chắn muốn ghi đè lên tên đăng nhập hiện tại không?</string>
@@ -754,7 +746,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="choose_your_master_password">Chọn mật khẩu chính của bạn</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Chọn mật khẩu mạnh và duy nhất để bảo vệ thông tin của bạn an toàn.</string>
     <plurals name="minimum_characters">
-        <item quantity="other">%d characters</item>
+        <item quantity="other">%d ký tự</item>
     </plurals>
     <string name="expired_link">Liên kết đã hết hạn</string>
     <string name="please_restart_registration_or_try_logging_in">Vui lòng tiến hành đăng ký lại hoặc thử đăng nhập. Bạn có thể đã có tài khoản.</string>
@@ -808,7 +800,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="need_help_check_out_import_help">Cần trợ giúp? Hãy xem <annotation link="importHelp">hướng dẫn nhập dữ liệu</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Lưu tệp đã xuất</annotation> ở một vị trí trên máy tính của bạn mà bạn có thể dễ dàng tìm thấy.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Đây không phải là máy chủ Bitwarden được công nhận. Bạn có thể cần liên hệ với nhà cung cấp dịch vụ hoặc cập nhật máy chủ của mình.</string>
-    <string name="syncing_logins_loading_message">Syncing logins…</string>
+    <string name="syncing_logins_loading_message">Đang đồng bộ đăng nhập…</string>
     <string name="download_the_browser_extension">Tải xuống tiện ích mở rộng trình duyệt</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Truy cập bitwarden.com/download và tích hợp Bitwarden vào trình duyệt yêu thích của bạn để có trải nghiệm liền mạch.</string>
     <string name="use_the_web_app">Dùng bản web</string>
@@ -917,7 +909,6 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="no_folder">Chưa phân loại</string>
     <string name="show_less">Thu gọn</string>
     <string name="add_field">Thêm trường</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Chia sẻ chi tiết lỗi</string>
     <string name="flight_recorder">Bản ghi nhật ký</string>
     <string name="flight_recorder_help">Trợ giúp bản ghi nhật ký</string>
@@ -1049,7 +1040,6 @@ các vấn đề.</string>
     <string name="sync_with_bitwarden_app">Đồng bộ hóa với ứng dụng Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">Tìm hiểu thêm</annotation></string>
     <string name="shared_codes_error">Không thể đồng bộ mã từ ứng dụng Bitwarden. Hãy đảm bảo cả hai ứng dụng đều được cập nhật phiên bản mới nhất. Bạn vẫn có thể truy cập các mã hiện có trong ứng dụng Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Đồng bộ hóa với ứng dụng Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Để xem tất cả mã xác minh của bạn, bạn cần cho phép đồng bộ hóa trên tất cả tài khoản của mình.</string>
     <string name="take_me_to_app_settings">Đi đến cài đặt ứng dụng</string>

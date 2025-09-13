@@ -6,7 +6,6 @@
     <string name="an_error_has_occurred">En fejl er opstået.</string>
     <string name="apply">Apply</string>
     <string name="back">Retur</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Afbryd</string>
     <string name="copy">Kopiér</string>
     <string name="copy_password">Kopiér adgangskode</string>
@@ -496,7 +495,6 @@ Skanning vil ske automatisk.</string>
     <string name="remove_master_password">Fjern hovedadgangskode</string>
     <string name="leave_organization">Forlad organisation</string>
     <string name="leave_organization_name">Forlad %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Godkend WebAuthn</string>
     <string name="fido2_return_to_app">Retur til appen</string>
     <string name="reset_password_auto_enroll_invite_warning">Denne organisation har en virksomhedspolitik, hvor man automatisk tilmeldes nulstilling af adgangskode, hvilket giver organisationsadministratorer mulighed for at skifte ens hovedadgangskode.</string>
@@ -574,12 +572,6 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</string>
     <string name="api_key">API key</string>
     <string name="api_key_required_parenthesis">API-nøgle (obligatorisk)</string>
     <string name="service">Tjeneste</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API access token (required)</string>
     <string name="api_access_token">API-adgangstoken</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Sikker på, at det aktuelle brugernavn skal overskrives?</string>
@@ -920,7 +912,6 @@ Skift til denne konto?</string>
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
     <string name="add_field">Add field</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Share error details</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>
@@ -1050,7 +1041,6 @@ Skift til denne konto?</string>
     <string name="sync_with_bitwarden_app">Synk med Bitwarden-appen</string>
     <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Kan ikke synke koder fra Bitwarden-appen. Sørg for, at begge apps er opdaterede. Eksisterende koder kan stadig tilgås i Bitwarden-appen.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Synk med Bitwarden-appen</string>
     <string name="sync_with_bitwarden_action_card_message">Tillad Authenticator-app synkning i Indstillinger for at se alle bekræftelseskoderne her.</string>
     <string name="take_me_to_app_settings">Gå til til app-indstillingerne</string>

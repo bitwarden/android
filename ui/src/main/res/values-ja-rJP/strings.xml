@@ -6,7 +6,6 @@
     <string name="an_error_has_occurred">エラーが発生しました。</string>
     <string name="apply">Apply</string>
     <string name="back">戻る</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">キャンセル</string>
     <string name="copy">コピー</string>
     <string name="copy_password">パスワードをコピー</string>
@@ -494,7 +493,6 @@
     <string name="remove_master_password">マスターパスワードを削除する</string>
     <string name="leave_organization">組織から脱退する</string>
     <string name="leave_organization_name">%1$s から脱退しますか?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">WebAuthn の認証</string>
     <string name="fido2_return_to_app">アプリに戻る</string>
     <string name="reset_password_auto_enroll_invite_warning">この組織には自動的にパスワードリセットに登録するポリシーがあります。登録すると、組織の管理者はマスターパスワードを変更できます。</string>
@@ -572,12 +570,6 @@
     <string name="api_key">APIキー</string>
     <string name="api_key_required_parenthesis">API キー (必須)</string>
     <string name="service">サービス</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">APIアクセストークン(必須)</string>
     <string name="api_access_token">API アクセストークン</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">現在のユーザー名を上書きしてもよろしいですか？</string>
@@ -917,7 +909,6 @@
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
     <string name="add_field">Add field</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Share error details</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>
@@ -1047,7 +1038,6 @@
     <string name="sync_with_bitwarden_app">Bitwarden アプリと同期</string>
     <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Bitwarden アプリからコードを同期できません。両方のアプリが最新であることを確認してください。既存のコードには Bitwarden アプリでアクセスできます。</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Bitwarden アプリと同期</string>
     <string name="sync_with_bitwarden_action_card_message">ここにすべての認証コードを表示するためには、認証アプリの同期を許可してください。</string>
     <string name="take_me_to_app_settings">アプリの設定に移動</string>

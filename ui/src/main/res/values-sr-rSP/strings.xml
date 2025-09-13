@@ -6,7 +6,6 @@
     <string name="an_error_has_occurred">Појавила се грешка.</string>
     <string name="apply">Примени</string>
     <string name="back">Назад</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Откажи</string>
     <string name="copy">Копирај</string>
     <string name="copy_password">Копирај лозинку</string>
@@ -498,7 +497,6 @@
     <string name="remove_master_password">Уклони главну лозинку</string>
     <string name="leave_organization">Напусти организацију</string>
     <string name="leave_organization_name">Напустити %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">WebAuthn аутентификација</string>
     <string name="fido2_return_to_app">Врати се на аппликацију</string>
     <string name="reset_password_auto_enroll_invite_warning">Ова организација има политику која ће вас аутоматски уписати у ресетовање лозинке. Упис ће омогућити администраторима организације да промене вашу главну лозинку.</string>
@@ -576,12 +574,6 @@
     <string name="api_key">API кључ</string>
     <string name="api_key_required_parenthesis">API кључ (обавезно)</string>
     <string name="service">Сервис</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API приступ токен (обавезно)</string>
     <string name="api_access_token">Приступни АПИ токен</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Сигурно преписати тренутно име?</string>
@@ -923,7 +915,6 @@
     <string name="no_folder">Нема фасцикле</string>
     <string name="show_less">Прикажи мање</string>
     <string name="add_field">Додај поље</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Поделите детаље о грешци</string>
     <string name="flight_recorder">Рекордер лета</string>
     <string name="flight_recorder_help">Помоћ за рекордера лета</string>
@@ -1055,7 +1046,6 @@
     <string name="sync_with_bitwarden_app">Синхронизујте са апликацијом Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">Сазнати више</annotation></string>
     <string name="shared_codes_error">Није могуће синхронизовати кодове из апликације Bitwarden. Уверите се да су обе апликације ажуриране. И даље можете да приступите својим постојећим кодовима у апликацији Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Синхронизујте са апликацијом Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Дозволите синхронизацију апликације Authenticator у подешавањима да бисте видели све своје верификационе кôдове овде.</string>
     <string name="take_me_to_app_settings">Одведи ме до подешавања апликације</string>

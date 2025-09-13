@@ -6,7 +6,6 @@
     <string name="an_error_has_occurred">خطایی رخ داده است</string>
     <string name="apply">Apply</string>
     <string name="back">بازگشت</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">انصراف</string>
     <string name="copy">کپی</string>
     <string name="copy_password">کپی کلمه عبور</string>
@@ -496,7 +495,6 @@
     <string name="remove_master_password">حذف کلمه عبور اصلی</string>
     <string name="leave_organization">ترک سازمان</string>
     <string name="leave_organization_name">%1$s را ترک می‌کنید؟</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">تأیید اعتبار در WebAuthn</string>
     <string name="fido2_return_to_app">بازگشت به برنامه</string>
     <string name="reset_password_auto_enroll_invite_warning">این سازمان دارای سیاست سازمانی است که به طور خودکار شما را در بازیابی کلمه عبور ثبت نام می‌کند. این ثبت نام به مدیران سازمان اجازه می‌دهد تا کلمه عبور اصلی شما را تغییر دهند.</string>
@@ -574,12 +572,6 @@
     <string name="api_key">کلید API</string>
     <string name="api_key_required_parenthesis">کلید API (الزامی)</string>
     <string name="service">سرویس</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">رله فایرفاکس</string>
-    <string name="simple_login">ورود ساده</string>
-    <string name="duck_duck_go">داک‌داک گو</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ارسال مجدد ایمیل</string>
     <string name="api_access_token_required_parenthesis">توکن دسترسی API (الزامی)</string>
     <string name="api_access_token">توکن دسترسی API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">آیا از بازنویسی نام کاربری فعلی مطمئن هستید؟</string>
@@ -920,7 +912,6 @@
     <string name="no_folder">بدون پوشه</string>
     <string name="show_less">نمایش کمتر</string>
     <string name="add_field">افزودن فیلد</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">اشتراک‌گذاری جزئیات خطا</string>
     <string name="flight_recorder">ضبط‌ کننده پرواز</string>
     <string name="flight_recorder_help">راهنمای ضبط‌ کننده پرواز</string>
@@ -1050,7 +1041,6 @@
     <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
     <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
     <string name="sync_with_bitwarden_action_card_message">In order to view all of your verification codes, you’ll need to allow for syncing on all of your accounts.</string>
     <string name="take_me_to_app_settings">Take me to the app settings</string>
