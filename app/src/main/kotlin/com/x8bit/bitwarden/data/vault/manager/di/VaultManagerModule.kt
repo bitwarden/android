@@ -5,10 +5,12 @@ import com.bitwarden.core.data.manager.realtime.RealtimeManager
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.DownloadService
+import com.bitwarden.network.service.SyncService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -22,6 +24,8 @@ import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManagerImpl
+import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
+import com.x8bit.bitwarden.data.vault.manager.VaultSyncManagerImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -110,4 +114,24 @@ object VaultManagerModule {
             dispatcherManager = dispatcherManager,
             clock = clock,
         )
+
+    @Provides
+    @Singleton
+    fun provideVaultSyncManager(
+        syncService: SyncService,
+        settingsDiskSource: SettingsDiskSource,
+        authDiskSource: AuthDiskSource,
+        vaultDiskSource: VaultDiskSource,
+        vaultSdkSource: VaultSdkSource,
+        userLogoutManager: UserLogoutManager,
+        clock: Clock,
+    ): VaultSyncManager = VaultSyncManagerImpl(
+        syncService = syncService,
+        settingsDiskSource = settingsDiskSource,
+        authDiskSource = authDiskSource,
+        vaultDiskSource = vaultDiskSource,
+        vaultSdkSource = vaultSdkSource,
+        userLogoutManager = userLogoutManager,
+        clock = clock,
+    )
 }
