@@ -17,15 +17,15 @@ on:
         required: true
         type: string
       rollout-percentage:
-          description: "Percentage of users who will receive this version update."
-          required: true
-          type: choice
-          options:
-            - 10%
-            - 30%
-            - 50%
-            - 100%
-          default: 10%
+        description: "Percentage of users who will receive this version update."
+        required: true
+        type: choice
+        options:
+          - 10%
+          - 30%
+          - 50%
+          - 100%
+        default: 10%
       release-notes:
         description: "Change notes to be included with this release."
         type: string
@@ -56,105 +56,116 @@ permissions:
   id-token: write
 
 jobs:
-    promote:
-      runs-on: ubuntu-24.04
-      name: Promote build to Production in Play Store
+  promote:
+    runs-on: ubuntu-24.04
+    name: Promote build to Production in Play Store
 
-      steps:
-        - name: Log inputs to job summary
-          run: |
-            echo "<details><summary>Job Inputs</summary>" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo '```json' >> $GITHUB_STEP_SUMMARY
-            echo '${{ toJson(inputs) }}' >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            echo "</details>" >> $GITHUB_STEP_SUMMARY
+    steps:
+      - name: Log inputs to job summary
+        env:
+          INPUTS: ${{ toJson(inputs) }}
+        run: |
+          {
+            echo "<details><summary>Job Inputs</summary>"
+            echo ""
+            echo '```json'
+            echo "$INPUTS"
+            echo '```'
+            echo "</details>"
+          }  >> "$GITHUB_STEP_SUMMARY"
 
-        - name: Check out repo
-          uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+      - name: Check out repo
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        with:
+          persist-credentials: false
 
-        - name: Configure Ruby
-          uses: ruby/setup-ruby@829114fc20da43a41d27359103ec7a63020954d4 # v1.255.0
-          with:
-            bundler-cache: true
+      - name: Configure Ruby
+        uses: ruby/setup-ruby@829114fc20da43a41d27359103ec7a63020954d4 # v1.255.0
+        with:
+          bundler-cache: true
 
-        - name: Install Fastlane
-          run: |
-            gem install bundler:2.2.27
-            bundle config path vendor/bundle
-            bundle install --jobs 4 --retry 3
+      - name: Install Fastlane
+        run: |
+          gem install bundler:2.2.27
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
-        - name: Log in to Azure
-          uses: bitwarden/gh-actions/azure-login@main
-          with:
-            subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-            tenant_id: ${{ secrets.AZURE_TENANT_ID }}
-            client_id: ${{ secrets.AZURE_CLIENT_ID }}
+      - name: Log in to Azure
+        uses: bitwarden/gh-actions/azure-login@main
+        with:
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
 
-        - name: Get Azure Key Vault secrets
-          id: get-kv-secrets
-          uses: bitwarden/gh-actions/get-keyvault-secrets@main
-          with:
-            keyvault: gh-android
-            secrets: "PLAY-BETA-KEYSTORE-PASSWORD,PLAY-BETA-KEY-PASSWORD"
+      - name: Get Azure Key Vault secrets
+        id: get-kv-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: gh-android
+          secrets: "PLAY-BETA-KEYSTORE-PASSWORD,PLAY-BETA-KEY-PASSWORD"
 
-        - name: Retrieve secrets
-          env:
-            ACCOUNT_NAME: bitwardenci
-            CONTAINER_NAME: mobile
-          run: |
-            mkdir -p ${{ github.workspace }}/secrets
-            mkdir -p ${{ github.workspace }}/app/src/standardRelease
+      - name: Retrieve secrets
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
+        run: |
+          mkdir -p ${{ github.workspace }}/secrets
+          mkdir -p ${{ github.workspace }}/app/src/standardRelease
 
-            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-            --name play_creds.json --file ${{ github.workspace }}/secrets/play_creds.json --output none
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
+          --name play_creds.json --file ${{ github.workspace }}/secrets/play_creds.json --output none
 
-            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-            --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
+          --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
 
-        - name: Log out from Azure
-          uses: bitwarden/gh-actions/azure-logout@main
+      - name: Log out from Azure
+        uses: bitwarden/gh-actions/azure-logout@main
 
-        - name: Format Release Notes
-          run: |
-            FORMATTED_MESSAGE="$(echo "${{ inputs.release-notes }}" | sed 's/  /\n/g')"
-            echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-            echo "$FORMATTED_MESSAGE" >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
-        - name: Promote Play Store version to production
-          env:
-            PLAY_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-BETA-KEYSTORE-PASSWORD }}
-            PLAY_KEY_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-BETA-KEY-PASSWORD }}
-            VERSION_CODE_INPUT: ${{ inputs.version-code }}
-            VERSION_NAME: ${{inputs.version-name}}
-            ROLLOUT_PERCENTAGE: ${{ inputs.rollout-percentage }}
-            PRODUCT: ${{ inputs.product }}
-            TRACK_FROM: ${{ inputs.track-from }}
-            TRACK_TARGET: ${{ inputs.track-target }}
-          run: |
-            if [ "$PRODUCT" = "Password Manager" ]; then
-              PACKAGE_NAME="com.x8bit.bitwarden"
-            elif [ "$PRODUCT" = "Authenticator" ]; then
-              PACKAGE_NAME="com.bitwarden.authenticator"
-            else
-              echo "Unsupported product: $PRODUCT"
-              exit 1
-            fi
+      - name: Format Release Notes
+        env:
+          RELEASE_NOTES: ${{ inputs.release-notes }}
+        run: |
+          FORMATTED_MESSAGE="$(echo "$RELEASE_NOTES" | sed 's/  /\n/g')"
+          {
+            echo "RELEASE_NOTES<<EOF"
+            printf '%s\n' "$FORMATTED_MESSAGE"
+            echo "EOF"
+          }  >> "$GITHUB_ENV"
 
-            VERSION_CODE=$(echo "${VERSION_CODE_INPUT}" | tr -d ',')
+      - name: Promote Play Store version to production
+        env:
+          PLAY_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-BETA-KEYSTORE-PASSWORD }}
+          PLAY_KEY_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-BETA-KEY-PASSWORD }}
+          VERSION_CODE_INPUT: ${{ inputs.version-code }}
+          VERSION_NAME: ${{inputs.version-name}}
+          ROLLOUT_PERCENTAGE: ${{ inputs.rollout-percentage }}
+          PRODUCT: ${{ inputs.product }}
+          TRACK_FROM: ${{ inputs.track-from }}
+          TRACK_TARGET: ${{ inputs.track-target }}
+        run: |
+          if [ "$PRODUCT" = "Password Manager" ]; then
+            PACKAGE_NAME="com.x8bit.bitwarden"
+          elif [ "$PRODUCT" = "Authenticator" ]; then
+            PACKAGE_NAME="com.bitwarden.authenticator"
+          else
+            echo "Unsupported product: $PRODUCT"
+            exit 1
+          fi
 
-            decimal=$(echo "scale=2; ${ROLLOUT_PERCENTAGE/\%/} / 100" | bc)
+          VERSION_CODE=$(echo "${VERSION_CODE_INPUT}" | tr -d ',')
 
-            bundle exec fastlane updateReleaseNotes \
-              releaseNotes:"$RELEASE_NOTES" \
-              versionCode:"$VERSION_CODE" \
-              packageName:"$PACKAGE_NAME"
+          decimal=$(echo "scale=2; ${ROLLOUT_PERCENTAGE/\%/} / 100" | bc)
 
-            bundle exec fastlane promoteToProduction \
-              versionCode:"$VERSION_CODE" \
-              versionName:"$VERSION_NAME" \
-              rolloutPercentage:"$decimal" \
-              packageName:"$PACKAGE_NAME" \
-              releaseNotes:"$RELEASE_NOTES" \
-              track:"$TRACK_FROM" \
-              trackPromoteTo:"$TRACK_TARGET"
+          bundle exec fastlane updateReleaseNotes \
+            releaseNotes:"$RELEASE_NOTES" \
+            versionCode:"$VERSION_CODE" \
+            packageName:"$PACKAGE_NAME"
+
+          bundle exec fastlane promoteToProduction \
+            versionCode:"$VERSION_CODE" \
+            versionName:"$VERSION_NAME" \
+            rolloutPercentage:"$decimal" \
+            packageName:"$PACKAGE_NAME" \
+            releaseNotes:"$RELEASE_NOTES" \
+            track:"$TRACK_FROM" \
+            trackPromoteTo:"$TRACK_TARGET"
