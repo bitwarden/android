@@ -17,8 +17,7 @@ import com.bitwarden.cxf.manager.CredentialExchangeCompletionManagerImpl
  *
  */
 @OmitFromCoverage
-class CredentialExchangeCompletionManagerBuilder
-internal constructor() {
+class CredentialExchangeCompletionManagerBuilder internal constructor() {
     internal fun build(activity: Activity): CredentialExchangeCompletionManager =
         CredentialExchangeCompletionManagerImpl(activity = activity)
 }
