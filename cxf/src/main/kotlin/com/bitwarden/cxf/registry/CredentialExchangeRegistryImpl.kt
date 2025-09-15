@@ -1,20 +1,22 @@
 package com.bitwarden.cxf.registry
 
-import android.content.Context
+import android.app.Application
 import androidx.credentials.providerevents.ProviderEventsManager
 import androidx.credentials.providerevents.transfer.ExportEntry
 import androidx.credentials.providerevents.transfer.RegisterExportRequest
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.cxf.registry.model.RegistrationRequest
 import java.util.UUID
 
 /**
  * Default implementation of [CredentialExchangeRegistry].
  */
+@OmitFromCoverage
 internal class CredentialExchangeRegistryImpl(
-    context: Context,
-    private val providerEventsManager: ProviderEventsManager =
-        ProviderEventsManager.create(context),
+    application: Application,
 ) : CredentialExchangeRegistry {
+    private val providerEventsManager: ProviderEventsManager =
+        ProviderEventsManager.create(application)
 
     override suspend fun register(
         registrationRequest: RegistrationRequest,
