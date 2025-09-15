@@ -15,12 +15,11 @@ import com.bitwarden.cxf.manager.CredentialExchangeCompletionManagerImpl
  * exchange process by returning a result to the calling application. It is primarily
  * used within the [credentialExchangeCompletionManager] builder function.
  *
- * @property activity The activity that will handle the completion of the credential exchange.
  */
 @OmitFromCoverage
 class CredentialExchangeCompletionManagerBuilder
-internal constructor(private val activity: Activity) {
-    internal fun build(): CredentialExchangeCompletionManager =
+internal constructor() {
+    internal fun build(activity: Activity): CredentialExchangeCompletionManager =
         CredentialExchangeCompletionManagerImpl(activity = activity)
 }
 
@@ -51,6 +50,6 @@ fun credentialExchangeCompletionManager(
     activity: Activity,
     config: CredentialExchangeCompletionManagerBuilder.() -> Unit = {},
 ): CredentialExchangeCompletionManager =
-    CredentialExchangeCompletionManagerBuilder(activity = activity)
+    CredentialExchangeCompletionManagerBuilder()
         .apply(config)
-        .build()
+        .build(activity = activity)
