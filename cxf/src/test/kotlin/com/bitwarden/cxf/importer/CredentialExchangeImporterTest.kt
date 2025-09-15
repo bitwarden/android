@@ -1,6 +1,6 @@
 package com.bitwarden.cxf.importer
 
-import android.content.Context
+import android.app.Activity
 import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.providerevents.ProviderEventsManager
 import androidx.credentials.providerevents.exception.ImportCredentialsCancellationException
@@ -18,39 +18,54 @@ import org.junit.jupiter.api.Test
 
 class CredentialExchangeImporterTest {
 
-    private val mockContext = mockk<Context>(relaxed = true) {
+    private val mockActivity = mockk<Activity>(relaxed = true) {
         every { packageName } returns "mockPackageName"
     }
     private val mockProviderEventsManager = mockk<ProviderEventsManager>()
     private val importer = CredentialExchangeImporterImpl(
-        activityContext = mockContext,
+        activity = mockActivity,
         providerEventsManager = mockProviderEventsManager,
     )
 
     @Test
-    fun `importCredentials should return a success result`() = runTest {
-        val mockCallingAppInfo = mockk<CallingAppInfo>()
-        coEvery {
-            mockProviderEventsManager.importCredentials(
-                context = mockContext,
-                request = DEFAULT_IMPORT_REQUEST,
-            )
-        } returns ProviderImportCredentialsResponse(
-            response = ImportCredentialsResponse(
-                responseJson = "mockResponse",
-            ),
-            callingAppInfo = mockCallingAppInfo,
-        )
-
-        val result = importer.importCredentials(listOf("basic-auth"))
-        assertEquals(
-            ImportCredentialsSelectionResult.Success(
-                response = "mockResponse",
+    fun `importCredentials should construct request correctly and return a success result`() =
+        runTest {
+            val mockCallingAppInfo = mockk<CallingAppInfo>()
+            val capturedRequestJson = mutableListOf<ImportCredentialsRequest>()
+            val expectedRequestJson = """
+        {
+          "importer": "mockPackageName",
+          "credentialTypes": [
+            "basic-auth"
+          ]
+        }
+        """
+                .trimIndent()
+            coEvery {
+                mockProviderEventsManager.importCredentials(
+                    context = mockActivity,
+                    request = capture(capturedRequestJson),
+                )
+            } returns ProviderImportCredentialsResponse(
+                response = ImportCredentialsResponse(
+                    responseJson = "mockResponse",
+                ),
                 callingAppInfo = mockCallingAppInfo,
-            ),
-            result,
-        )
-    }
+            )
+
+            val result = importer.importCredentials(listOf("basic-auth"))
+            assertEquals(
+                expectedRequestJson,
+                capturedRequestJson.firstOrNull()?.requestJson,
+            )
+            assertEquals(
+                ImportCredentialsSelectionResult.Success(
+                    response = "mockResponse",
+                    callingAppInfo = mockCallingAppInfo,
+                ),
+                result,
+            )
+        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -58,8 +73,8 @@ class CredentialExchangeImporterTest {
         runTest {
             coEvery {
                 mockProviderEventsManager.importCredentials(
-                    context = mockContext,
-                    request = DEFAULT_IMPORT_REQUEST,
+                    context = mockActivity,
+                    request = any(),
                 )
             } throws ImportCredentialsCancellationException()
 
@@ -76,8 +91,8 @@ class CredentialExchangeImporterTest {
             val importException = mockk<ImportCredentialsException>()
             coEvery {
                 mockProviderEventsManager.importCredentials(
-                    context = mockContext,
-                    request = DEFAULT_IMPORT_REQUEST,
+                    context = mockActivity,
+                    request = any(),
                 )
             } throws importException
 
@@ -89,15 +104,3 @@ class CredentialExchangeImporterTest {
             )
         }
 }
-
-private val DEFAULT_IMPORT_REQUEST = ImportCredentialsRequest(
-    requestJson = """
-        {
-          "importer": "mockPackageName",
-          "credentialTypes": [
-            "basic-auth"
-          ]
-        }
-        """
-        .trimIndent(),
-)

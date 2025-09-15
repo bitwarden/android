@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.androidx.credentials.providerevents)
     implementation(libs.androidx.credentials.providerevents.play.services)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.timber)
 
     testImplementation(platform(libs.junit.bom))
     testRuntimeOnly(libs.junit.platform.launcher)

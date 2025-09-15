@@ -7,20 +7,21 @@ import androidx.credentials.providerevents.exception.ImportCredentialsCancellati
 import androidx.credentials.providerevents.exception.ImportCredentialsException
 import androidx.credentials.providerevents.transfer.ImportCredentialsRequest
 import com.bitwarden.cxf.importer.model.ImportCredentialsSelectionResult
+import timber.log.Timber
 
 /**
  * Default implementation of [CredentialExchangeImporter].
  *
- * @param activityContext The context of the activity that is importing credentials.
+ * @param activity The context of the activity that is importing credentials.
  * @param providerEventsManager The [ProviderEventsManager] instance used for managing provider
- * events. If not provided, a default instance will be created using the provided [activityContext].
+ * events. If not provided, a default instance will be created using the provided [activity].
  * It is only meant to be used for testing purposes.
  */
 internal class CredentialExchangeImporterImpl(
-    private val activityContext: Context,
+    private val activity: Context,
     @param:VisibleForTesting
     private val providerEventsManager: ProviderEventsManager =
-        ProviderEventsManager.create(activityContext),
+        ProviderEventsManager.create(activity),
 ) : CredentialExchangeImporter {
 
     override suspend fun importCredentials(
@@ -28,12 +29,12 @@ internal class CredentialExchangeImporterImpl(
     ): ImportCredentialsSelectionResult {
         return try {
             val response = providerEventsManager.importCredentials(
-                context = activityContext,
+                context = activity,
                 request = ImportCredentialsRequest(
                     // TODO: Link to the correct documentation once it's available.
                     requestJson = """
                     {
-                      "importer": "${activityContext.packageName}",
+                      "importer": "${activity.packageName}",
                       "credentialTypes": [
                         ${credentialTypes.joinToString { "\"$it\"" }}
                       ]
@@ -49,6 +50,7 @@ internal class CredentialExchangeImporterImpl(
         } catch (_: ImportCredentialsCancellationException) {
             ImportCredentialsSelectionResult.Cancelled
         } catch (e: ImportCredentialsException) {
+            Timber.e(e, "Failed to import items from selected credential manager.")
             ImportCredentialsSelectionResult.Failure(error = e)
         }
     }
