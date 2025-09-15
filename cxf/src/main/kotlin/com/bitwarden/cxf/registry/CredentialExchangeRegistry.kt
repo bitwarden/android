@@ -14,9 +14,11 @@ interface CredentialExchangeRegistry {
      *
      * @param registrationRequest The request to register as a credential provider.
      *
-     * @return True if the registration was successful, false otherwise.
+     * @return A [Result] indicating if the application was add to the registry. [Result.isSuccess]
+     * does not indicate if the application was added to the registry. Use the result value to check
+     * if the application was added or not. [Result.isFailure] only indicates if an error occurred.
      */
-    suspend fun register(registrationRequest: RegistrationRequest): Boolean
+    suspend fun register(registrationRequest: RegistrationRequest): Result<Boolean>
 
     /**
      * Unregister as a credential export source.
