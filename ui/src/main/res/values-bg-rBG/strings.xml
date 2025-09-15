@@ -6,7 +6,6 @@
     <string name="an_error_has_occurred">Възникна грешка.</string>
     <string name="apply">Прилагане</string>
     <string name="back">Назад</string>
-    <string name="bitwarden">Битуорден</string>
     <string name="cancel">Отказ</string>
     <string name="copy">Копиране</string>
     <string name="copy_password">Копиране на паролата</string>
@@ -496,7 +495,6 @@
     <string name="remove_master_password">Премахване на главната парола</string>
     <string name="leave_organization">Напускане на организацията</string>
     <string name="leave_organization_name">Напускане на %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Идентификация WebAuthn</string>
     <string name="fido2_return_to_app">Назад към приложението</string>
     <string name="reset_password_auto_enroll_invite_warning">Тази организация включва автоматично новите си потребители в смяната на пароли. Това означава, че администраторите на организацията ще могат да променят главната Ви парола.</string>
@@ -574,12 +572,6 @@
     <string name="api_key">Ключ за ППИ</string>
     <string name="api_key_required_parenthesis">Ключ за API (задължително)</string>
     <string name="service">Услуга</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">Идентификатор за достъп до ППИ (задължително)</string>
     <string name="api_access_token">Идентификатор за достъп до API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Наистина ли искате да замените текущото потребителско име?</string>
@@ -920,7 +912,6 @@
     <string name="no_folder">Няма папка</string>
     <string name="show_less">Показване на по-малко</string>
     <string name="add_field">Добавяне на поле</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Споделяне на подробностите за грешката</string>
     <string name="flight_recorder">Проследяване чрез журнали</string>
     <string name="flight_recorder_help">Помощ за проследяването чрез журнали</string>
@@ -1052,7 +1043,6 @@
     <string name="sync_with_bitwarden_app">Синхронизиране с приложението на Битуорден</string>
     <string name="learn_more_link"><annotation link="learnMore">Научете повече</annotation></string>
     <string name="shared_codes_error">Кодовете не могат да бъдат синхронизирани с приложението на Битуорден. Уверете се, че и двете приложения са актуализиран до последна версия. Все още имате достъп до текущите си кодове в приложението на Битурден.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Синхронизиране с приложението на Битуорден</string>
     <string name="sync_with_bitwarden_action_card_message">За да видите всичките си кодове за удостоверяване, трябва да разрешите синхронизирането на всичките си акаунти.</string>
     <string name="take_me_to_app_settings">Към настройките на приложението</string>

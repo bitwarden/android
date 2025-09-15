@@ -6,7 +6,6 @@
     <string name="an_error_has_occurred">Vyskytla sa chyba.</string>
     <string name="apply">Použiť</string>
     <string name="back">Späť</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Zrušiť</string>
     <string name="copy">Kopírovať</string>
     <string name="copy_password">Kopírovať heslo</string>
@@ -111,9 +110,9 @@
     <string name="master_password_hint">Nápoveď k hlavnému heslu (voliteľné)</string>
     <string name="master_password_hint_description">Nápoveď k hlavnému heslu vám môže pomôcť spomenúť si na heslo, ak ho zabudnete.</string>
     <plurals name="master_password_length_val_message_x">
-        <item quantity="one">Master password must be at least %d character long.</item>
-        <item quantity="few">Master password must be at least %d characters long.</item>
-        <item quantity="many">Master password must be at least %d characters long.</item>
+        <item quantity="one">Hlavné heslo musí obsahovať aspoň %d znak.</item>
+        <item quantity="few">Hlavné heslo musí obsahovať aspoň %d znaky.</item>
+        <item quantity="many">Hlavné heslo musí obsahovať aspoň %d znakov.</item>
         <item quantity="other">Hlavné heslo musí obsahovať aspoň %d znakov.</item>
     </plurals>
     <string name="min_numbers">Minimum číslic</string>
@@ -316,9 +315,9 @@ Skenovanie prebehne automaticky.</string>
     <string name="check_password_for_data_breaches">Skontrolovať kompromitáciu hesla</string>
     <plurals name="password_exposed">
         <item quantity="one">Toto heslo uniklo %d-krát v dátových únikoch. Mali by ste ho zmeniť.</item>
-        <item quantity="few">This password has been exposed %d times in data breaches. You should change it.</item>
-        <item quantity="many">This password has been exposed %d times in data breaches. You should change it.</item>
-        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="few">Toto heslo uniklo %d-krát v dátových únikoch. Mali by ste ho zmeniť.</item>
+        <item quantity="many">Toto heslo uniklo %d-krát v dátových únikoch. Mali by ste ho zmeniť.</item>
+        <item quantity="other">Toto heslo uniklo %d-krát v dátových únikoch. Mali by ste ho zmeniť.</item>
     </plurals>
     <string name="password_safe">Heslo nebolo nájdene v žiadnom úniku dát. Malo by byť bezpečné.</string>
     <string name="identity_name">Meno identity</string>
@@ -500,7 +499,6 @@ Skenovanie prebehne automaticky.</string>
     <string name="remove_master_password">Odstrániť hlavné heslo</string>
     <string name="leave_organization">Opustiť organizáciu</string>
     <string name="leave_organization_name">Opustiť %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Overiť cez WebAuthn</string>
     <string name="fido2_return_to_app">Vrátiť sa do aplikácie</string>
     <string name="reset_password_auto_enroll_invite_warning">Táto organizácia má podnikovú politiku, ktorá vás automaticky zaregistruje na obnovenia hesla. Registrácia umožní správcom organizácie zmeniť vaše hlavné heslo.</string>
@@ -578,12 +576,6 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
     <string name="api_key">Kľúč API</string>
     <string name="api_key_required_parenthesis">Kľúč API (povinné)</string>
     <string name="service">Služba</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">Prístupový token API (povinné)</string>
     <string name="api_access_token">Prístupový token API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Naozaj chcete prepísať aktuálne používateľské meno?</string>
@@ -760,9 +752,9 @@ Chcete prepnúť na tento účet?</string>
     <string name="choose_your_master_password">Zvoľte si hlavné heslo</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Na udržanie vašich informácií v bezpečí si zvoľte unikátne a silné heslo.</string>
     <plurals name="minimum_characters">
-        <item quantity="one">%d character</item>
-        <item quantity="few">%d characters</item>
-        <item quantity="many">%d characters</item>
+        <item quantity="one">%d znak</item>
+        <item quantity="few">%d znaky</item>
+        <item quantity="many">%d znakov</item>
         <item quantity="other">%d znakov</item>
     </plurals>
     <string name="expired_link">Platnosť odkazu vypršala</string>
@@ -926,7 +918,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="no_folder">Žiadny priečinok</string>
     <string name="show_less">Zobraziť menej</string>
     <string name="add_field">Pridať pole</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Zdieľať podrobnosti o chybe</string>
     <string name="flight_recorder">Čierna skrinka</string>
     <string name="flight_recorder_help">Pomocník pre čiernu skrinku</string>
@@ -1056,7 +1047,6 @@ Chcete prepnúť na tento účet?</string>
     <string name="sync_with_bitwarden_app">Synchronizovať s apkou Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">Viac informácií</annotation></string>
     <string name="shared_codes_error">Nie je možné synchronizovať kódy z Bitwardenu. Skontrolujte, či sú obe aplikácie aktuálne. K existujúcim kódom máte stále prístup v Bitwardene.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Synchronizovať s apkou Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Ak chcete zobraziť všetky svoje overovacie kódy, musíte povoliť synchronizáciu na všetkých svojich účtoch.</string>
     <string name="take_me_to_app_settings">Prejsť do nastavení apky</string>

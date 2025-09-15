@@ -6,7 +6,6 @@
     <string name="an_error_has_occurred">Wystąpił błąd.</string>
     <string name="apply">Zastosuj</string>
     <string name="back">Wstecz</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Anuluj</string>
     <string name="copy">Kopiuj</string>
     <string name="copy_password">Kopiuj hasło</string>
@@ -500,7 +499,6 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="remove_master_password">Usuń hasło główne</string>
     <string name="leave_organization">Opuść organizację</string>
     <string name="leave_organization_name">Opuścić organizację %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Uwierzytelnianie WebAuthn</string>
     <string name="fido2_return_to_app">Wróć do aplikacji</string>
     <string name="reset_password_auto_enroll_invite_warning">Zasada organizacji umożliwia administratorom organizacji zmianę Twojego hasła głównego.</string>
@@ -577,12 +575,6 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="api_key">Klucz API</string>
     <string name="api_key_required_parenthesis">Klucz API (wymagane)</string>
     <string name="service">Usługa</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">Token dostępu API (wymagane)</string>
     <string name="api_access_token">Token dostępu API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Czy na pewno chcesz nadpisać obecną nazwę użytkownika?</string>
@@ -925,7 +917,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="no_folder">Nieprzypisane</string>
     <string name="show_less">Pokaż mniej</string>
     <string name="add_field">Dodaj pole</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Udostępnij szczegóły błędu</string>
     <string name="flight_recorder">Rejestrator zdarzeń</string>
     <string name="flight_recorder_help">Pomoc dotycząca rejestratora zdarzeń</string>
@@ -1055,7 +1046,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="sync_with_bitwarden_app">Synchronizacja z aplikacją Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">Dowiedz się więcej</annotation></string>
     <string name="shared_codes_error">Nie można zsynchronizować kodów z aplikacji Bitwarden. Upewnij się, że obie aplikacje są aktualne. Nadal możesz uzyskać dostęp do obecnych kodów w aplikacji Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Synchronizuj z aplikacją Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Aby wyświetlić wszystkie kody weryfikacyjne, musisz zezwolić na synchronizację na wszystkich swoich kontach.</string>
     <string name="take_me_to_app_settings">Przejdź do ustawień aplikacji</string>

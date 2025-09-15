@@ -6,7 +6,6 @@
     <string name="an_error_has_occurred">Сталася помилка</string>
     <string name="apply">Застосувати</string>
     <string name="back">Назад</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Скасувати</string>
     <string name="copy">Копіювати</string>
     <string name="copy_password">Копіювати пароль</string>
@@ -500,7 +499,6 @@
     <string name="remove_master_password">Вилучити головний пароль</string>
     <string name="leave_organization">Покинути організацію</string>
     <string name="leave_organization_name">Покинути %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Автентифікація WebAuthn</string>
     <string name="fido2_return_to_app">Повернутися до програми</string>
     <string name="reset_password_auto_enroll_invite_warning">Ця організація має корпоративну політику, яка автоматично розгортає вас на скидання пароля. Розгортання дозволятиме адміністраторам організації змінювати ваш головний пароль.</string>
@@ -578,12 +576,6 @@
     <string name="api_key">Ключ API</string>
     <string name="api_key_required_parenthesis">Ключ API (обов\'язково)</string>
     <string name="service">Послуга</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">Токен доступу до API (обов\'язково)</string>
     <string name="api_access_token">Токен доступу до API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Ви дійсно бажаєте перезаписати поточне ім\'я користувача?</string>
@@ -926,7 +918,6 @@
     <string name="no_folder">Без теки</string>
     <string name="show_less">Згорнути</string>
     <string name="add_field">Додати поле</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Поширити подробиці про помилку</string>
     <string name="flight_recorder">Чорна скринька</string>
     <string name="flight_recorder_help">Довідка щодо чорної скриньки</string>
@@ -1058,7 +1049,6 @@
     <string name="sync_with_bitwarden_app">Синхронізувати з програмою Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">Докладніше</annotation></string>
     <string name="shared_codes_error">Неможливо синхронізувати коди з програмою Bitwarden. Переконайтеся, що у вас найновіші версії обох програм. Ви все одно можете отримати доступ до наявних кодів у програмі Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Синхронізувати з програмою Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Щоб переглянути всі коди підтвердження, необхідно дозволити синхронізацію з усіма вашими обліковими записами.</string>
     <string name="take_me_to_app_settings">Перейти до налаштувань програми</string>
