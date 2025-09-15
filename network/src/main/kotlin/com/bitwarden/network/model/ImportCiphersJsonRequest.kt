@@ -8,9 +8,8 @@ import kotlinx.serialization.Serializable
  *
  * @property folders A list of folders to import.
  * @property ciphers A list of ciphers to import.
- * @property folderRelationships A map of cipher folder relationships to import. Key correlates to
- * the index of the cipher in the ciphers list. Value correlates to the index of the folder in the
- * folders list.
+ * @property folderRelationships A list of cipher-folder relationships to import. Each entry maps a
+ * cipher index (Key) to a folder index (Value).
  */
 @Serializable
 data class ImportCiphersJsonRequest(
@@ -19,7 +18,7 @@ data class ImportCiphersJsonRequest(
     @SerialName("ciphers")
     val ciphers: List<CipherJsonRequest>,
     @SerialName("folderRelationships")
-    val folderRelationships: Map<Int, Int>,
+    val folderRelationships: List<Map<Int, Int>>,
 ) {
     /**
      * Represents a folder request with an optional [id] if the folder already exists.
