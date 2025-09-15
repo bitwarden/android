@@ -28,20 +28,7 @@ class VaultSyncManagerImpl(
     private val userLogoutManager: UserLogoutManager,
     private val clock: Clock,
 ) : VaultSyncManager {
-    /**
-     * Initiates a synchronization process for the user's vault data.
-     *
-     * This function fetches the latest data from the remote server and updates the local
-     * vault cache. It can be a standard sync or a "forced" sync, which typically
-     *  bypasses local cache checks and fetches everything anew.
-     *
-     * @param userId The unique identifier of the user whose vault is to be synchronized.
-     * @param forced If true, performs a full, forced synchronization, ignoring any recent sync
-     * timestamps. If false, performs a standard incremental sync.
-     *
-     * @return A [SyncVaultDataResult] indicating the outcome of the synchronization, such as
-     * success or failure with details.
-     */
+
     @Suppress("LongMethod")
     override suspend fun sync(
         userId: String,

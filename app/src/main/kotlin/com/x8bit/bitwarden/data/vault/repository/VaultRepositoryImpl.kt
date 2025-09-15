@@ -358,7 +358,7 @@ class VaultRepositoryImpl(
         mutableFoldersStateFlow.updateToPendingOrLoading()
         mutableCollectionsStateFlow.updateToPendingOrLoading()
         mutableSendDataStateFlow.updateToPendingOrLoading()
-        syncJob = ioScope.launch { sync(userId = userId, forced = forced) }
+        syncJob = ioScope.launch { syncInternal(userId = userId, forced = forced) }
     }
 
     @Suppress("MagicNumber")
@@ -380,7 +380,7 @@ class VaultRepositoryImpl(
         val userId = activeUserId
             ?: return SyncVaultDataResult.Error(throwable = NoActiveUserException())
         syncJob = ioScope
-            .async { sync(userId = userId, forced = false) }
+            .async { syncInternal(userId = userId, forced = false) }
             .also {
                 return try {
                     it.await()
@@ -1437,8 +1437,9 @@ class VaultRepositoryImpl(
     }
     //endregion Push Notification helpers
 
-    private suspend fun sync(userId: String, forced: Boolean): SyncVaultDataResult =
-        vaultSyncManager.sync(userId = userId, forced = forced)
+    private suspend fun syncInternal(userId: String, forced: Boolean): SyncVaultDataResult =
+        vaultSyncManager
+            .sync(userId = userId, forced = forced)
             .also { result ->
                 if (result is SyncVaultDataResult.Error) {
                     updateVaultStateFlowsToError(throwable = result.throwable)

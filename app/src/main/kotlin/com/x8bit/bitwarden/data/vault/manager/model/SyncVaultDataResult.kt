@@ -14,7 +14,7 @@ sealed class SyncVaultDataResult {
     /**
      * Indicates a failed sync operation.
      *
-     * @property throwable The exception that caused the failure, if any.
+     * @property throwable The exception that caused the failure.
      */
     data class Error(val throwable: Throwable) : SyncVaultDataResult()
 }

@@ -13,7 +13,7 @@ interface VaultSyncManager {
      *
      * This function fetches the latest data from the remote server and updates the local
      * vault cache. It can be a standard sync or a "forced" sync, which typically
-     *  bypasses local cache checks and fetches everything anew.
+     * bypasses local cache checks and fetches everything anew.
      *
      * @param userId The unique identifier of the user whose vault is to be synchronized.
      * @param forced If true, performs a full, forced synchronization, ignoring any recent sync
