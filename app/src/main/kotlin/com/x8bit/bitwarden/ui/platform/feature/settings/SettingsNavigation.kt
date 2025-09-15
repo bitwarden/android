@@ -114,6 +114,7 @@ fun NavGraphBuilder.settingsGraph(
     onNavigateToFlightRecorder: () -> Unit,
     onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
+    onNavigateToImportItems: () -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
 ) {
     navigation<SettingsGraphRoute>(
@@ -162,6 +163,7 @@ fun NavGraphBuilder.settingsGraph(
             onNavigateToExportVault = onNavigateToExportVault,
             onNavigateToFolders = onNavigateToFolders,
             onNavigateToImportLogins = onNavigateToImportLogins,
+            onNavigateToImportItems = onNavigateToImportItems,
         )
         blockAutoFillDestination(onNavigateBack = { navController.popBackStack() })
         privilegedAppsListDestination(onNavigateBack = { navController.popBackStack() })

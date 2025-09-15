@@ -1,4 +1,5 @@
 @file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import androidx.navigation.NavController
@@ -48,6 +49,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
     onNavigateToFlightRecorder: () -> Unit,
     onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
+    onNavigateToImportItems: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderName: String?) -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
 ) {
@@ -68,6 +70,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
             onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
             onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
             onNavigateToImportLogins = onNavigateToImportLogins,
+            onNavigateToImportItems = onNavigateToImportItems,
             onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
             onNavigateToFlightRecorder = onNavigateToFlightRecorder,
             onNavigateToRecordedLogs = onNavigateToRecordedLogs,

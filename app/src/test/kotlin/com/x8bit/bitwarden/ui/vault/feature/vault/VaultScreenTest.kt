@@ -80,6 +80,7 @@ import org.junit.Test
 class VaultScreenTest : BitwardenComposeTest() {
     private var onNavigateToAboutCalled = false
     private var onNavigateToImportLoginsCalled = false
+    private var onNavigateToImportItemsCalled = false
     private var onNavigateToVaultAddItemScreenCalled = false
     private var onNavigateToVaultItemArgs: VaultItemArgs? = null
     private var onNavigateToVaultEditItemArgs: VaultAddEditArgs? = null
@@ -123,6 +124,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                     onNavigateToAddFolderParentFolderName = folderName
                 },
                 onNavigateToAboutScreen = { onNavigateToAboutCalled = true },
+                onNavigateToImportItems = { onNavigateToImportItemsCalled = true },
             )
         }
     }

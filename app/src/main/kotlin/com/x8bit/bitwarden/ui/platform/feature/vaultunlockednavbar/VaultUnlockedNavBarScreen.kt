@@ -74,6 +74,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
+    onNavigateToImportItems: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -145,6 +146,7 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
         onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
         onNavigateToImportLogins = onNavigateToImportLogins,
+        onNavigateToImportItems = onNavigateToImportItems,
         onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
         onNavigateToFlightRecorder = onNavigateToFlightRecorder,
         onNavigateToRecordedLogs = onNavigateToRecordedLogs,
@@ -181,6 +183,7 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToFlightRecorder: () -> Unit,
     onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
+    onNavigateToImportItems: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
 ) {
@@ -235,6 +238,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToSearchVault = onNavigateToSearchVault,
                 onDimBottomNavBarRequest = { shouldDim -> shouldDimNavBar = shouldDim },
                 onNavigateToImportLogins = onNavigateToImportLogins,
+                onNavigateToImportItems = { onNavigateToImportItems },
                 onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
                 onNavigateToAboutScreen = {
                     navController.navigateToSettingsGraphRoot()
@@ -260,6 +264,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
                 onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
                 onNavigateToImportLogins = onNavigateToImportLogins,
+                onNavigateToImportItems = onNavigateToImportItems,
                 onNavigateToFlightRecorder = onNavigateToFlightRecorder,
                 onNavigateToRecordedLogs = onNavigateToRecordedLogs,
                 onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,

@@ -93,6 +93,7 @@ fun VaultScreen(
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     onNavigateToImportLogins: () -> Unit,
+    onNavigateToImportItems: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutScreen: () -> Unit,
     exitManager: ExitManager = LocalExitManager.current,
@@ -164,6 +165,7 @@ fun VaultScreen(
 
             VaultEvent.NavigateOutOfApp -> exitManager.exitApplication()
             VaultEvent.NavigateToImportLogins -> onNavigateToImportLogins()
+            VaultEvent.NavigateToImportItems -> onNavigateToImportItems()
             is VaultEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
             VaultEvent.PromptForAppReview -> {
                 launchPrompt.invoke()

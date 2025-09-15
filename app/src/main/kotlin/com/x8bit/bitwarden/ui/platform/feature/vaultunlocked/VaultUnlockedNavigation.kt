@@ -50,6 +50,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.vaultAddEditDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.attachmentDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.navigateToAttachment
+import com.x8bit.bitwarden.ui.vault.feature.importitems.importItemsScreenDestination
+import com.x8bit.bitwarden.ui.vault.feature.importitems.navigateToImportItemsScreen
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.importLoginsScreenDestination
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.navigateToImportLoginsScreen
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
@@ -119,6 +121,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToSetupUnlockScreen = { navController.navigateToSetupUnlockScreen() },
             onNavigateToSetupAutoFillScreen = { navController.navigateToSetupAutoFillScreen() },
             onNavigateToImportLogins = { navController.navigateToImportLoginsScreen() },
+            onNavigateToImportItems = { navController.navigateToImportItemsScreen() },
             onNavigateToAddFolderScreen = {
                 navController.navigateToFolderAddEdit(
                     folderAddEditType = FolderAddEditType.AddItem,
@@ -255,6 +258,10 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         importLoginsScreenDestination(
             onNavigateBack = { navController.popBackStack() },
+        )
+        importItemsScreenDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToVault = { navController.navigateUpToVaultUnlockedRoot() },
         )
     }
 }
