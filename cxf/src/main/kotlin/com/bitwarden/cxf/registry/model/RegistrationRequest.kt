@@ -13,6 +13,6 @@ import androidx.annotation.DrawableRes
 data class RegistrationRequest(
     val appName: String,
     val credentialTypes: Set<String>,
-    @param:DrawableRes
+    @field:DrawableRes
     val iconResId: Int,
 )
