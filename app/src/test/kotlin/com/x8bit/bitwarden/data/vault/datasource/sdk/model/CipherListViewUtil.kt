@@ -110,12 +110,14 @@ fun createMockFido2CredentialListView(
     userHandle: String = "mockUserHandle-$number",
     userName: String = "mockUserName-$number",
     userDisplayName: String = "mockUserDisplayName-$number",
+    hasCounter: Boolean = false,
 ): Fido2CredentialListView = Fido2CredentialListView(
     credentialId = credentialId,
     rpId = rpId,
     userHandle = userHandle,
     userName = userName,
     userDisplayName = userDisplayName,
+    counter = if (hasCounter) "$number" else "0",
 )
 
 /**
