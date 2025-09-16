@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder
 
+import android.content.res.Resources
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,7 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -183,8 +184,8 @@ private fun DurationSelectButton(
     selectedOption: FlightRecorderDuration,
     onOptionSelected: (FlightRecorderDuration) -> Unit,
     modifier: Modifier = Modifier,
+    resources: Resources = LocalResources.current,
 ) {
-    val resources = LocalContext.current.resources
     val options = FlightRecorderDuration.entries.map { it.displayText() }.toImmutableList()
     BitwardenMultiSelectButton(
         label = stringResource(id = BitwardenString.logging_duration),

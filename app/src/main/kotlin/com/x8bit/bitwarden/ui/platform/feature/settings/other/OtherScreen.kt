@@ -24,7 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -252,7 +252,7 @@ private fun ClearClipboardFrequencyRow(
     currentSelection: ClearClipboardFrequency,
     onFrequencySelection: (ClearClipboardFrequency) -> Unit,
     modifier: Modifier = Modifier,
-    resources: Resources = LocalContext.current.resources,
+    resources: Resources = LocalResources.current,
 ) {
     BitwardenMultiSelectButton(
         label = stringResource(id = BitwardenString.clear_clipboard),

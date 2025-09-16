@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -46,7 +46,7 @@ fun VaultAddEditUriItem(
     defaultUriMatchType: UriMatchType,
     onLearnMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
-    resources: Resources = LocalContext.current.resources,
+    resources: Resources = LocalResources.current,
 ) {
     var shouldShowOptionsDialog by rememberSaveable { mutableStateOf(false) }
     var shouldShowMatchDialog by rememberSaveable { mutableStateOf(false) }
