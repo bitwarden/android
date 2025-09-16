@@ -1437,7 +1437,10 @@ class VaultRepositoryImpl(
     }
     //endregion Push Notification helpers
 
-    private suspend fun syncInternal(userId: String, forced: Boolean): SyncVaultDataResult =
+    private suspend fun syncInternal(
+        userId: String,
+        forced: Boolean,
+    ): SyncVaultDataResult =
         vaultSyncManager
             .sync(userId = userId, forced = forced)
             .also { result ->
