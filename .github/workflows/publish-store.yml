@@ -158,3 +158,7 @@ jobs:
               releaseNotes:"$RELEASE_NOTES" \
               track:"$TRACK_FROM" \
               trackPromoteTo:"$TRACK_TARGET"
+
+        - name: Publish Github Release
+          run: |
+            gh workflow enable publish-github-release.yml
