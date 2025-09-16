@@ -55,11 +55,13 @@ import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAn
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
+import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManager
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
+import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
@@ -69,7 +71,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
-import com.x8bit.bitwarden.data.vault.repository.model.ImportCxfPayloadResult
+import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
@@ -152,6 +154,7 @@ class VaultRepositoryImpl(
     dispatcherManager: DispatcherManager,
     private val reviewPromptManager: ReviewPromptManager,
     private val vaultSyncManager: VaultSyncManager,
+    private val credentialExchangeImportManager: CredentialExchangeImportManager,
 ) : VaultRepository,
     CipherManager by cipherManager,
     VaultLockManager by vaultLockManager {
@@ -968,18 +971,37 @@ class VaultRepositoryImpl(
             )
     }
 
-    override suspend fun importCxfPayload(payload: String): ImportCxfPayloadResult {
+    override suspend fun importCxfPayload(
+        payload: String,
+    ): ImportCredentialsResult {
         val userId = activeUserId
-            ?: return ImportCxfPayloadResult.Error(error = NoActiveUserException())
-        return vaultSdkSource
-            .importCxf(
+            ?: return ImportCredentialsResult.Error(error = NoActiveUserException())
+        val importResult = credentialExchangeImportManager
+            .importCxfPayload(
                 userId = userId,
                 payload = payload,
             )
-            .fold(
-                onSuccess = { ImportCxfPayloadResult.Success(it) },
-                onFailure = { ImportCxfPayloadResult.Error(error = it) },
-            )
+        return when (importResult) {
+            is ImportCxfPayloadResult.Error -> {
+                ImportCredentialsResult.Error(error = importResult.error)
+            }
+
+            ImportCxfPayloadResult.NoItems -> {
+                ImportCredentialsResult.NoItems
+            }
+
+            ImportCxfPayloadResult.Success -> {
+                when (val syncResult = syncInternal(userId = userId, forced = true)) {
+                    is SyncVaultDataResult.Error -> {
+                        ImportCredentialsResult.SyncFailed(error = syncResult.throwable)
+                    }
+
+                    is SyncVaultDataResult.Success -> {
+                        ImportCredentialsResult.Success
+                    }
+                }
+            }
+        }
     }
 
     override suspend fun exportVaultDataToCxf(

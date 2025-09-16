@@ -18,6 +18,8 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.CipherManagerImpl
+import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManager
+import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.FileManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
@@ -133,5 +135,15 @@ object VaultManagerModule {
         vaultSdkSource = vaultSdkSource,
         userLogoutManager = userLogoutManager,
         clock = clock,
+    )
+
+    @Provides
+    @Singleton
+    fun provideCredentialExchangeImportManager(
+        vaultSdkSource: VaultSdkSource,
+        ciphersService: CiphersService,
+    ): CredentialExchangeImportManager = CredentialExchangeImportManagerImpl(
+        vaultSdkSource = vaultSdkSource,
+        ciphersService = ciphersService,
     )
 }

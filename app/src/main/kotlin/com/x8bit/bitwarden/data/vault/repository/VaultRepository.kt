@@ -25,7 +25,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
-import com.x8bit.bitwarden.data.vault.repository.model.ImportCxfPayloadResult
+import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
@@ -264,7 +264,7 @@ interface VaultRepository : CipherManager, VaultLockManager {
      *
      * @param payload The CXF payload to import.
      */
-    suspend fun importCxfPayload(payload: String): ImportCxfPayloadResult
+    suspend fun importCxfPayload(payload: String): ImportCredentialsResult
 
     /**
      * Attempt to export the vault data to a CXF file.
