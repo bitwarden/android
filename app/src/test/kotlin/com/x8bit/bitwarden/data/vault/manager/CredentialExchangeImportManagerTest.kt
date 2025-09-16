@@ -32,9 +32,6 @@ class CredentialExchangeImportManagerTest {
         ciphersService = ciphersService,
     )
 
-    private val mockSdkCipher: Cipher = createMockSdkCipher(number = 1)
-    private val mockSdkCipherList: List<Cipher> = listOf(mockSdkCipher)
-
     @Test
     fun `when vaultSdkSource importCxf fails, should return Error`() = runTest {
         val exception = RuntimeException("SDK import failed")
@@ -67,7 +64,7 @@ class CredentialExchangeImportManagerTest {
                 userId = DEFAULT_USER_ID,
                 payload = DEFAULT_PAYLOAD,
             )
-        } returns mockSdkCipherList.asSuccess()
+        } returns DEFAULT_CIPHER_LIST.asSuccess()
 
         val exception = RuntimeException("Network import failed")
         val capturedRequest = slot<ImportCiphersJsonRequest>()
@@ -92,7 +89,7 @@ class CredentialExchangeImportManagerTest {
                 userId = DEFAULT_USER_ID,
                 payload = DEFAULT_PAYLOAD,
             )
-        } returns mockSdkCipherList.asSuccess()
+        } returns DEFAULT_CIPHER_LIST.asSuccess()
 
         coEvery {
             ciphersService.importCiphers(any())
@@ -120,7 +117,7 @@ class CredentialExchangeImportManagerTest {
                     userId = DEFAULT_USER_ID,
                     payload = DEFAULT_PAYLOAD,
                 )
-            } returns mockSdkCipherList.asSuccess()
+            } returns DEFAULT_CIPHER_LIST.asSuccess()
 
             coEvery {
                 ciphersService.importCiphers(any())
@@ -142,7 +139,7 @@ class CredentialExchangeImportManagerTest {
                 userId = DEFAULT_USER_ID,
                 payload = DEFAULT_PAYLOAD,
             )
-        } returns mockSdkCipherList.asSuccess()
+        } returns DEFAULT_CIPHER_LIST.asSuccess()
 
         coEvery {
             ciphersService.importCiphers(any())
@@ -185,3 +182,5 @@ class CredentialExchangeImportManagerTest {
 
 private const val DEFAULT_USER_ID = "mockId-1"
 private const val DEFAULT_PAYLOAD = "mockPayload-1"
+private val DEFAULT_CIPHER: Cipher = createMockSdkCipher(number = 1)
+private val DEFAULT_CIPHER_LIST: List<Cipher> = listOf(DEFAULT_CIPHER)
