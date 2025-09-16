@@ -13,6 +13,9 @@ import androidx.compose.runtime.compositionLocalOf
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.cxf.importer.CredentialExchangeImporter
+import com.bitwarden.cxf.importer.dsl.credentialExchangeImporter
+import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeImporter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
@@ -59,6 +62,8 @@ fun LocalManagerProvider(
     keyChainManager: KeyChainManager = KeyChainManagerImpl(activity = activity),
     nfcManager: NfcManager = NfcManagerImpl(activity = activity),
     permissionsManager: PermissionsManager = PermissionsManagerImpl(activity = activity),
+    credentialExchangeImporter: CredentialExchangeImporter =
+        credentialExchangeImporter(activity = activity),
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
@@ -73,6 +78,7 @@ fun LocalManagerProvider(
         LocalKeyChainManager provides keyChainManager,
         LocalNfcManager provides nfcManager,
         LocalPermissionsManager provides permissionsManager,
+        LocalCredentialExchangeImporter provides credentialExchangeImporter,
         content = content,
     )
 }
