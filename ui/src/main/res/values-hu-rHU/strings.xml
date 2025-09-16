@@ -6,7 +6,6 @@
     <string name="an_error_has_occurred">Hiba történt.</string>
     <string name="apply">Alkalmazás</string>
     <string name="back">Vissza</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Mégse</string>
     <string name="copy">Másolás</string>
     <string name="copy_password">Jelszó másolása</string>
@@ -495,7 +494,6 @@
     <string name="remove_master_password">Mesterjelszó eltávolítása</string>
     <string name="leave_organization">Kilépés a szervezetből</string>
     <string name="leave_organization_name">Elhagyjuk %1$s szervezetet?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">WebAuthn hitelesítése</string>
     <string name="fido2_return_to_app">Vissza az alkalmazásba</string>
     <string name="reset_password_auto_enroll_invite_warning">Ennek a szervezetnek van egy vállalati házirendje, amely automatikusan regisztrál a jelszó alaphelyzetbe állítására. A regisztráció lehetővé teszi a szervezet adminisztrátorainak a mesterjelszó megváltoztatását.</string>
@@ -573,12 +571,6 @@ TOTP hozzáadása a kulcs biztonságos tárolásához lehetőséget.</string>
     <string name="api_key">API kulcs</string>
     <string name="api_key_required_parenthesis">API kulcs (kötelező)</string>
     <string name="service">Szolgáltatás</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">FastMail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API elérési vezérjel (kötelező)</string>
     <string name="api_access_token">API hozzáférési vezérjel</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Biztosan felülírásra kerüljön az aktuális felhasználónév?</string>
@@ -919,7 +911,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="no_folder">Nincs mappa</string>
     <string name="show_less">Kevesebb megjelenítése</string>
     <string name="add_field">Mező hozzáadása</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Hiba részletek megosztása</string>
     <string name="flight_recorder">Adatrögzítő</string>
     <string name="flight_recorder_help">Adatrögzítő súgó</string>
@@ -1049,7 +1040,6 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="sync_with_bitwarden_app">Szinkronizálás a Bitwarden alkalmazással</string>
     <string name="learn_more_link"><annotation link="learnMore">További információ</annotation></string>
     <string name="shared_codes_error">Nem lehet szinkronizálni a kódokat a Bitwarden alkalmazásból Győződjünk meg arról, hogy mindkét alkalmazás naprakész. A Bitwarden alkalmazásban továbbra is hozzáférhetünk a meglévő kódokhoz.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Szinkronizálás a Bitwarden alkalmazással</string>
     <string name="sync_with_bitwarden_action_card_message">Az összes ellenőrző kód megtekintéséhez lehetővé kell tenni az összes fiók szinkronizálását.</string>
     <string name="take_me_to_app_settings">Ugrás az alkalmazás beállításaihoz</string>

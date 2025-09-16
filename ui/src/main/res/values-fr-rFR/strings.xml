@@ -6,7 +6,6 @@
     <string name="an_error_has_occurred">Une erreur s\'est produite.</string>
     <string name="apply">Apply</string>
     <string name="back">Retour</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Annuler</string>
     <string name="copy">Copier</string>
     <string name="copy_password">Copier le mot de passe</string>
@@ -496,7 +495,6 @@ La numérisation se fera automatiquement.</string>
     <string name="remove_master_password">Supprimer le mot de passe principal</string>
     <string name="leave_organization">Quitter l’organisation</string>
     <string name="leave_organization_name">Quitter %1$s ?</string>
-    <string name="fido2_title">WebAuthn FIDO2</string>
     <string name="fido2_authenticate_web_authn">Authentifier WebAuthn</string>
     <string name="fido2_return_to_app">Retourner à l’application</string>
     <string name="reset_password_auto_enroll_invite_warning">Cette organisation dispose d\'une politique d\'entreprise qui vous inscrira automatiquement à la réinitialisation du mot de passe. L\'inscription permettra aux administrateurs de l\'organisation de changer votre mot de passe principal.</string>
@@ -574,12 +572,6 @@ sélectionnez « Ajouter un TOTP » pour stocker la clé en toute sécurité</
     <string name="api_key">Clé API</string>
     <string name="api_key_required_parenthesis">Clé API (requise)</string>
     <string name="service">Service</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">Jeton d’accès API (requis)</string>
     <string name="api_access_token">Jeton d\'accès API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Êtes-vous sûr(e) de vouloir remplacer le nom d\'utilisateur actuel ?</string>
@@ -920,7 +912,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="no_folder">Aucun dossier</string>
     <string name="show_less">Afficher moins</string>
     <string name="add_field">Ajouter un champ</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Partager les détails de l\'erreur</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>
@@ -1050,7 +1041,6 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="sync_with_bitwarden_app">Synchroniser avec l\'app Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">En savoir plus</annotation></string>
     <string name="shared_codes_error">Impossible de synchroniser les codes de l\'application Bitwarden. Assurez-vous que les deux applications sont à jour. Vous pouvez toujours accéder à vos codes existants dans l\'application Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Synchroniser avec l\'app Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Afin de visualiser tous vos codes de vérification, vous devrez autoriser la synchronisation sur tous vos comptes.</string>
     <string name="take_me_to_app_settings">Emmenez-moi aux paramètres de l\'application</string>

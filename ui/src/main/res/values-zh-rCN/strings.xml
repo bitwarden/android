@@ -6,7 +6,6 @@
     <string name="an_error_has_occurred">发生错误</string>
     <string name="apply">应用</string>
     <string name="back">后退</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">取消</string>
     <string name="copy">复制</string>
     <string name="copy_password">复制密码</string>
@@ -494,7 +493,6 @@
     <string name="remove_master_password">移除主密码</string>
     <string name="leave_organization">退出组织</string>
     <string name="leave_organization_name">退出 %1$s？</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">验证 WebAuthn</string>
     <string name="fido2_return_to_app">返回 App</string>
     <string name="reset_password_auto_enroll_invite_warning">此组织有一个企业策略，将为您自动注册密码重置。注册后将允许组织管理员更改您的主密码。</string>
@@ -572,12 +570,6 @@
     <string name="api_key">API 密钥</string>
     <string name="api_key_required_parenthesis">API 密钥（必填）</string>
     <string name="service">服务</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API 访问令牌（必填）</string>
     <string name="api_access_token">API 访问令牌</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">确定要覆盖当前用户名吗？</string>
@@ -719,7 +711,7 @@
     <string name="level_up_your_logins">提升您的登录体验</string>
     <string name="welcome_message_3">使用生成器创建和保存强大且唯一的密码，以保护您的所有账户。</string>
     <string name="your_data_when_and_where_you_need_it">您的数据，无论何时何地均可用</string>
-    <string name="welcome_message_4">使用 Bitwarden 移动端、浏览器和桌面 App 在无限制的设备上保存无限数量的密码。</string>
+    <string name="welcome_message_4">使用 Bitwarden 移动端、浏览器和桌面 App 在不限数量的设备上保存不限数量的密码。</string>
     <string name="remove_passkey">移除通行密钥</string>
     <string name="passkey_removed">通行密钥已移除</string>
     <string name="what_makes_a_password_strong">一个强密码的特点是什么？</string>
@@ -917,7 +909,6 @@
     <string name="no_folder">无文件夹</string>
     <string name="show_less">显示更少</string>
     <string name="add_field">添加字段</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">分享错误详细信息</string>
     <string name="flight_recorder">飞行记录器</string>
     <string name="flight_recorder_help">飞行记录器帮助</string>
@@ -1048,7 +1039,6 @@
     <string name="sync_with_bitwarden_app">与 Bitwarden App 同步</string>
     <string name="learn_more_link"><annotation link="learnMore">了解更多</annotation></string>
     <string name="shared_codes_error">无法从 Bitwarden App 同步代码，请确保这两个 App 都是最新的。您仍然可以在 Bitwarden App 中访问您现有的代码。</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">与 Bitwarden App 同步</string>
     <string name="sync_with_bitwarden_action_card_message">要查看您的所有验证码，您需要在您的所有账户上允许同步。</string>
     <string name="take_me_to_app_settings">跳转到 App 设置</string>
