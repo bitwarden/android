@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.data.vault.repository
 import android.net.Uri
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DateTime
-import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -19,13 +18,11 @@ import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.network.model.CreateFileSendResponse
 import com.bitwarden.network.model.CreateSendJsonResponse
-import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UpdateFolderResponseJson
 import com.bitwarden.network.model.UpdateSendResponseJson
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.network.service.SendsService
-import com.bitwarden.network.service.SyncService
 import com.bitwarden.network.util.isNoConnectionError
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.Send
@@ -38,10 +35,7 @@ import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
-import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
-import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.autofill.util.login
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -64,7 +58,9 @@ import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
+import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
+import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
@@ -76,7 +72,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
-import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
@@ -140,7 +135,6 @@ private const val STOP_TIMEOUT_DELAY_MS: Long = 1000L
  */
 @Suppress("TooManyFunctions", "LongParameterList", "LargeClass")
 class VaultRepositoryImpl(
-    private val syncService: SyncService,
     private val ciphersService: CiphersService,
     private val sendsService: SendsService,
     private val folderService: FolderService,
@@ -152,12 +146,12 @@ class VaultRepositoryImpl(
     private val fileManager: FileManager,
     private val vaultLockManager: VaultLockManager,
     private val totpCodeManager: TotpCodeManager,
-    private val userLogoutManager: UserLogoutManager,
     databaseSchemeManager: DatabaseSchemeManager,
     pushManager: PushManager,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
     private val reviewPromptManager: ReviewPromptManager,
+    private val vaultSyncManager: VaultSyncManager,
 ) : VaultRepository,
     CipherManager by cipherManager,
     VaultLockManager by vaultLockManager {
@@ -378,12 +372,13 @@ class VaultRepositoryImpl(
         if (lastSyncInstant == null ||
             currentInstant.isAfter(lastSyncInstant.plus(30, ChronoUnit.MINUTES))
         ) {
-            sync()
+            sync(forced = false)
         }
     }
 
     override suspend fun syncForResult(): SyncVaultDataResult {
-        val userId = activeUserId ?: return SyncVaultDataResult.Error(throwable = null)
+        val userId = activeUserId
+            ?: return SyncVaultDataResult.Error(throwable = NoActiveUserException())
         syncJob = ioScope
             .async { syncInternal(userId = userId, forced = false) }
             .also {
@@ -1036,42 +1031,6 @@ class VaultRepositoryImpl(
             }
     }
 
-    private fun storeProfileData(
-        syncResponse: SyncResponseJson,
-    ) {
-        val profile = syncResponse.profile
-        val userId = profile.id
-        authDiskSource.apply {
-            storeUserKey(
-                userId = userId,
-                userKey = profile.key,
-            )
-            storePrivateKey(
-                userId = userId,
-                privateKey = profile.privateKey,
-            )
-            storeAccountKeys(
-                userId = userId,
-                accountKeys = profile.accountKeys,
-            )
-            storeOrganizationKeys(
-                userId = userId,
-                organizationKeys = profile.organizations
-                    .orEmpty()
-                    .filter { it.key != null }
-                    .associate { it.id to requireNotNull(it.key) },
-            )
-            storeShouldUseKeyConnector(
-                userId = userId,
-                shouldUseKeyConnector = profile.shouldUseKeyConnector,
-            )
-            storeOrganizations(
-                userId = userId,
-                organizations = profile.organizations,
-            )
-        }
-    }
-
     private suspend fun unlockVaultForUser(
         userId: String,
         initUserCryptoMethod: InitUserCryptoMethod,
@@ -1100,28 +1059,6 @@ class VaultRepositoryImpl(
             initUserCryptoMethod = initUserCryptoMethod,
             organizationKeys = organizationKeys,
         )
-    }
-
-    private suspend fun unlockVaultForOrganizationsIfNecessary(
-        syncResponse: SyncResponseJson,
-    ) {
-        val profile = syncResponse.profile
-        val organizationKeys = profile.organizations
-            .orEmpty()
-            .filter { it.key != null }
-            .associate { it.id to requireNotNull(it.key) }
-            .takeUnless { it.isEmpty() }
-            ?: return
-
-        // There shouldn't be issues when unlocking directly from the syncResponse so we can ignore
-        // the return type here.
-        vaultSdkSource
-            .initializeOrganizationCrypto(
-                userId = syncResponse.profile.id,
-                request = InitOrgCryptoRequest(
-                    organizationKeys = organizationKeys,
-                ),
-            )
     }
 
     private fun observeVaultDiskCiphersToCipherListView(
@@ -1500,90 +1437,17 @@ class VaultRepositoryImpl(
     }
     //endregion Push Notification helpers
 
-    @Suppress("LongMethod")
     private suspend fun syncInternal(
         userId: String,
         forced: Boolean,
-    ): SyncVaultDataResult {
-        if (!forced) {
-            // Skip this check if we are forcing the request.
-            val lastSyncInstant = settingsDiskSource
-                .getLastSyncTime(userId = userId)
-                ?.toEpochMilli()
-            lastSyncInstant?.let { lastSyncTimeMs ->
-                // If the lasSyncState is null we just sync, no checks required.
-                syncService
-                    .getAccountRevisionDateMillis()
-                    .fold(
-                        onSuccess = { serverRevisionDate ->
-                            if (serverRevisionDate < lastSyncTimeMs) {
-                                // We can skip the actual sync call if there is no new data or
-                                // database scheme changes since the last sync.
-                                settingsDiskSource.storeLastSyncTime(
-                                    userId = userId,
-                                    lastSyncTime = clock.instant(),
-                                )
-                                vaultDiskSource.resyncVaultData(userId = userId)
-                                val itemsAvailable = vaultDiskSource
-                                    .getCiphersFlow(userId)
-                                    .firstOrNull()
-                                    ?.isNotEmpty() == true
-                                return SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
-                            }
-                        },
-                        onFailure = {
-                            updateVaultStateFlowsToError(throwable = it)
-                            return SyncVaultDataResult.Error(throwable = it)
-                        },
-                    )
+    ): SyncVaultDataResult =
+        vaultSyncManager
+            .sync(userId = userId, forced = forced)
+            .also { result ->
+                if (result is SyncVaultDataResult.Error) {
+                    updateVaultStateFlowsToError(throwable = result.throwable)
+                }
             }
-        }
-
-        return syncService
-            .sync()
-            .fold(
-                onSuccess = { syncResponse ->
-                    val localSecurityStamp = authDiskSource.userState?.activeAccount?.profile?.stamp
-                    val serverSecurityStamp = syncResponse.profile.securityStamp
-
-                    // Log the user out if the stamps do not match
-                    localSecurityStamp?.let {
-                        if (serverSecurityStamp != localSecurityStamp) {
-                            userLogoutManager.softLogout(
-                                userId = userId,
-                                reason = LogoutReason.SecurityStamp,
-                            )
-                            return SyncVaultDataResult.Error(throwable = null)
-                        }
-                    }
-
-                    // Update user information with additional information from sync response
-                    authDiskSource.userState = authDiskSource.userState?.toUpdatedUserStateJson(
-                        syncResponse = syncResponse,
-                    )
-
-                    unlockVaultForOrganizationsIfNecessary(syncResponse = syncResponse)
-                    storeProfileData(syncResponse = syncResponse)
-                    // Treat absent network policies as known empty data to
-                    // distinguish between unknown null data.
-                    authDiskSource.storePolicies(
-                        userId = userId,
-                        policies = syncResponse.policies.orEmpty(),
-                    )
-                    settingsDiskSource.storeLastSyncTime(
-                        userId = userId,
-                        lastSyncTime = clock.instant(),
-                    )
-                    vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
-                    val itemsAvailable = syncResponse.ciphers?.isNotEmpty() == true
-                    SyncVaultDataResult.Success(itemsAvailable = itemsAvailable)
-                },
-                onFailure = { throwable ->
-                    updateVaultStateFlowsToError(throwable = throwable)
-                    SyncVaultDataResult.Error(throwable = throwable)
-                },
-            )
-    }
 }
 
 private fun <T> Throwable.toNetworkOrErrorState(data: T?): DataState<T> =
