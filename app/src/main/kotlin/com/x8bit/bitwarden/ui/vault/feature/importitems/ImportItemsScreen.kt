@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -22,6 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,13 +32,13 @@ import com.bitwarden.cxf.importer.CredentialExchangeImporter
 import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeImporter
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.cardStyle
-import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.components.indicator.BitwardenCircularProgressIndicator
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -235,21 +235,17 @@ private fun ImportingContent(
             .cardStyle(CardStyle.Full),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(
-            text = stringResource(BitwardenString.importing_your_saved_items),
-            style = BitwardenTheme.typography.titleMedium,
+        BitwardenCircularProgressIndicator(
+            modifier = Modifier
+                .size(48.dp)
+                .testTag(tag = "ImportItemsProgressIndicator"),
         )
 
         Spacer(Modifier.padding(vertical = 8.dp))
 
-        LinearProgressIndicator(
-            progress = { viewState.progress },
-            color = BitwardenTheme.colorScheme.stroke.border,
-            trackColor = BitwardenTheme.colorScheme.background.tertiary,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .nullableTestTag("ImportProgressIndicator"),
+        Text(
+            text = viewState.message(),
+            style = BitwardenTheme.typography.titleMedium,
         )
 
         Spacer(Modifier.padding(vertical = 8.dp))
@@ -355,7 +351,9 @@ private fun ImportingContent_preview() {
             },
         ) {
             ImportingContent(
-                viewState = ImportItemsState.ViewState.ImportingItems(progress = 0.5f),
+                viewState = ImportItemsState.ViewState.ImportingItems(
+                    message = BitwardenString.importing_items.asText(),
+                ),
             )
         }
     }

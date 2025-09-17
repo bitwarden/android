@@ -152,11 +152,13 @@ class ImportItemsScreenTest : BitwardenComposeTest() {
     fun `viewState should update to ImportingItems`() = runTest {
         mockkStateFlow.tryEmit(
             ImportItemsState(
-                viewState = ImportItemsState.ViewState.ImportingItems(progress = 0.5f),
+                viewState = ImportItemsState.ViewState.ImportingItems(
+                    message = "Importing items...".asText(),
+                ),
             ),
         )
         composeTestRule
-            .onNodeWithText("Importing your saved items")
+            .onNodeWithText("Importing items...")
             .assertExists()
     }
 
