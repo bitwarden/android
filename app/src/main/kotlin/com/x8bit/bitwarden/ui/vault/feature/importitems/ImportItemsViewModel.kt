@@ -37,8 +37,8 @@ class ImportItemsViewModel @Inject constructor(
 
     override fun handleAction(action: ImportItemsAction) {
         when (action) {
-            ImportItemsAction.NavigateBack -> {
-                sendEvent(ImportItemsEvent.NavigateBack)
+            ImportItemsAction.BackClick -> {
+                handleBackClick()
             }
 
             is ImportItemsAction.GetStartedClick -> {
@@ -50,13 +50,21 @@ class ImportItemsViewModel @Inject constructor(
             }
 
             ImportItemsAction.ReturnToVaultClick -> {
-                sendEvent(ImportItemsEvent.NavigateToVault)
+                handleReturnToVaultClick()
             }
 
             is ImportItemsAction.Internal.ImportCredentialsResultReceive -> {
                 handleImportCxfResultReceive(action)
             }
         }
+    }
+
+    private fun handleReturnToVaultClick() {
+        sendEvent(ImportItemsEvent.NavigateToVault)
+    }
+
+    private fun handleBackClick() {
+        sendEvent(ImportItemsEvent.NavigateBack)
     }
 
     private fun handleGetStartedClick() {
@@ -256,7 +264,7 @@ sealed class ImportItemsAction {
     /**
      * User clicked the back button.
      */
-    data object NavigateBack : ImportItemsAction()
+    data object BackClick : ImportItemsAction()
 
     /**
      * Internal actions that the [ImportItemsViewModel] may itself send.

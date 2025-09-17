@@ -29,7 +29,7 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
     fun `NavigateBack sends NavigateBack event`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(ImportItemsAction.NavigateBack)
+            viewModel.trySendAction(ImportItemsAction.BackClick)
             assertEquals(ImportItemsEvent.NavigateBack, awaitItem())
         }
     }
