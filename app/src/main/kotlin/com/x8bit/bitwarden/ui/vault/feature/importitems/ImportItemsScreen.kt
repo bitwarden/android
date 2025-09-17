@@ -126,7 +126,7 @@ private fun ImportItemsContent(
         targetState = viewState,
         label = "CrossfadeBetweenViewStates",
         modifier = modifier
-            .padding(top = 24.dp)
+            .padding(top = 12.dp)
             .standardHorizontalMargin()
             .fillMaxSize(),
     ) { viewState ->
@@ -137,6 +137,8 @@ private fun ImportItemsContent(
                 .cardStyle(CardStyle.Full),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Spacer(Modifier.height(12.dp))
+
             when (viewState) {
                 ImportItemsState.ViewState.NotStarted -> {
                     GetStartedContent(onGetStartedClick = onGetStartedClick)
