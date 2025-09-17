@@ -14,8 +14,9 @@ import com.x8bit.bitwarden.ui.vault.feature.importitems.ImportItemsViewModel
  */
 @OmitFromCoverage
 data class ImportItemsHandler(
-    val onNavigateToVaultClick: () -> Unit,
+    val onReturnToVaultClick: () -> Unit,
     val onNavigateBack: () -> Unit,
+    val onGetStartedClick: () -> Unit,
 ) {
 
     @Suppress("UndocumentedPublicClass")
@@ -25,11 +26,14 @@ data class ImportItemsHandler(
          * Creates an instance of [ImportItemsHandler] using the provided [ImportItemsViewModel].
          */
         fun create(viewModel: ImportItemsViewModel) = ImportItemsHandler(
-            onNavigateToVaultClick = {
+            onReturnToVaultClick = {
                 viewModel.trySendAction(ImportItemsAction.ReturnToVaultClick)
             },
             onNavigateBack = {
                 viewModel.trySendAction(ImportItemsAction.BackClick)
+            },
+            onGetStartedClick = {
+                viewModel.trySendAction(ImportItemsAction.GetStartedClick)
             },
         )
     }
@@ -40,13 +44,4 @@ data class ImportItemsHandler(
  */
 @Composable
 fun rememberImportItemsHandler(viewModel: ImportItemsViewModel): ImportItemsHandler =
-    remember(viewModel) {
-        ImportItemsHandler(
-            onNavigateToVaultClick = {
-                viewModel.trySendAction(ImportItemsAction.ReturnToVaultClick)
-            },
-            onNavigateBack = {
-                viewModel.trySendAction(ImportItemsAction.BackClick)
-            },
-        )
-    }
+    remember(viewModel) { ImportItemsHandler.create(viewModel) }

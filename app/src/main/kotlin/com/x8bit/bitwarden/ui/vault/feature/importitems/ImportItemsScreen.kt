@@ -1,4 +1,5 @@
 @file:Suppress("TooManyFunctions")
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.x8bit.bitwarden.ui.vault.feature.importitems
 
@@ -8,15 +9,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -104,22 +107,39 @@ fun ImportItemsScreen(
             )
         },
     ) {
-        Crossfade(
-            targetState = state.viewState,
-            label = "CrossfadeBetweenViewStates",
-            modifier = Modifier.fillMaxSize(),
-        ) { viewState ->
+        ImportItemsContent(
+            viewState = state.viewState,
+            onGetStartedClick = handler.onGetStartedClick,
+            onReturnToVaultClick = handler.onReturnToVaultClick,
+        )
+    }
+}
+
+@Composable
+private fun ImportItemsContent(
+    viewState: ImportItemsState.ViewState,
+    onGetStartedClick: () -> Unit,
+    onReturnToVaultClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Crossfade(
+        targetState = viewState,
+        label = "CrossfadeBetweenViewStates",
+        modifier = modifier
+            .padding(top = 24.dp)
+            .standardHorizontalMargin()
+            .fillMaxSize(),
+    ) { viewState ->
+        Column(
+            modifier = Modifier
+                .verticalScroll(state = rememberScrollState())
+                .fillMaxWidth()
+                .cardStyle(CardStyle.Full),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             when (viewState) {
                 ImportItemsState.ViewState.NotStarted -> {
-                    GetStartedContent(
-                        onGetStartedClick = remember {
-                            {
-                                viewModel.trySendAction(
-                                    ImportItemsAction.GetStartedClick,
-                                )
-                            }
-                        },
-                    )
+                    GetStartedContent(onGetStartedClick = onGetStartedClick)
                 }
 
                 ImportItemsState.ViewState.AwaitingSelection -> {
@@ -127,7 +147,7 @@ fun ImportItemsScreen(
                 }
 
                 is ImportItemsState.ViewState.ImportingItems -> {
-                    ImportingContent(viewState = viewState)
+                    ImportingContent(message = viewState.message)
                 }
 
                 is ImportItemsState.ViewState.Completed -> {
@@ -135,11 +155,7 @@ fun ImportItemsScreen(
                         title = viewState.title,
                         message = viewState.message,
                         iconData = viewState.iconData,
-                        onReturnToVaultClick = remember {
-                            {
-                                onNavigateToVault()
-                            }
-                        },
+                        onReturnToVaultClick = onReturnToVaultClick,
                     )
                 }
             }
@@ -150,106 +166,72 @@ fun ImportItemsScreen(
 @Composable
 private fun GetStartedContent(
     onGetStartedClick: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .padding(top = 24.dp)
-            .standardHorizontalMargin()
-            .cardStyle(CardStyle.Full),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Image(
-            painter = rememberVectorPainter(id = BitwardenDrawable.il_import_saved_items),
-            contentDescription = null,
-            modifier = Modifier
-                .standardHorizontalMargin()
-                .size(size = 112.dp)
-                .align(alignment = Alignment.CenterHorizontally),
-        )
+    Image(
+        painter = rememberVectorPainter(id = BitwardenDrawable.il_import_saved_items),
+        contentDescription = null,
+        modifier = Modifier
+            .size(size = 112.dp),
+    )
 
-        Text(
-            text = stringResource(BitwardenString.import_saved_items),
-            style = BitwardenTheme.typography.titleMedium,
-        )
+    Text(
+        text = stringResource(BitwardenString.import_saved_items),
+        style = BitwardenTheme.typography.titleMedium,
+    )
 
-        Spacer(Modifier.padding(vertical = 8.dp))
+    Spacer(Modifier.height(8.dp))
 
-        Text(
-            text = stringResource(
-                BitwardenString.import_your_credentials_from_another_password_manager,
-            ),
-            style = BitwardenTheme.typography.bodyMedium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
+    Text(
+        text = stringResource(
+            BitwardenString.import_your_credentials_from_another_password_manager,
+        ),
+        style = BitwardenTheme.typography.bodyMedium,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
 
-        Spacer(Modifier.padding(vertical = 8.dp))
+    Spacer(Modifier.height(8.dp))
 
-        BitwardenFilledButton(
-            label = stringResource(BitwardenString.get_started),
-            onClick = onGetStartedClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
-    }
+    BitwardenFilledButton(
+        label = stringResource(BitwardenString.get_started),
+        onClick = onGetStartedClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
 }
 
 @Composable
-private fun AwaitingSelectionContent(
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier
+private fun AwaitingSelectionContent() {
+    Text(
+        text = stringResource(BitwardenString.select_a_credential_manager_to_import_items_from),
+        style = BitwardenTheme.typography.titleMedium,
+        textAlign = TextAlign.Center,
+        modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 24.dp)
-            .standardHorizontalMargin()
-            .cardStyle(CardStyle.Full),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Text(
-            text = stringResource(BitwardenString.select_a_credential_manager_to_import_items_from),
-            style = BitwardenTheme.typography.titleMedium,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
+            .padding(horizontal = 16.dp),
+    )
 
-        Spacer(Modifier.padding(vertical = 8.dp))
-    }
+    Spacer(Modifier.padding(vertical = 8.dp))
 }
 
 @Composable
-private fun ImportingContent(
-    viewState: ImportItemsState.ViewState.ImportingItems,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 24.dp)
-            .standardHorizontalMargin()
-            .cardStyle(CardStyle.Full),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        BitwardenCircularProgressIndicator(
-            modifier = Modifier
-                .size(48.dp)
-                .testTag(tag = "ImportItemsProgressIndicator"),
-        )
+private fun ImportingContent(message: Text) {
+    BitwardenCircularProgressIndicator(
+        modifier = Modifier
+            .size(48.dp)
+            .testTag(tag = "ImportItemsProgressIndicator"),
+    )
 
-        Spacer(Modifier.padding(vertical = 8.dp))
+    Spacer(Modifier.height(8.dp))
 
-        Text(
-            text = viewState.message(),
-            style = BitwardenTheme.typography.titleMedium,
-        )
+    Text(
+        text = message(),
+        style = BitwardenTheme.typography.titleMedium,
+    )
 
-        Spacer(Modifier.padding(vertical = 8.dp))
-    }
+    Spacer(Modifier.height(8.dp))
 }
 
 @Composable
@@ -258,59 +240,49 @@ private fun CompletedContent(
     message: Text,
     iconData: IconData,
     onReturnToVaultClick: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
+    BitwardenIcon(
+        iconData = iconData,
+        modifier = Modifier
+            .size(42.dp),
+    )
+
+    Spacer(Modifier.padding(vertical = 8.dp))
+
+    Text(
+        text = title(),
+        style = BitwardenTheme.typography.titleMedium,
+        textAlign = TextAlign.Center,
+        modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 24.dp)
-            .standardHorizontalMargin()
-            .cardStyle(CardStyle.Full),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        BitwardenIcon(
-            iconData = iconData,
-            modifier = Modifier
-                .size(42.dp),
-        )
+            .padding(horizontal = 16.dp),
+    )
 
-        Spacer(Modifier.padding(vertical = 8.dp))
+    Spacer(Modifier.padding(vertical = 8.dp))
 
-        Text(
-            text = title(),
-            style = BitwardenTheme.typography.titleMedium,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
+    Text(
+        text = message(),
+        style = BitwardenTheme.typography.bodyMedium,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
 
-        Spacer(Modifier.padding(vertical = 8.dp))
+    Spacer(Modifier.padding(vertical = 8.dp))
 
-        Text(
-            text = message(),
-            style = BitwardenTheme.typography.bodyMedium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
-
-        Spacer(Modifier.padding(vertical = 8.dp))
-
-        BitwardenFilledButton(
-            label = stringResource(BitwardenString.return_to_your_vault),
-            onClick = onReturnToVaultClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
-    }
+    BitwardenFilledButton(
+        label = stringResource(BitwardenString.return_to_your_vault),
+        onClick = onReturnToVaultClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+//region Previews
 @Preview(showBackground = true)
 @Composable
-private fun GetStartedContext_preview() {
+private fun ImportItemsContent_preview() {
     BitwardenTheme {
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
         BitwardenScaffold(
@@ -326,36 +298,38 @@ private fun GetStartedContext_preview() {
                 )
             },
         ) {
-            GetStartedContent(onGetStartedClick = {})
+            ImportItemsContent(
+                viewState = ImportItemsState.ViewState.NotStarted,
+                onGetStartedClick = {},
+                onReturnToVaultClick = {},
+            )
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
+@Composable
+private fun GetStartedContent_preview() {
+    BitwardenTheme {
+        ImportItemsContent(
+            viewState = ImportItemsState.ViewState.NotStarted,
+            onGetStartedClick = {},
+            onReturnToVaultClick = {},
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun ImportingContent_preview() {
     BitwardenTheme {
-        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-        BitwardenScaffold(
-            topBar = {
-                BitwardenTopAppBar(
-                    title = stringResource(BitwardenString.import_items),
-                    navigationIcon = NavigationIcon(
-                        navigationIcon = rememberVectorPainter(BitwardenDrawable.ic_back),
-                        onNavigationIconClick = {},
-                        navigationIconContentDescription = stringResource(BitwardenString.back),
-                    ),
-                    scrollBehavior = scrollBehavior,
-                )
-            },
-        ) {
-            ImportingContent(
-                viewState = ImportItemsState.ViewState.ImportingItems(
-                    message = BitwardenString.importing_items.asText(),
-                ),
-            )
-        }
+        ImportItemsContent(
+            viewState = ImportItemsState.ViewState.ImportingItems(
+                message = BitwardenString.importing_items.asText(),
+            ),
+            onGetStartedClick = {},
+            onReturnToVaultClick = {},
+        )
     }
 }
 
@@ -363,11 +337,14 @@ private fun ImportingContent_preview() {
 @Composable
 private fun CompletedContentImportSuccess_preview() {
     BitwardenTheme {
-        CompletedContent(
-            title = BitwardenString.import_successful.asText(),
-            message = BitwardenString
-                .your_items_have_been_successfully_imported.asText(),
-            iconData = IconData.Local(BitwardenDrawable.ic_plain_checkmark),
+        ImportItemsContent(
+            viewState = ImportItemsState.ViewState.Completed(
+                title = BitwardenString.import_successful.asText(),
+                message = BitwardenString
+                    .your_items_have_been_successfully_imported.asText(),
+                iconData = IconData.Local(BitwardenDrawable.ic_plain_checkmark),
+            ),
+            onGetStartedClick = {},
             onReturnToVaultClick = {},
         )
     }
@@ -377,12 +354,15 @@ private fun CompletedContentImportSuccess_preview() {
 @Composable
 private fun CompletedContentImportSuccessSyncFail_preview() {
     BitwardenTheme {
-        CompletedContent(
-            title = BitwardenString.vault_sync_failed.asText(),
-            message = BitwardenString
-                .your_items_have_been_successfully_imported_but_could_not_sync_vault
-                .asText(),
-            iconData = IconData.Local(BitwardenDrawable.ic_refresh),
+        ImportItemsContent(
+            viewState = ImportItemsState.ViewState.Completed(
+                title = BitwardenString.vault_sync_failed.asText(),
+                message = BitwardenString
+                    .your_items_have_been_successfully_imported_but_could_not_sync_vault
+                    .asText(),
+                iconData = IconData.Local(BitwardenDrawable.ic_refresh),
+            ),
+            onGetStartedClick = {},
             onReturnToVaultClick = {},
         )
     }
@@ -392,12 +372,15 @@ private fun CompletedContentImportSuccessSyncFail_preview() {
 @Composable
 private fun CompletedContentNoItems_preview() {
     BitwardenTheme {
-        CompletedContent(
-            title = BitwardenString.no_items_imported.asText(),
-            message = BitwardenString
-                .no_items_received_from_the_selected_credential_manager
-                .asText(),
-            iconData = IconData.Local(BitwardenDrawable.ic_question_circle),
+        ImportItemsContent(
+            viewState = ImportItemsState.ViewState.Completed(
+                title = BitwardenString.no_items_imported.asText(),
+                message = BitwardenString
+                    .no_items_received_from_the_selected_credential_manager
+                    .asText(),
+                iconData = IconData.Local(BitwardenDrawable.ic_question_circle),
+            ),
+            onGetStartedClick = {},
             onReturnToVaultClick = {},
         )
     }
@@ -407,12 +390,15 @@ private fun CompletedContentNoItems_preview() {
 @Composable
 private fun CompletedContentImportCancelled_preview() {
     BitwardenTheme {
-        CompletedContent(
-            title = BitwardenString.import_cancelled.asText(),
-            message = BitwardenString
-                .credential_import_was_cancelled
-                .asText(),
-            iconData = IconData.Local(BitwardenDrawable.ic_close),
+        ImportItemsContent(
+            viewState = ImportItemsState.ViewState.Completed(
+                title = BitwardenString.import_cancelled.asText(),
+                message = BitwardenString
+                    .credential_import_was_cancelled
+                    .asText(),
+                iconData = IconData.Local(BitwardenDrawable.ic_close),
+            ),
+            onGetStartedClick = {},
             onReturnToVaultClick = {},
         )
     }
@@ -422,22 +408,29 @@ private fun CompletedContentImportCancelled_preview() {
 @Composable
 private fun CompletedContentImportFail_preview() {
     BitwardenTheme {
-        CompletedContent(
-            title = BitwardenString.import_error.asText(),
-            message = BitwardenString
-                .there_was_a_problem_importing_your_items
-                .asText(),
-            iconData = IconData.Local(BitwardenDrawable.ic_warning),
+        ImportItemsContent(
+            viewState = ImportItemsState.ViewState.Completed(
+                title = BitwardenString.import_error.asText(),
+                message = BitwardenString
+                    .there_was_a_problem_importing_your_items
+                    .asText(),
+                iconData = IconData.Local(BitwardenDrawable.ic_warning),
+            ),
+            onGetStartedClick = {},
             onReturnToVaultClick = {},
         )
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 private fun AwaitingSelectionContent_preview() {
     BitwardenTheme {
-        AwaitingSelectionContent()
+        ImportItemsContent(
+            viewState = ImportItemsState.ViewState.AwaitingSelection,
+            onGetStartedClick = {},
+            onReturnToVaultClick = {},
+        )
     }
 }
+//endregion Previews
