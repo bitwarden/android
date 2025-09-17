@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.vault.repository.di
 
 import com.bitwarden.data.manager.DispatcherManager
-import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.FolderService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -34,7 +33,6 @@ object VaultRepositoryModule {
     @Provides
     @Singleton
     fun providesVaultRepository(
-        ciphersService: CiphersService,
         folderService: FolderService,
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
@@ -51,7 +49,6 @@ object VaultRepositoryModule {
         vaultSyncManager: VaultSyncManager,
         credentialExchangeImportManager: CredentialExchangeImportManager,
     ): VaultRepository = VaultRepositoryImpl(
-        ciphersService = ciphersService,
         folderService = folderService,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
