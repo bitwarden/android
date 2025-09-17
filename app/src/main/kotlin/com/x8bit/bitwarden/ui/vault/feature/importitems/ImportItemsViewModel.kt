@@ -54,7 +54,7 @@ class ImportItemsViewModel @Inject constructor(
             }
 
             is ImportItemsAction.Internal.ImportCredentialsResultReceive -> {
-                handleImportCxfResultReceive(action)
+                handleImportCredentialsResultReceive(action)
             }
         }
     }
@@ -114,13 +114,7 @@ class ImportItemsViewModel @Inject constructor(
             }
 
             is ImportCredentialsSelectionResult.Success -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = ImportItemsState.ViewState.ImportingItems(
-                            progress = 0.5f,
-                        ),
-                    )
-                }
+                updateImportProgress(BitwardenString.import_items.asText())
                 viewModelScope.launch {
                     sendAction(
                         ImportItemsAction.Internal.ImportCredentialsResultReceive(
@@ -134,9 +128,10 @@ class ImportItemsViewModel @Inject constructor(
         }
     }
 
-    private fun handleImportCxfResultReceive(
+    private fun handleImportCredentialsResultReceive(
         action: ImportItemsAction.Internal.ImportCredentialsResultReceive,
     ) {
+        updateImportProgress(BitwardenString.uploading_items.asText())
         when (action.result) {
             is ImportCredentialsResult.Error -> {
                 mutableStateFlow.update {
@@ -195,6 +190,16 @@ class ImportItemsViewModel @Inject constructor(
             }
         }
     }
+
+    private fun updateImportProgress(message: Text) {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = ImportItemsState.ViewState.ImportingItems(
+                    message = message,
+                ),
+            )
+        }
+    }
 }
 
 /**
@@ -224,7 +229,7 @@ data class ImportItemsState(
         /**
          * The import is in progress.
          */
-        data class ImportingItems(val progress: Float) : ViewState()
+        data class ImportingItems(val message: Text) : ViewState()
 
         /**
          * The import has completed.

@@ -125,7 +125,9 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
 
             // Verify state is updated to ImportingItems
             assertEquals(
-                ImportItemsState.ViewState.ImportingItems(progress = 0.5f),
+                ImportItemsState.ViewState.ImportingItems(
+                    BitwardenString.import_items.asText(),
+                ),
                 viewModel.stateFlow.value.viewState,
             )
 
