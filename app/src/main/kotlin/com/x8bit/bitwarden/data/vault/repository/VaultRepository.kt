@@ -13,19 +13,17 @@ import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
+import com.x8bit.bitwarden.data.vault.manager.FolderManager
 import com.x8bit.bitwarden.data.vault.manager.SendManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
-import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
-import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
-import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -37,7 +35,7 @@ import javax.crypto.Cipher
  * Responsible for managing vault data inside the network layer.
  */
 @Suppress("TooManyFunctions")
-interface VaultRepository : CipherManager, SendManager, VaultLockManager {
+interface VaultRepository : CipherManager, FolderManager, SendManager, VaultLockManager {
 
     /**
      * The [VaultFilterType] for the current user.
@@ -203,21 +201,6 @@ interface VaultRepository : CipherManager, SendManager, VaultLockManager {
      * Attempt to get the verification code and the period.
      */
     suspend fun generateTotp(cipherId: String, time: DateTime): GenerateTotpResult
-
-    /**
-     * Attempt to create a folder.
-     */
-    suspend fun createFolder(folderView: FolderView): CreateFolderResult
-
-    /**
-     * Attempt to delete a folder.
-     */
-    suspend fun deleteFolder(folderId: String): DeleteFolderResult
-
-    /**
-     * Attempt to update a folder.
-     */
-    suspend fun updateFolder(folderId: String, folderView: FolderView): UpdateFolderResult
 
     /**
      * Attempt to get the user's vault data for export.

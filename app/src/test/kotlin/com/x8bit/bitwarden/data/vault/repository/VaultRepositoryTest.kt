@@ -15,22 +15,18 @@ import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.network.model.CipherTypeJson
-import com.bitwarden.network.model.FolderJsonRequest
 import com.bitwarden.network.model.SyncResponseJson
-import com.bitwarden.network.model.UpdateFolderResponseJson
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCollection
 import com.bitwarden.network.model.createMockDomains
 import com.bitwarden.network.model.createMockFolder
 import com.bitwarden.network.model.createMockOrganizationKeys
 import com.bitwarden.network.model.createMockSend
-import com.bitwarden.network.service.FolderService
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
-import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -43,8 +39,6 @@ import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
-import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
-import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderUpsertData
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockAccount
@@ -65,14 +59,11 @@ import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
 import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
-import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
-import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
-import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -81,7 +72,6 @@ import com.x8bit.bitwarden.data.vault.repository.util.toDomainsData
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCollectionList
-import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.util.createVerificationCodeItem
@@ -113,7 +103,6 @@ import java.security.GeneralSecurityException
 import java.security.MessageDigest
 import java.time.Clock
 import java.time.Instant
-import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
@@ -131,7 +120,6 @@ class VaultRepositoryTest {
     private val settingsDiskSource = mockk<SettingsDiskSource> {
         every { getLastSyncTime(userId = any()) } returns clock.instant()
     }
-    private val folderService: FolderService = mockk()
     private val mutableGetCiphersFlow: MutableStateFlow<List<SyncResponseJson.Cipher>> =
         MutableStateFlow(listOf(createMockCipher(1)))
     private val vaultDiskSource: VaultDiskSource = mockk {
@@ -169,18 +157,13 @@ class VaultRepositoryTest {
         every { databaseSchemeChangeFlow } returns mutableDatabaseSchemeChangeFlow
     }
     private val mutableFullSyncFlow = bufferedMutableSharedFlow<Unit>()
-    private val mutableSyncFolderDeleteFlow = bufferedMutableSharedFlow<SyncFolderDeleteData>()
-    private val mutableSyncFolderUpsertFlow = bufferedMutableSharedFlow<SyncFolderUpsertData>()
     private val pushManager: PushManager = mockk {
         every { fullSyncFlow } returns mutableFullSyncFlow
-        every { syncFolderDeleteFlow } returns mutableSyncFolderDeleteFlow
-        every { syncFolderUpsertFlow } returns mutableSyncFolderUpsertFlow
     }
     private val vaultSyncManager: VaultSyncManager = mockk()
     private val credentialExchangeImportManager: CredentialExchangeImportManager = mockk()
 
     private val vaultRepository = VaultRepositoryImpl(
-        folderService = folderService,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
         authDiskSource = fakeAuthDiskSource,
@@ -190,6 +173,7 @@ class VaultRepositoryTest {
         totpCodeManager = totpCodeManager,
         pushManager = pushManager,
         cipherManager = mockk(),
+        folderManager = mockk(),
         sendManager = mockk(),
         clock = clock,
         databaseSchemeManager = databaseSchemeManager,
@@ -2064,362 +2048,6 @@ class VaultRepositoryTest {
     }
 
     @Test
-    fun `deleteFolder with no active user should return DeleteFolderResult failure`() =
-        runTest {
-            fakeAuthDiskSource.userState = null
-
-            val result = vaultRepository.deleteFolder("Test")
-
-            assertEquals(
-                DeleteFolderResult.Error(error = NoActiveUserException()),
-                result,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `DeleteFolder with folderService Delete failure should return DeleteFolderResult Failure`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val error = Throwable("fail")
-            val folderId = "mockId-1"
-            coEvery { folderService.deleteFolder(folderId) } returns error.asFailure()
-
-            val result = vaultRepository.deleteFolder(folderId)
-            assertEquals(DeleteFolderResult.Error(error = error), result)
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `DeleteFolder with folderService Delete success should return DeleteFolderResult Success and update ciphers`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = MOCK_USER_STATE.activeUserId
-            val folderId = "mockFolderId-1"
-            val mockCipher = createMockCipher(number = 1)
-            val ciphers = listOf(mockCipher, createMockCipher(number = 2))
-            coEvery { folderService.deleteFolder(folderId) } returns Unit.asSuccess()
-            coEvery { vaultDiskSource.deleteFolder(userId = userId, folderId = folderId) } just runs
-            coEvery { vaultDiskSource.getCiphers(userId = userId) } returns ciphers
-            coEvery {
-                vaultDiskSource.saveCipher(
-                    userId = userId,
-                    cipher = mockCipher.copy(folderId = null),
-                )
-            } just runs
-
-            val result = vaultRepository.deleteFolder(folderId = folderId)
-
-            coVerify(exactly = 1) {
-                vaultDiskSource.saveCipher(
-                    userId = userId,
-                    cipher = mockCipher.copy(folderId = null),
-                )
-            }
-
-            assertEquals(DeleteFolderResult.Success, result)
-        }
-
-    @Test
-    fun `createFolder with no active user should return CreateFolderResult failure`() =
-        runTest {
-            fakeAuthDiskSource.userState = null
-
-            val result = vaultRepository.createFolder(mockk())
-
-            assertEquals(
-                CreateFolderResult.Error(NoActiveUserException()),
-                result,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `createFolder with folderService Delete failure should return DeleteFolderResult Failure`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val folderId = "mockId-1"
-            val error = Throwable("fail")
-            coEvery { folderService.deleteFolder(folderId) } returns error.asFailure()
-
-            val result = vaultRepository.deleteFolder(folderId)
-            assertEquals(DeleteFolderResult.Error(error = error), result)
-        }
-
-    @Test
-    fun `createFolder with encryptFolder failure should return CreateFolderResult failure`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val folderView = FolderView(
-                id = null,
-                name = "TestName",
-                revisionDate = DateTime.now(),
-            )
-            val error = IllegalStateException()
-
-            coEvery {
-                vaultSdkSource.encryptFolder(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    folder = folderView,
-                )
-            } returns error.asFailure()
-
-            val result = vaultRepository.createFolder(folderView)
-            assertEquals(CreateFolderResult.Error(error = error), result)
-        }
-
-    @Test
-    fun `createFolder with folderService failure should return CreateFolderResult failure`() =
-        runTest {
-            val date = DateTime.now()
-            val testFolderName = "TestName"
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val folderView = FolderView(
-                id = null,
-                name = testFolderName,
-                revisionDate = date,
-            )
-            val error = IllegalStateException()
-
-            coEvery {
-                vaultSdkSource.encryptFolder(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    folder = folderView,
-                )
-            } returns Folder(id = null, name = testFolderName, revisionDate = date).asSuccess()
-
-            coEvery {
-                folderService.createFolder(
-                    body = FolderJsonRequest(testFolderName),
-                )
-            } returns error.asFailure()
-
-            val result = vaultRepository.createFolder(folderView)
-            assertEquals(CreateFolderResult.Error(error = error), result)
-        }
-
-    @Test
-    fun `createFolder with folderService createFolder should return CreateFolderResult success`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val date = DateTime.now()
-            val testFolderName = "TestName"
-
-            val folderView = FolderView(
-                id = null,
-                name = testFolderName,
-                revisionDate = date,
-            )
-
-            val networkFolder = SyncResponseJson.Folder(
-                id = "1",
-                name = testFolderName,
-                revisionDate = ZonedDateTime.now(),
-            )
-
-            coEvery {
-                vaultSdkSource.encryptFolder(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    folder = folderView,
-                )
-            } returns Folder(id = null, name = testFolderName, revisionDate = date).asSuccess()
-
-            coEvery {
-                folderService.createFolder(
-                    body = FolderJsonRequest(testFolderName),
-                )
-            } returns networkFolder.asSuccess()
-
-            coEvery {
-                vaultDiskSource.saveFolder(
-                    MOCK_USER_STATE.activeUserId,
-                    networkFolder,
-                )
-            } just runs
-
-            coEvery {
-                vaultSdkSource.decryptFolder(
-                    MOCK_USER_STATE.activeUserId,
-                    networkFolder.toEncryptedSdkFolder(),
-                )
-            } returns folderView.asSuccess()
-
-            val result = vaultRepository.createFolder(folderView)
-            assertEquals(CreateFolderResult.Success(folderView), result)
-        }
-
-    @Test
-    fun `updateFolder with no active user should return UpdateFolderResult failure`() =
-        runTest {
-            fakeAuthDiskSource.userState = null
-
-            val result = vaultRepository.updateFolder("Test", mockk())
-
-            assertEquals(
-                UpdateFolderResult.Error(errorMessage = null, error = NoActiveUserException()),
-                result,
-            )
-        }
-
-    @Test
-    fun `updateFolder with encryptFolder failure should return UpdateFolderResult failure`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val folderId = "testId"
-            val folderView = FolderView(
-                id = folderId,
-                name = "TestName",
-                revisionDate = DateTime.now(),
-            )
-            val error = IllegalStateException()
-
-            coEvery {
-                vaultSdkSource.encryptFolder(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    folder = folderView,
-                )
-            } returns error.asFailure()
-
-            val result = vaultRepository.updateFolder(folderId, folderView)
-
-            assertEquals(UpdateFolderResult.Error(errorMessage = null, error = error), result)
-        }
-
-    @Test
-    fun `updateFolder with folderService failure should return UpdateFolderResult failure`() =
-        runTest {
-            val date = DateTime.now()
-            val testFolderName = "TestName"
-            val folderId = "testId"
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val folderView = FolderView(
-                id = folderId,
-                name = testFolderName,
-                revisionDate = date,
-            )
-            val error = IllegalStateException()
-
-            coEvery {
-                vaultSdkSource.encryptFolder(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    folder = folderView,
-                )
-            } returns Folder(id = folderId, name = testFolderName, revisionDate = date).asSuccess()
-
-            coEvery {
-                folderService.updateFolder(
-                    folderId = folderId,
-                    body = FolderJsonRequest(testFolderName),
-                )
-            } returns error.asFailure()
-
-            val result = vaultRepository.updateFolder(folderId, folderView)
-            assertEquals(UpdateFolderResult.Error(errorMessage = null, error = error), result)
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `updateFolder with folderService updateFolder Invalid response should return UpdateFolderResult Error with a non-null message`() =
-        runTest {
-            val date = DateTime.now()
-            val testFolderName = "TestName"
-            val folderId = "testId"
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val folderView = FolderView(
-                id = folderId,
-                name = testFolderName,
-                revisionDate = date,
-            )
-
-            coEvery {
-                vaultSdkSource.encryptFolder(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    folder = folderView,
-                )
-            } returns Folder(id = folderId, name = testFolderName, revisionDate = date).asSuccess()
-
-            coEvery {
-                folderService.updateFolder(
-                    folderId = folderId,
-                    body = FolderJsonRequest(testFolderName),
-                )
-            } returns UpdateFolderResponseJson
-                .Invalid(
-                    message = "You do not have permission to edit this.",
-                    validationErrors = null,
-                )
-                .asSuccess()
-
-            val result = vaultRepository.updateFolder(folderId, folderView)
-            assertEquals(
-                UpdateFolderResult.Error(
-                    errorMessage = "You do not have permission to edit this.",
-                    error = null,
-                ),
-                result,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `updateFolder with folderService updateFolder success should return UpdateFolderResult success`() =
-        runTest {
-            val date = DateTime.now()
-            val testFolderName = "TestName"
-            val folderId = "testId"
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-
-            val folderView = FolderView(
-                id = folderId,
-                name = testFolderName,
-                revisionDate = date,
-            )
-
-            val networkFolder = SyncResponseJson.Folder(
-                id = "1",
-                name = testFolderName,
-                revisionDate = ZonedDateTime.now(),
-            )
-
-            coEvery {
-                vaultSdkSource.encryptFolder(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    folder = folderView,
-                )
-            } returns Folder(id = folderId, name = testFolderName, revisionDate = date).asSuccess()
-
-            coEvery {
-                folderService.updateFolder(
-                    folderId = folderId,
-                    body = FolderJsonRequest(testFolderName),
-                )
-            } returns UpdateFolderResponseJson
-                .Success(folder = networkFolder)
-                .asSuccess()
-
-            coEvery {
-                vaultDiskSource.saveFolder(
-                    MOCK_USER_STATE.activeUserId,
-                    networkFolder,
-                )
-            } just runs
-
-            coEvery {
-                vaultSdkSource.decryptFolder(
-                    MOCK_USER_STATE.activeUserId,
-                    networkFolder.toEncryptedSdkFolder(),
-                )
-            } returns folderView.asSuccess()
-
-            val result = vaultRepository.updateFolder(folderId, folderView)
-            assertEquals(UpdateFolderResult.Success(folderView), result)
-        }
-
-    @Test
     fun `getAuthCodeFlow with no active user should emit an error`() = runTest {
         fakeAuthDiskSource.userState = null
         assertTrue(vaultRepository.getAuthCodeFlow(cipherId = "cipherId").value is DataState.Error)
@@ -2532,210 +2160,6 @@ class VaultRepositoryTest {
 
         coVerify { vaultSyncManager.sync(any(), any()) }
     }
-
-    @Test
-    fun `syncFolderDeleteFlow should delete folder from disk and update ciphers`() {
-        val userId = "mockId-1"
-        val folderId = "mockId-1"
-        val cipher = createMockCipher(number = 1, folderId = folderId)
-        val updatedCipher = createMockCipher(number = 1, folderId = null)
-
-        coEvery { vaultDiskSource.deleteFolder(userId = userId, folderId = folderId) } just runs
-        coEvery { vaultDiskSource.getCiphers(userId = userId) } returns listOf(cipher)
-        coEvery { vaultDiskSource.saveCipher(userId = userId, cipher = updatedCipher) } just runs
-
-        mutableSyncFolderDeleteFlow.tryEmit(
-            SyncFolderDeleteData(userId = userId, folderId = folderId),
-        )
-
-        coVerify(exactly = 1) {
-            vaultDiskSource.deleteFolder(userId = userId, folderId = folderId)
-            vaultDiskSource.getCiphers(userId = userId)
-            vaultDiskSource.saveCipher(userId = userId, cipher = updatedCipher)
-        }
-    }
-
-    @Test
-    fun `syncFolderUpsertFlow create with local folder should do nothing`() = runTest {
-        val number = 1
-        val folderId = "mockId-$number"
-
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
-        val folderView = createMockFolderView(number = number)
-        coEvery {
-            vaultSdkSource.decryptFolderList(
-                userId = MOCK_USER_STATE.activeUserId,
-                folderList = listOf(createMockSdkFolder(number = number)),
-            )
-        } returns listOf(folderView).asSuccess()
-
-        val foldersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>()
-        setupVaultDiskSourceFlows(foldersFlow = foldersFlow)
-
-        vaultRepository.foldersStateFlow.test {
-            // Populate and consume items related to the folders flow
-            awaitItem()
-            foldersFlow.tryEmit(listOf(createMockFolder(number = number)))
-            awaitItem()
-
-            mutableSyncFolderUpsertFlow.tryEmit(
-                SyncFolderUpsertData(
-                    folderId = folderId,
-                    revisionDate = ZonedDateTime.now(),
-                    isUpdate = false,
-                ),
-            )
-        }
-
-        coVerify(exactly = 0) {
-            folderService.getFolder(any())
-            vaultDiskSource.saveFolder(any(), any())
-        }
-    }
-
-    @Test
-    fun `syncFolderUpsertFlow update with no local folder should do nothing`() = runTest {
-        val number = 1
-        val folderId = "mockId-$number"
-
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
-        coEvery {
-            vaultSdkSource.decryptFolderList(
-                userId = MOCK_USER_STATE.activeUserId,
-                folderList = listOf(),
-            )
-        } returns listOf<FolderView>().asSuccess()
-
-        val foldersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>()
-        setupVaultDiskSourceFlows(foldersFlow = foldersFlow)
-
-        vaultRepository.foldersStateFlow.test {
-            // Populate and consume items related to the folders flow
-            awaitItem()
-            foldersFlow.tryEmit(listOf())
-            awaitItem()
-
-            mutableSyncFolderUpsertFlow.tryEmit(
-                SyncFolderUpsertData(
-                    folderId = folderId,
-                    revisionDate = ZonedDateTime.now(),
-                    isUpdate = true,
-                ),
-            )
-        }
-
-        coVerify(exactly = 0) {
-            folderService.getFolder(any())
-            vaultDiskSource.saveFolder(any(), any())
-        }
-    }
-
-    @Test
-    fun `syncFolderUpsertFlow update with more recent local folder should do nothing`() = runTest {
-        val number = 1
-        val folderId = "mockId-$number"
-
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
-        val folderView = createMockFolderView(number = number)
-        coEvery {
-            vaultSdkSource.decryptFolderList(
-                userId = MOCK_USER_STATE.activeUserId,
-                folderList = listOf(createMockSdkFolder(number = number)),
-            )
-        } returns listOf(folderView).asSuccess()
-
-        val foldersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>()
-        setupVaultDiskSourceFlows(foldersFlow = foldersFlow)
-
-        vaultRepository.foldersStateFlow.test {
-            // Populate and consume items related to the folders flow
-            awaitItem()
-            foldersFlow.tryEmit(listOf(createMockFolder(number = number)))
-            awaitItem()
-
-            mutableSyncFolderUpsertFlow.tryEmit(
-                SyncFolderUpsertData(
-                    folderId = folderId,
-                    revisionDate = ZonedDateTime.ofInstant(
-                        Instant.ofEpochSecond(0), ZoneId.of("UTC"),
-                    ),
-                    isUpdate = true,
-                ),
-            )
-        }
-
-        coVerify(exactly = 0) {
-            folderService.getFolder(any())
-            vaultDiskSource.saveFolder(any(), any())
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `syncFolderUpsertFlow valid create success should make a request for a folder and then store it`() =
-        runTest {
-            val number = 1
-            val userId = MOCK_USER_STATE.activeUserId
-            val folderId = "mockId-$number"
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            coEvery {
-                vaultDiskSource.getFolders(userId = userId)
-            } returns MutableStateFlow(emptyList())
-            val folder = mockk<SyncResponseJson.Folder>()
-            coEvery { folderService.getFolder(folderId = folderId) } returns folder.asSuccess()
-            coEvery { vaultDiskSource.saveFolder(userId = userId, folder = folder) } just runs
-
-            mutableSyncFolderUpsertFlow.tryEmit(
-                SyncFolderUpsertData(
-                    folderId = folderId,
-                    revisionDate = ZonedDateTime.now(clock),
-                    isUpdate = false,
-                ),
-            )
-
-            coVerify(exactly = 1) {
-                folderService.getFolder(folderId = folderId)
-                vaultDiskSource.saveFolder(userId = userId, folder = folder)
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `syncFolderUpsertFlow valid update success should make a request for a folder and then store it`() =
-        runTest {
-            val number = 1
-            val userId = MOCK_USER_STATE.activeUserId
-            val folderId = "mockId-$number"
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val folderView = createMockFolder(
-                number = number,
-                revisionDate = ZonedDateTime.now(clock).minus(5, ChronoUnit.MINUTES),
-            )
-            coEvery {
-                vaultDiskSource.getFolders(userId = userId)
-            } returns MutableStateFlow(listOf(folderView))
-            val folder = mockk<SyncResponseJson.Folder>()
-            coEvery { folderService.getFolder(folderId = folderId) } returns folder.asSuccess()
-            coEvery { vaultDiskSource.saveFolder(userId = userId, folder = folder) } just runs
-
-            mutableSyncFolderUpsertFlow.tryEmit(
-                SyncFolderUpsertData(
-                    folderId = folderId,
-                    revisionDate = ZonedDateTime.now(clock),
-                    isUpdate = true,
-                ),
-            )
-
-            coVerify(exactly = 1) {
-                folderService.getFolder(folderId)
-                vaultDiskSource.saveFolder(userId = userId, folder = folder)
-            }
-        }
 
     @Suppress("MaxLineLength")
     @Test
