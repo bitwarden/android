@@ -172,4 +172,4 @@ jobs:
               gh workflow view publish-github-release.yml
               # exit 0
             fi
-            gh workflow disable publish-github-release.yml
+            gh workflow enable publish-github-release.yml
