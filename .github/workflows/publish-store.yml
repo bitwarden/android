@@ -46,6 +46,10 @@ on:
           - production
           - Fastlane Automation Target
         required: true
+      dry-run:
+        description: "Dry-Run, Run the workflow without publishing to the store"
+        type: boolean
+        default: false
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GITHUB_ACTION_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
@@ -54,6 +58,7 @@ permissions:
   contents: read
   packages: read
   id-token: write
+  actions: write
 
 jobs:
     promote:
@@ -122,6 +127,7 @@ jobs:
             echo "$FORMATTED_MESSAGE" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
         - name: Promote Play Store version to production
+          if: ${{ inputs.dry-run == false }}
           env:
             PLAY_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-BETA-KEYSTORE-PASSWORD }}
             PLAY_KEY_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-BETA-KEY-PASSWORD }}
@@ -159,6 +165,10 @@ jobs:
               track:"$TRACK_FROM" \
               trackPromoteTo:"$TRACK_TARGET"
 
-        - name: Publish Github Release
+        - name: Enable Publish Github Release Workflow
           run: |
+            if ${{ inputs.dry-run }} ; then
+              gh workflow view publish-github-release.yml
+              exit 0
+            fi
             gh workflow enable publish-github-release.yml
