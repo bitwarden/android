@@ -350,7 +350,7 @@ class CiphersServiceTest : BaseServiceTest() {
             request = ImportCiphersJsonRequest(
                 ciphers = listOf(createMockCipherJsonRequest(number = 1)),
                 folders = emptyList(),
-                folderRelationships = emptyMap(),
+                folderRelationships = emptyList(),
             ),
         )
         assertEquals(ImportCiphersResponseJson.Success, result.getOrThrow())
@@ -363,7 +363,7 @@ class CiphersServiceTest : BaseServiceTest() {
             request = ImportCiphersJsonRequest(
                 ciphers = listOf(createMockCipherJsonRequest(number = 1)),
                 folders = emptyList(),
-                folderRelationships = emptyMap(),
+                folderRelationships = emptyList(),
             ),
         )
         assertTrue(result.isFailure)
