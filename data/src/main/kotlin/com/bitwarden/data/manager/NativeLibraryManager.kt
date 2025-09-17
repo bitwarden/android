@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.manager
+package com.bitwarden.data.manager
 
 /**
  * Manager for loading native libraries.
