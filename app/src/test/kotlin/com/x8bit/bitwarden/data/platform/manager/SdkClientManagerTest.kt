@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.data.manager.NativeLibraryManager
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
 import io.mockk.every
 import io.mockk.mockk
