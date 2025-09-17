@@ -1,5 +1,6 @@
 name: Publish to Google Play
-run-name: "Promoting ${{ inputs.product }} ${{ inputs.version-code }} from ${{ inputs.track-from }} to ${{ inputs.track-target }}"
+run-name:  >
+  ${{ inputs.dry-run && ' (Dry Run)' || '' }} Promoting ${{ inputs.product }} ${{ inputs.version-code }} from ${{ inputs.track-from }} to ${{ inputs.track-target }}
 on:
   workflow_dispatch:
     inputs:
