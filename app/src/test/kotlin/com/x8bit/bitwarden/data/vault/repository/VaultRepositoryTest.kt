@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.vault.repository
 
-import android.net.Uri
 import android.util.Base64
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
@@ -16,26 +15,18 @@ import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.network.model.CipherTypeJson
-import com.bitwarden.network.model.CreateFileSendResponse
-import com.bitwarden.network.model.CreateSendJsonResponse
 import com.bitwarden.network.model.FolderJsonRequest
-import com.bitwarden.network.model.SendTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UpdateFolderResponseJson
-import com.bitwarden.network.model.UpdateSendResponseJson
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCollection
 import com.bitwarden.network.model.createMockDomains
-import com.bitwarden.network.model.createMockFileSendResponseJson
 import com.bitwarden.network.model.createMockFolder
 import com.bitwarden.network.model.createMockOrganizationKeys
 import com.bitwarden.network.model.createMockSend
-import com.bitwarden.network.model.createMockSendJsonRequest
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.FolderService
-import com.bitwarden.network.service.SendsService
 import com.bitwarden.sdk.Fido2CredentialStore
-import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
@@ -53,13 +44,10 @@ import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
-import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderUpsertData
-import com.x8bit.bitwarden.data.platform.manager.model.SyncSendDeleteData
-import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockAccount
@@ -73,9 +61,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCollecti
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSend
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
-import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManager
-import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
@@ -83,17 +69,13 @@ import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
-import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
-import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
-import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
-import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -130,7 +112,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import retrofit2.HttpException
-import java.io.File
 import java.net.UnknownHostException
 import java.security.GeneralSecurityException
 import java.security.MessageDigest
@@ -150,14 +131,10 @@ class VaultRepositoryTest {
         ZoneOffset.UTC,
     )
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
-    private val fileManager: FileManager = mockk {
-        coEvery { delete(*anyVararg()) } just runs
-    }
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val settingsDiskSource = mockk<SettingsDiskSource> {
         every { getLastSyncTime(userId = any()) } returns clock.instant()
     }
-    private val sendsService: SendsService = mockk()
     private val ciphersService: CiphersService = mockk()
     private val folderService: FolderService = mockk()
     private val mutableGetCiphersFlow: MutableStateFlow<List<SyncResponseJson.Cipher>> =
@@ -174,7 +151,6 @@ class VaultRepositoryTest {
         emptyList(),
     )
     private val mutableUnlockedUserIdsStateFlow = MutableStateFlow<Set<String>>(emptySet())
-    private val cipherManager: CipherManager = mockk()
     private val vaultLockManager: VaultLockManager = mockk {
         every { vaultUnlockDataStateFlow } returns mutableVaultStateFlow
         every {
@@ -197,23 +173,15 @@ class VaultRepositoryTest {
     private val databaseSchemeManager: DatabaseSchemeManager = mockk {
         every { databaseSchemeChangeFlow } returns mutableDatabaseSchemeChangeFlow
     }
-    private val reviewPromptManager: ReviewPromptManager = mockk {
-        every { registerCreateSendAction() } just runs
-    }
-
     private val mutableFullSyncFlow = bufferedMutableSharedFlow<Unit>()
     private val mutableSyncCipherDeleteFlow = bufferedMutableSharedFlow<SyncCipherDeleteData>()
     private val mutableSyncCipherUpsertFlow = bufferedMutableSharedFlow<SyncCipherUpsertData>()
-    private val mutableSyncSendDeleteFlow = bufferedMutableSharedFlow<SyncSendDeleteData>()
-    private val mutableSyncSendUpsertFlow = bufferedMutableSharedFlow<SyncSendUpsertData>()
     private val mutableSyncFolderDeleteFlow = bufferedMutableSharedFlow<SyncFolderDeleteData>()
     private val mutableSyncFolderUpsertFlow = bufferedMutableSharedFlow<SyncFolderUpsertData>()
     private val pushManager: PushManager = mockk {
         every { fullSyncFlow } returns mutableFullSyncFlow
         every { syncCipherDeleteFlow } returns mutableSyncCipherDeleteFlow
         every { syncCipherUpsertFlow } returns mutableSyncCipherUpsertFlow
-        every { syncSendDeleteFlow } returns mutableSyncSendDeleteFlow
-        every { syncSendUpsertFlow } returns mutableSyncSendUpsertFlow
         every { syncFolderDeleteFlow } returns mutableSyncFolderDeleteFlow
         every { syncFolderUpsertFlow } returns mutableSyncFolderUpsertFlow
     }
@@ -221,7 +189,6 @@ class VaultRepositoryTest {
     private val credentialExchangeImportManager: CredentialExchangeImportManager = mockk()
 
     private val vaultRepository = VaultRepositoryImpl(
-        sendsService = sendsService,
         ciphersService = ciphersService,
         folderService = folderService,
         vaultDiskSource = vaultDiskSource,
@@ -232,11 +199,10 @@ class VaultRepositoryTest {
         dispatcherManager = dispatcherManager,
         totpCodeManager = totpCodeManager,
         pushManager = pushManager,
-        cipherManager = cipherManager,
-        fileManager = fileManager,
+        cipherManager = mockk(),
+        sendManager = mockk(),
         clock = clock,
         databaseSchemeManager = databaseSchemeManager,
-        reviewPromptManager = reviewPromptManager,
         vaultSyncManager = vaultSyncManager,
         credentialExchangeImportManager = credentialExchangeImportManager,
     )
@@ -244,7 +210,6 @@ class VaultRepositoryTest {
     @BeforeEach
     fun setup() {
         mockkStatic(SyncResponseJson.Domains::toDomainsData)
-        mockkStatic(Uri::class)
         mockkStatic(MessageDigest::class)
         mockkStatic(Base64::class)
         mockkConstructor(NoActiveUserException::class)
@@ -260,7 +225,6 @@ class VaultRepositoryTest {
     @AfterEach
     fun tearDown() {
         unmockkStatic(SyncResponseJson.Domains::toDomainsData)
-        unmockkStatic(Uri::class)
         unmockkStatic(MessageDigest::class)
         unmockkStatic(Base64::class)
         unmockkConstructor(NoActiveUserException::class)
@@ -2069,568 +2033,6 @@ class VaultRepositoryTest {
         }
 
     @Test
-    fun `createSend with no active user should return CreateSendResult Error`() =
-        runTest {
-            fakeAuthDiskSource.userState = null
-
-            val result = vaultRepository.createSend(
-                sendView = mockk(),
-                fileUri = mockk(),
-            )
-
-            assertEquals(
-                CreateSendResult.Error(message = null, error = NoActiveUserException()),
-                result,
-            )
-        }
-
-    @Test
-    fun `createSend with encryptSend failure should return CreateSendResult failure`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            val mockSendView = createMockSendView(number = 1)
-            val error = IllegalStateException()
-            coEvery {
-                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
-            } returns error.asFailure()
-
-            val result = vaultRepository.createSend(sendView = mockSendView, fileUri = null)
-
-            assertEquals(CreateSendResult.Error(message = null, error = error), result)
-        }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `createSend with TEXT and sendsService createTextSend failure should return CreateSendResult failure`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            val mockSendView = createMockSendView(number = 1, type = SendType.TEXT)
-            val error = IllegalStateException()
-            coEvery {
-                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
-            } returns createMockSdkSend(number = 1, type = SendType.TEXT).asSuccess()
-            coEvery {
-                sendsService.createTextSend(
-                    body = createMockSendJsonRequest(number = 1, type = SendTypeJson.TEXT)
-                        .copy(fileLength = null),
-                )
-            } returns error.asFailure()
-
-            val result = vaultRepository.createSend(sendView = mockSendView, fileUri = null)
-
-            assertEquals(CreateSendResult.Error(message = error.message, error = error), result)
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `createSend with TEXT and sendsService createTextSend success should return CreateSendResult success and increment send action count`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            val mockSendView = createMockSendView(number = 1, type = SendType.TEXT)
-            val mockSdkSend = createMockSdkSend(number = 1, type = SendType.TEXT)
-            val mockSend = createMockSend(number = 1, type = SendTypeJson.TEXT)
-            val mockSendViewResult = createMockSendView(number = 2)
-            val sendTextResponse = CreateSendJsonResponse.Success(send = mockSend)
-            coEvery {
-                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
-            } returns mockSdkSend.asSuccess()
-            coEvery {
-                sendsService.createTextSend(
-                    body = createMockSendJsonRequest(number = 1, type = SendTypeJson.TEXT)
-                        .copy(fileLength = null),
-                )
-            } returns sendTextResponse.asSuccess()
-            coEvery { vaultDiskSource.saveSend(userId, mockSend) } just runs
-            coEvery {
-                vaultSdkSource.decryptSend(userId, mockSdkSend)
-            } returns mockSendViewResult.asSuccess()
-
-            val result = vaultRepository.createSend(sendView = mockSendView, fileUri = null)
-
-            assertEquals(CreateSendResult.Success(mockSendViewResult), result)
-
-            verify(exactly = 1) { reviewPromptManager.registerCreateSendAction() }
-        }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `createSend with FILE and sendsService createFileSend failure should return CreateSendResult failure`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            val uri = setupMockUri(url = "www.test.com")
-            val mockSendView = createMockSendView(number = 1)
-            val mockSdkSend = createMockSdkSend(number = 1)
-            val decryptedFile = mockk<File> {
-                every { length() } returns 1
-                every { absolutePath } returns "mockAbsolutePath"
-            }
-            val encryptedFile = mockk<File> {
-                every { length() } returns 1
-                every { absolutePath } returns "mockAbsolutePath"
-            }
-            coEvery {
-                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
-            } returns mockSdkSend.asSuccess()
-            coEvery { fileManager.writeUriToCache(any()) } returns decryptedFile.asSuccess()
-            coEvery {
-                vaultSdkSource.encryptFile(
-                    userId = userId,
-                    send = mockSdkSend,
-                    path = "mockAbsolutePath",
-                    destinationFilePath = "mockAbsolutePath",
-                )
-            } returns encryptedFile.asSuccess()
-            val error = IllegalStateException()
-            coEvery {
-                sendsService.createFileSend(body = createMockSendJsonRequest(number = 1))
-            } returns error.asFailure()
-
-            val result = vaultRepository.createSend(sendView = mockSendView, fileUri = uri)
-
-            assertEquals(CreateSendResult.Error(message = error.message, error = error), result)
-        }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `createSend with FILE and sendsService uploadFile failure should return CreateSendResult failure`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            val url = "www.test.com"
-            val uri = setupMockUri(url = url)
-            val mockSendView = createMockSendView(number = 1)
-            val mockSdkSend = createMockSdkSend(number = 1)
-            val decryptedFile = mockk<File> {
-                every { name } returns "mockFileName"
-                every { absolutePath } returns "mockAbsolutePath"
-                every { length() } returns 1
-            }
-            val encryptedFile = mockk<File> {
-                every { name } returns "mockFileName"
-                every { absolutePath } returns "mockAbsolutePath"
-                every { length() } returns 1
-            }
-            val sendFileResponse = CreateFileSendResponse.Success(
-                createMockFileSendResponseJson(number = 1),
-            )
-            val error = Throwable()
-            coEvery {
-                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
-            } returns mockSdkSend.asSuccess()
-            coEvery {
-                vaultSdkSource.decryptSend(userId, mockSdkSend)
-            } returns mockSendView.asSuccess()
-            every { fileManager.filesDirectory } returns "mockFilesDirectory"
-            coEvery { fileManager.writeUriToCache(any()) } returns decryptedFile.asSuccess()
-            coEvery {
-                vaultSdkSource.encryptFile(
-                    userId = userId,
-                    send = mockSdkSend,
-                    path = "mockAbsolutePath",
-                    destinationFilePath = "mockAbsolutePath",
-                )
-            } returns encryptedFile.asSuccess()
-            coEvery {
-                vaultDiskSource.saveSend(
-                    userId,
-                    sendFileResponse.createFileJsonResponse.sendResponse,
-                )
-            } just runs
-            coEvery {
-                sendsService.createFileSend(body = createMockSendJsonRequest(number = 1))
-            } returns sendFileResponse.asSuccess()
-            coEvery {
-                sendsService.uploadFile(
-                    sendFileResponse = sendFileResponse.createFileJsonResponse,
-                    encryptedFile = encryptedFile,
-                )
-            } returns error.asFailure()
-
-            val result = vaultRepository.createSend(sendView = mockSendView, fileUri = uri)
-
-            assertEquals(CreateSendResult.Error(message = null, error = error), result)
-        }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `createSend with FILE and fileManager uriToByteArray failure should return CreateSendResult Error`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            val url = "www.test.com"
-            val uri = setupMockUri(url = url)
-            val mockSendView = createMockSendView(number = 1)
-            val mockSdkSend = createMockSdkSend(number = 1)
-            val error = Throwable()
-            coEvery {
-                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
-            } returns mockSdkSend.asSuccess()
-            coEvery { fileManager.writeUriToCache(any()) } returns error.asFailure()
-
-            val result = vaultRepository.createSend(sendView = mockSendView, fileUri = uri)
-
-            assertEquals(CreateSendResult.Error(message = null, error = error), result)
-        }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `createSend with FILE and sendsService uploadFile success should return CreateSendResult success`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            val url = "www.test.com"
-            val uri = setupMockUri(url = url)
-            val mockSendView = createMockSendView(number = 1)
-            val mockSdkSend = createMockSdkSend(number = 1)
-            val decryptedFile = mockk<File> {
-                every { name } returns "mockFileName"
-                every { absolutePath } returns "mockAbsolutePath"
-            }
-            val encryptedFile = mockk<File> {
-                every { length() } returns 1
-            }
-            val sendFileResponse = CreateFileSendResponse.Success(
-                createMockFileSendResponseJson(number = 1),
-            )
-            val mockSendViewResult = createMockSendView(number = 1)
-            coEvery {
-                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
-            } returns mockSdkSend.asSuccess()
-
-            every { fileManager.filesDirectory } returns "mockFilesDirectory"
-            coEvery { fileManager.writeUriToCache(any()) } returns decryptedFile.asSuccess()
-            coEvery {
-                vaultSdkSource.encryptFile(
-                    userId = userId,
-                    send = mockSdkSend,
-                    path = "mockAbsolutePath",
-                    destinationFilePath = "mockAbsolutePath",
-                )
-            } returns encryptedFile.asSuccess()
-            coEvery {
-                sendsService.createFileSend(body = createMockSendJsonRequest(number = 1))
-            } returns sendFileResponse.asSuccess()
-            coEvery {
-                sendsService.uploadFile(
-                    sendFileResponse = sendFileResponse.createFileJsonResponse,
-                    encryptedFile = encryptedFile,
-                )
-            } returns sendFileResponse.createFileJsonResponse.sendResponse.asSuccess()
-            coEvery {
-                vaultDiskSource.saveSend(
-                    userId,
-                    sendFileResponse.createFileJsonResponse.sendResponse,
-                )
-            } just runs
-            coEvery {
-                vaultSdkSource.decryptSend(userId, mockSdkSend)
-            } returns mockSendViewResult.asSuccess()
-
-            val result = vaultRepository.createSend(sendView = mockSendView, fileUri = uri)
-
-            assertEquals(CreateSendResult.Success(mockSendViewResult), result)
-        }
-
-    @Test
-    fun `updateSend with no active user should return UpdateSendResult Error`() =
-        runTest {
-            fakeAuthDiskSource.userState = null
-
-            val result = vaultRepository.updateSend(
-                sendId = "sendId",
-                sendView = mockk(),
-            )
-
-            assertEquals(
-                UpdateSendResult.Error(errorMessage = null, error = NoActiveUserException()),
-                result,
-            )
-        }
-
-    @Test
-    fun `updateSend with encryptSend failure should return UpdateSendResult failure`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            val sendId = "sendId1234"
-            val mockSendView = createMockSendView(number = 1)
-            val error = IllegalStateException()
-            coEvery {
-                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
-            } returns error.asFailure()
-
-            val result = vaultRepository.updateSend(
-                sendId = sendId,
-                sendView = mockSendView,
-            )
-
-            assertEquals(UpdateSendResult.Error(errorMessage = null, error = error), result)
-        }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `updateSend with sendsService updateSend failure should return UpdateSendResult Error with a null message`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            val sendId = "sendId1234"
-            val mockSendView = createMockSendView(number = 1, type = SendType.TEXT)
-            coEvery {
-                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
-            } returns createMockSdkSend(number = 1, type = SendType.TEXT).asSuccess()
-            val error = IllegalStateException()
-            coEvery {
-                sendsService.updateSend(
-                    sendId = sendId,
-                    body = createMockSendJsonRequest(number = 1, type = SendTypeJson.TEXT)
-                        .copy(fileLength = null),
-                )
-            } returns error.asFailure()
-
-            val result = vaultRepository.updateSend(
-                sendId = sendId,
-                sendView = mockSendView,
-            )
-
-            assertEquals(UpdateSendResult.Error(errorMessage = null, error = error), result)
-        }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `updateSend with sendsService updateSend Invalid response should return UpdateSendResult Error with a non-null message`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            val sendId = "sendId1234"
-            val mockSendView = createMockSendView(number = 1, type = SendType.TEXT)
-            coEvery {
-                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
-            } returns createMockSdkSend(number = 1, type = SendType.TEXT).asSuccess()
-            coEvery {
-                sendsService.updateSend(
-                    sendId = sendId,
-                    body = createMockSendJsonRequest(number = 1, type = SendTypeJson.TEXT)
-                        .copy(fileLength = null),
-                )
-            } returns UpdateSendResponseJson
-                .Invalid(
-                    message = "You do not have permission to edit this.",
-                    validationErrors = null,
-                )
-                .asSuccess()
-
-            val result = vaultRepository.updateSend(
-                sendId = sendId,
-                sendView = mockSendView,
-            )
-
-            assertEquals(
-                UpdateSendResult.Error(
-                    errorMessage = "You do not have permission to edit this.",
-                    error = null,
-                ),
-                result,
-            )
-        }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `updateSend with sendsService updateSend success and decryption error should return UpdateSendResult Error with a null message`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            val sendId = "sendId1234"
-            val mockSendView = createMockSendView(number = 1, type = SendType.TEXT)
-            coEvery {
-                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
-            } returns createMockSdkSend(number = 1, type = SendType.TEXT).asSuccess()
-            val mockSend = createMockSend(number = 1, type = SendTypeJson.TEXT)
-            coEvery {
-                sendsService.updateSend(
-                    sendId = sendId,
-                    body = createMockSendJsonRequest(number = 1, type = SendTypeJson.TEXT)
-                        .copy(fileLength = null),
-                )
-            } returns UpdateSendResponseJson.Success(send = mockSend).asSuccess()
-            val error = Throwable("Fail")
-            coEvery {
-                vaultSdkSource.decryptSend(
-                    userId = userId, send = createMockSdkSend(number = 1, type = SendType.TEXT),
-                )
-            } returns error.asFailure()
-            coEvery { vaultDiskSource.saveSend(userId = userId, send = mockSend) } just runs
-
-            val result = vaultRepository.updateSend(
-                sendId = sendId,
-                sendView = mockSendView,
-            )
-
-            assertEquals(UpdateSendResult.Error(errorMessage = null, error = error), result)
-        }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `updateSend with sendsService updateSend Success response should return UpdateSendResult success`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            val sendId = "sendId1234"
-            val mockSendView = createMockSendView(number = 1, type = SendType.TEXT)
-            coEvery {
-                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
-            } returns createMockSdkSend(number = 1, type = SendType.TEXT).asSuccess()
-            val mockSend = createMockSend(number = 1, type = SendTypeJson.TEXT)
-            coEvery {
-                sendsService.updateSend(
-                    sendId = sendId,
-                    body = createMockSendJsonRequest(number = 1, type = SendTypeJson.TEXT)
-                        .copy(fileLength = null),
-                )
-            } returns UpdateSendResponseJson.Success(send = mockSend).asSuccess()
-            val mockSendViewResult = createMockSendView(number = 2, type = SendType.TEXT)
-            coEvery {
-                vaultSdkSource.decryptSend(
-                    userId = userId,
-                    send = createMockSdkSend(number = 1, type = SendType.TEXT),
-                )
-            } returns mockSendViewResult.asSuccess()
-            coEvery { vaultDiskSource.saveSend(userId = userId, send = mockSend) } just runs
-
-            val result = vaultRepository.updateSend(
-                sendId = sendId,
-                sendView = mockSendView,
-            )
-
-            assertEquals(UpdateSendResult.Success(mockSendViewResult), result)
-        }
-
-    @Test
-    fun `removePasswordSend with no active user should return RemovePasswordSendResult Error`() =
-        runTest {
-            fakeAuthDiskSource.userState = null
-
-            val result = vaultRepository.removePasswordSend(
-                sendId = "sendId",
-            )
-
-            assertEquals(
-                RemovePasswordSendResult.Error(
-                    errorMessage = null,
-                    error = NoActiveUserException(),
-                ),
-                result,
-            )
-        }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `removePasswordSend with sendsService removeSendPassword Error should return RemovePasswordSendResult Error`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val sendId = "sendId1234"
-            val error = Throwable("Fail")
-            coEvery {
-                sendsService.removeSendPassword(sendId = sendId)
-            } returns error.asFailure()
-
-            val result = vaultRepository.removePasswordSend(sendId = sendId)
-
-            assertEquals(RemovePasswordSendResult.Error(errorMessage = null, error = error), result)
-        }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `removePasswordSend with sendsService removeSendPassword Success and vaultSdkSource decryptSend Failure should return RemovePasswordSendResult Error`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            val sendId = "sendId1234"
-            val mockSend = createMockSend(number = 1)
-            val error = Throwable("Fail")
-            coEvery {
-                sendsService.removeSendPassword(sendId = sendId)
-            } returns UpdateSendResponseJson.Success(send = mockSend).asSuccess()
-            coEvery {
-                vaultSdkSource.decryptSend(userId = userId, send = createMockSdkSend(number = 1))
-            } returns error.asFailure()
-            coEvery { vaultDiskSource.saveSend(userId = userId, send = mockSend) } just runs
-
-            val result = vaultRepository.removePasswordSend(sendId = sendId)
-
-            assertEquals(RemovePasswordSendResult.Error(errorMessage = null, error = error), result)
-        }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `removePasswordSend with sendsService removeSendPassword Success should return RemovePasswordSendResult success`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            val sendId = "sendId1234"
-            val mockSendView = createMockSendView(number = 1)
-            val mockSend = createMockSend(number = 1)
-            coEvery {
-                sendsService.removeSendPassword(sendId = sendId)
-            } returns UpdateSendResponseJson.Success(send = mockSend).asSuccess()
-            coEvery {
-                vaultSdkSource.decryptSend(userId = userId, send = createMockSdkSend(number = 1))
-            } returns mockSendView.asSuccess()
-            coEvery { vaultDiskSource.saveSend(userId = userId, send = mockSend) } just runs
-
-            val result = vaultRepository.removePasswordSend(sendId = sendId)
-
-            assertEquals(RemovePasswordSendResult.Success(mockSendView), result)
-        }
-
-    @Test
-    fun `deleteSend with no active user should return DeleteSendResult Error`() =
-        runTest {
-            fakeAuthDiskSource.userState = null
-
-            val result = vaultRepository.deleteSend(
-                sendId = "sendId",
-            )
-
-            assertEquals(
-                DeleteSendResult.Error(error = NoActiveUserException()),
-                result,
-            )
-        }
-
-    @Test
-    fun `deleteSend with sendsService deleteSend failure should return DeleteSendResult Error`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val sendId = "mockId-1"
-            val error = Throwable("Fail")
-            coEvery {
-                sendsService.deleteSend(sendId = sendId)
-            } returns error.asFailure()
-
-            val result = vaultRepository.deleteSend(sendId)
-
-            assertEquals(DeleteSendResult.Error(error = error), result)
-        }
-
-    @Test
-    fun `deleteSend with sendsService deleteSend success should return DeleteSendResult success`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            val sendId = "mockId-1"
-            coEvery { sendsService.deleteSend(sendId = sendId) } returns Unit.asSuccess()
-            coEvery { vaultDiskSource.deleteSend(userId, sendId) } just runs
-
-            val result = vaultRepository.deleteSend(sendId)
-
-            assertEquals(DeleteSendResult.Success, result)
-        }
-
-    @Test
     fun `generateTotp with no active user should return GenerateTotpResult Error`() =
         runTest {
             fakeAuthDiskSource.userState = null
@@ -3484,271 +2886,6 @@ class VaultRepositoryTest {
         }
 
     @Test
-    fun `syncSendDeleteFlow should delete send from disk`() {
-        val userId = "mockId-1"
-        val sendId = "mockId-1"
-        coEvery { vaultDiskSource.deleteSend(userId = userId, sendId = sendId) } just runs
-
-        mutableSyncSendDeleteFlow.tryEmit(SyncSendDeleteData(userId = userId, sendId = sendId))
-
-        coVerify { vaultDiskSource.deleteSend(userId = userId, sendId = sendId) }
-    }
-
-    @Test
-    fun `syncSendUpsertFlow create with local send should do nothing`() = runTest {
-        val number = 1
-        val sendId = "mockId-$number"
-
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
-        val sendView = createMockSendView(number = number)
-        coEvery {
-            vaultSdkSource.decryptSendList(
-                userId = MOCK_USER_STATE.activeUserId,
-                sendList = listOf(createMockSdkSend(number = number)),
-            )
-        } returns listOf(sendView).asSuccess()
-
-        val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
-        setupVaultDiskSourceFlows(sendsFlow = sendsFlow)
-
-        vaultRepository.sendDataStateFlow.test {
-            // Populate and consume items related to the sends flow
-            awaitItem()
-            sendsFlow.tryEmit(listOf(createMockSend(number = number)))
-            awaitItem()
-
-            mutableSyncSendUpsertFlow.tryEmit(
-                SyncSendUpsertData(
-                    sendId = sendId,
-                    revisionDate = ZonedDateTime.now(),
-                    isUpdate = false,
-                ),
-            )
-        }
-
-        coVerify(exactly = 0) {
-            sendsService.getSend(any())
-            vaultDiskSource.saveSend(any(), any())
-        }
-    }
-
-    @Test
-    fun `syncSendUpsertFlow update with no local send should do nothing`() = runTest {
-        val number = 1
-        val sendId = "mockId-$number"
-
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
-        coEvery {
-            vaultSdkSource.decryptSendList(
-                userId = MOCK_USER_STATE.activeUserId,
-                sendList = listOf(),
-            )
-        } returns listOf<SendView>().asSuccess()
-
-        val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
-        setupVaultDiskSourceFlows(sendsFlow = sendsFlow)
-
-        vaultRepository.sendDataStateFlow.test {
-            // Populate and consume items related to the sends flow
-            awaitItem()
-            sendsFlow.tryEmit(listOf())
-            awaitItem()
-
-            mutableSyncSendUpsertFlow.tryEmit(
-                SyncSendUpsertData(
-                    sendId = sendId,
-                    revisionDate = ZonedDateTime.now(),
-                    isUpdate = true,
-                ),
-            )
-        }
-
-        coVerify(exactly = 0) {
-            sendsService.getSend(any())
-            vaultDiskSource.saveSend(any(), any())
-        }
-    }
-
-    @Test
-    fun `syncSendUpsertFlow update with more recent local send should do nothing`() = runTest {
-        val number = 1
-        val sendId = "mockId-$number"
-
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
-        val sendView = createMockSendView(number = number)
-        coEvery {
-            vaultSdkSource.decryptSendList(
-                userId = MOCK_USER_STATE.activeUserId,
-                sendList = listOf(createMockSdkSend(number = number)),
-            )
-        } returns listOf(sendView).asSuccess()
-
-        val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
-        setupVaultDiskSourceFlows(sendsFlow = sendsFlow)
-
-        vaultRepository.sendDataStateFlow.test {
-            // Populate and consume items related to the send flow
-            awaitItem()
-            sendsFlow.tryEmit(listOf(createMockSend(number = number)))
-            awaitItem()
-
-            mutableSyncSendUpsertFlow.tryEmit(
-                SyncSendUpsertData(
-                    sendId = sendId,
-                    revisionDate = ZonedDateTime.ofInstant(
-                        Instant.ofEpochSecond(0), ZoneId.of("UTC"),
-                    ),
-                    isUpdate = true,
-                ),
-            )
-        }
-
-        coVerify(exactly = 0) {
-            sendsService.getSend(any())
-            vaultDiskSource.saveSend(any(), any())
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `syncSendUpsertFlow update failure with 404 code should make a request for a send and then delete it`() =
-        runTest {
-            val number = 1
-            val userId = MOCK_USER_STATE.activeUserId
-            val sendId = "mockId-$number"
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val response: HttpException = mockk {
-                every { code() } returns 404
-            }
-            coEvery { sendsService.getSend(sendId = sendId) } returns response.asFailure()
-            coEvery {
-                vaultDiskSource.deleteSend(userId = userId, sendId = sendId)
-            } just runs
-
-            val sendView = createMockSend(
-                number = number,
-                revisionDate = ZonedDateTime.now(clock).minus(5, ChronoUnit.MINUTES),
-            )
-            coEvery {
-                vaultDiskSource.getSends(userId = userId)
-            } returns MutableStateFlow(listOf(sendView))
-
-            mutableSyncSendUpsertFlow.tryEmit(
-                SyncSendUpsertData(
-                    sendId = sendId,
-                    revisionDate = ZonedDateTime.now(clock),
-                    isUpdate = true,
-                ),
-            )
-
-            coVerify(exactly = 1) {
-                sendsService.getSend(sendId = sendId)
-                vaultDiskSource.deleteSend(userId = userId, sendId = sendId)
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `syncSendUpsertFlow create failure with 404 code should make a request for a send and do nothing`() =
-        runTest {
-            val userId = MOCK_USER_STATE.activeUserId
-            val sendId = "mockId-1"
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val response: HttpException = mockk {
-                every { code() } returns 404
-            }
-            coEvery { sendsService.getSend(sendId = sendId) } returns response.asFailure()
-            coEvery {
-                vaultDiskSource.getSends(userId = userId)
-            } returns MutableStateFlow(emptyList())
-
-            mutableSyncSendUpsertFlow.tryEmit(
-                SyncSendUpsertData(
-                    sendId = sendId,
-                    revisionDate = ZonedDateTime.now(clock),
-                    isUpdate = false,
-                ),
-            )
-
-            coVerify(exactly = 1) {
-                sendsService.getSend(sendId = sendId)
-            }
-            coVerify(exactly = 0) {
-                vaultDiskSource.deleteSend(userId = userId, sendId = sendId)
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `syncSendUpsertFlow valid create success should make a request for a send and then store it`() =
-        runTest {
-            val number = 1
-            val userId = MOCK_USER_STATE.activeUserId
-            val sendId = "mockId-$number"
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            coEvery {
-                vaultDiskSource.getSends(userId = userId)
-            } returns MutableStateFlow(emptyList())
-            val send = mockk<SyncResponseJson.Send>()
-            coEvery { sendsService.getSend(sendId = sendId) } returns send.asSuccess()
-            coEvery { vaultDiskSource.saveSend(userId = userId, send = send) } just runs
-
-            mutableSyncSendUpsertFlow.tryEmit(
-                SyncSendUpsertData(
-                    sendId = sendId,
-                    revisionDate = ZonedDateTime.now(clock),
-                    isUpdate = false,
-                ),
-            )
-
-            coVerify(exactly = 1) {
-                sendsService.getSend(sendId = sendId)
-                vaultDiskSource.saveSend(userId = userId, send = send)
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `syncSendUpsertFlow valid update success should make a request for a send and then store it`() =
-        runTest {
-            val number = 1
-            val userId = MOCK_USER_STATE.activeUserId
-            val sendId = "mockId-$number"
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val sendView = createMockSend(
-                number = number,
-                revisionDate = ZonedDateTime.now(clock).minus(5, ChronoUnit.MINUTES),
-            )
-            coEvery {
-                vaultDiskSource.getSends(userId = userId)
-            } returns MutableStateFlow(listOf(sendView))
-
-            val send = mockk<SyncResponseJson.Send>()
-            coEvery { sendsService.getSend(sendId = sendId) } returns send.asSuccess()
-            coEvery { vaultDiskSource.saveSend(userId = userId, send = send) } just runs
-
-            mutableSyncSendUpsertFlow.tryEmit(
-                SyncSendUpsertData(
-                    sendId = sendId,
-                    revisionDate = ZonedDateTime.now(clock),
-                    isUpdate = true,
-                ),
-            )
-
-            coVerify(exactly = 1) {
-                sendsService.getSend(sendId = sendId)
-                vaultDiskSource.saveSend(userId = userId, send = send)
-            }
-        }
-
-    @Test
     fun `syncFolderDeleteFlow should delete folder from disk and update ciphers`() {
         val userId = "mockId-1"
         val folderId = "mockId-1"
@@ -4519,19 +3656,6 @@ class VaultRepositoryTest {
                 awaitItem(),
             )
         }
-    }
-
-    private fun setupMockUri(
-        url: String,
-        queryParams: Map<String, String> = emptyMap(),
-    ): Uri {
-        val mockUri = mockk<Uri> {
-            queryParams.forEach {
-                every { getQueryParameter(it.key) } returns it.value
-            }
-        }
-        every { Uri.parse(url) } returns mockUri
-        return mockUri
     }
 
     //endregion Helper functions

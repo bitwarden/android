@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.vault.repository
 
-import android.net.Uri
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.InitUserCryptoMethod
@@ -11,22 +10,15 @@ import com.bitwarden.core.data.repository.util.map
 import com.bitwarden.core.data.repository.util.mapNullable
 import com.bitwarden.core.data.repository.util.updateToPendingOrLoading
 import com.bitwarden.core.data.util.asFailure
-import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
-import com.bitwarden.network.model.CreateFileSendResponse
-import com.bitwarden.network.model.CreateSendJsonResponse
 import com.bitwarden.network.model.UpdateFolderResponseJson
-import com.bitwarden.network.model.UpdateSendResponseJson
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.FolderService
-import com.bitwarden.network.service.SendsService
 import com.bitwarden.network.util.isNoConnectionError
 import com.bitwarden.sdk.Fido2CredentialStore
-import com.bitwarden.send.Send
-import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
@@ -43,20 +35,17 @@ import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
-import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderUpsertData
-import com.x8bit.bitwarden.data.platform.manager.model.SyncSendDeleteData
-import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndUnlocked
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManager
-import com.x8bit.bitwarden.data.vault.manager.FileManager
+import com.x8bit.bitwarden.data.vault.manager.SendManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
@@ -65,31 +54,25 @@ import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
-import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
-import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
-import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
-import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.sortAlphabetically
 import com.x8bit.bitwarden.data.vault.repository.util.sortAlphabeticallyByTypeAndOrganization
 import com.x8bit.bitwarden.data.vault.repository.util.toDomainsData
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkFolder
-import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkSend
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCollectionList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
-import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSend
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
 import com.x8bit.bitwarden.data.vault.repository.util.toSdkAccount
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -138,25 +121,24 @@ private const val STOP_TIMEOUT_DELAY_MS: Long = 1000L
 @Suppress("TooManyFunctions", "LongParameterList", "LargeClass")
 class VaultRepositoryImpl(
     private val ciphersService: CiphersService,
-    private val sendsService: SendsService,
     private val folderService: FolderService,
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val authDiskSource: AuthDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
     private val cipherManager: CipherManager,
-    private val fileManager: FileManager,
+    private val sendManager: SendManager,
     private val vaultLockManager: VaultLockManager,
     private val totpCodeManager: TotpCodeManager,
     databaseSchemeManager: DatabaseSchemeManager,
     pushManager: PushManager,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
-    private val reviewPromptManager: ReviewPromptManager,
     private val vaultSyncManager: VaultSyncManager,
     private val credentialExchangeImportManager: CredentialExchangeImportManager,
 ) : VaultRepository,
     CipherManager by cipherManager,
+    SendManager by sendManager,
     VaultLockManager by vaultLockManager {
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
@@ -312,16 +294,6 @@ class VaultRepositoryImpl(
         pushManager
             .syncCipherUpsertFlow
             .onEach(::syncCipherIfNecessary)
-            .launchIn(ioScope)
-
-        pushManager
-            .syncSendDeleteFlow
-            .onEach(::deleteSend)
-            .launchIn(unconfinedScope)
-
-        pushManager
-            .syncSendUpsertFlow
-            .onEach(::syncSendIfNecessary)
             .launchIn(ioScope)
 
         pushManager
@@ -655,153 +627,6 @@ class VaultRepositoryImpl(
                 pinProtectedUserKey = pinProtectedUserKey,
             ),
         )
-    }
-
-    override suspend fun createSend(
-        sendView: SendView,
-        fileUri: Uri?,
-    ): CreateSendResult {
-        val userId = activeUserId
-            ?: return CreateSendResult.Error(message = null, error = NoActiveUserException())
-        return vaultSdkSource
-            .encryptSend(
-                userId = userId,
-                sendView = sendView,
-            )
-            .flatMap { send ->
-                when (send.type) {
-                    SendType.TEXT -> sendsService.createTextSend(send.toEncryptedNetworkSend())
-                    SendType.FILE -> createFileSend(fileUri, userId, send)
-                }
-            }
-            .map { createSendResponse ->
-                when (createSendResponse) {
-                    is CreateSendJsonResponse.Invalid -> {
-                        return CreateSendResult.Error(
-                            message = createSendResponse.firstValidationErrorMessage,
-                            error = null,
-                        )
-                    }
-
-                    is CreateSendJsonResponse.Success -> {
-                        // Save the send immediately, regardless of whether the decrypt succeeds
-                        vaultDiskSource.saveSend(userId = userId, send = createSendResponse.send)
-                        createSendResponse
-                    }
-                }
-            }
-            .flatMap { createSendSuccessResponse ->
-                vaultSdkSource.decryptSend(
-                    userId = userId,
-                    send = createSendSuccessResponse.send.toEncryptedSdkSend(),
-                )
-            }
-            .fold(
-                onFailure = { CreateSendResult.Error(message = null, error = it) },
-                onSuccess = {
-                    reviewPromptManager.registerCreateSendAction()
-                    CreateSendResult.Success(it)
-                },
-            )
-    }
-
-    override suspend fun updateSend(
-        sendId: String,
-        sendView: SendView,
-    ): UpdateSendResult {
-        val userId = activeUserId
-            ?: return UpdateSendResult.Error(
-                errorMessage = null,
-                error = NoActiveUserException(),
-            )
-        return vaultSdkSource
-            .encryptSend(
-                userId = userId,
-                sendView = sendView,
-            )
-            .flatMap { send ->
-                sendsService.updateSend(
-                    sendId = sendId,
-                    body = send.toEncryptedNetworkSend(),
-                )
-            }
-            .fold(
-                onFailure = { UpdateSendResult.Error(errorMessage = null, error = it) },
-                onSuccess = { response ->
-                    when (response) {
-                        is UpdateSendResponseJson.Invalid -> {
-                            UpdateSendResult.Error(errorMessage = response.message, error = null)
-                        }
-
-                        is UpdateSendResponseJson.Success -> {
-                            vaultDiskSource.saveSend(userId = userId, send = response.send)
-                            vaultSdkSource
-                                .decryptSend(
-                                    userId = userId,
-                                    send = response.send.toEncryptedSdkSend(),
-                                )
-                                .fold(
-                                    onSuccess = { UpdateSendResult.Success(sendView = it) },
-                                    onFailure = {
-                                        UpdateSendResult.Error(errorMessage = null, error = it)
-                                    },
-                                )
-                        }
-                    }
-                },
-            )
-    }
-
-    override suspend fun removePasswordSend(sendId: String): RemovePasswordSendResult {
-        val userId = activeUserId
-            ?: return RemovePasswordSendResult.Error(
-                errorMessage = null,
-                error = NoActiveUserException(),
-            )
-        return sendsService
-            .removeSendPassword(sendId = sendId)
-            .fold(
-                onSuccess = { response ->
-                    when (response) {
-                        is UpdateSendResponseJson.Invalid -> {
-                            RemovePasswordSendResult.Error(
-                                errorMessage = response.message,
-                                error = null,
-                            )
-                        }
-
-                        is UpdateSendResponseJson.Success -> {
-                            vaultDiskSource.saveSend(userId = userId, send = response.send)
-                            vaultSdkSource
-                                .decryptSend(
-                                    userId = userId,
-                                    send = response.send.toEncryptedSdkSend(),
-                                )
-                                .fold(
-                                    onSuccess = { RemovePasswordSendResult.Success(sendView = it) },
-                                    onFailure = {
-                                        RemovePasswordSendResult.Error(
-                                            errorMessage = null,
-                                            error = it,
-                                        )
-                                    },
-                                )
-                        }
-                    }
-                },
-                onFailure = { RemovePasswordSendResult.Error(errorMessage = null, error = it) },
-            )
-    }
-
-    override suspend fun deleteSend(sendId: String): DeleteSendResult {
-        val userId = activeUserId ?: return DeleteSendResult.Error(error = NoActiveUserException())
-        return sendsService
-            .deleteSend(sendId)
-            .onSuccess { vaultDiskSource.deleteSend(userId, sendId) }
-            .fold(
-                onSuccess = { DeleteSendResult.Success },
-                onFailure = { DeleteSendResult.Error(error = it) },
-            )
     }
 
     override suspend fun generateTotp(
@@ -1312,108 +1137,6 @@ class VaultRepositoryImpl(
                     @Suppress("MagicNumber")
                     if (httpException?.code() == 404 && isUpdate) {
                         vaultDiskSource.deleteCipher(userId = userId, cipherId = cipherId)
-                    }
-                },
-            )
-    }
-
-    private suspend fun createFileSend(
-        uri: Uri?,
-        userId: String,
-        send: Send,
-    ): Result<CreateSendJsonResponse> {
-        uri ?: return IllegalArgumentException(
-            "File URI must be present to create a File Send.",
-        )
-            .asFailure()
-
-        return fileManager
-            .writeUriToCache(uri)
-            .flatMap { file ->
-                vaultSdkSource.encryptFile(
-                    userId = userId,
-                    send = send,
-                    path = file.absolutePath,
-                    destinationFilePath = file.absolutePath,
-                )
-            }
-            .flatMap { encryptedFile ->
-                sendsService
-                    .createFileSend(
-                        body = send.toEncryptedNetworkSend(
-                            fileLength = encryptedFile.length(),
-                        ),
-                    )
-                    .flatMap { sendFileResponse ->
-                        when (sendFileResponse) {
-                            is CreateFileSendResponse.Invalid -> {
-                                CreateSendJsonResponse
-                                    .Invalid(
-                                        message = sendFileResponse.message,
-                                        validationErrors = sendFileResponse.validationErrors,
-                                    )
-                                    .asSuccess()
-                            }
-
-                            is CreateFileSendResponse.Success -> {
-                                sendsService
-                                    .uploadFile(
-                                        sendFileResponse = sendFileResponse.createFileJsonResponse,
-                                        encryptedFile = encryptedFile,
-                                    )
-                                    .also {
-                                        // Delete encrypted file once it has been uploaded.
-                                        fileManager.delete(encryptedFile)
-                                    }
-                                    .map { CreateSendJsonResponse.Success(it) }
-                            }
-                        }
-                    }
-            }
-    }
-
-    /**
-     * Deletes the send specified by [syncSendDeleteData] from disk.
-     */
-    private suspend fun deleteSend(syncSendDeleteData: SyncSendDeleteData) {
-        vaultDiskSource.deleteSend(
-            userId = syncSendDeleteData.userId,
-            sendId = syncSendDeleteData.sendId,
-        )
-    }
-
-    /**
-     * Syncs an individual send contained in [syncSendUpsertData] to disk if certain criteria are
-     * met. If the resource cannot be found cloud-side, and it was updated, delete it from disk for
-     * now.
-     */
-    private suspend fun syncSendIfNecessary(syncSendUpsertData: SyncSendUpsertData) {
-        val userId = activeUserId ?: return
-        val sendId = syncSendUpsertData.sendId
-        val isUpdate = syncSendUpsertData.isUpdate
-        val revisionDate = syncSendUpsertData.revisionDate
-
-        val localSend = vaultDiskSource
-            .getSends(userId = userId)
-            .first()
-            .find { it.id == sendId }
-        val isValidCreate = !isUpdate && localSend == null
-        val isValidUpdate = isUpdate &&
-            localSend != null &&
-            localSend.revisionDate.toEpochSecond() < revisionDate.toEpochSecond()
-
-        if (!isValidCreate && !isValidUpdate) return
-
-        sendsService
-            .getSend(sendId)
-            .fold(
-                onSuccess = { vaultDiskSource.saveSend(userId, it) },
-                onFailure = {
-                    // Delete any updates if it's missing from the server
-                    val httpException = it as? HttpException
-                    @Suppress("MagicNumber")
-                    if (httpException?.code() == 404 && isUpdate) {
-                        vaultDiskSource.deleteSend(userId = userId, sendId = sendId)
                     }
                 },
             )
