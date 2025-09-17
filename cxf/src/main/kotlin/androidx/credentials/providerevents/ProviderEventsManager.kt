@@ -58,7 +58,7 @@ internal class StubProviderEventsManager : ProviderEventsManager {
                 responseJson = CANNED_RESPONSE,
             ),
             callingAppInfo = CallingAppInfo(
-                packageName = "${context.packageName}",
+                packageName = context.packageName,
                 signingInfo = SigningInfo(),
                 origin = null,
             ),
