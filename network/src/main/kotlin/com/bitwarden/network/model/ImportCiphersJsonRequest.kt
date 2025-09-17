@@ -18,7 +18,7 @@ data class ImportCiphersJsonRequest(
     @SerialName("ciphers")
     val ciphers: List<CipherJsonRequest>,
     @SerialName("folderRelationships")
-    val folderRelationships: List<Map<Int, Int>>,
+    val folderRelationships: List<Int32Int32KeyValuePairJson>,
 ) {
     /**
      * Represents a folder request with an optional [id] if the folder already exists.
@@ -32,5 +32,19 @@ data class ImportCiphersJsonRequest(
         val name: String?,
         @SerialName("id")
         val id: String?,
+    )
+
+    /**
+     * A key-value pair of 32-bit integers, used for mapping relationships.
+     *
+     * @property key The key, typically an index.
+     * @property value The value, typically an index.
+     */
+    @Serializable
+    data class Int32Int32KeyValuePairJson(
+        @SerialName("key")
+        val key: Int,
+        @SerialName("value")
+        val value: Int,
     )
 }
