@@ -24,7 +24,6 @@ import com.bitwarden.network.model.createMockDomains
 import com.bitwarden.network.model.createMockFolder
 import com.bitwarden.network.model.createMockOrganizationKeys
 import com.bitwarden.network.model.createMockSend
-import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.SendView
@@ -44,8 +43,6 @@ import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
-import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
-import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderUpsertData
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -111,7 +108,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import retrofit2.HttpException
 import java.net.UnknownHostException
 import java.security.GeneralSecurityException
 import java.security.MessageDigest
@@ -135,7 +131,6 @@ class VaultRepositoryTest {
     private val settingsDiskSource = mockk<SettingsDiskSource> {
         every { getLastSyncTime(userId = any()) } returns clock.instant()
     }
-    private val ciphersService: CiphersService = mockk()
     private val folderService: FolderService = mockk()
     private val mutableGetCiphersFlow: MutableStateFlow<List<SyncResponseJson.Cipher>> =
         MutableStateFlow(listOf(createMockCipher(1)))
@@ -174,14 +169,10 @@ class VaultRepositoryTest {
         every { databaseSchemeChangeFlow } returns mutableDatabaseSchemeChangeFlow
     }
     private val mutableFullSyncFlow = bufferedMutableSharedFlow<Unit>()
-    private val mutableSyncCipherDeleteFlow = bufferedMutableSharedFlow<SyncCipherDeleteData>()
-    private val mutableSyncCipherUpsertFlow = bufferedMutableSharedFlow<SyncCipherUpsertData>()
     private val mutableSyncFolderDeleteFlow = bufferedMutableSharedFlow<SyncFolderDeleteData>()
     private val mutableSyncFolderUpsertFlow = bufferedMutableSharedFlow<SyncFolderUpsertData>()
     private val pushManager: PushManager = mockk {
         every { fullSyncFlow } returns mutableFullSyncFlow
-        every { syncCipherDeleteFlow } returns mutableSyncCipherDeleteFlow
-        every { syncCipherUpsertFlow } returns mutableSyncCipherUpsertFlow
         every { syncFolderDeleteFlow } returns mutableSyncFolderDeleteFlow
         every { syncFolderUpsertFlow } returns mutableSyncFolderUpsertFlow
     }
@@ -189,7 +180,6 @@ class VaultRepositoryTest {
     private val credentialExchangeImportManager: CredentialExchangeImportManager = mockk()
 
     private val vaultRepository = VaultRepositoryImpl(
-        ciphersService = ciphersService,
         folderService = folderService,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
@@ -2542,348 +2532,6 @@ class VaultRepositoryTest {
 
         coVerify { vaultSyncManager.sync(any(), any()) }
     }
-
-    @Test
-    fun `syncCipherDeleteFlow should delete cipher from disk`() {
-        val userId = "mockId-1"
-        val cipherId = "mockId-1"
-
-        coEvery { vaultDiskSource.deleteCipher(userId = userId, cipherId = cipherId) } just runs
-
-        mutableSyncCipherDeleteFlow.tryEmit(
-            SyncCipherDeleteData(userId = userId, cipherId = cipherId),
-        )
-
-        coVerify { vaultDiskSource.deleteCipher(userId = userId, cipherId = cipherId) }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `syncCipherUpsertFlow create with local cipher with no common collections should do nothing`() =
-        runTest {
-            val number = 1
-            val userId = MOCK_USER_STATE.activeUserId
-            val cipherId = "mockId-$number"
-            val originalCipher = createMockCipher(
-                number = number,
-                revisionDate = ZonedDateTime.now(clock).minus(5, ChronoUnit.MINUTES),
-            )
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            coEvery {
-                vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
-            } returns originalCipher
-
-            mutableSyncCipherUpsertFlow.tryEmit(
-                SyncCipherUpsertData(
-                    cipherId = cipherId,
-                    revisionDate = ZonedDateTime.now(clock),
-                    isUpdate = false,
-                    collectionIds = null,
-                    organizationId = null,
-                ),
-            )
-
-            coVerify(exactly = 1) {
-                vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
-            }
-            coVerify(exactly = 0) {
-                ciphersService.getCipher(cipherId = any())
-                vaultDiskSource.saveCipher(userId = any(), cipher = any())
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `syncCipherUpsertFlow create with local cipher, and with common collections, should make a request and save cipher to disk`() =
-        runTest {
-            val number = 1
-            val userId = MOCK_USER_STATE.activeUserId
-            val cipherId = "mockId-$number"
-            val collection = createMockCollection(number = number)
-            val originalCipher = createMockCipher(
-                number = number,
-                revisionDate = ZonedDateTime.now(clock).minus(5, ChronoUnit.MINUTES),
-            )
-            val updatedCipher = mockk<SyncResponseJson.Cipher>()
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            coEvery {
-                vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
-            } returns originalCipher
-            coEvery {
-                vaultDiskSource.getCollections(userId = userId)
-            } returns MutableStateFlow(listOf(collection))
-            coEvery {
-                ciphersService.getCipher(cipherId = cipherId)
-            } returns updatedCipher.asSuccess()
-            coEvery {
-                vaultDiskSource.saveCipher(userId = userId, cipher = updatedCipher)
-            } just runs
-
-            mutableSyncCipherUpsertFlow.tryEmit(
-                SyncCipherUpsertData(
-                    cipherId = cipherId,
-                    revisionDate = ZonedDateTime.now(clock),
-                    isUpdate = false,
-                    collectionIds = listOf("mockId-1"),
-                    organizationId = "mock-id",
-                ),
-            )
-
-            coVerify(exactly = 1) {
-                vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
-                ciphersService.getCipher(cipherId = cipherId)
-                vaultDiskSource.saveCipher(userId = userId, cipher = updatedCipher)
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `syncCipherUpsertFlow update with no local cipher, but with common collections, should make a request save cipher to disk`() =
-        runTest {
-            val userId = MOCK_USER_STATE.activeUserId
-            val number = 1
-            val cipherId = "mockId-$number"
-            val originalCipher = createMockCipher(
-                number = number,
-                revisionDate = ZonedDateTime.now(clock).minus(5, ChronoUnit.MINUTES),
-            )
-            val updatedCipher = mockk<SyncResponseJson.Cipher>()
-            val collection = createMockCollection(number = number)
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            coEvery { vaultDiskSource.getCipher(any(), any()) } returns originalCipher
-            coEvery {
-                vaultDiskSource.getCollections(userId = userId)
-            } returns MutableStateFlow(listOf(collection))
-
-            coEvery { ciphersService.getCipher(cipherId) } returns updatedCipher.asSuccess()
-            coEvery {
-                vaultDiskSource.saveCipher(userId = userId, cipher = updatedCipher)
-            } just runs
-
-            mutableSyncCipherUpsertFlow.tryEmit(
-                SyncCipherUpsertData(
-                    cipherId = cipherId,
-                    revisionDate = ZonedDateTime.now(clock),
-                    isUpdate = true,
-                    collectionIds = listOf("mockId-1"),
-                    organizationId = "mock-id",
-                ),
-            )
-
-            coVerify(exactly = 1) {
-                vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
-                ciphersService.getCipher(cipherId = cipherId)
-                vaultDiskSource.saveCipher(userId = userId, cipher = updatedCipher)
-            }
-        }
-
-    @Test
-    fun `syncCipherUpsertFlow update with no local cipher should do nothing`() = runTest {
-        val number = 1
-        val userId = MOCK_USER_STATE.activeUserId
-        val cipherId = "mockId-$number"
-
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        coEvery { vaultDiskSource.getCipher(userId = userId, cipherId = cipherId) } returns null
-
-        mutableSyncCipherUpsertFlow.tryEmit(
-            SyncCipherUpsertData(
-                cipherId = cipherId,
-                revisionDate = ZonedDateTime.now(clock),
-                isUpdate = true,
-                collectionIds = null,
-                organizationId = null,
-            ),
-        )
-
-        coVerify(exactly = 1) {
-            vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
-        }
-        coVerify(exactly = 0) {
-            ciphersService.getCipher(cipherId = any())
-            vaultDiskSource.saveCipher(userId = any(), cipher = any())
-        }
-    }
-
-    @Test
-    fun `syncCipherUpsertFlow update with more recent local cipher should do nothing`() = runTest {
-        val number = 1
-        val userId = MOCK_USER_STATE.activeUserId
-        val cipherId = "mockId-$number"
-        val originalCipher = createMockCipher(
-            number = number,
-            revisionDate = ZonedDateTime.now(clock),
-        )
-
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        coEvery {
-            vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
-        } returns originalCipher
-
-        mutableSyncCipherUpsertFlow.tryEmit(
-            SyncCipherUpsertData(
-                cipherId = cipherId,
-                revisionDate = ZonedDateTime.now(clock).minus(5, ChronoUnit.MINUTES),
-                isUpdate = true,
-                collectionIds = null,
-                organizationId = null,
-            ),
-        )
-
-        coVerify(exactly = 1) {
-            vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
-        }
-        coVerify(exactly = 0) {
-            ciphersService.getCipher(cipherId = any())
-            vaultDiskSource.saveCipher(userId = any(), cipher = any())
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `syncCipherUpsertFlow update failure with 404 code should make a request for a cipher and then delete it`() =
-        runTest {
-            val number = 1
-            val userId = MOCK_USER_STATE.activeUserId
-            val cipherId = "mockId-$number"
-
-            coEvery {
-                vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
-            } returns createMockCipher(number = number)
-            val response: HttpException = mockk {
-                every { code() } returns 404
-            }
-            coEvery { ciphersService.getCipher(cipherId = cipherId) } returns response.asFailure()
-            coEvery { vaultDiskSource.deleteCipher(userId = userId, cipherId = cipherId) } just runs
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-
-            mutableSyncCipherUpsertFlow.tryEmit(
-                SyncCipherUpsertData(
-                    cipherId = cipherId,
-                    revisionDate = ZonedDateTime.now(clock),
-                    isUpdate = true,
-                    collectionIds = null,
-                    organizationId = null,
-                ),
-            )
-
-            coVerify(exactly = 1) {
-                vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
-                ciphersService.getCipher(cipherId = cipherId)
-                vaultDiskSource.deleteCipher(userId = userId, cipherId = cipherId)
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `syncCipherUpsertFlow create failure with 404 code should make a request for a cipher and do nothing`() =
-        runTest {
-            val userId = MOCK_USER_STATE.activeUserId
-            val cipherId = "mockId-1"
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val response: HttpException = mockk {
-                every { code() } returns 404
-            }
-            coEvery { ciphersService.getCipher(cipherId = cipherId) } returns response.asFailure()
-            coEvery { vaultDiskSource.getCipher(userId = userId, cipherId = cipherId) } returns null
-
-            mutableSyncCipherUpsertFlow.tryEmit(
-                SyncCipherUpsertData(
-                    cipherId = cipherId,
-                    revisionDate = ZonedDateTime.now(clock),
-                    isUpdate = false,
-                    collectionIds = null,
-                    organizationId = null,
-                ),
-            )
-
-            coVerify(exactly = 1) {
-                vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
-                ciphersService.getCipher(cipherId = cipherId)
-            }
-            coVerify(exactly = 0) {
-                vaultDiskSource.deleteCipher(userId = any(), cipherId = any())
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `syncCipherUpsertFlow valid create success should make a request for a cipher and then store it`() =
-        runTest {
-            val number = 1
-            val userId = MOCK_USER_STATE.activeUserId
-            val cipherId = "mockId-$number"
-            val updatedCipher = mockk<SyncResponseJson.Cipher>()
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            coEvery {
-                vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
-            } returns null
-            coEvery {
-                ciphersService.getCipher(cipherId = cipherId)
-            } returns updatedCipher.asSuccess()
-            coEvery {
-                vaultDiskSource.saveCipher(userId = userId, cipher = updatedCipher)
-            } just runs
-
-            mutableSyncCipherUpsertFlow.tryEmit(
-                SyncCipherUpsertData(
-                    cipherId = cipherId,
-                    revisionDate = ZonedDateTime.now(clock),
-                    isUpdate = false,
-                    collectionIds = null,
-                    organizationId = null,
-                ),
-            )
-
-            coVerify(exactly = 1) {
-                vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
-                ciphersService.getCipher(cipherId = cipherId)
-                vaultDiskSource.saveCipher(userId = userId, cipher = updatedCipher)
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `syncCipherUpsertFlow valid update success should make a request for a cipher and then store it`() =
-        runTest {
-            val number = 1
-            val userId = MOCK_USER_STATE.activeUserId
-            val cipherId = "mockId-$number"
-            val originalCipher = mockk<SyncResponseJson.Cipher> {
-                every { revisionDate } returns ZonedDateTime.now(clock).minus(5, ChronoUnit.MINUTES)
-            }
-            val updatedCipher = mockk<SyncResponseJson.Cipher>()
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            coEvery {
-                vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
-            } returns originalCipher
-            coEvery { ciphersService.getCipher(cipherId) } returns updatedCipher.asSuccess()
-            coEvery {
-                vaultDiskSource.saveCipher(userId = userId, cipher = updatedCipher)
-            } just runs
-
-            mutableSyncCipherUpsertFlow.tryEmit(
-                SyncCipherUpsertData(
-                    cipherId = cipherId,
-                    revisionDate = ZonedDateTime.now(clock),
-                    isUpdate = true,
-                    collectionIds = null,
-                    organizationId = null,
-                ),
-            )
-
-            coVerify(exactly = 1) {
-                vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
-                ciphersService.getCipher(cipherId)
-                vaultDiskSource.saveCipher(userId = userId, cipher = updatedCipher)
-            }
-        }
 
     @Test
     fun `syncFolderDeleteFlow should delete folder from disk and update ciphers`() {

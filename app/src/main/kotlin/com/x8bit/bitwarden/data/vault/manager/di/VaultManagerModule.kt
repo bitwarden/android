@@ -57,6 +57,8 @@ object VaultManagerModule {
         fileManager: FileManager,
         clock: Clock,
         reviewPromptManager: ReviewPromptManager,
+        dispatcherManager: DispatcherManager,
+        pushManager: PushManager,
     ): CipherManager = CipherManagerImpl(
         fileManager = fileManager,
         authDiskSource = authDiskSource,
@@ -65,6 +67,8 @@ object VaultManagerModule {
         vaultSdkSource = vaultSdkSource,
         clock = clock,
         reviewPromptManager = reviewPromptManager,
+        dispatcherManager = dispatcherManager,
+        pushManager = pushManager,
     )
 
     @Provides

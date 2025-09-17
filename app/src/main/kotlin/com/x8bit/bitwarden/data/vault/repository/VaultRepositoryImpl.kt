@@ -15,7 +15,6 @@ import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.network.model.UpdateFolderResponseJson
-import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.network.util.isNoConnectionError
 import com.bitwarden.sdk.Fido2CredentialStore
@@ -35,8 +34,6 @@ import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
-import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
-import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderUpsertData
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
@@ -102,7 +99,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 import timber.log.Timber
 import java.security.GeneralSecurityException
 import java.time.Clock
@@ -120,7 +116,6 @@ private const val STOP_TIMEOUT_DELAY_MS: Long = 1000L
  */
 @Suppress("TooManyFunctions", "LongParameterList", "LargeClass")
 class VaultRepositoryImpl(
-    private val ciphersService: CiphersService,
     private val folderService: FolderService,
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
@@ -285,16 +280,6 @@ class VaultRepositoryImpl(
             .fullSyncFlow
             .onEach { sync(forced = false) }
             .launchIn(unconfinedScope)
-
-        pushManager
-            .syncCipherDeleteFlow
-            .onEach(::deleteCipher)
-            .launchIn(unconfinedScope)
-
-        pushManager
-            .syncCipherUpsertFlow
-            .onEach(::syncCipherIfNecessary)
-            .launchIn(ioScope)
 
         pushManager
             .syncFolderDeleteFlow
@@ -1065,82 +1050,6 @@ class VaultRepositoryImpl(
             ?: DataState.Loading
 
     //region Push notification helpers
-    /**
-     * Deletes the cipher specified by [syncCipherDeleteData] from disk.
-     */
-    private suspend fun deleteCipher(syncCipherDeleteData: SyncCipherDeleteData) {
-        vaultDiskSource.deleteCipher(
-            userId = syncCipherDeleteData.userId,
-            cipherId = syncCipherDeleteData.cipherId,
-        )
-    }
-
-    /**
-     * Syncs an individual cipher contained in [syncCipherUpsertData] to disk if certain criteria
-     * are met. If the resource cannot be found cloud-side, and it was updated, delete it from disk
-     * for now.
-     */
-    private suspend fun syncCipherIfNecessary(syncCipherUpsertData: SyncCipherUpsertData) {
-        val userId = activeUserId ?: return
-        val cipherId = syncCipherUpsertData.cipherId
-        val organizationId = syncCipherUpsertData.organizationId
-        val collectionIds = syncCipherUpsertData.collectionIds
-        val revisionDate = syncCipherUpsertData.revisionDate
-        val isUpdate = syncCipherUpsertData.isUpdate
-
-        val localCipher = vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
-
-        // Return if local cipher is more recent
-        if (localCipher != null &&
-            localCipher.revisionDate.toEpochSecond() > revisionDate.toEpochSecond()
-        ) {
-            return
-        }
-
-        var shouldUpdate: Boolean
-        val shouldCheckCollections: Boolean
-
-        when {
-            isUpdate -> {
-                shouldUpdate = localCipher != null
-                shouldCheckCollections = true
-            }
-
-            collectionIds == null || organizationId == null -> {
-                shouldUpdate = localCipher == null
-                shouldCheckCollections = false
-            }
-
-            else -> {
-                shouldUpdate = false
-                shouldCheckCollections = true
-            }
-        }
-
-        if (!shouldUpdate && shouldCheckCollections && organizationId != null) {
-            // Check if there are any collections in common
-            shouldUpdate = vaultDiskSource
-                .getCollections(userId = userId)
-                .first()
-                .any { collectionIds?.contains(it.id) == true }
-        }
-
-        if (!shouldUpdate) return
-
-        ciphersService
-            .getCipher(cipherId)
-            .fold(
-                onSuccess = { vaultDiskSource.saveCipher(userId, it) },
-                onFailure = {
-                    // Delete any updates if it's missing from the server
-                    val httpException = it as? HttpException
-                    @Suppress("MagicNumber")
-                    if (httpException?.code() == 404 && isUpdate) {
-                        vaultDiskSource.deleteCipher(userId = userId, cipherId = cipherId)
-                    }
-                },
-            )
-    }
 
     /**
      * Deletes the folder specified by [syncFolderDeleteData] from disk.
