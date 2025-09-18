@@ -1094,7 +1094,6 @@ Do you want to switch to this account?</string>
     <string name="vault_sync_failed">Vault sync failed</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but they will not be visible in your vault until sync is performed.</string>
     <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
-    <string name="decoding_items">Decoding items…</string>
     <string name="saving_items">Saving items…</string>
     <string name="unable_to_import_your_items">Unable to import your items</string>
     <string name="import_from_computer">Import from computer</string>

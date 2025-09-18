@@ -147,7 +147,7 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
             assertEquals(
                 ImportItemsState(
                     dialog = ImportItemsState.DialogState.Loading(
-                        message = BitwardenString.decoding_items.asText(),
+                        message = BitwardenString.saving_items.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
