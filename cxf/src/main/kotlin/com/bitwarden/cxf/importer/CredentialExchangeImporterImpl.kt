@@ -25,7 +25,6 @@ internal class CredentialExchangeImporterImpl(
         ProviderEventsManager.create(activity),
 ) : CredentialExchangeImporter {
 
-    @Suppress("TooGenericExceptionCaught")
     override suspend fun importCredentials(
         credentialTypes: List<String>,
     ): ImportCredentialsSelectionResult {
@@ -55,7 +54,7 @@ internal class CredentialExchangeImporterImpl(
         } catch (e: ImportCredentialsException) {
             Timber.e(e, "Failed to import items from selected credential manager.")
             ImportCredentialsSelectionResult.Failure(error = e)
-        } catch (e: Exception) {
+        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
             Timber.e(e, "Failed to import items from selected credential manager.")
             ImportCredentialsSelectionResult.Failure(
                 error = ImportCredentialsUnknownErrorException(),
