@@ -38,7 +38,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class AutoFillViewModel @Inject constructor(
     authRepository: AuthRepository,
-    chromeThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
+    browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
     private val savedStateHandle: SavedStateHandle,
     private val settingsRepository: SettingsRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
@@ -66,7 +66,7 @@ class AutoFillViewModel @Inject constructor(
                 defaultUriMatchType = settingsRepository.defaultUriMatchType,
                 showAutofillActionCard = false,
                 activeUserId = userId,
-                browserAutofillSettingsOptions = chromeThirdPartyAutofillEnabledManager
+                browserAutofillSettingsOptions = browserThirdPartyAutofillEnabledManager
                     .browserThirdPartyAutofillStatus
                     .toBrowserAutoFillSettingsOptions(),
                 isUserManagedPrivilegedAppsEnabled =
@@ -103,7 +103,7 @@ class AutoFillViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        chromeThirdPartyAutofillEnabledManager
+        browserThirdPartyAutofillEnabledManager
             .browserThirdPartyAutofillStatusFlow
             .map { AutoFillAction.Internal.BrowserAutofillStatusReceive(status = it) }
             .onEach(::sendAction)
