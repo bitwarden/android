@@ -44,18 +44,19 @@ class CredentialExchangeImportManagerImpl(
                     folderRelationships = emptyList(),
                 ),
             )
-        }
-        .flatMap { importCiphersResponseJson ->
-            when (importCiphersResponseJson) {
-                is ImportCiphersResponseJson.Invalid -> {
-                    ImportCredentialsUnknownErrorException().asFailure()
-                }
+                .flatMap { importCiphersResponseJson ->
+                    when (importCiphersResponseJson) {
+                        is ImportCiphersResponseJson.Invalid -> {
+                            ImportCredentialsUnknownErrorException().asFailure()
+                        }
 
-                ImportCiphersResponseJson.Success -> {
-                    ImportCxfPayloadResult.Success
-                        .asSuccess()
+                        ImportCiphersResponseJson.Success -> {
+                            ImportCxfPayloadResult
+                                .Success(itemCount = cipherList.size)
+                                .asSuccess()
+                        }
+                    }
                 }
-            }
         }
         .fold(
             onSuccess = { it },

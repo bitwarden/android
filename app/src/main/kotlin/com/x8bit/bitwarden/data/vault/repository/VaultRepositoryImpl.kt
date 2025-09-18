@@ -800,14 +800,14 @@ class VaultRepositoryImpl(
                 ImportCredentialsResult.NoItems
             }
 
-            ImportCxfPayloadResult.Success -> {
+            is ImportCxfPayloadResult.Success -> {
                 when (val syncResult = syncInternal(userId = userId, forced = true)) {
                     is SyncVaultDataResult.Error -> {
                         ImportCredentialsResult.SyncFailed(error = syncResult.throwable)
                     }
 
                     is SyncVaultDataResult.Success -> {
-                        ImportCredentialsResult.Success
+                        ImportCredentialsResult.Success(itemCount = importResult.itemCount)
                     }
                 }
             }

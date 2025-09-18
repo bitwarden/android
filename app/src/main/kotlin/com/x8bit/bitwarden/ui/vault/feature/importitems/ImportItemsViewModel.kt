@@ -7,13 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.cxf.importer.model.ImportCredentialsSelectionResult
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.platform.components.icon.model.IconData
-import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -25,14 +28,14 @@ private const val KEY_STATE = "state"
 /**
  * View model for the [ImportItemsScreen].
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class ImportItemsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val vaultRepository: VaultRepository,
+    private val snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<ImportItemsState, ImportItemsEvent, ImportItemsAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: ImportItemsState(
-        viewState = ImportItemsState.ViewState.NotStarted,
-    ),
+    initialState = savedStateHandle[KEY_STATE] ?: ImportItemsState(),
 ) {
 
     override fun handleAction(action: ImportItemsAction) {
@@ -41,8 +44,8 @@ class ImportItemsViewModel @Inject constructor(
                 handleBackClick()
             }
 
-            is ImportItemsAction.GetStartedClick -> {
-                handleGetStartedClick()
+            is ImportItemsAction.ImportFromAnotherAppClick -> {
+                handleImportFromAnotherAppClick()
             }
 
             is ImportItemsAction.ImportCredentialSelectionReceive -> {
@@ -56,6 +59,14 @@ class ImportItemsViewModel @Inject constructor(
             is ImportItemsAction.Internal.ImportCredentialsResultReceive -> {
                 handleImportCredentialsResultReceive(action)
             }
+
+            ImportItemsAction.ImportFromComputerClick -> {
+                handleImportFromComputerClick()
+            }
+
+            ImportItemsAction.DismissDialog -> {
+                handleDismissDialog()
+            }
         }
     }
 
@@ -67,10 +78,7 @@ class ImportItemsViewModel @Inject constructor(
         sendEvent(ImportItemsEvent.NavigateBack)
     }
 
-    private fun handleGetStartedClick() {
-        mutableStateFlow.update {
-            it.copy(viewState = ImportItemsState.ViewState.AwaitingSelection)
-        }
+    private fun handleImportFromAnotherAppClick() {
         sendEvent(
             ImportItemsEvent.ShowRegisteredImportSources(
                 credentialTypes = listOf(
@@ -85,41 +93,37 @@ class ImportItemsViewModel @Inject constructor(
         )
     }
 
+    private fun handleImportFromComputerClick() {
+        sendEvent(ImportItemsEvent.NavigateToImportFromComputer)
+    }
+
     private fun handleImportCredentialSelectionReceive(
         action: ImportItemsAction.ImportCredentialSelectionReceive,
     ) {
-        when (action.selectionResult) {
+        when (val result = action.selectionResult) {
             ImportCredentialsSelectionResult.Cancelled -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = ImportItemsState.ViewState.Completed(
-                            title = BitwardenString.import_cancelled.asText(),
-                            message = BitwardenString.credential_import_was_cancelled.asText(),
-                            iconData = IconData.Local(BitwardenDrawable.ic_warning),
-                        ),
-                    )
-                }
+                showGeneralDialog(
+                    title = BitwardenString.import_cancelled.asText(),
+                    message = BitwardenString.import_was_cancelled_in_the_selected_app.asText(),
+                    throwable = null,
+                )
             }
 
             is ImportCredentialsSelectionResult.Failure -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = ImportItemsState.ViewState.Completed(
-                            title = BitwardenString.import_vault_failure.asText(),
-                            message = BitwardenString.generic_error_message.asText(),
-                            iconData = IconData.Local(BitwardenDrawable.ic_warning),
-                        ),
-                    )
-                }
+                showGeneralDialog(
+                    title = BitwardenString.unable_to_import_your_items.asText(),
+                    message = BitwardenString.there_was_a_problem_importing_your_items.asText(),
+                    throwable = result.error,
+                )
             }
 
             is ImportCredentialsSelectionResult.Success -> {
-                updateImportProgress(BitwardenString.import_items.asText())
+                updateImportProgress(BitwardenString.decoding_items.asText())
                 viewModelScope.launch {
                     sendAction(
                         ImportItemsAction.Internal.ImportCredentialsResultReceive(
                             vaultRepository.importCxfPayload(
-                                payload = action.selectionResult.response,
+                                payload = result.response,
                             ),
                         ),
                     )
@@ -128,75 +132,88 @@ class ImportItemsViewModel @Inject constructor(
         }
     }
 
+    private fun handleDismissDialog() {
+        clearDialogs()
+    }
+
     private fun handleImportCredentialsResultReceive(
         action: ImportItemsAction.Internal.ImportCredentialsResultReceive,
     ) {
-        updateImportProgress(BitwardenString.uploading_items.asText())
+        updateImportProgress(BitwardenString.saving_items.asText())
         when (action.result) {
             is ImportCredentialsResult.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = ImportItemsState.ViewState.Completed(
-                            title = BitwardenString.import_error.asText(),
-                            message = BitwardenString
-                                .there_was_a_problem_importing_your_items
-                                .asText(),
-                            iconData = IconData.Local(BitwardenDrawable.ic_warning),
-                        ),
-                    )
-                }
+                showGeneralDialog(
+                    title = BitwardenString.unable_to_import_your_items.asText(),
+                    message = BitwardenString.there_was_a_problem_importing_your_items.asText(),
+                    throwable = action.result.error,
+                )
             }
 
             is ImportCredentialsResult.Success -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = ImportItemsState.ViewState.Completed(
-                            title = BitwardenString.import_success.asText(),
-                            message = BitwardenString
-                                .your_items_have_been_successfully_imported
-                                .asText(),
-                            iconData = IconData.Local(BitwardenDrawable.ic_plain_checkmark),
-                        ),
-                    )
-                }
+                clearDialogs()
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(
+                        messageHeader = BitwardenString.import_successful.asText(),
+                        message = BitwardenPlurals
+                            .x_items_have_been_imported_to_your_vault
+                            .asPluralsText(
+                                quantity = action.result.itemCount,
+                                args = arrayOf(action.result.itemCount),
+                            ),
+                    ),
+                    relay = SnackbarRelay.LOGINS_IMPORTED,
+                )
+                sendEvent(ImportItemsEvent.NavigateToVault)
             }
 
             ImportCredentialsResult.NoItems -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = ImportItemsState.ViewState.Completed(
-                            title = BitwardenString.no_items_imported.asText(),
-                            message = BitwardenString
-                                .no_items_received_from_the_selected_credential_manager
-                                .asText(),
-                            iconData = IconData.Local(BitwardenDrawable.ic_plain_checkmark),
-                        ),
-                    )
-                }
+                showGeneralDialog(
+                    title = BitwardenString.no_items_imported.asText(),
+                    message = BitwardenString.no_items_received_from_the_selected_app.asText(),
+                    throwable = null,
+                )
             }
 
             is ImportCredentialsResult.SyncFailed -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = ImportItemsState.ViewState.Completed(
-                            title = BitwardenString.vault_sync_failed.asText(),
-                            message = BitwardenString
-                                .your_items_have_been_successfully_imported_but_could_not_sync_vault
-                                .asText(),
-                            iconData = IconData.Local(BitwardenDrawable.ic_warning),
-                        ),
-                    )
-                }
+                clearDialogs()
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(
+                        messageHeader = BitwardenString.vault_sync_failed.asText(),
+                        message = BitwardenString
+                            .your_items_have_been_successfully_imported_but_could_not_sync_vault
+                            .asText(),
+                        actionLabel = BitwardenString.try_again.asText(),
+                    ),
+                    relay = SnackbarRelay.VAULT_SYNC_FAILED,
+                )
             }
+        }
+    }
+
+    private fun clearDialogs() {
+        mutableStateFlow.update { it.copy(dialog = null) }
+    }
+
+    private fun showGeneralDialog(
+        title: Text,
+        message: Text,
+        throwable: Throwable?,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = ImportItemsState.DialogState.General(
+                    title = title,
+                    message = message,
+                    throwable = throwable,
+                ),
+            )
         }
     }
 
     private fun updateImportProgress(message: Text) {
         mutableStateFlow.update {
             it.copy(
-                viewState = ImportItemsState.ViewState.ImportingItems(
-                    message = message,
-                ),
+                dialog = ImportItemsState.DialogState.Loading(message = message),
             )
         }
     }
@@ -207,38 +224,28 @@ class ImportItemsViewModel @Inject constructor(
  */
 @Parcelize
 data class ImportItemsState(
-    val viewState: ViewState,
+    val dialog: DialogState? = null,
 ) : Parcelable {
 
     /**
-     * View states for the [ImportItemsScreen].
+     * Dialog state for the [ImportItemsScreen].
      */
     @Parcelize
-    sealed class ViewState : Parcelable {
+    sealed class DialogState : Parcelable {
 
         /**
-         * The import has not yet started.
+         * Show the loading dialog.
          */
-        data object NotStarted : ViewState()
+        data class Loading(val message: Text) : DialogState()
 
         /**
-         * The import has started and is awaiting selection.
+         * Show a general dialog with the given title and message.
          */
-        data object AwaitingSelection : ViewState()
-
-        /**
-         * The import is in progress.
-         */
-        data class ImportingItems(val message: Text) : ViewState()
-
-        /**
-         * The import has completed.
-         */
-        data class Completed(
+        data class General(
             val title: Text,
             val message: Text,
-            val iconData: IconData,
-        ) : ViewState()
+            val throwable: Throwable?,
+        ) : DialogState()
     }
 }
 
@@ -248,9 +255,14 @@ data class ImportItemsState(
 sealed class ImportItemsAction {
 
     /**
-     * User clicked the Get started button.
+     * User clicked the Import from computer option.
      */
-    data object GetStartedClick : ImportItemsAction()
+    data object ImportFromComputerClick : ImportItemsAction()
+
+    /**
+     * User clicked the Import from another app option.
+     */
+    data object ImportFromAnotherAppClick : ImportItemsAction()
 
     /**
      * Result of credential selection from the selected credential manager.
@@ -272,6 +284,11 @@ sealed class ImportItemsAction {
     data object BackClick : ImportItemsAction()
 
     /**
+     * User dismissed the dialog.
+     */
+    data object DismissDialog : ImportItemsAction()
+
+    /**
      * Internal actions that the [ImportItemsViewModel] may itself send.
      */
     sealed class Internal : ImportItemsAction() {
@@ -291,6 +308,11 @@ sealed class ImportItemsEvent {
      * Navigate back.
      */
     data object NavigateBack : ImportItemsEvent()
+
+    /**
+     * Navigate to the import from computer screen.
+     */
+    data object NavigateToImportFromComputer : ImportItemsEvent()
 
     /**
      * Navigate to the vault.

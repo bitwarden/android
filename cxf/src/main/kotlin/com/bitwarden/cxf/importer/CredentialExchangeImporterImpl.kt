@@ -5,6 +5,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.credentials.providerevents.ProviderEventsManager
 import androidx.credentials.providerevents.exception.ImportCredentialsCancellationException
 import androidx.credentials.providerevents.exception.ImportCredentialsException
+import androidx.credentials.providerevents.exception.ImportCredentialsUnknownErrorException
 import androidx.credentials.providerevents.transfer.ImportCredentialsRequest
 import com.bitwarden.cxf.importer.model.ImportCredentialsSelectionResult
 import timber.log.Timber
@@ -24,6 +25,7 @@ internal class CredentialExchangeImporterImpl(
         ProviderEventsManager.create(activity),
 ) : CredentialExchangeImporter {
 
+    @Suppress("TooGenericExceptionCaught")
     override suspend fun importCredentials(
         credentialTypes: List<String>,
     ): ImportCredentialsSelectionResult {
@@ -47,11 +49,17 @@ internal class CredentialExchangeImporterImpl(
                 response = response.response.responseJson,
                 callingAppInfo = response.callingAppInfo,
             )
-        } catch (_: ImportCredentialsCancellationException) {
+        } catch (e: ImportCredentialsCancellationException) {
+            Timber.e(e, "User cancelled import from selected credential manager.")
             ImportCredentialsSelectionResult.Cancelled
         } catch (e: ImportCredentialsException) {
             Timber.e(e, "Failed to import items from selected credential manager.")
             ImportCredentialsSelectionResult.Failure(error = e)
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to import items from selected credential manager.")
+            ImportCredentialsSelectionResult.Failure(
+                error = ImportCredentialsUnknownErrorException(),
+            )
         }
     }
 }
