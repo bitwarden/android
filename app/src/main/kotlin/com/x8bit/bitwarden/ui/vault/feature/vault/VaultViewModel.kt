@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.repository.util.baseIconUrl
@@ -24,6 +25,7 @@ import com.bitwarden.vault.DecryptCipherListResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
@@ -97,6 +99,7 @@ class VaultViewModel @Inject constructor(
     private val reviewPromptManager: ReviewPromptManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val networkConnectionManager: NetworkConnectionManager,
+    private val toastManager: ToastManager,
     snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
@@ -255,6 +258,10 @@ class VaultViewModel @Inject constructor(
 
             VaultAction.ShareAllCipherDecryptionErrorsClick -> {
                 handleShareAllCipherDecryptionErrorsClick()
+            }
+
+            is VaultAction.KdfUpdatePasswordRepromptSubmit -> {
+                handleKdfUpdatePasswordRepromptSubmit(action)
             }
         }
     }
@@ -909,7 +916,8 @@ class VaultViewModel @Inject constructor(
         }
 
         val shouldShowDecryptionAlert = !state.hasShownDecryptionFailureAlert &&
-            vaultData.data.decryptCipherListResult.failures.isNotEmpty()
+            vaultData.data.decryptCipherListResult.failures.isNotEmpty() &&
+            state.dialog == null
 
         updateVaultState(
             vaultData = vaultData.data,
@@ -929,6 +937,21 @@ class VaultViewModel @Inject constructor(
                 state.hasShownDecryptionFailureAlert
             },
         )
+
+        // Check if user needs to update kdf settings to minimums
+        viewModelScope.launch {
+            if (authRepository.needsKdfUpdateToMinimums()) {
+                mutableStateFlow.update { currentState ->
+                    @Suppress("MaxLineLength")
+                    currentState.copy(
+                        dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
+                            title = BitwardenString.update_your_encryption_settings.asText(),
+                            message = BitwardenString.the_new_recommended_encryption_settings_will_improve_your_account_security_desc_long.asText(),
+                        ),
+                    )
+                }
+            }
+        }
     }
 
     private fun updateVaultState(
@@ -1089,6 +1112,48 @@ class VaultViewModel @Inject constructor(
 
             is GetCipherResult.Success -> result.cipherView
         }
+
+    private fun handleKdfUpdatePasswordRepromptSubmit(
+        action: VaultAction.KdfUpdatePasswordRepromptSubmit,
+    ) {
+        mutableStateFlow.update {
+            it.copy(dialog = null)
+        }
+        viewModelScope.launch {
+            val result = authRepository.updateKdfToMinimumsIfNeeded(action.password)
+            when (result) {
+                UpdateKdfMinimumsResult.AccountNotFound -> {
+                    showGenericError()
+                    Timber.e(message = "Failed to update kdf to minimums: Account not found")
+                }
+                UpdateKdfMinimumsResult.ActiveAccountNotFound -> {
+                    showGenericError()
+                    Timber.e(message = "Failed to update kdf to minimums: Active account not found")
+                }
+                is UpdateKdfMinimumsResult.Error -> {
+                    showGenericError(error = result.error)
+                    Timber.e(message = "Failed to update kdf to minimums: ${result.error}")
+                }
+                UpdateKdfMinimumsResult.Success -> {
+                    toastManager.show(messageId = BitwardenString.encryption_settings_updated)
+                }
+            }
+        }
+    }
+
+    private fun showGenericError(
+        error: Throwable? = null,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.Error(
+                    BitwardenString.an_error_has_occurred.asText(),
+                    BitwardenString.generic_error_message.asText(),
+                    error = error,
+                ),
+            )
+        }
+    }
 }
 
 /**
@@ -1722,6 +1787,13 @@ sealed class VaultAction {
      */
     data class ShareCipherDecryptionErrorClick(
         val selectedCipherId: String,
+    ) : VaultAction()
+
+    /**
+     * Click to submit the update kdf password reprompt form.
+     */
+    data class KdfUpdatePasswordRepromptSubmit(
+        val password: String,
     ) : VaultAction()
 
     /**
