@@ -153,7 +153,7 @@ private fun ImportItemsContent(
             )
         }
 
-        item { Spacer(Modifier.height(12.dp)) }
+        item { Spacer(Modifier.height(16.dp)) }
         item { Spacer(Modifier.navigationBarsPadding()) }
     }
 }
