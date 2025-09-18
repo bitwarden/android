@@ -1,5 +1,6 @@
 package com.bitwarden.cxf.registry
 
+import androidx.credentials.providerevents.transfer.RegisterExportResponse
 import com.bitwarden.cxf.registry.model.RegistrationRequest
 
 /**
@@ -18,7 +19,7 @@ interface CredentialExchangeRegistry {
      * does not indicate if the application was added to the registry. Use the result value to check
      * if the application was added or not. [Result.isFailure] only indicates if an error occurred.
      */
-    suspend fun register(registrationRequest: RegistrationRequest): Result<Boolean>
+    suspend fun register(registrationRequest: RegistrationRequest): Result<RegisterExportResponse>
 
     /**
      * Unregister as a credential export source.
@@ -28,5 +29,5 @@ interface CredentialExchangeRegistry {
      *
      * @return True if the unregistration was successful, false otherwise.
      */
-    suspend fun unregister(): Boolean
+    suspend fun unregister(): RegisterExportResponse
 }
