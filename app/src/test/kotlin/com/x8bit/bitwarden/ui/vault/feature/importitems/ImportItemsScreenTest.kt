@@ -46,13 +46,14 @@ class ImportItemsScreenTest : BitwardenComposeTest() {
 
     @Before
     fun setUp() {
-        setContent {
+        setContent(
+            credentialExchangeImporter = credentialExchangeImporter,
+        ) {
             ImportItemsScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToVault = { onNavigateToVaultCalled = true },
                 onNavigateToImportFromComputer = { onNavigateToImportFromComputerCalled = true },
                 viewModel = viewModel,
-                credentialExchangeImporter = credentialExchangeImporter,
             )
         }
     }
