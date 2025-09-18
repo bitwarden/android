@@ -94,10 +94,11 @@ private fun ImportItemsScaffold(
     onNavigateBack: () -> Unit,
     onImportFromComputerClick: () -> Unit,
     onImportFromAnotherAppClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
