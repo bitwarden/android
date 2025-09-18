@@ -33,17 +33,18 @@ class CredentialExchangeImportManagerImpl(
                 // appropriate result.
                 return ImportCxfPayloadResult.NoItems
             }
-            ciphersService.importCiphers(
-                request = ImportCiphersJsonRequest(
-                    ciphers = cipherList.map {
-                        it.toEncryptedNetworkCipher(
-                            encryptedFor = userId,
-                        )
-                    },
-                    folders = emptyList(),
-                    folderRelationships = emptyList(),
-                ),
-            )
+            ciphersService
+                .importCiphers(
+                    request = ImportCiphersJsonRequest(
+                        ciphers = cipherList.map {
+                            it.toEncryptedNetworkCipher(
+                                encryptedFor = userId,
+                            )
+                        },
+                        folders = emptyList(),
+                        folderRelationships = emptyList(),
+                    ),
+                )
                 .flatMap { importCiphersResponseJson ->
                     when (importCiphersResponseJson) {
                         is ImportCiphersResponseJson.Invalid -> {
