@@ -118,7 +118,7 @@ class ImportItemsViewModel @Inject constructor(
             }
 
             is ImportCredentialsSelectionResult.Success -> {
-                updateImportProgress(BitwardenString.decoding_items.asText())
+                updateImportProgress(BitwardenString.saving_items.asText())
                 viewModelScope.launch {
                     sendAction(
                         ImportItemsAction.Internal.ImportCredentialsResultReceive(
@@ -139,7 +139,6 @@ class ImportItemsViewModel @Inject constructor(
     private fun handleImportCredentialsResultReceive(
         action: ImportItemsAction.Internal.ImportCredentialsResultReceive,
     ) {
-        updateImportProgress(BitwardenString.saving_items.asText())
         when (action.result) {
             is ImportCredentialsResult.Error -> {
                 showGeneralDialog(
