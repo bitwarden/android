@@ -503,7 +503,8 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
       "privateKey": "mockPrivateKey-1",
       "keyFingerprint": "mockKeyFingerprint-1"
     },
-    "encryptedFor": "mockEncryptedFor-1"
+    "encryptedFor": "mockEncryptedFor-1",
+    "archivedDate": "2023-10-27T12:00:00.00Z"
   }
 }
 """
@@ -631,7 +632,8 @@ private const val CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON = """
     "privateKey": "mockPrivateKey-1",
     "keyFingerprint": "mockKeyFingerprint-1"
   },
-  "encryptedFor": "mockEncryptedFor-1"
+  "encryptedFor": "mockEncryptedFor-1",
+  "archivedDate": "2023-10-27T12:00:00.00Z"
 }
 """
 

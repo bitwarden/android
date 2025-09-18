@@ -47,6 +47,7 @@ fun createMockSdkCipher(number: Int, clock: Clock = FIXED_CLOCK): Cipher =
         creationDate = clock.instant(),
         deletedDate = clock.instant(),
         revisionDate = clock.instant(),
+        archivedDate = clock.instant(),
         attachments = listOf(createMockSdkAttachment(number = number)),
         card = createMockSdkCard(number = number),
         fields = listOf(createMockSdkField(number = number)),
