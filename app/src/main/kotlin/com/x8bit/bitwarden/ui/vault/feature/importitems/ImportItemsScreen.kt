@@ -60,7 +60,7 @@ fun ImportItemsScreen(
         when (event) {
             ImportItemsEvent.NavigateBack -> onNavigateBack()
             ImportItemsEvent.NavigateToVault -> onNavigateToVault()
-            ImportItemsEvent.NavigateToImportFromComputer -> onNavigateToImportFromComputer
+            ImportItemsEvent.NavigateToImportFromComputer -> onNavigateToImportFromComputer()
             is ImportItemsEvent.ShowRegisteredImportSources -> {
                 coroutineScope.launch {
                     viewModel.trySendAction(
