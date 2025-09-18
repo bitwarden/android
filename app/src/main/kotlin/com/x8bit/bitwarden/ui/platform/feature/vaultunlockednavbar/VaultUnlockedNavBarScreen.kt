@@ -28,6 +28,7 @@ import com.bitwarden.ui.platform.util.toObjectNavigationRoute
 import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.navigateToAbout
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.navigateToAutoFill
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraphRoot
 import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
@@ -239,6 +240,10 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToAboutScreen = {
                     navController.navigateToSettingsGraphRoot()
                     navController.navigateToAbout(isPreAuth = false)
+                },
+                onNavigateToAutofillScreen = {
+                    navController.navigateToSettingsGraphRoot()
+                    navController.navigateToAutoFill()
                 },
             )
             sendGraph(

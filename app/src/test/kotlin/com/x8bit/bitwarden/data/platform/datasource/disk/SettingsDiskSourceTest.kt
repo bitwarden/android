@@ -1482,4 +1482,33 @@ class SettingsDiskSourceTest {
             },
         )
     }
+
+    @Test
+    fun `browserAutofillDialogReshowTime should pull from SharedPreferences`() {
+        val browserAutofillDialogReshowTimeKey =
+            "bwPreferencesStorage:browserAutofillDialogReshowTime"
+        val expected = 11111L
+
+        // Verify initial value is null and disk source matches shared preferences.
+        assertNull(fakeSharedPreferences.getString(browserAutofillDialogReshowTimeKey, null))
+        assertNull(settingsDiskSource.browserAutofillDialogReshowTime)
+
+        // Updating the shared preferences should update disk source.
+        fakeSharedPreferences.edit {
+            putLong(browserAutofillDialogReshowTimeKey, expected)
+        }
+        val actual = settingsDiskSource.browserAutofillDialogReshowTime
+        assertEquals(Instant.ofEpochMilli(expected), actual)
+    }
+
+    @Test
+    fun `setting browserAutofillDialogReshowTime should update SharedPreferences`() {
+        val browserAutofillDialogReshowTimeKey =
+            "bwPreferencesStorage:browserAutofillDialogReshowTime"
+        val timeMs = 1111L
+        val timeInstant = Instant.ofEpochMilli(timeMs)
+        settingsDiskSource.browserAutofillDialogReshowTime = timeInstant
+        val actual = fakeSharedPreferences.getLong(browserAutofillDialogReshowTimeKey, 0L)
+        assertEquals(timeMs, actual)
+    }
 }
