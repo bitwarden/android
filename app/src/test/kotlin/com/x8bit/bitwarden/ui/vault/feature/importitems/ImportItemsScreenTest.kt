@@ -101,6 +101,12 @@ class ImportItemsScreenTest : BitwardenComposeTest() {
         }
 
     @Test
+    fun `NavigateToImportFromComputer should call onNavigateToImportFromComputer`() {
+        mockEventFlow.tryEmit(ImportItemsEvent.NavigateToImportFromComputer)
+        assertTrue(onNavigateToImportFromComputerCalled)
+    }
+
+    @Test
     fun `ImportFromAnotherApp click should send NavigateToImportFromAnotherApp action`() =
         runTest {
             composeTestRule
