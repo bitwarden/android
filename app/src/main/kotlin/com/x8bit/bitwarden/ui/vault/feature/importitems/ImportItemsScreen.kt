@@ -1,8 +1,10 @@
 package com.x8bit.bitwarden.ui.vault.feature.importitems
 
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
@@ -115,7 +117,6 @@ private fun ImportItemsScaffold(
             onImportFromAnotherAppClick = onImportFromAnotherAppClick,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 12.dp)
                 .standardHorizontalMargin(),
         )
     }
@@ -131,6 +132,8 @@ private fun ImportItemsContent(
         modifier = modifier
             .fillMaxSize(),
     ) {
+        item { Spacer(Modifier.height(12.dp)) }
+
         item {
             BitwardenTextRow(
                 text = stringResource(BitwardenString.import_from_computer),
@@ -148,6 +151,9 @@ private fun ImportItemsContent(
                 modifier = Modifier.fillMaxWidth(),
             )
         }
+
+        item { Spacer(Modifier.height(12.dp)) }
+        item { Spacer(Modifier.navigationBarsPadding()) }
     }
 }
 
