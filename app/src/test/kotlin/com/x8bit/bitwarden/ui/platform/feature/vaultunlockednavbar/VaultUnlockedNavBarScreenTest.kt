@@ -63,6 +63,7 @@ class VaultUnlockedNavBarScreenTest : BitwardenComposeTest() {
                 onNavigateToFlightRecorder = {},
                 onNavigateToRecordedLogs = {},
                 onNavigateToAboutPrivilegedApps = {},
+                onNavigateToImportItems = {},
             )
         }
     }

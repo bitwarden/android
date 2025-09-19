@@ -32,6 +32,8 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.other.navigateToOther
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.otherDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.navigateToVaultSettings
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.vaultSettingsDestination
+import com.x8bit.bitwarden.ui.vault.feature.importitems.importItemsDestination
+import com.x8bit.bitwarden.ui.vault.feature.importlogins.navigateToImportLoginsScreen
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
@@ -114,6 +116,8 @@ fun NavGraphBuilder.settingsGraph(
     onNavigateToFlightRecorder: () -> Unit,
     onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
+    onNavigateToImportItems: () -> Unit,
+    onNavigateToMyVault: () -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
 ) {
     navigation<SettingsGraphRoute>(
@@ -162,6 +166,12 @@ fun NavGraphBuilder.settingsGraph(
             onNavigateToExportVault = onNavigateToExportVault,
             onNavigateToFolders = onNavigateToFolders,
             onNavigateToImportLogins = onNavigateToImportLogins,
+            onNavigateToImportItems = onNavigateToImportItems,
+        )
+        importItemsDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToMyVault = onNavigateToMyVault,
+            onNavigateToImportLogins = { navController.navigateToImportLoginsScreen() },
         )
         blockAutoFillDestination(onNavigateBack = { navController.popBackStack() })
         privilegedAppsListDestination(onNavigateBack = { navController.popBackStack() })

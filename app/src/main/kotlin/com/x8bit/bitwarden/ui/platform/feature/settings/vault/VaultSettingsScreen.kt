@@ -49,6 +49,7 @@ fun VaultSettingsScreen(
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
+    onNavigateToImportItems: () -> Unit,
     viewModel: VaultSettingsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -60,6 +61,7 @@ fun VaultSettingsScreen(
             VaultSettingsEvent.NavigateToExportVault -> onNavigateToExportVault()
             VaultSettingsEvent.NavigateToFolders -> onNavigateToFolders()
             is VaultSettingsEvent.NavigateToImportVault -> onNavigateToImportLogins()
+            is VaultSettingsEvent.NavigateToImportItems -> onNavigateToImportItems()
             is VaultSettingsEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
