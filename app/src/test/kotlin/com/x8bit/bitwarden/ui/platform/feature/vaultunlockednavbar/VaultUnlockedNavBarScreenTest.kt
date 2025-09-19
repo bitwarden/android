@@ -64,7 +64,6 @@ class VaultUnlockedNavBarScreenTest : BitwardenComposeTest() {
                 onNavigateToRecordedLogs = {},
                 onNavigateToAboutPrivilegedApps = {},
                 onNavigateToImportItems = {},
-                onNavigateToMyVault = {},
             )
         }
     }

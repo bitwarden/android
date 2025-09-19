@@ -146,13 +146,6 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToSetupAutoFillScreen = { navController.navigateToSetupAutoFillScreen() },
             onNavigateToImportLogins = { navController.navigateToImportLoginsScreen() },
             onNavigateToImportItems = { navController.navigateToImportItemsGraph() },
-            onNavigateToMyVault = {
-                Timber.i(
-                    "vaultUnlockedNavBarDestination::onNavigateToMyVault currentBackStack = %s",
-                    navController.currentBackStack.value.joinToString(),
-                )
-                navController.navigateUpToVaultUnlockedRoot()
-            },
             onNavigateToAddFolderScreen = {
                 navController.navigateToFolderAddEdit(
                     folderAddEditType = FolderAddEditType.AddItem,
@@ -311,6 +304,5 @@ private fun NavController.navigateUpToSearchOrVaultUnlockedRoot() {
 }
 
 private fun NavController.navigateUpToVaultUnlockedRoot() {
-    Timber.i("navigateUpToVaultUnlockedRoot called")
     this.popBackStack<VaultUnlockedNavbarRoute>(inclusive = false)
 }

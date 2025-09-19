@@ -76,7 +76,6 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
     onNavigateToImportItems: () -> Unit,
-    onNavigateToMyVault: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -149,7 +148,7 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
         onNavigateToImportLogins = onNavigateToImportLogins,
         onNavigateToImportItems = onNavigateToImportItems,
-        onNavigateToMyVault = onNavigateToMyVault,
+        onNavigateToMyVault = { navController.navigateToSettingsGraphRoot() },
         onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
         onNavigateToFlightRecorder = onNavigateToFlightRecorder,
         onNavigateToRecordedLogs = onNavigateToRecordedLogs,

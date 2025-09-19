@@ -1,8 +1,10 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
@@ -82,4 +84,22 @@ fun NavGraphBuilder.vaultGraph(
  */
 fun NavController.navigateToVaultGraph(navOptions: NavOptions? = null) {
     this.navigate(route = VaultGraphRoute, navOptions = navOptions)
+}
+
+/**
+ * Navigate to the vault graph root.
+ */
+fun NavController.navigateToSettingsGraphRoot() {
+    // Brings up back to the Vault graph
+    navigateToVaultGraph(
+        navOptions = navOptions {
+            popUpTo(id = graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        },
+    )
+    // Then ensures that we are at the root
+    popBackStack(route = VaultRoute, inclusive = false)
 }
