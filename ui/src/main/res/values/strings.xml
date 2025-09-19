@@ -1102,4 +1102,7 @@ Do you want to switch to this account?</string>
         <item quantity="one">%1$d item has been imported to your vault.</item>
         <item quantity="other">%1$d items have been imported to your vault.</item>
     </plurals>
+    <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
+    <string name="your_browser_recently_updated_how_autofill_works">Your browser recently updated how Autofill works. To continue filling your passwords with Bitwarden, enable browser Autofill in autofill settings.</string>
+    <string name="not_now">Not now</string>
 </resources>

@@ -106,6 +106,11 @@ interface SettingsDiskSource {
     val flightRecorderDataFlow: Flow<FlightRecorderDataSet?>
 
     /**
+     * The time at which the browser autofill dialog is allowed to be shown to the user again.
+     */
+    var browserAutofillDialogReshowTime: Instant?
+
+    /**
      * Clears all the settings data for the given user.
      */
     fun clearData(userId: String)

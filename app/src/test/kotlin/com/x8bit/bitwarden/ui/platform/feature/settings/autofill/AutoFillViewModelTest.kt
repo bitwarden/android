@@ -470,7 +470,7 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         settingsRepository = settingsRepository,
         authRepository = authRepository,
         firstTimeActionManager = firstTimeActionManager,
-        chromeThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
+        browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
         featureFlagManager = mockFeatureFlagManager,
     )
 }

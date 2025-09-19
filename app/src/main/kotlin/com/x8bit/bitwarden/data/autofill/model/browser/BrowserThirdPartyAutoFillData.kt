@@ -6,7 +6,9 @@ package com.x8bit.bitwarden.data.autofill.model.browser
 data class BrowserThirdPartyAutoFillData(
     val isAvailable: Boolean,
     val isThirdPartyEnabled: Boolean,
-)
+) {
+    val isAvailableButDisabled: Boolean = isAvailable && !isThirdPartyEnabled
+}
 
 /**
  * The overall status for all relevant browsers.
@@ -15,4 +17,12 @@ data class BrowserThirdPartyAutofillStatus(
     val braveStableStatusData: BrowserThirdPartyAutoFillData,
     val chromeStableStatusData: BrowserThirdPartyAutoFillData,
     val chromeBetaChannelStatusData: BrowserThirdPartyAutoFillData,
-)
+) {
+    /**
+     * Whether any of the available browsers have third party autofill disabled.
+     */
+    val isAnyIsAvailableAndDisabled: Boolean
+        get() = braveStableStatusData.isAvailableButDisabled ||
+            chromeStableStatusData.isAvailableButDisabled ||
+            chromeBetaChannelStatusData.isAvailableButDisabled
+}

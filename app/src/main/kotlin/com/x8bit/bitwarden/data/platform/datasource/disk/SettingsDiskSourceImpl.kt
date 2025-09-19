@@ -48,6 +48,7 @@ private const val SHOULD_SHOW_GENERATOR_COACH_MARK = "shouldShowGeneratorCoachMa
 private const val RESUME_SCREEN = "resumeScreen"
 private const val FLIGHT_RECORDER_KEY = "flightRecorderData"
 private const val IS_DYNAMIC_COLORS_ENABLED = "isDynamicColorsEnabled"
+private const val BROWSER_AUTOFILL_DIALOG_RESHOW_TIME = "browserAutofillDialogReshowTime"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -223,6 +224,12 @@ class SettingsDiskSourceImpl(
 
     override val flightRecorderDataFlow: Flow<FlightRecorderDataSet?>
         get() = mutableFlightRecorderDataFlow.onSubscription { emit(flightRecorderData) }
+
+    override var browserAutofillDialogReshowTime: Instant?
+        get() = getLong(key = BROWSER_AUTOFILL_DIALOG_RESHOW_TIME)?.let { Instant.ofEpochMilli(it) }
+        set(value) {
+            putLong(key = BROWSER_AUTOFILL_DIALOG_RESHOW_TIME, value = value?.toEpochMilli())
+        }
 
     override fun clearData(userId: String) {
         storeVaultTimeoutInMinutes(userId = userId, vaultTimeoutInMinutes = null)
