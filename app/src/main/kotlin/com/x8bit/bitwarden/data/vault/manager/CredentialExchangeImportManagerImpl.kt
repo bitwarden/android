@@ -9,6 +9,7 @@ import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.service.CiphersService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
+import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 
 /**
@@ -17,6 +18,7 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 class CredentialExchangeImportManagerImpl(
     private val vaultSdkSource: VaultSdkSource,
     private val ciphersService: CiphersService,
+    private val vaultSyncManager: VaultSyncManager,
 ) : CredentialExchangeImportManager {
 
     override suspend fun importCxfPayload(
@@ -58,6 +60,14 @@ class CredentialExchangeImportManagerImpl(
                         }
                     }
                 }
+        }
+        .map {
+            when (val syncResult = vaultSyncManager.syncForResult(forced = true)) {
+                is SyncVaultDataResult.Success -> it
+                is SyncVaultDataResult.Error -> {
+                    ImportCxfPayloadResult.SyncFailed(error = syncResult.throwable)
+                }
+            }
         }
         .fold(
             onSuccess = { it },

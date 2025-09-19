@@ -16,6 +16,11 @@ sealed class ImportCxfPayloadResult {
     data object NoItems : ImportCxfPayloadResult()
 
     /**
+     *
+     */
+    data class SyncFailed(val error: Throwable) : ImportCxfPayloadResult()
+
+    /**
      * There was an error importing the vault data.
      *
      * @param error The error that occurred during import.
