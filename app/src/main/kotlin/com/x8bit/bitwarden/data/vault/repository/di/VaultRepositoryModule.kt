@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.vault.repository.di
 
 import com.bitwarden.data.manager.DispatcherManager
-import com.bitwarden.network.service.FolderService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
@@ -10,6 +9,7 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManager
+import com.x8bit.bitwarden.data.vault.manager.FolderManager
 import com.x8bit.bitwarden.data.vault.manager.SendManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
@@ -33,12 +33,12 @@ object VaultRepositoryModule {
     @Provides
     @Singleton
     fun providesVaultRepository(
-        folderService: FolderService,
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
         settingsDiskSource: SettingsDiskSource,
         cipherManager: CipherManager,
+        folderManager: FolderManager,
         sendManager: SendManager,
         vaultLockManager: VaultLockManager,
         dispatcherManager: DispatcherManager,
@@ -49,12 +49,12 @@ object VaultRepositoryModule {
         vaultSyncManager: VaultSyncManager,
         credentialExchangeImportManager: CredentialExchangeImportManager,
     ): VaultRepository = VaultRepositoryImpl(
-        folderService = folderService,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
         authDiskSource = authDiskSource,
         settingsDiskSource = settingsDiskSource,
         cipherManager = cipherManager,
+        folderManager = folderManager,
         sendManager = sendManager,
         vaultLockManager = vaultLockManager,
         dispatcherManager = dispatcherManager,
