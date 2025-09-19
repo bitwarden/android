@@ -2,9 +2,6 @@ package com.x8bit.bitwarden.data.vault.repository.di
 
 import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
-import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
@@ -20,7 +17,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -36,32 +32,24 @@ object VaultRepositoryModule {
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
-        settingsDiskSource: SettingsDiskSource,
         cipherManager: CipherManager,
         folderManager: FolderManager,
         sendManager: SendManager,
         vaultLockManager: VaultLockManager,
         dispatcherManager: DispatcherManager,
         totpCodeManager: TotpCodeManager,
-        pushManager: PushManager,
-        databaseSchemeManager: DatabaseSchemeManager,
-        clock: Clock,
         vaultSyncManager: VaultSyncManager,
         credentialExchangeImportManager: CredentialExchangeImportManager,
     ): VaultRepository = VaultRepositoryImpl(
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
         authDiskSource = authDiskSource,
-        settingsDiskSource = settingsDiskSource,
         cipherManager = cipherManager,
         folderManager = folderManager,
         sendManager = sendManager,
         vaultLockManager = vaultLockManager,
         dispatcherManager = dispatcherManager,
         totpCodeManager = totpCodeManager,
-        pushManager = pushManager,
-        databaseSchemeManager = databaseSchemeManager,
-        clock = clock,
         vaultSyncManager = vaultSyncManager,
         credentialExchangeImportManager = credentialExchangeImportManager,
     )
