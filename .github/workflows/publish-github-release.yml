@@ -3,17 +3,17 @@ name: Publish Password Manager and Authenticator GitHub Release as newest
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 3 * * 1-5'
+    - cron: '0 * * * *' # Every hour on the hour
 
 permissions:
   contents: write
   id-token: write
-  actions: read
+  actions: write
 
 jobs:
   publish-release-password-manager:
     name: Publish Password Manager Release
-    uses: bitwarden/gh-actions/.github/workflows/_publish-mobile-github-release.yml@main
+    uses: bitwarden/gh-actions/.github/workflows/_publish-mobile-github-release.yml@agalles/BRE-1118-automate-github-publish
     with:
       release_name: "Password Manager"
       workflow_name: "publish-github-release.yml"
@@ -25,7 +25,7 @@ jobs:
 
   publish-release-authenticator:
     name: Publish Authenticator Release
-    uses: bitwarden/gh-actions/.github/workflows/_publish-mobile-github-release.yml@main
+    uses: bitwarden/gh-actions/.github/workflows/_publish-mobile-github-release.yml@agalles/BRE-1118-automate-github-publish
     with:
       release_name: "Authenticator"
       workflow_name: "publish-github-release.yml"
