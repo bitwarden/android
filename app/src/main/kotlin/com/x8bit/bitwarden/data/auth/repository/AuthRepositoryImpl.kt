@@ -1735,6 +1735,8 @@ class AuthRepositoryImpl(
                         userId = userId,
                         passwordHash = passwordHash,
                     )
+                    // Try to automatically update kdf to minimums after password unlock
+                    updateKdfToMinimumsIfNeeded(password = password)
                 }
 
             // Cache the password to verify against any password policies after the sync completes.
