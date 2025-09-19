@@ -40,9 +40,11 @@ import com.x8bit.bitwarden.ui.tools.feature.send.navigateToSendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.importitems.navigateToImportItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultGraphRoute
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultGraph
+import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultGraphRoot
 import com.x8bit.bitwarden.ui.vault.feature.vault.vaultGraph
 import kotlinx.collections.immutable.persistentListOf
 
@@ -75,7 +77,6 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
-    onNavigateToImportItems: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -147,8 +148,7 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
         onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
         onNavigateToImportLogins = onNavigateToImportLogins,
-        onNavigateToImportItems = onNavigateToImportItems,
-        onNavigateToMyVault = { navController.navigateToSettingsGraphRoot() },
+        onNavigateToMyVault = { navController.navigateToVaultGraphRoot() },
         onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
         onNavigateToFlightRecorder = onNavigateToFlightRecorder,
         onNavigateToRecordedLogs = onNavigateToRecordedLogs,
@@ -185,7 +185,6 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToFlightRecorder: () -> Unit,
     onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
-    onNavigateToImportItems: () -> Unit,
     onNavigateToMyVault: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
@@ -241,7 +240,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToSearchVault = onNavigateToSearchVault,
                 onDimBottomNavBarRequest = { shouldDim -> shouldDimNavBar = shouldDim },
                 onNavigateToImportLogins = onNavigateToImportLogins,
-                onNavigateToImportItems = onNavigateToImportItems,
+                onNavigateToImportItems = { navController.navigateToImportItemsGraph() },
                 onNavigateToMyVault = onNavigateToMyVault,
                 onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
                 onNavigateToAboutScreen = {
@@ -272,7 +271,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
                 onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
                 onNavigateToImportLogins = onNavigateToImportLogins,
-                onNavigateToImportItems = onNavigateToImportItems,
+                onNavigateToImportItems = { navController.navigateToImportItemsGraph() },
                 onNavigateToFlightRecorder = onNavigateToFlightRecorder,
                 onNavigateToRecordedLogs = onNavigateToRecordedLogs,
                 onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,

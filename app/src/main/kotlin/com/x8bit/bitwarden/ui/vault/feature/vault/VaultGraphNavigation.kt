@@ -89,7 +89,7 @@ fun NavController.navigateToVaultGraph(navOptions: NavOptions? = null) {
 /**
  * Navigate to the vault graph root.
  */
-fun NavController.navigateToSettingsGraphRoot() {
+fun NavController.navigateToVaultGraphRoot() {
     // Brings up back to the Vault graph
     navigateToVaultGraph(
         navOptions = navOptions {

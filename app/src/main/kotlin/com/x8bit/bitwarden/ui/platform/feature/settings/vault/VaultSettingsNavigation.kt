@@ -4,7 +4,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import com.x8bit.bitwarden.ui.vault.feature.importitems.importItemsGraph
 import kotlinx.serialization.Serializable
 
 /**
@@ -16,15 +15,12 @@ data object VaultSettingsRoute
 /**
  * Add Vault Settings destinations to the nav graph.
  */
-@Suppress("LongParameterList")
 fun NavGraphBuilder.vaultSettingsDestination(
-    navController: NavController,
     onNavigateBack: () -> Unit,
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
     onNavigateToImportItems: () -> Unit,
-    onNavigateToMyVault: () -> Unit,
 ) {
     composableWithPushTransitions<VaultSettingsRoute> {
         VaultSettingsScreen(
@@ -33,12 +29,6 @@ fun NavGraphBuilder.vaultSettingsDestination(
             onNavigateToFolders = onNavigateToFolders,
             onNavigateToImportLogins = onNavigateToImportLogins,
             onNavigateToImportItems = onNavigateToImportItems,
-        )
-
-        importItemsGraph(
-            navController = navController,
-            onNavigateBack = onNavigateBack,
-            onNavigateToMyVault = onNavigateToMyVault,
         )
     }
 }
