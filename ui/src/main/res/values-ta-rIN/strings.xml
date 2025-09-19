@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">இதுபற்றி</string>
     <string name="add_folder">கோப்புறை சேர்</string>
     <string name="add_item">உருப்படியைச் சேர்</string>
@@ -998,7 +998,10 @@
     <string name="advanced">மேம்பட்ட</string>
     <string name="collapse_advanced_options">மேம்பட்ட விருப்பங்களைச் சுருக்கு</string>
     <string name="number_of_digits">இலக்கங்களின் எண்ணிக்கை</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d வினாடிகள்</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">உருப்படி சேமிக்கப்பட்டது</string>
     <string name="information">தகவல்</string>
     <string name="otp_type">OTP வகை</string>
@@ -1084,4 +1087,18 @@
     <string name="default_uri_match_detection_description_advanced_options">தானியங்கு நிரப்புதல் பரிந்துரைகளை Bitwarden எவ்வாறு கண்டறிகிறது என்பதை URI பொருத்தம் கண்டறிதல் கட்டுப்படுத்துகிறது.\n<annotation emphasis="bold">எச்சரிக்கை::</annotation> \"தொடங்குகிறது\" என்பது சான்றுகளை வெளிப்படுத்தும் அபாயம் கொண்ட ஒரு மேம்பட்ட விருப்பமாகும்.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"தொடங்குகிறது\" என்பது நற்சான்றிதழ்களை வெளிப்படுத்தும் அதிக ஆபத்து உள்ள ஒரு மேம்பட்ட விருப்பமாகும்.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"வழக்கமான வெளிப்பாடு\" என்பது தவறாகப் பயன்படுத்தப்பட்டால் நற்சான்றிதழ்களை வெளிப்படுத்தும் அபாயம் அதிகம் உள்ள ஒரு மேம்பட்ட விருப்பமாகும்.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>
