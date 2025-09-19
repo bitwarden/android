@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -11,7 +10,6 @@ import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofi
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFillData
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -67,16 +65,6 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         every { isAccessibilityEnabledStateFlow } returns mutableIsAccessibilityEnabledStateFlow
         every { isAutofillEnabledStateFlow } returns mutableIsAutofillEnabledStateFlow
         every { disableAutofill() } just runs
-    }
-
-    private val mutableUserManagedPrivilegedAppsEnabledFlow = MutableStateFlow(false)
-    private val mockFeatureFlagManager = mockk<FeatureFlagManager> {
-        every {
-            getFeatureFlag(FlagKey.UserManagedPrivilegedApps)
-        } returns mutableUserManagedPrivilegedAppsEnabledFlow.value
-        every {
-            getFeatureFlagFlow(FlagKey.UserManagedPrivilegedApps)
-        } returns mutableUserManagedPrivilegedAppsEnabledFlow
     }
 
     @BeforeEach
@@ -471,7 +459,6 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         authRepository = authRepository,
         firstTimeActionManager = firstTimeActionManager,
         browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
-        featureFlagManager = mockFeatureFlagManager,
     )
 }
 
@@ -487,7 +474,6 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     showAutofillActionCard = false,
     activeUserId = "activeUserId",
     browserAutofillSettingsOptions = persistentListOf(),
-    isUserManagedPrivilegedAppsEnabled = false,
 )
 
 private val DEFAULT_BROWSER_AUTOFILL_DATA = BrowserThirdPartyAutoFillData(

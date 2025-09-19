@@ -32,7 +32,6 @@ sealed class FlagKey<out T : Any> {
             listOf(
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
-                UserManagedPrivilegedApps,
             )
         }
     }
@@ -60,14 +59,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object CipherKeyEncryption : FlagKey<Boolean>() {
         override val keyName: String = "cipher-key-encryption"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key to enabled user-managed privileged apps.
-     */
-    data object UserManagedPrivilegedApps : FlagKey<Boolean>() {
-        override val keyName: String = "pm-18970-user-managed-privileged-apps"
         override val defaultValue: Boolean = false
     }
 
