@@ -188,6 +188,7 @@ class VaultViewModel @Inject constructor(
                 SnackbarRelay.CIPHER_RESTORED,
                 SnackbarRelay.CIPHER_UPDATED,
                 SnackbarRelay.LOGINS_IMPORTED,
+                SnackbarRelay.VAULT_SYNC_FAILED,
             ),
         )
             .map { VaultAction.Internal.SnackbarDataReceive(it) }

@@ -2882,14 +2882,14 @@ class VaultRepositoryTest {
                     userId = userId,
                     payload = payload,
                 )
-            } returns ImportCxfPayloadResult.Success
+            } returns ImportCxfPayloadResult.Success(itemCount = 1)
             coEvery {
                 vaultSyncManager.sync(userId = userId, forced = true)
             } returns SyncVaultDataResult.Success(itemsAvailable = true)
             val result = vaultRepository.importCxfPayload(payload)
 
             assertEquals(
-                ImportCredentialsResult.Success,
+                ImportCredentialsResult.Success(itemCount = 1),
                 result,
             )
             coVerify(exactly = 1) {
@@ -2966,7 +2966,7 @@ class VaultRepositoryTest {
                 userId = userId,
                 payload = payload,
             )
-        } returns ImportCxfPayloadResult.Success
+        } returns ImportCxfPayloadResult.Success(itemCount = 1)
 
         coEvery {
             vaultSyncManager.sync(userId = userId, forced = true)

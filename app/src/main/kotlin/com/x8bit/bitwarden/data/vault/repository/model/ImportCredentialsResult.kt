@@ -8,7 +8,7 @@ sealed class ImportCredentialsResult {
     /**
      * Indicates the vault data has been successfully imported.
      */
-    data object Success : ImportCredentialsResult()
+    data class Success(val itemCount: Int) : ImportCredentialsResult()
 
     /**
      * Indicates there are no items to import.

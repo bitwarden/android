@@ -8,7 +8,7 @@ sealed class ImportCxfPayloadResult {
     /**
      * The vault data has been successfully imported.
      */
-    data object Success : ImportCxfPayloadResult()
+    data class Success(val itemCount: Int) : ImportCxfPayloadResult()
 
     /**
      * There are no items to import.
