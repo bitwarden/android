@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">O aplikaci</string>
     <string name="add_folder">Přidat složku</string>
     <string name="add_item">Přidat položku</string>
@@ -1005,7 +1005,12 @@ při opakování problémů.</string>
     <string name="advanced">Pokročilé</string>
     <string name="collapse_advanced_options">Sbalit pokročilé volby</string>
     <string name="number_of_digits">Počet číslic</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d sekund</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d sekunda</item>
+        <item quantity="few">%d sekundy</item>
+        <item quantity="many">%d sekund</item>
+        <item quantity="other">%d sekund</item>
+    </plurals>
     <string name="item_saved">Položka byla uložena</string>
     <string name="information">Informace</string>
     <string name="otp_type">Typ OTP</string>
@@ -1093,4 +1098,18 @@ při opakování problémů.</string>
     <string name="default_uri_match_detection_description_advanced_options">Detekce shody URI ovládá způsob, jakým Bitwarden identifikuje návrhy automatického vyplňování.\n<annotation emphasis="bold">Varování:</annotation> \"Začíná na\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů, pokud je použita nesprávně.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Začíná na\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Regulární výraz\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů.</string>
+    <string name="credential_import_was_cancelled">Import přihlašovacích údajů byl zrušen. Žádné přihlašovací údaje nebyly importovány.</string>
+    <string name="import_cancelled">Import byl zrušen</string>
+    <string name="your_items_have_been_successfully_imported">Vaše položky byly úspěšně importovány a jsou nyní viditelné ve Vašem trezoru.</string>
+    <string name="import_saved_items">Importovat uložené položky</string>
+    <string name="import_your_credentials_from_another_password_manager">Importujte Vaše přihlašovací údaje, včetně hesel, hesel, platebních karet a všech osobních údajů z jiného správce hesel.</string>
+    <string name="return_to_your_vault">Zpět do Vašeho trezoru</string>
+    <string name="select_a_credential_manager_to_import_items_from">Vyberte správce přihlašovacích údajů pro import položek.</string>
+    <string name="no_items_imported">Nebyly importovány žádné položky</string>
+    <string name="no_items_received_from_the_selected_credential_manager">Z vybraného správce přihlašovacích údajů nebyly přijaty žádné položky.</string>
+    <string name="vault_sync_failed">Synchronizace trezoru se nezdařila</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Vaše položky byly úspěšně importovány, ale nemohly být synchronizovány. Importované položky nebudou viditelné v trezoru, dokud nebude provedena synchronizace.</string>
+    <string name="there_was_a_problem_importing_your_items">Při importu Vašich položek došlo k chybě. Zkuste to znovu. Pokud problém přetrvává, kontaktujte podporu.</string>
+    <string name="importing_items">Importování položek...</string>
+    <string name="uploading_items">Nahrávání položek...</string>
 </resources>

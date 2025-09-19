@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">Par</string>
     <string name="add_folder">Pievienot mapi</string>
     <string name="add_item">Pievienot vienumu</string>
@@ -1001,7 +1001,11 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="advanced">Papildu</string>
     <string name="collapse_advanced_options">Sakļaut papildu iespējas</string>
     <string name="number_of_digits">Ciparu skaits</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d sekundes</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="zero">%d sekunžu</item>
+        <item quantity="one">%d sekunde</item>
+        <item quantity="other">%d sekundes</item>
+    </plurals>
     <string name="item_saved">Vienums saglabāts</string>
     <string name="information">Informācija</string>
     <string name="otp_type">OTP veids</string>
@@ -1088,4 +1092,18 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="default_uri_match_detection_description_advanced_options">URI atbilstības noteikšana nosaka, kā Bitwarden atrod automātiskās aizpildes ieteikumus.\n<annotation emphasis="bold">Uzmanību:</annotation> “Sākas” ir lietpratējiem paredzēta iespēja ar paaugstinātu pieteikšanās datu atkāšanas bīstamību.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Sākas ar” ir lietpratējiem paredzēta iespēja ar paaugstinātu piekļuves datu atklāšanas bīstamību.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regulārā izteiksme” ir lietpratējiem paredzēta iespēja ar paaugstinātu piekļuves datu atklāšanas bīstamību.</string>
+    <string name="credential_import_was_cancelled">Piekļuves datu ievietošana tika atcelta. Nekas netika ievietots.</string>
+    <string name="import_cancelled">Ievietošana atcelta</string>
+    <string name="your_items_have_been_successfully_imported">Vienumi tika sekmīgi ievietoti, un tie tagad ir apskatāmi glabātavā.</string>
+    <string name="import_saved_items">Ievietot saglabātos vienumus</string>
+    <string name="import_your_credentials_from_another_password_manager">Ievieto savus piekļuves datus, tajā skaitā piekļuves atslēgas, paroles, maksājumu kartes un jebkādu personīgo identitātes informāciju no cita paroļu pārvaldnieka!</string>
+    <string name="return_to_your_vault">Atgriezties savā glabātavā</string>
+    <string name="select_a_credential_manager_to_import_items_from">Jāatlasa piekļuves datu pārvaldnieks, no kura ievietot vienumus.</string>
+    <string name="no_items_imported">Neviens vienums nav ievietots</string>
+    <string name="no_items_received_from_the_selected_credential_manager">Neviens vienums netika saņemts no atlasītā piekļuves datu pārvaldnieka.</string>
+    <string name="vault_sync_failed">Glabātavas sinhronizēšana neizdevās</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Vienumi tika sekmīgi ievietoti, bet nevarēja sinhronizēt glabātavu. Ievietotie vienumi nebūs redzami glabātavā, kamēr nebūs veikta sinhronizēšana.</string>
+    <string name="there_was_a_problem_importing_your_items">Bija sarežģījums vienumu ievietošanā. Lūgums mēģināt vēlreiz. Ja sarežģījums nepāriet, jāsazinās ar atbalstu.</string>
+    <string name="importing_items">Ievieto vienumus…</string>
+    <string name="uploading_items">Augšupielādē vienumus…</string>
 </resources>

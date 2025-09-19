@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">O aplikácii</string>
     <string name="add_folder">Pridať priečinok</string>
     <string name="add_item">Pridať položku</string>
@@ -1004,7 +1004,12 @@ Chcete prepnúť na tento účet?</string>
     <string name="advanced">Rozšírené</string>
     <string name="collapse_advanced_options">Zbaliť rozšírené možnosti</string>
     <string name="number_of_digits">Počet číslic</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d sek.</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d sekunda</item>
+        <item quantity="few">%d sekundy</item>
+        <item quantity="many">%d sekúnd</item>
+        <item quantity="other">%d sekúnd</item>
+    </plurals>
     <string name="item_saved">Položka bola uložená</string>
     <string name="information">Informácia</string>
     <string name="otp_type">Typ OTP</string>
@@ -1092,4 +1097,18 @@ Chcete prepnúť na tento účet?</string>
     <string name="default_uri_match_detection_description_advanced_options">Zisťovanie zhody URI ovláda ako Bitwarden identifikuje návrhy na automatické vyplnenie.\n<annotation emphasis="bold">Upozornenie:</annotation>\"Začína na\" je pokročilá možnosť so zvýšeným rizikom úniku prihlasovacích údajov.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Začína na\" je rozšírená možnosť so zvýšeným rizikom odhalenia prihlasovacích údajov.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Regulárny výraz\" je pokročilá možnosť so zvýšeným rizikom odhalenia prihlasovacích údajov, ak sa použije nesprávne.</string>
+    <string name="credential_import_was_cancelled">Import prihlasovacích údajov bol zrušený. Žiadne údaje neboli importované.</string>
+    <string name="import_cancelled">Import bol zrušený</string>
+    <string name="your_items_have_been_successfully_imported">Položky boli úspešne importované a sú dostupné vo vašom trezore.</string>
+    <string name="import_saved_items">Importovať uložené položky</string>
+    <string name="import_your_credentials_from_another_password_manager">Importujte svoje prihlasovacie údaje vrátane prístupových kľúčov, hesiel, platobných kariet a akýchkoľvek osobných údajov z iného správcu hesiel.</string>
+    <string name="return_to_your_vault">Späť do trezora</string>
+    <string name="select_a_credential_manager_to_import_items_from">Vyberte správcu hesiel, z ktorého chcete importovať položky.</string>
+    <string name="no_items_imported">Žiadne položky neboli importované</string>
+    <string name="no_items_received_from_the_selected_credential_manager">Od vybraného správcu hesiel neboli prijaté žiadne položky.</string>
+    <string name="vault_sync_failed">Synchronizácia trezora zlyhala</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Položky boli úspešne importované, ale nepodarilo sa synchronizovať trezor. Importované položky nebudú vo vašom trezore viditeľné, kým sa nevykoná synchronizácia.</string>
+    <string name="there_was_a_problem_importing_your_items">Pri importe vašich položiek došlo k problému. Skúste to znova. Ak problém pretrváva, kontaktujte podporu.</string>
+    <string name="importing_items">Importujú sa položky…</string>
+    <string name="uploading_items">Nahrávajú sa položky…</string>
 </resources>

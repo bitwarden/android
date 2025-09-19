@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">Относно</string>
     <string name="add_folder">Добавяне на папка</string>
     <string name="add_item">Добавяне на елемент</string>
@@ -1000,7 +1000,10 @@
     <string name="advanced">Разширени</string>
     <string name="collapse_advanced_options">Свиване на разширените настройки</string>
     <string name="number_of_digits">Брой цифри</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d секунди</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d секунда</item>
+        <item quantity="other">%d секунди</item>
+    </plurals>
     <string name="item_saved">Елементът е запазен</string>
     <string name="information">Информация</string>
     <string name="otp_type">Вид еднократна парола</string>
@@ -1073,8 +1076,8 @@
     <string name="copy_error_report">Копиране на доклада за грешката</string>
     <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Битуорден не може да дешифрира този елемент от трезора. Копирайте доклада за грешката и го изпратете на поддръжката, за да избегнете загубата на данни.</string>
     <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
-        <item quantity="one">Битуорден не може да дешифрира 1 елемент от трезора. Копирайте доклада за грешката и го изпратете на поддръжката, за да избегнете загубата на данни.</item>
-        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="one">Битуорден не може да дешифрира %1$d елемент от трезора. Копирайте доклада за грешката и го изпратете на поддръжката, за да избегнете загубата на данни.</item>
+        <item quantity="other">Битуорден не може да дешифрира %1$d елемента от трезора. Копирайте доклада за грешката и го изпратете на поддръжката, за да избегнете загубата на данни.</item>
     </plurals>
     <string name="select_a_card_for_x">Изберете карта за %s</string>
     <string name="advanced_options">Разширени настройки</string>
@@ -1086,4 +1089,18 @@
     <string name="default_uri_match_detection_description_advanced_options">Разпознаването на съвпадения по адрес управлява начина, по който Битуорден определя какви предложения за автоматично попълване да покаже.\n<annotation emphasis="bold">Внимание:</annotation> „Започва с“ е по-сложен метод, който е и по-рисков, тъй като може да застраши сигурността на данните за вписване.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">„Започва с“ е по-сложен метод, който е и по-рисков, тъй като може да застраши сигурността на данните за вписване.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">„Регулярен израз“ е по-сложен метод, който е и по-рисков, тъй като може да застраши сигурността на данните за вписване, ако се използва неправилно.</string>
+    <string name="credential_import_was_cancelled">Внасянето на данните за вписване беше прекъснато. Не са внесени никакви данни.</string>
+    <string name="import_cancelled">Внасянето е отменено</string>
+    <string name="your_items_have_been_successfully_imported">Елементите бяха внесени успешно и вече могат да бъдат намерени в трезора.</string>
+    <string name="import_saved_items">Внасяне на запазени елементи</string>
+    <string name="import_your_credentials_from_another_password_manager">Внесете своите данни за вписване, включително секретни ключове, пароли, разплащателни карти и всякакви други лични данни от друг управител на пароли.</string>
+    <string name="return_to_your_vault">Върнете се в трезора си</string>
+    <string name="select_a_credential_manager_to_import_items_from">Изберете управител на данни, от който да внесете елементи.</string>
+    <string name="no_items_imported">Не бяха внесени никакви елементи</string>
+    <string name="no_items_received_from_the_selected_credential_manager">Не беше получено нищо от избрания управител на данни.</string>
+    <string name="vault_sync_failed">Синхронизирането на трезора беше неуспешно</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Данните бяха внесени успешно, но трезорът не може да бъде синхронизиран. Внесените елементи няма да бъдат видими в трезора, докато не се извърши синхронизиране.</string>
+    <string name="there_was_a_problem_importing_your_items">Имаше проблем при внасянето на данните. Моля, опитайте отново. Ако това се повтори, свържете се с поддръжката.</string>
+    <string name="importing_items">Внасяне на елементи…</string>
+    <string name="uploading_items">Качване на елементи…</string>
 </resources>
