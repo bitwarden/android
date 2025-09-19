@@ -2312,6 +2312,12 @@ data class VaultAddEditState(
             ((viewState as? ViewState.Content)?.type is ViewState.Content.ItemType.Login) &&
             isAddItemMode
 
+    val hasOrganizations: Boolean
+        get() = (viewState as? ViewState.Content)
+            ?.common
+            ?.hasOrganizations
+            ?: false
+
     /**
      * Enum representing the main type options for the vault, such as LOGIN, CARD, etc.
      *
