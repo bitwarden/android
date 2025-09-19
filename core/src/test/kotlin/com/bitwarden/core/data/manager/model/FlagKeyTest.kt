@@ -21,10 +21,6 @@ class FlagKeyTest {
             "cipher-key-encryption",
         )
         assertEquals(
-            FlagKey.UserManagedPrivilegedApps.keyName,
-            "pm-18970-user-managed-privileged-apps",
-        )
-        assertEquals(
             FlagKey.BitwardenAuthenticationEnabled.keyName,
             "bitwarden-authentication-enabled",
         )
@@ -37,7 +33,6 @@ class FlagKeyTest {
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
                 FlagKey.CipherKeyEncryption,
-                FlagKey.UserManagedPrivilegedApps,
                 FlagKey.BitwardenAuthenticationEnabled,
             ).all {
                 !it.defaultValue

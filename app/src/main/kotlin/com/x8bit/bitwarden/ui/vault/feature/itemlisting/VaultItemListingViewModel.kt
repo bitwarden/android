@@ -9,7 +9,6 @@ import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.map
@@ -53,7 +52,6 @@ import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.credentials.util.getCreatePasskeyCredentialRequestOrNull
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
@@ -144,7 +142,6 @@ class VaultItemListingViewModel @Inject constructor(
     private val bitwardenCredentialManager: BitwardenCredentialManager,
     private val organizationEventManager: OrganizationEventManager,
     private val networkConnectionManager: NetworkConnectionManager,
-    private val featureFlagManager: FeatureFlagManager,
     private val relyingPartyParser: RelyingPartyParser,
     private val toastManager: ToastManager,
     snackbarRelayManager: SnackbarRelayManager,
@@ -2191,8 +2188,7 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun shouldShowTrustPrompt(error: ValidateOriginResult.Error): Boolean =
-        error is ValidateOriginResult.Error.PrivilegedAppNotAllowed &&
-            featureFlagManager.getFeatureFlag(FlagKey.UserManagedPrivilegedApps)
+        error is ValidateOriginResult.Error.PrivilegedAppNotAllowed
 
     private fun handleFido2AssertionDataReceive(
         action: VaultItemListingsAction.Internal.Fido2AssertionDataReceive,

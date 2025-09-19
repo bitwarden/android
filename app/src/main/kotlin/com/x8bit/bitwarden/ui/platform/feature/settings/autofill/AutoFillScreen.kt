@@ -245,30 +245,25 @@ private fun AutoFillScreenContent(
                     id = BitwardenString.set_bitwarden_as_passkey_manager_description,
                 ),
                 withDivider = false,
-                cardStyle = if (state.isUserManagedPrivilegedAppsEnabled) {
-                    CardStyle.Top()
-                } else {
-                    CardStyle.Full
-                },
+                cardStyle = CardStyle.Top(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
-            if (state.isUserManagedPrivilegedAppsEnabled) {
-                BitwardenTextRow(
-                    text = stringResource(BitwardenString.privileged_apps),
-                    onClick = autoFillHandlers.onPrivilegedAppsClick,
-                    tooltip = TooltipData(
-                        contentDescription =
-                            stringResource(BitwardenString.learn_more_about_privileged_apps),
-                        onClick = autoFillHandlers.onPrivilegedAppsHelpLinkClick,
+            BitwardenTextRow(
+                text = stringResource(BitwardenString.privileged_apps),
+                onClick = autoFillHandlers.onPrivilegedAppsClick,
+                tooltip = TooltipData(
+                    contentDescription = stringResource(
+                        id = BitwardenString.learn_more_about_privileged_apps,
                     ),
-                    cardStyle = CardStyle.Bottom,
-                    modifier = Modifier
-                        .standardHorizontalMargin()
-                        .fillMaxWidth(),
-                )
-            }
+                    onClick = autoFillHandlers.onPrivilegedAppsHelpLinkClick,
+                ),
+                cardStyle = CardStyle.Bottom,
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
+            )
             Spacer(modifier = Modifier.height(height = 8.dp))
         }
         AccessibilityAutofillSwitch(
