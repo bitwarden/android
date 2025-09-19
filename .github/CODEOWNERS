@@ -48,3 +48,8 @@
 # app/src/main/java/com/x8bit/bitwarden/ui/vault  @bitwarden/team-vault-dev
 # app/src/test/java/com/x8bit/bitwarden/data/vault @bitwarden/team-vault-dev
 # app/src/test/java/com/x8bit/bitwarden/ui/vault  @bitwarden/team-vault-dev
+
+# Default shared ownership of Dockerfile
+**/Dockerfile @bitwarden/team-appsec @bitwarden/dept-bre
+**/*.dockerignore @bitwarden/team-appsec @bitwarden/dept-bre
+**/entrypoint.sh @bitwarden/team-appsec @bitwarden/dept-bre
