@@ -3,8 +3,10 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlocked
 
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupAutoFillScreen
@@ -36,6 +38,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.folders.foldersDestinati
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.navigateToFolders
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VaultUnlockedNavbarRoute
+import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.navigateToVaultUnlockedNavBar
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorModalDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHistoryMode
@@ -50,6 +53,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.vaultAddEditDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.attachmentDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.navigateToAttachment
+import com.x8bit.bitwarden.ui.vault.feature.importitems.importItemsGraph
+import com.x8bit.bitwarden.ui.vault.feature.importitems.navigateToImportItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.importLoginsScreenDestination
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.navigateToImportLoginsScreen
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
@@ -62,6 +67,7 @@ import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.vaultMoveToOrgani
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.navigateToQrCodeScanScreen
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.vaultQrCodeScanDestination
 import kotlinx.serialization.Serializable
+import timber.log.Timber
 
 /**
  * The type-safe route for the vault unlocked graph.
@@ -74,6 +80,26 @@ data object VaultUnlockedGraphRoute
  */
 fun NavController.navigateToVaultUnlockedGraph(navOptions: NavOptions? = null) {
     navigate(route = VaultUnlockedGraphRoute, navOptions = navOptions)
+}
+
+/**
+ * Navigate to the vault unlocked screen root.
+ */
+fun NavController.navigateToVaultUnlockedGraphRoot() {
+    Timber.i(
+        "navigateToVaultUnlockedGraphRoot called with backstack = %s",
+        currentBackStack.value.joinToString(),
+    )
+    navigateToVaultUnlockedNavBar(
+        navOptions = navOptions {
+            popUpTo(id = graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        },
+    )
+//    popBackStack(route = VaultUnlockedGraphRoute, inclusive = false)
 }
 
 /**
@@ -119,6 +145,14 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToSetupUnlockScreen = { navController.navigateToSetupUnlockScreen() },
             onNavigateToSetupAutoFillScreen = { navController.navigateToSetupAutoFillScreen() },
             onNavigateToImportLogins = { navController.navigateToImportLoginsScreen() },
+            onNavigateToImportItems = { navController.navigateToImportItemsGraph() },
+            onNavigateToMyVault = {
+                Timber.i(
+                    "vaultUnlockedNavBarDestination::onNavigateToMyVault currentBackStack = %s",
+                    navController.currentBackStack.value.joinToString(),
+                )
+                navController.navigateUpToVaultUnlockedRoot()
+            },
             onNavigateToAddFolderScreen = {
                 navController.navigateToFolderAddEdit(
                     folderAddEditType = FolderAddEditType.AddItem,
@@ -256,6 +290,17 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         importLoginsScreenDestination(
             onNavigateBack = { navController.popBackStack() },
         )
+        importItemsGraph(
+            navController = navController,
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToMyVault = {
+                Timber.i(
+                    "importItemsGraph::onNavigateToMyVault currentBackStack = %s",
+                    navController.currentBackStack.value.joinToString(),
+                )
+                navController.navigateToVaultUnlockedGraphRoot()
+            },
+        )
     }
 }
 
@@ -266,5 +311,6 @@ private fun NavController.navigateUpToSearchOrVaultUnlockedRoot() {
 }
 
 private fun NavController.navigateUpToVaultUnlockedRoot() {
+    Timber.i("navigateUpToVaultUnlockedRoot called")
     this.popBackStack<VaultUnlockedNavbarRoute>(inclusive = false)
 }
