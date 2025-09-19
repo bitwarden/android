@@ -407,7 +407,8 @@ class TwoFactorLoginViewModel @Inject constructor(
                     it.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.verification_email_not_sent.asText(),
+                            message = result.message?.asText()
+                                ?: BitwardenString.verification_email_not_sent.asText(),
                             error = result.error,
                         ),
                     )

@@ -8,6 +8,8 @@ import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResendNewDeviceOtpRequestJson
 import com.bitwarden.network.model.ResetPasswordRequestJson
 import com.bitwarden.network.model.SetPasswordRequestJson
+import com.bitwarden.network.model.VerificationCodeResponseJson
+import com.bitwarden.network.model.VerificationOtpResponseJson
 
 /**
  * Provides an API for querying accounts endpoints.
@@ -51,12 +53,16 @@ interface AccountsService {
     /**
      * Resend the email with the two-factor verification code.
      */
-    suspend fun resendVerificationCodeEmail(body: ResendEmailRequestJson): Result<Unit>
+    suspend fun resendVerificationCodeEmail(
+        body: ResendEmailRequestJson,
+    ): Result<VerificationCodeResponseJson>
 
     /**
      * Resend the email with the verification code for new devices
      */
-    suspend fun resendNewDeviceOtp(body: ResendNewDeviceOtpRequestJson): Result<Unit>
+    suspend fun resendNewDeviceOtp(
+        body: ResendNewDeviceOtpRequestJson,
+    ): Result<VerificationOtpResponseJson>
 
     /**
      * Reset the password.
