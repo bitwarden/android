@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
@@ -98,6 +99,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         every {
             getSnackbarDataFlow(relay = any(), relays = anyVararg())
         } returns mutableSnackbarDataFlow
+    }
+
+    private val toastManager: ToastManager = mockk {
+        every { show(messageId = any()) } just runs
     }
 
     private val clipboardManager: BitwardenClipboardManager = mockk {
@@ -2834,6 +2839,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             reviewPromptManager = reviewPromptManager,
             specialCircumstanceManager = specialCircumstanceManager,
             networkConnectionManager = networkConnectionManager,
+            toastManager = toastManager,
         )
 }
 

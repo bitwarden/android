@@ -1878,9 +1878,10 @@ AuthRepositoryTest {
                 SINGLE_USER_STATE_1,
                 fakeAuthDiskSource.userState,
             )
-            verify(exactly = 1) {
+            coVerify(exactly = 1) {
                 userStateManager.hasPendingAccountAddition = false
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
+                repository.updateKdfToMinimumsIfNeeded(password = PASSWORD)
             }
         }
 
@@ -2130,6 +2131,18 @@ AuthRepositoryTest {
                 )
             } returns VaultUnlockResult.Success
             coEvery { vaultRepository.syncIfNecessary() } just runs
+            coEvery {
+                vaultSdkSource.makeUpdateKdf(
+                    userId = any(),
+                    password = any(),
+                    kdf = any(),
+                )
+            } returns UPDATE_KDF_RESPONSE.asSuccess()
+            coEvery {
+                accountsService.updateKdf(
+                    body = any(),
+                )
+            } returns Unit.asSuccess()
             every {
                 GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS.toUserState(
                     previousUserState = SINGLE_USER_STATE_2,
