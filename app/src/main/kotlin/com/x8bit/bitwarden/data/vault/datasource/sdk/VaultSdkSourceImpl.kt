@@ -474,7 +474,7 @@ class VaultSdkSourceImpl(
     ): Result<UpdatePasswordResponse> = runCatchingWithLogs {
         getClient(userId = userId)
             .crypto()
-            .updatePassword(newPassword = newPassword)
+            .makeUpdatePassword(newPassword = newPassword)
     }
 
     override suspend fun exportVaultDataToString(

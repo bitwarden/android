@@ -1079,7 +1079,7 @@ class VaultSdkSourceTest {
             newKey = newKey,
         )
         coEvery {
-            clientCrypto.updatePassword(
+            clientCrypto.makeUpdatePassword(
                 newPassword = newPassword,
             )
         } returns updatePasswordResponse
