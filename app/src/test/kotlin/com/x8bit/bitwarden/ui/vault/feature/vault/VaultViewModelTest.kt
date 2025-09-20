@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
@@ -146,6 +147,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             every { hasPendingAccountAddition = any() } just runs
             every { logout(userId = any(), reason = any()) } just runs
             every { switchAccount(any()) } answers { switchAccountResult }
+            coEvery { needsKdfUpdateToMinimums() } returns false
         }
 
     private var mutableFlightRecorderDataFlow =
@@ -2854,6 +2856,215 @@ class VaultViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `KdfUpdatePasswordRepromptSubmit with Success should clear dialog and show success toast`() =
+        runTest {
+            val password = "masterPassword"
+            coEvery {
+                authRepository.updateKdfToMinimumsIfNeeded(password)
+            } returns UpdateKdfMinimumsResult.Success
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.KdfUpdatePasswordRepromptSubmit(password = password),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(dialog = null),
+                viewModel.stateFlow.value,
+            )
+            verify(exactly = 1) {
+                toastManager.show(messageId = BitwardenString.encryption_settings_updated)
+            }
+        }
+
+    @Test
+    fun `KdfUpdatePasswordRepromptSubmit with AccountNotFound should show error dialog`() =
+        runTest {
+            val password = "masterPassword"
+            coEvery {
+                authRepository.updateKdfToMinimumsIfNeeded(password)
+            } returns UpdateKdfMinimumsResult.AccountNotFound
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.KdfUpdatePasswordRepromptSubmit(password = password),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `KdfUpdatePasswordRepromptSubmit with ActiveAccountNotFound should show error dialog`() =
+        runTest {
+            val password = "masterPassword"
+            coEvery {
+                authRepository.updateKdfToMinimumsIfNeeded(password)
+            } returns UpdateKdfMinimumsResult.ActiveAccountNotFound
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.KdfUpdatePasswordRepromptSubmit(password = password),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString.generic_error_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `KdfUpdatePasswordRepromptSubmit with Error should show error dialog`() = runTest {
+        val password = "masterPassword"
+        val testError = Exception("Test error")
+        coEvery {
+            authRepository.updateKdfToMinimumsIfNeeded(password)
+        } returns UpdateKdfMinimumsResult.Error(testError)
+
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            VaultAction.KdfUpdatePasswordRepromptSubmit(password = password),
+        )
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.Error(
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString.generic_error_message.asText(),
+                    error = testError,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `vaultDataStateFlow Loaded with needsKdfUpdateToMinimums true should show KdfUpdateRequired dialog`() =
+        runTest {
+            coEvery { authRepository.needsKdfUpdateToMinimums() } returns true
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(
+                            createMockCipherListView(
+                                number = 1,
+                                type = CipherListViewType.Login(
+                                    createMockLoginListView(number = 1),
+                                ),
+                            ),
+                            createMockCipherListView(
+                                number = 2,
+                                type = CipherListViewType.Login(
+                                    createMockLoginListView(number = 2),
+                                ),
+                            ),
+                        ),
+                        failures = emptyList(),
+                    ),
+                    collectionViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createViewModel()
+
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.Content(
+                        loginItemsCount = 2,
+                        cardItemsCount = 0,
+                        identityItemsCount = 0,
+                        secureNoteItemsCount = 0,
+                        favoriteItems = listOf(),
+                        folderItems = listOf(),
+                        collectionItems = listOf(),
+                        noFolderItems = listOf(),
+                        trashItemsCount = 0,
+                        totpItemsCount = 2,
+                        itemTypesCount = 5,
+                        sshKeyItemsCount = 0,
+                        showCardGroup = true,
+                    ),
+                    dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
+                        title = BitwardenString.update_your_encryption_settings.asText(),
+                        message = BitwardenString.the_new_recommended_encryption_settings_will_improve_your_account_security_desc_long.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `vaultDataStateFlow Loaded with needsKdfUpdateToMinimums false should not show KdfUpdateRequired dialog`() =
+        runTest {
+            coEvery { authRepository.needsKdfUpdateToMinimums() } returns false
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(
+                            createMockCipherListView(
+                                number = 1,
+                                type = CipherListViewType.Login(
+                                    createMockLoginListView(number = 1),
+                                ),
+                            ),
+                            createMockCipherListView(
+                                number = 2,
+                                type = CipherListViewType.Login(
+                                    createMockLoginListView(number = 2),
+                                ),
+                            ),
+                        ),
+                        failures = emptyList(),
+                    ),
+                    collectionViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createViewModel()
+
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.Content(
+                        loginItemsCount = 2,
+                        cardItemsCount = 0,
+                        identityItemsCount = 0,
+                        secureNoteItemsCount = 0,
+                        favoriteItems = listOf(),
+                        folderItems = listOf(),
+                        collectionItems = listOf(),
+                        noFolderItems = listOf(),
+                        trashItemsCount = 0,
+                        totpItemsCount = 2,
+                        itemTypesCount = 5,
+                        sshKeyItemsCount = 0,
+                        showCardGroup = true,
+                    ),
+                    dialog = null,
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
