@@ -30,6 +30,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.CredentialExchangeProtocolExport,
     FlagKey.CipherKeyEncryption,
     FlagKey.UserManagedPrivilegedApps,
+    FlagKey.ForceUpdateKdfSettings,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -74,6 +75,7 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.CredentialExchangeProtocolImport -> stringResource(BitwardenString.cxp_import)
     FlagKey.CredentialExchangeProtocolExport -> stringResource(BitwardenString.cxp_export)
     FlagKey.CipherKeyEncryption -> stringResource(BitwardenString.cipher_key_encryption)
+    FlagKey.ForceUpdateKdfSettings -> stringResource(BitwardenString.force_update_kdf_settings)
     FlagKey.UserManagedPrivilegedApps -> {
         stringResource(BitwardenString.user_trusted_privileged_app_management)
     }
