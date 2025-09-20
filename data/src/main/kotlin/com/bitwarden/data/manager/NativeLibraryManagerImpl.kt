@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.manager
+package com.bitwarden.data.manager
 
 import com.bitwarden.annotation.OmitFromCoverage
 import timber.log.Timber
@@ -7,7 +7,7 @@ import timber.log.Timber
  * Primary implementation of [NativeLibraryManager].
  */
 @OmitFromCoverage
-class NativeLibraryManagerImpl : NativeLibraryManager {
+internal class NativeLibraryManagerImpl : NativeLibraryManager {
     override fun loadLibrary(libraryName: String): Result<Unit> {
         return try {
             System.loadLibrary(libraryName)

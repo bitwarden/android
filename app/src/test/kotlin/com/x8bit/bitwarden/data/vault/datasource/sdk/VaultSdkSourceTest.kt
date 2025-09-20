@@ -1295,6 +1295,7 @@ class VaultSdkSourceTest {
         val mockAutofillView = Fido2CredentialAutofillView(
             credentialId = byteArrayOf(0),
             cipherId = "mockCipherId",
+            hasCounter = false,
             rpId = "mockRpId",
             userNameForUi = "mockUserNameForUi",
             userHandle = "mockUserHandle".toByteArray(),
@@ -1344,6 +1345,7 @@ class VaultSdkSourceTest {
             rpId = "mockRpId",
             userNameForUi = "mockUserNameForUi",
             userHandle = "mockUserHandle".toByteArray(),
+            hasCounter = false,
         )
         val autofillViews = listOf(mockAutofillView)
 

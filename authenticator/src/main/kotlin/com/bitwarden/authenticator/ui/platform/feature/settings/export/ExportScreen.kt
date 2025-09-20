@@ -21,12 +21,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledTonalButton
@@ -181,7 +182,7 @@ private fun ExportScreenContent(
         modifier = modifier
             .verticalScroll(rememberScrollState()),
     ) {
-        val resources = LocalContext.current.resources
+        val resources = LocalResources.current
         BitwardenMultiSelectButton(
             label = stringResource(id = BitwardenString.file_format),
             options = ExportVaultFormat.entries.map { it.displayLabel() }.toImmutableList(),

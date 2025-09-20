@@ -653,23 +653,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `PrivilegedAppsRow should display based on state`() {
-        composeTestRule
-            .onNodeWithText("Privileged apps")
-            .assertDoesNotExist()
-
-        mutableStateFlow.update {
-            it.copy(isUserManagedPrivilegedAppsEnabled = true)
-        }
-        composeTestRule
-            .onNodeWithText("Privileged apps")
-            .performScrollTo()
-            .assertIsDisplayed()
-    }
-
-    @Test
     fun `privileged app help link click should send AboutPrivilegedAppsClick`() {
-        mutableStateFlow.update { it.copy(isUserManagedPrivilegedAppsEnabled = true) }
         composeTestRule
             .onNodeWithContentDescription("Learn more about privileged apps")
             .performScrollTo()
@@ -689,7 +673,6 @@ class AutoFillScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `privileged apps row click should send PrivilegedAppsClick`() {
-        mutableStateFlow.update { it.copy(isUserManagedPrivilegedAppsEnabled = true) }
         composeTestRule
             .onNodeWithText("Privileged apps")
             .performScrollTo()
@@ -820,5 +803,4 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     showAutofillActionCard = false,
     activeUserId = "activeUserId",
     browserAutofillSettingsOptions = persistentListOf(),
-    isUserManagedPrivilegedAppsEnabled = false,
 )

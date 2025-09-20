@@ -28,6 +28,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -81,6 +82,7 @@ import javax.inject.Inject
 
 private const val VAULT_DATA_RECEIVED_DELAY: Long = 550L
 private const val LOGIN_SUCCESS_SNACKBAR_DELAY: Long = 550L
+private const val BROWSER_AUTOFILL_DIALOG_DELAY: Long = 550L
 
 /**
  * Manages [VaultState], handles [VaultAction], and launches [VaultEvent] for the [VaultScreen].
@@ -100,6 +102,7 @@ class VaultViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val networkConnectionManager: NetworkConnectionManager,
     private val toastManager: ToastManager,
+    private val browserAutofillDialogManager: BrowserAutofillDialogManager,
     snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
@@ -111,9 +114,8 @@ class VaultViewModel @Inject constructor(
                 .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
                 .any(),
         )
-        val appBarTitle = vaultFilterData.toAppBarTitle()
         VaultState(
-            appBarTitle = appBarTitle,
+            appBarTitle = vaultFilterData.toAppBarTitle(),
             initials = activeAccountSummary.initials,
             avatarColorString = activeAccountSummary.avatarColorHex,
             accountSummaries = accountSummaries,
@@ -191,6 +193,7 @@ class VaultViewModel @Inject constructor(
                 SnackbarRelay.CIPHER_RESTORED,
                 SnackbarRelay.CIPHER_UPDATED,
                 SnackbarRelay.LOGINS_IMPORTED,
+                SnackbarRelay.VAULT_SYNC_FAILED,
             ),
         )
             .map { VaultAction.Internal.SnackbarDataReceive(it) }
@@ -209,6 +212,20 @@ class VaultViewModel @Inject constructor(
             .map { VaultAction.Internal.PolicyUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        viewModelScope.launch {
+            delay(timeMillis = BROWSER_AUTOFILL_DIALOG_DELAY)
+            mutableStateFlow.update { vaultState ->
+                vaultState.copy(
+                    dialog = VaultState.DialogState.ThirdPartyBrowserAutofill
+                        .takeIf {
+                            vaultState.dialog == null &&
+                                browserAutofillDialogManager.shouldShowDialog
+                        }
+                        ?: vaultState.dialog,
+                )
+            }
+        }
     }
 
     override fun handleAction(action: VaultAction) {
@@ -263,6 +280,10 @@ class VaultViewModel @Inject constructor(
             is VaultAction.KdfUpdatePasswordRepromptSubmit -> {
                 handleKdfUpdatePasswordRepromptSubmit(action)
             }
+            VaultAction.EnableThirdPartyAutofillClick -> handleEnableThirdPartyAutofillClick()
+            VaultAction.DismissThirdPartyAutofillDialogClick -> {
+                handleDismissThirdPartyAutofillDialogClick()
+            }
         }
     }
 
@@ -292,6 +313,17 @@ class VaultViewModel @Inject constructor(
                     .joinToString(separator = "\n"),
             ),
         )
+    }
+
+    private fun handleEnableThirdPartyAutofillClick() {
+        browserAutofillDialogManager.delayDialog()
+        mutableStateFlow.update { it.copy(dialog = null) }
+        sendEvent(VaultEvent.NavigateToAutofillSettings)
+    }
+
+    private fun handleDismissThirdPartyAutofillDialogClick() {
+        browserAutofillDialogManager.delayDialog()
+        mutableStateFlow.update { it.copy(dialog = null) }
     }
 
     private fun handleSelectAddItemType() {
@@ -928,6 +960,8 @@ class VaultViewModel @Inject constructor(
                     title = BitwardenString.decryption_error.asText(),
                     cipherCount = vaultData.data.decryptCipherListResult.failures.size,
                 )
+            } else if (state.dialog is VaultState.DialogState.ThirdPartyBrowserAutofill) {
+                VaultState.DialogState.ThirdPartyBrowserAutofill
             } else {
                 null
             },
@@ -1523,6 +1557,12 @@ data class VaultState(
         ) : DialogState()
 
         /**
+         * Represents a dialog indicating that a 3rd party browser required Autofill configuration.
+         */
+        @Parcelize
+        data object ThirdPartyBrowserAutofill : DialogState()
+
+        /**
          * Represents a dialog indicating that there was a decryption error loading ciphers.
          */
         @Parcelize
@@ -1653,6 +1693,11 @@ sealed class VaultEvent {
      * Navigate to settings.
      */
     data object NavigateToAbout : VaultEvent()
+
+    /**
+     * Navigate to Autofill settings screen.
+     */
+    data object NavigateToAutofillSettings : VaultEvent()
 }
 
 /**
@@ -1781,6 +1826,16 @@ sealed class VaultAction {
      * User clicked the secure notes types button.
      */
     data object SecureNoteGroupClick : VaultAction()
+
+    /**
+     * Click to enabled 3rd party autofill for a browser.
+     */
+    data object EnableThirdPartyAutofillClick : VaultAction()
+
+    /**
+     * Click to dismiss 3rd party autofill dialog.
+     */
+    data object DismissThirdPartyAutofillDialogClick : VaultAction()
 
     /**
      * Click to share cipher decryption error details.

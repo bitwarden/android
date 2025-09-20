@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
@@ -28,6 +28,7 @@ import com.bitwarden.ui.platform.util.toObjectNavigationRoute
 import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.navigateToAbout
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.navigateToAutoFill
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraphRoot
 import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
@@ -239,6 +240,10 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToAboutScreen = {
                     navController.navigateToSettingsGraphRoot()
                     navController.navigateToAbout(isPreAuth = false)
+                },
+                onNavigateToAutofillScreen = {
+                    navController.navigateToSettingsGraphRoot()
+                    navController.navigateToAutoFill()
                 },
             )
             sendGraph(

@@ -51,7 +51,7 @@ jobs:
           echo "</details>" >> $GITHUB_STEP_SUMMARY
 
       - name: Check out repo
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - name: Validate Gradle wrapper
         uses: gradle/actions/wrapper-validation@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4.4.2
@@ -76,13 +76,13 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure JDK
-        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
         with:
           distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@829114fc20da43a41d27359103ec7a63020954d4 # v1.255.0
+        uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
         with:
           bundler-cache: true
 
@@ -110,10 +110,10 @@ jobs:
 
     steps:
       - name: Check out repo
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@829114fc20da43a41d27359103ec7a63020954d4 # v1.255.0
+        uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
         with:
           bundler-cache: true
 
@@ -211,7 +211,7 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure JDK
-        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
         with:
           distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}

@@ -640,6 +640,7 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     creationDate = FIXED_CLOCK.instant(),
     deletedDate = null,
     revisionDate = FIXED_CLOCK.instant(),
+    archivedDate = null,
     sshKey = null,
 )
 

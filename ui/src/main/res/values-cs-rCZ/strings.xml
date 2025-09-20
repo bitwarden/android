@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">O aplikaci</string>
     <string name="add_folder">Přidat složku</string>
     <string name="add_item">Přidat položku</string>
     <string name="an_error_has_occurred">Vyskytla se chyba.</string>
     <string name="apply">Použít</string>
     <string name="back">Zpět</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Zrušit</string>
     <string name="copy">Kopírovat</string>
     <string name="copy_password">Kopírovat heslo</string>
@@ -500,7 +499,6 @@ Načtení proběhne automaticky.</string>
     <string name="remove_master_password">Odebrat hlavní heslo</string>
     <string name="leave_organization">Opustit organizaci</string>
     <string name="leave_organization_name">Opustit %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Ověření WebAuthn</string>
     <string name="fido2_return_to_app">Zpět do aplikace</string>
     <string name="reset_password_auto_enroll_invite_warning">Tato organizace má podnikové zásady, které Vás automaticky zaregistrují k obnovení hesla. Registrace umožní správcům organizace změnit Vaše hlavní heslo.</string>
@@ -577,12 +575,6 @@ Načtení proběhne automaticky.</string>
     <string name="api_key">Klíč API</string>
     <string name="api_key_required_parenthesis">Klíč API (vyžadován)</string>
     <string name="service">Služba</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API přístupového tokenu (povinné)</string>
     <string name="api_access_token">Přístupový token API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Opravdu chcete přepsat aktuální uživatelské jméno?</string>
@@ -925,7 +917,6 @@ Chcete se přepnout na tento účet?</string>
     <string name="no_folder">Žádná složka</string>
     <string name="show_less">Zobrazit méně</string>
     <string name="add_field">Přidat pole</string>
-    <string name="x_ellipses">%s...</string>
     <string name="share_error_details">Sdílet podrobnosti o chybě</string>
     <string name="flight_recorder">Letový zapisovač</string>
     <string name="flight_recorder_help">Nápověda letového zapisovače</string>
@@ -1014,7 +1005,12 @@ při opakování problémů.</string>
     <string name="advanced">Pokročilé</string>
     <string name="collapse_advanced_options">Sbalit pokročilé volby</string>
     <string name="number_of_digits">Počet číslic</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d sekund</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d sekunda</item>
+        <item quantity="few">%d sekundy</item>
+        <item quantity="many">%d sekund</item>
+        <item quantity="other">%d sekund</item>
+    </plurals>
     <string name="item_saved">Položka byla uložena</string>
     <string name="information">Informace</string>
     <string name="otp_type">Typ OTP</string>
@@ -1057,7 +1053,6 @@ při opakování problémů.</string>
     <string name="sync_with_bitwarden_app">Synchronizovat s aplikací Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">Další informace</annotation></string>
     <string name="shared_codes_error">Nelze synchronizovat kódy z aplikace Bitwarden. Zkontrolujte, zda jsou obě aplikace aktuální. Ke stávajícím kódům máte stále přístup v aplikaci Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Synchronizovat s aplikací Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Pokud chcete zobrazit všechny ověřovací kódy, budete muset povolit synchronizaci na všech Vašich účtech.</string>
     <string name="take_me_to_app_settings">Přejít do nastavení aplikace</string>
@@ -1103,4 +1098,18 @@ při opakování problémů.</string>
     <string name="default_uri_match_detection_description_advanced_options">Detekce shody URI ovládá způsob, jakým Bitwarden identifikuje návrhy automatického vyplňování.\n<annotation emphasis="bold">Varování:</annotation> \"Začíná na\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů, pokud je použita nesprávně.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Začíná na\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Regulární výraz\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů.</string>
+    <string name="credential_import_was_cancelled">Import přihlašovacích údajů byl zrušen. Žádné přihlašovací údaje nebyly importovány.</string>
+    <string name="import_cancelled">Import byl zrušen</string>
+    <string name="your_items_have_been_successfully_imported">Vaše položky byly úspěšně importovány a jsou nyní viditelné ve Vašem trezoru.</string>
+    <string name="import_saved_items">Importovat uložené položky</string>
+    <string name="import_your_credentials_from_another_password_manager">Importujte Vaše přihlašovací údaje, včetně hesel, hesel, platebních karet a všech osobních údajů z jiného správce hesel.</string>
+    <string name="return_to_your_vault">Zpět do Vašeho trezoru</string>
+    <string name="select_a_credential_manager_to_import_items_from">Vyberte správce přihlašovacích údajů pro import položek.</string>
+    <string name="no_items_imported">Nebyly importovány žádné položky</string>
+    <string name="no_items_received_from_the_selected_credential_manager">Z vybraného správce přihlašovacích údajů nebyly přijaty žádné položky.</string>
+    <string name="vault_sync_failed">Synchronizace trezoru se nezdařila</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Vaše položky byly úspěšně importovány, ale nemohly být synchronizovány. Importované položky nebudou viditelné v trezoru, dokud nebude provedena synchronizace.</string>
+    <string name="there_was_a_problem_importing_your_items">Při importu Vašich položek došlo k chybě. Zkuste to znovu. Pokud problém přetrvává, kontaktujte podporu.</string>
+    <string name="importing_items">Importování položek...</string>
+    <string name="uploading_items">Nahrávání položek...</string>
 </resources>

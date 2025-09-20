@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">Tietoja</string>
     <string name="add_folder">Lisää kansio</string>
     <string name="add_item">Lisää kohde</string>
     <string name="an_error_has_occurred">Tapahtui virhe.</string>
     <string name="apply">Apply</string>
     <string name="back">Takaisin</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Peruuta</string>
     <string name="copy">Kopioi</string>
     <string name="copy_password">Kopioi salasana</string>
@@ -496,7 +495,6 @@ Koodi skannataan automaattisesti.</string>
     <string name="remove_master_password">Poista pääsalasana</string>
     <string name="leave_organization">Poistu organisaatiosta</string>
     <string name="leave_organization_name">Poistutaanko organisaatiosta %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">WebAuthn-tunnistautuminen</string>
     <string name="fido2_return_to_app">Palaa sovellukseen</string>
     <string name="reset_password_auto_enroll_invite_warning">Organisaatiolla on yrityskäytäntö, joka liittää tilisi automaattisesti salasanan palautusapuun. Liitos sallii organisaation ylläpitäjien vaihtaa pääsalasanasi.</string>
@@ -574,12 +572,6 @@ turvallisesti valitsemalla \"Lisää TOTP\"</string>
     <string name="api_key">API-avain</string>
     <string name="api_key_required_parenthesis">API-avain (pakollinen)</string>
     <string name="service">Palvelu</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">Forward Email</string>
     <string name="api_access_token_required_parenthesis">API access token (required)</string>
     <string name="api_access_token">API-käyttötunniste</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Haluatko varmasti korvata nykyisen käyttäjätunnuksen?</string>
@@ -920,7 +912,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="no_folder">Ei kansiota</string>
     <string name="show_less">Näytä vähemmän</string>
     <string name="add_field">Lisää kenttä</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Jaa virhetiedot</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>
@@ -1007,7 +998,10 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="advanced">Lisäasetukset</string>
     <string name="collapse_advanced_options">Tiivistä lisäasetukset</string>
     <string name="number_of_digits">Pituus</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d sekuntia</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">Kohde tallennettu</string>
     <string name="information">Tiedot</string>
     <string name="otp_type">OTP:n tyyppi</string>
@@ -1050,7 +1044,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="sync_with_bitwarden_app">Synkronoi Bitwarden-sovelluksen kanssa</string>
     <string name="learn_more_link"><annotation link="learnMore">Lue lisää</annotation></string>
     <string name="shared_codes_error">Koodien synkronointi Bitwarden sovelluksesta epäonnistui. Varmista, että molemmat sovellukset ovat ajan tasalla. Voit edelleen käyttää olemassa olevia koodejasi Bitwarden sovelluksessa.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Synkronoi Bitwarden-sovelluksen kanssa</string>
     <string name="sync_with_bitwarden_action_card_message">Tarkastellaksesi kaikkia vahvistuskoodejasi sinun täytyy sallia synkronointi kaikilla tileilläsi.</string>
     <string name="take_me_to_app_settings">Vie minut sovelluksen asetuksiin</string>
@@ -1094,4 +1087,18 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>

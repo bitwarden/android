@@ -48,6 +48,8 @@ data class VaultHandlers(
     val onShareCipherDecryptionErrorClick: (selectedCipherId: String) -> Unit,
     val onShareAllCipherDecryptionErrorsClick: () -> Unit,
     val onKdfUpdatePasswordRepromptSubmit: (password: String) -> Unit,
+    val onEnabledThirdPartyAutofillClick: () -> Unit,
+    val onDismissThirdPartyAutofillDialogClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -128,24 +130,21 @@ data class VaultHandlers(
                 dismissFlightRecorderSnackbar = {
                     viewModel.trySendAction(VaultAction.DismissFlightRecorderSnackbar)
                 },
-                onShareCipherDecryptionErrorClick =
-                    {
-                        viewModel.trySendAction(
-                            VaultAction.ShareCipherDecryptionErrorClick(it),
-                        )
-                    },
-                onShareAllCipherDecryptionErrorsClick =
-                    {
-                        viewModel.trySendAction(
-                            VaultAction.ShareAllCipherDecryptionErrorsClick,
-                        )
-                    },
-                onKdfUpdatePasswordRepromptSubmit =
-                    {
-                        viewModel.trySendAction(
-                            VaultAction.KdfUpdatePasswordRepromptSubmit(it),
-                        )
-                    },
+                onShareCipherDecryptionErrorClick = {
+                    viewModel.trySendAction(VaultAction.ShareCipherDecryptionErrorClick(it))
+                },
+                onShareAllCipherDecryptionErrorsClick = {
+                    viewModel.trySendAction(VaultAction.ShareAllCipherDecryptionErrorsClick)
+                },
+                onEnabledThirdPartyAutofillClick = {
+                    viewModel.trySendAction(VaultAction.EnableThirdPartyAutofillClick)
+                },
+                onDismissThirdPartyAutofillDialogClick = {
+                    viewModel.trySendAction(VaultAction.DismissThirdPartyAutofillDialogClick)
+                },
+                onKdfUpdatePasswordRepromptSubmit = {
+                    viewModel.trySendAction(VaultAction.KdfUpdatePasswordRepromptSubmit(it))
+                },
             )
     }
 }

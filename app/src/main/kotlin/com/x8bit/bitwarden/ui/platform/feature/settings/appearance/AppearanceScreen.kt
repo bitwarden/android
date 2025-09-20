@@ -17,12 +17,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -193,7 +193,7 @@ private fun LanguageSelectionRow(
     currentSelection: AppLanguage,
     onLanguageSelection: (AppLanguage) -> Unit,
     modifier: Modifier = Modifier,
-    resources: Resources = LocalContext.current.resources,
+    resources: Resources = LocalResources.current,
 ) {
     BitwardenMultiSelectButton(
         label = stringResource(id = BitwardenString.language),
@@ -214,7 +214,7 @@ private fun ThemeSelectionRow(
     currentSelection: AppTheme,
     onThemeSelection: (AppTheme) -> Unit,
     modifier: Modifier = Modifier,
-    resources: Resources = LocalContext.current.resources,
+    resources: Resources = LocalResources.current,
 ) {
     BitwardenMultiSelectButton(
         label = stringResource(id = BitwardenString.theme),

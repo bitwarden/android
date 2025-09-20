@@ -9,6 +9,7 @@ import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.manager.toast.ToastManagerImpl
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.manager.DispatcherManagerImpl
+import com.bitwarden.data.manager.NativeLibraryManager
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.network.BitwardenServiceClient
 import com.bitwarden.network.service.EventService
@@ -41,8 +42,6 @@ import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.NativeLibraryManager
-import com.x8bit.bitwarden.data.platform.manager.NativeLibraryManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -241,10 +240,6 @@ object PlatformManagerModule {
             serverConfigRepository = serverConfigRepository,
         )
     }
-
-    @Provides
-    @Singleton
-    fun provideNativeLibraryManager(): NativeLibraryManager = NativeLibraryManagerImpl()
 
     @Provides
     @Singleton

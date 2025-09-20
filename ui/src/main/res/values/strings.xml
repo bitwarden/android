@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">About</string>
     <string name="add_folder">Add folder</string>
     <string name="add_item">Add Item</string>
@@ -998,7 +998,10 @@ Do you want to switch to this account?</string>
     <string name="advanced">Advanced</string>
     <string name="collapse_advanced_options">Collapse advanced options</string>
     <string name="number_of_digits">Number of digits</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d seconds</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">Item saved</string>
     <string name="information">Information</string>
     <string name="otp_type">OTP type</string>
@@ -1088,4 +1091,22 @@ Do you want to switch to this account?</string>
     <string name="encryption_settings_updated">Encryption settings updated</string>
     <string name="update_your_encryption_settings">Update your encryption settings</string>
     <string name="the_new_recommended_encryption_settings_will_improve_your_account_security_desc_long">The new recommended encryption settings will improve your account security. Enter your master password to update now.</string>
+    <string name="import_was_cancelled_in_the_selected_app">Credential import was cancelled in the selected app. No items have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_app">No items received from the selected app.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but they will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="saving_items">Saving items…</string>
+    <string name="unable_to_import_your_items">Unable to import your items</string>
+    <string name="import_from_computer">Import from computer</string>
+    <string name="import_from_another_app">Import from another app</string>
+    <plurals name="x_items_have_been_imported_to_your_vault">
+        <item quantity="one">%1$d item has been imported to your vault.</item>
+        <item quantity="other">%1$d items have been imported to your vault.</item>
+    </plurals>
+    <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
+    <string name="your_browser_recently_updated_how_autofill_works">Your browser recently updated how Autofill works. To continue filling your passwords with Bitwarden, enable browser Autofill in autofill settings.</string>
+    <string name="not_now">Not now</string>
 </resources>

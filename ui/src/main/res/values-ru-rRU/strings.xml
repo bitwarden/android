@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">О Bitwarden</string>
     <string name="add_folder">Добавить папку</string>
     <string name="add_item">Добавить элемент</string>
     <string name="an_error_has_occurred">Произошла ошибка</string>
     <string name="apply">Применить</string>
     <string name="back">Назад</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Отмена</string>
     <string name="copy">Скопировать</string>
     <string name="copy_password">Скопировать пароль</string>
@@ -500,7 +499,6 @@
     <string name="remove_master_password">Удалить мастер-пароль</string>
     <string name="leave_organization">Покинуть организацию</string>
     <string name="leave_organization_name">Покинуть %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Аутентификация WebAutn</string>
     <string name="fido2_return_to_app">Вернуться в приложение</string>
     <string name="reset_password_auto_enroll_invite_warning">В этой организации действует корпоративная политика, которая автоматически зарегистрирует вас на сброс пароля. Регистрация позволит администраторам организации изменить ваш мастер-пароль.</string>
@@ -578,12 +576,6 @@
     <string name="api_key">Ключ API</string>
     <string name="api_key_required_parenthesis">Ключ API (требуется)</string>
     <string name="service">Служба</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">Токен доступа к API (обязательно)</string>
     <string name="api_access_token">Токен доступа к API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Вы хотите перезаписать текущее имя пользователя?</string>
@@ -926,7 +918,6 @@
     <string name="no_folder">Без папки</string>
     <string name="show_less">Меньше</string>
     <string name="add_field">Добавить поле</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Поделиться информацией об ошибке</string>
     <string name="flight_recorder">Бортовой самописец</string>
     <string name="flight_recorder_help">Помощь по бортовому самописцу</string>
@@ -1013,7 +1004,12 @@
     <string name="advanced">Дополнительно</string>
     <string name="collapse_advanced_options">Свернуть дополнительные параметры</string>
     <string name="number_of_digits">Количество цифр</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d сек.</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d сек.</item>
+        <item quantity="few">%d сек.</item>
+        <item quantity="many">%d сек.</item>
+        <item quantity="other">%d сек.</item>
+    </plurals>
     <string name="item_saved">Элемент сохранен</string>
     <string name="information">Информация</string>
     <string name="otp_type">Тип OTP</string>
@@ -1056,7 +1052,6 @@
     <string name="sync_with_bitwarden_app">Синхронизация с приложением Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">Узнать больше</annotation></string>
     <string name="shared_codes_error">Не удается синхронизировать коды из приложения Bitwarden. Убедитесь, что оба приложения обновлены до последней версии. Вы по-прежнему можете получить доступ к своим существующим кодам в приложении Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Синхронизация с приложением Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Чтобы просмотреть все свои коды подтверждения, вам необходимо разрешить синхронизацию всех своих аккаунтов.</string>
     <string name="take_me_to_app_settings">Перейти в настройки приложения</string>
@@ -1102,4 +1097,18 @@
     <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Начинается с” - это расширенный вариант с повышенным риском раскрытия учетных данных.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Регулярное выражение” - это расширенный вариант с повышенным риском раскрытия учетных данных при неправильном использовании.</string>
+    <string name="credential_import_was_cancelled">Импорт учетных данных был отменен. Учетные данные не были импортированы.</string>
+    <string name="import_cancelled">Импорт отменен</string>
+    <string name="your_items_have_been_successfully_imported">Ваши элементы успешно импортированы и теперь доступны для просмотра в вашем хранилище.</string>
+    <string name="import_saved_items">Импортировать сохраненные элементы</string>
+    <string name="import_your_credentials_from_another_password_manager">Импортируйте свои учетные данные, включая passkeys, пароли, кредитные карты и любую личную информацию из другого менеджера паролей.</string>
+    <string name="return_to_your_vault">Вернуться в хранилище</string>
+    <string name="select_a_credential_manager_to_import_items_from">Выберите диспетчер учетных данных, из которого вы хотите импортировать элементы.</string>
+    <string name="no_items_imported">Элементы не импортированы</string>
+    <string name="no_items_received_from_the_selected_credential_manager">От выбранного диспетчера учетных данных не получено никаких элементов.</string>
+    <string name="vault_sync_failed">Сбой синхронизации хранилища</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Ваши элементы успешно импортированы, но не удалось синхронизировать их с хранилищем. Импортированные элементы не будут отображаться в вашем хранилище до тех пор, пока не будет выполнена синхронизация.</string>
+    <string name="there_was_a_problem_importing_your_items">Возникла проблема с импортом ваших элементов. Пожалуйста, попробуйте снова. Если проблема повторится, обратитесь в службу поддержки.</string>
+    <string name="importing_items">Импорт элементов…</string>
+    <string name="uploading_items">Выгрузка элементов…</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.base
 
 import androidx.compose.runtime.Composable
+import com.bitwarden.cxf.importer.CredentialExchangeImporter
 import com.bitwarden.ui.platform.base.BaseComposeTest
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.manager.IntentManager
@@ -40,6 +41,7 @@ abstract class BitwardenComposeTest : BaseComposeTest() {
         keyChainManager: KeyChainManager = mockk(),
         nfcManager: NfcManager = mockk(),
         permissionsManager: PermissionsManager = mockk(),
+        credentialExchangeImporter: CredentialExchangeImporter = mockk(),
         test: @Composable () -> Unit,
     ) {
         setTestContent {
@@ -55,6 +57,7 @@ abstract class BitwardenComposeTest : BaseComposeTest() {
                 keyChainManager = keyChainManager,
                 nfcManager = nfcManager,
                 permissionsManager = permissionsManager,
+                credentialExchangeImporter = credentialExchangeImporter,
             ) {
                 BitwardenTheme(
                     theme = theme,

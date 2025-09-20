@@ -19,6 +19,8 @@ import com.bitwarden.network.model.ResendNewDeviceOtpRequestJson
 import com.bitwarden.network.model.ResetPasswordRequestJson
 import com.bitwarden.network.model.SetPasswordRequestJson
 import com.bitwarden.network.model.UpdateKdfJsonRequest
+import com.bitwarden.network.model.VerificationCodeResponseJson
+import com.bitwarden.network.model.VerificationOtpResponseJson
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -140,7 +142,30 @@ class AccountsServiceTest : BaseServiceTest() {
                 ssoToken = null,
             ),
         )
-        assertTrue(result.isSuccess)
+        assertEquals(VerificationCodeResponseJson.Success.asSuccess(), result)
+    }
+
+    @Test
+    fun `resendVerificationCodeEmail with 400 response is Error`() = runTest {
+        val response = MockResponse().setResponseCode(400).setBody(INVALID_JSON)
+        server.enqueue(response)
+        val result = service.resendVerificationCodeEmail(
+            body = ResendEmailRequestJson(
+                deviceIdentifier = "3",
+                email = "example@email.com",
+                passwordHash = "37y4d8r379r4789nt387r39k3dr87nr93",
+                ssoToken = null,
+            ),
+        )
+        assertEquals(
+            VerificationCodeResponseJson
+                .Invalid(
+                    message = "User verification failed.",
+                    validationErrors = null,
+                )
+                .asSuccess(),
+            result,
+        )
     }
 
     @Test
@@ -289,7 +314,35 @@ class AccountsServiceTest : BaseServiceTest() {
         assertTrue(result.isFailure)
     }
 
-    private val UPDATE_KDF_REQUEST = UpdateKdfJsonRequest(
+    fun `resendNewDeviceOtp with 400 response is Error`() = runTest {
+        val response = MockResponse().setResponseCode(400).setBody(INVALID_JSON)
+        server.enqueue(response)
+        val result = service.resendNewDeviceOtp(
+            body = ResendNewDeviceOtpRequestJson(
+                email = "example@email.com",
+                passwordHash = "37y4d8r379r4789nt387r39k3dr87nr93",
+            ),
+        )
+        assertEquals(
+            VerificationOtpResponseJson
+                .Invalid(
+                    message = "User verification failed.",
+                    validationErrors = null,
+                )
+                .asSuccess(),
+            result,
+        )
+    }
+}
+
+private const val INVALID_JSON = """
+{
+  "message": "User verification failed.",
+  "validationErrors": null
+}
+"""
+
+private val UPDATE_KDF_REQUEST = UpdateKdfJsonRequest(
         authenticationData = MasterPasswordAuthenticationDataJsonRequest(
             kdf = KdfJsonRequest(
                 kdfType = KdfTypeJson.PBKDF2_SHA256,
@@ -314,4 +367,3 @@ class AccountsServiceTest : BaseServiceTest() {
             salt = "mockSalt",
         ),
     )
-}

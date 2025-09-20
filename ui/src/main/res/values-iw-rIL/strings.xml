@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">אודות</string>
     <string name="add_folder">הוסף תיקייה</string>
     <string name="add_item">הוסף פריט</string>
     <string name="an_error_has_occurred">אירעה שגיאה.</string>
     <string name="apply">החל</string>
     <string name="back">הקודם</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">ביטול</string>
     <string name="copy">העתק</string>
     <string name="copy_password">העתק סיסמה</string>
@@ -500,7 +499,6 @@
     <string name="remove_master_password">הסר סיסמה ראשית</string>
     <string name="leave_organization">עזוב ארגון</string>
     <string name="leave_organization_name">לעזוב את %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">אמת WebAuthn</string>
     <string name="fido2_return_to_app">חזור ליישום</string>
     <string name="reset_password_auto_enroll_invite_warning">לארגון זה יש מדיניות ארגונית שתרשום אותך באופן אוטומטי לאיפוס סיסמה. הרישום יאפשר למנהלי הארגון לשנות את הסיסמה הראשית שלך.</string>
@@ -578,12 +576,6 @@
     <string name="api_key">מפתח API</string>
     <string name="api_key_required_parenthesis">מפתח API (נדרש)</string>
     <string name="service">שירות</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">אסימון גישת API (נדרש)</string>
     <string name="api_access_token">אסימון גישה ל־API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">האם אתה בטוח שברצונך לדרוס את שם המשתמש הנוכחי?</string>
@@ -926,7 +918,6 @@
     <string name="no_folder">ללא תיקייה</string>
     <string name="show_less">הצג פחות</string>
     <string name="add_field">הוסף שדה</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">שתף פרטי שגיאה</string>
     <string name="flight_recorder">מקליט טיסה</string>
     <string name="flight_recorder_help">עזרה במקליט טיסה</string>
@@ -1013,7 +1004,12 @@
     <string name="advanced">מתקדם</string>
     <string name="collapse_advanced_options">כווץ אפשרויות מתקדמות</string>
     <string name="number_of_digits">מספר ספרות</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d שניות</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="two">%d seconds</item>
+        <item quantity="many">%d seconds</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">הפריט נשמר</string>
     <string name="information">מידע</string>
     <string name="otp_type">סוג OTP</string>
@@ -1056,7 +1052,6 @@
     <string name="sync_with_bitwarden_app">סנכרן עם יישום Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">למד עוד</annotation></string>
     <string name="shared_codes_error">לא ניתן לסנכרן קודים מתוך היישום Bitwarden. יש לוודא ששני היישומים מעודכנים. באפשרותך עדיין לגשת לקודים הקיימים שלך ביישום Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">סנכרן עם היישום Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">כדי להציג את כל קודי האימות שלך, תצטרך להתיר סנכרון בכל החשבונות שלך.</string>
     <string name="take_me_to_app_settings">קח אותי אל הגדרות היישום</string>
@@ -1102,4 +1097,18 @@
     <string name="default_uri_match_detection_description_advanced_options">זיהוי התאמת URI שולט באופן שבו Bitwarden מזהה הצעות למילוי אוטומטי.\n<annotation emphasis="bold">אזהרה:</annotation> ”מתחיל עם” היא אפשרות מתקדמת עם סיכון מוגבר לחשיפת אישורים.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">”מתחיל עם” היא אפשרות מתקדמת עם סיכון מוגבר לחשיפת אישורים.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">”ביטוי רגולרי” הוא אפשרות מתקדמת עם סיכון מוגבר לחשיפת אישורים אם נעשה בו שימוש לא נכון.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>

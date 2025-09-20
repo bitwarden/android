@@ -24,7 +24,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -96,6 +96,7 @@ fun VaultScreen(
     onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutScreen: () -> Unit,
+    onNavigateToAutofillScreen: () -> Unit,
     exitManager: ExitManager = LocalExitManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
     appReviewManager: AppReviewManager = LocalAppReviewManager.current,
@@ -179,6 +180,8 @@ fun VaultScreen(
             is VaultEvent.ShowShareSheet -> {
                 intentManager.shareText(event.content)
             }
+
+            VaultEvent.NavigateToAutofillSettings -> onNavigateToAutofillScreen()
         }
     }
     val vaultHandlers = remember(viewModel) { VaultHandlers.create(viewModel) }
@@ -442,6 +445,24 @@ private fun VaultDialogs(
                 },
                 onDismissClick = vaultHandlers.dialogDismiss,
                 onDismissRequest = vaultHandlers.dialogDismiss,
+            )
+        }
+
+        VaultState.DialogState.ThirdPartyBrowserAutofill -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(
+                    id = BitwardenString.enable_browser_autofill_to_keep_filling_passwords,
+                ),
+                message = stringResource(
+                    id = BitwardenString.your_browser_recently_updated_how_autofill_works,
+                ),
+                confirmButtonText = stringResource(id = BitwardenString.go_to_settings),
+                dismissButtonText = stringResource(id = BitwardenString.not_now),
+                onConfirmClick = vaultHandlers.onEnabledThirdPartyAutofillClick,
+                onDismissClick = vaultHandlers.onDismissThirdPartyAutofillDialogClick,
+                onDismissRequest = vaultHandlers.onDismissThirdPartyAutofillDialogClick,
+                dismissOnBackPress = false,
+                dismissOnClickOutside = false,
             )
         }
 

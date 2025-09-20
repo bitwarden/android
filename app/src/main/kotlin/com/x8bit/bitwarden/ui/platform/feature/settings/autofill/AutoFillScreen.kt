@@ -23,12 +23,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -245,30 +245,25 @@ private fun AutoFillScreenContent(
                     id = BitwardenString.set_bitwarden_as_passkey_manager_description,
                 ),
                 withDivider = false,
-                cardStyle = if (state.isUserManagedPrivilegedAppsEnabled) {
-                    CardStyle.Top()
-                } else {
-                    CardStyle.Full
-                },
+                cardStyle = CardStyle.Top(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
-            if (state.isUserManagedPrivilegedAppsEnabled) {
-                BitwardenTextRow(
-                    text = stringResource(BitwardenString.privileged_apps),
-                    onClick = autoFillHandlers.onPrivilegedAppsClick,
-                    tooltip = TooltipData(
-                        contentDescription =
-                            stringResource(BitwardenString.learn_more_about_privileged_apps),
-                        onClick = autoFillHandlers.onPrivilegedAppsHelpLinkClick,
+            BitwardenTextRow(
+                text = stringResource(BitwardenString.privileged_apps),
+                onClick = autoFillHandlers.onPrivilegedAppsClick,
+                tooltip = TooltipData(
+                    contentDescription = stringResource(
+                        id = BitwardenString.learn_more_about_privileged_apps,
                     ),
-                    cardStyle = CardStyle.Bottom,
-                    modifier = Modifier
-                        .standardHorizontalMargin()
-                        .fillMaxWidth(),
-                )
-            }
+                    onClick = autoFillHandlers.onPrivilegedAppsHelpLinkClick,
+                ),
+                cardStyle = CardStyle.Bottom,
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
+            )
             Spacer(modifier = Modifier.height(height = 8.dp))
         }
         AccessibilityAutofillSwitch(
@@ -344,7 +339,7 @@ private fun FillStyleSelector(
     selectedStyle: AutofillStyle,
     onStyleChange: (AutofillStyle) -> Unit,
     modifier: Modifier = Modifier,
-    resources: Resources = LocalContext.current.resources,
+    resources: Resources = LocalResources.current,
 ) {
     BitwardenMultiSelectButton(
         label = stringResource(id = BitwardenString.display_autofill_suggestions),
@@ -502,7 +497,7 @@ private fun UriMatchSelectionButton(
     selectedUriMatchType: UriMatchType,
     onOptionSelected: (UriMatchType) -> Unit,
     modifier: Modifier = Modifier,
-    resources: Resources = LocalContext.current.resources,
+    resources: Resources = LocalResources.current,
 ) {
     val advancedOptions = UriMatchType.entries.filter { it.isAdvancedMatching() }
     val options = persistentListOfNotNull(

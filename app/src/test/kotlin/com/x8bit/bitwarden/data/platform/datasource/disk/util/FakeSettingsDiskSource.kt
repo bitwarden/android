@@ -87,6 +87,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private var hasSeenGeneratorCoachMark: Boolean? = null
     private var storedFlightRecorderData: FlightRecorderDataSet? = null
     private var storedIsDynamicColorsEnabled: Boolean? = null
+    private var storedBrowserAutofillDialogReshowTime: Instant? = null
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -205,6 +206,12 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     override val flightRecorderDataFlow: Flow<FlightRecorderDataSet?>
         get() = mutableFlightRecorderDataFlow
             .onSubscription { emit(storedFlightRecorderData) }
+
+    override var browserAutofillDialogReshowTime: Instant?
+        get() = storedBrowserAutofillDialogReshowTime
+        set(value) {
+            storedBrowserAutofillDialogReshowTime = value
+        }
 
     override fun getAccountBiometricIntegrityValidity(
         userId: String,
@@ -475,6 +482,13 @@ class FakeSettingsDiskSource : SettingsDiskSource {
      */
     fun assertLastSyncTime(userId: String, expected: Instant?) {
         assertEquals(expected, storedLastSyncTime[userId])
+    }
+
+    /**
+     * Asserts that the stored browser autofill dialog reshow time matches the [expected] one.
+     */
+    fun assertBrowserAutofillDialogReshowTime(expected: Instant?) {
+        assertEquals(expected, storedBrowserAutofillDialogReshowTime)
     }
 
     //region Private helper functions

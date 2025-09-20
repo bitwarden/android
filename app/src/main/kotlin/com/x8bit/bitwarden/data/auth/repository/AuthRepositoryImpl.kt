@@ -38,6 +38,8 @@ import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.network.model.TwoFactorDataModel
 import com.bitwarden.network.model.UpdateKdfJsonRequest
+import com.bitwarden.network.model.VerificationCodeResponseJson
+import com.bitwarden.network.model.VerificationOtpResponseJson
 import com.bitwarden.network.model.VerifyEmailTokenRequestJson
 import com.bitwarden.network.model.VerifyEmailTokenResponseJson
 import com.bitwarden.network.service.AccountsService
@@ -749,7 +751,17 @@ class AuthRepositoryImpl(
             ?.let { jsonRequest ->
                 accountsService.resendVerificationCodeEmail(body = jsonRequest).fold(
                     onFailure = { ResendEmailResult.Error(message = it.message, error = it) },
-                    onSuccess = { ResendEmailResult.Success },
+                    onSuccess = {
+                        when (it) {
+                            VerificationCodeResponseJson.Success -> ResendEmailResult.Success
+                            is VerificationCodeResponseJson.Invalid -> {
+                                ResendEmailResult.Error(
+                                    message = it.firstValidationErrorMessage,
+                                    error = null,
+                                )
+                            }
+                        }
+                    },
                 )
             }
             ?: ResendEmailResult.Error(
@@ -762,7 +774,17 @@ class AuthRepositoryImpl(
             ?.let { jsonRequest ->
                 accountsService.resendNewDeviceOtp(body = jsonRequest).fold(
                     onFailure = { ResendEmailResult.Error(message = it.message, error = it) },
-                    onSuccess = { ResendEmailResult.Success },
+                    onSuccess = {
+                        when (it) {
+                            VerificationOtpResponseJson.Success -> ResendEmailResult.Success
+                            is VerificationOtpResponseJson.Invalid -> {
+                                ResendEmailResult.Error(
+                                    message = it.firstValidationErrorMessage,
+                                    error = null,
+                                )
+                            }
+                        }
+                    },
                 )
             }
             ?: ResendEmailResult.Error(

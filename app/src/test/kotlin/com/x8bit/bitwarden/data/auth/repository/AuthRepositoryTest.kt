@@ -52,6 +52,7 @@ import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.network.model.TwoFactorDataModel
 import com.bitwarden.network.model.UserDecryptionOptionsJson
+import com.bitwarden.network.model.VerificationCodeResponseJson
 import com.bitwarden.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 import com.bitwarden.network.model.VerifyEmailTokenRequestJson
 import com.bitwarden.network.model.VerifyEmailTokenResponseJson
@@ -5914,7 +5915,7 @@ AuthRepositoryTest {
                     ssoToken = null,
                 ),
             )
-        } returns Unit.asSuccess()
+        } returns VerificationCodeResponseJson.Success.asSuccess()
         val resendEmailResult = repository.resendVerificationCodeEmail()
         assertEquals(ResendEmailResult.Success, resendEmailResult)
         coVerify {
@@ -5928,6 +5929,73 @@ AuthRepositoryTest {
             )
         }
     }
+
+    @Test
+    fun `resendVerificationCodeEmail uses cached request data to make api call with error`() =
+        runTest {
+            // Attempt a normal login with a two factor error first, so that the necessary
+            // data will be cached.
+            coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns GetTokenResponseJson
+                .TwoFactorRequired(
+                    authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
+                    ssoToken = null,
+                    twoFactorProviders = null,
+                )
+                .asSuccess()
+            val firstResult = repository.login(email = EMAIL, password = PASSWORD)
+            assertEquals(LoginResult.TwoFactorRequired, firstResult)
+            coVerify { identityService.preLogin(email = EMAIL) }
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            }
+
+            // Resend the verification code email.
+            val message = "Failure Message"
+            coEvery {
+                accountsService.resendVerificationCodeEmail(
+                    body = ResendEmailRequestJson(
+                        deviceIdentifier = UNIQUE_APP_ID,
+                        email = EMAIL,
+                        passwordHash = PASSWORD_HASH,
+                        ssoToken = null,
+                    ),
+                )
+            } returns VerificationCodeResponseJson
+                .Invalid(message = message, validationErrors = null)
+                .asSuccess()
+            val resendEmailResult = repository.resendVerificationCodeEmail()
+            assertEquals(
+                ResendEmailResult.Error(message = message, error = null),
+                resendEmailResult,
+            )
+            coVerify {
+                accountsService.resendVerificationCodeEmail(
+                    body = ResendEmailRequestJson(
+                        deviceIdentifier = UNIQUE_APP_ID,
+                        email = EMAIL,
+                        passwordHash = PASSWORD_HASH,
+                        ssoToken = null,
+                    ),
+                )
+            }
+        }
 
     @Test
     fun `resendVerificationCodeEmail returns error if no request data cached`() = runTest {
