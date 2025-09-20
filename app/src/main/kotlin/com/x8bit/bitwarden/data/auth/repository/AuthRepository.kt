@@ -353,12 +353,12 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager, UserStateM
     suspend fun getPasswordStrength(email: String? = null, password: String): PasswordStrengthResult
 
     /**
-     * Checks if their current settings are below the minimums and needs update
+     * Checks if user's current KDF settings are below the minimums and needs update
      */
     suspend fun needsKdfUpdateToMinimums(): Boolean
 
     /**
-     * Updates the user's KDF settings if their current settings are below the minimums
+     * Updates the user's KDF settings if below the minimums
      */
     suspend fun updateKdfToMinimumsIfNeeded(password: String): UpdateKdfMinimumsResult
 

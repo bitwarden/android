@@ -1889,7 +1889,7 @@ AuthRepositoryTest {
                 SINGLE_USER_STATE_1,
                 fakeAuthDiskSource.userState,
             )
-            coVerify(exactly = 1) {
+            verify(exactly = 1) {
                 userStateManager.hasPendingAccountAddition = false
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
             }
