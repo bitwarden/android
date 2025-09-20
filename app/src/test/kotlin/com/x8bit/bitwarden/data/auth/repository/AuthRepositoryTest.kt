@@ -11,6 +11,7 @@ import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
@@ -118,6 +119,7 @@ import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -271,6 +273,10 @@ AuthRepositoryTest {
         coEvery { userStateTransaction(capture(blockSlot)) } coAnswers { blockSlot.captured() }
     }
 
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every { getFeatureFlag(FlagKey.ForceUpdateKdfSettings) } returns true
+    }
+
     private val repository: AuthRepository = AuthRepositoryImpl(
         clock = FIXED_CLOCK,
         accountsService = accountsService,
@@ -295,6 +301,7 @@ AuthRepositoryTest {
         policyManager = policyManager,
         logsManager = logsManager,
         userStateManager = userStateManager,
+        featureFlagManager = featureFlagManager,
     )
 
     @BeforeEach
@@ -1782,6 +1789,9 @@ AuthRepositoryTest {
     fun `login get token succeeds should return Success, unlockVault, update AuthState, update stored keys, and sync`() =
         runTest {
             val successResponse = GET_TOKEN_WITH_ACCOUNT_KEYS_RESPONSE_SUCCESS
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.ForceUpdateKdfSettings)
+            } returns true
             coEvery {
                 identityService.preLogin(email = EMAIL)
             } returns PRE_LOGIN_SUCCESS.asSuccess()
@@ -1881,7 +1891,6 @@ AuthRepositoryTest {
             coVerify(exactly = 1) {
                 userStateManager.hasPendingAccountAddition = false
                 settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1)
-                repository.updateKdfToMinimumsIfNeeded(password = PASSWORD)
             }
         }
 
@@ -7026,6 +7035,33 @@ AuthRepositoryTest {
                         profile = PROFILE_1.copy(
                             kdfType = KdfTypeJson.PBKDF2_SHA256,
                             kdfIterations = 600000,
+                        ),
+                    ),
+                ),
+            )
+
+            val result = repository.updateKdfToMinimumsIfNeeded(password = PASSWORD)
+
+            assertEquals(
+                UpdateKdfMinimumsResult.Success,
+                result,
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `updateKdfToMinimumsIfNeeded with feature flag ForceUpdateKdfSettings to false return Success`() =
+        runTest {
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.ForceUpdateKdfSettings)
+            } returns false
+
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
+                accounts = mapOf(
+                    USER_ID_1 to ACCOUNT_1.copy(
+                        profile = PROFILE_1.copy(
+                            kdfType = KdfTypeJson.PBKDF2_SHA256,
+                            kdfIterations = 1000,
                         ),
                     ),
                 ),
