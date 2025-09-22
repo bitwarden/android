@@ -40,6 +40,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.navigateToSendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.importitems.navigateToImportItemsScreen
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultGraphRoute
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultGraph
@@ -265,6 +266,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
                 onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
                 onNavigateToImportLogins = onNavigateToImportLogins,
+                onNavigateToImportItems = { navController.navigateToImportItemsScreen() },
                 onNavigateToFlightRecorder = onNavigateToFlightRecorder,
                 onNavigateToRecordedLogs = onNavigateToRecordedLogs,
                 onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,

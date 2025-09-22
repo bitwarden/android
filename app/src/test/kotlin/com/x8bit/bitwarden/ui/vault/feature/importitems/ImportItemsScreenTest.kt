@@ -31,7 +31,6 @@ import org.junit.Test
 class ImportItemsScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
-    private var onNavigateToVaultCalled = false
     private var onNavigateToImportFromComputerCalled = false
 
     private val credentialExchangeImporter = mockk<CredentialExchangeImporter>()
@@ -51,7 +50,6 @@ class ImportItemsScreenTest : BitwardenComposeTest() {
         ) {
             ImportItemsScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToVault = { onNavigateToVaultCalled = true },
                 onNavigateToImportFromComputer = { onNavigateToImportFromComputerCalled = true },
                 viewModel = viewModel,
             )
@@ -116,12 +114,6 @@ class ImportItemsScreenTest : BitwardenComposeTest() {
                 viewModel.trySendAction(ImportItemsAction.ImportFromAnotherAppClick)
             }
         }
-
-    @Test
-    fun `NavigateToVault should call onNavigateToVault`() {
-        mockEventFlow.tryEmit(ImportItemsEvent.NavigateToVault)
-        assertTrue(onNavigateToVaultCalled)
-    }
 
     @Test
     fun `ShowRegisteredImportSources should call CredentialExchangeImporter`() = runTest {
@@ -205,4 +197,4 @@ class ImportItemsScreenTest : BitwardenComposeTest() {
     }
 }
 
-private val DEFAULT_STATE: ImportItemsState = ImportItemsState(dialog = null)
+private val DEFAULT_STATE: ImportItemsState = ImportItemsState()

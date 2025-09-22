@@ -30,6 +30,9 @@ import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarHostState
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -46,7 +49,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun ImportItemsScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToVault: () -> Unit,
     onNavigateToImportFromComputer: () -> Unit,
     viewModel: ImportItemsViewModel = hiltViewModel(),
     credentialExchangeImporter: CredentialExchangeImporter =
@@ -55,11 +57,11 @@ fun ImportItemsScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val coroutineScope = rememberCoroutineScope()
     val handler = rememberImportItemsHandler(viewModel = viewModel)
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
 
     EventsEffect(viewModel) { event ->
         when (event) {
             ImportItemsEvent.NavigateBack -> onNavigateBack()
-            ImportItemsEvent.NavigateToVault -> onNavigateToVault()
             ImportItemsEvent.NavigateToImportFromComputer -> onNavigateToImportFromComputer()
             is ImportItemsEvent.ShowRegisteredImportSources -> {
                 coroutineScope.launch {
@@ -73,6 +75,17 @@ fun ImportItemsScreen(
                     )
                 }
             }
+
+            is ImportItemsEvent.ShowBasicSnackbar -> {
+                snackbarHostState.showSnackbar(event.data)
+            }
+
+            is ImportItemsEvent.ShowSyncFailedSnackbar -> {
+                snackbarHostState.showSnackbar(
+                    snackbarData = event.data,
+                    onActionPerformed = handler.onSyncFailedTryAgainClick,
+                )
+            }
         }
     }
 
@@ -85,6 +98,7 @@ fun ImportItemsScreen(
         onNavigateBack = handler.onNavigateBack,
         onImportFromComputerClick = handler.onImportFromComputerClick,
         onImportFromAnotherAppClick = handler.onImportFromAnotherAppClick,
+        snackbarHostState = snackbarHostState,
     )
 }
 
@@ -95,6 +109,7 @@ private fun ImportItemsScaffold(
     onImportFromComputerClick: () -> Unit,
     onImportFromAnotherAppClick: () -> Unit,
     modifier: Modifier = Modifier,
+    snackbarHostState: BitwardenSnackbarHostState = rememberBitwardenSnackbarHostState(),
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -110,6 +125,11 @@ private fun ImportItemsScaffold(
                     navigationIconContentDescription = stringResource(BitwardenString.back),
                 ),
                 scrollBehavior = scrollBehavior,
+            )
+        },
+        snackbarHost = {
+            BitwardenSnackbarHost(
+                bitwardenHostState = snackbarHostState,
             )
         },
     ) {
