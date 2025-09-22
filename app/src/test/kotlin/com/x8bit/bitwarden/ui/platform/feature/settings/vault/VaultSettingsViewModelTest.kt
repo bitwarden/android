@@ -67,6 +67,9 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
+                every {
+                    featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport)
+                } returns false
                 viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
                 assertEquals(
                     VaultSettingsEvent.NavigateToImportVault,
@@ -81,7 +84,9 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
-                every { featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport) } returns true
+                every {
+                    featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport)
+                } returns true
                 viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
                 assertEquals(
                     VaultSettingsEvent.NavigateToImportItems,
