@@ -3,6 +3,7 @@ package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 import android.Manifest
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,6 +42,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.changedToDown
+import androidx.compose.ui.input.pointer.changedToUp
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -70,6 +75,7 @@ import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadin
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
 import com.bitwarden.authenticator.ui.platform.components.fab.ExpandableFabIcon
+import com.bitwarden.authenticator.ui.platform.components.fab.ExpandableFabState
 import com.bitwarden.authenticator.ui.platform.components.fab.ExpandableFloatingActionButton
 import com.bitwarden.authenticator.ui.platform.components.header.AuthenticatorExpandingHeader
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderTextWithSupportLabel
@@ -80,6 +86,7 @@ import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsMa
 import com.bitwarden.authenticator.ui.platform.theme.Typography
 import com.bitwarden.authenticator.ui.platform.util.startAuthenticatorAppSettings
 import com.bitwarden.authenticator.ui.platform.util.startBitwardenAccountSettings
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
@@ -637,10 +644,23 @@ fun EmptyItemListingContent(
     onSyncLearnMoreClick: () -> Unit,
     onDismissSyncWithBitwardenClick: () -> Unit,
 ) {
+    val expand = remember { mutableStateOf<ExpandableFabState>(ExpandableFabState.Collapsed) }
     BitwardenScaffold(
         modifier = Modifier
             .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .pointerInput(expand.value) {
+                awaitPointerEventScope {
+                    while (true) {
+                        val event = awaitPointerEvent(PointerEventPass.Initial)
+                        val upPointer = event.changes.firstOrNull { it.changedToDown() }
+                        if (upPointer != null && expand.value == ExpandableFabState.Expanded) {
+                            expand.value = ExpandableFabState.Collapsed
+                            upPointer.consume()
+                        }
+                    }
+                }
+            },
         topBar = {
             AuthenticatorTopAppBar(
                 title = stringResource(id = BitwardenString.verification_codes),
@@ -679,6 +699,7 @@ fun EmptyItemListingContent(
                         onEnterSetupKeyClick = onEnterSetupKeyClick,
                     ),
                 ),
+                expandableFabState = expand,
                 expandableFabIcon = ExpandableFabIcon(
                     iconData = IconResource(
                         iconPainter = painterResource(id = BitwardenDrawable.ic_plus),
