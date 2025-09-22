@@ -50,7 +50,6 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
                 onNavigateToFolders = { onNavigateToFoldersCalled = true },
                 onNavigateToImportLogins = { onNavigateToImportLoginsCalled = true },
                 onNavigateToImportItems = { onNavigateToImportItemsCalled = true },
-
             )
         }
     }
