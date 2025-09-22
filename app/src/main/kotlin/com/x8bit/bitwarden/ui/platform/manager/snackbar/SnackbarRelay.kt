@@ -21,5 +21,4 @@ enum class SnackbarRelay {
     LOGINS_IMPORTED,
     SEND_DELETED,
     SEND_UPDATED,
-    VAULT_SYNC_FAILED,
 }
