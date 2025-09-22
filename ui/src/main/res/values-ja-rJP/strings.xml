@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">アプリ情報</string>
     <string name="add_folder">フォルダーを追加</string>
     <string name="add_item">アイテムの追加</string>
     <string name="an_error_has_occurred">エラーが発生しました。</string>
     <string name="apply">Apply</string>
     <string name="back">戻る</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">キャンセル</string>
     <string name="copy">コピー</string>
     <string name="copy_password">パスワードをコピー</string>
     <string name="copy_username">ユーザー名をコピー</string>
     <string name="delete">削除</string>
-    <string name="deleting">削除中…</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">本当に削除しますか？この操作は元に戻せません。</string>
     <string name="edit">編集</string>
     <string name="edit_folder">フォルダーを編集</string>
@@ -55,7 +54,7 @@
     <string name="password">パスワード</string>
     <string name="save">保存</string>
     <string name="move">移動</string>
-    <string name="saving">保存中...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">設定</string>
     <string name="show">表示</string>
     <string name="item_deleted">アイテムを削除しました。</string>
@@ -104,7 +103,7 @@
     <string name="immediately">即時</string>
     <string name="vault_timeout_log_out_confirmation_title">セッションのタイムアウトを「ログアウト」に設定しますか？</string>
     <string name="vault_timeout_log_out_confirmation_message">タイムアウト期間後、ログアウトします。 ログインして保管庫に再度アクセスするには、インターネットに接続する必要があります。 このデバイスに保存されている設定とPINは変更されません。</string>
-    <string name="logging_in">ログイン中...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Bitwarden にログイン</string>
     <string name="master_password_confirmation_val_message">パスワードの確認が正しくありません。</string>
     <string name="master_password_description">マスターパスワードは、パスワード保管庫へのアクセスに使用するパスワードです。マスターパスワードを忘れないように注意してください。忘れた場合、パスワードを回復する方法はありません。</string>
@@ -145,8 +144,8 @@
     <string name="select">選択</string>
     <string name="item_details">アイテムの詳細</string>
     <string name="item_updated">アイテムを更新しました。</string>
-    <string name="submitting">送信中...</string>
-    <string name="syncing">同期中...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">同期が完了しました。</string>
     <string name="two_step_login">2段階認証</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -165,7 +164,7 @@
     <string name="search_for_a_login_or_add_a_new_login">ログイン情報を検索するか、新しいログイン情報を追加します</string>
     <string name="disabled">無効</string>
     <string name="bitwarden_autofill_service_alert2">ログイン情報を保管庫に追加する一番簡単な方法はBitwardenの自動入力機能を使うことです。詳しくは「設定」画面に進んでください。</string>
-    <string name="autofill">自動入力</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">このアイテムを自動入力するか表示しますか？</string>
     <string name="search">検索</string>
     <string name="learn_org">組織について学ぶ</string>
@@ -184,7 +183,7 @@
     <string name="add_new_attachment">添付ファイルを追加</string>
     <string name="attachments">添付ファイル</string>
     <string name="unable_to_download_file">ファイルをダウンロードできません。</string>
-    <string name="downloading">ダウンロード中...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">この添付ファイルのサイズは%1$sです。本当に端末にダウンロードしますか？</string>
     <string name="authenticator_key">認証キー (TOTP)</string>
     <string name="verification_code_totp">認証コード (TOTP)</string>
@@ -397,10 +396,10 @@
     <string name="save_attachment_success">添付ファイルを保存しました</string>
     <string name="autofill_tile_accessibility_required">自動入力タイルを使用するには、Bitwarden の設定で「自動入力ユーザー補助サービス」を有効にしてください。</string>
     <string name="autofill_tile_uri_not_found">パスワードフィールドが見つかりませんでした</string>
-    <string name="soft_deleting">ごみ箱に入れています…</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">アイテムをごみ箱に入れました。</string>
     <string name="restore">リストア</string>
-    <string name="restoring">リストア中...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">アイテムをリストアしました。</string>
     <string name="trash">ごみ箱</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">本当に完全に削除しますか？元に戻すことはできません。</string>
@@ -472,7 +471,7 @@
     <string name="add_text_send">新しいテキスト入のSend</string>
     <string name="are_you_sure_delete_send">この Send を削除してもよろしいですか?</string>
     <string name="send_deleted">Send を削除しました。</string>
-    <string name="send_updated">Send updated</string>
+    <string name="send_updated">Sendが更新されました</string>
     <string name="one_day">1日</string>
     <string name="two_days">2日</string>
     <string name="three_days">3日</string>
@@ -494,7 +493,6 @@
     <string name="remove_master_password">マスターパスワードを削除する</string>
     <string name="leave_organization">組織から脱退する</string>
     <string name="leave_organization_name">%1$s から脱退しますか?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">WebAuthn の認証</string>
     <string name="fido2_return_to_app">アプリに戻る</string>
     <string name="reset_password_auto_enroll_invite_warning">この組織には自動的にパスワードリセットに登録するポリシーがあります。登録すると、組織の管理者はマスターパスワードを変更できます。</string>
@@ -532,14 +530,14 @@
     <string name="totp">TOTP</string>
     <string name="verification_codes">認証コード</string>
     <string name="premium_subscription_required">プレミアム版が必要です</string>
-    <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
+    <string name="cannot_add_authenticator_key_scan_qr_code">認証のキーを追加できませんか？<annotation link="scanQrCode">QRコードをスキャンして下さい</annotation></string>
     <string name="scan_qr_code">QRコードを読み取る</string>
-    <string name="cannot_scan_qr_code_enter_key_manually">Cannot scan QR code? <annotation link="enterKeyManually">Enter key manually</annotation></string>
+    <string name="cannot_scan_qr_code_enter_key_manually">QRコードをスキャンできませんか？<annotation link="enterKeyManually">キーを手動で入力してください</annotation></string>
     <string name="authenticator_key_scanner">認証キー</string>
-    <string name="authenticator_key_help">Authenticator key help</string>
+    <string name="authenticator_key_help">認証キーのヘルプ</string>
     <string name="enter_key_manually">キーを手動で入力してください</string>
     <string name="add_totp">TOTP を追加</string>
-    <string name="set_up_authenticator_key">Set up authenticator key</string>
+    <string name="set_up_authenticator_key">認証キーをセットアップ</string>
     <string name="once_the_key_is_successfully_entered">キーを入力したら、安全に保存するため
 『TOTP を追加』を選択してください。</string>
     <string name="never_lock_warning">ロックオプションを「なし」に設定すると、あなたのデバイスを操作できる誰もが保管庫を見られます。 このオプションを使用する場合は、デバイスを適切に保護しておく必要があります。</string>
@@ -553,8 +551,8 @@
     <string name="device_type">デバイス種別</string>
     <string name="ip_address">IP アドレス</string>
     <string name="time">時間</string>
-    <string name="select_time">Select time</string>
-    <string name="switch_input_mode">Switch input mode</string>
+    <string name="select_time">日時を選択</string>
+    <string name="switch_input_mode">入力モード切り替え</string>
     <string name="confirm_log_in">ログインを承認</string>
     <string name="deny_log_in">ログインを拒否</string>
     <string name="log_in_denied">ログインを拒否しました</string>
@@ -567,18 +565,12 @@
     <string name="forwarded_email_alias">転送されたメールエイリアス</string>
     <string name="random_word">ランダムな単語</string>
     <string name="email_required_parenthesis">メールアドレス（必須）</string>
-    <string name="domain_name">domain name</string>
+    <string name="domain_name">ドメイン名</string>
     <string name="domain_name_required_parenthesis">ドメイン名（必須）</string>
-    <string name="api_key">API key</string>
+    <string name="api_key">APIキー</string>
     <string name="api_key_required_parenthesis">API キー (必須)</string>
     <string name="service">サービス</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
-    <string name="api_access_token_required_parenthesis">API access token (required)</string>
+    <string name="api_access_token_required_parenthesis">APIアクセストークン(必須)</string>
     <string name="api_access_token">API アクセストークン</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">現在のユーザー名を上書きしてもよろしいですか？</string>
     <string name="generate_username">ユーザー名を生成</string>
@@ -593,7 +585,7 @@
     <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">ログイン試行がありました:
 %1$s
 このアカウントに切り替えますか？</string>
-    <string name="new_to_bitwarden">New to Bitwarden?</string>
+    <string name="new_to_bitwarden">初めてBitwardenをご利用ですか？</string>
     <string name="get_master_passwordword_hint">マスターパスワードのヒントを取得する</string>
     <string name="logging_in_as_x_on_y">%2$s で %1$s としてログイン</string>
     <string name="not_you">あなたではないですか？</string>
@@ -625,7 +617,7 @@
     <string name="self_hosted">自己ホスト型</string>
     <string name="region">リージョン</string>
     <string name="update_weak_master_password_warning">マスターパスワードが組織のポリシーに適合していません。保管庫にアクセスするには、今すぐマスターパスワードを更新しなければなりません。続行すると現在のセッションからログアウトし、再度ログインする必要があります。 他のデバイス上のアクティブなセッションは、最大1時間アクティブであり続けることがあります。</string>
-    <string name="current_master_password_required">Current master password (required)</string>
+    <string name="current_master_password_required">現在のマスターパスワード(必須)</string>
     <string name="approve_with_my_other_device">他のデバイスで承認する</string>
     <string name="request_admin_approval">管理者の承認を要求する</string>
     <string name="approve_with_master_password">マスターパスワードで承認する</string>
@@ -651,7 +643,7 @@
     <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Bitwarden アプリで「デバイスでログイン」の設定をする必要があります。別のオプションが必要ですか？</string>
     <string name="log_in_with_device">デバイスでログイン</string>
     <string name="logging_in_on">ログイン先</string>
-    <string name="logging_in_on_with_colon">Logging in on:</string>
+    <string name="logging_in_on_with_colon">ログイン先：</string>
     <string name="vault">保管庫</string>
     <string name="appearance">外観</string>
     <string name="account_security">アカウントのセキュリティ</string>
@@ -676,7 +668,7 @@
     <string name="privacy_policy_description_long">bitwarden.com でプライバシーポリシーをご覧ください。</string>
     <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Bitwarden アカウントの機能をウェブアプリでご確認ください。</string>
     <string name="learn_about_organizations_description_long">Bitwarden は組織を使って保管庫アイテムを他の人と共有することができます。詳細は bitwarden.com ウェブサイトをご覧ください。</string>
-    <string name="created_x">Created %1$s</string>
+    <string name="created_x">作成: %1$s</string>
     <string name="your_organization_requires_you_to_set_a_master_password">あなたの組織では、マスターパスワードの設定が義務付けられています。</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">保管庫のタイムアウト動作を変更するには、ロック解除方法を設定してください。</string>
     <string name="save_passkey_as_new_login">パスキーを新しいログイン情報として保存</string>
@@ -700,11 +692,11 @@
     <string name="launch_web_authn">WebAuthn を起動</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">WebAuthn 2要素認証の開始時にエラーが発生しました</string>
     <string name="self_hosted_server_url">自己ホスト型サーバー URL</string>
-    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">ユーザーを検証できなかったため、認証操作に失敗しました。</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">ユーザーを確認できなかったため、パスキーの操作に失敗しました。</string>
     <string name="user_verification_direction">ユーザー認証</string>
-    <string name="create_account_on">Create account on</string>
-    <string name="create_account_on_with_colon">Create account on:</string>
+    <string name="create_account_on">アカウントの作成先</string>
+    <string name="create_account_on_with_colon">アカウントの作成先：</string>
     <string name="we_sent_an_email_to">%1$s にメールを送信しました。</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">続行すると弊社サービスの利用規約及びプライバシーポリシーに同意されたとみなされます</string>
     <string name="unsubscribe">配信停止</string>
@@ -712,7 +704,7 @@
     <string name="open_email_app">メールアプリを開く</string>
     <string name="email_verified">メールアドレスを認証しました</string>
     <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Bitwarden からメールでお知らせやアドバイス、アンケートを受け取ります。配信停止はいつでもできます。</string>
-    <string name="security_prioritized">Security, prioritized</string>
+    <string name="security_prioritized">セキュリティ優先</string>
     <string name="welcome_message_1">ログイン情報、カード、ID を安全な保管庫に保存します。Bitwarden はゼロ知識、エンドツーエンドの暗号化を使用して、あなたにとって重要なものを保護します。</string>
     <string name="welcome_message_2">生体認証のロック解除と自動入力を設定して、文字を何も入力せずにアカウントにログインします。</string>
     <string name="quick_and_easy_login">すばやく簡単にログイン</string>
@@ -723,7 +715,7 @@
     <string name="remove_passkey">パスキーを削除</string>
     <string name="passkey_removed">パスキーを削除しました</string>
     <string name="what_makes_a_password_strong">パスワードを強くする方法は?</string>
-    <string name="a_secure_memorable_password">A secure, memorable password</string>
+    <string name="a_secure_memorable_password">安全で覚えやすいパスワード</string>
     <string name="account_setup">アカウントのセットアップ</string>
     <string name="set_up_unlock">ロック解除を設定</string>
     <string name="set_up_later">あとで設定する</string>
@@ -732,8 +724,8 @@
     <string name="confirm">確認</string>
     <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">生体認証を設定するか、PIN コードを選択して保管庫にすばやくアクセスし、ログインを自動入力します。</string>
     <string name="never_lose_access_to_your_vault">保管庫へのアクセスを失うことはありません</string>
-    <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
-    <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
+    <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">常にアカウントにアクセスできるようにするための最善の方法は、最初から安全対策を設定することです。</string>
+    <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">安全で覚えやすいパスワードを作成する最善の方法の1つは、パスフレーズを使用することです。使用方法：</string>
     <string name="create_a_hint">ヒントを作成</string>
     <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">ヒントをリクエストするとメールで送信されます。</string>
     <string name="write_your_password_down">パスワードをメモしてください</string>
@@ -743,14 +735,14 @@
     <string name="generate_button_label">生成</string>
     <string name="write_this_password_down_and_keep_it_somewhere_safe">このパスワードを書き留めて安全な場所に保管してください。</string>
     <string name="learn_about_other_ways_to_prevent_account_lockout">アカウントのロックアウトを防ぐ他の方法について学ぶ</string>
-    <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
+    <string name="learn_about_ways_to_prevent_account_lockout">アカウントのロックアウトを防ぐ方法について学ぶ</string>
     <string name="help_with_server_geolocations">サーバーの位置情報のヘルプ</string>
     <string name="email_address_required">メールアドレス（必須）</string>
     <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"メール内のリンクを選択してメールアドレスを確認し、アカウント作成を続行してください。 "</string>
     <string name="change_email_address">メールアドレスを変更</string>
     <string name="next">次へ</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden は紛失した、または忘れられたマスターパスワードを復元できません。</string>
-    <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
+    <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden は紛失した、または忘れられたマスターパスワードをリセットできません。</string>
     <string name="choose_your_master_password">マスターパスワードを選択</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">あなたの情報を安全に保つために、ユニークで強力なパスワードを選択してください。</string>
     <plurals name="minimum_characters">
@@ -771,7 +763,7 @@
     <string name="youre_all_set">準備完了です！</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Duo サービスへの接続中にエラーが発生しました。異なる二段階ログイン方法を使用するか、Duo に連絡してください。</string>
     <string name="master_password_hint_not_specified">マスターパスワードのヒント</string>
-    <string name="new_master_password_hint">New master password hint</string>
+    <string name="new_master_password_hint">新しいマスターパスワードのヒント</string>
     <string name="get_started">利用を開始</string>
     <string name="save_and_protect_your_data">データの保存と保護</string>
     <string name="the_vault_protects_more_than_just_passwords">保管庫はパスワードだけではなく、ログイン情報、ID、カード、メモを安全に保管できます。</string>
@@ -788,13 +780,13 @@
     <string name="import_logins">ログイン情報をインポート</string>
     <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">以下の手順に従って、お使いのコンピュータに保存されたパスワードをブラウザまたは他のパスワードマネージャーからエクスポートしてください。その後、Bitwarden へ安全にインポートします。</string>
     <string name="give_your_vault_a_head_start">保管庫に情報を入れましょう</string>
-    <string name="class_3_biometrics_description">Unlock with biometrics requires strong biometric authentication and may not be compatible with all biometric options on this device.</string>
-    <string name="class_2_biometrics_description">Unlock with biometrics requires strong biometric authentication and is not compatible with the biometrics options available on this device.</string>
-    <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">On your computer, <annotation emphasis="bold">log in to your current browser or password manager.</annotation></string>
-    <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Export your passwords.</annotation> This option is usually found in your settings.</string>
-    <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Select Import data</annotation> in the web app, then Done below to finish syncing.</string>
-    <string name="step_1_of_3">Step 1 of 3</string>
-    <string name="export_your_saved_logins">Export your saved logins</string>
+    <string name="class_3_biometrics_description">生体認証でロックを解除するには強力な生体認証が必要です。このデバイスのすべての生体認証オプションと互換性がないかもしれません。</string>
+    <string name="class_2_biometrics_description">生体認証でロックを解除するには強力な生体認証が必要です。このデバイスのすべての生体認証オプションと互換性がないかもしれません。</string>
+    <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">コンピューターで、 **現在お使いのブラウザまたはパスワードマネージャーへログイン** します</string>
+    <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">パスワードをエクスポートします。</annotation> このオプションは通常、設定で見つかります。</string>
+    <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Webアプリでインポートデータ</annotation> を選択し、同期を完了します。</string>
+    <string name="step_1_of_3">手順1/3</string>
+    <string name="export_your_saved_logins">保存したログイン情報をエクスポート</string>
     <string name="delete_this_file_after_import_is_complete">You’ll delete this file after import is complete.</string>
     <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">On your computer, open a new browser tab and <annotation emphasis="bold">go to <annotation arg="0">%1$s</annotation></annotation></string>
     <string name="log_in_to_the_bitwarden_web_app">Log in to the Bitwarden web app.</string>
@@ -808,7 +800,7 @@
     <string name="need_help_check_out_import_help">Need help? Check out <annotation link="importHelp">import help</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
-    <string name="syncing_logins_loading_message">Syncing logins...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Download the browser extension</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favorite browser for a seamless experience.</string>
     <string name="use_the_web_app">Use the web app</string>
@@ -917,7 +909,6 @@
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
     <string name="add_field">Add field</string>
-    <string name="x_ellipses">%s...</string>
     <string name="share_error_details">Share error details</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>
@@ -972,12 +963,12 @@
     <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
     <string name="trust">Trust</string>
-    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but you trust to perform passkey operations.</string>
-    <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
-    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
-    <string name="trusted_by_you">Trusted by You</string>
-    <string name="trusted_by_the_community">Trusted by the Community</string>
-    <string name="trusted_by_google">Trusted by Google</string>
+    <string name="trusted_by_you_learn_more">これらは、Bitwardenがデフォルトで信頼していないアプリケーションまたはブラウザですが、パスキー操作を実行することを信頼します。</string>
+    <string name="trusted_by_community_learn_more">Google Playストアに含まれていないアプリケーションです。 しかし、Bitwarden はコミュニティメンバーが安全として使用し報告した後にパスキー操作を行うことを信頼しています。</string>
+    <string name="trusted_by_google_learn_more">これらはGoogleが安全と考えているアプリケーションであり、GoogleのPlayストアで利用できます。</string>
+    <string name="trusted_by_you">あなたに信頼されています</string>
+    <string name="trusted_by_the_community">コミュニティから信頼されています</string>
+    <string name="trusted_by_google">Googleに信頼されています</string>
     <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through applications or web browsers trusted by Google or the Bitwarden community.</string>
     <string name="about_privileged_applications">About privileged applications</string>
     <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
@@ -1004,7 +995,9 @@
     <string name="advanced">上級者向け</string>
     <string name="collapse_advanced_options">高度なオプションを閉じる</string>
     <string name="number_of_digits">桁数</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d 秒</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">項目を保存しました</string>
     <string name="information">情報</string>
     <string name="otp_type">OTPの種類</string>
@@ -1047,7 +1040,6 @@
     <string name="sync_with_bitwarden_app">Bitwarden アプリと同期</string>
     <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Bitwarden アプリからコードを同期できません。両方のアプリが最新であることを確認してください。既存のコードには Bitwarden アプリでアクセスできます。</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Bitwarden アプリと同期</string>
     <string name="sync_with_bitwarden_action_card_message">ここにすべての認証コードを表示するためには、認証アプリの同期を許可してください。</string>
     <string name="take_me_to_app_settings">アプリの設定に移動</string>
@@ -1090,4 +1082,18 @@
     <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>

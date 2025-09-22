@@ -54,6 +54,7 @@ fun createMockCipherListView(
         .takeIf { type is CipherListViewType.Login }
         .orEmpty(),
     isDeleted: Boolean = false,
+    isArchived: Boolean = false,
 ): CipherListView = CipherListView(
     id = id,
     organizationId = organizationId,
@@ -66,6 +67,7 @@ fun createMockCipherListView(
     revisionDate = revisionDate,
     creationDate = creationDate,
     deletedDate = if (isDeleted) Instant.parse(DEFAULT_TIMESTAMP) else null,
+    archivedDate = if (isArchived) Instant.parse(DEFAULT_TIMESTAMP) else null,
     attachments = attachments,
     organizationUseTotp = organizationUseTotp,
     edit = edit,
@@ -110,12 +112,14 @@ fun createMockFido2CredentialListView(
     userHandle: String = "mockUserHandle-$number",
     userName: String = "mockUserName-$number",
     userDisplayName: String = "mockUserDisplayName-$number",
+    hasCounter: Boolean = false,
 ): Fido2CredentialListView = Fido2CredentialListView(
     credentialId = credentialId,
     rpId = rpId,
     userHandle = userHandle,
     userName = userName,
     userDisplayName = userDisplayName,
+    counter = if (hasCounter) "$number" else "0",
 )
 
 /**

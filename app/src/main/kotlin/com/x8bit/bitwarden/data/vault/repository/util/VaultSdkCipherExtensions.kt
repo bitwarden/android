@@ -106,6 +106,7 @@ fun Cipher.toEncryptedNetworkCipherResponse(
         shouldViewPassword = viewPassword,
         key = key,
         encryptedFor = encryptedFor,
+        archivedDate = archivedDate?.let { ZonedDateTime.ofInstant(it, ZoneOffset.UTC) },
     )
 
 /**
@@ -389,6 +390,7 @@ fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
         creationDate = creationDate.toInstant(),
         deletedDate = deletedDate?.toInstant(),
         revisionDate = revisionDate.toInstant(),
+        archivedDate = archivedDate?.toInstant(),
     )
 
 /**
@@ -704,4 +706,5 @@ fun Cipher.toFailureCipherListView(): CipherListView =
         deletedDate = deletedDate,
         revisionDate = revisionDate,
         copyableFields = emptyList(),
+        archivedDate = archivedDate,
     )

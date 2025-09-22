@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">정보</string>
     <string name="add_folder">폴더 추가</string>
     <string name="add_item">항목 추가</string>
     <string name="an_error_has_occurred">오류</string>
     <string name="apply">Apply</string>
     <string name="back">뒤로</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">취소</string>
     <string name="copy">복사</string>
     <string name="copy_password">비밀번호 복사</string>
     <string name="copy_username">사용자 이름 복사</string>
     <string name="delete">삭제</string>
-    <string name="deleting">삭제 중...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</string>
     <string name="edit">편집</string>
     <string name="edit_folder">폴더 편집</string>
@@ -55,7 +54,7 @@
     <string name="password">비밀번호</string>
     <string name="save">저장</string>
     <string name="move">이동</string>
-    <string name="saving">저장 중...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">설정</string>
     <string name="show">표시</string>
     <string name="item_deleted">항목을 삭제했습니다.</string>
@@ -104,7 +103,7 @@
     <string name="immediately">즉시</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
-    <string name="logging_in">로그인 중...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Log in to Bitwarden</string>
     <string name="master_password_confirmation_val_message">비밀번호 확인과 비밀번호가 일치하지 않습니다.</string>
     <string name="master_password_description">마스터 비밀번호는 보관함을 열 때 필요한 비밀번호입니다. 절대 마스터 비밀번호를 잊어버리지 마세요. 잊어버리면 복구할 수 있는 방법이 없습니다.</string>
@@ -145,8 +144,8 @@
     <string name="select">선택</string>
     <string name="item_details">Item details</string>
     <string name="item_updated">항목을 업데이트했습니다.</string>
-    <string name="submitting">전송 중...</string>
-    <string name="syncing">동기화 중...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">동기화를 완료했습니다.</string>
     <string name="two_step_login">2단계 인증</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -165,7 +164,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">꺼짐</string>
     <string name="bitwarden_autofill_service_alert2">보관함에 새 로그인을 추가하는 가장 쉬운 방법은 Bitwarden 자동 완성 서비스를 사용하는 것입니다. \"설정\" 화면으로 이동하여 Bitwarden 자동 완성 서비스에 대해 더 자세히 알아보세요.</string>
-    <string name="autofill">자동 완성</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">이 항목을 보거나 자동 완성하시겠습니까?</string>
     <string name="search">검색</string>
     <string name="learn_org">조직에 대해 알아보기</string>
@@ -184,7 +183,7 @@
     <string name="add_new_attachment">새 첨부 파일 추가</string>
     <string name="attachments">첨부 파일</string>
     <string name="unable_to_download_file">파일을 다운로드할 수 없습니다.</string>
-    <string name="downloading">다운로드 중...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">이 첨부 파일의 크기는 %1$s입니다. 정말 이 파일을 기기에 다운로드하시겠습니까?</string>
     <string name="authenticator_key">인증 키 (TOTP)</string>
     <string name="verification_code_totp">인증 코드 (TOTP)</string>
@@ -397,10 +396,10 @@
     <string name="save_attachment_success">첨부 파일을 성공적으로 저장했습니다.</string>
     <string name="autofill_tile_accessibility_required">자동 채우기 타일을 사용하려면 Bitwarden 설정에서 \"자동 채우기 접근성 서비스\"를 활성화해주세요.</string>
     <string name="autofill_tile_uri_not_found">비밀번호 필드가 탐지되지 않음</string>
-    <string name="soft_deleting">휴지통으로 보내는 중...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">항목이 휴지통으로 이동되었습니다.</string>
     <string name="restore">복원</string>
-    <string name="restoring">복원 중...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">항목이 복원되었습니다.</string>
     <string name="trash">휴지통</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">정말로 영구적으로 삭제하시겠습니까? 되돌릴 수 없습니다.</string>
@@ -494,7 +493,6 @@
     <string name="remove_master_password">마스터 비밀번호 제거</string>
     <string name="leave_organization">조직 나가기</string>
     <string name="leave_organization_name">%1$s 조직을 떠나시겠어요?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">WebAuthn 인증</string>
     <string name="fido2_return_to_app">앱으로 돌아가기</string>
     <string name="reset_password_auto_enroll_invite_warning">이 조직에는 자동으로 비밀번호 재설정에 등록하는 기업 정책이 있습니다. 등록하면 조직 관리자가 마스터 암호를 변경할 수 있습니다.</string>
@@ -572,12 +570,6 @@
     <string name="api_key">API key</string>
     <string name="api_key_required_parenthesis">API 키 (필수)</string>
     <string name="service">서비스</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API access token (required)</string>
     <string name="api_access_token">API 액세스 토큰</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">정말 현재 사용자 이름을 덮어쓰시겠습니까?</string>
@@ -808,7 +800,7 @@
     <string name="need_help_check_out_import_help">Need help? Check out <annotation link="importHelp">import help</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
-    <string name="syncing_logins_loading_message">Syncing logins...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Download the browser extension</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favorite browser for a seamless experience.</string>
     <string name="use_the_web_app">Use the web app</string>
@@ -917,7 +909,6 @@
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
     <string name="add_field">Add field</string>
-    <string name="x_ellipses">%s...</string>
     <string name="share_error_details">Share error details</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>
@@ -1004,7 +995,9 @@
     <string name="advanced">Advanced</string>
     <string name="collapse_advanced_options">Collapse advanced options</string>
     <string name="number_of_digits">Number of digits</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d seconds</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">항목을 업데이트했습니다.</string>
     <string name="information">Information</string>
     <string name="otp_type">OTP type</string>
@@ -1047,7 +1040,6 @@
     <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
     <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
     <string name="sync_with_bitwarden_action_card_message">In order to view all of your verification codes, you’ll need to allow for syncing on all of your accounts.</string>
     <string name="take_me_to_app_settings">Take me to the app settings</string>
@@ -1090,4 +1082,18 @@
     <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>

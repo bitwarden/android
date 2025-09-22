@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">Oor</string>
     <string name="add_folder">Voeg vouer toe</string>
     <string name="add_item">Voeg item toe</string>
     <string name="an_error_has_occurred">’n Fout het voorgekom.</string>
     <string name="apply">Apply</string>
     <string name="back">Terug</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Kanselleer</string>
     <string name="copy">Kopieer</string>
     <string name="copy_password">Kopieer wagwoord</string>
     <string name="copy_username">Kopieer gebruikersnaam</string>
     <string name="delete">Skrap</string>
-    <string name="deleting">Skrap tans…</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Wil u dit regtig skrap? Dit kan nie ontdaan word nie.</string>
     <string name="edit">Wysig</string>
     <string name="edit_folder">Wysig vouer</string>
@@ -55,7 +54,7 @@
     <string name="password">Wagwoord</string>
     <string name="save">Bewaar</string>
     <string name="move">Skuif</string>
-    <string name="saving">Bewaar tans…</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Instellings</string>
     <string name="show">Toon</string>
     <string name="item_deleted">Item is geskrap.</string>
@@ -104,7 +103,7 @@
     <string name="immediately">Onmiddellik</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
-    <string name="logging_in">Teken tans aan…</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Log in to Bitwarden</string>
     <string name="master_password_confirmation_val_message">Wagwoordbevestiging is verkeerd.</string>
     <string name="master_password_description">Die hoofwagwoord is die wagwoord wat u gebruik vir toegang tot die kluis. Dit is baie belangrik dat u dit onthou. Dit kan op geen manier teruggevind word indien u dit vergeet nie.</string>
@@ -146,8 +145,8 @@
     <string name="select">Kies</string>
     <string name="item_details">Item details</string>
     <string name="item_updated">Item bygewerk.</string>
-    <string name="submitting">Word ingedien…</string>
-    <string name="syncing">Sinkroniseer...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Klaar gesinchroniseer.</string>
     <string name="two_step_login">Tweestapaantekening</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -166,7 +165,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">Gedeaktiveer</string>
     <string name="bitwarden_autofill_service_alert2">Die eenvoudigste manier om nuwe aantekeninge tot u kluis toe te voeg is vanuit die Bitwarden-outovuldiens. Leer meer oor die gebruik van die Bitwarden-outovuldiens in “Instellings”.</string>
-    <string name="autofill">Outovul</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">Wil u hierdie item outovul of bekyk?</string>
     <string name="search">Soek</string>
     <string name="learn_org">Meer oor organisasies</string>
@@ -185,7 +184,7 @@
     <string name="add_new_attachment">Voeg nuwe aanhegsel toe</string>
     <string name="attachments">Aanhegsels</string>
     <string name="unable_to_download_file">Kan nie lêer aflaai nie.</string>
-    <string name="downloading">Laai tans af…</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Hierdie aanhegsel is %1$s groot. Is u seker u wil dit op u toestel aflaai?</string>
     <string name="authenticator_key">Waarmerkkode (TOTP)</string>
     <string name="verification_code_totp">Bevestigingskode (TOTP)</string>
@@ -399,10 +398,10 @@ Skandering gebeur outomaties.</string>
     <string name="save_attachment_success">Aanhegsel suksesvol bewaar</string>
     <string name="autofill_tile_accessibility_required">Aktiveer asb. “Outovultoeganklikheidsdiens” in Bitwarden-instellings om die outovulteël te gebruik.</string>
     <string name="autofill_tile_uri_not_found">Geen wagwoordvelde bespeur</string>
-    <string name="soft_deleting">Stuur na die asblik…</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Item is na asblik verstuur.</string>
     <string name="restore">Stel terug</string>
-    <string name="restoring">Stel tans terug…</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Item is teruggestel.</string>
     <string name="trash">Asblik</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Wil u dit regtig permanent skrap? Dit kan nie ontdaan word nie.</string>
@@ -496,7 +495,6 @@ Skandering gebeur outomaties.</string>
     <string name="remove_master_password">Verwyder hoofwagwoord</string>
     <string name="leave_organization">Verlaat organisasie</string>
     <string name="leave_organization_name">Verlaat %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Waarmerk WebAuthn</string>
     <string name="fido2_return_to_app">Terug na die toep</string>
     <string name="reset_password_auto_enroll_invite_warning">Hierdie organisasie het ’n ondernemingsbeleid wat u outomaties inskryf in die terugstel van u wagwoord. Inskrywing stel organisasiebeheerders in staat om u hoofwagwoord te wysig.</string>
@@ -574,12 +572,6 @@ kies u Voeg TOTP toe om die sleutel veilig te bewaar</string>
     <string name="api_key">API key</string>
     <string name="api_key_required_parenthesis">API-sleutel (vereis)</string>
     <string name="service">Diens</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API access token (required)</string>
     <string name="api_access_token">API-toegangsteken</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Is u seker u wil oor die huidige gebruikersnaam skryf?</string>
@@ -811,7 +803,7 @@ Wil u na die rekening omskakel?</string>
     <string name="need_help_check_out_import_help">Need help? Check out <annotation link="importHelp">import help</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
-    <string name="syncing_logins_loading_message">Syncing logins...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Download the browser extension</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favorite browser for a seamless experience.</string>
     <string name="use_the_web_app">Use the web app</string>
@@ -920,7 +912,6 @@ Wil u na die rekening omskakel?</string>
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
     <string name="add_field">Add field</string>
-    <string name="x_ellipses">%s...</string>
     <string name="share_error_details">Share error details</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>
@@ -1007,7 +998,10 @@ Wil u na die rekening omskakel?</string>
     <string name="advanced">Advanced</string>
     <string name="collapse_advanced_options">Collapse advanced options</string>
     <string name="number_of_digits">Number of digits</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d seconds</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">Item bygewerk.</string>
     <string name="information">Information</string>
     <string name="otp_type">OTP type</string>
@@ -1050,7 +1044,6 @@ Wil u na die rekening omskakel?</string>
     <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
     <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
     <string name="sync_with_bitwarden_action_card_message">In order to view all of your verification codes, you’ll need to allow for syncing on all of your accounts.</string>
     <string name="take_me_to_app_settings">Take me to the app settings</string>
@@ -1094,4 +1087,18 @@ Wil u na die rekening omskakel?</string>
     <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>

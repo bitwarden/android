@@ -61,6 +61,7 @@ fun createMockCipherView(
     ),
     card: CardView? = createMockCardView(number = number).takeIf { cipherType == CipherType.CARD },
     attachments: List<AttachmentView> = listOf(createMockAttachmentView(number = number)),
+    isArchived: Boolean = false,
 ): CipherView =
     CipherView(
         id = "mockId-$number",
@@ -73,12 +74,17 @@ fun createMockCipherView(
         type = cipherType,
         login = login.takeIf { cipherType == CipherType.LOGIN },
         creationDate = clock.instant(),
+        revisionDate = clock.instant(),
         deletedDate = if (isDeleted) {
             clock.instant()
         } else {
             null
         },
-        revisionDate = clock.instant(),
+        archivedDate = if (isArchived) {
+            clock.instant()
+        } else {
+            null
+        },
         attachments = attachments,
         card = card,
         fields = listOf(createMockFieldView(number = number)),
@@ -166,6 +172,7 @@ fun createMockFido2CredentialAutofillView(
         rpId = rpId,
         userNameForUi = "mockUserNameForUi-$number",
         userHandle = "mockUserHandle-$number".encodeToByteArray(),
+        hasCounter = false,
     )
 
 /**

@@ -34,4 +34,5 @@ fun createMockFido2CredentialAutofillView(
     rpId = "mockRelyingPartyId-$number",
     userNameForUi = "mockUserNameForUi-$number",
     userHandle = "mockUserHandle-$number".toByteArray(),
+    hasCounter = false,
 )

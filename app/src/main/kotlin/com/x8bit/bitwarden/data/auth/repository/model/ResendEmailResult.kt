@@ -15,6 +15,6 @@ sealed class ResendEmailResult {
      */
     data class Error(
         val message: String?,
-        val error: Throwable,
+        val error: Throwable?,
     ) : ResendEmailResult()
 }

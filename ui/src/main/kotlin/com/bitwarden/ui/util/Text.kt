@@ -6,7 +6,7 @@ import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 
@@ -20,7 +20,7 @@ interface Text : Parcelable {
      */
     @Composable
     operator fun invoke(): String {
-        return toString(LocalContext.current.resources)
+        return toString(LocalResources.current)
     }
 
     /**
