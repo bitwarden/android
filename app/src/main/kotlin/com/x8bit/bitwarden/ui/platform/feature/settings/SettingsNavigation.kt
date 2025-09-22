@@ -117,7 +117,6 @@ fun NavGraphBuilder.settingsGraph(
     onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
     onNavigateToImportItems: () -> Unit,
-    onNavigateToMyVault: () -> Unit,
     onNavigateToAboutPrivilegedApps: () -> Unit,
 ) {
     navigation<SettingsGraphRoute>(
@@ -170,7 +169,6 @@ fun NavGraphBuilder.settingsGraph(
         )
         importItemsDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToMyVault = onNavigateToMyVault,
             onNavigateToImportLogins = { navController.navigateToImportLoginsScreen() },
         )
         blockAutoFillDestination(onNavigateBack = { navController.popBackStack() })

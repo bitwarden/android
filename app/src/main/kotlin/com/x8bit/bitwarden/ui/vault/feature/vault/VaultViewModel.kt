@@ -1581,16 +1581,6 @@ sealed class VaultEvent {
     data object NavigateToImportLogins : VaultEvent()
 
     /**
-     * Navigate to the import items screen.
-     */
-    data object NavigateToImportItems : VaultEvent()
-
-    /**
-     * Navigate to the My Vault screen.
-     */
-    data object NavigateToMyVault : VaultEvent()
-
-    /**
      * Indicates that we should prompt the user for app review.
      */
     data object PromptForAppReview : VaultEvent()

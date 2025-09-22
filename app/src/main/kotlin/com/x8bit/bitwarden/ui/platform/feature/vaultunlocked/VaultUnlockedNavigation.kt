@@ -50,7 +50,6 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.vaultAddEditDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.attachmentDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.navigateToAttachment
-import com.x8bit.bitwarden.ui.vault.feature.importitems.navigateToImportItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.importLoginsScreenDestination
 import com.x8bit.bitwarden.ui.vault.feature.importlogins.navigateToImportLoginsScreen
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem

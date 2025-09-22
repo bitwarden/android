@@ -18,7 +18,7 @@ data object ImportItemsGraphRoute
 /**
  * Helper function to navigate to the import items screen.
  */
-fun NavController.navigateToImportItemsGraph(
+fun NavController.navigateToImportItemsScreen(
     navOptions: NavOptions? = null,
 ) {
     navigate(route = ImportItemsGraphRoute, navOptions = navOptions)
@@ -29,13 +29,11 @@ fun NavController.navigateToImportItemsGraph(
  */
 fun NavGraphBuilder.importItemsDestination(
     onNavigateBack: () -> Unit,
-    onNavigateToMyVault: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
 ) {
     composableWithPushTransitions<ImportItemsGraphRoute> {
         ImportItemsScreen(
             onNavigateBack = onNavigateBack,
-            onNavigateToVault = onNavigateToMyVault,
             onNavigateToImportFromComputer = onNavigateToImportLogins,
         )
     }
