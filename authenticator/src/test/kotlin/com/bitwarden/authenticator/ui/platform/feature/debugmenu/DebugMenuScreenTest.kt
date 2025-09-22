@@ -10,7 +10,9 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -18,7 +20,7 @@ import org.junit.Test
 class DebugMenuScreenTest : AuthenticatorComposeTest() {
     private var onNavigateBackCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<DebugMenuEvent>()
-    private val mutableStateFlow = MutableStateFlow(DebugMenuState(featureFlags = emptyMap()))
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<DebugMenuViewModel>(relaxed = true) {
         every { stateFlow } returns mutableStateFlow
         every { eventFlow } returns mutableEventFlow
@@ -51,43 +53,31 @@ class DebugMenuScreenTest : AuthenticatorComposeTest() {
 
     @Test
     fun `feature flag content should not display if the state is empty`() {
+        mutableStateFlow.update {
+            DebugMenuState(featureFlags = persistentMapOf())
+        }
         composeTestRule
-            .onNodeWithText("Bitwarden authentication enabled", ignoreCase = true)
+            .onNodeWithText(text = "dummy-boolean")
             .assertDoesNotExist()
     }
 
     @Test
     fun `feature flag content should display if the state is not empty`() {
-        mutableStateFlow.tryEmit(
-            DebugMenuState(
-                featureFlags = mapOf(
-                    FlagKey.BitwardenAuthenticationEnabled to true,
-                ),
-            ),
-        )
-
         composeTestRule
-            .onNodeWithText("Bitwarden authentication enabled", ignoreCase = true)
+            .onNodeWithText(text = "dummy-boolean")
             .assertExists()
     }
 
     @Test
     fun `boolean feature flag content should send action when clicked`() {
-        mutableStateFlow.tryEmit(
-            DebugMenuState(
-                featureFlags = mapOf(
-                    FlagKey.BitwardenAuthenticationEnabled to true,
-                ),
-            ),
-        )
         composeTestRule
-            .onNodeWithText("Bitwarden authentication enabled", ignoreCase = true)
+            .onNodeWithText(text = "dummy-boolean")
             .performClick()
 
         verify {
             viewModel.trySendAction(
                 DebugMenuAction.UpdateFeatureFlag(
-                    FlagKey.BitwardenAuthenticationEnabled,
+                    FlagKey.DummyBoolean,
                     false,
                 ),
             )
@@ -104,3 +94,9 @@ class DebugMenuScreenTest : AuthenticatorComposeTest() {
         verify { viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues) }
     }
 }
+
+private val DEFAULT_STATE: DebugMenuState = DebugMenuState(
+    featureFlags = persistentMapOf(
+        FlagKey.DummyBoolean to true,
+    ),
+)

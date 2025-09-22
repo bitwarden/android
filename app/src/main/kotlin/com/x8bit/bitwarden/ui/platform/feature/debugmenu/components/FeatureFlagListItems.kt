@@ -18,13 +18,11 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) = when (val flagKey = this) {
-    FlagKey.DummyBoolean,
     is FlagKey.DummyInt,
     FlagKey.DummyString,
-        -> {
-        Unit
-    }
+        -> Unit
 
+    FlagKey.DummyBoolean,
     FlagKey.BitwardenAuthenticationEnabled,
     FlagKey.CredentialExchangeProtocolImport,
     FlagKey.CredentialExchangeProtocolExport,
