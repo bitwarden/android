@@ -7012,6 +7012,21 @@ AuthRepositoryTest {
     }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `needsKdfUpdateToMinimums with user decryption options and without password returns false`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
+                accounts = mapOf(
+                    USER_ID_1 to ACCOUNT_1,
+                ),
+            )
+
+            val result = repository.needsKdfUpdateToMinimums()
+
+            assertFalse(result)
+        }
+
+    @Test
     fun `needsKdfUpdateToMinimums with PBKDF2 below minimum iterations should return true`() =
         runTest {
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
@@ -7166,55 +7181,56 @@ AuthRepositoryTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `updateKdfToMinimumsIfNeeded with PBKDF2 below minimums and updateKdf API failure should return Error`() = runTest {
-        val error = Throwable("API failed")
-        coEvery {
-            vaultSdkSource.makeUpdateKdf(
-                userId = any(),
-                password = any(),
-                kdf = any(),
-            )
-        } returns UPDATE_KDF_RESPONSE.asSuccess()
+    fun `updateKdfToMinimumsIfNeeded with PBKDF2 below minimums and updateKdf API failure should return Error`() =
+        runTest {
+            val error = Throwable("API failed")
+            coEvery {
+                vaultSdkSource.makeUpdateKdf(
+                    userId = any(),
+                    password = any(),
+                    kdf = any(),
+                )
+            } returns UPDATE_KDF_RESPONSE.asSuccess()
 
-        coEvery {
-            accountsService.updateKdf(any())
-        } returns error.asFailure()
+            coEvery {
+                accountsService.updateKdf(any())
+            } returns error.asFailure()
 
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
 
-        val result = repository.updateKdfToMinimumsIfNeeded(password = PASSWORD)
+            val result = repository.updateKdfToMinimumsIfNeeded(password = PASSWORD)
 
-        assertEquals(UpdateKdfMinimumsResult.Error(error = error), result)
-        coVerify(exactly = 1) {
-            accountsService.updateKdf(any())
+            assertEquals(UpdateKdfMinimumsResult.Error(error = error), result)
+            coVerify(exactly = 1) {
+                accountsService.updateKdf(any())
+            }
         }
-    }
 
     @Test
     @Suppress("MaxLineLength")
     fun `updateKdfToMinimumsIfNeeded with PBKDF2 below minimums should return Success`() =
         runTest {
-        coEvery {
-            vaultSdkSource.makeUpdateKdf(
-                userId = any(),
-                password = any(),
-                kdf = any(),
-            )
-        } returns UPDATE_KDF_RESPONSE.asSuccess()
+            coEvery {
+                vaultSdkSource.makeUpdateKdf(
+                    userId = any(),
+                    password = any(),
+                    kdf = any(),
+                )
+            } returns UPDATE_KDF_RESPONSE.asSuccess()
 
-        coEvery {
-            accountsService.updateKdf(any())
-        } returns Unit.asSuccess()
+            coEvery {
+                accountsService.updateKdf(any())
+            } returns Unit.asSuccess()
 
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
 
-        val result = repository.updateKdfToMinimumsIfNeeded(password = PASSWORD)
+            val result = repository.updateKdfToMinimumsIfNeeded(password = PASSWORD)
 
-        assertEquals(UpdateKdfMinimumsResult.Success, result)
-        coVerify(exactly = 1) {
-            accountsService.updateKdf(any())
+            assertEquals(UpdateKdfMinimumsResult.Success, result)
+            coVerify(exactly = 1) {
+                accountsService.updateKdf(any())
+            }
         }
-    }
 
     companion object {
         private val FIXED_CLOCK: Clock = Clock.fixed(

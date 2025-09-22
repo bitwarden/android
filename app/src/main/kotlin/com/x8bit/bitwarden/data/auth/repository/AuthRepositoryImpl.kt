@@ -1254,6 +1254,12 @@ class AuthRepositoryImpl(
             ?.get(activeUserId)
             ?: return false
 
+        if (account.profile.userDecryptionOptions != null &&
+            !account.profile.userDecryptionOptions.hasMasterPassword
+        ) {
+            return false
+        }
+
         return account.profile.kdfType == KdfTypeJson.PBKDF2_SHA256 &&
             account.profile.kdfIterations != null &&
             account.profile.kdfIterations < DEFAULT_PBKDF2_ITERATIONS
