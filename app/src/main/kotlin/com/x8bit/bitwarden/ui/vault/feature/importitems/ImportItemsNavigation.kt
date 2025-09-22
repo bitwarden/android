@@ -10,10 +10,10 @@ import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import kotlinx.serialization.Serializable
 
 /**
- * The type-safe route for the import items graph.
+ * The type-safe route for the import items screen.
  */
 @Serializable
-data object ImportItemsGraphRoute
+data object ImportItemsRoute
 
 /**
  * Helper function to navigate to the import items screen.
@@ -21,17 +21,17 @@ data object ImportItemsGraphRoute
 fun NavController.navigateToImportItemsScreen(
     navOptions: NavOptions? = null,
 ) {
-    navigate(route = ImportItemsGraphRoute, navOptions = navOptions)
+    navigate(route = ImportItemsRoute, navOptions = navOptions)
 }
 
 /**
- * Add the import items graph to the nav graph.
+ * Add the import items screen to the nav graph.
  */
 fun NavGraphBuilder.importItemsDestination(
     onNavigateBack: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
 ) {
-    composableWithPushTransitions<ImportItemsGraphRoute> {
+    composableWithPushTransitions<ImportItemsRoute> {
         ImportItemsScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToImportFromComputer = onNavigateToImportLogins,
