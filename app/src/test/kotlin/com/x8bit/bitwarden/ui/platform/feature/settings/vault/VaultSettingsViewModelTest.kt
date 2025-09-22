@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
@@ -60,17 +61,34 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `ImportItemsClick should emit send NavigateToImportVault`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
-            assertEquals(
-                VaultSettingsEvent.NavigateToImportVault,
-                awaitItem(),
-            )
+    fun `ImportItemsClick should emit NavigateToImportVault when CredentialExchangeProtocolImport is disabled`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
+                assertEquals(
+                    VaultSettingsEvent.NavigateToImportVault,
+                    awaitItem(),
+                )
+            }
         }
-    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ImportItemsClick should emit NavigateToImportItems when CredentialExchangeProtocolImport is enabled`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                every { featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport) } returns true
+                viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
+                assertEquals(
+                    VaultSettingsEvent.NavigateToImportItems,
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `shouldShowImportCard should update when first time state changes`() = runTest {
