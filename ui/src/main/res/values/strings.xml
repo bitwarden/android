@@ -46,7 +46,7 @@
     <string name="my_vault">My vault</string>
     <string name="name">Name</string>
     <string name="item_name_required">Item name (required)</string>
-    <string name="send_name_required">"Send name (required)"</string>
+    <string name="send_name_required">Send name (required)</string>
     <string name="no">No</string>
     <string name="notes">Notes</string>
     <string name="private_notes">Private notes</string>
@@ -740,7 +740,7 @@ Do you want to switch to this account?</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
     <string name="help_with_server_geolocations">Help with server geolocations.</string>
     <string name="email_address_required">Email address (required)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Select the link in the email to verify your email address and continue creating your account. "</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
     <string name="change_email_address">Change email address</string>
     <string name="next">Next</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden cannot recover a lost or forgotten master password.</string>
@@ -848,8 +848,8 @@ Do you want to switch to this account?</string>
     <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Put the words together in any order to form your passphrase. <annotation emphasis="bold">Use hyphens, spaces, or leave them as one long word</annotation>—your choice!</string>
     <string name="make_it_yours">Make it yours</string>
     <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Add a number or symbol</annotation> to make it even stronger. Now you have a unique, secure, and memorable passphrase!</string>
-    <string name="need_some_inspiration">"Need some inspiration?"</string>
-    <string name="check_out_the_passphrase_generator">"Check out the passphrase generator"</string>
+    <string name="need_some_inspiration">Need some inspiration?</string>
+    <string name="check_out_the_passphrase_generator">Check out the passphrase generator</string>
     <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
     <string name="copy_private_key">Copy private key</string>
     <string name="login_credentials">Login Credentials</string>
@@ -867,7 +867,7 @@ Do you want to switch to this account?</string>
     <string name="import_client_certificate">Import client certificate</string>
     <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
     <string name="alias">Alias</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Use the generator to create secure passwords, passphrases and usernames.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where Autofill is not available, like a streaming service on your TV.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
     <string name="coachmark_1_of_6">1 OF 6</string>
@@ -877,7 +877,7 @@ Do you want to switch to this account?</string>
     <string name="coachmark_5_of_6">5 OF 6</string>
     <string name="coachmark_6_of_6">6 OF 6</string>
     <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website’s requirements.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">After you save your new password to Bitwarden, don’t forget to update it on your account website.</string>
     <string name="verify_your_identity">Verify your identity</string>
     <string name="error_loading_certificate">Error loading certificate</string>
     <string name="certificate_alias">Certificate alias</string>
@@ -1061,9 +1061,9 @@ Do you want to switch to this account?</string>
     <string name="account_synced_from_bitwarden_app">Account synced from Bitwarden app</string>
     <string name="local_codes">Local codes (%1$d)</string>
     <string name="required_information_missing">Required Information Missing</string>
-    <string name="required_information_missing_message">"Required info is missing (e.g., ‘services’ or ‘secret’). Check your file and try again. Visit bitwarden.com/help for support"</string>
-    <string name="file_could_not_be_processed">"File Could Not Be Processed"</string>
-    <string name="file_could_not_be_processed_message">"File could not be processed. Ensure it’s valid JSON and try again. Need help? Visit bitwarden.com/help"</string>
+    <string name="required_information_missing_message">Required info is missing (e.g., ‘services’ or ‘secret’). Check your file and try again. Visit bitwarden.com/help for support</string>
+    <string name="file_could_not_be_processed">File Could Not Be Processed</string>
+    <string name="file_could_not_be_processed_message">File could not be processed. Ensure it’s valid JSON and try again. Need help? Visit bitwarden.com/help</string>
     <string name="get_help">Get Help</string>
     <string name="expand_advanced_options">Expand advanced options</string>
     <string name="local_items_are_expanded_click_to_collapse">Local items are expanded, click to collapse.</string>
