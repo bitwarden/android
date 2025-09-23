@@ -16,7 +16,7 @@ jobs:
       id-token: write
     steps:
       - name: Check out repo
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - name: Log in to Azure
         uses: bitwarden/gh-actions/azure-login@main
@@ -33,7 +33,7 @@ jobs:
           secrets: "crowdin-api-token"
 
       - name: Upload sources
-        uses: crowdin/github-action@590c05e09a29f392b203faf4d6aa8e0cd32c7835 # v2.9.1
+        uses: crowdin/github-action@0749939f635900a2521aa6aac7a3766642b2dc71 # v2.11.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}

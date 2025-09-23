@@ -15,7 +15,6 @@ import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -68,7 +67,6 @@ import com.x8bit.bitwarden.data.credentials.model.createMockGetCredentialsReques
 import com.x8bit.bitwarden.data.credentials.model.createMockProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -109,7 +107,6 @@ import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockDisplayItemForCipher
-import com.x8bit.bitwarden.ui.vault.feature.vault.VaultAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
@@ -249,10 +246,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
     private val privilegedAppRepository = mockk<PrivilegedAppRepository> {
         coEvery { addTrustedPrivilegedApp(any(), any()) } just runs
-    }
-
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every { getFeatureFlag(FlagKey.UserManagedPrivilegedApps) } returns true
     }
 
     private val initialState = createVaultItemListingState()
@@ -3103,9 +3096,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `ValidateOriginResult should show TrustPrivilegedAddPrompt dialog when feature flag is on`() =
+    fun `ValidateOriginResult should show TrustPrivilegedAddPrompt dialog`() =
         runTest {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
@@ -3122,39 +3114,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.TrustPrivilegedAddPrompt(
-                    message = BitwardenString.passkey_operation_failed_because_browser_x_is_not_trusted
+                    message = BitwardenString
+                        .passkey_operation_failed_because_browser_x_is_not_trusted
                         .asText("mockPackageName"),
                     selectedCipherId = null,
-                ),
-                viewModel.stateFlow.value.dialogState,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `ValidateOriginResult should show not show TrustPrivilegedAppPrompt dialog when feature flag is off`() =
-        runTest {
-            specialCircumstanceManager.specialCircumstance =
-                SpecialCircumstance.ProviderCreateCredential(
-                    createCredentialRequest = createMockCreateCredentialRequest(number = 1),
-                )
-            coEvery {
-                originManager.validateOrigin(
-                    relyingPartyId = DEFAULT_RELYING_PARTY_ID,
-                    callingAppInfo = mockCallingAppInfo,
-                )
-            } returns ValidateOriginResult.Error.PrivilegedAppNotAllowed
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.UserManagedPrivilegedApps)
-            } returns false
-
-            val viewModel = createVaultItemListingViewModel()
-
-            assertEquals(
-                VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = BitwardenString.an_error_has_occurred.asText(),
-                    message = BitwardenString.passkey_operation_failed_because_browser_is_not_privileged
-                        .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -5863,7 +5826,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             originManager = originManager,
             networkConnectionManager = networkConnectionManager,
             privilegedAppRepository = privilegedAppRepository,
-            featureFlagManager = featureFlagManager,
             snackbarRelayManager = snackbarRelayManager,
             toastManager = toastManager,
             relyingPartyParser = relyingPartyParser,

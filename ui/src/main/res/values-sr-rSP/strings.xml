@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">О апликацији</string>
     <string name="add_folder">Додај фасциклу</string>
     <string name="add_item">Додај ставку</string>
     <string name="an_error_has_occurred">Појавила се грешка.</string>
     <string name="apply">Примени</string>
     <string name="back">Назад</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Откажи</string>
     <string name="copy">Копирај</string>
     <string name="copy_password">Копирај лозинку</string>
@@ -498,7 +497,6 @@
     <string name="remove_master_password">Уклони главну лозинку</string>
     <string name="leave_organization">Напусти организацију</string>
     <string name="leave_organization_name">Напустити %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">WebAuthn аутентификација</string>
     <string name="fido2_return_to_app">Врати се на аппликацију</string>
     <string name="reset_password_auto_enroll_invite_warning">Ова организација има политику која ће вас аутоматски уписати у ресетовање лозинке. Упис ће омогућити администраторима организације да промене вашу главну лозинку.</string>
@@ -576,12 +574,6 @@
     <string name="api_key">API кључ</string>
     <string name="api_key_required_parenthesis">API кључ (обавезно)</string>
     <string name="service">Сервис</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API приступ токен (обавезно)</string>
     <string name="api_access_token">Приступни АПИ токен</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Сигурно преписати тренутно име?</string>
@@ -923,7 +915,6 @@
     <string name="no_folder">Нема фасцикле</string>
     <string name="show_less">Прикажи мање</string>
     <string name="add_field">Додај поље</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Поделите детаље о грешци</string>
     <string name="flight_recorder">Рекордер лета</string>
     <string name="flight_recorder_help">Помоћ за рекордера лета</string>
@@ -1012,7 +1003,11 @@
     <string name="advanced">Напредно</string>
     <string name="collapse_advanced_options">Скупи напредне опције</string>
     <string name="number_of_digits">Број цифара</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d сек.</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="few">%d seconds</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">Ставка сачувана</string>
     <string name="information">Информација</string>
     <string name="otp_type">Тип ОТП</string>
@@ -1055,7 +1050,6 @@
     <string name="sync_with_bitwarden_app">Синхронизујте са апликацијом Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">Сазнати више</annotation></string>
     <string name="shared_codes_error">Није могуће синхронизовати кодове из апликације Bitwarden. Уверите се да су обе апликације ажуриране. И даље можете да приступите својим постојећим кодовима у апликацији Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Синхронизујте са апликацијом Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Дозволите синхронизацију апликације Authenticator у подешавањима да бисте видели све своје верификационе кôдове овде.</string>
     <string name="take_me_to_app_settings">Одведи ме до подешавања апликације</string>
@@ -1100,4 +1094,18 @@
     <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>

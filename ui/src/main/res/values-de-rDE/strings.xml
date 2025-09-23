@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">Über</string>
     <string name="add_folder">Ordner hinzufügen</string>
     <string name="add_item">Neuer Eintrag</string>
     <string name="an_error_has_occurred">Es ist ein Fehler aufgetreten.</string>
     <string name="apply">Anwenden</string>
     <string name="back">Zurück</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Abbrechen</string>
     <string name="copy">Kopieren</string>
     <string name="copy_password">Passwort kopieren</string>
@@ -496,7 +495,6 @@ Das Scannen erfolgt automatisch.</string>
     <string name="remove_master_password">Master-Passwort entfernen</string>
     <string name="leave_organization">Organisation verlassen</string>
     <string name="leave_organization_name">%1$s verlassen?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">WebAuthn authentifizieren</string>
     <string name="fido2_return_to_app">Zurück zur App</string>
     <string name="reset_password_auto_enroll_invite_warning">Diese Organisation hat eine Unternehmensrichtlinie, die dich automatisch für die Passwortzurücksetzung registriert. Die Registrierung wird es Administratoren der Organisation erlauben, dein Master-Passwort zu ändern.</string>
@@ -573,12 +571,6 @@ Das Scannen erfolgt automatisch.</string>
     <string name="api_key">API-Schlüssel</string>
     <string name="api_key_required_parenthesis">API-Schlüssel (erforderlich)</string>
     <string name="service">Dienst</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API-Zugriffstoken (erforderlich)</string>
     <string name="api_access_token">API-Zugriffstoken</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Bist Du sicher, dass Du den aktuellen Benutzernamen überschreiben möchtest?</string>
@@ -919,7 +911,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="no_folder">Kein Ordner</string>
     <string name="show_less">Weniger anzeigen</string>
     <string name="add_field">Feld hinzufügen</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Fehlerdetails teilen</string>
     <string name="flight_recorder">Flugschreiber</string>
     <string name="flight_recorder_help">Flugschreiber-Hilfe</string>
@@ -1006,7 +997,10 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="advanced">Erweitert</string>
     <string name="collapse_advanced_options">Erweiterte Optionen einklappen</string>
     <string name="number_of_digits">Anzahl der Ziffern</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d Sekunden</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">Eintrag gespeichert</string>
     <string name="information">Informationen</string>
     <string name="otp_type">OTP-Typ</string>
@@ -1049,7 +1043,6 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="sync_with_bitwarden_app">Mit der Bitwarden-App synchronisieren</string>
     <string name="learn_more_link"><annotation link="learnMore">Mehr erfahren</annotation></string>
     <string name="shared_codes_error">Codes aus der Bitwarden-App konnten nicht synchronisiert werden. Stelle sicher, dass beide Apps auf dem neusten Stand sind. Du kannst weiterhin auf deine existierenden Codes in der Bitwarden-App zugreifen.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Mit der Bitwarden-App synchronisieren</string>
     <string name="sync_with_bitwarden_action_card_message">Um alle deine Verifizierungscodes anzeigen zu können, musst du die Synchronisierung aller deiner Konten erlauben.</string>
     <string name="take_me_to_app_settings">Bring mich zu den App-Einstellungen</string>
@@ -1093,4 +1086,18 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="default_uri_match_detection_description_advanced_options">Die URI-Übereinstimmungserkennung steuert, wie Bitwarden Auto-Ausfüllen-Vorschläge erkennt.\n<annotation emphasis="bold">Warnung:</annotation> \"Beginnt mit\" ist eine erweiterte Option mit erhöhtem Risiko der Kompromittierung von Zugangsdaten.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Beginnt mit\" ist eine erweiterte Option mit erhöhtem Risiko der Kompromittierung von Zugangsdaten.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">„Regulärer Ausdruck“ ist eine erweiterte Option, die bei unsachgemäßer Verwendung ein erhöhtes Risiko der Kompromittierung von Zugangsdaten darstellt.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>

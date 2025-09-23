@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
@@ -28,6 +28,7 @@ import com.bitwarden.ui.platform.util.toObjectNavigationRoute
 import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.navigateToAbout
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.navigateToAutoFill
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraphRoot
 import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
@@ -39,6 +40,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.navigateToSendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.importitems.navigateToImportItemsScreen
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultGraphRoute
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultGraph
@@ -240,6 +242,10 @@ private fun VaultUnlockedNavBarScaffold(
                     navController.navigateToSettingsGraphRoot()
                     navController.navigateToAbout(isPreAuth = false)
                 },
+                onNavigateToAutofillScreen = {
+                    navController.navigateToSettingsGraphRoot()
+                    navController.navigateToAutoFill()
+                },
             )
             sendGraph(
                 navController = navController,
@@ -260,6 +266,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
                 onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
                 onNavigateToImportLogins = onNavigateToImportLogins,
+                onNavigateToImportItems = { navController.navigateToImportItemsScreen() },
                 onNavigateToFlightRecorder = onNavigateToFlightRecorder,
                 onNavigateToRecordedLogs = onNavigateToRecordedLogs,
                 onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,

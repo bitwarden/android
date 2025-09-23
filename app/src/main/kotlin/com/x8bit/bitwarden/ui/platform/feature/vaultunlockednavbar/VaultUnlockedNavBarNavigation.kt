@@ -1,4 +1,5 @@
 @file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import androidx.navigation.NavController

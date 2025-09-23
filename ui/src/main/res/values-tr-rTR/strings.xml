@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">Hakkında</string>
     <string name="add_folder">Klasör ekle</string>
     <string name="add_item">Kayıt ekle</string>
     <string name="an_error_has_occurred">Bir hata oluştu.</string>
     <string name="apply">Uygula</string>
     <string name="back">Geri</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">İptal</string>
     <string name="copy">Kopyala</string>
     <string name="copy_password">Parolayı kopyala</string>
     <string name="copy_username">Kullanıcı adını kopyala</string>
     <string name="delete">Sil</string>
-    <string name="deleting">Deleting…</string>
+    <string name="deleting">Siliniyor…</string>
     <string name="do_you_really_want_to_delete">Gerçekten silmek istiyor musunuz? Bu işlem geri alınamaz.</string>
     <string name="edit">Düzenle</string>
     <string name="edit_folder">Klasörü düzenle</string>
@@ -55,7 +54,7 @@
     <string name="password">Parola</string>
     <string name="save">Kaydet</string>
     <string name="move">Taşı</string>
-    <string name="saving">Saving…</string>
+    <string name="saving">Kaydediliyor…</string>
     <string name="settings">Ayarlar</string>
     <string name="show">Göster</string>
     <string name="item_deleted">Kayıt silindi</string>
@@ -104,7 +103,7 @@
     <string name="immediately">Hemen</string>
     <string name="vault_timeout_log_out_confirmation_title">Oturum zaman aşımı \"Çıkış yap\" olarak ayarlansın mı?</string>
     <string name="vault_timeout_log_out_confirmation_message">Zaman aşımı süresi dolunca oturumunuz kapatılacaktır. Yeniden oturum açıp kasaya erişmek için internete bağlı olmanız gerekecektir. Bu cihazda kayıtlı ayarlarınız ve PIN\'iniz değişmeyecektir.</string>
-    <string name="logging_in">Logging in…</string>
+    <string name="logging_in">Giriş yapılıyor…</string>
     <string name="login_to_bitwarden">Bitwarden\'a giriş yap</string>
     <string name="master_password_confirmation_val_message">Parola onayı doğru değil.</string>
     <string name="master_password_description">Ana parola, kasanıza ulaşmak için kullanacağınız paroladır. Ana parolanızı unutmamanız çok önemlidir. Unutursanız parolalarınızı asla kurtaramazsınız.</string>
@@ -146,8 +145,8 @@
     <string name="select">Seç</string>
     <string name="item_details">Kayıt ayrıntıları</string>
     <string name="item_updated">Öğe kaydedildi</string>
-    <string name="submitting">Submitting…</string>
-    <string name="syncing">Syncing…</string>
+    <string name="submitting">Gönderiliyor…</string>
+    <string name="syncing">Eşitleniyor…</string>
     <string name="syncing_complete">Eşitleme tamamlandı</string>
     <string name="two_step_login">İki aşamalı giriş</string>
     <string name="unlock_with_biometrics">Kilidi biyometri ile aç</string>
@@ -185,7 +184,7 @@
     <string name="add_new_attachment">Yeni dosya ekle</string>
     <string name="attachments">Dosyalar</string>
     <string name="unable_to_download_file">Dosya indirilemiyor.</string>
-    <string name="downloading">Downloading…</string>
+    <string name="downloading">İndiriliyor…</string>
     <string name="attachment_large_warning">Bu dosyanın boyutu %1$s. Dosyayı cihazınıza indirmek istediğinizden emin misiniz?</string>
     <string name="authenticator_key">Kimlik doğrulama anahtarı</string>
     <string name="verification_code_totp">Doğrulama kodu (TOTP)</string>
@@ -290,7 +289,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="new_uri">Yeni URI</string>
     <string name="add_website">Web sitesi ekle</string>
     <string name="base_domain">Ana alan adı</string>
-    <string name="default_text">Default (%1$s)</string>
+    <string name="default_text">Varsayılan (%1$s)</string>
     <string name="exact">Tam</string>
     <string name="host">Sunucu</string>
     <string name="reg_ex">Düzenli ifade</string>
@@ -363,7 +362,7 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="clear_clipboard">Panoyu temizle</string>
     <string name="clear_clipboard_description">Kopyalanan değerleri panodan otomatik olarak temizle.</string>
     <string name="default_uri_match_detection">Varsayılan URI eşleşme tespiti</string>
-    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
+    <string name="default_uri_match_detection_description">URl eşleştirme tespiti, Bitwarden\'ın otomatik doldurma önerilerini yönetir.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Uygulamanın renk temasını değiştir</string>
     <string name="copy_notes">Notu kopyala</string>
@@ -399,10 +398,10 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="save_attachment_success">Dosya başarıyla kaydedildi</string>
     <string name="autofill_tile_accessibility_required">Otomatik doldurma kutusunu kullanmak için lütfen Bitwarden ayarlarından \"Otomatik doldurma erişilebilirlik hizmeti\"ni açın.</string>
     <string name="autofill_tile_uri_not_found">Parola alanı tespit edilemedi</string>
-    <string name="soft_deleting">Sending to trash…</string>
+    <string name="soft_deleting">Çöp kutusuna gönderiliyor…</string>
     <string name="item_soft_deleted">Kayıt çöp kutusuna gönderildi.</string>
     <string name="restore">Geri yükle</string>
-    <string name="restoring">Restoring…</string>
+    <string name="restoring">Geri yükleniyor…</string>
     <string name="item_restored">Kayıt geri yüklendi</string>
     <string name="trash">Çöp Kutusu</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</string>
@@ -496,7 +495,6 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="remove_master_password">Ana parolayı kaldır</string>
     <string name="leave_organization">Kuruluştan ayrıl</string>
     <string name="leave_organization_name">%1$s kuruluşundan ayrılınsın mı?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">WebAutn ile doğrula</string>
     <string name="fido2_return_to_app">Uygulamaya dön</string>
     <string name="reset_password_auto_enroll_invite_warning">Bu kuruluşun sizi otomatik olarak parola sıfırlamaya ekleyen bir ilkesi bulunmakta. Bu ilkeye eklenmek, kuruluş yöneticilerinin ana parolanızı değiştirebilmesini sağlar.</string>
@@ -573,12 +571,6 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="api_key">API anahtarı</string>
     <string name="api_key_required_parenthesis">API anahtarı (gerekli)</string>
     <string name="service">Servis</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API erişim token\'ı (gerekli)</string>
     <string name="api_access_token">API erişim token\'ı</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Mevcut kullanıcı adının üzerine kaydetmek istediğinize emin misiniz?</string>
@@ -699,7 +691,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="autofill_suggestion">Öneriyi otomatik doldur</string>
     <string name="continue_to_complete_web_authn_verification">WebAuthn doğrulamasını tamamlamak için devam edin.</string>
     <string name="launch_web_authn">WebAuthn\'i aç</string>
-    <string name="there_was_an_error_starting_web_authn_two_factor_authentication">There was an error starting WebAuthn two factor authentication</string>
+    <string name="there_was_an_error_starting_web_authn_two_factor_authentication">WebAuthn iki faktörlü kimlik doğrulamayı başlatırken bir hata oluştu</string>
     <string name="self_hosted_server_url">Kendi kendine barındırılan sunucu URL\'si</string>
     <string name="credential_operation_failed_because_user_could_not_be_verified">Kullanıcı doğrulanamadığı için hesap bilgileri işlemi başarısız oldu.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Kullanıcı doğrulanamadığı için geçiş anahtarı işlemi başarısız oldu.</string>
@@ -806,11 +798,11 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="import_logins_to_bitwarden">Hesapları Bitwarden’a aktarın</string>
     <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">In the Bitwarden navigation, <annotation emphasis="bold">find the Tools</annotation> option and <annotation emphasis="bold">select Import data.</annotation></string>
     <string name="fill_out_the_form_and_import_your_saved_password_file">Fill out the form and <annotation emphasis="bold">import your saved password file.</annotation></string>
-    <string name="for_your_security_be_sure_to_delete_your_saved_password_file">For your security, be sure to <annotation emphasis="bold">delete your saved password file.</annotation></string>
+    <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Güvenliğiniz için, <annotation emphasis="bold">kayıtlı parola dosyanızı sildiğinizden emin olun.</annotation></string>
     <string name="need_help_check_out_import_help">Yardıma mı ihtiyacınız var? <annotation link="importHelp">İçe aktarma yardımına</annotation> göz atın.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Dışa aktardığınız dosyayı bilgisayarınızda kolayca bulabileceğiniz bir yere <annotation emphasis="bold">kaydedin</annotation>.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Bu Bitwarden sunucusu tanınmıyor. Servis sağlayıcınızdan bilgi alın veya sunucunuzu güncelleyin.</string>
-    <string name="syncing_logins_loading_message">Syncing logins…</string>
+    <string name="syncing_logins_loading_message">Hesaplar eşitleniyor…</string>
     <string name="download_the_browser_extension">Tarayıcı uzantısını indirin</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Daha rahat kullanım için Bitwarden\'ı en sevdiğiniz tarayıcınıza entegre etmek isterseniz bitwarden.com/download adresine gidin.</string>
     <string name="use_the_web_app">Web uygulamasını kullanın</string>
@@ -847,8 +839,8 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="copy_address">Adresi kopyala</string>
     <string name="biometrics_no_longer_supported_title">Artık bu cihazda biyometri desteklenmiyor</string>
     <string name="biometrics_no_longer_supported">Cihazınızın biyometrisi en son güvenlik gereksinimlerini karşılamadığı için oturumunuz kapatıldı. Ayarları güncellemek için yeniden oturum açın veya erişim için yöneticinize başvurun.</string>
-    <string name="cxp_import">CXP İçe Aktar</string>
-    <string name="cxp_export">CXP Dışa Aktar</string>
+    <string name="cxp_import">CXP içe aktarma</string>
+    <string name="cxp_export">CXP dışa aktarma</string>
     <string name="choose_three_or_four_random_words">Rastgele üç veya dört kelime seçin</string>
     <string name="pick_three_or_four_random_unrelated_words">Pick three or four random, unrelated words that you can easily remember. Think of <annotation emphasis="bold">objects, places, or things</annotation> you like.</string>
     <string name="combine_those_words_together">Bu kelimeleri bir araya getirin</string>
@@ -866,15 +858,15 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="coachmark_2_of_3">2/3</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
     <string name="coachmark_3_of_3">3/3</string>
-    <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+    <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Bu hesaba otomatik doldurmayı kullanarak erişmek için bir web adresi eklemeniz gerekir.</string>
     <string name="learn_about_new_logins">Yeni hesap ekleme hakkında bilgi alın</string>
-    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
+    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Yeni bir hesap eklemek için temel özellikler konusunda size yol göstereceğiz.</string>
     <string name="explore_the_generator">Üreteci keşfedin</string>
-    <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Learn more about generating secure login credentials with a guided tour.</string>
+    <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Rehberli tur ile güvenli hesap kimlik bilgileri oluşturma hakkında daha fazla bilgi edinin.</string>
     <string name="import_client_certificate">İstemci sertifikasını içe aktar</string>
-    <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
+    <string name="enter_the_client_certificate_password_and_alias">İstemci sertifikası parolasını ve bu sertifika için istenen diğer adı girin.</string>
     <string name="alias">Takma Ad</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Güvenli parolalar, parola cümleleri ve kullanıcı adları üretmek için üreteci kullanın. "</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where Autofill is not available, like a streaming service on your TV.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
     <string name="coachmark_1_of_6">1/6</string>
@@ -897,19 +889,19 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="invalid_certificate_chain">Geçersiz sertifika zinciri</string>
     <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Using a system certificate is less secure than storing the certificate with Bitwarden. Continuing will display a list of available system certificates if one is already installed.</string>
     <string name="link">Bağlantı</string>
-    <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey operation failed because host URL is not present in request.</string>
-    <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
-    <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
-    <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
-    <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
-    <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
+    <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Ana bilgisayar URL\'si istekte yer almadığı için geçiş anahtarı işlemi başarısız oldu.</string>
+    <string name="passkey_operation_failed_because_app_signature_is_invalid">Uygulama imzası geçersiz olduğu için geçiş anahtarı işlemi başarısız oldu.</string>
+    <string name="passkey_registration_failed_due_to_an_internal_error">Geçiş anahtarı kaydı dahili bir hata nedeniyle başarısız oldu.</string>
+    <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Güvenen taraf tanımlanamadığı için geçiş anahtarı işlemi başarısız oldu.</string>
+    <string name="passkey_operation_failed_because_the_request_is_invalid">İstek geçersiz olduğu için geçiş anahtarı işlemi başarısız oldu.</string>
+    <string name="passkey_operation_failed_because_no_item_was_selected">Hiçbir kayıt seçilmediği için geçiş anahtarı işlemi başarısız oldu.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">İstek desteklenmediği için geçiş anahtarı işlemi başarısız oldu.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
-    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
-    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
-    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
-    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Seçilen kayıt mevcut olmadığından parola işlemi başarısız oldu.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">Hiçbir kayıt seçilmediği için parola işlemi başarısız oldu.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Kullanıcı doğrulama denemeleri aşıldığı için kimlik bilgisi işlemi başarısız oldu.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">Kullanıcı kilitli olduğu için kimlik bilgisi işlemi başarısız oldu.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Seçilen kayıt mevcut olmadığından kimlik bilgisi işlemi başarısız oldu.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">Kullanıcı doğrulaması iptal edildiği için kimlik bilgisi işlemi başarısız oldu.</string>
     <string name="self_host_server_url">Kendi kendine barındırılan sunucu URL\'si</string>
     <string name="use_brave_autofill_integration">Brave otomatik doldurma entegrasyonunu kullan</string>
     <string name="use_chrome_autofill_integration">Chrome otomatik doldurma entegrasyonunu kullan</string>
@@ -919,7 +911,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="no_folder">Klasör yok</string>
     <string name="show_less">Daha az göster</string>
     <string name="add_field">Alan ekle</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Hata ayrıntılarını paylaş</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>
@@ -930,8 +921,8 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="experiencing_an_issue">Sorun mu yaşıyorsunuz?</string>
     <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Enable temporary logging to collect and inspect logs locally. When enabled, application states and network calls may be logged—never sensitive vault information.</string>
     <string name="to_get_started_set_a_logging_duration">To get started, set a logging duration. Logging  will automatically turn off after this period, giving you time to capture activity while reproducing  any issues.</string>
-    <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
-    <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
+    <string name="logs_will_be_automatically_deleted_after_30_days">Günlükler 30 gün sonra otomatik olarak silinecektir. Bitwarden günlük verilerinize yalnızca siz paylaştığınızda erişebilir.</string>
+    <string name="for_details_on_what_is_and_isnt_logged">Nelerin günlüğe kaydedilip kaydedilmediği hakkında ayrıntılı bilgi için\n<annotation link="helpCenter">Bitwarden yardım merkezini ziyaret edin.</annotation></string>
     <string name="logging_duration">Log kayıt süresi</string>
     <string name="flight_recorder_one_hour">1 saat</string>
     <string name="flight_recorder_eight_hours">8 saat</string>
@@ -941,7 +932,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="share_all">Tümünü paylaş</string>
     <string name="unable_to_share">Paylaşılamadı</string>
     <string name="please_try_again_or_select_a_different_log">Lütfen tekrar deneyin veya farklı bir günlük seçin.</string>
-    <string name="the_log_file_you_are_trying_to_share_has_been_removed">The log file you are trying to share has been removed.</string>
+    <string name="the_log_file_you_are_trying_to_share_has_been_removed">Paylaşmaya çalıştığınız günlük dosyası kaldırılmış.</string>
     <string name="delete_log">Günlüğü sil</string>
     <string name="do_you_really_want_to_delete_this_log">Bu günlüğü gerçekten silmek istiyor musunuz?</string>
     <string name="delete_logs">Günlükleri sil</string>
@@ -957,9 +948,9 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="all_logs_deleted">Tüm günlükler silindi</string>
     <string name="log_deleted">Günlük silindi</string>
     <string name="app_settings">Uygulama ayarları</string>
-    <string name="replace_existing_certificate">Mevcut sertifikayı değiştirelim mi?</string>
+    <string name="replace_existing_certificate">Mevcut sertifika değiştirilsin mi?</string>
     <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with the alias \"%s\" already exists. Do you want to replace it?\nReplacing the certificate may impact your connection to any environments currently using it.</string>
-    <string name="replace_certificate">Sertifikayı değiştirin</string>
+    <string name="replace_certificate">Sertifikayı değiştir</string>
     <string name="unable_to_read_certificate">Sertifika okunamıyor.</string>
     <string name="cannot_delete_your_account">Hesabınız silinemiyor</string>
     <string name="cannot_delete_your_account_explanation">Hesabınızın sahibi bir kuruluş olduğu için bu işlem tamamlanamadı. Bilgi almak için kuruluş yöneticinizle iletişime geçin.</string>
@@ -990,7 +981,7 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">%s\'ye güvenmeyi bırakmak istediğinizden emin misiniz?</string>
     <string name="installed_apps">Yüklü uygulamalar</string>
     <string name="delete_x">%s sil</string>
-    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Şifrenin şifresi çözülemedi. Destekle iletişime geçin.</string>
     <string name="decryption_error">Deşifre hatası</string>
     <string name="add_item_rotation">Öğe rotasyonu ekle</string>
     <string name="scan_a_qr_code">QR kodu tara</string>
@@ -1006,7 +997,10 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="advanced">Gelişmiş</string>
     <string name="collapse_advanced_options">Gelişmiş seçenekleri daralt</string>
     <string name="number_of_digits">Basamak sayısı</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d saniye</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">Hesap kaydedildi</string>
     <string name="information">Bilgi</string>
     <string name="otp_type">OTP türü</string>
@@ -1049,7 +1043,6 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="sync_with_bitwarden_app">Bitwarden uygulamasıyla senkronize et</string>
     <string name="learn_more_link"><annotation link="learnMore">Daha fazla bilgi al</annotation></string>
     <string name="shared_codes_error">Bitwarden uygulamasından kodlar senkronize edilemedi. Her iki uygulamanın da güncel olduğundan emin olun. Mevcut kodlarınıza Bitwarden uygulamasından erişmeye devam edebilirsiniz.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Bitwarden uygulamasıyla senkronize et</string>
     <string name="sync_with_bitwarden_action_card_message">Tüm doğrulama kodlarınızı görmek için tüm hesaplarınızda senkronizasyona izin vermelisiniz.</string>
     <string name="take_me_to_app_settings">Beni uygulama ayarlarına götür</string>
@@ -1093,4 +1086,18 @@ Bu hesaba geçmek ister misiniz?</string>
     <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>

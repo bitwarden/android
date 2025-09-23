@@ -52,12 +52,12 @@
 
     Please avoid mixing formatting and logical changes in the same commit/PR. When possible, fix any large formatting issues in a separate PR before opening one to make logical changes to the same code. This helps others focus on the meaningful code changes when reviewing the code.
 
-4. Setup JDK `Version` `17`:
+4. Setup JDK `Version` `21`:
 
     - Navigate to `Preferences > Build, Execution, Deployment > Build Tools > Gradle`.
     - Hit the selected Gradle JDK next to `Gradle JDK:`.
-    - Select a `17.x` version or hit `Download JDK...` if not present.
-    - Select `Version` `17`.
+    - Select a `21.x` version or hit `Download JDK...` if not present.
+    - Select `Version` `21`.
     - Select your preferred `Vendor`.
     - Hit `Download`.
     - Hit `Apply`.

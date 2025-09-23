@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">Sobre</string>
     <string name="add_folder">Adicionar pasta</string>
     <string name="add_item">Adicionar Item</string>
     <string name="an_error_has_occurred">Ocorreu um erro.</string>
     <string name="apply">Aplicar</string>
     <string name="back">Voltar</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Cancelar</string>
     <string name="copy">Copiar</string>
     <string name="copy_password">Copiar senha</string>
@@ -268,7 +267,7 @@ A leitura será feita automaticamente.</string>
     <string name="address">Endereço</string>
     <string name="expiration">Vencimento</string>
     <string name="show_website_icons">Mostrar ícones dos sites</string>
-    <string name="show_website_icons_help">Show website icons help</string>
+    <string name="show_website_icons_help">Ajuda sobre exibir ícones de website</string>
     <string name="show_website_icons_description">Mostre uma imagem reconhecível ao lado de cada login.</string>
     <string name="icons_url">URL do Servidor de Ícones</string>
     <string name="vault_is_locked">O cofre está trancado</string>
@@ -496,7 +495,6 @@ A leitura será feita automaticamente.</string>
     <string name="remove_master_password">Remover senha mestra</string>
     <string name="leave_organization">Sair da organização</string>
     <string name="leave_organization_name">Sair de %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Autenticar WebAuthn</string>
     <string name="fido2_return_to_app">Voltar ao Aplicativo</string>
     <string name="reset_password_auto_enroll_invite_warning">Esta organização possui uma política empresarial que irá inscrevê-lo automaticamente na redefinição de senha. A inscrição permitirá que os administradores da organização alterem sua senha mestra.</string>
@@ -574,12 +572,6 @@ selecione Adicionar TOTP para armazenar a chave de forma segura</string>
     <string name="api_key">Chave API</string>
     <string name="api_key_required_parenthesis">Chave de API (obrigatória)</string>
     <string name="service">Serviço</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">Token de acesso API (obrigatório)</string>
     <string name="api_access_token">Token de Acesso à API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Tem certeza que deseja substituir o usuário atual?</string>
@@ -920,7 +912,6 @@ Você deseja mudar para esta conta?</string>
     <string name="no_folder">Nenhuma pasta</string>
     <string name="show_less">Mostrar menos</string>
     <string name="add_field">Adicionar campo</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Compartilhar detalhes do erro</string>
     <string name="flight_recorder">Gravador de voo</string>
     <string name="flight_recorder_help">Ajuda do gravador de voo</string>
@@ -1007,7 +998,10 @@ Você deseja mudar para esta conta?</string>
     <string name="advanced">Avançado</string>
     <string name="collapse_advanced_options">Recolher opções avançadas</string>
     <string name="number_of_digits">Número de dígitos</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d segundos</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d segundos</item>
+    </plurals>
     <string name="item_saved">Item salvo</string>
     <string name="information">Informação</string>
     <string name="otp_type">Tipo de OTP</string>
@@ -1050,7 +1044,6 @@ Você deseja mudar para esta conta?</string>
     <string name="sync_with_bitwarden_app">Sincronizar com o aplicativo Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">Saber mais</annotation></string>
     <string name="shared_codes_error">Não é possível sincronizar os códigos do aplicativo Bitwarden. Certifique-se de que ambos os aplicativos estão atualizados. Você ainda pode acessar os códigos existentes no aplicativo Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sincronizar com o aplicativo Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Permitir a sincronização do app Autenticador em configurações para ver todos os seus códigos de verificação aqui.</string>
     <string name="take_me_to_app_settings">Me leve para as configurações do aplicativo</string>
@@ -1094,4 +1087,18 @@ Você deseja mudar para esta conta?</string>
     <string name="default_uri_match_detection_description_advanced_options">A detecção de correspondência URI controla como o Bitwarden identifica sugestões de autopreenchimento.\n<annotation emphasis="bold">Aviso:</annotation> \"Inicia com\" é uma opção avançada com maior risco de expor as credenciais.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Começa com\" é uma opção avançada com maior risco de expor as credenciais.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Expressão regular\" é uma opção avançada com alto risco de expor credenciais se usada incorretamente.</string>
+    <string name="credential_import_was_cancelled">Importação de credenciais foi cancelada. Nenhuma credencial foi importada.</string>
+    <string name="import_cancelled">Importação cancelada</string>
+    <string name="your_items_have_been_successfully_imported">Seus itens foram importados com sucesso e estão visíveis no seu cofre.</string>
+    <string name="import_saved_items">Importar itens salvos</string>
+    <string name="import_your_credentials_from_another_password_manager">Importe suas credenciais, incluindo senhas, cartões de crédito e qualquer informação de identidade pessoal de outro gerente de senha.</string>
+    <string name="return_to_your_vault">Retornar para o cofre</string>
+    <string name="select_a_credential_manager_to_import_items_from">Selecione um gerenciador de credenciais para importar itens.</string>
+    <string name="no_items_imported">Nenhum item importado</string>
+    <string name="no_items_received_from_the_selected_credential_manager">Nenhum item recebido do gerenciador de credenciais selecionado.</string>
+    <string name="vault_sync_failed">A sincronização do cofre falhou</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Seus itens foram importados com sucesso, mas não foi possível sincronizar o cofre. Itens importados não serão visíveis no seu cofre até que a sincronização seja executada.</string>
+    <string name="there_was_a_problem_importing_your_items">Houve um problema ao importar seus itens. Tente novamente. Se o problema persistir, contate o suporte.</string>
+    <string name="importing_items">Importando itens…</string>
+    <string name="uploading_items">Enviando itens…</string>
 </resources>

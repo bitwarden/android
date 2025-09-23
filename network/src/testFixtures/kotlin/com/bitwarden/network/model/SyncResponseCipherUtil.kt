@@ -23,6 +23,7 @@ fun createMockCipher(
     creationDate: ZonedDateTime = MOCK_ZONED_DATE_TIME,
     revisionDate: ZonedDateTime = MOCK_ZONED_DATE_TIME,
     deletedDate: ZonedDateTime? = MOCK_ZONED_DATE_TIME,
+    archivedDate: ZonedDateTime? = MOCK_ZONED_DATE_TIME,
     attachments: List<SyncResponseJson.Cipher.Attachment>? = listOf(
         createMockAttachment(number = number),
     ),
@@ -61,6 +62,7 @@ fun createMockCipher(
         creationDate = creationDate,
         revisionDate = revisionDate,
         deletedDate = deletedDate,
+        archivedDate = archivedDate,
         attachments = attachments,
         fields = fields,
         isFavorite = isFavorite,

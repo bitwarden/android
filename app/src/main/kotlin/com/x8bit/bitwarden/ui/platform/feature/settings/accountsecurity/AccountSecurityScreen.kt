@@ -25,12 +25,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -515,7 +515,7 @@ private fun SessionTimeoutRow(
     selectedVaultTimeoutType: VaultTimeout.Type,
     onVaultTimeoutTypeSelect: (VaultTimeout.Type) -> Unit,
     modifier: Modifier = Modifier,
-    resources: Resources = LocalContext.current.resources,
+    resources: Resources = LocalResources.current,
 ) {
     var shouldShowNeverTimeoutConfirmationDialog by remember { mutableStateOf(false) }
     val vaultTimeoutOptions = VaultTimeout.Type
@@ -633,7 +633,7 @@ private fun SessionTimeoutActionRow(
     selectedVaultTimeoutAction: VaultTimeoutAction,
     onVaultTimeoutActionSelect: (VaultTimeoutAction) -> Unit,
     modifier: Modifier = Modifier,
-    resources: Resources = LocalContext.current.resources,
+    resources: Resources = LocalResources.current,
 ) {
     var shouldShowLogoutActionConfirmationDialog by rememberSaveable { mutableStateOf(false) }
     BitwardenMultiSelectButton(

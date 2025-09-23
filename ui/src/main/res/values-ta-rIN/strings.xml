@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">இதுபற்றி</string>
     <string name="add_folder">கோப்புறை சேர்</string>
     <string name="add_item">உருப்படியைச் சேர்</string>
     <string name="an_error_has_occurred">ஓரு பிழை நேர்ந்துவிட்டது</string>
     <string name="apply">விண்ணப்பிக்கவும்</string>
     <string name="back">பின்னே</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">ரத்துசெய்</string>
     <string name="copy">நகலெடு</string>
     <string name="copy_password">கடவுச்சொல்லை நகலெடு</string>
@@ -496,7 +495,6 @@
     <string name="remove_master_password">பிரதான கடவுச்சொல்லை நீக்கு</string>
     <string name="leave_organization">நிறுவனத்தைவிட்டு விலகு</string>
     <string name="leave_organization_name">%1$s விட்டு விலகவா?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">WebAuthn-ஐ அங்கீகரி</string>
     <string name="fido2_return_to_app">செயலிக்குத் திரும்பு</string>
     <string name="reset_password_auto_enroll_invite_warning">உம்மைத் தானாகக் கடவுச்சொல் அகரமாக்கலில் சேர்க்கும் முனைவகக் கொள்கை இந்நிறுவனத்திடமுள்ளது. சேர்க்கையானது உம் பிரதான கடவுச்சொல்லை நிறுவன நிர்வாகிகள் மாற்ற அனுமதிக்கும்.</string>
@@ -574,12 +572,6 @@
     <string name="api_key">API விசை</string>
     <string name="api_key_required_parenthesis">API விசை (தேவை)</string>
     <string name="service">சேவை</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">ஃபயர்பாக்ஸ் ரிலே</string>
-    <string name="simple_login">சிம்பிள்லாகின்</string>
-    <string name="duck_duck_go">டக் டக் கோ</string>
-    <string name="fastmail">ஃபாஸ்ட்மெயில்</string>
-    <string name="forward_email">ஃபார்வர்ட்மின்னஞ்சல்</string>
     <string name="api_access_token_required_parenthesis">API அணுகல் டோக்கன் (தேவை)</string>
     <string name="api_access_token">API அணுகல் கிள்ளாக்கு</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">தற்போதைய பயனர்பெயரை மேலெழுத உறுதியா?</string>
@@ -920,7 +912,6 @@
     <string name="no_folder">கோப்புறை இல்லை</string>
     <string name="show_less">குறைவாக காட்டு</string>
     <string name="add_field">புலத்தைச் சேர்</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">பிழை விவரங்களைப் பகிரு</string>
     <string name="flight_recorder">ஃபிளைட் ரெக்கார்டர்</string>
     <string name="flight_recorder_help">ஃபிளைட் ரெக்கார்டர் உதவி</string>
@@ -1007,7 +998,10 @@
     <string name="advanced">மேம்பட்ட</string>
     <string name="collapse_advanced_options">மேம்பட்ட விருப்பங்களைச் சுருக்கு</string>
     <string name="number_of_digits">இலக்கங்களின் எண்ணிக்கை</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d வினாடிகள்</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">உருப்படி சேமிக்கப்பட்டது</string>
     <string name="information">தகவல்</string>
     <string name="otp_type">OTP வகை</string>
@@ -1050,7 +1044,6 @@
     <string name="sync_with_bitwarden_app">Bitwarden செயலியுடன் ஒத்திசை</string>
     <string name="learn_more_link"><annotation link="learnMore">மேலும் அறிக</annotation></string>
     <string name="shared_codes_error">Bitwarden செயலியிலிருந்து குறியீடுகளை ஒத்திசைக்க முடியவில்லை. இரண்டு செயலிகளும் புதுப்பித்த நிலையில் உள்ளதா என்பதை உறுதிப்படுத்தவும். Bitwarden செயலியில் உங்கள் தற்போதைய குறியீடுகளை நீங்கள் இன்னும் அணுகலாம்.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Bitwarden செயலியுடன் ஒத்திசைக்கவும்</string>
     <string name="sync_with_bitwarden_action_card_message">உங்கள் சரிபார்ப்புக் குறியீடுகள் அனைத்தையும் காண, உங்கள் எல்லா கணக்குகளிலும் ஒத்திசைவை அனுமதிக்க வேண்டும்.</string>
     <string name="take_me_to_app_settings">என்னை செயலி அமைப்புகளுக்கு அழைத்துச் செல்லவும்</string>
@@ -1094,4 +1087,18 @@
     <string name="default_uri_match_detection_description_advanced_options">தானியங்கு நிரப்புதல் பரிந்துரைகளை Bitwarden எவ்வாறு கண்டறிகிறது என்பதை URI பொருத்தம் கண்டறிதல் கட்டுப்படுத்துகிறது.\n<annotation emphasis="bold">எச்சரிக்கை::</annotation> \"தொடங்குகிறது\" என்பது சான்றுகளை வெளிப்படுத்தும் அபாயம் கொண்ட ஒரு மேம்பட்ட விருப்பமாகும்.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"தொடங்குகிறது\" என்பது நற்சான்றிதழ்களை வெளிப்படுத்தும் அதிக ஆபத்து உள்ள ஒரு மேம்பட்ட விருப்பமாகும்.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"வழக்கமான வெளிப்பாடு\" என்பது தவறாகப் பயன்படுத்தப்பட்டால் நற்சான்றிதழ்களை வெளிப்படுத்தும் அபாயம் அதிகம் உள்ள ஒரு மேம்பட்ட விருப்பமாகும்.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>

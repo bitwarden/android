@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">Over</string>
     <string name="add_folder">Map toevoegen</string>
     <string name="add_item">Item toevoegen</string>
     <string name="an_error_has_occurred">Er is een fout opgetreden.</string>
     <string name="apply">Toepassen</string>
     <string name="back">Terug</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Annuleren</string>
     <string name="copy">Kopiëren</string>
     <string name="copy_password">Wachtwoord kopiëren</string>
@@ -496,7 +495,6 @@ Het scannen gebeurt automatisch.</string>
     <string name="remove_master_password">Hoofdwachtwoord verwijderen</string>
     <string name="leave_organization">Organisatie verlaten</string>
     <string name="leave_organization_name">%1$s verlaten?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Authenticeer WebAuthn</string>
     <string name="fido2_return_to_app">Terug naar de app</string>
     <string name="reset_password_auto_enroll_invite_warning">Deze organisatie heeft een ondernemingsbeleid dat je automatisch inschrijft bij het resetten van je wachtwoord. Inschrijving stelt organisatiebeheerders in staat om je hoofdwachtwoord te wijzigen.</string>
@@ -574,12 +572,6 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</string>
     <string name="api_key">API-sleutel</string>
     <string name="api_key_required_parenthesis">API-sleutel (verplicht)</string>
     <string name="service">Dienst</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API-toegangstoken (verplicht)</string>
     <string name="api_access_token">API-toegangstoken</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Weet je zeker dat je de huidige gebruikersnaam wilt overschrijven?</string>
@@ -664,7 +656,7 @@ Wilt u naar dit account wisselen?</string>
     <string name="session_timeout_action">Actie voor sessie time-out</string>
     <string name="account_fingerprint_phrase">Vingerafdrukzin van je account</string>
     <string name="passkey_management_explanation_long">Gebruik Bitwarden voor het opslaan van nieuwe passkeys en inloggen met passkeys die zijn opgeslagen in je kluis.</string>
-    <string name="autofill_services_explanation_long">Het Android Autofill Framework helpt het het invullen van inloggegevens in andere apps op je apparaat.</string>
+    <string name="autofill_services_explanation_long">Het Android Autofill Framework helpt het invullen van inloggegevens in andere apps op je apparaat.</string>
     <string name="use_inline_autofill_explanation_long">Gebruik inline automatisch aanvullen als het geselecteerde toetsenbord dit ondersteunt. Gebruik anders de standaard overlay.</string>
     <string name="additional_options">Extra instellingen</string>
     <string name="continue_to_web_app">Doorgaan naar web-app?</string>
@@ -920,7 +912,6 @@ Wilt u naar dit account wisselen?</string>
     <string name="no_folder">Geen map</string>
     <string name="show_less">Minder weergeven</string>
     <string name="add_field">Veld toevoegen</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Foutdetails delen</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight Recorder-help</string>
@@ -1007,7 +998,10 @@ Wilt u naar dit account wisselen?</string>
     <string name="advanced">Geavanceerd</string>
     <string name="collapse_advanced_options">Geavanceerde opties samenvouwen</string>
     <string name="number_of_digits">Aantal cijfers</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d seconden</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d seconde</item>
+        <item quantity="other">%d seconden</item>
+    </plurals>
     <string name="item_saved">Item opgeslagen</string>
     <string name="information">Informatie</string>
     <string name="otp_type">OTP-type</string>
@@ -1050,7 +1044,6 @@ Wilt u naar dit account wisselen?</string>
     <string name="sync_with_bitwarden_app">Synchroniseren met Bitwarden app</string>
     <string name="learn_more_link"><annotation link="learnMore">Leer meer</annotation></string>
     <string name="shared_codes_error">Kan geen codes synchroniseren vanuit de Bitwarden app. Zorg ervoor dat beide apps up-to-date zijn. Je hebt nog steeds toegang tot je bestaande codes in de Bitwarden app.</string>
-    <string name="shared_accounts_header">%1$s %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Synchroniseren met de Bitwarden app</string>
     <string name="sync_with_bitwarden_action_card_message">Authenticator app synchronisatie toestaan in instellingen om hier al je verificatiecodes te bekijken.</string>
     <string name="take_me_to_app_settings">Breng me naar de app-instellingen</string>
@@ -1094,4 +1087,18 @@ Wilt u naar dit account wisselen?</string>
     <string name="default_uri_match_detection_description_advanced_options">De URI match detectie bepaalt hoe Bitwarden autofill-suggesties herkent.\n<annotation emphasis="bold">Waarschuwing:</annotation> \"Begint met\" is een geavanceerde optie met verhoogd risico voor het blootstellen van inloggegevens als je het niet goed gebruikt.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Begint met\" is een geavanceerde optie met een verhoogd risico op het blootstellen van inloggegevens.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Reguliere expressie\" is een geavanceerde optie met een verhoogd risico op het blootstellen van inloggegevens als je het verkeerd gebruikt.</string>
+    <string name="credential_import_was_cancelled">Import van inloggegevens geannuleerd. Er zijn geen inloggegevens geïmporteerd.</string>
+    <string name="import_cancelled">Importeren geannuleerd</string>
+    <string name="your_items_have_been_successfully_imported">Je items zijn met succes geïmporteerd en zijn nu zichtbaar in je kluis.</string>
+    <string name="import_saved_items">Opgeslagen logins importeren</string>
+    <string name="import_your_credentials_from_another_password_manager">Je inloggegevens, inclusief wachtwoorden, creditcards en persoonlijke identiteitsgegevens van een andere wachtwoordbeheerder importeren.</string>
+    <string name="return_to_your_vault">Terug naar je kluis</string>
+    <string name="select_a_credential_manager_to_import_items_from">Selecteer een wachtwoordmanager om items van te importeren.</string>
+    <string name="no_items_imported">Geen items geïmporteerd</string>
+    <string name="no_items_received_from_the_selected_credential_manager">Geen items ontvangen van de geselecteerde wachtwoordmanager.</string>
+    <string name="vault_sync_failed">Kluissynchronisatie mislukt</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Uw items zijn met succes geïmporteerd, maar konden de kluis niet synchroniseren. Geïmporteerde items zijn niet zichtbaar in uw kluis totdat de synchronisatie is uitgevoerd.</string>
+    <string name="there_was_a_problem_importing_your_items">Er ging iets mis bij het importeren van je items. Probeer het opnieuw. Als het probleem aanhoudt, neem dan contact op met support.</string>
+    <string name="importing_items">Items importeren…</string>
+    <string name="uploading_items">Items uploaden…</string>
 </resources>

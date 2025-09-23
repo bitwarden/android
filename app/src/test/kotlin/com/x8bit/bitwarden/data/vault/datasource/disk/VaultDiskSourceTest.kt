@@ -106,6 +106,22 @@ class VaultDiskSourceTest {
     }
 
     @Test
+    fun `getSelectedCiphers should return selected CiphersDao ciphers`() = runTest {
+        val cipherEntities = listOf(
+            CIPHER_ENTITY,
+            CIPHER_ENTITY.copy(id = "otherCipherId"),
+        )
+        val ciphers = listOf(CIPHER_1)
+        val cipherIds = listOf("mockId-1")
+
+        val result1 = vaultDiskSource.getSelectedCiphers(USER_ID, cipherIds)
+        assertEquals(emptyList<SyncResponseJson.Cipher>(), result1)
+        ciphersDao.insertCiphers(cipherEntities)
+        val result2 = vaultDiskSource.getSelectedCiphers(USER_ID, cipherIds)
+        assertEquals(ciphers, result2)
+    }
+
+    @Test
     fun `getTotpCiphers should return all CiphersDao totp ciphers`() = runTest {
         val cipherEntities = listOf(
             CIPHER_ENTITY,
@@ -409,6 +425,7 @@ private const val CIPHER_JSON = """
   "folderId": "mockFolderId-1",
   "organizationId": "mockOrganizationId-1",
   "deletedDate": "2023-10-27T12:00:00.000Z",
+  "archivedDate": "2023-10-27T12:00:00.000Z",
   "identity": {
     "passportNumber": "mockPassportNumber-1",
     "lastName": "mockLastName-1",

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.manager
 
 import android.os.Build
 import com.bitwarden.core.util.isBuildVersionAtLeast
+import com.bitwarden.data.manager.NativeLibraryManager
 import com.bitwarden.sdk.Client
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
 

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">Om</string>
     <string name="add_folder">Lägg till mapp</string>
     <string name="add_item">Lägg till objekt</string>
     <string name="an_error_has_occurred">Ett fel har inträffat</string>
     <string name="apply">Verkställ</string>
     <string name="back">Tillbaka</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Avbryt</string>
     <string name="copy">Kopiera</string>
     <string name="copy_password">Kopiera lösenord</string>
@@ -496,7 +495,6 @@ Skanningen sker automatiskt.</string>
     <string name="remove_master_password">Ta bort huvudlösenord</string>
     <string name="leave_organization">Lämna organisation</string>
     <string name="leave_organization_name">Lämna %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Autentisera WebAuthn</string>
     <string name="fido2_return_to_app">Återvänd till app</string>
     <string name="reset_password_auto_enroll_invite_warning">Denna organisation har en företagspolicy som automatiskt registrerar dig för lösenordsåterställning. Deltagandet gör det möjligt för organisationsadministratörer att ändra ditt huvudlösenord.</string>
@@ -574,12 +572,6 @@ välj Lägg till TOTP för att lagra nyckeln på ett säkert sätt</string>
     <string name="api_key">API-nyckel</string>
     <string name="api_key_required_parenthesis">API-nyckel (obligatoriskt)</string>
     <string name="service">Tjänst</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API-åtkomsttoken (krävs)</string>
     <string name="api_access_token">API-åtkomsttoken</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Är du säker på att du vill ersätta nuvarande användarnamn?</string>
@@ -920,7 +912,6 @@ Vill du byta till detta konto?</string>
     <string name="no_folder">Ingen mapp</string>
     <string name="show_less">Visa mindre</string>
     <string name="add_field">Lägg till fält</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Dela felinformation</string>
     <string name="flight_recorder">Färdskrivare</string>
     <string name="flight_recorder_help">Hjälp med färdskrivare</string>
@@ -1007,7 +998,10 @@ Vill du byta till detta konto?</string>
     <string name="advanced">Avancerat</string>
     <string name="collapse_advanced_options">Fäll in avancerade alternativ</string>
     <string name="number_of_digits">Antal siffror</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d sekunder</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d sekund</item>
+        <item quantity="other">%d sekunder</item>
+    </plurals>
     <string name="item_saved">Objekt sparat</string>
     <string name="information">Information</string>
     <string name="otp_type">OTP-typ</string>
@@ -1050,7 +1044,6 @@ Vill du byta till detta konto?</string>
     <string name="sync_with_bitwarden_app">Synkronisera med Bitwarden-appen</string>
     <string name="learn_more_link"><annotation link="learnMore">Läs mer</annotation></string>
     <string name="shared_codes_error">Det går inte att synkronisera koder från Bitwarden-appen. Se till att båda apparna är uppdaterade. Du kan fortfarande komma åt dina befintliga koder i Bitwarden-appen.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Synkronisera med Bitwarden-appen</string>
     <string name="sync_with_bitwarden_action_card_message">För att kunna se alla dina verifieringskoder måste du tillåta synkronisering på alla dina konton.</string>
     <string name="take_me_to_app_settings">Ta mig till appinställningarna</string>
@@ -1094,4 +1087,18 @@ Vill du byta till detta konto?</string>
     <string name="default_uri_match_detection_description_advanced_options">URI-matchning kontrollerar hur Bitwarden identifierar förslag för automatisk ifyllning.\n<annotation emphasis="bold">Varning:</annotation> ”Börjar med” är ett avancerat alternativ som medför ökad risk för att inloggningsuppgifter exponeras.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Börjar med\" är ett avancerat alternativ med ökad risk för att röja inloggningsuppgifter.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">”Reguljära uttryck” är ett avancerat alternativ som medför ökad risk för att användaruppgifter exponeras om det används felaktigt.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>

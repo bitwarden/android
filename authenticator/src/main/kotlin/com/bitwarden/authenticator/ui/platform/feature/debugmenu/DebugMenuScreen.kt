@@ -19,10 +19,11 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledButton
+import com.bitwarden.authenticator.ui.platform.components.content.AuthenticatorErrorContent
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.components.ListItemContent
@@ -74,12 +75,14 @@ fun DebugMenuScreen(
             )
         },
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(innerPadding),
-        ) {
-            Spacer(modifier = Modifier.height(16.dp))
+        if (state.featureFlags.isEmpty()) {
+            AuthenticatorErrorContent(
+                message = stringResource(id = BitwardenString.empty_item_list),
+                modifier = Modifier
+                    .padding(paddingValues = innerPadding)
+                    .fillMaxSize(),
+            )
+        } else {
             FeatureFlagContent(
                 featureFlagMap = state.featureFlags,
                 onValueChange = remember(viewModel) {
@@ -88,10 +91,11 @@ fun DebugMenuScreen(
                     }
                 },
                 onResetValues = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues)
-                    }
+                    { viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues) }
                 },
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(paddingValues = innerPadding),
             )
         }
     }
