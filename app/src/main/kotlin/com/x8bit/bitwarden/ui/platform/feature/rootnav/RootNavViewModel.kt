@@ -88,6 +88,10 @@ class RootNavViewModel @Inject constructor(
                 }
             }
 
+            specialCircumstance is SpecialCircumstance.CredentialExchangeExport -> {
+                RootNavState.CredentialExchangeExport
+            }
+
             userState.activeAccount.isVaultUnlocked &&
                 userState.shouldShowRemovePassword(authState = action.authState) -> {
                 RootNavState.RemovePassword
@@ -181,7 +185,9 @@ class RootNavViewModel @Inject constructor(
                     null,
                         -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
 
-                    is SpecialCircumstance.RegistrationEvent -> {
+                    is SpecialCircumstance.CredentialExchangeExport,
+                    is SpecialCircumstance.RegistrationEvent,
+                        -> {
                         throw IllegalStateException(
                             "Special circumstance should have been already handled.",
                         )
@@ -401,6 +407,12 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object OnboardingStepsComplete : RootNavState()
+
+    /**
+     * App should begin the export items flow.
+     */
+    @Parcelize
+    data object CredentialExchangeExport : RootNavState()
 }
 
 /**

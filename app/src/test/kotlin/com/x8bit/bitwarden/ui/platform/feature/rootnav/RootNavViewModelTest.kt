@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import androidx.core.os.bundleOf
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.JwtTokenDataJson
@@ -1388,6 +1389,24 @@ class RootNavViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         assertEquals(
             RootNavState.VaultUnlocked(activeUserId = "activeUserId"),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when SpecialCircumstance is CredentialExchangeExport the nav state should be CredentialExchangeExport`() {
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.CredentialExchangeExport(
+                data = ImportCredentialsRequestData(
+                    uri = mockk(),
+                    requestJson = "mockRequestJson",
+                ),
+            )
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.CredentialExchangeExport,
             viewModel.stateFlow.value,
         )
     }

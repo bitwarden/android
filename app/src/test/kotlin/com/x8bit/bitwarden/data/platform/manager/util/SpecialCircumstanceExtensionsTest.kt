@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager.util
 
 import androidx.core.os.bundleOf
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
@@ -346,5 +347,57 @@ class SpecialCircumstanceExtensionsTest {
             .forEach { specialCircumstance ->
                 assertNull(specialCircumstance.toTotpDataOrNull())
             }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toImportCredentialsRequestDataOrNull should return a non-null value for ImportCredentials`() {
+        val importCredentialsRequest = ImportCredentialsRequestData(
+            uri = mockk(),
+            requestJson = "",
+        )
+        assertEquals(
+            importCredentialsRequest,
+            SpecialCircumstance
+                .CredentialExchangeExport(
+                    data = importCredentialsRequest,
+                )
+                .toImportCredentialsRequestDataOrNull(),
+        )
+    }
+
+    @Test
+    fun `toImportCredentialsRequestDataOrNull should return a null value for other types`() {
+        listOf(
+            SpecialCircumstance.AutofillSelection(
+                autofillSelectionData = mockk(),
+                shouldFinishWhenComplete = true,
+            ),
+            SpecialCircumstance.AutofillSave(
+                autofillSaveItem = mockk(),
+            ),
+            SpecialCircumstance.ShareNewSend(
+                data = mockk(),
+                shouldFinishWhenComplete = true,
+            ),
+            mockk<SpecialCircumstance.AddTotpLoginItem>(),
+            SpecialCircumstance.PasswordlessRequest(
+                passwordlessRequestData = mockk(),
+                shouldFinishWhenComplete = true,
+            ),
+            SpecialCircumstance.ProviderCreateCredential(
+                createCredentialRequest = mockk(),
+            ),
+            SpecialCircumstance.ProviderGetCredentials(
+                getCredentialsRequest = mockk(),
+            ),
+            SpecialCircumstance.Fido2Assertion(
+                fido2AssertionRequest = mockk(),
+            ),
+            SpecialCircumstance.GeneratorShortcut,
+            SpecialCircumstance.VaultShortcut,
+        ).forEach { specialCircumstance ->
+            assertNull(specialCircumstance.toImportCredentialsRequestDataOrNull())
+        }
     }
 }
