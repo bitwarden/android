@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditRoute
+import com.x8bit.bitwarden.ui.vault.feature.exportitems.ExportItemsRoute
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.ItemListingType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingRoute
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
@@ -422,6 +423,17 @@ class RootNavScreenTest : BitwardenComposeTest() {
             verify {
                 mockNavHostController.navigate(
                     route = SetupCompleteRoute,
+                    navOptions = expectedNavOptions,
+                )
+            }
+        }
+
+        // Make sure navigating to export items graph works as expected:
+        rootNavStateFlow.value = RootNavState.CredentialExchangeExport
+        composeTestRule.runOnIdle {
+            verify {
+                mockNavHostController.navigate(
+                    route = ExportItemsRoute,
                     navOptions = expectedNavOptions,
                 )
             }

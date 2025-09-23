@@ -62,6 +62,8 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.navigateToAddEditSend
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toVaultItemCipherType
+import com.x8bit.bitwarden.ui.vault.feature.exportitems.exportItemsGraph
+import com.x8bit.bitwarden.ui.vault.feature.exportitems.navigateToExportItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListingAsRoot
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -107,6 +109,7 @@ fun RootNavScreen(
         setupUnlockDestinationAsRoot()
         setupAutoFillDestinationAsRoot()
         setupCompleteDestination()
+        exportItemsGraph()
     }
 
     val targetRoute = when (state) {
@@ -132,6 +135,7 @@ fun RootNavScreen(
         is RootNavState.VaultUnlockedForFido2Assertion,
         is RootNavState.VaultUnlockedForPasswordGet,
         is RootNavState.VaultUnlockedForProviderGetCredentials,
+        is RootNavState.CredentialExchangeExport,
             -> VaultUnlockedGraphRoute
 
         RootNavState.OnboardingAccountLockSetup -> SetupUnlockRoute.AsRoot
@@ -269,6 +273,10 @@ fun RootNavScreen(
 
             RootNavState.OnboardingStepsComplete -> {
                 navController.navigateToSetupCompleteScreen(rootNavOptions)
+            }
+
+            is RootNavState.CredentialExchangeExport -> {
+                navController.navigateToExportItemsGraph(rootNavOptions)
             }
         }
     }

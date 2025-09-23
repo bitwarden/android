@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager.util
 
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
@@ -69,5 +70,14 @@ fun SpecialCircumstance.toGetCredentialsRequestOrNull(): GetCredentialsRequest? 
 fun SpecialCircumstance.toTotpDataOrNull(): TotpData? =
     when (this) {
         is SpecialCircumstance.AddTotpLoginItem -> this.data
+        else -> null
+    }
+
+/**
+ * Returns [ImportCredentialsRequestData] when contained in the given [SpecialCircumstance].
+ */
+fun SpecialCircumstance.toImportCredentialsRequestDataOrNull(): ImportCredentialsRequestData? =
+    when (this) {
+        is SpecialCircumstance.CredentialExchangeExport -> this.data
         else -> null
     }
