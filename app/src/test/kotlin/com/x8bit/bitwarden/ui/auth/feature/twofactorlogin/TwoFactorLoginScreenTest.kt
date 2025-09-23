@@ -309,7 +309,7 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
         }
         composeTestRule.onNode(
             hasText(
-                text = "We don't recognize this device",
+                text = "We don’t recognize this device",
                 substring = true,
                 ignoreCase = true,
             ),
