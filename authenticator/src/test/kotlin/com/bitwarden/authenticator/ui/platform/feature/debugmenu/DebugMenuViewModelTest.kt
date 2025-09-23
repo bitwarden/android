@@ -13,7 +13,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.collections.immutable.ImmutableMap
-import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -79,13 +79,15 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
     )
 }
 
-private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf(
-    FlagKey.BitwardenAuthenticationEnabled to true,
-)
+private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = FlagKey
+    .activeAuthenticatorFlags
+    .associateWith { true }
+    .toImmutableMap()
 
-private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf(
-    FlagKey.BitwardenAuthenticationEnabled to false,
-)
+private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = FlagKey
+    .activeAuthenticatorFlags
+    .associateWith { false }
+    .toImmutableMap()
 
 private val DEFAULT_STATE = DebugMenuState(
     featureFlags = DEFAULT_MAP_VALUE,
