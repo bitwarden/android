@@ -100,11 +100,9 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
     @Test
     fun `handleUpdateFeatureFlag should update the feature flag via the repository`() {
         val viewModel = createViewModel()
-        viewModel.trySendAction(
-            DebugMenuAction.UpdateFeatureFlag(FlagKey.CipherKeyEncryption, false),
-        )
+        viewModel.trySendAction(DebugMenuAction.UpdateFeatureFlag(FlagKey.DummyBoolean, false))
         verify(exactly = 1) {
-            mockDebugMenuRepository.updateFeatureFlag(FlagKey.CipherKeyEncryption, false)
+            mockDebugMenuRepository.updateFeatureFlag(FlagKey.DummyBoolean, false)
         }
     }
 

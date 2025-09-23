@@ -26,7 +26,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.BitwardenAuthenticationEnabled,
     FlagKey.CredentialExchangeProtocolImport,
     FlagKey.CredentialExchangeProtocolExport,
-    FlagKey.CipherKeyEncryption,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -70,7 +69,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
 
     FlagKey.CredentialExchangeProtocolImport -> stringResource(BitwardenString.cxp_import)
     FlagKey.CredentialExchangeProtocolExport -> stringResource(BitwardenString.cxp_export)
-    FlagKey.CipherKeyEncryption -> stringResource(BitwardenString.cipher_key_encryption)
     FlagKey.BitwardenAuthenticationEnabled -> {
         stringResource(BitwardenString.bitwarden_authentication_enabled)
     }

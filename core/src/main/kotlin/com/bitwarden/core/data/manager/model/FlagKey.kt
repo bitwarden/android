@@ -55,14 +55,6 @@ sealed class FlagKey<out T : Any> {
     }
 
     /**
-     * Data object holding the feature flag key for the Cipher Key Encryption feature.
-     */
-    data object CipherKeyEncryption : FlagKey<Boolean>() {
-        override val keyName: String = "cipher-key-encryption"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
      *  Indicates the state of Bitwarden authentication.
      */
     data object BitwardenAuthenticationEnabled : FlagKey<Boolean>() {
