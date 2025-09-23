@@ -32,6 +32,7 @@ sealed class FlagKey<out T : Any> {
             listOf(
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
+                CipherKeyEncryption,
             )
         }
     }
