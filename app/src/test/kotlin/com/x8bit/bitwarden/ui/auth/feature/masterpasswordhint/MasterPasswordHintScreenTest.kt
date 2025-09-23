@@ -53,7 +53,7 @@ class MasterPasswordHintScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithText("We've sent you an email with your master password hint.")
+            .onNodeWithText("We’ve sent you an email with your master password hint.")
             .assertIsDisplayed()
     }
 
