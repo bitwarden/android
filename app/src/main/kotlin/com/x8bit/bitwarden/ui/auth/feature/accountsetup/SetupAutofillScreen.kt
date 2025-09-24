@@ -182,6 +182,7 @@ private fun SetupAutoFillContent(
         BitwardenFilledButton(
             label = stringResource(id = BitwardenString.continue_text),
             onClick = onContinueClick,
+            isEnabled = state.autofillEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
