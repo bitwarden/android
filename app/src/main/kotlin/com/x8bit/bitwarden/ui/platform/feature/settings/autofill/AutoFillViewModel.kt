@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofi
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
@@ -62,6 +63,7 @@ class AutoFillViewModel @Inject constructor(
                 ),
                 defaultUriMatchType = settingsRepository.defaultUriMatchType,
                 showAutofillActionCard = false,
+                showBrowserAutofillActionCard = false,
                 activeUserId = userId,
                 browserAutofillSettingsOptions = browserThirdPartyAutofillEnabledManager
                     .browserThirdPartyAutofillStatus
@@ -94,7 +96,7 @@ class AutoFillViewModel @Inject constructor(
 
         firstTimeActionManager
             .firstTimeStateFlow
-            .map { AutoFillAction.Internal.UpdateShowAutofillActionCard(it.showSetupAutofillCard) }
+            .map { AutoFillAction.Internal.UpdateShowAutofillActionCard(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -118,6 +120,14 @@ class AutoFillViewModel @Inject constructor(
         is AutoFillAction.Internal -> handleInternalAction(action)
         AutoFillAction.AutofillActionCardCtaClick -> handleAutofillActionCardCtaClick()
         AutoFillAction.DismissShowAutofillActionCard -> handleDismissShowAutofillActionCard()
+        AutoFillAction.BrowserAutofillActionCardCtaClick -> {
+            handleBrowserAutofillActionCardCtaClick()
+        }
+
+        AutoFillAction.DismissShowBrowserAutofillActionCard -> {
+            handleDismissShowBrowserAutofillActionCard()
+        }
+
         is AutoFillAction.BrowserAutofillSelected -> handleBrowserAutofillSelected(action)
         AutoFillAction.AboutPrivilegedAppsClick -> handleAboutPrivilegedAppsClick()
         AutoFillAction.PrivilegedAppsClick -> handlePrivilegedAppsClick()
@@ -180,10 +190,23 @@ class AutoFillViewModel @Inject constructor(
         sendEvent(AutoFillEvent.NavigateToSetupAutofill)
     }
 
+    private fun handleDismissShowBrowserAutofillActionCard() {
+        firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = false)
+    }
+
+    private fun handleBrowserAutofillActionCardCtaClick() {
+        sendEvent(AutoFillEvent.NavigateToSetupBrowserAutofill)
+    }
+
     private fun handleUpdateShowAutofillActionCard(
         action: AutoFillAction.Internal.UpdateShowAutofillActionCard,
     ) {
-        mutableStateFlow.update { it.copy(showAutofillActionCard = action.showAutofillActionCard) }
+        mutableStateFlow.update {
+            it.copy(
+                showAutofillActionCard = action.firstTimeState.showSetupAutofillCard,
+                showBrowserAutofillActionCard = action.firstTimeState.showSetupBrowserAutofillCard,
+            )
+        }
     }
 
     private fun handleAskToAddLoginClick(action: AutoFillAction.AskToAddLoginClick) {
@@ -273,6 +296,7 @@ data class AutoFillState(
     val showPasskeyManagementRow: Boolean,
     val defaultUriMatchType: UriMatchType,
     val showAutofillActionCard: Boolean,
+    val showBrowserAutofillActionCard: Boolean,
     val activeUserId: String,
     val browserAutofillSettingsOptions: ImmutableList<BrowserAutofillSettingsOption>,
 ) : Parcelable {
@@ -343,6 +367,11 @@ sealed class AutoFillEvent {
      * Navigates to the setup autofill screen.
      */
     data object NavigateToSetupAutofill : AutoFillEvent()
+
+    /**
+     * Navigates to the setup browser autofill screen.
+     */
+    data object NavigateToSetupBrowserAutofill : AutoFillEvent()
 
     /**
      * Navigate to the about privileged apps screen.
@@ -430,6 +459,16 @@ sealed class AutoFillAction {
     data object AutofillActionCardCtaClick : AutoFillAction()
 
     /**
+     * User has clicked the "X" to dismiss the browser autofill action card.
+     */
+    data object DismissShowBrowserAutofillActionCard : AutoFillAction()
+
+    /**
+     * User has clicked the CTA on the browser autofill action card.
+     */
+    data object BrowserAutofillActionCardCtaClick : AutoFillAction()
+
+    /**
      * User has clicked one of the browser autofill options.
      */
     data class BrowserAutofillSelected(val browserPackage: BrowserPackage) : AutoFillAction()
@@ -470,7 +509,7 @@ sealed class AutoFillAction {
         /**
          * An update for changes in the [showAutofillActionCard] value from the settings repository.
          */
-        data class UpdateShowAutofillActionCard(val showAutofillActionCard: Boolean) : Internal()
+        data class UpdateShowAutofillActionCard(val firstTimeState: FirstTimeState) : Internal()
 
         /**
          * Received updated [BrowserThirdPartyAutofillStatus] data.

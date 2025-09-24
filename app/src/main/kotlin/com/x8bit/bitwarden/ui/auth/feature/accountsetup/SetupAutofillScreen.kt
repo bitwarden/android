@@ -60,6 +60,7 @@ import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAutofillSettings
 @Composable
 fun SetupAutoFillScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToBrowserAutofill: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: SetupAutoFillViewModel = hiltViewModel(),
 ) {
@@ -75,6 +76,7 @@ fun SetupAutoFillScreen(
             }
 
             SetupAutoFillEvent.NavigateBack -> onNavigateBack()
+            SetupAutoFillEvent.NavigateToBrowserAutofill -> onNavigateToBrowserAutofill()
         }
     }
     when (state.dialogState) {
@@ -114,7 +116,7 @@ fun SetupAutoFillScreen(
                     id = if (state.isInitialSetup) {
                         BitwardenString.account_setup
                     } else {
-                        BitwardenString.turn_on_autofill
+                        BitwardenString.autofill_setup
                     },
                 ),
                 scrollBehavior = scrollBehavior,

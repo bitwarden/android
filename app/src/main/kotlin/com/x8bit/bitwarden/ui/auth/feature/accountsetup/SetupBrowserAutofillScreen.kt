@@ -25,12 +25,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
@@ -43,14 +46,17 @@ import kotlinx.collections.immutable.persistentListOf
  * Top level composable for the Setup Browser Autofill screen.
  */
 @OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongMethod")
 @Composable
 fun SetupBrowserAutofillScreen(
     viewModel: SetupBrowserAutofillViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
+    onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
+            SetupBrowserAutofillEvent.NavigateBack -> onNavigateBack()
             is SetupBrowserAutofillEvent.NavigateToBrowserAutofillSettings -> {
                 intentManager.startBrowserAutofillSettingsActivity(
                     browserPackage = event.browserPackage,
@@ -74,9 +80,25 @@ fun SetupBrowserAutofillScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = BitwardenString.account_setup),
+                title = stringResource(
+                    id = if (state.isInitialSetup) {
+                        BitwardenString.account_setup
+                    } else {
+                        BitwardenString.autofill_setup
+                    },
+                ),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = null,
+                navigationIcon = if (state.isInitialSetup) {
+                    null
+                } else {
+                    NavigationIcon(
+                        navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
+                        navigationIconContentDescription = stringResource(BitwardenString.close),
+                        onNavigationIconClick = remember(viewModel) {
+                            { viewModel.trySendAction(SetupBrowserAutofillAction.CloseClick) }
+                        },
+                    )
+                },
             )
         },
     ) {
@@ -143,14 +165,16 @@ private fun SetupBrowserAutofillContent(
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
-        Spacer(modifier = Modifier.height(height = 12.dp))
-        BitwardenOutlinedButton(
-            label = stringResource(BitwardenString.turn_on_later),
-            onClick = onTurnOnLaterClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
+        if (state.isInitialSetup) {
+            Spacer(modifier = Modifier.height(height = 12.dp))
+            BitwardenOutlinedButton(
+                label = stringResource(BitwardenString.turn_on_later),
+                onClick = onTurnOnLaterClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+        }
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
@@ -164,7 +188,7 @@ private fun SetupBrowserAutofillDialogs(
     when (dialogState) {
         SetupBrowserAutofillState.DialogState.TurnOnLaterDialog -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(BitwardenString.turn_on_autofill_later),
+                title = stringResource(BitwardenString.turn_on_browser_autofill_integration_later),
                 message = stringResource(
                     id = BitwardenString.return_to_complete_this_step_anytime_in_settings,
                 ),
@@ -187,6 +211,7 @@ private fun SetupBrowserAutofillContent_preview() {
         SetupBrowserAutofillContent(
             state = SetupBrowserAutofillState(
                 dialogState = null,
+                isInitialSetup = true,
                 browserAutofillSettingsOptions = persistentListOf(
                     BrowserAutofillSettingsOption.BraveStable(enabled = true),
                     BrowserAutofillSettingsOption.ChromeStable(enabled = false),
