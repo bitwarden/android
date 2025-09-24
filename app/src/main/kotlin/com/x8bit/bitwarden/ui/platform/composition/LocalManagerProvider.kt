@@ -15,6 +15,9 @@ import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.cxf.importer.CredentialExchangeImporter
 import com.bitwarden.cxf.importer.dsl.credentialExchangeImporter
+import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
+import com.bitwarden.cxf.manager.dsl.credentialExchangeCompletionManager
+import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeCompletionManager
 import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeImporter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
@@ -64,6 +67,8 @@ fun LocalManagerProvider(
     permissionsManager: PermissionsManager = PermissionsManagerImpl(activity = activity),
     credentialExchangeImporter: CredentialExchangeImporter =
         credentialExchangeImporter(activity = activity),
+    credentialExchangeCompletionManager: CredentialExchangeCompletionManager =
+        credentialExchangeCompletionManager(activity = activity),
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
@@ -79,6 +84,7 @@ fun LocalManagerProvider(
         LocalNfcManager provides nfcManager,
         LocalPermissionsManager provides permissionsManager,
         LocalCredentialExchangeImporter provides credentialExchangeImporter,
+        LocalCredentialExchangeCompletionManager provides credentialExchangeCompletionManager,
         content = content,
     )
 }
