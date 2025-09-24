@@ -227,7 +227,10 @@ private fun AutoFillScreenContent(
                 BrowserAutofillSettingsCard(
                     options = state.browserAutofillSettingsOptions,
                     onOptionClicked = autoFillHandlers.onBrowserAutofillSelected,
-                    enabled = state.isAutoFillServicesEnabled,
+                    supportingText = stringResource(
+                        id = BitwardenString
+                            .improves_login_filling_for_supported_websites_on_selected_browsers,
+                    ),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }

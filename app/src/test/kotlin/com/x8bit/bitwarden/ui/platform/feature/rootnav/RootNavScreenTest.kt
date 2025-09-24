@@ -5,6 +5,7 @@ import com.bitwarden.ui.platform.base.createMockNavHostController
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupAutofillRoute
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupBrowserAutofillRoute
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupCompleteRoute
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupUnlockRoute
 import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraphRoute
@@ -412,6 +413,17 @@ class RootNavScreenTest : BitwardenComposeTest() {
             verify {
                 mockNavHostController.navigate(
                     route = SetupAutofillRoute.AsRoot,
+                    navOptions = expectedNavOptions,
+                )
+            }
+        }
+
+        // Make sure navigating to browser autofill setup works as expected:
+        rootNavStateFlow.value = RootNavState.OnboardingBrowserAutofillSetup
+        composeTestRule.runOnIdle {
+            verify {
+                mockNavHostController.navigate(
+                    route = SetupBrowserAutofillRoute,
                     navOptions = expectedNavOptions,
                 )
             }

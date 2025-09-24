@@ -99,15 +99,7 @@ class RootNavViewModel @Inject constructor(
 
             userState.activeAccount.isVaultUnlocked &&
                 userState.activeAccount.onboardingStatus != OnboardingStatus.COMPLETE -> {
-                when (userState.activeAccount.onboardingStatus) {
-                    OnboardingStatus.NOT_STARTED,
-                    OnboardingStatus.ACCOUNT_LOCK_SETUP,
-                        -> RootNavState.OnboardingAccountLockSetup
-
-                    OnboardingStatus.AUTOFILL_SETUP -> RootNavState.OnboardingAutoFillSetup
-                    OnboardingStatus.FINAL_STEP -> RootNavState.OnboardingStepsComplete
-                    OnboardingStatus.COMPLETE -> throw IllegalStateException("Should not have entered here.")
-                }
+                getOnboardingNavState(onboardingStatus = userState.activeAccount.onboardingStatus)
             }
 
             userState.activeAccount.isVaultUnlocked -> {
@@ -198,6 +190,19 @@ class RootNavViewModel @Inject constructor(
             else -> RootNavState.VaultLocked
         }
         mutableStateFlow.update { updatedRootNavState }
+    }
+
+    private fun getOnboardingNavState(
+        onboardingStatus: OnboardingStatus,
+    ): RootNavState = when (onboardingStatus) {
+        OnboardingStatus.NOT_STARTED,
+        OnboardingStatus.ACCOUNT_LOCK_SETUP,
+            -> RootNavState.OnboardingAccountLockSetup
+
+        OnboardingStatus.AUTOFILL_SETUP -> RootNavState.OnboardingAutoFillSetup
+        OnboardingStatus.BROWSER_AUTOFILL_SETUP -> RootNavState.OnboardingBrowserAutofillSetup
+        OnboardingStatus.FINAL_STEP -> RootNavState.OnboardingStepsComplete
+        OnboardingStatus.COMPLETE -> throw IllegalStateException("Should not have entered here.")
     }
 
     private fun getRegistrationEventNavState(
@@ -401,6 +406,12 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object OnboardingAutoFillSetup : RootNavState()
+
+    /**
+     * App should show the set up browser autofill onboarding screen.
+     */
+    @Parcelize
+    data object OnboardingBrowserAutofillSetup : RootNavState()
 
     /**
      * App should show the onboarding steps complete screen.

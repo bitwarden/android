@@ -611,7 +611,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Use Chrome autofill integration (Beta)")
+            .onNodeWithText("Use Chrome Beta autofill integration")
             .performScrollTo()
             .performClick()
 

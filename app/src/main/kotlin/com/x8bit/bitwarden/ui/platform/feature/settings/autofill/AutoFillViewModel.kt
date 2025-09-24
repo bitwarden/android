@@ -5,7 +5,6 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.util.isBuildVersionAtLeast
-import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -18,6 +17,7 @@ import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.util.toBrowserAutoFillSettingsOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.launchIn
@@ -302,23 +302,6 @@ enum class AutofillStyle(val label: Text) {
      */
     POPUP(label = BitwardenString.autofill_suggestions_popup.asText()),
 }
-
-@Suppress("MaxLineLength")
-private fun BrowserThirdPartyAutofillStatus.toBrowserAutoFillSettingsOptions(): ImmutableList<BrowserAutofillSettingsOption> =
-    persistentListOfNotNull(
-        BrowserAutofillSettingsOption.BraveStable(
-            enabled = this.braveStableStatusData.isThirdPartyEnabled,
-        )
-            .takeIf { this.braveStableStatusData.isAvailable },
-        BrowserAutofillSettingsOption.ChromeStable(
-            enabled = this.chromeStableStatusData.isThirdPartyEnabled,
-        )
-            .takeIf { this.chromeStableStatusData.isAvailable },
-        BrowserAutofillSettingsOption.ChromeBeta(
-            enabled = this.chromeBetaChannelStatusData.isThirdPartyEnabled,
-        )
-            .takeIf { this.chromeBetaChannelStatusData.isAvailable },
-    )
 
 /**
  * Models events for the auto-fill screen.
