@@ -65,6 +65,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.navigateToAddEditSend
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toVaultItemCipherType
+import com.x8bit.bitwarden.ui.vault.feature.exportitems.ExportItemsRoute
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.exportItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.navigateToExportItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListingAsRoot
@@ -113,7 +114,7 @@ fun RootNavScreen(
         setupBrowserAutofillDestination()
         setupAutoFillDestinationAsRoot()
         setupCompleteDestination()
-        exportItemsGraph()
+        exportItemsGraph(navController)
     }
 
     val targetRoute = when (state) {
@@ -139,9 +140,9 @@ fun RootNavScreen(
         is RootNavState.VaultUnlockedForFido2Assertion,
         is RootNavState.VaultUnlockedForPasswordGet,
         is RootNavState.VaultUnlockedForProviderGetCredentials,
-        is RootNavState.CredentialExchangeExport,
             -> VaultUnlockedGraphRoute
 
+        is RootNavState.CredentialExchangeExport -> ExportItemsRoute
         RootNavState.OnboardingAccountLockSetup -> SetupUnlockRoute.AsRoot
         RootNavState.OnboardingAutoFillSetup -> SetupAutofillRoute.AsRoot
         RootNavState.OnboardingBrowserAutofillSetup -> SetupBrowserAutofillRoute
