@@ -34,7 +34,7 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
-import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.image.BitwardenGifImage
@@ -189,7 +189,7 @@ private fun SetupAutoFillContent(
         )
         Spacer(modifier = Modifier.height(12.dp))
         if (state.isInitialSetup) {
-            BitwardenTextButton(
+            BitwardenOutlinedButton(
                 label = stringResource(BitwardenString.turn_on_later),
                 onClick = onTurnOnLaterClick,
                 modifier = Modifier
