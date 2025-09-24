@@ -17,8 +17,8 @@ import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
 import com.bitwarden.network.model.KdfTypeJson
-import com.bitwarden.network.model.MasterPasswordAuthenticationDataJsonRequest
-import com.bitwarden.network.model.MasterPasswordUnlockDataJsonRequest
+import com.bitwarden.network.model.MasterPasswordAuthenticationDataJson
+import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PasswordHintResponseJson
 import com.bitwarden.network.model.PolicyTypeJson
@@ -1290,7 +1290,7 @@ class AuthRepositoryImpl(
         val unlockData = updateKdfResponse.masterPasswordUnlockData
         // Send update to server
         val updateKdfRequest = UpdateKdfJsonRequest(
-            authenticationData = MasterPasswordAuthenticationDataJsonRequest(
+            authenticationData = MasterPasswordAuthenticationDataJson(
                 kdf = authData.kdf.toKdfRequestModel(),
                 masterPasswordAuthenticationHash =
                     authData.masterPasswordAuthenticationHash,
@@ -1299,7 +1299,7 @@ class AuthRepositoryImpl(
             key = unlockData.masterKeyWrappedUserKey,
             masterPasswordHash = oldAuthData.masterPasswordAuthenticationHash,
             newMasterPasswordHash = authData.masterPasswordAuthenticationHash,
-            unlockData = MasterPasswordUnlockDataJsonRequest(
+            unlockData = MasterPasswordUnlockDataJson(
                 kdf = unlockData.kdf.toKdfRequestModel(),
                 masterKeyWrappedUserKey = unlockData.masterKeyWrappedUserKey,
                 salt = unlockData.salt,

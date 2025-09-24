@@ -4,12 +4,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents the request body used to authenticate with the master password.
+ * Represents the data used to authenticate with the master password.
  */
 @Serializable
-data class MasterPasswordAuthenticationDataJsonRequest(
+data class MasterPasswordAuthenticationDataJson(
     @SerialName("Kdf")
-    val kdf: KdfJsonRequest,
+    val kdf: KdfJson,
 
     @SerialName("MasterPasswordAuthenticationHash")
     val masterPasswordAuthenticationHash: String,

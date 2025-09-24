@@ -4,10 +4,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents the request body used to create the kdf settings.
+ * Represents the data used to create the kdf settings.
  */
 @Serializable
-data class KdfJsonRequest(
+data class KdfJson(
     @SerialName("KdfType")
     val kdfType: KdfTypeJson,
 

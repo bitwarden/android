@@ -4,16 +4,16 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents the request body used to unlock with the master password.
+ * Represents the data used to unlock with the master password.
  */
 @Serializable
-data class MasterPasswordUnlockDataJsonRequest(
-    @SerialName("Kdf")
-    val kdf: KdfJsonRequest,
+data class MasterPasswordUnlockDataJson(
+    @SerialName("MasterPasswordSalt")
+    val salt: String,
+
+    @SerialName("EncryptedPrivateKey")
+    val kdf: KdfJson,
 
     @SerialName("MasterKeyWrappedUserKey")
     val masterKeyWrappedUserKey: String,
-
-    @SerialName("Salt")
-    val salt: String,
 )

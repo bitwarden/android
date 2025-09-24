@@ -6,12 +6,12 @@ import com.bitwarden.network.api.AuthenticatedKeyConnectorApi
 import com.bitwarden.network.api.UnauthenticatedAccountsApi
 import com.bitwarden.network.api.UnauthenticatedKeyConnectorApi
 import com.bitwarden.network.base.BaseServiceTest
-import com.bitwarden.network.model.KdfJsonRequest
+import com.bitwarden.network.model.KdfJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
-import com.bitwarden.network.model.MasterPasswordAuthenticationDataJsonRequest
-import com.bitwarden.network.model.MasterPasswordUnlockDataJsonRequest
+import com.bitwarden.network.model.MasterPasswordAuthenticationDataJson
+import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.PasswordHintResponseJson
 import com.bitwarden.network.model.RegisterRequestJson
 import com.bitwarden.network.model.ResendEmailRequestJson
@@ -343,8 +343,8 @@ private const val INVALID_JSON = """
 """
 
 private val UPDATE_KDF_REQUEST = UpdateKdfJsonRequest(
-        authenticationData = MasterPasswordAuthenticationDataJsonRequest(
-            kdf = KdfJsonRequest(
+        authenticationData = MasterPasswordAuthenticationDataJson(
+            kdf = KdfJson(
                 kdfType = KdfTypeJson.PBKDF2_SHA256,
                 iterations = 7,
                 memory = 1,
@@ -356,8 +356,8 @@ private val UPDATE_KDF_REQUEST = UpdateKdfJsonRequest(
         key = "mockKey",
         masterPasswordHash = "mockMasterPasswordHash",
         newMasterPasswordHash = "mockNewMasterPasswordHash",
-        unlockData = MasterPasswordUnlockDataJsonRequest(
-            kdf = KdfJsonRequest(
+        unlockData = MasterPasswordUnlockDataJson(
+            kdf = KdfJson(
                 kdfType = KdfTypeJson.PBKDF2_SHA256,
                 iterations = 7,
                 memory = 1,

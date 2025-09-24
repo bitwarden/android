@@ -32,6 +32,7 @@ fun UserStateJson.toRemovedPasswordUserStateJson(
             hasMasterPassword = false,
             trustedDeviceUserDecryptionOptions = null,
             keyConnectorUserDecryptionOptions = null,
+            masterPasswordUnlock = null,
         )
     val updatedProfile = profile.copy(userDecryptionOptions = updatedUserDecryptionOptions)
     val updatedAccount = account.copy(profile = updatedProfile)
@@ -61,6 +62,9 @@ fun UserStateJson.toUpdatedUserStateJson(
             hasPremium = syncProfile.isPremium || syncProfile.isPremiumFromOrganization,
             isTwoFactorEnabled = syncProfile.isTwoFactorEnabled,
             creationDate = syncProfile.creationDate,
+            userDecryptionOptions = account.profile.userDecryptionOptions?.copy(
+                masterPasswordUnlock = syncResponse.userDecryption?.masterPasswordUnlock,
+            ),
         )
     val updatedAccount = account.copy(profile = updatedProfile)
     return this
@@ -90,6 +94,7 @@ fun UserStateJson.toUserStateJsonWithPassword(): UserStateJson {
                     hasMasterPassword = true,
                     keyConnectorUserDecryptionOptions = null,
                     trustedDeviceUserDecryptionOptions = null,
+                    masterPasswordUnlock = null,
                 ),
         )
     val updatedAccount = account.copy(profile = updatedProfile)

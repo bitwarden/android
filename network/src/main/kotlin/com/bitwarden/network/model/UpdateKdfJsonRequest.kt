@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UpdateKdfJsonRequest(
     @SerialName("authenticationData")
-    val authenticationData: MasterPasswordAuthenticationDataJsonRequest,
+    val authenticationData: MasterPasswordAuthenticationDataJson,
 
     @SerialName("key")
     val key: String,
@@ -21,5 +21,5 @@ data class UpdateKdfJsonRequest(
     val newMasterPasswordHash: String,
 
     @SerialName("unlockData")
-    val unlockData: MasterPasswordUnlockDataJsonRequest,
+    val unlockData: MasterPasswordUnlockDataJson,
 )
