@@ -45,6 +45,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
     private var onNavigateToBlockAutoFillScreenCalled = false
     private var onNavigateToSetupAutoFillScreenCalled = false
+    private var onNavigateToSetupBrowserAutofillScreenCalled = false
     private var onNavigateToAboutPrivilegedAppsScreenCalled = false
     private var onNavigateToPrivilegedAppsListCalled = false
 
@@ -79,6 +80,9 @@ class AutoFillScreenTest : BitwardenComposeTest() {
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToBlockAutoFillScreen = { onNavigateToBlockAutoFillScreenCalled = true },
                 onNavigateToSetupAutofill = { onNavigateToSetupAutoFillScreenCalled = true },
+                onNavigateToSetupBrowserAutofill = {
+                    onNavigateToSetupBrowserAutofillScreenCalled = true
+                },
                 onNavigateToAboutPrivilegedAppsScreen = {
                     onNavigateToAboutPrivilegedAppsScreenCalled = true
                 },
@@ -562,9 +566,58 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `browser autofill action card should show when state is true and hide when false`() {
+        composeTestRule
+            .onNodeWithText(text = "Get started")
+            .assertDoesNotExist()
+        mutableStateFlow.update { DEFAULT_STATE.copy(showBrowserAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithText(text = "Get started")
+            .assertIsDisplayed()
+        mutableStateFlow.update { DEFAULT_STATE.copy(showBrowserAutofillActionCard = false) }
+        composeTestRule
+            .onNodeWithText(text = "Get started")
+            .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when browser autofill card is visible clicking the cta button should send correct action`() {
+        mutableStateFlow.update { DEFAULT_STATE.copy(showBrowserAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithText(text = "Get started")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AutoFillAction.BrowserAutofillActionCardCtaClick)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when browser autofill action card is visible clicking dismissing should send correct action`() {
+        mutableStateFlow.update { DEFAULT_STATE.copy(showBrowserAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .performScrollTo()
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(AutoFillAction.DismissShowBrowserAutofillActionCard)
+        }
+    }
+
+    @Test
     fun `when NavigateToSetupAutofill event is sent should call onNavigateToSetupAutofill`() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToSetupAutofill)
         assertTrue(onNavigateToSetupAutoFillScreenCalled)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when NavigateToSetupBrowserAutofill event is sent should call onNavigateToSetupBrowserAutofill`() {
+        mutableEventFlow.tryEmit(AutoFillEvent.NavigateToSetupBrowserAutofill)
+        assertTrue(onNavigateToSetupBrowserAutofillScreenCalled)
     }
 
     @Test
@@ -801,6 +854,7 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     showPasskeyManagementRow = true,
     defaultUriMatchType = UriMatchType.DOMAIN,
     showAutofillActionCard = false,
+    showBrowserAutofillActionCard = false,
     activeUserId = "activeUserId",
     browserAutofillSettingsOptions = persistentListOf(),
 )

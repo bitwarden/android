@@ -28,6 +28,7 @@ import org.junit.Test
 
 class SetupAutofillScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
+    private var onNavigateToBrowserAutofillCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<SetupAutoFillEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -47,6 +48,7 @@ class SetupAutofillScreenTest : BitwardenComposeTest() {
             SetupAutoFillScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToBrowserAutofill = { onNavigateToBrowserAutofillCalled = true },
             )
         }
     }
@@ -243,6 +245,12 @@ class SetupAutofillScreenTest : BitwardenComposeTest() {
     fun `on NavigateBack event should invoke onNavigateBack`() {
         mutableEventFlow.tryEmit(SetupAutoFillEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `on NavigateToBrowserAutofill event should invoke onNavigateToBrowserAutofill`() {
+        mutableEventFlow.tryEmit(SetupAutoFillEvent.NavigateToBrowserAutofill)
+        assertTrue(onNavigateToBrowserAutofillCalled)
     }
 
     @Test

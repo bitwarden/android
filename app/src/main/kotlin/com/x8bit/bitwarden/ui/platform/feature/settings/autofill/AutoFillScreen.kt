@@ -78,6 +78,7 @@ fun AutoFillScreen(
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateToBlockAutoFillScreen: () -> Unit,
     onNavigateToSetupAutofill: () -> Unit,
+    onNavigateToSetupBrowserAutofill: () -> Unit,
     onNavigateToAboutPrivilegedAppsScreen: () -> Unit,
     onNavigateToPrivilegedAppsList: () -> Unit,
 ) {
@@ -105,6 +106,7 @@ fun AutoFillScreen(
             }
 
             AutoFillEvent.NavigateToSetupAutofill -> onNavigateToSetupAutofill()
+            AutoFillEvent.NavigateToSetupBrowserAutofill -> onNavigateToSetupBrowserAutofill()
             is AutoFillEvent.NavigateToBrowserAutofillSettings -> {
                 intentManager.startBrowserAutofillSettingsActivity(
                     browserPackage = event.browserPackage,
@@ -180,6 +182,28 @@ private fun AutoFillScreenContent(
                 actionText = stringResource(BitwardenString.get_started),
                 onActionClick = autoFillHandlers.onAutofillActionCardClick,
                 onDismissClick = autoFillHandlers.onAutofillActionCardDismissClick,
+                leadingContent = { NotificationBadge(notificationCount = 1) },
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .padding(bottom = 16.dp),
+            )
+        }
+        AnimatedVisibility(
+            visible = state.showBrowserAutofillActionCard,
+            label = "BrowserAutofillActionCard",
+            exit = actionCardExitAnimation(),
+        ) {
+            BitwardenActionCard(
+                cardTitle = stringResource(
+                    id = BitwardenString.turn_on_browser_autofill_integration,
+                ),
+                cardSubtitle = stringResource(
+                    id = BitwardenString
+                        .youre_using_a_browser_that_requires_special_permissions_for_bitwarden,
+                ),
+                actionText = stringResource(id = BitwardenString.get_started),
+                onActionClick = autoFillHandlers.onBrowserAutofillActionCardClick,
+                onDismissClick = autoFillHandlers.onBrowserAutofillActionCardDismissClick,
                 leadingContent = { NotificationBadge(notificationCount = 1) },
                 modifier = Modifier
                     .standardHorizontalMargin()

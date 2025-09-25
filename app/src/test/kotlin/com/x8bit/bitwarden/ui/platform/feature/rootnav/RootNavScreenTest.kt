@@ -423,7 +423,7 @@ class RootNavScreenTest : BitwardenComposeTest() {
         composeTestRule.runOnIdle {
             verify {
                 mockNavHostController.navigate(
-                    route = SetupBrowserAutofillRoute,
+                    route = SetupBrowserAutofillRoute.AsRoot,
                     navOptions = expectedNavOptions,
                 )
             }

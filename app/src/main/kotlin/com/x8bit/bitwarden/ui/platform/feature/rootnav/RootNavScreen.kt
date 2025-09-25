@@ -22,11 +22,11 @@ import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupBrowserAutofillRout
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupCompleteRoute
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupUnlockRoute
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupAutoFillAsRootScreen
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupBrowserAutofillScreen
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupBrowserAutoFillAsRootScreen
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupCompleteScreen
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScreenAsRoot
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupAutoFillDestinationAsRoot
-import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupBrowserAutofillDestination
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupBrowserAutofillDestinationAsRoot
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupCompleteDestination
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupUnlockDestinationAsRoot
 import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraphRoute
@@ -110,7 +110,7 @@ fun RootNavScreen(
         vaultUnlockDestination()
         vaultUnlockedGraph(navController)
         setupUnlockDestinationAsRoot()
-        setupBrowserAutofillDestination()
+        setupBrowserAutofillDestinationAsRoot()
         setupAutoFillDestinationAsRoot()
         setupCompleteDestination()
         exportItemsGraph()
@@ -144,7 +144,7 @@ fun RootNavScreen(
 
         RootNavState.OnboardingAccountLockSetup -> SetupUnlockRoute.AsRoot
         RootNavState.OnboardingAutoFillSetup -> SetupAutofillRoute.AsRoot
-        RootNavState.OnboardingBrowserAutofillSetup -> SetupBrowserAutofillRoute
+        RootNavState.OnboardingBrowserAutofillSetup -> SetupBrowserAutofillRoute.AsRoot
         RootNavState.OnboardingStepsComplete -> SetupCompleteRoute
     }
     val currentRoute = navController.currentDestination?.rootLevelRoute()
@@ -277,7 +277,7 @@ fun RootNavScreen(
             }
 
             RootNavState.OnboardingBrowserAutofillSetup -> {
-                navController.navigateToSetupBrowserAutofillScreen(rootNavOptions)
+                navController.navigateToSetupBrowserAutoFillAsRootScreen(rootNavOptions)
             }
 
             RootNavState.OnboardingStepsComplete -> {

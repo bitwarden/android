@@ -77,6 +77,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val storedAppResumeScreenData = mutableMapOf<String, String?>()
     private val userSignIns = mutableMapOf<String, Boolean>()
     private val userShowAutoFillBadge = mutableMapOf<String, Boolean?>()
+    private val userShowBrowserAutofillBadge = mutableMapOf<String, Boolean?>()
     private val userShowUnlockBadge = mutableMapOf<String, Boolean?>()
     private val userShowImportLoginsBadge = mutableMapOf<String, Boolean?>()
     private val vaultRegisteredForExport = mutableMapOf<String, Boolean?>()
@@ -90,6 +91,9 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private var storedBrowserAutofillDialogReshowTime: Instant? = null
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableShowBrowserAutofillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableShowUnlockSettingBadgeFlowMap =
@@ -372,6 +376,19 @@ class FakeSettingsDiskSource : SettingsDiskSource {
             emit(getShowAutoFillSettingBadge(userId = userId))
         }
 
+    override fun getShowBrowserAutofillSettingBadge(userId: String): Boolean? =
+        userShowBrowserAutofillBadge[userId]
+
+    override fun storeShowBrowserAutofillSettingBadge(userId: String, showBadge: Boolean?) {
+        userShowBrowserAutofillBadge[userId] = showBadge
+        getMutableShowBrowserAutofillSettingBadgeFlow(userId = userId).tryEmit(showBadge)
+    }
+
+    override fun getShowBrowserAutofillSettingBadgeFlow(userId: String): Flow<Boolean?> =
+        getMutableShowBrowserAutofillSettingBadgeFlow(userId = userId).onSubscription {
+            emit(getShowBrowserAutofillSettingBadge(userId = userId))
+        }
+
     override fun getShowUnlockSettingBadge(userId: String): Boolean? =
         userShowUnlockBadge[userId]
 
@@ -525,6 +542,13 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     ): MutableSharedFlow<Boolean?> = mutableShowAutoFillSettingBadgeFlowMap.getOrPut(userId) {
         bufferedMutableSharedFlow(replay = 1)
     }
+
+    private fun getMutableShowBrowserAutofillSettingBadgeFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableShowBrowserAutofillSettingBadgeFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
 
     private fun getMutableShowUnlockSettingBadgeFlow(userId: String): MutableSharedFlow<Boolean?> =
         mutableShowUnlockSettingBadgeFlowMap.getOrPut(userId) {
