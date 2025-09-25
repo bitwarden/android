@@ -1,10 +1,17 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import android.os.Build
+import com.bitwarden.core.ClientManagedTokens
 import com.bitwarden.core.util.isBuildVersionAtLeast
 import com.bitwarden.data.manager.NativeLibraryManager
 import com.bitwarden.sdk.Client
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
+
+class Token: ClientManagedTokens {
+    override suspend fun getAccessToken(): String? {
+        return null
+    }
+}
 
 /**
  * Primary implementation of [SdkClientManager].
@@ -14,7 +21,7 @@ class SdkClientManagerImpl(
     sdkRepoFactory: SdkRepositoryFactory,
     private val featureFlagManager: FeatureFlagManager,
     private val clientProvider: suspend (userId: String?) -> Client = { userId ->
-        Client(settings = null).apply {
+        Client(tokenProvider = Token(), settings = null).apply {
             platform().loadFlags(featureFlagManager.sdkFeatureFlags)
             userId?.let {
                 platform().state().apply {
