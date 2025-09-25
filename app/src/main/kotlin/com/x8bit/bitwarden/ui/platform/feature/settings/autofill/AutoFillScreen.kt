@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -54,6 +55,7 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
@@ -197,9 +199,10 @@ private fun AutoFillScreenContent(
                 cardTitle = stringResource(
                     id = BitwardenString.turn_on_browser_autofill_integration,
                 ),
-                cardSubtitle = stringResource(
-                    id = BitwardenString
+                cardSubtitle = pluralStringResource(
+                    id = BitwardenPlurals
                         .youre_using_a_browser_that_requires_special_permissions_for_bitwarden,
+                    count = state.browserCount,
                 ),
                 actionText = stringResource(id = BitwardenString.get_started),
                 onActionClick = autoFillHandlers.onBrowserAutofillActionCardClick,

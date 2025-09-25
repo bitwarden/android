@@ -4,9 +4,12 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFillData
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -18,6 +21,7 @@ import java.time.temporal.ChronoUnit
 class BrowserAutofillDialogManagerTest {
 
     private val autofillEnabledManager: AutofillEnabledManager = mockk()
+    private val firstTimeActionManager: FirstTimeActionManager = mockk()
     private val thirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager = mockk()
     private val fakeSettingsDiskSource: FakeSettingsDiskSource = FakeSettingsDiskSource()
 
@@ -25,8 +29,23 @@ class BrowserAutofillDialogManagerTest {
         autofillEnabledManager = autofillEnabledManager,
         browserThirdPartyAutofillEnabledManager = thirdPartyAutofillEnabledManager,
         clock = FIXED_CLOCK,
+        firstTimeActionManager = firstTimeActionManager,
         settingsDiskSource = fakeSettingsDiskSource,
     )
+
+    @Test
+    fun `browserCount should return the browser count`() {
+        val count = 0
+        every {
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+        } returns mockk { every { availableCount } returns count }
+
+        assertEquals(count, manager.browserCount)
+
+        verify(exactly = 1) {
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+        }
+    }
 
     @Test
     fun `shouldShowDialog should be false when autofill is disabled`() {
@@ -91,6 +110,41 @@ class BrowserAutofillDialogManagerTest {
         every {
             thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
         } returns browserThirdPartyAutofillStatus
+        every {
+            firstTimeActionManager.currentOrDefaultUserFirstTimeState
+        } returns FirstTimeState(showSetupBrowserAutofillCard = false)
+
+        assertFalse(manager.shouldShowDialog)
+
+        verify(exactly = 1) {
+            autofillEnabledManager.isAutofillEnabled
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+        }
+    }
+
+    @Test
+    fun `shouldShowDialog should be false browser autofill badge is being displayed`() {
+        val browserThirdPartyAutofillStatus = BrowserThirdPartyAutofillStatus(
+            braveStableStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = true,
+                isThirdPartyEnabled = false,
+            ),
+            chromeStableStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = true,
+                isThirdPartyEnabled = false,
+            ),
+            chromeBetaChannelStatusData = BrowserThirdPartyAutoFillData(
+                isAvailable = true,
+                isThirdPartyEnabled = false,
+            ),
+        )
+        every { autofillEnabledManager.isAutofillEnabled } returns true
+        every {
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+        } returns browserThirdPartyAutofillStatus
+        every {
+            firstTimeActionManager.currentOrDefaultUserFirstTimeState
+        } returns FirstTimeState(showSetupBrowserAutofillCard = true)
 
         assertFalse(manager.shouldShowDialog)
 
@@ -120,6 +174,9 @@ class BrowserAutofillDialogManagerTest {
         every {
             thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
         } returns browserThirdPartyAutofillStatus
+        every {
+            firstTimeActionManager.currentOrDefaultUserFirstTimeState
+        } returns FirstTimeState(showSetupBrowserAutofillCard = false)
         fakeSettingsDiskSource.browserAutofillDialogReshowTime = FIXED_CLOCK.instant()
 
         assertFalse(manager.shouldShowDialog)
@@ -150,6 +207,9 @@ class BrowserAutofillDialogManagerTest {
         every {
             thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
         } returns browserThirdPartyAutofillStatus
+        every {
+            firstTimeActionManager.currentOrDefaultUserFirstTimeState
+        } returns FirstTimeState(showSetupBrowserAutofillCard = false)
         fakeSettingsDiskSource.browserAutofillDialogReshowTime = null
 
         assertTrue(manager.shouldShowDialog)

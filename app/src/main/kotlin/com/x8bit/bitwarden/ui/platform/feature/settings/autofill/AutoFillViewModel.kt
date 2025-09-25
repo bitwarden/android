@@ -306,6 +306,11 @@ data class AutoFillState(
     val showInlineAutofill: Boolean get() = isAutoFillServicesEnabled && showInlineAutofillOption
 
     /**
+     * The number of browsers that can be configured.
+     */
+    val browserCount: Int get() = browserAutofillSettingsOptions.size
+
+    /**
      * Whether or not the toggles for enabling 3rd-party autofill support should be displayed.
      */
     val showBrowserSettingOptions: Boolean

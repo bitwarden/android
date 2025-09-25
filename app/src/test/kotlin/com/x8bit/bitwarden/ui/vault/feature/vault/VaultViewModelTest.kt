@@ -183,6 +183,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
     private val browserAutofillDialogManager: BrowserAutofillDialogManager = mockk {
         every { shouldShowDialog } returns false
+        every { browserCount } returns 1
         every { delayDialog() } just runs
     }
 
