@@ -36,10 +36,10 @@ fun BitwardenActionCardSmall(
     actionIcon: VectorPainter,
     actionText: String,
     callToActionText: String,
-    callToActionTextColor: Color = BitwardenTheme.colorScheme.text.primary,
-    colors: CardColors = bitwardenCardColors(),
     onCardClicked: () -> Unit,
     modifier: Modifier = Modifier,
+    callToActionTextColor: Color = BitwardenTheme.colorScheme.text.primary,
+    colors: CardColors = bitwardenCardColors(),
     trailingContent: (@Composable BoxScope.() -> Unit)? = null,
 ) {
     Card(
@@ -67,13 +67,13 @@ fun BitwardenActionCardSmall(
             ) {
                 Text(
                     text = actionText,
-                    style = BitwardenTheme.typography.bodyLarge,
+                    style = BitwardenTheme.typography.titleMedium,
                     color = BitwardenTheme.colorScheme.text.primary,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = callToActionText,
-                    style = BitwardenTheme.typography.labelLarge,
+                    style = BitwardenTheme.typography.bodyMedium,
                     color = callToActionTextColor,
                 )
             }

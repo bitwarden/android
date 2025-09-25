@@ -28,6 +28,7 @@ class AutoFillHandlers(
     val onDefaultUriMatchTypeSelect: (defaultUriMatchType: UriMatchType) -> Unit,
     val onBlockAutoFillClick: () -> Unit,
     val onLearnMoreClick: () -> Unit,
+    val onHelpCardClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -82,6 +83,7 @@ class AutoFillHandlers(
             },
             onBlockAutoFillClick = { viewModel.trySendAction(AutoFillAction.BlockAutoFillClick) },
             onLearnMoreClick = { viewModel.trySendAction(AutoFillAction.LearnMoreClick) },
+            onHelpCardClick = { viewModel.trySendAction(AutoFillAction.HelpCardClick) },
         )
     }
 }

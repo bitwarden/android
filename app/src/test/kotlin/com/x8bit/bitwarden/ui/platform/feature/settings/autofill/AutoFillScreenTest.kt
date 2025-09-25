@@ -104,6 +104,16 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `on NavigateToAutofillHelp should launch the browser to the autofill help page`() {
+        mutableEventFlow.tryEmit(AutoFillEvent.NavigateToAutofillHelp)
+        verify(exactly = 1) {
+            intentManager.launchUri(
+                uri = "https://bitwarden.com/help/auto-fill-android-troubleshooting/".toUri(),
+            )
+        }
+    }
+
+    @Test
     fun `on NavigateToAccessibilitySettings should attempt to navigate to system settings`() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToAccessibilitySettings)
 
@@ -157,6 +167,17 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         verify { intentManager.startCredentialManagerSettings() }
 
         composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `on help card CTA should send HelpCardClick`() {
+        composeTestRule
+            .onNodeWithText(text = "Having trouble with autofill?")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AutoFillAction.HelpCardClick)
+        }
     }
 
     @Suppress("MaxLineLength")

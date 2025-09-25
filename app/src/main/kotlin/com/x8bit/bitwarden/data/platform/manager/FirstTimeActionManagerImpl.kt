@@ -140,7 +140,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
                     )
                 }
             }
-            .onStart { emit(FirstTimeState()) }
+            .onStart { emit(currentOrDefaultUserFirstTimeState) }
             .distinctUntilChanged()
 
     override val shouldShowAddLoginCoachMarkFlow: Flow<Boolean>
