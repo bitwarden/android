@@ -46,7 +46,7 @@
     <string name="my_vault">Моє сховище</string>
     <string name="name">Назва</string>
     <string name="item_name_required">Назва запису (обов\'язково)</string>
-    <string name="send_name_required">"Назва відправлення (обов'язково)"</string>
+    <string name="send_name_required">Назва відправлення (обов\'язково)</string>
     <string name="no">Ні</string>
     <string name="notes">Нотатки</string>
     <string name="private_notes">Особисті нотатки</string>
@@ -101,8 +101,8 @@
     <string name="one_minute">1 хвилина</string>
     <string name="four_hours">4 години</string>
     <string name="immediately">Негайно</string>
-    <string name="vault_timeout_log_out_confirmation_title">Встановити час очікування сеансу на \"Вийти\"?</string>
-    <string name="vault_timeout_log_out_confirmation_message">Після часу очікування сеансу ви вийдете з системи. Для повторного входу й відновлення доступу до сховища потрібне інтернет-з\'єднання. Збережені налаштування та PIN-код на цьому пристрої не зміняться.</string>
+    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to “Log out”?</string>
+    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won’t change.</string>
     <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Увійти в Bitwarden</string>
     <string name="master_password_confirmation_val_message">Підтвердження пароля неправильне.</string>
@@ -138,7 +138,7 @@
     <string name="other">Інше</string>
     <string name="password_generator">Генератор паролів</string>
     <string name="password_hint">Підказка для пароля</string>
-    <string name="password_hint_alert">Ми надіслали вам лист з підказкою для головного пароля.</string>
+    <string name="password_hint_alert">We’ve sent you an email with your master password hint.</string>
     <string name="password_override_alert">Ви дійсно хочете перезаписати поточний пароль?</string>
     <string name="retype_master_password">Введіть головний пароль ще раз</string>
     <string name="retype_new_master_password_required">Введіть новий головний пароль ще раз (обов\'язково)</string>
@@ -166,7 +166,7 @@
     <string name="no_items_for_vault">У вашому сховищі немає записів, які відповідають “%1$s”</string>
     <string name="search_for_a_login_or_add_a_new_login">Пошукати запис або додати новий</string>
     <string name="disabled">Вимкнено</string>
-    <string name="bitwarden_autofill_service_alert2">Найлегшим способом додавання нових записів у сховище є використання служби автозаповнення Bitwarden. Дізнайтеся більше про використання служби автозаповнення Bitwarden в меню \"Налаштування\".</string>
+    <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
     <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">Автоматично заповнити чи переглянути запис?</string>
     <string name="search">Пошук</string>
@@ -174,14 +174,14 @@
     <string name="authenticator_app_title">Програма автентифікації</string>
     <string name="enter_verification_code_app">Введіть 6-значний код підтвердження з програми автентифікації.</string>
     <string name="enter_verification_code_email">Введіть 6-значний код підтвердження, надісланий на %1$s.</string>
-    <string name="enter_verification_code_new_device">Цей пристрій не розпізнано. Введіть код підтвердження, надісланий на вашу електронну пошту.</string>
+    <string name="enter_verification_code_new_device">We don’t recognize this device. Enter the code sent to your email to verify your identity.</string>
     <string name="recovery_code_title">Код відновлення</string>
     <string name="remember">Запам\'ятати</string>
     <string name="remember_email">Запам\'ятати е-пошту</string>
     <string name="send_verification_code_again">Надіслати новий код</string>
     <string name="verification_email_not_sent">Не вдається надіслати лист для перевірки. Спробуйте знову.</string>
     <string name="verification_email_sent">Лист для підтвердження надіслано</string>
-    <string name="yubi_key_instruction">Для продовження прикладіть свій YubiKey NEO до задньої сторони пристрою, або вставте його в порт USB свого пристрою.</string>
+    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">Ключ безпеки YubiKey</string>
     <string name="add_new_attachment">Додати нове вкладення</string>
     <string name="attachments">Вкладення</string>
@@ -346,7 +346,7 @@
     <string name="generator">Генератор</string>
     <string name="no_folders_to_list">Немає тек.</string>
     <string name="fingerprint_phrase">Фраза відбитка</string>
-    <string name="your_accounts_fingerprint">Фраза відбитка вашого облікового запису</string>
+    <string name="your_accounts_fingerprint">Your account’s fingerprint phrase</string>
     <string name="export_vault">Експортувати сховище</string>
     <string name="lock_now">Блокувати зараз</string>
     <string name="pin">PIN-код</string>
@@ -368,7 +368,7 @@
     <string name="default_uri_match_detection">Типове виявлення збігів URI</string>
     <string name="default_uri_match_detection_description">Функція виявлення збігів URI керує ідентифікацією пропозицій автозаповнення Bitwarden.</string>
     <string name="theme">Тема</string>
-    <string name="theme_description">Змінити колірну тему програми.</string>
+    <string name="theme_description">Change the application’s color theme</string>
     <string name="copy_notes">Копіювати нотатку</string>
     <string name="exit">Вийти</string>
     <string name="exit_confirmation">Ви впевнені, що хочете вийти з Bitwarden?</string>
@@ -394,13 +394,13 @@
     <string name="export_vault_file_pw_protect_info">Цей експортований файл буде захищений паролем, який необхідно ввести для його розшифрування.</string>
     <string name="export_vault_confirmation_title">Підтвердити експорт сховища</string>
     <string name="warning">Попередження</string>
-    <string name="export_vault_failure">Сталася помилка під час експорту вашого сховища. Якщо проблема не зникне, вам необхідно буде експортувати з вебсховища.</string>
+    <string name="export_vault_failure">There was a problem exporting your vault.  If the problem persists, you’ll need to export from the web vault.</string>
     <string name="export_vault_success">Сховище успішно експортовано</string>
     <string name="clone">Клонувати</string>
     <string name="password_generator_policy_in_effect">На параметри генератора впливають одна чи декілька політик організації</string>
     <string name="unable_to_save_attachment">Виникла проблема зі збереженням цього вкладення. Якщо проблема не зникне, ви можете зберегти його з вебсховища.</string>
     <string name="save_attachment_success">Вкладення успішно збережено</string>
-    <string name="autofill_tile_accessibility_required">Увімкніть \"Службу доступності автозаповнення\" в налаштуваннях Bitwarden, щоб використовувати панель автозаповнення.</string>
+    <string name="autofill_tile_accessibility_required">Please turn on “Autofill Accessibility Service” from Bitwarden Settings to use the Autofill tile.</string>
     <string name="autofill_tile_uri_not_found">Полів пароля не виявлено</string>
     <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Запис переміщено до смітника.</string>
@@ -415,7 +415,7 @@
     <string name="enable_sync_on_refresh">Дозволити синхронізацію жестом</string>
     <string name="enable_sync_on_refresh_description">Синхронізація сховища жестом Потягнути донизу.</string>
     <string name="log_in_sso">Єдиний корпоративний вхід (SSO)</string>
-    <string name="log_in_sso_summary">Швидкий вхід з використанням порталу єдиного входу вашої організації. Для початку введіть ідентифікатор вашої організації.</string>
+    <string name="log_in_sso_summary">Quickly log in using your organization’s single sign-on portal. Please enter your organization’s identifier to begin.</string>
     <string name="org_identifier">Ідентифікатор організації</string>
     <string name="login_sso_error">Наразі неможливо увійти з SSO</string>
     <string name="set_master_password">Встановити головний пароль</string>
@@ -580,8 +580,8 @@
     <string name="api_access_token">Токен доступу до API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Ви дійсно бажаєте перезаписати поточне ім\'я користувача?</string>
     <string name="generate_username">Генерувати ім\'я користувача</string>
-    <string name="plus_addressed_email_description">Використовуйте розширені можливості адрес вашого провайдера електронної пошти</string>
-    <string name="catch_all_email_description">Використовуйте свою скриньку вхідних Catch-All власного домену.</string>
+    <string name="plus_addressed_email_description">Use your email provider’s subaddress capabilities</string>
+    <string name="catch_all_email_description">Use your domain’s configured catch-all inbox.</string>
     <string name="forwarded_email_description">Згенеруйте псевдонім е-пошти зі стороннім сервісом пересилання.</string>
     <string name="accessibility_service_disclosure">Пояснення про службу підтримки доступності</string>
     <string name="accessibility_disclosure_text">Bitwarden використовує службу підтримки доступності для пошуку полів входу в програмах і на вебсайтах, після чого встановлює належні ідентифікатори полів для введення імені користувача й пароля під час виявлення збігу в програмі чи на вебсайті. Ми не зберігаємо жодної інформації, що обробляється нашою службою, і не намагаємося контролювати жодних екранних об\'єктів, окрім текстового введення облікових даних.</string>
@@ -744,7 +744,7 @@
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Дізнайтеся про способи запобігання блокуванню облікового запису</annotation></string>
     <string name="help_with_server_geolocations">Допомога з розташуванням серверів.</string>
     <string name="email_address_required">Адреса е-пошти (обов\'язково)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Перейдіть за посиланням у листі, щоб підтвердити адресу електронної пошти й продовжити створення облікового запису. "</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
     <string name="change_email_address">Змінити адресу е-пошти</string>
     <string name="next">Далі</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden не може відновити втрачений чи забутий головний пароль.</string>
@@ -764,12 +764,17 @@
     <string name="allow_bitwarden_authenticator_syncing">Дозволити синхронізацію Bitwarden Authentificator</string>
     <string name="there_was_an_issue_validating_the_registration_token">Під час перевірки токена реєстрації виникла проблема.</string>
     <string name="turn_on_autofill">Увімкніть автозаповнення</string>
+    <string name="autofill_setup">Autofill setup</string>
+    <string name="turn_on_browser_autofill_integration">Turn on browser autofill integration</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_for_bitwarden">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Використовуйте автозаповнення для входу в облікові записи одним дотиком.</string>
     <string name="turn_on_later">Увімкнути пізніше</string>
     <string name="turn_on_autofill_later">Увімкнути автозаповнення пізніше?</string>
+    <string name="turn_on_browser_autofill_integration_later">Turn on browser autofill integration later?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">Ви можете виконати цей крок будь-коли в налаштуваннях.</string>
     <string name="what_bitwarden_has_to_offer">Тепер ви можете випробувати всі можливості Bitwarden і почати безпечно керувати своїми паролями.</string>
-    <string name="youre_all_set">Усе налаштовано!</string>
+    <string name="youre_all_set">You’re all set!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Помилка під\'єднання до служби Duo. Скористайтеся іншим способом двоетапної перевірки або зверніться до служби підтримки Duo по допомогу.</string>
     <string name="master_password_hint_not_specified">Підказка для головного пароля</string>
     <string name="new_master_password_hint">Нова підказка для головного пароля</string>
@@ -854,8 +859,8 @@
     <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Складіть слова разом у будь-якій послідовності, щоб сформувати парольну фразу. <annotation emphasis="bold">Використовуйте дефіси чи пробіли для відокремлення слів, або просто об\'єднайте їх в єдиний довгий текст</annotation>.</string>
     <string name="make_it_yours">Вдоскональте</string>
     <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Додайте число або символ</annotation>, щоб зробити її ще надійнішою. Тепер у вас є унікальна, безпечна парольна фраза, яку ви легко запам\'ятаєте!</string>
-    <string name="need_some_inspiration">"Потрібне натхнення?"</string>
-    <string name="check_out_the_passphrase_generator">"Скористайтеся генератором парольної фрази"</string>
+    <string name="need_some_inspiration">Потрібне натхнення?</string>
+    <string name="check_out_the_passphrase_generator">Скористайтеся генератором парольної фрази</string>
     <string name="we_couldnt_verify_the_servers_certificate">Не вдається перевірити сертифікат сервера. Можливо, налаштування ланцюжка сертифікатів, проксі вашого пристрою, або вашого сервера Bitwarden неправильні.</string>
     <string name="copy_private_key">Копіювати закритий ключ</string>
     <string name="login_credentials">Облікові дані для входу</string>
@@ -867,13 +872,13 @@
     <string name="coachmark_3_of_3">3 з 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Необхідно додати вебадресу, щоб використовувати автозаповнення для цього облікового запису.</string>
     <string name="learn_about_new_logins">Докладніше про нові записи</string>
-    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Ми ознайомимо вас з основними можливостями додавання нового запису.</string>
+    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We’ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Ознайомитися з генератором</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Дізнайтеся про те, як генерувати надійні облікові дані для входу, пройшовши ознайомлення.</string>
     <string name="import_client_certificate">Імпортувати сертифікат клієнта</string>
     <string name="enter_the_client_certificate_password_and_alias">Введіть пароль сертифіката клієнта і бажаний псевдонім для нього.</string>
     <string name="alias">Псевдонім</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Використовуйте генератор для створення надійних паролів, парольних фраз та імен користувачів. "</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Use the generator to create secure passwords, passphrases and usernames.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Парольні фрази – це надійні паролі, які легше запам\'ятовуються і вводяться, порівняно з випадковими паролями. Їх доцільно використовувати для входу в облікові записи, де автозаповнення недоступне, як-от телевізійні служби потокової трансляції.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Унікальні імена користувачів додають ще один рівень безпеки й запобігають знаходженню ваших облікових записів хакерами.</string>
     <string name="coachmark_1_of_6">1 з 6</string>
@@ -882,8 +887,8 @@
     <string name="coachmark_4_of_6">4 з 6</string>
     <string name="coachmark_5_of_6">5 з 6</string>
     <string name="coachmark_6_of_6">6 з 6</string>
-    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Використовуйте ці параметри, щоб налаштувати відповідність пароля вимогам вебсайту.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Після збереження нового пароля у Bitwarden обов'язково оновіть його на вебсайті. "</string>
+    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website’s requirements.</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">After you save your new password to Bitwarden, don’t forget to update it on your account website.</string>
     <string name="verify_your_identity">Підтвердьте свою особу</string>
     <string name="error_loading_certificate">Помилка завантаження сертифіката</string>
     <string name="certificate_alias">Псевдонім сертифіката</string>
@@ -912,7 +917,7 @@
     <string name="self_host_server_url">URL-адреса власного сервера</string>
     <string name="use_brave_autofill_integration">Використовувати інтеграцію автозаповнення з Brave</string>
     <string name="use_chrome_autofill_integration">Використовувати інтеграцію автозаповнення з Chrome</string>
-    <string name="use_chrome_beta_autofill_integration">Використовувати інтеграцію автозаповнення з Chrome (бета-версія)</string>
+    <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Покращення заповнення даних входу на підтримуваних вебсайтах у вибраних браузерах. Після увімкнення вас буде спрямовано в налаштування браузера для активації автозаповнення третіх сторін.</string>
     <string name="show_more">Розгорнути</string>
     <string name="no_folder">Без теки</string>
@@ -958,7 +963,7 @@
     <string name="log_deleted">Журнал видалено</string>
     <string name="app_settings">Налаштування програми</string>
     <string name="replace_existing_certificate">Замінити наявний сертифікат?</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Вже є сертифікат із псевдонімом \"%s\". Хочете замінити його?\nЗаміна сертифіката може вплинути на ваше з\'єднання з будь-яким середовищем, яке зараз його використовує.</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with the alias “%s” already exists. Do you want to replace it?\nReplacing the certificate may impact your connection to any environments currently using it.</string>
     <string name="replace_certificate">Замінити сертифікат</string>
     <string name="unable_to_read_certificate">Не вдалося прочитати сертифікат.</string>
     <string name="cannot_delete_your_account">Не вдається видалити ваш обліковий запис</string>
@@ -971,12 +976,12 @@
     <string name="use_dynamic_colors">Використовувати динамічні кольори</string>
     <string name="use_dynamic_colors_question">Використовувати динамічні кольори?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Ця кольорова схема автоматично застосовує системні кольори в Bitwarden на основі ваших поточних шпалер. Ці кольори можуть не відповідати всім рекомендаціям доступності.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Не вдалося виконати операцію з ключем доступу, оскільки браузер (%1$s) не розпізнано. Виберіть \"Довіряти\", щоб додати %1$s до списку локальних довірених програм.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select “Trust” to add %1$s to the list of locally trusted applications.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Не вдалося виконати операцію з ключем доступу, оскільки браузер не є довіреним.</string>
     <string name="trust">Довіряти</string>
     <string name="trusted_by_you_learn_more">Цим програмам або браузерам Bitwarden не довіряє, але ви довіряєте їм виконання операцій з ключами доступу.</string>
     <string name="trusted_by_community_learn_more">Цих програм немає в магазині Google Play, але Bitwarden довіряє їм виконання операцій з ключами доступу, оскільки учасники спільноти користуються ними та вважають їх безпечними.</string>
-    <string name="trusted_by_google_learn_more">Ці програми доступні в магазині Google Play і вважаються безпечними.</string>
+    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google’s Play Store.</string>
     <string name="trusted_by_you">Довірені вами</string>
     <string name="trusted_by_the_community">Довірені спільнотою</string>
     <string name="trusted_by_google">Довірені Google</string>
@@ -1071,9 +1076,9 @@
     <string name="account_synced_from_bitwarden_app">Обліковий запис синхронізовано з програми Bitwarden</string>
     <string name="local_codes">Локальні коди (%1$d)</string>
     <string name="required_information_missing">Відсутня необхідна інформація</string>
-    <string name="required_information_missing_message">"Необхідна інформація відсутня (наприклад, 'services' або 'secret'). Перевірте свій файл і повторіть спробу. Відвідайте bitwarden.com/help для підтримки"</string>
-    <string name="file_could_not_be_processed">"Неможливо обробити файл"</string>
-    <string name="file_could_not_be_processed_message">"Не вдалося обробити файл. Перевірте правильність JSON і повторіть спробу. Потрібна допомога? Відвідайте bitwarden.com/help"</string>
+    <string name="required_information_missing_message">Необхідна інформація відсутня (наприклад, \'services\' або \'secret\'). Перевірте свій файл і повторіть спробу. Відвідайте bitwarden.com/help для підтримки</string>
+    <string name="file_could_not_be_processed">Неможливо обробити файл</string>
+    <string name="file_could_not_be_processed_message">Не вдалося обробити файл. Перевірте правильність JSON і повторіть спробу. Потрібна допомога? Відвідайте bitwarden.com/help</string>
     <string name="get_help">Отримати допомогу</string>
     <string name="expand_advanced_options">Розгорнути додаткові налаштування</string>
     <string name="local_items_are_expanded_click_to_collapse">Локальні записи розгорнуто. Натисніть, щоб згорнути.</string>
@@ -1099,18 +1104,27 @@
     <string name="default_uri_match_detection_description_advanced_options">Функція виявлення збігів URI керує ідентифікацією пропозицій автозаповнення Bitwarden.\n<annotation emphasis="bold">Обережно!</annotation> \"Починається з\" – це функція для досвідчених користувачів, використання якої може призвести до розкриття облікових даних.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Починається з\" – це функція для досвідчених користувачів, використання якої може призвести до розкриття облікових даних.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">Регулярний вираз – це функція для досвідчених користувачів, неправильне використання якої може призвести до розкриття облікових даних.</string>
-    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_was_cancelled_in_the_selected_app">Credential import was cancelled in the selected app. No items have been imported.</string>
     <string name="import_cancelled">Import cancelled</string>
-    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
-    <string name="import_saved_items">Import saved items</string>
-    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
-    <string name="return_to_your_vault">Return to your vault</string>
-    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
     <string name="no_items_imported">No items imported</string>
-    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="no_items_received_from_the_selected_app">No items received from the selected app.</string>
     <string name="vault_sync_failed">Vault sync failed</string>
-    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but they will not be visible in your vault until sync is performed.</string>
     <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
-    <string name="importing_items">Importing items…</string>
-    <string name="uploading_items">Uploading items…</string>
+    <string name="saving_items">Saving items…</string>
+    <string name="unable_to_import_your_items">Unable to import your items</string>
+    <string name="import_from_computer">Import from computer</string>
+    <string name="import_from_another_app">Import from another app</string>
+    <plurals name="x_items_have_been_imported_to_your_vault">
+        <item quantity="one">%1$d item has been imported to your vault.</item>
+        <item quantity="few">%1$d items have been imported to your vault.</item>
+        <item quantity="many">%1$d items have been imported to your vault.</item>
+        <item quantity="other">%1$d items have been imported to your vault.</item>
+    </plurals>
+    <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
+    <string name="your_browser_recently_updated_how_autofill_works">Your browser recently updated how Autofill works. To continue filling your passwords with Bitwarden, enable browser Autofill in autofill settings.</string>
+    <string name="not_now">Not now</string>
+    <string name="import_from_bitwarden">Import from Bitwarden</string>
+    <string name="select_account">Select account</string>
+    <string name="import_restricted_unable_to_import_credit_cards">Import restricted, unable to import cards from this account.</string>
 </resources>

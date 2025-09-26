@@ -46,7 +46,7 @@
     <string name="my_vault">Kho lưu trữ</string>
     <string name="name">Tên</string>
     <string name="item_name_required">Tên mục (bắt buộc)</string>
-    <string name="send_name_required">"Tên Send (bắt buộc)"</string>
+    <string name="send_name_required">Tên Send (bắt buộc)</string>
     <string name="no">Không</string>
     <string name="notes">Ghi chú</string>
     <string name="private_notes">Ghi chú riêng tư</string>
@@ -101,8 +101,8 @@
     <string name="one_minute">1 phút</string>
     <string name="four_hours">4 giờ</string>
     <string name="immediately">Tức thì</string>
-    <string name="vault_timeout_log_out_confirmation_title">Đặt thời gian đếm ngược \"Đăng xuất\"?</string>
-    <string name="vault_timeout_log_out_confirmation_message">Sau thời gian này, bạn sẽ bị đăng xuất. Bạn cần kết nối với internet để đăng nhập lại và truy cập vào kho. Các cài đặt và mã PIN đã lưu trên thiết bị này sẽ không thay đổi.</string>
+    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to “Log out”?</string>
+    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won’t change.</string>
     <string name="logging_in">Đang đăng nhập…</string>
     <string name="login_to_bitwarden">Đăng nhập Bitwarden</string>
     <string name="master_password_confirmation_val_message">Mật khẩu nhập lại không trùng khớp.</string>
@@ -135,7 +135,7 @@
     <string name="other">Khác</string>
     <string name="password_generator">Trình tạo mật khẩu</string>
     <string name="password_hint">Gợi ý mật khẩu</string>
-    <string name="password_hint_alert">Chúng tôi đã gửi cho bạn một email chứa gợi ý mật khẩu chính của bạn.</string>
+    <string name="password_hint_alert">We’ve sent you an email with your master password hint.</string>
     <string name="password_override_alert">Bạn có chắc chắn muốn ghi đè lên mật khẩu hiện tại không?</string>
     <string name="retype_master_password">Nhập lại mật khẩu chính</string>
     <string name="retype_new_master_password_required">Nhập lại mật khẩu chính mới (bắt buộc)</string>
@@ -163,7 +163,7 @@
     <string name="no_items_for_vault">Không có mục nào trong kho của bạn khớp với “%1$s”</string>
     <string name="search_for_a_login_or_add_a_new_login">Tìm kiếm mục đăng nhập hoặc thêm mục đăng nhập mới</string>
     <string name="disabled">Vô hiệu hóa</string>
-    <string name="bitwarden_autofill_service_alert2">Cách dễ nhất để thêm một đăng nhập mới vào kho của bạn là bằng dịch vụ Tự động điền của Bitwarden. Tìm hiểu thêm về cách sử dụng dịch vụ Tự động điền của Bitwarden trong phần \'Cài đặt\'.</string>
+    <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
     <string name="autofill_title">Tự động điền</string>
     <string name="autofill_or_view">Bạn muốn tự động điền hay xem mục này?</string>
     <string name="search">Tìm kiếm</string>
@@ -171,14 +171,14 @@
     <string name="authenticator_app_title">Ứng dụng xác thực</string>
     <string name="enter_verification_code_app">Nhập mã xác nhận 6 chữ số từ ứng dụng xác thực của bạn.</string>
     <string name="enter_verification_code_email">Nhập mã xác nhận 6 chữ số đã được gửi tới email %1$s.</string>
-    <string name="enter_verification_code_new_device">Chúng tôi không nhận diện được thiết bị này. Vui lòng nhập mã xác minh 8 chữ số đã được gửi đến email [%1$s].</string>
+    <string name="enter_verification_code_new_device">We don’t recognize this device. Enter the code sent to your email to verify your identity.</string>
     <string name="recovery_code_title">Mã khôi phục</string>
     <string name="remember">Ghi nhớ</string>
     <string name="remember_email">Ghi nhớ email</string>
     <string name="send_verification_code_again">Gửi lại mã</string>
     <string name="verification_email_not_sent">Không thể gửi email xác minh. Thử lại.</string>
     <string name="verification_email_sent">Đã gửi email xác minh</string>
-    <string name="yubi_key_instruction">Để tiếp tục, hãy đặt YubiKey NEO của bạn vào mặt sau của thiết bị hoặc cắm YubiKey vào cổng sạc của thiết bị, sau đó nhấn nút trên YubiKey.</string>
+    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">Khóa bảo mật YubiKey</string>
     <string name="add_new_attachment">Thêm tệp đính kèm mới</string>
     <string name="attachments">Tệp đính kèm</string>
@@ -340,7 +340,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="generator">Trình tạo</string>
     <string name="no_folders_to_list">Không có thư mục nào.</string>
     <string name="fingerprint_phrase">Cụm từ xác thực</string>
-    <string name="your_accounts_fingerprint">Cụm từ xác thực tài khoản của bạn</string>
+    <string name="your_accounts_fingerprint">Your account’s fingerprint phrase</string>
     <string name="export_vault">Xuất kho</string>
     <string name="lock_now">Khóa ngay</string>
     <string name="pin">Mã PIN</string>
@@ -362,7 +362,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="default_uri_match_detection">Cách nhận diện đường dẫn (URI)</string>
     <string name="default_uri_match_detection_description">Phát hiện khớp URI kiểm soát cách Bitwarden xác định gợi ý tự động điền.</string>
     <string name="theme">Chủ đề</string>
-    <string name="theme_description">Thay đổi màu sắc chủ đề của ứng dụng</string>
+    <string name="theme_description">Change the application’s color theme</string>
     <string name="copy_notes">Sao chép ghi chú</string>
     <string name="exit">Thoát</string>
     <string name="exit_confirmation">Bạn có chắc chắn muốn thoát Bitwarden?</string>
@@ -388,13 +388,13 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="export_vault_file_pw_protect_info">Tệp tin này sẽ được bảo vệ bằng mật khẩu và yêu cầu mật khẩu tệp tin để giải mã.</string>
     <string name="export_vault_confirmation_title">Xác nhận xuất kho</string>
     <string name="warning">Cảnh báo</string>
-    <string name="export_vault_failure">Có vấn đề khi xuất kho lưu trữ của bạn.  Nếu vấn đề vẫn tiếp diễn, bạn sẽ cần xuất từ kho lưu trữ trực tuyến.</string>
+    <string name="export_vault_failure">There was a problem exporting your vault.  If the problem persists, you’ll need to export from the web vault.</string>
     <string name="export_vault_success">Xuất kho hoàn tất</string>
     <string name="clone">Tạo bản sao</string>
     <string name="password_generator_policy_in_effect">Các chính sách của tổ chức đang ảnh hưởng đến cài đặt của trình tạo</string>
     <string name="unable_to_save_attachment">Có vấn đề khi lưu tệp đính kèm này. Nếu vấn đề vẫn tiếp diễn, bạn có thể lưu nó từ kho lưu trữ trực tuyến.</string>
     <string name="save_attachment_success">Đã lưu tệp tin đính kèm thành công</string>
-    <string name="autofill_tile_accessibility_required">Vui lòng bật \"Tự động điền bằng trợ năng\" từ Cài đặt Bitwarden để sử dụng ô Tự động điền.</string>
+    <string name="autofill_tile_accessibility_required">Please turn on “Autofill Accessibility Service” from Bitwarden Settings to use the Autofill tile.</string>
     <string name="autofill_tile_uri_not_found">Không tìm thấy trường mật khẩu nào</string>
     <string name="soft_deleting">Đang chuyển vào thùng rác…</string>
     <string name="item_soft_deleted">Đã cho mục vào thùng rác.</string>
@@ -409,7 +409,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="enable_sync_on_refresh">Đồng bộ khi làm mới</string>
     <string name="enable_sync_on_refresh_description">Đồng bộ kho bằng cách vuốt xuống.</string>
     <string name="log_in_sso">Đăng nhập một lần (SSO) cho doanh nghiệp</string>
-    <string name="log_in_sso_summary">Đăng nhập nhanh chóng thông qua cổng đăng nhập một lần của tổ chức của bạn. Vui lòng nhập mã định danh của tổ chức để bắt đầu.</string>
+    <string name="log_in_sso_summary">Quickly log in using your organization’s single sign-on portal. Please enter your organization’s identifier to begin.</string>
     <string name="org_identifier">Mã định danh tổ chức</string>
     <string name="login_sso_error">Hiện tại không thể đăng nhập bằng SSO</string>
     <string name="set_master_password">Đặt mật khẩu chính</string>
@@ -574,8 +574,8 @@ chọn Thêm TOTP để lưu khóa an toàn</string>
     <string name="api_access_token">Token truy cập API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Bạn có chắc chắn muốn ghi đè lên tên đăng nhập hiện tại không?</string>
     <string name="generate_username">Tạo tên đăng nhập</string>
-    <string name="plus_addressed_email_description">Sử dụng tính năng địa chỉ phụ của nhà cung cấp dịch vụ email của bạn</string>
-    <string name="catch_all_email_description">Sử dụng hộp thư bạn đã thiết lập để nhận tất cả email gửi đến tên miền của bạn.</string>
+    <string name="plus_addressed_email_description">Use your email provider’s subaddress capabilities</string>
+    <string name="catch_all_email_description">Use your domain’s configured catch-all inbox.</string>
     <string name="forwarded_email_description">Tạo một địa chỉ email ảo bằng dịch vụ chuyển tiếp email bên ngoài.</string>
     <string name="accessibility_service_disclosure">Thông báo về Dịch vụ Trợ năng</string>
     <string name="accessibility_disclosure_text">Bitwarden sử dụng Dịch vụ trợ năng để tìm kiếm các trường đăng nhập trong ứng dụng và trang web, sau đó thiết lập ID trường thích hợp để nhập tên đăng nhập &amp; mật khẩu khi tìm thấy ứng dụng hoặc trang web tương ứng. Chúng tôi không lưu trữ bất kỳ thông tin nào được dịch vụ cung cấp, cũng như không cố gắng kiểm soát bất kỳ yếu tố nào trên màn hình ngoài việc nhập thông tin đăng nhập.</string>
@@ -738,7 +738,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Tìm hiểu cách tránh bị khóa tài khoản</annotation></string>
     <string name="help_with_server_geolocations">Trợ giúp về vị trí địa lý của máy chủ.</string>
     <string name="email_address_required">Địa chỉ email (bắt buộc)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Nhấn vào liên kết trong email để xác minh địa chỉ email của bạn và tiếp tục tạo tài khoản. "</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account.</string>
     <string name="change_email_address">Thay đổi địa chỉ email</string>
     <string name="next">Tiếp theo</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden không thể khôi phục mật khẩu chính bị mất hoặc quên.</string>
@@ -755,12 +755,17 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="allow_bitwarden_authenticator_syncing">Đồng bộ với Bitwarden Authenticator</string>
     <string name="there_was_an_issue_validating_the_registration_token">Có vấn đề trong quá trình xác thực token đăng ký.</string>
     <string name="turn_on_autofill">Bật tự động điền</string>
+    <string name="autofill_setup">Autofill setup</string>
+    <string name="turn_on_browser_autofill_integration">Turn on browser autofill integration</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_for_bitwarden">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Dùng tính năng tự động điền để đăng nhập vào tài khoản của bạn chỉ bằng một lần chạm.</string>
     <string name="turn_on_later">Bật sau</string>
     <string name="turn_on_autofill_later">Bật tự động điền sau?</string>
+    <string name="turn_on_browser_autofill_integration_later">Turn on browser autofill integration later?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">Bạn có thể hoàn tất bước này sau trong phần Cài đặt.</string>
     <string name="what_bitwarden_has_to_offer">Bạn có thể khám phá tất cả các tính năng mà Bitwarden cung cấp và bắt đầu quản lý mật khẩu của mình một cách an toàn.</string>
-    <string name="youre_all_set">Bạn đã hoàn tất!</string>
+    <string name="youre_all_set">You’re all set!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Lỗi kết nối với dịch vụ Duo. Sử dụng phương thức đăng nhập hai bước khác hoặc liên hệ với Duo để được hỗ trợ.</string>
     <string name="master_password_hint_not_specified">Gợi ý mật khẩu chính</string>
     <string name="new_master_password_hint">Gợi ý mật khẩu chính mới</string>
@@ -845,8 +850,8 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Ghép các từ lại với nhau theo bất kỳ thứ tự nào để tạo thành cụm mật khẩu của bạn. <annotation emphasis="bold">Sử dụng dấu gạch ngang, khoảng trắng hoặc để nguyên thành một từ dài</annotation>—tuỳ bạn chọn!</string>
     <string name="make_it_yours">Tùy theo ý bạn</string>
     <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Thêm số hoặc ký tự đặc biệt</annotation> để làm cho nó mạnh mẽ hơn nữa. Bây giờ bạn đã có một cụm mật khẩu duy nhất, an toàn và dễ nhớ!</string>
-    <string name="need_some_inspiration">"Cần một chút cảm hứng?"</string>
-    <string name="check_out_the_passphrase_generator">"Tham khảo trình tạo cụm mật khẩu"</string>
+    <string name="need_some_inspiration">Cần một chút cảm hứng?</string>
+    <string name="check_out_the_passphrase_generator">Tham khảo trình tạo cụm mật khẩu</string>
     <string name="we_couldnt_verify_the_servers_certificate">Chúng tôi không thể xác minh chứng chỉ của máy chủ. Chuỗi chứng chỉ hoặc cài đặt proxy trên thiết bị hoặc máy chủ Bitwarden của bạn có thể chưa được cấu hình đúng cách.</string>
     <string name="copy_private_key">Sao chép khóa riêng tư</string>
     <string name="login_credentials">Thông tin đăng nhập</string>
@@ -858,13 +863,13 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="coachmark_3_of_3">3 TRONG 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Bạn phải thêm địa chỉ web để sử dụng tính năng tự động điền khi truy cập tài khoản này.</string>
     <string name="learn_about_new_logins">Tìm hiểu về cách đăng nhập mới</string>
-    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Chúng tôi sẽ hướng dẫn bạn các tính năng chính để thêm một thông tin đăng nhập mới.</string>
+    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We’ll walk you through the key features to add a new login.</string>
     <string name="explore_the_generator">Khám phá trình tạo</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Tìm hiểu thêm về cách tạo thông tin đăng nhập an toàn thông qua hướng dẫn.</string>
     <string name="import_client_certificate">Nhập chứng chỉ máy khách</string>
     <string name="enter_the_client_certificate_password_and_alias">Nhập mật khẩu chứng chỉ máy khách và tên gọi mong muốn cho chứng chỉ này.</string>
     <string name="alias">Tên gọi</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Sử dụng trình tạo để tạo mật khẩu, cụm mật khẩu và tên người dùng an toàn. "</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Use the generator to create secure passwords, passphrases and usernames.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Cụm mật khẩu là mật khẩu mạnh, thường dễ nhớ và dễ nhập hơn mật khẩu ngẫu nhiên. Chúng hữu ích khi đăng nhập vào các tài khoản không có tính năng Tự động điền, như dịch vụ phát trực tuyến trên TV của bạn.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Tên đăng nhập duy nhất giúp tăng cường bảo mật và có thể ngăn chặn tin tặc tìm ra tài khoản của bạn.</string>
     <string name="coachmark_1_of_6">1 TRONG 6</string>
@@ -873,8 +878,8 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="coachmark_4_of_6">4 TRONG 6</string>
     <string name="coachmark_5_of_6">5 TRONG 6</string>
     <string name="coachmark_6_of_6">6 TRONG 6</string>
-    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Sử dụng các tùy chọn này để điều chỉnh mật khẩu của bạn sao cho phù hợp với yêu cầu của trang web.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Sau khi lưu mật khẩu mới của bạn vào Bitwarden, đừng quên cập nhật nó trên trang web tài khoản của bạn. "</string>
+    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website’s requirements.</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">After you save your new password to Bitwarden, don’t forget to update it on your account website.</string>
     <string name="verify_your_identity">Xác minh danh tính của bạn</string>
     <string name="error_loading_certificate">Lỗi khi tải chứng chỉ</string>
     <string name="certificate_alias">Tên gọi chứng chỉ</string>
@@ -903,7 +908,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
     <string name="self_host_server_url">URL máy chủ tự lưu trữ</string>
     <string name="use_brave_autofill_integration">Tích hợp với tính năng tự động điền của Brave</string>
     <string name="use_chrome_autofill_integration">Tích hợp với tính năng tự động điền của Chrome</string>
-    <string name="use_chrome_beta_autofill_integration">Tích hợp với tính năng tự động điền của Chrome (Thử nghiệm)</string>
+    <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Cải thiện tính năng tự động điền thông tin đăng nhập cho các trang web được hỗ trợ trên trình duyệt đã chọn. Sau khi kích hoạt, bạn sẽ được chuyển đến cài đặt trình duyệt để bật tính năng tự động điền của bên thứ ba.</string>
     <string name="show_more">Xem thêm</string>
     <string name="no_folder">Chưa phân loại</string>
@@ -949,7 +954,7 @@ các vấn đề.</string>
     <string name="log_deleted">Đã xóa nhật ký</string>
     <string name="app_settings">Cài đặt ứng dụng</string>
     <string name="replace_existing_certificate">Thay thế chứng chỉ đã tồn tại?</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Một chứng chỉ có tên gọi \"%s\" đã tồn tại. Bạn có muốn thay thế nó không?\nViệc thay thế chứng chỉ có thể ảnh hưởng đến kết nối của bạn với các môi trường hiện đang sử dụng nó.</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with the alias “%s” already exists. Do you want to replace it?\nReplacing the certificate may impact your connection to any environments currently using it.</string>
     <string name="replace_certificate">Thay thế chứng chỉ</string>
     <string name="unable_to_read_certificate">Không thể đọc chứng chỉ.</string>
     <string name="cannot_delete_your_account">Không thể xóa tài khoản của bạn</string>
@@ -962,12 +967,12 @@ các vấn đề.</string>
     <string name="use_dynamic_colors">Dùng màu tương thích</string>
     <string name="use_dynamic_colors_question">Dùng màu giống hệ thống?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Tùy chọn này tự động áp dụng các màu hệ thống cho Bitwarden dựa trên màu sắc hình nền hiện tại của bạn. Các màu sắc này có thể khiến nội dung khó đọc hơn.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Vận hành mã khóa thất bại vì trình duyệt (%1$s) không được nhận diện. Chọn \"Tin tưởng\" để thêm %1$s vào danh sách các ứng dụng được tin cậy cục bộ.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select “Trust” to add %1$s to the list of locally trusted applications.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Vận hành mã khóa thất bại vì trình duyệt không được tin tưởng.</string>
     <string name="trust">Tin tưởng</string>
     <string name="trusted_by_you_learn_more">Đây là các ứng dụng hoặc trình duyệt mà Bitwarden không tin cậy theo mặc định, nhưng bạn tin tưởng để thực hiện các thao tác liên quan đến mã khóa.</string>
     <string name="trusted_by_community_learn_more">Đây là các ứng dụng không có trong Google Play Store, nhưng Bitwarden tin tưởng có thể thực hiện các thao tác liên quan tới mã khóa sau khi các thành viên cộng đồng đã sử dụng và báo cáo rằng chúng an toàn.</string>
-    <string name="trusted_by_google_learn_more">Đây là các ứng dụng mà Google đánh giá là an toàn và có sẵn trên Cửa hàng Google Play.</string>
+    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google’s Play Store.</string>
     <string name="trusted_by_you">Được bạn tin tưởng</string>
     <string name="trusted_by_the_community">Được cộng đồng tin tưởng</string>
     <string name="trusted_by_google">Được tin tưởng bởi Google</string>
@@ -1059,9 +1064,9 @@ các vấn đề.</string>
     <string name="account_synced_from_bitwarden_app">Tài khoản đã đồng bộ từ ứng dụng Bitwarden</string>
     <string name="local_codes">Mã địa phương (%1$d)</string>
     <string name="required_information_missing">Thông tin bắt buộc còn thiếu</string>
-    <string name="required_information_missing_message">"Thông tin bắt buộc còn thiếu (ví dụ: ‘dịch vụ’ hoặc ‘bí mật’). Vui lòng kiểm tra lại tệp của bạn và thử lại. Truy cập bitwarden.com/help để được hỗ trợ"</string>
-    <string name="file_could_not_be_processed">"Tệp không thể được xử lý"</string>
-    <string name="file_could_not_be_processed_message">"Tệp không thể được xử lý. Hãy đảm bảo tệp JSON hợp lệ và thử lại. Cần trợ giúp? Truy cập bitwarden.com/help"</string>
+    <string name="required_information_missing_message">Thông tin bắt buộc còn thiếu (ví dụ: ‘dịch vụ’ hoặc ‘bí mật’). Vui lòng kiểm tra lại tệp của bạn và thử lại. Truy cập bitwarden.com/help để được hỗ trợ</string>
+    <string name="file_could_not_be_processed">Tệp không thể được xử lý</string>
+    <string name="file_could_not_be_processed_message">Tệp không thể được xử lý. Hãy đảm bảo tệp JSON hợp lệ và thử lại. Cần trợ giúp? Truy cập bitwarden.com/help</string>
     <string name="get_help">Nhận trợ giúp</string>
     <string name="expand_advanced_options">Mở rộng các tùy chọn nâng cao</string>
     <string name="local_items_are_expanded_click_to_collapse">Các mục địa phương được mở rộng, nhấp để thu gọn.</string>
@@ -1086,18 +1091,24 @@ các vấn đề.</string>
 <annotation emphasis="bold">Cảnh báo:</annotation> “Bắt đầu với” là một tùy chọn nâng cao, có nguy cơ cao làm lộ thông tin xác thực.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Tùy chọn ‘Bắt đầu với’ là một tùy chọn nâng cao, có nguy cơ cao làm lộ thông tin xác thực.”</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Biểu thức chính quy” là một tùy chọn nâng cao, có nguy cơ cao làm lộ thông tin xác thực nếu sử dụng không đúng cách.</string>
-    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_was_cancelled_in_the_selected_app">Credential import was cancelled in the selected app. No items have been imported.</string>
     <string name="import_cancelled">Import cancelled</string>
-    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
-    <string name="import_saved_items">Import saved items</string>
-    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
-    <string name="return_to_your_vault">Return to your vault</string>
-    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
     <string name="no_items_imported">No items imported</string>
-    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="no_items_received_from_the_selected_app">No items received from the selected app.</string>
     <string name="vault_sync_failed">Vault sync failed</string>
-    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but they will not be visible in your vault until sync is performed.</string>
     <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
-    <string name="importing_items">Importing items…</string>
-    <string name="uploading_items">Uploading items…</string>
+    <string name="saving_items">Saving items…</string>
+    <string name="unable_to_import_your_items">Unable to import your items</string>
+    <string name="import_from_computer">Import from computer</string>
+    <string name="import_from_another_app">Import from another app</string>
+    <plurals name="x_items_have_been_imported_to_your_vault">
+        <item quantity="other">%1$d items have been imported to your vault.</item>
+    </plurals>
+    <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
+    <string name="your_browser_recently_updated_how_autofill_works">Your browser recently updated how Autofill works. To continue filling your passwords with Bitwarden, enable browser Autofill in autofill settings.</string>
+    <string name="not_now">Not now</string>
+    <string name="import_from_bitwarden">Import from Bitwarden</string>
+    <string name="select_account">Select account</string>
+    <string name="import_restricted_unable_to_import_credit_cards">Import restricted, unable to import cards from this account.</string>
 </resources>
