@@ -28,6 +28,12 @@ enum class OnboardingStatus {
     AUTOFILL_SETUP,
 
     /**
+     * The user is completing the browser autofill service setup.
+     */
+    @SerialName("browserAutofillSetup")
+    BROWSER_AUTOFILL_SETUP,
+
+    /**
      * The user is completing the final step of the onboarding process.
      */
     @SerialName("finalStep")

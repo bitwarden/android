@@ -147,7 +147,7 @@ class CredentialExchangeImportManagerTest {
 
         val result = importManager.importCxfPayload(DEFAULT_USER_ID, DEFAULT_PAYLOAD)
 
-        assertEquals(ImportCxfPayloadResult.Success, result)
+        assertEquals(ImportCxfPayloadResult.Success(itemCount = 1), result)
         coVerify(exactly = 1) {
             vaultSdkSource.importCxf(DEFAULT_USER_ID, DEFAULT_PAYLOAD)
             ciphersService.importCiphers(any())

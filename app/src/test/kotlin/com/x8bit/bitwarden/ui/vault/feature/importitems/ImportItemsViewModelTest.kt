@@ -6,10 +6,12 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.cxf.importer.model.ImportCredentialsSelectionResult
 import com.bitwarden.ui.platform.base.BaseViewModelTest
-import com.bitwarden.ui.platform.components.icon.model.IconData
-import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
 import io.mockk.awaits
@@ -26,7 +28,7 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
     private val vaultRepository = mockk<VaultRepository>()
 
     @Test
-    fun `NavigateBack sends NavigateBack event`() = runTest {
+    fun `BackClick sends NavigateBack event`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(ImportItemsAction.BackClick)
@@ -35,19 +37,27 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `GetStartedClick updates state and sends ShowRegisteredImportSources event`() {
+    fun `ImportFromComputerClick sends NavigateToImportFromComputer event`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(ImportItemsAction.ImportFromComputerClick)
+            assertEquals(ImportItemsEvent.NavigateToImportFromComputer, awaitItem())
+        }
+    }
+
+    @Test
+    fun `DismissDialog updates state`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ImportItemsAction.DismissDialog)
+        assertEquals(ImportItemsState(), viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `ImportFromAnotherAppClick sends ShowRegisteredImportSources event`() {
         runTest {
             val viewModel = createViewModel()
+            viewModel.trySendAction(ImportItemsAction.ImportFromAnotherAppClick)
             viewModel.eventFlow.test {
-                assertEquals(
-                    ImportItemsState.ViewState.NotStarted,
-                    viewModel.stateFlow.value.viewState,
-                )
-                viewModel.trySendAction(ImportItemsAction.GetStartedClick)
-                assertEquals(
-                    ImportItemsState.ViewState.AwaitingSelection,
-                    viewModel.stateFlow.value.viewState,
-                )
                 assertEquals(
                     ImportItemsEvent.ShowRegisteredImportSources(
                         listOf(
@@ -75,32 +85,37 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        val expectedState = ImportItemsState.ViewState.Completed(
-            title = BitwardenString.import_cancelled.asText(),
-            message = BitwardenString.credential_import_was_cancelled.asText(),
-            iconData = IconData.Local(BitwardenDrawable.ic_warning),
+        val expectedState = ImportItemsState(
+            dialog = ImportItemsState.DialogState.General(
+                title = BitwardenString.import_cancelled.asText(),
+                message = BitwardenString.import_was_cancelled_in_the_selected_app.asText(),
+                throwable = null,
+            ),
         )
-        assertEquals(expectedState, viewModel.stateFlow.value.viewState)
+        assertEquals(expectedState, viewModel.stateFlow.value)
     }
 
     @Test
     fun `ImportCredentialSelectionReceive and Failure result updates state`() = runTest {
         val viewModel = createViewModel()
+        val exception = ImportCredentialsInvalidJsonException("Error")
 
         viewModel.trySendAction(
             ImportItemsAction.ImportCredentialSelectionReceive(
                 selectionResult = ImportCredentialsSelectionResult.Failure(
-                    error = ImportCredentialsInvalidJsonException(),
+                    error = exception,
                 ),
             ),
         )
 
-        val expectedState = ImportItemsState.ViewState.Completed(
-            title = BitwardenString.import_vault_failure.asText(),
-            message = BitwardenString.generic_error_message.asText(),
-            iconData = IconData.Local(BitwardenDrawable.ic_warning),
+        val expectedState = ImportItemsState(
+            dialog = ImportItemsState.DialogState.General(
+                title = BitwardenString.unable_to_import_your_items.asText(),
+                message = BitwardenString.there_was_a_problem_importing_your_items.asText(),
+                throwable = exception,
+            ),
         )
-        assertEquals(expectedState, viewModel.stateFlow.value.viewState)
+        assertEquals(expectedState, viewModel.stateFlow.value)
     }
 
     @Test
@@ -123,12 +138,13 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            // Verify state is updated to ImportingItems
             assertEquals(
-                ImportItemsState.ViewState.ImportingItems(
-                    BitwardenString.import_items.asText(),
+                ImportItemsState(
+                    dialog = ImportItemsState.DialogState.Loading(
+                        message = BitwardenString.saving_items.asText(),
+                    ),
                 ),
-                viewModel.stateFlow.value.viewState,
+                viewModel.stateFlow.value,
             )
 
             // Verify that the repository method was called
@@ -136,56 +152,72 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `ReturnToVaultClick sends NavigateToVault event`() = runTest {
+    fun `SyncFailedTryAgainClick should update state and trigger sync`() = runTest {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ImportItemsAction.ReturnToVaultClick)
-            assertEquals(
-                ImportItemsEvent.NavigateToVault,
-                awaitItem(),
-            )
+        coEvery {
+            vaultRepository.syncForResult()
+        } returns SyncVaultDataResult.Success(itemsAvailable = true)
+
+        viewModel.trySendAction(ImportItemsAction.SyncFailedTryAgainClick)
+
+        coVerify(exactly = 1) {
+            vaultRepository.syncForResult()
         }
     }
 
     @Test
     fun `Internal ImportCxfResultReceive and Error result updates state`() = runTest {
         val viewModel = createViewModel()
-
+        val exception = ImportCredentialsInvalidJsonException("Error")
         viewModel.trySendAction(
             ImportItemsAction.Internal.ImportCredentialsResultReceive(
                 ImportCredentialsResult.Error(
-                    error = RuntimeException("Error"),
+                    error = exception,
                 ),
             ),
         )
 
-        val expectedState = ImportItemsState.ViewState.Completed(
-            title = BitwardenString.import_error.asText(),
-            message = BitwardenString.there_was_a_problem_importing_your_items.asText(),
-            iconData = IconData.Local(BitwardenDrawable.ic_warning),
-        )
-        assertEquals(expectedState, viewModel.stateFlow.value.viewState)
-    }
-
-    @Test
-    fun `Internal ImportCxfResultReceive and Success result updates state`() = runTest {
-        val viewModel = createViewModel()
-
-        viewModel.trySendAction(
-            ImportItemsAction.Internal.ImportCredentialsResultReceive(
-                ImportCredentialsResult.Success,
+        val expectedState = ImportItemsState(
+            dialog = ImportItemsState.DialogState.General(
+                title = BitwardenString.unable_to_import_your_items.asText(),
+                message = BitwardenString.there_was_a_problem_importing_your_items.asText(),
+                throwable = exception,
             ),
         )
-
-        val expectedState = ImportItemsState.ViewState.Completed(
-            title = BitwardenString.import_success.asText(),
-            message = BitwardenString
-                .your_items_have_been_successfully_imported
-                .asText(),
-            iconData = IconData.Local(BitwardenDrawable.ic_plain_checkmark),
-        )
-        assertEquals(expectedState, viewModel.stateFlow.value.viewState)
+        assertEquals(expectedState, viewModel.stateFlow.value)
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Internal ImportCredentialsResultReceive with Success result should clear dialogs, and show snackbar`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                ImportItemsAction.Internal.ImportCredentialsResultReceive(
+                    ImportCredentialsResult.Success(itemCount = 2),
+                ),
+            )
+
+            val expectedState = ImportItemsState()
+            assertEquals(expectedState, viewModel.stateFlow.value)
+            viewModel.eventFlow.test {
+                assertEquals(
+                    ImportItemsEvent.ShowBasicSnackbar(
+                        BitwardenSnackbarData(
+                            messageHeader = BitwardenString.import_successful.asText(),
+                            message = BitwardenPlurals
+                                .x_items_have_been_imported_to_your_vault
+                                .asPluralsText(
+                                    quantity = 2,
+                                    args = arrayOf(2),
+                                ),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `Internal ImportCxfResultReceive and NoItems result updates state`() = runTest {
@@ -197,37 +229,107 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        val expectedState = ImportItemsState.ViewState.Completed(
-            title = BitwardenString.no_items_imported.asText(),
-            message = BitwardenString
-                .no_items_received_from_the_selected_credential_manager
-                .asText(),
-            iconData = IconData.Local(BitwardenDrawable.ic_plain_checkmark),
-        )
-        assertEquals(expectedState, viewModel.stateFlow.value.viewState)
-    }
-
-    @Test
-    fun `Internal ImportCxfResultReceive and SyncFailed result updates state`() = runTest {
-        val viewModel = createViewModel()
-
-        viewModel.trySendAction(
-            ImportItemsAction.Internal.ImportCredentialsResultReceive(
-                ImportCredentialsResult.SyncFailed(
-                    error = RuntimeException("Error"),
-                ),
+        val expectedState = ImportItemsState(
+            dialog = ImportItemsState.DialogState.General(
+                title = BitwardenString.no_items_imported.asText(),
+                message = BitwardenString.no_items_received_from_the_selected_app.asText(),
+                throwable = null,
             ),
         )
-
-        val expectedState = ImportItemsState.ViewState.Completed(
-            title = BitwardenString.vault_sync_failed.asText(),
-            message = BitwardenString
-                .your_items_have_been_successfully_imported_but_could_not_sync_vault
-                .asText(),
-            iconData = IconData.Local(BitwardenDrawable.ic_warning),
-        )
-        assertEquals(expectedState, viewModel.stateFlow.value.viewState)
+        assertEquals(expectedState, viewModel.stateFlow.value)
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Internal ImportCxfResultReceive and SyncFailed should clear dialogs and show snackbar`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                ImportItemsAction.Internal.ImportCredentialsResultReceive(
+                    ImportCredentialsResult.SyncFailed(
+                        error = RuntimeException("Error"),
+                    ),
+                ),
+            )
+
+            val expectedState = ImportItemsState()
+            assertEquals(expectedState, viewModel.stateFlow.value)
+            viewModel.eventFlow.test {
+                assertEquals(
+                    ImportItemsEvent.ShowSyncFailedSnackbar(
+                        data = BitwardenSnackbarData(
+                            messageHeader = BitwardenString.vault_sync_failed.asText(),
+                            message = BitwardenString
+                                .your_items_have_been_successfully_imported_but_could_not_sync_vault
+                                .asText(),
+                            actionLabel = BitwardenString.try_again.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Internal RetrySyncResultReceive with Success should clear dialogs and display success snackbar`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                ImportItemsAction.Internal.RetrySyncResultReceive(
+                    result = SyncVaultDataResult.Success(itemsAvailable = true),
+                ),
+            )
+
+            assertEquals(
+                ImportItemsState(),
+                viewModel.stateFlow.value,
+            )
+            viewModel.eventFlow.test {
+                assertEquals(
+                    ImportItemsEvent.ShowBasicSnackbar(
+                        data = BitwardenSnackbarData(
+                            message = BitwardenString.syncing_complete.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Internal RetrySyncResultReceive with Error should clear dialogs and show SyncFailed snackbar`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                ImportItemsAction.Internal.RetrySyncResultReceive(
+                    result = SyncVaultDataResult.Error(throwable = RuntimeException("Error")),
+                ),
+            )
+
+            assertEquals(
+                ImportItemsState(),
+                viewModel.stateFlow.value,
+            )
+            viewModel.eventFlow.test {
+                assertEquals(
+                    ImportItemsEvent.ShowSyncFailedSnackbar(
+                        data = BitwardenSnackbarData(
+                            messageHeader = BitwardenString.vault_sync_failed.asText(),
+                            message = BitwardenString
+                                .your_items_have_been_successfully_imported_but_could_not_sync_vault
+                                .asText(),
+                            actionLabel = BitwardenString.try_again.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 
     private fun createViewModel(): ImportItemsViewModel = ImportItemsViewModel(
         vaultRepository = vaultRepository,

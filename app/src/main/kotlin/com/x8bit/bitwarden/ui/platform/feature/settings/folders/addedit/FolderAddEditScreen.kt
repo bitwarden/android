@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +17,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -55,16 +53,10 @@ fun FolderAddEditScreen(
     viewModel: FolderAddEditViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-
     var shouldShowConfirmationDialog by rememberSaveable { mutableStateOf(false) }
-
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is FolderAddEditEvent.NavigateBack -> onNavigateBack.invoke()
-            is FolderAddEditEvent.ShowToast -> {
-                Toast.makeText(context, event.message(context.resources), Toast.LENGTH_SHORT).show()
-            }
         }
     }
 

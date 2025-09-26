@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">Névjegy</string>
     <string name="add_folder">Mappa hozzáadása</string>
     <string name="add_item">Elem hozzáadása</string>
@@ -165,7 +165,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Keressünk egy bejelentkezést vagy adjunk hozzá új bejelentkezést.</string>
     <string name="disabled">Letiltva</string>
     <string name="bitwarden_autofill_service_alert2">A legkönnyebb módja új bejelentkezések széfbe helyezéséhez a Bitwarden automatikus kitöltés szolgáltatásból. További információ olvasható a Bitwarden automatikus kitöltés szolgáltatás használatáról a  \"Beállítások\" képernyőn.</string>
-    <string name="autofill_title">Autofill</string>
+    <string name="autofill_title">Automatikus kitöltés</string>
     <string name="autofill_or_view">Automatikusan kitöltésre vagy megtekintésre kerüljön ez az elem?</string>
     <string name="search">Keresés</string>
     <string name="learn_org">Információ szervezetekről</string>
@@ -997,7 +997,10 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="advanced">Bővített</string>
     <string name="collapse_advanced_options">Bővített opciók összezárása</string>
     <string name="number_of_digits">Számjegyek száma</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d másodperc</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d másodperc</item>
+        <item quantity="other">%d másodperc</item>
+    </plurals>
     <string name="item_saved">Az elem szerkesztésre került.</string>
     <string name="information">Információ</string>
     <string name="otp_type">OTP típus</string>
@@ -1083,4 +1086,18 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="default_uri_match_detection_description_advanced_options">Az URI egyezés észlelése szabályozza, hogy a Bitwarden hogyan azonosítsa az automatikus kitöltési javaslatokat.\n&lt;annotation emphous=„bold“&gt;Figyelem:&lt;/annotation&gt; A “Kezdés:” egy fejlett lehetőség, amely növeli a hitelesítő adatok felfedésének kockázatát.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">A “Kezdés:” egy fejlett opció, amely növeli a hitelesítő adatok felfedésének kockázatát.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“A reguláris kifejezés” egy fejlett opció, amely megnöveli a hitelesítő adatok felfedésének kockázatát, ha helytelenül használják.</string>
+    <string name="credential_import_was_cancelled">A hitelesítő adatok importálása megszakításra került. Nem lett importálva hitelesítő adat.</string>
+    <string name="import_cancelled">Az importálás megszakításra került.</string>
+    <string name="your_items_have_been_successfully_imported">Az elemek sikeresen importálásra kerültek és most megtekinthetők a széfben.</string>
+    <string name="import_saved_items">Mentett bejelentkezések importálása</string>
+    <string name="import_your_credentials_from_another_password_manager">A hitelesítő adatok, beleértve a azonosítókulcsok, jelszavak, hitelkártyák és bármely személyes személyazonossági adat egy másik jelszókezelőből.</string>
+    <string name="return_to_your_vault">Vissza a saját széfbe</string>
+    <string name="select_a_credential_manager_to_import_items_from">Válasszunk ki egy hitelesítőadat kezelőt az elemek importálásához.</string>
+    <string name="no_items_imported">Nem lett elem importálva.</string>
+    <string name="no_items_received_from_the_selected_credential_manager">A kiválasztott hitelesítőadat kezelőtől nem érkezett elem.</string>
+    <string name="vault_sync_failed">A széf szinkronizálás sikertelen volt.</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Az elemek sikeresen importálásra kerültek, de nem lehetett szinkronizálni a széfet. Az importált elemek a szinkronizálás végrehajtásáig nem lesznek láthatók a széfben.</string>
+    <string name="there_was_a_problem_importing_your_items">Probléma volt az elemek importálásával. Próbáljuk újra. Ha a probléma továbbra is fennáll, forduljunk a támogatáshoz.</string>
+    <string name="importing_items">Elemek importálása…</string>
+    <string name="uploading_items">Elemek feltöltése…</string>
 </resources>

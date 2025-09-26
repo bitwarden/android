@@ -21,8 +21,9 @@ sealed interface InvalidJsonResponse {
      * Returns the first error message found in [validationErrors], or [message] if there are no
      * [validationErrors] present.
      */
-    val firstValidationErrorMessage: String?
+    val firstValidationErrorMessage: String
         get() = validationErrors
             ?.flatMap { it.value }
-            ?.first()
+            ?.firstOrNull()
+            ?: message
 }

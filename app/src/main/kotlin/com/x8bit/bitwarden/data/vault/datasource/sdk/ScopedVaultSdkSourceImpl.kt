@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.data.manager.NativeLibraryManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.NativeLibraryManager
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
 

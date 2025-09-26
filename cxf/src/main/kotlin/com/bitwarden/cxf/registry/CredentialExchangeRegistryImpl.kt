@@ -6,6 +6,7 @@ import androidx.core.graphics.drawable.toBitmapOrNull
 import androidx.credentials.providerevents.ProviderEventsManager
 import androidx.credentials.providerevents.transfer.ExportEntry
 import androidx.credentials.providerevents.transfer.RegisterExportRequest
+import androidx.credentials.providerevents.transfer.RegisterExportResponse
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
@@ -24,7 +25,7 @@ internal class CredentialExchangeRegistryImpl(
 
     override suspend fun register(
         registrationRequest: RegistrationRequest,
-    ): Result<Boolean> {
+    ): Result<RegisterExportResponse> {
         val icon = ContextCompat
             .getDrawable(
                 application,
@@ -50,7 +51,7 @@ internal class CredentialExchangeRegistryImpl(
             .asSuccess()
     }
 
-    override suspend fun unregister(): Boolean =
+    override suspend fun unregister(): RegisterExportResponse =
         providerEventsManager.registerExport(
             // This is a workaround for unregistering an account since an explicit "unregister" API
             // is not currently available.

@@ -5,6 +5,7 @@ import androidx.core.net.toUri
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
+import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.AttachmentJsonResponse
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.CreateCipherResponseJson
@@ -17,7 +18,10 @@ import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.EncryptionContext
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
+import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
+import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
+import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
@@ -34,13 +38,18 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toNetworkAttachmentRequest
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import retrofit2.HttpException
 import java.io.File
 import java.time.Clock
 
 /**
  * The default implementation of the [CipherManager].
  */
-@Suppress("TooManyFunctions", "LongParameterList")
+@Suppress("TooManyFunctions", "LongParameterList", "LargeClass")
 class CipherManagerImpl(
     private val fileManager: FileManager,
     private val authDiskSource: AuthDiskSource,
@@ -49,8 +58,23 @@ class CipherManagerImpl(
     private val vaultSdkSource: VaultSdkSource,
     private val clock: Clock,
     private val reviewPromptManager: ReviewPromptManager,
+    dispatcherManager: DispatcherManager,
+    pushManager: PushManager,
 ) : CipherManager {
+    private val ioScope = CoroutineScope(dispatcherManager.io)
+    private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
+
+    init {
+        pushManager
+            .syncCipherDeleteFlow
+            .onEach(::deleteCipher)
+            .launchIn(unconfinedScope)
+        pushManager
+            .syncCipherUpsertFlow
+            .onEach(::syncCipherIfNecessary)
+            .launchIn(ioScope)
+    }
 
     override suspend fun createCipher(cipherView: CipherView): CreateCipherResult {
         val userId = activeUserId
@@ -640,5 +664,80 @@ class CipherManagerImpl(
                 result.onFailure { return it.asFailure() }
             }
         return migratedCipherView.asSuccess()
+    }
+
+    /**
+     * Deletes the cipher specified by [syncCipherDeleteData] from disk.
+     */
+    private suspend fun deleteCipher(syncCipherDeleteData: SyncCipherDeleteData) {
+        vaultDiskSource.deleteCipher(
+            userId = syncCipherDeleteData.userId,
+            cipherId = syncCipherDeleteData.cipherId,
+        )
+    }
+
+    /**
+     * Syncs an individual cipher contained in [syncCipherUpsertData] to disk if certain criteria
+     * are met. If the resource cannot be found cloud-side, and it was updated, delete it from disk
+     * for now.
+     */
+    private suspend fun syncCipherIfNecessary(syncCipherUpsertData: SyncCipherUpsertData) {
+        val userId = activeUserId ?: return
+        val cipherId = syncCipherUpsertData.cipherId
+        val organizationId = syncCipherUpsertData.organizationId
+        val collectionIds = syncCipherUpsertData.collectionIds
+        val revisionDate = syncCipherUpsertData.revisionDate
+        val isUpdate = syncCipherUpsertData.isUpdate
+
+        // Return if local cipher is more recent
+        val localCipher = vaultDiskSource.getCipher(userId = userId, cipherId = cipherId)
+        if (localCipher != null &&
+            localCipher.revisionDate.toEpochSecond() > revisionDate.toEpochSecond()
+        ) {
+            return
+        }
+
+        var shouldUpdate: Boolean
+        val shouldCheckCollections: Boolean
+        when {
+            isUpdate -> {
+                shouldUpdate = localCipher != null
+                shouldCheckCollections = true
+            }
+
+            collectionIds == null || organizationId == null -> {
+                shouldUpdate = localCipher == null
+                shouldCheckCollections = false
+            }
+
+            else -> {
+                shouldUpdate = false
+                shouldCheckCollections = true
+            }
+        }
+
+        if (!shouldUpdate && shouldCheckCollections && organizationId != null) {
+            // Check if there are any collections in common
+            shouldUpdate = vaultDiskSource
+                .getCollections(userId = userId)
+                .first()
+                .any { collectionIds?.contains(it.id) == true }
+        }
+
+        if (!shouldUpdate) return
+
+        ciphersService
+            .getCipher(cipherId = cipherId)
+            .fold(
+                onSuccess = { vaultDiskSource.saveCipher(userId = userId, cipher = it) },
+                onFailure = {
+                    // Delete any updates if it's missing from the server
+                    val httpException = it as? HttpException
+                    @Suppress("MagicNumber")
+                    if (httpException?.code() == 404 && isUpdate) {
+                        vaultDiskSource.deleteCipher(userId = userId, cipherId = cipherId)
+                    }
+                },
+            )
     }
 }

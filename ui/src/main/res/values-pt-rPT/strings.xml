@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">Acerca de</string>
     <string name="add_folder">Adicionar pasta</string>
     <string name="add_item">Adicionar item</string>
@@ -11,7 +11,7 @@
     <string name="copy_password">Copiar palavra-passe</string>
     <string name="copy_username">Copiar nome de utilizador</string>
     <string name="delete">Eliminar</string>
-    <string name="deleting">Deleting…</string>
+    <string name="deleting">A eliminar…</string>
     <string name="do_you_really_want_to_delete">Pretende mesmo eliminar? Esta ação não pode ser anulada.</string>
     <string name="edit">Editar</string>
     <string name="edit_folder">Editar pasta</string>
@@ -54,7 +54,7 @@
     <string name="password">Palavra-passe</string>
     <string name="save">Guardar</string>
     <string name="move">Mover</string>
-    <string name="saving">Saving…</string>
+    <string name="saving">A guardar…</string>
     <string name="settings">Definições</string>
     <string name="show">Mostrar</string>
     <string name="item_deleted">Item eliminado</string>
@@ -103,7 +103,7 @@
     <string name="immediately">Imediatamente</string>
     <string name="vault_timeout_log_out_confirmation_title">Definir o tempo limite da sessão para \"Terminar sessão\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">Após o período de tempo limite, a sessão será terminada. Terá de estar ligado à Internet para iniciar sessão e aceder novamente ao seu cofre. As suas definições e PIN guardados neste dispositivo não serão alterados.</string>
-    <string name="logging_in">Logging in…</string>
+    <string name="logging_in">A iniciar sessão…</string>
     <string name="login_to_bitwarden">Iniciar sessão no Bitwarden</string>
     <string name="master_password_confirmation_val_message">A confirmação da palavra-passe não está correta.</string>
     <string name="master_password_description">A palavra-passe mestra é a palavra-passe que utiliza para aceder ao seu cofre. É muito importante que não se esqueça da sua palavra-passe mestra. Não há forma de recuperar a palavra-passe no caso de a esquecer.</string>
@@ -145,8 +145,8 @@
     <string name="select">Selecionar</string>
     <string name="item_details">Detalhes do item</string>
     <string name="item_updated">Item guardado</string>
-    <string name="submitting">Submitting…</string>
-    <string name="syncing">Syncing…</string>
+    <string name="submitting">A submeter…</string>
+    <string name="syncing">A sincronizar…</string>
     <string name="syncing_complete">Sincronização concluída</string>
     <string name="two_step_login">Verificação de dois passos</string>
     <string name="unlock_with_biometrics">Desbloquear com biometria</string>
@@ -184,7 +184,7 @@
     <string name="add_new_attachment">Adicionar novo anexo</string>
     <string name="attachments">Anexos</string>
     <string name="unable_to_download_file">Não foi possível transferir o ficheiro.</string>
-    <string name="downloading">Downloading…</string>
+    <string name="downloading">A transferir…</string>
     <string name="attachment_large_warning">O anexo tem %1$s de tamanho. Tem a certeza que deseja transferi-lo para o seu dispositivo?</string>
     <string name="authenticator_key">Chave de autenticação (TOTP)</string>
     <string name="verification_code_totp">Código de verificação (TOTP)</string>
@@ -398,10 +398,10 @@ A leitura será efetuada automaticamente.</string>
     <string name="save_attachment_success">Anexo guardado com sucesso</string>
     <string name="autofill_tile_accessibility_required">Por favor, ative o \"Serviço de acessibilidade de preenchimento automático\" nas definições do Bitwarden para utilizar o mosaico de preenchimento automático.</string>
     <string name="autofill_tile_uri_not_found">Nenhum campo de palavra-passe detetado</string>
-    <string name="soft_deleting">Sending to trash…</string>
+    <string name="soft_deleting">A mover para o lixo…</string>
     <string name="item_soft_deleted">O item foi movido para o lixo.</string>
     <string name="restore">Restaurar</string>
-    <string name="restoring">Restoring…</string>
+    <string name="restoring">A restaurar…</string>
     <string name="item_restored">Item restaurado</string>
     <string name="trash">Lixo</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Pretende mesmo eliminar permanentemente? Esta ação não pode ser anulada.</string>
@@ -803,7 +803,7 @@ Pretende mudar para esta conta?</string>
     <string name="need_help_check_out_import_help">Precisa de ajuda? Consulte a <annotation link="importHelp">ajuda com a importação</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Guarde o ficheiro exportado</annotation> num local do seu computador que possa encontrar facilmente.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Este não é um servidor Bitwarden reconhecido. Poderá ter de verificar com o seu fornecedor ou atualizar o seu servidor.</string>
-    <string name="syncing_logins_loading_message">Syncing logins…</string>
+    <string name="syncing_logins_loading_message">A sincronizar credenciais…</string>
     <string name="download_the_browser_extension">Descarregue a extensão do navegador</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Vá a bitwarden.com/download para integrar o Bitwarden no seu navegador favorito para uma experiência perfeita.</string>
     <string name="use_the_web_app">Utilize a aplicação Web</string>
@@ -998,7 +998,10 @@ Pretende mudar para esta conta?</string>
     <string name="advanced">Avançadas</string>
     <string name="collapse_advanced_options">Ocultar opções avançadas</string>
     <string name="number_of_digits">Número de dígitos</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d segundos</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d segundo</item>
+        <item quantity="other">%d segundos</item>
+    </plurals>
     <string name="item_saved">Item guardado</string>
     <string name="information">Informações</string>
     <string name="otp_type">Tipo de OTP</string>
@@ -1084,4 +1087,18 @@ Pretende mudar para esta conta?</string>
     <string name="default_uri_match_detection_description_advanced_options">A deteção de correspondência de URI controla como o Bitwarden identifica sugestões de preenchimento automático.\n<annotation emphasis="bold">Aviso:</annotation> \"Começa com\" é uma opção avançada com maior risco de expor credenciais.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Começa com\" é uma opção avançada com um risco acrescido de exposição de credenciais.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">A \"Expressão regular\" é uma opção avançada com um risco acrescido de expor credenciais se for utilizada incorretamente.</string>
+    <string name="credential_import_was_cancelled">A importação de credenciais foi cancelada. Não foram importadas credenciais.</string>
+    <string name="import_cancelled">Importação cancelada</string>
+    <string name="your_items_have_been_successfully_imported">Os seus itens foram importados com sucesso e podem agora ser visualizados no seu cofre.</string>
+    <string name="import_saved_items">Importar itens guardados</string>
+    <string name="import_your_credentials_from_another_password_manager">Importe as suas credenciais, incluindo chaves de acesso, palavras-passe, cartões de crédito e quaisquer informações de identidade pessoal de outro gestor de palavras-passe.</string>
+    <string name="return_to_your_vault">Voltar ao seu cofre</string>
+    <string name="select_a_credential_manager_to_import_items_from">Selecione um gestor de credenciais a partir do qual importar itens.</string>
+    <string name="no_items_imported">Nenhum item importado</string>
+    <string name="no_items_received_from_the_selected_credential_manager">Não foram recebidos quaisquer itens do gestor de credenciais selecionado.</string>
+    <string name="vault_sync_failed">Falha na sincronização do cofre</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Os seus itens foram importados com sucesso, mas não foi possível sincronizar o cofre. Os itens importados não serão visíveis no seu cofre até que a sincronização seja efetuada.</string>
+    <string name="there_was_a_problem_importing_your_items">Ocorreu um problema ao importar os seus itens. Por favor, tente novamente. Se o problema persistir, contacte o suporte.</string>
+    <string name="importing_items">A importar itens…</string>
+    <string name="uploading_items">A carregar itens…</string>
 </resources>

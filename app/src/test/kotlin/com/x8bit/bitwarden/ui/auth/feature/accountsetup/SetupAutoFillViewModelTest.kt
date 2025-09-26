@@ -6,6 +6,7 @@ import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -47,6 +48,11 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
         every { setOnboardingStatus(any()) } just runs
+    }
+    private val thirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager = mockk {
+        every {
+            browserThirdPartyAutofillStatus
+        } returns mockk { every { isAnyIsAvailableAndDisabled } returns false }
     }
 
     @BeforeEach
@@ -131,10 +137,24 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
     fun `handleTurnOnLaterConfirmClick sets onboarding status to FINAL_STEP`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupAutoFillAction.TurnOnLaterConfirmClick)
-        verify {
-            authRepository.setOnboardingStatus(
-                OnboardingStatus.FINAL_STEP,
-            )
+        verify(exactly = 1) {
+            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+            firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = true)
+        }
+    }
+
+    @Test
+    fun `handleTurnOnLaterConfirmClick sets onboarding status to BROWSER_AUTOFILL_SETUP`() {
+        every {
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+        } returns mockk { every { isAnyIsAvailableAndDisabled } returns true }
+        val viewModel = createViewModel()
+        viewModel.trySendAction(SetupAutoFillAction.TurnOnLaterConfirmClick)
+        verify(exactly = 1) {
+            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+            firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = true)
         }
     }
 
@@ -144,9 +164,22 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupAutoFillAction.ContinueClick)
         verify(exactly = 1) {
-            authRepository.setOnboardingStatus(
-                OnboardingStatus.FINAL_STEP,
-            )
+            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+            firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = false)
+        }
+    }
+
+    @Test
+    fun `handleContinueClick sets onboarding status to BROWSER_AUTOFILL_SETUP`() {
+        every {
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+        } returns mockk { every { isAnyIsAvailableAndDisabled } returns true }
+        val viewModel = createViewModel()
+        viewModel.trySendAction(SetupAutoFillAction.ContinueClick)
+        verify(exactly = 1) {
+            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
             firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = false)
         }
     }
@@ -155,8 +188,9 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
     @Test
     fun `handleContinueClick send NavigateBack event when not initial setup and sets first time flag to false`() =
         runTest {
-            val viewModel =
-                createViewModel(initialState = DEFAULT_STATE.copy(isInitialSetup = false))
+            val viewModel = createViewModel(
+                initialState = DEFAULT_STATE.copy(isInitialSetup = false),
+            )
             viewModel.eventFlow.test {
                 viewModel.trySendAction(SetupAutoFillAction.ContinueClick)
                 assertEquals(
@@ -168,9 +202,32 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
                 firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = false)
             }
             verify(exactly = 0) {
-                authRepository.setOnboardingStatus(
-                    OnboardingStatus.FINAL_STEP,
+                authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `handleContinueClick send NavigateToBrowserAutofill event when not initial setup and sets first time flag to false`() =
+        runTest {
+            every {
+                thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+            } returns mockk { every { isAnyIsAvailableAndDisabled } returns true }
+            val viewModel = createViewModel(
+                initialState = DEFAULT_STATE.copy(isInitialSetup = false),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(SetupAutoFillAction.ContinueClick)
+                assertEquals(
+                    SetupAutoFillEvent.NavigateToBrowserAutofill,
+                    awaitItem(),
                 )
+            }
+            verify(exactly = 1) {
+                firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = false)
+            }
+            verify(exactly = 0) {
+                authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
             }
         }
 
@@ -204,6 +261,7 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
         settingsRepository = settingsRepository,
         authRepository = authRepository,
         firstTimeActionManager = firstTimeActionManager,
+        browserThirdPartyAutofillEnabledManager = thirdPartyAutofillEnabledManager,
     )
 }
 

@@ -95,6 +95,7 @@ fun VaultScreen(
     onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutScreen: () -> Unit,
+    onNavigateToAutofillScreen: () -> Unit,
     exitManager: ExitManager = LocalExitManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
     appReviewManager: AppReviewManager = LocalAppReviewManager.current,
@@ -178,6 +179,8 @@ fun VaultScreen(
             is VaultEvent.ShowShareSheet -> {
                 intentManager.shareText(event.content)
             }
+
+            VaultEvent.NavigateToAutofillSettings -> onNavigateToAutofillScreen()
         }
     }
     val vaultHandlers = remember(viewModel) { VaultHandlers.create(viewModel) }
@@ -404,6 +407,7 @@ private fun VaultScreenScaffold(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun VaultDialogs(
     dialogState: VaultState.DialogState?,
@@ -440,6 +444,25 @@ private fun VaultDialogs(
                 },
                 onDismissClick = vaultHandlers.dialogDismiss,
                 onDismissRequest = vaultHandlers.dialogDismiss,
+            )
+        }
+
+        is VaultState.DialogState.ThirdPartyBrowserAutofill -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(
+                    id = BitwardenString.enable_browser_autofill_to_keep_filling_passwords,
+                ),
+                message = pluralStringResource(
+                    id = BitwardenPlurals.your_browser_recently_updated_how_autofill_works,
+                    count = dialogState.browserCount,
+                ),
+                confirmButtonText = stringResource(id = BitwardenString.go_to_settings),
+                dismissButtonText = stringResource(id = BitwardenString.not_now),
+                onConfirmClick = vaultHandlers.onEnabledThirdPartyAutofillClick,
+                onDismissClick = vaultHandlers.onDismissThirdPartyAutofillDialogClick,
+                onDismissRequest = vaultHandlers.onDismissThirdPartyAutofillDialogClick,
+                dismissOnBackPress = false,
+                dismissOnClickOutside = false,
             )
         }
 

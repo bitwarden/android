@@ -16,6 +16,8 @@ import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResendNewDeviceOtpRequestJson
 import com.bitwarden.network.model.ResetPasswordRequestJson
 import com.bitwarden.network.model.SetPasswordRequestJson
+import com.bitwarden.network.model.VerificationCodeResponseJson
+import com.bitwarden.network.model.VerificationOtpResponseJson
 import com.bitwarden.network.model.VerifyOtpRequestJson
 import com.bitwarden.network.model.toBitwardenError
 import com.bitwarden.network.util.HEADER_VALUE_BEARER_PREFIX
@@ -111,15 +113,39 @@ internal class AccountsServiceImpl(
                     ?: throw throwable
             }
 
-    override suspend fun resendVerificationCodeEmail(body: ResendEmailRequestJson): Result<Unit> =
+    override suspend fun resendVerificationCodeEmail(
+        body: ResendEmailRequestJson,
+    ): Result<VerificationCodeResponseJson> =
         unauthenticatedAccountsApi
             .resendVerificationCodeEmail(body = body)
             .toResult()
+            .map { VerificationCodeResponseJson.Success }
+            .recoverCatching { throwable ->
+                throwable
+                    .toBitwardenError()
+                    .parseErrorBodyOrNull<VerificationCodeResponseJson.Invalid>(
+                        code = NetworkErrorCode.BAD_REQUEST,
+                        json = json,
+                    )
+                    ?: throw throwable
+            }
 
-    override suspend fun resendNewDeviceOtp(body: ResendNewDeviceOtpRequestJson): Result<Unit> =
+    override suspend fun resendNewDeviceOtp(
+        body: ResendNewDeviceOtpRequestJson,
+    ): Result<VerificationOtpResponseJson> =
         unauthenticatedAccountsApi
             .resendNewDeviceOtp(body = body)
             .toResult()
+            .map { VerificationOtpResponseJson.Success }
+            .recoverCatching { throwable ->
+                throwable
+                    .toBitwardenError()
+                    .parseErrorBodyOrNull<VerificationOtpResponseJson.Invalid>(
+                        code = NetworkErrorCode.BAD_REQUEST,
+                        json = json,
+                    )
+                    ?: throw throwable
+            }
 
     override suspend fun resetPassword(body: ResetPasswordRequestJson): Result<Unit> =
         if (body.currentPasswordHash == null) {

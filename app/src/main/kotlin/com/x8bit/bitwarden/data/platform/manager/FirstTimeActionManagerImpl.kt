@@ -4,6 +4,7 @@ import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -25,12 +26,14 @@ import javax.inject.Inject
 /**
  * Implementation of [FirstTimeActionManager]
  */
+@Suppress("TooManyFunctions")
 class FirstTimeActionManagerImpl @Inject constructor(
     dispatcherManager: DispatcherManager,
     private val authDiskSource: AuthDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
     private val vaultDiskSource: VaultDiskSource,
     private val autofillEnabledManager: AutofillEnabledManager,
+    private val thirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
 ) : FirstTimeActionManager {
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
@@ -78,11 +81,12 @@ class FirstTimeActionManagerImpl @Inject constructor(
             .activeUserIdChangesFlow
             .filterNotNull()
             .flatMapLatest {
-                // Can be expanded to support multiple autofill settings
-                getShowAutofillSettingBadgeFlowInternal(userId = it)
-                    .map { showAutofillBadge ->
-                        listOfNotNull(showAutofillBadge)
-                    }
+                combine(
+                    getShowAutofillSettingBadgeFlowInternal(userId = it),
+                    getShowBrowserAutofillSettingBadgeFlowInternal(userId = it),
+                ) { showAutofillBadge, showBrowserAutofillBadge ->
+                    listOf(showAutofillBadge, showBrowserAutofillBadge)
+                }
                     .map { list ->
                         list.count { showBadge -> showBadge }
                     }
@@ -124,6 +128,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
                         settingsDiskSource.getShowUnlockSettingBadgeFlow(userId = activeUserId),
                         getShowAutofillSettingBadgeFlowInternal(userId = activeUserId),
                         getShowImportLoginsSettingBadgeFlowInternal(userId = activeUserId),
+                        getShowBrowserAutofillSettingBadgeFlowInternal(userId = activeUserId),
                     ),
                 ) {
                     FirstTimeState(
@@ -131,19 +136,11 @@ class FirstTimeActionManagerImpl @Inject constructor(
                         showSetupUnlockCard = it[1],
                         showSetupAutofillCard = it[2],
                         showImportLoginsCardInSettings = it[3],
+                        showSetupBrowserAutofillCard = it[4],
                     )
                 }
             }
-            .onStart {
-                emit(
-                    FirstTimeState(
-                        showImportLoginsCard = null,
-                        showSetupUnlockCard = null,
-                        showSetupAutofillCard = null,
-                        showImportLoginsCardInSettings = null,
-                    ),
-                )
-            }
+            .onStart { emit(FirstTimeState()) }
             .distinctUntilChanged()
 
     override val shouldShowAddLoginCoachMarkFlow: Flow<Boolean>
@@ -176,18 +173,23 @@ class FirstTimeActionManagerImpl @Inject constructor(
                         showSetupAutofillCard = getShowAutofillSettingBadgeInternal(it),
                         showImportLoginsCardInSettings = settingsDiskSource
                             .getShowImportLoginsSettingBadge(it),
+                        showSetupBrowserAutofillCard = settingsDiskSource
+                            .getShowBrowserAutofillSettingBadge(it),
                     )
                 }
-                ?: FirstTimeState(
-                    showImportLoginsCard = null,
-                    showSetupUnlockCard = null,
-                    showSetupAutofillCard = null,
-                    showImportLoginsCardInSettings = null,
-                )
+                ?: FirstTimeState()
 
     override fun storeShowUnlockSettingBadge(showBadge: Boolean) {
         val activeUserId = authDiskSource.userState?.activeUserId ?: return
         settingsDiskSource.storeShowUnlockSettingBadge(
+            userId = activeUserId,
+            showBadge = showBadge,
+        )
+    }
+
+    override fun storeShowBrowserAutofillSettingBadge(showBadge: Boolean) {
+        val activeUserId = authDiskSource.userState?.activeUserId ?: return
+        settingsDiskSource.storeShowBrowserAutofillSettingBadge(
             userId = activeUserId,
             showBadge = showBadge,
         )
@@ -256,6 +258,19 @@ class FirstTimeActionManagerImpl @Inject constructor(
                 showImportLogins ?: false && ciphers.isEmpty()
             }
     }
+
+    /**
+     * Internal implementation to get a flow of the showBrowserAutofill value which takes
+     * into account if autofill and if browser autofill is already enabled.
+     */
+    private fun getShowBrowserAutofillSettingBadgeFlowInternal(userId: String): Flow<Boolean> =
+        combine(
+            settingsDiskSource.getShowBrowserAutofillSettingBadgeFlow(userId = userId),
+            autofillEnabledManager.isAutofillEnabledStateFlow,
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatusFlow,
+        ) { showBadge, autofillEnabled, status ->
+            showBadge ?: false && autofillEnabled && status.isAnyIsAvailableAndDisabled
+        }
 
     /**
      * Internal implementation to get a flow of the showAutofill value which takes

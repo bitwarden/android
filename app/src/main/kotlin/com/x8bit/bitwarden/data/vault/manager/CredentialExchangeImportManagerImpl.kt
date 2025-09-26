@@ -33,29 +33,31 @@ class CredentialExchangeImportManagerImpl(
                 // appropriate result.
                 return ImportCxfPayloadResult.NoItems
             }
-            ciphersService.importCiphers(
-                request = ImportCiphersJsonRequest(
-                    ciphers = cipherList.map {
-                        it.toEncryptedNetworkCipher(
-                            encryptedFor = userId,
-                        )
-                    },
-                    folders = emptyList(),
-                    folderRelationships = emptyMap(),
-                ),
-            )
-        }
-        .flatMap { importCiphersResponseJson ->
-            when (importCiphersResponseJson) {
-                is ImportCiphersResponseJson.Invalid -> {
-                    ImportCredentialsUnknownErrorException().asFailure()
-                }
+            ciphersService
+                .importCiphers(
+                    request = ImportCiphersJsonRequest(
+                        ciphers = cipherList.map {
+                            it.toEncryptedNetworkCipher(
+                                encryptedFor = userId,
+                            )
+                        },
+                        folders = emptyList(),
+                        folderRelationships = emptyList(),
+                    ),
+                )
+                .flatMap { importCiphersResponseJson ->
+                    when (importCiphersResponseJson) {
+                        is ImportCiphersResponseJson.Invalid -> {
+                            ImportCredentialsUnknownErrorException().asFailure()
+                        }
 
-                ImportCiphersResponseJson.Success -> {
-                    ImportCxfPayloadResult.Success
-                        .asSuccess()
+                        ImportCiphersResponseJson.Success -> {
+                            ImportCxfPayloadResult
+                                .Success(itemCount = cipherList.size)
+                                .asSuccess()
+                        }
+                    }
                 }
-            }
         }
         .fold(
             onSuccess = { it },

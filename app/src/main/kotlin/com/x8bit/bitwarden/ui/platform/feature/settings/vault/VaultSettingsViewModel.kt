@@ -1,9 +1,11 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -22,6 +24,7 @@ import javax.inject.Inject
 class VaultSettingsViewModel @Inject constructor(
     snackbarRelayManager: SnackbarRelayManager,
     private val firstTimeActionManager: FirstTimeActionManager,
+    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultSettingsState, VaultSettingsEvent, VaultSettingsAction>(
     initialState = run {
         val firstTimeState = firstTimeActionManager.currentOrDefaultUserFirstTimeState
@@ -106,7 +109,11 @@ class VaultSettingsViewModel @Inject constructor(
     }
 
     private fun handleImportItemsClicked() {
-        sendEvent(VaultSettingsEvent.NavigateToImportVault)
+        if (featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport)) {
+            sendEvent(VaultSettingsEvent.NavigateToImportItems)
+        } else {
+            sendEvent(VaultSettingsEvent.NavigateToImportVault)
+        }
     }
 }
 
@@ -130,6 +137,11 @@ sealed class VaultSettingsEvent {
      * Navigate to the import vault URL.
      */
     data object NavigateToImportVault : VaultSettingsEvent()
+
+    /**
+     * Navigate to the import vault URL.
+     */
+    data object NavigateToImportItems : VaultSettingsEvent()
 
     /**
      * Navigate to the Export Vault screen.

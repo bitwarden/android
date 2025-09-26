@@ -44,6 +44,7 @@ fun VaultAddEditState.ViewState.Content.toCipherView(): CipherView =
         creationDate = common.originalCipher?.creationDate ?: Instant.now(),
         deletedDate = common.originalCipher?.deletedDate,
         revisionDate = common.originalCipher?.revisionDate ?: Instant.now(),
+        archivedDate = common.originalCipher?.archivedDate,
 
         // Type specific section
         type = type.toCipherType(),

@@ -5,8 +5,9 @@ import com.bitwarden.core.data.manager.realtime.RealtimeManager
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.DownloadService
-import com.bitwarden.network.service.SyncService
+import com.bitwarden.network.service.FolderService
 import com.bitwarden.network.service.SendsService
+import com.bitwarden.network.service.SyncService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
@@ -24,6 +25,8 @@ import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManager
 import com.x8bit.bitwarden.data.vault.manager.CredentialExchangeImportManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.FileManagerImpl
+import com.x8bit.bitwarden.data.vault.manager.FolderManager
+import com.x8bit.bitwarden.data.vault.manager.FolderManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.SendManager
 import com.x8bit.bitwarden.data.vault.manager.SendManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
@@ -57,6 +60,8 @@ object VaultManagerModule {
         fileManager: FileManager,
         clock: Clock,
         reviewPromptManager: ReviewPromptManager,
+        dispatcherManager: DispatcherManager,
+        pushManager: PushManager,
     ): CipherManager = CipherManagerImpl(
         fileManager = fileManager,
         authDiskSource = authDiskSource,
@@ -65,6 +70,26 @@ object VaultManagerModule {
         vaultSdkSource = vaultSdkSource,
         clock = clock,
         reviewPromptManager = reviewPromptManager,
+        dispatcherManager = dispatcherManager,
+        pushManager = pushManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideFolderManager(
+        folderService: FolderService,
+        vaultDiskSource: VaultDiskSource,
+        vaultSdkSource: VaultSdkSource,
+        authDiskSource: AuthDiskSource,
+        dispatcherManager: DispatcherManager,
+        pushManager: PushManager,
+    ): FolderManager = FolderManagerImpl(
+        authDiskSource = authDiskSource,
+        folderService = folderService,
+        vaultDiskSource = vaultDiskSource,
+        vaultSdkSource = vaultSdkSource,
+        dispatcherManager = dispatcherManager,
+        pushManager = pushManager,
     )
 
     @Provides

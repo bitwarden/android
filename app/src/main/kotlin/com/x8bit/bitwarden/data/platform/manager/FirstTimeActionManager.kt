@@ -65,6 +65,12 @@ interface FirstTimeActionManager {
 
     /**
      * Stores the given value for whether or not the active user has signalled they want to
+     * enable the browser autofill integration later, during onboarding.
+     */
+    fun storeShowBrowserAutofillSettingBadge(showBadge: Boolean)
+
+    /**
+     * Stores the given value for whether or not the active user has signalled they want to
      * enable autofill later, during onboarding.
      */
     fun storeShowAutoFillSettingBadge(showBadge: Boolean)
