@@ -45,6 +45,7 @@ class AutoFillViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
             val userId = requireNotNull(authRepository.userStateFlow.value).activeUserId
+            val firstTimeState = firstTimeActionManager.currentOrDefaultUserFirstTimeState
             AutoFillState(
                 isAskToAddLoginEnabled = !settingsRepository.isAutofillSavePromptDisabled,
                 isAccessibilityAutofillEnabled = settingsRepository
@@ -62,8 +63,8 @@ class AutoFillViewModel @Inject constructor(
                     Build.VERSION_CODES.UPSIDE_DOWN_CAKE,
                 ),
                 defaultUriMatchType = settingsRepository.defaultUriMatchType,
-                showAutofillActionCard = false,
-                showBrowserAutofillActionCard = false,
+                showAutofillActionCard = firstTimeState.showSetupAutofillCard,
+                showBrowserAutofillActionCard = firstTimeState.showSetupBrowserAutofillCard,
                 activeUserId = userId,
                 browserAutofillSettingsOptions = browserThirdPartyAutofillEnabledManager
                     .browserThirdPartyAutofillStatus
@@ -132,6 +133,7 @@ class AutoFillViewModel @Inject constructor(
         AutoFillAction.AboutPrivilegedAppsClick -> handleAboutPrivilegedAppsClick()
         AutoFillAction.PrivilegedAppsClick -> handlePrivilegedAppsClick()
         AutoFillAction.LearnMoreClick -> handleLearnMoreClick()
+        AutoFillAction.HelpCardClick -> handleHelpCardClick()
     }
 
     private fun handlePrivilegedAppsClick() {
@@ -140,6 +142,10 @@ class AutoFillViewModel @Inject constructor(
 
     private fun handleLearnMoreClick() {
         sendEvent(AutoFillEvent.NavigateToLearnMore)
+    }
+
+    private fun handleHelpCardClick() {
+        sendEvent(AutoFillEvent.NavigateToAutofillHelp)
     }
 
     private fun handleInternalAction(action: AutoFillAction.Internal) {
@@ -301,6 +307,16 @@ data class AutoFillState(
     val browserAutofillSettingsOptions: ImmutableList<BrowserAutofillSettingsOption>,
 ) : Parcelable {
     /**
+     * Indicates which call-to-action that should be displayed.
+     */
+    val ctaState: CtaState
+        get() = when {
+            showAutofillActionCard -> CtaState.AUTOFILL
+            showBrowserAutofillActionCard -> CtaState.BROWSER_AUTOFILL
+            else -> CtaState.DEFAULT
+        }
+
+    /**
      * Whether or not the dropdown controlling the [autofillStyle] value is displayed.
      */
     val showInlineAutofill: Boolean get() = isAutoFillServicesEnabled && showInlineAutofillOption
@@ -315,6 +331,15 @@ data class AutoFillState(
      */
     val showBrowserSettingOptions: Boolean
         get() = isAutoFillServicesEnabled && browserAutofillSettingsOptions.isNotEmpty()
+}
+
+/**
+ * A representation of which call-to-action that should be displayed.
+ */
+enum class CtaState {
+    AUTOFILL,
+    BROWSER_AUTOFILL,
+    DEFAULT,
 }
 
 /**
@@ -392,6 +417,11 @@ sealed class AutoFillEvent {
      * Navigate to the learn more.
      */
     data object NavigateToLearnMore : AutoFillEvent()
+
+    /**
+     * Navigate to the autofill help page.
+     */
+    data object NavigateToAutofillHelp : AutoFillEvent()
 }
 
 /**
@@ -494,6 +524,11 @@ sealed class AutoFillAction {
     data object LearnMoreClick : AutoFillAction()
 
     /**
+     * User has clicked the help CTA.
+     */
+    data object HelpCardClick : AutoFillAction()
+
+    /**
      * Internal actions.
      */
     sealed class Internal : AutoFillAction() {
@@ -512,7 +547,7 @@ sealed class AutoFillAction {
         ) : Internal()
 
         /**
-         * An update for changes in the [showAutofillActionCard] value from the settings repository.
+         * An update for changes in the [firstTimeState] value from the settings repository.
          */
         data class UpdateShowAutofillActionCard(val firstTimeState: FirstTimeState) : Internal()
 

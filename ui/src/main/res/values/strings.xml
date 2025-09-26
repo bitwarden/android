@@ -1123,4 +1123,6 @@ Do you want to switch to this account?</string>
     <string name="select_account">Select account</string>
     <string name="import_restricted_unable_to_import_credit_cards">Import restricted, unable to import cards from this account.</string>
     <string name="verify_your_master_password">Verify your master password</string>
+    <string name="having_trouble_with_autofill">Having trouble with autofill?</string>
+    <string name="access_help_and_troubleshooting_documentation_here">Access help and troubleshooting documentation here</string>
 </resources>
