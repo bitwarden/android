@@ -99,7 +99,9 @@ class VaultSdkSourceImpl(
                     is DeriveKeyConnectorException.WrongPassword -> {
                         DeriveKeyConnectorResult.WrongPasswordError
                     }
-                    else -> DeriveKeyConnectorResult.Error(error = ex)
+                    is DeriveKeyConnectorException.Crypto -> {
+                        DeriveKeyConnectorResult.Error(error = ex)
+                    }
                 }
             } catch (exception: BitwardenException) {
                 DeriveKeyConnectorResult.Error(error = exception)
