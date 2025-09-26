@@ -13,10 +13,9 @@ import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -33,7 +32,6 @@ private const val KEY_STATE = "state"
 class ImportItemsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val vaultRepository: VaultRepository,
-    private val snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<ImportItemsState, ImportItemsEvent, ImportItemsAction>(
     initialState = savedStateHandle[KEY_STATE] ?: ImportItemsState(),
 ) {
@@ -52,14 +50,6 @@ class ImportItemsViewModel @Inject constructor(
                 handleImportCredentialSelectionReceive(action)
             }
 
-            ImportItemsAction.ReturnToVaultClick -> {
-                handleReturnToVaultClick()
-            }
-
-            is ImportItemsAction.Internal.ImportCredentialsResultReceive -> {
-                handleImportCredentialsResultReceive(action)
-            }
-
             ImportItemsAction.ImportFromComputerClick -> {
                 handleImportFromComputerClick()
             }
@@ -67,11 +57,59 @@ class ImportItemsViewModel @Inject constructor(
             ImportItemsAction.DismissDialog -> {
                 handleDismissDialog()
             }
+
+            ImportItemsAction.SyncFailedTryAgainClick -> {
+                handleSyncFailedTryAgainClick()
+            }
+
+            is ImportItemsAction.Internal -> {
+                handleInternalAction(action)
+            }
         }
     }
 
-    private fun handleReturnToVaultClick() {
-        sendEvent(ImportItemsEvent.NavigateToVault)
+    private fun handleInternalAction(action: ImportItemsAction.Internal) {
+        when (action) {
+            is ImportItemsAction.Internal.ImportCredentialsResultReceive -> {
+                handleImportCredentialsResultReceive(action)
+            }
+
+            is ImportItemsAction.Internal.RetrySyncResultReceive -> {
+                handleRetrySyncResultReceive(action)
+            }
+        }
+    }
+
+    private fun handleRetrySyncResultReceive(
+        action: ImportItemsAction.Internal.RetrySyncResultReceive,
+    ) {
+        clearDialogs()
+        when (action.result) {
+            is SyncVaultDataResult.Success -> {
+                sendEvent(
+                    ImportItemsEvent.ShowBasicSnackbar(
+                        data = BitwardenSnackbarData(
+                            message = BitwardenString.syncing_complete.asText(),
+                        ),
+                    ),
+                )
+            }
+
+            is SyncVaultDataResult.Error -> {
+                showSyncFailedSnackbar()
+            }
+        }
+    }
+
+    private fun handleSyncFailedTryAgainClick() {
+        showLoadingDialog(message = BitwardenString.syncing.asText())
+        viewModelScope.launch {
+            sendAction(
+                ImportItemsAction.Internal.RetrySyncResultReceive(
+                    result = vaultRepository.syncForResult(),
+                ),
+            )
+        }
     }
 
     private fun handleBackClick() {
@@ -118,7 +156,7 @@ class ImportItemsViewModel @Inject constructor(
             }
 
             is ImportCredentialsSelectionResult.Success -> {
-                updateImportProgress(BitwardenString.saving_items.asText())
+                showLoadingDialog(BitwardenString.saving_items.asText())
                 viewModelScope.launch {
                     sendAction(
                         ImportItemsAction.Internal.ImportCredentialsResultReceive(
@@ -150,19 +188,19 @@ class ImportItemsViewModel @Inject constructor(
 
             is ImportCredentialsResult.Success -> {
                 clearDialogs()
-                snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(
-                        messageHeader = BitwardenString.import_successful.asText(),
-                        message = BitwardenPlurals
-                            .x_items_have_been_imported_to_your_vault
-                            .asPluralsText(
-                                quantity = action.result.itemCount,
-                                args = arrayOf(action.result.itemCount),
-                            ),
+                sendEvent(
+                    ImportItemsEvent.ShowBasicSnackbar(
+                        data = BitwardenSnackbarData(
+                            messageHeader = BitwardenString.import_successful.asText(),
+                            message = BitwardenPlurals
+                                .x_items_have_been_imported_to_your_vault
+                                .asPluralsText(
+                                    quantity = action.result.itemCount,
+                                    args = arrayOf(action.result.itemCount),
+                                ),
+                        ),
                     ),
-                    relay = SnackbarRelay.LOGINS_IMPORTED,
                 )
-                sendEvent(ImportItemsEvent.NavigateToVault)
             }
 
             ImportCredentialsResult.NoItems -> {
@@ -175,18 +213,23 @@ class ImportItemsViewModel @Inject constructor(
 
             is ImportCredentialsResult.SyncFailed -> {
                 clearDialogs()
-                snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(
-                        messageHeader = BitwardenString.vault_sync_failed.asText(),
-                        message = BitwardenString
-                            .your_items_have_been_successfully_imported_but_could_not_sync_vault
-                            .asText(),
-                        actionLabel = BitwardenString.try_again.asText(),
-                    ),
-                    relay = SnackbarRelay.VAULT_SYNC_FAILED,
-                )
+                showSyncFailedSnackbar()
             }
         }
+    }
+
+    private fun showSyncFailedSnackbar() {
+        sendEvent(
+            ImportItemsEvent.ShowSyncFailedSnackbar(
+                data = BitwardenSnackbarData(
+                    messageHeader = BitwardenString.vault_sync_failed.asText(),
+                    message = BitwardenString
+                        .your_items_have_been_successfully_imported_but_could_not_sync_vault
+                        .asText(),
+                    actionLabel = BitwardenString.try_again.asText(),
+                ),
+            ),
+        )
     }
 
     private fun clearDialogs() {
@@ -209,7 +252,7 @@ class ImportItemsViewModel @Inject constructor(
         }
     }
 
-    private fun updateImportProgress(message: Text) {
+    private fun showLoadingDialog(message: Text) {
         mutableStateFlow.update {
             it.copy(
                 dialog = ImportItemsState.DialogState.Loading(message = message),
@@ -273,11 +316,6 @@ sealed class ImportItemsAction {
     ) : ImportItemsAction()
 
     /**
-     * User clicked the Return to vault button.
-     */
-    data object ReturnToVaultClick : ImportItemsAction()
-
-    /**
      * User clicked the back button.
      */
     data object BackClick : ImportItemsAction()
@@ -288,13 +326,27 @@ sealed class ImportItemsAction {
     data object DismissDialog : ImportItemsAction()
 
     /**
+     * User clicked the try again button.
+     */
+    data object SyncFailedTryAgainClick : ImportItemsAction()
+
+    /**
      * Internal actions that the [ImportItemsViewModel] may itself send.
      */
     sealed class Internal : ImportItemsAction() {
         /**
          * Import CXF result received.
          */
-        data class ImportCredentialsResultReceive(val result: ImportCredentialsResult) : Internal()
+        data class ImportCredentialsResultReceive(
+            val result: ImportCredentialsResult,
+        ) : Internal()
+
+        /**
+         * Retry sync result received.
+         */
+        data class RetrySyncResultReceive(
+            val result: SyncVaultDataResult,
+        ) : Internal()
     }
 }
 
@@ -314,16 +366,25 @@ sealed class ImportItemsEvent {
     data object NavigateToImportFromComputer : ImportItemsEvent()
 
     /**
-     * Navigate to the vault.
-     */
-    data object NavigateToVault : ImportItemsEvent()
-
-    /**
      * Show registered import sources.
      *
      * @property credentialTypes The credential types to request.
      */
     data class ShowRegisteredImportSources(
         val credentialTypes: List<String>,
+    ) : ImportItemsEvent(), BackgroundEvent
+
+    /**
+     * Show a basic snackbar.
+     */
+    data class ShowBasicSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : ImportItemsEvent(), BackgroundEvent
+
+    /**
+     * Show a snackbar indicating that the sync failed, with an option to retry.
+     */
+    data class ShowSyncFailedSnackbar(
+        val data: BitwardenSnackbarData,
     ) : ImportItemsEvent(), BackgroundEvent
 }

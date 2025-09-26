@@ -84,22 +84,22 @@ fun DebugMenuScreen(
             modifier = Modifier.verticalScroll(rememberScrollState()),
         ) {
             Spacer(modifier = Modifier.height(height = 12.dp))
-            FeatureFlagContent(
-                featureFlagMap = state.featureFlags,
-                onValueChange = remember(viewModel) {
-                    { key, value ->
-                        viewModel.trySendAction(DebugMenuAction.UpdateFeatureFlag(key, value))
-                    }
-                },
-                onResetValues = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues)
-                    }
-                },
-            )
-            Spacer(Modifier.height(height = 16.dp))
-            BitwardenHorizontalDivider()
-            Spacer(Modifier.height(height = 16.dp))
+            if (state.featureFlags.isNotEmpty()) {
+                FeatureFlagContent(
+                    featureFlagMap = state.featureFlags,
+                    onValueChange = remember(viewModel) {
+                        { key, value ->
+                            viewModel.trySendAction(DebugMenuAction.UpdateFeatureFlag(key, value))
+                        }
+                    },
+                    onResetValues = remember(viewModel) {
+                        { viewModel.trySendAction(DebugMenuAction.ResetFeatureFlagValues) }
+                    },
+                )
+                Spacer(Modifier.height(height = 16.dp))
+                BitwardenHorizontalDivider()
+                Spacer(Modifier.height(height = 16.dp))
+            }
             OnboardingOverrideContent(
                 onStartOnboarding = remember(viewModel) {
                     {

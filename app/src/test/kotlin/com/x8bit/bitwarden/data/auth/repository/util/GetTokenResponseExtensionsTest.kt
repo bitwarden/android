@@ -128,6 +128,7 @@ private val USER_DECRYPTION_OPTIONS = UserDecryptionOptionsJson(
         hasManageResetPasswordPermission = true,
     ),
     keyConnectorUserDecryptionOptions = null,
+    masterPasswordUnlock = null,
 )
 private val PROFILE_1 = AccountJson.Profile(
     userId = USER_ID_1,

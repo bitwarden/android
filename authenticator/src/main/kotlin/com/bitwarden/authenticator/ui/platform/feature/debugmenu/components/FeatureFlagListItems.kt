@@ -17,11 +17,11 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     onValueChange: (key: FlagKey<T>, value: T) -> Unit,
     modifier: Modifier = Modifier,
 ) = when (val flagKey = this) {
-    FlagKey.DummyBoolean,
     is FlagKey.DummyInt,
     FlagKey.DummyString,
         -> Unit
 
+    FlagKey.DummyBoolean,
     FlagKey.BitwardenAuthenticationEnabled,
     FlagKey.CipherKeyEncryption,
     FlagKey.CredentialExchangeProtocolExport,

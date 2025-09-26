@@ -18,6 +18,7 @@ data class ImportItemsHandler(
     val onDismissDialog: () -> Unit,
     val onImportFromAnotherAppClick: () -> Unit,
     val onImportFromComputerClick: () -> Unit,
+    val onSyncFailedTryAgainClick: () -> Unit,
 ) {
 
     @Suppress("UndocumentedPublicClass")
@@ -30,14 +31,17 @@ data class ImportItemsHandler(
             onNavigateBack = {
                 viewModel.trySendAction(ImportItemsAction.BackClick)
             },
+            onDismissDialog = {
+                viewModel.trySendAction(ImportItemsAction.DismissDialog)
+            },
             onImportFromAnotherAppClick = {
                 viewModel.trySendAction(ImportItemsAction.ImportFromAnotherAppClick)
             },
             onImportFromComputerClick = {
                 viewModel.trySendAction(ImportItemsAction.ImportFromComputerClick)
             },
-            onDismissDialog = {
-                viewModel.trySendAction(ImportItemsAction.DismissDialog)
+            onSyncFailedTryAgainClick = {
+                viewModel.trySendAction(ImportItemsAction.SyncFailedTryAgainClick)
             },
         )
     }

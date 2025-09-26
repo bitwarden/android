@@ -9,6 +9,7 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -34,6 +35,7 @@ class SetupUnlockViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
     private val firstTimeActionManager: FirstTimeActionManager,
+    private val browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
 ) : BaseViewModel<SetupUnlockState, SetupUnlockEvent, SetupUnlockAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -203,10 +205,14 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun updateOnboardingStatusToNextStep() {
-        val nextStep = if (settingsRepository.isAutofillEnabledStateFlow.value) {
-            OnboardingStatus.FINAL_STEP
-        } else {
-            OnboardingStatus.AUTOFILL_SETUP
+        val isAutofillEnabled = settingsRepository.isAutofillEnabledStateFlow.value
+        val isBrowserAutofillUnconfigured = browserThirdPartyAutofillEnabledManager
+            .browserThirdPartyAutofillStatus
+            .isAnyIsAvailableAndDisabled
+        val nextStep = when {
+            !isAutofillEnabled -> OnboardingStatus.AUTOFILL_SETUP
+            isBrowserAutofillUnconfigured -> OnboardingStatus.BROWSER_AUTOFILL_SETUP
+            else -> OnboardingStatus.FINAL_STEP
         }
         authRepository.setOnboardingStatus(nextStep)
     }

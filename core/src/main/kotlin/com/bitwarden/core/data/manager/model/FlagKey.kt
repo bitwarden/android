@@ -33,6 +33,7 @@ sealed class FlagKey<out T : Any> {
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
                 ForceUpdateKdfSettings,
+                CipherKeyEncryption,
             )
         }
     }

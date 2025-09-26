@@ -12,16 +12,19 @@ import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.crypto.CryptoException
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.exporters.Account
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.ClientData
+import com.bitwarden.fido.Fido2ClientException
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.Origin
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
+import com.bitwarden.fido.SilentlyDiscoverCredentialsException
 import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.AuthClient
 import com.bitwarden.sdk.BitwardenException
@@ -44,6 +47,7 @@ import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
+import com.bitwarden.vault.DecryptException
 import com.bitwarden.vault.EncryptionContext
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
@@ -502,7 +506,9 @@ class VaultSdkSourceTest {
             val userId = "userId"
             val mockInitCryptoRequest = mockk<InitUserCryptoRequest>()
             val expectedErrorMessage = "Whoopsy"
-            val expectedException = BitwardenException.E(message = expectedErrorMessage)
+            val expectedException = BitwardenException.Crypto(
+                CryptoException.InvalidKey(expectedErrorMessage),
+            )
             coEvery {
                 clientCrypto.initializeUserCrypto(
                     req = mockInitCryptoRequest,
@@ -515,7 +521,7 @@ class VaultSdkSourceTest {
             assertEquals(
                 InitializeCryptoResult
                     .AuthenticationError(
-                        message = expectedErrorMessage,
+                        message = expectedException.message,
                         error = expectedException,
                     )
                     .asSuccess(),
@@ -588,7 +594,9 @@ class VaultSdkSourceTest {
             val userId = "userId"
             val mockInitCryptoRequest = mockk<InitOrgCryptoRequest>()
             val expectedErrorMessage = "Whoopsy2"
-            val expectedException = BitwardenException.E(message = expectedErrorMessage)
+            val expectedException = BitwardenException.Crypto(
+                CryptoException.InvalidKey(expectedErrorMessage),
+            )
             coEvery {
                 clientCrypto.initializeOrgCrypto(
                     req = mockInitCryptoRequest,
@@ -601,7 +609,7 @@ class VaultSdkSourceTest {
             assertEquals(
                 InitializeCryptoResult
                     .AuthenticationError(
-                        message = expectedErrorMessage,
+                        message = expectedException.message,
                         error = expectedException,
                     )
                     .asSuccess(),
@@ -1082,7 +1090,7 @@ class VaultSdkSourceTest {
             newKey = newKey,
         )
         coEvery {
-            clientCrypto.updatePassword(
+            clientCrypto.makeUpdatePassword(
                 newPassword = newPassword,
             )
         } returns updatePasswordResponse
@@ -1233,7 +1241,7 @@ class VaultSdkSourceTest {
                     any(),
                     any(),
                 )
-            } throws BitwardenException.E("mockException")
+            } throws BitwardenException.Fido2Client(mockk<Fido2ClientException>())
 
             val result = vaultSdkSource.registerFido2Credential(
                 DEFAULT_FIDO_2_REGISTER_CREDENTIAL_REQUEST,
@@ -1278,7 +1286,7 @@ class VaultSdkSourceTest {
                     any(),
                     any(),
                 )
-            } throws BitwardenException.E("mockException")
+            } throws BitwardenException.Fido2Client(mockk<Fido2ClientException>("mockException"))
 
             val result = vaultSdkSource
                 .authenticateFido2Credential(
@@ -1324,7 +1332,7 @@ class VaultSdkSourceTest {
             val mockCipherView = createMockCipherView(number = 1)
             coEvery {
                 clientFido2.decryptFido2AutofillCredentials(mockCipherView)
-            } throws BitwardenException.E("mockException")
+            } throws BitwardenException.Fido2Client(mockk<Fido2ClientException>("mockException"))
 
             val result = vaultSdkSource.decryptFido2CredentialAutofillViews(
                 userId = "mockUserId",
@@ -1385,7 +1393,9 @@ class VaultSdkSourceTest {
                         credentialStore = fido2CredentialStore,
                     )
                     .silentlyDiscoverCredentials(relyingPartyId)
-            } throws BitwardenException.E("mockException")
+            } throws BitwardenException.SilentlyDiscoverCredentials(
+                mockk<SilentlyDiscoverCredentialsException>("mockException"),
+            )
 
             val result = vaultSdkSource.silentlyDiscoverCredentials(
                 userId = userId,
@@ -1425,7 +1435,7 @@ class VaultSdkSourceTest {
                 clientVault.ciphers().decryptListWithFailures(
                     ciphers = mockCipherList,
                 )
-            } throws BitwardenException.E("mockException")
+            } throws BitwardenException.Decrypt(mockk<DecryptException>("mockException"))
             val result = vaultSdkSource.decryptCipherListWithFailures(
                 userId = userId,
                 cipherList = mockCipherList,

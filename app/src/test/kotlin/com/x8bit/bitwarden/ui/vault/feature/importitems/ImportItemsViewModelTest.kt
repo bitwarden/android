@@ -11,17 +11,14 @@ import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -29,9 +26,6 @@ import org.junit.jupiter.api.Test
 class ImportItemsViewModelTest : BaseViewModelTest() {
 
     private val vaultRepository = mockk<VaultRepository>()
-    private val snackbarRelayManager = mockk<SnackbarRelayManager> {
-        every { sendSnackbarData(any(), any()) } just runs
-    }
 
     @Test
     fun `BackClick sends NavigateBack event`() = runTest {
@@ -55,7 +49,7 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
     fun `DismissDialog updates state`() = runTest {
         val viewModel = createViewModel()
         viewModel.trySendAction(ImportItemsAction.DismissDialog)
-        assertEquals(ImportItemsState(dialog = null), viewModel.stateFlow.value)
+        assertEquals(ImportItemsState(), viewModel.stateFlow.value)
     }
 
     @Test
@@ -158,14 +152,16 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `ReturnToVaultClick sends NavigateToVault event`() = runTest {
+    fun `SyncFailedTryAgainClick should update state and trigger sync`() = runTest {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ImportItemsAction.ReturnToVaultClick)
-            assertEquals(
-                ImportItemsEvent.NavigateToVault,
-                awaitItem(),
-            )
+        coEvery {
+            vaultRepository.syncForResult()
+        } returns SyncVaultDataResult.Success(itemsAvailable = true)
+
+        viewModel.trySendAction(ImportItemsAction.SyncFailedTryAgainClick)
+
+        coVerify(exactly = 1) {
+            vaultRepository.syncForResult()
         }
     }
 
@@ -193,7 +189,7 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `Internal ImportCredentialsResultReceive with Success result should clear dialogs, show snackbar, and navigate to vault`() =
+    fun `Internal ImportCredentialsResultReceive with Success result should clear dialogs, and show snackbar`() =
         runTest {
             val viewModel = createViewModel()
 
@@ -203,25 +199,21 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            val expectedState = ImportItemsState(dialog = null)
+            val expectedState = ImportItemsState()
             assertEquals(expectedState, viewModel.stateFlow.value)
-            coVerify(exactly = 1) {
-                snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(
-                        messageHeader = BitwardenString.import_successful.asText(),
-                        message = BitwardenPlurals
-                            .x_items_have_been_imported_to_your_vault
-                            .asPluralsText(
-                                quantity = 2,
-                                args = arrayOf(2),
-                            ),
-                    ),
-                    relay = SnackbarRelay.LOGINS_IMPORTED,
-                )
-            }
             viewModel.eventFlow.test {
                 assertEquals(
-                    ImportItemsEvent.NavigateToVault,
+                    ImportItemsEvent.ShowBasicSnackbar(
+                        BitwardenSnackbarData(
+                            messageHeader = BitwardenString.import_successful.asText(),
+                            message = BitwardenPlurals
+                                .x_items_have_been_imported_to_your_vault
+                                .asPluralsText(
+                                    quantity = 2,
+                                    args = arrayOf(2),
+                                ),
+                        ),
+                    ),
                     awaitItem(),
                 )
             }
@@ -249,7 +241,7 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `Internal ImportCxfResultReceive and SyncFailed should clear dialogs, show snackbar, and navigate to vault`() =
+    fun `Internal ImportCxfResultReceive and SyncFailed should clear dialogs and show snackbar`() =
         runTest {
             val viewModel = createViewModel()
 
@@ -261,18 +253,80 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            val expectedState = ImportItemsState(dialog = null)
+            val expectedState = ImportItemsState()
             assertEquals(expectedState, viewModel.stateFlow.value)
-            coVerify(exactly = 1) {
-                snackbarRelayManager.sendSnackbarData(
-                    data = BitwardenSnackbarData(
-                        messageHeader = BitwardenString.vault_sync_failed.asText(),
-                        message = BitwardenString
-                            .your_items_have_been_successfully_imported_but_could_not_sync_vault
-                            .asText(),
-                        actionLabel = BitwardenString.try_again.asText(),
+            viewModel.eventFlow.test {
+                assertEquals(
+                    ImportItemsEvent.ShowSyncFailedSnackbar(
+                        data = BitwardenSnackbarData(
+                            messageHeader = BitwardenString.vault_sync_failed.asText(),
+                            message = BitwardenString
+                                .your_items_have_been_successfully_imported_but_could_not_sync_vault
+                                .asText(),
+                            actionLabel = BitwardenString.try_again.asText(),
+                        ),
                     ),
-                    relay = SnackbarRelay.VAULT_SYNC_FAILED,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Internal RetrySyncResultReceive with Success should clear dialogs and display success snackbar`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                ImportItemsAction.Internal.RetrySyncResultReceive(
+                    result = SyncVaultDataResult.Success(itemsAvailable = true),
+                ),
+            )
+
+            assertEquals(
+                ImportItemsState(),
+                viewModel.stateFlow.value,
+            )
+            viewModel.eventFlow.test {
+                assertEquals(
+                    ImportItemsEvent.ShowBasicSnackbar(
+                        data = BitwardenSnackbarData(
+                            message = BitwardenString.syncing_complete.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Internal RetrySyncResultReceive with Error should clear dialogs and show SyncFailed snackbar`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                ImportItemsAction.Internal.RetrySyncResultReceive(
+                    result = SyncVaultDataResult.Error(throwable = RuntimeException("Error")),
+                ),
+            )
+
+            assertEquals(
+                ImportItemsState(),
+                viewModel.stateFlow.value,
+            )
+            viewModel.eventFlow.test {
+                assertEquals(
+                    ImportItemsEvent.ShowSyncFailedSnackbar(
+                        data = BitwardenSnackbarData(
+                            messageHeader = BitwardenString.vault_sync_failed.asText(),
+                            message = BitwardenString
+                                .your_items_have_been_successfully_imported_but_could_not_sync_vault
+                                .asText(),
+                            actionLabel = BitwardenString.try_again.asText(),
+                        ),
+                    ),
+                    awaitItem(),
                 )
             }
         }
@@ -280,6 +334,5 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
     private fun createViewModel(): ImportItemsViewModel = ImportItemsViewModel(
         vaultRepository = vaultRepository,
         savedStateHandle = SavedStateHandle(),
-        snackbarRelayManager = snackbarRelayManager,
     )
 }
