@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.ui.platform.base.BaseViewModelTest
@@ -38,6 +39,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,7 +48,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -60,13 +61,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val mockAuthRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserStateFlow
-        coEvery {
-            login(
-                email = any(),
-                password = any(),
-            )
-        } returns LoginResult.Success
-
+        coEvery { login(email = any(), password = any()) } returns LoginResult.Success
         coEvery {
             register(
                 email = any(),
@@ -77,10 +72,10 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 isMasterPasswordStrong = any(),
             )
         } returns RegisterResult.Success
-
-        coEvery {
-            setOnboardingStatus(OnboardingStatus.NOT_STARTED)
-        } just Runs
+        coEvery { setOnboardingStatus(OnboardingStatus.NOT_STARTED) } just Runs
+    }
+    private val toastManager: ToastManager = mockk {
+        every { show(messageId = any(), duration = any()) } just runs
     }
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
@@ -155,21 +150,18 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 )
             } returns RegisterResult.Success
             val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
-            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-                assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
+            viewModel.stateFlow.test {
+                assertEquals(VALID_INPUT_STATE, awaitItem())
                 viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
                 assertEquals(
                     VALID_INPUT_STATE.copy(dialog = CompleteRegistrationDialog.Loading),
-                    stateFlow.awaitItem(),
-                )
-                assertEquals(
-                    CompleteRegistrationEvent.ShowToast(
-                        BitwardenString.account_created_success.asText(),
-                    ),
-                    eventFlow.awaitItem(),
+                    awaitItem(),
                 )
                 // Make sure loading dialog is hidden:
-                assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
+                assertEquals(VALID_INPUT_STATE, awaitItem())
+            }
+            verify(exactly = 1) {
+                toastManager.show(messageId = BitwardenString.account_created_success)
             }
         }
 
@@ -224,7 +216,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
         viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
         viewModel.eventFlow.test {
-            assertTrue(awaitItem() is CompleteRegistrationEvent.ShowToast)
             expectNoEvents()
         }
         verify(exactly = 1) {
@@ -246,7 +237,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
             viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
             viewModel.eventFlow.test {
-                assertTrue(awaitItem() is CompleteRegistrationEvent.ShowToast)
                 assertEquals(
                     CompleteRegistrationEvent.NavigateToLogin(EMAIL),
                     awaitItem(),
@@ -404,13 +394,13 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `On init should show toast if from email is true`() = runTest {
+    fun `On init should show snackbar if from email is true`() = runTest {
         val viewModel = createCompleteRegistrationViewModel(
             DEFAULT_STATE.copy(fromEmail = true),
         )
         viewModel.eventFlow.test {
             assertEquals(
-                CompleteRegistrationEvent.ShowToast(BitwardenString.email_verified.asText()),
+                CompleteRegistrationEvent.ShowSnackbar(BitwardenString.email_verified.asText()),
                 awaitItem(),
             )
         }
@@ -666,6 +656,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         environmentRepository = fakeEnvironmentRepository,
         specialCircumstanceManager = specialCircumstanceManager,
         generatorRepository = generatorRepository,
+        toastManager = toastManager,
     )
 
     companion object {
