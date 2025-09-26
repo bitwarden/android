@@ -112,6 +112,7 @@ fun NavGraphBuilder.settingsGraph(
     onNavigateToPendingRequests: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
+    onNavigateToSetupBrowserAutofill: () -> Unit,
     onNavigateToFlightRecorder: () -> Unit,
     onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
@@ -152,6 +153,7 @@ fun NavGraphBuilder.settingsGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToBlockAutoFillScreen = { navController.navigateToBlockAutoFillScreen() },
             onNavigateToSetupAutofill = onNavigateToSetupAutoFillScreen,
+            onNavigateToSetupBrowserAutofill = onNavigateToSetupBrowserAutofill,
             onNavigateToAboutPrivilegedAppsScreen = onNavigateToAboutPrivilegedApps,
             onNavigateToPrivilegedAppsList = { navController.navigateToPrivilegedAppsList() },
         )

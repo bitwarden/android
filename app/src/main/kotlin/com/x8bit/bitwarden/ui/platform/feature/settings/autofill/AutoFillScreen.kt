@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -54,6 +55,7 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
@@ -78,6 +80,7 @@ fun AutoFillScreen(
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateToBlockAutoFillScreen: () -> Unit,
     onNavigateToSetupAutofill: () -> Unit,
+    onNavigateToSetupBrowserAutofill: () -> Unit,
     onNavigateToAboutPrivilegedAppsScreen: () -> Unit,
     onNavigateToPrivilegedAppsList: () -> Unit,
 ) {
@@ -105,6 +108,7 @@ fun AutoFillScreen(
             }
 
             AutoFillEvent.NavigateToSetupAutofill -> onNavigateToSetupAutofill()
+            AutoFillEvent.NavigateToSetupBrowserAutofill -> onNavigateToSetupBrowserAutofill()
             is AutoFillEvent.NavigateToBrowserAutofillSettings -> {
                 intentManager.startBrowserAutofillSettingsActivity(
                     browserPackage = event.browserPackage,
@@ -186,6 +190,29 @@ private fun AutoFillScreenContent(
                     .padding(bottom = 16.dp),
             )
         }
+        AnimatedVisibility(
+            visible = state.showBrowserAutofillActionCard,
+            label = "BrowserAutofillActionCard",
+            exit = actionCardExitAnimation(),
+        ) {
+            BitwardenActionCard(
+                cardTitle = stringResource(
+                    id = BitwardenString.turn_on_browser_autofill_integration,
+                ),
+                cardSubtitle = pluralStringResource(
+                    id = BitwardenPlurals
+                        .youre_using_a_browser_that_requires_special_permissions_for_bitwarden,
+                    count = state.browserCount,
+                ),
+                actionText = stringResource(id = BitwardenString.get_started),
+                onActionClick = autoFillHandlers.onBrowserAutofillActionCardClick,
+                onDismissClick = autoFillHandlers.onBrowserAutofillActionCardDismissClick,
+                leadingContent = { NotificationBadge(notificationCount = 1) },
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .padding(bottom = 16.dp),
+            )
+        }
         BitwardenListHeaderText(
             label = stringResource(id = BitwardenString.autofill_title),
             modifier = Modifier
@@ -227,7 +254,10 @@ private fun AutoFillScreenContent(
                 BrowserAutofillSettingsCard(
                     options = state.browserAutofillSettingsOptions,
                     onOptionClicked = autoFillHandlers.onBrowserAutofillSelected,
-                    enabled = state.isAutoFillServicesEnabled,
+                    supportingText = stringResource(
+                        id = BitwardenString
+                            .improves_login_filling_for_supported_websites_on_selected_browsers,
+                    ),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }

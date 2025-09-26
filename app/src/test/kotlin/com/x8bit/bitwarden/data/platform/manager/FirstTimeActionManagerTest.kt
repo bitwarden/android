@@ -11,6 +11,9 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutoFillData
+import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -39,6 +42,10 @@ class FirstTimeActionManagerTest {
         every { isAutofillEnabledStateFlow } returns mutableAutofillEnabledFlow
         every { isAutofillEnabled } returns false
     }
+    private val mutableThirdPartyAutofillStatusFlow = MutableStateFlow(DEFAULT_AUTOFILL_STATUS)
+    private val thirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager = mockk {
+        every { browserThirdPartyAutofillStatusFlow } returns mutableThirdPartyAutofillStatusFlow
+    }
 
     private val firstTimeActionManager = FirstTimeActionManagerImpl(
         authDiskSource = fakeAuthDiskSource,
@@ -46,11 +53,12 @@ class FirstTimeActionManagerTest {
         vaultDiskSource = vaultDiskSource,
         dispatcherManager = FakeDispatcherManager(),
         autofillEnabledManager = autofillEnabledManager,
+        thirdPartyAutofillEnabledManager = thirdPartyAutofillEnabledManager,
     )
 
     @Suppress("MaxLineLength")
     @Test
-    fun `allAutoFillSettingsBadgeCountFlow should update when saved value is changed or autofill enabled state changes`() =
+    fun `allAutofillSettingsBadgeCountFlow should update when saved value is changed or autofill enabled state changes`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             firstTimeActionManager.allAutofillSettingsBadgeCountFlow.test {
@@ -193,6 +201,20 @@ class FirstTimeActionManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = true)
         assertTrue(fakeSettingsDiskSource.getShowAutoFillSettingBadge(userId = USER_ID)!!)
+    }
+
+    @Test
+    fun `storeShowBrowserAutofillSettingBadge should store value of false to disk`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = false)
+        assertFalse(fakeSettingsDiskSource.getShowBrowserAutofillSettingBadge(userId = USER_ID)!!)
+    }
+
+    @Test
+    fun `storeShowBrowserAutofillSettingBadge should store value of true to disk`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = true)
+        assertTrue(fakeSettingsDiskSource.getShowBrowserAutofillSettingBadge(userId = USER_ID)!!)
     }
 
     @Test
@@ -432,4 +454,15 @@ private val MOCK_USER_STATE = UserStateJson(
     accounts = mapOf(
         USER_ID to MOCK_ACCOUNT,
     ),
+)
+
+private val DEFAULT_BROWSER_AUTOFILL_DATA = BrowserThirdPartyAutoFillData(
+    isAvailable = false,
+    isThirdPartyEnabled = false,
+)
+
+private val DEFAULT_AUTOFILL_STATUS = BrowserThirdPartyAutofillStatus(
+    braveStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
+    chromeStableStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
+    chromeBetaChannelStatusData = DEFAULT_BROWSER_AUTOFILL_DATA,
 )

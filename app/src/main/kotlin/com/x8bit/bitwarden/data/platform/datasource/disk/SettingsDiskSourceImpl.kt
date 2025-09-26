@@ -37,6 +37,7 @@ private const val CLEAR_CLIPBOARD_INTERVAL_KEY = "clearClipboard"
 private const val INITIAL_AUTOFILL_DIALOG_SHOWN = "addSitePromptShown"
 private const val HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY = "hasUserLoggedInOrCreatedAccount"
 private const val SHOW_AUTOFILL_SETTING_BADGE = "showAutofillSettingBadge"
+private const val SHOW_BROWSER_AUTOFILL_SETTING_BADGE = "showBrowserAutofillSettingBadge"
 private const val SHOW_UNLOCK_SETTING_BADGE = "showUnlockSettingBadge"
 private const val SHOW_IMPORT_LOGINS_SETTING_BADGE = "showImportLoginsSettingBadge"
 private const val IS_VAULT_REGISTERED_FOR_EXPORT = "isVaultRegisteredForExport"
@@ -71,6 +72,9 @@ class SettingsDiskSourceImpl(
         mutableMapOf<String, MutableSharedFlow<Int?>>()
 
     private val mutablePullToRefreshEnabledFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableShowBrowserAutofillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
@@ -438,6 +442,21 @@ class SettingsDiskSourceImpl(
             key = HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY.appendIdentifier(userId),
         ) == true
 
+    override fun getShowBrowserAutofillSettingBadge(userId: String): Boolean? =
+        getBoolean(key = SHOW_BROWSER_AUTOFILL_SETTING_BADGE.appendIdentifier(userId))
+
+    override fun storeShowBrowserAutofillSettingBadge(userId: String, showBadge: Boolean?) {
+        putBoolean(
+            key = SHOW_BROWSER_AUTOFILL_SETTING_BADGE.appendIdentifier(userId),
+            value = showBadge,
+        )
+        getMutableShowBrowserAutofillSettingBadgeFlow(userId).tryEmit(showBadge)
+    }
+
+    override fun getShowBrowserAutofillSettingBadgeFlow(userId: String): Flow<Boolean?> =
+        getMutableShowBrowserAutofillSettingBadgeFlow(userId = userId)
+            .onSubscription { emit(getShowBrowserAutofillSettingBadge(userId)) }
+
     override fun getShowAutoFillSettingBadge(userId: String): Boolean? =
         getBoolean(
             key = SHOW_AUTOFILL_SETTING_BADGE.appendIdentifier(userId),
@@ -602,6 +621,13 @@ class SettingsDiskSourceImpl(
         userId: String,
     ): MutableSharedFlow<Boolean?> =
         mutablePullToRefreshEnabledFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableShowBrowserAutofillSettingBadgeFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutableShowBrowserAutofillSettingBadgeFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

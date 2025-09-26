@@ -12,4 +12,5 @@ data class ProviderImportCredentialsRequest(
     val request: ImportCredentialsRequest,
     val callingAppInfo: CallingAppInfo,
     val uri: Uri,
+    val credId: String,
 )

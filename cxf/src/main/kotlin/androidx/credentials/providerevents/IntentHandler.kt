@@ -1,6 +1,4 @@
-@file:Suppress("unused")
-
-package androidx.credentials.providerevents.playservices
+package androidx.credentials.providerevents
 
 import android.app.Activity
 import android.content.Intent
@@ -8,10 +6,12 @@ import android.net.Uri
 import androidx.credentials.providerevents.exception.ImportCredentialsException
 import androidx.credentials.providerevents.transfer.ImportCredentialsResponse
 import androidx.credentials.providerevents.transfer.ProviderImportCredentialsRequest
+import com.bitwarden.annotation.OmitFromCoverage
 
 /**
  * A stub implementation of the Credential Provider Events IntentHandler class.
  */
+@OmitFromCoverage
 object IntentHandler {
 
     /**
