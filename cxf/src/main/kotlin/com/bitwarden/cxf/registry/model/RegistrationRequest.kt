@@ -1,6 +1,7 @@
 package com.bitwarden.cxf.registry.model
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 
 /**
  * Represents a request to register as a credential provider that allows exporting credentials.
@@ -11,8 +12,9 @@ import androidx.annotation.DrawableRes
  * when credential import is requested.
  */
 data class RegistrationRequest(
-    val appName: String,
-    val credentialTypes: Set<String>,
+    @field:StringRes
+    val appName: Int,
     @field:DrawableRes
     val iconResId: Int,
+    val credentialTypes: Set<String>,
 )

@@ -1,8 +1,13 @@
 package com.x8bit.bitwarden.ui.platform.feature.debugmenu
 
+import androidx.credentials.providerevents.transfer.CredentialTypes
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.model.FlagKey
+import com.bitwarden.cxf.registry.CredentialExchangeRegistry
+import com.bitwarden.cxf.registry.model.RegistrationRequest
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
@@ -18,6 +23,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -29,6 +35,7 @@ class DebugMenuViewModel @Inject constructor(
     private val debugMenuRepository: DebugMenuRepository,
     private val authRepository: AuthRepository,
     private val logsManager: LogsManager,
+    private val credentialExchangeRegistry: CredentialExchangeRegistry,
 ) : BaseViewModel<DebugMenuState, DebugMenuEvent, DebugMenuAction>(
     initialState = DebugMenuState(featureFlags = persistentMapOf()),
 ) {
@@ -104,6 +111,32 @@ class DebugMenuViewModel @Inject constructor(
 
     private fun handleUpdateFeatureFlag(action: DebugMenuAction.UpdateFeatureFlag<*>) {
         debugMenuRepository.updateFeatureFlag(action.flagKey, action.newValue)
+        viewModelScope.launch {
+            if (action.flagKey is FlagKey.CredentialExchangeProtocolExport) {
+                (action.newValue as? Boolean)?.let { enabled ->
+                    if (enabled) {
+                        Timber.d("Registering credential exchange")
+                        credentialExchangeRegistry.register(
+                            registrationRequest = RegistrationRequest(
+                                appName = R.string.app_name,
+                                credentialTypes = setOf(
+                                    CredentialTypes.CREDENTIAL_TYPE_BASIC_AUTH,
+                                    CredentialTypes.CREDENTIAL_TYPE_PUBLIC_KEY,
+                                    CredentialTypes.CREDENTIAL_TYPE_TOTP,
+                                    CredentialTypes.CREDENTIAL_TYPE_CREDIT_CARD,
+                                    CredentialTypes.CREDENTIAL_TYPE_SSH_KEY,
+                                    CredentialTypes.CREDENTIAL_TYPE_ADDRESS,
+                                ),
+                                iconResId = BitwardenDrawable.icon,
+                            ),
+                        )
+                    } else {
+                        Timber.d("Unregistering credential exchange")
+                        credentialExchangeRegistry.unregister()
+                    }
+                }
+            }
+        }
     }
 }
 
