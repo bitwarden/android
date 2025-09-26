@@ -61,12 +61,12 @@ class ImportItemsViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     ImportItemsEvent.ShowRegisteredImportSources(
                         listOf(
-                            CredentialTypes.BASIC_AUTH,
-                            CredentialTypes.PUBLIC_KEY,
-                            CredentialTypes.TOTP,
-                            CredentialTypes.CREDIT_CARD,
-                            CredentialTypes.SSH_KEY,
-                            CredentialTypes.ADDRESS,
+                            CredentialTypes.CREDENTIAL_TYPE_BASIC_AUTH,
+                            CredentialTypes.CREDENTIAL_TYPE_PUBLIC_KEY,
+                            CredentialTypes.CREDENTIAL_TYPE_TOTP,
+                            CredentialTypes.CREDENTIAL_TYPE_CREDIT_CARD,
+                            CredentialTypes.CREDENTIAL_TYPE_SSH_KEY,
+                            CredentialTypes.CREDENTIAL_TYPE_ADDRESS,
                         ),
                     ),
                     awaitItem(),

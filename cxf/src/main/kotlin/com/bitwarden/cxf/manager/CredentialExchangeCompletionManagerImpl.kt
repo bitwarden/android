@@ -26,6 +26,7 @@ internal class CredentialExchangeCompletionManagerImpl(
             is ExportCredentialsResult.Success -> {
                 IntentHandler.setImportCredentialsResponse(
                     context = activity,
+                    intent = intent,
                     uri = exportResult.uri,
                     response = ImportCredentialsResponse(
                         responseJson = exportResult.payload,
