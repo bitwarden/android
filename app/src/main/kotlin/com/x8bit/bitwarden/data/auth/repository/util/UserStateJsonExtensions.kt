@@ -32,6 +32,7 @@ fun UserStateJson.toRemovedPasswordUserStateJson(
             hasMasterPassword = false,
             trustedDeviceUserDecryptionOptions = null,
             keyConnectorUserDecryptionOptions = null,
+            masterPasswordUnlock = null,
         )
     val updatedProfile = profile.copy(userDecryptionOptions = updatedUserDecryptionOptions)
     val updatedAccount = account.copy(profile = updatedProfile)
@@ -54,6 +55,23 @@ fun UserStateJson.toUpdatedUserStateJson(
     val userId = syncProfile.id
     val account = this.accounts[userId] ?: return this
     val profile = account.profile
+    val userDecryptionOptions = syncResponse
+        .userDecryption
+        ?.let { syncUserDecryption ->
+            profile
+                .userDecryptionOptions
+                ?.copy(masterPasswordUnlock = syncUserDecryption.masterPasswordUnlock)
+                ?: UserDecryptionOptionsJson(
+                    hasMasterPassword = syncUserDecryption.masterPasswordUnlock != null,
+                    trustedDeviceUserDecryptionOptions = null,
+                    keyConnectorUserDecryptionOptions = null,
+                    masterPasswordUnlock = syncUserDecryption.masterPasswordUnlock,
+                )
+        }
+        ?: profile
+            .userDecryptionOptions
+            ?.copy(masterPasswordUnlock = null)
+
     val updatedProfile = profile
         .copy(
             avatarColorHex = syncProfile.avatarColor,
@@ -61,6 +79,7 @@ fun UserStateJson.toUpdatedUserStateJson(
             hasPremium = syncProfile.isPremium || syncProfile.isPremiumFromOrganization,
             isTwoFactorEnabled = syncProfile.isTwoFactorEnabled,
             creationDate = syncProfile.creationDate,
+            userDecryptionOptions = userDecryptionOptions,
         )
     val updatedAccount = account.copy(profile = updatedProfile)
     return this
@@ -90,6 +109,7 @@ fun UserStateJson.toUserStateJsonWithPassword(): UserStateJson {
                     hasMasterPassword = true,
                     keyConnectorUserDecryptionOptions = null,
                     trustedDeviceUserDecryptionOptions = null,
+                    masterPasswordUnlock = null,
                 ),
         )
     val updatedAccount = account.copy(profile = updatedProfile)

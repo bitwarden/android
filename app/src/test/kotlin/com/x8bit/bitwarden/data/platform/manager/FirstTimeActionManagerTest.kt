@@ -421,6 +421,7 @@ private val MOCK_USER_DECRYPTION_OPTIONS: UserDecryptionOptionsJson = UserDecryp
     hasMasterPassword = false,
     trustedDeviceUserDecryptionOptions = MOCK_TRUSTED_DEVICE_USER_DECRYPTION_OPTIONS,
     keyConnectorUserDecryptionOptions = null,
+    masterPasswordUnlock = null,
 )
 
 private val MOCK_PROFILE = AccountJson.Profile(

@@ -1463,6 +1463,7 @@ private val USER_STATE = UserStateJson(
                     keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
                         keyConnectorUrl = "keyConnectorUrl",
                     ),
+                    masterPasswordUnlock = null,
                 ),
             ),
             tokens = AccountTokensJson(
