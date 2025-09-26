@@ -356,6 +356,7 @@ private val VAULT_DATA: SyncResponseJson = SyncResponseJson(
     policies = null,
     domains = DOMAINS_1,
     sends = listOf(SEND_1),
+    userDecryption = null,
 )
 
 private const val CIPHER_JSON = """

@@ -21,6 +21,10 @@ data class UserDecryptionOptionsJson(
     @JsonNames("HasMasterPassword")
     val hasMasterPassword: Boolean,
 
+    @SerialName("masterPasswordUnlock")
+    @JsonNames("MasterPasswordUnlock")
+    val masterPasswordUnlock: MasterPasswordUnlockDataJson?,
+
     @SerialName("trustedDeviceOption")
     @JsonNames("TrustedDeviceOption")
     val trustedDeviceUserDecryptionOptions: TrustedDeviceUserDecryptionOptionsJson?,

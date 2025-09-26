@@ -626,6 +626,7 @@ private val LOGIN_SUCCESS = GetTokenResponseJson.Success(
         keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
             keyConnectorUrl = "keyConnectorUrl",
         ),
+        masterPasswordUnlock = null,
     ),
     keyConnectorUrl = "keyConnectorUrl",
 )

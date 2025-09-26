@@ -804,6 +804,7 @@ private val USER_STATE = UserStateJson(
                     keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
                         keyConnectorUrl = "keyConnectorUrl",
                     ),
+                    masterPasswordUnlock = null,
                 ),
                 isTwoFactorEnabled = false,
                 creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),

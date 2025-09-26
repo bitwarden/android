@@ -48,6 +48,9 @@ data class SyncResponseJson(
 
     @SerialName("sends")
     val sends: List<Send>?,
+
+    @SerialName("UserDecryption")
+    val userDecryption: UserDecryptionJson?,
 ) {
     /**
      * Represents domains in the vault response.

@@ -2008,6 +2008,7 @@ class AuthRepositoryTest {
                     hasMasterPassword = false,
                     keyConnectorUserDecryptionOptions = null,
                     trustedDeviceUserDecryptionOptions = null,
+                    masterPasswordUnlock = null,
                 ),
             )
             coEvery {
@@ -7030,6 +7031,7 @@ class AuthRepositoryTest {
             hasMasterPassword = false,
             trustedDeviceUserDecryptionOptions = TRUSTED_DEVICE_DECRYPTION_OPTIONS,
             keyConnectorUserDecryptionOptions = null,
+            masterPasswordUnlock = null,
         )
 
         @Deprecated(
@@ -7138,6 +7140,7 @@ class AuthRepositoryTest {
                             hasMasterPassword = true,
                             keyConnectorUserDecryptionOptions = null,
                             trustedDeviceUserDecryptionOptions = null,
+                            masterPasswordUnlock = null,
                         ),
                     ),
                 ),

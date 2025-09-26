@@ -55,12 +55,14 @@ private val DEFAULT_USER_DECRYPTION_OPTIONS: UserDecryptionOptionsJson = UserDec
     hasMasterPassword = false,
     trustedDeviceUserDecryptionOptions = DEFAULT_TRUSTED_DEVICE_USER_DECRYPTION_OPTIONS,
     keyConnectorUserDecryptionOptions = null,
+    masterPasswordUnlock = null,
 )
 
 private val UPDATED_USER_DECRYPTION_OPTIONS: UserDecryptionOptionsJson = UserDecryptionOptionsJson(
     hasMasterPassword = false,
     trustedDeviceUserDecryptionOptions = UPDATED_TRUSTED_DEVICE_USER_DECRYPTION_OPTIONS,
     keyConnectorUserDecryptionOptions = null,
+    masterPasswordUnlock = null,
 )
 
 private val DEFAULT_ACCOUNT = AccountJson(
