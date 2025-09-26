@@ -174,7 +174,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
                         showImportLoginsCardInSettings = settingsDiskSource
                             .getShowImportLoginsSettingBadge(it),
                         showSetupBrowserAutofillCard = settingsDiskSource
-                            .getShowUnlockSettingBadge(it),
+                            .getShowBrowserAutofillSettingBadge(it),
                     )
                 }
                 ?: FirstTimeState()
