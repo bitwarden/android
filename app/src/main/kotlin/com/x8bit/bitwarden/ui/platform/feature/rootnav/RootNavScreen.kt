@@ -65,7 +65,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.navigateToAddEditSend
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toVaultItemCipherType
-import com.x8bit.bitwarden.ui.vault.feature.exportitems.ExportItemsRoute
+import com.x8bit.bitwarden.ui.vault.feature.exportitems.ExportItemsGraphRoute
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.exportItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.navigateToExportItemsGraph
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListingAsRoot
@@ -142,7 +142,7 @@ fun RootNavScreen(
         is RootNavState.VaultUnlockedForProviderGetCredentials,
             -> VaultUnlockedGraphRoute
 
-        is RootNavState.CredentialExchangeExport -> ExportItemsRoute
+        is RootNavState.CredentialExchangeExport -> ExportItemsGraphRoute
         RootNavState.OnboardingAccountLockSetup -> SetupUnlockRoute.AsRoot
         RootNavState.OnboardingAutoFillSetup -> SetupAutofillRoute.AsRoot
         RootNavState.OnboardingBrowserAutofillSetup -> SetupBrowserAutofillRoute.AsRoot
