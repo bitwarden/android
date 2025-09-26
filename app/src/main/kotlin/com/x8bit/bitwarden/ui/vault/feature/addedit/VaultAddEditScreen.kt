@@ -371,9 +371,7 @@ fun VaultAddEditScreen(
                                         }
                                     },
                                 )
-                                    .takeUnless {
-                                        state.isAddItemMode || state.isCipherInCollection
-                                    },
+                                    .takeUnless { !state.shouldShowMoveToOrganization },
                                 OverflowMenuItemData(
                                     text = stringResource(id = BitwardenString.collections),
                                     onClick = remember(viewModel) {

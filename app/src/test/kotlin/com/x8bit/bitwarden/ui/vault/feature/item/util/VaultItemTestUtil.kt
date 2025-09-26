@@ -185,6 +185,7 @@ fun createCommonContent(
             passwordHistoryCount = null,
             relatedLocations = persistentListOf(),
             iconData = IconData.Local(iconResId),
+            hasOrganizations = true,
         )
     } else {
         VaultItemState.ViewState.Content.Common(
@@ -248,6 +249,7 @@ fun createCommonContent(
             passwordHistoryCount = 1,
             relatedLocations = persistentListOf(),
             iconData = IconData.Local(iconResId),
+            hasOrganizations = true,
         )
     }
 
