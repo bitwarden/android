@@ -2318,6 +2318,11 @@ data class VaultAddEditState(
             ?.hasOrganizations
             ?: false
 
+    val shouldShowMoveToOrganization: Boolean
+        get() = !isAddItemMode &&
+                !isCipherInCollection &&
+                hasOrganizations
+
     /**
      * Enum representing the main type options for the vault, such as LOGIN, CARD, etc.
      *
