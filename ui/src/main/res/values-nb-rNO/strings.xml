@@ -46,7 +46,7 @@
     <string name="my_vault">Mitt hvelv</string>
     <string name="name">Navn</string>
     <string name="item_name_required">Gjenstandens navn (påkrevd)</string>
-    <string name="send_name_required">"Send name (required)"</string>
+    <string name="send_name_required">Send name (required)</string>
     <string name="no">Nei</string>
     <string name="notes">Notater</string>
     <string name="private_notes">Private notes</string>
@@ -136,7 +136,7 @@
     <string name="other">Annet</string>
     <string name="password_generator">Passordgenerator</string>
     <string name="password_hint">Passordhint</string>
-    <string name="password_hint_alert">Vi har sendt deg en e-post med hint om hovedpassord.</string>
+    <string name="password_hint_alert">We’ve sent you an email with your master password hint.</string>
     <string name="password_override_alert">Er du sikker på at du vil overskrive det nåværende passordet?</string>
     <string name="retype_master_password">Skriv inn hovedpassordet på nytt</string>
     <string name="retype_new_master_password_required">Re-type new master password (required)</string>
@@ -164,7 +164,7 @@
     <string name="no_items_for_vault">There are no items in your vault that match “%1$s”</string>
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">Deaktivert</string>
-    <string name="bitwarden_autofill_service_alert2">Den enkleste måten å legge til nye innlogginger i hvelvet ditt, er fra Bitwarden sin autofylltjeneste. Lær mer om å bruke Bitwarden sin autofylltjeneste ved å navigere til \"Innstillinger\".</string>
+    <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Autofill Service. Learn more about using the Bitwarden Autofill Service by navigating to the “Settings” screen.</string>
     <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">Vil du auto-utfylle eller vise denne gjenstanden?</string>
     <string name="search">Søk</string>
@@ -179,7 +179,7 @@
     <string name="send_verification_code_again">Send E-posten med verifiseringskoden på nytt</string>
     <string name="verification_email_not_sent">Kunne ikke sende verifiserings-E-posten. Prøv igjen.</string>
     <string name="verification_email_sent">Verifiserings-E-posten er sendt.</string>
-    <string name="yubi_key_instruction">For å fortsette, hold din YubiKey NEO opp mot baksiden av enheten din, eller sett inn din YubiKey i din enhets USB-inntak, og så trykk på dens knapp.</string>
+    <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device’s USB port, then touch its button.</string>
     <string name="yubi_key_title">YubiKey-sikkerhetsnøkkel</string>
     <string name="add_new_attachment">Legg til et nytt vedlegg</string>
     <string name="attachments">Vedlegg</string>
@@ -342,7 +342,7 @@ Skanning skjer automatisk.</string>
     <string name="generator">Generator</string>
     <string name="no_folders_to_list">Det er ingen mapper å vise</string>
     <string name="fingerprint_phrase">Fingeravtrykksfrase</string>
-    <string name="your_accounts_fingerprint">Din kontos fingeravtrykksfrase</string>
+    <string name="your_accounts_fingerprint">Your account’s fingerprint phrase</string>
     <string name="export_vault">Eksporter hvelvet</string>
     <string name="lock_now">Lås nå</string>
     <string name="pin">PIN</string>
@@ -364,14 +364,14 @@ Skanning skjer automatisk.</string>
     <string name="default_uri_match_detection">Standard URI-samsvarsgjenkjenning</string>
     <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Tema</string>
-    <string name="theme_description">Endre appens fargetema.</string>
+    <string name="theme_description">Change the application’s color theme</string>
     <string name="copy_notes">Kopier notater</string>
     <string name="exit">Avslutt</string>
     <string name="exit_confirmation">Er du sikker på at du vil avslutte Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Ønsker du å låse opp ved å bruke hovedpassordet når applikasjonen startes på nytt?</string>
     <string name="ask_to_add_item">Ask to add item</string>
-    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn’t found in your vault.</string>
     <string name="on_restart">Ved omstart av appen</string>
     <string name="capitalize">Stor forbokstav</string>
     <string name="include_number">Inkluder siffer</string>
@@ -390,13 +390,13 @@ Skanning skjer automatisk.</string>
     <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
     <string name="export_vault_confirmation_title">Bekreft eksport av hvelvet</string>
     <string name="warning">Advarsel</string>
-    <string name="export_vault_failure">Det oppsto et problem med å eksportere hvelvet. Hvis problemet vedvarer, må du eksportere fra netthvelvet.</string>
+    <string name="export_vault_failure">There was a problem exporting your vault.  If the problem persists, you’ll need to export from the web vault.</string>
     <string name="export_vault_success">Hvelvet ble eksportert</string>
     <string name="clone">Klon</string>
     <string name="password_generator_policy_in_effect">En eller flere av organisasjonens vilkår påvirker generatorinnstillingene dine</string>
     <string name="unable_to_save_attachment">Det oppsto et problem med å lagre dette vedlegget. Hvis problemet vedvarer, kan du lagre det fra netthvelvet.</string>
     <string name="save_attachment_success">Vedlegget ble lagret</string>
-    <string name="autofill_tile_accessibility_required">Aktiver \"Auto-utfyllingstjenester\" fra Bitwarden-innstillingene for å bruke auto-utfyllingsflisen.</string>
+    <string name="autofill_tile_accessibility_required">Please turn on “Autofill Accessibility Service” from Bitwarden Settings to use the Autofill tile.</string>
     <string name="autofill_tile_uri_not_found">Ingen passordfelt oppdaget</string>
     <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Elementet ble sendt til papirkurven.</string>
@@ -411,7 +411,7 @@ Skanning skjer automatisk.</string>
     <string name="enable_sync_on_refresh">Aktiver synkronisering ved oppdatering</string>
     <string name="enable_sync_on_refresh_description">Synkroniser hvelvet med nedtrekksbevegelse.</string>
     <string name="log_in_sso">Bedriftsinnlogging (SSO)</string>
-    <string name="log_in_sso_summary">Logg raskt inn med din organisasjons enkelte  logg-på portal. Angi din organisasjons identifikator for å begynne.</string>
+    <string name="log_in_sso_summary">Quickly log in using your organization’s single sign-on portal. Please enter your organization’s identifier to begin.</string>
     <string name="org_identifier">Organisasjons identifikator</string>
     <string name="login_sso_error">Kan ikke logge inn med SSO</string>
     <string name="set_master_password">Angi hovedpassord</string>
@@ -576,8 +576,8 @@ velg Legg til TOTP for å lagre nøkkelen sikkert</string>
     <string name="api_access_token">API tilgangstoken</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Er du sikker på at du vil overskrive det nåværende brukernavnet?</string>
     <string name="generate_username">Generer brukernavn</string>
-    <string name="plus_addressed_email_description">Bruk sub-adresseringsfunksjonaliteten til din e-postleverandør</string>
-    <string name="catch_all_email_description">Bruk domenets konfigurerte catch-all innboks.</string>
+    <string name="plus_addressed_email_description">Use your email provider’s subaddress capabilities</string>
+    <string name="catch_all_email_description">Use your domain’s configured catch-all inbox.</string>
     <string name="forwarded_email_description">Generer et e-postalias hos en ekstern videresendingstjeneste.</string>
     <string name="accessibility_service_disclosure">Opplysninger om tilgjengelighetstjeneste</string>
     <string name="accessibility_disclosure_text">Bitwarden bruker Tilgjengelighetstjenesten for å søke etter innloggingsfelt i apper og på nettsteder, deretter finner den de riktige felt-IDene for å skrive inn et brukernavn og passord når en treff for appen eller nettsiden blir funnet. Vi lagrer ikke noen av opplysningene som tjenesten presenterer for oss. Vi gjør heller ikke noen forsøk på å kontrollere elementer på skjermen utenom tekstutfylling av brukernavn og passord.</string>
@@ -740,7 +740,7 @@ Vil du bytte til denne kontoen?</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
     <string name="help_with_server_geolocations">Help with server geolocations.</string>
     <string name="email_address_required">Email address (required)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Select the link in the email to verify your email address and continue creating your account. "</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Select the link in the email to verify your email address and continue creating your account. </string>
     <string name="change_email_address">Endre e-postadresse</string>
     <string name="next">Neste</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden cannot recover a lost or forgotten master password.</string>
@@ -758,12 +758,17 @@ Vil du bytte til denne kontoen?</string>
     <string name="allow_bitwarden_authenticator_syncing">Allow authenticator syncing</string>
     <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
     <string name="turn_on_autofill">Skru på auto-utfylling</string>
+    <string name="autofill_setup">Autofill setup</string>
+    <string name="turn_on_browser_autofill_integration">Turn on browser autofill integration</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_for_bitwarden">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
     <string name="turn_on_later">Turn on later</string>
     <string name="turn_on_autofill_later">Turn on autofill later?</string>
+    <string name="turn_on_browser_autofill_integration_later">Turn on browser autofill integration later?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">You can return to complete this step anytime in Settings.</string>
     <string name="what_bitwarden_has_to_offer">You can now explore everything Bitwarden has to offer and start managing your passwords securely.</string>
-    <string name="youre_all_set">Alt er klart for deg!</string>
+    <string name="youre_all_set">You’re all set!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
     <string name="master_password_hint_not_specified">Få et hint om hovedpassordet</string>
     <string name="new_master_password_hint">Nytt hint til hovedpassordet</string>
@@ -848,8 +853,8 @@ Vil du bytte til denne kontoen?</string>
     <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Put the words together in any order to form your passphrase. <annotation emphasis="bold">Use hyphens, spaces, or leave them as one long word</annotation>—your choice!</string>
     <string name="make_it_yours">Make it yours</string>
     <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Add a number or symbol</annotation> to make it even stronger. Now you have a unique, secure, and memorable passphrase!</string>
-    <string name="need_some_inspiration">"Need some inspiration?"</string>
-    <string name="check_out_the_passphrase_generator">"Check out the passphrase generator"</string>
+    <string name="need_some_inspiration">Need some inspiration?</string>
+    <string name="check_out_the_passphrase_generator">Check out the passphrase generator</string>
     <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
     <string name="copy_private_key">Kopiér privat nøkkel</string>
     <string name="login_credentials">Påloggingsdetaljer</string>
@@ -867,7 +872,7 @@ Vil du bytte til denne kontoen?</string>
     <string name="import_client_certificate">Import client certificate</string>
     <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
     <string name="alias">Alias</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Use the generator to create secure passwords, passphrases and usernames. </string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where Autofill is not available, like a streaming service on your TV.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
     <string name="coachmark_1_of_6">1 OF 6</string>
@@ -877,7 +882,7 @@ Vil du bytte til denne kontoen?</string>
     <string name="coachmark_5_of_6">5 OF 6</string>
     <string name="coachmark_6_of_6">6 OF 6</string>
     <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">After you save your new password to Bitwarden, don’t forget to update it on your account website. </string>
     <string name="verify_your_identity">Bekreft identiteten din</string>
     <string name="error_loading_certificate">Error loading certificate</string>
     <string name="certificate_alias">Certificate alias</string>
@@ -989,7 +994,7 @@ Vil du bytte til denne kontoen?</string>
     <string name="cannot_add_authenticator_key">Kan ikke legge til autentiseringsnøkkel?</string>
     <string name="enable_camera_permission_to_use_the_scanner">Aktiver kameratillatelse for å bruke skanner</string>
     <string name="empty_item_list">Empty Item Listing</string>
-    <string name="you_dont_have_items_to_display">You don\'t have any items to display.</string>
+    <string name="you_dont_have_items_to_display">You don’t have any items to display.</string>
     <string name="empty_item_list_instruction">Add a new code to secure your accounts.</string>
     <string name="add_code">Legg til kode</string>
     <string name="verification_code_added">Verification code added</string>
@@ -1011,7 +1016,7 @@ Vil du bytte til denne kontoen?</string>
     <string name="use_your_device_camera_to_scan_codes">Use your device camera to scan codes</string>
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Scan the QR code in your 2-step verification settings for any account.</string>
     <string name="sign_in_using_unique_codes">Sign in using unique codes</string>
-    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">When using 2-step verification, you\'ll enter your username and password and a code generated in this app.</string>
+    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">When using 2-step verification, you’ll enter your username and password and a code generated in this app.</string>
     <string name="skip">Hopp over</string>
     <string name="help">Hjelp</string>
     <string name="launch_tutorial">Launch tutorial</string>
@@ -1061,9 +1066,9 @@ Vil du bytte til denne kontoen?</string>
     <string name="account_synced_from_bitwarden_app">Account synced from Bitwarden app</string>
     <string name="local_codes">Local codes (%1$d)</string>
     <string name="required_information_missing">Required Information Missing</string>
-    <string name="required_information_missing_message">"Required info is missing (e.g., ‘services’ or ‘secret’). Check your file and try again. Visit bitwarden.com/help for support"</string>
-    <string name="file_could_not_be_processed">"File Could Not Be Processed"</string>
-    <string name="file_could_not_be_processed_message">"File could not be processed. Ensure it’s valid JSON and try again. Need help? Visit bitwarden.com/help"</string>
+    <string name="required_information_missing_message">Required info is missing (e.g., ‘services’ or ‘secret’). Check your file and try again. Visit bitwarden.com/help for support</string>
+    <string name="file_could_not_be_processed">File Could Not Be Processed</string>
+    <string name="file_could_not_be_processed_message">File could not be processed. Ensure it’s valid JSON and try again. Need help? Visit bitwarden.com/help</string>
     <string name="get_help">Få hjelp</string>
     <string name="expand_advanced_options">Expand advanced options</string>
     <string name="local_items_are_expanded_click_to_collapse">Local items are expanded, click to collapse.</string>
@@ -1087,18 +1092,25 @@ Vil du bytte til denne kontoen?</string>
     <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
-    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_was_cancelled_in_the_selected_app">Credential import was cancelled in the selected app. No items have been imported.</string>
     <string name="import_cancelled">Import cancelled</string>
-    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
-    <string name="import_saved_items">Import saved items</string>
-    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
-    <string name="return_to_your_vault">Return to your vault</string>
-    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
     <string name="no_items_imported">No items imported</string>
-    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="no_items_received_from_the_selected_app">No items received from the selected app.</string>
     <string name="vault_sync_failed">Vault sync failed</string>
-    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but they will not be visible in your vault until sync is performed.</string>
     <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
-    <string name="importing_items">Importing items…</string>
-    <string name="uploading_items">Uploading items…</string>
+    <string name="saving_items">Saving items…</string>
+    <string name="unable_to_import_your_items">Unable to import your items</string>
+    <string name="import_from_computer">Import from computer</string>
+    <string name="import_from_another_app">Import from another app</string>
+    <plurals name="x_items_have_been_imported_to_your_vault">
+        <item quantity="one">%1$d item has been imported to your vault.</item>
+        <item quantity="other">%1$d items have been imported to your vault.</item>
+    </plurals>
+    <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
+    <string name="your_browser_recently_updated_how_autofill_works">Your browser recently updated how Autofill works. To continue filling your passwords with Bitwarden, enable browser Autofill in autofill settings.</string>
+    <string name="not_now">Not now</string>
+    <string name="import_from_bitwarden">Import from Bitwarden</string>
+    <string name="select_account">Select account</string>
+    <string name="import_restricted_unable_to_import_credit_cards">Import restricted, unable to import cards from this account.</string>
 </resources>

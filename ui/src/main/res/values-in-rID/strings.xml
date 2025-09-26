@@ -46,7 +46,7 @@
     <string name="my_vault">Brankas Saya</string>
     <string name="name">Nama</string>
     <string name="item_name_required">Nama item (wajib)</string>
-    <string name="send_name_required">"Nama pengirim (wajib)"</string>
+    <string name="send_name_required">Nama pengirim (wajib)</string>
     <string name="no">Tidak</string>
     <string name="notes">Catatan</string>
     <string name="private_notes">Catatan pribadi</string>
@@ -101,8 +101,8 @@
     <string name="one_minute">1 menit</string>
     <string name="four_hours">4 Jam</string>
     <string name="immediately">Segera</string>
-    <string name="vault_timeout_log_out_confirmation_title">Setel waktu habis sesi untuk \"Keluar\"?</string>
-    <string name="vault_timeout_log_out_confirmation_message">Setelah waktu habis, Anda akan keluar. Anda perlu terhubung ke internet untuk masuk dan mengakses brankas lagi. Pengaturan dan PIN yang tersimpan di perangkat ini tidak akan berubah.</string>
+    <string name="vault_timeout_log_out_confirmation_title">Tetapkan batas waktu sesi untuk \"Keluar\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">Setelah periode batas waktu berakhir, Anda akan keluar otomatis. Untuk masuk dan mengakses brankas Anda lagi, perangkat harus terhubung ke internet. Pengaturan dan PIN di perangkat ini tetap sama.</string>
     <string name="logging_in">Sedang masuk…</string>
     <string name="login_to_bitwarden">Masuk ke Bitwarden</string>
     <string name="master_password_confirmation_val_message">Konfirmasi sandi tidak benar.</string>
@@ -135,7 +135,7 @@
     <string name="other">Lainnya</string>
     <string name="password_generator">Pembuat Sandi</string>
     <string name="password_hint">Petunjuk Sandi</string>
-    <string name="password_hint_alert">Kami telah mengirimi Anda email dengan petunjuk sandi utama Anda.</string>
+    <string name="password_hint_alert">Kami telah mengirimkan email kepada Anda berisi petunjuk sandi utama.</string>
     <string name="password_override_alert">Anda yakin ingin menimpa sandi saat ini?</string>
     <string name="retype_master_password">Ketik Ulang Sandi Utama</string>
     <string name="retype_new_master_password_required">Ulangi sandi utama baru (wajib)</string>
@@ -163,7 +163,7 @@
     <string name="no_items_for_vault">Tidak ada item di brankas Anda yang cocok dengan “%1$s”</string>
     <string name="search_for_a_login_or_add_a_new_login">Cari login atau tambahkan login baru</string>
     <string name="disabled">Dinonaktifkan</string>
-    <string name="bitwarden_autofill_service_alert2">Cara termudah untuk menambahkan login baru ke vault Anda adalah dari Bitwarden Auto-fill Service. Pelajari lebih lanjut tentang menggunakan Bitwarden Auto-fill Service dengan menavigasi ke layar \"Pengaturan\".</string>
+    <string name="bitwarden_autofill_service_alert2">Cara termudah menambahkan login baru ke brankas adalah melalui Layanan Isi Otomatis Bitwarden. Pelajari lebih lanjut cara penggunaan Layanan Isi Otomatis Bitwarden di menu \"Pengaturan\".</string>
     <string name="autofill_title">Isi Otomatis</string>
     <string name="autofill_or_view">Apakah Anda ingin mengisi otomatis atau melihat info masuk ini?</string>
     <string name="search">Pencarian</string>
@@ -178,7 +178,7 @@
     <string name="send_verification_code_again">Kirim ulang email kode verifikasi</string>
     <string name="verification_email_not_sent">Tidak dapat mengirim email verifikasi. Coba lagi.</string>
     <string name="verification_email_sent">Email verifikasi terkirim.</string>
-    <string name="yubi_key_instruction">Untuk melanjutkan, tahan YubiKey Neo pada bagian belakang perangkat anda atau masukkan YubiKey ke port USB perangkat anda, kemudian tekan tombolnya.</string>
+    <string name="yubi_key_instruction">Untuk melanjutkan, tempelkan YubiKey NEO Anda ke bagian belakang perangkat atau masukkan YubiKey ke port USB perangkat Anda, lalu tekan tombolnya.</string>
     <string name="yubi_key_title">Kunci Keamanan YubiKey</string>
     <string name="add_new_attachment">Tambah Lampiran Baru</string>
     <string name="attachments">Lampiran</string>
@@ -340,7 +340,7 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="generator">Pembuat Sandi</string>
     <string name="no_folders_to_list">Tidak ada folder yang dapat dicantumkan.</string>
     <string name="fingerprint_phrase">Frase Sidik Jari</string>
-    <string name="your_accounts_fingerprint">Frase sidik jari akun Anda</string>
+    <string name="your_accounts_fingerprint">Frasa sidik jari akun Anda</string>
     <string name="export_vault">Ekspor Brankas</string>
     <string name="lock_now">Kunci Sekarang</string>
     <string name="pin">PIN</string>
@@ -362,7 +362,7 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="default_uri_match_detection">Deteksi Kecocokan URI Default</string>
     <string name="default_uri_match_detection_description">Deteksi kecocokan URI mengatur cara Bitwarden mengenali saran isi otomatis.</string>
     <string name="theme">Tema</string>
-    <string name="theme_description">Ubah warna tema aplikasi.</string>
+    <string name="theme_description">Ubah tema warna aplikasi</string>
     <string name="copy_notes">Catatan Salinan</string>
     <string name="exit">Keluar</string>
     <string name="exit_confirmation">Apakah anda yakin ingin keluar dari Bitwarden?</string>
@@ -388,13 +388,13 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="export_vault_file_pw_protect_info">Ekspor file ini akan dilindungi sandi dan memerlukan sandi file untuk mendekripsi.</string>
     <string name="export_vault_confirmation_title">Konfirmasi Ekspor Vault</string>
     <string name="warning">Peringatan</string>
-    <string name="export_vault_failure">Terjadi masalah saat mengekspor vault Anda. Jika masalah terus berlanjut, Anda harus mengekspor dari brankas web.</string>
+    <string name="export_vault_failure">Terjadi masalah saat mengekspor brankas Anda. Jika masalah terus berlanjut, Anda harus mengekspor dari brankas web.</string>
     <string name="export_vault_success">Vault berhasil diekspor</string>
     <string name="clone">Klon</string>
     <string name="password_generator_policy_in_effect">Satu atau beberapa kebijakan organisasi memengaruhi pengaturan pembuat sandi Anda</string>
     <string name="unable_to_save_attachment">Terjadi masalah saat menyimpan lampiran ini. Jika masalah terus berlanjut, Anda dapat menyimpannya dari brankas web.</string>
     <string name="save_attachment_success">Lampiran berhasil disimpan</string>
-    <string name="autofill_tile_accessibility_required">Harap aktifkan \"Layanan Aksesibilitas Isi-Otomatis\" dari Pengaturan Bitwarden untuk menggunakan ubin Isi-Otomatis.</string>
+    <string name="autofill_tile_accessibility_required">Harap aktifkan \"Layanan Aksesibilitas Isi Otomatis\" dari Pengaturan Bitwarden untuk menggunakan pintasan Isi Otomatis.</string>
     <string name="autofill_tile_uri_not_found">Tidak ada kolom sandi yang terdeteksi</string>
     <string name="soft_deleting">Mengirim ke sampah…</string>
     <string name="item_soft_deleted">Item telah dikirim ke sampah.</string>
@@ -409,7 +409,7 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="enable_sync_on_refresh">Aktifkan sinkron saat segarkan</string>
     <string name="enable_sync_on_refresh_description">Sinkronkan brankas dengan gerakan tarik ke bawah.</string>
     <string name="log_in_sso">Sistem Masuk Tunggal Perusahaan</string>
-    <string name="log_in_sso_summary">Masuk dengan cepat menggunakan portal sistem masuk tunggal organisasi Anda. Harap masukkan pengenal organisasi Anda untuk memulai.</string>
+    <string name="log_in_sso_summary">Masuk dengan cepat menggunakan portal single sign-on organisasi Anda. Masukkan pengenal organisasi untuk memulai.</string>
     <string name="org_identifier">Pengenal Organisasi</string>
     <string name="login_sso_error">Saat ini tidak dapat masuk dengan SSO</string>
     <string name="set_master_password">Atur sandi utama</string>
@@ -575,7 +575,7 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Anda yakin ingin menimpa nama pengguna saat ini?</string>
     <string name="generate_username">Buat nama pengguna</string>
     <string name="plus_addressed_email_description">Gunakan fitur sub alamat dari penyedia email Anda</string>
-    <string name="catch_all_email_description">Gunakan kotak masuk catch-all yang telah dikonfigurasi domain Anda.</string>
+    <string name="catch_all_email_description">Gunakan kotak masuk catch-all yang dikonfigurasi pada domain Anda.</string>
     <string name="forwarded_email_description">Buat alias email dengan layanan penerusan eksternal.</string>
     <string name="accessibility_service_disclosure">Pernyataan Layanan Aksesibilitas</string>
     <string name="accessibility_disclosure_text">Bitwarden menggunakan Layanan Aksesibilitas untuk mencari kolom login di apl dan situs web, lalu menetapkan ID kolom yang sesuai untuk memasukkan nama pengguna &amp; sandi ketika apl atau situs cocok ditemukan. Kami tidak menyimpan informasi apa pun yang diberikan layanan pada kami, dan kami tidak berupaya mengontrol elemen layar apa pun selain entri teks kredensial.</string>
@@ -738,7 +738,7 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Pelajari cara mencegah akun terkunci</annotation></string>
     <string name="help_with_server_geolocations">Bantu tentang geolokasi server.</string>
     <string name="email_address_required">Alamat email (wajib)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Pilih tautan dalam email untuk memverifikasi alamat email Anda dan lanjutkan membuat akun. "</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Klik tautan di email untuk verifikasi alamat email Anda dan lanjutkan buat akun.</string>
     <string name="change_email_address">Ubah alamat email</string>
     <string name="next">Lanjut</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden tidak dapat memulihkan sandi utama yang hilang atau terlupa.</string>
@@ -755,12 +755,17 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="allow_bitwarden_authenticator_syncing">Aktifkan sinkronisasi authenticator</string>
     <string name="there_was_an_issue_validating_the_registration_token">Terjadi masalah saat memvalidasi token pendaftaran.</string>
     <string name="turn_on_autofill">Aktifkan isi otomatis</string>
+    <string name="autofill_setup">Autofill setup</string>
+    <string name="turn_on_browser_autofill_integration">Turn on browser autofill integration</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_for_bitwarden">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
     <string name="use_autofill_to_log_into_your_accounts">Gunakan isi otomatis untuk masuk ke akun Anda dengan sekali ketuk.</string>
     <string name="turn_on_later">Aktifkan nanti</string>
     <string name="turn_on_autofill_later">Aktifkan isi otomatis nanti?</string>
+    <string name="turn_on_browser_autofill_integration_later">Turn on browser autofill integration later?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">Anda dapat kembali menyelesaikan langkah ini kapan saja di Pengaturan.</string>
     <string name="what_bitwarden_has_to_offer">Sekarang Anda dapat menjelajahi semua yang ditawarkan Bitwarden dan mulai mengelola sandi Anda dengan aman.</string>
-    <string name="youre_all_set">Semua sudah siap!</string>
+    <string name="youre_all_set">Anda sudah siap!</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Terjadi kesalahan saat menghubungkan dengan layanan Duo. Gunakan metode login dua langkah lain atau hubungi Duo untuk bantuan.</string>
     <string name="master_password_hint_not_specified">Petunjuk sandi utama</string>
     <string name="new_master_password_hint">Petunjuk sandi utama baru</string>
@@ -845,8 +850,8 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Gabungkan kata-kata itu dengan urutan bebas untuk membentuk frasa sandi. <annotation emphasis="bold">Bisa pakai tanda hubung, spasi, atau digabung jadi satu kata</annotation>—terserah Anda!</string>
     <string name="make_it_yours">Sesuaikan untuk Anda</string>
     <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Tambahkan angka atau simbol</annotation> untuk membuatnya lebih kuat. Sekarang Anda memiliki frasa sandi unik, aman, dan mudah diingat!</string>
-    <string name="need_some_inspiration">"Butuh inspirasi?"</string>
-    <string name="check_out_the_passphrase_generator">"Coba pembuat frasa sandi"</string>
+    <string name="need_some_inspiration">Butuh inspirasi?</string>
+    <string name="check_out_the_passphrase_generator">Coba pembuat frasa sandi</string>
     <string name="we_couldnt_verify_the_servers_certificate">Kami tidak dapat memverifikasi sertifikat server. Rantai sertifikat atau pengaturan proxy di perangkat Anda atau server Bitwarden Anda mungkin tidak dikonfigurasi dengan benar.</string>
     <string name="copy_private_key">Salin kunci pribadi</string>
     <string name="login_credentials">Kredensial Login</string>
@@ -858,13 +863,13 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="coachmark_3_of_3">3 DARI 3</string>
     <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Anda harus menambahkan alamat web untuk menggunakan isi otomatis agar dapat mengakses akun ini.</string>
     <string name="learn_about_new_logins">Pelajari tentang login baru</string>
-    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Kami akan memandu Anda melalui fitur utama untuk menambahkan login baru.</string>
+    <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Kami akan memandu Anda menjelaskan fitur utama untuk menambahkan login baru.</string>
     <string name="explore_the_generator">Jelajahi pembuat sandi</string>
     <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Pelajari lebih lanjut tentang membuat kredensial login yang aman dengan tur panduan.</string>
     <string name="import_client_certificate">Impor sertifikat klien</string>
     <string name="enter_the_client_certificate_password_and_alias">Masukkan sandi sertifikat klien dan alias yang diinginkan untuk sertifikat ini.</string>
     <string name="alias">Alias</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Gunakan pembuat sandi untuk membuat sandi, frasa sandi, dan nama pengguna yang aman. "</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Gunakan pembuat sandi untuk membuat sandi, frasa sandi, dan nama pengguna yang aman.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Frasa sandi adalah sandi yang kuat dan sering kali lebih mudah diingat serta diketik dibandingkan sandi acak. Frasa sandi berguna untuk masuk ke akun saat Isi Otomatis tidak tersedia, misalnya layanan streaming di TV Anda.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Nama pengguna unik menambah lapisan keamanan ekstra dan dapat membantu mencegah peretas menemukan akun Anda.</string>
     <string name="coachmark_1_of_6">1 DARI 6</string>
@@ -873,8 +878,8 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="coachmark_4_of_6">4 DARI 6</string>
     <string name="coachmark_5_of_6">5 DARI 6</string>
     <string name="coachmark_6_of_6">6 DARI 6</string>
-    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Gunakan opsi ini untuk menyesuaikan sandi agar sesuai dengan persyaratan situs akun Anda.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Setelah Anda menyimpan sandi baru ke Bitwarden, jangan lupa memperbaruinya di situs akun Anda. "</string>
+    <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Gunakan opsi ini untuk menyesuaikan sandi Anda agar memenuhi persyaratan situs akun.</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">Setelah menyimpan sandi baru ke Bitwarden, jangan lupa memperbaruinya di situs akun Anda.</string>
     <string name="verify_your_identity">Verifikasi identitas Anda</string>
     <string name="error_loading_certificate">Kesalahan memuat sertifikat</string>
     <string name="certificate_alias">Alias sertifikat</string>
@@ -903,7 +908,7 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="self_host_server_url">URL server host mandiri</string>
     <string name="use_brave_autofill_integration">Gunakan integrasi isi otomatis Brave</string>
     <string name="use_chrome_autofill_integration">Gunakan integrasi isi otomatis Chrome</string>
-    <string name="use_chrome_beta_autofill_integration">Gunakan integrasi isi otomatis Chrome (Beta)</string>
+    <string name="use_chrome_beta_autofill_integration">Use Chrome Beta autofill integration</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Meningkatkan pengisian login untuk situs web yang didukung pada browser terpilih. Setelah diaktifkan, Anda akan diarahkan ke pengaturan browser untuk mengaktifkan isi otomatis pihak ketiga.</string>
     <string name="show_more">Lihat selengkapnya</string>
     <string name="no_folder">Tidak ada folder</string>
@@ -1057,9 +1062,9 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="account_synced_from_bitwarden_app">Akun tersinkron dari aplikasi Bitwarden</string>
     <string name="local_codes">Kode lokal (%1$d)</string>
     <string name="required_information_missing">Informasi Wajib Masih Kosong</string>
-    <string name="required_information_missing_message">"Informasi yang diperlukan hilang (misalnya: ‘layanan’ atau ‘rahasia’). Periksa file Anda dan coba lagi. Kunjungi bitwarden.com/help untuk dukungan"</string>
-    <string name="file_could_not_be_processed">"File Tidak Dapat Diproses"</string>
-    <string name="file_could_not_be_processed_message">"File tidak dapat diproses. Pastikan file berformat JSON yang valid lalu coba lagi. Perlu bantuan? Kunjungi bitwarden.com/help"</string>
+    <string name="required_information_missing_message">Informasi yang diperlukan hilang (misalnya: ‘layanan’ atau ‘rahasia’). Periksa file Anda dan coba lagi. Kunjungi bitwarden.com/help untuk dukungan</string>
+    <string name="file_could_not_be_processed">File Tidak Dapat Diproses</string>
+    <string name="file_could_not_be_processed_message">File tidak dapat diproses. Pastikan file berformat JSON yang valid lalu coba lagi. Perlu bantuan? Kunjungi bitwarden.com/help</string>
     <string name="get_help">Dapatkan Bantuan</string>
     <string name="expand_advanced_options">Buka opsi lanjutan</string>
     <string name="local_items_are_expanded_click_to_collapse">Item lokal ditampilkan, klik untuk menutup.</string>
@@ -1082,18 +1087,24 @@ Apakah Anda ingin beralih ke akun ini?</string>
     <string name="default_uri_match_detection_description_advanced_options">Deteksi kecocokan URI mengatur cara Bitwarden mengenali saran isi otomatis.\n<annotation emphasis="bold">Peringatan:</annotation> “Diawali dengan” adalah opsi lanjutan yang berisiko mengekspos kredensial.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Diawali dengan\" adalah opsi lanjutan dengan risiko lebih besar mengekspos identitas Anda.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Ekspresi regular\" adalah opsi lanjutan dengan risiko lebih besar mengekspos identitas Anda.</string>
-    <string name="credential_import_was_cancelled">Impor kredensial dibatalkan. Tidak ada kredensial yang diimpor.</string>
+    <string name="import_was_cancelled_in_the_selected_app">Impor kredensial dibatalkan di apl yang dipilih. Tidak ada item yang diimpor.</string>
     <string name="import_cancelled">Impor dibatalkan</string>
-    <string name="your_items_have_been_successfully_imported">Item Anda berhasil diimpor dan sekarang dapat dilihat di brankas Anda.</string>
-    <string name="import_saved_items">Impor item tersimpan</string>
-    <string name="import_your_credentials_from_another_password_manager">Impor kredensial Anda, termasuk kunci sandi, sandi, kartu kredit, dan informasi identitas pribadi dari pengelola sandi lain.</string>
-    <string name="return_to_your_vault">Kembali ke brankas Anda</string>
-    <string name="select_a_credential_manager_to_import_items_from">Pilih pengelola kredensial untuk mengimpor item.</string>
     <string name="no_items_imported">Tidak ada item yang diimpor</string>
-    <string name="no_items_received_from_the_selected_credential_manager">Tidak ada item yang diterima dari pengelola kredensial yang dipilih.</string>
+    <string name="no_items_received_from_the_selected_app">Tidak ada item diterima dari apl yang dipilih.</string>
     <string name="vault_sync_failed">Sinkronisasi brankas gagal</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Item berhasil diimpor, namun brankas gagal disinkronkan. Item impor tidak akan tampil di brankas hingga sinkronisasi dilakukan.</string>
     <string name="there_was_a_problem_importing_your_items">Terjadi masalah saat mengimpor item Anda. Silakan coba lagi. Jika masalah berlanjut, hubungi dukungan.</string>
-    <string name="importing_items">Mengimpor item…</string>
-    <string name="uploading_items">Mengunggah item…</string>
+    <string name="saving_items">Menyimpan item…</string>
+    <string name="unable_to_import_your_items">Tidak dapat mengimpor item Anda</string>
+    <string name="import_from_computer">Impor dari komputer</string>
+    <string name="import_from_another_app">Impor dari aplikasi lain</string>
+    <plurals name="x_items_have_been_imported_to_your_vault">
+        <item quantity="other">%1$d item telah diimpor ke brankas Anda.</item>
+    </plurals>
+    <string name="enable_browser_autofill_to_keep_filling_passwords">Aktifkan Isi Otomatis browser untuk tetap mengisi sandi</string>
+    <string name="your_browser_recently_updated_how_autofill_works">Browser Anda baru-baru ini memperbarui cara kerja Isi Otomatis. Untuk tetap mengisi sandi Anda dengan Bitwarden, aktifkan Isi Otomatis di pengaturan.</string>
+    <string name="not_now">Lain kali</string>
+    <string name="import_from_bitwarden">Import from Bitwarden</string>
+    <string name="select_account">Select account</string>
+    <string name="import_restricted_unable_to_import_credit_cards">Import restricted, unable to import cards from this account.</string>
 </resources>
