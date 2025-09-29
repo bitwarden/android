@@ -22,7 +22,6 @@ data class VaultHandlers(
     val addAccountClickAction: () -> Unit,
     val syncAction: () -> Unit,
     val lockAction: () -> Unit,
-    val exitConfirmationAction: () -> Unit,
     val vaultItemClick: (VaultState.ViewState.VaultItem) -> Unit,
     val folderClick: (VaultState.ViewState.FolderItem) -> Unit,
     val collectionClick: (VaultState.ViewState.CollectionItem) -> Unit,
@@ -79,9 +78,6 @@ data class VaultHandlers(
                 addAccountClickAction = { viewModel.trySendAction(VaultAction.AddAccountClick) },
                 syncAction = { viewModel.trySendAction(VaultAction.SyncClick) },
                 lockAction = { viewModel.trySendAction(VaultAction.LockClick) },
-                exitConfirmationAction = {
-                    viewModel.trySendAction(VaultAction.ExitConfirmationClick)
-                },
                 vaultItemClick = { viewModel.trySendAction(VaultAction.VaultItemClick(it)) },
                 folderClick = { viewModel.trySendAction(VaultAction.FolderClick(it)) },
                 collectionClick = { viewModel.trySendAction(VaultAction.CollectionClick(it)) },

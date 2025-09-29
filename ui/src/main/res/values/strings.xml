@@ -366,8 +366,6 @@ Scanning will happen automatically.</string>
     <string name="theme">Theme</string>
     <string name="theme_description">Change the application’s color theme</string>
     <string name="copy_notes">Copy note</string>
-    <string name="exit">Exit</string>
-    <string name="exit_confirmation">Are you sure you want to exit Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Do you want to require unlocking with your master password when the application is restarted?</string>
     <string name="ask_to_add_item">Ask to add item</string>
