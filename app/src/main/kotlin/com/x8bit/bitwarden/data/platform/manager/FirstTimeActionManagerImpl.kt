@@ -140,7 +140,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
                     )
                 }
             }
-            .onStart { emit(FirstTimeState()) }
+            .onStart { emit(currentOrDefaultUserFirstTimeState) }
             .distinctUntilChanged()
 
     override val shouldShowAddLoginCoachMarkFlow: Flow<Boolean>
@@ -174,7 +174,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
                         showImportLoginsCardInSettings = settingsDiskSource
                             .getShowImportLoginsSettingBadge(it),
                         showSetupBrowserAutofillCard = settingsDiskSource
-                            .getShowUnlockSettingBadge(it),
+                            .getShowBrowserAutofillSettingBadge(it),
                     )
                 }
                 ?: FirstTimeState()

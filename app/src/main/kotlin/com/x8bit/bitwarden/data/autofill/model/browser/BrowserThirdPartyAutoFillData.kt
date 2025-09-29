@@ -19,6 +19,14 @@ data class BrowserThirdPartyAutofillStatus(
     val chromeBetaChannelStatusData: BrowserThirdPartyAutoFillData,
 ) {
     /**
+     * The total number of available browsers.
+     */
+    val availableCount: Int
+        get() = (if (braveStableStatusData.isAvailable) 1 else 0) +
+            (if (chromeStableStatusData.isAvailable) 1 else 0) +
+            (if (chromeBetaChannelStatusData.isAvailable) 1 else 0)
+
+    /**
      * Whether any of the available browsers have third party autofill disabled.
      */
     val isAnyIsAvailableAndDisabled: Boolean

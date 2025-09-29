@@ -5,6 +5,11 @@ package com.x8bit.bitwarden.data.autofill.manager.browser
  */
 interface BrowserAutofillDialogManager {
     /**
+     * Number of browsers installed that may need autofill enabled.
+     */
+    val browserCount: Int
+
+    /**
      * Indicates whether the dialog should be displayed to the user.
      */
     val shouldShowDialog: Boolean

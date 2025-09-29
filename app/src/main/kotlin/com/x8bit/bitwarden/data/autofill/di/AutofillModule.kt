@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessorImpl
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProviderImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -70,11 +71,13 @@ object AutofillModule {
         autofillEnabledManager: AutofillEnabledManager,
         browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
         clock: Clock,
+        firstTimeActionManager: FirstTimeActionManager,
         settingsDiskSource: SettingsDiskSource,
     ): BrowserAutofillDialogManager = BrowserAutofillDialogManagerImpl(
         autofillEnabledManager = autofillEnabledManager,
         browserThirdPartyAutofillEnabledManager = browserThirdPartyAutofillEnabledManager,
         clock = clock,
+        firstTimeActionManager = firstTimeActionManager,
         settingsDiskSource = settingsDiskSource,
     )
 

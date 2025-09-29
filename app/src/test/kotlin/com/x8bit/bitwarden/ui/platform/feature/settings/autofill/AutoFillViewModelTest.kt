@@ -43,6 +43,7 @@ class AutoFillViewModelTest : BaseViewModelTest() {
     private val mutableFirstTimeStateFlow = MutableStateFlow(FirstTimeState())
     private val firstTimeActionManager: FirstTimeActionManager = mockk {
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
+        every { currentOrDefaultUserFirstTimeState } answers { mutableFirstTimeStateFlow.value }
         every { storeShowAutoFillSettingBadge(showBadge = any()) } just runs
         every { storeShowBrowserAutofillSettingBadge(showBadge = any()) } just runs
     }
@@ -175,6 +176,15 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         )
         // The UI enables the value, so the value gets flipped to save it as a "disabled" value.
         verify { settingsRepository.isAutofillSavePromptDisabled = false }
+    }
+
+    @Test
+    fun `on HelpCardClick should emit NavigateToAutofillHelp`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AutoFillAction.HelpCardClick)
+            assertEquals(AutoFillEvent.NavigateToAutofillHelp, awaitItem())
+        }
     }
 
     @Test
