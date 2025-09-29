@@ -242,7 +242,6 @@ class VaultViewModel @Inject constructor(
             is VaultAction.AddAccountClick -> handleAddAccountClick()
             is VaultAction.SyncClick -> handleSyncClick()
             is VaultAction.LockClick -> handleLockClick()
-            is VaultAction.ExitConfirmationClick -> handleExitConfirmationClick()
             is VaultAction.VaultFilterTypeSelect -> handleVaultFilterTypeSelect(action)
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
             is VaultAction.SshKeyGroupClick -> handleSshKeyClick()
@@ -495,10 +494,6 @@ class VaultViewModel @Inject constructor(
 
     private fun handleLockClick() {
         vaultRepository.lockVaultForCurrentUser(isUserInitiated = true)
-    }
-
-    private fun handleExitConfirmationClick() {
-        sendEvent(VaultEvent.NavigateOutOfApp)
     }
 
     private fun handleVaultFilterTypeSelect(action: VaultAction.VaultFilterTypeSelect) {
@@ -1574,11 +1569,6 @@ sealed class VaultEvent {
     data object NavigateToVerificationCodeScreen : VaultEvent()
 
     /**
-     * Navigate out of the app.
-     */
-    data object NavigateOutOfApp : VaultEvent()
-
-    /**
      * Navigate to the import logins screen.
      */
     data object NavigateToImportLogins : VaultEvent()
@@ -1697,12 +1687,6 @@ sealed class VaultAction {
      * User clicked the Lock option in the overflow menu.
      */
     data object LockClick : VaultAction()
-
-    /**
-     * User confirmed that they want to exit the app after clicking the Sync option in the overflow
-     * menu.
-     */
-    data object ExitConfirmationClick : VaultAction()
 
     /**
      * User selected a [VaultFilterType] from the Vault Filter menu.
