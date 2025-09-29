@@ -7,7 +7,10 @@ import com.bitwarden.data.manager.NativeLibraryManager
 import com.bitwarden.sdk.Client
 import com.x8bit.bitwarden.data.platform.manager.sdk.SdkRepositoryFactory
 
-class Token: ClientManagedTokens {
+/**
+ * The token provider to pass to the SDK.
+ */
+class Token : ClientManagedTokens {
     override suspend fun getAccessToken(): String? {
         return null
     }
