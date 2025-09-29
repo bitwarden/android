@@ -618,14 +618,12 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = VaultAddEditState.ViewState.Loading)
         }
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         mutableStateFlow.update {
             it.copy(viewState = VaultAddEditState.ViewState.Error("Fail".asText()))
         }
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(
@@ -636,8 +634,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 ),
             )
         }
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
     }
 
     @Test

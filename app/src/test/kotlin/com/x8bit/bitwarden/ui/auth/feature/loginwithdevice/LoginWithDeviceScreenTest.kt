@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
 import androidx.compose.ui.test.assert
-import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
@@ -117,14 +116,12 @@ class LoginWithDeviceScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = LoginWithDeviceState.ViewState.Loading)
         }
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         mutableStateFlow.update {
             it.copy(viewState = DEFAULT_STATE.viewState)
         }
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
     }
 
     @Test

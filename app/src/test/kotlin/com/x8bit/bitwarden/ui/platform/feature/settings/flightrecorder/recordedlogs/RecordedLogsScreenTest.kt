@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedlogs
 
-import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -103,8 +102,7 @@ class RecordedLogsScreenTest : BitwardenComposeTest() {
     @Test
     fun `UI should change based on ViewState`() {
         mutableStateFlow.update { it.copy(viewState = RecordedLogsState.ViewState.Loading) }
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         mutableStateFlow.update { it.copy(viewState = RecordedLogsState.ViewState.Empty) }
         composeTestRule.onNodeWithText(text = "No logs recorded").assertIsDisplayed()
