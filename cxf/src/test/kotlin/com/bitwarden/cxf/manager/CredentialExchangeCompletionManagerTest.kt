@@ -28,6 +28,7 @@ class CredentialExchangeCompletionManagerTest {
                 context = any(),
                 uri = any(),
                 response = any(),
+                intent = any(),
             )
         } just runs
 
@@ -54,6 +55,7 @@ class CredentialExchangeCompletionManagerTest {
                 context = mockActivity,
                 uri = mockUri,
                 response = any(),
+                intent = any(),
             )
             mockActivity.setResult(Activity.RESULT_OK, any())
             mockActivity.finish()
