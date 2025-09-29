@@ -1538,7 +1538,9 @@ class VaultSdkSourceTest {
                     password = "mockPassword",
                     kdf = kdf,
                 )
-            } throws BitwardenException.E("mockException")
+            } throws mockk<BitwardenException> {
+                every { message } returns "mockException"
+            }
             val result = vaultSdkSource.makeUpdateKdf(
                 userId = "mockUserId",
                 password = "mockPassword",
