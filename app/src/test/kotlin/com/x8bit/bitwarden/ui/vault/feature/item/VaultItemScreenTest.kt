@@ -2045,8 +2045,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             )
         }
 
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
         composeTestRule
             .onNodeWithText("Passkey")
@@ -2091,8 +2090,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             )
         }
 
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
         composeTestRule
             .onNodeWithContentDescription("Copy TOTP")
@@ -2113,8 +2111,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule.onNodeWithTextAfterScroll("Authenticator key")
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         composeTestRule
             .onNodeWithContentDescription("Copy TOTP")
@@ -2130,8 +2127,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule.onNodeWithTextAfterScroll("Authenticator key")
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll("Copy TOTP")
@@ -2148,8 +2144,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule.onNodeWithTextAfterScroll("Authenticator key")
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
         composeTestRule
             .onNodeWithContentDescription("Copy TOTP")
@@ -2351,22 +2346,19 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = VaultItemState.ViewState.Loading)
         }
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         mutableStateFlow.update {
             it.copy(viewState = VaultItemState.ViewState.Error("Fail".asText()))
         }
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) {
                 copy(totpCodeItemData = null)
             }
         }
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
     }
 
     @Test
