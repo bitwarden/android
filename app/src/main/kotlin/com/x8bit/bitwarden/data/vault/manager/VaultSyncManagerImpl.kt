@@ -209,7 +209,13 @@ class VaultSyncManagerImpl(
 
         pushManager
             .fullSyncFlow
-            .onEach { sync(forced = false) }
+            .onEach { userId ->
+                if (userId == activeUserId) {
+                    sync(forced = false)
+                } else {
+                    settingsDiskSource.storeLastSyncTime(userId = userId, lastSyncTime = null)
+                }
+            }
             .launchIn(unconfinedScope)
 
         databaseSchemeManager

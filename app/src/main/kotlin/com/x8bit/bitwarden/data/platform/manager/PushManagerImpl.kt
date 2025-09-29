@@ -55,7 +55,7 @@ class PushManagerImpl @Inject constructor(
     private val ioScope = CoroutineScope(dispatcherManager.io)
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 
-    private val mutableFullSyncSharedFlow = bufferedMutableSharedFlow<Unit>()
+    private val mutableFullSyncSharedFlow = bufferedMutableSharedFlow<String>()
     private val mutableLogoutSharedFlow = bufferedMutableSharedFlow<NotificationLogoutData>()
     private val mutablePasswordlessRequestSharedFlow =
         bufferedMutableSharedFlow<PasswordlessRequestData>()
@@ -73,7 +73,7 @@ class PushManagerImpl @Inject constructor(
     private val mutableSyncSendUpsertSharedFlow =
         bufferedMutableSharedFlow<SyncSendUpsertData>()
 
-    override val fullSyncFlow: SharedFlow<Unit>
+    override val fullSyncFlow: SharedFlow<String>
         get() = mutableFullSyncSharedFlow.asSharedFlow()
 
     override val logoutFlow: SharedFlow<NotificationLogoutData>
@@ -204,7 +204,10 @@ class PushManagerImpl @Inject constructor(
             NotificationType.SYNC_SETTINGS,
             NotificationType.SYNC_VAULT,
                 -> {
-                mutableFullSyncSharedFlow.tryEmit(Unit)
+                json
+                    .decodeFromString<NotificationPayload.SyncNotification>(notification.payload)
+                    .userId
+                    ?.let { mutableFullSyncSharedFlow.tryEmit(it) }
             }
 
             NotificationType.SYNC_FOLDER_CREATE,

@@ -126,7 +126,7 @@ class VaultSyncManagerTest {
     private val userLogoutManager: UserLogoutManager = mockk {
         every { softLogout(any(), any()) } just runs
     }
-    private val mutableFullSyncFlow = bufferedMutableSharedFlow<Unit>()
+    private val mutableFullSyncFlow = bufferedMutableSharedFlow<String>()
     private val pushManager: PushManager = mockk {
         every { fullSyncFlow } returns mutableFullSyncFlow
     }
@@ -1105,15 +1105,27 @@ class VaultSyncManagerTest {
         }
 
     @Test
-    fun `fullSyncFlow emission should trigger unforced sync`() {
+    fun `fullSyncFlow emission with active user ID should trigger an unforced sync`() {
         val userId = "mockId-1"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
-        every { settingsDiskSource.getLastSyncTime(userId = userId) } returns null
         coEvery { syncService.sync() } just awaits
 
-        mutableFullSyncFlow.tryEmit(Unit)
+        mutableFullSyncFlow.tryEmit(userId)
 
-        coVerify { syncService.sync() }
+        coVerify(exactly = 1) { syncService.sync() }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `fullSyncFlow emission with non-active user ID should clear last sync time for that user`() {
+        val userId = "mockId-2"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        mutableFullSyncFlow.tryEmit(userId)
+
+        coVerify(exactly = 1) {
+            settingsDiskSource.storeLastSyncTime(userId = userId, lastSyncTime = null)
+        }
     }
 
     @Suppress("MaxLineLength")
