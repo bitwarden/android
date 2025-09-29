@@ -1123,4 +1123,11 @@ Do you want to switch to this account?</string>
     <string name="verify_your_master_password">Verify your master password</string>
     <string name="having_trouble_with_autofill">Having trouble with autofill?</string>
     <string name="access_help_and_troubleshooting_documentation_here">Access help and troubleshooting documentation here</string>
+    <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import passwords, passkeys, and other item types from your Bitwarden vault.</string>
+    <string name="items_to_import">Items to import</string>
+    <string name="exporting_items">Exporting items…</string>
+    <string name="export_failed">Export failed</string>
+    <string name="passwords">Passwords</string>
+    <string name="passkeys">Passkeys</string>
+    <string name="import_verb">Import</string>
 </resources>
