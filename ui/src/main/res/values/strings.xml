@@ -760,8 +760,14 @@ Do you want to switch to this account?</string>
     <string name="turn_on_autofill">Turn on autofill</string>
     <string name="autofill_setup">Autofill setup</string>
     <string name="turn_on_browser_autofill_integration">Turn on browser autofill integration</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions_for_bitwarden">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords.</string>
-    <string name="youre_using_a_browser_that_requires_special_permissions">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
+    <plurals name="youre_using_a_browser_that_requires_special_permissions_for_bitwarden">
+        <item quantity="one">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords.</item>
+        <item quantity="other">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords.</item>
+    </plurals>
+    <plurals name="youre_using_a_browser_that_requires_special_permissions">
+        <item quantity="one">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</item>
+        <item quantity="other">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords. Enable autofill for all your installed browsers to continue.</item>
+    </plurals>
     <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
     <string name="turn_on_later">Turn on later</string>
     <string name="turn_on_autofill_later">Turn on autofill later?</string>
@@ -1112,9 +1118,15 @@ Do you want to switch to this account?</string>
         <item quantity="other">%1$d items have been imported to your vault.</item>
     </plurals>
     <string name="enable_browser_autofill_to_keep_filling_passwords">Enable browser Autofill to keep filling passwords</string>
-    <string name="your_browser_recently_updated_how_autofill_works">Your browser recently updated how Autofill works. To continue filling your passwords with Bitwarden, enable browser Autofill in autofill settings.</string>
+    <plurals name="your_browser_recently_updated_how_autofill_works">
+        <item quantity="one">Your browser has recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill in autofill settings.</item>
+        <item quantity="other">Your browsers have recently updated, which has disabled Bitwarden autofill. To continue filling your passwords with Bitwarden, enable browser autofill for all installed browsers in autofill settings.</item>
+    </plurals>
     <string name="not_now">Not now</string>
     <string name="import_from_bitwarden">Import from Bitwarden</string>
     <string name="select_account">Select account</string>
     <string name="import_restricted_unable_to_import_credit_cards">Import restricted, unable to import cards from this account.</string>
+    <string name="verify_your_master_password">Verify your master password</string>
+    <string name="having_trouble_with_autofill">Having trouble with autofill?</string>
+    <string name="access_help_and_troubleshooting_documentation_here">Access help and troubleshooting documentation here</string>
 </resources>

@@ -585,7 +585,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     fun `ThirdPartyBrowserAutofill should be displayed according to state`() {
         composeTestRule.assertNoDialogExists()
         mutableStateFlow.update {
-            it.copy(dialog = VaultState.DialogState.ThirdPartyBrowserAutofill)
+            it.copy(dialog = VaultState.DialogState.ThirdPartyBrowserAutofill(browserCount = 1))
         }
 
         composeTestRule
@@ -601,7 +601,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     @Test
     fun `ThirdPartyBrowserAutofill dialog Not now button should emit DismissThirdPartyAutofillDialogClick`() {
         mutableStateFlow.update {
-            it.copy(dialog = VaultState.DialogState.ThirdPartyBrowserAutofill)
+            it.copy(dialog = VaultState.DialogState.ThirdPartyBrowserAutofill(browserCount = 2))
         }
 
         composeTestRule
@@ -619,7 +619,7 @@ class VaultScreenTest : BitwardenComposeTest() {
     @Test
     fun `ThirdPartyBrowserAutofill dialog Go to settings now button should emit EnableThirdPartyAutofillClick`() {
         mutableStateFlow.update {
-            it.copy(dialog = VaultState.DialogState.ThirdPartyBrowserAutofill)
+            it.copy(dialog = VaultState.DialogState.ThirdPartyBrowserAutofill(browserCount = 3))
         }
 
         composeTestRule

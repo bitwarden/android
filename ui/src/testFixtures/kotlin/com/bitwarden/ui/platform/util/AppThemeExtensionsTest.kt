@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.util
+package com.bitwarden.ui.platform.util
 
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.resource.BitwardenString

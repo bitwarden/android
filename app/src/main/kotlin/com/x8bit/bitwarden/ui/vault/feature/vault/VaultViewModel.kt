@@ -192,6 +192,7 @@ class VaultViewModel @Inject constructor(
                 SnackbarRelay.CIPHER_DELETED_SOFT,
                 SnackbarRelay.CIPHER_RESTORED,
                 SnackbarRelay.CIPHER_UPDATED,
+                SnackbarRelay.FOLDER_CREATED,
                 SnackbarRelay.LOGINS_IMPORTED,
             ),
         )
@@ -216,7 +217,8 @@ class VaultViewModel @Inject constructor(
             delay(timeMillis = BROWSER_AUTOFILL_DIALOG_DELAY)
             mutableStateFlow.update { vaultState ->
                 vaultState.copy(
-                    dialog = VaultState.DialogState.ThirdPartyBrowserAutofill
+                    dialog = VaultState.DialogState
+                        .ThirdPartyBrowserAutofill(browserAutofillDialogManager.browserCount)
                         .takeIf {
                             vaultState.dialog == null &&
                                 browserAutofillDialogManager.shouldShowDialog
@@ -960,7 +962,7 @@ class VaultViewModel @Inject constructor(
                     cipherCount = vaultData.data.decryptCipherListResult.failures.size,
                 )
             } else if (state.dialog is VaultState.DialogState.ThirdPartyBrowserAutofill) {
-                VaultState.DialogState.ThirdPartyBrowserAutofill
+                state.dialog
             } else {
                 null
             },
@@ -1559,7 +1561,9 @@ data class VaultState(
          * Represents a dialog indicating that a 3rd party browser required Autofill configuration.
          */
         @Parcelize
-        data object ThirdPartyBrowserAutofill : DialogState()
+        data class ThirdPartyBrowserAutofill(
+            val browserCount: Int,
+        ) : DialogState()
 
         /**
          * Represents a dialog indicating that there was a decryption error loading ciphers.

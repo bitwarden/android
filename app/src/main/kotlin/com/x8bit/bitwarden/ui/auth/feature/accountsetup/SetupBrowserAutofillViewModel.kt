@@ -131,9 +131,14 @@ data class SetupBrowserAutofillState(
     val browserAutofillSettingsOptions: ImmutableList<BrowserAutofillSettingsOption>,
 ) : Parcelable {
     /**
+     * The number of browsers that can be configured.
+     */
+    val browserCount: Int get() = browserAutofillSettingsOptions.size
+
+    /**
      * Indicates if the Continue button should be enabled or not.
      */
-    val isContinueEnabled: Boolean get() = browserAutofillSettingsOptions.any { it.isEnabled }
+    val isContinueEnabled: Boolean get() = browserAutofillSettingsOptions.all { it.isEnabled }
 
     /**
      * Models dialogs that can be shown on the Setup Browser Autofill screen.

@@ -228,6 +228,7 @@ class UserStateJsonExtensionsTest {
                             every { isTwoFactorEnabled } returns false
                             every { creationDate } returns ZonedDateTime
                                 .parse("2024-09-13T01:00:00.00Z")
+                            every { userDecryption } returns null
                         }
                     },
                 ),

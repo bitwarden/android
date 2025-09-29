@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.isValidEmail
 import com.bitwarden.ui.platform.resource.BitwardenPlurals
@@ -54,6 +55,7 @@ class CompleteRegistrationViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
+    private val toastManager: ToastManager,
 ) : BaseViewModel<CompleteRegistrationState, CompleteRegistrationEvent, CompleteRegistrationAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val args = savedStateHandle.toCompleteRegistrationArgs()
@@ -146,9 +148,7 @@ class CompleteRegistrationViewModel @Inject constructor(
 
         viewModelScope.launch {
             sendEvent(
-                CompleteRegistrationEvent.ShowToast(
-                    message = BitwardenString.email_verified.asText(),
-                ),
+                CompleteRegistrationEvent.ShowSnackbar(BitwardenString.email_verified.asText()),
             )
         }
     }
@@ -243,11 +243,7 @@ class CompleteRegistrationViewModel @Inject constructor(
 
     private fun handleLoginResult(action: Internal.ReceiveLoginResult) {
         clearDialogState()
-        sendEvent(
-            CompleteRegistrationEvent.ShowToast(
-                message = BitwardenString.account_created_success.asText(),
-            ),
-        )
+        toastManager.show(messageId = BitwardenString.account_created_success)
 
         authRepository.setOnboardingStatus(
             status = OnboardingStatus.NOT_STARTED,
@@ -504,9 +500,9 @@ sealed class CompleteRegistrationEvent {
     data object NavigateBack : CompleteRegistrationEvent()
 
     /**
-     * Show a toast with the given message.
+     * Show a snackbar with the given message.
      */
-    data class ShowToast(
+    data class ShowSnackbar(
         val message: Text,
     ) : CompleteRegistrationEvent()
 

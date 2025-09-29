@@ -27,8 +27,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenWideSwitch
-import com.bitwarden.authenticator.ui.platform.components.util.maxDialogHeight
-import com.bitwarden.authenticator.ui.platform.components.util.maxDialogWidth
+import com.bitwarden.ui.platform.components.dialog.util.maxDialogHeight
+import com.bitwarden.ui.platform.components.dialog.util.maxDialogWidth
 import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**

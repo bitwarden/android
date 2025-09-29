@@ -71,6 +71,7 @@ import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.util.displayLabel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 

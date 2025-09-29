@@ -39,8 +39,8 @@ import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
-import com.x8bit.bitwarden.ui.platform.util.displayLabel
 import kotlinx.collections.immutable.toImmutableList
 
 /**

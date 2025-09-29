@@ -9,6 +9,8 @@ import androidx.navigation.navigation
 import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.selectaccount.SelectAccountRoute
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.selectaccount.selectAccountDestination
+import com.x8bit.bitwarden.ui.vault.feature.exportitems.verifypassword.navigateToVerifyPassword
+import com.x8bit.bitwarden.ui.vault.feature.exportitems.verifypassword.verifyPasswordDestination
 import kotlinx.serialization.Serializable
 
 /**
@@ -21,13 +23,21 @@ data object ExportItemsRoute
 /**
  * Add export items destinations to the nav graph.
  */
-fun NavGraphBuilder.exportItemsGraph() {
+fun NavGraphBuilder.exportItemsGraph(
+    navController: NavController,
+) {
     navigation<ExportItemsRoute>(
         startDestination = SelectAccountRoute,
     ) {
         selectAccountDestination(
             onAccountSelected = {
-                // TODO: [PM-26110] Navigate to verify password screen.
+                navController.navigateToVerifyPassword(userId = it)
+            },
+        )
+        verifyPasswordDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onPasswordVerified = {
+                // TODO: [PM-26111] Navigate to confirm export screen.
             },
         )
     }

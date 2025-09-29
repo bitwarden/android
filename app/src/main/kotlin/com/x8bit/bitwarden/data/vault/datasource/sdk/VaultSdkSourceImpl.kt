@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk
 
 import com.bitwarden.collections.Collection
 import com.bitwarden.collections.CollectionView
+import com.bitwarden.core.DeriveKeyConnectorException
 import com.bitwarden.core.DeriveKeyConnectorRequest
 import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.InitOrgCryptoRequest
@@ -94,14 +95,17 @@ class VaultSdkSourceImpl(
                         ),
                     )
                 DeriveKeyConnectorResult.Success(key)
-            } catch (exception: BitwardenException) {
-                when {
-                    exception.message == "Wrong password" -> {
+            } catch (ex: BitwardenException.DeriveKeyConnector) {
+                when (ex.v1) {
+                    is DeriveKeyConnectorException.WrongPassword -> {
                         DeriveKeyConnectorResult.WrongPasswordError
                     }
-
-                    else -> DeriveKeyConnectorResult.Error(exception)
+                    is DeriveKeyConnectorException.Crypto -> {
+                        DeriveKeyConnectorResult.Error(error = ex)
+                    }
                 }
+            } catch (exception: BitwardenException) {
+                DeriveKeyConnectorResult.Error(error = exception)
             }
         }
 

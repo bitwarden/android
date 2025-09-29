@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk
 
 import com.bitwarden.collections.Collection
 import com.bitwarden.collections.CollectionView
+import com.bitwarden.core.DeriveKeyConnectorException
 import com.bitwarden.core.DeriveKeyConnectorRequest
 import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.InitOrgCryptoRequest
@@ -202,15 +203,61 @@ class VaultSdkSourceTest {
         }
 
     @Test
-    fun `deriveKeyConnector should call SDK and return a Result with wrong password`() =
+    @Suppress("MaxLineLength")
+    fun `deriveKeyConnector should call SDK with WrongPassword exception and return a Result with wrong password`() =
         runBlocking {
             val userId = "userId"
             val userKeyEncrypted = "userKeyEncrypted"
             val email = "email"
             val password = "password"
-            val error = mockk<BitwardenException> {
-                every { message } returns "Wrong password"
+            val kdf = mockk<Kdf>()
+            coEvery {
+                clientCrypto.deriveKeyConnector(
+                    request = DeriveKeyConnectorRequest(
+                        userKeyEncrypted = userKeyEncrypted,
+                        email = email,
+                        password = password,
+                        kdf = kdf,
+                    ),
+                )
+            } throws BitwardenException.DeriveKeyConnector(
+                v1 = DeriveKeyConnectorException.WrongPassword(message = "mock message"),
+            )
+            val result = vaultSdkSource.deriveKeyConnector(
+                userId = userId,
+                userKeyEncrypted = userKeyEncrypted,
+                email = email,
+                password = password,
+                kdf = kdf,
+            )
+            assertEquals(
+                DeriveKeyConnectorResult.WrongPasswordError,
+                result.getOrNull(),
+            )
+            coVerify(exactly = 1) {
+                sdkClientManager.getOrCreateClient(userId = userId)
+                clientCrypto.deriveKeyConnector(
+                    request = DeriveKeyConnectorRequest(
+                        userKeyEncrypted = userKeyEncrypted,
+                        email = email,
+                        password = password,
+                        kdf = kdf,
+                    ),
+                )
             }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `deriveKeyConnector should call SDK with Crypto exception return and return a Result with error`() =
+        runBlocking {
+            val userId = "userId"
+            val userKeyEncrypted = "userKeyEncrypted"
+            val email = "email"
+            val password = "password"
+            val error = BitwardenException.DeriveKeyConnector(
+                v1 = DeriveKeyConnectorException.Crypto(message = "mock message"),
+            )
             val kdf = mockk<Kdf>()
             coEvery {
                 clientCrypto.deriveKeyConnector(
@@ -230,7 +277,7 @@ class VaultSdkSourceTest {
                 kdf = kdf,
             )
             assertEquals(
-                DeriveKeyConnectorResult.WrongPasswordError,
+                DeriveKeyConnectorResult.Error(error = error),
                 result.getOrNull(),
             )
             coVerify(exactly = 1) {
