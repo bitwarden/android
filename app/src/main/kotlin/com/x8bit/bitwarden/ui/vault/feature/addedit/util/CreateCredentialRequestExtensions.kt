@@ -23,7 +23,7 @@ fun CreateCredentialRequest.toDefaultAddTypeContent(
         ?: callingAppInfo.packageName
             .toAndroidAppUriString()
 
-    val name = attestationOptions
+    val rpName = attestationOptions
         ?.relyingParty
         ?.name ?: callingAppInfo.packageName
 
@@ -40,7 +40,7 @@ fun CreateCredentialRequest.toDefaultAddTypeContent(
 
     return VaultAddEditState.ViewState.Content(
         common = VaultAddEditState.ViewState.Content.Common(
-            name = name,
+            name = rpName,
         ),
         isIndividualVaultDisabled = isIndividualVaultDisabled,
         type = VaultAddEditState.ViewState.Content.ItemType.Login(

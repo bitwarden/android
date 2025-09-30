@@ -99,6 +99,7 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.time.Clock
+import java.time.Instant
 import java.util.Collections
 import java.util.UUID
 import javax.inject.Inject
@@ -443,9 +444,10 @@ class VaultAddEditViewModel @Inject constructor(
 
         state.createCredentialRequest
             ?.let { request ->
+                //store a deleted date to mark that this data has not been saved yet
                 handleProviderCreateCredentialRequest(
                     request.providerRequest,
-                    content.toCipherView(),
+                    content.toCipherView().copy(deletedDate = Instant.now()),
                 )
                 return@onContent
             }
