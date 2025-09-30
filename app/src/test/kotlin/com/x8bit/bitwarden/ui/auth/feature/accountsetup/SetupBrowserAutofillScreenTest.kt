@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.assertNoDialogExists
@@ -34,7 +35,9 @@ import org.junit.Test
 
 class SetupBrowserAutofillScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
-    private val intentManager = mockk<IntentManager>()
+    private val intentManager = mockk<IntentManager> {
+        every { launchUri(uri = any()) } just runs
+    }
 
     private val mutableEventFlow = bufferedMutableSharedFlow<SetupBrowserAutofillEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -66,6 +69,16 @@ class SetupBrowserAutofillScreenTest : BitwardenComposeTest() {
     fun `NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(SetupBrowserAutofillEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `NavigateToBrowserIntegrationsInfo should call onNavigateBack`() {
+        mutableEventFlow.tryEmit(SetupBrowserAutofillEvent.NavigateToBrowserIntegrationsInfo)
+        verify(exactly = 1) {
+            intentManager.launchUri(
+                uri = "https://bitwarden.com/help/auto-fill-android/#browser-integrations/".toUri(),
+            )
+        }
     }
 
     @Test
@@ -110,6 +123,18 @@ class SetupBrowserAutofillScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithContentDescription(label = "Close").assertDoesNotExist()
         mutableStateFlow.update { it.copy(isInitialSetup = false) }
         composeTestRule.onNodeWithContentDescription(label = "Close").assertExists()
+    }
+
+    @Test
+    fun `why is this step required button click should emit WhyIsThisStepRequiredClick`() {
+        mutableStateFlow.update { it.copy(isInitialSetup = false) }
+        composeTestRule
+            .onNodeWithText(text = "Why is this step required?")
+            .performScrollTo()
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(SetupBrowserAutofillAction.WhyIsThisStepRequiredClick)
+        }
     }
 
     @Test

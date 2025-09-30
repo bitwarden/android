@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,6 +15,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.pluralStringResource
@@ -21,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -31,6 +34,7 @@ import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
@@ -62,6 +66,12 @@ fun SetupBrowserAutofillScreen(
             is SetupBrowserAutofillEvent.NavigateToBrowserAutofillSettings -> {
                 intentManager.startBrowserAutofillSettingsActivity(
                     browserPackage = event.browserPackage,
+                )
+            }
+
+            SetupBrowserAutofillEvent.NavigateToBrowserIntegrationsInfo -> {
+                intentManager.launchUri(
+                    "https://bitwarden.com/help/auto-fill-android/#browser-integrations/".toUri(),
                 )
             }
         }
@@ -106,6 +116,9 @@ fun SetupBrowserAutofillScreen(
     ) {
         SetupBrowserAutofillContent(
             state = state,
+            onWhyIsThisStepRequiredClick = remember(viewModel) {
+                { viewModel.trySendAction(SetupBrowserAutofillAction.WhyIsThisStepRequiredClick) }
+            },
             onBrowserClick = remember(viewModel) {
                 { viewModel.trySendAction(SetupBrowserAutofillAction.BrowserIntegrationClick(it)) }
             },
@@ -120,9 +133,11 @@ fun SetupBrowserAutofillScreen(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun SetupBrowserAutofillContent(
     state: SetupBrowserAutofillState,
+    onWhyIsThisStepRequiredClick: () -> Unit,
     onBrowserClick: (BrowserPackage) -> Unit,
     onContinueClick: () -> Unit,
     onTurnOnLaterClick: () -> Unit,
@@ -154,7 +169,16 @@ private fun SetupBrowserAutofillContent(
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
-        Spacer(modifier = Modifier.height(height = 24.dp))
+        BitwardenClickableText(
+            label = stringResource(id = BitwardenString.why_is_this_step_required),
+            style = BitwardenTheme.typography.labelMedium,
+            onClick = onWhyIsThisStepRequiredClick,
+            modifier = Modifier
+                .wrapContentWidth()
+                .align(alignment = Alignment.CenterHorizontally)
+                .standardHorizontalMargin(),
+        )
+        Spacer(modifier = Modifier.height(height = 8.dp))
         BrowserAutofillSettingsCard(
             options = state.browserAutofillSettingsOptions,
             onOptionClicked = onBrowserClick,
@@ -221,6 +245,7 @@ private fun SetupBrowserAutofillContent_preview() {
                     BrowserAutofillSettingsOption.ChromeBeta(enabled = true),
                 ),
             ),
+            onWhyIsThisStepRequiredClick = { },
             onBrowserClick = { },
             onContinueClick = { },
             onTurnOnLaterClick = { },

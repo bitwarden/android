@@ -56,6 +56,10 @@ class SetupBrowserAutofillViewModel @Inject constructor(
                 handleBrowserIntegrationClick(action)
             }
 
+            SetupBrowserAutofillAction.WhyIsThisStepRequiredClick -> {
+                handleWhyIsThisStepRequiredClick()
+            }
+
             SetupBrowserAutofillAction.CloseClick -> handleCloseClick()
             SetupBrowserAutofillAction.DismissDialog -> handleDismissDialog()
             SetupBrowserAutofillAction.ContinueClick -> handleContinueClick()
@@ -79,6 +83,10 @@ class SetupBrowserAutofillViewModel @Inject constructor(
         sendEvent(
             SetupBrowserAutofillEvent.NavigateToBrowserAutofillSettings(action.browserPackage),
         )
+    }
+
+    private fun handleWhyIsThisStepRequiredClick() {
+        sendEvent(SetupBrowserAutofillEvent.NavigateToBrowserIntegrationsInfo)
     }
 
     private fun handleCloseClick() {
@@ -167,6 +175,11 @@ sealed class SetupBrowserAutofillEvent {
     data class NavigateToBrowserAutofillSettings(
         val browserPackage: BrowserPackage,
     ) : SetupBrowserAutofillEvent()
+
+    /**
+     * Navigates to the browser integrations info page.
+     */
+    data object NavigateToBrowserIntegrationsInfo : SetupBrowserAutofillEvent()
 }
 
 /**
@@ -204,6 +217,11 @@ sealed class SetupBrowserAutofillAction {
      * Indicates that the confirmation button was clicked to turn on later.
      */
     data object TurnOnLaterConfirmClick : SetupBrowserAutofillAction()
+
+    /**
+     * Indicates that the "Why is this step required?" button was clicked.
+     */
+    data object WhyIsThisStepRequiredClick : SetupBrowserAutofillAction()
 
     /**
      * Models actions the [SetupBrowserAutofillViewModel] itself may send.
