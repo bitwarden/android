@@ -163,6 +163,7 @@ import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import javax.net.ssl.SSLHandshakeException
+import kotlin.text.get
 
 @Suppress("LargeClass")
 class
@@ -7231,6 +7232,37 @@ AuthRepositoryTest {
             coVerify(exactly = 1) {
                 accountsService.updateKdf(any())
             }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `updateKdfToMinimumsIfNeeded with PBKDF2 below minimums should update userState to minimums`() =
+        runTest {
+            coEvery {
+                vaultSdkSource.makeUpdateKdf(
+                    userId = any(),
+                    password = any(),
+                    kdf = any(),
+                )
+            } returns UPDATE_KDF_RESPONSE.asSuccess()
+
+            coEvery {
+                accountsService.updateKdf(any())
+            } returns Unit.asSuccess()
+
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
+
+            val result = repository.updateKdfToMinimumsIfNeeded(password = PASSWORD)
+
+            assertEquals(UpdateKdfMinimumsResult.Success, result)
+
+            // Verify userState was updated with minimum KDF values
+            val updatedUserState = fakeAuthDiskSource.userState
+            val updatedProfile = updatedUserState?.accounts?.get(USER_ID_2)?.profile
+            assertEquals(KdfTypeJson.PBKDF2_SHA256, updatedProfile?.kdfType)
+            assertEquals(600000, updatedProfile?.kdfIterations)
+            assertNull(updatedProfile?.kdfMemory)
+            assertNull(updatedProfile?.kdfParallelism)
         }
 
     companion object {
