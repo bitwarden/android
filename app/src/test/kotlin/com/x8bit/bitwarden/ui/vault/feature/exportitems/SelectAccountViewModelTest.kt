@@ -50,11 +50,8 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial state should be correct`() = runTest {
         val viewModel = createViewModel()
-
         assertEquals(
-            SelectAccountState(
-                accountSelectionListItems = persistentListOf(),
-            ),
+            SelectAccountState(viewState = SelectAccountState.ViewState.Loading),
             viewModel.stateFlow.value,
         )
     }
@@ -79,7 +76,11 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
         )
 
         assertEquals(
-            SelectAccountState(accountSelectionListItems = persistentListOf(expectedItem)),
+            SelectAccountState(
+                viewState = SelectAccountState.ViewState.Content(
+                    accountSelectionListItems = persistentListOf(expectedItem),
+                ),
+            ),
             viewModel.stateFlow.value,
         )
     }
@@ -116,9 +117,7 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
             ),
         )
         assertEquals(
-            SelectAccountState(
-                accountSelectionListItems = persistentListOf(),
-            ),
+            SelectAccountState(viewState = SelectAccountState.ViewState.NoItems),
             viewModel.stateFlow.value,
         )
     }
@@ -163,7 +162,11 @@ class SelectAccountViewModelTest : BaseViewModelTest() {
                 ),
             )
             assertEquals(
-                SelectAccountState(accountSelectionListItems = persistentListOf(expectedItem)),
+                SelectAccountState(
+                    viewState = SelectAccountState.ViewState.Content(
+                        accountSelectionListItems = persistentListOf(expectedItem),
+                    ),
+                ),
                 viewModel.stateFlow.value,
             )
         }

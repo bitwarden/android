@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.exportitems
 
 import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.isNotDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -124,6 +125,42 @@ class SelectAccountScreenTest : BitwardenComposeTest() {
 
             assertTrue(onAccountSelectedCalled)
         }
+
+    @Test
+    fun `NoItemsContent should be displayed according to state`() = runTest {
+        mockkStateFlow.emit(
+            DEFAULT_STATE.copy(
+                viewState = SelectAccountState.ViewState.NoItems,
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("No accounts available")
+            .isDisplayed()
+
+        composeTestRule
+            .onNodeWithText(
+                text = "You don't have any accounts you can import from.",
+                substring = true,
+            )
+            .isDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Select an account")
+            .isNotDisplayed()
+    }
+
+    @Test
+    fun `Loading content should be displayed according to state`() = runTest {
+        mockkStateFlow.emit(
+            DEFAULT_STATE.copy(
+                viewState = SelectAccountState.ViewState.Loading,
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Loading")
+            .isDisplayed()
+    }
 }
 
 private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
@@ -148,20 +185,22 @@ private val LOCKED_ACCOUNT_SUMMARY = AccountSummary(
 )
 
 private val DEFAULT_STATE = SelectAccountState(
-    accountSelectionListItems = persistentListOf(
-        AccountSelectionListItem(
-            userId = ACTIVE_ACCOUNT_SUMMARY.userId,
-            email = ACTIVE_ACCOUNT_SUMMARY.email,
-            initials = "AA",
-            avatarColorHex = "#FFFF0000",
-            isItemRestricted = false,
-        ),
-        AccountSelectionListItem(
-            userId = LOCKED_ACCOUNT_SUMMARY.userId,
-            email = LOCKED_ACCOUNT_SUMMARY.email,
-            initials = "LU",
-            avatarColorHex = "#FF00FF00",
-            isItemRestricted = false,
+    viewState = SelectAccountState.ViewState.Content(
+        accountSelectionListItems = persistentListOf(
+            AccountSelectionListItem(
+                userId = ACTIVE_ACCOUNT_SUMMARY.userId,
+                email = ACTIVE_ACCOUNT_SUMMARY.email,
+                initials = "AA",
+                avatarColorHex = "#FFFF0000",
+                isItemRestricted = false,
+            ),
+            AccountSelectionListItem(
+                userId = LOCKED_ACCOUNT_SUMMARY.userId,
+                email = LOCKED_ACCOUNT_SUMMARY.email,
+                initials = "LU",
+                avatarColorHex = "#FF00FF00",
+                isItemRestricted = false,
+            ),
         ),
     ),
 )
