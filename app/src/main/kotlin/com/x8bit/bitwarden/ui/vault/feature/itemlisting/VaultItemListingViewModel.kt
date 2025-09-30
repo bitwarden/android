@@ -1013,16 +1013,16 @@ class VaultItemListingViewModel @Inject constructor(
                             cipherView = cipherView,
                         )
                     } ?: run {
-                        sendAction(
-                            VaultItemListingsAction.Internal.CredentialOperationFailureReceive(
-                                title = BitwardenString.an_error_has_occurred.asText(),
-                message = BitwardenString
-                                    .credential_operation_failed_because_the_request_is_unsupported
-                                    .asText(),
-                                error = null,
-                            ),
-                        )
-                    }
+                    sendAction(
+                        VaultItemListingsAction.Internal.CredentialOperationFailureReceive(
+                            title = BitwardenString.an_error_has_occurred.asText(),
+                            message = BitwardenString
+                                .credential_operation_failed_because_the_request_is_unsupported
+                                .asText(),
+                            error = null,
+                        ),
+                    )
+                }
             }
         }
     }

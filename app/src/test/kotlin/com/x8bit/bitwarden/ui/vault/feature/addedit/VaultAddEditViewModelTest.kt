@@ -1343,7 +1343,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 )
             val stateWithSavingDialog = createVaultAddItemState(
                 dialogState = VaultAddEditState.DialogState.Loading(
-                    R.string.saving.asText(),
+                    BitwardenString.saving.asText(),
                 ),
                 commonContentViewState = createCommonContentViewState(
                     name = "mockName-1",
@@ -1393,10 +1393,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 assertEquals(stateWithName, stateFlow.awaitItem())
                 assertEquals(stateWithSavingDialog, stateFlow.awaitItem())
-                assertEquals(
-                    VaultAddEditEvent.ShowToast(R.string.item_updated.asText()),
-                    eventFlow.awaitItem(),
-                )
                 assertEquals(stateWithName, stateFlow.awaitItem())
                 assertEquals(
                     VaultAddEditEvent.CompletePasswordRegistration(
@@ -1410,6 +1406,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         createPasswordRequest = mockCreatePasswordRequest,
                     )
                 }
+            }
+
+            verify(exactly = 1) {
+                toastManager.show(messageId = BitwardenString.item_updated)
             }
         }
 
@@ -2301,6 +2301,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `in edit mode during Password registration, SaveClick should display ConfirmOverwriteExistingPasswordDialog when original cipher has a password`() =
         runTest {
+            val cipherListView = createMockCipherListView(1)
             val cipherView = createMockCipherView(number = 5)
             val mockPasswordCredentialRequest = createMockCreateCredentialRequest(number = 1)
             val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
@@ -2334,7 +2335,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 )
             } returns stateWithName.viewState
             mutableVaultDataFlow.value = DataState.Loaded(
-                createVaultData(cipherView = cipherView),
+                createVaultData(cipherListView = cipherListView),
             )
 
             val viewModel = createAddVaultItemViewModel(
@@ -2356,6 +2357,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `ConfirmOverwriteExistingPasswordClick should register credential when user is verified`() {
+        val cipherListView = createMockCipherListView(1)
         val cipherView = createMockCipherView(number = 1)
         val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
         val mockPasswordRequest = createMockCreateCredentialRequest(number = 1)
@@ -2402,7 +2404,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every { bitwardenCredentialManager.isUserVerified } returns true
 
         mutableVaultDataFlow.value = DataState.Loaded(
-            createVaultData(cipherView = cipherView),
+            createVaultData(cipherListView = cipherListView),
         )
 
         val viewModel = createAddVaultItemViewModel(
@@ -4811,11 +4813,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
             }
+        }
 
     @Suppress("MaxLineLength")
     @Test
     fun `PasswordRegisterResult Error should show toast and emit CompletePasswordRegistration result`() =
         runTest {
+            val viewModel = createAddVaultItemViewModel()
             val mockRequest = createMockCreateCredentialRequest(number = 1)
             val mockResult = PasswordRegisterResult.Error.InternalError
             specialCircumstanceManager.specialCircumstance =
@@ -4840,19 +4844,18 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultAddEditEvent.ShowToast(R.string.an_error_has_occurred.asText()),
-                    awaitItem(),
-                )
-
-                assertEquals(
                     VaultAddEditEvent.CompletePasswordRegistration(
                         RegisterPasswordCredentialResult.Error(
-                            R.string.password_registration_failed_due_to_an_internal_error
+                            BitwardenString.password_registration_failed_due_to_an_internal_error
                                 .asText(),
                         ),
                     ),
                     awaitItem(),
                 )
+            }
+
+            verify(exactly = 1) {
+                toastManager.show(messageId = BitwardenString.an_error_has_occurred)
             }
         }
 
@@ -4860,6 +4863,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `PasswordRegisterResult Success should show toast and emit CompletePasswordRegistration result`() =
         runTest {
+            val viewModel = createAddVaultItemViewModel()
             val mockRequest = createMockCreateCredentialRequest(number = 1)
             val mockResult = PasswordRegisterResult.Success
             specialCircumstanceManager.specialCircumstance =
@@ -4883,19 +4887,17 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultAddEditEvent.ShowToast(R.string.item_updated.asText()),
-                    awaitItem(),
-                )
-
-                assertEquals(
                     VaultAddEditEvent.CompletePasswordRegistration(
                         RegisterPasswordCredentialResult.Success,
                     ),
                     awaitItem(),
                 )
             }
+
+            verify(exactly = 1) {
+                toastManager.show(messageId = BitwardenString.item_updated)
+            }
         }
-    }
 
     //region Helper functions
 

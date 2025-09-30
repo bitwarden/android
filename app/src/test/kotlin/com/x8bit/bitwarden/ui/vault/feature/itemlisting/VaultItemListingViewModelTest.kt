@@ -959,17 +959,20 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `ItemClick for vault item during Password registration should show overwrite password confirmation when selected cipher has existing password`() {
         runTest {
             setupMockUri()
-            val cipherView = createMockCipherView(number = 1)
+            val cipherListView = createMockCipherListView(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
                     createCredentialRequest = createMockCreateCredentialRequest(number = 1),
                 )
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
-                    cipherViewList = listOf(cipherView),
-                    folderViewList = emptyList(),
-                    collectionViewList = emptyList(),
-                    sendViewList = emptyList(),
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(cipherListView),
+                    ),
+                    folderViewList = listOf(),
+                    collectionViewList = listOf(),
+                    sendViewList = listOf(),
                 ),
             )
             coEvery {
@@ -983,7 +986,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
                 VaultItemListingsAction.ItemClick(
-                    id = cipherView.id.orEmpty(),
+                    id = cipherListView.id.orEmpty(),
                     type = VaultItemListingState.DisplayItem.ItemType.Vault(
                         type = CipherType.LOGIN,
                     ),
@@ -992,7 +995,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.OverwritePasswordConfirmationPrompt(
-                    cipherViewId = cipherView.id!!,
+                    cipherViewId = cipherListView.id!!,
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -1004,10 +1007,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `ItemClick for vault item during Password registration should perform registration`() =
         runTest {
             setupMockUri()
-            val cipherView = createMockCipherView(
-                number = 1,
-                password = "",
-            )
+            val cipherListView = createMockCipherListView(number = 1)
             val mockPasswordRequest = createMockCreateCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
@@ -1015,10 +1015,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 )
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
-                    cipherViewList = listOf(cipherView),
-                    folderViewList = emptyList(),
-                    collectionViewList = emptyList(),
-                    sendViewList = emptyList(),
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(cipherListView),
+                    ),
+                    folderViewList = listOf(),
+                    collectionViewList = listOf(),
+                    sendViewList = listOf(),
                 ),
             )
 
@@ -1033,7 +1036,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
                 VaultItemListingsAction.ItemClick(
-                    id = cipherView.id.orEmpty(),
+                    id = cipherListView.id.orEmpty(),
                     type = VaultItemListingState.DisplayItem.ItemType.Vault(
                         type = CipherType.LOGIN,
                     ),
@@ -5177,17 +5180,23 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `ConfirmOverwriteExistingPasswordClick should display CredentialManagerOperationFail when getSelectedCipher returns null`() =
         runTest {
             setupMockUri()
-            val cipherView = createMockCipherView(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
                     createCredentialRequest = createMockCreateCredentialRequest(number = 1),
                 )
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
-                    cipherViewList = listOf(cipherView),
-                    folderViewList = emptyList(),
-                    collectionViewList = emptyList(),
-                    sendViewList = emptyList(),
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(
+                            createMockCipherListView(
+                                number = 1,
+                            ),
+                        ),
+                    ),
+                    folderViewList = listOf(),
+                    collectionViewList = listOf(),
+                    sendViewList = listOf(),
                 ),
             )
             setupPasswordCreateRequest()
@@ -5200,8 +5209,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    R.string.an_error_has_occurred.asText(),
-                    R.string.password_operation_failed_because_the_selected_item_does_not_exist
+                    BitwardenString.an_error_has_occurred.asText(),
+                    BitwardenString.password_operation_failed_because_the_selected_item_does_not_exist
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
@@ -5936,6 +5945,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(VaultItemListingEvent.ShowSnackbar(data = snackbarData), awaitItem())
         }
     }
+
     private fun setupFido2CreateRequest(
         mockCallingAppInfo: CallingAppInfo = this.mockCallingAppInfo,
         mockCreatePublicKeyCredentialRequest: CreatePublicKeyCredentialRequest =
