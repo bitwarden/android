@@ -35,8 +35,6 @@ import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.PasswordRegisterResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
-import com.x8bit.bitwarden.data.credentials.util.getCreatePasskeyCredentialRequestOrNull
-import com.x8bit.bitwarden.data.credentials.util.getCreatePasswordCredentialRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -63,7 +61,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordCredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordResult
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -595,7 +592,7 @@ class VaultAddEditViewModel @Inject constructor(
             authRepository.activeUserId
                 ?: run {
                     showPasswordErrorDialog(
-                        R.string.password_operation_failed_because_user_could_not_be_verified
+                        BitwardenString.password_operation_failed_because_user_could_not_be_verified
                             .asText(),
                     )
                     return@launch
@@ -764,7 +761,7 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
         sendEvent(
             VaultAddEditEvent.CompletePasswordRegistration(
-                result = RegisterPasswordResult.Error(action.message),
+                result = RegisterPasswordCredentialResult.Error(action.message),
             ),
         )
     }
@@ -2095,10 +2092,10 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
         when (action.result) {
             is PasswordRegisterResult.Error -> {
-                sendEvent(VaultAddEditEvent.ShowToast(BitwardenString.an_error_has_occurred.asText()))
+                toastManager.show(BitwardenString.an_error_has_occurred)
                 sendEvent(
                     VaultAddEditEvent.CompletePasswordRegistration(
-                        RegisterPasswordResult.Error(
+                        RegisterPasswordCredentialResult.Error(
                             action.result.messageResourceId.asText(),
                         ),
                     ),
@@ -2106,10 +2103,10 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is PasswordRegisterResult.Success -> {
-                sendEvent(VaultAddEditEvent.ShowToast(BitwardenString.item_updated.asText()))
+                toastManager.show(BitwardenString.item_updated)
                 sendEvent(
                     VaultAddEditEvent.CompletePasswordRegistration(
-                        RegisterPasswordResult.Success,
+                        RegisterPasswordCredentialResult.Success,
                     ),
                 )
             }
@@ -3048,7 +3045,7 @@ sealed class VaultAddEditEvent {
      * @property result the result of Password credential registration.
      */
     data class CompletePasswordRegistration(
-        val result: RegisterPasswordResult,
+        val result: RegisterPasswordCredentialResult,
     ) : BackgroundEvent, VaultAddEditEvent()
 
     /**

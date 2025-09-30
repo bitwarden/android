@@ -673,9 +673,7 @@ Do you want to switch to this account?</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Set up an unlock option to change your vault timeout action.</string>
     <string name="save_passkey_as_new_login">Save passkey as new login</string>
     <string name="overwrite_passkey">Overwrite passkey?</string>
-    <string name="overwrite_password">Overwrite password?</string>
     <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">This item already contains a passkey. Are you sure you want to overwrite the current passkey?</string>
-    <string name="this_item_already_contains_a_password_are_you_sure_you_want_to_overwrite_the_current_passkey">This item already contains a password. Are you sure you want to overwrite the current password?</string>
     <string name="duo_two_step_login_is_required_for_your_account">Duo two-step login is required for your account.</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Follow the steps from Duo to finish logging in.</string>
     <string name="launch_duo">Launch Duo</string>
@@ -696,7 +694,6 @@ Do you want to switch to this account?</string>
     <string name="self_hosted_server_url">Self-hosted server URL</string>
     <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
-    <string name="password_operation_failed_because_user_could_not_be_verified">Password operation failed because user could not be verified.</string>
     <string name="user_verification_direction">User verification</string>
     <string name="create_account_on">Create account on</string>
     <string name="create_account_on_with_colon">Create account on:</string>
@@ -897,12 +894,8 @@ Do you want to switch to this account?</string>
     <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
-    <string name="password_registration_failed_due_to_an_internal_error">Password registration failed due to an internal error.</string>
-    <string name="password_operation_failed_because_the_request_is_invalid">Password operation failed because the request is invalid.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
-    <string name="credential_operation_failed_because_the_request_is_unsupported">Credential operation failed because the request is unsupported.</string>
-    <string name="credential_operation_failed_because_the_request_is_invalid">Credential operation failed because the request is invalid.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>

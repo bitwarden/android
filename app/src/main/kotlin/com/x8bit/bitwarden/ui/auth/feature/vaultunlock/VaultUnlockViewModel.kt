@@ -556,7 +556,6 @@ sealed class VaultUnlockEvent {
      * Completes the FIDO2 credential assertion request with an error response.
      */
     data class Fido2CredentialAssertionError(val message: Text) : VaultUnlockEvent()
-
 }
 
 /**

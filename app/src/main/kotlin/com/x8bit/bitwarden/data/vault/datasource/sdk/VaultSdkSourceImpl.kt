@@ -50,7 +50,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.time.Instant
-import kotlin.collections.filter
 
 /**
  * Primary implementation of [VaultSdkSource] that serves as a convenience wrapper around a

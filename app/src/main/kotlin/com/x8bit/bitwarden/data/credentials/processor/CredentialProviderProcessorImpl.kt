@@ -169,7 +169,7 @@ class CredentialProviderProcessorImpl(
         val entryBuilder = CreateEntry
             .Builder(
                 accountName = accountName,
-                pendingIntent = pendingIntentManager.createCredentialCreationPendingIntent(
+                pendingIntent = pendingIntentManager.createFido2CreationPendingIntent(
                     userId = userId,
                 ),
             )
@@ -217,10 +217,8 @@ class CredentialProviderProcessorImpl(
         val entryBuilder = CreateEntry
             .Builder(
                 accountName = accountName,
-                pendingIntent = intentManager.createCredentialCreationPendingIntent(
-                    CREATE_PASSWORD_INTENT,
-                    userId,
-                    requestCode.getAndIncrement(),
+                pendingIntent = pendingIntentManager.createPasswordCreationPendingIntent(
+                    userId = userId,
                 ),
             )
             .setDescription(

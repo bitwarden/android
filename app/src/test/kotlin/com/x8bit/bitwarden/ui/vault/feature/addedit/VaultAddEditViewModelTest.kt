@@ -79,7 +79,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordCredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordResult
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -1401,7 +1400,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithName, stateFlow.awaitItem())
                 assertEquals(
                     VaultAddEditEvent.CompletePasswordRegistration(
-                        RegisterPasswordResult.Success,
+                        RegisterPasswordCredentialResult.Success,
                     ),
                     eventFlow.awaitItem(),
                 )
@@ -4847,7 +4846,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 assertEquals(
                     VaultAddEditEvent.CompletePasswordRegistration(
-                        RegisterPasswordResult.Error(
+                        RegisterPasswordCredentialResult.Error(
                             R.string.password_registration_failed_due_to_an_internal_error
                                 .asText(),
                         ),
@@ -4890,7 +4889,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 assertEquals(
                     VaultAddEditEvent.CompletePasswordRegistration(
-                        RegisterPasswordResult.Success,
+                        RegisterPasswordCredentialResult.Success,
                     ),
                     awaitItem(),
                 )

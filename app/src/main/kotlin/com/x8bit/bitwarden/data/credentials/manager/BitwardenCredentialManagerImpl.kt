@@ -25,7 +25,6 @@ import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessaryOrNull
 import com.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
-import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithCopyablePassword
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilder
@@ -60,7 +59,6 @@ import timber.log.Timber
 class BitwardenCredentialManagerImpl(
     private val vaultSdkSource: VaultSdkSource,
     private val fido2CredentialStore: Fido2CredentialStore,
-    private val autofillCipherProvider: AutofillCipherProvider,
     private val credentialEntryBuilder: CredentialEntryBuilder,
     private val json: Json,
     private val vaultRepository: VaultRepository,
@@ -192,7 +190,6 @@ class BitwardenCredentialManagerImpl(
 
     override suspend fun getCredentialEntries(
         getCredentialsRequest: GetCredentialsRequest,
-        originValidated: Boolean,
     ): Result<List<CredentialEntry>> = withContext(ioScope.coroutineContext) {
         val cipherListViews = vaultRepository
             .decryptCipherListResultStateFlow
@@ -222,15 +219,12 @@ class BitwardenCredentialManagerImpl(
             }
             .orEmpty()
 
-        val passkeyCredentialResult = if (originValidated) {
-            getCredentialsRequest
-                .beginGetPublicKeyCredentialOptions
-                .toPublicKeyCredentialEntries(
-                    userId = getCredentialsRequest.userId,
-
-                )
-                .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
-        } else null
+        val passkeyCredentialResult = getCredentialsRequest
+            .beginGetPublicKeyCredentialOptions
+            .toPublicKeyCredentialEntries(
+                userId = getCredentialsRequest.userId,
+            )
+            .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
 
         if (passkeyCredentialResult.isFailure && passwordCredentialResult.isNotEmpty()) {
             Result.success(passwordCredentialResult)
@@ -247,7 +241,6 @@ class BitwardenCredentialManagerImpl(
         userId: String,
     ): Result<List<CredentialEntry>> {
         if (this.isEmpty()) return emptyList<CredentialEntry>().asSuccess()
-
         val assertionOptions = this
             .mapNotNull { getPasskeyAssertionOptionsOrNull(it.requestJson) }
             .ifEmpty {
@@ -403,7 +396,7 @@ class BitwardenCredentialManagerImpl(
             },
         )
 
-    private suspend fun List<BeginGetPasswordOption>.toPasswordCredentialEntries(
+    private fun List<BeginGetPasswordOption>.toPasswordCredentialEntries(
         userId: String,
         cipherListViews: List<CipherListView>,
     ): List<CredentialEntry> {

@@ -57,7 +57,6 @@ import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.credentials.util.getCreatePasskeyCredentialRequestOrNull
 import com.x8bit.bitwarden.data.credentials.util.getCreatePasswordCredentialRequestOrNull
-import com.x8bit.bitwarden.data.credentials.util.getCreatePasswordCredentialRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
@@ -84,8 +83,7 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialRes
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordCredentialResult
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
@@ -2241,7 +2239,7 @@ class VaultItemListingViewModel @Inject constructor(
                 sendEvent(VaultItemListingEvent.ShowSnackbar(BitwardenString.item_updated.asText()))
                 sendEvent(
                     VaultItemListingEvent.CompletePasswordRegistration(
-                        RegisterPasswordResult.Success,
+                        RegisterPasswordCredentialResult.Success,
                     ),
                 )
             }
@@ -2269,7 +2267,7 @@ class VaultItemListingViewModel @Inject constructor(
         sendEvent(VaultItemListingEvent.ShowSnackbar(BitwardenString.an_error_has_occurred.asText()))
         sendEvent(
             VaultItemListingEvent.CompletePasswordRegistration(
-                RegisterPasswordResult.Error(
+                RegisterPasswordCredentialResult.Error(
                     message = error.messageResourceId.asText(),
                 ),
             ),
@@ -3451,7 +3449,7 @@ sealed class VaultItemListingEvent {
      * @property result The result of Password credential registration.
      */
     data class CompletePasswordRegistration(
-        val result: RegisterPasswordResult,
+        val result: RegisterPasswordCredentialResult,
     ) : BackgroundEvent, VaultItemListingEvent()
 
     /**
@@ -3701,14 +3699,7 @@ sealed class VaultItemListingsAction {
     ) : VaultItemListingsAction()
 
     /**
-     * The user has confirmed overwriting the existing cipher's passkey.
-     */
-    data class ConfirmOverwriteExistingPasswordClick(
-        val cipherViewId: String,
-    ) : VaultItemListingsAction()
-
-    /**
-     * The user has confirmed overwriting the existing cipher's passkey.
+     * The user has confirmed overwriting the existing cipher's password.
      */
     data class ConfirmOverwriteExistingPasswordClick(
         val cipherViewId: String,
@@ -3824,13 +3815,6 @@ sealed class VaultItemListingsAction {
          */
         data class Fido2RegisterCredentialResultReceive(
             val result: Fido2RegisterCredentialResult,
-        ) : Internal()
-
-        /**
-         * Indicates that a result for password credential registration has been received.
-         */
-        data class PasswordRegisterCredentialResultReceive(
-            val result: PasswordRegisterResult,
         ) : Internal()
 
         /**

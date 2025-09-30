@@ -220,7 +220,7 @@ class CredentialProviderProcessorTest {
         every { context.packageName } returns "com.x8bit.bitwarden"
         every { context.getString(any(), any()) } returns "mockDescription"
         every {
-            pendingIntentManager.createCredentialCreationPendingIntent(
+            pendingIntentManager.createFido2CreationPendingIntent(
                 userId = any(),
             )
         } returns mockIntent
@@ -268,7 +268,7 @@ class CredentialProviderProcessorTest {
         } returns "{\"mockJsonRequest\":1}"
         every { callback.onResult(capture(captureSlot)) } just runs
         every {
-            pendingIntentManager.createCredentialCreationPendingIntent(
+            pendingIntentManager.createFido2CreationPendingIntent(
                 userId = any(),
             )
         } returns mockIntent

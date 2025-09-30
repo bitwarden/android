@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import androidx.annotation.StringRes
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.data.credentials.model.PasswordRegisterResult
 
 /**
@@ -12,5 +12,5 @@ val PasswordRegisterResult.Error.messageResourceId: Int
     @StringRes
     get() = when (this) {
         PasswordRegisterResult.Error.InternalError ->
-            R.string.password_registration_failed_due_to_an_internal_error
+            BitwardenString.password_registration_failed_due_to_an_internal_error
     }

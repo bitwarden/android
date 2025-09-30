@@ -52,7 +52,7 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialRes
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordCredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
@@ -1980,7 +1980,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `CompletePasswordRegistration event should call CredentialProviderCompletionManager with result`() {
-        val result = RegisterPasswordResult.Success
+        val result = RegisterPasswordCredentialResult.Success
         mutableEventFlow.tryEmit(VaultItemListingEvent.CompletePasswordRegistration(result))
         verify {
             credentialProviderCompletionManager.completePasswordRegistration(result)

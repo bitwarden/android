@@ -5,19 +5,19 @@ import com.bitwarden.ui.util.Text
 /**
  * Represents the result of a Password registration attempt.
  */
-sealed class RegisterPasswordResult {
+sealed class RegisterPasswordCredentialResult {
     /**
      * Indicates that the registration was successful.
      */
-    data object Success : RegisterPasswordResult()
+    data object Success : RegisterPasswordCredentialResult()
 
     /**
      * Indicates that an error occurred during registration.
      */
-    data class Error(val message: Text) : RegisterPasswordResult()
+    data class Error(val message: Text) : RegisterPasswordCredentialResult()
 
     /**
      * Indicates that the registration was cancelled by the user.
      */
-    data object Cancelled : RegisterPasswordResult()
+    data object Cancelled : RegisterPasswordCredentialResult()
 }

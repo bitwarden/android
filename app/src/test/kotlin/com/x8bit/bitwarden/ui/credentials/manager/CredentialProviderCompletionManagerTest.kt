@@ -11,7 +11,6 @@ import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.data.credentials.processor.GET_CREDENTIAL_INTENT
 import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
@@ -20,7 +19,7 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialRes
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordCredentialResult
 import io.mockk.Called
 import io.mockk.MockKVerificationScope
 import io.mockk.Ordering
@@ -73,7 +72,7 @@ class CredentialProviderCompletionManagerTest {
 
         @Test
         fun `completePasswordRegistration should perform no operations`() {
-            val mockRegistrationResult = mockk<RegisterPasswordResult>()
+            val mockRegistrationResult = mockk<RegisterPasswordCredentialResult>()
             credentialProviderCompletionManager.completePasswordRegistration(mockRegistrationResult)
             verify {
                 mockRegistrationResult wasNot Called
@@ -184,7 +183,7 @@ class CredentialProviderCompletionManagerTest {
         @Test
         fun `completePasswordRegistration should set CreateCredentialResponse, set activity result, then finish activity when result is Success`() {
             credentialProviderCompletionManager
-                .completePasswordRegistration(RegisterPasswordResult.Success)
+                .completePasswordRegistration(RegisterPasswordCredentialResult.Success)
 
             verifyActivityResultIsSetAndFinishedAfter {
                 PendingIntentHandler.setCreateCredentialResponse(any(), any())
@@ -195,7 +194,7 @@ class CredentialProviderCompletionManagerTest {
         @Test
         fun `completePasswordRegistration should set CreateCredentialException, set activity result, then finish activity when result is Error`() {
             credentialProviderCompletionManager
-                .completePasswordRegistration(RegisterPasswordResult.Error("".asText()))
+                .completePasswordRegistration(RegisterPasswordCredentialResult.Error("".asText()))
 
             verifyActivityResultIsSetAndFinishedAfter {
                 mockActivity.resources
@@ -207,7 +206,7 @@ class CredentialProviderCompletionManagerTest {
         @Test
         fun `completePasswordRegistration should set CreateCredentialException, set activity result, then finish activity when result is Cancelled`() {
             credentialProviderCompletionManager
-                .completePasswordRegistration(RegisterPasswordResult.Cancelled)
+                .completePasswordRegistration(RegisterPasswordCredentialResult.Cancelled)
 
             verifyActivityResultIsSetAndFinishedAfter {
                 PendingIntentHandler.setCreateCredentialException(any(), any())
@@ -318,8 +317,7 @@ class CredentialProviderCompletionManagerTest {
             val mockFido2AutofillView = createMockFido2CredentialAutofillView(number = 1)
 
             every {
-                mockIntentManager.createFido2GetCredentialPendingIntent(
-                    action = GET_CREDENTIAL_INTENT,
+                mockPendingIntentManager.createFido2GetCredentialPendingIntent(
                     userId = "mockUserId",
                     credentialId = mockFido2AutofillView.credentialId.toString(),
                     cipherId = mockFido2AutofillView.cipherId,
