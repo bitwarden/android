@@ -102,6 +102,19 @@ class SetupBrowserAutofillViewModelTest {
     }
 
     @Test
+    fun `WhyIsThisStepRequiredClick should send NavigateToBrowserIntegrationsInfo event`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(SetupBrowserAutofillAction.WhyIsThisStepRequiredClick)
+                assertEquals(
+                    SetupBrowserAutofillEvent.NavigateToBrowserIntegrationsInfo,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
     fun `BrowserIntegrationClick should send NavigateToBrowserAutofillSettings event`() = runTest {
         val browserPackage = BrowserPackage.BRAVE_RELEASE
         val viewModel = createViewModel()
