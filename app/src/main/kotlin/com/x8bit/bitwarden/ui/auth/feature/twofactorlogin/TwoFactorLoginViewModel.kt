@@ -14,16 +14,15 @@ import com.bitwarden.network.util.preferredAuthMethod
 import com.bitwarden.network.util.twoFactorDisplayEmail
 import com.bitwarden.network.util.twoFactorDuoAuthUrl
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
-import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -32,7 +31,6 @@ import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.imageRes
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.isContinueButtonEnabled
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.shouldUseNfc
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.showPasswordInput
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -71,7 +69,6 @@ class TwoFactorLoginViewModel @Inject constructor(
                     .preferredAuthMethod
                     .isContinueButtonEnabled,
                 isRememberEnabled = false,
-                captchaToken = null,
                 email = args.emailAddress,
                 password = args.password,
                 orgIdentifier = args.orgIdentifier,
@@ -93,13 +90,6 @@ class TwoFactorLoginViewModel @Inject constructor(
         // As state updates, write to saved state handle.
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
-
-        // Automatically attempt to login again if a captcha token is received.
-        authRepository
-            .captchaTokenResultFlow
-            .map { TwoFactorLoginAction.Internal.ReceiveCaptchaToken(tokenResult = it) }
-            .onEach(::sendAction)
             .launchIn(viewModelScope)
 
         // Process the Duo result when it is received.
@@ -147,9 +137,6 @@ class TwoFactorLoginViewModel @Inject constructor(
     private fun handleInternalAction(action: TwoFactorLoginAction.Internal) {
         when (action) {
             is TwoFactorLoginAction.Internal.ReceiveLoginResult -> handleReceiveLoginResult(action)
-            is TwoFactorLoginAction.Internal.ReceiveCaptchaToken -> {
-                handleCaptchaTokenReceived(action)
-            }
 
             is TwoFactorLoginAction.Internal.ReceiveDuoResult -> {
                 handleReceiveDuoResult(action)
@@ -169,30 +156,6 @@ class TwoFactorLoginViewModel @Inject constructor(
 
             TwoFactorLoginAction.Internal.SendVerificationCodeEmail -> {
                 handleSendVerificationCodeEmail()
-            }
-        }
-    }
-
-    private fun handleCaptchaTokenReceived(
-        action: TwoFactorLoginAction.Internal.ReceiveCaptchaToken,
-    ) {
-        when (val tokenResult = action.tokenResult) {
-            CaptchaCallbackTokenResult.MissingToken -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = TwoFactorLoginState.DialogState.Error(
-                            title = BitwardenString.log_in_denied.asText(),
-                            message = BitwardenString.captcha_failed.asText(),
-                        ),
-                    )
-                }
-            }
-
-            is CaptchaCallbackTokenResult.Success -> {
-                mutableStateFlow.update {
-                    it.copy(captchaToken = tokenResult.token)
-                }
-                initiateLogin()
             }
         }
     }
@@ -298,14 +261,6 @@ class TwoFactorLoginViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(dialogState = null) }
 
         when (val loginResult = action.loginResult) {
-            // Launch the captcha flow if necessary.
-            is LoginResult.CaptchaRequired -> {
-                sendEvent(
-                    event = TwoFactorLoginEvent.NavigateToCaptcha(
-                        uri = generateUriForCaptcha(captchaId = loginResult.captchaId),
-                    ),
-                )
-            }
 
             // NO-OP: This error shouldn't be possible at this stage.
             is LoginResult.TwoFactorRequired -> Unit
@@ -452,7 +407,8 @@ class TwoFactorLoginViewModel @Inject constructor(
                     it.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
                             title = BitwardenString.an_error_has_occurred.asText(),
-                            message = BitwardenString.verification_email_not_sent.asText(),
+                            message = result.message?.asText()
+                                ?: BitwardenString.verification_email_not_sent.asText(),
                             error = result.error,
                         ),
                     )
@@ -611,7 +567,6 @@ class TwoFactorLoginViewModel @Inject constructor(
                     email = state.email,
                     password = state.password,
                     newDeviceOtp = code,
-                    captchaToken = state.captchaToken,
                     orgIdentifier = state.orgIdentifier,
                 )
             } else {
@@ -623,7 +578,6 @@ class TwoFactorLoginViewModel @Inject constructor(
                         method = state.authMethod.value.toString(),
                         remember = state.isRememberEnabled,
                     ),
-                    captchaToken = state.captchaToken,
                     orgIdentifier = state.orgIdentifier,
                 )
             }
@@ -650,7 +604,6 @@ data class TwoFactorLoginState(
     val isRememberEnabled: Boolean,
     val isNewDeviceVerification: Boolean,
     // Internal
-    val captchaToken: String?,
     val email: String,
     val password: String?,
     val orgIdentifier: String?,
@@ -710,11 +663,6 @@ sealed class TwoFactorLoginEvent {
      * Navigates back to the previous screen.
      */
     data object NavigateBack : TwoFactorLoginEvent()
-
-    /**
-     * Navigates to the captcha verification screen.
-     */
-    data class NavigateToCaptcha(val uri: Uri) : TwoFactorLoginEvent()
 
     /**
      * Navigates to the Duo 2-factor authentication screen.
@@ -804,13 +752,6 @@ sealed class TwoFactorLoginAction {
      * Models actions that the [TwoFactorLoginViewModel] itself might send.
      */
     sealed class Internal : TwoFactorLoginAction() {
-        /**
-         * Indicates a captcha callback token has been received.
-         */
-        data class ReceiveCaptchaToken(
-            val tokenResult: CaptchaCallbackTokenResult,
-        ) : Internal()
-
         /**
          * Indicates that a Dup callback token has been received.
          */

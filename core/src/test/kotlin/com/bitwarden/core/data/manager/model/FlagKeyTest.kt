@@ -21,20 +21,8 @@ class FlagKeyTest {
             "cipher-key-encryption",
         )
         assertEquals(
-            FlagKey.UserManagedPrivilegedApps.keyName,
-            "pm-18970-user-managed-privileged-apps",
-        )
-        assertEquals(
-            FlagKey.RemoveCardPolicy.keyName,
-            "pm-16442-remove-card-item-type-policy",
-        )
-        assertEquals(
             FlagKey.BitwardenAuthenticationEnabled.keyName,
             "bitwarden-authentication-enabled",
-        )
-        assertEquals(
-            FlagKey.EnrollAeadOnKeyRotation.keyName,
-            "enroll-aead-on-key-rotation",
         )
     }
 
@@ -45,10 +33,7 @@ class FlagKeyTest {
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
                 FlagKey.CipherKeyEncryption,
-                FlagKey.UserManagedPrivilegedApps,
-                FlagKey.RemoveCardPolicy,
                 FlagKey.BitwardenAuthenticationEnabled,
-                FlagKey.EnrollAeadOnKeyRotation,
             ).all {
                 !it.defaultValue
             },

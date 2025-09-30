@@ -6,15 +6,20 @@ import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.provider.BiometricPromptResult
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
+import androidx.credentials.providerevents.transfer.ImportCredentialsRequest
+import androidx.credentials.providerevents.transfer.ProviderImportCredentialsRequest
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
+import com.bitwarden.cxf.util.getProviderImportCredentialsRequest
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManagerImpl
@@ -60,7 +65,6 @@ import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticato
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut
 import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
 import com.x8bit.bitwarden.ui.platform.util.isPasswordGeneratorShortcut
@@ -160,6 +164,10 @@ class MainViewModelTest : BaseViewModelTest() {
                 mockk<GetPublicKeyCredentialOption>(relaxed = true),
             )
         }
+    private val toastManager: ToastManager = mockk {
+        every { show(message = any(), duration = any()) } just runs
+        every { show(messageId = any(), duration = any()) } just runs
+    }
 
     @BeforeEach
     fun setup() {
@@ -174,6 +182,7 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getCreateCredentialRequestOrNull,
             Intent::getGetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
+            Intent::getProviderImportCredentialsRequest,
         )
         mockkStatic(
             Intent::isMyVaultShortcut,
@@ -205,6 +214,7 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getCreateCredentialRequestOrNull,
             Intent::getGetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
+            Intent::getProviderImportCredentialsRequest,
         )
         unmockkStatic(
             Intent::isMyVaultShortcut,
@@ -592,18 +602,11 @@ class MainViewModelTest : BaseViewModelTest() {
                 authRepository.validateEmailToken(email = intentEmail, token = token)
             } returns EmailTokenResult.Error(message = null, error = Throwable("Fail!"))
 
-            viewModel.eventFlow.test {
-                // We skip the first 2 events because they are the default appTheme and appLanguage
-                awaitItem()
-                awaitItem()
+            viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
 
-                viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
-                assertEquals(
-                    MainEvent.ShowToast(
-                        BitwardenString.there_was_an_issue_validating_the_registration_token
-                            .asText(),
-                    ),
-                    awaitItem(),
+            verify(exactly = 1) {
+                toastManager.show(
+                    BitwardenString.there_was_an_issue_validating_the_registration_token,
                 )
             }
         }
@@ -629,16 +632,10 @@ class MainViewModelTest : BaseViewModelTest() {
                 authRepository.validateEmailToken(email = intentEmail, token = token)
             } returns EmailTokenResult.Error(message = expectedMessage, error = null)
 
-            viewModel.eventFlow.test {
-                // We skip the first 2 events because they are the default appTheme and appLanguage
-                awaitItem()
-                awaitItem()
+            viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
 
-                viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
-                assertEquals(
-                    MainEvent.ShowToast(expectedMessage.asText()),
-                    awaitItem(),
-                )
+            verify(exactly = 1) {
+                toastManager.show(message = expectedMessage)
             }
         }
 
@@ -1109,6 +1106,37 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on ReceiveNewIntent with import credentials request data should set the special circumstance to CredentialExchangeExport`() {
+        val viewModel = createViewModel()
+        val importCredentialsRequestData = ProviderImportCredentialsRequest(
+            request = ImportCredentialsRequest("mockRequestJson"),
+            callingAppInfo = mockk(),
+            uri = mockk(),
+            credId = "mockCredId",
+        )
+        val mockIntent = createMockIntent(
+            mockProviderImportCredentialsRequest = importCredentialsRequestData,
+        )
+
+        viewModel.trySendAction(
+            MainAction.ReceiveNewIntent(
+                intent = mockIntent,
+            ),
+        )
+
+        assertEquals(
+            SpecialCircumstance.CredentialExchangeExport(
+                data = ImportCredentialsRequestData(
+                    uri = importCredentialsRequestData.uri,
+                    requestJson = importCredentialsRequestData.request.requestJson,
+                ),
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `on ResumeScreenDataReceived with null value, should call AppResumeManager clearResumeScreen`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(
@@ -1157,6 +1185,7 @@ class MainViewModelTest : BaseViewModelTest() {
             set(SPECIAL_CIRCUMSTANCE_KEY, initialSpecialCircumstance)
         },
         appResumeManager = appResumeManager,
+        toastManager = toastManager,
     )
 }
 
@@ -1217,6 +1246,7 @@ private fun createMockIntent(
     mockIsPasswordGeneratorShortcut: Boolean = false,
     mockIsAccountSecurityShortcut: Boolean = false,
     mockIsAddTotpLoginItemFromAuthenticator: Boolean = false,
+    mockProviderImportCredentialsRequest: ProviderImportCredentialsRequest? = null,
 ): Intent = mockk<Intent> {
     every { getTotpDataOrNull() } returns mockTotpData
     every { getPasswordlessRequestDataIntentOrNull() } returns mockPasswordlessRequestData
@@ -1231,6 +1261,7 @@ private fun createMockIntent(
     every { isPasswordGeneratorShortcut } returns mockIsPasswordGeneratorShortcut
     every { isAccountSecurityShortcut } returns mockIsAccountSecurityShortcut
     every { isAddTotpLoginItemFromAuthenticator() } returns mockIsAddTotpLoginItemFromAuthenticator
+    every { getProviderImportCredentialsRequest() } returns mockProviderImportCredentialsRequest
 }
 
 private val FIXED_CLOCK: Clock = Clock.fixed(

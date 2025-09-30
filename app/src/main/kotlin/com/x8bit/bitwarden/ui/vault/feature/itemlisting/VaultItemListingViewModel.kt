@@ -9,7 +9,6 @@ import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.map
@@ -21,7 +20,9 @@ import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -51,7 +52,6 @@ import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.credentials.util.getCreatePasskeyCredentialRequestOrNull
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
@@ -78,8 +78,6 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialRes
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
@@ -110,7 +108,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -145,7 +142,6 @@ class VaultItemListingViewModel @Inject constructor(
     private val bitwardenCredentialManager: BitwardenCredentialManager,
     private val organizationEventManager: OrganizationEventManager,
     private val networkConnectionManager: NetworkConnectionManager,
-    private val featureFlagManager: FeatureFlagManager,
     private val relyingPartyParser: RelyingPartyParser,
     private val toastManager: ToastManager,
     snackbarRelayManager: SnackbarRelayManager,
@@ -212,23 +208,18 @@ class VaultItemListingViewModel @Inject constructor(
 
         policyManager
             .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
-            .combine(
-                featureFlagManager.getFeatureFlagFlow(FlagKey.RemoveCardPolicy),
-            ) { policies, enabledFlag ->
-                if (enabledFlag) {
-                    policies.map { it.organizationId }
-                } else {
-                    emptyList()
-                }
-            }
+            .map { policies -> policies.map { it.organizationId } }
             .map { VaultItemListingsAction.Internal.RestrictItemTypesPolicyUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
         snackbarRelayManager
             .getSnackbarDataFlow(
+                SnackbarRelay.CIPHER_CREATED,
                 SnackbarRelay.CIPHER_DELETED,
+                SnackbarRelay.CIPHER_DELETED_SOFT,
                 SnackbarRelay.CIPHER_RESTORED,
+                SnackbarRelay.CIPHER_UPDATED,
                 SnackbarRelay.SEND_DELETED,
                 SnackbarRelay.SEND_UPDATED,
             )
@@ -350,6 +341,10 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             is VaultItemListingsAction.Internal -> handleInternalAction(action)
+
+            is VaultItemListingsAction.ShareCipherDecryptionErrorClick -> {
+                handleShareCipherDecryptionErrorClick(action)
+            }
         }
     }
 
@@ -639,6 +634,16 @@ class VaultItemListingViewModel @Inject constructor(
         action: ListingItemOverflowAction.SendAction.ShareUrlClick,
     ) {
         sendEvent(VaultItemListingEvent.ShowShareSheet(action.sendUrl))
+    }
+
+    private fun handleShareCipherDecryptionErrorClick(
+        action: VaultItemListingsAction.ShareCipherDecryptionErrorClick,
+    ) {
+        sendEvent(
+            event = VaultItemListingEvent.ShowShareSheet(
+                content = action.selectedCipherId,
+            ),
+        )
     }
 
     private fun handleRemoveSendPasswordClick(
@@ -935,8 +940,28 @@ class VaultItemListingViewModel @Inject constructor(
                     sendType = itemType.type.toSendItemType(),
                 )
             }
+
+            VaultItemListingState.DisplayItem.ItemType.DecryptionError -> {
+                showCipherDecryptionErrorItemClick(itemId = action.id)
+                return
+            }
         }
+
         sendEvent(event)
+    }
+
+    private fun showCipherDecryptionErrorItemClick(itemId: String) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.CipherDecryptionError(
+                    title = BitwardenString.decryption_error.asText(),
+                    message = BitwardenString
+                        .bitwarden_could_not_decrypt_this_vault_item_description_long
+                        .asText(),
+                    selectedCipherId = itemId,
+                ),
+            )
+        }
     }
 
     private fun handleItemClickForProviderCreateCredentialRequest(
@@ -2163,8 +2188,7 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun shouldShowTrustPrompt(error: ValidateOriginResult.Error): Boolean =
-        error is ValidateOriginResult.Error.PrivilegedAppNotAllowed &&
-            featureFlagManager.getFeatureFlag(FlagKey.UserManagedPrivilegedApps)
+        error is ValidateOriginResult.Error.PrivilegedAppNotAllowed
 
     private fun handleFido2AssertionDataReceive(
         action: VaultItemListingsAction.Internal.Fido2AssertionDataReceive,
@@ -2485,6 +2509,7 @@ class VaultItemListingViewModel @Inject constructor(
                         decryptCipherListResult = vaultData.decryptCipherListResult.copy(
                             successes = vaultData.decryptCipherListResult.successes
                                 .filter { it.type is CipherListViewType.Card },
+                            failures = emptyList(),
                         ),
                     )
                 }
@@ -2502,6 +2527,7 @@ class VaultItemListingViewModel @Inject constructor(
                                 cipherListViews = vaultData.decryptCipherListResult.successes,
                                 matchUri = matchUri,
                             ),
+                            failures = emptyList(),
                         ),
                     )
                 }
@@ -2525,6 +2551,7 @@ class VaultItemListingViewModel @Inject constructor(
                         cipherListViews = vaultData.decryptCipherListResult.successes,
                         matchUri = matchUri,
                     ),
+                    failures = emptyList(),
                 ),
             )
         }
@@ -2546,6 +2573,7 @@ class VaultItemListingViewModel @Inject constructor(
                             searchTypeData = SearchTypeData.Vault.Logins,
                             searchTerm = query,
                         ),
+                    failures = emptyList(),
                 ),
             )
         }
@@ -2705,6 +2733,16 @@ data class VaultItemListingState(
             val title: Text?,
             val message: Text,
             val throwable: Throwable? = null,
+        ) : DialogState()
+
+        /**
+         * Represents a dialog indicating that a cipher decryption error occurred.
+         */
+        @Parcelize
+        data class CipherDecryptionError(
+            val title: Text,
+            val message: Text,
+            val selectedCipherId: String,
         ) : DialogState()
 
         /**
@@ -2889,7 +2927,7 @@ data class VaultItemListingState(
      */
     data class DisplayItem(
         val id: String,
-        val title: String,
+        val title: Text,
         val titleTestTag: String,
         val secondSubtitle: String?,
         val secondSubtitleTestTag: String?,
@@ -2918,6 +2956,11 @@ data class VaultItemListingState(
              * Indicates the item type is a vault item.
              */
             data class Vault(val type: CipherType) : ItemType()
+
+            /**
+             * Indicates the item type is a decryption error.
+             */
+            object DecryptionError : ItemType()
         }
     }
 
@@ -3343,6 +3386,13 @@ sealed class VaultItemListingsAction {
     data object LockClick : VaultItemListingsAction()
 
     /**
+     * Click to share cipher decryption error details.
+     */
+    data class ShareCipherDecryptionErrorClick(
+        val selectedCipherId: String,
+    ) : VaultItemListingsAction()
+
+    /**
      * Click the refresh button.
      */
     data object SyncClick : VaultItemListingsAction()
@@ -3595,7 +3645,7 @@ sealed class VaultItemListingsAction {
          */
         data class SnackbarDataReceived(
             val data: BitwardenSnackbarData,
-        ) : Internal()
+        ) : Internal(), BackgroundEvent
 
         /**
          * Indicates that an error occurred while decrypting a cipher.

@@ -135,7 +135,7 @@ class AutofillParserImpl(
 
         // Get inline information if available
         val isInlineAutofillEnabled = settingsRepository.isInlineAutofillEnabled
-        Timber.e("Autofill request isInlineEnabled=$isInlineAutofillEnabled -- ${fillRequest?.id}")
+        Timber.d("Autofill request isInlineEnabled=$isInlineAutofillEnabled -- ${fillRequest?.id}")
         val maxInlineSuggestionsCount = fillRequest.getMaxInlineSuggestionsCount(
             autofillAppInfo = autofillAppInfo,
             isInlineAutofillEnabled = isInlineAutofillEnabled,

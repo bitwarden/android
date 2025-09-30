@@ -12,6 +12,7 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -29,14 +30,12 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySele
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -58,7 +57,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
@@ -156,13 +154,6 @@ class SearchViewModelTest : BaseViewModelTest() {
         every {
             getSnackbarDataFlow(relay = any(), relays = anyVararg())
         } returns mutableSnackbarDataFlow
-    }
-
-    private val mutableRemoveCardPolicyFeatureFlow = MutableStateFlow(false)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every {
-            getFeatureFlagFlow(FlagKey.RemoveCardPolicy)
-        } returns mutableRemoveCardPolicyFeatureFlow
     }
 
     @BeforeEach
@@ -1676,10 +1667,8 @@ class SearchViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is enable`() =
+    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly`() =
         runTest {
-            mutableRemoveCardPolicyFeatureFlow.value = true
-
             val viewModel = createViewModel()
             assertEquals(
                 DEFAULT_STATE.copy(restrictItemTypesPolicyOrgIds = persistentListOf()),
@@ -1701,33 +1690,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(
                     restrictItemTypesPolicyOrgIds = persistentListOf("Test Organization"),
                 ),
-                viewModel.stateFlow.value,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is disabled`() =
-        runTest {
-            val viewModel = createViewModel()
-            assertEquals(
-                DEFAULT_STATE,
-                viewModel.stateFlow.value,
-            )
-            mutableActivePoliciesFlow.emit(
-                listOf(
-                    SyncResponseJson.Policy(
-                        organizationId = "Test Organization",
-                        id = "testId",
-                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
-                        isEnabled = true,
-                        data = null,
-                    ),
-                ),
-            )
-
-            assertEquals(
-                DEFAULT_STATE.copy(restrictItemTypesPolicyOrgIds = persistentListOf()),
                 viewModel.stateFlow.value,
             )
         }
@@ -1799,7 +1761,6 @@ class SearchViewModelTest : BaseViewModelTest() {
         autofillSelectionManager = autofillSelectionManager,
         organizationEventManager = organizationEventManager,
         snackbarRelayManager = snackbarRelayManager,
-        featureFlagManager = featureFlagManager,
     )
 
     /**

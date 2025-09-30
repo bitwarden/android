@@ -34,13 +34,14 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
@@ -64,6 +65,7 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import kotlinx.collections.immutable.toImmutableList
 
@@ -425,7 +427,11 @@ private fun LazyListScope.advancedOptions(
     item(key = "RefreshPeriodItemTypePicker") {
         val possibleRefreshPeriodOptions = AuthenticatorRefreshPeriodOption.entries
         val refreshPeriodOptionsWithStrings = possibleRefreshPeriodOptions.associateWith {
-            stringResource(id = BitwardenString.refresh_period_seconds, it.seconds)
+            pluralStringResource(
+                id = BitwardenPlurals.refresh_period_seconds,
+                count = it.seconds,
+                formatArgs = arrayOf(it.seconds),
+            )
         }
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenMultiSelectButton(
@@ -436,9 +442,8 @@ private fun LazyListScope.advancedOptions(
                 .animateItem(),
             label = stringResource(id = BitwardenString.refresh_period),
             options = refreshPeriodOptionsWithStrings.values.toImmutableList(),
-            selectedOption = stringResource(
-                id = BitwardenString.refresh_period_seconds,
-                viewState.itemData.refreshPeriod.seconds,
+            selectedOption = refreshPeriodOptionsWithStrings.getValue(
+                key = viewState.itemData.refreshPeriod,
             ),
             onOptionSelected = remember(viewState) {
                 { selectedOption ->

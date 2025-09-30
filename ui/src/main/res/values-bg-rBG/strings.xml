@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">Относно</string>
     <string name="add_folder">Добавяне на папка</string>
     <string name="add_item">Добавяне на елемент</string>
     <string name="an_error_has_occurred">Възникна грешка.</string>
+    <string name="apply">Прилагане</string>
     <string name="back">Назад</string>
-    <string name="bitwarden">Битуорден</string>
     <string name="cancel">Отказ</string>
     <string name="copy">Копиране</string>
     <string name="copy_password">Копиране на паролата</string>
@@ -109,7 +109,10 @@
     <string name="master_password_description">С главната парола получавате достъп до трезора си, не я губете! Ако я забравите, не съществува никакъв начин за нейното възстановяване.</string>
     <string name="master_password_hint">Подсказка за главната парола (по избор)</string>
     <string name="master_password_hint_description">Подсказката помага да си спомните паролата, ако сте я забравили.</string>
-    <string name="master_password_length_val_message_x">Главната парола трябва да е дълга поне %1$s знака.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Главната парола трябва да е с дължина поне %d знак.</item>
+        <item quantity="other">Главната парола трябва да е с дължина поне %d знака.</item>
+    </plurals>
     <string name="min_numbers">Минимален брой цифри</string>
     <string name="min_special">Минимален брой специални знаци</string>
     <string name="never">Никога</string>
@@ -162,7 +165,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Търсене на елемент за вписване или добавяне на нов такъв</string>
     <string name="disabled">Изключено</string>
     <string name="bitwarden_autofill_service_alert2">Най-лесният начин да добавяте нови записи към трезора си е с услугата за автоматично дописване на Битуорден. Може да научите повече как да я ползвате от екрана за настройки.</string>
-    <string name="autofill">Автоматично дописване</string>
+    <string name="autofill_title">Автоматично попълване</string>
     <string name="autofill_or_view">Искате да разгледате записа или да го ползвате за дописване?</string>
     <string name="search">Търсене</string>
     <string name="learn_org">Разберете повече за организациите</string>
@@ -181,7 +184,7 @@
     <string name="add_new_attachment">Прикачване на файл</string>
     <string name="attachments">Прикачени файлове</string>
     <string name="unable_to_download_file">Файлът не може да се изтегли.</string>
-    <string name="downloading">Изтегляне…</string>
+    <string name="downloading">Сваляне…</string>
     <string name="attachment_large_warning">Размерът на прикачения файл е %1$s. Сигурни ли сте, че искате да го свалите на устройството си?</string>
     <string name="authenticator_key">Удостоверителен ключ (TOTP)</string>
     <string name="verification_code_totp">Код за потвърждаване (TOTP)</string>
@@ -286,7 +289,7 @@
     <string name="new_uri">Нов адрес</string>
     <string name="add_website">Добавяне на уеб сайт</string>
     <string name="base_domain">Основен домейн</string>
-    <string name="default_text">Стандартно</string>
+    <string name="default_text">По подразбиране (%1$s)</string>
     <string name="exact">Точно</string>
     <string name="host">Сървър</string>
     <string name="reg_ex">Регулярен израз</string>
@@ -308,7 +311,10 @@
     <string name="personal_details">Лични данни</string>
     <string name="contact_info">Информация за връзка</string>
     <string name="check_password_for_data_breaches">Проверка дали паролата е засегната от пробиви</string>
-    <string name="password_exposed">Паролата е била разкрита поне %1$s път/и в пробиви. Непременно я сменете.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">Тази парола е била разкрита %d път в пробиви. Непременно я сменете.</item>
+        <item quantity="other">Тази парола е била разкрита %d пъти в пробиви. Непременно я сменете.</item>
+    </plurals>
     <string name="password_safe">Паролата не е била разкрита в известните пробиви. Засега ползването ѝ изглежда безопасно.</string>
     <string name="identity_name">Име на самоличността</string>
     <string name="value">Стойност</string>
@@ -356,7 +362,7 @@
     <string name="clear_clipboard">Изчистване на буфера</string>
     <string name="clear_clipboard_description">Автоматично изчистване на буфера след поставяне на стойността.</string>
     <string name="default_uri_match_detection">Стандартно засичане на съвпадения на адреси</string>
-    <string name="default_uri_match_detection_description">Изберете начина за засичане на съвпадения на адресите за автоматичното дописване при вписване.</string>
+    <string name="default_uri_match_detection_description">Разпознаването на съвпадения чрез адреса задава начина, по който Битуорден определя кои елементи да предложи за автоматично попълване.</string>
     <string name="theme">Облик</string>
     <string name="theme_description">Промяна на цветовия облик на програмата.</string>
     <string name="copy_notes">Копиране на бележките</string>
@@ -364,8 +370,8 @@
     <string name="exit_confirmation">Сигурни ли сте, че искате да спрете Битуорден?</string>
     <string name="require_master_password_on_app_restart">Изискване на главната парола при повторно пускане на приложението?</string>
     <string name="pin_require_master_password_restart">Искате ли да бъдете питани за главната парола при всяко пускане на Битуорден наново?</string>
-    <string name="ask_to_add_login">Питане за добавяне на запис</string>
-    <string name="ask_to_add_login_description">Питане за добавяне на запис, ако такъв не бъде намерен в трезора Ви.</string>
+    <string name="ask_to_add_item">Помолете за добавяне на елемент</string>
+    <string name="ask_to_add_item_description">Помолете за добавяне на елемент, ако такъв не може да бъде намерен в трезора Ви.</string>
     <string name="on_restart">При рестартиране на приложението</string>
     <string name="capitalize">Главни букви</string>
     <string name="include_number">И цифри</string>
@@ -395,7 +401,7 @@
     <string name="soft_deleting">Преместване в кошчето…</string>
     <string name="item_soft_deleted">Записът е преместен в кошчето.</string>
     <string name="restore">Възстановяване</string>
-    <string name="restoring">Възстановяване...</string>
+    <string name="restoring">Възстановяване…</string>
     <string name="item_restored">Записът бе възстановен.</string>
     <string name="trash">Кошче</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Наистина ли искате да го изтриете? Действието не може да бъде отменено.</string>
@@ -483,14 +489,12 @@
     <string name="password_prompt">Повторно запитване за главната парола</string>
     <string name="password_confirmation">Потвърждение на главната парола</string>
     <string name="password_confirmation_desc">Това действие е защитено. За да продължите, въведете отново главната си парола, за да потвърдите самоличността си.</string>
-    <string name="captcha_failed">Грешка. Опитайте отново.</string>
     <string name="update_master_password">Промяна на главната парола</string>
     <string name="update_master_password_warning">Вашата главна парола наскоро е била сменена от администратор в организацията Ви. За да получите достъп до трезора, трябва да промените главната си парола сега. Това означава, че ще бъдете отписан(а) от текущата си сесия и ще трябва да се впишете отново. Активните сесии на други устройства може да продължат да бъдат активни още един час.</string>
     <string name="updating_password">Обновяване на паролата</string>
     <string name="remove_master_password">Премахване на главната парола</string>
     <string name="leave_organization">Напускане на организацията</string>
     <string name="leave_organization_name">Напускане на %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Идентификация WebAuthn</string>
     <string name="fido2_return_to_app">Назад към приложението</string>
     <string name="reset_password_auto_enroll_invite_warning">Тази организация включва автоматично новите си потребители в смяната на пароли. Това означава, че администраторите на организацията ще могат да променят главната Ви парола.</string>
@@ -568,12 +572,6 @@
     <string name="api_key">Ключ за ППИ</string>
     <string name="api_key_required_parenthesis">Ключ за API (задължително)</string>
     <string name="service">Услуга</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">Идентификатор за достъп до ППИ (задължително)</string>
     <string name="api_access_token">Идентификатор за достъп до API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Наистина ли искате да замените текущото потребителско име?</string>
@@ -749,7 +747,10 @@
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Битуорден не може да нулира загубена или забравена парола.</string>
     <string name="choose_your_master_password">Изберете главна парола</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Изберете уникална и сложна парола, за да запазите информацията си защитена.</string>
-    <string name="minimum_characters">%1$s знака</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d знак</item>
+        <item quantity="other">%d знака</item>
+    </plurals>
     <string name="expired_link">Връзка с изтекла давност</string>
     <string name="please_restart_registration_or_try_logging_in">Моля, рестартирайте процеса на регистрация или опитайте да се впишете. Може вече да имате регистрация.</string>
     <string name="restart_registration">Рестартиране на регистрацията</string>
@@ -850,7 +851,6 @@
     <string name="need_some_inspiration">"Имате ли нужда от вдъхновение?"</string>
     <string name="check_out_the_passphrase_generator">"Изпробвайте генератора на пароли-фрази"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Сертификатът на сървъра не може да бъде потвърден. Възможно е да има проблем в конфигурацията на сертификатите, настройките за сървър-посредник на устройството или на сървъра на Битуорден.</string>
-    <string name="review_flow_launched">Процесът на оценяване вече е наличен!</string>
     <string name="copy_private_key">Копиране на частния ключ</string>
     <string name="login_credentials">Данни за вписване</string>
     <string name="autofill_options">Опции за автоматично попълване</string>
@@ -912,7 +912,6 @@
     <string name="no_folder">Няма папка</string>
     <string name="show_less">Показване на по-малко</string>
     <string name="add_field">Добавяне на поле</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Споделяне на подробностите за грешката</string>
     <string name="flight_recorder">Проследяване чрез журнали</string>
     <string name="flight_recorder_help">Помощ за проследяването чрез журнали</string>
@@ -1001,7 +1000,10 @@
     <string name="advanced">Разширени</string>
     <string name="collapse_advanced_options">Свиване на разширените настройки</string>
     <string name="number_of_digits">Брой цифри</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d секунди</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d секунда</item>
+        <item quantity="other">%d секунди</item>
+    </plurals>
     <string name="item_saved">Елементът е запазен</string>
     <string name="information">Информация</string>
     <string name="otp_type">Вид еднократна парола</string>
@@ -1044,7 +1046,6 @@
     <string name="sync_with_bitwarden_app">Синхронизиране с приложението на Битуорден</string>
     <string name="learn_more_link"><annotation link="learnMore">Научете повече</annotation></string>
     <string name="shared_codes_error">Кодовете не могат да бъдат синхронизирани с приложението на Битуорден. Уверете се, че и двете приложения са актуализиран до последна версия. Все още имате достъп до текущите си кодове в приложението на Битурден.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Синхронизиране с приложението на Битуорден</string>
     <string name="sync_with_bitwarden_action_card_message">За да видите всичките си кодове за удостоверяване, трябва да разрешите синхронизирането на всичките си акаунти.</string>
     <string name="take_me_to_app_settings">Към настройките на приложението</string>
@@ -1071,5 +1072,35 @@
     <string name="local_items_are_collapsed_click_to_expand">Наличните на това устройство елементи са свити. Щракнете за разгъване.</string>
     <string name="items_expanded_click_to_collapse">Елементите са разгънати. Щракнете за свиване.</string>
     <string name="items_are_collapsed_click_to_expand">Елементите са свити. Щракнете за разгъване.</string>
+    <string name="error_cannot_decrypt">[грешка: не може да се дешифрира]</string>
+    <string name="copy_error_report">Копиране на доклада за грешката</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Битуорден не може да дешифрира този елемент от трезора. Копирайте доклада за грешката и го изпратете на поддръжката, за да избегнете загубата на данни.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Битуорден не може да дешифрира %1$d елемент от трезора. Копирайте доклада за грешката и го изпратете на поддръжката, за да избегнете загубата на данни.</item>
+        <item quantity="other">Битуорден не може да дешифрира %1$d елемента от трезора. Копирайте доклада за грешката и го изпратете на поддръжката, за да избегнете загубата на данни.</item>
+    </plurals>
     <string name="select_a_card_for_x">Изберете карта за %s</string>
+    <string name="advanced_options">Разширени настройки</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Повече относно разпознаването на съвпадения</annotation></string>
+    <string name="keep_your_credential_secure">Защитете данните си за вписване</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Научете повече относно това как да защитите данните си за вписване, когато ползвате „%1$s“.</string>
+    <string name="are_you_sure_you_want_to_use">Наистина ли искате да се използвате „%1$s“?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">Разпознаването на съвпадения по адрес управлява начина, по който Битуорден определя какви предложения за автоматично попълване да покаже.\n<annotation emphasis="bold">Внимание:</annotation> „Регулярен израз“ е по-сложен метод, който е и по-рисков, тъй като може да застраши сигурността на данните за вписване, ако се използва неправилно.</string>
+    <string name="default_uri_match_detection_description_advanced_options">Разпознаването на съвпадения по адрес управлява начина, по който Битуорден определя какви предложения за автоматично попълване да покаже.\n<annotation emphasis="bold">Внимание:</annotation> „Започва с“ е по-сложен метод, който е и по-рисков, тъй като може да застраши сигурността на данните за вписване.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">„Започва с“ е по-сложен метод, който е и по-рисков, тъй като може да застраши сигурността на данните за вписване.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">„Регулярен израз“ е по-сложен метод, който е и по-рисков, тъй като може да застраши сигурността на данните за вписване, ако се използва неправилно.</string>
+    <string name="credential_import_was_cancelled">Внасянето на данните за вписване беше прекъснато. Не са внесени никакви данни.</string>
+    <string name="import_cancelled">Внасянето е отменено</string>
+    <string name="your_items_have_been_successfully_imported">Елементите бяха внесени успешно и вече могат да бъдат намерени в трезора.</string>
+    <string name="import_saved_items">Внасяне на запазени елементи</string>
+    <string name="import_your_credentials_from_another_password_manager">Внесете своите данни за вписване, включително секретни ключове, пароли, разплащателни карти и всякакви други лични данни от друг управител на пароли.</string>
+    <string name="return_to_your_vault">Върнете се в трезора си</string>
+    <string name="select_a_credential_manager_to_import_items_from">Изберете управител на данни, от който да внесете елементи.</string>
+    <string name="no_items_imported">Не бяха внесени никакви елементи</string>
+    <string name="no_items_received_from_the_selected_credential_manager">Не беше получено нищо от избрания управител на данни.</string>
+    <string name="vault_sync_failed">Синхронизирането на трезора беше неуспешно</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Данните бяха внесени успешно, но трезорът не може да бъде синхронизиран. Внесените елементи няма да бъдат видими в трезора, докато не се извърши синхронизиране.</string>
+    <string name="there_was_a_problem_importing_your_items">Имаше проблем при внасянето на данните. Моля, опитайте отново. Ако това се повтори, свържете се с поддръжката.</string>
+    <string name="importing_items">Внасяне на елементи…</string>
+    <string name="uploading_items">Качване на елементи…</string>
 </resources>

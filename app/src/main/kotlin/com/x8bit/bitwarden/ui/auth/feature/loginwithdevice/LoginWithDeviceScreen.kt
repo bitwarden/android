@@ -27,22 +27,20 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.indicator.BitwardenCircularProgressIndicator
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 
 /**
  * The top level composable for the Login with Device screen.
@@ -53,15 +51,11 @@ fun LoginWithDeviceScreen(
     onNavigateBack: () -> Unit,
     onNavigateToTwoFactorLogin: (emailAddress: String) -> Unit,
     viewModel: LoginWithDeviceViewModel = hiltViewModel(),
-    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             LoginWithDeviceEvent.NavigateBack -> onNavigateBack()
-            is LoginWithDeviceEvent.NavigateToCaptcha -> {
-                intentManager.startCustomTabsActivity(uri = event.uri)
-            }
 
             is LoginWithDeviceEvent.NavigateToTwoFactorLogin -> {
                 onNavigateToTwoFactorLogin(event.emailAddress)

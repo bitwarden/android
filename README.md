@@ -52,15 +52,46 @@
 
     Please avoid mixing formatting and logical changes in the same commit/PR. When possible, fix any large formatting issues in a separate PR before opening one to make logical changes to the same code. This helps others focus on the meaningful code changes when reviewing the code.
 
-4. Setup JDK `Version` `17`:
+4. Setup JDK `Version` `21`:
 
     - Navigate to `Preferences > Build, Execution, Deployment > Build Tools > Gradle`.
     - Hit the selected Gradle JDK next to `Gradle JDK:`.
-    - Select a `17.x` version or hit `Download JDK...` if not present.
-    - Select `Version` `17`.
+    - Select a `21.x` version or hit `Download JDK...` if not present.
+    - Select `Version` `21`.
     - Select your preferred `Vendor`.
     - Hit `Download`.
     - Hit `Apply`.
+
+5. Setup `detekt` pre-commit hook (optional):
+
+Run the following script from the root of the repository to install the hook. This will overwrite any existing pre-commit hook if present.
+
+```shell
+echo "Writing detekt pre-commit hook..."
+cat << 'EOL' > .git/hooks/pre-commit
+#!/usr/bin/env bash
+
+echo "Running detekt check..."
+OUTPUT="/tmp/detekt-$(date +%s)"
+./gradlew -Pprecommit=true detekt > $OUTPUT
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ]; then
+  cat $OUTPUT
+  rm $OUTPUT
+  echo "***********************************************"
+  echo "                 detekt failed                 "
+  echo " Please fix the above issues before committing "
+  echo "***********************************************"
+  exit $EXIT_CODE
+fi
+rm $OUTPUT
+EOL
+echo "detekt pre-commit hook written to .git/hooks/pre-commit"
+echo "Making the hook executable"
+chmod +x .git/hooks/pre-commit
+
+echo "detekt pre-commit hook installed successfully to .git/hooks/pre-commit"
+```
 
 ## Theme
 

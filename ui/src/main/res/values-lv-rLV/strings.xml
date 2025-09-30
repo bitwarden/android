@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">Par</string>
     <string name="add_folder">Pievienot mapi</string>
     <string name="add_item">Pievienot vienumu</string>
     <string name="an_error_has_occurred">Radusies kļūda.</string>
+    <string name="apply">Pielietot</string>
     <string name="back">Atpakaļ</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Atcelt</string>
     <string name="copy">Ievietot starpliktuvē</string>
     <string name="copy_password">Ievietot paroli starpliktuvē</string>
     <string name="copy_username">Ievietot lietotājvārdu starpliktuvē</string>
     <string name="delete">Izdzēst</string>
-    <string name="deleting">Dzēš...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Vai tiešām izdzēst? To nevar atsaukt.</string>
     <string name="edit">Labot</string>
     <string name="edit_folder">Labot mapi</string>
@@ -54,7 +54,7 @@
     <string name="password">Parole</string>
     <string name="save">Saglabāt</string>
     <string name="move">Pārvietot</string>
-    <string name="saving">Saglabā...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Iestatījumi</string>
     <string name="show">Parādīt</string>
     <string name="item_deleted">Vienums ir izdzēsts</string>
@@ -68,7 +68,7 @@
     <string name="value_has_been_copied">%1$s ir starpliktuvē</string>
     <string name="verify_master_password">Apstiprināt galveno paroli</string>
     <string name="verify_pin">Apstiprināt PIN</string>
-    <string name="view">Skatīt</string>
+    <string name="view">Apskatīt</string>
     <string name="yes">Jā</string>
     <string name="account">Konts</string>
     <string name="account_created_success">Jaunais konts tika izveidots.</string>
@@ -103,13 +103,17 @@
     <string name="immediately">Nekavējoties</string>
     <string name="vault_timeout_log_out_confirmation_title">Iestatīt sesijas noildzi līdz \"Atteikšanās\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">Pēc noildzes laika posma notiks atteikšanās. Būs nepieciešams interneta savienojums, lai pieteiktos un atkal piekļūtu savai glabātavai. Ierīcē saglabātie iestatījumi un PIN nemainīsies.</string>
-    <string name="logging_in">Notiek pieteikšanās...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Pieteikties Bitwarden</string>
     <string name="master_password_confirmation_val_message">Paroles apstiprinājums nav pareizs.</string>
     <string name="master_password_description">Galvenā parole ir parole, kas tiek izmantota, lai piekļūtu glabātavai. Ir ļoti svarīgi, ka tā netiek aizmirsta, jo tādā gadījumā to nav iespējams atgūt.</string>
     <string name="master_password_hint">Galvenās paroles norāde (nav nepieciešama)</string>
     <string name="master_password_hint_description">Galvenās paroles norāde var palīdzēt atcerēties paroli, ja tā ir aizmirsta.</string>
-    <string name="master_password_length_val_message_x">Galvenajai parolei ir jābūt vismaz %1$s rakstzīmes garai.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="zero">Galvenajai parolei ir jābūt vismaz %d rakstzīmes garai.</item>
+        <item quantity="one">Galvenajai parolei ir jābūt vismaz %d rakstzīmi garai.</item>
+        <item quantity="other">Galvenajai parolei ir jābūt vismaz %d rakstzīmes garai.</item>
+    </plurals>
     <string name="min_numbers">Mazākais pieļaujamais ciparu skaits</string>
     <string name="min_special">Mazākais pieļaujamais īpašo rakstzīmju skaits</string>
     <string name="never">Nekad</string>
@@ -142,8 +146,8 @@
     <string name="select">Atlasīt</string>
     <string name="item_details">Vienuma dati</string>
     <string name="item_updated">Vienums atjaunināts.</string>
-    <string name="submitting">Iesniedz...</string>
-    <string name="syncing">Sinhronizē…</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Sinhronizācija pabeigta</string>
     <string name="two_step_login">Divpakāpju pieteikšanās</string>
     <string name="unlock_with_biometrics">Atslēgt ar biometriju</string>
@@ -152,7 +156,7 @@
     <string name="view_login">Apskatīt pieteikšanās vienumu</string>
     <string name="view_card">Apskatīt karti</string>
     <string name="view_identity">Apskatīt identitāti</string>
-    <string name="view_note">Apskatīt pezīmi</string>
+    <string name="view_note">Apskatīt piezīmi</string>
     <string name="view_ssh_key">Apskatīt SSH atslēgu</string>
     <string name="web_vault">Bitwarden tīmekļa glabātava</string>
     <string name="items">Vienumi</string>
@@ -162,7 +166,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Meklēt pieteikšanās vienumu vai pievienot jaunu</string>
     <string name="disabled">Atspējots</string>
     <string name="bitwarden_autofill_service_alert2">Vieglākais veids, kā glabātavā pievienot jaunus pieteikšanās vienumus, ir ar Bitwarden automātiskās aizpildes pakalpojumu. Vairāk par Bitwarden automātisko aizpildi var uzzināt iestatījumu skatā.</string>
-    <string name="autofill">Automātiskā aizpilde</string>
+    <string name="autofill_title">Automātiskā aizpilde</string>
     <string name="autofill_or_view">Automātiski aizpildīt vai apskatīt šo vienumu?</string>
     <string name="search">Meklēt</string>
     <string name="learn_org">Uzzināt par apvienībām</string>
@@ -170,7 +174,7 @@
     <string name="enter_verification_code_app">Jāievada 6 ciparu apliecinājuma kods no autentificētāja lietotnes.</string>
     <string name="enter_verification_code_email">Jāievada 6 ciparu apliecinājuma kods, kas tika nosūtīts uz %1$s.</string>
     <string name="enter_verification_code_new_device">Mēs neatpazīstam šo ierīci. Jāievada 8 ciparu apliecinājuma kods, kas tika nosūtīts [%1$s].</string>
-    <string name="recovery_code_title">Atgūšanas kods</string>
+    <string name="recovery_code_title">Atkopes kods</string>
     <string name="remember">Atcerēties</string>
     <string name="remember_email">Atcerēties e-pasta adresi</string>
     <string name="send_verification_code_again">Atkārtoti nosūtīt kodu</string>
@@ -181,7 +185,7 @@
     <string name="add_new_attachment">Pievienot jaunu pielikumu</string>
     <string name="attachments">Pielikumi</string>
     <string name="unable_to_download_file">Nav iespējams lejupielādēt datni.</string>
-    <string name="downloading">Lejupielādē...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Šī pielikuma lielums ir %1$s. Vai tiešām to lejupielādēt šajā ierīcē?</string>
     <string name="authenticator_key">Autentificētāja atslēga (TOTP)</string>
     <string name="verification_code_totp">Apliecinājuma kods (TOTP)</string>
@@ -286,7 +290,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="new_uri">Jauns URI</string>
     <string name="add_website">Pievient tīmekļvietni</string>
     <string name="base_domain">Pamata domēns</string>
-    <string name="default_text">Noklusējums</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Tiešs</string>
     <string name="host">Saimniekdators</string>
     <string name="reg_ex">Regulārā izteiksme</string>
@@ -308,7 +312,11 @@ Nolasīšana notiks automātiski.</string>
     <string name="personal_details">Personiskā informācija</string>
     <string name="contact_info">Saziņas informācija</string>
     <string name="check_password_for_data_breaches">Pārbaudīt, vai parole ir datu noplūdēs</string>
-    <string name="password_exposed">Šī parole datu noplūdēs ir atklāta %1$s reizi(es). To vajadzētu nomainīt.</string>
+    <plurals name="password_exposed">
+        <item quantity="zero">Šī parole datu noplūdēs ir atklāta %d reizes. To vajadzētu nomainīt.</item>
+        <item quantity="one">Šī parole datu noplūdēs ir atklāta %d reizi. To vajadzētu nomainīt.</item>
+        <item quantity="other">Šī parole datu noplūdēs ir atklāta %d reizes. To vajadzētu nomainīt.</item>
+    </plurals>
     <string name="password_safe">Šī parole netika atrasta nevienā zināmā datu noplūdē. Tai vajadzētu būt droši izmantojamai.</string>
     <string name="identity_name">Identitātes nosaukums</string>
     <string name="value">Vērtība</string>
@@ -356,7 +364,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="clear_clipboard">Notīrīt starpliktuvi</string>
     <string name="clear_clipboard_description">Automātiski noņemt starpliktuvē ievietotās vērtības.</string>
     <string name="default_uri_match_detection">Noklusējuma URI atbilstības noteikšana</string>
-    <string name="default_uri_match_detection_description">Izvēlēties noklusējuma veidu, kādā URI atbilstības noteikšana tiek apstrādāta, kad tiek veiktas tādas darbības kā automātiska aizpildīšana.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Izskats</string>
     <string name="theme_description">Mainīt lietotnes izskata krāsas.</string>
     <string name="copy_notes">Ievietot piezīmes starpliktuvē</string>
@@ -364,8 +372,8 @@ Nolasīšana notiks automātiski.</string>
     <string name="exit_confirmation">Vai tiešām iziet no Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Pieprasīt galveno paroli pēc lietotnes pārsāknēšanas?</string>
     <string name="pin_require_master_password_restart">Vai pieprasīt atslēgšanu ar galveno paroli pēc lietotnes atkārtotas palaišanas?</string>
-    <string name="ask_to_add_login">Vaicāt, lai pievienotu pieteikšanās vienumu</string>
-    <string name="ask_to_add_login_description">Vaicāt pievienot vienumu, ja tāds nav atrodams glabātavā.</string>
+    <string name="ask_to_add_item">Vaicāt, lai pievienotu vienumu</string>
+    <string name="ask_to_add_item_description">Vaicāt pievienot vienumu, ja tāds nav atrodams glabātavā.</string>
     <string name="on_restart">Pārsāknējot lietotni</string>
     <string name="capitalize">Izmantot lielos sākumburtus</string>
     <string name="include_number">Iekļaut ciparu</string>
@@ -392,10 +400,10 @@ Nolasīšana notiks automātiski.</string>
     <string name="save_attachment_success">Pielikums veiksmīgi saglabāts</string>
     <string name="autofill_tile_accessibility_required">Lūgums iespējot \"Automātiskās aizpildes pieejamības pakalpojums\" Bitwarden iestatījumos, lai izmantotu automātiskās aizpildes laukumu.</string>
     <string name="autofill_tile_uri_not_found">Paroļu lauki netika atrasti</string>
-    <string name="soft_deleting">Pārvieto uz atkritni...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Vienums tika pārvietots uz atkritni.</string>
     <string name="restore">Atjaunot</string>
-    <string name="restoring">Atjauno...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Vienums tika atjaunots.</string>
     <string name="trash">Atkritne</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Vai tiešām neatgriezeniski izdzēst? To nevar atsaukt.</string>
@@ -451,7 +459,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="maximum_access_count_reached">Sasniegts lielākais pieļaujamais piekļuves reižu skaits</string>
     <string name="current_access_count">Pašreizējais piekļuvju skaits</string>
     <string name="new_password">Jauna parole</string>
-    <string name="password_info">Pēc izvēles pieprasīt paroli, lai lietotāji varētu piekļūt šim Send.</string>
+    <string name="password_info">Pieprasīt šo paroli, lai apskatītu Send.</string>
     <string name="remove_password">Noņemt paroli</string>
     <string name="removing_send_password">Noņem paroli</string>
     <string name="password_removed">Parole noņemta</string>
@@ -483,14 +491,12 @@ Nolasīšana notiks automātiski.</string>
     <string name="password_prompt">Galvenās paroles pārvaicāšana</string>
     <string name="password_confirmation">Galvenās paroles apstiprināšana</string>
     <string name="password_confirmation_desc">Šī darbība ir aizsargāta, lai turpinātu, ir jāievada galvenā parole, lai apstiprinātu identitāti.</string>
-    <string name="captcha_failed">Captcha neizdevās. Lūgums mēģināt vēlreiz.</string>
     <string name="update_master_password">Atjaunināt galveno paroli</string>
     <string name="update_master_password_warning">Apvienības pārvaldnieks nesen nomainīja galveno paroli. Tā ir jāatjaunina, lai varētu piekļūt glabātavai. Turpinot tiks izbeigta pašreizējā sesija un tiks pieprasīta atkārtota pieteikšanās. Esošās sesijas citās ierīcēs var turpināt darboties līdz vienai stundai.</string>
     <string name="updating_password">Atjaunina paroli</string>
     <string name="remove_master_password">Noņemt galveno paroli</string>
     <string name="leave_organization">Pamest apvienību</string>
     <string name="leave_organization_name">Pamest %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Autentificēt WebAuthn</string>
     <string name="fido2_return_to_app">Atgriezties uz lietotni</string>
     <string name="reset_password_auto_enroll_invite_warning">Šajā apvienībā ir uzņēmuma nosacījums, kas automātiski ievieto lietotājus paroles atiestatīšanas sarakstā. Tas ļauj apvienības pārvaldniekiem mainīt lietotāju galveno paroli.</string>
@@ -568,12 +574,6 @@ jāizvēlas \"Pievienot TOTP\", lai droši glabātu atslēgu.</string>
     <string name="api_key">API atslēga</string>
     <string name="api_key_required_parenthesis">API atslēga (nepieciešama)</string>
     <string name="service">Pakalpojums</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API piekļuves pilnvara (nepieciešama)</string>
     <string name="api_access_token">API piekļuves pilnvara</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Vai tiešām pārrakstīt pašreizējo lietotājvārdu?</string>
@@ -598,7 +598,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="a_notification_has_been_sent_to_your_device">Uz ierīci ir nosūtīts paziņojums.</string>
     <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Lūgums pārliecināties, ka glabātava ir atslēgta un atpazīšanas vārdkopa ir tāda pati arī citā ierīcē.</string>
     <string name="resend_notification">Atkārtoti nosūtīt paziņojumu</string>
-    <string name="view_all_login_options">Skatīt visas pieteikšanās iespējas</string>
+    <string name="view_all_login_options">Apskatīt visas pieteikšanās iespējas</string>
     <string name="pending_log_in_requests">Neapstiprinātie pieteikšanās pieprasījumi</string>
     <string name="decline_all_requests">Noraidīt visus pieprasījumus</string>
     <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Vai tiešām noraidīt visus neapstiprinātos pieteikšanās pieprasījumus?</string>
@@ -749,7 +749,11 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden nevar atiestatīt pazaudētu vai aizmirstu galveno paroli.</string>
     <string name="choose_your_master_password">Jāizvēlas galvenā parole</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Jāizvēlas vienreizēja un spēcīga parole, lai turētu savu informāciju drošībā.</string>
-    <string name="minimum_characters">%1$s rakstzīmes</string>
+    <plurals name="minimum_characters">
+        <item quantity="zero">%d rakstzīmju</item>
+        <item quantity="one">%d rakstzīme</item>
+        <item quantity="other">%d rakstzīmes</item>
+    </plurals>
     <string name="expired_link">Saitei beidzies derīgums</string>
     <string name="please_restart_registration_or_try_logging_in">Lūgums sākt reģistrēšanos no jauna vai mēģināt pieteikties. Tev jau varētu būt konts.</string>
     <string name="restart_registration">Sākt reģistrēšanos no jauna</string>
@@ -802,7 +806,7 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="need_help_check_out_import_help">Nepieciešama palīdzība? Ir vērts ieskatīties ievietošanas palīdzībā.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Izgūtā datne jāsaglabā kaut kur viegli atrodamā vietā datorā.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Šis nav atzīts Bitwarden serveris. Var būt nepieciešams vērsties pie nodrošinātāja, lai pārbaudītu, vai atjaunināt savu serveri.</string>
-    <string name="syncing_logins_loading_message">Sinhronizē pieteikšanās vienumus...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Lejupielādēt pārlūka paplašinājumu</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Jādodas uz bitwarden.com/download, lai iekļautu Bitwarden savā iecienītākajā pārlūkā, lai iegūtu nevainojamu pieredzi.</string>
     <string name="use_the_web_app">Izmantot tīmekļa lietotni</string>
@@ -850,7 +854,6 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="need_some_inspiration">"Nepieciešama iedvesma?"</string>
     <string name="check_out_the_passphrase_generator">"Ir vērts ieskatīties paroles vārdkopu veidotājā"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Mēs nevarējām apliecināt servera sertifikātu. Sertifikātu ķēde vai starpniekservera iestatījumi ierīcē, vai Bitwarden serveris varētu nebūt pareizi iestatīti.</string>
-    <string name="review_flow_launched">Palaista izskatīšanas plūsma.</string>
     <string name="copy_private_key">Ievietot privāto atslēgu starpliktuvē</string>
     <string name="login_credentials">Pieteikšanās dati</string>
     <string name="autofill_options">Automātiskās aizpildes iespējas</string>
@@ -912,7 +915,6 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="no_folder">Nav mapes</string>
     <string name="show_less">Rādīt mazāk</string>
     <string name="add_field">Pievienot lauku</string>
-    <string name="x_ellipses">%s...</string>
     <string name="share_error_details">Kopīgot informāciju par kļūdu</string>
     <string name="flight_recorder">Melnā kaste</string>
     <string name="flight_recorder_help">Palīdzība par melno kasti</string>
@@ -999,7 +1001,11 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="advanced">Papildu</string>
     <string name="collapse_advanced_options">Sakļaut papildu iespējas</string>
     <string name="number_of_digits">Ciparu skaits</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d sekundes</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="zero">%d sekunžu</item>
+        <item quantity="one">%d sekunde</item>
+        <item quantity="other">%d sekundes</item>
+    </plurals>
     <string name="item_saved">Vienums saglabāts</string>
     <string name="information">Informācija</string>
     <string name="otp_type">OTP veids</string>
@@ -1042,9 +1048,8 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
     <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
-    <string name="sync_with_bitwarden_action_card_message">In order to view all of your verification codes, you’ll need to allow for syncing on all of your accounts.</string>
+    <string name="sync_with_bitwarden_action_card_message">Lai varētu apskatīt visus savus apliecinājuma kodus, ir nepieciešams ļaut sinhronizēšanu visos savos kontos.</string>
     <string name="take_me_to_app_settings">Take me to the app settings</string>
     <string name="something_went_wrong">Kaut kas nogājis greizi</string>
     <string name="please_try_again">Please try again</string>
@@ -1069,5 +1074,36 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
-    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="error_cannot_decrypt">[kļūda: nevar atšifrēt]</string>
+    <string name="copy_error_report">Ievietot kļūdas ziņojumu starpliktuvē</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nevarēja atšifrēt šo glabātavas vienumu. Šī kļūda jāievieto starpliktuvē un jākopīgo ar klientu atbalstu, lai izvairītos no papildu datu zudumiem.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="zero">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden nevarēja atšifrēt %1$d glabātavas vienumus. Šī kļūda jāievieto starpliktuvē un jākopīgo ar klientu atbalstu, lai izvairītos no papildu datu zudumiem.</item>
+    </plurals>
+    <string name="select_a_card_for_x">Atlasīt karti %s</string>
+    <string name="advanced_options">Papildu iespējas</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Vairāk par atbilstības noteikšanu</annotation></string>
+    <string name="keep_your_credential_secure">Turi savus pieteikšanās datus drošībā</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Uzzini vairāk par to, kā turēt pieteikšanās datus drošībā, kad izmanto “%1$s”!</string>
+    <string name="are_you_sure_you_want_to_use">Vai tiešām izmantot “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI atbilstības noteikšana nosaka, kā Bitwarden atrod automātiskās aizpildes ieteikumus.\n<annotation emphasis="bold">Uzmanību:</annotation> “Regulārā izteiksme” ir lietpratējiem paredzēta iespēja ar paaugstinātu pieteikšanās datu atkāšanas bīstamību, ja tā tiek izmantota nepareizi.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI atbilstības noteikšana nosaka, kā Bitwarden atrod automātiskās aizpildes ieteikumus.\n<annotation emphasis="bold">Uzmanību:</annotation> “Sākas” ir lietpratējiem paredzēta iespēja ar paaugstinātu pieteikšanās datu atkāšanas bīstamību.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Sākas ar” ir lietpratējiem paredzēta iespēja ar paaugstinātu piekļuves datu atklāšanas bīstamību.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regulārā izteiksme” ir lietpratējiem paredzēta iespēja ar paaugstinātu piekļuves datu atklāšanas bīstamību.</string>
+    <string name="credential_import_was_cancelled">Piekļuves datu ievietošana tika atcelta. Nekas netika ievietots.</string>
+    <string name="import_cancelled">Ievietošana atcelta</string>
+    <string name="your_items_have_been_successfully_imported">Vienumi tika sekmīgi ievietoti, un tie tagad ir apskatāmi glabātavā.</string>
+    <string name="import_saved_items">Ievietot saglabātos vienumus</string>
+    <string name="import_your_credentials_from_another_password_manager">Ievieto savus piekļuves datus, tajā skaitā piekļuves atslēgas, paroles, maksājumu kartes un jebkādu personīgo identitātes informāciju no cita paroļu pārvaldnieka!</string>
+    <string name="return_to_your_vault">Atgriezties savā glabātavā</string>
+    <string name="select_a_credential_manager_to_import_items_from">Jāatlasa piekļuves datu pārvaldnieks, no kura ievietot vienumus.</string>
+    <string name="no_items_imported">Neviens vienums nav ievietots</string>
+    <string name="no_items_received_from_the_selected_credential_manager">Neviens vienums netika saņemts no atlasītā piekļuves datu pārvaldnieka.</string>
+    <string name="vault_sync_failed">Glabātavas sinhronizēšana neizdevās</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Vienumi tika sekmīgi ievietoti, bet nevarēja sinhronizēt glabātavu. Ievietotie vienumi nebūs redzami glabātavā, kamēr nebūs veikta sinhronizēšana.</string>
+    <string name="there_was_a_problem_importing_your_items">Bija sarežģījums vienumu ievietošanā. Lūgums mēģināt vēlreiz. Ja sarežģījums nepāriet, jāsazinās ar atbalstu.</string>
+    <string name="importing_items">Ievieto vienumus…</string>
+    <string name="uploading_items">Augšupielādē vienumus…</string>
 </resources>

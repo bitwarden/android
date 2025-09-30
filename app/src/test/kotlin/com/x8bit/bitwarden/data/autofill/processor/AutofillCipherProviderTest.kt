@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.autofill.processor
 
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.vault.CardListView
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherListView
@@ -17,6 +19,7 @@ import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProviderImpl
 import com.x8bit.bitwarden.data.autofill.util.card
 import com.x8bit.bitwarden.data.autofill.util.login
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
@@ -54,6 +57,7 @@ class AutofillCipherProviderTest {
         every { id } returns CARD_CIPHER_ID
         every { name } returns CARD_NAME
         every { reprompt } returns CipherRepromptType.NONE
+        every { organizationId } returns null
         every { type } returns CipherListViewType.Card(v1 = cardListView)
     }
     private val cardView: CardView = mockk {
@@ -62,7 +66,7 @@ class AutofillCipherProviderTest {
         every { expMonth } returns CARD_EXP_MONTH
         every { expYear } returns CARD_EXP_YEAR
         every { number } returns CARD_NUMBER
-        every { brand } returns null
+        every { brand } returns CARD_BRAND
     }
     private val cardCipherView: CipherView = mockk {
         every { card } returns cardView
@@ -140,6 +144,11 @@ class AutofillCipherProviderTest {
             mutableVaultStateFlow.value.statusFor(ACTIVE_USER_ID) == VaultUnlockData.Status.UNLOCKED
         }
     }
+    private val policyManager: PolicyManager = mockk {
+        every {
+            getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+        } returns emptyList()
+    }
 
     private lateinit var autofillCipherProvider: AutofillCipherProvider
 
@@ -150,6 +159,7 @@ class AutofillCipherProviderTest {
             authRepository = authRepository,
             cipherMatchingManager = cipherMatchingManager,
             vaultRepository = vaultRepository,
+            policyManager = policyManager,
         )
     }
 
@@ -254,7 +264,7 @@ class AutofillCipherProviderTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getCardAutofillCiphers when unlocked should decrypt then return non-null, non-deleted, and non-reprompt card ciphers`() =
+    fun `getCardAutofillCiphers when unlocked should decrypt then return non-null, non-deleted, non-reprompt, and non-restricted card ciphers`() =
         runTest {
             val deletedCardCipherView: CipherListView = mockk {
                 every { deletedDate } returns mockk()
@@ -265,17 +275,39 @@ class AutofillCipherProviderTest {
                 every { reprompt } returns CipherRepromptType.PASSWORD
                 every { type } returns CipherListViewType.Card(cardListView)
             }
+            val restrictedCardCipherView: CipherListView = mockk {
+                every { deletedDate } returns null
+                every { type } returns CipherListViewType.Card(cardListView)
+                every { reprompt } returns CipherRepromptType.NONE
+                every { organizationId } returns ORGANIZATION_ID_WITH_CARD_TYPE_RESTRICTIONS
+            }
+            val personalVaultCardCipherView: CipherListView = mockk {
+                every { deletedDate } returns null
+                every { type } returns CipherListViewType.Card(cardListView)
+                every { reprompt } returns CipherRepromptType.NONE
+                every { organizationId } returns null
+            }
             val decryptCipherListViewsResult = DecryptCipherListResult(
                 successes = listOf(
                     cardCipherListView,
                     deletedCardCipherView,
                     repromptCardCipherView,
+                    restrictedCardCipherView,
+                    personalVaultCardCipherView,
                     loginCipherListViewWithTotp,
                     loginCipherListViewWithoutTotp,
                 ),
                 failures = emptyList(),
             )
 
+            every {
+                policyManager.getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            } returns listOf(
+                createMockPolicy(
+                    number = 1,
+                    organizationId = ORGANIZATION_ID_WITH_CARD_TYPE_RESTRICTIONS,
+                ),
+            )
             coEvery {
                 vaultRepository.getCipher(CARD_CIPHER_ID)
             } returns GetCipherResult.Success(
@@ -294,6 +326,7 @@ class AutofillCipherProviderTest {
             val expected = listOf(
                 CARD_AUTOFILL_CIPHER,
             )
+            every { cardCipherListView.organizationId } returns ORGANIZATION_ID
             every { cardCipherListView.subtitle } returns CARD_SUBTITLE
 
             // Test & Verify
@@ -542,13 +575,17 @@ class AutofillCipherProviderTest {
 }
 
 private const val ACTIVE_USER_ID = "activeUserId"
+private const val ORGANIZATION_ID = "organizationId"
+private const val ORGANIZATION_ID_WITH_CARD_TYPE_RESTRICTIONS =
+    "organizationIdWithCardTypeRestrictions"
 private const val CARD_CARDHOLDER_NAME = "John Doe"
 private const val CARD_CODE = "123"
 private const val CARD_EXP_MONTH = "January"
 private const val CARD_EXP_YEAR = "2029"
 private const val CARD_NAME = "John's Card"
 private const val CARD_NUMBER = "1234567890"
-private const val CARD_SUBTITLE = "7890"
+private const val CARD_BRAND = "Visa"
+private const val CARD_SUBTITLE = "$CARD_BRAND, *7890"
 private const val LOGIN_WITH_TOTP_CIPHER_ID = "1234567890"
 private const val LOGIN_WITHOUT_TOTP_CIPHER_ID = "ABCDEFGHIJ"
 private const val CARD_CIPHER_ID = "0987654321"
@@ -561,6 +598,7 @@ private val CARD_AUTOFILL_CIPHER = AutofillCipher.Card(
     name = CARD_NAME,
     number = CARD_NUMBER,
     subtitle = CARD_SUBTITLE,
+    brand = CARD_BRAND,
 )
 private const val LOGIN_NAME = "John's Login"
 private const val LOGIN_PASSWORD = "Password123"

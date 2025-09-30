@@ -8,7 +8,7 @@ import com.x8bit.bitwarden.data.autofill.model.FilledData
 import com.x8bit.bitwarden.data.autofill.model.FilledPartition
 import com.x8bit.bitwarden.data.autofill.util.buildDataset
 import com.x8bit.bitwarden.data.autofill.util.buildVaultItemDataset
-import com.x8bit.bitwarden.data.autofill.util.createTotpCopyIntentSender
+import com.x8bit.bitwarden.data.autofill.util.createAutofillCallbackIntentSender
 import com.x8bit.bitwarden.data.autofill.util.fillableAutofillIds
 import timber.log.Timber
 
@@ -23,7 +23,7 @@ class FillResponseBuilderImpl : FillResponseBuilder {
         saveInfo: SaveInfo?,
     ): FillResponse? =
         if (filledData.fillableAutofillIds.isNotEmpty()) {
-            Timber.w("Autofill request constructing FillResponse")
+            Timber.d("Autofill request constructing FillResponse")
             val fillResponseBuilder = FillResponse.Builder()
             saveInfo?.let { nonNullSaveInfo -> fillResponseBuilder.setSaveInfo(nonNullSaveInfo) }
 
@@ -65,8 +65,8 @@ class FillResponseBuilderImpl : FillResponseBuilder {
 }
 
 /**
- * Convert this [FilledPartition] and [autofillAppInfo] into an [IntentSender] if totp is enabled
- * and there the [FilledPartition.autofillCipher] has a valid cipher id.
+ * Convert this [FilledPartition] and [autofillAppInfo] into an [IntentSender] if the
+ * [FilledPartition.autofillCipher] has a valid cipher id.
  */
 private fun FilledPartition.toAuthIntentSenderOrNull(
     autofillAppInfo: AutofillAppInfo,
@@ -74,8 +74,7 @@ private fun FilledPartition.toAuthIntentSenderOrNull(
     autofillCipher
         .cipherId
         ?.let { cipherId ->
-            // We always do this even if there is no TOTP code because we want to log the events
-            createTotpCopyIntentSender(
+            createAutofillCallbackIntentSender(
                 cipherId = cipherId,
                 context = autofillAppInfo.context,
             )

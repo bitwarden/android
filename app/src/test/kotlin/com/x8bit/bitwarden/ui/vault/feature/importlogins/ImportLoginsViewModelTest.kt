@@ -4,13 +4,13 @@ import android.net.Uri
 import app.cash.turbine.test
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManagerImpl
 import io.mockk.coEvery
@@ -33,7 +33,9 @@ import org.junit.jupiter.api.Test
 class ImportLoginsViewModelTest : BaseViewModelTest() {
 
     private val vaultRepository: VaultRepository = mockk {
-        coEvery { syncForResult() } returns SyncVaultDataResult.Success(itemsAvailable = true)
+        coEvery {
+            syncForResult(forced = true)
+        } returns SyncVaultDataResult.Success(itemsAvailable = true)
     }
 
     private val firstTimeActionManager: FirstTimeActionManager = mockk {
@@ -312,21 +314,23 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
             )
             cancelAndIgnoreRemainingEvents()
         }
-        coVerify { vaultRepository.syncForResult() }
+        coVerify(exactly = 1) { vaultRepository.syncForResult(forced = true) }
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `RetryVaultSync sets isVaultSyncing to true and clears dialog state and calls syncForResult`() =
         runTest {
-            coEvery { vaultRepository.syncForResult() } returns SyncVaultDataResult.Error(Exception())
+            coEvery {
+                vaultRepository.syncForResult(forced = true)
+            } returns SyncVaultDataResult.Error(Exception())
             val viewModel = createViewModel()
             viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
             viewModel.stateFlow.test {
                 assertNotNull(awaitItem().dialogState)
-                coEvery { vaultRepository.syncForResult() } returns SyncVaultDataResult.Success(
-                    itemsAvailable = true,
-                )
+                coEvery {
+                    vaultRepository.syncForResult(forced = true)
+                } returns SyncVaultDataResult.Success(itemsAvailable = true)
                 viewModel.trySendAction(ImportLoginsAction.RetryVaultSync)
                 assertEquals(
                     ImportLoginsState(
@@ -339,7 +343,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
                 )
                 cancelAndIgnoreRemainingEvents()
             }
-            coVerify { vaultRepository.syncForResult() }
+            coVerify(exactly = 2) { vaultRepository.syncForResult(forced = true) }
         }
 
     @Suppress("MaxLineLength")
@@ -367,7 +371,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
     fun `MoveToSyncInProgress should set no items imported error dialog state when sync succeeds but no items are available`() =
         runTest {
             coEvery {
-                vaultRepository.syncForResult()
+                vaultRepository.syncForResult(forced = true)
             } returns SyncVaultDataResult.Success(itemsAvailable = false)
             val viewModel = createViewModel()
             viewModel.stateFlow.test {
@@ -402,7 +406,9 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `SyncVaultDataResult Error should remove loading state and show error dialog`() = runTest {
-        coEvery { vaultRepository.syncForResult() } returns SyncVaultDataResult.Error(Exception())
+        coEvery {
+            vaultRepository.syncForResult(forced = true)
+        } returns SyncVaultDataResult.Error(Exception())
         val viewModel = createViewModel()
         viewModel.trySendAction(ImportLoginsAction.MoveToSyncInProgress)
         assertEquals(
@@ -420,7 +426,7 @@ class ImportLoginsViewModelTest : BaseViewModelTest() {
     fun `FailSyncAcknowledged should remove dialog state and send NavigateBack event`() =
         runTest {
             coEvery {
-                vaultRepository.syncForResult()
+                vaultRepository.syncForResult(forced = true)
             } returns SyncVaultDataResult.Error(Exception())
             val viewModel = createViewModel()
             viewModel.eventFlow.test {

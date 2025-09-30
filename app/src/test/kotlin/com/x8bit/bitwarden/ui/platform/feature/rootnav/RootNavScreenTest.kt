@@ -2,8 +2,10 @@ package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import androidx.navigation.navOptions
 import com.bitwarden.ui.platform.base.createMockNavHostController
+import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupAutofillRoute
+import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupBrowserAutofillRoute
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupCompleteRoute
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupUnlockRoute
 import com.x8bit.bitwarden.ui.auth.feature.auth.AuthGraphRoute
@@ -22,6 +24,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditRoute
+import com.x8bit.bitwarden.ui.vault.feature.exportitems.ExportItemsGraphRoute
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.ItemListingType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingRoute
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
@@ -242,9 +245,9 @@ class RootNavScreenTest : BitwardenComposeTest() {
             }
         }
 
-        // Make sure navigating to vault unlocked for autofill save works as expected:
+        // Make sure navigating to vault unlocked for autofill save for login works as expected:
         rootNavStateFlow.value = RootNavState.VaultUnlockedForAutofillSave(
-            autofillSaveItem = mockk(),
+            autofillSaveItem = mockk<AutofillSaveItem.Login>(),
         )
         composeTestRule.runOnIdle {
             verify {
@@ -257,6 +260,29 @@ class RootNavScreenTest : BitwardenComposeTest() {
                         vaultAddEditMode = VaultAddEditMode.ADD,
                         vaultItemId = null,
                         vaultItemCipherType = VaultItemCipherType.LOGIN,
+                        selectedFolderId = null,
+                        selectedCollectionId = null,
+                    ),
+                    navOptions = expectedNavOptions,
+                )
+            }
+        }
+
+        // Make sure navigating to vault unlocked for autofill save for card works as expected:
+        rootNavStateFlow.value = RootNavState.VaultUnlockedForAutofillSave(
+            autofillSaveItem = mockk<AutofillSaveItem.Card>(),
+        )
+        composeTestRule.runOnIdle {
+            verify {
+                mockNavHostController.navigate(
+                    route = VaultUnlockedGraphRoute,
+                    navOptions = expectedNavOptions,
+                )
+                mockNavHostController.navigate(
+                    route = VaultAddEditRoute(
+                        vaultAddEditMode = VaultAddEditMode.ADD,
+                        vaultItemId = null,
+                        vaultItemCipherType = VaultItemCipherType.CARD,
                         selectedFolderId = null,
                         selectedCollectionId = null,
                     ),
@@ -392,12 +418,34 @@ class RootNavScreenTest : BitwardenComposeTest() {
             }
         }
 
+        // Make sure navigating to browser autofill setup works as expected:
+        rootNavStateFlow.value = RootNavState.OnboardingBrowserAutofillSetup
+        composeTestRule.runOnIdle {
+            verify {
+                mockNavHostController.navigate(
+                    route = SetupBrowserAutofillRoute.AsRoot,
+                    navOptions = expectedNavOptions,
+                )
+            }
+        }
+
         // Make sure navigating to account setup complete works as expected:
         rootNavStateFlow.value = RootNavState.OnboardingStepsComplete
         composeTestRule.runOnIdle {
             verify {
                 mockNavHostController.navigate(
                     route = SetupCompleteRoute,
+                    navOptions = expectedNavOptions,
+                )
+            }
+        }
+
+        // Make sure navigating to export items graph works as expected:
+        rootNavStateFlow.value = RootNavState.CredentialExchangeExport
+        composeTestRule.runOnIdle {
+            verify {
+                mockNavHostController.navigate(
+                    route = ExportItemsGraphRoute,
                     navOptions = expectedNavOptions,
                 )
             }

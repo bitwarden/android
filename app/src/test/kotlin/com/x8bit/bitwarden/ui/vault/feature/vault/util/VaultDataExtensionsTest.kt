@@ -21,8 +21,10 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionV
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCipherListResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
+import com.x8bit.bitwarden.data.vault.repository.util.toFailureCipherListView
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
 import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
@@ -50,10 +52,15 @@ class VaultDataExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `toViewState for AllVaults should transform full VaultData into ViewState Content without filtering`() {
+        val mockCipher = createMockSdkCipher(number = 2).copy(
+            folderId = null,
+            favorite = true,
+            deletedDate = null,
+        )
         val vaultData = VaultData(
             decryptCipherListResult = DecryptCipherListResult(
                 successes = listOf(createMockCipherListView(number = 1)),
-                failures = emptyList(),
+                failures = listOf(mockCipher),
             ),
             collectionViewList = listOf(createMockCollectionView(number = 1)),
             folderViewList = listOf(
@@ -72,16 +79,28 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            restrictItemTypesPolicyOrgIds = null,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
             VaultState.ViewState.Content(
-                loginItemsCount = 1,
+                loginItemsCount = 2,
                 cardItemsCount = 0,
                 identityItemsCount = 0,
                 secureNoteItemsCount = 0,
-                favoriteItems = listOf(),
+                favoriteItems = listOf(
+                    VaultState.ViewState.VaultItem.Login(
+                        id = "mockId-2",
+                        name = BitwardenString.error_cannot_decrypt.asText(),
+                        startIcon = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
+                        startIconTestTag = "LoginCipherIcon",
+                        extraIconList = mockCipher.toFailureCipherListView().toLabelIcons(),
+                        overflowOptions = emptyList(),
+                        shouldShowMasterPasswordReprompt = false,
+                        username = null,
+                        hasDecryptionError = true,
+                    ),
+                ),
                 folderItems = listOf(
                     VaultState.ViewState.FolderItem(
                         id = "1",
@@ -101,7 +120,7 @@ class VaultDataExtensionsTest {
                     VaultState.ViewState.FolderItem(
                         id = null,
                         name = BitwardenString.folder_none.asText(),
-                        itemCount = 0,
+                        itemCount = 1,
                     ),
                 ),
                 collectionItems = listOf(
@@ -144,7 +163,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.MyVault,
             hasMasterPassword = true,
-            restrictItemTypesPolicyOrgIds = null,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -204,7 +223,7 @@ class VaultDataExtensionsTest {
                 organizationName = "Mock Organization 1",
             ),
             hasMasterPassword = true,
-            restrictItemTypesPolicyOrgIds = null,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -262,7 +281,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            restrictItemTypesPolicyOrgIds = null,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -289,7 +308,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            restrictItemTypesPolicyOrgIds = null,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -317,7 +336,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            restrictItemTypesPolicyOrgIds = null,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -359,7 +378,7 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
-            restrictItemTypesPolicyOrgIds = null,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -403,7 +422,7 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
-            restrictItemTypesPolicyOrgIds = null,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -447,7 +466,7 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
-            restrictItemTypesPolicyOrgIds = null,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -675,7 +694,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            restrictItemTypesPolicyOrgIds = null,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -719,7 +738,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            restrictItemTypesPolicyOrgIds = null,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -766,7 +785,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            restrictItemTypesPolicyOrgIds = null,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -820,7 +839,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            restrictItemTypesPolicyOrgIds = null,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -848,6 +867,7 @@ class VaultDataExtensionsTest {
                         ),
                         shouldShowMasterPasswordReprompt = false,
                         username = "mockUsername-1".asText(),
+                        hasDecryptionError = false,
                     ),
                 ),
                 trashItemsCount = 0,
@@ -891,7 +911,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            restrictItemTypesPolicyOrgIds = null,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -1087,7 +1107,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            restrictItemTypesPolicyOrgIds = null,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -1122,6 +1142,7 @@ class VaultDataExtensionsTest {
                         number = 1,
                         type = CipherListViewType.SshKey,
                         folderId = null,
+                        favorite = true,
                     ),
                     createMockCipherListView(
                         number = 2,
@@ -1146,7 +1167,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            restrictItemTypesPolicyOrgIds = null,
+            restrictItemTypesPolicyOrgIds = emptyList(),
         )
 
         assertEquals(
@@ -1156,7 +1177,7 @@ class VaultDataExtensionsTest {
                 identityItemsCount = 0,
                 secureNoteItemsCount = 0,
                 sshKeyItemsCount = 3,
-                favoriteItems = listOf(),
+                favoriteItems = listOf(createMockSshKeyVaultItem(number = 1)),
                 collectionItems = listOf(),
                 folderItems = listOf(),
                 noFolderItems = listOf(
@@ -1206,4 +1227,5 @@ private fun createMockSshKeyVaultItem(number: Int): VaultState.ViewState.VaultIt
             ),
         ),
         shouldShowMasterPasswordReprompt = false,
+        hasDecryptionError = false,
     )

@@ -2,12 +2,12 @@
 
 package com.x8bit.bitwarden.ui.auth.feature.login
 
-import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -15,16 +15,11 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
-import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.util.toUriOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
@@ -53,7 +48,6 @@ class LoginViewModel @Inject constructor(
                 passwordInput = "",
                 environmentLabel = environmentRepository.environment.label,
                 dialogState = LoginState.DialogState.Loading(BitwardenString.loading.asText()),
-                captchaToken = args.captchaToken,
                 accountSummaries = authRepository
                     .userStateFlow
                     .value
@@ -65,16 +59,6 @@ class LoginViewModel @Inject constructor(
 ) {
 
     init {
-        authRepository.captchaTokenResultFlow
-            .onEach {
-                sendAction(
-                    LoginAction.Internal.ReceiveCaptchaToken(
-                        tokenResult = it,
-                    ),
-                )
-            }
-            .launchIn(viewModelScope)
-
         viewModelScope.launch {
             trySendAction(
                 LoginAction.Internal.ReceiveKnownDeviceResult(
@@ -98,9 +82,6 @@ class LoginViewModel @Inject constructor(
             LoginAction.SingleSignOnClick -> handleSingleSignOnClicked()
             is LoginAction.PasswordInputChanged -> handlePasswordInputChanged(action)
             is LoginAction.ErrorDialogDismiss -> handleErrorDialogDismiss()
-            is LoginAction.Internal.ReceiveCaptchaToken -> {
-                handleCaptchaTokenReceived(action.tokenResult)
-            }
 
             is LoginAction.Internal.ReceiveLoginResult -> {
                 handleReceiveLoginResult(action = action)
@@ -159,15 +140,6 @@ class LoginViewModel @Inject constructor(
     @Suppress("MaxLineLength", "LongMethod")
     private fun handleReceiveLoginResult(action: LoginAction.Internal.ReceiveLoginResult) {
         when (val loginResult = action.loginResult) {
-            is LoginResult.CaptchaRequired -> {
-                mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(
-                    event = LoginEvent.NavigateToCaptcha(
-                        uri = generateUriForCaptcha(captchaId = loginResult.captchaId),
-                    ),
-                )
-            }
-
             is LoginResult.EncryptionKeyMigrationRequired -> {
                 val vaultUrl =
                     environmentRepository
@@ -256,28 +228,6 @@ class LoginViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(dialogState = null) }
     }
 
-    private fun handleCaptchaTokenReceived(tokenResult: CaptchaCallbackTokenResult) {
-        when (tokenResult) {
-            CaptchaCallbackTokenResult.MissingToken -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = LoginState.DialogState.Error(
-                            title = BitwardenString.log_in_denied.asText(),
-                            message = BitwardenString.captcha_failed.asText(),
-                        ),
-                    )
-                }
-            }
-
-            is CaptchaCallbackTokenResult.Success -> {
-                mutableStateFlow.update {
-                    it.copy(captchaToken = tokenResult.token)
-                }
-                attemptLogin()
-            }
-        }
-    }
-
     private fun handleCloseButtonClicked() {
         sendEvent(LoginEvent.NavigateBack)
     }
@@ -302,7 +252,6 @@ class LoginViewModel @Inject constructor(
             val result = authRepository.login(
                 email = state.emailAddress,
                 password = state.passwordInput,
-                captchaToken = state.captchaToken,
             )
             sendAction(
                 LoginAction.Internal.ReceiveLoginResult(
@@ -344,7 +293,6 @@ data class LoginState(
     // We never want this saved since the input is sensitive data.
     @IgnoredOnParcel val passwordInput: String = "",
     val emailAddress: String,
-    val captchaToken: String?,
     val environmentLabel: String,
     val isLoginButtonEnabled: Boolean,
     val dialogState: DialogState?,
@@ -390,11 +338,6 @@ sealed class LoginEvent {
     data class NavigateToMasterPasswordHint(
         val emailAddress: String,
     ) : LoginEvent()
-
-    /**
-     * Navigates to the captcha verification screen.
-     */
-    data class NavigateToCaptcha(val uri: Uri) : LoginEvent()
 
     /**
      * Navigates to the enterprise single sign on screen.
@@ -496,12 +439,6 @@ sealed class LoginAction {
      * Models actions that the [LoginViewModel] itself might send.
      */
     sealed class Internal : LoginAction() {
-        /**
-         * Indicates a captcha callback token has been received.
-         */
-        data class ReceiveCaptchaToken(
-            val tokenResult: CaptchaCallbackTokenResult,
-        ) : Internal()
 
         /**
          * Indicates that a [KnownDeviceResult] has been received and state should be updated.

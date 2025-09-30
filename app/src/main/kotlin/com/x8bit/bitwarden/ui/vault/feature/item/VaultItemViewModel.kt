@@ -12,8 +12,11 @@ import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asPluralsText
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
@@ -30,7 +33,6 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
@@ -186,6 +188,9 @@ class VaultItemViewModel @Inject constructor(
                             folderName?.let { VaultItemLocation.Folder(it) },
                         )
 
+                        val hasOrganizations =
+                            !userState?.activeAccount?.organizations.isNullOrEmpty()
+
                         VaultItemStateData(
                             cipher = cipherView,
                             totpCodeItemData = totpCodeData,
@@ -194,6 +199,7 @@ class VaultItemViewModel @Inject constructor(
                             canAssociateToCollections = canAssignToCollections,
                             canEdit = canEdit,
                             relatedLocations = relatedLocations,
+                            hasOrganizations = hasOrganizations,
                         )
                     },
             )
@@ -207,7 +213,11 @@ class VaultItemViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         snackbarRelayManager
-            .getSnackbarDataFlow(SnackbarRelay.CIPHER_MOVED_TO_ORGANIZATION)
+            .getSnackbarDataFlow(
+                SnackbarRelay.CIPHER_DELETED_SOFT,
+                SnackbarRelay.CIPHER_MOVED_TO_ORGANIZATION,
+                SnackbarRelay.CIPHER_UPDATED,
+            )
             .map { VaultItemAction.Internal.SnackbarDataReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -974,7 +984,10 @@ class VaultItemViewModel @Inject constructor(
             is BreachCountResult.Success -> {
                 VaultItemState.DialogState.Generic(
                     message = if (result.breachCount > 0) {
-                        BitwardenString.password_exposed.asText(result.breachCount)
+                        BitwardenPlurals.password_exposed.asPluralsText(
+                            quantity = result.breachCount,
+                            args = arrayOf(result.breachCount),
+                        )
                     } else {
                         BitwardenString.password_safe.asText()
                     },
@@ -1065,6 +1078,7 @@ class VaultItemViewModel @Inject constructor(
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             relatedLocations = this.data?.relatedLocations.orEmpty().toImmutableList(),
+            hasOrganizations = this.data?.hasOrganizations == true,
         )
         ?: VaultItemState.ViewState.Error(message = errorText)
 
@@ -1327,6 +1341,12 @@ data class VaultItemState(
             ?.canAssignToCollections
             ?: false
 
+    val hasOrganizations: Boolean
+        get() = viewState.asContentOrNull()
+            ?.common
+            ?.hasOrganizations
+            ?: false
+
     /**
      * The text to display on the deletion confirmation dialog.
      */
@@ -1383,6 +1403,7 @@ data class VaultItemState(
              * collections.
              * @property favorite Indicates that the cipher is favorite.
              * @property passwordHistoryCount An integer indicating how many times the password.
+             * @property hasOrganizations Indicates if the user has organizations.
              */
             @Parcelize
             data class Common(
@@ -1403,6 +1424,7 @@ data class VaultItemState(
                 val passwordHistoryCount: Int?,
                 val iconData: IconData,
                 val relatedLocations: ImmutableList<VaultItemLocation>,
+                val hasOrganizations: Boolean,
             ) : Parcelable {
 
                 /**

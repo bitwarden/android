@@ -106,6 +106,11 @@ interface SettingsDiskSource {
     val flightRecorderDataFlow: Flow<FlightRecorderDataSet?>
 
     /**
+     * The time at which the browser autofill dialog is allowed to be shown to the user again.
+     */
+    var browserAutofillDialogReshowTime: Instant?
+
+    /**
      * Clears all the settings data for the given user.
      */
     fun clearData(userId: String)
@@ -280,6 +285,23 @@ interface SettingsDiskSource {
      * @see [storeUseHasLoggedInPreviously]
      */
     fun getUserHasSignedInPreviously(userId: String): Boolean
+
+    /**
+     * Gets whether or not the given [userId] has signalled they want to enable autofill in
+     * onboarding.
+     */
+    fun getShowBrowserAutofillSettingBadge(userId: String): Boolean?
+
+    /**
+     * Stores the given value for whether or not the given [userId] has signalled they want to
+     * enable the browser autofill integration in onboarding.
+     */
+    fun storeShowBrowserAutofillSettingBadge(userId: String, showBadge: Boolean?)
+
+    /**
+     * Emits updates that track [getShowAutoFillSettingBadge] for the given [userId].
+     */
+    fun getShowBrowserAutofillSettingBadgeFlow(userId: String): Flow<Boolean?>
 
     /**
      * Gets whether or not the given [userId] has signalled they want to enable autofill in

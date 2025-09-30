@@ -227,6 +227,7 @@ dependencies {
 
     implementation(project(":annotation"))
     implementation(project(":core"))
+    implementation(project(":cxf"))
     implementation(project(":data"))
     implementation(project(":network"))
     implementation(project(":ui"))
@@ -248,6 +249,8 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.providerevents)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.lifecycle.runtime.compose)
@@ -265,7 +268,6 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.bitwarden.sdk)
     implementation(libs.bumptech.glide)
-    implementation(libs.androidx.credentials)
     implementation(libs.google.hilt.android)
     ksp(libs.google.hilt.compiler)
     implementation(libs.kotlinx.collections.immutable)
@@ -339,6 +341,7 @@ private fun renameFile(path: String, newName: String) {
     if (originalFile.renameTo(newFile)) {
         println("Renamed $originalFile to $newFile")
     } else {
+        @Suppress("TooGenericExceptionThrown")
         throw RuntimeException("Failed to rename $originalFile to $newFile")
     }
 }

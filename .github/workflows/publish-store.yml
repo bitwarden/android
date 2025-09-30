@@ -71,10 +71,10 @@ jobs:
             echo "</details>" >> $GITHUB_STEP_SUMMARY
 
         - name: Check out repo
-          uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+          uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
         - name: Configure Ruby
-          uses: ruby/setup-ruby@bb6434c747fa7022e12fa1cae2a0951fcffcff26 # v1.253.0
+          uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
           with:
             bundler-cache: true
 
@@ -147,7 +147,8 @@ jobs:
 
             bundle exec fastlane updateReleaseNotes \
               releaseNotes:"$RELEASE_NOTES" \
-              versionCode:"$VERSION_CODE"
+              versionCode:"$VERSION_CODE" \
+              packageName:"$PACKAGE_NAME"
 
             bundle exec fastlane promoteToProduction \
               versionCode:"$VERSION_CODE" \

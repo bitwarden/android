@@ -13,10 +13,10 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -108,15 +108,6 @@ class EnterpriseSignOnScreenTest : BitwardenComposeTest() {
         mutableEventFlow.tryEmit(EnterpriseSignOnEvent.NavigateToSsoLogin(ssoUri))
         verify(exactly = 1) {
             intentManager.startCustomTabsActivity(ssoUri)
-        }
-    }
-
-    @Test
-    fun `NavigateToCaptcha should call startCustomTabsActivity`() {
-        val captchaUri = Uri.parse("https://captcha.com")
-        mutableEventFlow.tryEmit(EnterpriseSignOnEvent.NavigateToCaptcha(captchaUri))
-        verify(exactly = 1) {
-            intentManager.startCustomTabsActivity(captchaUri)
         }
     }
 
@@ -279,7 +270,6 @@ class EnterpriseSignOnScreenTest : BitwardenComposeTest() {
         private val DEFAULT_STATE = EnterpriseSignOnState(
             dialogState = null,
             orgIdentifierInput = "",
-            captchaToken = null,
         )
     }
 }

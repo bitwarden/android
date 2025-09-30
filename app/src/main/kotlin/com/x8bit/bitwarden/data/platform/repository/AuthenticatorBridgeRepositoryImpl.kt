@@ -126,9 +126,18 @@ class AuthenticatorBridgeRepositoryImpl(
         account: AccountJson,
         decryptedUserKey: String,
     ): VaultUnlockResult {
-        val privateKey = authDiskSource
-            .getPrivateKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError(MissingPropertyException("Private key"))
+        val accountKeys = authDiskSource.getAccountKeys(userId = userId)
+        val privateKey = accountKeys?.publicKeyEncryptionKeyPair?.wrappedPrivateKey
+            ?: authDiskSource.getPrivateKey(userId = userId)
+            ?: return VaultUnlockResult.InvalidStateError(
+                MissingPropertyException("Private key"),
+            )
+        val securityState = authDiskSource
+            .getAccountKeys(userId = userId)
+            ?.securityState
+            ?.securityState
+        val signingKey = accountKeys?.signatureKeyPair?.wrappedSigningKey
+
         return scopedVaultSdkSource
             .initializeCrypto(
                 userId = userId,
@@ -137,11 +146,11 @@ class AuthenticatorBridgeRepositoryImpl(
                     kdfParams = account.profile.toSdkParams(),
                     email = account.profile.email,
                     privateKey = privateKey,
+                    securityState = securityState,
+                    signingKey = signingKey,
                     method = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = decryptedUserKey,
                     ),
-                    signingKey = null,
-                    securityState = null,
                 ),
             )
             .flatMap { result ->

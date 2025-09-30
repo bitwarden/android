@@ -158,6 +158,7 @@ class CipherViewExtensionsTest {
                     email = "placeholde@email.com",
                     phone = "555-555-5555",
                     city = "Minneapolis",
+                    state = "MN",
                     country = "USA",
                 ),
             ),
@@ -216,7 +217,7 @@ class CipherViewExtensionsTest {
                     totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
                     canViewPassword = false,
                     fido2CredentialCreationDateTime = BitwardenString.created_x.asText(
-                        "Oct 27, 2023, 12:00 PM",
+                        "Oct 27, 2023, 12:00\u202FPM",
                     ),
                 ),
             ),
@@ -277,7 +278,7 @@ class CipherViewExtensionsTest {
                     totp = totp,
                     canViewPassword = false,
                     fido2CredentialCreationDateTime = BitwardenString.created_x.asText(
-                        "Oct 27, 2023, 12:00 PM",
+                        "Oct 27, 2023, 12:00\u202FPM",
                     ),
                 ),
             ),
@@ -639,6 +640,7 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     creationDate = FIXED_CLOCK.instant(),
     deletedDate = null,
     revisionDate = FIXED_CLOCK.instant(),
+    archivedDate = null,
     sshKey = null,
 )
 

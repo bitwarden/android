@@ -28,7 +28,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import com.bitwarden.authenticator.ui.platform.components.util.nonLetterColorVisualTransformation
+import com.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 
@@ -80,7 +80,11 @@ fun BitwardenPasswordField(
         onValueChange = onValueChange,
         visualTransformation = when {
             !showPassword -> PasswordVisualTransformation()
-            readOnly -> nonLetterColorVisualTransformation()
+            readOnly -> nonLetterColorVisualTransformation(
+                digitColor = MaterialTheme.colorScheme.primary,
+                specialCharacterColor = MaterialTheme.colorScheme.error,
+            )
+
             else -> VisualTransformation.None
         },
         singleLine = singleLine,

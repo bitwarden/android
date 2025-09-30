@@ -9,6 +9,7 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -59,6 +60,11 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         } returns false
         every { createCipherOrNull(DEFAULT_USER_ID) } returns CIPHER
     }
+    private val thirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager = mockk {
+        every {
+            browserThirdPartyAutofillStatus
+        } returns mockk { every { isAnyIsAvailableAndDisabled } returns false }
+    }
 
     @BeforeEach
     fun setup() {
@@ -90,10 +96,9 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
     fun `ContinueClick should call setOnboardingStatus and set to AUTOFILL_SETUP if AutoFill is not enabled`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupUnlockAction.ContinueClick)
-        verify {
-            authRepository.setOnboardingStatus(
-                status = OnboardingStatus.AUTOFILL_SETUP,
-            )
+        verify(exactly = 1) {
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+            authRepository.setOnboardingStatus(status = OnboardingStatus.AUTOFILL_SETUP)
         }
     }
 
@@ -131,29 +136,42 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ContinueClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled and set first time value to false`() {
+    fun `ContinueClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled, browsers are setup, and set first time value to false`() {
         mutableAutofillEnabledStateFlow.update { true }
         val viewModel = createViewModel()
         viewModel.trySendAction(SetupUnlockAction.ContinueClick)
         verify(exactly = 1) {
-            authRepository.setOnboardingStatus(
-                status = OnboardingStatus.FINAL_STEP,
-            )
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
             firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
         }
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `SetUpLaterClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled`() =
+    fun `ContinueClick should call setOnboardingStatus and set to BROWSER_AUTOFILL_SETUP if AutoFill is already enabled and browsers are not setup`() {
+        mutableAutofillEnabledStateFlow.update { true }
+        every {
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+        } returns mockk { every { isAnyIsAvailableAndDisabled } returns true }
+        val viewModel = createViewModel()
+        viewModel.trySendAction(SetupUnlockAction.ContinueClick)
+        verify(exactly = 1) {
+            thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+            authRepository.setOnboardingStatus(status = OnboardingStatus.BROWSER_AUTOFILL_SETUP)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SetUpLaterClick should call setOnboardingStatus and set to FINAL_STEP if AutoFill is already enabled and browsers are setup`() =
         runTest {
             mutableAutofillEnabledStateFlow.update { true }
             val viewModel = createViewModel()
             viewModel.trySendAction(SetupUnlockAction.SetUpLaterClick)
-            verify {
-                authRepository.setOnboardingStatus(
-                    status = OnboardingStatus.FINAL_STEP,
-                )
+            verify(exactly = 1) {
+                thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+                authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
             }
         }
 
@@ -395,6 +413,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
             settingsRepository = settingsRepository,
             biometricsEncryptionManager = biometricsEncryptionManager,
             firstTimeActionManager = firstTimeActionManager,
+            browserThirdPartyAutofillEnabledManager = thirdPartyAutofillEnabledManager,
         )
 }
 

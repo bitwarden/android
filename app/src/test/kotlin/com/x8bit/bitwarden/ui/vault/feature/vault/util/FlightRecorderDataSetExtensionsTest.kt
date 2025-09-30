@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
@@ -69,7 +69,7 @@ class FlightRecorderDataSetExtensionsTest {
         assertEquals(
             BitwardenSnackbarData(
                 message = BitwardenString.flight_recorder_banner_message
-                    .asText("4/12/25", "9:15 AM"),
+                    .asText("4/12/25", "9:15\u202FAM"),
                 messageHeader = BitwardenString.flight_recorder_banner_title.asText(),
                 actionLabel = BitwardenString.go_to_settings.asText(),
                 withDismissAction = true,

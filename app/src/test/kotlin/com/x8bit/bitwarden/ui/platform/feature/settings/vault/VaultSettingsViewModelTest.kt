@@ -1,12 +1,14 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import io.mockk.every
@@ -29,6 +31,7 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
         every { storeShowImportLoginsSettingsBadge(any()) } just runs
     }
+    private val featureFlagManager = mockk<FeatureFlagManager>()
 
     private val mutableSnackbarSharedFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
     private val snackbarRelayManager = mockk<SnackbarRelayManager> {
@@ -58,17 +61,39 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `ImportItemsClick should emit send NavigateToImportVault`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
-            assertEquals(
-                VaultSettingsEvent.NavigateToImportVault,
-                awaitItem(),
-            )
+    fun `ImportItemsClick should emit NavigateToImportVault when CredentialExchangeProtocolImport is disabled`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                every {
+                    featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport)
+                } returns false
+                viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
+                assertEquals(
+                    VaultSettingsEvent.NavigateToImportVault,
+                    awaitItem(),
+                )
+            }
         }
-    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ImportItemsClick should emit NavigateToImportItems when CredentialExchangeProtocolImport is enabled`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                every {
+                    featureFlagManager.getFeatureFlag(FlagKey.CredentialExchangeProtocolImport)
+                } returns true
+                viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
+                assertEquals(
+                    VaultSettingsEvent.NavigateToImportItems,
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `shouldShowImportCard should update when first time state changes`() = runTest {
@@ -131,6 +156,7 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
     private fun createViewModel(): VaultSettingsViewModel = VaultSettingsViewModel(
         firstTimeActionManager = firstTimeActionManager,
         snackbarRelayManager = snackbarRelayManager,
+        featureFlagManager = featureFlagManager,
     )
 }
 

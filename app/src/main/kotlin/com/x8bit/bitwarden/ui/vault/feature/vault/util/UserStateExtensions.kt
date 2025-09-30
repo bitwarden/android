@@ -1,9 +1,10 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import java.util.Locale
 
 /**
  * Converts the given [UserState] to a list of [AccountSummary].
@@ -71,3 +72,26 @@ fun UserState.Account.toVaultFilterData(
                 ),
             )
         }
+
+/**
+ * Given the [UserState.Account], returns the first two "initials" found when looking at the
+ * [UserState.Account.name].
+ *
+ * Ex:
+ * - "First Last" -> "FL"
+ * - "First Second Last" -> "FS"
+ * - "First" -> "FI"
+ * - name is `null`, email is "test@bitwarden.com" -> "TE"
+ */
+val UserState.Account.initials: String
+    get() {
+        val names = this.name.orEmpty().split(" ").filter { it.isNotBlank() }
+        return if (names.size >= 2) {
+            names
+                .take(2)
+                .joinToString(separator = "") { it.first().toString() }
+        } else {
+            (this.name ?: this.email).take(2)
+        }
+            .uppercase(Locale.getDefault())
+    }

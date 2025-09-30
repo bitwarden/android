@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import java.time.Clock
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -54,7 +55,7 @@ class PushManagerImpl @Inject constructor(
     private val ioScope = CoroutineScope(dispatcherManager.io)
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 
-    private val mutableFullSyncSharedFlow = bufferedMutableSharedFlow<Unit>()
+    private val mutableFullSyncSharedFlow = bufferedMutableSharedFlow<String>()
     private val mutableLogoutSharedFlow = bufferedMutableSharedFlow<NotificationLogoutData>()
     private val mutablePasswordlessRequestSharedFlow =
         bufferedMutableSharedFlow<PasswordlessRequestData>()
@@ -66,13 +67,13 @@ class PushManagerImpl @Inject constructor(
         bufferedMutableSharedFlow<SyncFolderDeleteData>()
     private val mutableSyncFolderUpsertSharedFlow =
         bufferedMutableSharedFlow<SyncFolderUpsertData>()
-    private val mutableSyncOrgKeysSharedFlow = bufferedMutableSharedFlow<Unit>()
+    private val mutableSyncOrgKeysSharedFlow = bufferedMutableSharedFlow<String>()
     private val mutableSyncSendDeleteSharedFlow =
         bufferedMutableSharedFlow<SyncSendDeleteData>()
     private val mutableSyncSendUpsertSharedFlow =
         bufferedMutableSharedFlow<SyncSendUpsertData>()
 
-    override val fullSyncFlow: SharedFlow<Unit>
+    override val fullSyncFlow: SharedFlow<String>
         get() = mutableFullSyncSharedFlow.asSharedFlow()
 
     override val logoutFlow: SharedFlow<NotificationLogoutData>
@@ -93,7 +94,7 @@ class PushManagerImpl @Inject constructor(
     override val syncFolderUpsertFlow: SharedFlow<SyncFolderUpsertData>
         get() = mutableSyncFolderUpsertSharedFlow.asSharedFlow()
 
-    override val syncOrgKeysFlow: SharedFlow<Unit>
+    override val syncOrgKeysFlow: SharedFlow<String>
         get() = mutableSyncOrgKeysSharedFlow.asSharedFlow()
 
     override val syncSendDeleteFlow: SharedFlow<SyncSendDeleteData>
@@ -129,8 +130,8 @@ class PushManagerImpl @Inject constructor(
     @Suppress("LongMethod", "CyclomaticComplexMethod")
     private fun onMessageReceived(notification: BitwardenNotification) {
         if (authDiskSource.uniqueAppId == notification.contextId) return
-
         val userId = activeUserId ?: return
+        Timber.d("Push Notification Received: ${notification.notificationType}")
 
         when (val type = notification.notificationType) {
             NotificationType.AUTH_REQUEST,
@@ -189,16 +190,24 @@ class PushManagerImpl @Inject constructor(
                     .decodeFromString<NotificationPayload.SyncCipherNotification>(
                         string = notification.payload,
                     )
-                    .takeIf { isLoggedIn(userId) && it.userMatchesNotification(userId) }
-                    ?.cipherId
-                    ?.let { mutableSyncCipherDeleteSharedFlow.tryEmit(SyncCipherDeleteData(it)) }
+                    .takeIf { it.userId != null && it.cipherId != null }
+                    ?.let {
+                        SyncCipherDeleteData(
+                            userId = requireNotNull(it.userId),
+                            cipherId = requireNotNull(it.cipherId),
+                        )
+                    }
+                    ?.let { mutableSyncCipherDeleteSharedFlow.tryEmit(it) }
             }
 
             NotificationType.SYNC_CIPHERS,
             NotificationType.SYNC_SETTINGS,
             NotificationType.SYNC_VAULT,
                 -> {
-                mutableFullSyncSharedFlow.tryEmit(Unit)
+                json
+                    .decodeFromString<NotificationPayload.SyncNotification>(notification.payload)
+                    .userId
+                    ?.let { mutableFullSyncSharedFlow.tryEmit(it) }
             }
 
             NotificationType.SYNC_FOLDER_CREATE,
@@ -226,15 +235,24 @@ class PushManagerImpl @Inject constructor(
                     .decodeFromString<NotificationPayload.SyncFolderNotification>(
                         string = notification.payload,
                     )
-                    .takeIf { isLoggedIn(userId) && it.userMatchesNotification(userId) }
-                    ?.folderId
-                    ?.let { mutableSyncFolderDeleteSharedFlow.tryEmit(SyncFolderDeleteData(it)) }
+                    .takeIf { it.userId != null && it.folderId != null }
+                    ?.let {
+                        SyncFolderDeleteData(
+                            userId = requireNotNull(it.userId),
+                            folderId = requireNotNull(it.folderId),
+                        )
+                    }
+                    ?.let { mutableSyncFolderDeleteSharedFlow.tryEmit(it) }
             }
 
             NotificationType.SYNC_ORG_KEYS -> {
-                if (isLoggedIn(userId)) {
-                    mutableSyncOrgKeysSharedFlow.tryEmit(Unit)
-                }
+                json
+                    .decodeFromString<NotificationPayload.SynchronizeOrganizationKeysNotifications>(
+                        string = notification.payload,
+                    )
+                    .userId
+                    .takeIf { authDiskSource.userState?.accounts.orEmpty().containsKey(it) }
+                    ?.let { mutableSyncOrgKeysSharedFlow.tryEmit(it) }
             }
 
             NotificationType.SYNC_SEND_CREATE,
@@ -262,9 +280,14 @@ class PushManagerImpl @Inject constructor(
                     .decodeFromString<NotificationPayload.SyncSendNotification>(
                         string = notification.payload,
                     )
-                    .takeIf { isLoggedIn(userId) && it.userMatchesNotification(userId) }
-                    ?.sendId
-                    ?.let { mutableSyncSendDeleteSharedFlow.tryEmit(SyncSendDeleteData(it)) }
+                    .takeIf { it.userId != null && it.sendId != null }
+                    ?.let {
+                        SyncSendDeleteData(
+                            userId = requireNotNull(it.userId),
+                            sendId = requireNotNull(it.sendId),
+                        )
+                    }
+                    ?.let { mutableSyncSendDeleteSharedFlow.tryEmit(it) }
             }
         }
     }

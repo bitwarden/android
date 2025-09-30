@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">О апликацији</string>
     <string name="add_folder">Додај фасциклу</string>
     <string name="add_item">Додај ставку</string>
     <string name="an_error_has_occurred">Појавила се грешка.</string>
+    <string name="apply">Примени</string>
     <string name="back">Назад</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Откажи</string>
     <string name="copy">Копирај</string>
     <string name="copy_password">Копирај лозинку</string>
     <string name="copy_username">Копирај име</string>
     <string name="delete">Избриши</string>
-    <string name="deleting">Брисање...</string>
+    <string name="deleting">Брисање…</string>
     <string name="do_you_really_want_to_delete">Да ли сигурно желиш да избришеш? Ово се не може поништити.</string>
     <string name="edit">Уреди</string>
     <string name="edit_folder">Уреди фасциклу</string>
@@ -54,7 +54,7 @@
     <string name="password">Лозинка</string>
     <string name="save">Сачувај</string>
     <string name="move">Премести</string>
-    <string name="saving">Чување...</string>
+    <string name="saving">Чување…</string>
     <string name="settings">Подешавања</string>
     <string name="show">Прикажи</string>
     <string name="item_deleted">Ставка је избрисана.</string>
@@ -103,13 +103,17 @@
     <string name="immediately">Одмах</string>
     <string name="vault_timeout_log_out_confirmation_title">Подесите време за сесију да бисте \"одјавили\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">Након временског периода, бићете одјављени. Морат ћете бити повезани на Интернет да бисте се пријавили и приступили сефу поново. Ваша подешавања и ПИН сачувани на овом уређају се неће променити.</string>
-    <string name="logging_in">Пријављивање...</string>
+    <string name="logging_in">Пријављивање…</string>
     <string name="login_to_bitwarden">Пријави се на Bitwarden</string>
     <string name="master_password_confirmation_val_message">Потврђена лозинка није тачна.</string>
     <string name="master_password_description">Главна Лозинка је лозинка коју користите за приступ Вашем сефу. Врло је важно да је не заборавите. Не постоји начин да повратите лозинку у случају да је заборавите.</string>
     <string name="master_password_hint">Савет Главне Лозинке (опционо)</string>
     <string name="master_password_hint_description">Савет Главне Лозинке може да Вам помогне да се потсетите ако је заборавите.</string>
-    <string name="master_password_length_val_message_x">Главна лозинка треба имати барем %1$s карактера.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="few">Master password must be at least %d characters long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Минимално Бројева</string>
     <string name="min_special">Минимално специјалних</string>
     <string name="never">Никада</string>
@@ -142,11 +146,11 @@
     <string name="select">Изабери</string>
     <string name="item_details">Детаљи ставке</string>
     <string name="item_updated">Ставка је сачувана</string>
-    <string name="submitting">Слање...</string>
-    <string name="syncing">Синхронизује се...</string>
+    <string name="submitting">Постављање…</string>
+    <string name="syncing">Синхронизација…</string>
     <string name="syncing_complete">Синхронизација је завршена</string>
     <string name="two_step_login">Дво-коракна лозинка</string>
-    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
+    <string name="unlock_with_biometrics">Откључај биометријом</string>
     <string name="unlock_with_pin">Откључај са ПИН кодом</string>
     <string name="verification_code">Верификациони код</string>
     <string name="view_login">Преглед пријаве</string>
@@ -162,7 +166,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Потражите лозинку или додајте нову лозинку</string>
     <string name="disabled">Онемогућено</string>
     <string name="bitwarden_autofill_service_alert2">Најлакши начин за додавање нових пријава у свој сеф је из сервиса ауто-попуњавања Bitwarden-а. Сазнајте више о коришћењу сервиса ауто-попуњавања Bitwarden-а преко екрана „Подешавања“.</string>
-    <string name="autofill">Ауто-попуњавање</string>
+    <string name="autofill_title">Аутоматско попуњавање</string>
     <string name="autofill_or_view">Да ли желите да ауто-попуните или да погледате ову ставку?</string>
     <string name="search">Тражи</string>
     <string name="learn_org">Сазнајте о организацијама</string>
@@ -181,7 +185,7 @@
     <string name="add_new_attachment">Додај нови прилог</string>
     <string name="attachments">Прилози</string>
     <string name="unable_to_download_file">Не могу да преузмем датотеку.</string>
-    <string name="downloading">Преузимање...</string>
+    <string name="downloading">Преузимање…</string>
     <string name="attachment_large_warning">Овај прилог има %1$s. Да ли сте сигурни да желите да га преузмете на свој уређај?</string>
     <string name="authenticator_key">Једнократни код</string>
     <string name="verification_code_totp">Једнократни код</string>
@@ -286,7 +290,7 @@
     <string name="new_uri">Нови УРЛ</string>
     <string name="add_website">Додај вебсајт</string>
     <string name="base_domain">Главни домен</string>
-    <string name="default_text">Подразумевано</string>
+    <string name="default_text">Подразумевано (%1$s)</string>
     <string name="exact">Тачно</string>
     <string name="host">Хост</string>
     <string name="reg_ex">Регуларни израз</string>
@@ -308,7 +312,11 @@
     <string name="personal_details">Личне информације</string>
     <string name="contact_info">Контакт информације</string>
     <string name="check_password_for_data_breaches">Провери лозинку за провалу података</string>
-    <string name="password_exposed">Ова лозинка је изложена %1$s пута. Требали би да је промените.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="few">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Ова лозинка није никада изложена. Треба да је сигурна за употребу.</string>
     <string name="identity_name">Име идентитета</string>
     <string name="value">Вредност</string>
@@ -356,7 +364,7 @@
     <string name="clear_clipboard">Очисти међуспремник</string>
     <string name="clear_clipboard_description">Аутоматски избриши копиране вредности из међуспремника.</string>
     <string name="default_uri_match_detection">Стандардно налажење УРЛ</string>
-    <string name="default_uri_match_detection_description">Изабери подразумевани начин на који се поступа са откривањем УРЛ за пријаве приликом извођења радњи као што је аутоматско попуњавање.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Тема</string>
     <string name="theme_description">Промени боје апликације.</string>
     <string name="copy_notes">Копирај белешке</string>
@@ -364,8 +372,8 @@
     <string name="exit_confirmation">Да ли сте сигурни да желите да изађете из Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Потражити главну лозинку при поновном покретању апликације?</string>
     <string name="pin_require_master_password_restart">Да ли желите да затражите откључавање главном лозинком када се апликација поново покрене?</string>
-    <string name="ask_to_add_login">Питај да се дода пријава</string>
-    <string name="ask_to_add_login_description">Затражи да се дода ставка ако она није пронађена у вашем сефу.</string>
+    <string name="ask_to_add_item">Затражите додавање ставке</string>
+    <string name="ask_to_add_item_description">Затражи да се дода ставка ако она није пронађена у вашем сефу.</string>
     <string name="on_restart">На поновно покретање</string>
     <string name="capitalize">Прво слово велико</string>
     <string name="include_number">Убаци број</string>
@@ -392,10 +400,10 @@
     <string name="save_attachment_success">Прилог успешно сачуван</string>
     <string name="autofill_tile_accessibility_required">Омогући „Аутоматско попуњавање услуге приступачности“ из подешавања Bitwarden-а да би могао да користиш аутоматско попуњавање.</string>
     <string name="autofill_tile_uri_not_found">Поља са лозинкама нису нађена</string>
-    <string name="soft_deleting">Слање у отпад...</string>
+    <string name="soft_deleting">Слање у отпад…</string>
     <string name="item_soft_deleted">Ставка је послата у отпад.</string>
     <string name="restore">Поврати</string>
-    <string name="restoring">Враћање…</string>
+    <string name="restoring">Обнављање…</string>
     <string name="item_restored">Ставка је враћена.</string>
     <string name="trash">Отпад</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Да ли сигурно желите да трајно избришете? Ово се не може поништити.</string>
@@ -483,14 +491,12 @@
     <string name="password_prompt">Поновно тражење главне лозинке</string>
     <string name="password_confirmation">Потврда главне лозинке</string>
     <string name="password_confirmation_desc">Ова акција је заштићена, да бисте наставили, поново унесите своју главну лозинку да бисте проверили идентитет.</string>
-    <string name="captcha_failed">Провера није успела. Покушајте поново.</string>
     <string name="update_master_password">Ажурирај главну лозинку</string>
     <string name="update_master_password_warning">Ваша главна лозинка је недавно промењена од стране администратора организације. Како  бисте приступили сефу, морате да ажурирате вашу главну лозинку. Ако наставите бићете одјављени из ваше тренутне сесије, што ће захтевати да се поново пријавите. Активне сесије на другим уређајима ће можда наставити да раде до сат времена.</string>
     <string name="updating_password">Ажурирање лозинке</string>
     <string name="remove_master_password">Уклони главну лозинку</string>
     <string name="leave_organization">Напусти организацију</string>
     <string name="leave_organization_name">Напустити %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">WebAuthn аутентификација</string>
     <string name="fido2_return_to_app">Врати се на аппликацију</string>
     <string name="reset_password_auto_enroll_invite_warning">Ова организација има политику која ће вас аутоматски уписати у ресетовање лозинке. Упис ће омогућити администраторима организације да промене вашу главну лозинку.</string>
@@ -568,12 +574,6 @@
     <string name="api_key">API кључ</string>
     <string name="api_key_required_parenthesis">API кључ (обавезно)</string>
     <string name="service">Сервис</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API приступ токен (обавезно)</string>
     <string name="api_access_token">Приступни АПИ токен</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Сигурно преписати тренутно име?</string>
@@ -749,7 +749,11 @@
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden не може да рисетује изгубљену или заборављену главну лозинку.</string>
     <string name="choose_your_master_password">Одаберите вашу главну лозинку</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Изаберите јединствену и јаку лозинку да бисте заштитили своје податке.</string>
-    <string name="minimum_characters">%1$s знакова</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="few">%d characters</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Истекла веза</string>
     <string name="please_restart_registration_or_try_logging_in">Поново покрените регистрацију или покушајте да се пријавите. Можда већ имате налог.</string>
     <string name="restart_registration">Поново покрените регистрацију</string>
@@ -802,7 +806,7 @@
     <string name="need_help_check_out_import_help">Треба вам помоћ? Проверите помоћ за увоз.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Сачувајте извезену датотеку негде на рачунару где можете лако да пронађете.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Ово није признати Bitwarden сервер. Можда ћете морати да проверите код свог провајдера или да ажурирате сервер.</string>
-    <string name="syncing_logins_loading_message">Синхронизовање пријављивања...</string>
+    <string name="syncing_logins_loading_message">Синхронизовање пријављивања…</string>
     <string name="download_the_browser_extension">Преузмите проширење претраживача</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Идите на bitwarden.com/download да интегришете Bitwarden у свој омиљени претраживач за беспрекорно искуство.</string>
     <string name="use_the_web_app">Користите веб апликацију</string>
@@ -850,7 +854,6 @@
     <string name="need_some_inspiration">"Потребна вам је инспирација?"</string>
     <string name="check_out_the_passphrase_generator">"Испробајте генератор фраза"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Нисмо могли да верификујемо сертификат сервера. Ланац сертификата или подешавања проксија на вашем уређају или вашем Bitwarden серверу можда нису правилно подешени.</string>
-    <string name="review_flow_launched">Рецензија тока је покренута!</string>
     <string name="copy_private_key">Копирај приватни кључ</string>
     <string name="login_credentials">Акредитиве за пријављивање</string>
     <string name="autofill_options">Опције аутоматског попуњавања</string>
@@ -890,20 +893,20 @@
     <string name="invalid_certificate_chain">Неважећи ланац сертификата</string>
     <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Коришћење системских сертификата је мање безбедано него чување сертификата са Bitwarden. Наставак ће приказати листу доступних системских сертификата ако је неки већ инсталиран.</string>
     <string name="link">Линк</string>
-    <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey operation failed because host URL is not present in request.</string>
-    <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
-    <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
-    <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
-    <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
-    <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
-    <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
+    <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Операција са кључем за приступ није успела јер URL адреса домаћина није присутна у захтеву.</string>
+    <string name="passkey_operation_failed_because_app_signature_is_invalid">Операција са кључем за приступ није успела јер потпис апликације није важећи.</string>
+    <string name="passkey_registration_failed_due_to_an_internal_error">Регистрација кључа за приступ није успела због interne грешке.</string>
+    <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Операција са кључем за приступ није успела јер се ослонац (relying party) не може идентификовати.</string>
+    <string name="passkey_operation_failed_because_the_request_is_invalid">Операција са кључем за приступ није успела јер је захтев неважећи.</string>
+    <string name="passkey_operation_failed_because_no_item_was_selected">Операција са кључем за приступ није успела јер није изабрана ниједна ставка.</string>
+    <string name="passkey_operation_failed_because_the_request_is_unsupported">Операција са кључем за приступ није успела јер је захтев неподржан.</string>
     <string name="password_operation_failed_because_the_selected_item_does_not_exist">Операција лозинке није успела јер изабрана ставка не постоји.</string>
     <string name="password_operation_failed_because_no_item_was_selected">Операција лозинке није успела јер нема изабране ставке.</string>
     <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Операција акредитива није успела јер су прекорачени покушаји верификације корисника.</string>
     <string name="credential_operation_failed_because_user_is_locked_out">Операција акредитива није успела јер је корисник закључан.</string>
     <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Операција акредитива није успела јер изабрана ставка не постоји.</string>
     <string name="credential_operation_failed_because_user_verification_was_cancelled">Операција акредитива није успела јер је корисничка верификација отказана.</string>
-    <string name="self_host_server_url">Self-host server URL</string>
+    <string name="self_host_server_url">УРЛ сервера који се самостално хостује</string>
     <string name="use_brave_autofill_integration">Користи Brave-ову интеграцију за аутоматско попуњавање</string>
     <string name="use_chrome_autofill_integration">Користи Chrome-ову интеграцију за аутоматско попуњавање</string>
     <string name="use_chrome_beta_autofill_integration">Користи Chrome-ову интеграцију за аутоматско попуњавање (Beta)</string>
@@ -912,19 +915,20 @@
     <string name="no_folder">Нема фасцикле</string>
     <string name="show_less">Прикажи мање</string>
     <string name="add_field">Додај поље</string>
-    <string name="x_ellipses">%s...</string>
     <string name="share_error_details">Поделите детаље о грешци</string>
-    <string name="flight_recorder">Flight recorder</string>
-    <string name="flight_recorder_help">Flight recorder help</string>
-    <string name="view_recorded_logs">View recorded logs</string>
-    <string name="enable_flight_recorder_title">Enable flight recorder</string>
+    <string name="flight_recorder">Рекордер лета</string>
+    <string name="flight_recorder_help">Помоћ за рекордера лета</string>
+    <string name="view_recorded_logs">Погледајте снимљене извештаје</string>
+    <string name="enable_flight_recorder_title">Омогући рекордера лета</string>
     <string name="recorded_logs_title">Снимљени извештаји</string>
     <string name="no_logs_recorded">Нема извештаја</string>
     <string name="experiencing_an_issue">Доживљавате проблем?</string>
     <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Омогућите привремене евидентирање за прикупљање и локалног прегледавања извештаја. Када је омогућено, статуси апликације и мрежни позиви могу се пријавити - никада осетљиве информације о сефу.</string>
-    <string name="to_get_started_set_a_logging_duration">To get started, set a logging duration. Logging  will automatically turn off after this period, giving you time to capture activity while reproducing  any issues.</string>
-    <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
-    <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
+    <string name="to_get_started_set_a_logging_duration">Да бисте започели, подесите трајање бележења. Бележење 
+ће се аутоматски искључити после овог периода, дајући вам времена да снимите 
+активност приликом репродуковања било каквих проблема.</string>
+    <string name="logs_will_be_automatically_deleted_after_30_days">Записи ће бити аутоматски обрисани после 30 дана. Bitwarden може да приступи вашим подацима записа само када их поделите.</string>
+    <string name="for_details_on_what_is_and_isnt_logged">За детаље о томе шта се бележи, а шта не, посетите\n<annotation link="helpCenter">цentar за помоћ Bitwarden-а.</annotation></string>
     <string name="logging_duration">Трајање извештаја</string>
     <string name="flight_recorder_one_hour">1 сат</string>
     <string name="flight_recorder_eight_hours">8 сати</string>
@@ -933,17 +937,17 @@
     <string name="delete_all">Избриши све</string>
     <string name="share_all">Подели све</string>
     <string name="unable_to_share">Није могуће поделити</string>
-    <string name="please_try_again_or_select_a_different_log">Please try again or select a different log.</string>
-    <string name="the_log_file_you_are_trying_to_share_has_been_removed">The log file you are trying to share has been removed.</string>
-    <string name="delete_log">Delete log</string>
-    <string name="do_you_really_want_to_delete_this_log">Do you really want to delete this log?</string>
-    <string name="delete_logs">Delete logs</string>
-    <string name="do_you_really_want_to_delete_all_recorded_logs">Do you really want to delete all recorded logs?</string>
-    <string name="confirm_key_connector_domain">Confirm Key Connector domain</string>
-    <string name="key_connector_domain">Key Connector domain:</string>
-    <string name="key_connector_organization">Organization:</string>
-    <string name="password_no_longer_required_confirm_domain">A master password is no longer required for members of the following organization. Please confirm the domain below with your organization administrator.</string>
-    <string name="please_confirm_domain_with_admin">Please confirm the domain below with your organization administrator.\n\nKey Connector domain:\n%1$s</string>
+    <string name="please_try_again_or_select_a_different_log">Молимо покушајте поново или изаберите други запис.</string>
+    <string name="the_log_file_you_are_trying_to_share_has_been_removed">Датотека записа коју покушавате да поделите је уклоњена.</string>
+    <string name="delete_log">Обриши запис</string>
+    <string name="do_you_really_want_to_delete_this_log">Да ли заиста желите да избришете овај запис?</string>
+    <string name="delete_logs">Избриши записе</string>
+    <string name="do_you_really_want_to_delete_all_recorded_logs">Да ли заиста желите да избришете све записе?</string>
+    <string name="confirm_key_connector_domain">Потврдите домен конектора кључа</string>
+    <string name="key_connector_domain">Домен конектора кључа:</string>
+    <string name="key_connector_organization">Организација:</string>
+    <string name="password_no_longer_required_confirm_domain">Главна лозинка више није потребна за чланове следеће организације. Молимо потврдите домен са администратором организације.</string>
+    <string name="please_confirm_domain_with_admin">Молимо потврдите домен у наставку са администратором организације.\n\nДомен конектор кључа:\n%1$s</string>
     <string name="flight_recorder_banner_title">Рекордер лета упаљен</string>
     <string name="flight_recorder_banner_message">Рекордер лета је упаљен до %1$s у %2$s. Повратак на подешавања да бисте сада деактивирали.</string>
     <string name="go_to_settings">Иди на подешавања</string>
@@ -999,7 +1003,11 @@
     <string name="advanced">Напредно</string>
     <string name="collapse_advanced_options">Скупи напредне опције</string>
     <string name="number_of_digits">Број цифара</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d сек.</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="few">%d seconds</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">Ставка сачувана</string>
     <string name="information">Информација</string>
     <string name="otp_type">Тип ОТП</string>
@@ -1042,7 +1050,6 @@
     <string name="sync_with_bitwarden_app">Синхронизујте са апликацијом Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">Сазнати више</annotation></string>
     <string name="shared_codes_error">Није могуће синхронизовати кодове из апликације Bitwarden. Уверите се да су обе апликације ажуриране. И даље можете да приступите својим постојећим кодовима у апликацији Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Синхронизујте са апликацијом Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Дозволите синхронизацију апликације Authenticator у подешавањима да бисте видели све своје верификационе кôдове овде.</string>
     <string name="take_me_to_app_settings">Одведи ме до подешавања апликације</string>
@@ -1069,5 +1076,36 @@
     <string name="local_items_are_collapsed_click_to_expand">Локални предмети су умањени, кликните да се проширу.</string>
     <string name="items_expanded_click_to_collapse">Предмети су проширени, кликните да се умањи.</string>
     <string name="items_are_collapsed_click_to_expand">Предмети су умањени, кликните да се проширу.</string>
-    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="error_cannot_decrypt">[грешка: неуспешна декрипција]</string>
+    <string name="copy_error_report">Копирај извештај о грешци</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden није могао да дешифрира овај сеф. Копирајте и делите овај извештај о грешци са успехом купца да бисте избегли додатни губитак података.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="few">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
+    <string name="select_a_card_for_x">Одабрати картицу за %s</string>
+    <string name="advanced_options">Напредне опције</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Више о откривању меча</annotation></string>
+    <string name="keep_your_credential_secure">Чувајте своје акредитиве на сигурном</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Сазнајте више о томе како да чувате акредитиве сигурне када користите “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Јесте ли сигурни да желите да користите “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>

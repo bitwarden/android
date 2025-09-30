@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedlogs
 
-import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -16,6 +15,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
@@ -26,7 +26,6 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedL
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsScreen
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsState
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsViewModel
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -103,8 +102,7 @@ class RecordedLogsScreenTest : BitwardenComposeTest() {
     @Test
     fun `UI should change based on ViewState`() {
         mutableStateFlow.update { it.copy(viewState = RecordedLogsState.ViewState.Loading) }
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         mutableStateFlow.update { it.copy(viewState = RecordedLogsState.ViewState.Empty) }
         composeTestRule.onNodeWithText(text = "No logs recorded").assertIsDisplayed()

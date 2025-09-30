@@ -27,6 +27,8 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
@@ -38,8 +40,6 @@ import com.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
@@ -431,7 +431,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
             // Verify only the first collection name is shown
             composeTestRule
-                .onNodeWithText("My collection...")
+                .onNodeWithText("My collection…")
                 .assertIsDisplayed()
 
             // Verify other collection names are not shown by default.
@@ -1352,6 +1352,12 @@ class VaultItemScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `Move to organization option menu click should send MoveToOrganizationClick action`() {
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE,
+            )
+        }
+
         // Confirm dropdown version of item is absent
         composeTestRule
             .onAllNodesWithText("Move to Organization")
@@ -1367,6 +1373,30 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(VaultItemAction.Common.MoveToOrganizationClick)
         }
+    }
+
+    @Test
+    fun `Move to organization option menu should not be visible if user has no organizations`() {
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(hasOrganizations = false),
+                ),
+            )
+        }
+
+        // Confirm dropdown version of item is absent
+        composeTestRule
+            .onAllNodesWithText("Move to Organization")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+        // Open the overflow menu
+        composeTestRule.onNodeWithContentDescription("More").performClick()
+        // Confirm it does not exist
+        composeTestRule
+            .onAllNodesWithText("Move to Organization")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertDoesNotExist()
     }
 
     @Test
@@ -2045,8 +2075,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             )
         }
 
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
         composeTestRule
             .onNodeWithText("Passkey")
@@ -2091,8 +2120,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             )
         }
 
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
         composeTestRule
             .onNodeWithContentDescription("Copy TOTP")
@@ -2113,8 +2141,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule.onNodeWithTextAfterScroll("Authenticator key")
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         composeTestRule
             .onNodeWithContentDescription("Copy TOTP")
@@ -2130,8 +2157,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule.onNodeWithTextAfterScroll("Authenticator key")
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll("Copy TOTP")
@@ -2148,8 +2174,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule.onNodeWithTextAfterScroll("Authenticator key")
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
         composeTestRule
             .onNodeWithContentDescription("Copy TOTP")
@@ -2351,22 +2376,19 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = VaultItemState.ViewState.Loading)
         }
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         mutableStateFlow.update {
             it.copy(viewState = VaultItemState.ViewState.Error("Fail".asText()))
         }
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) {
                 copy(totpCodeItemData = null)
             }
         }
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
     }
 
     @Test
@@ -3203,6 +3225,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
         passwordHistoryCount = null,
         iconData = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
         relatedLocations = persistentListOf(),
+        hasOrganizations = true,
     )
 
 private val DEFAULT_PASSKEY = BitwardenString.created_x.asText("Mar 13, 2024, 3:56 PM")
@@ -3288,6 +3311,7 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         passwordHistoryCount = null,
         iconData = IconData.Local(iconRes = BitwardenDrawable.ic_globe),
         relatedLocations = persistentListOf(),
+        hasOrganizations = true,
     )
 
 private val EMPTY_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =

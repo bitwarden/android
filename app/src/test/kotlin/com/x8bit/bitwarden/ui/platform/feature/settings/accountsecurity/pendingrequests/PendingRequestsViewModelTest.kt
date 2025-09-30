@@ -2,8 +2,11 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pending
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestResult
@@ -11,21 +14,25 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.time.temporal.TemporalAccessor
 
 class PendingRequestsViewModelTest : BaseViewModelTest() {
 
@@ -48,6 +55,19 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         every {
             getSnackbarDataFlow(relay = any(), relays = anyVararg())
         } returns mutableSnackbarDataFlow
+    }
+    private val buildInfoManager = mockk<BuildInfoManager> {
+        every { isFdroid } returns false
+    }
+
+    @BeforeEach
+    fun setUp() {
+        mockkStatic(TemporalAccessor::toFormattedDateTimeStyle)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(TemporalAccessor::toFormattedDateTimeStyle)
     }
 
     @Test
@@ -74,10 +94,14 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
     @Suppress("LongMethod")
     @Test
     fun `getPendingResults success with content should update state with some requests filtered`() {
-        val dateTimeFormatter = DateTimeFormatter
-            .ofPattern("M/d/yy, hh:mm a")
-            .withZone(fixedClock.zone)
         val nowZonedDateTime = ZonedDateTime.now(fixedClock)
+        every {
+            nowZonedDateTime.toFormattedDateTimeStyle(
+                dateStyle = FormatStyle.SHORT,
+                timeStyle = FormatStyle.SHORT,
+                clock = fixedClock,
+            )
+        } returns "10/27/23, 12:00 PM"
         val requestList = listOf(
             AuthRequest(
                 id = "1",
@@ -139,7 +163,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
                     PendingRequestsState.ViewState.Content.PendingLoginRequest(
                         fingerprintPhrase = "pantry-overdue-survive-sleep-jab",
                         platform = "Android",
-                        timestamp = nowZonedDateTime.format(dateTimeFormatter),
+                        timestamp = "10/27/23, 12:00 PM",
                     ),
                 ),
             ),
@@ -190,7 +214,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
     fun `on HideBottomSheet should make hideBottomSheet true`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(PendingRequestsAction.HideBottomSheet)
-        assertEquals(DEFAULT_STATE.copy(hideBottomSheet = true), viewModel.stateFlow.value)
+        assertEquals(DEFAULT_STATE.copy(internalHideBottomSheet = true), viewModel.stateFlow.value)
     }
 
     @Test
@@ -308,6 +332,20 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         val nowZonedDateTime = ZonedDateTime.now(fixedClock)
         val fiveMinZonedDateTime = ZonedDateTime.now(fixedClock).minusMinutes(5)
         val sixMinZonedDateTime = ZonedDateTime.now(fixedClock).minusMinutes(6)
+        every {
+            nowZonedDateTime.toFormattedDateTimeStyle(
+                dateStyle = FormatStyle.SHORT,
+                timeStyle = FormatStyle.SHORT,
+                clock = fixedClock,
+            )
+        } returns "10/27/23, 12:00 PM"
+        every {
+            fiveMinZonedDateTime.toFormattedDateTimeStyle(
+                dateStyle = FormatStyle.SHORT,
+                timeStyle = FormatStyle.SHORT,
+                clock = fixedClock,
+            )
+        } returns "10/27/23, 11:55 AM"
         val requestList = listOf(
             AuthRequest(
                 id = "1",
@@ -393,6 +431,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         authRepository = authRepository,
         settingsRepository = settingsRepository,
         snackbarRelayManager = snackbarRelayManager,
+        buildInfoManager = buildInfoManager,
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
     )
 }
@@ -402,5 +441,6 @@ private val DEFAULT_STATE: PendingRequestsState = PendingRequestsState(
     viewState = PendingRequestsState.ViewState.Empty,
     isPullToRefreshSettingEnabled = false,
     isRefreshing = false,
-    hideBottomSheet = false,
+    internalHideBottomSheet = false,
+    isFdroid = false,
 )

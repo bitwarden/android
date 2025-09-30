@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">Tietoja</string>
     <string name="add_folder">Lisää kansio</string>
     <string name="add_item">Lisää kohde</string>
     <string name="an_error_has_occurred">Tapahtui virhe.</string>
+    <string name="apply">Apply</string>
     <string name="back">Takaisin</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Peruuta</string>
     <string name="copy">Kopioi</string>
     <string name="copy_password">Kopioi salasana</string>
     <string name="copy_username">Kopioi käyttäjätunnus</string>
     <string name="delete">Poista</string>
-    <string name="deleting">Poistetaan...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Haluatko varmasti poistaa? Toiminnon peruminen ei ole mahdollista.</string>
     <string name="edit">Muokkaa</string>
     <string name="edit_folder">Muokkaa kansiota</string>
@@ -54,7 +54,7 @@
     <string name="password">Salasana</string>
     <string name="save">Tallenna</string>
     <string name="move">Siirrä</string>
-    <string name="saving">Tallennetaan...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Asetukset</string>
     <string name="show">Näytä</string>
     <string name="item_deleted">Kohde poistettiin</string>
@@ -103,13 +103,16 @@
     <string name="immediately">Välittömästi</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
-    <string name="logging_in">Kirjaudutaan sisään…</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Kirjaudu Bitwardeniin</string>
     <string name="master_password_confirmation_val_message">Salasanan vahvistus ei täsmää.</string>
     <string name="master_password_description">Pääsalasanalla pääset käsiksi holviisi. On erittäin tärkeää, että muistat pääsalasanasi, koska sen palautus ei ole mahdollista, jos unohdat sen.</string>
     <string name="master_password_hint">Pääsalasanan vihje (valinnainen)</string>
     <string name="master_password_hint_description">Pääsalasanan vihje voi auttaa sinua muistamaan unohtamasi salasanan.</string>
-    <string name="master_password_length_val_message_x">Pääsalasanan tulee sisältää vähintään %1$s merkkiä.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Numeroita vähintään</string>
     <string name="min_special">Erikoismerkkejä vähintään</string>
     <string name="never">Ei koskaan</string>
@@ -142,8 +145,8 @@
     <string name="select">Valitse</string>
     <string name="item_details">Kohteen tiedot</string>
     <string name="item_updated">Kohde tallennettiin</string>
-    <string name="submitting">Käsitellään…</string>
-    <string name="syncing">Synkronoidaan...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Synkronointi suoritettiin</string>
     <string name="two_step_login">Kaksivaiheinen kirjautuminen</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -162,7 +165,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Hae kirjautumistietoa tai lisää uusi</string>
     <string name="disabled">Ei käytössä</string>
     <string name="bitwarden_autofill_service_alert2">Holviin on helpoin lisätä uusia kirjautumistietoja Bitwardenin automaattitäytön palvelun avulla. Asetuksista löydät lisätietoja sen käytöstä.</string>
-    <string name="autofill">Automaattitäyttö</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">Haluatko täyttää kohteen automaattisesti vai tarkastella sitä?</string>
     <string name="search">Etsi</string>
     <string name="learn_org">Lisätietoja organisaatioista</string>
@@ -181,7 +184,7 @@
     <string name="add_new_attachment">Lisää uusi tiedostoliite</string>
     <string name="attachments">Liitteet</string>
     <string name="unable_to_download_file">Tiedostoa ei voitu ladata.</string>
-    <string name="downloading">Ladataan…</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Tiedostoliitteen koko on %1$s. Haluatko varmasti ladata sen laitteellesi?</string>
     <string name="authenticator_key">Todennusavain (TOTP)</string>
     <string name="verification_code_totp">Todennuskoodi (TOTP)</string>
@@ -286,7 +289,7 @@ Koodi skannataan automaattisesti.</string>
     <string name="new_uri">Uusi URI</string>
     <string name="add_website">Lisää verkkosivusto</string>
     <string name="base_domain">Pääverkkotunnus</string>
-    <string name="default_text">Oletus</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Tarkka</string>
     <string name="host">Isäntä</string>
     <string name="reg_ex">Säännöllinen lauseke</string>
@@ -308,7 +311,10 @@ Koodi skannataan automaattisesti.</string>
     <string name="personal_details">Henkilötiedot</string>
     <string name="contact_info">Yhteystiedot</string>
     <string name="check_password_for_data_breaches">Tarkasta salasana tietomurtojen varalta</string>
-    <string name="password_exposed">Salasana on paljastunut %1$s tietovuodossa. Se tulisi vaihtaa.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Salasanaa ei löytynyt tunnetuista tietovuodoista. Sen pitäisi olla turvallinen.</string>
     <string name="identity_name">Henkilöllisyyden nimi</string>
     <string name="value">Arvo</string>
@@ -356,7 +362,7 @@ Koodi skannataan automaattisesti.</string>
     <string name="clear_clipboard">Tyhjennä leikepöytä</string>
     <string name="clear_clipboard_description">Poista kopioidut arvot leikepöydältä automaattisesti.</string>
     <string name="default_uri_match_detection">URI:n oletuarvoinen tunnistustapa</string>
-    <string name="default_uri_match_detection_description">Valitse kirjautumistietojen URI:en oletusarvoinen tunnistustapa suoritettaessa automaattisen täytön kaltaisia toimintoja.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Teema</string>
     <string name="theme_description">Vaihda sovelluksen väriteemaa.</string>
     <string name="copy_notes">Kopioi merkinnät</string>
@@ -364,8 +370,8 @@ Koodi skannataan automaattisesti.</string>
     <string name="exit_confirmation">Haluatko varmasti poistua Bitwardenista?</string>
     <string name="require_master_password_on_app_restart">Vaadi pääsalasana sovellusta uudelleenkäynnistettäessä?</string>
     <string name="pin_require_master_password_restart">Vaaditaanko lukituksen avaus pääsalasanalla, kun sovellus käynnistetään uudelleen?</string>
-    <string name="ask_to_add_login">Kysy lisätäänkö kirjautumistieto</string>
-    <string name="ask_to_add_login_description">Kysy lisätäänkö uusi kohde, jos holvissa ei vielä ole sopivaa kohdetta.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Kun sovellus käynnistetään uudelleen</string>
     <string name="capitalize">Sanat isoilla alkukirjaimilla</string>
     <string name="include_number">Sisällytä numero</string>
@@ -392,10 +398,10 @@ Koodi skannataan automaattisesti.</string>
     <string name="save_attachment_success">Tiedostoliite tallennettiin</string>
     <string name="autofill_tile_accessibility_required">Ota \"Automaattitäytön esteettömyyspalvelu\" käyttöön Bitwardenin asetuksista käyttääksesi automaattitäytön pikavalintapalkkia.</string>
     <string name="autofill_tile_uri_not_found">Salasanakenttiä ei havaittu</string>
-    <string name="soft_deleting">Siirretään roskakoriin...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Kohde siirrettiin roskakoriin.</string>
     <string name="restore">Palauta</string>
-    <string name="restoring">Palautetaan...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Kohde palautettiin</string>
     <string name="trash">Roskakori</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Haluatko varmasti poistaa pysyvästi? Toiminnon peruminen ei ole mahdollista.</string>
@@ -483,14 +489,12 @@ Koodi skannataan automaattisesti.</string>
     <string name="password_prompt">Pääsalasanan uudelleenkysely</string>
     <string name="password_confirmation">Pääsalasanan vahvistus</string>
     <string name="password_confirmation_desc">Toiminto on suojattu. Jatka vahvistamalla henkilöllisyytesi syöttämällä pääsalasanasi uudelleen.</string>
-    <string name="captcha_failed">Captcha-vahvistus epäonnistui. Yritä uudelleen.</string>
     <string name="update_master_password">Päivitä pääsalasana</string>
     <string name="update_master_password_warning">Organisaatiosi ylläpito on hiljattain vaihtanut pääsalasanasi ja käyttääksesi holvia sinun on päivitettävä se nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan.</string>
     <string name="updating_password">Salasanaa vaihdetaan</string>
     <string name="remove_master_password">Poista pääsalasana</string>
     <string name="leave_organization">Poistu organisaatiosta</string>
     <string name="leave_organization_name">Poistutaanko organisaatiosta %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">WebAuthn-tunnistautuminen</string>
     <string name="fido2_return_to_app">Palaa sovellukseen</string>
     <string name="reset_password_auto_enroll_invite_warning">Organisaatiolla on yrityskäytäntö, joka liittää tilisi automaattisesti salasanan palautusapuun. Liitos sallii organisaation ylläpitäjien vaihtaa pääsalasanasi.</string>
@@ -568,12 +572,6 @@ turvallisesti valitsemalla \"Lisää TOTP\"</string>
     <string name="api_key">API-avain</string>
     <string name="api_key_required_parenthesis">API-avain (pakollinen)</string>
     <string name="service">Palvelu</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">Forward Email</string>
     <string name="api_access_token_required_parenthesis">API access token (required)</string>
     <string name="api_access_token">API-käyttötunniste</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Haluatko varmasti korvata nykyisen käyttäjätunnuksen?</string>
@@ -749,7 +747,10 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Valitse pääsalasanasi</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Suojaa tietosi valitsemalla ainutlaatuinen ja vahva salasana.</string>
-    <string name="minimum_characters">%1$s merkkiä</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Vanhentunut linkki</string>
     <string name="please_restart_registration_or_try_logging_in">Aloita rekisteröityminen alusta tai yritä kirjautua sisään uudelleen. Sinulla saattaa jo olla tili.</string>
     <string name="restart_registration">Aloita rekisteröityminen alusta</string>
@@ -802,7 +803,7 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="need_help_check_out_import_help">Need help? Check out <annotation link="importHelp">import help</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
-    <string name="syncing_logins_loading_message">Synkronoidaan kirjautumistietoja...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Lataa selaimen laajennus</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favorite browser for a seamless experience.</string>
     <string name="use_the_web_app">Käytä verkkosovellusta</string>
@@ -850,7 +851,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="need_some_inspiration">"Tarvitsetko inspiraatiota?"</string>
     <string name="check_out_the_passphrase_generator">"Tutustu salalausegeneraattoriin"</string>
     <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
-    <string name="review_flow_launched">Review flow launched!</string>
     <string name="copy_private_key">Kopioi yksityinen avain</string>
     <string name="login_credentials">Kirjautumistiedot</string>
     <string name="autofill_options">Autofill Options</string>
@@ -912,7 +912,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="no_folder">Ei kansiota</string>
     <string name="show_less">Näytä vähemmän</string>
     <string name="add_field">Lisää kenttä</string>
-    <string name="x_ellipses">%s...</string>
     <string name="share_error_details">Jaa virhetiedot</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>
@@ -999,7 +998,10 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="advanced">Lisäasetukset</string>
     <string name="collapse_advanced_options">Tiivistä lisäasetukset</string>
     <string name="number_of_digits">Pituus</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d sekuntia</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">Kohde tallennettu</string>
     <string name="information">Tiedot</string>
     <string name="otp_type">OTP:n tyyppi</string>
@@ -1042,7 +1044,6 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="sync_with_bitwarden_app">Synkronoi Bitwarden-sovelluksen kanssa</string>
     <string name="learn_more_link"><annotation link="learnMore">Lue lisää</annotation></string>
     <string name="shared_codes_error">Koodien synkronointi Bitwarden sovelluksesta epäonnistui. Varmista, että molemmat sovellukset ovat ajan tasalla. Voit edelleen käyttää olemassa olevia koodejasi Bitwarden sovelluksessa.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Synkronoi Bitwarden-sovelluksen kanssa</string>
     <string name="sync_with_bitwarden_action_card_message">Tarkastellaksesi kaikkia vahvistuskoodejasi sinun täytyy sallia synkronointi kaikilla tileilläsi.</string>
     <string name="take_me_to_app_settings">Vie minut sovelluksen asetuksiin</string>
@@ -1069,5 +1070,35 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="local_items_are_collapsed_click_to_expand">Paikalliset kohteet on pienennetty. Paina laajentaaksesi.</string>
     <string name="items_expanded_click_to_collapse">Kohteet on laajennettu. Paina pienentääksesi.</string>
     <string name="items_are_collapsed_click_to_expand">Kohteet ovat tiivistetty. Paina laajentaaksesi.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Copy error report</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>

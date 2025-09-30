@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
@@ -17,7 +18,6 @@ import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
@@ -88,6 +88,10 @@ class RootNavViewModel @Inject constructor(
                 }
             }
 
+            specialCircumstance is SpecialCircumstance.CredentialExchangeExport -> {
+                RootNavState.CredentialExchangeExport
+            }
+
             userState.activeAccount.isVaultUnlocked &&
                 userState.shouldShowRemovePassword(authState = action.authState) -> {
                 RootNavState.RemovePassword
@@ -95,15 +99,7 @@ class RootNavViewModel @Inject constructor(
 
             userState.activeAccount.isVaultUnlocked &&
                 userState.activeAccount.onboardingStatus != OnboardingStatus.COMPLETE -> {
-                when (userState.activeAccount.onboardingStatus) {
-                    OnboardingStatus.NOT_STARTED,
-                    OnboardingStatus.ACCOUNT_LOCK_SETUP,
-                        -> RootNavState.OnboardingAccountLockSetup
-
-                    OnboardingStatus.AUTOFILL_SETUP -> RootNavState.OnboardingAutoFillSetup
-                    OnboardingStatus.FINAL_STEP -> RootNavState.OnboardingStepsComplete
-                    OnboardingStatus.COMPLETE -> throw IllegalStateException("Should not have entered here.")
-                }
+                getOnboardingNavState(onboardingStatus = userState.activeAccount.onboardingStatus)
             }
 
             userState.activeAccount.isVaultUnlocked -> {
@@ -181,7 +177,9 @@ class RootNavViewModel @Inject constructor(
                     null,
                         -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
 
-                    is SpecialCircumstance.RegistrationEvent -> {
+                    is SpecialCircumstance.CredentialExchangeExport,
+                    is SpecialCircumstance.RegistrationEvent,
+                        -> {
                         throw IllegalStateException(
                             "Special circumstance should have been already handled.",
                         )
@@ -192,6 +190,19 @@ class RootNavViewModel @Inject constructor(
             else -> RootNavState.VaultLocked
         }
         mutableStateFlow.update { updatedRootNavState }
+    }
+
+    private fun getOnboardingNavState(
+        onboardingStatus: OnboardingStatus,
+    ): RootNavState = when (onboardingStatus) {
+        OnboardingStatus.NOT_STARTED,
+        OnboardingStatus.ACCOUNT_LOCK_SETUP,
+            -> RootNavState.OnboardingAccountLockSetup
+
+        OnboardingStatus.AUTOFILL_SETUP -> RootNavState.OnboardingAutoFillSetup
+        OnboardingStatus.BROWSER_AUTOFILL_SETUP -> RootNavState.OnboardingBrowserAutofillSetup
+        OnboardingStatus.FINAL_STEP -> RootNavState.OnboardingStepsComplete
+        OnboardingStatus.COMPLETE -> throw IllegalStateException("Should not have entered here.")
     }
 
     private fun getRegistrationEventNavState(
@@ -397,10 +408,22 @@ sealed class RootNavState : Parcelable {
     data object OnboardingAutoFillSetup : RootNavState()
 
     /**
+     * App should show the set up browser autofill onboarding screen.
+     */
+    @Parcelize
+    data object OnboardingBrowserAutofillSetup : RootNavState()
+
+    /**
      * App should show the onboarding steps complete screen.
      */
     @Parcelize
     data object OnboardingStepsComplete : RootNavState()
+
+    /**
+     * App should begin the export items flow.
+     */
+    @Parcelize
+    data object CredentialExchangeExport : RootNavState()
 }
 
 /**

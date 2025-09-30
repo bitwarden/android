@@ -19,10 +19,10 @@ import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.bitwarden.core.data.manager.model.FlagKey
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
@@ -31,7 +31,9 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.Export
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -77,11 +79,8 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         } returns ExportVaultDataResult.Success("data")
     }
     private val fileManager: FileManager = mockk()
-
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every {
-            getFeatureFlag(FlagKey.RemoveCardPolicy)
-        } returns false
+    private val organizationEventManager = mockk<OrganizationEventManager> {
+        every { trackEvent(event = any()) } just runs
     }
 
     @Test
@@ -135,7 +134,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ConfirmExportVaultClicked correct password should call exportVaultDataToString with restricted item types when policy and feature flags enabled`() {
+    fun `ConfirmExportVaultClicked correct password should call exportVaultDataToString with restricted item types when policy`() {
         val password = "password"
         coEvery {
             authRepository.validatePassword(
@@ -145,9 +144,6 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         every {
             policyManager.getActivePolicies(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
         } returns listOf(createMockPolicy())
-        every {
-            featureFlagManager.getFeatureFlag(FlagKey.RemoveCardPolicy)
-        } returns true
 
         val viewModel = createViewModel()
         viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
@@ -164,16 +160,13 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ConfirmExportVaultClicked correct password should call exportVaultDataToString without restricted item types when policy is disabled and feature flag is enabled`() {
+    fun `ConfirmExportVaultClicked correct password should call exportVaultDataToString without restricted item types when policy is disabled`() {
         val password = "password"
         coEvery {
             authRepository.validatePassword(
                 password = password,
             )
         } returns ValidatePasswordResult.Success(isValid = true)
-        every {
-            featureFlagManager.getFeatureFlag(FlagKey.RemoveCardPolicy)
-        } returns true
 
         val viewModel = createViewModel()
         viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
@@ -792,27 +785,39 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ExportLocationReceive should emit ShowSnackbar on success`() = runTest {
-        val exportData = "TestExportVaultData"
-        val viewModel = createViewModel(
-            DEFAULT_STATE.copy(
-                exportData = exportData,
-            ),
-        )
-        val uri = mockk<Uri>()
-        coEvery { fileManager.stringToUri(fileUri = any(), dataString = exportData) } returns true
-
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ExportVaultAction.ExportLocationReceive(uri))
-
-            coVerify { fileManager.stringToUri(fileUri = any(), dataString = exportData) }
-
-            assertEquals(
-                ExportVaultEvent.ShowSnackbar(BitwardenString.export_vault_success.asText()),
-                awaitItem(),
+    fun `ExportLocationReceive should emit ShowSnackbar and UserClientExportedVault on success`() =
+        runTest {
+            val exportData = "TestExportVaultData"
+            val viewModel = createViewModel(
+                DEFAULT_STATE.copy(
+                    exportData = exportData,
+                ),
             )
+            val uri = mockk<Uri>()
+            coEvery {
+                fileManager.stringToUri(
+                    fileUri = any(),
+                    dataString = exportData,
+                )
+            } returns true
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(ExportVaultAction.ExportLocationReceive(uri))
+
+                coVerify { fileManager.stringToUri(fileUri = any(), dataString = exportData) }
+
+                verify(exactly = 1) {
+                    organizationEventManager.trackEvent(
+                        event = OrganizationEvent.UserClientExportedVault,
+                    )
+                }
+
+                assertEquals(
+                    ExportVaultEvent.ShowSnackbar(BitwardenString.export_vault_success.asText()),
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     private fun createViewModel(
         initialState: ExportVaultState? = null,
@@ -825,7 +830,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         fileManager = fileManager,
         vaultRepository = vaultRepository,
         clock = clock,
-        featureFlagManager = featureFlagManager,
+        organizationEventManager = organizationEventManager,
     )
 }
 

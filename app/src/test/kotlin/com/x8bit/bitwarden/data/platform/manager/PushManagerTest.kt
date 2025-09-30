@@ -161,7 +161,7 @@ class PushManagerTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
@@ -180,7 +180,7 @@ class PushManagerTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
@@ -191,7 +191,7 @@ class PushManagerTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
@@ -237,6 +237,7 @@ class PushManagerTest {
                         pushManager.onMessageReceived(SYNC_CIPHER_DELETE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncCipherDeleteData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                             ),
                             awaitItem(),
@@ -285,6 +286,7 @@ class PushManagerTest {
                         pushManager.onMessageReceived(SYNC_FOLDER_DELETE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncFolderDeleteData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 folderId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                             ),
                             awaitItem(),
@@ -315,6 +317,7 @@ class PushManagerTest {
                         pushManager.onMessageReceived(SYNC_LOGIN_DELETE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncCipherDeleteData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                             ),
                             awaitItem(),
@@ -343,6 +346,7 @@ class PushManagerTest {
                     pushManager.onMessageReceived(SYNC_SEND_DELETE_NOTIFICATION_MAP)
                     assertEquals(
                         SyncSendDeleteData(
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
                             sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
                         ),
                         awaitItem(),
@@ -360,6 +364,17 @@ class PushManagerTest {
                             revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
                             isUpdate = true,
                         ),
+                        awaitItem(),
+                    )
+                }
+            }
+
+            @Test
+            fun `onMessageReceived with sync org keys emits to syncOrgKeysFlow`() = runTest {
+                pushManager.syncOrgKeysFlow.test {
+                    pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_MAP)
+                    assertEquals(
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
@@ -392,7 +407,13 @@ class PushManagerTest {
             fun `onMessageReceived with sync cipher delete does nothing`() = runTest {
                 pushManager.syncCipherDeleteFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHER_DELETE_NOTIFICATION_MAP)
-                    expectNoEvents()
+                    assertEquals(
+                        SyncCipherDeleteData(
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                            cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                        ),
+                        awaitItem(),
+                    )
                 }
             }
 
@@ -413,12 +434,19 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived with sync folder delete does nothing`() = runTest {
-                pushManager.syncFolderDeleteFlow.test {
-                    pushManager.onMessageReceived(SYNC_FOLDER_DELETE_NOTIFICATION_MAP)
-                    expectNoEvents()
+            fun `onMessageReceived with sync folder delete emits to syncFolderDeleteFlow`() =
+                runTest {
+                    pushManager.syncFolderDeleteFlow.test {
+                        pushManager.onMessageReceived(SYNC_FOLDER_DELETE_NOTIFICATION_MAP)
+                        assertEquals(
+                            SyncFolderDeleteData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                                folderId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                            ),
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
 
             @Test
             fun `onMessageReceived with sync folder update does nothing`() = runTest {
@@ -429,12 +457,19 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived with sync login delete does nothing`() = runTest {
-                pushManager.syncCipherDeleteFlow.test {
-                    pushManager.onMessageReceived(SYNC_LOGIN_DELETE_NOTIFICATION_MAP)
-                    expectNoEvents()
+            fun `onMessageReceived with sync login delete emits to syncCipherDeleteFlow`() =
+                runTest {
+                    pushManager.syncCipherDeleteFlow.test {
+                        pushManager.onMessageReceived(SYNC_LOGIN_DELETE_NOTIFICATION_MAP)
+                        assertEquals(
+                            SyncCipherDeleteData(
+                                userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                                cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                            ),
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
 
             @Test
             fun `onMessageReceived with sync send create does nothing`() = runTest {
@@ -445,10 +480,16 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived with sync send delete does nothing`() = runTest {
+            fun `onMessageReceived with sync send delete emits to syncSendDeleteFlow`() = runTest {
                 pushManager.syncSendDeleteFlow.test {
                     pushManager.onMessageReceived(SYNC_SEND_DELETE_NOTIFICATION_MAP)
-                    expectNoEvents()
+                    assertEquals(
+                        SyncSendDeleteData(
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                            sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                        ),
+                        awaitItem(),
+                    )
                 }
             }
 
@@ -539,20 +580,17 @@ class PushManagerTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
             }
 
             @Test
-            fun `onMessageReceived with sync org keys emits to syncOrgKeysFlow`() = runTest {
+            fun `onMessageReceived with sync org keys does not emit`() = runTest {
                 pushManager.syncOrgKeysFlow.test {
                     pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_MAP)
-                    assertEquals(
-                        Unit,
-                        awaitItem(),
-                    )
+                    expectNoEvents()
                 }
             }
 
@@ -561,7 +599,7 @@ class PushManagerTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
@@ -572,7 +610,7 @@ class PushManagerTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }

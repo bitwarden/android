@@ -16,9 +16,12 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
+import com.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
+import com.bitwarden.ui.platform.components.account.util.initials
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
@@ -26,36 +29,34 @@ import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionI
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.scaffold.model.BitwardenPullToRefreshState
+import com.bitwarden.ui.platform.components.scaffold.model.rememberBitwardenPullToRefreshState
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarHostState
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalIntentManager
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
-import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
-import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.model.BitwardenPullToRefreshState
-import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHostState
-import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInputDialog
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
@@ -65,7 +66,6 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingUserVerificationHandlers
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.collections.immutable.persistentListOf
@@ -319,6 +319,13 @@ fun VaultItemListingScreen(
                 )
             }
         },
+        onShareCipherDecryptionErrorClick = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    VaultItemListingsAction.ShareCipherDecryptionErrorClick(it),
+                )
+            }
+        },
     )
 
     val vaultItemListingHandlers = remember(viewModel) {
@@ -350,6 +357,7 @@ private fun VaultItemListingDialogs(
     onDismissUserVerification: () -> Unit,
     onVaultItemTypeSelected: (CreateVaultItemType) -> Unit,
     onTrustPrivilegedAppClick: (selectedCipherId: String?) -> Unit,
+    onShareCipherDecryptionErrorClick: (selectedCipherId: String) -> Unit,
 ) {
     when (dialogState) {
         is VaultItemListingState.DialogState.Error -> BitwardenBasicDialog(
@@ -362,6 +370,20 @@ private fun VaultItemListingDialogs(
         is VaultItemListingState.DialogState.Loading -> BitwardenLoadingDialog(
             text = dialogState.message(),
         )
+
+        is VaultItemListingState.DialogState.CipherDecryptionError -> {
+            BitwardenTwoButtonDialog(
+                title = dialogState.title(),
+                message = dialogState.message(),
+                confirmButtonText = stringResource(BitwardenString.copy_error_report),
+                dismissButtonText = stringResource(BitwardenString.close),
+                onConfirmClick = {
+                    onShareCipherDecryptionErrorClick(dialogState.selectedCipherId)
+                },
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
+        }
 
         is VaultItemListingState.DialogState.CredentialManagerOperationFail -> BitwardenBasicDialog(
             title = dialogState.title(),

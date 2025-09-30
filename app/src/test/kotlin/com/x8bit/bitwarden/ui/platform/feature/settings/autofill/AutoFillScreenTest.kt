@@ -12,31 +12,40 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.utils.startBrowserAutofillSettingsActivity
+import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAccessibilitySettingsActivity
+import com.x8bit.bitwarden.ui.platform.manager.utils.startSystemAutofillSettingsActivity
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
+@Suppress("LargeClass")
 class AutoFillScreenTest : BitwardenComposeTest() {
 
     private var isSystemSettingsRequestSuccess = false
     private var onNavigateBackCalled = false
     private var onNavigateToBlockAutoFillScreenCalled = false
     private var onNavigateToSetupAutoFillScreenCalled = false
+    private var onNavigateToSetupBrowserAutofillScreenCalled = false
     private var onNavigateToAboutPrivilegedAppsScreenCalled = false
     private var onNavigateToPrivilegedAppsListCalled = false
 
@@ -47,14 +56,23 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         every { stateFlow } returns mutableStateFlow
     }
     private val intentManager: IntentManager = mockk {
-        every { startSystemAutofillSettingsActivity() } answers { isSystemSettingsRequestSuccess }
-        every { startCredentialManagerSettings(any()) } just runs
-        every { startSystemAccessibilitySettingsActivity() } just runs
-        every { startBrowserAutofillSettingsActivity(any()) } returns true
+        every { startCredentialManagerSettings() } just runs
+        every { launchUri(any()) } just runs
     }
 
     @Before
     fun setUp() {
+        mockkStatic(
+            IntentManager::startSystemAutofillSettingsActivity,
+            IntentManager::startSystemAccessibilitySettingsActivity,
+            IntentManager::startBrowserAutofillSettingsActivity,
+        )
+        every { intentManager.startBrowserAutofillSettingsActivity(any()) } returns true
+        every {
+            intentManager.startSystemAutofillSettingsActivity()
+        } answers { isSystemSettingsRequestSuccess }
+        every { intentManager.startSystemAccessibilitySettingsActivity() } just runs
+
         setContent(
             intentManager = intentManager,
         ) {
@@ -62,6 +80,9 @@ class AutoFillScreenTest : BitwardenComposeTest() {
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToBlockAutoFillScreen = { onNavigateToBlockAutoFillScreenCalled = true },
                 onNavigateToSetupAutofill = { onNavigateToSetupAutoFillScreenCalled = true },
+                onNavigateToSetupBrowserAutofill = {
+                    onNavigateToSetupBrowserAutofillScreenCalled = true
+                },
                 onNavigateToAboutPrivilegedAppsScreen = {
                     onNavigateToAboutPrivilegedAppsScreenCalled = true
                 },
@@ -69,6 +90,25 @@ class AutoFillScreenTest : BitwardenComposeTest() {
                     onNavigateToPrivilegedAppsListCalled = true
                 },
                 viewModel = viewModel,
+            )
+        }
+    }
+
+    @After
+    fun tearDown() {
+        unmockkStatic(
+            IntentManager::startSystemAutofillSettingsActivity,
+            IntentManager::startSystemAccessibilitySettingsActivity,
+            IntentManager::startBrowserAutofillSettingsActivity,
+        )
+    }
+
+    @Test
+    fun `on NavigateToAutofillHelp should launch the browser to the autofill help page`() {
+        mutableEventFlow.tryEmit(AutoFillEvent.NavigateToAutofillHelp)
+        verify(exactly = 1) {
+            intentManager.launchUri(
+                uri = "https://bitwarden.com/help/auto-fill-android-troubleshooting/".toUri(),
             )
         }
     }
@@ -124,9 +164,20 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     fun `on NavigateToSettings should attempt to navigate to credential manager settings`() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToSettings)
 
-        verify { intentManager.startCredentialManagerSettings(any()) }
+        verify { intentManager.startCredentialManagerSettings() }
 
         composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `on help card CTA should send HelpCardClick`() {
+        composeTestRule
+            .onNodeWithText(text = "Having trouble with autofill?")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AutoFillAction.HelpCardClick)
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -379,23 +430,23 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on ask to add login toggle should send AskToAddLoginClick`() {
+    fun `on Ask to add item toggle should send AskToAddLoginClick`() {
         composeTestRule
-            .onNodeWithText("Ask to add login")
+            .onNodeWithText("Ask to add item")
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(AutoFillAction.AskToAddLoginClick(true)) }
     }
 
     @Test
-    fun `ask to add login should be toggled on or off according to state`() {
+    fun `Ask to add item should be toggled on or off according to state`() {
         composeTestRule
-            .onNodeWithText("Ask to add login")
+            .onNodeWithText("Ask to add item")
             .performScrollTo()
             .assertIsOff()
         mutableStateFlow.update { it.copy(isAskToAddLoginEnabled = true) }
         composeTestRule
-            .onNodeWithText("Ask to add login")
+            .onNodeWithText("Ask to add item")
             .performScrollTo()
             .assertIsOn()
     }
@@ -536,9 +587,58 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `browser autofill action card should show when state is true and hide when false`() {
+        composeTestRule
+            .onNodeWithText(text = "Get started")
+            .assertDoesNotExist()
+        mutableStateFlow.update { DEFAULT_STATE.copy(showBrowserAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithText(text = "Get started")
+            .assertIsDisplayed()
+        mutableStateFlow.update { DEFAULT_STATE.copy(showBrowserAutofillActionCard = false) }
+        composeTestRule
+            .onNodeWithText(text = "Get started")
+            .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when browser autofill card is visible clicking the cta button should send correct action`() {
+        mutableStateFlow.update { DEFAULT_STATE.copy(showBrowserAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithText(text = "Get started")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AutoFillAction.BrowserAutofillActionCardCtaClick)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when browser autofill action card is visible clicking dismissing should send correct action`() {
+        mutableStateFlow.update { DEFAULT_STATE.copy(showBrowserAutofillActionCard = true) }
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .performScrollTo()
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(AutoFillAction.DismissShowBrowserAutofillActionCard)
+        }
+    }
+
+    @Test
     fun `when NavigateToSetupAutofill event is sent should call onNavigateToSetupAutofill`() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToSetupAutofill)
         assertTrue(onNavigateToSetupAutoFillScreenCalled)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when NavigateToSetupBrowserAutofill event is sent should call onNavigateToSetupBrowserAutofill`() {
+        mutableEventFlow.tryEmit(AutoFillEvent.NavigateToSetupBrowserAutofill)
+        assertTrue(onNavigateToSetupBrowserAutofillScreenCalled)
     }
 
     @Test
@@ -585,7 +685,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Use Chrome autofill integration (Beta)")
+            .onNodeWithText("Use Chrome Beta autofill integration")
             .performScrollTo()
             .performClick()
 
@@ -627,23 +727,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `PrivilegedAppsRow should display based on state`() {
-        composeTestRule
-            .onNodeWithText("Privileged apps")
-            .assertDoesNotExist()
-
-        mutableStateFlow.update {
-            it.copy(isUserManagedPrivilegedAppsEnabled = true)
-        }
-        composeTestRule
-            .onNodeWithText("Privileged apps")
-            .performScrollTo()
-            .assertIsDisplayed()
-    }
-
-    @Test
     fun `privileged app help link click should send AboutPrivilegedAppsClick`() {
-        mutableStateFlow.update { it.copy(isUserManagedPrivilegedAppsEnabled = true) }
         composeTestRule
             .onNodeWithContentDescription("Learn more about privileged apps")
             .performScrollTo()
@@ -663,7 +747,6 @@ class AutoFillScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `privileged apps row click should send PrivilegedAppsClick`() {
-        mutableStateFlow.update { it.copy(isUserManagedPrivilegedAppsEnabled = true) }
         composeTestRule
             .onNodeWithText("Privileged apps")
             .performScrollTo()
@@ -671,6 +754,114 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(AutoFillAction.PrivilegedAppsClick)
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on default URI match type dialog item click should send warning when is an Advanced Option`() {
+        composeTestRule
+            .onNodeWithText(text = "Default URI match detection")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Starts with")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(
+                "“Starts with” is an advanced option with " +
+                    "increased risk of exposing credentials.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on advanced match detection warning dialog click on cancel should not change the default URI match type`() {
+        composeTestRule
+            .onNodeWithText(text = "Default URI match detection")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Starts with")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(
+                AutoFillAction.DefaultUriMatchTypeSelect(
+                    defaultUriMatchType = UriMatchType.STARTS_WITH,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `on Advanced matching warning dialog confirm should display learn more dialog`() {
+        composeTestRule
+            .onNodeWithText(text = "Default URI match detection")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Starts with")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Keep your credentials secure")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on Advanced matching warning dialog click on more about match detection should call launchUri`() {
+        composeTestRule
+            .onNodeWithText(text = "Default URI match detection")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Starts with")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Learn more")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                AutoFillAction.LearnMoreClick,
+            )
+        }
+    }
+
+    @Test
+    fun `on NavigateToLearnMore should call launchUri`() {
+        mutableEventFlow.tryEmit(AutoFillEvent.NavigateToLearnMore)
+        intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
     }
 }
 
@@ -684,7 +875,7 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     showPasskeyManagementRow = true,
     defaultUriMatchType = UriMatchType.DOMAIN,
     showAutofillActionCard = false,
+    showBrowserAutofillActionCard = false,
     activeUserId = "activeUserId",
     browserAutofillSettingsOptions = persistentListOf(),
-    isUserManagedPrivilegedAppsEnabled = false,
 )

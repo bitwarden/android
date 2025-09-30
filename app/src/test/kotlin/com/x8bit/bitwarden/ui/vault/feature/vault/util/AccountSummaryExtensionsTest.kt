@@ -1,8 +1,12 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
+import com.bitwarden.ui.platform.components.account.util.iconRes
+import com.bitwarden.ui.platform.components.account.util.iconTestTag
+import com.bitwarden.ui.platform.components.account.util.initials
+import com.bitwarden.ui.platform.components.account.util.supportingTextResOrNull
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals

@@ -3,6 +3,13 @@
 fastlane/report.xml
 fastlane/README.md
 
+# Ruby / Bundler
+.bundle/
+vendor/
+
+# Backup files
+*.bak
+
 # General
 .DS_Store
 Thumbs.db

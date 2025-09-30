@@ -1,15 +1,17 @@
 package com.x8bit.bitwarden.ui.platform.base
 
 import androidx.compose.runtime.Composable
+import com.bitwarden.cxf.importer.CredentialExchangeImporter
+import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
 import com.bitwarden.ui.platform.base.BaseComposeTest
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManager
 import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
@@ -40,6 +42,8 @@ abstract class BitwardenComposeTest : BaseComposeTest() {
         keyChainManager: KeyChainManager = mockk(),
         nfcManager: NfcManager = mockk(),
         permissionsManager: PermissionsManager = mockk(),
+        credentialExchangeImporter: CredentialExchangeImporter = mockk(),
+        credentialExchangeCompletionManager: CredentialExchangeCompletionManager = mockk(),
         test: @Composable () -> Unit,
     ) {
         setTestContent {
@@ -55,6 +59,8 @@ abstract class BitwardenComposeTest : BaseComposeTest() {
                 keyChainManager = keyChainManager,
                 nfcManager = nfcManager,
                 permissionsManager = permissionsManager,
+                credentialExchangeImporter = credentialExchangeImporter,
+                credentialExchangeCompletionManager = credentialExchangeCompletionManager,
             ) {
                 BitwardenTheme(
                     theme = theme,

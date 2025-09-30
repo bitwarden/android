@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">عن التطبيق</string>
     <string name="add_folder">إضافة مجلّد</string>
     <string name="add_item">إضافة عنصر</string>
     <string name="an_error_has_occurred">لقد حدث خطأ.</string>
+    <string name="apply">Apply</string>
     <string name="back">رجوع</string>
-    <string name="bitwarden">بت واردن</string>
     <string name="cancel">إلغاء</string>
     <string name="copy">نسخ</string>
     <string name="copy_password">نسخ كلمة المرور</string>
     <string name="copy_username">انسخ اسم المستخدم</string>
     <string name="delete">حذف</string>
-    <string name="deleting">جارِ الحذف...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">هل تريد حقا أن تحذف؟ هذا لا يمكن التراجع عنها.</string>
     <string name="edit">تعديل</string>
     <string name="edit_folder">تحرير المجلد</string>
@@ -54,7 +54,7 @@
     <string name="password">كلمة المرور</string>
     <string name="save">حفظ</string>
     <string name="move">نقل</string>
-    <string name="saving">جارِ حفظ...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">الإعدادات</string>
     <string name="show">إظهار</string>
     <string name="item_deleted">تم حذف العنصر.</string>
@@ -103,13 +103,20 @@
     <string name="immediately">فورًا</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
-    <string name="logging_in">جارِ تسجيل الدخول...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">تسجيل الدخول إلى بت واردن</string>
     <string name="master_password_confirmation_val_message">تأكيد كلمة المرور غير صحيح.</string>
     <string name="master_password_description">كلمة المرور الرئيسية هي كلمة المرور المستخدمة للوصول إلى الخزنة الخاصة بك. من المهم جدا ً ألا تنسى ذلك. لا توجد طريقة للعثور عليها إذا نسيت.</string>
     <string name="master_password_hint">فهرس كلمة المرور الرئيسية (اختياري)</string>
     <string name="master_password_hint_description">يمكن أن تساعدك فكرة كلمة المرور الرئيسية على تذكر كلمة المرور الخاصة بك إذا نسيت.</string>
-    <string name="master_password_length_val_message_x">كلمة المرور الرئيسية يجب أن تكون على الأقل %1$s حرفاً.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="zero">Master password must be at least %d characters long.</item>
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="two">Master password must be at least %d characters long.</item>
+        <item quantity="few">Master password must be at least %d characters long.</item>
+        <item quantity="many">Master password must be at least %d characters long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">الحد الأدنى للأرقام</string>
     <string name="min_special">الحد الأدنى من الأحرف الخاصة</string>
     <string name="never">أبداً</string>
@@ -142,8 +149,8 @@
     <string name="select">تحديد</string>
     <string name="item_details">تفاصيل العنصر</string>
     <string name="item_updated">تم تحديث العنصر</string>
-    <string name="submitting">جارِ الإرسال...</string>
-    <string name="syncing">جارِ المزامنة...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">اكتمال المزامنة.</string>
     <string name="two_step_login">تحديد المصادقة الثنائية</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -162,7 +169,7 @@
     <string name="search_for_a_login_or_add_a_new_login">البحث عن تسجيل الدخول أو إضافة تسجيل دخول جديد</string>
     <string name="disabled">تعطيل</string>
     <string name="bitwarden_autofill_service_alert2">أسهل طريقة لإضافة تسجيلات دخول جديدة إلى خزانتك هي من خدمة التعبئة التلقائية بت واردن تعرف على المزيد حول استخدام خدمة الملء التلقائي لـ بت واردن عن طريق الانتقال إلى شاشة \"إعدادات\".</string>
-    <string name="autofill">التعبئة التلقائية</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">هل تريد الملأ التلقائي أو رؤية هذا المعرّف؟</string>
     <string name="search">بحث</string>
     <string name="learn_org">تعرف على المؤسسات</string>
@@ -181,7 +188,7 @@
     <string name="add_new_attachment">إضافة مرفق جديد</string>
     <string name="attachments">مرفقات</string>
     <string name="unable_to_download_file">تعذر تنزيل الملف.</string>
-    <string name="downloading">جارِ التحميل...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">حجم هذا المرفق %1$s. هل أنت متأكد أنك تريد تنزيله على جهازك؟</string>
     <string name="authenticator_key">مفتاح المصادقة (TOTP)</string>
     <string name="verification_code_totp">رمز التحقق (TOTP)</string>
@@ -286,7 +293,7 @@
     <string name="new_uri">رابط جديد</string>
     <string name="add_website">إضافة موقع</string>
     <string name="base_domain">النطاق الأساسي</string>
-    <string name="default_text">الافتراضي</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">بالضبط</string>
     <string name="host">المضيف</string>
     <string name="reg_ex">التعبير الاعتيادي</string>
@@ -308,7 +315,14 @@
     <string name="personal_details">التفاصيل الشخصية</string>
     <string name="contact_info">معلومات الاتصال</string>
     <string name="check_password_for_data_breaches">تحقق من كلمة المرور لخروقات البيانات</string>
-    <string name="password_exposed">تم كشف كلمة المرور هذه %1$s مرة (مرات) في عمليات اختراق البيانات. يجب عليك تغييرها.</string>
+    <plurals name="password_exposed">
+        <item quantity="zero">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="two">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="few">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="many">This password has been exposed %d times in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">لم يتم العثور على كلمة المرور هذه في أي عمليات اختراق معروفة للبيانات. يجب أن تكون آمنة للاستخدام.</string>
     <string name="identity_name">اسم الهوية</string>
     <string name="value">القيمة</string>
@@ -356,7 +370,7 @@
     <string name="clear_clipboard">مسح الحافظة</string>
     <string name="clear_clipboard_description">مسح القيم المنسوخة تلقائيًا من حافظتك.</string>
     <string name="default_uri_match_detection">كشف تطابق الرابط الافتراضي</string>
-    <string name="default_uri_match_detection_description">اختر الطريقة الافتراضية التي يتم بها معالجة اكتشاف تطابق الرابط لعمليات تسجيل الدخول عند تنفيذ إجراءات مثل الملء التلقائي.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">المظهر</string>
     <string name="theme_description">تغيير سمة لون التطبيق.</string>
     <string name="copy_notes">نسخ الملاحظة</string>
@@ -364,8 +378,8 @@
     <string name="exit_confirmation">هل أنت متأكد من أنك تريد الخروج من بت واردن؟</string>
     <string name="require_master_password_on_app_restart">تتطلب كلمة مرور رئيسية عند إعادة تشغيل التطبيق؟</string>
     <string name="pin_require_master_password_restart">هل تريد طلب إلغاء القفل باستخدام كلمة المرور الرئيسية عند إعادة تشغيل التطبيق؟</string>
-    <string name="ask_to_add_login">اطلب إضافة تسجيل الدخول</string>
-    <string name="ask_to_add_login_description">اطلب إضافة عنصر إذا لم يتم العثور عليه في خزانتك.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">عند إعادة تشغيل التطبيق</string>
     <string name="capitalize">كبّر الحروف</string>
     <string name="include_number">تضمين الرقم</string>
@@ -392,10 +406,10 @@
     <string name="save_attachment_success">تم حفظ المرفق بنجاح</string>
     <string name="autofill_tile_accessibility_required">الرجاء تمكين \"خدمة الوصول إلى الملء التلقائي\" من إعدادات بت واردن لاستخدام الملء التلقائي.</string>
     <string name="autofill_tile_uri_not_found">لم يتم العثور على حقول كلمة المرور</string>
-    <string name="soft_deleting">إرسال إلى سلة المهملات...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">تم إرسال العنصر إلى سلة المهملات.</string>
     <string name="restore">استعادة</string>
-    <string name="restoring">إستعادة...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">تم استعادة العنصر.</string>
     <string name="trash">سلة المهملات</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">هل تريد حقاً الحذف نهائيًا؟ لا يمكن التراجع عن ذلك.</string>
@@ -483,14 +497,12 @@
     <string name="password_prompt">إعادة توجيه كلمة المرور الرئيسية</string>
     <string name="password_confirmation">تأكيد كلمة المرور الرئيسية</string>
     <string name="password_confirmation_desc">هذا الإجراء محمي، للاستمرار أعد إدخال كلمة المرور الرئيسية للتحقق من هويتك.</string>
-    <string name="captcha_failed">فشلت كلمة التحقق. الرجاء المحاولة مرة أخرى.</string>
     <string name="update_master_password">تحديث كلمة المرور الرئيسية</string>
     <string name="update_master_password_warning">تم تغيير كلمة المرور الرئيسية الخاصة بك مؤخرًا من قبل مسؤول في مؤسستك. من أجل الوصول إلى الخزانة، يجب عليك تحديث كلمة المرور الرئيسية الآن. سيتم تسجيل خروجك من الجلسة الحالية، مما يتطلب منك تسجيل الدخول مرة أخرى. وقد تظل الجلسات النشطة على أجهزة أخرى نشطة لمدة تصل إلى ساعة واحدة.</string>
     <string name="updating_password">تحديث كلمة المرور</string>
     <string name="remove_master_password">إزالة كلمة المرور الرئيسية</string>
     <string name="leave_organization">مغادرة المؤسسة</string>
     <string name="leave_organization_name">مغادرة %1$s؟</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">مصادقة WebAuthn</string>
     <string name="fido2_return_to_app">الرجوع إلى التطبيق</string>
     <string name="reset_password_auto_enroll_invite_warning">هذه المؤسسة لديها سياسة الشركة التي ستقوم تلقائياً بتسجيلك في إعادة تعيين كلمة المرور. التسجيل سيسمح لمسؤولي المؤسسة بتغيير كلمة المرور الرئيسية الخاصة بك.</string>
@@ -568,12 +580,6 @@
     <string name="api_key">مفتاح API</string>
     <string name="api_key_required_parenthesis">مفتاح API (مطلوب)</string>
     <string name="service">الخدمة</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">FirefoxRelay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">رمز الوصول إلى API (مطلوب)</string>
     <string name="api_access_token">رمز الوصول API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">هل أنت متأكد من أنك تريد الكتابة فوق اسم المستخدم الحالي؟</string>
@@ -749,7 +755,14 @@
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">لا يمكن لبت واردن إعادة تعيين كلمة مرور رئيسية مفقودة أو منسية.</string>
     <string name="choose_your_master_password">اختر كلمة المرور الرئيسية</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">اختر كلمة مرور فريدة وقوية للحفاظ على سلامة معلوماتك.</string>
-    <string name="minimum_characters">%1$s أحرف</string>
+    <plurals name="minimum_characters">
+        <item quantity="zero">%d characters</item>
+        <item quantity="one">%d character</item>
+        <item quantity="two">%d characters</item>
+        <item quantity="few">%d characters</item>
+        <item quantity="many">%d characters</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">رابط منتهي الصلاحية</string>
     <string name="please_restart_registration_or_try_logging_in">الرجاء إعادة تشغيل التسجيل أو محاولة تسجيل الدخول. قد يكون لديك حساب بالفعل.</string>
     <string name="restart_registration">إعادة تشغيل التسجيل</string>
@@ -802,7 +815,7 @@
     <string name="need_help_check_out_import_help">بحاجة إلى مساعدة؟ تحقق من مساعدة الاستيراد.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">حفظ الملف المصدّر في مكان ما على جهاز الكمبيوتر الخاص بك يمكنك العثور عليه بسهولة.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">هذا ليس خادم بت واردن المعترف به. قد تحتاج إلى التحقق مع المزود الخاص بك أو تحديث الخادم الخاص بك.</string>
-    <string name="syncing_logins_loading_message">مزامنة تسجيلات الدخول...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">تحميل ملحق المتصفح</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">اذهب إلى bitwarden.com/download لدمج بت واردن في المتصفح المفضل لديك للحصول على تجربة سلسة.</string>
     <string name="use_the_web_app">استخدام تطبيق الويب</string>
@@ -850,7 +863,6 @@
     <string name="need_some_inspiration">"هل تحتاج إلى بعض الإلهام؟"</string>
     <string name="check_out_the_passphrase_generator">"تحقق من مولد عبارة المرور"</string>
     <string name="we_couldnt_verify_the_servers_certificate">لا يمكننا التحقق من شهادة الخادم. قد لا يتم إعداد سلسلة الشهادات أو إعدادات الوكيل على جهازك أو خادم بت واردن الخاص بك بشكل صحيح.</string>
-    <string name="review_flow_launched">تم تشغيل التدفق!</string>
     <string name="copy_private_key">نسخ المفتاح الخاص</string>
     <string name="login_credentials">معلومات الدخول</string>
     <string name="autofill_options">خيارات الملء التلقائي</string>
@@ -912,7 +924,6 @@
     <string name="no_folder">لا يوجد مجلد</string>
     <string name="show_less">عرض أقل</string>
     <string name="add_field">إضافة حقل</string>
-    <string name="x_ellipses">%s...</string>
     <string name="share_error_details">مشاركة تفاصيل الخطأ</string>
     <string name="flight_recorder">مسجل الرحلة</string>
     <string name="flight_recorder_help">مساعدة مسجل الطيران</string>
@@ -999,7 +1010,14 @@
     <string name="advanced">متقدم</string>
     <string name="collapse_advanced_options">إغلاق الخيارات المتقدمة</string>
     <string name="number_of_digits">عدد الأرقام</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d ثواني</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="zero">%d seconds</item>
+        <item quantity="one">%d second</item>
+        <item quantity="two">%d seconds</item>
+        <item quantity="few">%d seconds</item>
+        <item quantity="many">%d seconds</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">تم حفظ العنصر</string>
     <string name="information">معلومات</string>
     <string name="otp_type">نوع OTP</string>
@@ -1042,7 +1060,6 @@
     <string name="sync_with_bitwarden_app">المزامنة مع تطبيق Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">غير قادر على مزامنة الرموز من تطبيق Bitwarden. تأكد من تحديث كلا التطبيقين. لا يزال بإمكانك الوصول إلى الرموز الموجودة في تطبيق Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">المزامنة مع تطبيق Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">السماح لمزامنة تطبيق المصادقة في الإعدادات لعرض جميع رموز التحقق الخاصة بك هنا.</string>
     <string name="take_me_to_app_settings">خذني إلى إعدادات التطبيق</string>
@@ -1069,5 +1086,39 @@
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Copy error report</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="zero">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="two">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="few">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="many">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">हमारे बारे में</string>
     <string name="add_folder">फोल्डर बनाएं</string>
     <string name="add_item">आइटम बनाएं</string>
     <string name="an_error_has_occurred">एक गड़बड़ हुई।</string>
+    <string name="apply">Apply</string>
     <string name="back">पीछे जाएं</string>
-    <string name="bitwarden">बिटवार्डन</string>
     <string name="cancel">कैंसिल करें</string>
     <string name="copy">कॉपी करें</string>
     <string name="copy_password">पासवर्ड कॉपी करें</string>
     <string name="copy_username">यूज़रनेम कॉपी करें</string>
     <string name="delete">हटाएं</string>
-    <string name="deleting">हटा रहे है...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">पक्का हटाएं? इसे अंडू नहीं किया जा सकता।</string>
     <string name="edit">बदलें</string>
     <string name="edit_folder">फोल्डर बदलें</string>
@@ -54,7 +54,7 @@
     <string name="password">पासवर्ड</string>
     <string name="save">सेव करें</string>
     <string name="move">ट्रांस्फर करें</string>
-    <string name="saving">सेव कर रहे है...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">सेटिंग</string>
     <string name="show">दिखाएं</string>
     <string name="item_deleted">आइटम हटाया गया</string>
@@ -103,13 +103,16 @@
     <string name="immediately">तुरंत</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
-    <string name="logging_in">लॉगइन कर रहे...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Log in to Bitwarden</string>
     <string name="master_password_confirmation_val_message">पासवर्ड गलत है।</string>
     <string name="master_password_description">मास्टर पासवर्ड वो पासवर्ड है जो तिजोरी एक्सेस करने के लिए इस्तेमाल होता है। मास्टर पासवर्ड ना भूलना बहुत ज़रूरी है। भूलने के बाद पासवर्ड वापस पाना मुमकिन नहीं है।</string>
     <string name="master_password_hint">मास्टर पासवर्ड हिंट (ज़रूरी नहीं)</string>
     <string name="master_password_hint_description">मास्टर पासवर्ड हिंट पासवर्ड भूल जाने के हालत में उसको याद करने में मदद करता है।</string>
-    <string name="master_password_length_val_message_x">मास्टर पासवर्ड कम-से-कम %1$s अक्षर लंबा होना चाहिए।</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">कम-से-कम इतने नंबर</string>
     <string name="min_special">कम-से-कम इतने खास</string>
     <string name="never">कभी नहीं</string>
@@ -142,8 +145,8 @@
     <string name="select">चुनें</string>
     <string name="item_details">Item details</string>
     <string name="item_updated">आइटम सेव किया गया</string>
-    <string name="submitting">भेज रहे है...</string>
-    <string name="syncing">सिंक हो रहा है…</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">सिंक हो गया</string>
     <string name="two_step_login">टू-स्टेप लॉगइन</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -162,7 +165,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
     <string name="disabled">बंद</string>
     <string name="bitwarden_autofill_service_alert2">बिटवार्डन ऑटो-फिल सर्विस अपने तिजोरी में नए लॉगइन जोड़ने का सबसे आसान तरीका है। \"सेटिंग\" स्क्रीन पर जाकर बिटवार्डन ऑटो-फिल सर्विस के बारे में ज़्यादा जानें।</string>
-    <string name="autofill">ऑटो-फिल</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">ऑटो-फिल करें या ये आइटम देखें?</string>
     <string name="search">सर्च करें</string>
     <string name="learn_org">ऑर्गनाइज़ेशन के बारे में जानें</string>
@@ -181,7 +184,7 @@
     <string name="add_new_attachment">नया अटैचमेंट डालें</string>
     <string name="attachments">अटैचमेंट</string>
     <string name="unable_to_download_file">फाइल डाउनलोड नहीं कर पाए।</string>
-    <string name="downloading">डाउनलोड कर रहे...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">इस अटैचमेंट का साइज़ %1$s है। इसे डिवाइस पर डाउनलोड करें?</string>
     <string name="authenticator_key">ऑथेंटिकेशन चाबी (टीओटीपी)</string>
     <string name="verification_code_totp">वेरिफिकेशन कोड (टीओटीपी)</string>
@@ -285,7 +288,7 @@
     <string name="new_uri">नया यूआरआई</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">बेस डोमेन</string>
-    <string name="default_text">डिफॉल्ट</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">सटीक</string>
     <string name="host">होस्ट</string>
     <string name="reg_ex">रेगुलर एक्सप्रेशन</string>
@@ -307,7 +310,10 @@
     <string name="personal_details">Personal Details</string>
     <string name="contact_info">Contact Info</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
-    <string name="password_exposed">This password has been exposed %1$s time(s) in data breaches. You should change it.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">This password was not found in any known data breaches. It should be safe to use.</string>
     <string name="identity_name">आईडी का नाम</string>
     <string name="value">वैल्यू</string>
@@ -355,7 +361,7 @@
     <string name="clear_clipboard">क्लिपबोर्ड साफ करें</string>
     <string name="clear_clipboard_description">Automatically clear copied values from your clipboard.</string>
     <string name="default_uri_match_detection">Default URI match detection</string>
-    <string name="default_uri_match_detection_description">Choose the default way that URI match detection is handled for logins when performing actions such as autofill.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">थीम</string>
     <string name="theme_description">ऐप का थीम बदलें।</string>
     <string name="copy_notes">नोट कॉपी करें</string>
@@ -363,8 +369,8 @@
     <string name="exit_confirmation">पक्का निकलें?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">ऐप रीस्टार्ट करने पर मास्टर पासवर्ड पूछें?</string>
-    <string name="ask_to_add_login">Ask to add login</string>
-    <string name="ask_to_add_login_description">Ask to add an item if one isn\'t found in your vault.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">ऐप रिस्टार्ट पर</string>
     <string name="capitalize">कैपिटलाइज़ करें</string>
     <string name="include_number">नंबर शामिल करें</string>
@@ -391,10 +397,10 @@
     <string name="save_attachment_success">Attachment saved successfully</string>
     <string name="autofill_tile_accessibility_required">Please turn on \"Autofill Accessibility Service\" from Bitwarden Settings to use the Autofill tile.</string>
     <string name="autofill_tile_uri_not_found">No password fields detected</string>
-    <string name="soft_deleting">Sending to trash...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">आइटम कचरे में डाला गया।</string>
     <string name="restore">रिस्टोर करें</string>
-    <string name="restoring">रिस्टोर कर रहे...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">आइटम रिस्टोर किया गया</string>
     <string name="trash">कचरा</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Do you really want to permanently delete? This cannot be undone.</string>
@@ -482,14 +488,12 @@
     <string name="password_prompt">Master password re-prompt</string>
     <string name="password_confirmation">Master password confirmation</string>
     <string name="password_confirmation_desc">This action is protected, to continue please re-enter your master password to verify your identity.</string>
-    <string name="captcha_failed">Captcha failed. Please try again.</string>
     <string name="update_master_password">Update master password</string>
     <string name="update_master_password_warning">Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</string>
     <string name="updating_password">Updating password</string>
     <string name="remove_master_password">Remove master password</string>
     <string name="leave_organization">Leave organization</string>
     <string name="leave_organization_name">%1$s छोड़ें?</string>
-    <string name="fido2_title">एफआईडीओ2 वेब ऑथेंटिकेशन</string>
     <string name="fido2_authenticate_web_authn">Authenticate WebAuthn</string>
     <string name="fido2_return_to_app">ऐप पर वापस जाएं</string>
     <string name="reset_password_auto_enroll_invite_warning">This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</string>
@@ -567,12 +571,6 @@ select Add TOTP to store the key safely</string>
     <string name="api_key">API key</string>
     <string name="api_key_required_parenthesis">एपीआई चाबी (ज़रूरी)</string>
     <string name="service">सर्विस</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">फायरफॉक्स रीले</string>
-    <string name="simple_login">सिंपललॉगइन</string>
-    <string name="duck_duck_go">डकडकगो</string>
-    <string name="fastmail">फास्टमेल</string>
-    <string name="forward_email">फॉरवर्डईमेल</string>
     <string name="api_access_token_required_parenthesis">API access token (required)</string>
     <string name="api_access_token">एपीआई एक्सेस टोकन</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">चालू यूज़रनाम को पक्का ओवरराइट करें?</string>
@@ -748,7 +746,10 @@ Do you want to switch to this account?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Choose your master password</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
-    <string name="minimum_characters">%1$s characters</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Expired link</string>
     <string name="please_restart_registration_or_try_logging_in">Please restart registration or try logging in. You may already have an account.</string>
     <string name="restart_registration">Restart registration</string>
@@ -801,7 +802,7 @@ Do you want to switch to this account?</string>
     <string name="need_help_check_out_import_help">Need help? Check out <annotation link="importHelp">import help</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
-    <string name="syncing_logins_loading_message">Syncing logins...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Download the browser extension</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favorite browser for a seamless experience.</string>
     <string name="use_the_web_app">Use the web app</string>
@@ -849,7 +850,6 @@ Do you want to switch to this account?</string>
     <string name="need_some_inspiration">"Need some inspiration?"</string>
     <string name="check_out_the_passphrase_generator">"Check out the passphrase generator"</string>
     <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
-    <string name="review_flow_launched">Review flow launched!</string>
     <string name="copy_private_key">Copy private key</string>
     <string name="login_credentials">Login Credentials</string>
     <string name="autofill_options">Autofill Options</string>
@@ -911,7 +911,6 @@ Do you want to switch to this account?</string>
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
     <string name="add_field">Add field</string>
-    <string name="x_ellipses">%s...</string>
     <string name="share_error_details">Share error details</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>
@@ -998,7 +997,10 @@ Do you want to switch to this account?</string>
     <string name="advanced">Advanced</string>
     <string name="collapse_advanced_options">Collapse advanced options</string>
     <string name="number_of_digits">Number of digits</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d seconds</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">आइटम सेव किया गया</string>
     <string name="information">Information</string>
     <string name="otp_type">OTP type</string>
@@ -1041,7 +1043,6 @@ Do you want to switch to this account?</string>
     <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
     <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
     <string name="sync_with_bitwarden_action_card_message">In order to view all of your verification codes, you’ll need to allow for syncing on all of your accounts.</string>
     <string name="take_me_to_app_settings">Take me to the app settings</string>
@@ -1068,5 +1069,35 @@ Do you want to switch to this account?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Copy error report</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>

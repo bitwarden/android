@@ -1,36 +1,25 @@
 package com.x8bit.bitwarden.data.vault.repository
 
-import android.net.Uri
-import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.sdk.Fido2CredentialStore
-import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.DecryptCipherListResult
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
+import com.x8bit.bitwarden.data.vault.manager.FolderManager
+import com.x8bit.bitwarden.data.vault.manager.SendManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
+import com.x8bit.bitwarden.data.vault.manager.VaultSyncManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
-import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
-import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
-import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
-import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
-import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
-import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
-import com.x8bit.bitwarden.data.vault.repository.model.SendData
-import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
+import com.x8bit.bitwarden.data.vault.repository.model.ImportCredentialsResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
-import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
-import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
-import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import kotlinx.coroutines.flow.Flow
@@ -41,7 +30,12 @@ import javax.crypto.Cipher
  * Responsible for managing vault data inside the network layer.
  */
 @Suppress("TooManyFunctions")
-interface VaultRepository : CipherManager, VaultLockManager {
+interface VaultRepository :
+    CipherManager,
+    FolderManager,
+    SendManager,
+    VaultLockManager,
+    VaultSyncManager {
 
     /**
      * The [VaultFilterType] for the current user.
@@ -52,52 +46,6 @@ interface VaultRepository : CipherManager, VaultLockManager {
     var vaultFilterType: VaultFilterType
 
     /**
-     * Flow that represents the current vault data.
-     *
-     * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself
-     * must be collected in order to trigger state changes.
-     */
-    val vaultDataStateFlow: StateFlow<DataState<VaultData>>
-
-    /**
-     * Flow that represents all ciphers for the active user, including references to ciphers that
-     * cannot be decrypted.
-     *
-     * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself
-     * must be collected in order to trigger state changes.
-     */
-    val decryptCipherListResultStateFlow: StateFlow<DataState<DecryptCipherListResult>>
-
-    /**
-     * Flow that represents all collections for the active user.
-     *
-     * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself
-     * must be collected in order to trigger state changes.
-     */
-    val collectionsStateFlow: StateFlow<DataState<List<CollectionView>>>
-
-    /**
-     * Flow that represents all domains for the active user.
-     *
-     * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself
-     * must be collected in order to trigger state changes.
-     */
-    val domainsStateFlow: StateFlow<DataState<DomainsData>>
-
-    /**
-     * Flow that represents all folders for the active user.
-     *
-     * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself
-     * must be collected in order to trigger state changes.
-     */
-    val foldersStateFlow: StateFlow<DataState<List<FolderView>>>
-
-    /**
-     * Flow that represents the current send data.
-     */
-    val sendDataStateFlow: StateFlow<DataState<SendData>>
-
-    /**
      * Flow that represents the totp code.
      */
     val totpCodeFlow: Flow<TotpCodeResult>
@@ -106,26 +54,6 @@ interface VaultRepository : CipherManager, VaultLockManager {
      * Completely remove any persisted data from the vault.
      */
     fun deleteVaultData(userId: String)
-
-    /**
-     * Sync the vault data for the current user.
-     *
-     * Unlike [syncIfNecessary], this will always perform the requested sync and should only be
-     * utilized in cases where the user specifically requested the action.
-     */
-    fun sync(forced: Boolean = false)
-
-    /**
-     * Checks if conditions have been met to perform a sync request and, if so, syncs the vault
-     * data for the current user.
-     */
-    fun syncIfNecessary()
-
-    /**
-     * Syncs the vault data for the current user. This is an explicit request to sync and will
-     * return the result of the sync as a [SyncVaultDataResult].
-     */
-    suspend fun syncForResult(): SyncVaultDataResult
 
     /**
      * Flow that represents the data for a specific vault item as found by ID. This may emit `null`
@@ -204,48 +132,9 @@ interface VaultRepository : CipherManager, VaultLockManager {
     ): VaultUnlockResult
 
     /**
-     * Attempt to create a send. The [fileUri] _must_ be present when the given [SendView] has a
-     * [SendView.type] of [SendType.FILE].
-     */
-    suspend fun createSend(sendView: SendView, fileUri: Uri?): CreateSendResult
-
-    /**
-     * Attempt to update a send.
-     */
-    suspend fun updateSend(
-        sendId: String,
-        sendView: SendView,
-    ): UpdateSendResult
-
-    /**
-     * Attempt to remove the password from a send.
-     */
-    suspend fun removePasswordSend(sendId: String): RemovePasswordSendResult
-
-    /**
      * Attempt to get the verification code and the period.
      */
     suspend fun generateTotp(cipherId: String, time: DateTime): GenerateTotpResult
-
-    /**
-     * Attempt to delete a send.
-     */
-    suspend fun deleteSend(sendId: String): DeleteSendResult
-
-    /**
-     * Attempt to create a folder.
-     */
-    suspend fun createFolder(folderView: FolderView): CreateFolderResult
-
-    /**
-     * Attempt to delete a folder.
-     */
-    suspend fun deleteFolder(folderId: String): DeleteFolderResult
-
-    /**
-     * Attempt to update a folder.
-     */
-    suspend fun updateFolder(folderId: String, folderView: FolderView): UpdateFolderResult
 
     /**
      * Attempt to get the user's vault data for export.
@@ -257,6 +146,20 @@ interface VaultRepository : CipherManager, VaultLockManager {
         format: ExportFormat,
         restrictedTypes: List<CipherType>,
     ): ExportVaultDataResult
+
+    /**
+     * Attempt to import a CXF payload.
+     *
+     * @param payload The CXF payload to import.
+     */
+    suspend fun importCxfPayload(payload: String): ImportCredentialsResult
+
+    /**
+     * Attempt to export the vault data to a CXF file.
+     *
+     * @param ciphers Ciphers selected for export.
+     */
+    suspend fun exportVaultDataToCxf(ciphers: List<CipherListView>): Result<String>
 
     /**
      * Flow that represents the data for a specific vault list item as found by ID. This may emit

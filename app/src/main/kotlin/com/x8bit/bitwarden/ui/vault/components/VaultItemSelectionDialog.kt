@@ -2,9 +2,9 @@ package com.x8bit.bitwarden.ui.vault.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import com.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
+import com.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import kotlinx.collections.immutable.ImmutableList

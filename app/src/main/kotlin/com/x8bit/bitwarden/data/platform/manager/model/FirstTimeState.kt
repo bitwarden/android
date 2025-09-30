@@ -8,6 +8,7 @@ data class FirstTimeState(
     val showImportLoginsCardInSettings: Boolean,
     val showSetupUnlockCard: Boolean,
     val showSetupAutofillCard: Boolean,
+    val showSetupBrowserAutofillCard: Boolean,
 ) {
     /**
      * Constructs a [FirstTimeState] accepting nullable values. If a value is null, the default
@@ -18,10 +19,12 @@ data class FirstTimeState(
         showSetupUnlockCard: Boolean? = null,
         showSetupAutofillCard: Boolean? = null,
         showImportLoginsCardInSettings: Boolean? = null,
+        showSetupBrowserAutofillCard: Boolean? = null,
     ) : this(
         showImportLoginsCard = showImportLoginsCard ?: true,
         showSetupUnlockCard = showSetupUnlockCard ?: false,
         showSetupAutofillCard = showSetupAutofillCard ?: false,
         showImportLoginsCardInSettings = showImportLoginsCardInSettings ?: false,
+        showSetupBrowserAutofillCard = showSetupBrowserAutofillCard ?: false,
     )
 }

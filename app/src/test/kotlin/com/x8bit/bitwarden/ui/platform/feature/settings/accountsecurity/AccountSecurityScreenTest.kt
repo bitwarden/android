@@ -20,6 +20,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
@@ -28,11 +29,12 @@ import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.utils.startApplicationDetailsSettingsActivity
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
@@ -53,8 +55,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
 
     private val intentManager = mockk<IntentManager> {
         every { launchUri(any()) } just runs
-        every { startActivity(any()) } just runs
-        every { startApplicationDetailsSettingsActivity() } just runs
+        every { startActivity(any()) } returns true
     }
     private val captureBiometricsSuccess = slot<(cipher: Cipher?) -> Unit>()
     private val captureBiometricsCancel = slot<() -> Unit>()
@@ -104,9 +105,11 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `on NavigateToApplicationDataSettings should launch the correct intent`() {
-        mutableEventFlow.tryEmit(AccountSecurityEvent.NavigateToApplicationDataSettings)
-
-        verify { intentManager.startApplicationDetailsSettingsActivity() }
+        mockkStatic(IntentManager::startApplicationDetailsSettingsActivity) {
+            every { intentManager.startApplicationDetailsSettingsActivity() } just runs
+            mutableEventFlow.tryEmit(AccountSecurityEvent.NavigateToApplicationDataSettings)
+            verify { intentManager.startApplicationDetailsSettingsActivity() }
+        }
     }
 
     @Test
@@ -1101,14 +1104,14 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Set session timeout to \"Log out\"?")
+            .onAllNodesWithText("Set session timeout to “Log out”?")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
             .onAllNodesWithText(
                 text = "After the timeout period, you will be logged out. You will need to be " +
                     "connected to the internet to log in and access your vault again. Your " +
-                    "settings and PIN saved on this device won\'t change.",
+                    "settings and PIN saved on this device won’t change.",
             )
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
@@ -1140,7 +1143,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Set session timeout to \"Log out\"?")
+            .onAllNodesWithText("Set session timeout to “Log out”?")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
@@ -1169,7 +1172,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Set session timeout to \"Log out\"?")
+            .onAllNodesWithText("Set session timeout to “Log out”?")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule

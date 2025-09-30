@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">O aplikaci</string>
     <string name="add_folder">Přidat složku</string>
     <string name="add_item">Přidat položku</string>
     <string name="an_error_has_occurred">Vyskytla se chyba.</string>
+    <string name="apply">Použít</string>
     <string name="back">Zpět</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Zrušit</string>
     <string name="copy">Kopírovat</string>
     <string name="copy_password">Kopírovat heslo</string>
@@ -109,7 +109,12 @@
     <string name="master_password_description">Hlavní heslo je heslo, které používáte k přístupu do Vašeho trezoru. Je velmi důležité, abyste jej nezapomněli. Neexistuje totiž žádný způsob, jak heslo obnovit v případě, že jste jej zapomněli.</string>
     <string name="master_password_hint">Nápověda k hlavnímu heslu (volitelné)</string>
     <string name="master_password_hint_description">Nápověda k hlavnímu heslu Vám pomůže vzpomenout si heslo, pokud ho zapomenete.</string>
-    <string name="master_password_length_val_message_x">Hlavní heslo musí obsahovat alespoň %1$s znaků.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Hlavní heslo musí obsahovat alespoň %d znak.</item>
+        <item quantity="few">Hlavní heslo musí obsahovat alespoň %d znaky.</item>
+        <item quantity="many">Hlavní heslo musí obsahovat alespoň %d znaků.</item>
+        <item quantity="other">Hlavní heslo musí obsahovat alespoň %d znaků.</item>
+    </plurals>
     <string name="min_numbers">Minimální počet číslic</string>
     <string name="min_special">Minimální počet speciálních znaků</string>
     <string name="never">Nikdy</string>
@@ -162,7 +167,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Hledat přhlášení nebo přidat nové přihlášení</string>
     <string name="disabled">Zakázáno</string>
     <string name="bitwarden_autofill_service_alert2">Nejjednodušší způsob, jak přidat nové přihlašovací údaje do Vašeho trezoru, je služba automatického vyplňování Bitwarden. Další informace o použití této služby naleznete na obrazovce \"Nastavení\".</string>
-    <string name="autofill">Automatické vyplňování</string>
+    <string name="autofill_title">Automatické vyplňování</string>
     <string name="autofill_or_view">Chcete automaticky vyplnit nebo zobrazit tyto přihlašovací údaje?</string>
     <string name="search">Hledat</string>
     <string name="learn_org">Více o organizacích</string>
@@ -286,7 +291,7 @@ Načtení proběhne automaticky.</string>
     <string name="new_uri">Nová URI</string>
     <string name="add_website">Přidat webovou stránku</string>
     <string name="base_domain">Základní doména</string>
-    <string name="default_text">Výchozí</string>
+    <string name="default_text">Výchozí (%1$s)</string>
     <string name="exact">Přesně</string>
     <string name="host">Hostitel</string>
     <string name="reg_ex">Regulární výraz</string>
@@ -308,7 +313,12 @@ Načtení proběhne automaticky.</string>
     <string name="personal_details">Osobní údaje</string>
     <string name="contact_info">Kontaktní informace</string>
     <string name="check_password_for_data_breaches">Kontrola hesla pro případ narušení bezpečnosti dat</string>
-    <string name="password_exposed">K úniku tohoto hesla došlo celkem %1$sx. Měli byste jej změnit.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">K úniku tohoto hesla došlo celkem %dx. Měli byste jej změnit.</item>
+        <item quantity="few">K úniku tohoto hesla došlo celkem %dx. Měli byste jej změnit.</item>
+        <item quantity="many">K úniku tohoto hesla došlo celkem %dx. Měli byste jej změnit.</item>
+        <item quantity="other">K úniku tohoto hesla došlo celkem %dx. Měli byste jej změnit.</item>
+    </plurals>
     <string name="password_safe">V žádném ze známých případů nedošlo k úniku tohoto hesla. Mělo by být bezpečné používat jej i nadále.</string>
     <string name="identity_name">Název identity</string>
     <string name="value">Hodnota</string>
@@ -356,7 +366,7 @@ Načtení proběhne automaticky.</string>
     <string name="clear_clipboard">Vymazat schránku</string>
     <string name="clear_clipboard_description">Automaticky vymaže zkopírované hodnoty z Vaší schránky.</string>
     <string name="default_uri_match_detection">Výchozí zjišťování shody URI</string>
-    <string name="default_uri_match_detection_description">Vyberte výchozí způsob, jakým se detekuje shoda URI přihlašovacích údajů. Používá se například pro automatické vyplňování.</string>
+    <string name="default_uri_match_detection_description">Detekce shody URI ovládá způsob, jakým Bitwarden identifikuje návrhy automatického vyplňování.</string>
     <string name="theme">Motiv</string>
     <string name="theme_description">Změní barevný motiv aplikace.</string>
     <string name="copy_notes">Kopírovat poznámku</string>
@@ -364,8 +374,8 @@ Načtení proběhne automaticky.</string>
     <string name="exit_confirmation">Opravdu chcete ukončit Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Vyžadovat hlavní heslo při restartu aplikace?</string>
     <string name="pin_require_master_password_restart">Chcete po restartování aplikace vyžadovat hlavní heslo pro odemknutí trezoru?</string>
-    <string name="ask_to_add_login">Ptát se na přidání přihlášení</string>
-    <string name="ask_to_add_login_description">Zeptá se na uložení údajů, pokud nebyly v trezoru nalezeny.</string>
+    <string name="ask_to_add_item">Zeptat se na přidání položky</string>
+    <string name="ask_to_add_item_description">Zeptá se na uložení údajů, pokud nebyly v trezoru nalezeny.</string>
     <string name="on_restart">Při restartu aplikace</string>
     <string name="capitalize">Velká písmena na začátku slova</string>
     <string name="include_number">Zahrnout číslice</string>
@@ -483,14 +493,12 @@ Načtení proběhne automaticky.</string>
     <string name="password_prompt">Zeptat se znovu na hlavní heslo</string>
     <string name="password_confirmation">Potvrzení hlavního hesla</string>
     <string name="password_confirmation_desc">Tato akce je chráněna. Chcete-li pokračovat, zadejte znovu Vaše hlavní heslo, abychom ověřili Vaši totožnost.</string>
-    <string name="captcha_failed">Captcha selhala. Zkuste to znovu.</string>
     <string name="update_master_password">Aktualizovat hlavní heslo</string>
     <string name="update_master_password_warning">Administrátor v organizaci nedávno změnil Vaše hlavní heslo. Pro přístup k trezoru jej nyní musíte změnit. Pokračování Vás odhlásí z Vaší aktuální relace a bude nutné se znovu přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny.</string>
     <string name="updating_password">Aktualizování hesla</string>
     <string name="remove_master_password">Odebrat hlavní heslo</string>
     <string name="leave_organization">Opustit organizaci</string>
     <string name="leave_organization_name">Opustit %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Ověření WebAuthn</string>
     <string name="fido2_return_to_app">Zpět do aplikace</string>
     <string name="reset_password_auto_enroll_invite_warning">Tato organizace má podnikové zásady, které Vás automaticky zaregistrují k obnovení hesla. Registrace umožní správcům organizace změnit Vaše hlavní heslo.</string>
@@ -567,12 +575,6 @@ Načtení proběhne automaticky.</string>
     <string name="api_key">Klíč API</string>
     <string name="api_key_required_parenthesis">Klíč API (vyžadován)</string>
     <string name="service">Služba</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API přístupového tokenu (povinné)</string>
     <string name="api_access_token">Přístupový token API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Opravdu chcete přepsat aktuální uživatelské jméno?</string>
@@ -748,7 +750,12 @@ Chcete se přepnout na tento účet?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden nemůže obnovit ztracené nebo zapomenuté hlavní heslo.</string>
     <string name="choose_your_master_password">Zvolte hlavní heslo</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Zvolte jedinečné a silné heslo pro zabezpečení Vašich informací.</string>
-    <string name="minimum_characters">%1$s znaků</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d znak</item>
+        <item quantity="few">%d znaky</item>
+        <item quantity="many">%d znaků</item>
+        <item quantity="other">%d znaků</item>
+    </plurals>
     <string name="expired_link">Platnost odkazu vypršela</string>
     <string name="please_restart_registration_or_try_logging_in">Restartujte registraci nebo se zkuste přihlásit. Možná již máte účet.</string>
     <string name="restart_registration">Restartovat registraci</string>
@@ -801,7 +808,7 @@ Chcete se přepnout na tento účet?</string>
     <string name="need_help_check_out_import_help">Potřebujete pomoc? Podívejte se na <annotation link="importHelp">nápovědu pro import</annotation>.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Uložte exportovaný soubor</annotation> někde na Vašem počítači, kde jej můžete snadno najít.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Nejedná se o rozpoznaný server Bitwarden. Možná budete muset zkontrolovat svého poskytovatele nebo aktualizovat svůj server.</string>
-    <string name="syncing_logins_loading_message">Synchronizování přihlášení...</string>
+    <string name="syncing_logins_loading_message">Synchronizování přihlašovacích údajů...</string>
     <string name="download_the_browser_extension">Stáhnout rozšíření prohlížeče</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Přejděte na bitwarden.com/download a integrujte Bitwarden do svého oblíbeného prohlížeče pro bezproblémové používání.</string>
     <string name="use_the_web_app">Použít webovou aplikaci</string>
@@ -849,7 +856,6 @@ Chcete se přepnout na tento účet?</string>
     <string name="need_some_inspiration">"Potřebujete inspiraci?"</string>
     <string name="check_out_the_passphrase_generator">"Podívejte se na generátor heslové fráze"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Certifikát serveru se nám nepodařilo ověřit. Řetězec certifikátů nebo nastavení proxy serveru na Vašem zařízení nebo serveru Bitwardenu nemusí být správně nastaven.</string>
-    <string name="review_flow_launched">Přehled byl spuštěn!</string>
     <string name="copy_private_key">Kopírovat soukromý klíč</string>
     <string name="login_credentials">Přihlašovací údaje</string>
     <string name="autofill_options">Volby automatického vyplňování</string>
@@ -911,7 +917,6 @@ Chcete se přepnout na tento účet?</string>
     <string name="no_folder">Žádná složka</string>
     <string name="show_less">Zobrazit méně</string>
     <string name="add_field">Přidat pole</string>
-    <string name="x_ellipses">%s...</string>
     <string name="share_error_details">Sdílet podrobnosti o chybě</string>
     <string name="flight_recorder">Letový zapisovač</string>
     <string name="flight_recorder_help">Nápověda letového zapisovače</string>
@@ -1000,7 +1005,12 @@ při opakování problémů.</string>
     <string name="advanced">Pokročilé</string>
     <string name="collapse_advanced_options">Sbalit pokročilé volby</string>
     <string name="number_of_digits">Počet číslic</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d sekund</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d sekunda</item>
+        <item quantity="few">%d sekundy</item>
+        <item quantity="many">%d sekund</item>
+        <item quantity="other">%d sekund</item>
+    </plurals>
     <string name="item_saved">Položka byla uložena</string>
     <string name="information">Informace</string>
     <string name="otp_type">Typ OTP</string>
@@ -1043,7 +1053,6 @@ při opakování problémů.</string>
     <string name="sync_with_bitwarden_app">Synchronizovat s aplikací Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">Další informace</annotation></string>
     <string name="shared_codes_error">Nelze synchronizovat kódy z aplikace Bitwarden. Zkontrolujte, zda jsou obě aplikace aktuální. Ke stávajícím kódům máte stále přístup v aplikaci Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Synchronizovat s aplikací Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Pokud chcete zobrazit všechny ověřovací kódy, budete muset povolit synchronizaci na všech Vašich účtech.</string>
     <string name="take_me_to_app_settings">Přejít do nastavení aplikace</string>
@@ -1070,5 +1079,37 @@ při opakování problémů.</string>
     <string name="local_items_are_collapsed_click_to_expand">Místní položky jsou sbaleny; klepnutím rozbalíte.</string>
     <string name="items_expanded_click_to_collapse">Položky jsou rozbaleny; klepnutím sbalíte.</string>
     <string name="items_are_collapsed_click_to_expand">Položky jsou sbaleny; klepnutím rozbalíte.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Zpráva o chybě kopírování</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden nemohl dešifrovat tuto položku trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden nemohl dešifrovat %1$d položku trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</item>
+        <item quantity="few">Bitwarden nemohl dešifrovat %1$d položky trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</item>
+        <item quantity="many">Bitwarden nemohl dešifrovat %1$d položek trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</item>
+        <item quantity="other">Bitwarden nemohl dešifrovat %1$d položek trezoru. Zkopírujte a sdílejte tuto zprávu o chybě s oddělením zákaznické podpory, abyste předešli další ztrátě dat.</item>
+    </plurals>
     <string name="select_a_card_for_x">Vyberte kartu pro %s</string>
+    <string name="advanced_options">Rozšířené volby</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Další informace o detekci shody</annotation></string>
+    <string name="keep_your_credential_secure">Uchovávejte Vaše přihlašovací údaje v bezpečí</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Zjistěte více o tom, jak udržet přihlašovací údaje při používání \"%1$s\" v bezpečí.</string>
+    <string name="are_you_sure_you_want_to_use">Opravdu chcete použít \"%1$s\"?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">Detekce shody URI ovládá způsob, jakým Bitwarden identifikuje návrhy automatického vyplňování.\n<annotation emphasis="bold">Varování:</annotation> \"Regulární výraz\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů, pokud je použita nesprávně.</string>
+    <string name="default_uri_match_detection_description_advanced_options">Detekce shody URI ovládá způsob, jakým Bitwarden identifikuje návrhy automatického vyplňování.\n<annotation emphasis="bold">Varování:</annotation> \"Začíná na\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů, pokud je použita nesprávně.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Začíná na\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Regulární výraz\" je pokročilá volba se zvýšeným rizikem odhalení přihlašovacích údajů.</string>
+    <string name="credential_import_was_cancelled">Import přihlašovacích údajů byl zrušen. Žádné přihlašovací údaje nebyly importovány.</string>
+    <string name="import_cancelled">Import byl zrušen</string>
+    <string name="your_items_have_been_successfully_imported">Vaše položky byly úspěšně importovány a jsou nyní viditelné ve Vašem trezoru.</string>
+    <string name="import_saved_items">Importovat uložené položky</string>
+    <string name="import_your_credentials_from_another_password_manager">Importujte Vaše přihlašovací údaje, včetně hesel, hesel, platebních karet a všech osobních údajů z jiného správce hesel.</string>
+    <string name="return_to_your_vault">Zpět do Vašeho trezoru</string>
+    <string name="select_a_credential_manager_to_import_items_from">Vyberte správce přihlašovacích údajů pro import položek.</string>
+    <string name="no_items_imported">Nebyly importovány žádné položky</string>
+    <string name="no_items_received_from_the_selected_credential_manager">Z vybraného správce přihlašovacích údajů nebyly přijaty žádné položky.</string>
+    <string name="vault_sync_failed">Synchronizace trezoru se nezdařila</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Vaše položky byly úspěšně importovány, ale nemohly být synchronizovány. Importované položky nebudou viditelné v trezoru, dokud nebude provedena synchronizace.</string>
+    <string name="there_was_a_problem_importing_your_items">Při importu Vašich položek došlo k chybě. Zkuste to znovu. Pokud problém přetrvává, kontaktujte podporu.</string>
+    <string name="importing_items">Importování položek...</string>
+    <string name="uploading_items">Nahrávání položek...</string>
 </resources>

@@ -18,20 +18,15 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) = when (val flagKey = this) {
-    FlagKey.DummyBoolean,
     is FlagKey.DummyInt,
     FlagKey.DummyString,
-        -> {
-        Unit
-    }
+        -> Unit
 
+    FlagKey.DummyBoolean,
     FlagKey.BitwardenAuthenticationEnabled,
     FlagKey.CredentialExchangeProtocolImport,
     FlagKey.CredentialExchangeProtocolExport,
     FlagKey.CipherKeyEncryption,
-    FlagKey.UserManagedPrivilegedApps,
-    FlagKey.RemoveCardPolicy,
-    FlagKey.EnrollAeadOnKeyRotation,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -76,16 +71,7 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.CredentialExchangeProtocolImport -> stringResource(BitwardenString.cxp_import)
     FlagKey.CredentialExchangeProtocolExport -> stringResource(BitwardenString.cxp_export)
     FlagKey.CipherKeyEncryption -> stringResource(BitwardenString.cipher_key_encryption)
-    FlagKey.UserManagedPrivilegedApps -> {
-        stringResource(BitwardenString.user_trusted_privileged_app_management)
-    }
-
-    FlagKey.RemoveCardPolicy -> stringResource(BitwardenString.remove_card_policy)
     FlagKey.BitwardenAuthenticationEnabled -> {
         stringResource(BitwardenString.bitwarden_authentication_enabled)
-    }
-
-    FlagKey.EnrollAeadOnKeyRotation -> {
-        stringResource(BitwardenString.enroll_aead_on_key_rotation)
     }
 }

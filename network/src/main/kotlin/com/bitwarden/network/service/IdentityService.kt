@@ -36,7 +36,6 @@ interface IdentityService {
      * @param email user's email address.
      * @param authModel information necessary to authenticate with any
      * of the available login methods.
-     * @param captchaToken captcha token to be passed to the API (nullable).
      * @param twoFactorData the two-factor data, if applicable.
      */
     @Suppress("LongParameterList")
@@ -44,7 +43,6 @@ interface IdentityService {
         uniqueAppId: String,
         email: String,
         authModel: IdentityTokenAuthModel,
-        captchaToken: String?,
         twoFactorData: TwoFactorDataModel? = null,
         newDeviceOtp: String? = null,
     ): Result<GetTokenResponseJson>

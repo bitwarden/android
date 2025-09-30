@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.repository.util.baseIconUrl
@@ -11,7 +10,10 @@ import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.base.util.hexToColor
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
+import com.bitwarden.ui.platform.components.account.util.initials
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
@@ -24,8 +26,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
@@ -40,8 +42,6 @@ import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
@@ -49,7 +49,6 @@ import com.x8bit.bitwarden.ui.vault.components.util.toVaultItemCipherTypeOrNull
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAppBarTitle
@@ -65,9 +64,9 @@ import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
@@ -79,7 +78,9 @@ import timber.log.Timber
 import java.time.Clock
 import javax.inject.Inject
 
+private const val VAULT_DATA_RECEIVED_DELAY: Long = 550L
 private const val LOGIN_SUCCESS_SNACKBAR_DELAY: Long = 550L
+private const val BROWSER_AUTOFILL_DIALOG_DELAY: Long = 550L
 
 /**
  * Manages [VaultState], handles [VaultAction], and launches [VaultEvent] for the [VaultScreen].
@@ -98,8 +99,8 @@ class VaultViewModel @Inject constructor(
     private val reviewPromptManager: ReviewPromptManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val networkConnectionManager: NetworkConnectionManager,
+    private val browserAutofillDialogManager: BrowserAutofillDialogManager,
     snackbarRelayManager: SnackbarRelayManager,
-    featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -110,9 +111,8 @@ class VaultViewModel @Inject constructor(
                 .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
                 .any(),
         )
-        val appBarTitle = vaultFilterData.toAppBarTitle()
         VaultState(
-            appBarTitle = appBarTitle,
+            appBarTitle = vaultFilterData.toAppBarTitle(),
             initials = activeAccountSummary.initials,
             avatarColorString = activeAccountSummary.avatarColorHex,
             accountSummaries = accountSummaries,
@@ -129,6 +129,8 @@ class VaultViewModel @Inject constructor(
                 .flightRecorderData
                 .toSnackbarData(clock = clock),
             restrictItemTypesPolicyOrgIds = emptyList(),
+            cipherDecryptionFailureIds = persistentListOf(),
+            hasShownDecryptionFailureAlert = false,
         )
     },
 ) {
@@ -159,7 +161,12 @@ class VaultViewModel @Inject constructor(
         vaultRepository
             .vaultDataStateFlow
             .map { VaultAction.Internal.VaultDataReceive(it) }
-            .onEach(::sendAction)
+            .onEach {
+                // When the vault data is received, the current activity is about to
+                // be recreated. Adding this delay prevents the dialogs from disappearing.
+                delay(VAULT_DATA_RECEIVED_DELAY)
+                trySendAction(it)
+            }
             .launchIn(viewModelScope)
 
         authRepository
@@ -177,8 +184,12 @@ class VaultViewModel @Inject constructor(
                     delay(timeMillis = LOGIN_SUCCESS_SNACKBAR_DELAY)
                 },
             snackbarRelayManager.getSnackbarDataFlow(
+                SnackbarRelay.CIPHER_CREATED,
                 SnackbarRelay.CIPHER_DELETED,
+                SnackbarRelay.CIPHER_DELETED_SOFT,
                 SnackbarRelay.CIPHER_RESTORED,
+                SnackbarRelay.CIPHER_UPDATED,
+                SnackbarRelay.FOLDER_CREATED,
                 SnackbarRelay.LOGINS_IMPORTED,
             ),
         )
@@ -194,18 +205,25 @@ class VaultViewModel @Inject constructor(
 
         policyManager
             .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
-            .combine(
-                featureFlagManager.getFeatureFlagFlow(FlagKey.RemoveCardPolicy),
-            ) { policies, enabledFlag ->
-                if (enabledFlag && policies.isNotEmpty()) {
-                    policies.map { it.organizationId }
-                } else {
-                    null
-                }
-            }
+            .map { policies -> policies.map { it.organizationId } }
             .map { VaultAction.Internal.PolicyUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        viewModelScope.launch {
+            delay(timeMillis = BROWSER_AUTOFILL_DIALOG_DELAY)
+            mutableStateFlow.update { vaultState ->
+                vaultState.copy(
+                    dialog = VaultState.DialogState
+                        .ThirdPartyBrowserAutofill(browserAutofillDialogManager.browserCount)
+                        .takeIf {
+                            vaultState.dialog == null &&
+                                browserAutofillDialogManager.shouldShowDialog
+                        }
+                        ?: vaultState.dialog,
+                )
+            }
+        }
     }
 
     override fun handleAction(action: VaultAction) {
@@ -224,7 +242,6 @@ class VaultViewModel @Inject constructor(
             is VaultAction.AddAccountClick -> handleAddAccountClick()
             is VaultAction.SyncClick -> handleSyncClick()
             is VaultAction.LockClick -> handleLockClick()
-            is VaultAction.ExitConfirmationClick -> handleExitConfirmationClick()
             is VaultAction.VaultFilterTypeSelect -> handleVaultFilterTypeSelect(action)
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
             is VaultAction.SshKeyGroupClick -> handleSshKeyClick()
@@ -249,6 +266,18 @@ class VaultViewModel @Inject constructor(
             VaultAction.SelectAddItemType -> handleSelectAddItemType()
             VaultAction.DismissFlightRecorderSnackbar -> handleDismissFlightRecorderSnackbar()
             VaultAction.FlightRecorderGoToSettingsClick -> handleFlightRecorderGoToSettingsClick()
+            is VaultAction.ShareCipherDecryptionErrorClick -> {
+                handleShareCipherDecryptionErrorClick(action)
+            }
+
+            VaultAction.ShareAllCipherDecryptionErrorsClick -> {
+                handleShareAllCipherDecryptionErrorsClick()
+            }
+
+            VaultAction.EnableThirdPartyAutofillClick -> handleEnableThirdPartyAutofillClick()
+            VaultAction.DismissThirdPartyAutofillDialogClick -> {
+                handleDismissThirdPartyAutofillDialogClick()
+            }
         }
     }
 
@@ -260,12 +289,43 @@ class VaultViewModel @Inject constructor(
         sendEvent(VaultEvent.NavigateToAbout)
     }
 
+    private fun handleShareCipherDecryptionErrorClick(
+        action: VaultAction.ShareCipherDecryptionErrorClick,
+    ) {
+        sendEvent(
+            event = VaultEvent.ShowShareSheet(
+                content = action.selectedCipherId,
+            ),
+        )
+    }
+
+    private fun handleShareAllCipherDecryptionErrorsClick() {
+        sendEvent(
+            event = VaultEvent.ShowShareSheet(
+                content = state
+                    .cipherDecryptionFailureIds
+                    .joinToString(separator = "\n"),
+            ),
+        )
+    }
+
+    private fun handleEnableThirdPartyAutofillClick() {
+        browserAutofillDialogManager.delayDialog()
+        mutableStateFlow.update { it.copy(dialog = null) }
+        sendEvent(VaultEvent.NavigateToAutofillSettings)
+    }
+
+    private fun handleDismissThirdPartyAutofillDialogClick() {
+        browserAutofillDialogManager.delayDialog()
+        mutableStateFlow.update { it.copy(dialog = null) }
+    }
+
     private fun handleSelectAddItemType() {
         // If policy is enable for any organization, exclude the card option
         val excludedOptions = persistentListOfNotNull(
             CreateVaultItemType.SSH_KEY,
             CreateVaultItemType.CARD.takeUnless {
-                state.restrictItemTypesPolicyOrgIds.isNullOrEmpty()
+                state.restrictItemTypesPolicyOrgIds.isEmpty()
             },
         )
 
@@ -436,10 +496,6 @@ class VaultViewModel @Inject constructor(
         vaultRepository.lockVaultForCurrentUser(isUserInitiated = true)
     }
 
-    private fun handleExitConfirmationClick() {
-        sendEvent(VaultEvent.NavigateOutOfApp)
-    }
-
     private fun handleVaultFilterTypeSelect(action: VaultAction.VaultFilterTypeSelect) {
         // Update the current filter
         vaultRepository.vaultFilterType = action.vaultFilterType
@@ -471,6 +527,11 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleVaultItemClick(action: VaultAction.VaultItemClick) {
+        if (action.vaultItem.hasDecryptionError) {
+            showCipherDecryptionErrorItemClick(itemId = action.vaultItem.id)
+            return
+        }
+
         sendEvent(
             event = VaultEvent.NavigateToVaultItem(
                 itemId = action.vaultItem.id,
@@ -670,6 +731,19 @@ class VaultViewModel @Inject constructor(
         )
     }
 
+    private fun showCipherDecryptionErrorItemClick(itemId: String) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.CipherDecryptionError(
+                    title = BitwardenString.decryption_error.asText(),
+                    message = BitwardenString
+                        .bitwarden_could_not_decrypt_this_vault_item_description_long.asText(),
+                    selectedCipherId = itemId,
+                ),
+            )
+        }
+    }
+
     private fun handleInternalAction(action: VaultAction.Internal) {
         when (action) {
             is VaultAction.Internal.GenerateTotpResultReceive -> {
@@ -732,7 +806,10 @@ class VaultViewModel @Inject constructor(
         }
 
         vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
-            updateVaultState(vaultData, clearDialog = false)
+            updateVaultState(
+                vaultData = vaultData,
+                dialog = state.dialog,
+            )
         }
     }
 
@@ -859,12 +936,36 @@ class VaultViewModel @Inject constructor(
         if (state.dialog == VaultState.DialogState.Syncing) {
             sendEvent(VaultEvent.ShowSnackbar(message = BitwardenString.syncing_complete.asText()))
         }
-        updateVaultState(vaultData.data)
+
+        val shouldShowDecryptionAlert = !state.hasShownDecryptionFailureAlert &&
+            vaultData.data.decryptCipherListResult.failures.isNotEmpty()
+
+        updateVaultState(
+            vaultData = vaultData.data,
+            dialog = if (shouldShowDecryptionAlert ||
+                state.dialog is VaultState.DialogState.VaultLoadCipherDecryptionError
+            ) {
+                VaultState.DialogState.VaultLoadCipherDecryptionError(
+                    title = BitwardenString.decryption_error.asText(),
+                    cipherCount = vaultData.data.decryptCipherListResult.failures.size,
+                )
+            } else if (state.dialog is VaultState.DialogState.ThirdPartyBrowserAutofill) {
+                state.dialog
+            } else {
+                null
+            },
+            hasShownDecryptionFailureAlert = if (shouldShowDecryptionAlert) {
+                true
+            } else {
+                state.hasShownDecryptionFailureAlert
+            },
+        )
     }
 
     private fun updateVaultState(
         vaultData: VaultData,
-        clearDialog: Boolean = true,
+        dialog: VaultState.DialogState? = null,
+        hasShownDecryptionFailureAlert: Boolean = state.hasShownDecryptionFailureAlert,
     ) {
         mutableStateFlow.update {
             it.copy(
@@ -876,8 +977,14 @@ class VaultViewModel @Inject constructor(
                     vaultFilterType = vaultFilterTypeOrDefault,
                     restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                 ),
-                dialog = if (clearDialog) null else state.dialog,
+                dialog = dialog,
                 isRefreshing = false,
+                cipherDecryptionFailureIds = vaultData
+                    .decryptCipherListResult
+                    .failures
+                    .mapNotNull { cipher -> cipher.id }
+                    .toImmutableList(),
+                hasShownDecryptionFailureAlert = hasShownDecryptionFailureAlert,
             )
         }
     }
@@ -1045,7 +1152,9 @@ data class VaultState(
     private val isPullToRefreshSettingEnabled: Boolean,
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
-    val restrictItemTypesPolicyOrgIds: List<String>?,
+    val cipherDecryptionFailureIds: ImmutableList<String>,
+    val hasShownDecryptionFailureAlert: Boolean,
+    val restrictItemTypesPolicyOrgIds: List<String>,
 ) : Parcelable {
 
     /**
@@ -1229,6 +1338,11 @@ data class VaultState(
             abstract val type: VaultItemCipherType
 
             /**
+             * Indicates whether this item has a decryption error.
+             */
+            abstract val hasDecryptionError: Boolean
+
+            /**
              * Represents a login item within the vault.
              *
              * @property username The username associated with this login item.
@@ -1242,6 +1356,7 @@ data class VaultState(
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
+                override val hasDecryptionError: Boolean,
                 val username: Text?,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = username
@@ -1265,6 +1380,7 @@ data class VaultState(
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
+                override val hasDecryptionError: Boolean,
                 private val brand: VaultCardBrand? = null,
                 val lastFourDigits: Text? = null,
             ) : VaultItem() {
@@ -1296,6 +1412,7 @@ data class VaultState(
                 override val startIconTestTag: String = "IdentityCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val hasDecryptionError: Boolean,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 val fullName: Text?,
             ) : VaultItem() {
@@ -1315,6 +1432,7 @@ data class VaultState(
                 override val startIconTestTag: String = "SecureNoteCipherIcon",
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val hasDecryptionError: Boolean,
                 override val shouldShowMasterPasswordReprompt: Boolean,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = null
@@ -1333,6 +1451,7 @@ data class VaultState(
                 override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
+                override val hasDecryptionError: Boolean,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = null
                 override val type: VaultItemCipherType get() = VaultItemCipherType.SSH_KEY
@@ -1357,6 +1476,33 @@ data class VaultState(
         @Parcelize
         data class SelectVaultAddItemType(
             val excludedOptions: ImmutableList<CreateVaultItemType>,
+        ) : DialogState()
+
+        /**
+         * Represents a dialog indicating that a cipher decryption error occurred.
+         */
+        @Parcelize
+        data class CipherDecryptionError(
+            val title: Text,
+            val message: Text,
+            val selectedCipherId: String,
+        ) : DialogState()
+
+        /**
+         * Represents a dialog indicating that a 3rd party browser required Autofill configuration.
+         */
+        @Parcelize
+        data class ThirdPartyBrowserAutofill(
+            val browserCount: Int,
+        ) : DialogState()
+
+        /**
+         * Represents a dialog indicating that there was a decryption error loading ciphers.
+         */
+        @Parcelize
+        data class VaultLoadCipherDecryptionError(
+            val title: Text,
+            val cipherCount: Int,
         ) : DialogState()
 
         /**
@@ -1423,11 +1569,6 @@ sealed class VaultEvent {
     data object NavigateToVerificationCodeScreen : VaultEvent()
 
     /**
-     * Navigate out of the app.
-     */
-    data object NavigateOutOfApp : VaultEvent()
-
-    /**
      * Navigate to the import logins screen.
      */
     data object NavigateToImportLogins : VaultEvent()
@@ -1459,6 +1600,11 @@ sealed class VaultEvent {
     }
 
     /**
+     * Show a share sheet with the given content.
+     */
+    data class ShowShareSheet(val content: String) : VaultEvent()
+
+    /**
      * Navigate to the add folder screen
      */
     data object NavigateToAddFolder : VaultEvent()
@@ -1467,6 +1613,11 @@ sealed class VaultEvent {
      * Navigate to settings.
      */
     data object NavigateToAbout : VaultEvent()
+
+    /**
+     * Navigate to Autofill settings screen.
+     */
+    data object NavigateToAutofillSettings : VaultEvent()
 }
 
 /**
@@ -1538,12 +1689,6 @@ sealed class VaultAction {
     data object LockClick : VaultAction()
 
     /**
-     * User confirmed that they want to exit the app after clicking the Sync option in the overflow
-     * menu.
-     */
-    data object ExitConfirmationClick : VaultAction()
-
-    /**
      * User selected a [VaultFilterType] from the Vault Filter menu.
      */
     data class VaultFilterTypeSelect(
@@ -1595,6 +1740,28 @@ sealed class VaultAction {
      * User clicked the secure notes types button.
      */
     data object SecureNoteGroupClick : VaultAction()
+
+    /**
+     * Click to enabled 3rd party autofill for a browser.
+     */
+    data object EnableThirdPartyAutofillClick : VaultAction()
+
+    /**
+     * Click to dismiss 3rd party autofill dialog.
+     */
+    data object DismissThirdPartyAutofillDialogClick : VaultAction()
+
+    /**
+     * Click to share cipher decryption error details.
+     */
+    data class ShareCipherDecryptionErrorClick(
+        val selectedCipherId: String,
+    ) : VaultAction()
+
+    /**
+     * Click to share all cipher decryption error details.
+     */
+    data object ShareAllCipherDecryptionErrorsClick : VaultAction()
 
     /**
      * User clicked the SSH key types button.
@@ -1725,7 +1892,7 @@ sealed class VaultAction {
          */
         data class SnackbarDataReceive(
             val data: BitwardenSnackbarData,
-        ) : Internal()
+        ) : Internal(), BackgroundEvent
 
         /**
          * Indicates that the flight recorder data was received.
@@ -1738,7 +1905,7 @@ sealed class VaultAction {
          * Indicates that a policy update has been received.
          */
         data class PolicyUpdateReceive(
-            val restrictItemTypesPolicyOrdIds: List<String>?,
+            val restrictItemTypesPolicyOrdIds: List<String>,
         ) : Internal()
 
         /**
@@ -1763,7 +1930,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
     errorTitle: Text,
     errorMessage: Text,
     isRefreshing: Boolean,
-    restrictItemTypesPolicyOrgIds: List<String>?,
+    restrictItemTypesPolicyOrgIds: List<String>,
 ) {
     this.update {
         if (vaultData != null) {

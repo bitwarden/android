@@ -9,6 +9,8 @@ import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.account.model.AccountSummary
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -21,8 +23,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
@@ -30,7 +32,6 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.bitwarden.core.data.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
@@ -44,13 +45,12 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockDecryptCiph
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginListView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.model.GetCipherResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
@@ -152,6 +152,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { flightRecorderData } returns FlightRecorderDataSet(data = emptySet())
         every { flightRecorderDataFlow } returns mutableFlightRecorderDataFlow
         every { dismissFlightRecorderBanner() } just runs
+        every { isAutofillEnabledStateFlow } returns MutableStateFlow(false)
     }
 
     private val vaultRepository: VaultRepository =
@@ -171,13 +172,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { trackEvent(event = any()) } just runs
     }
 
-    private val mutableRemoveCardPolicyFeatureFlow = MutableStateFlow(false)
-    private val mutableSshKeyVaultItemsEnabledFlow = MutableStateFlow(false)
-    private val featureFlagManager: FeatureFlagManager = mockk {
-        every {
-            getFeatureFlagFlow(FlagKey.RemoveCardPolicy)
-        } returns mutableRemoveCardPolicyFeatureFlow
-    }
     private val reviewPromptManager: ReviewPromptManager = mockk()
 
     private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
@@ -186,6 +180,11 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     private val networkConnectionManager: NetworkConnectionManager = mockk {
         every { isNetworkConnected } returns true
+    }
+    private val browserAutofillDialogManager: BrowserAutofillDialogManager = mockk {
+        every { shouldShowDialog } returns false
+        every { browserCount } returns 1
+        every { delayDialog() } just runs
     }
 
     @AfterEach
@@ -219,7 +218,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `UserState updates with a non-null value when switching accounts should do nothing`() {
         val viewModel = createViewModel()
@@ -414,10 +412,8 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is enable`() =
+    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly`() =
         runTest {
-            mutableRemoveCardPolicyFeatureFlow.value = true
-
             val viewModel = createViewModel()
             assertEquals(
                 DEFAULT_STATE,
@@ -437,33 +433,6 @@ class VaultViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 DEFAULT_STATE.copy(restrictItemTypesPolicyOrgIds = listOf("Test Organization")),
-                viewModel.stateFlow.value,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `RESTRICT_ITEM_TYPES policy changes should update restrictItemTypesPolicyOrgIds accordingly if RemoveCardPolicy flag is disabled`() =
-        runTest {
-            val viewModel = createViewModel()
-            assertEquals(
-                DEFAULT_STATE,
-                viewModel.stateFlow.value,
-            )
-            mutableActivePoliciesFlow.emit(
-                listOf(
-                    SyncResponseJson.Policy(
-                        organizationId = "Test Organization",
-                        id = "testId",
-                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
-                        isEnabled = true,
-                        data = null,
-                    ),
-                ),
-            )
-
-            assertEquals(
-                DEFAULT_STATE.copy(restrictItemTypesPolicyOrgIds = null),
                 viewModel.stateFlow.value,
             )
         }
@@ -497,6 +466,75 @@ class VaultViewModelTest : BaseViewModelTest() {
 
         verify(exactly = 1) {
             settingsRepository.dismissFlightRecorderBanner()
+        }
+    }
+
+    @Test
+    fun `on EnableThirdPartyAutofillClick should send NavigateToAutofillSettings`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.EnableThirdPartyAutofillClick)
+            assertEquals(VaultEvent.NavigateToAutofillSettings, awaitItem())
+        }
+        verify(exactly = 1) {
+            browserAutofillDialogManager.delayDialog()
+        }
+    }
+
+    @Test
+    fun `on DismissThirdPartyAutofillDialogClick should call delay dialog`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(VaultAction.DismissThirdPartyAutofillDialogClick)
+
+        verify(exactly = 1) {
+            browserAutofillDialogManager.delayDialog()
+        }
+    }
+
+    @Test
+    fun `on ShareCipherDecryptionErrorClick should send ShowShareSheet`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                action = VaultAction.ShareCipherDecryptionErrorClick(selectedCipherId = "1"),
+            )
+            assertEquals(VaultEvent.ShowShareSheet("1"), awaitItem())
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `on ShareAllCipherDecryptionErrorsClick should send ShowShareSheet`() = runTest {
+        val viewModel = createViewModel()
+        val vaultData = VaultData(
+            decryptCipherListResult = createMockDecryptCipherListResult(number = 1)
+                .copy(
+                    failures = listOf(
+                        createMockSdkCipher(number = 1),
+                        createMockSdkCipher(number = 2),
+                    ),
+                ),
+            collectionViewList = listOf(createMockCollectionView(number = 1)),
+            folderViewList = listOf(createMockFolderView(number = 1)),
+            sendViewList = listOf(createMockSendView(number = 1)),
+        )
+        viewModel.eventFlow.test {
+            mutableVaultDataStateFlow.tryEmit(
+                value = DataState.Loaded(
+                    data = vaultData,
+                ),
+            )
+            advanceTimeBy(1500)
+            viewModel.trySendAction(
+                action = VaultAction.ShareAllCipherDecryptionErrorsClick,
+            )
+            assertEquals(
+                VaultEvent.ShowShareSheet("mockId-1\nmockId-2"),
+                awaitItem(),
+            )
         }
     }
 
@@ -673,15 +711,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Test
-    fun `on ExitConfirmationClick should emit NavigateOutOfApp`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultAction.ExitConfirmationClick)
-            assertEquals(VaultEvent.NavigateOutOfApp, awaitItem())
-        }
-    }
-
     @Suppress("MaxLineLength")
     @Test
     fun `on VaultFilterTypeSelect should update the selected filter type and re-filter any existing data`() {
@@ -724,7 +753,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
                 baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                 hasMasterPassword = true,
-                restrictItemTypesPolicyOrgIds = null,
+                restrictItemTypesPolicyOrgIds = emptyList(),
             ),
         )
             .copy(
@@ -749,7 +778,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
                     baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                     hasMasterPassword = true,
-                    restrictItemTypesPolicyOrgIds = null,
+                    restrictItemTypesPolicyOrgIds = emptyList(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -759,7 +788,6 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `vaultDataStateFlow Loaded with items should update state to Content`() = runTest {
-        mutableSshKeyVaultItemsEnabledFlow.value = true
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Loaded(
                 data = VaultData(
@@ -892,6 +920,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Suppress("MaxLineLength")
     @Test
     fun `vaultDataStateFlow Loaded with items when manually syncing with the sync button should update state to Content, show a success Snackbar, and dismiss pull to refresh`() =
@@ -930,7 +959,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                         ),
                     ),
                 )
-
+                // Allow time for state to update
+                advanceTimeBy(1500)
                 assertEquals(expectedState, viewModel.stateFlow.value)
                 assertEquals(
                     VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
@@ -961,6 +991,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Suppress("MaxLineLength")
     @Test
     fun `vaultDataStateFlow Loaded with empty items when manually syncing with the sync button should update state to NoItems, show a success Snackbar, and dismiss pull to refresh`() =
@@ -983,7 +1014,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                         sendViewList = emptyList(),
                     ),
                 )
-
+                // Allow time for state to update
+                advanceTimeBy(1500)
                 assertEquals(expectedState, viewModel.stateFlow.value)
                 assertEquals(
                     VaultEvent.ShowSnackbar(BitwardenString.syncing_complete.asText()),
@@ -1212,7 +1244,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `vaultDataStateFlow NoNetwork with items should update state to Content`() =
         runTest {
@@ -1313,7 +1344,6 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `vaultDataStateFlow Loaded should include SSH key vault items`() =
         runTest {
-            mutableSshKeyVaultItemsEnabledFlow.value = true
             mutableVaultDataStateFlow.tryEmit(
                 value = DataState.Loaded(
                     data = VaultData(
@@ -1503,6 +1533,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         val item = mockk<VaultState.ViewState.VaultItem> {
             every { id } returns itemId
             every { type } returns VaultItemCipherType.LOGIN
+            every { hasDecryptionError } returns false
         }
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAction.VaultItemClick(item))
@@ -1512,6 +1543,152 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Test
+    fun `VaultItemClick should show alert if hasDecryptionError is true`() = runTest {
+        val viewModel = createViewModel()
+        val itemId = "54321"
+        val item = mockk<VaultState.ViewState.VaultItem> {
+            every { id } returns itemId
+            every { type } returns VaultItemCipherType.LOGIN
+            every { hasDecryptionError } returns true
+        }
+
+        viewModel.trySendAction(VaultAction.VaultItemClick(item))
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.CipherDecryptionError(
+                    title = BitwardenString.decryption_error.asText(),
+                    message = BitwardenString
+                        .bitwarden_could_not_decrypt_this_vault_item_description_long.asText(),
+                    selectedCipherId = itemId,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with decryption failures should show VaultLoadCipherDecryptionError dialog when hasShownDecryptionFailureAlert is false`() =
+        runTest {
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = emptyList(),
+                        failures = listOf(
+                            createMockSdkCipher(number = 1).copy(
+                                deletedDate = null,
+                            ),
+                            createMockSdkCipher(number = 2).copy(
+                                deletedDate = null,
+                            ),
+                        ),
+                    ),
+                    collectionViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createViewModel()
+
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.Content(
+                        loginItemsCount = 2,
+                        cardItemsCount = 0,
+                        identityItemsCount = 0,
+                        secureNoteItemsCount = 0,
+                        favoriteItems = listOf(),
+                        folderItems = listOf(),
+                        collectionItems = listOf(),
+                        noFolderItems = listOf(),
+                        trashItemsCount = 0,
+                        totpItemsCount = 0,
+                        itemTypesCount = 5,
+                        sshKeyItemsCount = 0,
+                        showCardGroup = true,
+                    ),
+                    dialog = VaultState.DialogState.VaultLoadCipherDecryptionError(
+                        title = BitwardenString.decryption_error.asText(),
+                        cipherCount = 2,
+                    ),
+                ).copy(
+                    hasShownDecryptionFailureAlert = true,
+                    cipherDecryptionFailureIds = persistentListOf(
+                        "mockId-1",
+                        "mockId-2",
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with decryption failures should not show dialog when hasShownDecryptionFailureAlert is true`() =
+        runTest {
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(number = 1)
+                        .copy(
+                            failures = listOf(
+                                createMockSdkCipher(number = 1).copy(
+                                    deletedDate = null,
+                                ),
+                                createMockSdkCipher(number = 2).copy(
+                                    deletedDate = null,
+                                ),
+                            ),
+                        ),
+                    collectionViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            mutableVaultDataStateFlow.value = dataState
+            val viewModel = createViewModel()
+
+            // Clear the dialog by dismissing it
+            viewModel.trySendAction(VaultAction.DialogDismiss)
+
+            // Emit new data with failures - should not show dialog again
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+
+            // Advance time to allow state updates
+            advanceTimeBy(1500)
+
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.Content(
+                        loginItemsCount = 3,
+                        cardItemsCount = 0,
+                        identityItemsCount = 0,
+                        secureNoteItemsCount = 0,
+                        favoriteItems = listOf(),
+                        folderItems = listOf(),
+                        collectionItems = listOf(),
+                        noFolderItems = listOf(),
+                        trashItemsCount = 0,
+                        totpItemsCount = 1,
+                        itemTypesCount = 5,
+                        sshKeyItemsCount = 0,
+                        showCardGroup = true,
+                    ),
+                    dialog = null,
+                ).copy(
+                    hasShownDecryptionFailureAlert = true,
+                    cipherDecryptionFailureIds = persistentListOf(
+                        "mockId-1",
+                        "mockId-2",
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `TryAgainClick should sync the vault data`() {
@@ -2311,6 +2488,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                             shouldShowMasterPasswordReprompt = true,
                             username = null,
                             overflowOptions = persistentListOf(),
+                            hasDecryptionError = false,
                         ),
                         password = password,
                     ),
@@ -2352,6 +2530,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                             name = "name".asText(),
                             shouldShowMasterPasswordReprompt = true,
                             overflowOptions = persistentListOf(),
+                            hasDecryptionError = false,
                         ),
                         password = password,
                     ),
@@ -2380,6 +2559,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 shouldShowMasterPasswordReprompt = true,
                 fullName = null,
                 overflowOptions = persistentListOf(),
+                hasDecryptionError = false,
             )
             coEvery {
                 authRepository.validatePassword(password = password)
@@ -2593,7 +2773,6 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `SelectAddItemType action should set dialog state to SelectVaultAddItemType accordingly when RESTRICT_ITEM_TYPES is enabled`() =
         runTest {
-            mutableRemoveCardPolicyFeatureFlow.value = true
             val viewModel = createViewModel()
             mutableActivePoliciesFlow.emit(
                 listOf(
@@ -2672,12 +2851,12 @@ class VaultViewModelTest : BaseViewModelTest() {
             settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,
             organizationEventManager = organizationEventManager,
-            featureFlagManager = featureFlagManager,
             firstTimeActionManager = firstTimeActionManager,
             snackbarRelayManager = snackbarRelayManager,
             reviewPromptManager = reviewPromptManager,
             specialCircumstanceManager = specialCircumstanceManager,
             networkConnectionManager = networkConnectionManager,
+            browserAutofillDialogManager = browserAutofillDialogManager,
         )
 }
 
@@ -2787,5 +2966,7 @@ private fun createMockVaultState(
         showImportActionCard = true,
         isRefreshing = false,
         flightRecorderSnackBar = null,
-        restrictItemTypesPolicyOrgIds = null,
+        cipherDecryptionFailureIds = persistentListOf(),
+        hasShownDecryptionFailureAlert = false,
+        restrictItemTypesPolicyOrgIds = emptyList(),
     )

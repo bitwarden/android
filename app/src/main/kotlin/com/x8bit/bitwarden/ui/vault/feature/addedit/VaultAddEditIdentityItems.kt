@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
+import android.content.res.Resources
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -7,16 +8,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import kotlinx.collections.immutable.toImmutableList
@@ -295,8 +296,8 @@ private fun TitleMultiSelectButton(
     selectedTitle: VaultIdentityTitle,
     onTitleSelected: (VaultIdentityTitle) -> Unit,
     modifier: Modifier = Modifier,
+    resources: Resources = LocalResources.current,
 ) {
-    val resources = LocalContext.current.resources
     BitwardenMultiSelectButton(
         label = stringResource(id = BitwardenString.title),
         options = VaultIdentityTitle

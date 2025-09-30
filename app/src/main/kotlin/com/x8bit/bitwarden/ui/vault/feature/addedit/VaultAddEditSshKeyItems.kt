@@ -11,11 +11,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
 
 /**
@@ -27,20 +27,6 @@ fun LazyListScope.vaultAddEditSshKeyItems(
 ) {
     item {
         Spacer(modifier = Modifier.height(8.dp))
-        BitwardenTextField(
-            label = stringResource(id = BitwardenString.public_key),
-            value = sshKeyState.publicKey,
-            readOnly = true,
-            onValueChange = { },
-            textFieldTestTag = "PublicKeyEntry",
-            cardStyle = CardStyle.Top(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
-    }
-
-    item {
         BitwardenPasswordField(
             label = stringResource(id = BitwardenString.private_key),
             value = sshKeyState.privateKey,
@@ -50,6 +36,20 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             showPasswordChange = { sshKeyTypeHandlers.onPrivateKeyVisibilityChange(it) },
             showPasswordTestTag = "ViewPrivateKeyButton",
             passwordFieldTestTag = "PrivateKeyEntry",
+            cardStyle = CardStyle.Top(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+    }
+
+    item {
+        BitwardenTextField(
+            label = stringResource(id = BitwardenString.public_key),
+            value = sshKeyState.publicKey,
+            readOnly = true,
+            onValueChange = { },
+            textFieldTestTag = "PublicKeyEntry",
             cardStyle = CardStyle.Middle(),
             modifier = Modifier
                 .fillMaxWidth()

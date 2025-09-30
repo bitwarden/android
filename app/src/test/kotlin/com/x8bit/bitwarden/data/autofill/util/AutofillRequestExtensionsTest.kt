@@ -31,15 +31,19 @@ class AutofillRequestExtensionsTest {
             every { expirationYearSaveValue } returns SAVE_VALUE_YEAR
             every { numberSaveValue } returns SAVE_VALUE_NUMBER
             every { securityCodeSaveValue } returns SAVE_VALUE_CODE
+            every { cardholderNameSaveValue } returns SAVE_VALUE_CARDHOLDER_NAME
+            every { brandSaveValue } returns SAVE_VALUE_BRAND
         }
         val autofillRequest: AutofillRequest.Fillable = mockk {
             every { partition } returns autofillPartition
         }
         val expected = AutofillSaveItem.Card(
+            cardholderName = SAVE_VALUE_CARDHOLDER_NAME,
             number = SAVE_VALUE_NUMBER,
             expirationMonth = SAVE_VALUE_MONTH,
             expirationYear = SAVE_VALUE_YEAR,
             securityCode = SAVE_VALUE_CODE,
+            brand = SAVE_VALUE_BRAND,
         )
 
         // Test
@@ -50,7 +54,7 @@ class AutofillRequestExtensionsTest {
     }
 
     @Test
-    fun `toAutofillSaveItem should return AutofillSaveItem Login when card partition`() {
+    fun `toAutofillSaveItem should return AutofillSaveItem Login when login partition`() {
         RAW_URI_LIST
             .forEach { rawUri ->
                 // Setup
@@ -106,9 +110,11 @@ private const val AUTOFILL_REQUEST_EXTENSIONS_PATH =
 
 // CARD DATA
 private const val SAVE_VALUE_CODE: String = "SAVE_VALUE_CODE"
+private const val SAVE_VALUE_BRAND: String = "SAVE_VALUE_BRAND"
 private const val SAVE_VALUE_MONTH: String = "SAVE_VALUE_MONTH"
 private const val SAVE_VALUE_NUMBER: String = "SAVE_VALUE_NUMBER"
 private const val SAVE_VALUE_YEAR: String = "SAVE_VALUE_YEAR"
+private const val SAVE_VALUE_CARDHOLDER_NAME: String = "SAVE_VALUE_CARDHOLDER_NAME"
 
 // LOGIN DATA
 private const val SAVE_VALUE_PASSWORD: String = "SAVE_VALUE_PASSWORD"

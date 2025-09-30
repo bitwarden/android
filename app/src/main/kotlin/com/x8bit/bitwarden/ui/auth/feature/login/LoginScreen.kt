@@ -28,30 +28,28 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
+import com.bitwarden.ui.platform.components.account.BitwardenPlaceholderAccountActionItem
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
-import com.x8bit.bitwarden.ui.platform.components.account.BitwardenPlaceholderAccountActionItem
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
-import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -68,7 +66,6 @@ fun LoginScreen(
     onNavigateToLoginWithDevice: (emailAddress: String) -> Unit,
     onNavigateToTwoFactorLogin: (String, String?, Boolean) -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
-    intentManager: IntentManager = LocalIntentManager.current,
     keyboardController: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -77,10 +74,6 @@ fun LoginScreen(
             LoginEvent.NavigateBack -> onNavigateBack()
             is LoginEvent.NavigateToMasterPasswordHint -> {
                 onNavigateToMasterPasswordHint(event.emailAddress)
-            }
-
-            is LoginEvent.NavigateToCaptcha -> {
-                intentManager.startCustomTabsActivity(uri = event.uri)
             }
 
             is LoginEvent.NavigateToEnterpriseSignOn -> {

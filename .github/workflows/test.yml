@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
 env:
-  _JAVA_VERSION: 17
+  _JAVA_VERSION: 21
   _GITHUB_ACTION_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
 
 
@@ -27,13 +27,13 @@ jobs:
 
     steps:
       - name: Check out repo
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4.4.1
+        uses: gradle/actions/wrapper-validation@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4.4.2
 
       - name: Cache Gradle files
-        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
         with:
           path: |
             ~/.gradle/caches
@@ -43,7 +43,7 @@ jobs:
             ${{ runner.os }}-gradle-v2-
 
       - name: Cache build output
-        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
         with:
           path: |
             ${{ github.workspace }}/build-cache
@@ -52,12 +52,12 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@bb6434c747fa7022e12fa1cae2a0951fcffcff26 # v1.253.0
+        uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
         with:
           bundler-cache: true
 
       - name: Configure JDK
-        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
         with:
           distribution: "temurin"
           java-version: ${{ env._JAVA_VERSION }}
@@ -91,7 +91,7 @@ jobs:
 
       - name: Upload to codecov.io
         id: upload-to-codecov
-        uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5.4.3
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
         if: github.event_name == 'push' || github.event_name == 'pull_request'
         continue-on-error: true
         with:

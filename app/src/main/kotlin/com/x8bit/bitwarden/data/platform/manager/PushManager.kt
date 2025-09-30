@@ -15,9 +15,9 @@ import kotlinx.coroutines.flow.Flow
  */
 interface PushManager {
     /**
-     * Flow that represents requests intended for full syncs.
+     * Flow that represents requests intended for full syncs for the user ID provided.
      */
-    val fullSyncFlow: Flow<Unit>
+    val fullSyncFlow: Flow<String>
 
     /**
      * Flow that represents requests intended to log a user out.
@@ -52,7 +52,7 @@ interface PushManager {
     /**
      * Flow that represents requests intended to trigger syncing organization keys.
      */
-    val syncOrgKeysFlow: Flow<Unit>
+    val syncOrgKeysFlow: Flow<String>
 
     /**
      * Flow that represents requests intended to trigger a sync send delete.

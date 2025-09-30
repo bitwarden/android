@@ -23,7 +23,7 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
-import com.bitwarden.authenticator.ui.platform.components.util.maxDialogHeight
+import com.bitwarden.ui.platform.components.dialog.util.maxDialogHeight
 import com.bitwarden.ui.platform.resource.BitwardenString
 
 /**

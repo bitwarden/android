@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">Om</string>
     <string name="add_folder">Tilføj mappe</string>
     <string name="add_item">Tilføj emne</string>
     <string name="an_error_has_occurred">En fejl er opstået.</string>
+    <string name="apply">Apply</string>
     <string name="back">Retur</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Afbryd</string>
     <string name="copy">Kopiér</string>
     <string name="copy_password">Kopiér adgangskode</string>
     <string name="copy_username">Kopiér brugernavn</string>
     <string name="delete">Slet</string>
-    <string name="deleting">Sletter...</string>
+    <string name="deleting">Deleting…</string>
     <string name="do_you_really_want_to_delete">Slet fortsat, sikker? Dette kan ikke fortrydes.</string>
     <string name="edit">Redigér</string>
     <string name="edit_folder">Redigér mappe</string>
@@ -54,7 +54,7 @@
     <string name="password">Adgangskode</string>
     <string name="save">Gem</string>
     <string name="move">Flyt</string>
-    <string name="saving">Gemmer...</string>
+    <string name="saving">Saving…</string>
     <string name="settings">Indstillinger</string>
     <string name="show">Vis</string>
     <string name="item_deleted">Emne slettet</string>
@@ -103,13 +103,16 @@
     <string name="immediately">Straks</string>
     <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
     <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
-    <string name="logging_in">Logger ind...</string>
+    <string name="logging_in">Logging in…</string>
     <string name="login_to_bitwarden">Log ind på Bitwarden</string>
     <string name="master_password_confirmation_val_message">Adgangskodebekræftelse er forkert.</string>
     <string name="master_password_description">Hovedadgangskoden er den adgangskode, man benytter for at tilgå sin boks. Det er meget vigtigt, at man ikke glemmer sin hovedadgangskode, da der ikke er nogen måde, hvorpå koden kan genoprettes, dersom den glemmes.</string>
     <string name="master_password_hint">Hovedadgangskodetip (valgfrit)</string>
     <string name="master_password_hint_description">Et hovedeadgangskodentip kan være en hjælpe til at huske adgangskoden, hvis den glemmes.</string>
-    <string name="master_password_length_val_message_x">Hovedadgangskoden skal udgøre mindst %1$s tegn.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">Master password must be at least %d character long.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Minnimumsantal cifre</string>
     <string name="min_special">Minnimumsantal specialtegn</string>
     <string name="never">Aldrig</string>
@@ -142,8 +145,8 @@
     <string name="select">Vælg</string>
     <string name="item_details">Item details</string>
     <string name="item_updated">Emne gemt</string>
-    <string name="submitting">Indsender...</string>
-    <string name="syncing">Synker...</string>
+    <string name="submitting">Submitting…</string>
+    <string name="syncing">Syncing…</string>
     <string name="syncing_complete">Synkning fuldført</string>
     <string name="two_step_login">Totrins-login</string>
     <string name="unlock_with_biometrics">Unlock with Biometrics</string>
@@ -162,7 +165,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Søg efter eller tilføj et nyt login</string>
     <string name="disabled">Deaktiveret</string>
     <string name="bitwarden_autofill_service_alert2">Den letteste måde at føje nye logins til boksen er fra Bitwarden Autoudfyldningstjeneste. Læs mere om brugen af Bitwarden Autoudfyldningstjeneste ved at gå til skærmen \"Indstillinger\".</string>
-    <string name="autofill">Autoudfyld</string>
+    <string name="autofill_title">Autofill</string>
     <string name="autofill_or_view">Skal dette emne autoudfyldes eller vises?</string>
     <string name="search">Søg</string>
     <string name="learn_org">Læs om organisationer</string>
@@ -181,7 +184,7 @@
     <string name="add_new_attachment">Tilføj ny vedhæftning</string>
     <string name="attachments">Vedhæftninger</string>
     <string name="unable_to_download_file">Kunne ikke downloade fil.</string>
-    <string name="downloading">Downloader...</string>
+    <string name="downloading">Downloading…</string>
     <string name="attachment_large_warning">Størrelsen på denne vedhæftning er %1$s. Sikker på, at den skal downloades på enheden?</string>
     <string name="authenticator_key">Godkendelsesnøgle (TOTP)</string>
     <string name="verification_code_totp">Bekræftelseskode (TOTP)</string>
@@ -286,7 +289,7 @@ Skanning vil ske automatisk.</string>
     <string name="new_uri">Ny URI</string>
     <string name="add_website">Add website</string>
     <string name="base_domain">Basisdomæne</string>
-    <string name="default_text">Standard</string>
+    <string name="default_text">Default (%1$s)</string>
     <string name="exact">Nøjagtig</string>
     <string name="host">Vært</string>
     <string name="reg_ex">Regulært udtryk</string>
@@ -308,7 +311,10 @@ Skanning vil ske automatisk.</string>
     <string name="personal_details">Personal Details</string>
     <string name="contact_info">Contact Info</string>
     <string name="check_password_for_data_breaches">Check password for data breaches</string>
-    <string name="password_exposed">Denne adgangskode er blevet afsløret %1$s gang(e) i datalæk, hvorfor den straks bør skiftes.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">This password has been exposed %d time in data breaches. You should change it.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Denne adgangskode er ikke fundet i nogen kendte datalæk. Den burde være sikker at bruge.</string>
     <string name="identity_name">Identitetsnavn</string>
     <string name="value">Værdi</string>
@@ -356,7 +362,7 @@ Skanning vil ske automatisk.</string>
     <string name="clear_clipboard">Ryd udklipsholder</string>
     <string name="clear_clipboard_description">Ryd automatisk kopierede data fra udklipsholderen.</string>
     <string name="default_uri_match_detection">Standard URI-matchdetektering</string>
-    <string name="default_uri_match_detection_description">Vælg standardmåden, som URI-matchdetektering håndteres til logins, når der udføres handlinger som f.eks. Autoudfyld.</string>
+    <string name="default_uri_match_detection_description">URI match detection controls how Bitwarden identifies autofill suggestions.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Skift appens farvetema.</string>
     <string name="copy_notes">Kopiér notat</string>
@@ -364,8 +370,8 @@ Skanning vil ske automatisk.</string>
     <string name="exit_confirmation">Sikker på, at Bitwarden skal afsluttes?</string>
     <string name="require_master_password_on_app_restart">Kræv hovedadgangskode ved app-genstart?</string>
     <string name="pin_require_master_password_restart">Skal oplåsning med hovedadgangskoden kræves, når appen genstartes?</string>
-    <string name="ask_to_add_login">Spørg om at tilføje login</string>
-    <string name="ask_to_add_login_description">Spørg om at tilføje et emne, hvis der ikke findes et matchende i boksen.</string>
+    <string name="ask_to_add_item">Ask to add item</string>
+    <string name="ask_to_add_item_description">Ask to add an item if one isn\'t found in your vault.</string>
     <string name="on_restart">Ved app-genstart</string>
     <string name="capitalize">Versal</string>
     <string name="include_number">Inkludér ciffer</string>
@@ -392,10 +398,10 @@ Skanning vil ske automatisk.</string>
     <string name="save_attachment_success">Vedhæftning gemt</string>
     <string name="autofill_tile_accessibility_required">Aktivér \"Autoudfyld-tilgængelighedstjeneste\" fra Bitwarden-indstillinger for at benytte flisen Autoudfyld.</string>
     <string name="autofill_tile_uri_not_found">Ingen adgangskodefelter fundet</string>
-    <string name="soft_deleting">Sender til papirkurven...</string>
+    <string name="soft_deleting">Sending to trash…</string>
     <string name="item_soft_deleted">Emne er sendt til papirkurven.</string>
     <string name="restore">Gendan</string>
-    <string name="restoring">Gendanner...</string>
+    <string name="restoring">Restoring…</string>
     <string name="item_restored">Emne gendannet</string>
     <string name="trash">Papirkurv</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Sikker på, at der skal slettes permanent? Dette kan ikke fortrydes.</string>
@@ -483,14 +489,12 @@ Skanning vil ske automatisk.</string>
     <string name="password_prompt">Genanmodning om hovedadgangskode</string>
     <string name="password_confirmation">Bekræftelse af hovedadgangskode</string>
     <string name="password_confirmation_desc">Denne handling er beskyttet. Angiv hovedadgangskoden igen for at bekræfte identiteten og fortsætte.</string>
-    <string name="captcha_failed">Captcha mislykkedes. Forsøg igen.</string>
     <string name="update_master_password">Opdatér hovedadgangskode</string>
     <string name="update_master_password_warning">Hovedadgangskoden er for nylig skiftet af en administrator i organisationen. For at kunne tilgå boksen, opdatér hovedadgangskoden nu. Fortsættes, logges man ud af sin nuværende session og vil skulle logger ind igen. Aktive sessioner på andre enheder kan forblive aktive i op til én time.</string>
     <string name="updating_password">Opdaterer adgangskode</string>
     <string name="remove_master_password">Fjern hovedadgangskode</string>
     <string name="leave_organization">Forlad organisation</string>
     <string name="leave_organization_name">Forlad %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Godkend WebAuthn</string>
     <string name="fido2_return_to_app">Retur til appen</string>
     <string name="reset_password_auto_enroll_invite_warning">Denne organisation har en virksomhedspolitik, hvor man automatisk tilmeldes nulstilling af adgangskode, hvilket giver organisationsadministratorer mulighed for at skifte ens hovedadgangskode.</string>
@@ -568,12 +572,6 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</string>
     <string name="api_key">API key</string>
     <string name="api_key_required_parenthesis">API-nøgle (obligatorisk)</string>
     <string name="service">Tjeneste</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API access token (required)</string>
     <string name="api_access_token">API-adgangstoken</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Sikker på, at det aktuelle brugernavn skal overskrives?</string>
@@ -749,7 +747,10 @@ Skift til denne konto?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
     <string name="choose_your_master_password">Vælg hovedadgangskode</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Vælg en unik og stærk adgangskode for at holde brugeroplysningerne sikre.</string>
-    <string name="minimum_characters">%1$s tegn</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d character</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Udløbet link</string>
     <string name="please_restart_registration_or_try_logging_in">Genstart registreringen eller prøv at logge ind. En konto findes muligvis allerede.</string>
     <string name="restart_registration">Genstart registrering</string>
@@ -802,7 +803,7 @@ Skift til denne konto?</string>
     <string name="need_help_check_out_import_help">Behov for hjælp? Tjek import-hjælp ud.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Gem den eksporterede fil et sted på computeren, hvor man nemt kan finde den.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Dette er ikke en genkendt Bitwarden-server. Man skal muligvis tjekke med sin udbyder eller opdatere sin server.</string>
-    <string name="syncing_logins_loading_message">Synker logins...</string>
+    <string name="syncing_logins_loading_message">Syncing logins…</string>
     <string name="download_the_browser_extension">Download webbrowserudvidelsen</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Gå til bitwarden.com/download for at integrere Bitwarden i den foretrukne webbrowser for en problemfri oplevelse.</string>
     <string name="use_the_web_app">Brug web-appen</string>
@@ -850,7 +851,6 @@ Skift til denne konto?</string>
     <string name="need_some_inspiration">"Brug for inspiration?"</string>
     <string name="check_out_the_passphrase_generator">"Tjek adgangssætningsgeneratoren ud"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Servercertifikatet kunne ikke bekræftes. Enhedens eller Bitwarden-serverens certifikatkæde eller proxy-indstillinger på er muligvis ikke opsat korrekt.</string>
-    <string name="review_flow_launched">Gennemgangs-flow startet!</string>
     <string name="copy_private_key">Kopiér privat nøgle</string>
     <string name="login_credentials">Login-legitimationsoplysninger</string>
     <string name="autofill_options">Autoudfyldningsindstillinger</string>
@@ -912,7 +912,6 @@ Skift til denne konto?</string>
     <string name="no_folder">No folder</string>
     <string name="show_less">Show less</string>
     <string name="add_field">Add field</string>
-    <string name="x_ellipses">%s...</string>
     <string name="share_error_details">Share error details</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>
@@ -999,7 +998,10 @@ Skift til denne konto?</string>
     <string name="advanced">Avanceret</string>
     <string name="collapse_advanced_options">Sammenfold avancerede indstillinger</string>
     <string name="number_of_digits">Antal cifre</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d sekunder</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">Emne gemt</string>
     <string name="information">Information</string>
     <string name="otp_type">OTP-type</string>
@@ -1042,7 +1044,6 @@ Skift til denne konto?</string>
     <string name="sync_with_bitwarden_app">Synk med Bitwarden-appen</string>
     <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Kan ikke synke koder fra Bitwarden-appen. Sørg for, at begge apps er opdaterede. Eksisterende koder kan stadig tilgås i Bitwarden-appen.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Synk med Bitwarden-appen</string>
     <string name="sync_with_bitwarden_action_card_message">Tillad Authenticator-app synkning i Indstillinger for at se alle bekræftelseskoderne her.</string>
     <string name="take_me_to_app_settings">Gå til til app-indstillingerne</string>
@@ -1069,5 +1070,35 @@ Skift til denne konto?</string>
     <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
     <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
     <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
+    <string name="error_cannot_decrypt">[error: cannot decrypt]</string>
+    <string name="copy_error_report">Copy error report</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">Bitwarden could not decrypt this vault item. Copy and share this error report with customer success to avoid additional data loss.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
     <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="advanced_options">Advanced options</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">More about match detection</annotation></string>
+    <string name="keep_your_credential_secure">Keep your credentials secure</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Learn more about how to keep credentials secure when using “%1$s”.</string>
+    <string name="are_you_sure_you_want_to_use">Are you sure you want to use “%1$s”?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>

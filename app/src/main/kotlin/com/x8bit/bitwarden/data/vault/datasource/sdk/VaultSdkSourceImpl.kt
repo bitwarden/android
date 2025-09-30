@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk
 
 import com.bitwarden.collections.Collection
 import com.bitwarden.collections.CollectionView
+import com.bitwarden.core.DeriveKeyConnectorException
 import com.bitwarden.core.DeriveKeyConnectorRequest
 import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.InitOrgCryptoRequest
@@ -10,6 +11,7 @@ import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.exporters.Account
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
@@ -92,14 +94,17 @@ class VaultSdkSourceImpl(
                         ),
                     )
                 DeriveKeyConnectorResult.Success(key)
-            } catch (exception: BitwardenException) {
-                when {
-                    exception.message == "Wrong password" -> {
+            } catch (ex: BitwardenException.DeriveKeyConnector) {
+                when (ex.v1) {
+                    is DeriveKeyConnectorException.WrongPassword -> {
                         DeriveKeyConnectorResult.WrongPasswordError
                     }
-
-                    else -> DeriveKeyConnectorResult.Error(exception)
+                    is DeriveKeyConnectorException.Crypto -> {
+                        DeriveKeyConnectorResult.Error(error = ex)
+                    }
                 }
+            } catch (exception: BitwardenException) {
+                DeriveKeyConnectorResult.Error(error = exception)
             }
         }
 
@@ -473,7 +478,7 @@ class VaultSdkSourceImpl(
     ): Result<UpdatePasswordResponse> = runCatchingWithLogs {
         getClient(userId = userId)
             .crypto()
-            .updatePassword(newPassword = newPassword)
+            .makeUpdatePassword(newPassword = newPassword)
     }
 
     override suspend fun exportVaultDataToString(
@@ -489,6 +494,28 @@ class VaultSdkSourceImpl(
                 ciphers = ciphers,
                 format = format,
             )
+    }
+
+    override suspend fun exportVaultDataToCxf(
+        userId: String,
+        account: Account,
+        ciphers: List<Cipher>,
+    ): Result<String> = runCatchingWithLogs {
+        getClient(userId = userId)
+            .exporters()
+            .exportCxf(
+                account = account,
+                ciphers = ciphers,
+            )
+    }
+
+    override suspend fun importCxf(
+        userId: String,
+        payload: String,
+    ): Result<List<Cipher>> = runCatchingWithLogs {
+        getClient(userId = userId)
+            .exporters()
+            .importCxf(payload = payload)
     }
 
     override suspend fun registerFido2Credential(

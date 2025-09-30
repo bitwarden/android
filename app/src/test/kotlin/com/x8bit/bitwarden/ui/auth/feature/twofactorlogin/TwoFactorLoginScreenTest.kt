@@ -16,10 +16,10 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.network.model.TwoFactorAuthMethod
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
 import io.mockk.every
 import io.mockk.just
@@ -271,13 +271,6 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `NavigateToCaptcha should call intentManager startCustomTabsActivity`() {
-        val mockUri = mockk<Uri>()
-        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToCaptcha(mockUri))
-        verify { intentManager.startCustomTabsActivity(mockUri) }
-    }
-
-    @Test
     fun `NavigateToDuo should call intentManager startCustomTabsActivity`() {
         val mockUri = mockk<Uri>()
         mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToDuo(mockUri))
@@ -316,7 +309,7 @@ class TwoFactorLoginScreenTest : BitwardenComposeTest() {
         }
         composeTestRule.onNode(
             hasText(
-                text = "We don't recognize this device",
+                text = "We don’t recognize this device",
                 substring = true,
                 ignoreCase = true,
             ),
@@ -351,7 +344,6 @@ private val DEFAULT_STATE = TwoFactorLoginState(
     isContinueButtonEnabled = false,
     isRememberEnabled = false,
     isNewDeviceVerification = false,
-    captchaToken = null,
     email = "example@email.com",
     password = "password123",
     orgIdentifier = "orgIdentifier",

@@ -196,6 +196,10 @@ private fun AutofillCipher.Card.getAutofillValueOrNull(autofillView: AutofillVie
                 null
             }
         }
+
+        is AutofillView.Card.Brand -> {
+            brand.takeIf { it.isNotEmpty() }
+        }
     }
 
 /**

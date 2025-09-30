@@ -19,12 +19,12 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
+import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
@@ -205,7 +205,7 @@ fun VaultItemListingContent(
                 BitwardenListItem(
                     startIcon = it.iconData,
                     startIconTestTag = it.iconTestTag,
-                    label = it.title,
+                    label = it.title.invoke(),
                     labelTestTag = it.titleTestTag,
                     secondSupportingLabel = it.secondSubtitle,
                     secondSupportingLabelTestTag = it.secondSubtitleTestTag,

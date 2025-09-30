@@ -1,12 +1,14 @@
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import androidx.core.os.bundleOf
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.JwtTokenDataJson
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
@@ -23,7 +25,6 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import io.mockk.every
 import io.mockk.mockk
@@ -1242,6 +1243,44 @@ class RootNavViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `when the active user has an unlocked vault and they have a OnboardingStatus of BROWSER_AUTOFILL_SETUP the nav state should be OnboardingBrowserAutofillSetup`() {
+        mutableUserStateFlow.tryEmit(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "name",
+                        email = "email",
+                        avatarColorHex = "avatarColorHex",
+                        environment = Environment.Us,
+                        isPremium = true,
+                        isLoggedIn = true,
+                        isVaultUnlocked = true,
+                        needsPasswordReset = false,
+                        isBiometricsEnabled = false,
+                        organizations = emptyList(),
+                        needsMasterPassword = false,
+                        trustedDevice = null,
+                        hasMasterPassword = true,
+                        isUsingKeyConnector = false,
+                        onboardingStatus = OnboardingStatus.BROWSER_AUTOFILL_SETUP,
+                        firstTimeState = FirstTimeState(
+                            showImportLoginsCard = true,
+                        ),
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.OnboardingBrowserAutofillSetup,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `when the active user has an unlocked vault and they have a OnboardingStatus of FINAL_STEP the nav state should be OnboardingAutoFillSetup`() {
         mutableUserStateFlow.tryEmit(
             UserState(
@@ -1388,6 +1427,24 @@ class RootNavViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         assertEquals(
             RootNavState.VaultUnlocked(activeUserId = "activeUserId"),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when SpecialCircumstance is CredentialExchangeExport the nav state should be CredentialExchangeExport`() {
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.CredentialExchangeExport(
+                data = ImportCredentialsRequestData(
+                    uri = mockk(),
+                    requestJson = "mockRequestJson",
+                ),
+            )
+        mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.CredentialExchangeExport,
             viewModel.stateFlow.value,
         )
     }

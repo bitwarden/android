@@ -18,6 +18,11 @@ interface EnvironmentRepository {
     val environmentStateFlow: StateFlow<Environment>
 
     /**
+     * Initializes the [EnvironmentRepository].
+     */
+    fun initialize()
+
+    /**
      * Stores the current environment for the given [userEmail].
      */
     fun saveCurrentEnvironmentForEmail(userEmail: String)

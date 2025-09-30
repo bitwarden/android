@@ -1,11 +1,13 @@
 package com.x8bit.bitwarden.data.autofill.provider
 
+import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.firstWithTimeoutOrNull
 import com.x8bit.bitwarden.data.platform.util.subtitle
@@ -34,6 +36,7 @@ class AutofillCipherProviderImpl(
     private val authRepository: AuthRepository,
     private val cipherMatchingManager: CipherMatchingManager,
     private val vaultRepository: VaultRepository,
+    private val policyManager: PolicyManager,
 ) : AutofillCipherProvider {
     private val activeUserId: String? get() = authRepository.activeUserId
 
@@ -53,7 +56,9 @@ class AutofillCipherProviderImpl(
 
     override suspend fun getCardAutofillCiphers(): List<AutofillCipher.Card> {
         val cipherListViews = getUnlockedCipherListViewsOrNull() ?: return emptyList()
-
+        val organizationIdsWithCardTypeRestrictions = policyManager
+            .getActivePolicies(PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            .map { it.organizationId }
         return cipherListViews
             .mapNotNull { cipherListView ->
                 cipherListView
@@ -64,7 +69,11 @@ class AutofillCipherProviderImpl(
                             // Must not be deleted.
                             it.deletedDate == null &&
                             // Must not require a reprompt.
-                            it.reprompt == CipherRepromptType.NONE
+                            it.reprompt == CipherRepromptType.NONE &&
+                            // Must not be restricted by organization.
+                            !it.isExcludedByOrgCardRestrictions(
+                                organizationIdsWithCardTypeRestrictions,
+                            )
                     }
                     ?.let { nonNullCipherListView ->
                         nonNullCipherListView.id?.let { cipherId ->
@@ -78,6 +87,7 @@ class AutofillCipherProviderImpl(
                                     expirationMonth = cipherView.card?.expMonth.orEmpty(),
                                     expirationYear = cipherView.card?.expYear.orEmpty(),
                                     number = cipherView.card?.number.orEmpty(),
+                                    brand = cipherView.card?.brand.orEmpty(),
                                 )
                             }
                         }
@@ -138,10 +148,33 @@ class AutofillCipherProviderImpl(
                 Timber.e("Cipher not found for autofill.")
                 null
             }
+
             is GetCipherResult.Failure -> {
                 Timber.e(result.error, "Failed to decrypt cipher for autofill.")
                 null
             }
+
             is GetCipherResult.Success -> result.cipherView
         }
+
+    /**
+     * Checks if this [CipherListView] item should be excluded from autofill due to
+     * organization-based card type restrictions.
+     *
+     * It's considered restricted if:
+     * 1. There are organizations with card type restrictions AND this item is a personal vault item
+     * (organizationId is null).
+     * 2. OR this item belongs to an organization that has card type restrictions.
+     */
+    private fun CipherListView.isExcludedByOrgCardRestrictions(
+        restrictingOrgIds: List<String>,
+    ): Boolean {
+        if (restrictingOrgIds.isEmpty()) {
+            return false
+        }
+        // If personal vault (no orgId), restricted if any org has restrictions.
+        return organizationId == null ||
+            // If part of an org, restricted if that org is in the restricting list.
+            organizationId in restrictingOrgIds
+    }
 }

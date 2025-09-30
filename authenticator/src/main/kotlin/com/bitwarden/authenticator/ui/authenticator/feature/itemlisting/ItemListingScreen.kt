@@ -1,9 +1,6 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
 import android.Manifest
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -54,7 +51,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.ItemListingExpandableFabAction
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
@@ -78,14 +75,16 @@ import com.bitwarden.authenticator.ui.platform.components.header.AuthenticatorEx
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderTextWithSupportLabel
 import com.bitwarden.authenticator.ui.platform.components.model.IconResource
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.authenticator.ui.platform.composition.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.composition.LocalPermissionsManager
-import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
 import com.bitwarden.authenticator.ui.platform.theme.Typography
+import com.bitwarden.authenticator.ui.platform.util.startAuthenticatorAppSettings
+import com.bitwarden.authenticator.ui.platform.util.startBitwardenAccountSettings
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -139,10 +138,7 @@ fun ItemListingScreen(
 
             is ItemListingEvent.NavigateToEditItem -> onNavigateToEditItemScreen(event.id)
             is ItemListingEvent.NavigateToAppSettings -> {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                intent.data = Uri.parse("package:" + context.packageName)
-
-                intentManager.startActivity(intent = intent)
+                intentManager.startAuthenticatorAppSettings()
             }
 
             ItemListingEvent.NavigateToBitwardenListing -> {
@@ -156,7 +152,7 @@ fun ItemListingScreen(
             }
 
             ItemListingEvent.NavigateToBitwardenSettings -> {
-                intentManager.startMainBitwardenAppAccountSettings()
+                intentManager.startBitwardenAccountSettings()
             }
 
             is ItemListingEvent.ShowFirstTimeSyncSnackbar -> {

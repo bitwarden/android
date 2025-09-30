@@ -7,9 +7,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -24,6 +24,7 @@ import org.junit.Test
 class VaultSettingsScreenTest : BitwardenComposeTest() {
 
     private var onNavigateToImportLoginsCalled = false
+    private var onNavigateToImportItemsCalled = false
     private var onNavigateBackCalled = false
     private var onNavigateToExportVaultCalled = false
     private var onNavigateToFoldersCalled = false
@@ -48,6 +49,7 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
                 onNavigateToExportVault = { onNavigateToExportVaultCalled = true },
                 onNavigateToFolders = { onNavigateToFoldersCalled = true },
                 onNavigateToImportLogins = { onNavigateToImportLoginsCalled = true },
+                onNavigateToImportItems = { onNavigateToImportItemsCalled = true },
             )
         }
     }

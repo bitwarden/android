@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.manager.snackbar
 
-import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import kotlinx.serialization.Serializable
 
 /**
@@ -9,10 +9,16 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 enum class SnackbarRelay {
+    CIPHER_CREATED,
     CIPHER_DELETED,
+    CIPHER_DELETED_SOFT,
     CIPHER_MOVED_TO_ORGANIZATION,
     CIPHER_RESTORED,
+    CIPHER_UPDATED,
     ENVIRONMENT_SAVED,
+    FOLDER_CREATED,
+    FOLDER_DELETED,
+    FOLDER_UPDATED,
     LOGIN_APPROVAL,
     LOGIN_SUCCESS,
     LOGINS_IMPORTED,

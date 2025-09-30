@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">Sobre</string>
     <string name="add_folder">Adicionar pasta</string>
     <string name="add_item">Adicionar Item</string>
     <string name="an_error_has_occurred">Ocorreu um erro.</string>
+    <string name="apply">Aplicar</string>
     <string name="back">Voltar</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Cancelar</string>
     <string name="copy">Copiar</string>
     <string name="copy_password">Copiar senha</string>
     <string name="copy_username">Copiar nome de usuário</string>
     <string name="delete">Excluir</string>
-    <string name="deleting">Excluindo...</string>
+    <string name="deleting">Excluindo…</string>
     <string name="do_you_really_want_to_delete">Você realmente quer excluir? Isto não pode ser desfeito.</string>
     <string name="edit">Editar</string>
     <string name="edit_folder">Editar pasta</string>
@@ -54,7 +54,7 @@
     <string name="password">Senha</string>
     <string name="save">Salvar</string>
     <string name="move">Mover</string>
-    <string name="saving">Salvando...</string>
+    <string name="saving">Salvando…</string>
     <string name="settings">Configurações</string>
     <string name="show">Mostrar</string>
     <string name="item_deleted">Item excluído</string>
@@ -85,7 +85,7 @@
     <string name="edit_card">Editar cartão</string>
     <string name="edit_identity">Editar identidade</string>
     <string name="edit_note">Editar nota</string>
-    <string name="edit_ssh_key">Edit SSH key</string>
+    <string name="edit_ssh_key">Editar chave SSH</string>
     <string name="enter_email_for_hint">Digite o endereço de e-mail da sua conta para receber a dica da sua senha mestra.</string>
     <string name="favorite">Favorito</string>
     <string name="unfavorite">Desfavoritar</string>
@@ -101,15 +101,18 @@
     <string name="one_minute">1 minuto</string>
     <string name="four_hours">4 horas</string>
     <string name="immediately">Imediatamente</string>
-    <string name="vault_timeout_log_out_confirmation_title">Set session timeout to \"Log out\"?</string>
-    <string name="vault_timeout_log_out_confirmation_message">After the timeout period, you will be logged out. You will need to be connected to the internet to log in and access your vault again. Your settings and PIN saved on this device won\'t change.</string>
-    <string name="logging_in">Iniciando Sessão...</string>
+    <string name="vault_timeout_log_out_confirmation_title">Definir tempo limite da sessão para \"Encerrar sessão\"?</string>
+    <string name="vault_timeout_log_out_confirmation_message">Após o período de tempo limite, você será desconectado. Você precisará estar conectado à internet para entrar e acessar o seu cofre novamente. Suas configurações e PIN salvos neste dispositivo não serão alterados.</string>
+    <string name="logging_in">Iniciando sessão…</string>
     <string name="login_to_bitwarden">Iniciar sessão no Bitwarden</string>
     <string name="master_password_confirmation_val_message">A confirmação de senha não está correta.</string>
     <string name="master_password_description">A senha mestra é a senha que você usa para acessar o seu cofre. É muito importante que você não esqueça sua senha mestra. Não há nenhuma maneira de recuperar a senha caso você se esqueça.</string>
     <string name="master_password_hint">Dica de senha mestra (opcional)</string>
     <string name="master_password_hint_description">Uma dica de senha mestra pode ajudá-lo(a) a lembrá-la caso você a esqueça.</string>
-    <string name="master_password_length_val_message_x">A senha mestra deve ter pelo menos %1$s caracteres.</string>
+    <plurals name="master_password_length_val_message_x">
+        <item quantity="one">A senha mestra deve ser pelo menos %d caracteres.</item>
+        <item quantity="other">Master password must be at least %d characters long.</item>
+    </plurals>
     <string name="min_numbers">Números mínimos</string>
     <string name="min_special">Especiais Minímos</string>
     <string name="never">Nunca</string>
@@ -142,18 +145,18 @@
     <string name="select">Selecionar</string>
     <string name="item_details">Detalhes do item</string>
     <string name="item_updated">Item salvo</string>
-    <string name="submitting">Enviando...</string>
-    <string name="syncing">Sincronizando...</string>
+    <string name="submitting">Enviando…</string>
+    <string name="syncing">Sincronizando…</string>
     <string name="syncing_complete">Sincronização completa</string>
     <string name="two_step_login">Login em Duas Etapas</string>
-    <string name="unlock_with_biometrics">Unlock with Biometrics</string>
+    <string name="unlock_with_biometrics">Desbloquear com Biometria</string>
     <string name="unlock_with_pin">Desbloquear com Código PIN</string>
     <string name="verification_code">Código de Verificação</string>
     <string name="view_login">Ver login</string>
     <string name="view_card">Ver cartão</string>
     <string name="view_identity">Ver identidade</string>
     <string name="view_note">Ver nota</string>
-    <string name="view_ssh_key">View SSH key</string>
+    <string name="view_ssh_key">Ver chave SSH</string>
     <string name="web_vault">Cofre Web bitwarden</string>
     <string name="items">Itens</string>
     <string name="items_for_uri">Itens para %1$s</string>
@@ -162,7 +165,7 @@
     <string name="search_for_a_login_or_add_a_new_login">Pesquise por um login ou adicione um novo login</string>
     <string name="disabled">Desativado</string>
     <string name="bitwarden_autofill_service_alert2">A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir do Serviço de Preenchimento Automático do Bitwarden. Saiba mais sobre como usar o Serviço de Preenchimento Automático do Bitwarden navegando até a tela de \"Configurações\".</string>
-    <string name="autofill">Preencher automaticamente</string>
+    <string name="autofill_title">Preenchimento automático</string>
     <string name="autofill_or_view">Você gostaria de preencher essa credencial automaticamente ou vê-la?</string>
     <string name="search">Pesquisar</string>
     <string name="learn_org">Aprenda mais sobre as Organizações</string>
@@ -181,7 +184,7 @@
     <string name="add_new_attachment">Adicionar novo anexo</string>
     <string name="attachments">Anexos</string>
     <string name="unable_to_download_file">Não foi possível baixar o arquivo.</string>
-    <string name="downloading">Baixando...</string>
+    <string name="downloading">Baixando…</string>
     <string name="attachment_large_warning">Este anexo tem %1$s de tamanho. Tem certeza que deseja baixar para o seu dispositivo?</string>
     <string name="authenticator_key">Chave de Autenticação (TOTP)</string>
     <string name="verification_code_totp">Código de Verificação (TOTP)</string>
@@ -264,7 +267,7 @@ A leitura será feita automaticamente.</string>
     <string name="address">Endereço</string>
     <string name="expiration">Vencimento</string>
     <string name="show_website_icons">Mostrar ícones dos sites</string>
-    <string name="show_website_icons_help">Show website icons help</string>
+    <string name="show_website_icons_help">Ajuda sobre exibir ícones de website</string>
     <string name="show_website_icons_description">Mostre uma imagem reconhecível ao lado de cada login.</string>
     <string name="icons_url">URL do Servidor de Ícones</string>
     <string name="vault_is_locked">O cofre está trancado</string>
@@ -286,7 +289,7 @@ A leitura será feita automaticamente.</string>
     <string name="new_uri">Novo URI</string>
     <string name="add_website">Adicionar site</string>
     <string name="base_domain">Domínio de base</string>
-    <string name="default_text">Padrão</string>
+    <string name="default_text">Padrão (%1$s)</string>
     <string name="exact">Exato</string>
     <string name="host">Servidor</string>
     <string name="reg_ex">Expressão regular</string>
@@ -308,7 +311,10 @@ A leitura será feita automaticamente.</string>
     <string name="personal_details">Dados Pessoais</string>
     <string name="contact_info">Informações de Contato</string>
     <string name="check_password_for_data_breaches">Procurar senha em vazamento de dados</string>
-    <string name="password_exposed">Esta senha foi exposta %1$s vez(es) em brechas de dados. Você deve alterá-la.</string>
+    <plurals name="password_exposed">
+        <item quantity="one">Esta senha foi exposta %d vez em violações de dados. Você deve alterá-la.</item>
+        <item quantity="other">This password has been exposed %d times in data breaches. You should change it.</item>
+    </plurals>
     <string name="password_safe">Esta senha não foi encontrada em brechas de dados conhecidas. Deve ser segura para se usar.</string>
     <string name="identity_name">Nome de Identidade</string>
     <string name="value">Valor</string>
@@ -356,7 +362,7 @@ A leitura será feita automaticamente.</string>
     <string name="clear_clipboard">Limpar a Área de Transferência</string>
     <string name="clear_clipboard_description">Limpar automaticamente valores copiados da sua área de transferência.</string>
     <string name="default_uri_match_detection">Detecção de Correspondência de URI Padrão</string>
-    <string name="default_uri_match_detection_description">Escolha a maneira padrão pela qual a detecção de correspondência de URI é manipulada para credenciais ao executar ações como preenchimento automático.</string>
+    <string name="default_uri_match_detection_description">A detecção de correspondência de URI controla como o Bitwarden identifica sugestões de autopreenchimento.</string>
     <string name="theme">Tema</string>
     <string name="theme_description">Altere o tema de cor do aplicativo.</string>
     <string name="copy_notes">Copiar Nota</string>
@@ -364,8 +370,8 @@ A leitura será feita automaticamente.</string>
     <string name="exit_confirmation">Você tem certeza que deseja sair do Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Exigir senha mestra ao reiniciar o app?</string>
     <string name="pin_require_master_password_restart">Você quer exigir o desbloqueio com a sua senha mestra quando o aplicativo for reiniciado?</string>
-    <string name="ask_to_add_login">Pedir para adicionar uma conta</string>
-    <string name="ask_to_add_login_description">Pedir para adicionar um item se um não for encontrado no seu cofre.</string>
+    <string name="ask_to_add_item">Pedir para adicionar item</string>
+    <string name="ask_to_add_item_description">Pedir para adicionar um item se ele não for encontrado no seu cofre.</string>
     <string name="on_restart">Ao reiniciar o App</string>
     <string name="capitalize">Iniciais em Maiúsculas</string>
     <string name="include_number">Incluir número</string>
@@ -392,10 +398,10 @@ A leitura será feita automaticamente.</string>
     <string name="save_attachment_success">Anexo salvo com sucesso</string>
     <string name="autofill_tile_accessibility_required">Por favor, habilite \"Serviço de Acessibilidade de Autopreenchimento\" nas configurações do Bitwarden para usar o bloco de Autopreenchimento.</string>
     <string name="autofill_tile_uri_not_found">Nenhum campo de senha detectado</string>
-    <string name="soft_deleting">Enviando para a lixeira...</string>
+    <string name="soft_deleting">Enviando para a lixeira…</string>
     <string name="item_soft_deleted">O item foi enviado para a lixeira.</string>
     <string name="restore">Restaurar</string>
-    <string name="restoring">Restaurando...</string>
+    <string name="restoring">Restaurando…</string>
     <string name="item_restored">O item foi restaurado</string>
     <string name="trash">Lixeira</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Você realmente quer excluir permanentemente? Isso não pode ser desfeito.</string>
@@ -483,14 +489,12 @@ A leitura será feita automaticamente.</string>
     <string name="password_prompt">Nova solicitação de senha mestra</string>
     <string name="password_confirmation">Confirmação de senha mestra</string>
     <string name="password_confirmation_desc">Esta ação é protegida, para continuar por favor reinsira a sua senha mestra para verificar a sua identidade.</string>
-    <string name="captcha_failed">Captcha falhou. Por favor, tente novamente.</string>
     <string name="update_master_password">Atualizar senha mestra</string>
     <string name="update_master_password_warning">A sua senha mestra foi alterada recentemente por um administrador na sua organização. Para acessar o cofre, você precisa atualizar sua senha mestra agora. O processo desconectará você da sessão atual, exigindo que você inicie a sessão novamente. Sessões ativas em outros dispositivos podem continuar ativas por até uma hora.</string>
     <string name="updating_password">Atualizando senha</string>
     <string name="remove_master_password">Remover senha mestra</string>
     <string name="leave_organization">Sair da organização</string>
     <string name="leave_organization_name">Sair de %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Autenticar WebAuthn</string>
     <string name="fido2_return_to_app">Voltar ao Aplicativo</string>
     <string name="reset_password_auto_enroll_invite_warning">Esta organização possui uma política empresarial que irá inscrevê-lo automaticamente na redefinição de senha. A inscrição permitirá que os administradores da organização alterem sua senha mestra.</string>
@@ -568,12 +572,6 @@ selecione Adicionar TOTP para armazenar a chave de forma segura</string>
     <string name="api_key">Chave API</string>
     <string name="api_key_required_parenthesis">Chave de API (obrigatória)</string>
     <string name="service">Serviço</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">Token de acesso API (obrigatório)</string>
     <string name="api_access_token">Token de Acesso à API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Tem certeza que deseja substituir o usuário atual?</string>
@@ -696,7 +694,7 @@ Você deseja mudar para esta conta?</string>
     <string name="launch_web_authn">Iniciar WebAuthn</string>
     <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Houve um erro ao iniciar a autenticação de dois fatores WebAuthn</string>
     <string name="self_hosted_server_url">URL do servidor auto-hospedado</string>
-    <string name="credential_operation_failed_because_user_could_not_be_verified">Credential operation failed because user could not be verified.</string>
+    <string name="credential_operation_failed_because_user_could_not_be_verified">A operação de credencial falhou porque o usuário não pôde ser verificado.</string>
     <string name="passkey_operation_failed_because_user_could_not_be_verified">A operação da senha falhou porque o usuário não pôde ser verificado.</string>
     <string name="user_verification_direction">Verificação de usuário</string>
     <string name="create_account_on">Criar conta em</string>
@@ -749,7 +747,10 @@ Você deseja mudar para esta conta?</string>
     <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">O Bitwarden não consegue recuperar uma senha mestra perdida ou esquecida.</string>
     <string name="choose_your_master_password">Escolha sua senha mestra</string>
     <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Escolha uma senha única e forte para manter suas informações seguras.</string>
-    <string name="minimum_characters">%1$s caracteres</string>
+    <plurals name="minimum_characters">
+        <item quantity="one">%d caracteres</item>
+        <item quantity="other">%d characters</item>
+    </plurals>
     <string name="expired_link">Link expirado</string>
     <string name="please_restart_registration_or_try_logging_in">Por favor, reinicie o registro ou tente iniciar uma sessão. Você pode já ter uma conta.</string>
     <string name="restart_registration">Reiniciar registro</string>
@@ -802,7 +803,7 @@ Você deseja mudar para esta conta?</string>
     <string name="need_help_check_out_import_help">Precisa de ajuda? Confira a ajuda de importação.</string>
     <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Salve o arquivo exportado em algum lugar no seu computador que você encontrar facilmente.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Este não é um servidor do Bitwarden reconhecido. Você pode precisar verificar com o seu provedor ou atualizar o seu servidor.</string>
-    <string name="syncing_logins_loading_message">Syncing logins...</string>
+    <string name="syncing_logins_loading_message">Sincronizando logins…</string>
     <string name="download_the_browser_extension">Baixar a extensão do navegador</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Vá para bitwarden.com/download para integrar o Bitwarden em seu navegador favorito para uma experiência perfeita.</string>
     <string name="use_the_web_app">Usar o aplicativo web</string>
@@ -850,7 +851,6 @@ Você deseja mudar para esta conta?</string>
     <string name="need_some_inspiration">"Precisa de alguma inspiração?"</string>
     <string name="check_out_the_passphrase_generator">"Confira o gerador de frase secreta"</string>
     <string name="we_couldnt_verify_the_servers_certificate">Não foi possível verificar o certificado do servidor. As configurações da cadeia de certificados ou de proxy no seu dispositivo ou no seu servidor do Bitwarden podem não estar configuradas corretamente.</string>
-    <string name="review_flow_launched">Fluxo de revisão iniciado!</string>
     <string name="copy_private_key">Copiar chave privada</string>
     <string name="login_credentials">Credenciais de Acesso</string>
     <string name="autofill_options">Opções de Preenchimento Automático</string>
@@ -897,12 +897,12 @@ Você deseja mudar para esta conta?</string>
     <string name="passkey_operation_failed_because_the_request_is_invalid">A operação da chave de acesso falhou porque o pedido é inválido.</string>
     <string name="passkey_operation_failed_because_no_item_was_selected">A operação da chave de acesso falhou porque não foi selecionado nenhum item.</string>
     <string name="passkey_operation_failed_because_the_request_is_unsupported">A operação com a chave de acesso falhou porque a solicitação não é compatível.</string>
-    <string name="password_operation_failed_because_the_selected_item_does_not_exist">Password operation failed because the selected item does not exist.</string>
-    <string name="password_operation_failed_because_no_item_was_selected">Password operation failed because no item was selected.</string>
-    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">Credential operation failed because user verification attempts exceeded.</string>
-    <string name="credential_operation_failed_because_user_is_locked_out">Credential operation failed because user is locked out.</string>
-    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">Credential operation failed because the selected item does not exist.</string>
-    <string name="credential_operation_failed_because_user_verification_was_cancelled">Credential operation failed because user verification was cancelled.</string>
+    <string name="password_operation_failed_because_the_selected_item_does_not_exist">A operação de senha falhou porque o item selecionado não existe.</string>
+    <string name="password_operation_failed_because_no_item_was_selected">A operação de senha falhou porque nenhum item foi selecionado.</string>
+    <string name="credential_operation_failed_because_user_verification_attempts_exceeded">A operação de credenciais falhou porque o número de tentativas de verificação do usuário foi excedido.</string>
+    <string name="credential_operation_failed_because_user_is_locked_out">A operação de credenciais falhou porque o usuário está bloqueado.</string>
+    <string name="credential_operation_failed_because_the_selected_item_does_not_exist">A operação de credencial falhou porque o item selecionado não existe.</string>
+    <string name="credential_operation_failed_because_user_verification_was_cancelled">A operação de credenciais falhou porque a verificação do usuário foi cancelada.</string>
     <string name="self_host_server_url">URL do servidor auto-hospedado</string>
     <string name="use_brave_autofill_integration">Usar a integração do autopreenchimento do Brave</string>
     <string name="use_chrome_autofill_integration">Usar integração com o preenchimento automático do Chrome</string>
@@ -912,7 +912,6 @@ Você deseja mudar para esta conta?</string>
     <string name="no_folder">Nenhuma pasta</string>
     <string name="show_less">Mostrar menos</string>
     <string name="add_field">Adicionar campo</string>
-    <string name="x_ellipses">%s...</string>
     <string name="share_error_details">Compartilhar detalhes do erro</string>
     <string name="flight_recorder">Gravador de voo</string>
     <string name="flight_recorder_help">Ajuda do gravador de voo</string>
@@ -983,8 +982,8 @@ Você deseja mudar para esta conta?</string>
     <string name="are_you_sure_you_want_to_stop_trusting_x">Tem certeza de que deseja parar de confiar em %s?</string>
     <string name="installed_apps">Apps instalados</string>
     <string name="delete_x">Excluir %s</string>
-    <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
-    <string name="decryption_error">Decryption error</string>
+    <string name="failed_to_decrypt_cipher_contact_support">Falha ao descriptografar a cifra. Entre em contato com o suporte.</string>
+    <string name="decryption_error">Erro ao descriptografar</string>
     <string name="add_item_rotation">Adicionar Rotação do Item</string>
     <string name="scan_a_qr_code">Escanear QR code</string>
     <string name="cannot_add_authenticator_key">Não foi possível adicionar chave de autenticação?</string>
@@ -999,7 +998,10 @@ Você deseja mudar para esta conta?</string>
     <string name="advanced">Avançado</string>
     <string name="collapse_advanced_options">Recolher opções avançadas</string>
     <string name="number_of_digits">Número de dígitos</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d segundos</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d segundos</item>
+    </plurals>
     <string name="item_saved">Item salvo</string>
     <string name="information">Informação</string>
     <string name="otp_type">Tipo de OTP</string>
@@ -1040,15 +1042,14 @@ Você deseja mudar para esta conta?</string>
     <string name="download_bitwarden_card_message">Armazene todos os seus logins e sincronize códigos de verificação diretamente com o app Autenticador.</string>
     <string name="download_now">Baixe agora</string>
     <string name="sync_with_bitwarden_app">Sincronizar com o aplicativo Bitwarden</string>
-    <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
+    <string name="learn_more_link"><annotation link="learnMore">Saber mais</annotation></string>
     <string name="shared_codes_error">Não é possível sincronizar os códigos do aplicativo Bitwarden. Certifique-se de que ambos os aplicativos estão atualizados. Você ainda pode acessar os códigos existentes no aplicativo Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sincronizar com o aplicativo Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Permitir a sincronização do app Autenticador em configurações para ver todos os seus códigos de verificação aqui.</string>
     <string name="take_me_to_app_settings">Me leve para as configurações do aplicativo</string>
     <string name="something_went_wrong">Algo deu errado</string>
     <string name="please_try_again">Por favor, tente novamente</string>
-    <string name="copy_to_bitwarden_vault">Copy to Bitwarden vault</string>
+    <string name="copy_to_bitwarden_vault">Copiar para o cofre do Bitwarden</string>
     <string name="default_save_option">Opção padrão de salvar</string>
     <string name="save_to_bitwarden">Salvar no Bitwarden</string>
     <string name="save_here">Salvar aqui</string>
@@ -1058,16 +1059,46 @@ Você deseja mudar para esta conta?</string>
     <string name="choose_save_location_message">Salve esta chave de autenticador aqui, ou adicione-a a um login no seu aplicativo Bitwarden.</string>
     <string name="save_option_as_default">Salvar opção como padrão</string>
     <string name="account_synced_from_bitwarden_app">Conta sincronizada do aplicativo Bitwarden</string>
-    <string name="local_codes">Local codes (%1$d)</string>
+    <string name="local_codes">Códigos locais (%1$d)</string>
     <string name="required_information_missing">Informações necessárias faltando</string>
     <string name="required_information_missing_message">"As informações necessárias estão faltando (ex.: 'serviços' ou 'segredo'). Verifique o seu arquivo e tente novamente. Visite bitwarden.com/help para obter suporte"</string>
     <string name="file_could_not_be_processed">"O arquivo não pode ser processado"</string>
     <string name="file_could_not_be_processed_message">"O arquivo não pôde ser processado. Certifique-se de que é um JSON válido e tente novamente. Precisa de ajuda? Visite bitwarden.com/help"</string>
     <string name="get_help">Obter Ajuda</string>
-    <string name="expand_advanced_options">Expand advanced options</string>
-    <string name="local_items_are_expanded_click_to_collapse">Local items are expanded, click to collapse.</string>
-    <string name="local_items_are_collapsed_click_to_expand">Local items are collapsed, click to expand.</string>
-    <string name="items_expanded_click_to_collapse">Items are expanded, click to collapse.</string>
-    <string name="items_are_collapsed_click_to_expand">Items are collapsed, click to expand.</string>
-    <string name="select_a_card_for_x">Select a card for %s</string>
+    <string name="expand_advanced_options">Expandir opções avançadas</string>
+    <string name="local_items_are_expanded_click_to_collapse">Itens locais expandidos, clique para recolher.</string>
+    <string name="local_items_are_collapsed_click_to_expand">Os itens locais estão recolhidos, clique para expandir.</string>
+    <string name="items_expanded_click_to_collapse">Itens expandidos, clique para recolher.</string>
+    <string name="items_are_collapsed_click_to_expand">Itens estão recolhidos, clique para expandir.</string>
+    <string name="error_cannot_decrypt">[erro: não foi possível descriptografar]</string>
+    <string name="copy_error_report">Copiar relatório de erros</string>
+    <string name="bitwarden_could_not_decrypt_this_vault_item_description_long">O Bitwarden não pôde descriptografar este item do cofre. Copie e compartilhe este relatório de erro com o suporte ao cliente para evitar perda de dados adicionais.</string>
+    <plurals name="bitwarden_could_not_decrypt_x_vault_item_copy_and_share_description_long">
+        <item quantity="one">Bitwarden could not decrypt %1$d vault item. Copy and share this error report with customer success to avoid additional data loss.</item>
+        <item quantity="other">Bitwarden could not decrypt %1$d vault items. Copy and share this error report with customer success to avoid additional data loss.</item>
+    </plurals>
+    <string name="select_a_card_for_x">Selecione um cartão para %s</string>
+    <string name="advanced_options">Opções avançadas</string>
+    <string name="more_about_match_detection"><annotation link="moreAboutMatchDetection">Mais sobre a detecção de correspondências</annotation></string>
+    <string name="keep_your_credential_secure">Mantenha suas credenciais seguras</string>
+    <string name="learn_more_about_how_to_keep_credentirals_secure">Saiba mais sobre como manter as credenciais seguras ao usar \"%1$s\".</string>
+    <string name="are_you_sure_you_want_to_use">Tem certeza que deseja usar \"%1$s\"?</string>
+    <string name="default_uri_match_detection_description_advanced_options_incorrectly">A detecção de correspondência de URI controla como o Bitwarden identifica sugestões de autopreenchimento.\n<annotation emphasis="bold">Aviso:</annotation> \"Expressão regular\" é uma opção avançada com maior risco de expor credenciais se usada incorretamente.</string>
+    <string name="default_uri_match_detection_description_advanced_options">A detecção de correspondência URI controla como o Bitwarden identifica sugestões de autopreenchimento.\n<annotation emphasis="bold">Aviso:</annotation> \"Inicia com\" é uma opção avançada com maior risco de expor as credenciais.</string>
+    <string name="advanced_option_with_increased_risk_of_exposing_credentials">\"Começa com\" é uma opção avançada com maior risco de expor as credenciais.</string>
+    <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">\"Expressão regular\" é uma opção avançada com alto risco de expor credenciais se usada incorretamente.</string>
+    <string name="credential_import_was_cancelled">Importação de credenciais foi cancelada. Nenhuma credencial foi importada.</string>
+    <string name="import_cancelled">Importação cancelada</string>
+    <string name="your_items_have_been_successfully_imported">Seus itens foram importados com sucesso e estão visíveis no seu cofre.</string>
+    <string name="import_saved_items">Importar itens salvos</string>
+    <string name="import_your_credentials_from_another_password_manager">Importe suas credenciais, incluindo senhas, cartões de crédito e qualquer informação de identidade pessoal de outro gerente de senha.</string>
+    <string name="return_to_your_vault">Retornar para o cofre</string>
+    <string name="select_a_credential_manager_to_import_items_from">Selecione um gerenciador de credenciais para importar itens.</string>
+    <string name="no_items_imported">Nenhum item importado</string>
+    <string name="no_items_received_from_the_selected_credential_manager">Nenhum item recebido do gerenciador de credenciais selecionado.</string>
+    <string name="vault_sync_failed">A sincronização do cofre falhou</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Seus itens foram importados com sucesso, mas não foi possível sincronizar o cofre. Itens importados não serão visíveis no seu cofre até que a sincronização seja executada.</string>
+    <string name="there_was_a_problem_importing_your_items">Houve um problema ao importar seus itens. Tente novamente. Se o problema persistir, contate o suporte.</string>
+    <string name="importing_items">Importando itens…</string>
+    <string name="uploading_items">Enviando itens…</string>
 </resources>

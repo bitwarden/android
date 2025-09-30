@@ -14,8 +14,10 @@ import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UriMatchTypeJson
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.Card
+import com.bitwarden.vault.CardListView
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherPermissions
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -26,6 +28,7 @@ import com.bitwarden.vault.Field
 import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.Identity
 import com.bitwarden.vault.Login
+import com.bitwarden.vault.LoginListView
 import com.bitwarden.vault.LoginUri
 import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.SecureNote
@@ -103,6 +106,7 @@ fun Cipher.toEncryptedNetworkCipherResponse(
         shouldViewPassword = viewPassword,
         key = key,
         encryptedFor = encryptedFor,
+        archivedDate = archivedDate?.let { ZonedDateTime.ofInstant(it, ZoneOffset.UTC) },
     )
 
 /**
@@ -386,6 +390,7 @@ fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
         creationDate = creationDate.toInstant(),
         deletedDate = deletedDate?.toInstant(),
         revisionDate = revisionDate.toInstant(),
+        archivedDate = archivedDate?.toInstant(),
     )
 
 /**
@@ -651,3 +656,55 @@ fun EncryptionContext.toEncryptedNetworkCipher(): CipherJsonRequest =
  */
 fun EncryptionContext.toEncryptedNetworkCipherResponse(): SyncResponseJson.Cipher =
     cipher.toEncryptedNetworkCipherResponse(encryptedFor = encryptedFor)
+
+/**
+ * Converts a Bitwarden SDK [Cipher] object to a corresponding
+ * [CipherListView] object with modified field to represent a decryption error instance.
+ * This allows reuse of existing logic for filtering and grouping ciphers to construct
+ * the sections in the vault list.
+ */
+fun Cipher.toFailureCipherListView(): CipherListView =
+    CipherListView(
+        id = id,
+        organizationId = organizationId,
+        folderId = folderId,
+        collectionIds = collectionIds,
+        key = key,
+        name = name,
+        subtitle = "",
+        type = when (type) {
+            CipherType.LOGIN -> CipherListViewType.Login(
+                v1 = LoginListView(
+                    fido2Credentials = null,
+                    hasFido2 = false,
+                    username = null,
+                    totp = null,
+                    uris = null,
+                ),
+            )
+
+            CipherType.SECURE_NOTE -> CipherListViewType.SecureNote
+            CipherType.CARD -> CipherListViewType.Card(
+                CardListView(
+                    brand = null,
+                ),
+            )
+
+            CipherType.IDENTITY -> CipherListViewType.Identity
+            CipherType.SSH_KEY -> CipherListViewType.SshKey
+        },
+        favorite = favorite,
+        reprompt = reprompt,
+        organizationUseTotp = organizationUseTotp,
+        edit = edit,
+        permissions = permissions,
+        viewPassword = viewPassword,
+        attachments = 0.toUInt(),
+        hasOldAttachments = false,
+        localData = null,
+        creationDate = creationDate,
+        deletedDate = deletedDate,
+        revisionDate = revisionDate,
+        copyableFields = emptyList(),
+        archivedDate = archivedDate,
+    )
