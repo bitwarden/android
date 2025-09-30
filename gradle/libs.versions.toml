@@ -33,6 +33,7 @@ androidxWork = "2.10.5"
 bitwardenSdk = "1.0.0-3175-c9758478"
 crashlytics = "3.0.6"
 detekt = "1.23.8"
+espressoCore = "3.6.1"
 firebaseBom = "34.2.0"
 glide = "1.0.0-beta01"
 googleGuava = "33.4.8-jre"
@@ -42,6 +43,7 @@ googleServices = "4.4.3"
 googleReview = "2.0.2"
 hilt = "2.57.1"
 junit5 = "5.13.4"
+junitKtx = "1.2.1"
 jvmTarget = "21"
 # kotlin and ksp **must** use compatible versions, do not update either without the other.
 kotlin = "2.2.20"
@@ -58,6 +60,7 @@ sonarqube = "6.2.0.5505"
 testng = "7.11.0"
 timber = "5.0.1"
 turbine = "1.2.1"
+uiautomator = "2.3.0"
 zxing = "3.5.3"
 
 [libraries]
@@ -86,7 +89,9 @@ androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "androidxCredentials" }
 androidx-credentials-providerevents = { module = "androidx.credentials.providerevents:providerevents", version.ref = "androidxCredentialsProviderEvents" }
 androidx-credentials-providerevents-play-services = { module = "androidx.credentials.providerevents:providerevents-play-services", version.ref = "androidxCredentialsProviderEvents" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
@@ -96,6 +101,8 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidxRoom" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "androidxSecurityCrypto" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxSplash" }
+androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
+androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
 bitwarden-sdk = { module = "com.bitwarden:sdk-android", version.ref = "bitwardenSdk" }
 bumptech-glide = { module = "com.github.bumptech.glide:compose", version.ref = "glide" }

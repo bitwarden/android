@@ -1,16 +1,90 @@
 name: Test Device
 
 on:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      apk_filename:
+        type: string
+        description: "Filename of the APK file to test"
+        default: com.x8bit.bitwarden.apk
+      test_apk_filename:
+        type: string
+        description: "Filename of the test APK file to test"
+        default: com.x8bit.bitwarden-test.apk
 
+env:
+  _APK_PATH: artifacts/${{ inputs.apk_filename }}
+  _TEST_APK_PATH: artifacts/${{ inputs.test_apk_filename }}
+
+# TODO confirm if these permissions are needed
 permissions:
   contents: read
+  actions: read
+  checks: write
+  id-token: write
 
 jobs:
-  test:
-    name: Test Device
+  test-device:
+    name: Check main build against real devices
     runs-on: ubuntu-24.04
 
     steps:
-    - name: Placeholder step
-      run: echo "Placeholder workflow step"
+      - name: Log in to Azure
+        uses: bitwarden/gh-actions/azure-login@main
+        with:
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
+
+      - name: Get E2E secrets from Azure
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: gh-android
+          secrets: "SAUCE-LABS-USERNAME,SAUCE-LABS-ACCESS-KEY"
+        id: get-kv-secrets
+
+      - name: Log out from Azure
+        uses: bitwarden/gh-actions/azure-logout@main
+
+      - name: Download release APK artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: ${{ inputs.apk_filename }}
+          path: artifacts
+
+      - name: Download test APK artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: ${{ inputs.test_apk_filename }}
+          path: artifacts
+
+      - name: Install saucectl
+        run: |
+          npm i -g saucectl
+
+      - name: Upload APK to SauceLabs storage
+        run: |
+          saucectl storage upload $_APK_PATH
+        env:
+          SAUCE_USERNAME: ${{ steps.get-kv-secrets.outputs.SAUCE-LABS-USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ steps.get-kv-secrets.outputs.SAUCE-LABS-ACCESS-KEY }}
+
+      - name: Upload test APK to SauceLabs storage
+        env:
+          SAUCE_USERNAME: ${{ steps.get-kv-secrets.outputs.SAUCE-LABS-USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ steps.get-kv-secrets.outputs.SAUCE-LABS-ACCESS-KEY }}
+        run: |
+          saucectl storage upload $_TEST_APK_PATH
+
+      - name: Run tests on SauceLabs
+        run: saucectl run --config .sauce/config.yml
+        env:
+          SAUCE_USERNAME: ${{ steps.get-kv-secrets.outputs.SAUCE-LABS-USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ steps.get-kv-secrets.outputs.SAUCE-LABS-ACCESS-KEY }}
+
+      - name: Upload SauceLabs test report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: saucectl-report
+          path: saucectl-report.xml

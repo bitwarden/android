@@ -121,3 +121,23 @@
 -dontwarn com.google.errorprone.annotations.CheckReturnValue
 -dontwarn com.google.errorprone.annotations.Immutable
 -dontwarn com.google.errorprone.annotations.RestrictedApi
+
+################################################################################
+# AndroidX Test Runner
+################################################################################
+
+# Keep the test runner classes
+-keep class androidx.test.runner.** { *; }
+-keep class androidx.test.internal.runner.** { *; }
+-keep class androidx.test.ext.junit.** { *; }
+-keep class androidx.test.ext.** { *; }
+-keep class androidx.test.** { *; }
+
+# Keep Compose test classes
+-keep class androidx.compose.ui.test.** { *; }
+-keep class androidx.compose.ui.test.junit4.** { *; }
+
+# Keep Kotlin standard library classes
+-keep class kotlin.** { *; }
+-keep class kotlinx.** { *; }
+-keep class kotlin.io.** { *; }

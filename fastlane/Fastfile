@@ -69,6 +69,18 @@ platform :android do
     )
   end
 
+  desc "Assemble test APK"
+  lane :assembleTestApk do |options|
+    buildAndSignBitwarden(
+      taskName: "assembleAndroidTest",
+      buildType: "Release",
+      storeFile: options[:storeFile],
+      storePassword: options[:storePassword],
+      keyAlias: options[:keyAlias],
+      keyPassword: options[:keyPassword],
+    )
+  end
+
   desc "Assemble Play Store release APK"
   lane :assemblePlayStoreBetaApk do |options|
     buildAndSignBitwarden(
