@@ -3,7 +3,7 @@ name: Publish Password Manager and Authenticator GitHub Release as newest
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 * * * *' # Every hour on the hour
+    - cron: '0 * * * 1-5' # Every hour on the hour on weekdays
 
 permissions:
   contents: write
