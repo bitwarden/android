@@ -101,7 +101,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterCredentialResult
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
@@ -262,8 +262,16 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     private val mockGetPublicKeyCredentialOption = mockk<GetPublicKeyCredentialOption> {
         every { requestJson } returns "mockRequestJson"
     }
+    private val mockCreatePublicKeyCredentialOption = mockk<CreatePublicKeyCredentialRequest> {
+        every { requestJson } returns "mockRequestJson"
+        every { origin } returns "mockOrigin"
+    }
     private val mockProviderGetCredentialRequest = mockk<ProviderGetCredentialRequest> {
         every { credentialOptions } returns listOf(mockGetPublicKeyCredentialOption)
+        every { callingAppInfo } returns mockCallingAppInfo
+    }
+    private val mockProviderCreateCredentialRequest = mockk<ProviderCreateCredentialRequest> {
+        every { callingRequest } returns mockCreatePublicKeyCredentialOption
         every { callingAppInfo } returns mockCallingAppInfo
     }
     private val mockBeginGetPublicKeyCredentialOption = mockk<BeginGetPublicKeyCredentialOption> {
@@ -301,6 +309,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every {
             ProviderGetCredentialRequest.fromBundle(any())
         } returns mockProviderGetCredentialRequest
+        every {
+            ProviderCreateCredentialRequest.fromBundle(any())
+        } returns mockProviderCreateCredentialRequest
         every {
             BeginGetCredentialRequest.fromBundle(any())
         } returns mockBeginGetCredentialRequest
@@ -1008,10 +1019,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             setupMockUri()
             val cipherListView = createMockCipherListView(number = 1)
-            val mockPasswordRequest = createMockCreateCredentialRequest(number = 1)
+            val cipherView = createMockCipherView(number = 1, password = null)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
-                    createCredentialRequest = mockPasswordRequest,
+                    createCredentialRequest = createMockCreateCredentialRequest(number = 1),
                 )
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
@@ -1019,18 +1030,21 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         number = 1,
                         successes = listOf(cipherListView),
                     ),
-                    folderViewList = listOf(),
-                    collectionViewList = listOf(),
-                    sendViewList = listOf(),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
                 ),
             )
 
             coEvery {
                 bitwardenCredentialManager.registerPasswordCredential(
-                    any(),
-                    any(),
+                    createPasswordRequest = any(),
+                    selectedCipherView = any(),
                 )
             } returns PasswordRegisterResult.Success
+            coEvery {
+                vaultRepository.getCipher("mockId-1")
+            } returns GetCipherResult.Success(cipherView)
 
             setupPasswordCreateRequest()
             val viewModel = createVaultItemListingViewModel()
@@ -1043,10 +1057,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            coVerify {
+            coVerify(exactly = 1) {
                 bitwardenCredentialManager.registerPasswordCredential(
                     createPasswordRequest = any(),
-                    selectedCipherView = any(),
+                    selectedCipherView = cipherView,
                 )
             }
         }
@@ -3309,7 +3323,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `Fido2RegisterCredentialResult Error should show toast and emit CompleteFido2Registration result`() =
+    fun `Fido2RegisterCredentialResult Error should show toast and emit CompleteCredentialRegistration result`() =
         runTest {
             val mockResult = Fido2RegisterCredentialResult.Error.InternalError
 
@@ -3322,8 +3336,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultItemListingEvent.CompleteFido2Registration(
-                        RegisterFido2CredentialResult.Error(
+                    VaultItemListingEvent.CompleteCredentialRegistration(
+                        RegisterCredentialResult.Error(
                             BitwardenString.passkey_registration_failed_due_to_an_internal_error.asText(),
                         ),
                     ),
@@ -3337,7 +3351,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `Fido2RegisterCredentialResult Success should show toast and emit CompleteFido2Registration result`() =
+    fun `Fido2RegisterCredentialResult Success should show toast and emit CompleteCredentialRegistration result`() =
         runTest {
             val mockResult = Fido2RegisterCredentialResult.Success(
                 responseJson = "mockResponse",
@@ -3352,8 +3366,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultItemListingEvent.CompleteFido2Registration(
-                        RegisterFido2CredentialResult.Success(
+                    VaultItemListingEvent.CompleteCredentialRegistration(
+                        RegisterCredentialResult.SuccessFido2(
                             responseJson = "mockResponse",
                         ),
                     ),
@@ -3383,8 +3397,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 assertNull(viewModel.stateFlow.value.dialogState)
                 assertEquals(
-                    VaultItemListingEvent.CompleteFido2Registration(
-                        result = RegisterFido2CredentialResult.Error(
+                    VaultItemListingEvent.CompleteCredentialRegistration(
+                        result = RegisterCredentialResult.Error(
                             "".asText(),
                         ),
                     ),
@@ -4236,7 +4250,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `UserVerificationCancelled should clear dialog state, set isUserVerified to false, and emit CompleteFido2Registration with cancelled result`() =
+    fun `UserVerificationCancelled should clear dialog state, set isUserVerified to false, and emit CompleteCredentialRegistration with cancelled result`() =
         runTest {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
@@ -4250,8 +4264,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertNull(viewModel.stateFlow.value.dialogState)
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultItemListingEvent.CompleteFido2Registration(
-                        result = RegisterFido2CredentialResult.Cancelled,
+                    VaultItemListingEvent.CompleteCredentialRegistration(
+                        result = RegisterCredentialResult.Cancelled,
                     ),
                     awaitItem(),
                 )
@@ -5180,6 +5194,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `ConfirmOverwriteExistingPasswordClick should display CredentialManagerOperationFail when getSelectedCipher returns null`() =
         runTest {
             setupMockUri()
+            val cipherListView = createMockCipherListView(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
                     createCredentialRequest = createMockCreateCredentialRequest(number = 1),
@@ -5188,18 +5203,16 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 data = VaultData(
                     decryptCipherListResult = createMockDecryptCipherListResult(
                         number = 1,
-                        successes = listOf(
-                            createMockCipherListView(
-                                number = 1,
-                            ),
-                        ),
+                        successes = listOf(cipherListView),
                     ),
                     folderViewList = listOf(),
                     collectionViewList = listOf(),
                     sendViewList = listOf(),
                 ),
             )
-            setupPasswordCreateRequest()
+            coEvery {
+                vaultRepository.getCipher("invalidId")
+            } returns GetCipherResult.CipherNotFound
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
                 VaultItemListingsAction.ConfirmOverwriteExistingPasswordClick(
@@ -5210,7 +5223,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
                     BitwardenString.an_error_has_occurred.asText(),
-                    BitwardenString.password_operation_failed_because_the_selected_item_does_not_exist
+                    BitwardenString
+                        .credential_operation_failed_because_the_selected_item_does_not_exist
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,

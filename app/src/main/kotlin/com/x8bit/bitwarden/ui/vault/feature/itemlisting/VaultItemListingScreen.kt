@@ -180,12 +180,8 @@ fun VaultItemListingScreen(
                 onNavigateToVaultItemListing(VaultItemListingType.Collection(event.collectionId))
             }
 
-            is VaultItemListingEvent.CompleteFido2Registration -> {
-                credentialProviderCompletionManager.completeFido2Registration(event.result)
-            }
-
-            is VaultItemListingEvent.CompletePasswordRegistration -> {
-                credentialProviderCompletionManager.completePasswordRegistration(event.result)
+            is VaultItemListingEvent.CompleteCredentialRegistration -> {
+                credentialProviderCompletionManager.completeCredentialRegistration(event.result)
             }
 
             is VaultItemListingEvent.CredentialManagerUserVerification -> {

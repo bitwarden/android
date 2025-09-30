@@ -82,8 +82,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordCredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterCredentialResult
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
@@ -414,14 +413,8 @@ class VaultItemListingViewModel @Inject constructor(
     ) {
         clearDialogState()
         viewModelScope.launch {
-            getCipherViewOrNull(action.cipherViewId)
+            getCipherViewForCredentialOrNull(action.cipherViewId)
                 ?.let { registerPasswordCredential(it) }
-                ?: run {
-                    showCredentialManagerErrorDialog(
-                        BitwardenString.password_operation_failed_because_the_selected_item_does_not_exist
-                            .asText(),
-                    )
-                }
         }
     }
 
@@ -452,8 +445,8 @@ class VaultItemListingViewModel @Inject constructor(
         state.createCredentialRequest
             ?.let {
                 sendEvent(
-                    VaultItemListingEvent.CompleteFido2Registration(
-                        result = RegisterFido2CredentialResult.Cancelled,
+                    VaultItemListingEvent.CompleteCredentialRegistration(
+                        result = RegisterCredentialResult.Cancelled,
                     ),
                 )
             }
@@ -1457,8 +1450,8 @@ class VaultItemListingViewModel @Inject constructor(
         when {
             state.createCredentialRequest != null -> {
                 sendEvent(
-                    VaultItemListingEvent.CompleteFido2Registration(
-                        result = RegisterFido2CredentialResult.Error(action.message),
+                    VaultItemListingEvent.CompleteCredentialRegistration(
+                        result = RegisterCredentialResult.Error(action.message),
                     ),
                 )
             }
@@ -2218,8 +2211,8 @@ class VaultItemListingViewModel @Inject constructor(
                 // user to have time to see the message.
                 toastManager.show(messageId = BitwardenString.item_updated)
                 sendEvent(
-                    VaultItemListingEvent.CompleteFido2Registration(
-                        RegisterFido2CredentialResult.Success(action.result.responseJson),
+                    VaultItemListingEvent.CompleteCredentialRegistration(
+                        RegisterCredentialResult.SuccessFido2(action.result.responseJson),
                     ),
                 )
             }
@@ -2238,8 +2231,8 @@ class VaultItemListingViewModel @Inject constructor(
             is PasswordRegisterResult.Success -> {
                 sendEvent(VaultItemListingEvent.ShowSnackbar(BitwardenString.item_updated.asText()))
                 sendEvent(
-                    VaultItemListingEvent.CompletePasswordRegistration(
-                        RegisterPasswordCredentialResult.Success,
+                    VaultItemListingEvent.CompleteCredentialRegistration(
+                        RegisterCredentialResult.SuccessPassword,
                     ),
                 )
             }
@@ -2253,8 +2246,8 @@ class VaultItemListingViewModel @Inject constructor(
         // user to have time to see the message.
         toastManager.show(messageId = BitwardenString.an_error_has_occurred)
         sendEvent(
-            VaultItemListingEvent.CompleteFido2Registration(
-                RegisterFido2CredentialResult.Error(
+            VaultItemListingEvent.CompleteCredentialRegistration(
+                RegisterCredentialResult.Error(
                     message = error.messageResourceId.asText(),
                 ),
             ),
@@ -2266,8 +2259,8 @@ class VaultItemListingViewModel @Inject constructor(
     ) {
         sendEvent(VaultItemListingEvent.ShowSnackbar(BitwardenString.an_error_has_occurred.asText()))
         sendEvent(
-            VaultItemListingEvent.CompletePasswordRegistration(
-                RegisterPasswordCredentialResult.Error(
+            VaultItemListingEvent.CompleteCredentialRegistration(
+                RegisterCredentialResult.Error(
                     message = error.messageResourceId.asText(),
                 ),
             ),
@@ -3435,21 +3428,12 @@ sealed class VaultItemListingEvent {
     }
 
     /**
-     * Complete the current FIDO 2 credential registration process.
+     * Complete the current credential registration process.
      *
-     * @property result The result of FIDO 2 credential registration.
+     * @property result The result of the credential registration.
      */
-    data class CompleteFido2Registration(
-        val result: RegisterFido2CredentialResult,
-    ) : BackgroundEvent, VaultItemListingEvent()
-
-    /**
-     * Complete the current Password credential registration process.
-     *
-     * @property result The result of Password credential registration.
-     */
-    data class CompletePasswordRegistration(
-        val result: RegisterPasswordCredentialResult,
+    data class CompleteCredentialRegistration(
+        val result: RegisterCredentialResult,
     ) : BackgroundEvent, VaultItemListingEvent()
 
     /**

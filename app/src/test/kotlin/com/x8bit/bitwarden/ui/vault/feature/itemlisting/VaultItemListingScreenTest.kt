@@ -51,8 +51,7 @@ import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionMa
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordCredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterCredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
@@ -108,8 +107,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         every { launchUri(any()) } just runs
     }
     private val credentialProviderCompletionManager: CredentialProviderCompletionManager = mockk {
-        every { completeFido2Registration(any()) } just runs
-        every { completePasswordRegistration(any()) } just runs
+        every { completeCredentialRegistration(any()) } just runs
         every { completeFido2Assertion(any()) } just runs
         every { completePasswordGet(any()) } just runs
         every { completeProviderGetCredentialsRequest(any()) } just runs
@@ -1969,21 +1967,11 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `CompleteFido2Registration event should call CredentialProviderCompletionManager with result`() {
-        val result = RegisterFido2CredentialResult.Success("mockResponse")
-        mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2Registration(result))
+    fun `CompleteCredentialRegistration event should call CredentialProviderCompletionManager with result`() {
+        val result = RegisterCredentialResult.SuccessFido2("mockResponse")
+        mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteCredentialRegistration(result))
         verify {
-            credentialProviderCompletionManager.completeFido2Registration(result)
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `CompletePasswordRegistration event should call CredentialProviderCompletionManager with result`() {
-        val result = RegisterPasswordCredentialResult.Success
-        mutableEventFlow.tryEmit(VaultItemListingEvent.CompletePasswordRegistration(result))
-        verify {
-            credentialProviderCompletionManager.completePasswordRegistration(result)
+            credentialProviderCompletionManager.completeCredentialRegistration(result)
         }
     }
 

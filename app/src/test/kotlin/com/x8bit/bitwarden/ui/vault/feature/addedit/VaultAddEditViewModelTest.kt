@@ -1,8 +1,10 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.core.os.bundleOf
+import androidx.credentials.CreateDigitalCredentialRequest
 import androidx.credentials.CreatePasswordRequest
 import androidx.credentials.CreatePublicKeyCredentialRequest
+import androidx.credentials.ExperimentalDigitalCredentialApi
 import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.lifecycle.SavedStateHandle
@@ -77,8 +79,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordCredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterCredentialResult
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -1087,8 +1088,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithSavingDialog, stateFlow.awaitItem())
                 assertEquals(stateWithName, stateFlow.awaitItem())
                 assertEquals(
-                    VaultAddEditEvent.CompleteFido2Registration(
-                        RegisterFido2CredentialResult.Success(
+                    VaultAddEditEvent.CompleteCredentialRegistration(
+                        RegisterCredentialResult.SuccessFido2(
                             responseJson = "mockResponse",
                         ),
                     ),
@@ -1185,9 +1186,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @OptIn(ExperimentalDigitalCredentialApi::class)
     @Suppress("MaxLineLength")
     @Test
-    fun `in add mode during fido2, SaveClick should show fido2 error dialog when request type is not supported`() =
+    fun `in add mode during fido2, SaveClick should show credential error dialog when request type is not supported`() =
         runTest {
             val fido2CredentialRequest = createMockCreateCredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance =
@@ -1205,7 +1207,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val mockProviderCreateCredentialRequest: ProviderCreateCredentialRequest =
                 mockk<ProviderCreateCredentialRequest>(relaxed = true) {
                     every { callingAppInfo } returns mockk(relaxed = true)
-                    every { callingRequest } returns mockk<CreatePasswordRequest>(relaxed = true)
+                    every { callingRequest } returns mockk<CreateDigitalCredentialRequest>(relaxed = true)
                 }
 
             every {
@@ -1226,8 +1228,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
             assertEquals(
-                VaultAddEditState.DialogState.Fido2Error(
-                    message = BitwardenString.passkey_operation_failed_because_the_request_is_unsupported
+                VaultAddEditState.DialogState.CredentialError(
+                    message = BitwardenString.credential_operation_failed_because_the_request_is_invalid
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialog,
@@ -1395,8 +1397,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithSavingDialog, stateFlow.awaitItem())
                 assertEquals(stateWithName, stateFlow.awaitItem())
                 assertEquals(
-                    VaultAddEditEvent.CompletePasswordRegistration(
-                        RegisterPasswordCredentialResult.Success,
+                    VaultAddEditEvent.CompleteCredentialRegistration(
+                        RegisterCredentialResult.SuccessPassword,
                     ),
                     eventFlow.awaitItem(),
                 )
@@ -2492,7 +2494,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     fun `DismissFido2ErrorDialogClick should clear the dialog state then complete FIDO 2 create`() =
         runTest {
             val errorState = createVaultAddItemState(
-                dialogState = VaultAddEditState.DialogState.Fido2Error(
+                dialogState = VaultAddEditState.DialogState.CredentialError(
                     message = BitwardenString.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
             )
@@ -2504,15 +2506,15 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
             viewModel.trySendAction(
-                VaultAddEditAction.Common.Fido2ErrorDialogDismissed(
+                VaultAddEditAction.Common.CredentialErrorDialogDismissed(
                     BitwardenString.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
             )
             viewModel.eventFlow.test {
                 assertNull(viewModel.stateFlow.value.dialog)
                 assertEquals(
-                    VaultAddEditEvent.CompleteFido2Registration(
-                        result = RegisterFido2CredentialResult.Error(
+                    VaultAddEditEvent.CompleteCredentialRegistration(
+                        result = RegisterCredentialResult.Error(
                             BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
                                 .asText(),
                         ),
@@ -4250,12 +4252,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `UserVerificationLockout should set isUserVerified to false and display Fido2ErrorDialog`() {
+        fun `UserVerificationLockout should set isUserVerified to false and display CredentialErrorDialog`() {
             viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationLockOut)
 
             verify { bitwardenCredentialManager.isUserVerified = false }
             assertEquals(
-                VaultAddEditState.DialogState.Fido2Error(
+                VaultAddEditState.DialogState.CredentialError(
                     message = BitwardenString.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
                 viewModel.stateFlow.value.dialog,
@@ -4264,7 +4266,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `UserVerificationCancelled should clear dialog state, set isUserVerified to false, and emit CompleteFido2Create with cancelled result`() =
+        fun `UserVerificationCancelled should clear dialog state, set isUserVerified to false, and emit CompleteCredentialRegistration with cancelled result`() =
             runTest {
                 viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationCancelled)
 
@@ -4272,8 +4274,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertNull(viewModel.stateFlow.value.dialog)
                 viewModel.eventFlow.test {
                     assertEquals(
-                        VaultAddEditEvent.CompleteFido2Registration(
-                            result = RegisterFido2CredentialResult.Cancelled,
+                        VaultAddEditEvent.CompleteCredentialRegistration(
+                            result = RegisterCredentialResult.Cancelled,
                         ),
                         awaitItem(),
                     )
@@ -4282,12 +4284,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `UserVerificationFail should set isUserVerified to false, and display Fido2ErrorDialog`() {
+        fun `UserVerificationFail should set isUserVerified to false, and display CredentialErrorDialog`() {
             viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationFail)
 
             verify { bitwardenCredentialManager.isUserVerified = false }
             assertEquals(
-                VaultAddEditState.DialogState.Fido2Error(
+                VaultAddEditState.DialogState.CredentialError(
                     message = BitwardenString.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
                 viewModel.stateFlow.value.dialog,
@@ -4296,12 +4298,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `UserVerificationNotSupported should display Fido2ErrorDialog when active account not found`() {
+        fun `UserVerificationNotSupported should display CredentialErrorDialog when active account not found`() {
             mutableUserStateFlow.value = null
             viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationNotSupported)
             verify { bitwardenCredentialManager.isUserVerified = false }
             assertEquals(
-                VaultAddEditState.DialogState.Fido2Error(
+                VaultAddEditState.DialogState.CredentialError(
                     message = BitwardenString.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
                 viewModel.stateFlow.value.dialog,
@@ -4397,7 +4399,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `MasterPasswordFido2VerificationSubmit should display Fido2Error when password verification fails`() {
+        fun `MasterPasswordFido2VerificationSubmit should display CredentialError when password verification fails`() {
             val password = "password"
             coEvery {
                 authRepository.validatePassword(password = password)
@@ -4410,7 +4412,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
 
             assertEquals(
-                VaultAddEditState.DialogState.Fido2Error(
+                VaultAddEditState.DialogState.CredentialError(
                     message = BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
                         .asText(),
                 ),
@@ -4446,7 +4448,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `MasterPasswordFido2VerificationSubmit should display Fido2Error when user has no retries remaining`() {
+        fun `MasterPasswordFido2VerificationSubmit should display CredentialError when user has no retries remaining`() {
             val password = "password"
             every { bitwardenCredentialManager.hasAuthenticationAttemptsRemaining() } returns false
             coEvery {
@@ -4460,7 +4462,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
 
             assertEquals(
-                VaultAddEditState.DialogState.Fido2Error(
+                VaultAddEditState.DialogState.CredentialError(
                     message = BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
                         .asText(),
                 ),
@@ -4502,7 +4504,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `PinFido2VerificationSubmit should display Fido2Error when Pin verification fails`() {
+        fun `PinFido2VerificationSubmit should display CredentialError when Pin verification fails`() {
             val pin = "PIN"
             coEvery {
                 authRepository.validatePin(pin = pin)
@@ -4515,7 +4517,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
 
             assertEquals(
-                VaultAddEditState.DialogState.Fido2Error(
+                VaultAddEditState.DialogState.CredentialError(
                     message = BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
                         .asText(),
                 ),
@@ -4551,7 +4553,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `PinFido2VerificationSubmit should display Fido2Error when user has no retries remaining`() {
+        fun `PinFido2VerificationSubmit should display CredentialError when user has no retries remaining`() {
             val pin = "PIN"
             every { bitwardenCredentialManager.hasAuthenticationAttemptsRemaining() } returns false
             coEvery {
@@ -4565,7 +4567,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
 
             assertEquals(
-                VaultAddEditState.DialogState.Fido2Error(
+                VaultAddEditState.DialogState.CredentialError(
                     message = BitwardenString.passkey_operation_failed_because_user_could_not_be_verified
                         .asText(),
                 ),
@@ -4646,13 +4648,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
         @Test
-        fun `DismissFido2VerificationDialogClick should display Fido2ErrorDialog`() {
+        fun `DismissFido2VerificationDialogClick should display CredentialErrorDialog`() {
             viewModel.trySendAction(
                 VaultAddEditAction.Common.DismissFido2VerificationDialogClick,
             )
 
             assertEquals(
-                VaultAddEditState.DialogState.Fido2Error(
+                VaultAddEditState.DialogState.CredentialError(
                     message = BitwardenString
                         .passkey_operation_failed_because_user_could_not_be_verified
                         .asText(),
@@ -4663,7 +4665,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `UserVerificationSuccess should display Fido2ErrorDialog when request is invalid`() {
+        fun `UserVerificationSuccess should display CredentialErrorDialog when request is invalid`() {
             every { authRepository.activeUserId } returns null
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
@@ -4675,7 +4677,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess)
 
             assertEquals(
-                VaultAddEditState.DialogState.Fido2Error(
+                VaultAddEditState.DialogState.CredentialError(
                     message = BitwardenString.passkey_operation_failed_because_the_request_is_unsupported
                         .asText(),
                 ),
@@ -4715,7 +4717,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `Fido2RegisterCredentialResult Error should show toast and emit CompleteFido2Registration result`() =
+        fun `Fido2RegisterCredentialResult Error should show toast and emit CompleteCredentialRegistration result`() =
             runTest {
                 val mockRequest = createMockCreateCredentialRequest(number = 1)
                 val mockResult = Fido2RegisterCredentialResult.Error.InternalError
@@ -4743,8 +4745,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 viewModel.eventFlow.test {
                     assertEquals(
-                        VaultAddEditEvent.CompleteFido2Registration(
-                            RegisterFido2CredentialResult.Error(
+                        VaultAddEditEvent.CompleteCredentialRegistration(
+                            RegisterCredentialResult.Error(
                                 BitwardenString.passkey_registration_failed_due_to_an_internal_error
                                     .asText(),
                             ),
@@ -4759,7 +4761,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `Fido2RegisterCredentialResult Success should show toast and emit CompleteFido2Registration result`() =
+        fun `Fido2RegisterCredentialResult Success should show toast and emit CompleteCredentialRegistration result`() =
             runTest {
                 val mockRequest = createMockCreateCredentialRequest(number = 1)
                 val mockResult = Fido2RegisterCredentialResult.Success(
@@ -4788,8 +4790,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 viewModel.eventFlow.test {
                     assertEquals(
-                        VaultAddEditEvent.CompleteFido2Registration(
-                            RegisterFido2CredentialResult.Success(
+                        VaultAddEditEvent.CompleteCredentialRegistration(
+                            RegisterCredentialResult.SuccessFido2(
                                 responseJson = "mockResponse",
                             ),
                         ),
@@ -4817,7 +4819,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `PasswordRegisterResult Error should show toast and emit CompletePasswordRegistration result`() =
+    fun `PasswordRegisterResult Error should show toast and emit CompleteCredentialRegistration result`() =
         runTest {
             val viewModel = createAddVaultItemViewModel()
             val mockRequest = createMockCreateCredentialRequest(number = 1)
@@ -4844,8 +4846,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultAddEditEvent.CompletePasswordRegistration(
-                        RegisterPasswordCredentialResult.Error(
+                    VaultAddEditEvent.CompleteCredentialRegistration(
+                        RegisterCredentialResult.Error(
                             BitwardenString.password_registration_failed_due_to_an_internal_error
                                 .asText(),
                         ),
@@ -4861,7 +4863,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `PasswordRegisterResult Success should show toast and emit CompletePasswordRegistration result`() =
+    fun `PasswordRegisterResult Success should show toast and emit CompleteCredentialRegistration result`() =
         runTest {
             val viewModel = createAddVaultItemViewModel()
             val mockRequest = createMockCreateCredentialRequest(number = 1)
@@ -4887,8 +4889,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultAddEditEvent.CompletePasswordRegistration(
-                        RegisterPasswordCredentialResult.Success,
+                    VaultAddEditEvent.CompleteCredentialRegistration(
+                        RegisterCredentialResult.SuccessPassword,
                     ),
                     awaitItem(),
                 )

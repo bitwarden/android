@@ -18,8 +18,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPasswordCre
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterPasswordCredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterCredentialResult
 import io.mockk.Called
 import io.mockk.MockKVerificationScope
 import io.mockk.Ordering
@@ -61,19 +60,11 @@ class CredentialProviderCompletionManagerTest {
         }
 
         @Test
-        fun `completeFido2Registration should perform no operations`() {
-            val mockRegistrationResult = mockk<RegisterFido2CredentialResult>()
-            credentialProviderCompletionManager.completeFido2Registration(mockRegistrationResult)
-            verify {
-                mockRegistrationResult wasNot Called
-                mockActivity wasNot Called
-            }
-        }
-
-        @Test
-        fun `completePasswordRegistration should perform no operations`() {
-            val mockRegistrationResult = mockk<RegisterPasswordCredentialResult>()
-            credentialProviderCompletionManager.completePasswordRegistration(mockRegistrationResult)
+        fun `completeCredentialRegistration should perform no operations`() {
+            val mockRegistrationResult = mockk<RegisterCredentialResult>()
+            credentialProviderCompletionManager.completeCredentialRegistration(
+                mockRegistrationResult
+            )
             verify {
                 mockRegistrationResult wasNot Called
                 mockActivity wasNot Called
@@ -143,10 +134,10 @@ class CredentialProviderCompletionManagerTest {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `completeFido2Registration should set CreateCredentialResponse, set activity result, then finish activity when result is Success`() {
+        fun `completeCredentialRegistration should set CreateCredentialResponse, set activity result, then finish activity when result is Success`() {
             credentialProviderCompletionManager
-                .completeFido2Registration(
-                    RegisterFido2CredentialResult.Success(
+                .completeCredentialRegistration(
+                    RegisterCredentialResult.SuccessFido2(
                         responseJson = "registrationResponse",
                     ),
                 )
@@ -158,9 +149,9 @@ class CredentialProviderCompletionManagerTest {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `completeFido2Registration should set CreateCredentialException, set activity result, then finish activity when result is Error`() {
+        fun `completeCredentialRegistration should set CreateCredentialException, set activity result, then finish activity when result is Error`() {
             credentialProviderCompletionManager
-                .completeFido2Registration(RegisterFido2CredentialResult.Error("".asText()))
+                .completeCredentialRegistration(RegisterCredentialResult.Error("".asText()))
 
             verifyActivityResultIsSetAndFinishedAfter {
                 mockActivity.resources
@@ -170,43 +161,9 @@ class CredentialProviderCompletionManagerTest {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `completeFido2Registration should set CreateCredentialException, set activity result, then finish activity when result is Cancelled`() {
+        fun `completeCredentialRegistration should set CreateCredentialException, set activity result, then finish activity when result is Cancelled`() {
             credentialProviderCompletionManager
-                .completeFido2Registration(RegisterFido2CredentialResult.Cancelled)
-
-            verifyActivityResultIsSetAndFinishedAfter {
-                PendingIntentHandler.setCreateCredentialException(any(), any())
-            }
-        }
-
-        @Suppress("MaxLineLength")
-        @Test
-        fun `completePasswordRegistration should set CreateCredentialResponse, set activity result, then finish activity when result is Success`() {
-            credentialProviderCompletionManager
-                .completePasswordRegistration(RegisterPasswordCredentialResult.Success)
-
-            verifyActivityResultIsSetAndFinishedAfter {
-                PendingIntentHandler.setCreateCredentialResponse(any(), any())
-            }
-        }
-
-        @Suppress("MaxLineLength")
-        @Test
-        fun `completePasswordRegistration should set CreateCredentialException, set activity result, then finish activity when result is Error`() {
-            credentialProviderCompletionManager
-                .completePasswordRegistration(RegisterPasswordCredentialResult.Error("".asText()))
-
-            verifyActivityResultIsSetAndFinishedAfter {
-                mockActivity.resources
-                PendingIntentHandler.setCreateCredentialException(any(), any())
-            }
-        }
-
-        @Suppress("MaxLineLength")
-        @Test
-        fun `completePasswordRegistration should set CreateCredentialException, set activity result, then finish activity when result is Cancelled`() {
-            credentialProviderCompletionManager
-                .completePasswordRegistration(RegisterPasswordCredentialResult.Cancelled)
+                .completeCredentialRegistration(RegisterCredentialResult.Cancelled)
 
             verifyActivityResultIsSetAndFinishedAfter {
                 PendingIntentHandler.setCreateCredentialException(any(), any())

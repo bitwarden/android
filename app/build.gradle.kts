@@ -305,7 +305,7 @@ tasks {
         useJUnitPlatform()
         maxHeapSize = "2g"
         maxParallelForks = Runtime.getRuntime().availableProcessors()
-        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC" + "-Duser.country=US"
+        jvmArgs = jvmArgs + "-XX:+UseParallelGC" + "-Duser.country=US" + "-Duser.language=en"
         android.sourceSets["main"].res.srcDirs("src/test/res")
     }
 }

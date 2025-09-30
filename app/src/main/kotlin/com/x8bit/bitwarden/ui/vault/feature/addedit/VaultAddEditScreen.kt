@@ -162,14 +162,8 @@ fun VaultAddEditScreen(
                 )
             }
 
-            is VaultAddEditEvent.CompleteFido2Registration -> {
-                credentialProviderCompletionManager.completeFido2Registration(
-                    result = event.result,
-                )
-            }
-
-            is VaultAddEditEvent.CompletePasswordRegistration -> {
-                credentialProviderCompletionManager.completePasswordRegistration(
+            is VaultAddEditEvent.CompleteCredentialRegistration -> {
+                credentialProviderCompletionManager.completeCredentialRegistration(
                     result = event.result,
                 )
             }
@@ -234,17 +228,10 @@ fun VaultAddEditScreen(
         onAutofillDismissRequest = remember(viewModel) {
             { viewModel.trySendAction(VaultAddEditAction.Common.InitialAutofillDialogDismissed) }
         },
-        onFido2ErrorDismiss = remember(viewModel) {
+        onCredentialErrorDismiss = remember(viewModel) {
             { errorMessage ->
                 viewModel.trySendAction(
-                    VaultAddEditAction.Common.Fido2ErrorDialogDismissed(message = errorMessage),
-                )
-            }
-        },
-        onPasswordErrorDismiss = remember(viewModel) {
-            { errorMessage ->
-                viewModel.trySendAction(
-                    VaultAddEditAction.Common.PasswordErrorDialogDismissed(message = errorMessage),
+                    VaultAddEditAction.Common.CredentialErrorDialogDismissed(message = errorMessage),
                 )
             }
         },
@@ -484,8 +471,7 @@ private fun VaultAddEditItemDialogs(
     dialogState: VaultAddEditState.DialogState?,
     onDismissRequest: () -> Unit,
     onAutofillDismissRequest: () -> Unit,
-    onFido2ErrorDismiss: (Text) -> Unit,
-    onPasswordErrorDismiss: (Text) -> Unit,
+    onCredentialErrorDismiss: (Text) -> Unit,
     onConfirmOverwriteExistingPasskey: () -> Unit,
     onConfirmOverwriteExistingPassword: () -> Unit,
     onSubmitMasterPasswordFido2Verification: (password: String) -> Unit,
@@ -518,19 +504,11 @@ private fun VaultAddEditItemDialogs(
             )
         }
 
-        is VaultAddEditState.DialogState.Fido2Error -> {
+        is VaultAddEditState.DialogState.CredentialError -> {
             BitwardenBasicDialog(
                 title = stringResource(id = BitwardenString.an_error_has_occurred),
                 message = dialogState.message(),
-                onDismissRequest = { onFido2ErrorDismiss(dialogState.message) },
-            )
-        }
-
-        is VaultAddEditState.DialogState.PasswordError -> {
-            BitwardenBasicDialog(
-                title = stringResource(id = BitwardenString.an_error_has_occurred),
-                message = dialogState.message(),
-                onDismissRequest = { onPasswordErrorDismiss(dialogState.message) },
+                onDismissRequest = { onCredentialErrorDismiss(dialogState.message) },
             )
         }
 
