@@ -57,6 +57,7 @@ class VaultUnlockedNavBarScreenTest : BitwardenComposeTest() {
                 onNavigateToSearchVault = {},
                 onNavigateToSearchSend = {},
                 onNavigateToSetupAutoFillScreen = {},
+                onNavigateToSetupBrowserAutofill = {},
                 onNavigateToSetupUnlockScreen = {},
                 onNavigateToImportLogins = {},
                 onNavigateToAddFolderScreen = {},

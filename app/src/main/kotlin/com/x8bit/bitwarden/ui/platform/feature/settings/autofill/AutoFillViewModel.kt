@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofi
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
@@ -44,6 +45,7 @@ class AutoFillViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
             val userId = requireNotNull(authRepository.userStateFlow.value).activeUserId
+            val firstTimeState = firstTimeActionManager.currentOrDefaultUserFirstTimeState
             AutoFillState(
                 isAskToAddLoginEnabled = !settingsRepository.isAutofillSavePromptDisabled,
                 isAccessibilityAutofillEnabled = settingsRepository
@@ -61,7 +63,8 @@ class AutoFillViewModel @Inject constructor(
                     Build.VERSION_CODES.UPSIDE_DOWN_CAKE,
                 ),
                 defaultUriMatchType = settingsRepository.defaultUriMatchType,
-                showAutofillActionCard = false,
+                showAutofillActionCard = firstTimeState.showSetupAutofillCard,
+                showBrowserAutofillActionCard = firstTimeState.showSetupBrowserAutofillCard,
                 activeUserId = userId,
                 browserAutofillSettingsOptions = browserThirdPartyAutofillEnabledManager
                     .browserThirdPartyAutofillStatus
@@ -94,7 +97,7 @@ class AutoFillViewModel @Inject constructor(
 
         firstTimeActionManager
             .firstTimeStateFlow
-            .map { AutoFillAction.Internal.UpdateShowAutofillActionCard(it.showSetupAutofillCard) }
+            .map { AutoFillAction.Internal.UpdateShowAutofillActionCard(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -118,10 +121,19 @@ class AutoFillViewModel @Inject constructor(
         is AutoFillAction.Internal -> handleInternalAction(action)
         AutoFillAction.AutofillActionCardCtaClick -> handleAutofillActionCardCtaClick()
         AutoFillAction.DismissShowAutofillActionCard -> handleDismissShowAutofillActionCard()
+        AutoFillAction.BrowserAutofillActionCardCtaClick -> {
+            handleBrowserAutofillActionCardCtaClick()
+        }
+
+        AutoFillAction.DismissShowBrowserAutofillActionCard -> {
+            handleDismissShowBrowserAutofillActionCard()
+        }
+
         is AutoFillAction.BrowserAutofillSelected -> handleBrowserAutofillSelected(action)
         AutoFillAction.AboutPrivilegedAppsClick -> handleAboutPrivilegedAppsClick()
         AutoFillAction.PrivilegedAppsClick -> handlePrivilegedAppsClick()
         AutoFillAction.LearnMoreClick -> handleLearnMoreClick()
+        AutoFillAction.HelpCardClick -> handleHelpCardClick()
     }
 
     private fun handlePrivilegedAppsClick() {
@@ -130,6 +142,10 @@ class AutoFillViewModel @Inject constructor(
 
     private fun handleLearnMoreClick() {
         sendEvent(AutoFillEvent.NavigateToLearnMore)
+    }
+
+    private fun handleHelpCardClick() {
+        sendEvent(AutoFillEvent.NavigateToAutofillHelp)
     }
 
     private fun handleInternalAction(action: AutoFillAction.Internal) {
@@ -180,10 +196,23 @@ class AutoFillViewModel @Inject constructor(
         sendEvent(AutoFillEvent.NavigateToSetupAutofill)
     }
 
+    private fun handleDismissShowBrowserAutofillActionCard() {
+        firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = false)
+    }
+
+    private fun handleBrowserAutofillActionCardCtaClick() {
+        sendEvent(AutoFillEvent.NavigateToSetupBrowserAutofill)
+    }
+
     private fun handleUpdateShowAutofillActionCard(
         action: AutoFillAction.Internal.UpdateShowAutofillActionCard,
     ) {
-        mutableStateFlow.update { it.copy(showAutofillActionCard = action.showAutofillActionCard) }
+        mutableStateFlow.update {
+            it.copy(
+                showAutofillActionCard = action.firstTimeState.showSetupAutofillCard,
+                showBrowserAutofillActionCard = action.firstTimeState.showSetupBrowserAutofillCard,
+            )
+        }
     }
 
     private fun handleAskToAddLoginClick(action: AutoFillAction.AskToAddLoginClick) {
@@ -273,19 +302,44 @@ data class AutoFillState(
     val showPasskeyManagementRow: Boolean,
     val defaultUriMatchType: UriMatchType,
     val showAutofillActionCard: Boolean,
+    val showBrowserAutofillActionCard: Boolean,
     val activeUserId: String,
     val browserAutofillSettingsOptions: ImmutableList<BrowserAutofillSettingsOption>,
 ) : Parcelable {
+    /**
+     * Indicates which call-to-action that should be displayed.
+     */
+    val ctaState: CtaState
+        get() = when {
+            showAutofillActionCard -> CtaState.AUTOFILL
+            showBrowserAutofillActionCard -> CtaState.BROWSER_AUTOFILL
+            else -> CtaState.DEFAULT
+        }
+
     /**
      * Whether or not the dropdown controlling the [autofillStyle] value is displayed.
      */
     val showInlineAutofill: Boolean get() = isAutoFillServicesEnabled && showInlineAutofillOption
 
     /**
+     * The number of browsers that can be configured.
+     */
+    val browserCount: Int get() = browserAutofillSettingsOptions.size
+
+    /**
      * Whether or not the toggles for enabling 3rd-party autofill support should be displayed.
      */
     val showBrowserSettingOptions: Boolean
         get() = isAutoFillServicesEnabled && browserAutofillSettingsOptions.isNotEmpty()
+}
+
+/**
+ * A representation of which call-to-action that should be displayed.
+ */
+enum class CtaState {
+    AUTOFILL,
+    BROWSER_AUTOFILL,
+    DEFAULT,
 }
 
 /**
@@ -345,6 +399,11 @@ sealed class AutoFillEvent {
     data object NavigateToSetupAutofill : AutoFillEvent()
 
     /**
+     * Navigates to the setup browser autofill screen.
+     */
+    data object NavigateToSetupBrowserAutofill : AutoFillEvent()
+
+    /**
      * Navigate to the about privileged apps screen.
      */
     data object NavigateToAboutPrivilegedAppsScreen : AutoFillEvent()
@@ -358,6 +417,11 @@ sealed class AutoFillEvent {
      * Navigate to the learn more.
      */
     data object NavigateToLearnMore : AutoFillEvent()
+
+    /**
+     * Navigate to the autofill help page.
+     */
+    data object NavigateToAutofillHelp : AutoFillEvent()
 }
 
 /**
@@ -430,6 +494,16 @@ sealed class AutoFillAction {
     data object AutofillActionCardCtaClick : AutoFillAction()
 
     /**
+     * User has clicked the "X" to dismiss the browser autofill action card.
+     */
+    data object DismissShowBrowserAutofillActionCard : AutoFillAction()
+
+    /**
+     * User has clicked the CTA on the browser autofill action card.
+     */
+    data object BrowserAutofillActionCardCtaClick : AutoFillAction()
+
+    /**
      * User has clicked one of the browser autofill options.
      */
     data class BrowserAutofillSelected(val browserPackage: BrowserPackage) : AutoFillAction()
@@ -450,6 +524,11 @@ sealed class AutoFillAction {
     data object LearnMoreClick : AutoFillAction()
 
     /**
+     * User has clicked the help CTA.
+     */
+    data object HelpCardClick : AutoFillAction()
+
+    /**
      * Internal actions.
      */
     sealed class Internal : AutoFillAction() {
@@ -468,9 +547,9 @@ sealed class AutoFillAction {
         ) : Internal()
 
         /**
-         * An update for changes in the [showAutofillActionCard] value from the settings repository.
+         * An update for changes in the [firstTimeState] value from the settings repository.
          */
-        data class UpdateShowAutofillActionCard(val showAutofillActionCard: Boolean) : Internal()
+        data class UpdateShowAutofillActionCard(val firstTimeState: FirstTimeState) : Internal()
 
         /**
          * Received updated [BrowserThirdPartyAutofillStatus] data.

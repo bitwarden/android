@@ -3,13 +3,16 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.folders
 import app.cash.turbine.test
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderDisplayItem
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +27,26 @@ class FoldersViewModelTest : BaseViewModelTest() {
 
     private val vaultRepository: VaultRepository = mockk {
         every { foldersStateFlow } returns mutableFoldersStateFlow
+    }
+    private val mutableSnackbarDataFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
+    private val snackbarRelayManager: SnackbarRelayManager = mockk {
+        every {
+            getSnackbarDataFlow(relay = any(), relays = anyVararg())
+        } returns mutableSnackbarDataFlow
+    }
+
+    @Test
+    fun `on snackbar data received should emit ShowSnackbar`() = runTest {
+        val viewModel = createViewModel()
+
+        val data = BitwardenSnackbarData(message = "Snackbar!".asText())
+        viewModel.eventFlow.test {
+            mutableSnackbarDataFlow.emit(data)
+            assertEquals(
+                FoldersEvent.ShowSnackbar(data = data),
+                awaitItem(),
+            )
+        }
     }
 
     @Test
@@ -161,6 +184,7 @@ class FoldersViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(): FoldersViewModel = FoldersViewModel(
         vaultRepository = vaultRepository,
+        snackbarRelayManager = snackbarRelayManager,
     )
 
     private fun createFolderState(

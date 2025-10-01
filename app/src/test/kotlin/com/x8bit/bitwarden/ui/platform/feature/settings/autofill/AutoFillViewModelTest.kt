@@ -43,7 +43,9 @@ class AutoFillViewModelTest : BaseViewModelTest() {
     private val mutableFirstTimeStateFlow = MutableStateFlow(FirstTimeState())
     private val firstTimeActionManager: FirstTimeActionManager = mockk {
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
-        every { storeShowAutoFillSettingBadge(any()) } just runs
+        every { currentOrDefaultUserFirstTimeState } answers { mutableFirstTimeStateFlow.value }
+        every { storeShowAutoFillSettingBadge(showBadge = any()) } just runs
+        every { storeShowBrowserAutofillSettingBadge(showBadge = any()) } just runs
     }
 
     private val mutableChromeAutofillStatusFlow = MutableStateFlow(DEFAULT_AUTOFILL_STATUS)
@@ -174,6 +176,15 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         )
         // The UI enables the value, so the value gets flipped to save it as a "disabled" value.
         verify { settingsRepository.isAutofillSavePromptDisabled = false }
+    }
+
+    @Test
+    fun `on HelpCardClick should emit NavigateToAutofillHelp`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AutoFillAction.HelpCardClick)
+            assertEquals(AutoFillEvent.NavigateToAutofillHelp, awaitItem())
+        }
     }
 
     @Test
@@ -323,8 +334,32 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            mutableFirstTimeStateFlow.update { it.copy(showSetupAutofillCard = true) }
-            assertEquals(DEFAULT_STATE.copy(showAutofillActionCard = true), awaitItem())
+            mutableFirstTimeStateFlow.update {
+                it.copy(
+                    showSetupAutofillCard = true,
+                    showSetupBrowserAutofillCard = true,
+                )
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    showAutofillActionCard = true,
+                    showBrowserAutofillActionCard = true,
+                ),
+                awaitItem(),
+            )
+            mutableFirstTimeStateFlow.update {
+                it.copy(
+                    showSetupAutofillCard = false,
+                    showSetupBrowserAutofillCard = true,
+                )
+            }
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    showAutofillActionCard = false,
+                    showBrowserAutofillActionCard = true,
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -356,6 +391,32 @@ class AutoFillViewModelTest : BaseViewModelTest() {
             firstTimeActionManager.storeShowAutoFillSettingBadge(
                 false,
             )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when BrowserAutofillActionCardCtaClick action is sent should update show autofill in repository and send NavigateToSetupBrowserAutofill event`() =
+        runTest {
+            mutableFirstTimeStateFlow.update { it.copy(showSetupBrowserAutofillCard = true) }
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AutoFillAction.BrowserAutofillActionCardCtaClick)
+                assertEquals(AutoFillEvent.NavigateToSetupBrowserAutofill, awaitItem())
+            }
+            verify(exactly = 0) {
+                firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = false)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when DismissShowBrowserAutofillActionCard action is sent should update show autofill in repository`() {
+        mutableFirstTimeStateFlow.update { it.copy(showSetupBrowserAutofillCard = true) }
+        val viewModel = createViewModel()
+        viewModel.trySendAction(AutoFillAction.DismissShowBrowserAutofillActionCard)
+        verify(exactly = 1) {
+            firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = false)
         }
     }
 
@@ -472,6 +533,7 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     showPasskeyManagementRow = true,
     defaultUriMatchType = UriMatchType.DOMAIN,
     showAutofillActionCard = false,
+    showBrowserAutofillActionCard = false,
     activeUserId = "activeUserId",
     browserAutofillSettingsOptions = persistentListOf(),
 )

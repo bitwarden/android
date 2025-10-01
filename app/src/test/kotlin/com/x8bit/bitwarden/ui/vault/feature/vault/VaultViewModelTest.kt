@@ -183,6 +183,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
     private val browserAutofillDialogManager: BrowserAutofillDialogManager = mockk {
         every { shouldShowDialog } returns false
+        every { browserCount } returns 1
         every { delayDialog() } just runs
     }
 
@@ -707,15 +708,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultAction.LockClick)
         verify {
             vaultRepository.lockVaultForCurrentUser(isUserInitiated = true)
-        }
-    }
-
-    @Test
-    fun `on ExitConfirmationClick should emit NavigateOutOfApp`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultAction.ExitConfirmationClick)
-            assertEquals(VaultEvent.NavigateOutOfApp, awaitItem())
         }
     }
 

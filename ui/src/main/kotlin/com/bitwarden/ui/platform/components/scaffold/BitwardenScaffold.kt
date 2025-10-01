@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
@@ -59,7 +58,6 @@ import com.bitwarden.ui.platform.util.rememberWindowSize
  * The [overlay] is a nonstandard [Composable] that is placed over top the `utilityBar` and
  * `content`.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
 @Composable
 fun BitwardenScaffold(

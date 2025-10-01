@@ -205,7 +205,7 @@ class ImportLoginsViewModel @Inject constructor(
 
     private fun syncVault() {
         viewModelScope.launch {
-            val result = vaultRepository.syncForResult()
+            val result = vaultRepository.syncForResult(forced = true)
             sendAction(ImportLoginsAction.Internal.VaultSyncResultReceived(result))
         }
     }

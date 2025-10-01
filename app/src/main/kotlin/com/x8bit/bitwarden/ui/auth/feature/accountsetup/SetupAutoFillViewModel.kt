@@ -110,7 +110,14 @@ class SetupAutoFillViewModel @Inject constructor(
         if (state.isInitialSetup) {
             updateOnboardingStatusToNextStep()
         } else {
-            sendEvent(SetupAutoFillEvent.NavigateBack)
+            val isBrowserAutofillUnconfigured = browserThirdPartyAutofillEnabledManager
+                .browserThirdPartyAutofillStatus
+                .isAnyIsAvailableAndDisabled
+            if (isBrowserAutofillUnconfigured) {
+                sendEvent(SetupAutoFillEvent.NavigateToBrowserAutofill)
+            } else {
+                sendEvent(SetupAutoFillEvent.NavigateBack)
+            }
         }
     }
 
@@ -173,6 +180,11 @@ sealed class SetupAutoFillEvent {
      * Navigate to the autofill settings screen.
      */
     data object NavigateToAutofillSettings : SetupAutoFillEvent()
+
+    /**
+     * Navigate to the setup browser autofill screen.
+     */
+    data object NavigateToBrowserAutofill : SetupAutoFillEvent()
 
     /**
      * Navigate back.

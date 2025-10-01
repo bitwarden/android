@@ -290,6 +290,23 @@ interface SettingsDiskSource {
      * Gets whether or not the given [userId] has signalled they want to enable autofill in
      * onboarding.
      */
+    fun getShowBrowserAutofillSettingBadge(userId: String): Boolean?
+
+    /**
+     * Stores the given value for whether or not the given [userId] has signalled they want to
+     * enable the browser autofill integration in onboarding.
+     */
+    fun storeShowBrowserAutofillSettingBadge(userId: String, showBadge: Boolean?)
+
+    /**
+     * Emits updates that track [getShowAutoFillSettingBadge] for the given [userId].
+     */
+    fun getShowBrowserAutofillSettingBadgeFlow(userId: String): Flow<Boolean?>
+
+    /**
+     * Gets whether or not the given [userId] has signalled they want to enable autofill in
+     * onboarding.
+     */
     fun getShowAutoFillSettingBadge(userId: String): Boolean?
 
     /**

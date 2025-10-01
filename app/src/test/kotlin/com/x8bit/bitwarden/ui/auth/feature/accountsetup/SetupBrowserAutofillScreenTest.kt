@@ -5,9 +5,11 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.assertNoDialogExists
@@ -27,11 +29,15 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.After
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 class SetupBrowserAutofillScreenTest : BitwardenComposeTest() {
-    private val intentManager = mockk<IntentManager>()
+    private var onNavigateBackCalled = false
+    private val intentManager = mockk<IntentManager> {
+        every { launchUri(uri = any()) } just runs
+    }
 
     private val mutableEventFlow = bufferedMutableSharedFlow<SetupBrowserAutofillEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -49,6 +55,7 @@ class SetupBrowserAutofillScreenTest : BitwardenComposeTest() {
         ) {
             SetupBrowserAutofillScreen(
                 viewModel = viewModel,
+                onNavigateBack = { onNavigateBackCalled = true },
             )
         }
     }
@@ -56,6 +63,22 @@ class SetupBrowserAutofillScreenTest : BitwardenComposeTest() {
     @After
     fun tearDown() {
         unmockkStatic(IntentManager::startSystemAutofillSettingsActivity)
+    }
+
+    @Test
+    fun `NavigateBack should call onNavigateBack`() {
+        mutableEventFlow.tryEmit(SetupBrowserAutofillEvent.NavigateBack)
+        assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `NavigateToBrowserIntegrationsInfo should call onNavigateBack`() {
+        mutableEventFlow.tryEmit(SetupBrowserAutofillEvent.NavigateToBrowserIntegrationsInfo)
+        verify(exactly = 1) {
+            intentManager.launchUri(
+                uri = "https://bitwarden.com/help/auto-fill-android/#browser-integrations/".toUri(),
+            )
+        }
     }
 
     @Test
@@ -82,6 +105,55 @@ class SetupBrowserAutofillScreenTest : BitwardenComposeTest() {
                 SetupBrowserAutofillAction.BrowserIntegrationClick(BrowserPackage.BRAVE_RELEASE),
             )
         }
+    }
+
+    @Test
+    fun `appbar title is updated according to state`() {
+        mutableStateFlow.update { it.copy(isInitialSetup = true) }
+        composeTestRule.onNodeWithText(text = "Account setup").assertExists()
+        composeTestRule.onNodeWithText(text = "Autofill setup").assertDoesNotExist()
+        mutableStateFlow.update { it.copy(isInitialSetup = false) }
+        composeTestRule.onNodeWithText(text = "Account setup").assertDoesNotExist()
+        composeTestRule.onNodeWithText(text = "Autofill setup").assertExists()
+    }
+
+    @Test
+    fun `close button is updated according to state`() {
+        mutableStateFlow.update { it.copy(isInitialSetup = true) }
+        composeTestRule.onNodeWithContentDescription(label = "Close").assertDoesNotExist()
+        mutableStateFlow.update { it.copy(isInitialSetup = false) }
+        composeTestRule.onNodeWithContentDescription(label = "Close").assertExists()
+    }
+
+    @Test
+    fun `why is this step required button click should emit WhyIsThisStepRequiredClick`() {
+        mutableStateFlow.update { it.copy(isInitialSetup = false) }
+        composeTestRule
+            .onNodeWithText(text = "Why is this step required?")
+            .performScrollTo()
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(SetupBrowserAutofillAction.WhyIsThisStepRequiredClick)
+        }
+    }
+
+    @Test
+    fun `close button click should emit CloseClick`() {
+        mutableStateFlow.update { it.copy(isInitialSetup = false) }
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(SetupBrowserAutofillAction.CloseClick)
+        }
+    }
+
+    @Test
+    fun `turn on later button is updated according to state`() {
+        mutableStateFlow.update { it.copy(isInitialSetup = true) }
+        composeTestRule.onNodeWithText(text = "Turn on later").assertExists()
+        mutableStateFlow.update { it.copy(isInitialSetup = false) }
+        composeTestRule.onNodeWithText(text = "Turn on later").assertDoesNotExist()
     }
 
     @Test
@@ -173,6 +245,7 @@ class SetupBrowserAutofillScreenTest : BitwardenComposeTest() {
 
 private val DEFAULT_STATE: SetupBrowserAutofillState = SetupBrowserAutofillState(
     dialogState = null,
+    isInitialSetup = true,
     browserAutofillSettingsOptions = persistentListOf(
         BrowserAutofillSettingsOption.BraveStable(enabled = true),
     ),

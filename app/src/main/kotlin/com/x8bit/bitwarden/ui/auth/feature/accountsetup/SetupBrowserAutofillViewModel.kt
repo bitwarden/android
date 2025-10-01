@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserPackage
 import com.x8bit.bitwarden.data.autofill.model.browser.BrowserThirdPartyAutofillStatus
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.model.BrowserAutofillSettingsOption
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.browser.util.toBrowserAutoFillSettingsOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,12 +29,14 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class SetupBrowserAutofillViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val firstTimeActionManager: FirstTimeActionManager,
     browserThirdPartyAutofillEnabledManager: BrowserThirdPartyAutofillEnabledManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SetupBrowserAutofillState, SetupBrowserAutofillEvent, SetupBrowserAutofillAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: SetupBrowserAutofillState(
         dialogState = null,
+        isInitialSetup = savedStateHandle.toSetupBrowserAutofillArgs().isInitialSetup,
         browserAutofillSettingsOptions = browserThirdPartyAutofillEnabledManager
             .browserThirdPartyAutofillStatus
             .toBrowserAutoFillSettingsOptions(),
@@ -53,6 +56,11 @@ class SetupBrowserAutofillViewModel @Inject constructor(
                 handleBrowserIntegrationClick(action)
             }
 
+            SetupBrowserAutofillAction.WhyIsThisStepRequiredClick -> {
+                handleWhyIsThisStepRequiredClick()
+            }
+
+            SetupBrowserAutofillAction.CloseClick -> handleCloseClick()
             SetupBrowserAutofillAction.DismissDialog -> handleDismissDialog()
             SetupBrowserAutofillAction.ContinueClick -> handleContinueClick()
             SetupBrowserAutofillAction.TurnOnLaterClick -> handleTurnOnLaterClick()
@@ -77,12 +85,25 @@ class SetupBrowserAutofillViewModel @Inject constructor(
         )
     }
 
+    private fun handleWhyIsThisStepRequiredClick() {
+        sendEvent(SetupBrowserAutofillEvent.NavigateToBrowserIntegrationsInfo)
+    }
+
+    private fun handleCloseClick() {
+        sendEvent(SetupBrowserAutofillEvent.NavigateBack)
+    }
+
     private fun handleDismissDialog() {
         mutableStateFlow.update { it.copy(dialogState = null) }
     }
 
     private fun handleContinueClick() {
-        authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+        firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = false)
+        if (state.isInitialSetup) {
+            authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+        } else {
+            sendEvent(SetupBrowserAutofillEvent.NavigateBack)
+        }
     }
 
     private fun handleTurnOnLaterClick() {
@@ -92,6 +113,7 @@ class SetupBrowserAutofillViewModel @Inject constructor(
     }
 
     private fun handleTurnOnLaterConfirmClick() {
+        firstTimeActionManager.storeShowBrowserAutofillSettingBadge(showBadge = true)
         mutableStateFlow.update { it.copy(dialogState = null) }
         authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
     }
@@ -113,12 +135,18 @@ class SetupBrowserAutofillViewModel @Inject constructor(
 @Parcelize
 data class SetupBrowserAutofillState(
     val dialogState: DialogState?,
+    val isInitialSetup: Boolean,
     val browserAutofillSettingsOptions: ImmutableList<BrowserAutofillSettingsOption>,
 ) : Parcelable {
     /**
+     * The number of browsers that can be configured.
+     */
+    val browserCount: Int get() = browserAutofillSettingsOptions.size
+
+    /**
      * Indicates if the Continue button should be enabled or not.
      */
-    val isContinueEnabled: Boolean get() = browserAutofillSettingsOptions.any { it.isEnabled }
+    val isContinueEnabled: Boolean get() = browserAutofillSettingsOptions.all { it.isEnabled }
 
     /**
      * Models dialogs that can be shown on the Setup Browser Autofill screen.
@@ -137,11 +165,21 @@ data class SetupBrowserAutofillState(
  */
 sealed class SetupBrowserAutofillEvent {
     /**
+     * Navigates back.
+     */
+    data object NavigateBack : SetupBrowserAutofillEvent()
+
+    /**
      * Navigate to the Autofill settings of the specified [browserPackage].
      */
     data class NavigateToBrowserAutofillSettings(
         val browserPackage: BrowserPackage,
     ) : SetupBrowserAutofillEvent()
+
+    /**
+     * Navigates to the browser integrations info page.
+     */
+    data object NavigateToBrowserIntegrationsInfo : SetupBrowserAutofillEvent()
 }
 
 /**
@@ -154,6 +192,11 @@ sealed class SetupBrowserAutofillAction {
     data class BrowserIntegrationClick(
         val browserPackage: BrowserPackage,
     ) : SetupBrowserAutofillAction()
+
+    /**
+     * Indicates that the close button has been clicked.
+     */
+    data object CloseClick : SetupBrowserAutofillAction()
 
     /**
      * Indicates that the dialog has been dismissed.
@@ -174,6 +217,11 @@ sealed class SetupBrowserAutofillAction {
      * Indicates that the confirmation button was clicked to turn on later.
      */
     data object TurnOnLaterConfirmClick : SetupBrowserAutofillAction()
+
+    /**
+     * Indicates that the "Why is this step required?" button was clicked.
+     */
+    data object WhyIsThisStepRequiredClick : SetupBrowserAutofillAction()
 
     /**
      * Models actions the [SetupBrowserAutofillViewModel] itself may send.

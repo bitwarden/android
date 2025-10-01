@@ -206,6 +206,31 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `handleContinueClick send NavigateToBrowserAutofill event when not initial setup and sets first time flag to false`() =
+        runTest {
+            every {
+                thirdPartyAutofillEnabledManager.browserThirdPartyAutofillStatus
+            } returns mockk { every { isAnyIsAvailableAndDisabled } returns true }
+            val viewModel = createViewModel(
+                initialState = DEFAULT_STATE.copy(isInitialSetup = false),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(SetupAutoFillAction.ContinueClick)
+                assertEquals(
+                    SetupAutoFillEvent.NavigateToBrowserAutofill,
+                    awaitItem(),
+                )
+            }
+            verify(exactly = 1) {
+                firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = false)
+            }
+            verify(exactly = 0) {
+                authRepository.setOnboardingStatus(status = OnboardingStatus.FINAL_STEP)
+            }
+        }
+
     @Test
     fun `handleTurnOnLaterConfirmClick sets showAutoFillSettingBadge to true`() {
         val viewModel = createViewModel()
