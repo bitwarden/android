@@ -8,10 +8,10 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class MasterPasswordUnlockDataJson(
-    @SerialName("MasterPasswordSalt")
+    @SerialName("Salt")
     val salt: String,
 
-    @SerialName("EncryptedPrivateKey")
+    @SerialName("Kdf")
     val kdf: KdfJson,
 
     @SerialName("MasterKeyWrappedUserKey")
