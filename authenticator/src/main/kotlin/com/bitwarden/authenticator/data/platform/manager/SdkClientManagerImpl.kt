@@ -4,15 +4,6 @@ import com.bitwarden.core.ClientManagedTokens
 import com.bitwarden.sdk.Client
 
 /**
- * The token provider to pass to the SDK.
- */
-class Token : ClientManagedTokens {
-    override suspend fun getAccessToken(): String? {
-        return null
-    }
-}
-
-/**
  * Primary implementation of [SdkClientManager].
  */
 class SdkClientManagerImpl(
@@ -29,5 +20,14 @@ class SdkClientManagerImpl(
 
     override fun destroyClient() {
         client = null
+    }
+
+    /**
+     * The token provider to pass to the SDK.
+     */
+    private class Token : ClientManagedTokens {
+        override suspend fun getAccessToken(): String? {
+            return null
+        }
     }
 }
