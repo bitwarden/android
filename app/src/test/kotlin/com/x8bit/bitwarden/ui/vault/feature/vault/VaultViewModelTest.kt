@@ -2882,30 +2882,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `KdfUpdatePasswordRepromptSubmit with AccountNotFound should show error dialog`() =
-        runTest {
-            val password = "masterPassword"
-            coEvery {
-                authRepository.updateKdfToMinimumsIfNeeded(password)
-            } returns UpdateKdfMinimumsResult.AccountNotFound
-
-            val viewModel = createViewModel()
-            viewModel.trySendAction(
-                VaultAction.KdfUpdatePasswordRepromptSubmit(password = password),
-            )
-
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialog = VaultState.DialogState.Error(
-                        title = BitwardenString.an_error_has_occurred.asText(),
-                        message = BitwardenString.generic_error_message.asText(),
-                    ),
-                ),
-                viewModel.stateFlow.value,
-            )
-        }
-
-    @Test
     fun `KdfUpdatePasswordRepromptSubmit with ActiveAccountNotFound should show error dialog`() =
         runTest {
             val password = "masterPassword"

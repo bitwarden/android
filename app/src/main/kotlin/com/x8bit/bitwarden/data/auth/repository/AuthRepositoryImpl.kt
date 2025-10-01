@@ -1268,8 +1268,6 @@ class AuthRepositoryImpl(
 
     override suspend fun updateKdfToMinimumsIfNeeded(password: String): UpdateKdfMinimumsResult {
         val userId = activeUserId ?: return UpdateKdfMinimumsResult.ActiveAccountNotFound
-        val account = authDiskSource.userState?.accounts?.get(userId)
-            ?: return UpdateKdfMinimumsResult.ActiveAccountNotFound
 
         // Check if needs update kdf
         if (!needsKdfUpdateToMinimums()) {

@@ -10,11 +10,6 @@ sealed class UpdateKdfMinimumsResult {
     object ActiveAccountNotFound : UpdateKdfMinimumsResult()
 
     /**
-     * Account with userId was not found
-     */
-    object AccountNotFound : UpdateKdfMinimumsResult()
-
-    /**
      * There was an error updating user to minimum kdf settings.
      *
      * @param error the error.

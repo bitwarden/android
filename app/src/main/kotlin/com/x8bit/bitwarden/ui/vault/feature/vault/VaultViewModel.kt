@@ -1157,10 +1157,6 @@ class VaultViewModel @Inject constructor(
         viewModelScope.launch {
             val result = authRepository.updateKdfToMinimumsIfNeeded(action.password)
             when (result) {
-                UpdateKdfMinimumsResult.AccountNotFound -> {
-                    showGenericError()
-                    Timber.e(message = "Failed to update kdf to minimums: Account not found")
-                }
                 UpdateKdfMinimumsResult.ActiveAccountNotFound -> {
                     showGenericError()
                     Timber.e(message = "Failed to update kdf to minimums: Active account not found")
