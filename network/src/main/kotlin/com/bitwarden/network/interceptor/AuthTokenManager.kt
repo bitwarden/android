@@ -15,6 +15,7 @@ import java.time.Clock
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
+private const val AUTH_TOKEN_SYNC_HEADER: String = "Access-Token-Sync"
 private const val MISSING_TOKEN_MESSAGE: String = "Auth token is missing!"
 private const val MISSING_PROVIDER_MESSAGE: String = "Refresh token provider is missing!"
 private const val EXPIRATION_OFFSET_MINUTES: Long = 5L
@@ -79,7 +80,9 @@ internal class AuthTokenManager(
             val expirationTime = Instant
                 .ofEpochSecond(tokenData.expiresAtSec)
                 .minus(EXPIRATION_OFFSET_MINUTES, ChronoUnit.MINUTES)
-            if (clock.instant().isAfter(expirationTime)) {
+            if (clock.instant().isAfter(expirationTime) ||
+                chain.request().header(AUTH_TOKEN_SYNC_HEADER).toBoolean()
+            ) {
                 Timber.d("Attempting to refresh token due to expiration")
                 refreshTokenProvider
                     ?.refreshAccessTokenSynchronously(userId = tokenData.userId)
@@ -92,6 +95,7 @@ internal class AuthTokenManager(
         val request = chain
             .request()
             .newBuilder()
+            .removeHeader(AUTH_TOKEN_SYNC_HEADER)
             .addHeader(
                 name = HEADER_KEY_AUTHORIZATION,
                 value = "${HEADER_VALUE_BEARER_PREFIX}$token",
