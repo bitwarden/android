@@ -8,6 +8,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -41,7 +42,7 @@ fun BitwardenExternalLinkRow(
     onConfirmClick: () -> Unit,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
-    description: String? = null,
+    description: AnnotatedString? = null,
     withDivider: Boolean = true,
     dialogTitle: String,
     dialogMessage: String,
