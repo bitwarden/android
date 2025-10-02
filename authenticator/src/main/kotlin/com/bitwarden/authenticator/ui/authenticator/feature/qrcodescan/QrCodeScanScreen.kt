@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -53,19 +52,17 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.util.QrCodeAnalyzer
 import com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.util.QrCodeAnalyzerImpl
-import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
-import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
-import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.authenticator.ui.platform.theme.LocalNonMaterialColors
 import com.bitwarden.authenticator.ui.platform.util.isPortrait
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.spanStyleOf
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
-import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import java.util.concurrent.Executors
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -117,7 +114,7 @@ fun QrCodeScanScreen(
     BitwardenScaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            AuthenticatorTopAppBar(
+            BitwardenTopAppBar(
                 title = stringResource(id = BitwardenString.scan_qr_code),
                 navigationIcon = painterResource(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = BitwardenString.close),
@@ -127,24 +124,21 @@ fun QrCodeScanScreen(
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
             )
         },
-    ) { innerPadding ->
+    ) {
         CameraPreview(
             cameraErrorReceive = remember(viewModel) {
                 { viewModel.trySendAction(QrCodeScanAction.CameraSetupErrorReceive) }
             },
             qrCodeAnalyzer = qrCodeAnalyzer,
-            modifier = Modifier.padding(innerPadding),
         )
 
         if (LocalConfiguration.current.isPortrait) {
             PortraitQRCodeContent(
                 onEnterCodeManuallyClick = onEnterCodeManuallyClick,
-                modifier = Modifier.padding(paddingValues = innerPadding),
             )
         } else {
             LandscapeQRCodeContent(
                 onEnterCodeManuallyClick = onEnterCodeManuallyClick,
-                modifier = Modifier.padding(paddingValues = innerPadding),
             )
         }
     }
@@ -167,10 +161,8 @@ private fun QrCodeScanDialogs(
 
         QrCodeScanState.DialogState.SaveToBitwardenError -> {
             BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = BitwardenString.something_went_wrong.asText(),
-                    message = BitwardenString.please_try_again.asText(),
-                ),
+                title = stringResource(id = BitwardenString.something_went_wrong),
+                message = stringResource(id = BitwardenString.please_try_again),
                 onDismissRequest = onDismissRequest,
             )
         }
@@ -207,7 +199,7 @@ private fun PortraitQRCodeContent(
                 text = stringResource(id = BitwardenString.point_your_camera_at_the_qr_code),
                 textAlign = TextAlign.Center,
                 color = Color.White,
-                style = MaterialTheme.typography.bodyMedium,
+                style = BitwardenTheme.typography.bodyMedium,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
 
@@ -248,7 +240,7 @@ private fun LandscapeQRCodeContent(
                 text = stringResource(id = BitwardenString.point_your_camera_at_the_qr_code),
                 textAlign = TextAlign.Center,
                 color = Color.White,
-                style = MaterialTheme.typography.bodySmall,
+                style = BitwardenTheme.typography.bodySmall,
             )
 
             BottomClickableText(
@@ -345,7 +337,7 @@ private fun QrCodeSquare(
     modifier: Modifier = Modifier,
     squareOutlineSize: Dp,
 ) {
-    val color = MaterialTheme.colorScheme.primary
+    val color = BitwardenTheme.colorScheme.text.primary
 
     Box(
         contentAlignment = Alignment.Center,
@@ -443,12 +435,12 @@ private fun BottomClickableText(
         text = annotatedStringResource(
             id = BitwardenString.cannot_scan_qr_code_enter_key_manually,
             linkHighlightStyle = spanStyleOf(
-                color = LocalNonMaterialColors.current.qrCodeClickableText,
-                textStyle = MaterialTheme.typography.bodyMedium,
+                color = BitwardenTheme.colorScheme.text.interaction,
+                textStyle = BitwardenTheme.typography.bodyMedium,
             ),
             style = spanStyleOf(
                 color = Color.White,
-                textStyle = MaterialTheme.typography.bodyMedium,
+                textStyle = BitwardenTheme.typography.bodyMedium,
             ),
             onAnnotationClick = {
                 when (it) {

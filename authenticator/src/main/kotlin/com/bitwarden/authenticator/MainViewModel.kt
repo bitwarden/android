@@ -60,6 +60,7 @@ class MainViewModel @Inject constructor(
 
     private fun handleThemeUpdated(action: MainAction.Internal.ThemeUpdate) {
         mutableStateFlow.update { it.copy(theme = action.theme) }
+        sendEvent(MainEvent.UpdateAppTheme(osTheme = action.theme.osValue))
     }
 
     private fun handleFirstIntentReceived(action: MainAction.ReceiveFirstIntent) {
@@ -139,4 +140,9 @@ sealed class MainEvent {
      * Event indicating a change in the screen capture setting.
      */
     data class ScreenCaptureSettingChange(val isAllowed: Boolean) : MainEvent()
+
+    /**
+     * Indicates that the app theme has been updated.
+     */
+    data class UpdateAppTheme(val osTheme: Int) : MainEvent()
 }

@@ -5,10 +5,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -21,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Show a snackbar that says "Account synced from Bitwarden app" with a close action.
@@ -40,8 +39,8 @@ fun FirstTimeSyncSnackbarHost(
                     .fillMaxWidth()
                     .shadow(elevation = 6.dp)
                     .background(
-                        color = MaterialTheme.colorScheme.inverseSurface,
-                        shape = RoundedCornerShape(8.dp),
+                        color = BitwardenTheme.colorScheme.background.alert,
+                        shape = BitwardenTheme.shapes.snackbar,
                     ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -50,8 +49,8 @@ fun FirstTimeSyncSnackbarHost(
                         .padding(16.dp)
                         .weight(1f, fill = true),
                     text = stringResource(BitwardenString.account_synced_from_bitwarden_app),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.inverseOnSurface,
+                    style = BitwardenTheme.typography.bodyLarge,
+                    color = BitwardenTheme.colorScheme.text.reversed,
                 )
                 IconButton(
                     onClick = { state.currentSnackbarData?.dismiss() },
@@ -59,7 +58,7 @@ fun FirstTimeSyncSnackbarHost(
                     Icon(
                         painter = painterResource(id = BitwardenDrawable.ic_close),
                         contentDescription = stringResource(id = BitwardenString.close),
-                        tint = MaterialTheme.colorScheme.inverseOnSurface,
+                        tint = BitwardenTheme.colorScheme.icon.reversed,
                         modifier = Modifier
                             .size(24.dp),
                     )

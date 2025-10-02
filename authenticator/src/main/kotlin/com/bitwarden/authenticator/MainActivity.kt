@@ -9,17 +9,19 @@ import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.composition.LocalManagerProvider
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
 import com.bitwarden.authenticator.ui.platform.feature.rootnav.RootNavScreen
-import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.setupEdgeToEdge
 import com.bitwarden.ui.platform.util.validate
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,6 +41,9 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var debugLaunchManager: DebugMenuLaunchManager
 
+    @Inject
+    lateinit var settingsRepository: SettingsRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         intent = intent.validate()
         var shouldShowSplashScreen = true
@@ -53,13 +58,14 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
+        AppCompatDelegate.setDefaultNightMode(settingsRepository.appTheme.osValue)
         setupEdgeToEdge(appThemeFlow = mainViewModel.stateFlow.map { it.theme })
         setContent {
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
             val navController = rememberNavController()
             observeViewModelEvents(navController)
             LocalManagerProvider {
-                AuthenticatorTheme(
+                BitwardenTheme(
                     theme = state.theme,
                 ) {
                     RootNavScreen(
@@ -94,6 +100,9 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     MainEvent.NavigateToDebugMenu -> navController.navigateToDebugMenuScreen()
+                    is MainEvent.UpdateAppTheme -> {
+                        AppCompatDelegate.setDefaultNightMode(event.osTheme)
+                    }
                 }
             }
             .launchIn(lifecycleScope)

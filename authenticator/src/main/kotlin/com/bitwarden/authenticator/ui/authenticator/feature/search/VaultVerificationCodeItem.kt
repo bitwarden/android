@@ -1,7 +1,5 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.search
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,11 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -22,12 +17,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bitwarden.authenticator.ui.platform.components.indicator.AuthenticatorCircularCountdownIndicator
-import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
+import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.ui.platform.components.icon.model.IconData
+import com.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
+import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * The verification code item displayed to the user.
@@ -53,25 +50,24 @@ fun VaultVerificationCodeItem(
     startIcon: IconData,
     onCopyClick: () -> Unit,
     onItemClick: () -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
     supportingLabel: String? = null,
 ) {
     Row(
-        modifier = Modifier
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = MaterialTheme.colorScheme.primary),
+        modifier = modifier
+            .defaultMinSize(minHeight = 60.dp)
+            .cardStyle(
+                cardStyle = cardStyle,
                 onClick = onItemClick,
-            )
-            .defaultMinSize(minHeight = 72.dp)
-            .padding(vertical = 8.dp)
-            .then(modifier),
+                paddingStart = 16.dp,
+            ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         BitwardenIcon(
             iconData = startIcon,
-            tint = MaterialTheme.colorScheme.onSurface,
+            tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier.size(24.dp),
         )
 
@@ -83,8 +79,8 @@ fun VaultVerificationCodeItem(
             if (!issuer.isNullOrEmpty()) {
                 Text(
                     text = issuer,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    style = BitwardenTheme.typography.bodyLarge,
+                    color = BitwardenTheme.colorScheme.text.primary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -92,15 +88,15 @@ fun VaultVerificationCodeItem(
             if (!supportingLabel.isNullOrEmpty()) {
                 Text(
                     text = supportingLabel,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = BitwardenTheme.typography.bodyMedium,
+                    color = BitwardenTheme.colorScheme.text.secondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
             }
         }
 
-        AuthenticatorCircularCountdownIndicator(
+        BitwardenCircularCountdownIndicator(
             timeLeftSeconds = timeLeftSeconds,
             periodSeconds = periodSeconds,
             alertThresholdSeconds = alertThresholdSeconds,
@@ -108,8 +104,8 @@ fun VaultVerificationCodeItem(
 
         Text(
             text = authCode.chunked(3).joinToString(" "),
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = BitwardenTheme.typography.sensitiveInfoSmall,
+            color = BitwardenTheme.colorScheme.text.primary,
         )
 
         IconButton(
@@ -118,7 +114,7 @@ fun VaultVerificationCodeItem(
             Icon(
                 painter = painterResource(id = BitwardenDrawable.ic_copy),
                 contentDescription = stringResource(id = BitwardenString.copy),
-                tint = MaterialTheme.colorScheme.primary,
+                tint = BitwardenTheme.colorScheme.icon.primary,
                 modifier = Modifier.size(24.dp),
             )
         }
@@ -129,7 +125,7 @@ fun VaultVerificationCodeItem(
 @Preview(showBackground = true)
 @Composable
 private fun VerificationCodeItem_preview() {
-    AuthenticatorTheme {
+    BitwardenTheme {
         VaultVerificationCodeItem(
             startIcon = IconData.Local(BitwardenDrawable.ic_login_item),
             issuer = "Sample Label",
@@ -141,6 +137,7 @@ private fun VerificationCodeItem_preview() {
             onItemClick = {},
             modifier = Modifier.padding(horizontal = 16.dp),
             alertThresholdSeconds = 7,
+            cardStyle = CardStyle.Full,
         )
     }
 }

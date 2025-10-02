@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
@@ -22,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A header that can be expanded and collapsed.
@@ -54,15 +54,15 @@ fun AuthenticatorExpandingHeader(
         )
         Text(
             text = label,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = BitwardenTheme.typography.labelMedium,
+            color = BitwardenTheme.colorScheme.text.secondary,
             modifier = Modifier.weight(1f, fill = false),
         )
         Spacer(modifier = Modifier.width(width = 8.dp))
         Icon(
             painter = rememberVectorPainter(id = BitwardenDrawable.ic_chevron_up_small),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier.rotate(degrees = iconRotationDegrees.value),
         )
     }
