@@ -16,10 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.nullableTestTag
+import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.ui.platform.components.model.CardStyle
@@ -53,7 +55,7 @@ fun BitwardenTextRow(
     onClick: () -> Unit,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
-    description: String? = null,
+    description: AnnotatedString? = null,
     textTestTag: String? = null,
     isEnabled: Boolean = true,
     clickable: Boolean = isEnabled,
@@ -138,7 +140,7 @@ private fun BitwardenTextRowWithTooltipAndContent_Preview() {
         text = "Sample Text",
         onClick = {},
         cardStyle = CardStyle.Full,
-        description = "This is a sample description.",
+        description = "This is a sample description.".toAnnotatedString(),
         textTestTag = "sampleTestTag",
         isEnabled = true,
         withDivider = false,
@@ -156,7 +158,7 @@ private fun BitwardenTextRowWithDividerDisabled_Preview() {
         text = "Sample Text Disabled",
         onClick = {},
         cardStyle = CardStyle.Top(),
-        description = "This is a sample disabled description.",
+        description = "This is a sample disabled description.".toAnnotatedString(),
         textTestTag = "sampleDisabledTestTag",
         isEnabled = false,
         withDivider = true,

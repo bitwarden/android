@@ -22,12 +22,15 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param timeLeftSeconds The seconds left on the timer.
  * @param periodSeconds The period for the timer countdown.
  * @param modifier A [Modifier] for the composable.
+ * @param alertThresholdSeconds The threshold at which the progress indicator should change to an
+ * alert color.
  */
 @Composable
 fun BitwardenCircularCountdownIndicator(
     timeLeftSeconds: Int,
     periodSeconds: Int,
     modifier: Modifier = Modifier,
+    alertThresholdSeconds: Int = -1,
 ) {
     val progressAnimate by animateFloatAsState(
         targetValue = timeLeftSeconds.toFloat() / periodSeconds,
@@ -46,7 +49,11 @@ fun BitwardenCircularCountdownIndicator(
         CircularProgressIndicator(
             progress = { progressAnimate },
             modifier = Modifier.size(size = 30.dp),
-            color = BitwardenTheme.colorScheme.icon.secondary,
+            color = if (timeLeftSeconds > alertThresholdSeconds) {
+                BitwardenTheme.colorScheme.icon.secondary
+            } else {
+                BitwardenTheme.colorScheme.status.error
+            },
             trackColor = Color.Transparent,
             strokeWidth = 3.dp,
             strokeCap = StrokeCap.Round,
@@ -55,7 +62,11 @@ fun BitwardenCircularCountdownIndicator(
         Text(
             text = timeLeftSeconds.toString(),
             style = BitwardenTheme.typography.bodySmall,
-            color = BitwardenTheme.colorScheme.text.primary,
+            color = if (timeLeftSeconds > alertThresholdSeconds) {
+                BitwardenTheme.colorScheme.text.primary
+            } else {
+                BitwardenTheme.colorScheme.status.error
+            },
         )
     }
 }
