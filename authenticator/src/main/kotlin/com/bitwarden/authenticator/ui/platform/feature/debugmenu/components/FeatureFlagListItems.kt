@@ -26,6 +26,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.CipherKeyEncryption,
     FlagKey.CredentialExchangeProtocolExport,
     FlagKey.CredentialExchangeProtocolImport,
+    FlagKey.ForceUpdateKdfSettings,
         -> BooleanFlagItem(
         label = flagKey.getDisplayLabel(),
         key = flagKey as FlagKey<Boolean>,
@@ -66,6 +67,7 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.CredentialExchangeProtocolImport -> stringResource(BitwardenString.cxp_import)
     FlagKey.CredentialExchangeProtocolExport -> stringResource(BitwardenString.cxp_export)
     FlagKey.CipherKeyEncryption -> stringResource(BitwardenString.cipher_key_encryption)
+    FlagKey.ForceUpdateKdfSettings -> stringResource(BitwardenString.force_update_kdf_settings)
     FlagKey.BitwardenAuthenticationEnabled -> {
         stringResource(BitwardenString.bitwarden_authentication_enabled)
     }

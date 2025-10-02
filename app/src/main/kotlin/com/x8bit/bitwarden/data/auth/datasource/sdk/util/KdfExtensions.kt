@@ -26,6 +26,7 @@ fun Kdf.toKdfRequestModel(): KdfJson =
             memory = memory.toInt(),
             parallelism = parallelism.toInt(),
         )
+
         is Kdf.Pbkdf2 -> KdfJson(
             kdfType = toKdfTypeJson(),
             iterations = iterations.toInt(),
