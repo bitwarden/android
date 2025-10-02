@@ -31,7 +31,7 @@ fun PublicKeyCredentialAuthenticatorAttestationResponse.toAndroidAttestationResp
                         .ClientExtensionResults
                         .CredentialProperties(residentKey = residentKey),
                 )
-            },
+            } ?: Fido2AttestationResponse.ClientExtensionResults(),
         authenticatorAttachment = authenticatorAttachment,
     )
 

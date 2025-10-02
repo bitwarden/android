@@ -15,9 +15,9 @@ import kotlinx.coroutines.flow.Flow
  */
 interface PushManager {
     /**
-     * Flow that represents requests intended for full syncs.
+     * Flow that represents requests intended for full syncs for the user ID provided.
      */
-    val fullSyncFlow: Flow<Unit>
+    val fullSyncFlow: Flow<String>
 
     /**
      * Flow that represents requests intended to log a user out.

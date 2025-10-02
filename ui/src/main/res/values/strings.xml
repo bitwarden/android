@@ -366,8 +366,6 @@ Scanning will happen automatically.</string>
     <string name="theme">Theme</string>
     <string name="theme_description">Change the application’s color theme</string>
     <string name="copy_notes">Copy note</string>
-    <string name="exit">Exit</string>
-    <string name="exit_confirmation">Are you sure you want to exit Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
     <string name="pin_require_master_password_restart">Do you want to require unlocking with your master password when the application is restarted?</string>
     <string name="ask_to_add_item">Ask to add item</string>
@@ -1129,4 +1127,12 @@ Do you want to switch to this account?</string>
     <string name="verify_your_master_password">Verify your master password</string>
     <string name="having_trouble_with_autofill">Having trouble with autofill?</string>
     <string name="access_help_and_troubleshooting_documentation_here">Access help and troubleshooting documentation here</string>
+    <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Import passwords, passkeys, and other item types from your Bitwarden vault.</string>
+    <string name="items_to_import">Items to import</string>
+    <string name="exporting_items">Exporting items…</string>
+    <string name="export_failed">Export failed</string>
+    <string name="passwords">Passwords</string>
+    <string name="passkeys">Passkeys</string>
+    <string name="import_verb">Import</string>
+    <string name="why_is_this_step_required">Why is this step required?</string>
 </resources>

@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
+import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -177,7 +178,11 @@ object VaultManagerModule {
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         userLogoutManager: UserLogoutManager,
+        vaultLockManager: VaultLockManager,
         clock: Clock,
+        databaseSchemeManager: DatabaseSchemeManager,
+        pushManager: PushManager,
+        dispatcherManager: DispatcherManager,
     ): VaultSyncManager = VaultSyncManagerImpl(
         syncService = syncService,
         settingsDiskSource = settingsDiskSource,
@@ -185,7 +190,11 @@ object VaultManagerModule {
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
         userLogoutManager = userLogoutManager,
+        vaultLockManager = vaultLockManager,
         clock = clock,
+        databaseSchemeManager = databaseSchemeManager,
+        pushManager = pushManager,
+        dispatcherManager = dispatcherManager,
     )
 
     @Provides
@@ -193,8 +202,10 @@ object VaultManagerModule {
     fun provideCredentialExchangeImportManager(
         vaultSdkSource: VaultSdkSource,
         ciphersService: CiphersService,
+        vaultSyncManager: VaultSyncManager,
     ): CredentialExchangeImportManager = CredentialExchangeImportManagerImpl(
         vaultSdkSource = vaultSdkSource,
         ciphersService = ciphersService,
+        vaultSyncManager = vaultSyncManager,
     )
 }

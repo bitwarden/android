@@ -12,6 +12,7 @@ import kotlinx.collections.immutable.ImmutableList
  * @property canAssociateToCollections Whether the item can be associated to a collection.
  * @property canEdit Whether the item can be edited.
  * @property relatedLocations The locations the item is assigned to.
+ * @property hasOrganizations Whether the user has organizations.
  */
 data class VaultItemStateData(
     val cipher: CipherView?,
@@ -21,4 +22,5 @@ data class VaultItemStateData(
     val canAssociateToCollections: Boolean,
     val canEdit: Boolean,
     val relatedLocations: ImmutableList<VaultItemLocation>,
+    val hasOrganizations: Boolean,
 )

@@ -61,9 +61,7 @@ import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppReviewManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
-import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.vault.components.VaultItemSelectionDialog
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
@@ -97,7 +95,6 @@ fun VaultScreen(
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutScreen: () -> Unit,
     onNavigateToAutofillScreen: () -> Unit,
-    exitManager: ExitManager = LocalExitManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
     appReviewManager: AppReviewManager = LocalAppReviewManager.current,
 ) {
@@ -163,8 +160,6 @@ fun VaultScreen(
             }
 
             is VaultEvent.NavigateToUrl -> intentManager.launchUri(event.url.toUri())
-
-            VaultEvent.NavigateOutOfApp -> exitManager.exitApplication()
             VaultEvent.NavigateToImportLogins -> onNavigateToImportLogins()
             is VaultEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
             VaultEvent.PromptForAppReview -> {
@@ -214,7 +209,6 @@ private fun VaultScreenScaffold(
         accountMenuVisible = shouldShowMenu
         onDimBottomNavBarRequest(shouldShowMenu)
     }
-    var shouldShowExitConfirmationDialog by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
         state = rememberTopAppBarState(),
         canScroll = { !accountMenuVisible },
@@ -222,23 +216,6 @@ private fun VaultScreenScaffold(
 
     // Dynamic dialogs
     VaultDialogs(dialogState = state.dialog, vaultHandlers = vaultHandlers)
-
-    // Static dialogs
-    if (shouldShowExitConfirmationDialog) {
-        BitwardenTwoButtonDialog(
-            title = stringResource(id = BitwardenString.exit),
-            message = stringResource(id = BitwardenString.exit_confirmation),
-            confirmButtonText = stringResource(id = BitwardenString.yes),
-            dismissButtonText = stringResource(id = BitwardenString.cancel),
-            onConfirmClick = {
-                shouldShowExitConfirmationDialog = false
-                vaultHandlers.exitConfirmationAction()
-            },
-            onDismissClick = { shouldShowExitConfirmationDialog = false },
-            onDismissRequest = { shouldShowExitConfirmationDialog = false },
-        )
-    }
-
     BitwardenScaffold(
         topBar = {
             BitwardenMediumTopAppBar(
@@ -270,10 +247,6 @@ private fun VaultScreenScaffold(
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.lock),
                                 onClick = vaultHandlers.lockAction,
-                            ),
-                            OverflowMenuItemData(
-                                text = stringResource(id = BitwardenString.exit),
-                                onClick = { shouldShowExitConfirmationDialog = true },
                             ),
                         ),
                     )

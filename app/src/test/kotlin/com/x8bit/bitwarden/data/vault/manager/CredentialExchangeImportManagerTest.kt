@@ -10,6 +10,7 @@ import com.bitwarden.vault.Cipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.manager.model.ImportCxfPayloadResult
+import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -26,10 +27,12 @@ class CredentialExchangeImportManagerTest {
 
     private val vaultSdkSource: VaultSdkSource = mockk()
     private val ciphersService: CiphersService = mockk(relaxed = true)
+    private val vaultSyncManager: VaultSyncManager = mockk()
 
     private val importManager = CredentialExchangeImportManagerImpl(
         vaultSdkSource = vaultSdkSource,
         ciphersService = ciphersService,
+        vaultSyncManager = vaultSyncManager,
     )
 
     @Test
@@ -110,7 +113,7 @@ class CredentialExchangeImportManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `when ciphersService importCiphers is Success should return Success`() =
+    fun `when ciphersService importCiphers is Success and sync fails should return SyncFailed`() =
         runTest {
             coEvery {
                 vaultSdkSource.importCxf(
@@ -122,13 +125,21 @@ class CredentialExchangeImportManagerTest {
             coEvery {
                 ciphersService.importCiphers(any())
             } returns ImportCiphersResponseJson.Success.asSuccess()
+            val throwable = Throwable("Error!")
+            coEvery {
+                vaultSyncManager.syncForResult(forced = true)
+            } returns SyncVaultDataResult.Error(throwable)
 
             val result = importManager.importCxfPayload(DEFAULT_USER_ID, DEFAULT_PAYLOAD)
 
-            assertTrue(result is ImportCxfPayloadResult.Success)
+            assertEquals(
+                ImportCxfPayloadResult.SyncFailed(throwable),
+                result,
+            )
             coVerify(exactly = 1) {
                 vaultSdkSource.importCxf(DEFAULT_USER_ID, DEFAULT_PAYLOAD)
                 ciphersService.importCiphers(any())
+                vaultSyncManager.syncForResult(forced = true)
             }
         }
 
@@ -144,6 +155,9 @@ class CredentialExchangeImportManagerTest {
         coEvery {
             ciphersService.importCiphers(any())
         } returns ImportCiphersResponseJson.Success.asSuccess()
+        coEvery {
+            vaultSyncManager.syncForResult(forced = true)
+        } returns SyncVaultDataResult.Success(itemsAvailable = true)
 
         val result = importManager.importCxfPayload(DEFAULT_USER_ID, DEFAULT_PAYLOAD)
 
@@ -151,6 +165,7 @@ class CredentialExchangeImportManagerTest {
         coVerify(exactly = 1) {
             vaultSdkSource.importCxf(DEFAULT_USER_ID, DEFAULT_PAYLOAD)
             ciphersService.importCiphers(any())
+            vaultSyncManager.syncForResult(forced = true)
         }
     }
 

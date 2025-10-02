@@ -13,5 +13,5 @@ import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
 @Suppress("MaxLineLength")
 val LocalCredentialExchangeCompletionManager: ProvidableCompositionLocal<CredentialExchangeCompletionManager> =
     compositionLocalOf {
-        error("CompositionLocal LocalPermissionsManager not present")
+        error("CompositionLocal LocalCredentialExchangeCompletionManager not present")
     }

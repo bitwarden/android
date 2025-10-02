@@ -713,15 +713,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Test
-    fun `on ExitConfirmationClick should emit NavigateOutOfApp`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultAction.ExitConfirmationClick)
-            assertEquals(VaultEvent.NavigateOutOfApp, awaitItem())
-        }
-    }
-
     @Suppress("MaxLineLength")
     @Test
     fun `on VaultFilterTypeSelect should update the selected filter type and re-filter any existing data`() {

@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.viewsend
 
 import androidx.compose.ui.test.assert
-import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.hasAnyAncestor
@@ -171,12 +170,10 @@ class ViewSendScreenTest : BitwardenComposeTest() {
     @Test
     fun `progress bar should be displayed based on ViewState`() {
         mutableStateFlow.update { it.copy(viewState = ViewSendState.ViewState.Loading) }
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         mutableStateFlow.update { it.copy(viewState = DEFAULT_STATE.viewState) }
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
     }
 
     @Test
