@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.repository.util.baseIconUrl
@@ -101,7 +100,6 @@ class VaultViewModel @Inject constructor(
     private val reviewPromptManager: ReviewPromptManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val networkConnectionManager: NetworkConnectionManager,
-    private val toastManager: ToastManager,
     private val browserAutofillDialogManager: BrowserAutofillDialogManager,
     snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
@@ -281,6 +279,7 @@ class VaultViewModel @Inject constructor(
             is VaultAction.KdfUpdatePasswordRepromptSubmit -> {
                 handleKdfUpdatePasswordRepromptSubmit(action)
             }
+
             VaultAction.EnableThirdPartyAutofillClick -> handleEnableThirdPartyAutofillClick()
             VaultAction.DismissThirdPartyAutofillDialogClick -> {
                 handleDismissThirdPartyAutofillDialogClick()
@@ -796,6 +795,40 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal.DecryptionErrorReceive -> {
                 handleDecryptionErrorReceive(action)
             }
+
+            is VaultAction.Internal.UpdatedKdfToMinimumsReceived -> {
+                handleUpdatedKdfToMinimumsReceived(action)
+            }
+        }
+    }
+
+    private fun handleUpdatedKdfToMinimumsReceived(
+        action: VaultAction.Internal.UpdatedKdfToMinimumsReceived,
+    ) {
+        mutableStateFlow.update {
+            it.copy(dialog = null)
+        }
+
+        when (val result = action.result) {
+            UpdateKdfMinimumsResult.ActiveAccountNotFound -> {
+                showGenericError()
+                Timber.e(message = "Failed to update kdf to minimums: Active account not found")
+            }
+
+            is UpdateKdfMinimumsResult.Error -> {
+                showGenericError(error = result.error)
+                Timber.e(message = "Failed to update kdf to minimums: ${result.error}")
+            }
+
+            UpdateKdfMinimumsResult.Success -> {
+                sendEvent(
+                    event = VaultEvent.ShowSnackbar(
+                        data = BitwardenSnackbarData(
+                            message = BitwardenString.encryption_settings_updated.asText(),
+                        ),
+                    ),
+                )
+            }
         }
     }
 
@@ -974,17 +1007,15 @@ class VaultViewModel @Inject constructor(
         )
 
         // Check if user needs to update kdf settings to minimums
-        viewModelScope.launch {
-            if (authRepository.needsKdfUpdateToMinimums()) {
-                mutableStateFlow.update { currentState ->
-                    @Suppress("MaxLineLength")
-                    currentState.copy(
-                        dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
-                            title = BitwardenString.update_your_encryption_settings.asText(),
-                            message = BitwardenString.the_new_recommended_encryption_settings_will_improve_your_account_security_desc_long.asText(),
-                        ),
-                    )
-                }
+        if (authRepository.needsKdfUpdateToMinimums()) {
+            mutableStateFlow.update { currentState ->
+                @Suppress("MaxLineLength")
+                currentState.copy(
+                    dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
+                        title = BitwardenString.update_your_encryption_settings.asText(),
+                        message = BitwardenString.the_new_recommended_encryption_settings_will_improve_your_account_security_desc_long.asText(),
+                    ),
+                )
             }
         }
     }
@@ -1151,24 +1182,9 @@ class VaultViewModel @Inject constructor(
     private fun handleKdfUpdatePasswordRepromptSubmit(
         action: VaultAction.KdfUpdatePasswordRepromptSubmit,
     ) {
-        mutableStateFlow.update {
-            it.copy(dialog = null)
-        }
         viewModelScope.launch {
-            val result = authRepository.updateKdfToMinimumsIfNeeded(action.password)
-            when (result) {
-                UpdateKdfMinimumsResult.ActiveAccountNotFound -> {
-                    showGenericError()
-                    Timber.e(message = "Failed to update kdf to minimums: Active account not found")
-                }
-                is UpdateKdfMinimumsResult.Error -> {
-                    showGenericError(error = result.error)
-                    Timber.e(message = "Failed to update kdf to minimums: ${result.error}")
-                }
-                UpdateKdfMinimumsResult.Success -> {
-                    toastManager.show(messageId = BitwardenString.encryption_settings_updated)
-                }
-            }
+            val result = authRepository.updateKdfToMinimumsIfNeeded(password = action.password)
+            sendAction(action = VaultAction.Internal.UpdatedKdfToMinimumsReceived(result))
         }
     }
 
@@ -2007,6 +2023,13 @@ sealed class VaultAction {
             val title: Text,
             val message: Text,
             val error: Throwable?,
+        ) : Internal()
+
+        /**
+         * Indicates that a result for updating the kdf has been received.
+         */
+        data class UpdatedKdfToMinimumsReceived(
+            val result: UpdateKdfMinimumsResult,
         ) : Internal()
     }
 }

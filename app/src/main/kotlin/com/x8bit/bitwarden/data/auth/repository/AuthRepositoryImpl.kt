@@ -1244,7 +1244,7 @@ class AuthRepositoryImpl(
                 onFailure = { PasswordStrengthResult.Error(error = it) },
             )
 
-    override suspend fun needsKdfUpdateToMinimums(): Boolean {
+    override fun needsKdfUpdateToMinimums(): Boolean {
         if (!featureFlagManager.getFeatureFlag(FlagKey.ForceUpdateKdfSettings)) {
             return false
         }
@@ -1275,13 +1275,15 @@ class AuthRepositoryImpl(
         }
         val defaultKdf = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt())
         // Generate updated KDF data
-        val updateKdfResponse = vaultSdkSource.makeUpdateKdf(
-            userId = userId,
-            password = password,
-            kdf = defaultKdf,
-        ).getOrElse { error ->
-            return UpdateKdfMinimumsResult.Error(error = error)
-        }
+        val updateKdfResponse = vaultSdkSource
+            .makeUpdateKdf(
+                userId = userId,
+                password = password,
+                kdf = defaultKdf,
+            )
+            .getOrElse { error ->
+                return UpdateKdfMinimumsResult.Error(error = error)
+            }
 
         val authData = updateKdfResponse.masterPasswordAuthenticationData
         val oldAuthData = updateKdfResponse.oldMasterPasswordAuthenticationData

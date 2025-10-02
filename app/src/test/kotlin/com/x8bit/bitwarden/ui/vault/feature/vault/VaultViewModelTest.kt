@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import app.cash.turbine.test
-import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
@@ -101,10 +100,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         every {
             getSnackbarDataFlow(relay = any(), relays = anyVararg())
         } returns mutableSnackbarDataFlow
-    }
-
-    private val toastManager: ToastManager = mockk {
-        every { show(messageId = any()) } just runs
     }
 
     private val clipboardManager: BitwardenClipboardManager = mockk {
@@ -2860,40 +2855,35 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `KdfUpdatePasswordRepromptSubmit with Success should clear dialog and show success toast`() =
+    fun `UpdatedKdfToMinimumsReceived with Success should clear dialog and send a ShowSnackbar event`() =
         runTest {
-            val password = "masterPassword"
-            coEvery {
-                authRepository.updateKdfToMinimumsIfNeeded(password)
-            } returns UpdateKdfMinimumsResult.Success
-
             val viewModel = createViewModel()
-            viewModel.trySendAction(
-                VaultAction.KdfUpdatePasswordRepromptSubmit(password = password),
-            )
-
-            assertEquals(
-                DEFAULT_STATE.copy(dialog = null),
-                viewModel.stateFlow.value,
-            )
-            verify(exactly = 1) {
-                toastManager.show(messageId = BitwardenString.encryption_settings_updated)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    action = VaultAction.Internal.UpdatedKdfToMinimumsReceived(
+                        result = UpdateKdfMinimumsResult.Success,
+                    ),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(dialog = null),
+                    viewModel.stateFlow.value,
+                )
+                assertEquals(
+                    VaultEvent.ShowSnackbar(BitwardenString.encryption_settings_updated.asText()),
+                    awaitItem(),
+                )
             }
         }
 
     @Test
-    fun `KdfUpdatePasswordRepromptSubmit with ActiveAccountNotFound should show error dialog`() =
+    fun `UpdatedKdfToMinimumsReceived with ActiveAccountNotFound should show error dialog`() =
         runTest {
-            val password = "masterPassword"
-            coEvery {
-                authRepository.updateKdfToMinimumsIfNeeded(password)
-            } returns UpdateKdfMinimumsResult.ActiveAccountNotFound
-
             val viewModel = createViewModel()
             viewModel.trySendAction(
-                VaultAction.KdfUpdatePasswordRepromptSubmit(password = password),
+                action = VaultAction.Internal.UpdatedKdfToMinimumsReceived(
+                    result = UpdateKdfMinimumsResult.ActiveAccountNotFound,
+                ),
             )
-
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialog = VaultState.DialogState.Error(
@@ -2906,18 +2896,14 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `KdfUpdatePasswordRepromptSubmit with Error should show error dialog`() = runTest {
-        val password = "masterPassword"
+    fun `UpdatedKdfToMinimumsReceived with Error should show error dialog`() = runTest {
         val testError = Exception("Test error")
-        coEvery {
-            authRepository.updateKdfToMinimumsIfNeeded(password)
-        } returns UpdateKdfMinimumsResult.Error(testError)
-
         val viewModel = createViewModel()
         viewModel.trySendAction(
-            VaultAction.KdfUpdatePasswordRepromptSubmit(password = password),
+            action = VaultAction.Internal.UpdatedKdfToMinimumsReceived(
+                result = UpdateKdfMinimumsResult.Error(testError),
+            ),
         )
-
         assertEquals(
             DEFAULT_STATE.copy(
                 dialog = VaultState.DialogState.Error(
@@ -3057,7 +3043,6 @@ class VaultViewModelTest : BaseViewModelTest() {
             reviewPromptManager = reviewPromptManager,
             specialCircumstanceManager = specialCircumstanceManager,
             networkConnectionManager = networkConnectionManager,
-            toastManager = toastManager,
             browserAutofillDialogManager = browserAutofillDialogManager,
         )
 }

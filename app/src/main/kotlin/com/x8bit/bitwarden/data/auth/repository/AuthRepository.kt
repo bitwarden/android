@@ -355,7 +355,7 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager, UserStateM
     /**
      * Checks if user's current KDF settings are below the minimums and needs update
      */
-    suspend fun needsKdfUpdateToMinimums(): Boolean
+    fun needsKdfUpdateToMinimums(): Boolean
 
     /**
      * Updates the user's KDF settings if below the minimums
