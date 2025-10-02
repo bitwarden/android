@@ -780,6 +780,90 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `vault load KDF update required dialog should be shown or hidden according to the state`() {
+        val dialogTitle = "Master Password Update"
+        val dialogMessage = "Your master password does not meet the current security requirements."
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithText(dialogTitle)
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(dialogMessage)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
+                    title = dialogTitle.asText(),
+                    message = dialogMessage.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(dialogTitle)
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(dialogMessage)
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `confirm button click on the VaultLoadKdfUpdateRequired dialog should send KdfUpdatePasswordRepromptSubmit`() {
+        val dialogTitle = "Master Password Update"
+        val dialogMessage = "Your master password does not meet the current security requirements."
+        val testPassword = "test_password"
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
+                    title = dialogTitle.asText(),
+                    message = dialogMessage.asText(),
+                ),
+            )
+        }
+
+        // Enter password in the input field
+        composeTestRule
+            .onNodeWithText("Master password")
+            .performTextInput(testPassword)
+
+        // Click confirm button
+        composeTestRule
+            .onNodeWithText("Submit")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAction.KdfUpdatePasswordRepromptSubmit(testPassword),
+            )
+        }
+    }
+
+    @Test
+    fun `later button click on the VaultLoadKdfUpdateRequired dialog should send DialogDismiss`() {
+        val dialogTitle = "Master Password Update"
+        val dialogMessage = "Your master password does not meet the current security requirements."
+        val laterText = "Later"
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
+                    title = dialogTitle.asText(),
+                    message = dialogMessage.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(laterText)
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultAction.DialogDismiss)
+        }
+    }
+
+    @Test
     fun `syncing dialog should be displayed according to state`() {
         composeTestRule.assertNoDialogExists()
         composeTestRule.onNodeWithText("Loading").assertDoesNotExist()

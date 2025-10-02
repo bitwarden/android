@@ -16,6 +16,7 @@ import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResendNewDeviceOtpRequestJson
 import com.bitwarden.network.model.ResetPasswordRequestJson
 import com.bitwarden.network.model.SetPasswordRequestJson
+import com.bitwarden.network.model.UpdateKdfJsonRequest
 import com.bitwarden.network.model.VerificationCodeResponseJson
 import com.bitwarden.network.model.VerificationOtpResponseJson
 import com.bitwarden.network.model.VerifyOtpRequestJson
@@ -208,5 +209,10 @@ internal class AccountsServiceImpl(
                 bearerToken = "$HEADER_VALUE_BEARER_PREFIX$accessToken",
                 body = KeyConnectorMasterKeyRequestJson(masterKey = masterKey),
             )
+            .toResult()
+
+    override suspend fun updateKdf(body: UpdateKdfJsonRequest): Result<Unit> =
+        authenticatedAccountsApi
+            .updateKdf(body)
             .toResult()
 }

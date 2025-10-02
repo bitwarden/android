@@ -24,6 +24,10 @@ class FlagKeyTest {
             FlagKey.BitwardenAuthenticationEnabled.keyName,
             "bitwarden-authentication-enabled",
         )
+        assertEquals(
+            FlagKey.ForceUpdateKdfSettings.keyName,
+            "pm-18021-force-update-kdf-settings",
+        )
     }
 
     @Test
@@ -34,6 +38,7 @@ class FlagKeyTest {
                 FlagKey.CredentialExchangeProtocolExport,
                 FlagKey.CipherKeyEncryption,
                 FlagKey.BitwardenAuthenticationEnabled,
+                FlagKey.ForceUpdateKdfSettings,
             ).all {
                 !it.defaultValue
             },

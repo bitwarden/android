@@ -46,6 +46,7 @@ data class VaultHandlers(
     val dismissFlightRecorderSnackbar: () -> Unit,
     val onShareCipherDecryptionErrorClick: (selectedCipherId: String) -> Unit,
     val onShareAllCipherDecryptionErrorsClick: () -> Unit,
+    val onKdfUpdatePasswordRepromptSubmit: (password: String) -> Unit,
     val onEnabledThirdPartyAutofillClick: () -> Unit,
     val onDismissThirdPartyAutofillDialogClick: () -> Unit,
 ) {
@@ -136,6 +137,9 @@ data class VaultHandlers(
                 },
                 onDismissThirdPartyAutofillDialogClick = {
                     viewModel.trySendAction(VaultAction.DismissThirdPartyAutofillDialogClick)
+                },
+                onKdfUpdatePasswordRepromptSubmit = {
+                    viewModel.trySendAction(VaultAction.KdfUpdatePasswordRepromptSubmit(it))
                 },
             )
     }

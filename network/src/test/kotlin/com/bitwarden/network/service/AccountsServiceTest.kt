@@ -6,15 +6,19 @@ import com.bitwarden.network.api.AuthenticatedKeyConnectorApi
 import com.bitwarden.network.api.UnauthenticatedAccountsApi
 import com.bitwarden.network.api.UnauthenticatedKeyConnectorApi
 import com.bitwarden.network.base.BaseServiceTest
+import com.bitwarden.network.model.KdfJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
+import com.bitwarden.network.model.MasterPasswordAuthenticationDataJson
+import com.bitwarden.network.model.MasterPasswordUnlockDataJson
 import com.bitwarden.network.model.PasswordHintResponseJson
 import com.bitwarden.network.model.RegisterRequestJson
 import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResendNewDeviceOtpRequestJson
 import com.bitwarden.network.model.ResetPasswordRequestJson
 import com.bitwarden.network.model.SetPasswordRequestJson
+import com.bitwarden.network.model.UpdateKdfJsonRequest
 import com.bitwarden.network.model.VerificationCodeResponseJson
 import com.bitwarden.network.model.VerificationOtpResponseJson
 import kotlinx.coroutines.test.runTest
@@ -291,6 +295,25 @@ class AccountsServiceTest : BaseServiceTest() {
     }
 
     @Test
+    fun `updateKdf success should return Success`() = runTest {
+        val response = MockResponse().setResponseCode(200)
+        server.enqueue(response)
+
+        val result = service.updateKdf(body = UPDATE_KDF_REQUEST)
+
+        assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `updateKdf failure should return Failure`() = runTest {
+        val response = MockResponse().setResponseCode(400)
+        server.enqueue(response)
+
+        val result = service.updateKdf(body = UPDATE_KDF_REQUEST)
+
+        assertTrue(result.isFailure)
+    }
+
     fun `resendNewDeviceOtp with 400 response is Error`() = runTest {
         val response = MockResponse().setResponseCode(400).setBody(INVALID_JSON)
         server.enqueue(response)
@@ -318,3 +341,29 @@ private const val INVALID_JSON = """
   "validationErrors": null
 }
 """
+
+private val UPDATE_KDF_REQUEST = UpdateKdfJsonRequest(
+        authenticationData = MasterPasswordAuthenticationDataJson(
+            kdf = KdfJson(
+                kdfType = KdfTypeJson.PBKDF2_SHA256,
+                iterations = 7,
+                memory = 1,
+                parallelism = 2,
+            ),
+            masterPasswordAuthenticationHash = "mockMasterPasswordHash",
+            salt = "mockSalt",
+        ),
+        key = "mockKey",
+        masterPasswordHash = "mockMasterPasswordHash",
+        newMasterPasswordHash = "mockNewMasterPasswordHash",
+        unlockData = MasterPasswordUnlockDataJson(
+            kdf = KdfJson(
+                kdfType = KdfTypeJson.PBKDF2_SHA256,
+                iterations = 7,
+                memory = 1,
+                parallelism = 2,
+            ),
+            masterKeyWrappedUserKey = "mockMasterPasswordKey",
+            salt = "mockSalt",
+        ),
+    )
