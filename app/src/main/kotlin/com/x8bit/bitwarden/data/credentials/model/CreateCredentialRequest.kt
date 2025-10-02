@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.credentials.model
 
 import android.os.Bundle
 import android.os.Parcelable
+import androidx.credentials.CreatePasswordRequest
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.ProviderCreateCredentialRequest
@@ -46,6 +47,15 @@ data class CreateCredentialRequest(
     @IgnoredOnParcel
     val createPublicKeyCredentialRequest: CreatePublicKeyCredentialRequest? by lazy {
         providerRequest.callingRequest as? CreatePublicKeyCredentialRequest
+    }
+
+    /**
+     * The [CreatePasswordRequest] of the [providerRequest], or null if the calling
+     * request is not a [CreatePasswordRequest].
+     */
+    @IgnoredOnParcel
+    val createPasswordCredentialRequest: CreatePasswordRequest? by lazy {
+        providerRequest.callingRequest as? CreatePasswordRequest
     }
 
     /**
