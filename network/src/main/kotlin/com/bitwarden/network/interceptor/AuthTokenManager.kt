@@ -1,6 +1,10 @@
 package com.bitwarden.network.interceptor
 
+import com.bitwarden.core.data.util.asFailure
+import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.network.model.AuthTokenData
 import com.bitwarden.network.provider.RefreshTokenProvider
+import com.bitwarden.network.provider.TokenProvider
 import com.bitwarden.network.util.HEADER_KEY_AUTHORIZATION
 import com.bitwarden.network.util.HEADER_VALUE_BEARER_PREFIX
 import com.bitwarden.network.util.parseJwtTokenDataOrNull
@@ -25,70 +29,61 @@ private const val EXPIRATION_OFFSET_MINUTES: Long = 5L
 internal class AuthTokenManager(
     private val clock: Clock,
     private val authTokenProvider: AuthTokenProvider,
-) : Authenticator, Interceptor {
+) : TokenProvider, Authenticator, Interceptor {
     var refreshTokenProvider: RefreshTokenProvider? = null
 
+    @Synchronized
+    override fun getAccessToken(
+        userId: String,
+    ): String? = authTokenProvider
+        .getAuthTokenDataOrNull(userId = userId)
+        ?.let { getAccessToken(authTokenData = it).getOrNull() }
+
+    @Synchronized
     override fun authenticate(
         route: Route?,
         response: Response,
     ): Request? {
-        synchronized(this) {
-            if (response.shouldSkipAuthentication()) {
-                // If the same request keeps failing, let's just let the 401 pass through.
-                return null
+        if (response.shouldSkipAuthentication()) {
+            // If the same request keeps failing, let's just let the 401 pass through.
+            return null
+        }
+        val accessToken = requireNotNull(
+            response
+                .request
+                .header(name = HEADER_KEY_AUTHORIZATION)
+                ?.substringAfter(delimiter = HEADER_VALUE_BEARER_PREFIX),
+        )
+        return when (val userId = parseJwtTokenDataOrNull(accessToken)?.userId) {
+            null -> {
+                // We are unable to get the user ID, let's just let the 401 pass through.
+                null
             }
-            val accessToken = requireNotNull(
-                response
-                    .request
-                    .header(name = HEADER_KEY_AUTHORIZATION)
-                    ?.substringAfter(delimiter = HEADER_VALUE_BEARER_PREFIX),
-            )
-            return when (val userId = parseJwtTokenDataOrNull(accessToken)?.userId) {
-                null -> {
-                    // We are unable to get the user ID, let's just let the 401 pass through.
-                    null
-                }
 
-                else -> {
-                    Timber.d("Attempting to refresh token due to unauthorized")
-                    refreshTokenProvider
-                        ?.refreshAccessTokenSynchronously(userId = userId)
-                        ?.fold(
-                            onFailure = { null },
-                            onSuccess = { newAccessToken ->
-                                response
-                                    .request
-                                    .newBuilder()
-                                    .header(
-                                        name = HEADER_KEY_AUTHORIZATION,
-                                        value = "$HEADER_VALUE_BEARER_PREFIX$newAccessToken",
-                                    )
-                                    .build()
-                            },
-                        )
-                }
+            else -> {
+                Timber.d("Attempting to refresh token due to unauthorized")
+                refreshTokenProvider
+                    ?.refreshAccessTokenSynchronously(userId = userId)
+                    ?.fold(
+                        onFailure = { null },
+                        onSuccess = { newAccessToken ->
+                            response
+                                .request
+                                .newBuilder()
+                                .header(
+                                    name = HEADER_KEY_AUTHORIZATION,
+                                    value = "$HEADER_VALUE_BEARER_PREFIX$newAccessToken",
+                                )
+                                .build()
+                        },
+                    )
             }
         }
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val token = synchronized(this) {
-            val tokenData = authTokenProvider
-                .getAuthTokenDataOrNull()
-                ?: throw IOException(IllegalStateException(MISSING_TOKEN_MESSAGE))
-            val expirationTime = Instant
-                .ofEpochSecond(tokenData.expiresAtSec)
-                .minus(EXPIRATION_OFFSET_MINUTES, ChronoUnit.MINUTES)
-            if (clock.instant().isAfter(expirationTime)) {
-                Timber.d("Attempting to refresh token due to expiration")
-                refreshTokenProvider
-                    ?.refreshAccessTokenSynchronously(userId = tokenData.userId)
-                    ?.getOrElse { throw IOException(it) }
-                    ?: throw IOException(IllegalStateException(MISSING_PROVIDER_MESSAGE))
-            } else {
-                tokenData.accessToken
-            }
-        }
+        val token = getAccessToken()
+            ?: throw IOException(IllegalStateException(MISSING_TOKEN_MESSAGE))
         val request = chain
             .request()
             .newBuilder()
@@ -98,6 +93,26 @@ internal class AuthTokenManager(
             )
             .build()
         return chain.proceed(request)
+    }
+
+    @Synchronized
+    private fun getAccessToken(): String? = authTokenProvider
+        .getAuthTokenDataOrNull()
+        ?.let { getAccessToken(authTokenData = it).getOrThrow() }
+
+    @Synchronized
+    private fun getAccessToken(authTokenData: AuthTokenData): Result<String> {
+        val expirationTime = Instant
+            .ofEpochSecond(authTokenData.expiresAtSec)
+            .minus(EXPIRATION_OFFSET_MINUTES, ChronoUnit.MINUTES)
+        return if (clock.instant().isAfter(expirationTime)) {
+            Timber.d("Attempting to refresh token due to expiration")
+            refreshTokenProvider
+                ?.refreshAccessTokenSynchronously(userId = authTokenData.userId)
+                ?: IOException(IllegalStateException(MISSING_PROVIDER_MESSAGE)).asFailure()
+        } else {
+            authTokenData.accessToken.asSuccess()
+        }
     }
 
     private fun Response.shouldSkipAuthentication(): Boolean = this.priorResponse != null

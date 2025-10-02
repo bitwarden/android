@@ -52,6 +52,50 @@ class AuthTokenManagerTest {
     }
 
     @Nested
+    inner class TokenProvider {
+        @Test
+        fun `returns null if token provider has no auth data for user ID`() {
+            val userId = "userId"
+            every { mockAuthTokenProvider.getAuthTokenDataOrNull(userId = userId) } returns null
+            val result = authTokenManager.getAccessToken(userId = userId)
+            assertNull(result)
+        }
+
+        @Test
+        fun `returns null if refresh fails`() {
+            val userId = "userId"
+            val authData = AuthTokenData(
+                userId = userId,
+                accessToken = ACCESS_TOKEN,
+                expiresAtSec = FIXED_CLOCK.instant().epochSecond,
+            )
+            every { mockAuthTokenProvider.getAuthTokenDataOrNull(userId = userId) } returns authData
+            every {
+                refreshTokenProvider.refreshAccessTokenSynchronously(userId = userId)
+            } returns Throwable("Fail!").asFailure()
+            val result = authTokenManager.getAccessToken(userId = userId)
+            assertNull(result)
+        }
+
+        @Test
+        fun `returns access token if refresh is not required`() {
+            val userId = "userId"
+            val authData = AuthTokenData(
+                userId = userId,
+                accessToken = ACCESS_TOKEN,
+                expiresAtSec = 0L,
+            )
+            val refreshedAccessToken = "refreshed_access_token"
+            every { mockAuthTokenProvider.getAuthTokenDataOrNull(userId = userId) } returns authData
+            every {
+                refreshTokenProvider.refreshAccessTokenSynchronously(userId = userId)
+            } returns refreshedAccessToken.asSuccess()
+            val result = authTokenManager.getAccessToken(userId = userId)
+            assertEquals(refreshedAccessToken, result)
+        }
+    }
+
+    @Nested
     inner class Authenticator {
         @Test
         fun `returns null if API has no authorization user ID`() {
@@ -158,7 +202,7 @@ class AuthTokenManagerTest {
             authTokenManager.refreshTokenProvider = object : RefreshTokenProvider {
                 override fun refreshAccessTokenSynchronously(
                     userId: String,
-                ): Result<String> = Throwable(errorMessage).asFailure()
+                ): Result<String> = IOException(errorMessage).asFailure()
             }
             val authTokenData = AuthTokenData(
                 userId = USER_ID,
@@ -172,7 +216,7 @@ class AuthTokenManagerTest {
                     chain = FakeInterceptorChain(request = request),
                 )
             }
-            assertEquals(errorMessage, throwable.cause?.message)
+            assertEquals(errorMessage, throwable?.message)
         }
 
         @Suppress("MaxLineLength")

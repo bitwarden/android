@@ -7,6 +7,7 @@ import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.model.BitwardenServiceClientConfig
 import com.bitwarden.network.provider.RefreshTokenProvider
+import com.bitwarden.network.provider.TokenProvider
 import com.bitwarden.network.retrofit.Retrofits
 import com.bitwarden.network.retrofit.RetrofitsImpl
 import com.bitwarden.network.service.AccountsServiceImpl
@@ -55,6 +56,7 @@ internal class BitwardenServiceClientImpl(
         clock = bitwardenServiceClientConfig.clock,
         authTokenProvider = bitwardenServiceClientConfig.authTokenProvider,
     )
+    override val tokenProvider: TokenProvider = authTokenManager
     private val clientJson = Json {
 
         // If there are keys returned by the server not modeled by a serializable class,

@@ -56,6 +56,7 @@ object PlatformNetworkModule {
             enableHttpBodyLogging = BuildConfig.DEBUG,
             authTokenProvider = object : AuthTokenProvider {
                 override fun getAuthTokenDataOrNull(): AuthTokenData? = null
+                override fun getAuthTokenDataOrNull(userId: String): AuthTokenData? = null
             },
             certificateProvider = object : CertificateProvider {
                 override fun chooseClientAlias(
