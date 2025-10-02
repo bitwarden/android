@@ -46,7 +46,6 @@ fun BitwardenMasterPasswordDialog(
     dismissButtonText: String = stringResource(id = BitwardenString.cancel),
     onConfirmClick: (masterPassword: String) -> Unit,
     onDismissRequest: () -> Unit,
-    filledButtonStyle: Boolean = false,
 ) {
     var masterPassword by remember { mutableStateOf("") }
     AlertDialog(
@@ -59,21 +58,12 @@ fun BitwardenMasterPasswordDialog(
             )
         },
         confirmButton = {
-            if (filledButtonStyle) {
-                BitwardenFilledButton(
-                    label = confirmButtonText,
-                    isEnabled = masterPassword.isNotEmpty(),
-                    onClick = { onConfirmClick(masterPassword) },
-                    modifier = Modifier.testTag("AcceptAlertButton"),
-                )
-            } else {
-                BitwardenTextButton(
-                    label = confirmButtonText,
-                    isEnabled = masterPassword.isNotEmpty(),
-                    onClick = { onConfirmClick(masterPassword) },
-                    modifier = Modifier.testTag("AcceptAlertButton"),
-                )
-            }
+            BitwardenFilledButton(
+                label = confirmButtonText,
+                isEnabled = masterPassword.isNotEmpty(),
+                onClick = { onConfirmClick(masterPassword) },
+                modifier = Modifier.testTag("AcceptAlertButton"),
+            )
         },
         title = {
             Text(

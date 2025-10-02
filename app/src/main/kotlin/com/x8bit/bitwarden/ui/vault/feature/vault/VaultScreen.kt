@@ -495,7 +495,6 @@ private fun VaultDialogs(
                     vaultHandlers.onKdfUpdatePasswordRepromptSubmit(it)
                 },
                 onDismissRequest = vaultHandlers.dialogDismiss,
-                filledButtonStyle = true,
             )
         }
 
