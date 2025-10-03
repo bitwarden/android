@@ -63,6 +63,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -3019,6 +3020,24 @@ class VaultViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
         }
+
+    @Test
+    fun `on KdfUpdatePasswordRepromptSubmit should call updateKdfToMinimumsIfNeeded`() = runTest {
+        val password = "mock_password"
+        coEvery {
+            authRepository.updateKdfToMinimumsIfNeeded(password)
+        } returns UpdateKdfMinimumsResult.Success
+
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            action = VaultAction.KdfUpdatePasswordRepromptSubmit(password = password),
+        )
+
+        coVerify(exactly = 1) {
+            authRepository.updateKdfToMinimumsIfNeeded(password)
+        }
+    }
 
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(

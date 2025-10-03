@@ -7017,14 +7017,23 @@ AuthRepositoryTest {
     @Suppress("MaxLineLength")
     fun `needsKdfUpdateToMinimums with user decryption options and without password returns false`() =
         runTest {
+            val account = ACCOUNT_1.copy(
+                profile = ACCOUNT_1.profile.copy(
+                    userDecryptionOptions = UserDecryptionOptionsJson(
+                        hasMasterPassword = false,
+                        keyConnectorUserDecryptionOptions = null,
+                        trustedDeviceUserDecryptionOptions = null,
+                        masterPasswordUnlock = null,
+                    ),
+                ),
+            )
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
                 accounts = mapOf(
-                    USER_ID_1 to ACCOUNT_1,
+                    USER_ID_1 to account,
                 ),
             )
 
             val result = repository.needsKdfUpdateToMinimums()
-
             assertFalse(result)
         }
 
