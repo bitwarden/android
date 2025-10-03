@@ -1,6 +1,6 @@
 name: Publish to Google Play
 run-name:  >
-  ${{ inputs.dry-run && ' (Dry Run)' || '' }} Promoting ${{ inputs.product }} ${{ inputs.version-code }} from ${{ inputs.track-from }} to ${{ inputs.track-target }}
+  ${{ inputs.dry-run && ' (Dry Run)' || '' }}Promoting ${{ inputs.product }} ${{ inputs.version-code }} from ${{ inputs.track-from }} to ${{ inputs.track-target }}
 on:
   workflow_dispatch:
     inputs:
