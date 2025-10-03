@@ -7,6 +7,8 @@ import com.bitwarden.core.data.manager.realtime.RealtimeManager
 import com.bitwarden.core.data.manager.realtime.RealtimeManagerImpl
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.manager.toast.ToastManagerImpl
+import com.bitwarden.cxf.registry.CredentialExchangeRegistry
+import com.bitwarden.cxf.registry.dsl.credentialExchangeRegistry
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.manager.DispatcherManagerImpl
 import com.bitwarden.data.manager.NativeLibraryManager
@@ -420,4 +422,12 @@ object PlatformManagerModule {
             clock = clock,
         )
     }
+
+    @Provides
+    @Singleton
+    fun provideCredentialExchangeRegistry(
+        application: Application,
+    ): CredentialExchangeRegistry = credentialExchangeRegistry(
+        application = application,
+    )
 }

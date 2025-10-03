@@ -40,7 +40,7 @@ internal class CredentialExchangeRegistryImpl(
                 ExportEntry(
                     id = UUID.randomUUID().toString(),
                     accountDisplayName = null,
-                    userDisplayName = registrationRequest.appName,
+                    userDisplayName = application.getString(registrationRequest.appName),
                     icon = icon,
                     supportedCredentialTypes = registrationRequest.credentialTypes,
                 ),
