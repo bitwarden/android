@@ -169,9 +169,15 @@ jobs:
 
         - name: Enable Publish Github Release Workflow
           if: ${{ steps.promote.conclusion == 'success' }}
+          env:
+            PRODUCT: ${{ inputs.product }}
           run: |
             if ${{ inputs.dry-run }} ; then
               gh workflow view publish-github-release.yml
               exit 0
             fi
-            gh workflow enable publish-github-release.yml
+            if $PRODUCT == "Password Manager" ; then
+              gh workflow enable publish-github-release-pwm.yml
+            elif $PRODUCT == "Authenticator" ; then
+              gh workflow enable publish-github-release-bwa.yml
+            fi

@@ -16,7 +16,7 @@ jobs:
     uses: bitwarden/gh-actions/.github/workflows/_publish-mobile-github-release.yml@main
     with:
       release_name: "Authenticator"
-      workflow_name: "publish-github-release.yml"
+      workflow_name: "publish-github-release-bwa.yml"
       credentials_filename: "authenticator_play_store-creds.json"
       project_type: android
       check_release_command: >
