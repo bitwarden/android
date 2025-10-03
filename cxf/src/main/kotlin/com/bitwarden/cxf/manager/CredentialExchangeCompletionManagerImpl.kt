@@ -2,7 +2,7 @@ package com.bitwarden.cxf.manager
 
 import android.app.Activity
 import android.content.Intent
-import androidx.credentials.providerevents.playservices.IntentHandler
+import androidx.credentials.providerevents.IntentHandler
 import androidx.credentials.providerevents.transfer.ImportCredentialsResponse
 import com.bitwarden.cxf.manager.model.ExportCredentialsResult
 
@@ -26,6 +26,7 @@ internal class CredentialExchangeCompletionManagerImpl(
             is ExportCredentialsResult.Success -> {
                 IntentHandler.setImportCredentialsResponse(
                     context = activity,
+                    intent = intent,
                     uri = exportResult.uri,
                     response = ImportCredentialsResponse(
                         responseJson = exportResult.payload,

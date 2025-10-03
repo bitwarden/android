@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">关于</string>
     <string name="add_folder">添加文件夹</string>
     <string name="add_item">添加项目</string>
@@ -996,7 +996,9 @@
     <string name="advanced">高级</string>
     <string name="collapse_advanced_options">折叠高级选项</string>
     <string name="number_of_digits">位数</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d 秒</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="other">%d 秒</item>
+    </plurals>
     <string name="item_saved">项目已保存</string>
     <string name="information">信息</string>
     <string name="otp_type">OTP 类型</string>
@@ -1081,4 +1083,18 @@
     <string name="default_uri_match_detection_description_advanced_options">URI 匹配检测控制 Bitwarden 如何识别自动填充建议。\n<annotation emphasis="bold">警告：</annotation>「开始于」是一种高级选项，会增加暴露凭据的风险。</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">「开始于」是一种高级选项，会增加暴露凭据的风险。</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">「正则表达方式」是一种高级选项，若使用不当，会增加暴露凭据的风险。</string>
+    <string name="credential_import_was_cancelled">凭据导入被取消。未导入任何凭据。</string>
+    <string name="import_cancelled">导入已取消</string>
+    <string name="your_items_have_been_successfully_imported">您的项目已成功导入，现在可以在您的密码库中查看。</string>
+    <string name="import_saved_items">导入保存的项目</string>
+    <string name="import_your_credentials_from_another_password_manager">从其他密码管理器导入您的凭据，包括通行密钥、密码、信用卡以及任何个人身份信息。</string>
+    <string name="return_to_your_vault">返回您的密码库</string>
+    <string name="select_a_credential_manager_to_import_items_from">选择要从其中导入项目的凭据管理器。</string>
+    <string name="no_items_imported">未导入任何项目</string>
+    <string name="no_items_received_from_the_selected_credential_manager">未从所选凭据管理器中接收到任何项目。</string>
+    <string name="vault_sync_failed">密码库同步失败</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">您的项目已成功导入，但无法同步密码库。在进行同步之前，导入的项目将不会显示在您的密码库中。</string>
+    <string name="there_was_a_problem_importing_your_items">导入您的项目时出现问题。请重试。如果问题仍然存在，请联系支持。</string>
+    <string name="importing_items">正在导入项目…</string>
+    <string name="uploading_items">正在上传项目…</string>
 </resources>

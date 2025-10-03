@@ -159,6 +159,7 @@ fun createCipherView(type: CipherType, isEmpty: Boolean): CipherView =
         creationDate = Instant.ofEpochSecond(1_000L),
         deletedDate = null,
         revisionDate = Instant.ofEpochSecond(1_000L),
+        archivedDate = null,
         sshKey = createSshKeyView(isEmpty),
     )
 
@@ -184,6 +185,7 @@ fun createCommonContent(
             passwordHistoryCount = null,
             relatedLocations = persistentListOf(),
             iconData = IconData.Local(iconResId),
+            hasOrganizations = true,
         )
     } else {
         VaultItemState.ViewState.Content.Common(
@@ -247,6 +249,7 @@ fun createCommonContent(
             passwordHistoryCount = 1,
             relatedLocations = persistentListOf(),
             iconData = IconData.Local(iconResId),
+            hasOrganizations = true,
         )
     }
 

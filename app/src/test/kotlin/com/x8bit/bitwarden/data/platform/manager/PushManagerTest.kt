@@ -161,7 +161,7 @@ class PushManagerTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
@@ -180,7 +180,7 @@ class PushManagerTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
@@ -191,7 +191,7 @@ class PushManagerTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
@@ -580,7 +580,7 @@ class PushManagerTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
@@ -599,7 +599,7 @@ class PushManagerTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }
@@ -610,7 +610,7 @@ class PushManagerTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_MAP)
                     assertEquals(
-                        Unit,
+                        "078966a2-93c2-4618-ae2a-0a2394c88d37",
                         awaitItem(),
                     )
                 }

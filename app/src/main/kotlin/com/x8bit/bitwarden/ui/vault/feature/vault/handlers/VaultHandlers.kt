@@ -22,7 +22,6 @@ data class VaultHandlers(
     val addAccountClickAction: () -> Unit,
     val syncAction: () -> Unit,
     val lockAction: () -> Unit,
-    val exitConfirmationAction: () -> Unit,
     val vaultItemClick: (VaultState.ViewState.VaultItem) -> Unit,
     val folderClick: (VaultState.ViewState.FolderItem) -> Unit,
     val collectionClick: (VaultState.ViewState.CollectionItem) -> Unit,
@@ -47,6 +46,8 @@ data class VaultHandlers(
     val dismissFlightRecorderSnackbar: () -> Unit,
     val onShareCipherDecryptionErrorClick: (selectedCipherId: String) -> Unit,
     val onShareAllCipherDecryptionErrorsClick: () -> Unit,
+    val onEnabledThirdPartyAutofillClick: () -> Unit,
+    val onDismissThirdPartyAutofillDialogClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -77,9 +78,6 @@ data class VaultHandlers(
                 addAccountClickAction = { viewModel.trySendAction(VaultAction.AddAccountClick) },
                 syncAction = { viewModel.trySendAction(VaultAction.SyncClick) },
                 lockAction = { viewModel.trySendAction(VaultAction.LockClick) },
-                exitConfirmationAction = {
-                    viewModel.trySendAction(VaultAction.ExitConfirmationClick)
-                },
                 vaultItemClick = { viewModel.trySendAction(VaultAction.VaultItemClick(it)) },
                 folderClick = { viewModel.trySendAction(VaultAction.FolderClick(it)) },
                 collectionClick = { viewModel.trySendAction(VaultAction.CollectionClick(it)) },
@@ -127,18 +125,18 @@ data class VaultHandlers(
                 dismissFlightRecorderSnackbar = {
                     viewModel.trySendAction(VaultAction.DismissFlightRecorderSnackbar)
                 },
-                onShareCipherDecryptionErrorClick =
-                    {
-                        viewModel.trySendAction(
-                            VaultAction.ShareCipherDecryptionErrorClick(it),
-                        )
-                    },
-                onShareAllCipherDecryptionErrorsClick =
-                    {
-                        viewModel.trySendAction(
-                            VaultAction.ShareAllCipherDecryptionErrorsClick,
-                        )
-                    },
+                onShareCipherDecryptionErrorClick = {
+                    viewModel.trySendAction(VaultAction.ShareCipherDecryptionErrorClick(it))
+                },
+                onShareAllCipherDecryptionErrorsClick = {
+                    viewModel.trySendAction(VaultAction.ShareAllCipherDecryptionErrorsClick)
+                },
+                onEnabledThirdPartyAutofillClick = {
+                    viewModel.trySendAction(VaultAction.EnableThirdPartyAutofillClick)
+                },
+                onDismissThirdPartyAutofillDialogClick = {
+                    viewModel.trySendAction(VaultAction.DismissThirdPartyAutofillDialogClick)
+                },
             )
     }
 }

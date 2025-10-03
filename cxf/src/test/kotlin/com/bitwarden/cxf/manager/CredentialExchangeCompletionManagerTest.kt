@@ -2,8 +2,8 @@ package com.bitwarden.cxf.manager
 
 import android.app.Activity
 import android.net.Uri
+import androidx.credentials.providerevents.IntentHandler
 import androidx.credentials.providerevents.exception.ImportCredentialsException
-import androidx.credentials.providerevents.playservices.IntentHandler
 import com.bitwarden.cxf.manager.model.ExportCredentialsResult
 import io.mockk.Ordering
 import io.mockk.every
@@ -28,6 +28,7 @@ class CredentialExchangeCompletionManagerTest {
                 context = any(),
                 uri = any(),
                 response = any(),
+                intent = any(),
             )
         } just runs
 
@@ -54,6 +55,7 @@ class CredentialExchangeCompletionManagerTest {
                 context = mockActivity,
                 uri = mockUri,
                 response = any(),
+                intent = any(),
             )
             mockActivity.setResult(Activity.RESULT_OK, any())
             mockActivity.finish()

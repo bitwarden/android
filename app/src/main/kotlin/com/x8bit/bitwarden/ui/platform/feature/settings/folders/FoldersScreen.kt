@@ -33,6 +33,8 @@ import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.bitwarden.ui.platform.components.snackbar.model.rememberBitwardenSnackbarHostState
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -54,6 +56,7 @@ fun FoldersScreen(
     viewModel: FoldersViewModel = hiltViewModel(),
 ) {
     val state = viewModel.stateFlow.collectAsStateWithLifecycle()
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is FoldersEvent.NavigateBack -> onNavigateBack()
@@ -61,6 +64,8 @@ fun FoldersScreen(
             is FoldersEvent.NavigateToEditFolderScreen -> {
                 onNavigateToEditFolderScreen(event.folderId)
             }
+
+            is FoldersEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
 
@@ -92,6 +97,7 @@ fun FoldersScreen(
                     .navigationBarsPadding(),
             )
         },
+        snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarHostState) },
     ) {
         when (val viewState = state.value.viewState) {
             is FoldersState.ViewState.Content -> {

@@ -54,6 +54,7 @@ fun createMockCipherListView(
         .takeIf { type is CipherListViewType.Login }
         .orEmpty(),
     isDeleted: Boolean = false,
+    isArchived: Boolean = false,
 ): CipherListView = CipherListView(
     id = id,
     organizationId = organizationId,
@@ -66,6 +67,7 @@ fun createMockCipherListView(
     revisionDate = revisionDate,
     creationDate = creationDate,
     deletedDate = if (isDeleted) Instant.parse(DEFAULT_TIMESTAMP) else null,
+    archivedDate = if (isArchived) Instant.parse(DEFAULT_TIMESTAMP) else null,
     attachments = attachments,
     organizationUseTotp = organizationUseTotp,
     edit = edit,

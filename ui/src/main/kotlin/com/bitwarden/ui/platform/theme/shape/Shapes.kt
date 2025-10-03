@@ -17,6 +17,7 @@ val bitwardenShapes: BitwardenShapes = BitwardenShapes(
     contentTop = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp),
     dialog = RoundedCornerShape(size = 28.dp),
     fab = CircleShape,
+    fabItem = RoundedCornerShape(size = 12.dp),
     infoCallout = RoundedCornerShape(size = 8.dp),
     menu = RoundedCornerShape(size = 4.dp),
     progressIndicator = CircleShape,

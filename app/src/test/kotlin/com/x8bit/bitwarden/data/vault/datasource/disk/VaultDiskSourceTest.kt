@@ -356,6 +356,7 @@ private val VAULT_DATA: SyncResponseJson = SyncResponseJson(
     policies = null,
     domains = DOMAINS_1,
     sends = listOf(SEND_1),
+    userDecryption = null,
 )
 
 private const val CIPHER_JSON = """
@@ -425,6 +426,7 @@ private const val CIPHER_JSON = """
   "folderId": "mockFolderId-1",
   "organizationId": "mockOrganizationId-1",
   "deletedDate": "2023-10-27T12:00:00.000Z",
+  "archivedDate": "2023-10-27T12:00:00.000Z",
   "identity": {
     "passportNumber": "mockPassportNumber-1",
     "lastName": "mockLastName-1",

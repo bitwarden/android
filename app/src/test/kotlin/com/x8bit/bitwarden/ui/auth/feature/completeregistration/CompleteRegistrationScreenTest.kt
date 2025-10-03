@@ -71,6 +71,14 @@ class CompleteRegistrationScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `on ShowSnackbar should display snackbar content`() {
+        val message = "message"
+        composeTestRule.onNodeWithText(text = message).assertDoesNotExist()
+        mutableEventFlow.tryEmit(CompleteRegistrationEvent.ShowSnackbar(message = message.asText()))
+        composeTestRule.onNodeWithText(text = message).assertIsDisplayed()
+    }
+
+    @Test
     fun `close click should send CloseClick action`() {
         composeTestRule.onNodeWithContentDescription("Back").performClick()
         verify { viewModel.trySendAction(BackClick) }

@@ -38,7 +38,7 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
-import com.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -218,11 +218,11 @@ private fun SetUpLaterButton(
 ) {
     var displayConfirmation by rememberSaveable { mutableStateOf(value = false) }
     if (displayConfirmation) {
-        @Suppress("MaxLineLength")
         BitwardenTwoButtonDialog(
             title = stringResource(id = BitwardenString.set_up_unlock_later),
             message = stringResource(
-                id = BitwardenString.you_can_return_to_complete_this_step_anytime_from_account_security_in_settings,
+                id = BitwardenString
+                    .you_can_return_to_complete_this_step_anytime_from_account_security_in_settings,
             ),
             confirmButtonText = stringResource(id = BitwardenString.confirm),
             dismissButtonText = stringResource(id = BitwardenString.cancel),
@@ -235,7 +235,7 @@ private fun SetUpLaterButton(
         )
     }
 
-    BitwardenTextButton(
+    BitwardenOutlinedButton(
         label = stringResource(id = BitwardenString.set_up_later),
         onClick = { displayConfirmation = true },
         modifier = modifier.testTag(tag = "SetUpLaterButton"),

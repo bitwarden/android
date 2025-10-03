@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
@@ -26,6 +28,7 @@ import org.junit.Test
 
 class SetupAutofillScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
+    private var onNavigateToBrowserAutofillCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<SetupAutoFillEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -45,6 +48,7 @@ class SetupAutofillScreenTest : BitwardenComposeTest() {
             SetupAutoFillScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToBrowserAutofill = { onNavigateToBrowserAutofillCalled = true },
             )
         }
     }
@@ -77,6 +81,7 @@ class SetupAutofillScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `Continue click should send correct action`() {
+        mutableStateFlow.update { it.copy(autofillEnabled = true) }
         composeTestRule
             .onNodeWithText("Continue")
             .performScrollTo()
@@ -125,6 +130,14 @@ class SetupAutofillScreenTest : BitwardenComposeTest() {
             mutableEventFlow.tryEmit(SetupAutoFillEvent.NavigateToAutofillSettings)
             verify { viewModel.trySendAction(SetupAutoFillAction.AutoFillServiceFallback) }
         }
+    }
+
+    @Test
+    fun `Continue button is enabled according to state`() {
+        mutableStateFlow.update { it.copy(autofillEnabled = false) }
+        composeTestRule.onNodeWithText(text = "Continue").assertIsNotEnabled()
+        mutableStateFlow.update { it.copy(autofillEnabled = true) }
+        composeTestRule.onNodeWithText(text = "Continue").assertIsEnabled()
     }
 
     @Test
@@ -232,6 +245,12 @@ class SetupAutofillScreenTest : BitwardenComposeTest() {
     fun `on NavigateBack event should invoke onNavigateBack`() {
         mutableEventFlow.tryEmit(SetupAutoFillEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `on NavigateToBrowserAutofill event should invoke onNavigateToBrowserAutofill`() {
+        mutableEventFlow.tryEmit(SetupAutoFillEvent.NavigateToBrowserAutofill)
+        assertTrue(onNavigateToBrowserAutofillCalled)
     }
 
     @Test

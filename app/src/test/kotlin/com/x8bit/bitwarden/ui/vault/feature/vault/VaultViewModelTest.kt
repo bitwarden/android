@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -151,6 +152,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { flightRecorderData } returns FlightRecorderDataSet(data = emptySet())
         every { flightRecorderDataFlow } returns mutableFlightRecorderDataFlow
         every { dismissFlightRecorderBanner() } just runs
+        every { isAutofillEnabledStateFlow } returns MutableStateFlow(false)
     }
 
     private val vaultRepository: VaultRepository =
@@ -178,6 +180,11 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     private val networkConnectionManager: NetworkConnectionManager = mockk {
         every { isNetworkConnected } returns true
+    }
+    private val browserAutofillDialogManager: BrowserAutofillDialogManager = mockk {
+        every { shouldShowDialog } returns false
+        every { browserCount } returns 1
+        every { delayDialog() } just runs
     }
 
     @AfterEach
@@ -463,6 +470,30 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on EnableThirdPartyAutofillClick should send NavigateToAutofillSettings`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.EnableThirdPartyAutofillClick)
+            assertEquals(VaultEvent.NavigateToAutofillSettings, awaitItem())
+        }
+        verify(exactly = 1) {
+            browserAutofillDialogManager.delayDialog()
+        }
+    }
+
+    @Test
+    fun `on DismissThirdPartyAutofillDialogClick should call delay dialog`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(VaultAction.DismissThirdPartyAutofillDialogClick)
+
+        verify(exactly = 1) {
+            browserAutofillDialogManager.delayDialog()
+        }
+    }
+
+    @Test
     fun `on ShareCipherDecryptionErrorClick should send ShowShareSheet`() = runTest {
         val viewModel = createViewModel()
 
@@ -677,15 +708,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultAction.LockClick)
         verify {
             vaultRepository.lockVaultForCurrentUser(isUserInitiated = true)
-        }
-    }
-
-    @Test
-    fun `on ExitConfirmationClick should emit NavigateOutOfApp`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultAction.ExitConfirmationClick)
-            assertEquals(VaultEvent.NavigateOutOfApp, awaitItem())
         }
     }
 
@@ -2834,6 +2856,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             reviewPromptManager = reviewPromptManager,
             specialCircumstanceManager = specialCircumstanceManager,
             networkConnectionManager = networkConnectionManager,
+            browserAutofillDialogManager = browserAutofillDialogManager,
         )
 }
 

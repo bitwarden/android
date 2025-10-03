@@ -16,16 +16,16 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * applying different colors to the digits and special characters, letters will remain unaffected.
  */
 @Composable
-fun nonLetterColorVisualTransformation(): VisualTransformation {
-    val digitColor = BitwardenTheme.colorScheme.text.codeBlue
-    val specialCharacterColor = BitwardenTheme.colorScheme.text.codePink
-    return remember(digitColor, specialCharacterColor) {
+fun nonLetterColorVisualTransformation(
+    digitColor: Color = BitwardenTheme.colorScheme.text.codeBlue,
+    specialCharacterColor: Color = BitwardenTheme.colorScheme.text.codePink,
+): VisualTransformation =
+    remember(digitColor, specialCharacterColor) {
         NonLetterColorVisualTransformation(
             digitColor = digitColor,
             specialCharacterColor = specialCharacterColor,
         )
     }
-}
 
 /**
  * Alters the visual output of the text in an input field.

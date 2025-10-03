@@ -48,6 +48,9 @@ data class SyncResponseJson(
 
     @SerialName("sends")
     val sends: List<Send>?,
+
+    @SerialName("UserDecryption")
+    val userDecryption: UserDecryptionJson?,
 ) {
     /**
      * Represents domains in the vault response.
@@ -449,6 +452,7 @@ data class SyncResponseJson(
      * @property card The card of the cipher.
      * @property key The key of the cipher (nullable).
      * @property encryptedFor ID of the user who the cipher is encrypted by.
+     * @property archivedDate The archived date of the cipher (nullable).
      */
     @Serializable
     data class Cipher(
@@ -532,6 +536,10 @@ data class SyncResponseJson(
 
         @SerialName("encryptedFor")
         val encryptedFor: String?,
+
+        @SerialName("archivedDate")
+        @Contextual
+        val archivedDate: ZonedDateTime?,
     ) {
         /**
          * Represents an attachment in the vault response.

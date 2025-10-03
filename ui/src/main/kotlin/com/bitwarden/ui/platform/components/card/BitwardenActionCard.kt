@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,11 +15,18 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.toDp
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
@@ -39,6 +47,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param leadingContent Optional content to display on the leading side of the
  * [cardTitle] [Text].
  */
+@Suppress("LongMethod")
 @Composable
 fun BitwardenActionCard(
     cardTitle: String,
@@ -56,19 +65,47 @@ fun BitwardenActionCard(
         elevation = CardDefaults.elevatedCardElevation(),
         border = BorderStroke(width = 1.dp, color = BitwardenTheme.colorScheme.stroke.border),
     ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Spacer(Modifier.width(16.dp))
-            Row(modifier = Modifier.padding(top = 16.dp)) {
+        var rowBottomPx by remember { mutableIntStateOf(0) }
+        var titleBottomPx by remember { mutableIntStateOf(0) }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned {
+                    rowBottomPx = it.positionInParent().y.toInt() + it.size.height
+                },
+        ) {
+            Spacer(modifier = Modifier.width(width = 16.dp))
+            Row(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .weight(weight = 1f),
+            ) {
                 leadingContent?.let {
                     it()
-                    Spacer(Modifier.width(12.dp))
+                    Spacer(modifier = Modifier.width(width = 12.dp))
                 }
-                Text(
-                    text = cardTitle,
-                    style = BitwardenTheme.typography.titleMedium,
-                )
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        text = cardTitle,
+                        style = BitwardenTheme.typography.titleMedium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .onGloballyPositioned {
+                                titleBottomPx = it.positionInParent().y.toInt() + it.size.height
+                            },
+                    )
+                    cardSubtitle?.let {
+                        Spacer(modifier = Modifier.height(height = 4.dp))
+                        Text(
+                            text = it,
+                            style = BitwardenTheme.typography.bodyMedium,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
+                }
             }
-            Spacer(Modifier.weight(1f))
             onDismissClick?.let {
                 BitwardenStandardIconButton(
                     painter = rememberVectorPainter(id = BitwardenDrawable.ic_close),
@@ -77,17 +114,17 @@ fun BitwardenActionCard(
                 )
             }
         }
-        cardSubtitle?.let {
-            Spacer(Modifier.height(4.dp))
-            Text(
-                text = it,
-                style = BitwardenTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
+        if (cardSubtitle == null && rowBottomPx > titleBottomPx) {
+            // When the subtitle is missing, we want to ensure that the filled button is 16dp below
+            // the title but the close button can be taller than the title which will push the
+            // button further down. So we measure the difference and use that to offset the spacer
+            // size.
+            Spacer(
+                modifier = Modifier.height(height = 16.dp - (rowBottomPx - titleBottomPx).toDp()),
             )
+        } else {
+            Spacer(modifier = Modifier.height(height = 16.dp))
         }
-        Spacer(Modifier.height(16.dp))
         BitwardenFilledButton(
             label = actionText,
             onClick = onActionClick,
@@ -95,7 +132,7 @@ fun BitwardenActionCard(
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
-        Spacer(Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
     }
 }
 

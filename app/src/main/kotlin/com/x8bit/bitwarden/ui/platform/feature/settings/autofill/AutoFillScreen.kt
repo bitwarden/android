@@ -1,7 +1,10 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 
 import android.content.res.Resources
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -25,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -35,9 +40,11 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.spanStyleOf
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
+import com.bitwarden.ui.platform.components.card.BitwardenActionCardSmall
 import com.bitwarden.ui.platform.components.card.actionCardExitAnimation
 import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -54,6 +61,7 @@ import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
+import com.bitwarden.ui.platform.resource.BitwardenPlurals
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
@@ -78,6 +86,7 @@ fun AutoFillScreen(
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateToBlockAutoFillScreen: () -> Unit,
     onNavigateToSetupAutofill: () -> Unit,
+    onNavigateToSetupBrowserAutofill: () -> Unit,
     onNavigateToAboutPrivilegedAppsScreen: () -> Unit,
     onNavigateToPrivilegedAppsList: () -> Unit,
 ) {
@@ -105,6 +114,7 @@ fun AutoFillScreen(
             }
 
             AutoFillEvent.NavigateToSetupAutofill -> onNavigateToSetupAutofill()
+            AutoFillEvent.NavigateToSetupBrowserAutofill -> onNavigateToSetupBrowserAutofill()
             is AutoFillEvent.NavigateToBrowserAutofillSettings -> {
                 intentManager.startBrowserAutofillSettingsActivity(
                     browserPackage = event.browserPackage,
@@ -121,6 +131,12 @@ fun AutoFillScreen(
 
             AutoFillEvent.NavigateToLearnMore -> {
                 intentManager.launchUri("https://bitwarden.com/help/uri-match-detection/".toUri())
+            }
+
+            AutoFillEvent.NavigateToAutofillHelp -> {
+                intentManager.launchUri(
+                    uri = "https://bitwarden.com/help/auto-fill-android-troubleshooting/".toUri(),
+                )
             }
         }
     }
@@ -170,22 +186,14 @@ private fun AutoFillScreenContent(
 ) {
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.height(height = 12.dp))
-        AnimatedVisibility(
-            visible = state.showAutofillActionCard,
-            label = "AutofillActionCard",
-            exit = actionCardExitAnimation(),
-        ) {
-            BitwardenActionCard(
-                cardTitle = stringResource(BitwardenString.turn_on_autofill),
-                actionText = stringResource(BitwardenString.get_started),
-                onActionClick = autoFillHandlers.onAutofillActionCardClick,
-                onDismissClick = autoFillHandlers.onAutofillActionCardDismissClick,
-                leadingContent = { NotificationBadge(notificationCount = 1) },
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .padding(bottom = 16.dp),
-            )
-        }
+        AutofillCallToActionCard(
+            state = state,
+            autoFillHandlers = autoFillHandlers,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+        Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenListHeaderText(
             label = stringResource(id = BitwardenString.autofill_title),
             modifier = Modifier
@@ -227,7 +235,10 @@ private fun AutoFillScreenContent(
                 BrowserAutofillSettingsCard(
                     options = state.browserAutofillSettingsOptions,
                     onOptionClicked = autoFillHandlers.onBrowserAutofillSelected,
-                    enabled = state.isAutoFillServicesEnabled,
+                    supportingText = stringResource(
+                        id = BitwardenString
+                            .improves_login_filling_for_supported_websites_on_selected_browsers,
+                    ),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }
@@ -236,39 +247,34 @@ private fun AutoFillScreenContent(
         if (state.showPasskeyManagementRow) {
             BitwardenExternalLinkRow(
                 text = stringResource(id = BitwardenString.passkey_management),
-                description = stringResource(
-                    id = BitwardenString.passkey_management_explanation_long,
-                ),
+                description = BitwardenString
+                    .passkey_management_explanation_long
+                    .toAnnotatedString(),
                 onConfirmClick = autoFillHandlers.onPasskeyManagementClick,
                 dialogTitle = stringResource(id = BitwardenString.continue_to_device_settings),
                 dialogMessage = stringResource(
                     id = BitwardenString.set_bitwarden_as_passkey_manager_description,
                 ),
                 withDivider = false,
-                cardStyle = if (state.isUserManagedPrivilegedAppsEnabled) {
-                    CardStyle.Top()
-                } else {
-                    CardStyle.Full
-                },
+                cardStyle = CardStyle.Top(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
-            if (state.isUserManagedPrivilegedAppsEnabled) {
-                BitwardenTextRow(
-                    text = stringResource(BitwardenString.privileged_apps),
-                    onClick = autoFillHandlers.onPrivilegedAppsClick,
-                    tooltip = TooltipData(
-                        contentDescription =
-                            stringResource(BitwardenString.learn_more_about_privileged_apps),
-                        onClick = autoFillHandlers.onPrivilegedAppsHelpLinkClick,
+            BitwardenTextRow(
+                text = stringResource(BitwardenString.privileged_apps),
+                onClick = autoFillHandlers.onPrivilegedAppsClick,
+                tooltip = TooltipData(
+                    contentDescription = stringResource(
+                        id = BitwardenString.learn_more_about_privileged_apps,
                     ),
-                    cardStyle = CardStyle.Bottom,
-                    modifier = Modifier
-                        .standardHorizontalMargin()
-                        .fillMaxWidth(),
-                )
-            }
+                    onClick = autoFillHandlers.onPrivilegedAppsHelpLinkClick,
+                ),
+                cardStyle = CardStyle.Bottom,
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
+            )
             Spacer(modifier = Modifier.height(height = 8.dp))
         }
         AccessibilityAutofillSwitch(
@@ -325,9 +331,9 @@ private fun AutoFillScreenContent(
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextRow(
             text = stringResource(id = BitwardenString.block_auto_fill),
-            description = stringResource(
-                id = BitwardenString.auto_fill_will_not_be_offered_for_these_ur_is,
-            ),
+            description = BitwardenString
+                .auto_fill_will_not_be_offered_for_these_ur_is
+                .toAnnotatedString(),
             onClick = autoFillHandlers.onBlockAutoFillClick,
             cardStyle = CardStyle.Full,
             modifier = Modifier
@@ -336,6 +342,67 @@ private fun AutoFillScreenContent(
         )
         Spacer(modifier = Modifier.height(height = 16.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
+    }
+}
+
+@Composable
+private fun AutofillCallToActionCard(
+    state: AutoFillState,
+    autoFillHandlers: AutoFillHandlers,
+    modifier: Modifier,
+) {
+    AnimatedContent(
+        targetState = state.ctaState,
+        label = "AutofillActionCard",
+        transitionSpec = { EnterTransition.None.togetherWith(actionCardExitAnimation()) },
+        modifier = modifier,
+    ) {
+        when (it) {
+            CtaState.AUTOFILL -> {
+                BitwardenActionCard(
+                    cardTitle = stringResource(id = BitwardenString.turn_on_autofill),
+                    actionText = stringResource(id = BitwardenString.get_started),
+                    onActionClick = autoFillHandlers.onAutofillActionCardClick,
+                    onDismissClick = autoFillHandlers.onAutofillActionCardDismissClick,
+                    leadingContent = { NotificationBadge(notificationCount = 1) },
+                )
+            }
+
+            CtaState.BROWSER_AUTOFILL -> {
+                BitwardenActionCard(
+                    cardTitle = stringResource(
+                        id = BitwardenString.turn_on_browser_autofill_integration,
+                    ),
+                    cardSubtitle = pluralStringResource(
+                        id = BitwardenPlurals
+                            .youre_using_a_browser_that_requires_special_permissions_for_bitwarden,
+                        count = state.browserCount,
+                    ),
+                    actionText = stringResource(id = BitwardenString.get_started),
+                    onActionClick = autoFillHandlers.onBrowserAutofillActionCardClick,
+                    onDismissClick = autoFillHandlers.onBrowserAutofillActionCardDismissClick,
+                    leadingContent = { NotificationBadge(notificationCount = 1) },
+                )
+            }
+
+            CtaState.DEFAULT -> {
+                BitwardenActionCardSmall(
+                    actionIcon = rememberVectorPainter(id = BitwardenDrawable.ic_question_circle),
+                    actionText = stringResource(id = BitwardenString.having_trouble_with_autofill),
+                    callToActionText = stringResource(
+                        id = BitwardenString.access_help_and_troubleshooting_documentation_here,
+                    ),
+                    onCardClicked = autoFillHandlers.onHelpCardClick,
+                    trailingContent = {
+                        Icon(
+                            painter = rememberVectorPainter(BitwardenDrawable.ic_chevron_right),
+                            contentDescription = null,
+                            tint = BitwardenTheme.colorScheme.icon.primary,
+                        )
+                    },
+                )
+            }
+        }
     }
 }
 

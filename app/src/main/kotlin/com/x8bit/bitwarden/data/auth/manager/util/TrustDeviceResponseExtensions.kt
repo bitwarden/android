@@ -26,6 +26,7 @@ fun TrustDeviceResponse.toUserStateJson(
             hasMasterPassword = false,
             trustedDeviceUserDecryptionOptions = null,
             keyConnectorUserDecryptionOptions = null,
+            masterPasswordUnlock = null,
         )
     val deviceOptions = decryptionOptions
         .trustedDeviceUserDecryptionOptions
