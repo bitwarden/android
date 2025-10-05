@@ -1743,8 +1743,6 @@ class AuthRepositoryImpl(
                         userId = userId,
                         passwordHash = passwordHash,
                     )
-                    // Try to automatically update kdf to minimums after password unlock
-                    updateKdfToMinimumsIfNeeded(password = password)
                 }
 
             // Cache the password to verify against any password policies after the sync completes.
@@ -1762,6 +1760,14 @@ class AuthRepositoryImpl(
         settingsRepository.hasUserLoggedInOrCreatedAccount = true
 
         authDiskSource.userState = userStateJson
+        password?.let {
+            // Automatically update kdf to minimums after password unlock and userState update
+            kdfManager.updateKdfToMinimumsIfNeeded(password = password).let { result ->
+                if (result is UpdateKdfMinimumsResult.Error) {
+                    Timber.e("Failed to silent update KDF settings: ${result.error}")
+                }
+            }
+        }
         loginResponse.key?.let {
             // Only set the value if it's present, since we may have set it already
             // when we completed the pending admin auth request.
