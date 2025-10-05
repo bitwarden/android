@@ -10,6 +10,7 @@ import com.bitwarden.network.service.SendsService
 import com.bitwarden.network.service.SyncService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -141,6 +142,7 @@ object VaultManagerModule {
         userLogoutManager: UserLogoutManager,
         dispatcherManager: DispatcherManager,
         trustedDeviceManager: TrustedDeviceManager,
+        kdfManager: KdfManager,
     ): VaultLockManager =
         VaultLockManagerImpl(
             context = context,
@@ -154,6 +156,7 @@ object VaultManagerModule {
             userLogoutManager = userLogoutManager,
             dispatcherManager = dispatcherManager,
             trustedDeviceManager = trustedDeviceManager,
+            kdfManager = kdfManager,
         )
 
     @Provides

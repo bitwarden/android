@@ -17,6 +17,7 @@ import com.bitwarden.crypto.Kdf
 import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
@@ -86,6 +87,7 @@ class VaultLockManagerImpl(
     private val appStateManager: AppStateManager,
     private val userLogoutManager: UserLogoutManager,
     private val trustedDeviceManager: TrustedDeviceManager,
+    private val kdfManager: KdfManager,
     dispatcherManager: DispatcherManager,
     context: Context,
 ) : VaultLockManager {
@@ -236,7 +238,12 @@ class VaultLockManagerImpl(
                                         clearInvalidUnlockCount(userId = userId)
                                         trustedDeviceManager
                                             .trustThisDeviceIfNecessary(userId = userId)
-                                            .also { setVaultToUnlocked(userId = userId) }
+                                        if (initUserCryptoMethod is InitUserCryptoMethod.Password) {
+                                            kdfManager.updateKdfToMinimumsIfNeeded(
+                                                password = initUserCryptoMethod.password,
+                                            )
+                                        }
+                                        setVaultToUnlocked(userId = userId)
                                     } else {
                                         incrementInvalidUnlockCount(userId = userId)
                                     }

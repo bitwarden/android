@@ -28,7 +28,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
-import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
@@ -351,16 +350,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager, UserStateM
      * account via the [userStateFlow].
      */
     suspend fun getPasswordStrength(email: String? = null, password: String): PasswordStrengthResult
-
-    /**
-     * Checks if user's current KDF settings are below the minimums and needs update
-     */
-    fun needsKdfUpdateToMinimums(): Boolean
-
-    /**
-     * Updates the user's KDF settings if below the minimums
-     */
-    suspend fun updateKdfToMinimumsIfNeeded(password: String): UpdateKdfMinimumsResult
 
     /**
      * Validates the master password for the current logged in user.

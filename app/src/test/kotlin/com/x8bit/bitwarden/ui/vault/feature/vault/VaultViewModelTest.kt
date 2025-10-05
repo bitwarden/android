@@ -17,6 +17,7 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherListViewType
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
+import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
@@ -143,7 +144,6 @@ class VaultViewModelTest : BaseViewModelTest() {
             every { hasPendingAccountAddition = any() } just runs
             every { logout(userId = any(), reason = any()) } just runs
             every { switchAccount(any()) } answers { switchAccountResult }
-            coEvery { needsKdfUpdateToMinimums() } returns false
         }
 
     private var mutableFlightRecorderDataFlow =
@@ -188,6 +188,13 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { shouldShowDialog } returns false
         every { browserCount } returns 1
         every { delayDialog() } just runs
+    }
+
+    private val kdfManager: KdfManager = mockk {
+        every { needsKdfUpdateToMinimums() } returns false
+        coEvery {
+            updateKdfToMinimumsIfNeeded(password = any())
+        } returns UpdateKdfMinimumsResult.Success
     }
 
     @AfterEach
@@ -2912,7 +2919,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     fun `vaultDataStateFlow Loaded with needsKdfUpdateToMinimums true should show KdfUpdateRequired dialog`() =
         runTest {
-            coEvery { authRepository.needsKdfUpdateToMinimums() } returns true
+            coEvery { kdfManager.needsKdfUpdateToMinimums() } returns true
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
                     decryptCipherListResult = createMockDecryptCipherListResult(
@@ -2970,7 +2977,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     fun `vaultDataStateFlow Loaded with needsKdfUpdateToMinimums false should not show KdfUpdateRequired dialog`() =
         runTest {
-            coEvery { authRepository.needsKdfUpdateToMinimums() } returns false
+            coEvery { kdfManager.needsKdfUpdateToMinimums() } returns false
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
                     decryptCipherListResult = createMockDecryptCipherListResult(
@@ -3025,7 +3032,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     fun `on KdfUpdatePasswordRepromptSubmit should call updateKdfToMinimumsIfNeeded`() = runTest {
         val password = "mock_password"
         coEvery {
-            authRepository.updateKdfToMinimumsIfNeeded(password)
+            kdfManager.updateKdfToMinimumsIfNeeded(password)
         } returns UpdateKdfMinimumsResult.Success
 
         val viewModel = createViewModel()
@@ -3035,7 +3042,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
 
         coVerify(exactly = 1) {
-            authRepository.updateKdfToMinimumsIfNeeded(password)
+            kdfManager.updateKdfToMinimumsIfNeeded(password)
         }
     }
 
@@ -3054,6 +3061,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager = specialCircumstanceManager,
             networkConnectionManager = networkConnectionManager,
             browserAutofillDialogManager = browserAutofillDialogManager,
+            kdfManager = kdfManager,
         )
 }
 

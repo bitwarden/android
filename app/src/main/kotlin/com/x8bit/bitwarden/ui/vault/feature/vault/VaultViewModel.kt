@@ -21,6 +21,7 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
+import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
@@ -101,6 +102,7 @@ class VaultViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val networkConnectionManager: NetworkConnectionManager,
     private val browserAutofillDialogManager: BrowserAutofillDialogManager,
+    private val kdfManager: KdfManager,
     snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
@@ -1002,7 +1004,7 @@ class VaultViewModel @Inject constructor(
         )
 
         // Check if user needs to update kdf settings to minimums
-        if (authRepository.needsKdfUpdateToMinimums()) {
+        if (kdfManager.needsKdfUpdateToMinimums()) {
             mutableStateFlow.update { currentState ->
                 @Suppress("MaxLineLength")
                 currentState.copy(
@@ -1178,7 +1180,7 @@ class VaultViewModel @Inject constructor(
         action: VaultAction.KdfUpdatePasswordRepromptSubmit,
     ) {
         viewModelScope.launch {
-            val result = authRepository.updateKdfToMinimumsIfNeeded(password = action.password)
+            val result = kdfManager.updateKdfToMinimumsIfNeeded(password = action.password)
             sendAction(action = VaultAction.Internal.UpdatedKdfToMinimumsReceived(result))
         }
     }
