@@ -35,6 +35,7 @@ class SaveInfoBuilderTest {
         isFocused = true,
         textValue = null,
         hasPasswordTerms = false,
+        website = null,
     )
     private val autofillIdValid: AutofillId = mockk()
     private val autofillViewDataValid = AutofillView.Data(
@@ -44,6 +45,7 @@ class SaveInfoBuilderTest {
         isFocused = true,
         textValue = null,
         hasPasswordTerms = false,
+        website = null,
     )
     private val autofillPartitionCard: AutofillPartition.Card = AutofillPartition.Card(
         views = listOf(

@@ -41,6 +41,7 @@ fun CipherView.toAutofillCipherProvider(): AutofillCipherProvider =
                     password = login.password.orEmpty(),
                     subtitle = subtitle.orEmpty(),
                     username = login.username.orEmpty(),
+                    website = uri,
                 ),
             )
         }

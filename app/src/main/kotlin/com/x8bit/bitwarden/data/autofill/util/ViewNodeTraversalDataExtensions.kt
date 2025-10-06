@@ -5,36 +5,6 @@ import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
 
 /**
- * The android app URI scheme. Example: androidapp://com.x8bit.bitwarden
- */
-private const val ANDROID_APP_SCHEME: String = "androidapp"
-
-/**
- * Try and build a URI. First, try building a website from the list of [ViewNodeTraversalData]. If
- * that fails, try converting [packageName] into an Android app URI.
- */
-fun List<ViewNodeTraversalData>.buildUriOrNull(
-    packageName: String?,
-): String? {
-    // Search list of ViewNodeTraversalData for a website URI.
-    this
-        .firstOrNull { it.website != null }
-        ?.website
-        ?.let { websiteUri ->
-            return websiteUri
-        }
-
-    // If the package name is available, build a URI out of that.
-    return packageName
-        ?.let { nonNullPackageName ->
-            buildUri(
-                domain = nonNullPackageName,
-                scheme = ANDROID_APP_SCHEME,
-            )
-        }
-}
-
-/**
  * Try and build a package name. First, try searching traversal data for package names. If that
  * fails, try extracting a package name from [assistStructure].
  */

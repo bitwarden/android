@@ -4,8 +4,14 @@ import android.view.View
 import android.view.autofill.AutofillValue
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import com.x8bit.bitwarden.data.autofill.model.FilledItem
+import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
+
+/**
+ * The android app URI scheme. Example: androidapp://com.x8bit.bitwarden
+ */
+private const val ANDROID_APP_SCHEME: String = "androidapp"
 
 /**
  * Convert this [AutofillView] into a [FilledItem]. Return null if not possible.
@@ -96,3 +102,17 @@ private fun AutofillView.buildListAutofillValueOrNull(
                 ?.let { AutofillValue.forList(it) }
         }
     }
+
+/**
+ * Try and build a URI. First, try building a website from the list of [ViewNodeTraversalData]. If
+ * that fails, try converting [packageName] into an Android app URI.
+ */
+fun AutofillView.buildUriOrNull(
+    packageName: String?,
+): String? {
+    // Search list of ViewNodeTraversalData for a website URI.
+    this.data.website?.let { websiteUri -> return websiteUri }
+
+    // If the package name is available, build a URI out of that.
+    return packageName?.let { buildUri(domain = it, scheme = ANDROID_APP_SCHEME) }
+}
