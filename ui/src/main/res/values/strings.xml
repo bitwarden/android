@@ -993,7 +993,6 @@ Do you want to switch to this account?</string>
     <string name="delete_x">Delete %s</string>
     <string name="failed_to_decrypt_cipher_contact_support">Failed to decrypt cipher. Contact support.</string>
     <string name="decryption_error">Decryption error</string>
-    <string name="add_item_rotation">Add Item Rotation</string>
     <string name="scan_a_qr_code">Scan a QR code</string>
     <string name="cannot_add_authenticator_key">Cannot add authenticator key?</string>
     <string name="enable_camera_permission_to_use_the_scanner">Enable camera permission to use the scanner</string>

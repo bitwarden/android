@@ -14,7 +14,6 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
-import com.bitwarden.ui.util.performCustomAccessibilityAction
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -194,7 +193,7 @@ class ManualCodeEntryScreenTest : AuthenticatorComposeTest() {
     }
 
     @Test
-    fun `on permission dialog Settings clock should emit SettingsClick`() {
+    fun `on permission dialog Settings click should emit SettingsClick`() {
         permissionsManager.checkPermissionResult = false
         permissionsManager.getPermissionsResult = false
         composeTestRule
@@ -221,21 +220,6 @@ class ManualCodeEntryScreenTest : AuthenticatorComposeTest() {
             .onNodeWithText(text = "Scan QR code")
             .performScrollTo()
             .performClick()
-
-        verify(exactly = 1) {
-            viewModel.trySendAction(ManualCodeEntryAction.ScanQrCodeTextClick)
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on Scan QR code accessibility action without permission and permission is granted should emit ScanQrCodeTextClick`() {
-        permissionsManager.checkPermissionResult = false
-        permissionsManager.getPermissionsResult = true
-        composeTestRule
-            .onNodeWithText(text = "Scan QR code")
-            .performScrollTo()
-            .performCustomAccessibilityAction(label = "Scan QR code")
 
         verify(exactly = 1) {
             viewModel.trySendAction(ManualCodeEntryAction.ScanQrCodeTextClick)

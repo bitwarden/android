@@ -143,7 +143,7 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `Default Save Option dialog should send DefaultSaveOptionUpdated when confirm is clicked`() =
+    fun `Default Save Option dialog should send DefaultSaveOptionUpdated when selection is made`() =
         runTest {
             val expectedSaveOption = DefaultSaveOption.BITWARDEN_APP
             mutableStateFlow.value = DEFAULT_STATE
@@ -161,12 +161,6 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
             // Select updated option:
             composeTestRule
                 .onNodeWithText("Save to Bitwarden")
-                .assertIsDisplayed()
-                .performClick()
-
-            // Click confirm:
-            composeTestRule
-                .onNodeWithText("Confirm")
                 .assertIsDisplayed()
                 .performClick()
 
