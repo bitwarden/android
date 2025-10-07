@@ -6,6 +6,7 @@ import android.app.Activity
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
 import com.bitwarden.cxf.manager.CredentialExchangeCompletionManagerImpl
+import java.time.Clock
 
 /**
  * A DSL for building a [CredentialExchangeCompletionManager].
@@ -18,20 +19,43 @@ import com.bitwarden.cxf.manager.CredentialExchangeCompletionManagerImpl
  */
 @OmitFromCoverage
 class CredentialExchangeCompletionManagerBuilder internal constructor() {
-    internal fun build(activity: Activity): CredentialExchangeCompletionManager =
-        CredentialExchangeCompletionManagerImpl(activity = activity)
+    /**
+     * The relying party ID of the credential exporter.
+     */
+    lateinit var exporterRpId: String
+
+    /**
+     * The display name of the credential exporter.
+     */
+    lateinit var exporterDisplayName: String
+
+    /**
+     * Constructs a [CredentialExchangeCompletionManager] instance with the configured properties.
+     *
+     * This function is internal and called by the [credentialExchangeCompletionManager] builder
+     * after the [CredentialExchangeCompletionManagerBuilder] has been configured.
+     *
+     * @param activity The [Activity] that initiated the credential exchange operation.
+     * @return An initialized [CredentialExchangeCompletionManager] ready to complete the flow.
+     */
+    internal fun build(activity: Activity, clock: Clock): CredentialExchangeCompletionManager =
+        CredentialExchangeCompletionManagerImpl(
+            activity = activity,
+            clock = clock,
+        )
 }
 
 /**
  * Creates an instance of [CredentialExchangeCompletionManager] using a DSL-style builder.
  *
  * This function is the entry point for handling the completion of a credential exchange flow,
- * such as after a user has successfully created or selected a passkey.
+ * such as after a user has successfully selected items to export.
  *
  * Example usage:
  * ```
  * val completionManager = credentialExchangeCompletionManager(activity) {
- *     // Configuration options can be added here if the DSL is extended in the future.
+ *     exporterRpId = "example.com"
+ *     exporterDisplayName = "Example"
  * }
  *
  * // Use the completionManager to finish the credential exchange.
@@ -47,8 +71,12 @@ class CredentialExchangeCompletionManagerBuilder internal constructor() {
  */
 fun credentialExchangeCompletionManager(
     activity: Activity,
-    config: CredentialExchangeCompletionManagerBuilder.() -> Unit = {},
+    clock: Clock,
+    config: CredentialExchangeCompletionManagerBuilder.() -> Unit,
 ): CredentialExchangeCompletionManager =
     CredentialExchangeCompletionManagerBuilder()
         .apply(config)
-        .build(activity = activity)
+        .build(
+            activity = activity,
+            clock = clock,
+        )
