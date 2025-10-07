@@ -51,6 +51,7 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.StatusBarsAppearanceAffect
 import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -101,6 +102,7 @@ fun QrCodeScanScreen(
     }
     // This screen should always look like it's in dark mode
     CompositionLocalProvider(LocalBitwardenColorScheme provides darkBitwardenColorScheme) {
+        StatusBarsAppearanceAffect(isLightStatusBars = false)
         BitwardenScaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = {
