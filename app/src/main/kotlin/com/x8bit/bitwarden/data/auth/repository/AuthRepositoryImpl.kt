@@ -764,7 +764,7 @@ class AuthRepositoryImpl(
         resendNewDeviceOtpRequestJson
             ?.let { jsonRequest ->
                 accountsService.resendNewDeviceOtp(body = jsonRequest).fold(
-                    onFailure = { ResendEmailResult.Error(message = it.message, error = it) },
+                    onFailure = { ResendEmailResult.Error(message = null, error = it) },
                     onSuccess = {
                         when (it) {
                             VerificationOtpResponseJson.Success -> ResendEmailResult.Success
