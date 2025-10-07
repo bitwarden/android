@@ -167,6 +167,7 @@ class AuthRepositoryImpl(
     dispatcherManager: DispatcherManager,
 ) : AuthRepository,
     AuthRequestManager by authRequestManager,
+    KdfManager by kdfManager,
     UserStateManager by userStateManager {
     /**
      * A scope intended for use when simply collecting multiple flows in order to combine them. The

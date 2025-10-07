@@ -21,7 +21,6 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.DecryptCipherListResult
-import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
@@ -102,7 +101,6 @@ class VaultViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val networkConnectionManager: NetworkConnectionManager,
     private val browserAutofillDialogManager: BrowserAutofillDialogManager,
-    private val kdfManager: KdfManager,
     snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
@@ -1006,7 +1004,7 @@ class VaultViewModel @Inject constructor(
     private fun getDialogVaultLoaded(
         shouldShowDecryptionAlert: Boolean,
         vaultData: DataState.Loaded<VaultData>,
-    ): VaultState.DialogState? = if (kdfManager.needsKdfUpdateToMinimums()) {
+    ): VaultState.DialogState? = if (authRepository.needsKdfUpdateToMinimums()) {
         VaultState.DialogState.VaultLoadKdfUpdateRequired(
             title = BitwardenString.update_your_encryption_settings.asText(),
             message = BitwardenString
@@ -1189,7 +1187,7 @@ class VaultViewModel @Inject constructor(
         action: VaultAction.KdfUpdatePasswordRepromptSubmit,
     ) {
         viewModelScope.launch {
-            val result = kdfManager.updateKdfToMinimumsIfNeeded(password = action.password)
+            val result = authRepository.updateKdfToMinimumsIfNeeded(password = action.password)
             sendAction(action = VaultAction.Internal.UpdatedKdfToMinimumsReceived(result))
         }
     }

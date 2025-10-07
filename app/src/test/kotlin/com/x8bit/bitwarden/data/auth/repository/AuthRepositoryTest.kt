@@ -164,8 +164,7 @@ import java.time.ZonedDateTime
 import javax.net.ssl.SSLHandshakeException
 
 @Suppress("LargeClass")
-class
-AuthRepositoryTest {
+class AuthRepositoryTest {
 
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
     private val accountsService: AccountsService = mockk()

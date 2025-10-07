@@ -278,7 +278,6 @@ class KdfManagerTest {
         }
 
     @Test
-    @Suppress("MaxLineLength")
     fun `updateKdfToMinimumsIfNeeded with PBKDF2 below minimums should return Success`() =
         runTest {
             coEvery {
