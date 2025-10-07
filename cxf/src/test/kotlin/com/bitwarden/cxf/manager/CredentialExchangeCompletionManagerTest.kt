@@ -1,6 +1,7 @@
 package com.bitwarden.cxf.manager
 
 import android.app.Activity
+import android.content.pm.ApplicationInfo
 import android.net.Uri
 import androidx.credentials.providerevents.IntentHandler
 import androidx.credentials.providerevents.exception.ImportCredentialsException
@@ -14,15 +15,25 @@ import io.mockk.runs
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
 class CredentialExchangeCompletionManagerTest {
 
-    private val mockActivity = mockk<Activity>()
-    private val completionManager = CredentialExchangeCompletionManagerImpl(mockActivity)
+    private val mockActivity = mockk<Activity>(relaxed = true, relaxUnitFun = true)
+    private val mockApplicationInfo = mockk<ApplicationInfo>(relaxed = true)
+
+    private val completionManager = CredentialExchangeCompletionManagerImpl(
+        activity = mockActivity,
+        clock = FIXED_CLOCK,
+    )
 
     @BeforeEach
     fun setUp() {
         mockkObject(IntentHandler)
+        every { mockActivity.packageName } returns "mockPackageName-1"
+        every { mockActivity.applicationInfo } returns mockApplicationInfo
         every {
             IntentHandler.setImportCredentialsResponse(
                 context = any(),
@@ -82,3 +93,8 @@ class CredentialExchangeCompletionManagerTest {
         }
     }
 }
+
+private val FIXED_CLOCK = Clock.fixed(
+    Instant.parse("2024-01-25T10:15:30.00Z"),
+    ZoneOffset.UTC,
+)

@@ -34,7 +34,13 @@ class CredentialExchangeImporterTest {
             val capturedRequestJson = mutableListOf<ImportCredentialsRequest>()
             val expectedRequestJson = """
         {
-          "importer": "mockPackageName",
+          "version": {
+            "major":0,
+            "minor":0
+          },
+          "mode": ["direct"],
+          "importerRpId": "mockPackageName",
+          "importerDisplayName": "null",
           "credentialTypes": [
             "basic-auth"
           ]

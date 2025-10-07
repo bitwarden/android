@@ -10,6 +10,9 @@ import androidx.credentials.providerevents.transfer.ImportCredentialsRequest
 import com.bitwarden.cxf.importer.model.ImportCredentialsSelectionResult
 import timber.log.Timber
 
+private const val CXP_FORMAT_VERSION_MAJOR = 0
+private const val CXP_FORMAT_VERSION_MINOR = 0
+
 /**
  * Default implementation of [CredentialExchangeImporter].
  *
@@ -32,10 +35,17 @@ internal class CredentialExchangeImporterImpl(
             val response = providerEventsManager.importCredentials(
                 context = activity,
                 request = ImportCredentialsRequest(
+                    // Format the request according to the FIDO CXP spec.
                     // TODO: [PM-25663] Link to the correct documentation once it's available.
                     requestJson = """
                     {
-                      "importer": "${activity.packageName}",
+                      "version": {
+                        "major":$CXP_FORMAT_VERSION_MAJOR,
+                        "minor":$CXP_FORMAT_VERSION_MINOR
+                      },
+                      "mode": ["direct"],
+                      "importerRpId": "${activity.packageName}",
+                      "importerDisplayName": "${activity.applicationInfo.name}",
                       "credentialTypes": [
                         ${credentialTypes.joinToString { "\"$it\"" }}
                       ]
