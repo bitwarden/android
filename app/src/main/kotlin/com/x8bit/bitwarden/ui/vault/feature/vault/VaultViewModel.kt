@@ -808,12 +808,19 @@ class VaultViewModel @Inject constructor(
 
         when (val result = action.result) {
             UpdateKdfMinimumsResult.ActiveAccountNotFound -> {
-                showGenericError()
+                showGenericError(
+                    message = BitwardenString.kdf_update_failed_active_account_not_found.asText(),
+                )
                 Timber.e(message = "Failed to update kdf to minimums: Active account not found")
             }
 
             is UpdateKdfMinimumsResult.Error -> {
-                showGenericError(error = result.error)
+                showGenericError(
+                    message = BitwardenString
+                        .an_error_occurred_while_trying_to_update_your_kdf_settings
+                        .asText(),
+                        error = result.error,
+                )
                 Timber.e(message = "Failed to update kdf to minimums: ${result.error}")
             }
 
@@ -1010,7 +1017,9 @@ class VaultViewModel @Inject constructor(
                 currentState.copy(
                     dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
                         title = BitwardenString.update_your_encryption_settings.asText(),
-                        message = BitwardenString.the_new_recommended_encryption_settings_will_improve_your_account_security_desc_long.asText(),
+                        message = BitwardenString
+                            .the_new_recommended_encryption_settings_will_improve_your_account_security_desc_long
+                            .asText(),
                     ),
                 )
             }
@@ -1186,13 +1195,14 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun showGenericError(
+        message: Text = BitwardenString.generic_error_message.asText(),
         error: Throwable? = null,
     ) {
         mutableStateFlow.update {
             it.copy(
                 dialog = VaultState.DialogState.Error(
-                    BitwardenString.an_error_has_occurred.asText(),
-                    BitwardenString.generic_error_message.asText(),
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = message,
                     error = error,
                 ),
             )

@@ -2887,7 +2887,9 @@ class VaultViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(
                     dialog = VaultState.DialogState.Error(
                         title = BitwardenString.an_error_has_occurred.asText(),
-                        message = BitwardenString.generic_error_message.asText(),
+                        message = BitwardenString
+                            .kdf_update_failed_active_account_not_found
+                            .asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -2907,7 +2909,9 @@ class VaultViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 dialog = VaultState.DialogState.Error(
                     title = BitwardenString.an_error_has_occurred.asText(),
-                    message = BitwardenString.generic_error_message.asText(),
+                    message = BitwardenString
+                        .an_error_occurred_while_trying_to_update_your_kdf_settings
+                        .asText(),
                     error = testError,
                 ),
             ),
