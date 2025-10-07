@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util
+package com.bitwarden.ui.platform.feature.qrcodescan.util
 
 import androidx.camera.core.ImageProxy
 

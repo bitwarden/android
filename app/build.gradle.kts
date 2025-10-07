@@ -271,7 +271,6 @@ dependencies {
     implementation(platform(libs.square.retrofit.bom))
     implementation(libs.square.retrofit)
     implementation(libs.timber)
-    implementation(libs.zxing.zxing.core)
 
     // For now we are restricted to running Compose tests for debug builds only
     debugImplementation(libs.androidx.compose.ui.test.manifest)
