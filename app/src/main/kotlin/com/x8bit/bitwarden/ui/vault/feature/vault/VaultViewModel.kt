@@ -819,7 +819,7 @@ class VaultViewModel @Inject constructor(
                     message = BitwardenString
                         .an_error_occurred_while_trying_to_update_your_kdf_settings
                         .asText(),
-                        error = result.error,
+                    error = result.error,
                 )
                 Timber.e(message = "Failed to update kdf to minimums: ${result.error}")
             }
@@ -991,39 +991,39 @@ class VaultViewModel @Inject constructor(
 
         updateVaultState(
             vaultData = vaultData.data,
-            dialog = if (shouldShowDecryptionAlert ||
-                state.dialog is VaultState.DialogState.VaultLoadCipherDecryptionError
-            ) {
-                VaultState.DialogState.VaultLoadCipherDecryptionError(
-                    title = BitwardenString.decryption_error.asText(),
-                    cipherCount = vaultData.data.decryptCipherListResult.failures.size,
-                )
-            } else if (state.dialog is VaultState.DialogState.ThirdPartyBrowserAutofill) {
-                state.dialog
-            } else {
-                null
-            },
+            dialog = getDialogVaultLoaded(
+                shouldShowDecryptionAlert = shouldShowDecryptionAlert,
+                vaultData = vaultData,
+            ),
             hasShownDecryptionFailureAlert = if (shouldShowDecryptionAlert) {
                 true
             } else {
                 state.hasShownDecryptionFailureAlert
             },
         )
+    }
 
-        // Check if user needs to update kdf settings to minimums
-        if (kdfManager.needsKdfUpdateToMinimums()) {
-            mutableStateFlow.update { currentState ->
-                @Suppress("MaxLineLength")
-                currentState.copy(
-                    dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
-                        title = BitwardenString.update_your_encryption_settings.asText(),
-                        message = BitwardenString
-                            .the_new_recommended_encryption_settings_will_improve_your_account_security_desc_long
-                            .asText(),
-                    ),
-                )
-            }
-        }
+    private fun getDialogVaultLoaded(
+        shouldShowDecryptionAlert: Boolean,
+        vaultData: DataState.Loaded<VaultData>,
+    ): VaultState.DialogState? = if (kdfManager.needsKdfUpdateToMinimums()) {
+        VaultState.DialogState.VaultLoadKdfUpdateRequired(
+            title = BitwardenString.update_your_encryption_settings.asText(),
+            message = BitwardenString
+                .the_new_recommended_encryption_settings_will_improve_your_account_desc_long
+                .asText(),
+        )
+    } else if (shouldShowDecryptionAlert ||
+        state.dialog is VaultState.DialogState.VaultLoadCipherDecryptionError
+    ) {
+        VaultState.DialogState.VaultLoadCipherDecryptionError(
+            title = BitwardenString.decryption_error.asText(),
+            cipherCount = vaultData.data.decryptCipherListResult.failures.size,
+        )
+    } else if (state.dialog is VaultState.DialogState.ThirdPartyBrowserAutofill) {
+        state.dialog
+    } else {
+        null
     }
 
     private fun updateVaultState(

@@ -2970,7 +2970,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     ),
                     dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
                         title = BitwardenString.update_your_encryption_settings.asText(),
-                        message = BitwardenString.the_new_recommended_encryption_settings_will_improve_your_account_security_desc_long.asText(),
+                        message = BitwardenString.the_new_recommended_encryption_settings_will_improve_your_account_desc_long.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
