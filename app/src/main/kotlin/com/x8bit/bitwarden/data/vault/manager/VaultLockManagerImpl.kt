@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
+import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
@@ -65,6 +66,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.time.Clock
 import kotlin.time.Duration.Companion.minutes
 
@@ -232,17 +234,11 @@ class VaultLockManagerImpl(
                                                 )
                                             }
                                     }
-                                }
-                                .also {
                                     if (it is VaultUnlockResult.Success) {
                                         clearInvalidUnlockCount(userId = userId)
                                         trustedDeviceManager
                                             .trustThisDeviceIfNecessary(userId = userId)
-                                        if (initUserCryptoMethod is InitUserCryptoMethod.Password) {
-                                            kdfManager.updateKdfToMinimumsIfNeeded(
-                                                password = initUserCryptoMethod.password,
-                                            )
-                                        }
+                                        updateKdfIfNeeded(initUserCryptoMethod)
                                         setVaultToUnlocked(userId = userId)
                                     } else {
                                         incrementInvalidUnlockCount(userId = userId)
@@ -678,6 +674,20 @@ class VaultLockManagerImpl(
     private fun isUserLoggedOut(userId: String): Boolean {
         val accounts = authDiskSource.userAccountTokens
         return (accounts.find { it.userId == userId }?.isLoggedIn) == false
+    }
+
+    private suspend fun updateKdfIfNeeded(initUserCryptoMethod: InitUserCryptoMethod) {
+        if (initUserCryptoMethod is InitUserCryptoMethod.Password) {
+            kdfManager
+                .updateKdfToMinimumsIfNeeded(
+                    password = initUserCryptoMethod.password,
+                )
+                .also { result ->
+                    if (result is UpdateKdfMinimumsResult.Error) {
+                        Timber.e("Failed to silent update KDF settings: ${result.error}")
+                    }
+                }
+        }
     }
 
     /**

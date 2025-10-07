@@ -1682,11 +1682,13 @@ class AuthRepositoryImpl(
         authDiskSource.userState = userStateJson
         password?.let {
             // Automatically update kdf to minimums after password unlock and userState update
-            kdfManager.updateKdfToMinimumsIfNeeded(password = password).let { result ->
-                if (result is UpdateKdfMinimumsResult.Error) {
-                    Timber.e("Failed to silent update KDF settings: ${result.error}")
+            kdfManager
+                .updateKdfToMinimumsIfNeeded(password = password)
+                .also { result ->
+                    if (result is UpdateKdfMinimumsResult.Error) {
+                        Timber.e("Failed to silent update KDF settings: ${result.error}")
+                    }
                 }
-            }
         }
         loginResponse.key?.let {
             // Only set the value if it's present, since we may have set it already
