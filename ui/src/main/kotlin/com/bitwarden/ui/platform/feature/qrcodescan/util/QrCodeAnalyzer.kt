@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.util
+package com.bitwarden.ui.platform.feature.qrcodescan.util
 
 import androidx.camera.core.ImageAnalysis
 import androidx.compose.runtime.Stable
