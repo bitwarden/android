@@ -23,8 +23,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -52,6 +52,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.ui.platform.util.isPortrait
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.StatusBarsAppearanceAffect
 import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.spanStyleOf
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -63,6 +64,8 @@ import com.bitwarden.ui.platform.feature.qrcodescan.util.QrCodeAnalyzerImpl
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.theme.LocalBitwardenColorScheme
+import com.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
 import java.util.concurrent.Executors
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -98,48 +101,52 @@ fun QrCodeScanScreen(
         }
     }
 
-    QrCodeScanDialogs(
-        dialogState = state.dialog,
-        onSaveHereClick = remember(viewModel) {
-            { viewModel.trySendAction(QrCodeScanAction.SaveLocallyClick(it)) }
-        },
-        onTakeMeToBitwardenClick = remember(viewModel) {
-            { viewModel.trySendAction(QrCodeScanAction.SaveToBitwardenClick(it)) }
-        },
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(QrCodeScanAction.SaveToBitwardenErrorDismiss) }
-        },
-    )
-
-    BitwardenScaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            BitwardenTopAppBar(
-                title = stringResource(id = BitwardenString.scan_qr_code),
-                navigationIcon = painterResource(id = BitwardenDrawable.ic_close),
-                navigationIconContentDescription = stringResource(id = BitwardenString.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(QrCodeScanAction.CloseClick) }
-                },
-                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
-            )
-        },
-    ) {
-        CameraPreview(
-            cameraErrorReceive = remember(viewModel) {
-                { viewModel.trySendAction(QrCodeScanAction.CameraSetupErrorReceive) }
+    // This screen should always look like it's in dark mode
+    CompositionLocalProvider(LocalBitwardenColorScheme provides darkBitwardenColorScheme) {
+        StatusBarsAppearanceAffect(isLightStatusBars = false)
+        QrCodeScanDialogs(
+            dialogState = state.dialog,
+            onSaveHereClick = remember(viewModel) {
+                { viewModel.trySendAction(QrCodeScanAction.SaveLocallyClick(it)) }
             },
-            qrCodeAnalyzer = qrCodeAnalyzer,
+            onTakeMeToBitwardenClick = remember(viewModel) {
+                { viewModel.trySendAction(QrCodeScanAction.SaveToBitwardenClick(it)) }
+            },
+            onDismissRequest = remember(viewModel) {
+                { viewModel.trySendAction(QrCodeScanAction.SaveToBitwardenErrorDismiss) }
+            },
         )
 
-        if (LocalConfiguration.current.isPortrait) {
-            PortraitQRCodeContent(
-                onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+        BitwardenScaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                BitwardenTopAppBar(
+                    title = stringResource(id = BitwardenString.scan_qr_code),
+                    navigationIcon = painterResource(id = BitwardenDrawable.ic_close),
+                    navigationIconContentDescription = stringResource(id = BitwardenString.close),
+                    onNavigationIconClick = remember(viewModel) {
+                        { viewModel.trySendAction(QrCodeScanAction.CloseClick) }
+                    },
+                    scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+                )
+            },
+        ) {
+            CameraPreview(
+                cameraErrorReceive = remember(viewModel) {
+                    { viewModel.trySendAction(QrCodeScanAction.CameraSetupErrorReceive) }
+                },
+                qrCodeAnalyzer = qrCodeAnalyzer,
             )
-        } else {
-            LandscapeQRCodeContent(
-                onEnterCodeManuallyClick = onEnterCodeManuallyClick,
-            )
+
+            if (LocalConfiguration.current.isPortrait) {
+                PortraitQRCodeContent(
+                    onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+                )
+            } else {
+                LandscapeQRCodeContent(
+                    onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+                )
+            }
         }
     }
 }
