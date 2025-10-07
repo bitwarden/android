@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.search
 
 import androidx.compose.ui.test.assert
-import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.filterToOne
@@ -181,15 +180,13 @@ class SearchScreenTest : BitwardenComposeTest() {
     @Test
     fun `progressbar should be displayed according to state`() {
         mutableStateFlow.update { DEFAULT_STATE }
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         mutableStateFlow.update {
             it.copy(viewState = SearchState.ViewState.Empty(message = null))
         }
 
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
     }
 
     @Test

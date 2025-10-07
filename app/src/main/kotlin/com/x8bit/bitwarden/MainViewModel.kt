@@ -5,6 +5,8 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.manager.toast.ToastManager
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
+import com.bitwarden.cxf.util.getProviderImportCredentialsRequest
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.manager.IntentManager
@@ -295,6 +297,7 @@ class MainViewModel @Inject constructor(
         val getCredentialsRequest = intent.getGetCredentialsRequestOrNull()
         val fido2AssertCredentialRequest = intent.getFido2AssertionRequestOrNull()
         val providerGetPasswordRequest = intent.getProviderGetPasswordRequestOrNull()
+        val importCredentialsRequest = intent.getProviderImportCredentialsRequest()
         when {
             passwordlessRequestData != null -> {
                 authRepository.activeUserId?.let {
@@ -417,6 +420,16 @@ class MainViewModel @Inject constructor(
             hasAccountSecurityShortcut -> {
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.AccountSecurityShortcut
+            }
+
+            importCredentialsRequest != null -> {
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.CredentialExchangeExport(
+                        data = ImportCredentialsRequestData(
+                            uri = importCredentialsRequest.uri,
+                            requestJson = importCredentialsRequest.request.requestJson,
+                        ),
+                    )
             }
         }
     }

@@ -24,6 +24,7 @@ import org.junit.Test
 class VaultSettingsScreenTest : BitwardenComposeTest() {
 
     private var onNavigateToImportLoginsCalled = false
+    private var onNavigateToImportItemsCalled = false
     private var onNavigateBackCalled = false
     private var onNavigateToExportVaultCalled = false
     private var onNavigateToFoldersCalled = false
@@ -48,6 +49,7 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
                 onNavigateToExportVault = { onNavigateToExportVaultCalled = true },
                 onNavigateToFolders = { onNavigateToFoldersCalled = true },
                 onNavigateToImportLogins = { onNavigateToImportLoginsCalled = true },
+                onNavigateToImportItems = { onNavigateToImportItemsCalled = true },
             )
         }
     }

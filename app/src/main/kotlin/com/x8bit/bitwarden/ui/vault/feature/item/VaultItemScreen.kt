@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -194,7 +194,10 @@ fun VaultItemScreen(
                                     }
                                 },
                             )
-                                .takeUnless { state.isCipherInCollection },
+                                .takeUnless {
+                                    state.isCipherInCollection ||
+                                        !state.hasOrganizations
+                                },
                             OverflowMenuItemData(
                                 text = stringResource(id = BitwardenString.collections),
                                 onClick = remember(viewModel) {

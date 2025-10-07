@@ -1,4 +1,5 @@
 @file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 
 import androidx.navigation.NavController
@@ -17,10 +18,12 @@ data object AutofillRoute
 /**
  * Add settings destinations to the nav graph.
  */
+@Suppress("LongParameterList")
 fun NavGraphBuilder.autoFillDestination(
     onNavigateBack: () -> Unit,
     onNavigateToBlockAutoFillScreen: () -> Unit,
     onNavigateToSetupAutofill: () -> Unit,
+    onNavigateToSetupBrowserAutofill: () -> Unit,
     onNavigateToAboutPrivilegedAppsScreen: () -> Unit,
     onNavigateToPrivilegedAppsList: () -> Unit,
 ) {
@@ -29,6 +32,7 @@ fun NavGraphBuilder.autoFillDestination(
             onNavigateBack = onNavigateBack,
             onNavigateToBlockAutoFillScreen = onNavigateToBlockAutoFillScreen,
             onNavigateToSetupAutofill = onNavigateToSetupAutofill,
+            onNavigateToSetupBrowserAutofill = onNavigateToSetupBrowserAutofill,
             onNavigateToAboutPrivilegedAppsScreen = onNavigateToAboutPrivilegedAppsScreen,
             onNavigateToPrivilegedAppsList = onNavigateToPrivilegedAppsList,
         )

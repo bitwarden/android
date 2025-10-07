@@ -2,6 +2,7 @@
 
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
+import com.bitwarden.collections.CollectionType
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.resource.BitwardenString
@@ -139,12 +140,22 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
                     .toSelectedOwnerId(cipherView = currentContentState.common.originalCipher)
                     ?: collectionViewList
                         .firstOrNull { it.id == currentContentState.common.selectedCollectionId }
+                        ?.organizationId
+                    ?: collectionViewList
+                        .getDefaultCollectionViewOrNull(
+                            isIndividualVaultDisabled = isIndividualVaultDisabled,
+                        )
                         ?.organizationId,
                 availableOwners = activeAccount.toAvailableOwners(
                     collectionViewList = collectionViewList,
                     cipherView = currentContentState.common.originalCipher,
                     isIndividualVaultDisabled = isIndividualVaultDisabled,
-                    selectedCollectionId = currentContentState.common.selectedCollectionId,
+                    selectedCollectionId = currentContentState.common.selectedCollectionId
+                        ?: collectionViewList
+                            .getDefaultCollectionViewOrNull(
+                                isIndividualVaultDisabled = isIndividualVaultDisabled,
+                            )
+                            ?.id,
                 ),
                 isUnlockWithPasswordEnabled = activeAccount.hasMasterPassword,
                 hasOrganizations = activeAccount.organizations.isNotEmpty(),
@@ -152,6 +163,29 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
         )
     } ?: this
 }
+
+/**
+ * Retrieves the default user collection from a list of [CollectionView]s, but only if the
+ * individual vault is disabled.
+ *
+ * This is used to pre-select the default collection for a new item when the user is part of an
+ * organization and the "Individual Vault" policy is enabled, which prevents them from creating
+ * items in their personal vault.
+ *
+ * @param isIndividualVaultDisabled A boolean indicating if the policy disabling the individual
+ * vault is active.
+ *
+ * @return The [CollectionView] corresponding to the default user collection if the individual vault
+ * is disabled, otherwise `null`.
+ */
+fun List<CollectionView>.getDefaultCollectionViewOrNull(
+    isIndividualVaultDisabled: Boolean,
+): CollectionView? =
+    if (isIndividualVaultDisabled) {
+        firstOrNull { it.type == CollectionType.DEFAULT_USER_COLLECTION }
+    } else {
+        null
+    }
 
 /**
  * Validates a [CipherView] otherwise returning a [VaultAddEditState.ViewState.Error].

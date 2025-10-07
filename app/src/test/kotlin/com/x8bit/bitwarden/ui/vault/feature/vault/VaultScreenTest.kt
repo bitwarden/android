@@ -49,7 +49,6 @@ import com.bitwarden.ui.util.performYesDialogButtonClick
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
@@ -79,6 +78,7 @@ import org.junit.Test
 @Suppress("LargeClass")
 class VaultScreenTest : BitwardenComposeTest() {
     private var onNavigateToAboutCalled = false
+    private var onNavigateToAutofillCalled = false
     private var onNavigateToImportLoginsCalled = false
     private var onNavigateToVaultAddItemScreenCalled = false
     private var onNavigateToVaultItemArgs: VaultItemArgs? = null
@@ -89,7 +89,6 @@ class VaultScreenTest : BitwardenComposeTest() {
     private var onNavigateToSearchScreen = false
     private var onNavigateToAddFolderCalled = false
     private var onNavigateToAddFolderParentFolderName: String? = null
-    private val exitManager = mockk<ExitManager>(relaxed = true)
     private val intentManager = mockk<IntentManager>(relaxed = true)
     private val appReviewManager: AppReviewManager = mockk {
         every { promptForReview() } just runs
@@ -104,7 +103,6 @@ class VaultScreenTest : BitwardenComposeTest() {
     @Before
     fun setUp() {
         setContent(
-            exitManager = exitManager,
             intentManager = intentManager,
             appReviewManager = appReviewManager,
         ) {
@@ -123,6 +121,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                     onNavigateToAddFolderParentFolderName = folderName
                 },
                 onNavigateToAboutScreen = { onNavigateToAboutCalled = true },
+                onNavigateToAutofillScreen = { onNavigateToAutofillCalled = true },
             )
         }
     }
@@ -414,7 +413,6 @@ class VaultScreenTest : BitwardenComposeTest() {
         composeTestRule.onNode(isPopup()).assertDoesNotExist()
         composeTestRule.onNodeWithText("Sync").assertDoesNotExist()
         composeTestRule.onNodeWithText("Lock").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Exit").assertDoesNotExist()
 
         composeTestRule.onNodeWithContentDescription("More").performClick()
 
@@ -425,10 +423,6 @@ class VaultScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
         composeTestRule
             .onAllNodesWithText("Lock")
-            .filterToOne(hasAnyAncestor(isPopup()))
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText("Exit")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
     }
@@ -457,55 +451,6 @@ class VaultScreenTest : BitwardenComposeTest() {
             .performClick()
 
         verify { viewModel.trySendAction(VaultAction.LockClick) }
-    }
-
-    @Test
-    fun `exit click in the overflow menu should show a confirmation dialog`() {
-        // Expand the overflow menu
-        composeTestRule.onNodeWithContentDescription("More").performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Exit")
-            .filterToOne(hasAnyAncestor(isPopup()))
-            .performClick()
-
-        composeTestRule
-            .onNode(isDialog())
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText("Exit")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText("Are you sure you want to exit Bitwarden?")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText("Yes")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText("Cancel")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-    }
-
-    @Test
-    fun `yes click in exit confirmation dialog should send ExitConfirmationClick`() {
-        // Expand the overflow menu and show the exit confirmation dialog
-        composeTestRule.onNodeWithContentDescription("More").performClick()
-        composeTestRule
-            .onAllNodesWithText("Exit")
-            .filterToOne(hasAnyAncestor(isPopup()))
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Yes")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        composeTestRule.assertNoDialogExists()
-        verify { viewModel.trySendAction(VaultAction.ExitConfirmationClick) }
     }
 
     @Test
@@ -577,6 +522,56 @@ class VaultScreenTest : BitwardenComposeTest() {
             .performClick()
 
         verify { viewModel.trySendAction(VaultAction.DialogDismiss) }
+    }
+
+    @Test
+    fun `ThirdPartyBrowserAutofill should be displayed according to state`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.ThirdPartyBrowserAutofill(browserCount = 1))
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Enable browser Autofill to keep filling passwords")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+
+        mutableStateFlow.update { it.copy(dialog = null) }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ThirdPartyBrowserAutofill dialog Not now button should emit DismissThirdPartyAutofillDialogClick`() {
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.ThirdPartyBrowserAutofill(browserCount = 2))
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Not now")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAction.DismissThirdPartyAutofillDialogClick)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ThirdPartyBrowserAutofill dialog Go to settings now button should emit EnableThirdPartyAutofillClick`() {
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.ThirdPartyBrowserAutofill(browserCount = 3))
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Go to settings")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) { viewModel.trySendAction(VaultAction.EnableThirdPartyAutofillClick) }
     }
 
     @Suppress("MaxLineLength")
@@ -1002,12 +997,6 @@ class VaultScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) {
             intentManager.shareText(text)
         }
-    }
-
-    @Test
-    fun `NavigateOutOfApp event should call exitApplication on the ExitManager`() {
-        mutableEventFlow.tryEmit(VaultEvent.NavigateOutOfApp)
-        verify { exitManager.exitApplication() }
     }
 
     @Test
@@ -2024,6 +2013,12 @@ class VaultScreenTest : BitwardenComposeTest() {
     fun `when NavigateToAbout is sent, it should call onNavigateToAbout`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateToAbout)
         assertTrue(onNavigateToAboutCalled)
+    }
+
+    @Test
+    fun `when NavigateToAutofillSettings is sent, it should call onNavigateToAutofillSettings`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToAutofillSettings)
+        assertTrue(onNavigateToAutofillCalled)
     }
 
     @Test

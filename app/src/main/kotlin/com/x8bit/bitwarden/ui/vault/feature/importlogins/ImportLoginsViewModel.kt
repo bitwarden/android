@@ -9,8 +9,8 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.util.toUriOrNull
+import com.x8bit.bitwarden.data.vault.manager.model.SyncVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -205,7 +205,7 @@ class ImportLoginsViewModel @Inject constructor(
 
     private fun syncVault() {
         viewModelScope.launch {
-            val result = vaultRepository.syncForResult()
+            val result = vaultRepository.syncForResult(forced = true)
             sendAction(ImportLoginsAction.Internal.VaultSyncResultReceived(result))
         }
     }

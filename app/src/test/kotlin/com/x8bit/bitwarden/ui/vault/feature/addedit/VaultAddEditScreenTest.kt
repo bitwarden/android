@@ -618,14 +618,12 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = VaultAddEditState.ViewState.Loading)
         }
-        // There are 2 because of the pull-to-refresh
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         mutableStateFlow.update {
             it.copy(viewState = VaultAddEditState.ViewState.Error("Fail".asText()))
         }
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(
@@ -636,8 +634,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 ),
             )
         }
-        // Only pull-to-refresh remains
-        composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
     }
 
     @Test
@@ -3604,6 +3601,7 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                         originalCipher = createMockCipherView(1).copy(
                             collectionIds = emptyList(),
                         ),
+                        hasOrganizations = true,
                     ),
                     type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
                     isIndividualVaultDisabled = false,
@@ -4259,6 +4257,75 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
                 )
             }
         }
+    }
+
+    @Test
+    fun `Move to organization option menu should not be visible if user has no organizations`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        originalCipher = createMockCipherView(1).copy(
+                            collectionIds = emptyList(),
+                        ),
+                        hasOrganizations = false,
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+
+        // Confirm dropdown version of item is absent
+        composeTestRule
+            .onAllNodesWithText("Move to Organization")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+        // Open the overflow menu
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        // Confirm it does not exist
+        composeTestRule
+            .onAllNodesWithText("Move to Organization")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsNotDisplayed()
+    }
+
+    @Test
+    fun `Move to organization option menu should be visible if user has organizations`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        originalCipher = createMockCipherView(1).copy(
+                            collectionIds = emptyList(),
+                        ),
+                        hasOrganizations = true,
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+
+        // Confirm dropdown version of item is absent
+        composeTestRule
+            .onAllNodesWithText("Move to Organization")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Move to Organization")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
     }
 
     //endregion Helper functions

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">Acerca de</string>
     <string name="add_folder">Añadir carpeta</string>
     <string name="add_item">Añadir elemento</string>
     <string name="an_error_has_occurred">Ha ocurrido un error.</string>
     <string name="apply">Apply</string>
     <string name="back">Atrás</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Cancelar</string>
     <string name="copy">Copiar</string>
     <string name="copy_password">Copiar contraseña</string>
@@ -496,7 +495,6 @@ El escaneo se realizará automáticamente.</string>
     <string name="remove_master_password">Remueve Contraseña Maestra</string>
     <string name="leave_organization">Abandonar Organización</string>
     <string name="leave_organization_name">¿Abandonar %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Autenticar WebAuthn</string>
     <string name="fido2_return_to_app">Volver a la App</string>
     <string name="reset_password_auto_enroll_invite_warning">Esta organización tiene una política empresarial que lo inscribirá automáticamente en el restablecimiento de contraseña. La inscripción permitirá a los administradores de la organización cambiar su contraseña maestra.</string>
@@ -574,12 +572,6 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="api_key">Clave de la API</string>
     <string name="api_key_required_parenthesis">Clave API (requerida)</string>
     <string name="service">Servicio</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">API access token (required)</string>
     <string name="api_access_token">Token de acceso API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">¿Está seguro que desea sobrescribir el nombre de usuario actual?</string>
@@ -921,7 +913,6 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="no_folder">Sin carpeta</string>
     <string name="show_less">Mostrar menos</string>
     <string name="add_field">Añadir campo</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Compartir detalles del error</string>
     <string name="flight_recorder">Flight recorder</string>
     <string name="flight_recorder_help">Flight recorder help</string>
@@ -1008,7 +999,10 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="advanced">Avanzado</string>
     <string name="collapse_advanced_options">Colapsar opciones avanzadas</string>
     <string name="number_of_digits">Número de dígitos</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d segundos</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">Elemento guardado</string>
     <string name="information">Información</string>
     <string name="otp_type">Tipo OTP</string>
@@ -1051,7 +1045,6 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="sync_with_bitwarden_app">Sincronizar con la aplicación Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">Más información</annotation></string>
     <string name="shared_codes_error">No se pueden sincronizar los códigos desde la aplicación de Bitwarden. Asegúrate de que ambas aplicaciones estén actualizadas. Aún puedes acceder a tus códigos existentes en la aplicación de Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sincronizar con la aplicación Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Permite la sincronización de la aplicación Authenticator en la configuración para ver todos tus códigos de verificación aquí.</string>
     <string name="take_me_to_app_settings">Llévame a la configuración de la aplicación</string>
@@ -1095,4 +1088,18 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>

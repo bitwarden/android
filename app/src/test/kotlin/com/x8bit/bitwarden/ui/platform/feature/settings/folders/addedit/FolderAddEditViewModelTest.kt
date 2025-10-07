@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.components.snackbar.model.BitwardenSnackbarData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -14,11 +15,15 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,6 +42,9 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
 
     private val vaultRepository: VaultRepository = mockk {
         every { getVaultFolderStateFlow(DEFAULT_EDIT_ITEM_ID) } returns mutableFoldersStateFlow
+    }
+    private val relayManager: SnackbarRelayManager = mockk {
+        every { sendSnackbarData(data = any(), relay = any()) } just runs
     }
 
     @BeforeEach
@@ -126,12 +134,14 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    FolderAddEditEvent.ShowToast(BitwardenString.folder_deleted.asText()),
-                    awaitItem(),
-                )
-                assertEquals(
                     FolderAddEditEvent.NavigateBack,
                     awaitItem(),
+                )
+            }
+            verify(exactly = 1) {
+                relayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.folder_deleted.asText()),
+                    relay = SnackbarRelay.FOLDER_DELETED,
                 )
             }
         }
@@ -179,6 +189,12 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithoutDialog, awaitItem())
                 assertEquals(stateWithDialog, awaitItem())
                 assertEquals(stateWithoutDialog, awaitItem())
+            }
+            verify(exactly = 1) {
+                relayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.folder_deleted.asText()),
+                    relay = SnackbarRelay.FOLDER_DELETED,
+                )
             }
         }
 
@@ -322,6 +338,12 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithDialog, awaitItem())
                 assertEquals(stateWithoutDialog, awaitItem())
             }
+            verify(exactly = 1) {
+                relayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.folder_created.asText()),
+                    relay = SnackbarRelay.FOLDER_CREATED,
+                )
+            }
         }
 
     @Suppress("MaxLineLength")
@@ -348,15 +370,19 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 vaultRepository.createFolder(any())
             } returns CreateFolderResult.Success(mockk())
             viewModel.trySendAction(FolderAddEditAction.SaveClick)
-            coVerify(
-                exactly = 1,
-            ) {
+            coVerify(exactly = 1) {
                 vaultRepository.createFolder(
                     folderView = FolderView(
                         name = DEFAULT_FOLDER_NAME,
                         id = null,
                         revisionDate = Instant.MIN,
                     ),
+                )
+            }
+            verify(exactly = 1) {
+                relayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.folder_created.asText()),
+                    relay = SnackbarRelay.FOLDER_CREATED,
                 )
             }
             unmockkStatic(DateTime::class)
@@ -387,15 +413,19 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 vaultRepository.createFolder(any())
             } returns CreateFolderResult.Success(mockk())
             viewModel.trySendAction(FolderAddEditAction.SaveClick)
-            coVerify(
-                exactly = 1,
-            ) {
+            coVerify(exactly = 1) {
                 vaultRepository.createFolder(
                     folderView = FolderView(
                         name = "$parentFolderName/$DEFAULT_FOLDER_NAME",
                         id = null,
                         revisionDate = Instant.MIN,
                     ),
+                )
+            }
+            verify(exactly = 1) {
+                relayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.folder_created.asText()),
+                    relay = SnackbarRelay.FOLDER_CREATED,
                 )
             }
             unmockkStatic(DateTime::class)
@@ -482,6 +512,12 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithoutDialog, awaitItem())
                 assertEquals(stateWithDialog, awaitItem())
                 assertEquals(stateWithoutDialog, awaitItem())
+            }
+            verify(exactly = 1) {
+                relayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(BitwardenString.folder_updated.asText()),
+                    relay = SnackbarRelay.FOLDER_UPDATED,
+                )
             }
         }
 
@@ -758,6 +794,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
     ): FolderAddEditViewModel = FolderAddEditViewModel(
         savedStateHandle = savedStateHandle,
         vaultRepository = vaultRepository,
+        relayManager = relayManager,
     )
 }
 

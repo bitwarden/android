@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">O aplikacji</string>
     <string name="add_folder">Dodaj folder</string>
     <string name="add_item">Dodaj element</string>
     <string name="an_error_has_occurred">Wystąpił błąd.</string>
     <string name="apply">Zastosuj</string>
     <string name="back">Wstecz</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">Anuluj</string>
     <string name="copy">Kopiuj</string>
     <string name="copy_password">Kopiuj hasło</string>
@@ -500,7 +499,6 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="remove_master_password">Usuń hasło główne</string>
     <string name="leave_organization">Opuść organizację</string>
     <string name="leave_organization_name">Opuścić organizację %1$s?</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">Uwierzytelnianie WebAuthn</string>
     <string name="fido2_return_to_app">Wróć do aplikacji</string>
     <string name="reset_password_auto_enroll_invite_warning">Zasada organizacji umożliwia administratorom organizacji zmianę Twojego hasła głównego.</string>
@@ -577,12 +575,6 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="api_key">Klucz API</string>
     <string name="api_key_required_parenthesis">Klucz API (wymagane)</string>
     <string name="service">Usługa</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">Firefox Relay</string>
-    <string name="simple_login">SimpleLogin</string>
-    <string name="duck_duck_go">DuckDuckGo</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ForwardEmail</string>
     <string name="api_access_token_required_parenthesis">Token dostępu API (wymagane)</string>
     <string name="api_access_token">Token dostępu API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Czy na pewno chcesz nadpisać obecną nazwę użytkownika?</string>
@@ -925,7 +917,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="no_folder">Nieprzypisane</string>
     <string name="show_less">Pokaż mniej</string>
     <string name="add_field">Dodaj pole</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">Udostępnij szczegóły błędu</string>
     <string name="flight_recorder">Rejestrator zdarzeń</string>
     <string name="flight_recorder_help">Pomoc dotycząca rejestratora zdarzeń</string>
@@ -1012,7 +1003,12 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="advanced">Zaawansowane</string>
     <string name="collapse_advanced_options">Zwiń opcje zaawansowane</string>
     <string name="number_of_digits">Liczba cyfr</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d sekund</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d sekunda</item>
+        <item quantity="few">%d sekundy</item>
+        <item quantity="many">%d sekund</item>
+        <item quantity="other">%d sekundy</item>
+    </plurals>
     <string name="item_saved">Element został zapisany</string>
     <string name="information">Informacje</string>
     <string name="otp_type">Rodzaj OTP</string>
@@ -1055,7 +1051,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="sync_with_bitwarden_app">Synchronizacja z aplikacją Bitwarden</string>
     <string name="learn_more_link"><annotation link="learnMore">Dowiedz się więcej</annotation></string>
     <string name="shared_codes_error">Nie można zsynchronizować kodów z aplikacji Bitwarden. Upewnij się, że obie aplikacje są aktualne. Nadal możesz uzyskać dostęp do obecnych kodów w aplikacji Bitwarden.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Synchronizuj z aplikacją Bitwarden</string>
     <string name="sync_with_bitwarden_action_card_message">Aby wyświetlić wszystkie kody weryfikacyjne, musisz zezwolić na synchronizację na wszystkich swoich kontach.</string>
     <string name="take_me_to_app_settings">Przejdź do ustawień aplikacji</string>
@@ -1101,4 +1096,18 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="default_uri_match_detection_description_advanced_options">Wykrywanie dopasowania to sposób, w jaki Bitwarden identyfikuje sugestie autouzupełniania.\n<annotation emphasis="bold">Ostrzeżenie:</annotation> „Rozpoczyna się od” jest zaawansowaną opcją zwiększającą ryzyko ujawnienia danych logowania.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">„Rozpoczyna się od” jest zaawansowaną opcją zwiększającą ryzyko ujawnienia danych logowania.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">„Wyrażenie regularne” jest zaawansowaną opcją zwiększającą ryzyko ujawnienia danych logowania.</string>
+    <string name="credential_import_was_cancelled">Import danych logowania został anulowany. Dane logowanie nie zostały zaimportowane.</string>
+    <string name="import_cancelled">Importowanie zostało anulowane</string>
+    <string name="your_items_have_been_successfully_imported">Elementy zostały zaimportowane i są widoczne w sejfie.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Wróć do sejfu</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">Brak zaimportowanych elementów</string>
+    <string name="no_items_received_from_the_selected_credential_manager">Nie odebrano żadnych elementów z wybranego menedżera poświadczeń.</string>
+    <string name="vault_sync_failed">Synchronizacja sejfu nie powiodła się</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Elementy zostały zaimportowane, ale nie można zsynchronizować sejfu. Zaimportowane elementy będą widoczne w sejfie dopiero po synchronizacji.</string>
+    <string name="there_was_a_problem_importing_your_items">Wystąpił problem z importowaniem elementów. Spróbuj ponownie. Jeśli problem się powtarza, skontaktuj się z pomocą techniczną.</string>
+    <string name="importing_items">Importowanie elementów…</string>
+    <string name="uploading_items">Przesyłanie elementów…</string>
 </resources>

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="about">درباره</string>
     <string name="add_folder">افزودن پوشه</string>
     <string name="add_item">افزودن مورد</string>
     <string name="an_error_has_occurred">خطایی رخ داده است</string>
     <string name="apply">Apply</string>
     <string name="back">بازگشت</string>
-    <string name="bitwarden">Bitwarden</string>
     <string name="cancel">انصراف</string>
     <string name="copy">کپی</string>
     <string name="copy_password">کپی کلمه عبور</string>
@@ -496,7 +495,6 @@
     <string name="remove_master_password">حذف کلمه عبور اصلی</string>
     <string name="leave_organization">ترک سازمان</string>
     <string name="leave_organization_name">%1$s را ترک می‌کنید؟</string>
-    <string name="fido2_title">FIDO2 WebAuthn</string>
     <string name="fido2_authenticate_web_authn">تأیید اعتبار در WebAuthn</string>
     <string name="fido2_return_to_app">بازگشت به برنامه</string>
     <string name="reset_password_auto_enroll_invite_warning">این سازمان دارای سیاست سازمانی است که به طور خودکار شما را در بازیابی کلمه عبور ثبت نام می‌کند. این ثبت نام به مدیران سازمان اجازه می‌دهد تا کلمه عبور اصلی شما را تغییر دهند.</string>
@@ -574,12 +572,6 @@
     <string name="api_key">کلید API</string>
     <string name="api_key_required_parenthesis">کلید API (الزامی)</string>
     <string name="service">سرویس</string>
-    <string name="addy_io">addy.io</string>
-    <string name="firefox_relay">رله فایرفاکس</string>
-    <string name="simple_login">ورود ساده</string>
-    <string name="duck_duck_go">داک‌داک گو</string>
-    <string name="fastmail">Fastmail</string>
-    <string name="forward_email">ارسال مجدد ایمیل</string>
     <string name="api_access_token_required_parenthesis">توکن دسترسی API (الزامی)</string>
     <string name="api_access_token">توکن دسترسی API</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">آیا از بازنویسی نام کاربری فعلی مطمئن هستید؟</string>
@@ -920,7 +912,6 @@
     <string name="no_folder">بدون پوشه</string>
     <string name="show_less">نمایش کمتر</string>
     <string name="add_field">افزودن فیلد</string>
-    <string name="x_ellipses">%s…</string>
     <string name="share_error_details">اشتراک‌گذاری جزئیات خطا</string>
     <string name="flight_recorder">ضبط‌ کننده پرواز</string>
     <string name="flight_recorder_help">راهنمای ضبط‌ کننده پرواز</string>
@@ -1007,7 +998,10 @@
     <string name="advanced">Advanced</string>
     <string name="collapse_advanced_options">Collapse advanced options</string>
     <string name="number_of_digits">Number of digits</string>
-    <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d seconds</string>
+    <plurals name="refresh_period_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
     <string name="item_saved">مورد به‌روزرسانی شد</string>
     <string name="information">Information</string>
     <string name="otp_type">OTP type</string>
@@ -1050,7 +1044,6 @@
     <string name="sync_with_bitwarden_app">Sync with Bitwarden app</string>
     <string name="learn_more_link"><annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Unable to sync codes from the Bitwarden app. Make sure both apps are up-to-date. You can still access your existing codes in the Bitwarden app.</string>
-    <string name="shared_accounts_header">%1$s | %2$s (%3$d)</string>
     <string name="sync_with_the_bitwarden_app">Sync with the Bitwarden app</string>
     <string name="sync_with_bitwarden_action_card_message">In order to view all of your verification codes, you’ll need to allow for syncing on all of your accounts.</string>
     <string name="take_me_to_app_settings">Take me to the app settings</string>
@@ -1094,4 +1087,18 @@
     <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="credential_import_was_cancelled">Credential import was cancelled. No credentials have been imported.</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="your_items_have_been_successfully_imported">Your items have been successfully imported and are now viewable in your vault.</string>
+    <string name="import_saved_items">Import saved items</string>
+    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
+    <string name="return_to_your_vault">Return to your vault</string>
+    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
+    <string name="no_items_imported">No items imported</string>
+    <string name="no_items_received_from_the_selected_credential_manager">No items received from the selected credential manager.</string>
+    <string name="vault_sync_failed">Vault sync failed</string>
+    <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Your items have been successfully imported, but could not sync the vault. Imported items will not be visible in your vault until sync is performed.</string>
+    <string name="there_was_a_problem_importing_your_items">There was a problem importing your items. Please try again. If the problem persists, contact support.</string>
+    <string name="importing_items">Importing items…</string>
+    <string name="uploading_items">Uploading items…</string>
 </resources>
