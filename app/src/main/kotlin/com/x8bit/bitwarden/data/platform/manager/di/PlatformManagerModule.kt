@@ -389,8 +389,10 @@ object PlatformManagerModule {
     @Singleton
     fun provideSdkRepositoryFactory(
         vaultDiskSource: VaultDiskSource,
+        bitwardenServiceClient: BitwardenServiceClient,
     ): SdkRepositoryFactory = SdkRepositoryFactoryImpl(
         vaultDiskSource = vaultDiskSource,
+        bitwardenServiceClient = bitwardenServiceClient,
     )
 
     @Provides
