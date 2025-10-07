@@ -40,6 +40,7 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.spanStyleOf
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.bitwarden.ui.platform.components.card.BitwardenActionCard
@@ -246,9 +247,9 @@ private fun AutoFillScreenContent(
         if (state.showPasskeyManagementRow) {
             BitwardenExternalLinkRow(
                 text = stringResource(id = BitwardenString.passkey_management),
-                description = stringResource(
-                    id = BitwardenString.passkey_management_explanation_long,
-                ),
+                description = BitwardenString
+                    .passkey_management_explanation_long
+                    .toAnnotatedString(),
                 onConfirmClick = autoFillHandlers.onPasskeyManagementClick,
                 dialogTitle = stringResource(id = BitwardenString.continue_to_device_settings),
                 dialogMessage = stringResource(
@@ -330,9 +331,9 @@ private fun AutoFillScreenContent(
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextRow(
             text = stringResource(id = BitwardenString.block_auto_fill),
-            description = stringResource(
-                id = BitwardenString.auto_fill_will_not_be_offered_for_these_ur_is,
-            ),
+            description = BitwardenString
+                .auto_fill_will_not_be_offered_for_these_ur_is
+                .toAnnotatedString(),
             onClick = autoFillHandlers.onBlockAutoFillClick,
             cardStyle = CardStyle.Full,
             modifier = Modifier

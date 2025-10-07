@@ -5,10 +5,10 @@ import com.bitwarden.authenticator.ui.platform.composition.LocalManagerProvider
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.manager.exit.ExitManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
-import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.base.BaseComposeTest
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import io.mockk.mockk
 
 /**
@@ -19,7 +19,7 @@ abstract class AuthenticatorComposeTest : BaseComposeTest() {
 
     /**
      * Helper for testing a basic Composable function that only requires a Composable environment
-     * with the [AuthenticatorTheme].
+     * with the [BitwardenTheme].
      */
     @Suppress("LongParameterList")
     protected fun setContent(
@@ -31,7 +31,7 @@ abstract class AuthenticatorComposeTest : BaseComposeTest() {
         test: @Composable () -> Unit,
     ) {
         setTestContent {
-            AuthenticatorTheme(theme = theme) {
+            BitwardenTheme(theme = theme) {
                 LocalManagerProvider(
                     permissionsManager = permissionsManager,
                     intentManager = intentManager,

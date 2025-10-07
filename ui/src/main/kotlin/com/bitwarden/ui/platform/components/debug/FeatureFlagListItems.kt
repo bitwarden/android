@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.feature.debugmenu.components
+package com.bitwarden.ui.platform.components.debug
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

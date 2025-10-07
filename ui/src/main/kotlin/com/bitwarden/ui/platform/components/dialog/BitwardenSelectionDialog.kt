@@ -36,6 +36,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * Displays a dialog with a title and "Cancel" button.
  *
  * @param title Title to display.
+ * @param subTitle The subtitle to display
  * @param onDismissRequest Invoked when the user dismisses the dialog.
  * @param selectionItems Lambda containing selection items to show to the user. See
  * [BitwardenSelectionRow].
@@ -44,6 +45,7 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
 @Composable
 fun BitwardenSelectionDialog(
     title: String,
+    subTitle: String? = null,
     onDismissRequest: () -> Unit,
     selectionItems: @Composable ColumnScope.() -> Unit = {},
 ) {
@@ -83,6 +85,17 @@ fun BitwardenSelectionDialog(
                 color = BitwardenTheme.colorScheme.text.primary,
                 style = BitwardenTheme.typography.headlineSmall,
             )
+            subTitle?.let {
+                Text(
+                    modifier = Modifier
+                        .testTag("AlertSubTitleText")
+                        .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
+                        .fillMaxWidth(),
+                    text = it,
+                    color = BitwardenTheme.colorScheme.text.secondary,
+                    style = BitwardenTheme.typography.bodyMedium,
+                )
+            }
             if (canScrollBackward) {
                 BitwardenHorizontalDivider()
             }

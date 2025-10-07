@@ -55,7 +55,7 @@ fun BitwardenNavigationRail(
                 .fillMaxHeight()
                 .windowInsetsPadding(insets = windowInsets)
                 .widthIn(min = 80.dp)
-                .padding(vertical = 4.dp)
+                .padding(all = 4.dp)
                 .selectableGroup()
                 .verticalScroll(state = rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,

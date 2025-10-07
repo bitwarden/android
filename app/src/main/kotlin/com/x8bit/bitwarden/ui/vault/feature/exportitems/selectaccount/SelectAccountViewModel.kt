@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.exportitems.selectaccount
 
+import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
@@ -11,12 +12,13 @@ import com.x8bit.bitwarden.ui.vault.feature.exportitems.model.AccountSelectionLi
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import javax.inject.Inject
 
 /**
@@ -28,7 +30,7 @@ class SelectAccountViewModel @Inject constructor(
     policyManager: PolicyManager,
 ) : BaseViewModel<SelectAccountState, SelectAccountEvent, SelectAccountAction>(
     initialState = SelectAccountState(
-        accountSelectionListItems = persistentListOf(),
+        viewState = SelectAccountState.ViewState.Loading,
     ),
 ) {
 
@@ -95,30 +97,38 @@ class SelectAccountViewModel @Inject constructor(
             .filter { it.isEnabled }
             .map { it.organizationId }
 
+        val accountSelectionListItems = action.userState
+            ?.accounts
+            .orEmpty()
+            // We only want accounts that do not restrict personal vault ownership
+            .filter { account ->
+                account
+                    .organizations
+                    .none { org -> org.id in personalOwnershipRestrictedOrgIds }
+            }
+            .map { account ->
+                AccountSelectionListItem(
+                    userId = account.userId,
+                    email = account.email,
+                    initials = account.initials,
+                    avatarColorHex = account.avatarColorHex,
+                    // Indicate which accounts have item restrictions applied.
+                    isItemRestricted = account
+                        .organizations
+                        .any { org -> org.id in itemRestrictedOrgIds },
+                )
+            }
+            .toImmutableList()
+
         mutableStateFlow.update {
             it.copy(
-                accountSelectionListItems = action.userState
-                    ?.accounts
-                    .orEmpty()
-                    // We only want accounts that do not restrict personal vault ownership
-                    .filter { account ->
-                        account
-                            .organizations
-                            .none { org -> org.id in personalOwnershipRestrictedOrgIds }
-                    }
-                    .map { account ->
-                        AccountSelectionListItem(
-                            userId = account.userId,
-                            email = account.email,
-                            initials = account.initials,
-                            avatarColorHex = account.avatarColorHex,
-                            // Indicate which accounts have item restrictions applied.
-                            isItemRestricted = account
-                                .organizations
-                                .any { org -> org.id in itemRestrictedOrgIds },
-                        )
-                    }
-                    .toImmutableList(),
+                viewState = if (accountSelectionListItems.isEmpty()) {
+                    SelectAccountState.ViewState.NoItems
+                } else {
+                    SelectAccountState.ViewState.Content(
+                        accountSelectionListItems = accountSelectionListItems,
+                    )
+                },
             )
         }
     }
@@ -126,12 +136,40 @@ class SelectAccountViewModel @Inject constructor(
 
 /**
  * Represents the state for the select account screen.
- *
- * @param accountSelectionListItems The list of account summaries to be displayed for selection.
  */
+@Parcelize
+@Serializable
 data class SelectAccountState(
-    val accountSelectionListItems: ImmutableList<AccountSelectionListItem>,
-)
+    val viewState: ViewState,
+) : Parcelable {
+
+    /**
+     * Represents the different states for the select account screen.
+     */
+    @Parcelize
+    @Serializable
+    sealed class ViewState : Parcelable {
+        /**
+         * Represents the loading state for the select account screen.
+         */
+        data object Loading : ViewState()
+
+        /**
+         * Represents the content state for the select account screen.
+         *
+         * @param accountSelectionListItems The list of account summaries to be displayed for
+         * selection.
+         */
+        data class Content(
+            val accountSelectionListItems: ImmutableList<AccountSelectionListItem>,
+        ) : ViewState()
+
+        /**
+         * Represents the no items state for the select account screen.
+         */
+        data object NoItems : ViewState()
+    }
+}
 
 /**
  * Represents the actions that can be performed on the select account screen.
