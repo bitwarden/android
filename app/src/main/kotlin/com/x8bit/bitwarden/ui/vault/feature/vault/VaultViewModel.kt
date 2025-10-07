@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.util.persistentListOfNotNull
 import com.bitwarden.data.repository.util.baseIconUrl
@@ -28,6 +29,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
+import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
@@ -100,6 +103,8 @@ class VaultViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val networkConnectionManager: NetworkConnectionManager,
     private val browserAutofillDialogManager: BrowserAutofillDialogManager,
+    private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
+    featureFlagManager: FeatureFlagManager,
     snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
@@ -207,6 +212,11 @@ class VaultViewModel @Inject constructor(
             .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
             .map { policies -> policies.map { it.organizationId } }
             .map { VaultAction.Internal.PolicyUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        featureFlagManager.getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolExport)
+            .map { VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -784,6 +794,22 @@ class VaultViewModel @Inject constructor(
 
             is VaultAction.Internal.DecryptionErrorReceive -> {
                 handleDecryptionErrorReceive(action)
+            }
+
+            is VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive -> {
+                handleCredentialExchangeProtocolExportFlagUpdateReceive(action)
+            }
+        }
+    }
+
+    private fun handleCredentialExchangeProtocolExportFlagUpdateReceive(
+        action: VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive,
+    ) {
+        viewModelScope.launch {
+            if (action.isCredentialExchangeProtocolExportEnabled) {
+                credentialExchangeRegistryManager.register()
+            } else {
+                credentialExchangeRegistryManager.unregister()
             }
         }
     }
@@ -1915,6 +1941,13 @@ sealed class VaultAction {
             val title: Text,
             val message: Text,
             val error: Throwable?,
+        ) : Internal()
+
+        /**
+         * Indicates that the Credential Exchange Protocol export flag has been updated.
+         */
+        data class CredentialExchangeProtocolExportFlagUpdateReceive(
+            val isCredentialExchangeProtocolExportEnabled: Boolean,
         ) : Internal()
     }
 }
