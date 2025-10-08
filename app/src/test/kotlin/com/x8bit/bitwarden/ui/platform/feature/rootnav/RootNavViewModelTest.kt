@@ -8,7 +8,7 @@ import com.bitwarden.network.model.JwtTokenDataJson
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import com.bitwarden.ui.platform.base.BaseViewModelTest
-import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.share.model.ShareData
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
@@ -531,7 +531,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     fun `when the active user has an unlocked vault but the is a ShareNewSend special circumstance the nav state should be VaultUnlockedForNewSend`() {
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.ShareNewSend(
-                data = mockk<IntentManager.ShareData.TextSend>(),
+                data = mockk<ShareData.TextSend>(),
                 shouldFinishWhenComplete = true,
             )
         mutableUserStateFlow.tryEmit(

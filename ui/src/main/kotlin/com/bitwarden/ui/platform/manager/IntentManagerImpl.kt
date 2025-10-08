@@ -29,6 +29,7 @@ import com.bitwarden.ui.platform.manager.util.deviceData
 import com.bitwarden.ui.platform.manager.util.fileProviderAuthority
 import com.bitwarden.ui.platform.model.FileData
 import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.platform.util.getLocalFileData
 import java.io.File
 import java.time.Clock
 
@@ -151,42 +152,7 @@ internal class IntentManagerImpl(
     ): FileData? {
         if (activityResult.resultCode != Activity.RESULT_OK) return null
         val uri = activityResult.data?.data
-        return if (uri != null) getLocalFileData(uri) else getCameraFileData()
-    }
-
-    private fun getFileDataFromIntent(
-        intent: Intent,
-    ): FileData? = intent
-        .clipData
-        ?.getItemAt(0)
-        ?.uri
-        ?.takeUnless { uri ->
-            val uriString = uri.toString()
-            context
-                .packageManager
-                .getPackageInfo(buildInfoManager.applicationId, PackageManager.GET_PROVIDERS)
-                .providers
-                ?.any { uriString.contains(other = it.authority) } == true
-        }
-        ?.let { getLocalFileData(it) }
-
-    override fun getShareDataFromIntent(intent: Intent): IntentManager.ShareData? {
-        if (intent.action != Intent.ACTION_SEND) return null
-        return if (intent.type?.contains("text/") == true) {
-            val subject = intent.getStringExtra(Intent.EXTRA_SUBJECT)
-            val title = intent.getStringExtra(Intent.EXTRA_TEXT) ?: return null
-            IntentManager.ShareData.TextSend(
-                subject = subject,
-                text = title,
-            )
-        } else {
-            getFileDataFromIntent(intent = intent)
-                ?.let {
-                    IntentManager.ShareData.FileSend(
-                        fileData = it,
-                    )
-                }
-        }
+        return if (uri != null) context.getLocalFileData(uri) else getCameraFileData()
     }
 
     override fun createFileChooserIntent(withCameraIntents: Boolean, mimeType: String): Intent {
@@ -256,38 +222,6 @@ internal class IntentManagerImpl(
             sizeBytes = file.length(),
         )
     }
-
-    private fun getLocalFileData(uri: Uri): FileData? =
-        context
-            .contentResolver
-            .query(
-                uri,
-                arrayOf(
-                    MediaStore.MediaColumns.DISPLAY_NAME,
-                    MediaStore.MediaColumns.SIZE,
-                ),
-                null,
-                null,
-                null,
-            )
-            ?.use { cursor ->
-                if (!cursor.moveToFirst()) return@use null
-                val fileName = cursor
-                    .getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME)
-                    .takeIf { it >= 0 }
-                    ?.let { cursor.getString(it) }
-                    ?: return@use null
-                val fileSize = cursor
-                    .getColumnIndex(MediaStore.MediaColumns.SIZE)
-                    .takeIf { it >= 0 }
-                    ?.let { cursor.getLong(it) }
-                    ?: return@use null
-                FileData(
-                    fileName = fileName,
-                    uri = uri,
-                    sizeBytes = fileSize,
-                )
-            }
 
     private fun getCameraIntents(outputUri: Uri): List<Intent> {
         val captureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
