@@ -302,9 +302,14 @@ class AuthRepositoryImpl(
         pushManager
             .syncOrgKeysFlow
             .onEach { userId ->
+                // This will force the next authenticated request to refresh the auth token.
+                authDiskSource.storeAccountTokens(
+                    userId = userId,
+                    accountTokens = authDiskSource
+                        .getAccountTokens(userId = userId)
+                        ?.copy(expiresAtSec = 0L),
+                )
                 if (userId == activeUserId) {
-                    // TODO: [PM-20593] Investigate why tokens are explicitly refreshed.
-                    refreshAccessTokenSynchronously(userId = userId)
                     // We just sync now to get the latest data
                     vaultRepository.sync(forced = true)
                 } else {
