@@ -758,14 +758,10 @@ Do you want to switch to this account?</string>
     <string name="turn_on_autofill">Turn on autofill</string>
     <string name="autofill_setup">Autofill setup</string>
     <string name="turn_on_browser_autofill_integration">Turn on browser autofill integration</string>
-    <plurals name="youre_using_a_browser_that_requires_special_permissions_for_bitwarden">
-        <item quantity="one">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords.</item>
-        <item quantity="other">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords.</item>
-    </plurals>
-    <plurals name="youre_using_a_browser_that_requires_special_permissions">
-        <item quantity="one">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</item>
-        <item quantity="other">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords. Enable autofill for all your installed browsers to continue.</item>
-    </plurals>
+    <string name="browser_requires_special_permissions_for_bitwarden_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_singular">You’re using a browser that requires special permissions for Bitwarden to autofill your passwords. Enable your preferred autofill integration below.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">You’re using browsers that requires special permissions for Bitwarden to autofill your passwords. Enable autofill for all your installed browsers to continue.</string>
     <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
     <string name="turn_on_later">Turn on later</string>
     <string name="turn_on_autofill_later">Turn on autofill later?</string>
