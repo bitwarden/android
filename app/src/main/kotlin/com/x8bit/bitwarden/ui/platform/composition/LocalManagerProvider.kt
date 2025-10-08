@@ -57,7 +57,7 @@ fun LocalManagerProvider(
     exitManager: ExitManager = ExitManagerImpl(activity = activity),
     buildInfoManager: BuildInfoManager = BitwardenBuildInfoManagerImpl(),
     intentManager: IntentManager = IntentManager.create(
-        context = activity,
+        activity = activity,
         clock = clock,
         buildInfoManager = buildInfoManager,
     ),

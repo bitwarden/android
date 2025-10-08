@@ -1,9 +1,8 @@
 package com.bitwarden.ui.platform.manager
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.os.Parcelable
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.Composable
@@ -11,7 +10,6 @@ import androidx.compose.runtime.Immutable
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.manager.BuildInfoManager
 import com.bitwarden.ui.platform.model.FileData
-import kotlinx.parcelize.Parcelize
 import java.time.Clock
 
 /**
@@ -77,11 +75,6 @@ interface IntentManager {
     fun getFileDataFromActivityResult(activityResult: ActivityResult): FileData?
 
     /**
-     * Processes the [intent] and attempts to derive [ShareData] information from it.
-     */
-    fun getShareDataFromIntent(intent: Intent): ShareData?
-
-    /**
      * Creates an intent for choosing a file saved to disk.
      *
      * @param withCameraIntents Whether to include camera intents in the chooser.
@@ -95,28 +88,6 @@ interface IntentManager {
      */
     fun createDocumentIntent(fileName: String): Intent
 
-    /**
-     * Represents data for a share request coming from outside the app.
-     */
-    sealed class ShareData : Parcelable {
-        /**
-         * The data required to create a new Text Send.
-         */
-        @Parcelize
-        data class TextSend(
-            val subject: String?,
-            val text: String,
-        ) : ShareData()
-
-        /**
-         * The data required to create a new File Send.
-         */
-        @Parcelize
-        data class FileSend(
-            val fileData: FileData,
-        ) : ShareData()
-    }
-
     @Suppress("UndocumentedPublicClass")
     @OmitFromCoverage
     companion object {
@@ -124,11 +95,11 @@ interface IntentManager {
          * Creates a new [IntentManager] instance.
          */
         fun create(
-            context: Context,
+            activity: Activity,
             clock: Clock,
             buildInfoManager: BuildInfoManager,
         ): IntentManager = IntentManagerImpl(
-            context = context,
+            activity = activity,
             clock = clock,
             buildInfoManager = buildInfoManager,
         )
