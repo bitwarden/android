@@ -352,15 +352,15 @@ class SpecialCircumstanceExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `toImportCredentialsRequestDataOrNull should return a non-null value for ImportCredentials`() {
-        val importCredentialsRequest = ImportCredentialsRequestData(
+        val importCredentialsRequestData = ImportCredentialsRequestData(
             uri = mockk(),
             requestJson = "",
         )
         assertEquals(
-            importCredentialsRequest,
+            importCredentialsRequestData,
             SpecialCircumstance
                 .CredentialExchangeExport(
-                    data = importCredentialsRequest,
+                    data = importCredentialsRequestData,
                 )
                 .toImportCredentialsRequestDataOrNull(),
         )

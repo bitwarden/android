@@ -2,12 +2,19 @@ package com.x8bit.bitwarden.ui.vault.feature.exportitems.selectaccount
 
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.resource.BitwardenString
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.model.AccountSelectionListItem
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +25,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
 import javax.inject.Inject
 
 /**
@@ -26,32 +32,35 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class SelectAccountViewModel @Inject constructor(
-    authRepository: AuthRepository,
-    policyManager: PolicyManager,
+    private val authRepository: AuthRepository,
+    private val policyManager: PolicyManager,
+    specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<SelectAccountState, SelectAccountEvent, SelectAccountAction>(
-    initialState = SelectAccountState(
-        viewState = SelectAccountState.ViewState.Loading,
-    ),
+    initialState = run {
+        val importRequest = specialCircumstanceManager.specialCircumstance
+            as SpecialCircumstance.CredentialExchangeExport
+
+        SelectAccountState(
+            importRequest = importRequest.data,
+            viewState = SelectAccountState.ViewState.Loading,
+        )
+    },
 ) {
 
     init {
-        combine(
-            authRepository.userStateFlow,
-            policyManager.getActivePoliciesFlow(PolicyTypeJson.RESTRICT_ITEM_TYPES),
-            policyManager.getActivePoliciesFlow(PolicyTypeJson.PERSONAL_OWNERSHIP),
-        ) { userState, itemRestrictedOrgs, personalOwnershipOrgs ->
-            SelectAccountAction.Internal.SelectionDataReceive(
-                userState,
-                itemRestrictedOrgs,
-                personalOwnershipOrgs,
-            )
-        }
-            .onEach(::handleAction)
-            .launchIn(viewModelScope)
+        sendEvent(
+            SelectAccountEvent.ValidateImportRequest(
+                importCredentialsRequestData = state.importRequest,
+            ),
+        )
     }
 
     override fun handleAction(action: SelectAccountAction) {
         when (action) {
+            is SelectAccountAction.ValidateImportRequestResultReceive -> {
+                handleValidateImportRequestResultReceive(action)
+            }
+
             SelectAccountAction.CloseClick -> {
                 handleCloseClick()
             }
@@ -62,6 +71,24 @@ class SelectAccountViewModel @Inject constructor(
 
             is SelectAccountAction.Internal -> {
                 handleInternalAction(action)
+            }
+        }
+    }
+
+    private fun handleValidateImportRequestResultReceive(
+        action: SelectAccountAction.ValidateImportRequestResultReceive,
+    ) {
+        if (action.isValid) {
+            observeSelectionData()
+        } else {
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = SelectAccountState.ViewState.Error(
+                        message = BitwardenString
+                            .the_import_request_could_not_be_processed
+                            .asText(),
+                    ),
+                )
             }
         }
     }
@@ -132,14 +159,30 @@ class SelectAccountViewModel @Inject constructor(
             )
         }
     }
+
+    private fun observeSelectionData() {
+        combine(
+            authRepository.userStateFlow,
+            policyManager.getActivePoliciesFlow(PolicyTypeJson.RESTRICT_ITEM_TYPES),
+            policyManager.getActivePoliciesFlow(PolicyTypeJson.PERSONAL_OWNERSHIP),
+        ) { userState, itemRestrictedOrgs, personalOwnershipOrgs ->
+            SelectAccountAction.Internal.SelectionDataReceive(
+                userState = userState,
+                itemRestrictedOrgs = itemRestrictedOrgs,
+                personalOwnershipOrgs = personalOwnershipOrgs,
+            )
+        }
+            .onEach(::handleAction)
+            .launchIn(viewModelScope)
+    }
 }
 
 /**
  * Represents the state for the select account screen.
  */
 @Parcelize
-@Serializable
 data class SelectAccountState(
+    val importRequest: ImportCredentialsRequestData,
     val viewState: ViewState,
 ) : Parcelable {
 
@@ -147,7 +190,6 @@ data class SelectAccountState(
      * Represents the different states for the select account screen.
      */
     @Parcelize
-    @Serializable
     sealed class ViewState : Parcelable {
         /**
          * Represents the loading state for the select account screen.
@@ -168,6 +210,11 @@ data class SelectAccountState(
          * Represents the no items state for the select account screen.
          */
         data object NoItems : ViewState()
+
+        /**
+         * Represents the error state for the select account screen.
+         */
+        data class Error(val message: Text) : ViewState()
     }
 }
 
@@ -175,6 +222,15 @@ data class SelectAccountState(
  * Represents the actions that can be performed on the select account screen.
  */
 sealed class SelectAccountAction {
+
+    /**
+     * Indicates the validate import request result was received.
+     *
+     * @param isValid Whether the import request is valid.
+     */
+    data class ValidateImportRequestResultReceive(
+        val isValid: Boolean,
+    ) : SelectAccountAction()
 
     /**
      * Indicates the top-bar close button was clicked.
@@ -208,6 +264,13 @@ sealed class SelectAccountAction {
  * Models events for the select account screen.
  */
 sealed class SelectAccountEvent {
+
+    /**
+     * Validates the import request.
+     */
+    data class ValidateImportRequest(
+        val importCredentialsRequestData: ImportCredentialsRequestData,
+    ) : SelectAccountEvent(), BackgroundEvent
 
     /**
      * Navigates back to the previous screen.

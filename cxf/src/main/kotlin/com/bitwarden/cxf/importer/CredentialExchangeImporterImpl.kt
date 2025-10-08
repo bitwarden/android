@@ -1,7 +1,6 @@
 package com.bitwarden.cxf.importer
 
 import android.content.Context
-import androidx.annotation.VisibleForTesting
 import androidx.credentials.providerevents.ProviderEventsManager
 import androidx.credentials.providerevents.exception.ImportCredentialsCancellationException
 import androidx.credentials.providerevents.exception.ImportCredentialsException
@@ -23,7 +22,6 @@ private const val CXP_FORMAT_VERSION_MINOR = 0
  */
 internal class CredentialExchangeImporterImpl(
     private val activity: Context,
-    @param:VisibleForTesting
     private val providerEventsManager: ProviderEventsManager =
         ProviderEventsManager.create(activity),
 ) : CredentialExchangeImporter {
