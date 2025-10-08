@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.manager
 
 import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.data.manager.model.FlagKey
+import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.MasterPasswordAuthenticationDataJson
@@ -57,15 +58,21 @@ class KdfManagerImpl(
         if (!needsKdfUpdateToMinimums()) {
             return UpdateKdfMinimumsResult.Success
         }
-
         return vaultSdkSource
             .makeUpdateKdf(
                 userId = userId,
                 password = password,
                 kdf = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
             )
+            .flatMap {
+                accountsService.updateKdf(createUpdateKdfRequest(it))
+            }
             .fold(
-                onSuccess = { updateKdfOnServer(createUpdateKdfRequest(it)) },
+                onSuccess = {
+                    authDiskSource.userState = authDiskSource.userState
+                        ?.toUserStateJsonKdfUpdatedMinimums()
+                    UpdateKdfMinimumsResult.Success
+                },
                 onFailure = { UpdateKdfMinimumsResult.Error(error = it) },
             )
     }
@@ -90,18 +97,5 @@ class KdfManagerImpl(
                 salt = unlockData.salt,
             ),
         )
-    }
-
-    private suspend fun updateKdfOnServer(request: UpdateKdfJsonRequest): UpdateKdfMinimumsResult {
-        return accountsService
-            .updateKdf(body = request)
-            .fold(
-                onSuccess = {
-                    authDiskSource.userState = authDiskSource.userState
-                        ?.toUserStateJsonKdfUpdatedMinimums()
-                    UpdateKdfMinimumsResult.Success
-                },
-                onFailure = { UpdateKdfMinimumsResult.Error(error = it) },
-            )
     }
 }
