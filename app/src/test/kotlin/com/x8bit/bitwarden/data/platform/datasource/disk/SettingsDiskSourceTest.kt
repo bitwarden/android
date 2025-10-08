@@ -1342,35 +1342,31 @@ class SettingsDiskSourceTest {
     }
 
     @Test
-    fun `getVaultRegisteredForExport should pull from SharedPreferences`() {
-        val mockUserId = "mockUserId"
-        val vaultRegisteredForExportKey =
-            "bwPreferencesStorage:isVaultRegisteredForExport_$mockUserId"
+    fun `getAppRegisteredForExport should pull from SharedPreferences`() {
+        val vaultRegisteredForExportKey = "bwPreferencesStorage:isVaultRegisteredForExport"
         fakeSharedPreferences.edit {
             putBoolean(vaultRegisteredForExportKey, true)
         }
-        assertTrue(settingsDiskSource.getVaultRegisteredForExport(userId = mockUserId)!!)
+        assertTrue(settingsDiskSource.getAppRegisteredForExport()!!)
     }
 
     @Test
-    fun `storeVaultRegisteredForExport should update SharedPreferences`() {
-        val mockUserId = "mockUserId"
-        val vaultRegisteredForExportKey =
-            "bwPreferencesStorage:isVaultRegisteredForExport_$mockUserId"
-        settingsDiskSource.storeVaultRegisteredForExport(mockUserId, true)
+    fun `storeAppRegisteredForExport should update SharedPreferences`() {
+        val vaultRegisteredForExportKey = "bwPreferencesStorage:isVaultRegisteredForExport"
+        settingsDiskSource.storeAppRegisteredForExport(true)
         assertTrue(fakeSharedPreferences.getBoolean(vaultRegisteredForExportKey, false))
     }
 
     @Test
-    fun `storeVaultRegisteredForExport should update the flow value`() = runTest {
+    fun `storeAppRegisteredForExport should update the flow value`() = runTest {
         val mockUserId = "mockUserId"
-        settingsDiskSource.getVaultRegisteredForExportFlow(mockUserId).test {
+        settingsDiskSource.getAppRegisteredForExportFlow(mockUserId).test {
             // The initial values of the Flow are in sync
             assertFalse(awaitItem() ?: false)
-            settingsDiskSource.storeVaultRegisteredForExport(mockUserId, true)
+            settingsDiskSource.storeAppRegisteredForExport(true)
             assertTrue(awaitItem() ?: false)
             // Update the value to false
-            settingsDiskSource.storeVaultRegisteredForExport(mockUserId, false)
+            settingsDiskSource.storeAppRegisteredForExport(false)
             assertFalse(awaitItem() ?: true)
         }
     }

@@ -278,19 +278,19 @@ interface SettingsRepository : FlightRecorderManager {
     fun storeUserHasLoggedInValue(userId: String)
 
     /**
-     * Returns true if the given [userId] has previously registered for export via the credential
+     * Returns true if the application has previously registered for export via the credential
      * exchange protocol.
      */
-    fun isVaultRegisteredForExport(userId: String): Boolean
+    fun isAppRegisteredForExport(): Boolean
 
     /**
-     * Stores that the given [userId] has previously registered for export via the credential
+     * Stores that the application has previously registered for export via the credential
      * exchange protocol.
      */
-    fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean)
+    fun storeAppRegisteredForExport(isRegistered: Boolean)
 
     /**
-     * Gets updates for the [isVaultRegisteredForExport] value for the given [userId].
+     * Gets updates for the [isAppRegisteredForExport] value for the given [userId].
      */
-    fun getVaultRegisteredForExportFlow(userId: String): StateFlow<Boolean>
+    fun getAppRegisteredForExportFlow(userId: String): StateFlow<Boolean>
 }
