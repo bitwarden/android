@@ -176,8 +176,8 @@ jobs:
               gh workflow view publish-github-release.yml
               exit 0
             fi
-            if $PRODUCT == "Password Manager" ; then
+            if [ "$PRODUCT" = "Password Manager" ]; then
               gh workflow enable publish-github-release-bwpm.yml
-            elif $PRODUCT == "Authenticator" ; then
+            elif [ "$PRODUCT" = "Authenticator" ]; then
               gh workflow enable publish-github-release-bwa.yml
             fi
