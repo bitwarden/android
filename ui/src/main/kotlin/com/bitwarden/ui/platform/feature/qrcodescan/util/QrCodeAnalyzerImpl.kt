@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util
+package com.bitwarden.ui.platform.feature.qrcodescan.util
 
 import androidx.camera.core.ImageProxy
 import com.bitwarden.annotation.OmitFromCoverage
@@ -43,21 +43,17 @@ class QrCodeAnalyzerImpl : QrCodeAnalyzer {
         )
         val binaryBitmap = BinaryBitmap(HybridBinarizer(source))
         try {
-            val result = MultiFormatReader()
-                .apply {
-                    setHints(
-                        mapOf(
-                            DecodeHintType.POSSIBLE_FORMATS to arrayListOf(
-                                BarcodeFormat.QR_CODE,
-                            ),
-                        ),
-                    )
-                }
-                .decode(binaryBitmap)
+            val result = MultiFormatReader().decode(
+                binaryBitmap,
+                mapOf(
+                    DecodeHintType.POSSIBLE_FORMATS to arrayListOf(BarcodeFormat.QR_CODE),
+                    DecodeHintType.ALSO_INVERTED to true,
+                ),
+            )
 
             qrCodeRead = true
             onQrCodeScanned(result.text)
-        } catch (e: NotFoundException) {
+        } catch (_: NotFoundException) {
             return
         } finally {
             image.close()

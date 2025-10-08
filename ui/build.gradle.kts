@@ -57,6 +57,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.browser)
+    implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material3.adaptive)
@@ -72,6 +73,7 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.zxing.zxing.core)
 
     // For now we are restricted to running Compose tests for debug builds only
     debugImplementation(libs.androidx.compose.ui.test.manifest)
@@ -86,6 +88,7 @@ dependencies {
     testImplementation(libs.androidx.compose.ui.test)
 
     testFixturesImplementation(libs.androidx.activity.compose)
+    testFixturesImplementation(libs.androidx.camera.camera2)
     testFixturesImplementation(libs.androidx.compose.ui.test)
     testFixturesImplementation(libs.androidx.navigation.compose)
     testFixturesImplementation(libs.google.hilt.android.testing)

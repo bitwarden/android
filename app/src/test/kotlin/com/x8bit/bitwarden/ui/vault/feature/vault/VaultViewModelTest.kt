@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
@@ -26,6 +27,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
+import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
@@ -34,7 +37,9 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.manager.model.RegisterExportResult
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.model.UnregisterExportResult
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
@@ -62,6 +67,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toSnackbarData
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
+import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -191,6 +197,17 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { shouldShowDialog } returns false
         every { browserCount } returns 1
         every { delayDialog() } just runs
+    }
+
+    private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager = mockk {
+        coEvery { register() } returns RegisterExportResult.Success
+        coEvery { unregister() } returns UnregisterExportResult.Success
+    }
+    private val mutableCxpExportFeatureFlagFlow = MutableStateFlow(false)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every {
+            getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolExport)
+        } returns mutableCxpExportFeatureFlagFlow
     }
 
     @AfterEach
@@ -3046,6 +3063,47 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `CredentialExchangeProtocolExportFlagUpdateReceive should register for export when flag is enabled`() =
+        runTest {
+            mutableCxpExportFeatureFlagFlow.value = false
+            coEvery { credentialExchangeRegistryManager.register() } just awaits
+
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(
+                    isCredentialExchangeProtocolExportEnabled = true,
+                ),
+            )
+
+            coVerify {
+                credentialExchangeRegistryManager.register()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `CredentialExchangeProtocolExportFlagUpdateReceive should unregister when flag is disabled`() =
+        runTest {
+            mutableCxpExportFeatureFlagFlow.value = true
+            every { settingsRepository.isAppRegisteredForExport() } returns true
+            coEvery { credentialExchangeRegistryManager.unregister() } just awaits
+
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(
+                    isCredentialExchangeProtocolExportEnabled = false,
+                ),
+            )
+
+            coVerify {
+                credentialExchangeRegistryManager.unregister()
+            }
+        }
+
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,
@@ -3061,6 +3119,8 @@ class VaultViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager = specialCircumstanceManager,
             networkConnectionManager = networkConnectionManager,
             browserAutofillDialogManager = browserAutofillDialogManager,
+            credentialExchangeRegistryManager = credentialExchangeRegistryManager,
+            featureFlagManager = featureFlagManager,
         )
 }
 

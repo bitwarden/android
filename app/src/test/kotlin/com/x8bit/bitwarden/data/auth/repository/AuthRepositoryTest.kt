@@ -6462,34 +6462,39 @@ class AuthRepositoryTest {
     fun `syncOrgKeysFlow emissions for active user should refresh access token and force sync`() {
         fakeAuthDiskSource.userState = MULTI_USER_STATE
         fakeAuthDiskSource.storeAccountTokens(userId = USER_ID_1, accountTokens = ACCOUNT_TOKENS_1)
-        coEvery {
-            identityService.refreshTokenSynchronously(REFRESH_TOKEN)
-        } returns REFRESH_TOKEN_RESPONSE_JSON.asSuccess()
-        coEvery { vaultRepository.sync(forced = true) } just runs
+        every { vaultRepository.sync(forced = true) } just runs
 
         mutableSyncOrgKeysFlow.tryEmit(USER_ID_1)
 
-        coVerify(exactly = 1) {
-            identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+        verify(exactly = 1) {
             vaultRepository.sync(forced = true)
         }
+        fakeAuthDiskSource.assertAccountTokens(
+            userId = USER_ID_1,
+            accountTokens = ACCOUNT_TOKENS_1.copy(expiresAtSec = 0L),
+        )
     }
 
     @Test
     fun `syncOrgKeysFlow emissions for inactive user should clear the last sync time`() {
         fakeAuthDiskSource.userState = MULTI_USER_STATE
+        fakeAuthDiskSource.storeAccountTokens(userId = USER_ID_2, accountTokens = ACCOUNT_TOKENS_2)
         fakeSettingsDiskSource.storeLastSyncTime(
             userId = USER_ID_2,
             lastSyncTime = FIXED_CLOCK.instant(),
         )
+        every { vaultRepository.sync(forced = true) } just runs
 
         mutableSyncOrgKeysFlow.tryEmit(USER_ID_2)
 
-        coVerify(exactly = 0) {
-            identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+        verify(exactly = 0) {
             vaultRepository.sync(forced = true)
         }
         fakeSettingsDiskSource.assertLastSyncTime(userId = USER_ID_2, null)
+        fakeAuthDiskSource.assertAccountTokens(
+            userId = USER_ID_2,
+            accountTokens = ACCOUNT_TOKENS_2.copy(expiresAtSec = 0L),
+        )
     }
 
     @Test

@@ -28,6 +28,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManagerImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
@@ -120,6 +121,7 @@ object AuthManagerModule {
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         dispatcherManager: DispatcherManager,
+        credentialExchangeRegistryManager: CredentialExchangeRegistryManager,
     ): UserLogoutManager =
         UserLogoutManagerImpl(
             authDiskSource = authDiskSource,
@@ -131,6 +133,7 @@ object AuthManagerModule {
             vaultDiskSource = vaultDiskSource,
             vaultSdkSource = vaultSdkSource,
             dispatcherManager = dispatcherManager,
+            credentialExchangeRegistryManager = credentialExchangeRegistryManager,
         )
 
     @Provides

@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import com.bitwarden.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.share.model.ShareData
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
@@ -126,8 +126,8 @@ class RootNavViewModel @Inject constructor(
                     is SpecialCircumstance.ShareNewSend -> {
                         RootNavState.VaultUnlockedForNewSend(
                             sendType = when (specialCircumstance.data) {
-                                is IntentManager.ShareData.FileSend -> SendItemType.FILE
-                                is IntentManager.ShareData.TextSend -> SendItemType.TEXT
+                                is ShareData.FileSend -> SendItemType.FILE
+                                is ShareData.TextSend -> SendItemType.TEXT
                             },
                         )
                     }
