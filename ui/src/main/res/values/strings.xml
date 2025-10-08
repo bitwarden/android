@@ -1132,4 +1132,5 @@ Do you want to switch to this account?</string>
     <string name="passkeys">Passkeys</string>
     <string name="import_verb">Import</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
+    <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
 </resources>

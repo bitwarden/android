@@ -8,6 +8,8 @@ import androidx.compose.ui.test.performClick
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
 import com.bitwarden.cxf.manager.model.ExportCredentialsResult
+import com.bitwarden.cxf.model.ImportCredentialsRequestData
+import com.bitwarden.cxf.validator.CredentialExchangeRequestValidator
 import com.bitwarden.ui.platform.components.account.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.vault.feature.exportitems.model.AccountSelectionListItem
@@ -35,6 +37,9 @@ class SelectAccountScreenTest : BitwardenComposeTest() {
     private val mockEventFlow = bufferedMutableSharedFlow<SelectAccountEvent>()
 
     private val credentialExchangeCompletionManager = mockk<CredentialExchangeCompletionManager>()
+    private val credentialExchangeRequestValidator = mockk<CredentialExchangeRequestValidator> {
+        every { validate(any()) } returns true
+    }
     private val viewModel = mockk<SelectAccountViewModel> {
         every { eventFlow } returns mockEventFlow
         every { stateFlow } returns mockkStateFlow
@@ -45,6 +50,7 @@ class SelectAccountScreenTest : BitwardenComposeTest() {
     fun setUp() {
         setContent(
             credentialExchangeCompletionManager = credentialExchangeCompletionManager,
+            credentialExchangeRequestValidator = credentialExchangeRequestValidator,
         ) {
             SelectAccountScreen(
                 onAccountSelected = { onAccountSelectedCalled = true },
@@ -183,6 +189,10 @@ private val LOCKED_ACCOUNT_SUMMARY = AccountSummary(
     isLoggedIn = true,
     isVaultUnlocked = false,
 )
+private val DEFAULT_IMPORT_REQUEST = ImportCredentialsRequestData(
+    uri = mockk(),
+    requestJson = "mockRequestJson",
+)
 
 private val DEFAULT_STATE = SelectAccountState(
     viewState = SelectAccountState.ViewState.Content(
@@ -203,4 +213,5 @@ private val DEFAULT_STATE = SelectAccountState(
             ),
         ),
     ),
+    importRequest = DEFAULT_IMPORT_REQUEST,
 )

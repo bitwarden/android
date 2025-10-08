@@ -19,6 +19,9 @@ import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
 import com.bitwarden.cxf.manager.dsl.credentialExchangeCompletionManager
 import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeCompletionManager
 import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeImporter
+import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeRequestValidator
+import com.bitwarden.cxf.validator.CredentialExchangeRequestValidator
+import com.bitwarden.cxf.validator.dsl.credentialExchangeRequestValidator
 import com.bitwarden.ui.platform.composition.LocalIntentManager
 import com.bitwarden.ui.platform.manager.IntentManager
 import com.x8bit.bitwarden.R
@@ -73,6 +76,8 @@ fun LocalManagerProvider(
             exporterRpId = activity.packageName
             exporterDisplayName = activity.getString(R.string.app_name)
         },
+    credentialExchangeRequestValidator: CredentialExchangeRequestValidator =
+        credentialExchangeRequestValidator(activity = activity),
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
@@ -89,6 +94,7 @@ fun LocalManagerProvider(
         LocalPermissionsManager provides permissionsManager,
         LocalCredentialExchangeImporter provides credentialExchangeImporter,
         LocalCredentialExchangeCompletionManager provides credentialExchangeCompletionManager,
+        LocalCredentialExchangeRequestValidator provides credentialExchangeRequestValidator,
         content = content,
     )
 }

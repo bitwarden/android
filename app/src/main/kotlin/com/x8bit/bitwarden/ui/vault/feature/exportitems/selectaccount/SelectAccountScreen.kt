@@ -25,10 +25,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.cxf.manager.CredentialExchangeCompletionManager
 import com.bitwarden.cxf.manager.model.ExportCredentialsResult
 import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeCompletionManager
+import com.bitwarden.cxf.ui.composition.LocalCredentialExchangeRequestValidator
+import com.bitwarden.cxf.validator.CredentialExchangeRequestValidator
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.content.BitwardenEmptyContent
+import com.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -52,6 +55,8 @@ fun SelectAccountScreen(
     viewModel: SelectAccountViewModel = hiltViewModel(),
     credentialExchangeCompletionManager: CredentialExchangeCompletionManager =
         LocalCredentialExchangeCompletionManager.current,
+    credentialExchangeRequestValidator: CredentialExchangeRequestValidator =
+        LocalCredentialExchangeRequestValidator.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handlers = rememberSelectAccountHandlers(viewModel)
@@ -70,6 +75,15 @@ fun SelectAccountScreen(
 
             is SelectAccountEvent.NavigateToPasswordVerification -> {
                 onAccountSelected(event.userId)
+            }
+
+            is SelectAccountEvent.ValidateImportRequest -> {
+                viewModel.trySendAction(
+                    SelectAccountAction.ValidateImportRequestResultReceive(
+                        isValid = credentialExchangeRequestValidator
+                            .validate(event.importCredentialsRequestData),
+                    ),
+                )
             }
         }
     }
@@ -108,6 +122,13 @@ fun SelectAccountScreen(
                         BitwardenString.you_dont_have_any_accounts_you_can_import_from,
                     ),
                     labelTestTag = "NoAccountsText",
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+
+            is SelectAccountState.ViewState.Error -> {
+                BitwardenErrorContent(
+                    message = viewState.message(),
                     modifier = Modifier.fillMaxSize(),
                 )
             }
@@ -243,6 +264,27 @@ private fun LoadingContent_preview() {
     ) {
         BitwardenLoadingContent(
             text = stringResource(BitwardenString.loading),
+            modifier = Modifier.fillMaxSize(),
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(
+    name = "Error content",
+    showBackground = true,
+    showSystemUi = true,
+)
+@Composable
+private fun ErrorContent_preview() {
+    ExportItemsScaffold(
+        navIcon = rememberVectorPainter(BitwardenDrawable.ic_close),
+        navigationIconContentDescription = stringResource(BitwardenString.close),
+        onNavigationIconClick = { },
+        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
+    ) {
+        BitwardenErrorContent(
+            message = stringResource(BitwardenString.an_error_has_occurred),
             modifier = Modifier.fillMaxSize(),
         )
     }

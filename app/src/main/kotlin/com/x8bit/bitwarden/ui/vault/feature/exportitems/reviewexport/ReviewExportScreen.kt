@@ -304,7 +304,7 @@ private fun ReviewExportContent_preview() {
     BitwardenTheme {
         ReviewExportContent(
             state = ReviewExportState(
-                importCredentialsRequest = ImportCredentialsRequestData(
+                importCredentialsRequestData = ImportCredentialsRequestData(
                     uri = Uri.EMPTY,
                     requestJson = "",
                 ),
