@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.manager
 
+import com.bitwarden.core.UpdateKdfResponse
 import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.network.model.KdfTypeJson
@@ -53,28 +54,28 @@ class KdfManagerImpl(
     override suspend fun updateKdfToMinimumsIfNeeded(password: String): UpdateKdfMinimumsResult {
         val userId = activeUserId ?: return UpdateKdfMinimumsResult.ActiveAccountNotFound
 
-        // Check if needs update kdf
         if (!needsKdfUpdateToMinimums()) {
             return UpdateKdfMinimumsResult.Success
         }
 
-        val defaultKdf = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt())
-        // Generate updated KDF data
-        val updateKdfResponse = vaultSdkSource
+        return vaultSdkSource
             .makeUpdateKdf(
                 userId = userId,
                 password = password,
-                kdf = defaultKdf,
+                kdf = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
             )
-            .getOrElse { error ->
-                return UpdateKdfMinimumsResult.Error(error = error)
-            }
+            .fold(
+                onSuccess = { updateKdfOnServer(createUpdateKdfRequest(it)) },
+                onFailure = { UpdateKdfMinimumsResult.Error(error = it) },
+            )
+    }
 
-        val authData = updateKdfResponse.masterPasswordAuthenticationData
-        val oldAuthData = updateKdfResponse.oldMasterPasswordAuthenticationData
-        val unlockData = updateKdfResponse.masterPasswordUnlockData
-        // Send update to server
-        val updateKdfRequest = UpdateKdfJsonRequest(
+    private fun createUpdateKdfRequest(response: UpdateKdfResponse): UpdateKdfJsonRequest {
+        val authData = response.masterPasswordAuthenticationData
+        val oldAuthData = response.oldMasterPasswordAuthenticationData
+        val unlockData = response.masterPasswordUnlockData
+
+        return UpdateKdfJsonRequest(
             authenticationData = MasterPasswordAuthenticationDataJson(
                 kdf = authData.kdf.toKdfRequestModel(),
                 masterPasswordAuthenticationHash = authData.masterPasswordAuthenticationHash,
@@ -89,17 +90,18 @@ class KdfManagerImpl(
                 salt = unlockData.salt,
             ),
         )
+    }
 
-        accountsService
-            .updateKdf(body = updateKdfRequest)
-            .getOrElse { error ->
-                return UpdateKdfMinimumsResult.Error(error = error)
-            }
-
-        val currentUserState = authDiskSource.userState
-        // Update profile with new KDF parameters
-        authDiskSource.userState = currentUserState?.toUserStateJsonKdfUpdatedMinimums()
-
-        return UpdateKdfMinimumsResult.Success
+    private suspend fun updateKdfOnServer(request: UpdateKdfJsonRequest): UpdateKdfMinimumsResult {
+        return accountsService
+            .updateKdf(body = request)
+            .fold(
+                onSuccess = {
+                    authDiskSource.userState = authDiskSource.userState
+                        ?.toUserStateJsonKdfUpdatedMinimums()
+                    UpdateKdfMinimumsResult.Success
+                },
+                onFailure = { UpdateKdfMinimumsResult.Error(error = it) },
+            )
     }
 }

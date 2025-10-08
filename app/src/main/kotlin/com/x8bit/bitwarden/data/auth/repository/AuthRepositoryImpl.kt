@@ -1687,7 +1687,7 @@ class AuthRepositoryImpl(
                 .updateKdfToMinimumsIfNeeded(password = password)
                 .also { result ->
                     if (result is UpdateKdfMinimumsResult.Error) {
-                        Timber.e("Failed to silent update KDF settings: ${result.error}")
+                        Timber.e(result.error, message = "Failed to silent update KDF settings.")
                     }
                 }
         }

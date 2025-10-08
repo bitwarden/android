@@ -37,7 +37,6 @@ import com.bitwarden.ui.platform.theme.BitwardenTheme
  * @param onDismissRequest called when the user attempts to dismiss the dialog (for example by
  * tapping outside of it).
  */
-@Suppress("LongMethod")
 @Composable
 fun BitwardenMasterPasswordDialog(
     title: String = stringResource(id = BitwardenString.password_confirmation),

@@ -1136,6 +1136,6 @@ Do you want to switch to this account?</string>
     <string name="passkeys">Passkeys</string>
     <string name="import_verb">Import</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
-    <string name="kdf_update_failed_active_account_not_found">"Kdf update failed, active account not found. Please try again or contact us."</string>
-    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">"An error occurred while trying to update your kdf settings. Please try again or contact us."</string>
+    <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
+    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
 </resources>

@@ -819,7 +819,7 @@ class VaultViewModel @Inject constructor(
                         .asText(),
                     error = result.error,
                 )
-                Timber.e(message = "Failed to update kdf to minimums: ${result.error}")
+                Timber.e(result.error, message = "Failed to update kdf to minimums.")
             }
 
             UpdateKdfMinimumsResult.Success -> {
