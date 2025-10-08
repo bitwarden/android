@@ -50,7 +50,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.ItemListingExpandableFabAction
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.authenticator.feature.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.model.VerificationCodeDisplayItem
@@ -73,7 +72,8 @@ import com.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.ui.platform.components.fab.BitwardenExpandableFloatingActionButton
-import com.bitwarden.ui.platform.components.fab.ExpandableFabIcon
+import com.bitwarden.ui.platform.components.fab.model.ExpandableFabIcon
+import com.bitwarden.ui.platform.components.fab.model.ExpandableFabOption
 import com.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.ui.platform.components.icon.model.IconData
 import com.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -188,25 +188,25 @@ fun ItemListingScreen(
             BitwardenExpandableFloatingActionButton(
                 modifier = Modifier.testTag("AddItemButton"),
                 items = persistentListOf(
-                    ItemListingExpandableFabAction.ScanQrCode(
+                    ExpandableFabOption(
                         label = BitwardenString.scan_a_qr_code.asText(),
                         icon = IconData.Local(
                             iconRes = BitwardenDrawable.ic_camera_small,
                             contentDescription = BitwardenString.scan_a_qr_code.asText(),
                             testTag = "ScanQRCodeButton",
                         ),
-                        onScanQrCodeClick = remember(viewModel) {
+                        onFabOptionClick = remember(viewModel) {
                             { launcher.launch(Manifest.permission.CAMERA) }
                         },
                     ),
-                    ItemListingExpandableFabAction.EnterSetupKey(
+                    ExpandableFabOption(
                         label = BitwardenString.enter_key_manually.asText(),
                         icon = IconData.Local(
                             iconRes = BitwardenDrawable.ic_lock_encrypted_small,
                             contentDescription = BitwardenString.enter_key_manually.asText(),
                             testTag = "EnterSetupKeyButton",
                         ),
-                        onEnterSetupKeyClick = remember(viewModel) {
+                        onFabOptionClick = remember(viewModel) {
                             { viewModel.trySendAction(ItemListingAction.EnterSetupKeyClick) }
                         },
                     ),
