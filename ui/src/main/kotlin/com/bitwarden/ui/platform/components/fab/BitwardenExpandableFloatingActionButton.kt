@@ -84,7 +84,9 @@ fun BitwardenExpandableFloatingActionButton(
     Column(
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.Bottom,
-        modifier = modifier,
+        modifier = modifier.clickable(interactionSource = null, indication = null) {
+            onIsExpandedChange(false)
+        },
     ) {
         AnimatedVisibility(
             visible = isExpanded,
@@ -92,11 +94,7 @@ fun BitwardenExpandableFloatingActionButton(
             modifier = Modifier.weight(weight = 1f),
         ) {
             LazyColumn(
-                modifier = Modifier
-                    .clickable(interactionSource = null, indication = null) {
-                        onIsExpandedChange(false)
-                    }
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.spacedBy(
                     space = 12.dp,
