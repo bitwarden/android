@@ -1,6 +1,6 @@
 package com.bitwarden.ui.platform.manager
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.ManagedActivityResultLauncher
@@ -95,11 +95,11 @@ interface IntentManager {
          * Creates a new [IntentManager] instance.
          */
         fun create(
-            context: Context,
+            activity: Activity,
             clock: Clock,
             buildInfoManager: BuildInfoManager,
         ): IntentManager = IntentManagerImpl(
-            context = context,
+            activity = activity,
             clock = clock,
             buildInfoManager = buildInfoManager,
         )

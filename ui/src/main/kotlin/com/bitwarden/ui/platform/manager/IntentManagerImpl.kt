@@ -3,7 +3,6 @@ package com.bitwarden.ui.platform.manager
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
@@ -50,14 +49,14 @@ private const val TEMP_CAMERA_IMAGE_DIR: String = "camera_temp"
 @Suppress("TooManyFunctions")
 @OmitFromCoverage
 internal class IntentManagerImpl(
-    private val context: Context,
+    private val activity: Activity,
     private val clock: Clock,
     private val buildInfoManager: BuildInfoManager,
 ) : IntentManager {
-    override val packageName: String get() = context.packageName
+    override val packageName: String get() = activity.packageName
 
     override fun startActivity(intent: Intent): Boolean = try {
-        context.startActivity(intent)
+        activity.startActivity(intent)
         true
     } catch (_: ActivityNotFoundException) {
         false
@@ -76,12 +75,12 @@ internal class IntentManagerImpl(
         CustomTabsIntent
             .Builder()
             .build()
-            .launchUrl(context, uri)
+            .launchUrl(activity, uri)
     }
 
     override fun startCredentialManagerSettings() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            CredentialManager.create(context).createSettingsPendingIntent().send()
+            CredentialManager.create(activity).createSettingsPendingIntent().send()
         }
     }
 
@@ -92,10 +91,10 @@ internal class IntentManagerImpl(
                 startActivity(createPlayStoreIntent(packageName))
             } else {
                 try {
-                    context
+                    activity
                         .packageManager
                         .getLaunchIntentSenderForPackage(packageName)
-                        .sendIntent(context, Activity.RESULT_OK, null, null, null)
+                        .sendIntent(activity, Activity.RESULT_OK, null, null, null)
                 } catch (_: IntentSender.SendIntentException) {
                     startActivity(createPlayStoreIntent(packageName))
                 }
@@ -112,7 +111,7 @@ internal class IntentManagerImpl(
 
     override fun shareFile(title: String?, fileUri: Uri) {
         val providedFile = FileProvider.getUriForFile(
-            context,
+            activity,
             buildInfoManager.fileProviderAuthority,
             File(fileUri.toString()),
         )
@@ -152,7 +151,7 @@ internal class IntentManagerImpl(
     ): FileData? {
         if (activityResult.resultCode != Activity.RESULT_OK) return null
         val uri = activityResult.data?.data
-        return if (uri != null) context.getLocalFileData(uri) else getCameraFileData()
+        return if (uri != null) activity.getLocalFileData(uri) else getCameraFileData()
     }
 
     override fun createFileChooserIntent(withCameraIntents: Boolean, mimeType: String): Intent {
@@ -160,18 +159,18 @@ internal class IntentManagerImpl(
             Intent(Intent.ACTION_OPEN_DOCUMENT)
                 .addCategory(Intent.CATEGORY_OPENABLE)
                 .setType(mimeType),
-            ContextCompat.getString(context, BitwardenString.file_source),
+            ContextCompat.getString(activity, BitwardenString.file_source),
         )
 
         if (withCameraIntents) {
-            val tmpDir = File(context.filesDir, TEMP_CAMERA_IMAGE_DIR)
+            val tmpDir = File(activity.filesDir, TEMP_CAMERA_IMAGE_DIR)
             val file = File(tmpDir, TEMP_CAMERA_IMAGE_NAME)
             if (!file.exists()) {
                 file.parentFile?.mkdirs()
                 file.createNewFile()
             }
             val outputFileUri = FileProvider.getUriForFile(
-                context,
+                activity,
                 buildInfoManager.fileProviderAuthority,
                 file,
             )
@@ -208,10 +207,10 @@ internal class IntentManagerImpl(
     }
 
     private fun getCameraFileData(): FileData {
-        val tmpDir = File(context.filesDir, TEMP_CAMERA_IMAGE_DIR)
+        val tmpDir = File(activity.filesDir, TEMP_CAMERA_IMAGE_DIR)
         val file = File(tmpDir, TEMP_CAMERA_IMAGE_NAME)
         val uri = FileProvider.getUriForFile(
-            context,
+            activity,
             buildInfoManager.fileProviderAuthority,
             file,
         )
@@ -225,7 +224,7 @@ internal class IntentManagerImpl(
 
     private fun getCameraIntents(outputUri: Uri): List<Intent> {
         val captureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        return context
+        return activity
             .packageManager
             .queryIntentActivities(captureIntent, PackageManager.MATCH_ALL)
             .map {
