@@ -1533,20 +1533,19 @@ class VaultSdkSourceTest {
     fun `makeUpdateKdf should return Failure when Bitwarden exception is thrown`() =
         runTest {
             val kdf = mockk<Kdf>()
+            val error = BitwardenException.Crypto(CryptoException.MissingKey("mockException"))
             coEvery {
                 clientCrypto.makeUpdateKdf(
                     password = "mockPassword",
                     kdf = kdf,
                 )
-            } throws mockk<BitwardenException> {
-                every { message } returns "mockException"
-            }
+            } throws error
             val result = vaultSdkSource.makeUpdateKdf(
                 userId = "mockUserId",
                 password = "mockPassword",
                 kdf = kdf,
             )
-            assertTrue(result.isFailure)
+            assertEquals(error.asFailure(), result)
         }
 }
 
