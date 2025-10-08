@@ -33,7 +33,7 @@ class PublicKeyCredentialAuthenticatorAttestationResponseExtensionsTest {
     @Test
     fun `authenticatorAttachment should be null when SDK value is null`() {
         val mockSdkResponse = createMockSdkAttestationResponse(number = 1)
-        val result = mockSdkResponse.toAndroidAttestationResponse()
+        val result = mockSdkResponse.toAndroidAttestationResponse(callingPackageName = "")
         assertNull(result.authenticatorAttachment)
     }
 
@@ -43,14 +43,14 @@ class PublicKeyCredentialAuthenticatorAttestationResponseExtensionsTest {
             number = 1,
             authenticatorAttachment = "mockAuthenticatorAttachment",
         )
-        val result = mockSdkResponse.toAndroidAttestationResponse()
+        val result = mockSdkResponse.toAndroidAttestationResponse(callingPackageName = "")
         assertNotNull(result.authenticatorAttachment)
     }
 
     @Test
     fun `clientExtensionResults should be populated when SDK value is null`() {
         val mockSdkResponse = createMockSdkAttestationResponse(number = 1)
-        val result = mockSdkResponse.toAndroidAttestationResponse()
+        val result = mockSdkResponse.toAndroidAttestationResponse(callingPackageName = "")
         assertNotNull(result.clientExtensionResults)
     }
 
@@ -63,8 +63,41 @@ class PublicKeyCredentialAuthenticatorAttestationResponseExtensionsTest {
                 authenticatorDisplayName = null,
             ),
         )
-        val result = mockSdkResponse.toAndroidAttestationResponse()
+        val result = mockSdkResponse.toAndroidAttestationResponse(callingPackageName = "")
         assert(result.clientExtensionResults.credentialProperties?.residentKey ?: false)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAndroidAttestationResponse should build specific response when package name is Binance`() {
+        val binancePackageName = "com.binance.dev"
+        val mockSdkResponse = createMockSdkAttestationResponse(number = 1)
+
+        val result = mockSdkResponse.toAndroidAttestationResponse(callingPackageName = binancePackageName)
+
+        assertNull(result.response.transports)
+        assertNull(result.response.publicKey)
+        assertNull(result.response.publicKeyAlgorithm)
+        assertNull(result.response.authenticatorData)
+
+        assertNotNull(result.response.clientDataJson)
+        assertNotNull(result.response.attestationObject)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAndroidAttestationResponse should build full response for any package name other than Binance`() {
+        val otherPackageName = "com.any.app"
+        val mockSdkResponse = createMockSdkAttestationResponse(number = 1)
+
+        val result = mockSdkResponse.toAndroidAttestationResponse(callingPackageName = otherPackageName)
+
+        assertNotNull(result.response.transports)
+        assertNotNull(result.response.publicKey)
+        assertNotNull(result.response.publicKeyAlgorithm)
+        assertNotNull(result.response.authenticatorData)
+        assertNotNull(result.response.clientDataJson)
+        assertNotNull(result.response.attestationObject)
     }
 }
 
