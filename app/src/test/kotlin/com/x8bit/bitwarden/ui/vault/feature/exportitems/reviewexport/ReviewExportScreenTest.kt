@@ -140,7 +140,7 @@ private val DEFAULT_STATE = ReviewExportState(
     viewState = ReviewExportState.ViewState(
         itemTypeCounts = ReviewExportState.ItemTypeCounts(),
     ),
-    importCredentialsRequest = ImportCredentialsRequestData(
+    importCredentialsRequestData = ImportCredentialsRequestData(
         uri = Uri.EMPTY,
         requestJson = "",
     ),

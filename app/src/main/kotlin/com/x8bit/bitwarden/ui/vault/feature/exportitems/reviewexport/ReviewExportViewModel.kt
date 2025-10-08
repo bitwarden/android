@@ -48,7 +48,7 @@ class ReviewExportViewModel @Inject constructor(
     specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<ReviewExportState, ReviewExportEvent, ReviewExportAction>(
     initialState = ReviewExportState(
-        importCredentialsRequest = requireNotNull(
+        importCredentialsRequestData = requireNotNull(
             specialCircumstanceManager
                 .specialCircumstance
                 ?.toImportCredentialsRequestDataOrNull(),
@@ -96,7 +96,7 @@ class ReviewExportViewModel @Inject constructor(
                             onSuccess = { payload ->
                                 ExportCredentialsResult.Success(
                                     payload = payload,
-                                    uri = state.importCredentialsRequest.uri,
+                                    uri = state.importCredentialsRequestData.uri,
                                 )
                             },
                             onFailure = { error ->
@@ -274,7 +274,7 @@ data class ReviewExportState(
     val viewState: ViewState,
     val dialog: DialogState? = null,
     // Internally used properties
-    val importCredentialsRequest: ImportCredentialsRequestData,
+    val importCredentialsRequestData: ImportCredentialsRequestData,
 ) : Parcelable {
 
     /**
