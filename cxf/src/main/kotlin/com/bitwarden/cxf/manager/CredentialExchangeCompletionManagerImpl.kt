@@ -6,7 +6,6 @@ import androidx.credentials.providerevents.IntentHandler
 import androidx.credentials.providerevents.exception.ImportCredentialsException
 import androidx.credentials.providerevents.transfer.ImportCredentialsResponse
 import com.bitwarden.cxf.manager.model.ExportCredentialsResult
-import timber.log.Timber
 import java.time.Clock
 import kotlin.io.encoding.Base64
 
@@ -49,12 +48,10 @@ internal class CredentialExchangeCompletionManagerImpl(
                     }
                 """
                     .trimIndent()
-                Timber.d("completeCredentialExport set headerJson:\n$headerJson")
 
                 val encodedPayload = Base64.UrlSafe
                     .withPadding(Base64.PaddingOption.ABSENT)
                     .encode(headerJson.toByteArray())
-                Timber.d("completeCredentialExport set encodedPayload: $encodedPayload")
 
                 val responseJson = """
                     {
@@ -68,7 +65,6 @@ internal class CredentialExchangeCompletionManagerImpl(
                     }
                 """
                     .trimIndent()
-                Timber.d("completeCredentialExport set responseJson: $responseJson")
 
                 IntentHandler.setImportCredentialsResponse(
                     context = activity,
