@@ -129,6 +129,7 @@ jobs:
             echo "EOF" >> $GITHUB_ENV
         - name: Promote Play Store version to production
           if: ${{ inputs.dry-run == false }}
+          id: publish
           env:
             PLAY_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-BETA-KEYSTORE-PASSWORD }}
             PLAY_KEY_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-BETA-KEY-PASSWORD }}
@@ -167,10 +168,12 @@ jobs:
               trackPromoteTo:"$TRACK_TARGET"
 
         - name: Enable Publish Github Release Workflow
+          if: ${{ steps.publish.conclusion == 'success' || inputs.dry-run }}
           env:
             PRODUCT: ${{ inputs.product }}
+            DRY_RUN: ${{ inputs.dry-run }}
           run: |
-            if ${{ inputs.dry-run }} ; then
+            if $DRY_RUN ; then
               gh workflow view publish-github-release.yml
               exit 0
             fi
