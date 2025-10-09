@@ -13,28 +13,18 @@ private const val BINANCE_PACKAGE_NAME = "com.binance.dev"
 fun PublicKeyCredentialAuthenticatorAttestationResponse.toAndroidAttestationResponse(
     callingPackageName: String?,
 ): Fido2AttestationResponse {
-    val registrationResponse = if (callingPackageName == BINANCE_PACKAGE_NAME) {
-        // Setting transports as null, otherwise Binance labels the passkey broken
-        // PM-26734 remove this flow if not necessary anymore
-        Fido2AttestationResponse.RegistrationResponse(
-            clientDataJson = response.clientDataJson.base64EncodeForFido2Response(),
-            attestationObject = response.attestationObject.base64EncodeForFido2Response(),
-            transports = null,
-            publicKeyAlgorithm = response.publicKeyAlgorithm,
-            publicKey = response.publicKey?.base64EncodeForFido2Response(),
-            authenticatorData = response.authenticatorData.base64EncodeForFido2Response(),
-        )
-    } else {
-        // All other apps get all data.
-        Fido2AttestationResponse.RegistrationResponse(
-            clientDataJson = response.clientDataJson.base64EncodeForFido2Response(),
-            attestationObject = response.attestationObject.base64EncodeForFido2Response(),
-            transports = response.transports,
-            publicKeyAlgorithm = response.publicKeyAlgorithm,
-            publicKey = response.publicKey?.base64EncodeForFido2Response(),
-            authenticatorData = response.authenticatorData.base64EncodeForFido2Response(),
-        )
-    }
+    val registrationResponse = Fido2AttestationResponse.RegistrationResponse(
+        clientDataJson = response.clientDataJson.base64EncodeForFido2Response(),
+        attestationObject = response.attestationObject.base64EncodeForFido2Response(),
+        transports = response.transports.takeUnless {
+            // Setting transports as null, otherwise Binance labels the passkey broken
+            // PM-26734 remove this flow if not necessary anymore
+            callingPackageName == BINANCE_PACKAGE_NAME
+        },
+        publicKeyAlgorithm = response.publicKeyAlgorithm,
+        publicKey = response.publicKey?.base64EncodeForFido2Response(),
+        authenticatorData = response.authenticatorData.base64EncodeForFido2Response(),
+    )
 
     return Fido2AttestationResponse(
         id = id,
