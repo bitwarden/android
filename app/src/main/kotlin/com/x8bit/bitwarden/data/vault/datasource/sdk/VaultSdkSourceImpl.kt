@@ -4,7 +4,7 @@ import com.bitwarden.collections.Collection
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DeriveKeyConnectorException
 import com.bitwarden.core.DeriveKeyConnectorRequest
-import com.bitwarden.core.DerivePinKeyResponse
+import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.UpdatePasswordResponse
@@ -108,24 +108,24 @@ class VaultSdkSourceImpl(
             }
         }
 
-    override suspend fun derivePinKey(
+    override suspend fun enrollPin(
         userId: String,
         pin: String,
-    ): Result<DerivePinKeyResponse> =
+    ): Result<EnrollPinResponse> =
         runCatchingWithLogs {
             getClient(userId = userId)
                 .crypto()
-                .derivePinKey(pin = pin)
+                .enrollPin(pin = pin)
         }
 
-    override suspend fun derivePinProtectedUserKey(
+    override suspend fun enrollPinWithEncryptedPin(
         userId: String,
         encryptedPin: String,
-    ): Result<String> =
+    ): Result<EnrollPinResponse> =
         runCatchingWithLogs {
             getClient(userId = userId)
                 .crypto()
-                .derivePinUserKey(encryptedPin = encryptedPin)
+                .enrollPinWithEncryptedPin(encryptedPin = encryptedPin)
         }
 
     override suspend fun validatePin(

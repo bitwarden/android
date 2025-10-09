@@ -4,7 +4,7 @@ import com.bitwarden.collections.Collection
 import com.bitwarden.collections.CollectionView
 import com.bitwarden.core.DeriveKeyConnectorException
 import com.bitwarden.core.DeriveKeyConnectorRequest
-import com.bitwarden.core.DerivePinKeyResponse
+import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.UpdatePasswordResponse
@@ -336,14 +336,14 @@ class VaultSdkSourceTest {
         }
 
     @Test
-    fun `derivePinKey should call SDK and return a Result with the correct data`() = runBlocking {
+    fun `enrollPin should call SDK and return a Result with the correct data`() = runBlocking {
         val userId = "userId"
         val pin = "pin"
-        val expectedResult = mockk<DerivePinKeyResponse>()
+        val expectedResult = mockk<EnrollPinResponse>()
         coEvery {
-            clientCrypto.derivePinKey(pin = pin)
+            clientCrypto.enrollPin(pin = pin)
         } returns expectedResult
-        val result = vaultSdkSource.derivePinKey(
+        val result = vaultSdkSource.enrollPin(
             userId = userId,
             pin = pin,
         )
@@ -352,21 +352,21 @@ class VaultSdkSourceTest {
             result,
         )
         coVerify {
-            clientCrypto.derivePinKey(pin)
+            clientCrypto.enrollPin(pin)
         }
         coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
-    fun `derivePinProtectedUserKey should call SDK and return a Result with the correct data`() =
+    fun `enrollPinWithEncryptedPin should call SDK and return a Result with the correct data`() =
         runBlocking {
             val userId = "userId"
             val encryptedPin = "encryptedPin"
-            val expectedResult = "pinProtectedUserKey"
+            val expectedResult = mockk<EnrollPinResponse>()
             coEvery {
-                clientCrypto.derivePinUserKey(encryptedPin = encryptedPin)
+                clientCrypto.enrollPinWithEncryptedPin(encryptedPin = encryptedPin)
             } returns expectedResult
-            val result = vaultSdkSource.derivePinProtectedUserKey(
+            val result = vaultSdkSource.enrollPinWithEncryptedPin(
                 userId = userId,
                 encryptedPin = encryptedPin,
             )
@@ -375,7 +375,7 @@ class VaultSdkSourceTest {
                 result,
             )
             coVerify {
-                clientCrypto.derivePinUserKey(encryptedPin = encryptedPin)
+                clientCrypto.enrollPinWithEncryptedPin(encryptedPin = encryptedPin)
             }
             coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
