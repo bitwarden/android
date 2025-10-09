@@ -128,7 +128,6 @@ jobs:
             echo "$FORMATTED_MESSAGE" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
         - name: Promote Play Store version to production
-          id: promote
           if: ${{ inputs.dry-run == false }}
           env:
             PLAY_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-BETA-KEYSTORE-PASSWORD }}
@@ -168,7 +167,6 @@ jobs:
               trackPromoteTo:"$TRACK_TARGET"
 
         - name: Enable Publish Github Release Workflow
-          if: ${{ steps.promote.conclusion == 'success' }}
           env:
             PRODUCT: ${{ inputs.product }}
           run: |
