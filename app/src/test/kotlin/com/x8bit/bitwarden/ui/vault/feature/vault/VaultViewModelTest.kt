@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.manager.model.FlagKey
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
@@ -21,10 +22,13 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.browser.BrowserAutofillDialogManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
+import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
@@ -33,7 +37,9 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.manager.model.RegisterExportResult
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.model.UnregisterExportResult
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardListView
@@ -61,7 +67,9 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toSnackbarData
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
+import io.mockk.awaits
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -141,6 +149,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             every { hasPendingAccountAddition = any() } just runs
             every { logout(userId = any(), reason = any()) } just runs
             every { switchAccount(any()) } answers { switchAccountResult }
+            every { needsKdfUpdateToMinimums() } returns false
+            coEvery {
+                updateKdfToMinimumsIfNeeded(password = any())
+            } returns UpdateKdfMinimumsResult.Success
         }
 
     private var mutableFlightRecorderDataFlow =
@@ -185,6 +197,17 @@ class VaultViewModelTest : BaseViewModelTest() {
         every { shouldShowDialog } returns false
         every { browserCount } returns 1
         every { delayDialog() } just runs
+    }
+
+    private val credentialExchangeRegistryManager: CredentialExchangeRegistryManager = mockk {
+        coEvery { register() } returns RegisterExportResult.Success
+        coEvery { unregister() } returns UnregisterExportResult.Success
+    }
+    private val mutableCxpExportFeatureFlagFlow = MutableStateFlow(false)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every {
+            getFeatureFlagFlow(FlagKey.CredentialExchangeProtocolExport)
+        } returns mutableCxpExportFeatureFlagFlow
     }
 
     @AfterEach
@@ -2842,6 +2865,245 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    @Suppress("MaxLineLength")
+    fun `UpdatedKdfToMinimumsReceived with Success should clear dialog and send a ShowSnackbar event`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    action = VaultAction.Internal.UpdatedKdfToMinimumsReceived(
+                        result = UpdateKdfMinimumsResult.Success,
+                    ),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(dialog = null),
+                    viewModel.stateFlow.value,
+                )
+                assertEquals(
+                    VaultEvent.ShowSnackbar(BitwardenString.encryption_settings_updated.asText()),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `UpdatedKdfToMinimumsReceived with ActiveAccountNotFound should show error dialog`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                action = VaultAction.Internal.UpdatedKdfToMinimumsReceived(
+                    result = UpdateKdfMinimumsResult.ActiveAccountNotFound,
+                ),
+            )
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultState.DialogState.Error(
+                        title = BitwardenString.an_error_has_occurred.asText(),
+                        message = BitwardenString
+                            .kdf_update_failed_active_account_not_found
+                            .asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `UpdatedKdfToMinimumsReceived with Error should show error dialog`() = runTest {
+        val testError = Exception("Test error")
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            action = VaultAction.Internal.UpdatedKdfToMinimumsReceived(
+                result = UpdateKdfMinimumsResult.Error(testError),
+            ),
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.Error(
+                    title = BitwardenString.an_error_has_occurred.asText(),
+                    message = BitwardenString
+                        .an_error_occurred_while_trying_to_update_your_kdf_settings
+                        .asText(),
+                    error = testError,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `vaultDataStateFlow Loaded with needsKdfUpdateToMinimums true should show KdfUpdateRequired dialog`() =
+        runTest {
+            coEvery { authRepository.needsKdfUpdateToMinimums() } returns true
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(
+                            createMockCipherListView(
+                                number = 1,
+                                type = CipherListViewType.Login(
+                                    createMockLoginListView(number = 1),
+                                ),
+                            ),
+                            createMockCipherListView(
+                                number = 2,
+                                type = CipherListViewType.Login(
+                                    createMockLoginListView(number = 2),
+                                ),
+                            ),
+                        ),
+                        failures = emptyList(),
+                    ),
+                    collectionViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createViewModel()
+
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.Content(
+                        loginItemsCount = 2,
+                        cardItemsCount = 0,
+                        identityItemsCount = 0,
+                        secureNoteItemsCount = 0,
+                        favoriteItems = listOf(),
+                        folderItems = listOf(),
+                        collectionItems = listOf(),
+                        noFolderItems = listOf(),
+                        trashItemsCount = 0,
+                        totpItemsCount = 2,
+                        itemTypesCount = 5,
+                        sshKeyItemsCount = 0,
+                        showCardGroup = true,
+                    ),
+                    dialog = VaultState.DialogState.VaultLoadKdfUpdateRequired(
+                        title = BitwardenString.update_your_encryption_settings.asText(),
+                        message = BitwardenString.the_new_recommended_encryption_settings_will_improve_your_account_desc_long.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `vaultDataStateFlow Loaded with needsKdfUpdateToMinimums false should not show KdfUpdateRequired dialog`() =
+        runTest {
+            coEvery { authRepository.needsKdfUpdateToMinimums() } returns false
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    decryptCipherListResult = createMockDecryptCipherListResult(
+                        number = 1,
+                        successes = listOf(
+                            createMockCipherListView(
+                                number = 1,
+                                type = CipherListViewType.Login(
+                                    createMockLoginListView(number = 1),
+                                ),
+                            ),
+                            createMockCipherListView(
+                                number = 2,
+                                type = CipherListViewType.Login(
+                                    createMockLoginListView(number = 2),
+                                ),
+                            ),
+                        ),
+                        failures = emptyList(),
+                    ),
+                    collectionViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createViewModel()
+
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.Content(
+                        loginItemsCount = 2,
+                        cardItemsCount = 0,
+                        identityItemsCount = 0,
+                        secureNoteItemsCount = 0,
+                        favoriteItems = listOf(),
+                        folderItems = listOf(),
+                        collectionItems = listOf(),
+                        noFolderItems = listOf(),
+                        trashItemsCount = 0,
+                        totpItemsCount = 2,
+                        itemTypesCount = 5,
+                        sshKeyItemsCount = 0,
+                        showCardGroup = true,
+                    ),
+                    dialog = null,
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `on KdfUpdatePasswordRepromptSubmit should call updateKdfToMinimumsIfNeeded`() = runTest {
+        val password = "mock_password"
+        coEvery {
+            authRepository.updateKdfToMinimumsIfNeeded(password)
+        } returns UpdateKdfMinimumsResult.Success
+
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            action = VaultAction.KdfUpdatePasswordRepromptSubmit(password = password),
+        )
+
+        coVerify(exactly = 1) {
+            authRepository.updateKdfToMinimumsIfNeeded(password)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `CredentialExchangeProtocolExportFlagUpdateReceive should register for export when flag is enabled`() =
+        runTest {
+            mutableCxpExportFeatureFlagFlow.value = false
+            coEvery { credentialExchangeRegistryManager.register() } just awaits
+
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(
+                    isCredentialExchangeProtocolExportEnabled = true,
+                ),
+            )
+
+            coVerify {
+                credentialExchangeRegistryManager.register()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `CredentialExchangeProtocolExportFlagUpdateReceive should unregister when flag is disabled`() =
+        runTest {
+            mutableCxpExportFeatureFlagFlow.value = true
+            every { settingsRepository.isAppRegisteredForExport() } returns true
+            coEvery { credentialExchangeRegistryManager.unregister() } just awaits
+
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.Internal.CredentialExchangeProtocolExportFlagUpdateReceive(
+                    isCredentialExchangeProtocolExportEnabled = false,
+                ),
+            )
+
+            coVerify {
+                credentialExchangeRegistryManager.unregister()
+            }
+        }
+
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,
@@ -2857,6 +3119,8 @@ class VaultViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager = specialCircumstanceManager,
             networkConnectionManager = networkConnectionManager,
             browserAutofillDialogManager = browserAutofillDialogManager,
+            credentialExchangeRegistryManager = credentialExchangeRegistryManager,
+            featureFlagManager = featureFlagManager,
         )
 }
 

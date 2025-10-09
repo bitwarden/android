@@ -7,6 +7,8 @@ import com.bitwarden.core.data.manager.realtime.RealtimeManager
 import com.bitwarden.core.data.manager.realtime.RealtimeManagerImpl
 import com.bitwarden.core.data.manager.toast.ToastManager
 import com.bitwarden.core.data.manager.toast.ToastManagerImpl
+import com.bitwarden.cxf.registry.CredentialExchangeRegistry
+import com.bitwarden.cxf.registry.dsl.credentialExchangeRegistry
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.manager.DispatcherManagerImpl
 import com.bitwarden.data.manager.NativeLibraryManager
@@ -34,6 +36,8 @@ import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.CertificateManager
 import com.x8bit.bitwarden.data.platform.manager.CertificateManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManager
+import com.x8bit.bitwarden.data.platform.manager.CredentialExchangeRegistryManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DebugMenuFeatureFlagManagerImpl
@@ -422,4 +426,22 @@ object PlatformManagerModule {
             clock = clock,
         )
     }
+
+    @Provides
+    @Singleton
+    fun provideCredentialExchangeRegistry(
+        application: Application,
+    ): CredentialExchangeRegistry = credentialExchangeRegistry(
+        application = application,
+    )
+
+    @Provides
+    @Singleton
+    fun provideCredentialExchangeRegistryManager(
+        credentialExchangeRegistry: CredentialExchangeRegistry,
+        settingsDiskSource: SettingsDiskSource,
+    ): CredentialExchangeRegistryManager = CredentialExchangeRegistryManagerImpl(
+        credentialExchangeRegistry = credentialExchangeRegistry,
+        settingsDiskSource = settingsDiskSource,
+    )
 }

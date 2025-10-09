@@ -1,7 +1,6 @@
 package com.bitwarden.cxf.importer
 
 import android.content.Context
-import androidx.annotation.VisibleForTesting
 import androidx.credentials.providerevents.ProviderEventsManager
 import androidx.credentials.providerevents.exception.ImportCredentialsCancellationException
 import androidx.credentials.providerevents.exception.ImportCredentialsException
@@ -9,6 +8,9 @@ import androidx.credentials.providerevents.exception.ImportCredentialsUnknownErr
 import androidx.credentials.providerevents.transfer.ImportCredentialsRequest
 import com.bitwarden.cxf.importer.model.ImportCredentialsSelectionResult
 import timber.log.Timber
+
+private const val CXP_FORMAT_VERSION_MAJOR = 0
+private const val CXP_FORMAT_VERSION_MINOR = 0
 
 /**
  * Default implementation of [CredentialExchangeImporter].
@@ -20,7 +22,6 @@ import timber.log.Timber
  */
 internal class CredentialExchangeImporterImpl(
     private val activity: Context,
-    @param:VisibleForTesting
     private val providerEventsManager: ProviderEventsManager =
         ProviderEventsManager.create(activity),
 ) : CredentialExchangeImporter {
@@ -32,10 +33,17 @@ internal class CredentialExchangeImporterImpl(
             val response = providerEventsManager.importCredentials(
                 context = activity,
                 request = ImportCredentialsRequest(
+                    // Format the request according to the FIDO CXP spec.
                     // TODO: [PM-25663] Link to the correct documentation once it's available.
                     requestJson = """
                     {
-                      "importer": "${activity.packageName}",
+                      "version": {
+                        "major":$CXP_FORMAT_VERSION_MAJOR,
+                        "minor":$CXP_FORMAT_VERSION_MINOR
+                      },
+                      "mode": ["direct"],
+                      "importerRpId": "${activity.packageName}",
+                      "importerDisplayName": "${activity.applicationInfo.name}",
                       "credentialTypes": [
                         ${credentialTypes.joinToString { "\"$it\"" }}
                       ]

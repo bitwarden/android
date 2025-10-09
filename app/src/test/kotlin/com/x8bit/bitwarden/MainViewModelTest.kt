@@ -18,7 +18,8 @@ import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
-import com.bitwarden.ui.platform.manager.IntentManager
+import com.bitwarden.ui.platform.manager.share.ShareManager
+import com.bitwarden.ui.platform.manager.share.model.ShareData
 import com.bitwarden.ui.platform.resource.BitwardenString
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -136,8 +137,8 @@ class MainViewModelTest : BaseViewModelTest() {
     private val environmentRepository = mockk<EnvironmentRepository>(relaxed = true) {
         every { loadEnvironmentForEmail(any()) } returns true
     }
-    private val intentManager: IntentManager = mockk {
-        every { getShareDataFromIntent(any()) } returns null
+    private val shareManager: ShareManager = mockk {
+        every { getShareDataOrNull(any()) } returns null
     }
     private val bitwardenCredentialManager = mockk<BitwardenCredentialManager> {
         every { isUserVerified } returns true
@@ -459,8 +460,8 @@ class MainViewModelTest : BaseViewModelTest() {
     fun `on ReceiveFirstIntent with share data should set the special circumstance to ShareNewSend`() {
         val viewModel = createViewModel()
         val mockIntent = createMockIntent()
-        val shareData = mockk<IntentManager.ShareData>()
-        every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
+        val shareData = mockk<ShareData>()
+        every { shareManager.getShareDataOrNull(mockIntent) } returns shareData
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(
@@ -847,8 +848,8 @@ class MainViewModelTest : BaseViewModelTest() {
     fun `on ReceiveNewIntent with share data should set the special circumstance to ShareNewSend`() {
         val viewModel = createViewModel()
         val mockIntent = createMockIntent()
-        val shareData = mockk<IntentManager.ShareData>()
-        every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
+        val shareData = mockk<ShareData>()
+        every { shareManager.getShareDataOrNull(mockIntent) } returns shareData
 
         viewModel.trySendAction(
             MainAction.ReceiveNewIntent(
@@ -1175,7 +1176,7 @@ class MainViewModelTest : BaseViewModelTest() {
         specialCircumstanceManager = specialCircumstanceManager,
         garbageCollectionManager = garbageCollectionManager,
         bitwardenCredentialManager = bitwardenCredentialManager,
-        intentManager = intentManager,
+        shareManager = shareManager,
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
         authRepository = authRepository,
