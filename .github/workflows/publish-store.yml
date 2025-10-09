@@ -171,7 +171,7 @@ jobs:
             PRODUCT: ${{ inputs.product }}
           run: |
             if ${{ inputs.dry-run }} ; then
-              gh workflow view publish-github-release-bwpm.yml
+              gh workflow view publish-github-release.yml
               exit 0
             fi
             if [ "$PRODUCT" = "Password Manager" ]; then
