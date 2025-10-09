@@ -43,16 +43,22 @@ jobs:
 
     steps:
       - name: Log inputs to job summary
+        env:
+          INPUTS: ${{ toJson(inputs) }}
         run: |
-          echo "<details><summary>Job Inputs</summary>" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo '```json' >> $GITHUB_STEP_SUMMARY
-          echo '${{ toJson(inputs) }}' >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "</details>" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "<details><summary>Job Inputs</summary>"
+            echo ""
+            echo '```json'
+            echo "$INPUTS"
+            echo '```'
+            echo "</details>"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Check out repo
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
 
       - name: Validate Gradle wrapper
         uses: gradle/actions/wrapper-validation@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4.4.2
@@ -119,6 +125,8 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
 
       - name: Configure Ruby
         uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
@@ -154,19 +162,19 @@ jobs:
           mkdir -p ${{ github.workspace }}/app/src/standardBeta
           mkdir -p ${{ github.workspace }}/app/src/standardRelease
 
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name app_play-keystore.jks --file ${{ github.workspace }}/keystores/app_play-keystore.jks --output none
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name app_upload-keystore.jks --file ${{ github.workspace }}/keystores/app_upload-keystore.jks --output none
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name play_creds.json --file ${{ github.workspace }}/secrets/play_creds.json --output none
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name app_beta_play-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_play-keystore.jks --output none
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name app_beta_upload-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_upload-keystore.jks --output none
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name google-services.json --file ${{ github.workspace }}/app/src/standardRelease/google-services.json --output none
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name google-services.json --file ${{ github.workspace }}/app/src/standardBeta/google-services.json --output none
 
       - name: Download Firebase credentials
@@ -177,7 +185,7 @@ jobs:
         run: |
           mkdir -p ${{ github.workspace }}/secrets
 
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name app_play_prod_firebase-creds.json --file ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json --output none
 
       - name: Log out from Azure
@@ -214,18 +222,21 @@ jobs:
       - name: Update app CI Build info
         run: |
           ./scripts/update_app_ci_build_info.sh \
-          $GITHUB_REPOSITORY \
-          $GITHUB_REF_NAME \
-          $GITHUB_SHA \
-          $GITHUB_RUN_ID \
-          $GITHUB_RUN_ATTEMPT
+          "$GITHUB_REPOSITORY" \
+          "$GITHUB_REF_NAME" \
+          "$GITHUB_SHA" \
+          "$GITHUB_RUN_ID" \
+          "$GITHUB_RUN_ATTEMPT"
 
       - name: Increment version
+        env:
+          VERSION_CODE: ${{ inputs.version-code }}
+          VERSION_NAME: ${{ inputs.version-name }}
         run: |
-          DEFAULT_VERSION_CODE=$((11000+GITHUB_RUN_NUMBER))
+          VERSION_CODE="${VERSION_CODE:-$((11000 + GITHUB_RUN_NUMBER))}"
           bundle exec fastlane setBuildVersionInfo \
-          versionCode:${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }} \
-          versionName:${{ inputs.version-name }}
+          versionCode:"$VERSION_CODE" \
+          versionName:"$VERSION_NAME"
 
       - name: Generate release Play Store bundle
         if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' }}
@@ -233,10 +244,10 @@ jobs:
           UPLOAD-KEYSTORE-PASSWORD: ${{ steps.get-kv-secrets.outputs.UPLOAD-KEYSTORE-PASSWORD }}
         run: |
           bundle exec fastlane bundlePlayStoreRelease \
-          storeFile:app_upload-keystore.jks \
-          storePassword:${{ env.UPLOAD-KEYSTORE-PASSWORD }} \
-          keyAlias:upload \
-          keyPassword:${{ env.UPLOAD-KEYSTORE-PASSWORD }}
+          storeFile:"app_upload-keystore.jks" \
+          storePassword:"$UPLOAD-KEYSTORE-PASSWORD" \
+          keyAlias:"upload" \
+          keyPassword:"$UPLOAD-KEYSTORE-PASSWORD"
 
       - name: Generate beta Play Store bundle
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
@@ -245,10 +256,10 @@ jobs:
           UPLOAD-BETA-KEY-PASSWORD: ${{ steps.get-kv-secrets.outputs.UPLOAD-BETA-KEY-PASSWORD }}
         run: |
           bundle exec fastlane bundlePlayStoreBeta \
-          storeFile:app_beta_upload-keystore.jks \
-          storePassword:${{ env.UPLOAD-BETA-KEYSTORE-PASSWORD }} \
-          keyAlias:bitwarden-beta-upload \
-          keyPassword:${{ env.UPLOAD-BETA-KEY-PASSWORD }}
+          storeFile:"app_beta_upload-keystore.jks" \
+          storePassword:"$UPLOAD-BETA-KEYSTORE-PASSWORD" \
+          keyAlias:"bitwarden-beta-upload" \
+          keyPassword:"$UPLOAD-BETA-KEYSTORE-PASSWORD"
 
       - name: Generate release Play Store APK
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
@@ -256,10 +267,10 @@ jobs:
           PLAY-KEYSTORE-PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-KEYSTORE-PASSWORD }}
         run: |
           bundle exec fastlane assemblePlayStoreReleaseApk \
-          storeFile:app_play-keystore.jks \
-          storePassword:${{ env.PLAY-KEYSTORE-PASSWORD }} \
-          keyAlias:bitwarden \
-          keyPassword:${{ env.PLAY-KEYSTORE-PASSWORD }}
+          storeFile:"app_play-keystore.jks" \
+          storePassword:"$PLAY-KEYSTORE-PASSWORD" \
+          keyAlias:"bitwarden" \
+          keyPassword:"$PLAY-KEYSTORE-PASSWORD"
 
       - name: Generate beta Play Store APK
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
@@ -268,10 +279,10 @@ jobs:
           PLAY-BETA-KEY-PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-BETA-KEY-PASSWORD }}
         run: |
           bundle exec fastlane assemblePlayStoreBetaApk \
-          storeFile:app_beta_play-keystore.jks \
-          storePassword:${{ env.PLAY-BETA-KEYSTORE-PASSWORD }} \
-          keyAlias:bitwarden-beta \
-          keyPassword:${{ env.PLAY-BETA-KEY-PASSWORD }}
+          storeFile:"app_beta_play-keystore.jks" \
+          storePassword:"$PLAY-BETA-KEYSTORE-PASSWORD" \
+          keyAlias:"bitwarden-beta" \
+          keyPassword:"$PLAY-BETA-KEY-PASSWORD"
 
       - name: Generate debug Play Store APKs
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
@@ -399,8 +410,8 @@ jobs:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
         run: |
           bundle exec fastlane distributeReleasePlayStoreToFirebase \
-          actionUrl:${{ env.GITHUB_ACTION_RUN_URL }} \
-          service_credentials_file:${{ env.APP_PLAY_FIREBASE_CREDS_PATH }}
+          actionUrl:"$GITHUB_ACTION_RUN_URL" \
+          service_credentials_file:"$APP_PLAY_FIREBASE_CREDS_PATH"
 
       - name: Publish beta artifacts to Firebase
         if: ${{ (matrix.variant == 'prod' && matrix.artifact == 'apk') && (inputs.distribute-to-firebase || github.event_name == 'push') }}
@@ -408,8 +419,8 @@ jobs:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
         run: |
           bundle exec fastlane distributeBetaPlayStoreToFirebase \
-          actionUrl:${{ env.GITHUB_ACTION_RUN_URL }} \
-          service_credentials_file:${{ env.APP_PLAY_FIREBASE_CREDS_PATH }}
+          actionUrl:"$GITHUB_ACTION_RUN_URL" \
+          service_credentials_file:"$APP_PLAY_FIREBASE_CREDS_PATH"
 
       - name: Verify Play Store credentials
         if: ${{ matrix.variant == 'prod' && inputs.publish-to-play-store }}
@@ -430,6 +441,8 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
 
       - name: Configure Ruby
         uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
@@ -461,9 +474,9 @@ jobs:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
         run: |
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name app_fdroid-keystore.jks --file ${{ github.workspace }}/keystores/app_fdroid-keystore.jks --output none
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name app_beta_fdroid-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_fdroid-keystore.jks --output none
 
       - name: Download Firebase credentials
@@ -474,7 +487,7 @@ jobs:
         run: |
           mkdir -p ${{ github.workspace }}/secrets
 
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          az storage blob download --account-name "$ACCOUNT_NAME" --container-name "$CONTAINER_NAME" \
           --name app_fdroid_firebase-creds.json --file ${{ github.workspace }}/secrets/app_fdroid_firebase-creds.json --output none
 
       - name: Log out from Azure
@@ -511,36 +524,38 @@ jobs:
       - name: Update app CI Build info
         run: |
           ./scripts/update_app_ci_build_info.sh \
-          $GITHUB_REPOSITORY \
-          $GITHUB_REF_NAME \
-          $GITHUB_SHA \
-          $GITHUB_RUN_ID \
-          $GITHUB_RUN_ATTEMPT
+          "$GITHUB_REPOSITORY" \
+          "$GITHUB_REF_NAME" \
+          "$GITHUB_SHA" \
+          "$GITHUB_RUN_ID" \
+          "$GITHUB_RUN_ATTEMPT"
 
       # Start from 11000 to prevent collisions with mobile build version codes
       - name: Increment version
+        env:
+          VERSION_CODE: ${{ inputs.version-code }}
+          VERSION_NAME: ${{ inputs.version-name }}
         run: |
-          DEFAULT_VERSION_CODE=$((11000+GITHUB_RUN_NUMBER))
-          VERSION_CODE="${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }}"
+          VERSION_CODE="${VERSION_CODE:-$((11000 + GITHUB_RUN_NUMBER))}"
           bundle exec fastlane setBuildVersionInfo \
-          versionCode:$VERSION_CODE \
-          versionName:${{ inputs.version-name || '' }}
+          versionCode:"$VERSION_CODE" \
+          versionName:"$VERSION_NAME"
 
           regex='appVersionName = "([^"]+)"'
           if [[ "$(cat gradle/libs.versions.toml)" =~ $regex ]]; then
             VERSION_NAME="${BASH_REMATCH[1]}"
           fi
-          echo "Version Name: ${VERSION_NAME}" >> $GITHUB_STEP_SUMMARY
-          echo "Version Number: $VERSION_CODE" >> $GITHUB_STEP_SUMMARY
+          echo "Version Name: ${VERSION_NAME}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Version Number: $VERSION_CODE" >> "$GITHUB_STEP_SUMMARY"
       - name: Generate F-Droid artifacts
         env:
           FDROID_STORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.FDROID-KEYSTORE-PASSWORD }}
         run: |
           bundle exec fastlane assembleFDroidReleaseApk \
-          storeFile:app_fdroid-keystore.jks \
-          storePassword:"${{ env.FDROID_STORE_PASSWORD }}" \
-          keyAlias:bitwarden \
-          keyPassword:"${{ env.FDROID_STORE_PASSWORD }}"
+          storeFile:"app_fdroid-keystore.jks" \
+          storePassword:"$FDROID_STORE_PASSWORD" \
+          keyAlias:"bitwarden" \
+          keyPassword:"$FDROID_STORE_PASSWORD"
 
       - name: Generate F-Droid Beta Artifacts
         env:
@@ -548,10 +563,10 @@ jobs:
           FDROID-BETA-KEY-PASSWORD: ${{ steps.get-kv-secrets.outputs.FDROID-BETA-KEY-PASSWORD }}
         run: |
           bundle exec fastlane assembleFDroidBetaApk \
-          storeFile:app_beta_fdroid-keystore.jks \
-          storePassword:"${{ env.FDROID-BETA-KEYSTORE-PASSWORD }}" \
-          keyAlias:bitwarden-beta \
-          keyPassword:"${{ env.FDROID-BETA-KEY-PASSWORD }}"
+          storeFile:"app_beta_fdroid-keystore.jks" \
+          storePassword:"$FDROID-BETA-KEYSTORE-PASSWORD" \
+          keyAlias:"bitwarden-beta" \
+          keyPassword:"$FDROID-BETA-KEY-PASSWORD"
 
       - name: Upload F-Droid .apk artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -601,5 +616,5 @@ jobs:
           APP_FDROID_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_fdroid_firebase-creds.json
         run: |
           bundle exec fastlane distributeReleaseFDroidToFirebase \
-          actionUrl:${{ env.GITHUB_ACTION_RUN_URL }} \
-          service_credentials_file:${{ env.APP_FDROID_FIREBASE_CREDS_PATH }}
+          actionUrl:"$GITHUB_ACTION_RUN_URL" \
+          service_credentials_file:"$APP_FDROID_FIREBASE_CREDS_PATH"

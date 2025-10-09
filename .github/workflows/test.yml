@@ -16,7 +16,6 @@ env:
   _JAVA_VERSION: 21
   _GITHUB_ACTION_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
 
-
 jobs:
   test:
     name: Test
@@ -28,6 +27,8 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
 
       - name: Validate Gradle wrapper
         uses: gradle/actions/wrapper-validation@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4.4.2
@@ -103,14 +104,14 @@ jobs:
       - name: Comment PR if tests failed
         if: steps.upload-to-codecov.outcome == 'failure' && (github.event_name == 'push' || github.event_name == 'pull_request')
         env:
-            PR_NUMBER: ${{ github.event.number }}
-            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            RUN_ACTOR: ${{ github.triggering_actor }}
+          PR_NUMBER: ${{ github.event.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_ACTOR: ${{ github.triggering_actor }}
         run: |
-          echo "> [!WARNING]" >> $GITHUB_STEP_SUMMARY
-          echo "> Uploading code coverage report failed. Please check the \"Upload to codecov.io\" step of \"Process Test Reports\" job for more details." >> $GITHUB_STEP_SUMMARY
+          echo "> [!WARNING]" >> "$GITHUB_STEP_SUMMARY"
+          echo "> Uploading code coverage report failed. Please check the \"Upload to codecov.io\" step of \"Process Test Reports\" job for more details." >> "$GITHUB_STEP_SUMMARY"
 
           if [ -n "$PR_NUMBER" ]; then
             message=$'> [!WARNING]\n> @'$RUN_ACTOR' Uploading code coverage report failed. Please check the "Upload to codecov.io" step of [Process Test Reports job]('$_GITHUB_ACTION_RUN_URL') for more details.'
-            gh pr comment --repo $GITHUB_REPOSITORY $PR_NUMBER --body "$message"
+            gh pr comment --repo "$GITHUB_REPOSITORY" "$PR_NUMBER" --body "$message"
           fi
