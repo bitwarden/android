@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden
 
 import android.content.Intent
+import androidx.browser.auth.AuthTabIntent
 import androidx.core.os.bundleOf
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.provider.BiometricPromptResult
@@ -28,6 +29,12 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
+import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
+import com.x8bit.bitwarden.data.auth.repository.util.getDuoCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
+import com.x8bit.bitwarden.data.auth.repository.util.getWebAuthResult
 import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
@@ -120,6 +127,9 @@ class MainViewModelTest : BaseViewModelTest() {
         every { userStateFlow } returns mutableUserStateFlow
         every { switchAccount(any()) } returns SwitchAccountResult.NoChange
         coEvery { validateEmailToken(any(), any()) } returns EmailTokenResult.Success
+        every { setWebAuthResult(webAuthResult = any()) } just runs
+        every { setSsoCallbackResult(result = any()) } just runs
+        every { setDuoCallbackTokenResult(tokenResult = any()) } just runs
     }
     private val mutableVaultStateEventFlow = bufferedMutableSharedFlow<VaultStateEvent>()
     private val vaultRepository = mockk<VaultRepository> {
@@ -184,6 +194,9 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getGetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
             Intent::getProviderImportCredentialsRequest,
+            AuthTabIntent.AuthResult::getDuoCallbackTokenResult,
+            AuthTabIntent.AuthResult::getSsoCallbackResult,
+            AuthTabIntent.AuthResult::getWebAuthResult,
         )
         mockkStatic(
             Intent::isMyVaultShortcut,
@@ -216,6 +229,9 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getGetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
             Intent::getProviderImportCredentialsRequest,
+            AuthTabIntent.AuthResult::getDuoCallbackTokenResult,
+            AuthTabIntent.AuthResult::getSsoCallbackResult,
+            AuthTabIntent.AuthResult::getWebAuthResult,
         )
         unmockkStatic(
             Intent::isMyVaultShortcut,
@@ -1165,6 +1181,51 @@ class MainViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(MainAction.AppSpecificLanguageUpdate(AppLanguage.SPANISH))
 
         verify { settingsRepository.appLanguage = AppLanguage.SPANISH }
+    }
+
+    @Test
+    fun `on DuoResult should setDuoCallbackTokenResult with result`() = runTest {
+        val tokenResult = DuoCallbackTokenResult.Success(token = "token")
+        val authResult = mockk<AuthTabIntent.AuthResult> {
+            every { getDuoCallbackTokenResult() } returns tokenResult
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(MainAction.DuoResult(authResult = authResult))
+
+        verify(exactly = 1) {
+            authRepository.setDuoCallbackTokenResult(tokenResult = tokenResult)
+        }
+    }
+
+    @Test
+    fun `on SsoResult should setSsoCallbackResult with result`() = runTest {
+        val result = SsoCallbackResult.Success(state = null, code = "code")
+        val authResult = mockk<AuthTabIntent.AuthResult> {
+            every { getSsoCallbackResult() } returns result
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(MainAction.SsoResult(authResult = authResult))
+
+        verify(exactly = 1) {
+            authRepository.setSsoCallbackResult(result = result)
+        }
+    }
+
+    @Test
+    fun `on WebAuthnResult should setWebAuthResult with result`() = runTest {
+        val webAuthResult = WebAuthResult.Success(token = "token")
+        val authResult = mockk<AuthTabIntent.AuthResult> {
+            every { getWebAuthResult() } returns webAuthResult
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(MainAction.WebAuthnResult(authResult = authResult))
+
+        verify(exactly = 1) {
+            authRepository.setWebAuthResult(webAuthResult = webAuthResult)
+        }
     }
 
     private fun createViewModel(

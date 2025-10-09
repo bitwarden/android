@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import com.bitwarden.annotation.OmitFromCoverage
@@ -44,6 +45,14 @@ interface IntentManager {
      * Start an activity to view the given [uri] in an external browser.
      */
     fun launchUri(uri: Uri)
+
+    /**
+     * Start an Auth Tab Activity using the provided [Uri].
+     */
+    fun startAuthTab(
+        uri: Uri,
+        launcher: ActivityResultLauncher<Intent>,
+    )
 
     /**
      * Start an activity using the provided [Intent] and provides a callback, via [onResult], for
