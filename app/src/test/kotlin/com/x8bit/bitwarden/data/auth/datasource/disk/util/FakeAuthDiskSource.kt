@@ -65,6 +65,9 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedShowImportLogins = mutableMapOf<String, Boolean?>()
     private val storedLastLockTimestampState = mutableMapOf<String, Instant?>()
     private val storedAccountKeys = mutableMapOf<String, AccountKeysJson?>()
+    private val storedPinProtectedUserKeyEnvelopes = mutableMapOf<String, Pair<String?, Boolean>>()
+    private val mutablePinProtectedUserKeyEnvelopesFlowMap =
+        mutableMapOf<String, MutableSharedFlow<String?>>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -89,11 +92,19 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedBiometricInitVectors.remove(userId)
         storedBiometricKeys.remove(userId)
         storedOrganizationKeys.remove(userId)
+        storedPinProtectedUserKeyEnvelopes.remove(userId)
 
         mutableShouldUseKeyConnectorFlowMap.remove(userId)
         mutableOrganizationsFlowMap.remove(userId)
         mutablePoliciesFlowMap.remove(userId)
         mutableAccountTokensFlowMap.remove(userId)
+        mutablePinProtectedUserKeyEnvelopesFlowMap.remove(userId)
+    }
+
+    private fun getMutablePinProtectedUserKeyEnvelopeFlow(
+        userId: String,
+    ): MutableSharedFlow<String?> = mutablePinProtectedUserKeyEnvelopesFlowMap.getOrPut(userId) {
+        bufferedMutableSharedFlow(replay = 1)
     }
 
     override fun getShouldUseKeyConnectorFlow(
@@ -331,6 +342,24 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedLastLockTimestampState[userId] = lastLockTimestamp
     }
 
+    override fun getPinProtectedUserKeyEnvelope(userId: String): String? =
+        storedPinProtectedUserKeyEnvelopes[userId]?.first
+
+    override fun storePinProtectedUserKeyEnvelope(
+        userId: String,
+        pinProtectedUserKeyEnvelope: String?,
+        inMemoryOnly: Boolean,
+    ) {
+        storedPinProtectedUserKeyEnvelopes[userId] = pinProtectedUserKeyEnvelope to inMemoryOnly
+        getMutablePinProtectedUserKeyEnvelopeFlow(userId).tryEmit(pinProtectedUserKeyEnvelope)
+    }
+
+    override fun getPinProtectedUserKeyEnvelopeFlow(userId: String): Flow<String?> =
+        getMutablePinProtectedUserKeyEnvelopeFlow(userId)
+            .onSubscription {
+                emit(getPinProtectedUserKeyEnvelope(userId))
+            }
+
     /**
      * Assert the the [isTdeLoginComplete] was stored successfully using the [userId].
      */
@@ -425,6 +454,20 @@ class FakeAuthDiskSource : AuthDiskSource {
         inMemoryOnly: Boolean = false,
     ) {
         assertEquals(pinProtectedUserKey to inMemoryOnly, storedPinProtectedUserKeys[userId])
+    }
+
+    /**
+     * Assert that the [pinProtectedUserKeyEnvelope] was stored successfully using the [userId].
+     */
+    fun assertPinProtectedUserKeyEnvelope(
+        userId: String,
+        pinProtectedUserKeyEnvelope: String?,
+        inMemoryOnly: Boolean = false,
+    ) {
+        assertEquals(
+            pinProtectedUserKeyEnvelope to inMemoryOnly,
+            storedPinProtectedUserKeyEnvelopes[userId],
+        )
     }
 
     /**
