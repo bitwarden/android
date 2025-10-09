@@ -360,17 +360,34 @@ class VaultRepositoryImpl(
     ): VaultUnlockResult {
         val userId = activeUserId
             ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
-        val pinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError(
-                error = MissingPropertyException("Pin protected key"),
-            )
-        return this.unlockVaultForUser(
-            userId = userId,
-            initUserCryptoMethod = InitUserCryptoMethod.Pin(
-                pin = pin,
-                pinProtectedUserKey = pinProtectedUserKey,
-            ),
-        )
+
+        return authDiskSource.getPinProtectedUserKeyEnvelope(userId = userId)
+            ?.let { pinProtectedUserKeyEnvelope ->
+                this.unlockVaultForUser(
+                    userId = userId,
+                    initUserCryptoMethod = InitUserCryptoMethod.PinEnvelope(
+                        pin = pin,
+                        pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+                    ),
+                )
+            }
+            ?: run {
+                // This is needed to support unlocking with a legacy pin protected user key.
+                // Once the vault is unlocked, the user's pin protected user key is migrated to
+                // a pin protected user key envelope.
+                val pinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
+                    ?: return VaultUnlockResult.InvalidStateError(
+                        error = MissingPropertyException("Pin protected key"),
+                    )
+
+                this.unlockVaultForUser(
+                    userId = userId,
+                    initUserCryptoMethod = InitUserCryptoMethod.Pin(
+                        pin = pin,
+                        pinProtectedUserKey = pinProtectedUserKey,
+                    ),
+                )
+            }
     }
 
     override suspend fun generateTotp(
@@ -502,17 +519,20 @@ class VaultRepositoryImpl(
      */
     private suspend fun deriveTemporaryPinProtectedUserKeyIfNecessary(userId: String) {
         val encryptedPin = authDiskSource.getEncryptedPin(userId = userId) ?: return
-        val existingPinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
-        if (existingPinProtectedUserKey != null) return
+        val existingPinProtectedUserKeyEnvelope = authDiskSource
+            .getPinProtectedUserKeyEnvelope(
+                userId = userId,
+            )
+        if (existingPinProtectedUserKeyEnvelope != null) return
         vaultSdkSource
-            .derivePinProtectedUserKey(
+            .enrollPinWithEncryptedPin(
                 userId = userId,
                 encryptedPin = encryptedPin,
             )
-            .onSuccess { pinProtectedUserKey ->
-                authDiskSource.storePinProtectedUserKey(
+            .onSuccess { enrollPinResponse ->
+                authDiskSource.storePinProtectedUserKeyEnvelope(
                     userId = userId,
-                    pinProtectedUserKey = pinProtectedUserKey,
+                    pinProtectedUserKeyEnvelope = enrollPinResponse.pinProtectedUserKeyEnvelope,
                     inMemoryOnly = true,
                 )
             }
