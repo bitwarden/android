@@ -53,6 +53,7 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toInt
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
+import com.x8bit.bitwarden.data.auth.manager.KdfManager
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
@@ -79,6 +80,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.UpdateKdfMinimumsResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
@@ -129,6 +131,7 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import timber.log.Timber
 import java.time.Clock
 import javax.inject.Singleton
 
@@ -158,11 +161,13 @@ class AuthRepositoryImpl(
     private val userLogoutManager: UserLogoutManager,
     private val policyManager: PolicyManager,
     private val userStateManager: UserStateManager,
+    private val kdfManager: KdfManager,
     logsManager: LogsManager,
     pushManager: PushManager,
     dispatcherManager: DispatcherManager,
 ) : AuthRepository,
     AuthRequestManager by authRequestManager,
+    KdfManager by kdfManager,
     UserStateManager by userStateManager {
     /**
      * A scope intended for use when simply collecting multiple flows in order to combine them. The
@@ -1681,6 +1686,16 @@ class AuthRepositoryImpl(
         settingsRepository.hasUserLoggedInOrCreatedAccount = true
 
         authDiskSource.userState = userStateJson
+        password?.let {
+            // Automatically update kdf to minimums after password unlock and userState update
+            kdfManager
+                .updateKdfToMinimumsIfNeeded(password = password)
+                .also { result ->
+                    if (result is UpdateKdfMinimumsResult.Error) {
+                        Timber.e(result.error, message = "Failed to silent update KDF settings.")
+                    }
+                }
+        }
         loginResponse.key?.let {
             // Only set the value if it's present, since we may have set it already
             // when we completed the pending admin auth request.

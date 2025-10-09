@@ -1091,6 +1091,10 @@ Do you want to switch to this account?</string>
     <string name="default_uri_match_detection_description_advanced_options">URI match detection controls how Bitwarden identifies autofill suggestions.\n<annotation emphasis="bold">Warning:</annotation> “Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">“Starts with” is an advanced option with increased risk of exposing credentials.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">“Regular expression” is an advanced option with increased risk of exposing credentials if used incorrectly.</string>
+    <string name="later">Later</string>
+    <string name="encryption_settings_updated">Encryption settings updated</string>
+    <string name="update_your_encryption_settings">Update your encryption settings</string>
+    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">The new recommended encryption settings will improve your account security. Enter your master password to update now.</string>
     <string name="import_was_cancelled_in_the_selected_app">Credential import was cancelled in the selected app. No items have been imported.</string>
     <string name="import_cancelled">Import cancelled</string>
     <string name="no_items_imported">No items imported</string>
@@ -1128,5 +1132,7 @@ Do you want to switch to this account?</string>
     <string name="passkeys">Passkeys</string>
     <string name="import_verb">Import</string>
     <string name="why_is_this_step_required">Why is this step required?</string>
+    <string name="kdf_update_failed_active_account_not_found">Kdf update failed, active account not found. Please try again or contact us.</string>
+    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">An error occurred while trying to update your kdf settings. Please try again or contact us.</string>
     <string name="the_import_request_could_not_be_processed">The import request could not be processed.</string>
 </resources>
