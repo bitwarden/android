@@ -527,21 +527,27 @@ class SettingsRepositoryImpl(
         val userId = activeUserId ?: return
         unconfinedScope.launch {
             vaultSdkSource
-                .derivePinKey(
+                .enrollPin(
                     userId = userId,
                     pin = pin,
                 )
                 .fold(
-                    onSuccess = { derivePinKeyResponse ->
+                    onSuccess = { enrollPinResponse ->
                         authDiskSource.apply {
                             storeEncryptedPin(
                                 userId = userId,
-                                encryptedPin = derivePinKeyResponse.encryptedPin,
+                                encryptedPin = enrollPinResponse.userKeyEncryptedPin,
                             )
+                            storePinProtectedUserKeyEnvelope(
+                                userId = userId,
+                                pinProtectedUserKeyEnvelope =
+                                    enrollPinResponse.pinProtectedUserKeyEnvelope,
+                                inMemoryOnly = shouldRequireMasterPasswordOnRestart,
+                            )
+                            // Remove any legacy pin protected user keys.
                             storePinProtectedUserKey(
                                 userId = userId,
-                                pinProtectedUserKey = derivePinKeyResponse.pinProtectedUserKey,
-                                inMemoryOnly = shouldRequireMasterPasswordOnRestart,
+                                pinProtectedUserKey = null,
                             )
                         }
                     },
@@ -560,6 +566,10 @@ class SettingsRepositoryImpl(
             storeEncryptedPin(
                 userId = userId,
                 encryptedPin = null,
+            )
+            authDiskSource.storePinProtectedUserKeyEnvelope(
+                userId = userId,
+                pinProtectedUserKeyEnvelope = null,
             )
             authDiskSource.storePinProtectedUserKey(
                 userId = userId,

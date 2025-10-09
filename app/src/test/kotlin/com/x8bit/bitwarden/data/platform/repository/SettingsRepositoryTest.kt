@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.platform.repository
 import android.view.autofill.AutofillManager
 import app.cash.turbine.test
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
-import com.bitwarden.core.DerivePinKeyResponse
+import com.bitwarden.core.EnrollPinResponse
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
@@ -924,19 +924,19 @@ class SettingsRepositoryTest {
     @Test
     fun `storeUnlockPin when the master password on restart is required should only save an encrypted PIN to disk`() {
         val pin = "1234"
-        val encryptedPin = "encryptedPin"
-        val pinProtectedUserKey = "pinProtectedUserKey"
-        val derivePinKeyResponse = DerivePinKeyResponse(
-            pinProtectedUserKey = pinProtectedUserKey,
-            encryptedPin = encryptedPin,
+        val userKeyEncryptedPin = "encryptedPin"
+        val pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope"
+        val enrollResponse = EnrollPinResponse(
+            pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+            userKeyEncryptedPin = userKeyEncryptedPin,
         )
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         coEvery {
-            vaultSdkSource.derivePinKey(
+            vaultSdkSource.enrollPin(
                 userId = USER_ID,
                 pin = pin,
             )
-        } returns derivePinKeyResponse.asSuccess()
+        } returns enrollResponse.asSuccess()
 
         settingsRepository.storeUnlockPin(
             pin = pin,
@@ -946,16 +946,16 @@ class SettingsRepositoryTest {
         fakeAuthDiskSource.apply {
             assertEncryptedPin(
                 userId = USER_ID,
-                encryptedPin = encryptedPin,
+                encryptedPin = userKeyEncryptedPin,
             )
-            assertPinProtectedUserKey(
+            assertPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
-                pinProtectedUserKey = pinProtectedUserKey,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
                 inMemoryOnly = true,
             )
         }
         coVerify {
-            vaultSdkSource.derivePinKey(
+            vaultSdkSource.enrollPin(
                 userId = USER_ID,
                 pin = pin,
             )
@@ -966,19 +966,19 @@ class SettingsRepositoryTest {
     @Test
     fun `storeUnlockPin when the master password on restart is not required should save all PIN data to disk`() {
         val pin = "1234"
-        val encryptedPin = "encryptedPin"
-        val pinProtectedUserKey = "pinProtectedUserKey"
-        val derivePinKeyResponse = DerivePinKeyResponse(
-            pinProtectedUserKey = pinProtectedUserKey,
-            encryptedPin = encryptedPin,
+        val userKeyEncryptedPin = "encryptedPin"
+        val pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope"
+        val enrollResponse = EnrollPinResponse(
+            pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
+            userKeyEncryptedPin = userKeyEncryptedPin,
         )
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         coEvery {
-            vaultSdkSource.derivePinKey(
+            vaultSdkSource.enrollPin(
                 userId = USER_ID,
                 pin = pin,
             )
-        } returns derivePinKeyResponse.asSuccess()
+        } returns enrollResponse.asSuccess()
 
         settingsRepository.storeUnlockPin(
             pin = pin,
@@ -988,16 +988,16 @@ class SettingsRepositoryTest {
         fakeAuthDiskSource.apply {
             assertEncryptedPin(
                 userId = USER_ID,
-                encryptedPin = encryptedPin,
+                encryptedPin = userKeyEncryptedPin,
             )
-            assertPinProtectedUserKey(
+            assertPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
-                pinProtectedUserKey = pinProtectedUserKey,
+                pinProtectedUserKeyEnvelope = pinProtectedUserKeyEnvelope,
                 inMemoryOnly = false,
             )
         }
         coVerify {
-            vaultSdkSource.derivePinKey(
+            vaultSdkSource.enrollPin(
                 userId = USER_ID,
                 pin = pin,
             )
@@ -1013,9 +1013,9 @@ class SettingsRepositoryTest {
                 userId = USER_ID,
                 encryptedPin = "encryptedPin",
             )
-            storePinProtectedUserKey(
+            storePinProtectedUserKeyEnvelope(
                 userId = USER_ID,
-                pinProtectedUserKey = "pinProtectedUserKey",
+                pinProtectedUserKeyEnvelope = "pinProtectedUserKeyEnvelope",
             )
         }
 
@@ -1026,9 +1026,9 @@ class SettingsRepositoryTest {
                 userId = USER_ID,
                 encryptedPin = null,
             )
-            assertPinProtectedUserKey(
+            assertPinProtectedUserKeyEnvelope(
                 userId = USER_ID,
-                pinProtectedUserKey = null,
+                pinProtectedUserKeyEnvelope = null,
             )
         }
     }
