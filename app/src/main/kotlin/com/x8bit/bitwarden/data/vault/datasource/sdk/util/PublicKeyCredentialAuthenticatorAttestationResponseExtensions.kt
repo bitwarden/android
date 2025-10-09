@@ -10,15 +10,19 @@ private const val BINANCE_PACKAGE_NAME = "com.binance.dev"
  * Converts the SDK attestation response to a [Fido2AttestationResponse] that can be serialized into
  * the expected system JSON.
  */
-@Suppress("MaxLineLength")
 fun PublicKeyCredentialAuthenticatorAttestationResponse.toAndroidAttestationResponse(
     callingPackageName: String?,
 ): Fido2AttestationResponse {
     val registrationResponse = if (callingPackageName == BINANCE_PACKAGE_NAME) {
-        // This is a special case only necessary for Binance.
+        // Setting transports as null, otherwise Binance labels the passkey broken
+        // PM-26734 remove this flow if not necessary anymore
         Fido2AttestationResponse.RegistrationResponse(
             clientDataJson = response.clientDataJson.base64EncodeForFido2Response(),
             attestationObject = response.attestationObject.base64EncodeForFido2Response(),
+            transports = null,
+            publicKeyAlgorithm = response.publicKeyAlgorithm,
+            publicKey = response.publicKey?.base64EncodeForFido2Response(),
+            authenticatorData = response.authenticatorData.base64EncodeForFido2Response(),
         )
     } else {
         // All other apps get all data.

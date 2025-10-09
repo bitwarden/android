@@ -34,15 +34,14 @@ data class Fido2AttestationResponse(
         val clientDataJson: String,
         @SerialName("attestationObject")
         val attestationObject: String,
-
         @SerialName("transports")
-        val transports: List<String>? = null,
+        val transports: List<String>?,
         @SerialName("publicKeyAlgorithm")
-        val publicKeyAlgorithm: Long? = null,
+        val publicKeyAlgorithm: Long,
         @SerialName("publicKey")
-        val publicKey: String? = null,
+        val publicKey: String?,
         @SerialName("authenticatorData")
-        val authenticatorData: String? = null,
+        val authenticatorData: String?,
     )
 
     /**

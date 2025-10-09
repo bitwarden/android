@@ -76,10 +76,9 @@ class PublicKeyCredentialAuthenticatorAttestationResponseExtensionsTest {
         val result = mockSdkResponse.toAndroidAttestationResponse(callingPackageName = binancePackageName)
 
         assertNull(result.response.transports)
-        assertNull(result.response.publicKey)
-        assertNull(result.response.publicKeyAlgorithm)
-        assertNull(result.response.authenticatorData)
-
+        assertNotNull(result.response.publicKey)
+        assertNotNull(result.response.publicKeyAlgorithm)
+        assertNotNull(result.response.authenticatorData)
         assertNotNull(result.response.clientDataJson)
         assertNotNull(result.response.attestationObject)
     }
