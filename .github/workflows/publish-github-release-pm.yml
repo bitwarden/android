@@ -16,7 +16,7 @@ jobs:
     uses: bitwarden/gh-actions/.github/workflows/_publish-mobile-github-release.yml@main
     with:
       release_name: "Password Manager"
-      workflow_name: "publish-github-release-bwpm.yml"
+      workflow_name: "publish-github-release-pm.yml"
       credentials_filename: "play_creds.json"
       project_type: android
       check_release_command: >
