@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManager
 import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
+import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import io.mockk.mockk
 import java.time.Clock
@@ -33,6 +34,7 @@ abstract class BitwardenComposeTest : BaseComposeTest() {
     protected fun setContent(
         theme: AppTheme = AppTheme.DEFAULT,
         featureFlagsState: FeatureFlagsState = FeatureFlagsState,
+        authTabLaunchers: AuthTabLaunchers = mockk(),
         appResumeStateManager: AppResumeStateManager = mockk(),
         appReviewManager: AppReviewManager = mockk(),
         biometricsManager: BiometricsManager = mockk(),
@@ -51,6 +53,7 @@ abstract class BitwardenComposeTest : BaseComposeTest() {
         setTestContent {
             LocalManagerProvider(
                 featureFlagsState = featureFlagsState,
+                authTabLaunchers = authTabLaunchers,
                 appResumeStateManager = appResumeStateManager,
                 appReviewManager = appReviewManager,
                 biometricsManager = biometricsManager,

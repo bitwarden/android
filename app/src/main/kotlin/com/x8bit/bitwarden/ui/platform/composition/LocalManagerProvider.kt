@@ -43,6 +43,7 @@ import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManagerImpl
+import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import java.time.Clock
 
@@ -78,6 +79,7 @@ fun LocalManagerProvider(
         },
     credentialExchangeRequestValidator: CredentialExchangeRequestValidator =
         credentialExchangeRequestValidator(activity = activity),
+    authTabLaunchers: AuthTabLaunchers,
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
@@ -95,6 +97,7 @@ fun LocalManagerProvider(
         LocalCredentialExchangeImporter provides credentialExchangeImporter,
         LocalCredentialExchangeCompletionManager provides credentialExchangeCompletionManager,
         LocalCredentialExchangeRequestValidator provides credentialExchangeRequestValidator,
+        LocalAuthTabLaunchers provides authTabLaunchers,
         content = content,
     )
 }
@@ -125,6 +128,13 @@ val LocalClock: ProvidableCompositionLocal<Clock> = compositionLocalOf { Clock.s
  */
 val LocalExitManager: ProvidableCompositionLocal<ExitManager> = compositionLocalOf {
     error("CompositionLocal ExitManager not present")
+}
+
+/**
+ * Provides access to the Auth Tab launchers throughout the app.
+ */
+val LocalAuthTabLaunchers: ProvidableCompositionLocal<AuthTabLaunchers> = compositionLocalOf {
+    error("CompositionLocal AuthTabLaunchers not present")
 }
 
 /**

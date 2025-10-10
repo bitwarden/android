@@ -11,6 +11,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.browser.auth.AuthTabIntent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -38,6 +39,7 @@ import com.x8bit.bitwarden.ui.platform.feature.debugmenu.navigateToDebugMenuScre
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.ROOT_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.rootNavDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.x8bit.bitwarden.ui.platform.model.AuthTabLaunchers
 import com.x8bit.bitwarden.ui.platform.util.appLanguage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.map
@@ -68,6 +70,16 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var debugLaunchManager: DebugMenuLaunchManager
 
+    private val duoLauncher = AuthTabIntent.registerActivityResultLauncher(this) {
+        mainViewModel.trySendAction(MainAction.DuoResult(it))
+    }
+    private val ssoLauncher = AuthTabIntent.registerActivityResultLauncher(this) {
+        mainViewModel.trySendAction(MainAction.SsoResult(it))
+    }
+    private val webAuthnLauncher = AuthTabIntent.registerActivityResultLauncher(this) {
+        mainViewModel.trySendAction(MainAction.WebAuthnResult(it))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         intent = intent.validate()
         var shouldShowSplashScreen = true
@@ -88,7 +100,14 @@ class MainActivity : AppCompatActivity() {
             SetupEventsEffect(navController = navController)
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
             updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
-            LocalManagerProvider(featureFlagsState = state.featureFlagsState) {
+            LocalManagerProvider(
+                featureFlagsState = state.featureFlagsState,
+                authTabLaunchers = AuthTabLaunchers(
+                    duo = duoLauncher,
+                    sso = ssoLauncher,
+                    webAuthn = webAuthnLauncher,
+                ),
+            ) {
                 ObserveScreenDataEffect(
                     onDataUpdate = remember(mainViewModel) {
                         { mainViewModel.trySendAction(MainAction.ResumeScreenDataReceived(it)) }

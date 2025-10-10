@@ -13,7 +13,10 @@ import android.webkit.MimeTypeMap
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.browser.auth.AuthTabIntent
+import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
@@ -70,6 +73,19 @@ internal class IntentManagerImpl(
             contract = ActivityResultContracts.StartActivityForResult(),
             onResult = onResult,
         )
+
+    override fun startAuthTab(
+        uri: Uri,
+        launcher: ActivityResultLauncher<Intent>,
+    ) {
+        val providerPackageName = CustomTabsClient.getPackageName(activity, null).toString()
+        if (CustomTabsClient.isAuthTabSupported(activity, providerPackageName)) {
+            AuthTabIntent.Builder().build().launch(launcher, uri, "bitwarden")
+        } else {
+            // Fall back to a Custom Tab.
+            startCustomTabsActivity(uri = uri)
+        }
+    }
 
     override fun startCustomTabsActivity(uri: Uri) {
         CustomTabsIntent
