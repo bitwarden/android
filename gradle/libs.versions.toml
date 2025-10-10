@@ -41,7 +41,7 @@ googleProtoBufPlugin = "0.9.5"
 googleServices = "4.4.3"
 googleReview = "2.0.2"
 hilt = "2.57.2"
-junit5 = "5.13.4"
+junit = "6.0.0"
 jvmTarget = "21"
 # kotlin and ksp **must** use compatible versions, do not update either without the other.
 kotlin = "2.2.20"
@@ -50,7 +50,7 @@ kotlinxCoroutines = "1.10.2"
 kotlinxSerialization = "1.9.0"
 kotlinxKover = "0.9.2"
 ksp = "2.2.20-2.0.4"
-mockk = "1.14.5"
+mockk = "1.14.6"
 okhttp = "5.1.0"
 retrofitBom = "3.0.0"
 robolectric = "4.16"
@@ -112,8 +112,8 @@ google-play-review = { module = "com.google.android.play:review", version.ref = 
 google-protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "googleProtoBufJava" }
 # Included so that Renovate tracks updates since protoc is not referenced directly in `dependency {}` blocks.
 google-protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "googleProtoBufJava" }
-junit-bom = { module = "org.junit:junit-bom", version.ref = "junit5" }
-junit-junit5 = { module = "org.junit.jupiter:junit-jupiter" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 junit-vintage = { module = "org.junit.vintage:junit-vintage-engine" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
