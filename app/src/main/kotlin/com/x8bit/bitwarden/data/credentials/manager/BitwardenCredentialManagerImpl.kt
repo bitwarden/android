@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.credentials.manager
 
 import android.util.Base64
+import androidx.credentials.CreatePasswordRequest
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.exceptions.GetCredentialUnknownException
@@ -32,6 +33,7 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
+import com.x8bit.bitwarden.data.credentials.model.PasswordRegisterResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.getAppOrigin
@@ -43,6 +45,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2Credenti
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidAttestationResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKeyCredential
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.withContext
@@ -90,6 +93,19 @@ class BitwardenCredentialManagerImpl(
                 createPublicKeyCredentialRequest = createPublicKeyCredentialRequest,
                 selectedCipherView = selectedCipherView,
             )
+        }
+    }
+
+    /**
+     * Register a new Password credential to a users vault.
+     */
+    override suspend fun registerPasswordCredential(
+        createPasswordRequest: CreatePasswordRequest,
+        selectedCipherView: CipherView,
+    ): PasswordRegisterResult {
+        return when (vaultRepository.createCipher(cipherView = selectedCipherView)) {
+            is CreateCipherResult.Error -> PasswordRegisterResult.Error.InternalError
+            CreateCipherResult.Success -> PasswordRegisterResult.Success
         }
     }
 
