@@ -235,8 +235,8 @@ jobs:
         run: |
           VERSION_CODE="${VERSION_CODE:-$((11000 + GITHUB_RUN_NUMBER))}"
           bundle exec fastlane setBuildVersionInfo \
-          versionCode:"$VERSION_CODE" \
-          versionName:"$VERSION_NAME"
+          versionCode:$VERSION_CODE \
+          versionName:$VERSION_NAME
 
       - name: Generate release Play Store bundle
         if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' }}
@@ -244,10 +244,10 @@ jobs:
           UPLOAD-KEYSTORE-PASSWORD: ${{ steps.get-kv-secrets.outputs.UPLOAD-KEYSTORE-PASSWORD }}
         run: |
           bundle exec fastlane bundlePlayStoreRelease \
-          storeFile:"app_upload-keystore.jks" \
-          storePassword:"$UPLOAD-KEYSTORE-PASSWORD" \
-          keyAlias:"upload" \
-          keyPassword:"$UPLOAD-KEYSTORE-PASSWORD"
+          storeFile:app_upload-keystore.jks \
+          storePassword:$UPLOAD-KEYSTORE-PASSWORD \
+          keyAlias:upload \
+          keyPassword:$UPLOAD-KEYSTORE-PASSWORD
 
       - name: Generate beta Play Store bundle
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
@@ -256,10 +256,10 @@ jobs:
           UPLOAD-BETA-KEY-PASSWORD: ${{ steps.get-kv-secrets.outputs.UPLOAD-BETA-KEY-PASSWORD }}
         run: |
           bundle exec fastlane bundlePlayStoreBeta \
-          storeFile:"app_beta_upload-keystore.jks" \
-          storePassword:"$UPLOAD-BETA-KEYSTORE-PASSWORD" \
-          keyAlias:"bitwarden-beta-upload" \
-          keyPassword:"$UPLOAD-BETA-KEYSTORE-PASSWORD"
+          storeFile:app_beta_upload-keystore.jks \
+          storePassword:$UPLOAD-BETA-KEYSTORE-PASSWORD \
+          keyAlias:bitwarden-beta-upload \
+          keyPassword:$UPLOAD-BETA-KEYSTORE-PASSWORD
 
       - name: Generate release Play Store APK
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
@@ -267,10 +267,10 @@ jobs:
           PLAY-KEYSTORE-PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-KEYSTORE-PASSWORD }}
         run: |
           bundle exec fastlane assemblePlayStoreReleaseApk \
-          storeFile:"app_play-keystore.jks" \
-          storePassword:"$PLAY-KEYSTORE-PASSWORD" \
-          keyAlias:"bitwarden" \
-          keyPassword:"$PLAY-KEYSTORE-PASSWORD"
+          storeFile:app_play-keystore.jks \
+          storePassword:$PLAY-KEYSTORE-PASSWORD \
+          keyAlias:bitwarden \
+          keyPassword:$PLAY-KEYSTORE-PASSWORD
 
       - name: Generate beta Play Store APK
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
@@ -279,10 +279,10 @@ jobs:
           PLAY-BETA-KEY-PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY-BETA-KEY-PASSWORD }}
         run: |
           bundle exec fastlane assemblePlayStoreBetaApk \
-          storeFile:"app_beta_play-keystore.jks" \
-          storePassword:"$PLAY-BETA-KEYSTORE-PASSWORD" \
-          keyAlias:"bitwarden-beta" \
-          keyPassword:"$PLAY-BETA-KEY-PASSWORD"
+          storeFile:app_beta_play-keystore.jks \
+          storePassword:$PLAY-BETA-KEYSTORE-PASSWORD \
+          keyAlias:bitwarden-beta \
+          keyPassword:$PLAY-BETA-KEY-PASSWORD
 
       - name: Generate debug Play Store APKs
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
@@ -410,8 +410,8 @@ jobs:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
         run: |
           bundle exec fastlane distributeReleasePlayStoreToFirebase \
-          actionUrl:"$GITHUB_ACTION_RUN_URL" \
-          service_credentials_file:"$APP_PLAY_FIREBASE_CREDS_PATH"
+          actionUrl:$GITHUB_ACTION_RUN_URL \
+          service_credentials_file:$APP_PLAY_FIREBASE_CREDS_PATH
 
       - name: Publish beta artifacts to Firebase
         if: ${{ (matrix.variant == 'prod' && matrix.artifact == 'apk') && (inputs.distribute-to-firebase || github.event_name == 'push') }}
@@ -419,8 +419,8 @@ jobs:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
         run: |
           bundle exec fastlane distributeBetaPlayStoreToFirebase \
-          actionUrl:"$GITHUB_ACTION_RUN_URL" \
-          service_credentials_file:"$APP_PLAY_FIREBASE_CREDS_PATH"
+          actionUrl:$GITHUB_ACTION_RUN_URL \
+          service_credentials_file:$APP_PLAY_FIREBASE_CREDS_PATH
 
       - name: Verify Play Store credentials
         if: ${{ matrix.variant == 'prod' && inputs.publish-to-play-store }}
@@ -538,8 +538,8 @@ jobs:
         run: |
           VERSION_CODE="${VERSION_CODE:-$((11000 + GITHUB_RUN_NUMBER))}"
           bundle exec fastlane setBuildVersionInfo \
-          versionCode:"$VERSION_CODE" \
-          versionName:"$VERSION_NAME"
+          versionCode:$VERSION_CODE \
+          versionName:$VERSION_NAME
 
           regex='appVersionName = "([^"]+)"'
           if [[ "$(cat gradle/libs.versions.toml)" =~ $regex ]]; then
@@ -552,10 +552,10 @@ jobs:
           FDROID_STORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.FDROID-KEYSTORE-PASSWORD }}
         run: |
           bundle exec fastlane assembleFDroidReleaseApk \
-          storeFile:"app_fdroid-keystore.jks" \
-          storePassword:"$FDROID_STORE_PASSWORD" \
-          keyAlias:"bitwarden" \
-          keyPassword:"$FDROID_STORE_PASSWORD"
+          storeFile:app_fdroid-keystore.jks \
+          storePassword:$FDROID_STORE_PASSWORD \
+          keyAlias:bitwarden \
+          keyPassword:$FDROID_STORE_PASSWORD
 
       - name: Generate F-Droid Beta Artifacts
         env:
@@ -563,10 +563,10 @@ jobs:
           FDROID-BETA-KEY-PASSWORD: ${{ steps.get-kv-secrets.outputs.FDROID-BETA-KEY-PASSWORD }}
         run: |
           bundle exec fastlane assembleFDroidBetaApk \
-          storeFile:"app_beta_fdroid-keystore.jks" \
-          storePassword:"$FDROID-BETA-KEYSTORE-PASSWORD" \
-          keyAlias:"bitwarden-beta" \
-          keyPassword:"$FDROID-BETA-KEY-PASSWORD"
+          storeFile:app_beta_fdroid-keystore.jks \
+          storePassword:$FDROID-BETA-KEYSTORE-PASSWORD \
+          keyAlias:bitwarden-beta \
+          keyPassword:$FDROID-BETA-KEY-PASSWORD
 
       - name: Upload F-Droid .apk artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -616,5 +616,5 @@ jobs:
           APP_FDROID_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_fdroid_firebase-creds.json
         run: |
           bundle exec fastlane distributeReleaseFDroidToFirebase \
-          actionUrl:"$GITHUB_ACTION_RUN_URL" \
-          service_credentials_file:"$APP_FDROID_FIREBASE_CREDS_PATH"
+          actionUrl:$GITHUB_ACTION_RUN_URL \
+          service_credentials_file:$APP_FDROID_FIREBASE_CREDS_PATH
