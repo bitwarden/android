@@ -46,7 +46,7 @@
     <string name="my_vault">Sejf</string>
     <string name="name">Nazwa</string>
     <string name="item_name_required">Nazwa elementu (wymagane)</string>
-    <string name="send_name_required">"Nazwa wysyłki (wymagane)"</string>
+    <string name="send_name_required">Nazwa wysyłki (wymagane)</string>
     <string name="no">Nie</string>
     <string name="notes">Notatki</string>
     <string name="private_notes">Prywatna notatka</string>
@@ -174,7 +174,7 @@
     <string name="authenticator_app_title">Aplikacja uwierzytelniająca</string>
     <string name="enter_verification_code_app">Wpisz 6-cyfrowy kod weryfikacyjny z aplikacji uwierzytelniającej.</string>
     <string name="enter_verification_code_email">Wpisz 6-cyfrowy kod weryfikacyjny wysłany na adres %1$s.</string>
-    <string name="enter_verification_code_new_device">Nie rozpoznajemy tego urządzenia. Wpisz 8-cyfrowy kod weryfikacyjny, który został wysłany na adres [%1$s].</string>
+    <string name="enter_verification_code_new_device">Nie rozpoznajemy tego urządzenia. Wpisz kod wysłany na adres e-mail, aby zweryfikować swoją tożsamość.</string>
     <string name="recovery_code_title">Kod odzyskiwania</string>
     <string name="remember">Zapamiętaj</string>
     <string name="remember_email">Zapamiętaj adres e-mail</string>
@@ -370,8 +370,6 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="theme">Motyw</string>
     <string name="theme_description">Zmień motyw kolorystyczny aplikacji</string>
     <string name="copy_notes">Kopiuj notatkę</string>
-    <string name="exit">Wyjdź</string>
-    <string name="exit_confirmation">Czy na pewno chcesz wyjść z Bitwarden?</string>
     <string name="require_master_password_on_app_restart">Wymagać hasła głównego po ponownym uruchomieniu aplikacji?</string>
     <string name="pin_require_master_password_restart">Czy chcesz wymagać odblokowywania hasłem głównym po ponownym uruchomieniu aplikacji?</string>
     <string name="ask_to_add_item">Proponuj zapisywanie elementu</string>
@@ -743,7 +741,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Dowiedz się więcej o sposobach zapobiegania blokowaniu konta</annotation></string>
     <string name="help_with_server_geolocations">Pomoc z geolokalizacjami serwera.</string>
     <string name="email_address_required">Adres e-mail (wymagane)</string>
-    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Kliknij link w wiadomości, aby zweryfikować adres e-mail i utworzyć konto."</string>
+    <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">Kliknij link w wiadomości, aby zweryfikować adres e-mail i utworzyć konto.</string>
     <string name="change_email_address">Zmień adres e-mail</string>
     <string name="next">Dalej</string>
     <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden nie może odzyskać utraconego hasła głównego.</string>
@@ -763,9 +761,16 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="allow_bitwarden_authenticator_syncing">Synchronizacja z aplikacją Authenticator</string>
     <string name="there_was_an_issue_validating_the_registration_token">Wystąpił błąd podczas sprawdzania poprawności tokenu rejestracyjnego.</string>
     <string name="turn_on_autofill">Włącz autouzupełnienie</string>
+    <string name="autofill_setup">Konfiguracja autouzupełniania</string>
+    <string name="turn_on_browser_autofill_integration">Włącz autouzupełnianie przeglądarki</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_singular">Używasz przeglądarki, która wymaga specjalnych uprawnień, aby Bitwarden mógł uzupełniać hasła.</string>
+    <string name="browser_requires_special_permissions_for_bitwarden_plural">Używasz przeglądarek, które wymagają specjalnych uprawnień, aby Bitwarden mógł uzupełniać hasła.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_singular">Używasz przeglądarki, która wymaga specjalnych uprawnień, aby Bitwarden mógł uzupełniać hasła. Włącz autouzupełnianie poniżej.</string>
+    <string name="youre_using_a_browser_that_requires_special_permissions_plural">Używasz przeglądarek, które wymagają specjalnych uprawnień, aby Bitwarden mógł uzupełniać hasła. Włącz autouzupełnianie dla wszystkich przeglądarek poniżej.</string>
     <string name="use_autofill_to_log_into_your_accounts">Użyj autouzupełniania, aby zalogować się na swoje konta jednym dotknięciem.</string>
     <string name="turn_on_later">Włącz później</string>
     <string name="turn_on_autofill_later">Włączyć autouzupełnianie później?</string>
+    <string name="turn_on_browser_autofill_integration_later">Włącz autouzupełnianie przeglądarki później?</string>
     <string name="return_to_complete_this_step_anytime_in_settings">Możesz wrócić do ustawień w dowolnym momencie, aby zakończyć ten krok.</string>
     <string name="what_bitwarden_has_to_offer">Odkryj, co Bitwarden ma do zaoferowania i zacznij bezpiecznie zarządzać swoimi hasłami.</string>
     <string name="youre_all_set">Wszystko gotowe!</string>
@@ -853,8 +858,8 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Połącz słowa w dowolnej kolejności, aby utworzyć hasło. <annotation emphasis="bold">Użyj myślników, spacji lub pozostaw je jako jedno długie słowo</annotation> — Twój wybór!</string>
     <string name="make_it_yours">Spraw, aby było Twoje</string>
     <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Dodaj cyfrę lub znak specjalny</annotation>, aby hasło było silniejsze. Teraz masz unikalne, bezpieczne i łatwe do zapamiętania hasło wyrazowe!</string>
-    <string name="need_some_inspiration">"Szukasz inspiracji?"</string>
-    <string name="check_out_the_passphrase_generator">"Sprawdź generator haseł wyrazowych"</string>
+    <string name="need_some_inspiration">Szukasz inspiracji?</string>
+    <string name="check_out_the_passphrase_generator">Sprawdź generator haseł wyrazowych</string>
     <string name="we_couldnt_verify_the_servers_certificate">Nie mogliśmy zweryfikować certyfikatu serwera. Łańcuch certyfikatów, ustawienia proxy urządzeniu lub serwer Bitwarden mogą nie być poprawnie skonfigurowane.</string>
     <string name="copy_private_key">Kopiuj klucz prywatny</string>
     <string name="login_credentials">Dane logowania</string>
@@ -872,7 +877,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="import_client_certificate">Importuj certyfikat klienta</string>
     <string name="enter_the_client_certificate_password_and_alias">Wpisz hasło certyfikatu klienta i żądany alias dla tego certyfikatu.</string>
     <string name="alias">Alias</string>
-    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Użyj generatora, aby utworzyć bezpieczne hasła i nazwy użytkowników."</string>
+    <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">Użyj generatora, aby utworzyć bezpieczne hasła i nazwy użytkowników.</string>
     <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Hasła wyrazowe to silne hasła, które są łatwiejsze do zapamiętania i wpisania niż losowe hasła. Są przydatne podczas logowania się do kont, gdzie autouzupełnianie nie jest dostępne, np. w usługach streamingowych na telewizorze.</string>
     <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unikalne nazwy użytkowników dodają dodatkową warstwę bezpieczeństwa i mogą pomóc w uniemożliwieniu hakerom odnalezienia Twoich kont.</string>
     <string name="coachmark_1_of_6">1 z 6</string>
@@ -882,7 +887,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="coachmark_5_of_6">5 z 6</string>
     <string name="coachmark_6_of_6">6 z 6</string>
     <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Użyj tych opcji, aby dostosować hasło do wymagań strony.</string>
-    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Po zapisaniu nowego hasła w Bitwarden nie zapomnij zaktualizować go na stronie konta."</string>
+    <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">Po zapisaniu nowego hasła w Bitwarden nie zapomnij zaktualizować go na stronie konta.</string>
     <string name="verify_your_identity">Zweryfikuj tożsamość</string>
     <string name="error_loading_certificate">Wystąpił błąd podczas ładowania certyfikatu</string>
     <string name="certificate_alias">Alias certyfikatu</string>
@@ -911,7 +916,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="self_host_server_url">URL samodzielnie hostowanego serwera</string>
     <string name="use_brave_autofill_integration">Użyj autouzupełniania Brave</string>
     <string name="use_chrome_autofill_integration">Użyj autouzupełniania Chrome</string>
-    <string name="use_chrome_beta_autofill_integration">Użyj autouzupełniania Chrome (beta)</string>
+    <string name="use_chrome_beta_autofill_integration">Użyj autouzupełniania Chrome Beta</string>
     <string name="improves_login_filling_for_supported_websites_on_selected_browsers">Poprawia uzupełnianie danych logowania w wybranych przeglądarkach. Po włączeniu zostaniesz przekierowany do ustawień przeglądarki, aby włączyć autouzupełnianie innych firm.</string>
     <string name="show_more">Pokaż więcej</string>
     <string name="no_folder">Nieprzypisane</string>
@@ -968,7 +973,7 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="use_dynamic_colors">Użyj dynamicznych kolorów</string>
     <string name="use_dynamic_colors_question">Użyć dynamicznych kolorów?</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamiczne kolory wykorzystują kolory systemowe i mogą nie spełniać wszystkich wytycznych dotyczących ułatwień dostępu.</string>
-    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Operacja klucza dostępu nie powiodła się, ponieważ przeglądarka %1$s nie jest zaufana. Wybierz \"Zaufaj\" aby dodać %1$s do listy zaufanych aplikacji.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Operacja klucza dostępu nie powiodła się, ponieważ przeglądarka %1$s nie jest zaufana. Kliknij „Zaufaj”, aby dodać %1$s do listy zaufanych aplikacji.</string>
     <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Operacja klucza dostępu nie powiodła się, ponieważ przeglądarka nie jest zaufana.</string>
     <string name="trust">Zaufaj</string>
     <string name="trusted_by_you_learn_more">Aplikacje lub przeglądarki, którym Bitwarden domyślnie nie ufa, ale Ty ufasz, aby wykonać operacje z kluczami dostępu.</string>
@@ -989,7 +994,6 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="delete_x">Usuń %s</string>
     <string name="failed_to_decrypt_cipher_contact_support">Odszyfrowanie szyfru nie powiodło się. Skontaktuj się z pomocą techniczną.</string>
     <string name="decryption_error">Błąd odszyfrowywania</string>
-    <string name="add_item_rotation">Dodaj rotację elementu</string>
     <string name="scan_a_qr_code">Zeskanuj kod QR</string>
     <string name="cannot_add_authenticator_key">Nie możesz dodać klucza uwierzytelniającego?</string>
     <string name="enable_camera_permission_to_use_the_scanner">Włącz uprawnienia aparatu do korzystania ze skanera</string>
@@ -1068,9 +1072,9 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="account_synced_from_bitwarden_app">Konto zostało zsynchronizowane z aplikacji Bitwarden</string>
     <string name="local_codes">Kody lokalne (%1$d)</string>
     <string name="required_information_missing">Brak wymaganych informacji</string>
-    <string name="required_information_missing_message">"Brak wymaganych informacji (np. usług lub sekretów). Sprawdź plik i spróbuj ponownie. Odwiedź bitwarden.com/help, aby uzyskać wsparcie"</string>
-    <string name="file_could_not_be_processed">"Plik nie może zostać przetworzony"</string>
-    <string name="file_could_not_be_processed_message">"Plik nie może być przetworzony. Upewnij się, że plik JSON jest prawidłowy i spróbuj ponownie. Potrzebujesz pomocy? Odwiedź bitwarden.com/help"</string>
+    <string name="required_information_missing_message">Brak wymaganych informacji (np. usług lub sekretów). Sprawdź plik i spróbuj ponownie. Odwiedź bitwarden.com/help, aby uzyskać wsparcie</string>
+    <string name="file_could_not_be_processed">Plik nie może zostać przetworzony</string>
+    <string name="file_could_not_be_processed_message">Plik nie może być przetworzony. Upewnij się, że plik JSON jest prawidłowy i spróbuj ponownie. Potrzebujesz pomocy? Odwiedź bitwarden.com/help</string>
     <string name="get_help">Uzyskaj pomoc</string>
     <string name="expand_advanced_options">Rozwiń opcje zaawansowane</string>
     <string name="local_items_are_expanded_click_to_collapse">Lokalne elementy są rozwinięte. Kliknij, aby zwinąć.</string>
@@ -1096,18 +1100,52 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="default_uri_match_detection_description_advanced_options">Wykrywanie dopasowania to sposób, w jaki Bitwarden identyfikuje sugestie autouzupełniania.\n<annotation emphasis="bold">Ostrzeżenie:</annotation> „Rozpoczyna się od” jest zaawansowaną opcją zwiększającą ryzyko ujawnienia danych logowania.</string>
     <string name="advanced_option_with_increased_risk_of_exposing_credentials">„Rozpoczyna się od” jest zaawansowaną opcją zwiększającą ryzyko ujawnienia danych logowania.</string>
     <string name="advanced_option_increased_risk_exposing_credentials_used_incorrectly">„Wyrażenie regularne” jest zaawansowaną opcją zwiększającą ryzyko ujawnienia danych logowania.</string>
-    <string name="credential_import_was_cancelled">Import danych logowania został anulowany. Dane logowanie nie zostały zaimportowane.</string>
+    <string name="later">Później</string>
+    <string name="encryption_settings_updated">Ustawienia szyfrowania zostały zaktualizowane</string>
+    <string name="update_your_encryption_settings">Zaktualizuj ustawienia szyfrowania</string>
+    <string name="the_new_recommended_encryption_settings_will_improve_your_account_desc_long">Nowe zalecane ustawienia szyfrowania poprawią bezpieczeństwo Twojego konta. Wpisz hasło główne, aby zaktualizować zabezpieczenia.</string>
+    <string name="import_was_cancelled_in_the_selected_app">Import danych logowania został anulowany. Elementy nie zostały zaimportowane.</string>
     <string name="import_cancelled">Importowanie zostało anulowane</string>
-    <string name="your_items_have_been_successfully_imported">Elementy zostały zaimportowane i są widoczne w sejfie.</string>
-    <string name="import_saved_items">Import saved items</string>
-    <string name="import_your_credentials_from_another_password_manager">Import your credentials, including passkeys, passwords, credit cards, and any personal identity information from another password manager.</string>
-    <string name="return_to_your_vault">Wróć do sejfu</string>
-    <string name="select_a_credential_manager_to_import_items_from">Select a credential manager to import items from.</string>
     <string name="no_items_imported">Brak zaimportowanych elementów</string>
-    <string name="no_items_received_from_the_selected_credential_manager">Nie odebrano żadnych elementów z wybranego menedżera poświadczeń.</string>
+    <string name="no_items_received_from_the_selected_app">Nie odebrano żadnych elementów z wybranej aplikacji.</string>
     <string name="vault_sync_failed">Synchronizacja sejfu nie powiodła się</string>
     <string name="your_items_have_been_successfully_imported_but_could_not_sync_vault">Elementy zostały zaimportowane, ale nie można zsynchronizować sejfu. Zaimportowane elementy będą widoczne w sejfie dopiero po synchronizacji.</string>
     <string name="there_was_a_problem_importing_your_items">Wystąpił problem z importowaniem elementów. Spróbuj ponownie. Jeśli problem się powtarza, skontaktuj się z pomocą techniczną.</string>
-    <string name="importing_items">Importowanie elementów…</string>
-    <string name="uploading_items">Przesyłanie elementów…</string>
+    <string name="saving_items">Zapisywanie elementów…</string>
+    <string name="unable_to_import_your_items">Nie można zaimportować elementów</string>
+    <string name="import_from_computer">Importuj z komputera</string>
+    <string name="import_from_another_app">Importuj z innej aplikacji</string>
+    <plurals name="x_items_have_been_imported_to_your_vault">
+        <item quantity="one">Zaimportowano %1$d element do sejfu.</item>
+        <item quantity="few">Zaimportowano %1$d elementy do sejfu.</item>
+        <item quantity="many">Zaimportowano %1$d elementów do sejfu.</item>
+        <item quantity="other">Zaimportowano %1$d elementów do sejfu.</item>
+    </plurals>
+    <string name="enable_browser_autofill_to_keep_filling_passwords">Włącz autouzupełnianie w przeglądarce, aby uzupełniać hasła</string>
+    <plurals name="your_browser_recently_updated_how_autofill_works">
+        <item quantity="one">Twoja przeglądarka została zaktualizowana, co spowodowało wyłączenie autouzupełniania Bitwarden. Aby nadal uzupełniać hasła za pomocą Bitwarden, włącz autouzupełnianie w przeglądarce.</item>
+        <item quantity="few">Twoje przeglądarki zostały zaktualizowane, co spowodowało wyłączenie autouzupełniania Bitwarden. Aby nadal uzupełniać hasła za pomocą Bitwarden, włącz autouzupełnianie we wszystkich przeglądarkach.</item>
+        <item quantity="many">Twoje przeglądarki zostały zaktualizowane, co spowodowało wyłączenie autouzupełniania Bitwarden. Aby nadal uzupełniać hasła za pomocą Bitwarden, włącz autouzupełnianie we wszystkich przeglądarkach.</item>
+        <item quantity="other">Twoje przeglądarki zostały zaktualizowane, co spowodowało wyłączenie autouzupełniania Bitwarden. Aby nadal uzupełniać hasła za pomocą Bitwarden, włącz autouzupełnianie we wszystkich przeglądarkach.</item>
+    </plurals>
+    <string name="not_now">Nie teraz</string>
+    <string name="import_from_bitwarden">Importuj z Bitwarden</string>
+    <string name="select_account">Wybierz konto</string>
+    <string name="no_accounts_available">Brak dostępnych kont</string>
+    <string name="you_dont_have_any_accounts_you_can_import_from">Nie masz żadnych kont, z których można by zaimportować dane. Zasada bezpieczeństwa Twojej organizacji może ograniczać importowanie elementów z Bitwarden do innej aplikacji.</string>
+    <string name="import_restricted_unable_to_import_credit_cards">Importowanie zostało ograniczone. Nie można zaimportować kart.</string>
+    <string name="verify_your_master_password">Zweryfikuj hasło główne</string>
+    <string name="having_trouble_with_autofill">Masz problem z autouzupełnianiem?</string>
+    <string name="access_help_and_troubleshooting_documentation_here">Uzyskaj pomoc i dokumentacją tutaj</string>
+    <string name="import_passwords_passkeys_and_other_item_types_from_your_vault">Importuj hasła, klucze dostępu i inne elementy z sejfu Bitwarden.</string>
+    <string name="items_to_import">Elementy do zaimportowania</string>
+    <string name="exporting_items">Eksportowanie elementów…</string>
+    <string name="export_failed">Eksportowanie nie powiodło się</string>
+    <string name="passwords">Hasła</string>
+    <string name="passkeys">Klucze dostępu</string>
+    <string name="import_verb">Importuj</string>
+    <string name="why_is_this_step_required">Dlaczego ten krok jest wymagany?</string>
+    <string name="kdf_update_failed_active_account_not_found">Aktualizacja ustawień KDF nie powiodła się. Nie znaleziono aktywnego konta. Spróbuj ponownie lub skontaktuj się z nami.</string>
+    <string name="an_error_occurred_while_trying_to_update_your_kdf_settings">Wystąpił błąd podczas aktualizowania ustawień KDF. Spróbuj ponownie lub skontaktuj się z nami.</string>
+    <string name="the_import_request_could_not_be_processed">Importowanie nie mogło zostać przetworzone.</string>
 </resources>
